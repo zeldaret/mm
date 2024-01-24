@@ -56,12 +56,12 @@ void BossHakugin_SetupShootLightning(BossHakugin* this);
 void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupCutsceneStart(BossHakugin* this);
 void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play);
-void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this);
-void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play);
-void BossHakugin_SetupDeathCutscenePart2(BossHakugin* this);
-void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play);
-void BossHakugin_SetupDead(BossHakugin* this);
-void BossHakugin_Dead(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupDeathCutsceneRun(BossHakugin* this);
+void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupDeathCutsceneSwerveIntoWall(BossHakugin* this);
+void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this);
+void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play);
 
 typedef enum GohtElectricBallState {
     // The electric ball is not active. Goht will start charging the electric ball the next time the player hits it with
@@ -1761,7 +1761,11 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 25.0f, 0.5f);
     this->skelAnime.playSpeed = (this->actor.speed / 32.0f) + 0.5f;
     BossHakugin_RunUpdateCommon(this, play);
+
+    // Setting this to 10 prevents Goht from spawning boulders during the cutscene and shortly afterwards, since
+    // `BossHakugin_SpawnBoulder` is called fewer than 10 times during the cutscene.
     this->preventBoulderSpawnCount = 10;
+
     SkelAnime_Update(&this->skelAnime);
     this->timer++;
     if (this->timer < 8) {
@@ -2228,7 +2232,7 @@ void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         if (this->actor.colChkInfo.health == 0) {
-            BossHakugin_SetupDeathCutscenePart1(this);
+            BossHakugin_SetupDeathCutsceneRun(this);
         } else if (this->nextCutsceneType == GOHT_NEXT_CUTSCENE_TYPE_INTRO) {
             BossHakugin_SetupIntroCutsceneThaw(this);
         } else {
@@ -2239,7 +2243,7 @@ void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play) {
     }
 }
 
-void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
+void BossHakugin_SetupDeathCutsceneRun(BossHakugin* this) {
     f32 direction;
 
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.3f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
@@ -2296,10 +2300,14 @@ void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
     this->headRot.z = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = CLAMP_MIN(this->actor.speed, 16.0f);
-    this->actionFunc = BossHakugin_DeathCutscenePart1;
+    this->actionFunc = BossHakugin_DeathCutsceneRun;
 }
 
-void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
+/**
+ * Handles the first part of Goht's death cutscene where Goht runs forward while turning side-to-side wildly. Once
+ * Goht's position and y-rotation reach a specific range of values, this function will make Goht swerve into the wall.
+ */
+void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
     Vec3f subCamAt;
     f32 absPosX;
     f32 absPosZ;
@@ -2307,9 +2315,13 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 15.0f, 2.0f);
     SkelAnime_Update(&this->skelAnime);
+
+    // Setting these to 10 prevents Goht from spawning boulders, stalactites, and bombs during the cutscene, since the
+    // relevant spawn functions are called fewer than 10 times during the cutscene.
     this->preventBoulderSpawnCount = 10;
     this->preventStalactiteSpawnCount = 10;
     this->preventBombSpawnCount = 10;
+
     BossHakugin_RunUpdateCommon(this, play);
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
@@ -2322,14 +2334,17 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
         } else {
             this->runOffsetRot = Rand_S16Offset(0x800, 0x800);
         }
+
         this->timer = 18;
         this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     }
 
     this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
     this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
+
     this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->runOffsetRot * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
+
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
     subCamAt.y = this->actor.world.pos.y + 200.0f;
     subCamAt.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
@@ -2342,12 +2357,12 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
 
         if (((absPosX > 1289.1f) && (absPosZ < 1110.9f) && ((absRotY < 0x2000) || (absRotY > 0x6000))) ||
             ((absPosZ > 1289.1f) && (absPosX < 1110.9f) && (absRotY > 0x2000) && (absRotY < 0x6000))) {
-            BossHakugin_SetupDeathCutscenePart2(this);
+            BossHakugin_SetupDeathCutsceneSwerveIntoWall(this);
         }
     }
 }
 
-void BossHakugin_SetupDeathCutscenePart2(BossHakugin* this) {
+void BossHakugin_SetupDeathCutsceneSwerveIntoWall(BossHakugin* this) {
     if (this->direction == GOHT_DIRECTION_CLOCKWISE) {
         this->targetRotY -= 0x4000;
     } else {
@@ -2355,40 +2370,50 @@ void BossHakugin_SetupDeathCutscenePart2(BossHakugin* this) {
     }
 
     this->actor.speed = 15.0f;
-    this->actionFunc = BossHakugin_DeathCutscenePart2;
+    this->actionFunc = BossHakugin_DeathCutsceneSwerveIntoWall;
 }
 
-void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
+/**
+ * Handles the second part of Goht's death cutscene where swerves hard to the side and slams into the wall. Once Goht's
+ * y-rotation matches the target rotation, this function will transition Goht into being crushed by rocks.
+ */
+void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play) {
     Vec3f subCamAt;
     Vec3f eyeTarget;
-    s32 var_v0;
-    s16 temp_a0;
+    s32 absTargetRotY;
+    s16 eyeTargetAngle;
 
     SkelAnime_Update(&this->skelAnime);
+
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
     subCamAt.y = this->actor.world.pos.y + 200.0f;
     subCamAt.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
-    temp_a0 = this->actor.shape.rot.y - (this->direction * 0x6000);
-    eyeTarget.x = (Math_SinS(temp_a0) * 400.0f) + this->actor.world.pos.x;
+
+    eyeTargetAngle = this->actor.shape.rot.y - (this->direction * 0x6000);
+    eyeTarget.x = (Math_SinS(eyeTargetAngle) * 400.0f) + this->actor.world.pos.x;
     eyeTarget.y = this->actor.world.pos.y + 100.0f;
-    eyeTarget.z = Math_CosS(temp_a0) * 400.0f + this->actor.world.pos.z;
+    eyeTarget.z = (Math_CosS(eyeTargetAngle) * 400.0f) + this->actor.world.pos.z;
 
     Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
+
+    // Setting these to 10 prevents Goht from spawning boulders, stalactites, and bombs during the cutscene, since the
+    // relevant spawn functions are called fewer than 10 times during the cutscene.
     this->preventBoulderSpawnCount = 10;
     this->preventStalactiteSpawnCount = 10;
     this->preventBombSpawnCount = 10;
+
     BossHakugin_RunUpdateCommon(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
         ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
-        BossHakugin_SetupDead(this);
+        BossHakugin_SetupDeathCutsceneCrushedByRocks(this);
     } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
                ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
-        var_v0 = ABS_ALT(this->targetRotY);
-        if (var_v0 < 0x2000) {
+        absTargetRotY = ABS_ALT(this->targetRotY);
+        if (absTargetRotY < 0x2000) {
             this->actor.world.pos.z = -1389.0f;
-        } else if (var_v0 > 0x6000) {
+        } else if (absTargetRotY > 0x6000) {
             this->actor.world.pos.z = 1389.0f;
         } else if (this->targetRotY > 0) {
             this->actor.world.pos.x = -1389.0f;
@@ -2400,12 +2425,12 @@ void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
-void BossHakugin_SetupDead(BossHakugin* this) {
+void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this) {
     this->timer = 0;
     this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 0.5f;
     func_80B0D9CC(this);
-    this->actionFunc = BossHakugin_Dead;
+    this->actionFunc = BossHakugin_DeathCutsceneCrushedByRocks;
 }
 
 typedef struct {
@@ -2434,7 +2459,7 @@ static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
                                          GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_THIGH) },
 };
 
-void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
+void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     Vec3s* test;
     Camera* subCam = Play_GetCamera(play, this->subCamId);
@@ -2866,7 +2891,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, sp70.x, 0x100);
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
 
-    if (this->actionFunc == BossHakugin_Dead) {
+    if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         BossHakugin_UpdateRocksDead(this);
     } else {
         BossHakugin_UpdateRocks(this);
@@ -2963,7 +2988,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
     static s32 sCurrentLimbIndex = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
     BossHakugin* this = THIS;
 
-    if (this->actionFunc == BossHakugin_Dead) {
+    if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         if (limbIndex == GOHT_LIMB_ROOT) {
             pos->y -= this->actor.shape.yOffset;
         }
@@ -2985,7 +3010,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
 
     if (limbIndex == GOHT_LIMB_HEAD) {
         rot->z += this->frontHalfRotZ;
-        if (this->actionFunc == BossHakugin_DeathCutscenePart1) {
+        if (this->actionFunc == BossHakugin_DeathCutsceneRun) {
             rot->z += this->headRot.z;
             rot->y += this->headRot.y;
         }
@@ -3024,7 +3049,7 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     if (limbIndex == GOHT_LIMB_HEAD) {
         Matrix_MultVecX(3500.0f, &this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        if (this->actionFunc != BossHakugin_DeathCutscenePart1) {
+        if (this->actionFunc != BossHakugin_DeathCutsceneRun) {
             Matrix_MtxFToYXZRot(Matrix_GetCurrent(), &this->headRot, false);
         }
 
@@ -3292,7 +3317,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
 
-    if (this->actionFunc == BossHakugin_Dead) {
+    if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         BossHakugin_DrawDead(&this->actor, play);
     } else {
         BossHakugin_DrawRocks(this, play);
@@ -3307,7 +3332,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
         BossHakugin_DrawIce(this, play);
     }
 
-    if (this->actionFunc != BossHakugin_Dead) {
+    if (this->actionFunc != BossHakugin_DeathCutsceneCrushedByRocks) {
         BossHakugin_GenShadowTex(tex, this);
         BossHakugin_DrawShadowTex(tex, this, play);
     }
