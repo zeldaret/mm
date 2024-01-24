@@ -2802,35 +2802,35 @@ void BossHakugin_UpdateLightningSegments(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    CollisionPoly* spA0 = NULL;
-    Vec3f sp94;
-    Vec3f sp88;
-    Vec3f sp7C;
-    Vec3f sp70;
-    Vec3f* sp6C;
-    Vec3f* var_s0;
-    s32 var_s0_2;
-    f32 sp60;
+    CollisionPoly* poly = NULL;
+    Vec3f resultPos;
+    Vec3f posB;
+    Vec3f normal;
+    Vec3f targetRot;
+    Vec3f* firstBallPos;
+    Vec3f* ballPosIter;
+    s32 pad;
+    f32 angleStep;
     s32 bgId;
-    s32 sp58 = false;
-    s16 temp_v1;
+    s32 playedHitSfx = false;
 
-    sp6C = &this->electricBallPos[0];
+    firstBallPos = &this->electricBallPos[0];
 
     if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_FORWARD) {
         if (Math_StepToF(&this->electricBallSpeed, 50.0f, 3.5f)) {
             this->electricBallState = GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER;
         }
     } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) {
-        sp60 = BINANG_TO_RAD(Math3D_Vec3fDistSq(sp6C, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
-        if (sp60 > M_PI / 4.0f) {
-            sp60 = M_PI / 4.0f;
+        angleStep =
+            BINANG_TO_RAD(Math3D_Vec3fDistSq(firstBallPos, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
+        if (angleStep > M_PI / 4.0f) {
+            angleStep = M_PI / 4.0f;
         }
 
-        Math_Vec3f_Diff(&player->actor.world.pos, sp6C, &sp70);
+        Math_Vec3f_Diff(&player->actor.world.pos, firstBallPos, &targetRot);
 
-        if (BossHakugin_Vec3fNormalize(&sp70)) {
-            BossHakugin_StepVector(&this->electricBallRot, &sp70, sp60);
+        if (BossHakugin_Vec3fNormalize(&targetRot)) {
+            BossHakugin_StepVector(&this->electricBallRot, &targetRot, angleStep);
         }
     } else if (this->electricBallState != GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
         return;
@@ -2846,59 +2846,61 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         this->electricBallState = GOHT_ELECTRIC_BALL_STATE_NONE;
         this->electricBallCount = 0;
     } else {
-        var_s0 = &this->electricBallPos[9];
-        while (var_s0 != sp6C) {
-            Math_Vec3f_Copy(var_s0, var_s0 - 1);
-            var_s0--;
+        ballPosIter = &this->electricBallPos[9];
+        while (ballPosIter != firstBallPos) {
+            Math_Vec3f_Copy(ballPosIter, ballPosIter - 1);
+            ballPosIter--;
         }
 
         this->lightOrbRotZ += (s16)(0x4000 + (Rand_Next() >> 0x12));
+
         if (this->electricBallState != GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
             if (this->electricBallCollider.base.atFlags & AT_HIT) {
                 this->electricBallState = GOHT_ELECTRIC_BALL_STATE_FADE_OUT;
                 this->electricBallCount = 0;
                 this->electricBallCollider.base.atFlags &= ~AT_HIT;
                 this->electricBallCollider.base.atFlags &= ~AT_ON;
-                sp58 = true;
+                playedHitSfx = true;
                 Audio_PlaySfx_AtPos(&this->electricBallSfxPos, NA_SE_EN_COMMON_E_BALL_HIT);
             }
 
-            sp88.x = sp6C->x + (this->electricBallSpeed * this->electricBallRot.x);
-            sp88.y = sp6C->y + (this->electricBallSpeed * this->electricBallRot.y);
-            sp88.z = sp6C->z + (this->electricBallSpeed * this->electricBallRot.z);
+            posB.x = firstBallPos->x + (this->electricBallSpeed * this->electricBallRot.x);
+            posB.y = firstBallPos->y + (this->electricBallSpeed * this->electricBallRot.y);
+            posB.z = firstBallPos->z + (this->electricBallSpeed * this->electricBallRot.z);
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, sp6C, &sp88, &sp94, &spA0, true, true, true, true, &bgId)) {
-                var_s0_2 = 0;
-                Math_Vec3f_Copy(sp6C, &sp94);
+            if (BgCheck_EntityLineTest1(&play->colCtx, firstBallPos, &posB, &resultPos, &poly, true, true, true, true,
+                                        &bgId)) {
+                s16 yawDiff = false;
 
-                if ((spA0->normal.y > -0x6665) && (spA0->normal.y < 0x3FFF)) {
-                    temp_v1 = Math_Vec3f_Yaw(sp6C, &player->actor.world.pos) -
-                              Math_Atan2S_XY(COLPOLY_GET_NORMAL(spA0->normal.z), COLPOLY_GET_NORMAL(spA0->normal.x));
-                    //! FAKE: 0LL
-                    var_s0_2 = (ABS_ALT(temp_v1) > 0x4000) ? 1 : 0LL;
+                Math_Vec3f_Copy(firstBallPos, &resultPos);
+
+                if ((poly->normal.y > -0x6665) && (poly->normal.y < 0x3FFF)) {
+                    yawDiff = Math_Vec3f_Yaw(firstBallPos, &player->actor.world.pos) -
+                              Math_Atan2S_XY(COLPOLY_GET_NORMAL(poly->normal.z), COLPOLY_GET_NORMAL(poly->normal.x));
+                    yawDiff = (ABS_ALT(yawDiff) > 0x4000) ? true : false;
                 }
 
                 if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) &&
-                    (var_s0_2 || (spA0->normal.y >= 0x4000))) {
+                    (yawDiff || (poly->normal.y >= 0x4000))) {
                     this->electricBallState = GOHT_ELECTRIC_BALL_STATE_FADE_OUT;
                     this->electricBallCount = 0;
-                    if (!sp58) {
+                    if (!playedHitSfx) {
                         Audio_PlaySfx_AtPos(&this->electricBallSfxPos, NA_SE_EN_COMMON_E_BALL_HIT);
                     }
                 } else {
-                    sp7C.x = COLPOLY_GET_NORMAL(spA0->normal.x);
-                    sp7C.y = COLPOLY_GET_NORMAL(spA0->normal.y);
-                    sp7C.z = COLPOLY_GET_NORMAL(spA0->normal.z);
-                    func_80179F64(&this->electricBallRot, &sp7C, &sp70);
-                    Math_Vec3f_Copy(&this->electricBallRot, &sp70);
+                    normal.x = COLPOLY_GET_NORMAL(poly->normal.x);
+                    normal.y = COLPOLY_GET_NORMAL(poly->normal.y);
+                    normal.z = COLPOLY_GET_NORMAL(poly->normal.z);
+                    func_80179F64(&this->electricBallRot, &normal, &targetRot);
+                    Math_Vec3f_Copy(&this->electricBallRot, &targetRot);
                 }
             } else {
-                Math_Vec3f_Copy(sp6C, &sp88);
+                Math_Vec3f_Copy(firstBallPos, &posB);
             }
 
-            this->electricBallCollider.dim.worldSphere.center.x = sp6C->x;
-            this->electricBallCollider.dim.worldSphere.center.y = sp6C->y;
-            this->electricBallCollider.dim.worldSphere.center.z = sp6C->z;
+            this->electricBallCollider.dim.worldSphere.center.x = firstBallPos->x;
+            this->electricBallCollider.dim.worldSphere.center.y = firstBallPos->y;
+            this->electricBallCollider.dim.worldSphere.center.z = firstBallPos->z;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->electricBallCollider.base);
         }
     }
