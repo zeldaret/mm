@@ -26,7 +26,7 @@
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
 void BossHakugin_Update(Actor* thisx, PlayState* play);
-void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2);
+void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
 void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play);
 
@@ -35,7 +35,7 @@ void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* pl
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 void BossHakugin_SpawnCrushingRocks(BossHakugin* this);
-void func_80B0DFA8(BossHakugin* this);
+void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this);
 
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupFrozenBeforeFight(BossHakugin* this);
@@ -2506,9 +2506,9 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
         CutsceneManager_Stop(this->actor.csId);
         Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
         BossHakugin_SpawnBlueWarpAndHeartContainer(this, play);
-        func_80B0DFA8(this);
+        BossHakugin_UpdateCrushingRocksCollision(this);
         this->actor.draw = BossHakugin_DrawCrushingRocks;
-        this->actor.update = BossHakugin_UpdateDead;
+        this->actor.update = BossHakugin_UpdateStationaryCrushingRocks;
     } else if (((this->timer % 6) == 0) && (index < 6)) {
         explosionLimbHideInfo = &sExplosionLimbHideInfo[index];
         pos = &this->bodyCollider.elements[explosionLimbHideInfo->colliderIndex].dim.worldSphere.center;
@@ -2695,7 +2695,12 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
     return false;
 }
 
-void BossHakugin_UpdateRocks(BossHakugin* this) {
+/**
+ * Updates all of the various rock effects that Goht and EnHakurock can spawn. If the rock effect's timer is above zero,
+ * then it's y-velocity will be decreased to make it fall faster. Once the effect reaches a certain point below the
+ * floor, the timer is set to -1, effectively disabling the effect and allowing it to be reused later.
+ */
+void BossHakugin_UpdateRockEffects(BossHakugin* this) {
     GohtRockEffect* rockEffect;
     s32 i;
 
@@ -2706,6 +2711,7 @@ void BossHakugin_UpdateRocks(BossHakugin* this) {
             rockEffect->timer--;
             rockEffect->velocity.y += -1.0f;
             Math_Vec3f_Sum(&rockEffect->pos, &rockEffect->velocity, &rockEffect->pos);
+
             if (rockEffect->pos.y < -500.0f) {
                 rockEffect->timer = -1;
             } else {
@@ -2717,7 +2723,11 @@ void BossHakugin_UpdateRocks(BossHakugin* this) {
     }
 }
 
-void BossHakugin_UpdateCrushingRocks(BossHakugin* this) {
+/**
+ * Updates the rocks that crush Goht as they fall onto it during its death cutscene. The rocks gradually speed up as
+ * they fall until they approach their target position, at which point they completely stop moving.
+ */
+void BossHakugin_UpdateFallingCrushingRocks(BossHakugin* this) {
     GohtCrushingRock* crushingRock;
     s32 i;
 
@@ -2914,9 +2924,9 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
 
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
-        BossHakugin_UpdateCrushingRocks(this);
+        BossHakugin_UpdateFallingCrushingRocks(this);
     } else {
-        BossHakugin_UpdateRocks(this);
+        BossHakugin_UpdateRockEffects(this);
     }
 
     BossHakugin_UpdateMalfunctionEffects(this);
@@ -3087,7 +3097,10 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 }
 
-void BossHakugin_DrawRocks(BossHakugin* this, PlayState* play) {
+/**
+ * Draws the various rock effects that Goht or EnHakurock can spawn.
+ */
+void BossHakugin_DrawRockEffects(BossHakugin* this, PlayState* play) {
     GohtRockEffect* rockEffect;
     s32 i;
 
@@ -3342,7 +3355,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         BossHakugin_DrawCrushingRocks(&this->actor, play);
     } else {
-        BossHakugin_DrawRocks(this, play);
+        BossHakugin_DrawRockEffects(this, play);
     }
 
     BossHakugin_DrawMalfunctionEffects(this, play);
@@ -3528,6 +3541,11 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
+/**
+ * Spawns the rocks that fall down and crush Goht in its death cutscene. Each rock is placed in the air with a falling
+ * speed of zero; `BossHakugin_DeathCutsceneCrushedByRocks` is responsible for setting the falling speed to a non-zero
+ * value when it wants a rock to start falling.
+ */
 void BossHakugin_SpawnCrushingRocks(BossHakugin* this) {
     s32 i;
     Vec3f pos;
@@ -3598,7 +3616,12 @@ void BossHakugin_SpawnCrushingRocks(BossHakugin* this) {
     }
 }
 
-void func_80B0DFA8(BossHakugin* this) {
+/**
+ * This function uses Goht's body parts colliders to set the collision info for the rocks that crushed Goht. Since Goht
+ * is always buried under rocks when this function is called, using its body parts colliders in this manner is fine;
+ * they aren't currently being used for their original purpose or for anything else.
+ */
+void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this) {
     s32 i;
     GohtCrushingRock* crushingRock;
     ColliderJntSphElement* element;
@@ -3613,9 +3636,10 @@ void func_80B0DFA8(BossHakugin* this) {
         element->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
         element->info.bumper.dmgFlags = 0xF3CFBBFF;
         element->info.bumperFlags &= ~BUMP_NO_HITMARK;
-
         element->info.elemType = ELEMTYPE_UNK0;
     }
+
+    // This for-loop will update the collider for GOHT_COLLIDER_BODYPART_LEFT_HORN.
     for (; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
         this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_ON;
         this->bodyCollider.elements[i].info.ocElemFlags &= ~OCELEM_ON;
@@ -3624,15 +3648,22 @@ void func_80B0DFA8(BossHakugin* this) {
     this->bodyCollider.base.colType = COLTYPE_HARD;
 }
 
-void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2) {
+/**
+ * Updates the rocks that crushed Goht after the boss fight is over. The rocks in this state don't actually move; the
+ * only thing this function does is update the collision for the rocks.
+ */
+void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BossHakugin* this = THIS;
 
-    func_80B0DFA8(this);
+    BossHakugin_UpdateCrushingRocksCollision(this);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
 }
 
+/**
+ * Draws the rocks that crush Goht, both when they are falling down and after they become stationary.
+ */
 void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
