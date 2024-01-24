@@ -1816,6 +1816,15 @@ void BossHakugin_SetupRun(BossHakugin* this) {
     this->actionFunc = BossHakugin_Run;
 }
 
+/**
+ * This function handles everything for when Goht is running in a circle around the boss arena, including:
+ * - Charging up and firing an electric ball when Goht is hit by Goron Spikes
+ * - Checking if Goht should wait around instead running and transitioning it to the waiting state if it should
+ * - Changing Goht's target speed and smooth-stepping its actual speed to match the target speed
+ * - Changing the play speed of Goht's running animation depending on its actual speed
+ * - Giving Goht's run a slightly-random drift so that it doesn't run perfectly straight
+ * - Checking if Goht should charge the player and transitioning it to the charging state if it should
+ */
 void BossHakugin_Run(BossHakugin* this, PlayState* play) {
     s16 yawDiff;
 
@@ -1842,6 +1851,9 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
     if (BossHakugin_ShouldWait(this, play)) {
         BossHakugin_SetupWait(this, play);
     } else {
+        // The `damagedSpeedUpCounter` increases by 35 every time the player hits Goht (when it's not downed) and
+        // decreases by 1 every frame. Thus, if the player repeatedly hits Goht in a short amount of time, this will
+        // exceed 55; in this circumstance, Goht will run twice as fast as it normally does to get away from the player.
         if (this->damagedSpeedUpCounter > 55) {
             this->damagedSpeedUpCounter = 0;
             this->timer = 40;
@@ -1861,6 +1873,7 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
                 } else {
                     this->targetSpeed = 14.5f;
                 }
+
                 this->targetSpeed += (30 - this->actor.colChkInfo.health) * (1.0f / 30.0f);
                 this->timer = 40;
             }
@@ -1900,8 +1913,12 @@ void BossHakugin_SetupCharge(BossHakugin* this) {
     this->actionFunc = BossHakugin_Charge;
 }
 
+/**
+ * This function makes Goht lower its head and charge quickly towards the player. If Goht hits the player, or if Goht
+ * misses and the player ends up behind it, then this function will transition Goht back to running.
+ */
 void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
-    s16 var_v0;
+    s16 angle;
 
     Math_ScaledStepToS(&this->frontHalfRotZ, 0x800, 0x100);
     Math_StepToF(&this->actor.speed, 25.0f, 2.0f);
@@ -1916,21 +1933,22 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
         } else {
             if (((this->transformedPlayerPos.x > 0.0f) && (this->transformedPlayerPos.x < this->distToLeftWall)) ||
                 ((this->transformedPlayerPos.x <= 0.0f) && (-this->transformedPlayerPos.x < this->distToRightWall))) {
-                var_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-                var_v0 = CLAMP(var_v0, -0x3000, 0x3000);
-                this->targetRotY = this->actor.shape.rot.y + var_v0;
+                angle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+                angle = CLAMP(angle, -0x3000, 0x3000);
+                this->targetRotY = this->actor.shape.rot.y + angle;
             } else {
                 this->targetRotY =
                     ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) >> 1) + this->actor.shape.rot.y;
             }
         }
 
-        var_v0 = this->targetRotY - this->baseRotY;
-        if (var_v0 > 0x1800) {
+        angle = this->targetRotY - this->baseRotY;
+        if (angle > 0x1800) {
             this->targetRotY = this->baseRotY + 0x1800;
-        } else if (var_v0 < -0x1800) {
+        } else if (angle < -0x1800) {
             this->targetRotY = this->baseRotY - 0x1800;
         }
+
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->targetRotY, 5, 0x800, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
