@@ -2376,8 +2376,8 @@ void BossHakugin_SetupDeathCutsceneSwerveIntoWall(BossHakugin* this) {
 }
 
 /**
- * Handles the second part of Goht's death cutscene where swerves hard to the side and slams into the wall. Once Goht's
- * y-rotation matches the target rotation, this function will transition Goht into being crushed by rocks.
+ * Handles the second part of Goht's death cutscene where it swerves hard to the side and slams into the wall. Once
+ * Goht's y-rotation matches the target rotation, this function will transition Goht into being crushed by rocks.
  */
 void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play) {
     Vec3f subCamAt;
@@ -2440,7 +2440,13 @@ typedef struct {
     /* 0x4 */ u32 limbHideFlags;
 } ExplosionLimbHideInfo; // size = 0x4
 
-static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
+/**
+ * This array is used to determine the timing of when certain rocks should fall to crush Goht. Rocks fall in four
+ * distinct waves, and which rocks fall in which wave is dependent on the values in this array. For example, for the
+ * first wave, rocks with an index of 0 to 14 all fall at once; for the second wave, rocks with an index of 15 to 25 all
+ * fall at once. You can see how this array is used in `BossHakugin_DeathCutsceneCrushedByRocks` for more information.
+ */
+static s32 sRockNums[5] = { 0, 15, 26, 33, 36 };
 
 /**
  * Various explosions go off as rocks fall to crush Goht. Each element of this array is used to determine:
@@ -2468,6 +2474,12 @@ static ExplosionLimbHideInfo sExplosionLimbHideInfo[] = {
                                          GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_THIGH) },
 };
 
+/**
+ * Handles the final part of Goht's death cutscene where rocks fall from the ceiling to crush it. As the rocks cover
+ * Goht's body, this function will set off various explosions and hide Goht's limbs. After 30 frames, this function will
+ * start the "boss defeated" theme, and after 180 frames, it will end the cutscene, spawn the heart container and
+ * blue warp, enable collision on the fallen rocks, and stop running Goht's regular update and draw functions.
+ */
 void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     Vec3s* pos;
@@ -2516,15 +2528,15 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
     if (((this->timer + 3) % 6) == 0) {
         s32 i;
 
-        index = (this->timer + 3) / 6 - 1;
-        if (index < ARRAY_COUNT(D_80B0EB24) - 1) {
-            for (i = D_80B0EB24[index]; i < D_80B0EB24[index + 1]; i++) {
+        index = ((this->timer + 3) / 6) - 1;
+        if (index < ARRAY_COUNT(sRockNums) - 1) {
+            for (i = sRockNums[index]; i < sRockNums[index + 1]; i++) {
                 this->crushingRocks[i].fallingSpeed = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
 
         if (index < 6) {
-            if (index & 1) {
+            if ((index % 2) != 0) {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_WALL);
             } else {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_BREAK);
