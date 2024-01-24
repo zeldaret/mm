@@ -1507,6 +1507,10 @@ void BossHakugin_SetupEntranceCutscene(BossHakugin* this, PlayState* play) {
     this->actionFunc = BossHakugin_EntranceCutscene;
 }
 
+/**
+ * Handles the cutscene that plays when the player first enters Goht's arena which shows it encased in ice. After 120
+ * frames, the cutscene ends and control is returned to the player.
+ */
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play) {
     static Vec3f sSubCamAt = { 492.0f, 28.0f, -1478.0f };
 
@@ -1536,6 +1540,11 @@ void BossHakugin_SetupFrozenBeforeFight(BossHakugin* this) {
     this->actionFunc = BossHakugin_FrozenBeforeFight;
 }
 
+/**
+ * Waits around until the player strikes the ice block with a Fire Arrow, which starts Goht's intro cutscene. In this
+ * state, Goht's ice block can freeze the player if they touch it; if this happens, this function will ensure the player
+ * can't be frozen by the ice block again until 40 frames pass.
+ */
 void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -1573,10 +1582,14 @@ void BossHakugin_SetupIntroCutsceneThaw(BossHakugin* this) {
     this->actionFunc = BossHakugin_IntroCutsceneThaw;
 }
 
+/**
+ * Handles the first part of Goht's intro cutscene which shows close ups of various parts of Goht while the ice
+ * surrounding it melts and spawns steam. After 100 frames, this function switches to the action where Goht wakes up.
+ */
 void BossHakugin_IntroCutsceneThaw(BossHakugin* this, PlayState* play) {
     Vec3f subCamEye;
     Vec3f subCamAt;
-    s32 temp_v1;
+    s32 alpha;
 
     this->timer--;
     if ((this->timer >= 30) && ((this->timer % 2) != 0)) {
@@ -1620,8 +1633,8 @@ void BossHakugin_IntroCutsceneThaw(BossHakugin* this, PlayState* play) {
     }
 
     this->iceScaleY -= 0.027f;
-    temp_v1 = (s32)(this->timer * 5.1f) + 50;
-    this->iceAlpha = CLAMP_MAX(temp_v1, 255);
+    alpha = (s32)(this->timer * 5.1f) + 50;
+    this->iceAlpha = CLAMP_MAX(alpha, 255);
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
 
@@ -1652,6 +1665,12 @@ void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     this->actionFunc = BossHakugin_IntroCutsceneWakeUp;
 }
 
+/**
+ * Handles the second part of Goht's intro cutscene where Goht wakes up from being frozen. For the first 70 frames of
+ * the cutscene, the camera travels up Goht's back until the player is in view in front of Goht. Afterwards, the camera
+ * focuses on Goht head-on as it looks around and destroys the wall of stalactites to its sides; this part of the
+ * cutscene is where the boss theme begins playing and Goht's title card appears.
+ */
 void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     static Vec3f sSubCamAt = { 377.0f, 140.0f, -1600.0f };
     static Vec3f sSubCamEye = { 282.0f, 108.0f, -1600.0f };
@@ -1708,15 +1727,15 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f sp30;
+    Vec3f subCamAt;
 
     this->subCamEye.x = player->actor.world.pos.x - 150.0f;
     this->subCamEye.y = player->actor.world.pos.y + 30.0f;
     this->subCamEye.z = player->actor.world.pos.z - 30.0f;
-    sp30.x = this->actor.world.pos.x - 100.0f;
-    sp30.y = this->actor.world.pos.y + 100.0f;
-    sp30.z = this->actor.world.pos.z;
-    func_800BE33C(&this->subCamEye, &sp30, &this->subCamRot, true);
+    subCamAt.x = this->actor.world.pos.x - 100.0f;
+    subCamAt.y = this->actor.world.pos.y + 100.0f;
+    subCamAt.z = this->actor.world.pos.z;
+    func_800BE33C(&this->subCamEye, &subCamAt, &this->subCamRot, true);
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
     this->timer = 0;
     this->actor.speed = 5.0f;
@@ -1726,6 +1745,11 @@ void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play) {
     this->actionFunc = BossHakugin_IntroCutsceneRun;
 }
 
+/**
+ * Handles the final part of Goht's intro cutscene where Goht runs forward and smashes through the wall of stalactites
+ * in front of it. This function manually overrides the control stick input to make the player run away from Goht, and
+ * it manually knocks the player back when Goht collides with them to make it appear as if Goht is running them over.
+ */
 void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Camera* subCam = Play_GetCamera(play, this->subCamId);
