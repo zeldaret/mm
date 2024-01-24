@@ -2907,7 +2907,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
 void BossHakugin_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     BossHakugin* this = (BossHakugin*)thisx;
-    Vec3s sp70;
+    Vec3s targetRot;
     Player* player = GET_PLAYER(play);
 
     this->blockMalfunctionEffects = false;
@@ -2926,9 +2926,9 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, (89100.0f * 0.001f), 0.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
-    func_800BE3D0(&this->actor, this->actor.shape.rot.y, &sp70);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, sp70.x, 0x100);
-    Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
+    func_800BE3D0(&this->actor, this->actor.shape.rot.y, &targetRot);
+    Math_ScaledStepToS(&this->actor.shape.rot.x, targetRot.x, 0x100);
+    Math_ScaledStepToS(&this->actor.shape.rot.z, targetRot.z, 0x100);
 
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         BossHakugin_UpdateFallingCrushingRocks(this);
@@ -2974,38 +2974,42 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         }
     }
 
+    // The lowest valid `floorHeight` the player can have while still being within the bounds of the arena is -320.0f.
+    // Thus, this is checking if the player is below the floor; this entire block is about moving the player to a valid
+    // position if they've somehow left the arena.
     if (player->actor.floorHeight < -400.0f) {
-        CollisionPoly* sp68 = NULL;
-        Vec3f sp5C;
-        Vec3f sp50;
+        CollisionPoly* poly = NULL;
+        Vec3f resultPos;
+        Vec3f posA;
         s32 bgId;
 
         if ((fabsf(player->actor.world.pos.z) < 1200.0f) && (fabsf(player->actor.world.pos.x) < 1200.0f)) {
-            s16 temp_v0_5 = Math_Atan2S_XY(player->actor.world.pos.z, player->actor.world.pos.x);
+            s16 atan = Math_Atan2S_XY(player->actor.world.pos.z, player->actor.world.pos.x);
 
-            sp50.x = Math_SinS(temp_v0_5) * 2000.0f;
-            sp50.z = Math_CosS(temp_v0_5) * 2000.0f;
+            posA.x = Math_SinS(atan) * 2000.0f;
+            posA.z = Math_CosS(atan) * 2000.0f;
         } else {
             if (player->actor.world.pos.z > 1200.0f) {
-                sp50.z = 1500.0f;
+                posA.z = 1500.0f;
             } else if (player->actor.world.pos.z < -1200.0f) {
-                sp50.z = -1500.0f;
+                posA.z = -1500.0f;
             } else {
-                sp50.z = player->actor.world.pos.z;
+                posA.z = player->actor.world.pos.z;
             }
             if (player->actor.world.pos.x > 1200.0f) {
-                sp50.x = 1500.0f;
+                posA.x = 1500.0f;
             } else if (player->actor.world.pos.x < -1200.0f) {
-                sp50.x = -1500.0f;
+                posA.x = -1500.0f;
             } else {
-                sp50.x = player->actor.world.pos.x;
+                posA.x = player->actor.world.pos.x;
             }
         }
-        sp50.y = 100.0f;
 
-        if (BgCheck_EntityLineTest1(&play->colCtx, &sp50, &player->actor.world.pos, &sp5C, &sp68, true, true, false,
-                                    true, &bgId)) {
-            Math_Vec3f_Copy(&player->actor.world.pos, &sp5C);
+        posA.y = 100.0f;
+
+        if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &player->actor.world.pos, &resultPos, &poly, true, true,
+                                    false, true, &bgId)) {
+            Math_Vec3f_Copy(&player->actor.world.pos, &resultPos);
             Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
             Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
             player->actor.floorHeight = player->actor.world.pos.y;
