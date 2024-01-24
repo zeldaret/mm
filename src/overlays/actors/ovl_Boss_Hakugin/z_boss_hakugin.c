@@ -2056,10 +2056,15 @@ void BossHakugin_SetupThrow(BossHakugin* this, PlayState* play) {
     this->actionFunc = BossHakugin_Throw;
 }
 
+/**
+ * This function stops Goht in place and makes it rotate its front half upwards; the player is "attached" to Goht's head
+ * and is lifted into the air as Goht rotates. When Goht finishes its rotation, it throws the player backwards and waits
+ * 10 frames before running again.
+ */
 void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 sp32;
-    f32 sp2C;
+    s16 angle;
+    f32 cos;
 
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->actor.speed, 0.0f, 2.0f);
@@ -2083,18 +2088,18 @@ void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
         this->timer--;
     } else {
         player->av2.actionVar2 = 0;
-        sp32 = -this->headRot.z + 0x1F40;
+        angle = -this->headRot.z + 0x1F40;
         player->actor.shape.rot.x = -this->headRot.z + 0x8FC0;
 
-        sp2C = Math_CosS(sp32);
-        player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->baseRotY) * (20.0f * sp2C));
-        player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(sp32) * 20.0f);
-        player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->baseRotY) * (20.0f * sp2C));
+        cos = Math_CosS(angle);
+        player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->baseRotY) * (20.0f * cos));
+        player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(angle) * 20.0f);
+        player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->baseRotY) * (20.0f * cos));
     }
 }
 
 void BossHakugin_SetupWait(BossHakugin* this, PlayState* play) {
-    f32 var_fv1;
+    f32 direction;
     s16 atan;
 
     if (this->actionFunc != BossHakugin_ShootLightning) {
@@ -2121,16 +2126,16 @@ void BossHakugin_SetupWait(BossHakugin* this, PlayState* play) {
         }
 
         if (this->direction == GOHT_DIRECTION_CLOCKWISE) {
-            var_fv1 = -1.0f;
+            direction = -1.0f;
             this->actor.shape.rot.y -= 0x4000;
         } else {
-            var_fv1 = 1.0f;
+            direction = 1.0f;
         }
 
         this->baseRotY = this->actor.shape.rot.y + (this->direction * 0x6000);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        this->actor.world.pos.x += var_fv1 * 300.0f * Math_CosS(this->actor.shape.rot.y);
-        this->actor.world.pos.z -= var_fv1 * 300.0f * Math_SinS(this->actor.shape.rot.y);
+        this->actor.world.pos.x += direction * 300.0f * Math_CosS(this->actor.shape.rot.y);
+        this->actor.world.pos.z -= direction * 300.0f * Math_SinS(this->actor.shape.rot.y);
         this->actor.world.pos.y += 500.0f;
         this->actor.world.pos.y =
             BgCheck_EntityRaycastFloor1(&play->colCtx, &this->actor.floorPoly, &this->actor.world.pos);
