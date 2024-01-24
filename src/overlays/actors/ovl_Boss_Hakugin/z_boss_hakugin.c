@@ -92,6 +92,13 @@ typedef enum GohtNextCutsceneType {
     /* 1 */ GOHT_NEXT_CUTSCENE_TYPE_INTRO
 } GohtNextCutsceneType;
 
+typedef enum GohtShadowSize {
+    /* 0 */ GOHT_SHADOW_SIZE_MEDIUM,
+    /* 1 */ GOHT_SHADOW_SIZE_LARGE,
+    /* 2 */ GOHT_SHADOW_SIZE_EXTRA_LARGE,
+    /* 3 */ GOHT_SHADOW_SIZE_SMALL
+} GohtShadowSize;
+
 ActorInit Boss_Hakugin_InitVars = {
     /**/ ACTOR_BOSS_HAKUGIN,
     /**/ ACTORCAT_BOSS,
@@ -3373,10 +3380,35 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 D_80B0EB70[6] = { 1, 2, 3, 3, 2, 1 };
-s32 D_80B0EB88[7] = { 2, 3, 4, 4, 4, 3, 2 };
-s32 D_80B0EBA4[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
-s32 D_80B0EBC4[14] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
+/**
+ * These four arrays encode circular shadow maps of various sizes. For an array of length N, the shadow map is N rows
+ * tall, and each entry in the array describes the start and end point of the shadow within a given row (the exact
+ * values of the start and end points are determined by the loops within BossHakugin_FillShadowTex). To illustrate using
+ * the sShadowSmallMap as an example:
+ * -3 -2 -1  0  1
+ *  -------------
+ *  0  0  1  0  0
+ *  0  1  1  1  0
+ *  1  1  1  1  1
+ *  1  1  1  1  1
+ *  0  1  1  1  0
+ *  0  0  1  0  0
+ */
+static s32 sShadowSmallMap[] = {
+    1, 2, 3, 3, 2, 1,
+};
+
+static s32 sShadowMediumMap[] = {
+    2, 3, 4, 4, 4, 3, 2,
+};
+
+static s32 sShadowLargeMap[] = {
+    2, 3, 4, 4, 4, 4, 3, 2,
+};
+
+static s32 sShadowExtraLargeMap[] = {
+    2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2,
+};
 
 static s32 sParentShadowBodyParts[GOHT_BODYPART_MAX] = {
     GOHT_BODYPART_THORAX,                // GOHT_BODYPART_PELVIS
@@ -3397,21 +3429,21 @@ static s32 sParentShadowBodyParts[GOHT_BODYPART_MAX] = {
 };
 
 static u8 sShadowSizes[GOHT_BODYPART_MAX] = {
-    1, // GOHT_BODYPART_PELVIS
-    2, // GOHT_BODYPART_THORAX
-    1, // GOHT_BODYPART_HEAD
-    0, // GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG
-    3, // GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG
-    3, // GOHT_BODYPART_FRONT_RIGHT_HOOF
-    0, // GOHT_BODYPART_FRONT_LEFT_UPPER_LEG
-    3, // GOHT_BODYPART_FRONT_LEFT_LOWER_LEG
-    3, // GOHT_BODYPART_FRONT_LEFT_HOOF
-    0, // GOHT_BODYPART_BACK_RIGHT_THIGH
-    3, // GOHT_BODYPART_BACK_RIGHT_SHIN
-    3, // GOHT_BODYPART_BACK_RIGHT_HOOF
-    0, // GOHT_BODYPART_BACK_LEFT_THIGH
-    3, // GOHT_BODYPART_BACK_LEFT_SHIN
-    3  // GOHT_BODYPART_BACK_LEFT_HOOF
+    GOHT_SHADOW_SIZE_LARGE,       // GOHT_BODYPART_PELVIS
+    GOHT_SHADOW_SIZE_EXTRA_LARGE, // GOHT_BODYPART_THORAX
+    GOHT_SHADOW_SIZE_LARGE,       // GOHT_BODYPART_HEAD
+    GOHT_SHADOW_SIZE_MEDIUM,      // GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_FRONT_RIGHT_HOOF
+    GOHT_SHADOW_SIZE_MEDIUM,      // GOHT_BODYPART_FRONT_LEFT_UPPER_LEG
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_FRONT_LEFT_LOWER_LEG
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_FRONT_LEFT_HOOF
+    GOHT_SHADOW_SIZE_MEDIUM,      // GOHT_BODYPART_BACK_RIGHT_THIGH
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_BACK_RIGHT_SHIN
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_BACK_RIGHT_HOOF
+    GOHT_SHADOW_SIZE_MEDIUM,      // GOHT_BODYPART_BACK_LEFT_THIGH
+    GOHT_SHADOW_SIZE_SMALL,       // GOHT_BODYPART_BACK_LEFT_SHIN
+    GOHT_SHADOW_SIZE_SMALL        // GOHT_BODYPART_BACK_LEFT_HOOF
 };
 
 void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
@@ -3444,6 +3476,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                 pos.y = bodyPartPos->y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
                 pos.z = bodyPartPos->z - this->actor.world.pos.z;
             }
+
             Matrix_MultVec3f(&pos, &startVec);
 
             startVec.x *= 0.07f;
@@ -3452,27 +3485,27 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
             baseX = (u16)(s32)(startVec.x + 32.0f);
             baseY = (u16)((s32)startVec.y * 64);
 
-            if (sShadowSizes[i] == 2) {
-                for (y = 0, addY = -0x180; y < ARRAY_COUNT(D_80B0EBC4); y++, addY += 0x40) {
-                    for (x = -D_80B0EBC4[y]; x < D_80B0EBC4[y]; x++) {
+            if (sShadowSizes[i] == GOHT_SHADOW_SIZE_EXTRA_LARGE) {
+                for (y = 0, addY = -0x180; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 0x40) {
+                    for (x = -sShadowExtraLargeMap[y]; x < sShadowExtraLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
                 }
-            } else if (sShadowSizes[i] == 1) {
-                for (y = 0, addY = -0x100; y < ARRAY_COUNT(D_80B0EBA4); y++, addY += 0x40) {
-                    for (x = -D_80B0EBA4[y]; x < D_80B0EBA4[y]; x++) {
+            } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_LARGE) {
+                for (y = 0, addY = -0x100; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 0x40) {
+                    for (x = -sShadowLargeMap[y]; x < sShadowLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
                 }
-            } else if (sShadowSizes[i] == 0) {
-                for (y = 0, addY = -0xC0; y < ARRAY_COUNT(D_80B0EB88); y++, addY += 0x40) {
-                    for (x = -D_80B0EB88[y]; x < D_80B0EB88[y]; x++) {
+            } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_MEDIUM) {
+                for (y = 0, addY = -0xC0; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 0x40) {
+                    for (x = -sShadowMediumMap[y]; x < sShadowMediumMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
@@ -3480,8 +3513,8 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else {
-                for (y = 0, addY = -0x80; y < ARRAY_COUNT(D_80B0EB70); y++, addY += 0x40) {
-                    for (x = -D_80B0EB70[y]; x < D_80B0EB70[y]; x++) {
+                for (y = 0, addY = -0x80; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 0x40) {
+                    for (x = -sShadowSmallMap[y]; x < sShadowSmallMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
@@ -3508,6 +3541,9 @@ void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this) {
     }
 }
 
+/**
+ * Draws Goht's dynamic shadow underneath it.
+ */
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     s32 pad[2];
     f32 alpha;
