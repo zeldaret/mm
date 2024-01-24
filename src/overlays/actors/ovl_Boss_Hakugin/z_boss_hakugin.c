@@ -2512,7 +2512,7 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
         sp60 = (this->timer + 3) / 6 - 1;
         if (sp60 < ARRAY_COUNT(D_80B0EB24) - 1) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
-                this->rockEffects[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
+                this->crushingRocks[i].fallingSpeed = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
 
@@ -2699,14 +2699,14 @@ void BossHakugin_UpdateRocks(BossHakugin* this) {
 }
 
 void BossHakugin_UpdateCrushingRocks(BossHakugin* this) {
-    GohtRockEffect* rockEffect;
+    GohtCrushingRock* crushingRock;
     s32 i;
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
-        rockEffect = &this->rockEffects[i];
-        Math_StepToF(&rockEffect->pos.y, rockEffect->velocity.x, rockEffect->velocity.y);
-        if (rockEffect->velocity.y > 0.0f) {
-            rockEffect->velocity.y += 6.0f;
+        crushingRock = &this->crushingRocks[i];
+        Math_StepToF(&crushingRock->pos.y, crushingRock->targetPosY, crushingRock->fallingSpeed);
+        if (crushingRock->fallingSpeed > 0.0f) {
+            crushingRock->fallingSpeed += 6.0f;
         }
     }
 }
@@ -3513,7 +3513,7 @@ void BossHakugin_SetupCrushingRocks(BossHakugin* this) {
     s32 i;
     Vec3f pos;
     s32 num = 15;
-    GohtRockEffect* rockEffect = this->rockEffects;
+    GohtCrushingRock* crushingRock = this->crushingRocks;
     s32 j;
     s32 rockCount;
     f32 sinY = Math_SinS(this->actor.shape.rot.y) * 65.0f;
@@ -3534,64 +3534,64 @@ void BossHakugin_SetupCrushingRocks(BossHakugin* this) {
         pos.y = this->actor.world.pos.y + (85.0f * (4 - i)) + 20.0f;
         pos.z = this->actor.world.pos.z - (i * cosY) + offsetZ2;
 
-        rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
-        Math_Vec3f_Copy(&rockEffect->pos, &pos);
+        crushingRock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        Math_Vec3f_Copy(&crushingRock->pos, &pos);
 
         rockCount = num >> 1;
         if (rockCount == 0) {
             break;
         }
 
-        rockEffect++;
+        crushingRock++;
 
         scale = i / (f32)rockCount;
         offsetX1 = (cosY + sinY) * scale;
         offsetZ1 = (cosY - sinY) * scale;
 
-        for (j = 0; j < rockCount; j++, rockEffect++) {
-            rockEffect->pos.x = pos.x + offsetX1 * (rockCount - j);
-            rockEffect->pos.y = pos.y + i * sinZ;
-            rockEffect->pos.z = pos.z + offsetZ1 * (rockCount - j);
-            rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        for (j = 0; j < rockCount; j++, crushingRock++) {
+            crushingRock->pos.x = pos.x + offsetX1 * (rockCount - j);
+            crushingRock->pos.y = pos.y + i * sinZ;
+            crushingRock->pos.z = pos.z + offsetZ1 * (rockCount - j);
+            crushingRock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
 
         offsetX2 = (sinY - cosY) * scale;
         offsetZ2 = (cosY + sinY) * scale;
 
-        for (j = 0; j < rockCount; j++, rockEffect++) {
-            rockEffect->pos.x = pos.x + offsetX2 * (rockCount - j);
-            rockEffect->pos.y = pos.y - i * sinZ;
-            rockEffect->pos.z = pos.z + offsetZ2 * (rockCount - j);
-            rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        for (j = 0; j < rockCount; j++, crushingRock++) {
+            crushingRock->pos.x = pos.x + offsetX2 * (rockCount - j);
+            crushingRock->pos.y = pos.y - i * sinZ;
+            crushingRock->pos.z = pos.z + offsetZ2 * (rockCount - j);
+            crushingRock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
     }
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
-        rockEffect = &this->rockEffects[i];
+        crushingRock = &this->crushingRocks[i];
 
-        rockEffect->scale += Rand_ZeroFloat(5.0f) * 0.001f;
-        rockEffect->rot.x = (s32)Rand_Next() >> 0x10;
-        rockEffect->rot.y = (s32)Rand_Next() >> 0x10;
-        rockEffect->rot.z = (s32)Rand_Next() >> 0x10;
-        rockEffect->velocity.x = rockEffect->pos.y;
-        rockEffect->velocity.y = 0.0f;
-        rockEffect->pos.y += 850.0f;
+        crushingRock->scale += Rand_ZeroFloat(5.0f) * 0.001f;
+        crushingRock->rot.x = (s32)Rand_Next() >> 0x10;
+        crushingRock->rot.y = (s32)Rand_Next() >> 0x10;
+        crushingRock->rot.z = (s32)Rand_Next() >> 0x10;
+        crushingRock->targetPosY = crushingRock->pos.y;
+        crushingRock->fallingSpeed = 0.0f;
+        crushingRock->pos.y += 850.0f;
     }
 }
 
 void func_80B0DFA8(BossHakugin* this) {
     s32 i;
-    GohtRockEffect* rockEffect;
+    GohtCrushingRock* crushingRock;
     ColliderJntSphElement* element;
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT / 2; i++) {
-        rockEffect = &this->rockEffects[i << 1];
+        crushingRock = &this->crushingRocks[i << 1];
         element = &this->bodyCollider.elements[i];
 
-        element->dim.worldSphere.center.x = rockEffect->pos.x;
-        element->dim.worldSphere.center.y = rockEffect->pos.y;
-        element->dim.worldSphere.center.z = rockEffect->pos.z;
-        element->dim.worldSphere.radius = rockEffect->scale * 3000.0f;
+        element->dim.worldSphere.center.x = crushingRock->pos.x;
+        element->dim.worldSphere.center.y = crushingRock->pos.y;
+        element->dim.worldSphere.center.z = crushingRock->pos.z;
+        element->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
         element->info.bumper.dmgFlags = 0xF3CFBBFF;
         element->info.bumperFlags &= ~BUMP_NO_HITMARK;
 
@@ -3617,7 +3617,7 @@ void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2) {
 void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
-    GohtRockEffect* rockEffect;
+    GohtCrushingRock* crushingRock;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3625,10 +3625,10 @@ void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
-        rockEffect = &this->rockEffects[i];
+        crushingRock = &this->crushingRocks[i];
 
-        Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
-        Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
+        Matrix_SetTranslateRotateYXZ(crushingRock->pos.x, crushingRock->pos.y, crushingRock->pos.z, &crushingRock->rot);
+        Matrix_Scale(crushingRock->scale, crushingRock->scale, crushingRock->scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);

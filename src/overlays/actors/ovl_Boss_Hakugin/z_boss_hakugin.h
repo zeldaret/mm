@@ -28,7 +28,17 @@ typedef struct GohtRockEffect {
     /* 0x24 */ f32 scale;
 } GohtRockEffect; // size = 0x28
 
+typedef struct GohtCrushingRock {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 targetPosY;
+    /* 0x10 */ f32 fallingSpeed;
+    /* 0x14 */ UNK_TYPE1 pad_14[0x8];
+    /* 0x1C */ Vec3s rot;
+    /* 0x24 */ f32 scale;
+} GohtCrushingRock; // size = 0x28
+
 #define GOHT_ROCK_EFFECT_COUNT 180
+#define GOHT_CRUSHING_ROCK_COUNT 36
 
 typedef struct GohtLightningSegment {
     /* 0x00 */ Vec3f pos;
@@ -153,7 +163,10 @@ typedef struct BossHakugin {
     /* 0x0964 */ ColliderCylinder iceCollider;
     /* 0x09B0 */ Actor* boulders[8];
     /* 0x09D0 */ Actor* stalactites[10];
-    /* 0x09F8 */ GohtRockEffect rockEffects[GOHT_ROCK_EFFECT_COUNT];
+    /* 0x09F8 */ union {
+                     GohtRockEffect rockEffects[GOHT_ROCK_EFFECT_COUNT];
+                     GohtCrushingRock crushingRocks[GOHT_CRUSHING_ROCK_COUNT]; 
+                 };
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
     /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_MALFUNCTION_EFFECTS_PER_TYPE]; // Black smoke and electric zaps on body parts as damage accumulates 
     /* 0x3734 */ Vec3f electricBallPos[10];
