@@ -34,7 +34,7 @@ void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this);
 void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
-void BossHakugin_SetupCrushingRocks(BossHakugin* this);
+void BossHakugin_SpawnCrushingRocks(BossHakugin* this);
 void func_80B0DFA8(BossHakugin* this);
 
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
@@ -2431,18 +2431,25 @@ void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this) {
     this->timer = 0;
     this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 0.5f;
-    BossHakugin_SetupCrushingRocks(this);
+    BossHakugin_SpawnCrushingRocks(this);
     this->actionFunc = BossHakugin_DeathCutsceneCrushedByRocks;
 }
 
 typedef struct {
     /* 0x0 */ s32 colliderIndex;
     /* 0x4 */ u32 limbHideFlags;
-} BossHakuginStruct_B0A8C4; // size = 0x4
+} ExplosionLimbHideInfo; // size = 0x4
 
 static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
 
-static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
+/**
+ * Various explosions go off as rocks fall to crush Goht. Each element of this array is used to determine:
+ * - At which body part collider a given explosion should originate
+ * - Which limbs should be hidden when an explosion occurs. This is necessary to do because Goht will still be
+ *   performing its running animation as it gets crushed; if its limbs were not hidden, the player would be able
+ *   to see them sticking out of the rocks.
+ */
+static ExplosionLimbHideInfo sExplosionLimbHideInfo[] = {
     { GOHT_COLLIDER_BODYPART_HEAD, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_HEAD) | GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_JAW) },
     { GOHT_COLLIDER_BODYPART_FRONT_RIGHT_LOWER_LEG, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_RIGHT_UPPER_LEG) |
                                                         GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_RIGHT_LOWER_LEG) |
@@ -2467,11 +2474,11 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
     Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f eyeTarget;
     s16 eyeTargetAngle;
-    s32 sp60;
-    BossHakuginStruct_B0A8C4* unkStruct;
+    s32 index;
+    ExplosionLimbHideInfo* explosionLimbHideInfo;
 
     SkelAnime_Update(&this->skelAnime);
-    sp60 = this->timer / 6;
+    index = this->timer / 6;
 
     eyeTargetAngle = this->actor.shape.rot.y + (0x6000 * this->direction);
     eyeTarget.x = (Math_SinS(eyeTargetAngle) * 500.0f) + this->actor.world.pos.x;
@@ -2480,7 +2487,7 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
     Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
     Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &this->subCamEye);
 
-    if (sp60 == 30) {
+    if (index == 30) {
         Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
         Play_DisableMotionBlur();
@@ -2490,9 +2497,9 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
         func_80B0DFA8(this);
         this->actor.draw = BossHakugin_DrawCrushingRocks;
         this->actor.update = BossHakugin_UpdateDead;
-    } else if (((this->timer % 6) == 0) && (sp60 < 6)) {
-        unkStruct = &D_80B0EB38[sp60];
-        pos = &this->bodyCollider.elements[unkStruct->colliderIndex].dim.worldSphere.center;
+    } else if (((this->timer % 6) == 0) && (index < 6)) {
+        explosionLimbHideInfo = &sExplosionLimbHideInfo[index];
+        pos = &this->bodyCollider.elements[explosionLimbHideInfo->colliderIndex].dim.worldSphere.center;
         bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, pos->x, pos->y, pos->z,
                                    BOMB_EXPLOSIVE_TYPE_POWDER_KEG, 0, 0, BOMB_TYPE_BODY);
 
@@ -2500,8 +2507,8 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
             bomb->timer = 0;
         }
 
-        this->limbDrawFlags &= ~unkStruct->limbHideFlags;
-        if (sp60 == 5) {
+        this->limbDrawFlags &= ~explosionLimbHideInfo->limbHideFlags;
+        if (index == 5) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
         }
     }
@@ -2509,15 +2516,15 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
     if (((this->timer + 3) % 6) == 0) {
         s32 i;
 
-        sp60 = (this->timer + 3) / 6 - 1;
-        if (sp60 < ARRAY_COUNT(D_80B0EB24) - 1) {
-            for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
+        index = (this->timer + 3) / 6 - 1;
+        if (index < ARRAY_COUNT(D_80B0EB24) - 1) {
+            for (i = D_80B0EB24[index]; i < D_80B0EB24[index + 1]; i++) {
                 this->crushingRocks[i].fallingSpeed = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
 
-        if (sp60 < 6) {
-            if (sp60 & 1) {
+        if (index < 6) {
+            if (index & 1) {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_WALL);
             } else {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_BREAK);
@@ -2543,7 +2550,6 @@ void func_80B0AC30(BossHakugin* this, PlayState* play) {
             player->actor.velocity.y = 10.0f;
             player->unk_B8C = 4;
             player->actor.shape.rot.y = player->actor.home.rot.y = player->currentYaw = player->actor.world.rot.y;
-
         } else if (!(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
             s16 var_a3 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
@@ -2552,6 +2558,7 @@ void func_80B0AC30(BossHakugin* this, PlayState* play) {
             } else {
                 var_a3 = this->actor.shape.rot.y + (s32)(var_a3 / 2.0f) - 0x4000;
             }
+
             func_800B8D50(play, &this->actor, 5.0f, var_a3, 6.0f, 0);
         }
     }
@@ -3509,7 +3516,7 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void BossHakugin_SetupCrushingRocks(BossHakugin* this) {
+void BossHakugin_SpawnCrushingRocks(BossHakugin* this) {
     s32 i;
     Vec3f pos;
     s32 num = 15;

@@ -12982,7 +12982,7 @@
     0x80B0D2B8:("BossHakugin_FillShadowTex",),
     0x80B0D69C:("BossHakugin_GenShadowTex",),
     0x80B0D750:("BossHakugin_DrawShadowTex",),
-    0x80B0D9CC:("BossHakugin_SetupCrushingRocks",),
+    0x80B0D9CC:("BossHakugin_SpawnCrushingRocks",),
     0x80B0DFA8:("func_80B0DFA8",),
     0x80B0E548:("BossHakugin_UpdateDead",),
     0x80B0E5A4:("BossHakugin_DrawCrushingRocks",),
