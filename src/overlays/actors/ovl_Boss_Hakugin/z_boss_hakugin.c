@@ -2148,12 +2148,20 @@ void BossHakugin_SetupWait(BossHakugin* this, PlayState* play) {
     this->actionFunc = BossHakugin_Wait;
 }
 
+/**
+ * This function makes Goht wait while facing the direction opposite of the direction in which it was last running. If
+ * the player gets in range in front of Goht, it will stop waiting and start shooting lightning. Goht will stop waiting
+ * and start running in its original direction if the player gets behind Goht, if the player is too close to Goht, or if
+ * the player gets hit by one of Goht's lightning attacks. If Goht is still waiting after 150 frames, then it will
+ * reverse its direction and run towards the player.
+ */
 void BossHakugin_Wait(BossHakugin* this, PlayState* play) {
     f32 absTransformedPlayerPosX;
 
     SkelAnime_Update(&this->skelAnime);
     absTransformedPlayerPosX = fabsf(this->transformedPlayerPos.x);
     Math_StepToF(&this->chargingLightOrbScale, 0.0f, 6.0f);
+
     if ((this->transformedPlayerPos.z < 0.0f) || (this->actor.xzDistToPlayer < 750.0f) ||
         (this->lightningHitSomething == true)) {
         BossHakugin_SetupRun(this);
@@ -2187,9 +2195,14 @@ void BossHakugin_SetupShootLightning(BossHakugin* this) {
     this->actionFunc = BossHakugin_ShootLightning;
 }
 
+/**
+ * This function will make Goht charge up an attack and then fire a single burst of lightning. After this, it will go
+ * back to waiting.
+ */
 void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
+
     if (BossHakugin_ChargeUpAttack(this)) {
         BossHakugin_AddLightningSegments(this, &this->chargingLightningPos, play);
         BossHakugin_SetupWait(this, play);
@@ -2207,6 +2220,10 @@ void BossHakugin_SetupCutsceneStart(BossHakugin* this) {
     this->actionFunc = BossHakugin_CutsceneStart;
 }
 
+/**
+ * Starts either the entrance cutscene, the intro cutscene, or the death cutscene, depending on Goht's current action
+ * function and health.
+ */
 void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
