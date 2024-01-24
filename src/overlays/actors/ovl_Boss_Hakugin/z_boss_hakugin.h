@@ -110,7 +110,7 @@ typedef struct BossHakugin {
     /* 0x018D */ u8 preventBoulderSpawnCount;
     /* 0x018E */ u8 preventStalactiteSpawnCount;
     /* 0x018F */ u8 preventBombSpawnCount;
-    /* 0x0190 */ u8 blockMalfunctionEffects; // boolean?
+    /* 0x0190 */ u8 blockMalfunctionEffects;
     /* 0x0191 */ u8 malfunctionEffectIndex;
     /* 0x0192 */ u8 electricBallState; // See `GohtElectricBallState`
     /* 0x0193 */ u8 iceAlpha;

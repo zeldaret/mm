@@ -3039,6 +3039,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
 
     if (!this->blockMalfunctionEffects && (limbIndex == sCurrentLimbIndex)) {
         Matrix_MultZero(&this->malfunctionEffects[sCurrentMalfunctionType][this->malfunctionEffectIndex].pos);
+
         sCurrentMalfunctionType--;
         if (sCurrentMalfunctionType < 0) {
             sCurrentMalfunctionType = GOHT_MALFUNCTION_NUM_TYPES - 1;
@@ -3071,6 +3072,7 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
     Collider_UpdateSpheres(limbIndex, &this->bodyCollider);
     bodyPartIndex = sLimbToBodyParts[limbIndex];
+
     if (bodyPartIndex > BODYPART_NONE) {
         for (i = 0; i < GOHT_COLLIDER_BODYPART_MAX; i++) {
             if (this->bodyCollider.elements[i].dim.limb == limbIndex) {
@@ -3138,6 +3140,9 @@ void BossHakugin_DrawRockEffects(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draws the black smoke component of the malfunction effect. The electrical component is drawn by EffectSsFhgFlash.
+ */
 void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
     GohtMalfunctionEffect* malfunctionEffect;
     s32 i;
@@ -3158,7 +3163,7 @@ void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
             if (malfunctionEffect->alpha > 0) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, malfunctionEffect->alpha);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, malfunctionEffect->timer * 3,
+                           Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, malfunctionEffect->timer * 3,
                                             malfunctionEffect->timer * 15, 32, 64, 1, 0, 0, 32, 32));
                 Matrix_Translate(malfunctionEffect->pos.x, malfunctionEffect->pos.y, malfunctionEffect->pos.z,
                                  MTXMODE_NEW);
@@ -3174,6 +3179,9 @@ void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draws the electricity and light orb that appears in front of Goht's head as it charges up certain attacks.
+ */
 void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
     s32 pad;
     s32 i;
@@ -3221,6 +3229,9 @@ void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draws the segments of the lightning attack that Goht can shoot at the player while it's waiting.
+ */
 void BossHakugin_DrawLightningSegments(BossHakugin* this, PlayState* play) {
     GohtLightningSegment* lightningSegment;
     s32 i;
@@ -3255,6 +3266,9 @@ void BossHakugin_DrawLightningSegments(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draws the electric balls that Goht can shoot at the player.
+ */
 void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     s32 pad[4];
     PlayState* play = play2;
@@ -3282,9 +3296,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, sLightColor.r, sLightColor.g, sLightColor.b, 0);
-
     rotZ = this->lightOrbRotZ;
-
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbMaterialDL);
 
     for (; i >= end; i--) {
@@ -3306,6 +3318,9 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draws the ice that encases Goht before the fight begins.
+ */
 void BossHakugin_DrawIce(BossHakugin* this, PlayState* play) {
     s32 pad;
 
@@ -3322,8 +3337,8 @@ void BossHakugin_DrawIce(BossHakugin* this, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->gameplayFrames & 0xFF, 32, 16, 1, 0,
-                                (play->gameplayFrames * 2) & 0xFF, 64, 32)); // check
+               Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0, play->gameplayFrames & 0xFF, 32, 16, 1, 0,
+                                (play->gameplayFrames * 2) & 0xFF, 64, 32));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, this->iceAlpha);
     gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
@@ -3353,6 +3368,12 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     if (!this->blockMalfunctionEffects) {
         BossHakugin_AddMalfunctionEffects(this, play);
     }
+
+    // Setting `blockMalfunctionEffects` to true here ensures that `BossHakugin_AddMalfunctionEffects` won't be called
+    // until `BossHakugin_Update` is called again, which is the only function that sets this to false. The player can
+    // call draw functions over and over without ever calling update functions by pausing and unpausing rapidly; by
+    // setting this to true, the developers ensured that the player couldn't add a potentially-infinite amount of
+    // malfunction effects by repeatedly pausing.
     this->blockMalfunctionEffects = true;
 
     if (this->actor.colorFilterTimer != 0) {
