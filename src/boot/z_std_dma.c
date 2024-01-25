@@ -240,7 +240,7 @@ void DmaMgr_ThreadEntry(void* arg) {
  */
 s32 DmaMgr_RequestAsync(DmaRequest* req, void* ram, uintptr_t vrom, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue,
                         OSMesg msg) {
-    if (gIrqMgrResetStatus >= 2) {
+    if (gIrqMgrResetStatus >= IRQ_RESET_STATUS_NMI) {
         return -2;
     }
 

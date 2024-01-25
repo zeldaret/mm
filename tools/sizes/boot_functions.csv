@@ -27,10 +27,10 @@ asm/non_matchings/boot/yaz0/Yaz0_DecompressImpl.s,Yaz0_DecompressImpl,0x80080FF0
 asm/non_matchings/boot/yaz0/Yaz0_Decompress.s,Yaz0_Decompress,0x80081178,0x36
 asm/non_matchings/boot/irqmgr/IrqMgr_AddClient.s,IrqMgr_AddClient,0x80081250,0x23
 asm/non_matchings/boot/irqmgr/IrqMgr_RemoveClient.s,IrqMgr_RemoveClient,0x800812DC,0x23
-asm/non_matchings/boot/irqmgr/IrqMgr_SendMesgForClient.s,IrqMgr_SendMesgForClient,0x80081368,0x14
-asm/non_matchings/boot/irqmgr/IrqMgr_JamMesgForClient.s,IrqMgr_JamMesgForClient,0x800813B8,0x19
+asm/non_matchings/boot/irqmgr/IrqMgr_SendMesgToClients.s,IrqMgr_SendMesgToClients,0x80081368,0x14
+asm/non_matchings/boot/irqmgr/IrqMgr_JamMesgToClients.s,IrqMgr_JamMesgToClients,0x800813B8,0x19
 asm/non_matchings/boot/irqmgr/IrqMgr_HandlePreNMI.s,IrqMgr_HandlePreNMI,0x8008141C,0x26
-asm/non_matchings/boot/irqmgr/IrqMgr_CheckStack.s,IrqMgr_CheckStack,0x800814B4,0x8
+asm/non_matchings/boot/irqmgr/IrqMgr_CheckStacks.s,IrqMgr_CheckStacks,0x800814B4,0x8
 asm/non_matchings/boot/irqmgr/IrqMgr_HandlePRENMI450.s,IrqMgr_HandlePRENMI450,0x800814D4,0x1F
 asm/non_matchings/boot/irqmgr/IrqMgr_HandlePRENMI480.s,IrqMgr_HandlePRENMI480,0x80081550,0x16
 asm/non_matchings/boot/irqmgr/IrqMgr_HandlePRENMI500.s,IrqMgr_HandlePRENMI500,0x800815A8,0x9

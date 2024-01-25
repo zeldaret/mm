@@ -451,7 +451,7 @@ void EnJso2_UpdateSubCam(EnJso2* this, PlayState* play) {
 }
 
 s32 EnJso2_ShouldAdvanceMessage(PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         return true;
     }

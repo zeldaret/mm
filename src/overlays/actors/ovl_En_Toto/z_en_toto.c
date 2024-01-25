@@ -412,7 +412,7 @@ s32 func_80BA407C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA40D4(EnToto* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         return 1;
     }
     return 0;

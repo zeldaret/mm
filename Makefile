@@ -172,7 +172,7 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ## Assets binaries (PNGs, JPGs, etc)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c")
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
 # Prevents building C files that will be #include'd
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
@@ -302,6 +302,7 @@ clean:
 
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
+	$(RM) -rf assets/text/*.h
 	$(RM) -rf build/assets
 	$(RM) -rf .extracted-assets.json
 
@@ -372,6 +373,16 @@ build/baserom/%.o: baserom/%
 
 build/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
+
+build/assets/text/message_data.enc.h: assets/text/message_data.h
+	python3 tools/msg/nes/msgencNES.py -o $@ $<
+
+build/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
+	python3 tools/msg/staff/msgencStaff.py -o $@ $<
+
+build/assets/text/message_data_static.o: build/assets/text/message_data.enc.h
+build/assets/text/staff_message_data_static.o: build/assets/text/staff_message_data.enc.h
+build/src/code/z_message.o: build/assets/text/message_data.enc.h build/assets/text/staff_message_data.enc.h
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<

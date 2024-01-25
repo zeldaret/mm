@@ -268,7 +268,7 @@ endseg
 
 beginseg
     name "kanji"
-    include "build/baserom/kanji.o"
+    include "build/assets/interface/kanji/kanji.o"
 endseg
 
 beginseg
@@ -405,31 +405,35 @@ endseg
 beginseg
     name "message_static"
     romalign 0x1000
-    include "build/baserom/message_static.o"
+    include "build/assets/interface/message_static/message_static.o"
+    number 7
 endseg
 
 beginseg
     name "message_texture_static"
     romalign 0x1000
-    include "build/baserom/message_texture_static.o"
+    include "build/assets/interface/message_texture_static/message_texture_static.o"
+    number 9
 endseg
 
 beginseg
     name "nes_font_static"
     romalign 0x1000
-    include "build/baserom/nes_font_static.o"
+    include "build/assets/interface/nes_font_static/nes_font_static.o"
 endseg
 
 beginseg
     name "message_data_static"
     romalign 0x1000
-    include "build/baserom/message_data_static.o"
+    include "build/assets/text/message_data_static.o"
+    number 8
 endseg
 
 beginseg
     name "staff_message_data_static"
     romalign 0x1000
-    include "build/baserom/staff_message_data_static.o"
+    include "build/assets/text/staff_message_data_static.o"
+    number 7
 endseg
 
 beginseg
@@ -496,7 +500,7 @@ beginseg
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
     include "build/src/code/z_nmi_buff.o"
-    include "build/src/code/code_8010C1B0.o"
+    include "build/src/code/z_nulltask.o"
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
@@ -580,7 +584,7 @@ beginseg
     include "build/src/code/c_keyframe.o"
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
-    include "build/asm/code/code_80185F90.text.o" // handwritten
+    include "build/asm/code/kanread.text.o" // handwritten
     include "build/src/code/osFlash.o"
     pad_text
     pad_text
