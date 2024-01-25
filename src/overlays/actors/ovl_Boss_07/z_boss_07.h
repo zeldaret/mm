@@ -15,7 +15,7 @@ struct Boss07;
 
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
-typedef enum {
+typedef enum MajoraParams {
     /*   0 */ MAJORAS_BOSS,
     /*  10 */ MAJORAS_MASK = 10,
     /*  11 */ MAJORAS_MASK_CS,

@@ -474,6 +474,7 @@ s32 Boss07_IsFacingPlayer(Boss07* this, PlayState* play) {
 
 void Boss07_SmoothStop(Boss07* this, f32 maxStep) {
     Math_ApproachZeroF(&this->actor.speed, 1.0f, maxStep);
+
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) {
         this->actor.speed = 0.0f;
     }
@@ -861,10 +862,20 @@ void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->unk_17E8 = 0x1400;
 }
 
+typedef struct {
+    /* 0x0 */ f32 eyeY;
+    /* 0x4 */ f32 eyeZ;
+    /* 0x8 */ f32 atY;
+} MajoraWrathIntroCutsceneCamPoints; // size = 0xC
+
 void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
-    static f32 sCamPoints[5][3] = {
-        { 40.0f, 400.0f, 110.0f }, { 80.0f, 450.0f, 110.0f }, { 100.0f, 400.0f, 110.0f },
-        { 60.0f, 390.0f, 110.0f }, { 30.0f, 430.0f, 110.0f },
+    // sCamPoints reads playerForm in a different order than the enum
+    static MajoraWrathIntroCutsceneCamPoints sCamPoints[PLAYER_FORM_MAX] = {
+        { 40.0f, 400.0f, 110.0f },  // PLAYER_FORM_HUMAN
+        { 80.0f, 450.0f, 110.0f },  // PLAYER_FORM_GORON
+        { 100.0f, 400.0f, 110.0f }, // PLAYER_FORM_FIERCE_DEITY
+        { 60.0f, 390.0f, 110.0f },  // PLAYER_FORM_ZORA
+        { 30.0f, 430.0f, 110.0f },  // PLAYER_FORM_DEKU
     };
 
     this->invincibilityTimer = 20;
@@ -915,9 +926,10 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     dataIndex = 4;
                 }
 
-                Math_ApproachF(&this->subCamNextEye.y, sCamPoints[dataIndex][0], 0.075f, this->subCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->subCamNextEye.z, sCamPoints[dataIndex][1], 0.075f, this->subCamSpeedMod * 17.0f);
-                Math_ApproachF(&this->subCamNextAt.y, sCamPoints[dataIndex][2], 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamNextEye.y, sCamPoints[dataIndex].eyeY, 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamNextEye.z, sCamPoints[dataIndex].eyeZ, 0.075f,
+                               this->subCamSpeedMod * 17.0f);
+                Math_ApproachF(&this->subCamNextAt.y, sCamPoints[dataIndex].atY, 0.075f, this->subCamSpeedMod * 7.0f);
                 Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
 
                 if (this->timer_ABC8 == 70) {
@@ -1019,7 +1031,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     s32 spC0 = 0;
     Vec3f spB4;
     Vec3f spA8 = { 0.0f, 0.0f, 0.0f };
-    f32 spA4 = 0.0f, spA0 = 0.1f;
+    f32 spA4 = 0.0f, spA0 = 0.1f; //! FAKE: same line declaration?
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     this->invincibilityTimer = 1000;
@@ -1927,12 +1939,12 @@ void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
     }
 
-    if ((this->actionTimer < (s16)(KREG(40) + 14)) || ((s16)(KREG(41) + 17) < this->actionTimer)) {
+    if ((this->actionTimer < (s16)(KREG(40) + 14)) || (this->actionTimer > (s16)(KREG(41) + 17))) {
         SkelAnime_Update(&this->skelAnime);
     }
 
     if ((this->actionTimer >= (s16)(KREG(40) + 14)) &&
-        ((this->actionTimer <= (s16)(KREG(41) + 17)) || ((s16)(KREG(42) + 21) <= this->actionTimer))) {
+        ((this->actionTimer <= (s16)(KREG(41) + 17)) || (this->actionTimer >= (s16)(KREG(42) + 21)))) {
         this->whipTopIndex -= KREG(39) + 5;
         if (this->whipTopIndex < 0) {
             this->whipTopIndex = 0;
@@ -1948,7 +1960,7 @@ void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
     this->rightWhip.gravity = -5.0f;
     this->leftWhip.gravity = -15.0f;
 
-    if (((s16)(KREG(43) + 12) <= this->actionTimer) && (this->actionTimer <= (s16)(KREG(44) + 17))) {
+    if ((this->actionTimer >= (s16)(KREG(43) + 12)) && (this->actionTimer <= (s16)(KREG(44) + 17))) {
         this->rightWhip.tension = KREG(6) + 500.0f;
     }
 
@@ -1962,6 +1974,7 @@ void Boss07_Wrath_Stunned(Boss07* this, PlayState* play) {
 
     Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     Boss07_SmoothStop(this, 2.0f);
+
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
@@ -2004,14 +2017,18 @@ void Boss07_Wrath_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u8 dmgE
 void Boss07_Wrath_Damaged(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->timer_ABCC++;
+
     if ((this->timer_ABCC % 16) == 0) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
     }
+
     Boss07_SmoothStop(this, 2.0f);
+
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.drag = this->rightWhip.drag = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
+
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         Boss07_Wrath_Dodge(this, play, true);
     }
@@ -2051,6 +2068,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
             (playerImpactType != PLAYER_IMPACT_ZORA_BARRIER)) {
             playerImpactType = -1;
         }
+
         for (i = 10; i < sWhipSegCount; i += 3) {
             dx = player->actor.world.pos.x - whipPos[i].x;
             dy = player->actor.world.pos.y + 30.0f - whipPos[i].y;
@@ -2060,7 +2078,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
 
             if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 140.0f) {
                 if ((this->actionFunc == Boss07_Wrath_Grab) && (playerImpactType != PLAYER_IMPACT_ZORA_BARRIER) &&
-                    !(player->stateFlags3 & PLAYER_STATE3_1000) && (520.0f <= this->actor.xzDistToPlayer) &&
+                    !(player->stateFlags3 & PLAYER_STATE3_1000) && (this->actor.xzDistToPlayer >= 520.0f) &&
                     (this->actor.xzDistToPlayer <= 900.0f)) {
                     if (play->grabPlayer(play, player)) {
                         f32 dx1;
@@ -2093,11 +2111,13 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                     func_800B8D50(play, NULL, 5.0f, this->actor.shape.rot.y, 0.0f, 8);
                     this->whipCollisionTimer = 20;
                 }
+
                 sp7C = player->actor.world.pos;
 
                 sp7C.x += Rand_CenteredFloat(30.0f);
                 sp7C.y += Rand_CenteredFloat(30.0f) + 20.0f;
                 sp7C.z += Rand_CenteredFloat(30.0f);
+
                 EffectSsHitmark_SpawnFixedScale(play, 0, &sp7C);
                 Boss07_SpawnDustAtPos(play, &player->actor.world.pos, 7);
                 break;
@@ -2341,9 +2361,11 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         Actor_SetScale(&this->actor, 0.015f);
         Math_ApproachZeroF(&this->unk_184, 1.0f, 0.02f);
         Math_ApproachZeroF(&this->unk_188, 1.0f, 0.02f);
+
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
             DECR(this->timers[i]);
         }
+
         DECR(this->whipCollisionTimer);
         DECR(this->collisionTimer);
         DECR(this->invincibilityTimer);
@@ -2515,7 +2537,8 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     Vec3f shapeForce;
     Vec3f tensForce;
 
-    baseSegVec.z = 22.0f * scale; // sets the fixed length of each whip segment
+    // sets the fixed length of each whip segment
+    baseSegVec.z = 22.0f * scale;
 
     for (i = 0; i < (s16)sWhipSegCount; i++, velocity++) {
         if (i == 0) {
@@ -2526,6 +2549,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             Math_ApproachF(&velocity->z, 0.0f, 1.0f, drag);
         }
     }
+
     spAC.z = 20.0f;
 
     // calculates rotation away from Wrath's hand
@@ -2559,7 +2583,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             shapeForce.z = (6 - i) * handForce.z * 0.2f;
         } else if (grabIndex != 0) {
             // wraps the whip around Link
-            if (grabIndex <= i && i < (s16)(grabIndex + this->whipWrapIndex)) {
+            if ((i >= grabIndex) && (i < (s16)(grabIndex + this->whipWrapIndex))) {
                 shapeForce.y = 0.0f;
                 shapeForce.x = sinf(this->actor.yawTowardsPlayer * M_PI / 0x8000 + (j * 1.4f)) * 100.0f;
                 shapeForce.z = cosf(this->actor.yawTowardsPlayer * M_PI / 0x8000 + (j * 1.4f)) * 100.0f;
@@ -2576,6 +2600,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
         if (tempY < 2.0f) {
             tempY = 2.0f;
         }
+
         // tempY = CLAMP_MIN(tempY, 2.0f);
         tempPos.y = tempY - (pos - 1)->y;
         tempPos.z = pos->z + velocity->z - (pos - 1)->z + shapeForce.z + tensForce.z;
@@ -2611,7 +2636,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             this->whipGrabPos.z = pos->z + segVec.z;
         } else if ((hand == MAJORAS_WRATH_RIGHT_HAND) && (this->actionFunc == Boss07_Wrath_SpawnTop)) {
             // Updates the grab point when throwing a top
-            if (i == KREG(90) + sWhipSegCount - this->whipTopIndex + 1) {
+            if (i == (KREG(90) + sWhipSegCount - this->whipTopIndex + 1)) {
                 spAC.x = KREG(60);
                 spAC.y = KREG(61);
                 spAC.z = KREG(62);
@@ -2868,6 +2893,7 @@ void Boss07_Wrath_DrawShocks(Boss07* this, PlayState* play) {
 
         if (this->unk_32C > 0.0f) {
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
+
             for (i = 0; i < MAJORAS_WRATH_BODYPART_MAX; i++) {
                 Matrix_Translate(this->bodyPartsPos[i].x, this->bodyPartsPos[i].y, this->bodyPartsPos[i].z,
                                  MTXMODE_NEW);
@@ -2937,6 +2963,7 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
                 gSPDisplayList(POLY_XLU_DISP++, gMajorasWrathDeathLightModelDL);
             }
         }
+
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(220 + sREG(18)), (u8)(170 + sREG(16)));
@@ -3038,6 +3065,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
         Boss07_Wrath_MakeShadowTex(shadowTex, this, play);
         Boss07_Wrath_DrawShadowTex(shadowTex, this, play);
     }
+
     Boss07_Wrath_DrawShocks(this, play);
 
     {
@@ -3087,6 +3115,7 @@ void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* shadowTex, f32 weight) {
                 sp74.y = this->bodyPartsPos[i].y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
                 sp74.z = this->bodyPartsPos[i].z - this->actor.world.pos.z;
             }
+
             Matrix_MultVec3f(&sp74, &sp68);
 
             sp68.x *= 0.2f;
@@ -3198,6 +3227,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
     f32 sp58;
 
     SkelAnime_Update(&this->skelAnime);
+
     this->timer_ABC8++;
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -3368,7 +3398,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
 }
 
 void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
-    static AnimationHeader* sTauntAnims[] = {
+    static AnimationHeader* sTauntAnimations[] = {
         &gMajorasIncarnationTauntDance1Anim,
         &gMajorasIncarnationTauntDance2Anim,
         &gMajorasIncarnationTauntJumpAnim,
@@ -3376,7 +3406,7 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
 
     this->actionFunc = Boss07_Incarnation_Taunt;
     this->actionState = Rand_ZeroFloat(MAJORAS_INCARNATION_STATE_MAX - 0.001f);
-    Animation_MorphToLoop(&this->skelAnime, sTauntAnims[this->actionState], -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, sTauntAnimations[this->actionState], -10.0f);
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
 }
@@ -3389,13 +3419,16 @@ void Boss07_Incarnation_Taunt(Boss07* this, PlayState* play) {
     } else if ((this->actionState == MAJORAS_INCARNATION_STATE_2) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_JUMP_OLD);
     }
+
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 2.0f);
     Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
+
     if ((this->timers[0] == 0) || (player->unk_D57 == 4) || (this->actor.xzDistToPlayer <= 300.0f)) {
         Boss07_Incarnation_SetupRun(this, play);
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
     }
+
     Boss07_Incarnation_SpawnDust(this, play, 1, false);
 }
 
@@ -3405,6 +3438,7 @@ void Boss07_Incarnation_SetupStunned(Boss07* this, PlayState* play, s16 stunTime
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasIncarnationFallOverStartAnim, -10.0f);
         this->animEndFrame = Animation_GetLastFrame(&gMajorasIncarnationFallOverStartAnim);
     }
+
     this->collisionTimer = 10;
     this->timers[0] = stunTime;
     this->timers[1] = 12;
@@ -3523,6 +3557,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
                 this->velocity_170 = 0.0f;
             }
         }
+
         Math_ApproachS(&this->actor.world.rot.y, Math_Atan2S(sp34, sp30), 5, this->velocity_170);
         Math_ApproachF(&this->velocity_170, 0xFA0, 1.0f, 0x1F4);
         Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 20.0f);
@@ -3536,6 +3571,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
             this->timers[0] = 50;
             this->timers[2] = 50;
         }
+
         Boss07_Incarnation_SpawnDust(this, play, 3, false);
         this->timer_18D6 = 5;
     }
@@ -3615,6 +3651,7 @@ void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
         }
     }
+
     Boss07_Incarnation_SpawnDust(this, play, 7, false);
 }
 
@@ -3629,6 +3666,7 @@ void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_MOONWALK_OLD - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachF(&this->actor.speed, KREG(69) + -10.0f, 1.0f, 3.0f);
+
     if (this->timers[1] == 0) {
         if ((this->actionTimer == 0) && (Rand_ZeroOne() < 0.5f)) {
             if (Rand_ZeroOne() < 0.75f) {
@@ -3637,6 +3675,7 @@ void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play) {
                 this->unk_180 = this->actor.yawTowardsPlayer + 0x8000;
             }
         }
+
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->timers[1] = 20;
             this->unk_180 = this->actor.yawTowardsPlayer + 0x8000;
@@ -3648,6 +3687,7 @@ void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play) {
     if (this->timers[0] == 0) {
         Boss07_Incarnation_SetupRun(this, play);
     }
+
     Boss07_Incarnation_SpawnDust(this, play, 7, false);
 }
 
@@ -3685,6 +3725,7 @@ void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
         }
     }
+
     this->actor.shape.rot.y += 0x2000;
 }
 
@@ -3932,6 +3973,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         s32 pad;
 
         Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.1f);
+
         if (play->envCtx.lightBlend == 1.0f) {
             play->envCtx.lightBlend = 0.0f;
             this->envEffectTimer++;
@@ -3948,19 +3990,24 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     if (KREG(63) == 0) {
         this->canDodge = false;
         this->actor.shape.shadowAlpha = 130;
+
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
             DECR(this->timers[i]);
         }
+
         DECR(this->invincibilityTimer);
         DECR(this->dmgFogEffectTimer);
         DECR(this->collisionTimer);
         DECR(this->timer_18D6);
 
         Math_ApproachZeroF(&this->unk_330, 1.0f, 0.04f);
+
         this->actionFunc(this, play);
+
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 200.0f, 100.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+
         if (this->startDeath || KREG(88)) {
             KREG(88) = false;
             this->startDeath = false;
@@ -3968,17 +4015,21 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
             Boss07_Incarnation_SetupDeathCutscene(this, play);
         }
     }
+
     if (this->collisionTimer != 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyElements); i++) {
             this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
         }
     }
+
     Boss07_Incarnation_CollisionCheck(this, play);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
+
     if (this->actionFunc != Boss07_Incarnation_Pirouette) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x1000);
     }
+
     if ((this->timer_18D6 != 0) && !(this->actionTimer & 1)) {
         Boss07* afterimage = (Boss07*)Actor_SpawnAsChild(
             &play->actorCtx, &this->actor, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -4203,9 +4254,11 @@ void Boss07_Incarnation_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
     if ((this->dmgFogEffectTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
+
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, Boss07_Incarnation_OverrideLimbDraw,
                                    Boss07_Incarnation_PostLimbDraw, Boss07_Incarnation_TransformLimbDraw, &this->actor);
@@ -4262,6 +4315,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     sp34 = Math_Atan2S(sp30, sp28);
     sp36 = Math_Atan2S(sp2C, sqrtf(SQ(sp30) + SQ(sp28)));
     sp36 += (s16)(Math_SinS(this->actionTimer * 0x1388) * 0xFA0);
+
     Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->velocity_170);
     Math_ApproachS(&this->actor.world.rot.x, sp36, 5, this->velocity_170);
     Math_ApproachF(&this->velocity_170, 0x7D0, 1.0f, 0x64);
@@ -4397,9 +4451,11 @@ void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
     Boss07_SmoothStop(this, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.x, -0x1000 + 0x4B0 * Math_SinS(this->actionTimer * 0xBB8), 5, 0x800);
     Math_ApproachS(&this->actor.shape.rot.z, -0x1000 + 0x3E8 * Math_SinS(this->actionTimer * 0x9C4), 5, 0x800);
+
     if (this->actor.world.pos.y > 51.0f) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     }
+
     Math_ApproachF(&this->actor.world.pos.y, 50.0f + 10.0f * Math_SinS(this->actionTimer * 0x5DC), 0.1f,
                    this->velocity_170);
     Math_ApproachF(&this->velocity_170, 15.0f, 1.0f, 1.0f);
@@ -4407,6 +4463,7 @@ void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
     if ((this->timers[0] > 30) || ((this->timers[0] & 2) != 0)) {
         this->maskEyeState = 1;
     }
+
     if (this->timers[0] == 0) {
         Boss07_Mask_SetupIdle(this, play);
         this->timers[2] = 100;
@@ -4418,7 +4475,8 @@ void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* h
 
     this->actionFunc = Boss07_Mask_Damaged;
     this->timers[0] = 40;
-    if (damage) {
+
+    if ((u32)damage != 0) {
         this->actor.speed = 30.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
         this->angularVelocity = 0x1500;
@@ -4435,7 +4493,9 @@ void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* h
         }
         this->angularVelocity = 0x1000;
     }
+
     this->actor.colChkInfo.health -= damage;
+
     if ((s8)this->actor.colChkInfo.health <= 0) {
         this->timers[0] = 30;
     }
@@ -4445,6 +4505,7 @@ void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* h
 void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
     this->invincibilityTimer = 20;
     SkelAnime_Update(&this->skelAnime);
+
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Boss07_SmoothStop(this, 1.0f);
         Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x1000);
@@ -4452,15 +4513,20 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
     } else {
         this->actor.shape.rot.x += 0x2000;
     }
+
     this->actor.shape.rot.z += this->angularVelocity;
+
     if ((this->timers[0] > 30) || ((this->timers[0] & 2) != 0)) {
         this->maskEyeState = 1;
     }
+
     if ((this->timers[0] == 15) && ((s8)this->actor.colChkInfo.health < 10)) {
         this->activateRemains = true;
     }
+
     if (this->timers[0] == 0) {
         Boss07_Mask_SetupIdle(this, play);
+
         if ((s8)this->actor.colChkInfo.health <= 0) {
             this->startDeath = true;
             Enemy_StartFinishingBlow(play, &this->actor);
@@ -4501,24 +4567,26 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     f32 sp180;
     f32 phi_f24;
     s16 phi_s0;
-    s16 sp178;
+    s16 i;
     Vec3f sp16C;
     Vec3f sp160;
     Player* player = GET_PLAYER(play);
     CollisionPoly* sp158;
     Vec3f beamMarkPos;
-    u8 sp14B = 0;
+    u8 sp14B = false;
     s32 sp144;
 
     this->invincibilityTimer = 20;
     Boss07_SmoothStop(this, 0.5f);
     Math_ApproachF(&this->actor.world.pos.y, 300.0f, 0.05f, 1.0f);
     Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x400);
+
     if ((player->lockOnActor != NULL) && (player->stateFlags1 & PLAYER_STATE1_400000)) {
         phi_f24 = (player->transformation == PLAYER_FORM_HUMAN) ? 20 : 30.0f;
     } else {
         phi_f24 = (player->transformation == PLAYER_FORM_HUMAN) ? 8.0f : 15.0f;
     }
+
     phi_s0 = (player->stateFlags1 & PLAYER_STATE1_400000) ? 1 : 10;
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, phi_s0, this->velocity_170);
     temp_f20 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -4534,6 +4602,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             if (this->timers[0] == 25) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST1_BLOW_OLD);
             }
+
             if (this->timers[0] == 0) {
                 this->actionState = MAJORAS_MASK_BEAM_EYES;
                 this->timers[0] = 6;
@@ -4543,6 +4612,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
 
         case MAJORAS_MASK_BEAM_EYES:
             Math_ApproachF(&this->eyeBeamsZscale, 1.0f, 1.0f, 0.2f);
+
             if (this->timers[0] == 0) {
                 this->actionState = MAJORAS_MASK_BEAM_FOCUS;
                 this->timers[0] = 8;
@@ -4552,6 +4622,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
         case MAJORAS_MASK_BEAM_FOCUS:
             Audio_PlaySfx(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
             Math_ApproachF(&this->beamFocusOrbScale, 1.0f, 0.2f, 0.2f);
+
             if (this->timers[0] == 0) {
                 this->actionState = MAJORAS_MASK_BEAM_ACTIVE;
                 this->timers[0] = 100;
@@ -4670,6 +4741,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     spF0.z = spFC.z * -0.05f;
                                     Boss07_SpawnEffect(play, &sp108, &spFC, &spF0, Rand_ZeroFloat(10.0f) + 25.0f);
                                 }
+
                                 if ((s8)this->actor.colChkInfo.health <= 0) {
                                     this->timer_18D6 = 200;
                                 } else {
@@ -4680,29 +4752,32 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
 
                         Matrix_Pop();
 
-                        for (sp178 = 0; sp178 < MAJORAS_REMAINS_MAX; sp178++) {
-                            if (sMajorasRemains[sp178]->actionState >= MAJORAS_REMAINS_DEATH) {
+                        for (i = 0; i < MAJORAS_REMAINS_MAX; i++) {
+                            if (sMajorasRemains[i]->actionState >= MAJORAS_REMAINS_DEATH) {
                                 continue;
                             }
-                            sp16C.x = sMajorasRemains[sp178]->actor.world.pos.x - this->unk_18A8.x;
-                            sp16C.y = sMajorasRemains[sp178]->actor.world.pos.y - this->unk_18A8.y;
-                            sp16C.z = sMajorasRemains[sp178]->actor.world.pos.z - this->unk_18A8.z;
+
+                            sp16C.x = sMajorasRemains[i]->actor.world.pos.x - this->unk_18A8.x;
+                            sp16C.y = sMajorasRemains[i]->actor.world.pos.y - this->unk_18A8.y;
+                            sp16C.z = sMajorasRemains[i]->actor.world.pos.z - this->unk_18A8.z;
                             sp180 = sqrtf(SQXYZ(sp16C));
                             Matrix_MultVec3f(&sp16C, &sp160);
+
                             if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
                                 (sp160.z <= (this->unk_18C0 * 16.666668f)) &&
                                 (this->actionState != MAJORAS_MASK_BEAM_END)) {
-                                s32 pad;
+                                s32 j;
                                 Vec3f spE0;
                                 Vec3f spD4;
                                 Vec3f spC8;
 
                                 this->beamDmgTimer += 2;
                                 this->unk_18C0 = sp180 * 0.062f;
+
                                 if (this->beamDmgTimer < 5) {
-                                    spE0.x = sMajorasRemains[sp178]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
-                                    spE0.y = sMajorasRemains[sp178]->actor.world.pos.y + Rand_CenteredFloat(40.0f);
-                                    spE0.z = sMajorasRemains[sp178]->actor.world.pos.z + Rand_CenteredFloat(40.0f);
+                                    spE0.x = sMajorasRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
+                                    spE0.y = sMajorasRemains[i]->actor.world.pos.y + Rand_CenteredFloat(40.0f);
+                                    spE0.z = sMajorasRemains[i]->actor.world.pos.z + Rand_CenteredFloat(40.0f);
                                     spD4.x = 0.0f;
                                     spD4.y = 6.0f;
                                     spD4.z = 0.0f;
@@ -4711,15 +4786,15 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     spC8.z = spD4.z * -0.05f;
 
                                     Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
-                                    sMajorasRemains[sp178]->dmgFogEffectTimer |= 0xA;
+                                    sMajorasRemains[i]->dmgFogEffectTimer |= 0xA;
                                 } else {
-                                    sMajorasRemains[sp178]->actionState = MAJORAS_REMAINS_DEATH;
-                                    sMajorasRemains[sp178]->timer_18D6 = 60;
+                                    sMajorasRemains[i]->actionState = MAJORAS_REMAINS_DEATH;
+                                    sMajorasRemains[i]->timer_18D6 = 60;
                                     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
-                                    for (pad = 0; pad < 20; pad++) {
-                                        spE0.x = sMajorasRemains[sp178]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
-                                        spE0.y = sMajorasRemains[sp178]->actor.world.pos.y + Rand_CenteredFloat(50.0f);
-                                        spE0.z = sMajorasRemains[sp178]->actor.world.pos.z + Rand_CenteredFloat(50.0f);
+                                    for (j = 0; j < 20; j++) {
+                                        spE0.x = sMajorasRemains[i]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
+                                        spE0.y = sMajorasRemains[i]->actor.world.pos.y + Rand_CenteredFloat(50.0f);
+                                        spE0.z = sMajorasRemains[i]->actor.world.pos.z + Rand_CenteredFloat(50.0f);
                                         spD4.x = Rand_CenteredFloat(20.0f);
                                         spD4.y = Rand_CenteredFloat(20.0f);
                                         spD4.z = Rand_CenteredFloat(20.0f);
@@ -4753,12 +4828,14 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         }
                     }
                 } else if (!player->isBurning && (this->actionState != MAJORAS_MASK_BEAM_END)) {
-                    s32 pad2;
+                    s32 i;
 
                     func_800B8D50(play, &this->actor, 5.0f, this->actor.shape.rot.y, 0.0f, 0x10);
-                    for (pad2 = 0; pad2 < ARRAY_COUNT(player->flameTimers); pad2++) {
-                        player->flameTimers[pad2] = Rand_S16Offset(0, 200);
+
+                    for (i = 0; i < ARRAY_COUNT(player->flameTimers); i++) {
+                        player->flameTimers[i] = Rand_S16Offset(0, 200);
                     }
+
                     player->isBurning = true;
                     Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                 }
@@ -4810,6 +4887,7 @@ static Vec3s sIntroCamEyes[4] = {
     { 400, 300, 463 },
     { -400, 470, 496 },
 };
+
 static Vec3s sIntroCamAts[4] = {
     { 646, 394, -150 },
     { -648, 380, -190 },
@@ -4849,13 +4927,16 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 Audio_PlaySfx_2(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
                 Math_ApproachF(&sMajoraStatic->introOrbScale, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
             }
+
             if (this->timer_ABC8 == 35) {
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_15);
             }
+
             player->actor.world.pos.x = 0.0f;
             player->actor.world.pos.z = 700.0f;
             player->actor.shape.rot.y = -0x8000;
             player->actor.world.rot.y = player->actor.shape.rot.y;
+
             this->subCamEye.x = 0.0f;
             this->subCamEye.y = Player_GetHeight(player) + player->actor.world.pos.y - 24.0f;
             this->subCamEye.z = player->actor.world.pos.z - 60.0f;
@@ -4976,6 +5057,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 }
 
                 sp8C = 2.0f * (this->timer_ABC8 % 2);
+
                 if ((this->timer_ABC8 % 2) != 0) {
                     this->actor.world.pos.x += 2.0f;
                 } else {
@@ -5138,6 +5220,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
 
             this->unk_1874 = 2;
+
             if (this->timer_ABC8 > 60) {
                 Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
                 Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x200);
@@ -5147,6 +5230,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
                 this->actor.shape.rot.z += 0x1200;
                 Math_ApproachZeroF(&this->tentLengthScale, 1.0f, 0.005f);
             }
+
             if (this->timer_ABC8 > 130) {
                 this->csState = MAJORAS_MASK_DEATH_STATE_2;
             } else {
@@ -5191,6 +5275,7 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
             this->maskFrontCollider.base.acFlags &= ~AC_HIT;
             this->dmgShakeTimer = 7;
         }
+
         if (this->maskBackCollider.base.acFlags & AC_HIT) {
             this->maskBackCollider.base.acFlags &= ~AC_HIT;
             this->dmgShakeTimer = 15;
@@ -5226,28 +5311,34 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
     f32 sp68;
 
     this->actor.hintId = TATL_HINT_ID_MAJORAS_MASK;
+
     if (sMusicStartTimer != 0) {
         sMusicStartTimer--;
         if (sMusicStartTimer == 0) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MAJORAS_MASK | SEQ_FLAG_ASYNC);
         }
     }
+
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
+
     if ((sMajoraStatic == NULL) || (sMajoraStatic->subCamId == SUB_CAM_ID_DONE)) {
         this->updateWhips = true;
         play->envCtx.lightSetting = 2;
         play->envCtx.prevLightSetting = 0;
         Math_ApproachF(&play->envCtx.lightBlend, this->beamXYscale, 1.0f, 0.1f);
         this->actionTimer++;
+
         if (KREG(63) == 0) {
             this->canDodge = false;
             this->maskEyeState = 0;
             this->unk_1874 = 0;
             Actor_SetScale(&this->actor, 0.1f);
             this->actor.focus.pos = this->actor.world.pos;
+
             for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
                 DECR(this->timers[i]);
             }
+
             DECR(this->dmgShakeTimer);
             DECR(this->invincibilityTimer);
             DECR(this->dmgFogEffectTimer);
@@ -5255,11 +5346,15 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             DECR(this->beamDmgTimer);
 
             this->beamOn = false;
+
             this->actionFunc(this, play);
+
             if (!this->beamOn && this->beamOnLastFrame) {
                 func_800AEF44(Effect_GetByIndex(this->effectIndex));
             }
+
             this->beamOnLastFrame = this->beamOn;
+
             if (this->actionFunc != Boss07_Mask_IntroCutscene) {
                 if (this->actionFunc != Boss07_Mask_Damaged) {
                     Actor_UpdateVelocityWithoutGravity(&this->actor);
@@ -5280,40 +5375,51 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         } else {
             this->actor.colChkInfo.health = 0;
         }
+
         Boss07_Mask_CollisionCheck(this, play);
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+
         sp6C.x = -55.0f;
         sp6C.y = 55.0f;
         sp6C.z = 10.0f;
         Matrix_MultVec3f(&sp6C, &sp9C);
+
         sp6C.x = -55.0f;
         sp6C.y = -55.0f;
         Matrix_MultVec3f(&sp6C, &sp90);
+
         sp6C.x = 55.0f;
         sp6C.y = 55.0f;
         Matrix_MultVec3f(&sp6C, &sp84);
+
         sp6C.x = 55.0f;
         sp6C.y = -55.0f;
         Matrix_MultVec3f(&sp6C, &sp78);
+
         Collider_SetQuadVertices(&this->maskFrontCollider, &sp9C, &sp90, &sp84, &sp78);
 
         sp68 = (player->stateFlags3 & PLAYER_STATE3_200) ? 70.0f : 40.0f;
+
         sp6C.x = -sp68;
         sp6C.y = sp68;
         sp6C.z = -10.0f;
         Matrix_MultVec3f(&sp6C, &sp9C);
+
         sp6C.x = -sp68;
         sp6C.y = -sp68;
         Matrix_MultVec3f(&sp6C, &sp90);
+
         sp6C.x = sp68;
         sp6C.y = sp68;
         Matrix_MultVec3f(&sp6C, &sp84);
+
         sp6C.x = sp68;
         sp6C.y = -sp68;
         Matrix_MultVec3f(&sp6C, &sp78);
+
         Collider_SetQuadVertices(&this->maskBackCollider, &sp9C, &sp90, &sp84, &sp78);
 
         if (player->stateFlags3 & PLAYER_STATE3_200) {
@@ -5328,6 +5434,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->maskBackCollider.base);
             }
         }
+
         if (this->timer_18D6 != 0) {
             Vec3f sp5C;
             Vec3f sp50;
@@ -5337,12 +5444,15 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             sp5C.x = Rand_CenteredFloat(sp40) + this->actor.world.pos.x;
             sp5C.y = Rand_CenteredFloat(sp40) + this->actor.world.pos.y;
             sp5C.z = Rand_CenteredFloat(sp40) + this->actor.world.pos.z;
+
             sp50.x = 0.0f;
             sp50.y = 5.0f;
             sp50.z = 0.0f;
+
             sp44.x = sp50.x * -0.05f;
             sp44.y = sp50.y * -0.05f;
             sp44.z = sp50.z * -0.05f;
+
             Boss07_SpawnEffect(play, &sp5C, &sp50, &sp44, Rand_ZeroFloat(10.0f) + 25.0f);
             Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EV_BURN_OUT - SFX_FLAG);
         }
@@ -5379,14 +5489,16 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
             Matrix_Pop();
         }
     }
+
     for (i = 0; i < MAJORAS_TENT_LENGTH; i++, velocity++) {
         if (i == 0) {
             pos[0] = *base;
-        } else {
-            Math_ApproachF(&velocity->x, 0.0f, 1.0f, 1.0f);
-            Math_ApproachF(&velocity->y, 0.0f, 1.0f, 1.0f);
-            Math_ApproachF(&velocity->z, 0.0f, 1.0f, 1.0f);
+            continue;
         }
+
+        Math_ApproachF(&velocity->x, 0.0f, 1.0f, 1.0f);
+        Math_ApproachF(&velocity->y, 0.0f, 1.0f, 1.0f);
+        Math_ApproachF(&velocity->z, 0.0f, 1.0f, 1.0f);
     }
 
     pos++;
@@ -5394,6 +5506,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
     velocity = sp7C + 1;
     sp98.x = sp98.y = 0.0f;
     sp98.z = arg7 * 23.0f;
+
     for (i = 1; i < MAJORAS_TENT_LENGTH; i++, velocity++, pos++, rot++) {
         if (i < MAJORAS_TENT_LENGTH / 2) {
             sp80.x = arg6->x * (MAJORAS_TENT_LENGTH / 2 - i) * 0.2f;
@@ -5402,7 +5515,9 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
         } else {
             sp80 = gZeroVec3f;
         }
+
         temp_f24 = pos->x + velocity->x - (pos - 1)->x + sp80.x;
+
         if (this->unk_1874 != 0) {
             phi_f0 = 0.0f;
         } else if (arg8 && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
@@ -5410,6 +5525,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
         } else {
             phi_f0 = -3.0f - ((s32)(i % 8U) * 0.05f);
         }
+
         phi_f2 = pos->y + velocity->y + phi_f0 + sp80.y;
         if (phi_f2 < 2.0f) {
             phi_f2 = 2.0f;
@@ -5582,7 +5698,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         Vec3f sp9C;
         Vec3f sp90;
         f32 phi_f24;
-        f32 pad2;
+        f32 temp;
         s32 i;
         s32 phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
                       (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
@@ -5606,14 +5722,14 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
             this->tentacles[i].base.y = this->tentAttachPos.y + sp9C.y;
             this->tentacles[i].base.z = this->tentAttachPos.z + sp9C.z;
 
-            pad2 = (1 - (i * 0.008f)) * this->tentLengthScale;
+            temp = (1 - (i * 0.008f)) * this->tentLengthScale;
             Matrix_Pop();
             if (this->updateWhips) {
                 Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
-                                            this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, pad2, phi_s6,
+                                            this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, temp, phi_s6,
                                             phi_f24);
             }
-            Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, pad2, i * 0.9f);
+            Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, temp, i * 0.9f);
             phi_f24 += 0.5f;
             spA8.y += 1.0f;
 
@@ -5633,7 +5749,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
     f32 sp50;
     PlayState* play = play2;
     Boss07* this = THIS;
-    f32 pad;
+    f32 temp;
     Player* player = GET_PLAYER(play);
 
     this->actionTimer++;
@@ -5651,8 +5767,8 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             sp50 = player->actor.world.pos.z - this->actor.world.pos.z;
 
             this->actor.world.rot.y = Math_Atan2S(sp58, sp50);
-            pad = sqrtf(SQ(sp58) + SQ(sp50));
-            this->actor.world.rot.x = Math_Atan2S(sp54, pad);
+            temp = sqrtf(SQ(sp58) + SQ(sp50));
+            this->actor.world.rot.x = Math_Atan2S(sp54, temp);
             this->actionState = MAJORAS_PROJECTILE_STATE_1;
             this->actor.speed = 30.0f;
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
@@ -6024,16 +6140,21 @@ void Boss07_Remains_Update(Actor* thisx, PlayState* play2) {
     s32 i;
 
     this->actionTimer++;
+
     for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
         DECR(this->timers[i]);
     }
+
     DECR(this->timer_18D6);
     DECR(this->invincibilityTimer);
     DECR(this->dmgFogEffectTimer);
+
     this->actionFunc(this, play);
+
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.world.pos.x += this->xRecoil;
     this->actor.world.pos.z += this->zRecoil;
+
     Math_ApproachZeroF(&this->xRecoil, 1.0f, 1.0f);
     Math_ApproachZeroF(&this->zRecoil, 1.0f, 1.0f);
 }
@@ -6111,7 +6232,9 @@ void Boss07_Top_Thrown(Boss07* this, PlayState* play) {
         Math_Vec3f_Copy(&this->actor.world.pos, &sMajorasWrath->whipGrabPos);
         this->actor.world.pos.y -= 25.0f + sREG(78);
     }
+
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 50.0f, 80.0f, UPDBGCHECKINFO_FLAG_1);
+
     if ((sMajorasWrath->actionTimer >= (s16)(KREG(50) + 21)) || (sMajorasWrath->invincibilityTimer != 0)) {
         Boss07_Top_SetupGround(this, play);
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
@@ -6125,6 +6248,7 @@ void Boss07_Top_Thrown(Boss07* this, PlayState* play) {
 void Boss07_Top_SetupGround(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Top_Ground;
     this->actor.gravity = -2.0f;
+
     if (sMajorasWrath->invincibilityTimer != 0) {
         this->timers[0] = sREG(47) + 80;
         this->timers[1] = sREG(77) + 150;
@@ -6134,6 +6258,7 @@ void Boss07_Top_SetupGround(Boss07* this, PlayState* play) {
         this->actor.velocity.y = (sREG(43) * 0.1f) + 15.0f;
         this->actor.speed = (sREG(44) * 0.1f) + -3.0f;
     }
+
     this->actor.world.rot.y = (sREG(45) * 0x1000) + sMajorasWrath->actor.shape.rot.y;
     this->actor.shape.rot.z = Rand_ZeroFloat((f32)(sREG(29) + 10) * 0x100);
 }
@@ -6254,8 +6379,10 @@ void Boss07_Top_Collide(Boss07* this, PlayState* play) {
                         top->topSpinRate = (sREG(89) * 0.01f) + 0.2f;
                         top->unk_180 = 0x800;
                     }
+
                     CollisionCheck_SpawnShieldParticles(play, &this->actor.focus.pos);
                     CollisionCheck_SpawnShieldParticles(play, &top->actor.focus.pos);
+
                     if (this->timers[0] > 80) {
                         this->actor.shape.rot.z = Rand_CenteredFloat((f32)(sREG(29) + 20) * 0x100);
                         for (i = 0; i < 5; i++) {
@@ -6502,9 +6629,11 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             if (this->timer_ABC8 == 20) {
                 sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_ACTIVATE;
             }
+
             this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.x;
             this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.y;
             this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.z;
+
             if (this->timer_ABC8 == 40) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 s32 i;
@@ -6572,6 +6701,7 @@ void Boss07_Static_UpdateEffects(PlayState* play) {
             effect->velocity.x += effect->accel.x;
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
+
             if (effect->type == MAJORAS_EFFECT_FLAME) {
                 if (effect->isFading) {
                     effect->alpha -= (i % 8U) + 13;
