@@ -121,10 +121,10 @@ static Color_RGBA8 sEffPrimColors[] = { { 50, 50, 50, 255 }, { 255, 255, 255, 25
 static Color_RGBA8 sEffEnvColors[] = { { 200, 200, 200, 255 }, { 255, 255, 255, 255 } };
 
 typedef struct EnMkkModelInfo {
-    /* 0x00 */ Gfx* materialDL;
-    /* 0x04 */ Gfx* modelDL;
-    /* 0x08 */ Gfx* endDL;
-    /* 0x0C */ Gfx* eyesDL;
+    /* 0x0 */ Gfx* materialDL;
+    /* 0x4 */ Gfx* modelDL;
+    /* 0x8 */ Gfx* endDL;
+    /* 0xC */ Gfx* eyesDL;
 } EnMkkModelInfo; // size = 0x10
 
 static EnMkkModelInfo sBoeModelInfo[] = {
