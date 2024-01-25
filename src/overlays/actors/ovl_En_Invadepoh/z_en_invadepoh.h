@@ -13,6 +13,32 @@ struct EnInvadepoh;
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
 typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState, not GameState
 
+#define ENINVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
+#define ENINVADEPOH_GET_TYPE(thisx) ((thisx)->params >> 4 & 0xF)
+#define ENINVADEPOH_GET_PATH(thisx) ((thisx)->params >> 8 & 0x7F)
+
+#define ENINVADEPOH_PARAMS(path, type, index) (((index) & 7) | (((path) << 8) & 0x7F00) | (((type) << 4) & 0xF0))
+
+typedef enum EnInvadepohType {
+    /* 0x0 */ ENINVADEPOH_TYPE_HANDLER,         // Invasion event handler   
+    /* 0x1 */ ENINVADEPOH_TYPE_ALIEN_INVADER,   // Alien invader
+    /* 0x2 */ ENINVADEPOH_TYPE_COW,             // Abudcted cow, spawned by unused alien abductor   
+    /* 0x3 */ ENINVADEPOH_TYPE_COW_TAIL,        // Abducted cow tail, spawned by abducted cow   
+    /* 0x4 */ ENINVADEPOH_TYPE_ROMANI_ABDUCTED, // Abducted Romani, spawned by unused alien abductor       
+    /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_CONFUSED, // Returned, confused Romani   
+    /* 0x6 */ ENINVADEPOH_TYPE_LIGHT_BALL,      // Light ball spaceship   
+    /* 0x7 */ ENINVADEPOH_TYPE_ROMANI_NIGHT_1,  // Romani running to barn on night 1
+    /* 0x8 */ ENINVADEPOH_TYPE_ROMANI_BARN,     // Romani in the barn on night 1
+    /* 0x9 */ ENINVADEPOH_TYPE_ROMANI_REWARD,   // Romani rewarding you for defeating invasion
+    /* 0xA */ ENINVADEPOH_TYPE_DOG,             // Dog during alien invasion   
+    /* 0xB */ ENINVADEPOH_TYPE_CREMIA_NIGHT_3,  // Cremia walking from barn to house on night 3
+    /* 0xC */ ENINVADEPOH_TYPE_ROMANI_NIGHT_3,  // Romnani walking from barn to house on night 3
+    /* 0xD */ ENINVADEPOH_TYPE_ALIEN_ABDUCTOR,  // Alien abductor, unused, carries cow or Romani
+    /* 0xE */ ENINVADEPOH_TYPE_MAX
+} EnInvadepohType;
+
+#define EN_INVADEPOH_PATH_INDEX_NONE 0xFF
+
 typedef struct EnInvadepohUnkStruct1 {
     /* 0x0 */ f32 unk0;
     /* 0x4 */ s16 unk4;
@@ -120,12 +146,12 @@ typedef struct EnInvadepoh {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[EN_INVADEPOH_LIMB_MAX];
     /* 0x212 */ Vec3s morphTable[EN_INVADEPOH_LIMB_MAX];
-    /* 0x29C */ s8 finishedAnim;
+    /* 0x29C */ s8 isAnimFinished;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;
     /* 0x2F0 */ s16 actionTimer;
     /* 0x2F2 */ s16 stateTimer;
-    /* 0x2F4 */ s8 bankIndex;
+    /* 0x2F4 */ s8 objectSlot;
     /* 0x2F8 */ f32 unk_2F8;
     /* 0x2FC */ char unk_2FC[4]; // unused? f32?
     /* 0x300 */ f32 unk_300;
@@ -163,28 +189,5 @@ typedef struct EnInvadepoh {
     /* 0x3B0 */ char pad3B0[0xC]; // unused? Vec3f?
     /* 0x3BC */ s8 dogTargetPoint;
 } EnInvadepoh; // size = 0x3C0
-
-typedef enum EnInvadepohParamsTypes {
-    /* 0x0 */ ENINVADEPOH_HANDLER,         // Invasion event handler   
-    /* 0x1 */ ENINVADEPOH_ALIEN_INVADER,   // Alien invader
-    /* 0x2 */ ENINVADEPOH_COW,             // Abudcted cow, spawned by unused alien abductor   
-    /* 0x3 */ ENINVADEPOH_COW_TAIL,        // Abducted cow tail, spawned by abducted cow   
-    /* 0x4 */ ENINVADEPOH_ROMANI_ABDUCTED, // Abducted Romani, spawned by unused alien abductor       
-    /* 0x5 */ ENINVADEPOH_ROMANI_CONFUSED, // Returned, confused Romani   
-    /* 0x6 */ ENINVADEPOH_LIGHT_BALL,      // Light ball spaceship   
-    /* 0x7 */ ENINVADEPOH_ROMANI_NIGHT_1,  // Romani running to barn on night 1
-    /* 0x8 */ ENINVADEPOH_ROMANI_BARN,     // Romani in the barn on night 1
-    /* 0x9 */ ENINVADEPOH_ROMANI_REWARD,   // Romani rewarding you for defeating invasion
-    /* 0xA */ ENINVADEPOH_DOG,             // Dog during alien invasion   
-    /* 0xB */ ENINVADEPOH_CREMIA_NIGHT_3,  // Cremia walking from barn to house on night 3
-    /* 0xC */ ENINVADEPOH_ROMANI_NIGHT_3,  // Romnani walking from barn to house on night 3
-    /* 0xD */ ENINVADEPOH_ALIEN_ABDUCTOR   // Alien abductor, unused, carries cow or Romani
-} EnInvadepohParamsTypes;
-
-#define ENINVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
-#define ENINVADEPOH_GET_TYPE(thisx) ((thisx)->params >> 4 & 0xF)
-#define ENINVADEPOH_GET_PATH(thisx) ((thisx)->params >> 8 & 0x7F)
-
-#define ENINVADEPOH_SET_PARAMS(path, type, index) (((index) & 7) | (((path) << 8) & 0x7F00) | (((type) << 4) & 0xF0))
 
 #endif // Z_EN_INVADEPOH_H

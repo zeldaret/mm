@@ -1,5 +1,6 @@
 #include "z_en_invadepoh.h"
 
+#include "prevent_bss_reordering.h"
 #include "sys_cfb.h"
 #include "z64horse.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
@@ -22,15 +23,14 @@
 #define SPAWN_Y_POSITION 235
 #define SPAWN_Z_POSITION -434
 
-typedef enum {
-    ENINVADEPOH_EVENT_UNSET,
-    ENINVADEPOH_EVENT_WAIT,
-    ENINVADEPOH_EVENT_ACTIVE,
-    ENINVADEPOH_EVENT_CLEAR,
-    ENINVADEPOH_EVENT_FAILED
+typedef enum EnInvadepohEventState {
+    /* 0 */ ENINVADEPOH_EVENT_UNSET,
+    /* 1 */ ENINVADEPOH_EVENT_WAIT,
+    /* 2 */ ENINVADEPOH_EVENT_ACTIVE,
+    /* 3 */ ENINVADEPOH_EVENT_CLEAR,
+    /* 4 */ ENINVADEPOH_EVENT_FAILED
 } EnInvadepohEventState;
 
-#if 1 // function prototypes
 void EnInvadepoh_Init(Actor* thisx, PlayState* play);
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play);
 void EnInvadepoh_Event_Update(Actor* thisx, PlayState* play2);
@@ -168,7 +168,6 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play);
 
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed);
-#endif
 
 ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
@@ -246,10 +245,10 @@ Vec3f sLightBallSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
 s32 sEventState = ENINVADEPOH_EVENT_UNSET;
 
-TexturePtr sRomaniEyeTextures[5] = {
+TexturePtr sRomaniEyeTextures[] = {
     gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
-TexturePtr sRomaniMouthTextures[4] = {
+TexturePtr sRomaniMouthTextures[] = {
     gRomaniMouthHappyTex,
     gRomaniMouthFrownTex,
     gRomaniMouthHangingOpenTex,
@@ -257,10 +256,10 @@ TexturePtr sRomaniMouthTextures[4] = {
 };
 s8 sRomaniTexturesDesegmented = false;
 
-TexturePtr sCremiaEyeTextures[6] = {
+TexturePtr sCremiaEyeTextures[] = {
     gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
-TexturePtr sCremiaMouthTextures[4] = {
+TexturePtr sCremiaMouthTextures[] = {
     gCremiaMouthNormalTex,
     gCremiaMouthSlightSmileTex,
     gCremiaMouthFrownTex,
@@ -281,7 +280,7 @@ EnInvadepoh* sRomani;
 EnInvadepoh* sCremia;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
-s16 sCutsceneIds[3];
+static s16 sCsIdList[3];
 EnInvadepoh* sClosestAlien;
 
 #define BITPACK(field, value, width, offset) \
@@ -347,9 +346,9 @@ s32 EnInvadepoh_Invader_AddKill(void) {
 }
 
 void EnInvadepoh_Invader_SetRespawnTime(s32 invaderIndex) {
-    s32 currentTime = gSaveContext.save.time;
+    s32 currentTime = CURRENT_TIME;
 
-    if ((CURRENT_DAY == 1) && (CLOCK_TIME(2, 30) <= currentTime) && (currentTime < CLOCK_TIME(5, 15))) {
+    if ((CURRENT_DAY == 1) && (currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(5, 15))) {
         s32 spawnDelay = (12 - EnInvadepoh_Invader_GetKillCount()) * 25.0f;
 
         EnInvadepoh_Invader_SetSpawnTime(invaderIndex, currentTime + spawnDelay);
@@ -431,7 +430,8 @@ void EnInvadepoh_Romani_TurnToPath(EnInvadepoh* this, s16 scale, s16 step, s16 m
     if (this->currentPoint != this->endPoint) {
         Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
         Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF), scale, step, minStep);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF), scale, step,
+                           minStep);
     }
 }
 
@@ -476,10 +476,10 @@ void EnInvadepoh_SetPosToPathPoint(EnInvadepoh* this, s32 point) {
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[point]);
 }
 
-s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* thisx, f32 highValue, f32 lowValue) {
-    EnInvadepoh* this = thisx; // TODO: why recast?
-    Vec3s* currentPoint = &this->pathPoints[this->currentPoint];
+s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* this, f32 highValue, f32 lowValue) {
     Vec3s* nextPoint = &this->pathPoints[this->currentPoint] + 1;
+    Vec3s* currentPoint = &this->pathPoints[this->currentPoint];
+    s32 pad;
     f32 pathSegmentX;
     f32 pathSegmentZ;
     f32 pathUnitVecZ;
@@ -494,6 +494,7 @@ s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* thisx, f32 highValue, f32 lowValue) {
     if (this->currentPoint >= this->endPoint) {
         return false;
     }
+
     pathSegmentX = (nextPoint->x - currentPoint->x);
     pathSegmentZ = (nextPoint->z - currentPoint->z);
     pathYaw = Math_Atan2S_XY(pathSegmentZ, pathSegmentX);
@@ -537,7 +538,7 @@ s32 EnInvadepoh_Dog_FindClosestWaypoint(EnInvadepoh* this, Vec3f* pos) {
 
 void EnInvadepoh_Invader_SetProgress(EnInvadepoh* this) {
     s32 pad;
-    s32 currentTime = gSaveContext.save.time;
+    s32 currentTime = CURRENT_TIME;
     s32 warpInTime = EnInvadepoh_Invader_GetSpawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
 
     if (sEventState == ENINVADEPOH_EVENT_WAIT) {
@@ -604,12 +605,12 @@ void EnInvadepoh_Night1Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night1Romani_SetProgress(EnInvadepoh* this) {
-    if ((gSaveContext.save.time < CLOCK_TIME(2, 00)) || (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
+    if ((CURRENT_TIME < CLOCK_TIME(2, 00)) || (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
         this->progress = 0.0f;
-    } else if ((gSaveContext.save.time >= CLOCK_TIME(2, 15)) && (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
+    } else if ((CURRENT_TIME >= CLOCK_TIME(2, 15)) && (CURRENT_TIME < CLOCK_TIME(6, 00))) {
         this->progress = 1.0f;
     } else {
-        f32 progress = (gSaveContext.save.time - CLOCK_TIME(2, 00)) * (1.0f / (CLOCK_TIME(2, 15) - CLOCK_TIME(2, 00)));
+        f32 progress = (CURRENT_TIME - CLOCK_TIME(2, 00)) * (1.0f / (CLOCK_TIME(2, 15) - CLOCK_TIME(2, 00)));
 
         this->progress = progress;
         this->progress = CLAMP(this->progress, 0.0f, 1.0f);
@@ -646,13 +647,12 @@ void EnInvadepoh_Night3Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
-    if ((gSaveContext.save.time < CLOCK_TIME(20, 00)) && (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
+    if ((CURRENT_TIME < CLOCK_TIME(20, 00)) && (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
         this->progress = 0.0f;
-    } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 14) + 15) || (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
+    } else if ((CURRENT_TIME >= CLOCK_TIME(20, 14) + 15) || (CURRENT_TIME < CLOCK_TIME(6, 00))) {
         this->progress = 1.0f;
     } else {
-        f32 progress =
-            (gSaveContext.save.time - CLOCK_TIME(20, 00)) * (1.0f / (CLOCK_TIME(20, 14) + 15 - CLOCK_TIME(20, 00)));
+        f32 progress = (CURRENT_TIME - CLOCK_TIME(20, 00)) * (1.0f / (CLOCK_TIME(20, 14) + 15 - CLOCK_TIME(20, 00)));
 
         this->progress = progress;
         this->progress = CLAMP(this->progress, 0.0f, 1.0f);
@@ -688,9 +688,11 @@ void EnInvadepoh_Invader_ApplyProgress(EnInvadepoh* this, PlayState* play) {
         this->unk_314.y = ((curPathPointF.y * prevWeight) + (nextPathPointF.y * nextWeight)) * invPathLength;
         this->unk_314.z = ((curPathPointF.z * prevWeight) + (nextPathPointF.z * nextWeight)) * invPathLength;
     }
+
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_314);
     func_800B4AEC(play, &this->actor, 0.0f);
-    if (this->actor.floorHeight > BGCHECK_Y_MIN + 1.0f) {
+
+    if (this->actor.floorHeight > (BGCHECK_Y_MIN + 1.0f)) {
         if (yPosTemp < this->actor.floorHeight) {
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 0.0f;
@@ -731,14 +733,14 @@ void EnInvadepoh_Invader_Knockback(EnInvadepoh* this, PlayState* play) {
         this->actor.speed *= 0.8f;
     }
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnInvadepoh_Invader_EmptyFunc(EnInvadepoh* this) {
 }
 
 s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 speed, f32 height) {
-    s32 pad; // TODO: recast?
+    s32 pad;
     Vec3s* nextPathPoint = &this->pathPoints[this->currentPoint + 1];
     s32 reachedNextPoint = EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z,
                                                     nextPathPoint->x, nextPathPoint->z, speed);
@@ -749,7 +751,7 @@ s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 spe
 }
 
 void EnInvadepoh_Night1Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
-    s32 pad; // TODO: recast?
+    s32 pad;
     f32 yPosTemp = this->actor.world.pos.y;
 
     EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
@@ -808,6 +810,7 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
             reachedNext = true;
         }
     }
+
     // Instead of targeting nextPathPoint, the target is about 5% beyond it along that path segment.
     worldToTarget.x = ((worldToNext.x + worldToCurrent.x) * 0.9f) + currentToNext.x;
     worldToTarget.y = 0.0f;
@@ -818,7 +821,7 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f,
                             EnInvadepoh_Dog_IsOnPath(this, 50.0f, 15.0f)
                                 ? UPDBGCHECKINFO_FLAG_4
-                                : UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_1);
+                                : UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 
     return reachedNext;
@@ -826,12 +829,12 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Dog_Move(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
 
 void EnInvadepoh_Night3Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
-    s32 pad; // TODO: recast?
+    s32 pad;
     f32 yPosTemp = this->actor.world.pos.y;
 
     EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
@@ -906,9 +909,9 @@ void EnInvadepoh_Event_CheckState(EnInvadepoh* this, PlayState* play) {
         if (CURRENT_DAY < 1) {
             sEventState = ENINVADEPOH_EVENT_WAIT;
         } else if (CURRENT_DAY == 1) {
-            s32 currentTime = gSaveContext.save.time;
+            s32 currentTime = CURRENT_TIME;
 
-            if (!((CLOCK_TIME(2, 30) <= currentTime) && (currentTime < CLOCK_TIME(6, 00)))) {
+            if (!((currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(6, 00)))) {
                 sEventState = ENINVADEPOH_EVENT_WAIT;
             } else if (currentTime < CLOCK_TIME(5, 15)) {
                 s32 i;
@@ -920,7 +923,7 @@ void EnInvadepoh_Event_CheckState(EnInvadepoh* this, PlayState* play) {
 
                     firstSpawn = MIN(spawnTime, firstSpawn);
                 }
-                if (currentTime < firstSpawn + 3601) { // 79 in-game minutes
+                if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
                     sEventState = ENINVADEPOH_EVENT_ACTIVE;
                 }
             }
@@ -942,8 +945,8 @@ void EnInvadepoh_Event_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
     for (i = 0; i < this->spawnCount; i++) {
         sAlienInvaders[i] = (EnInvadepoh*)Actor_Spawn(
             &play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(pathIndex, ENINVADEPOH_ALIEN_INVADER, i));
-        if (pathIndex != 0xFF) {
+            this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_PARAMS(pathIndex, ENINVADEPOH_TYPE_ALIEN_INVADER, i));
+        if (pathIndex != EN_INVADEPOH_PATH_INDEX_NONE) {
             Path* path = &play->setupPathList[pathIndex];
 
             pathIndex = path->additionalPathIndex;
@@ -954,19 +957,19 @@ void EnInvadepoh_Event_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_Abductor_SpawnCow(EnInvadepoh* this, PlayState* play, s32 index) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
                        this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
-                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW, index));
+                       ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_COW, index));
 }
 
 void EnInvadepoh_Abductor_SpawnRomani(EnInvadepoh* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
                        this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
-                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_ROMANI_ABDUCTED, 0));
+                       ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_ROMANI_ABDUCTED, 0));
 }
 
 void EnInvadepoh_Event_SpawnLightBall(EnInvadepoh* this, PlayState* play) {
     sLightBall = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
                                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                           ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_LIGHT_BALL, 0));
+                                           ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_LIGHT_BALL, 0));
 }
 
 void EnInvadepoh_LightBall_ReplaceTranslation(Vec3f* translation) {
@@ -977,7 +980,7 @@ void EnInvadepoh_LightBall_ReplaceTranslation(Vec3f* translation) {
     curMtxF->zw = translation->z;
 }
 
-s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 range, s32 doorTimer) {
+s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 rangeSq, s32 doorTimer) {
     Actor* doorActor = play->actorCtx.actorLists[ACTORCAT_DOOR].first;
     EnDoor* door;
     s32 doorOpened = false;
@@ -986,7 +989,7 @@ s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 range, s
         if ((doorActor->id == ACTOR_EN_DOOR) && (doorActor->update != NULL)) {
             door = (EnDoor*)doorActor;
             if ((door->knobDoor.dyna.actor.room == this->actor.room) &&
-                (Math3D_Vec3fDistSq(&door->knobDoor.dyna.actor.world.pos, &this->actor.world.pos) < range)) {
+                (Math3D_Vec3fDistSq(&door->knobDoor.dyna.actor.world.pos, &this->actor.world.pos) < rangeSq)) {
 
                 door->openTimer = doorTimer;
                 doorOpened = true;
@@ -1007,8 +1010,8 @@ void EnInvadepoh_Event_SetCutscenes(EnInvadepoh* this) {
     s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < 3; i++) {
-        sCutsceneIds[i] = csId;
+    for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
+        sCsIdList[i] = csId;
         csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 }
@@ -1018,6 +1021,7 @@ s32 EnInvadepoh_Alien_LensFlareDepthCheck(PlayState* play, Vec3f* pos) {
     f32 invW;
 
     Actor_GetProjectedPos(play, pos, &projectedPos, &invW);
+
     if ((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f) && (fabsf(projectedPos.y * invW) < 1.0f)) {
         f32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
         f32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
@@ -1039,14 +1043,16 @@ void EnInvadepoh_Event_SetClosestAlien(EnInvadepoh* this) {
         if ((sAlienInvaders[i] != NULL) && sAlienInvaders[i]->present) {
             f32 distSqToBarn = Math3D_Vec3fDistSq(&sAlienInvaders[i]->actor.world.pos, &this->actor.world.pos);
 
-            if (distSqToBarn < minDistSqToBarn) {
+            if (minDistSqToBarn > distSqToBarn) {
                 minDistSqToBarn = distSqToBarn;
                 closestAlienIndex = i;
             }
         }
         sAlienStateFlags[i] &= ~ENINVADEPOH_INVADER_CLOSEST;
     }
+
     sAliensTooClose = false;
+
     if (minDistSqToBarn <= SQ(2000.0f)) {
         sAlienStateFlags[closestAlienIndex] |= ENINVADEPOH_INVADER_CLOSEST;
         if (minDistSqToBarn <= SQ(340.0f)) {
@@ -1077,7 +1083,9 @@ s8 EnInvadepoh_Interact_GetNextAnim(EnInvadepohFaceAnimNext* nextAnims, s32 next
             break;
         }
     }
-    return (nextAnims + nextIndex)->index; // TODO: fake?
+
+    //! FAKE:
+    return (nextAnims + nextIndex)->index;
 }
 
 void EnInvadepoh_Interact_SetNextAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim* faceAnim) {
@@ -1127,8 +1135,8 @@ void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadePohFaceAnimInfo* fac
     } else if (faceInfo->delayTimer > 0) {
         faceInfo->delayTimer--;
     } else {
-        EnInvadepohFaceAnim* nextAnim = animSet[EnInvadepoh_Interact_GetNextAnim(
-            faceAnimLoopDelayed->loop.nextAnims, faceAnimLoopDelayed->loop.nextCount)];
+        EnInvadepohFaceAnim* nextAnim = animSet[EnInvadepoh_Interact_GetNextAnim(faceAnimLoopDelayed->loop.nextAnims,
+                                                                                 faceAnimLoopDelayed->loop.nextCount)];
 
         EnInvadepoh_Interact_SetNextAnim(faceInfo, nextAnim);
     }
@@ -1231,8 +1239,8 @@ void EnInvadepoh_Interact_UpdateAnimation(EnInvadePohFaceAnimInfo* faceInfo) {
     }
 }
 
-void EnInvadepoh_Interact_Init(EnInvadePohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimSet,
-                               s32 curEyeAnim, EnInvadepohFaceAnim** mouthAnimSet, s32 curMouthAnim, Vec3s* headRotTarget,
+void EnInvadepoh_Interact_Init(EnInvadePohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimSet, s32 curEyeAnim,
+                               EnInvadepohFaceAnim** mouthAnimSet, s32 curMouthAnim, Vec3s* headRotTarget,
                                s16 maxTurnRate, f32 scaledTurnRate, f32 torsoRotXModTarget, f32 torsoRotXModStep) {
     Math_Vec3s_Copy(&interactInfo->headRotTarget, headRotTarget);
     interactInfo->maxTurnRate = maxTurnRate;
@@ -1376,7 +1384,6 @@ s32 EnInvadepoh_Event_UpdateWarps(void) {
 }
 
 void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Massive problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 spawnCount;
     s32 pathIndex;
@@ -1388,23 +1395,25 @@ void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
         Path* path = &play->setupPathList[pathIndex];
 
         pathIndex = path->additionalPathIndex;
-        if (pathIndex == 0xFF) {
+        if (pathIndex == EN_INVADEPOH_PATH_INDEX_NONE) {
             break;
         }
     }
+
     this->spawnCount = spawnCount;
     EnInvadepoh_Event_CheckState(this, play);
     EnInvadepoh_Event_SetCutscenes(this);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_SWITCH);
+
     if (sEventState == ENINVADEPOH_EVENT_WAIT) {
         EnInvadepoh_Event_SetupWait(this);
     } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
-        if (gSaveContext.save.time < CLOCK_TIME(2, 31)) {
+        if (CURRENT_TIME < CLOCK_TIME(2, 31)) {
             EnInvadepoh_Event_SetupWait(this);
         } else {
             EnInvadepoh_Event_SpawnLightBall(this, play);
             EnInvadepoh_Event_SpawnInvaders(this, play);
-            AudioSeq_QueueSeqCmd(0x8000 | NA_BGM_ALIEN_INVASION);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             EnInvadepoh_Event_SetupInvasion(this);
         }
     } else if (sEventState == ENINVADEPOH_EVENT_CLEAR) {
@@ -1420,22 +1429,23 @@ void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-InitChainEntry sAlienInitChain[4] = {
+InitChainEntry sAlienInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
+
 void EnInvadepoh_Alien_Init(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Stack size problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
     Collider_InitCylinder(play, &this->collider);
     ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
-    this->actor.flags = ACTOR_FLAG_80000000 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_10;
-    if (ENINVADEPOH_GET_TYPE(&this->actor) == ENINVADEPOH_ALIEN_ABDUCTOR) {
+    this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
+
+    if (ENINVADEPOH_GET_TYPE(&this->actor) == ENINVADEPOH_TYPE_ALIEN_ABDUCTOR) {
         this->actor.update = EnInvadepoh_Abuductor_WaitForObject;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;
     } else {
@@ -1443,18 +1453,20 @@ void EnInvadepoh_Alien_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sAlienCylinderInit);
         this->actor.colChkInfo.mass = 40;
     }
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_UCH);
-    if (this->bankIndex < 0) {
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UCH);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
 }
 
-InitChainEntry sCowInitChain[4] = {
+InitChainEntry sCowInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
+
 void EnInvadepoh_Cow_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
@@ -1462,87 +1474,95 @@ void EnInvadepoh_Cow_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sCowInitChain);
     this->actor.update = EnInvadepoh_Cow_WaitForObject;
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW_TAIL, 0));
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_COW);
-    if (this->bankIndex < 0) {
+                       ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_COW_TAIL, 0));
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
 }
 
-InitChainEntry sCowTailInitChain[4] = {
+InitChainEntry sCowTailInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
+
 void EnInvadepoh_CowTail_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sCowTailInitChain);
     this->actor.update = EnInvadepoh_CowTail_WaitForObject;
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_COW);
-    if (this->bankIndex < 0) {
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
 }
 
-InitChainEntry sRomaniInitChain[5] = {
+InitChainEntry sRomaniInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
+
 void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Stack management problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 romaniType = ENINVADEPOH_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
-    if ((romaniType == ENINVADEPOH_ROMANI_NIGHT_1) || (romaniType == ENINVADEPOH_ROMANI_NIGHT_3)) {
-        this->actor.targetMode = 3;
+
+    if ((romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_1) || (romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_3)) {
+        this->actor.targetMode = TARGET_MODE_3;
     } else {
-        this->actor.targetMode = 6;
+        this->actor.targetMode = TARGET_MODE_6;
     }
+
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(play, &this->collider);
-    if (romaniType != ENINVADEPOH_ROMANI_ABDUCTED) {
+    if (romaniType != ENINVADEPOH_TYPE_ROMANI_ABDUCTED) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sHumanCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
-    if (romaniType == ENINVADEPOH_ROMANI_ABDUCTED) {
+
+    if (romaniType == ENINVADEPOH_TYPE_ROMANI_ABDUCTED) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
-    } else if (romaniType == ENINVADEPOH_ROMANI_CONFUSED) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_CONFUSED) {
         this->actor.update = EnInvadepoh_ConfusedRomani_WaitForObject;
         this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE;
-    } else if (romaniType == ENINVADEPOH_ROMANI_NIGHT_1) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
-    } else if (romaniType == ENINVADEPOH_ROMANI_BARN) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_BARN) {
         this->actor.update = EnInvadepoh_BarnRomani_WaitForObject;
-    } else if (romaniType == ENINVADEPOH_ROMANI_REWARD) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_REWARD) {
         this->actor.update = EnInvadepoh_RewardRomani_WaitForObject;
     } else {
         this->actor.update = EnInvadepoh_Night3Romani_WaitForObject;
     }
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_MA1);
-    if (this->bankIndex < 0) {
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MA1);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
-    if (romaniType == ENINVADEPOH_ROMANI_CONFUSED) {
+
+    if (romaniType == ENINVADEPOH_TYPE_ROMANI_CONFUSED) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == ENINVADEPOH_ROMANI_NIGHT_1) {
-        if ((CLOCK_TIME(6, 00) > gSaveContext.save.time) && (gSaveContext.save.time >= CLOCK_TIME(2, 15))) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_1) {
+        if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 15))) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == ENINVADEPOH_ROMANI_BARN) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_BARN) {
         // nothing
-    } else if (romaniType == ENINVADEPOH_ROMANI_REWARD) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_REWARD) {
         if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == ENINVADEPOH_ROMANI_NIGHT_3) {
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_3) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             Actor_Kill(&this->actor);
         }
@@ -1550,11 +1570,12 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-InitChainEntry sLightBallInitChain[6] = {
+InitChainEntry sLightBallInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
+
 void EnInvadepoh_LightBall_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
@@ -1563,7 +1584,7 @@ void EnInvadepoh_LightBall_Init(Actor* thisx, PlayState* play2) {
     this->actor.update = EnInvadepoh_LightBall_Update;
     this->actor.draw = EnInvadepoh_LightBall_Draw;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
-    if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (gSaveContext.save.time < CLOCK_TIME(2, 31))) {
+    if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
         this->actor.world.pos.x += sLightBallSpawnOffset.x;
         this->actor.world.pos.y += sLightBallSpawnOffset.y + 3000.0f;
         this->actor.world.pos.z += sLightBallSpawnOffset.z;
@@ -1576,16 +1597,13 @@ void EnInvadepoh_LightBall_Init(Actor* thisx, PlayState* play2) {
     }
 }
 
-InitChainEntry sDogInitChain[6] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),
-    ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 4, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
+InitChainEntry sDogInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),  ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),   ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
 };
+
 void EnInvadepoh_Dog_Init(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Stack size problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sDogInitChain);
@@ -1594,20 +1612,19 @@ void EnInvadepoh_Dog_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sDogCylinderInit);
     this->actor.colChkInfo.mass = 80;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_DOG);
-    if (this->bankIndex < 0) {
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_DOG);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
 }
 
-InitChainEntry sCremiaInitChain[6] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 3, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+InitChainEntry sCremiaInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
+
 void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
     // PlayState* play = play2; Stack size problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
@@ -1619,32 +1636,35 @@ void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sHumanCylinderInit);
     this->actor.colChkInfo.mass = MASS_HEAVY;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    this->bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_MA2);
-    if (this->bankIndex < 0) {
+
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MA2);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
     }
+
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         Actor_Kill(&this->actor);
     }
+
     sCremia = this;
 }
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
-    static ActorFunc sInitFuncs[14] = {
-        /* 0x0 */ EnInvadepoh_Event_Init,     // Event handler
-        /* 0x1 */ EnInvadepoh_Alien_Init,     // Alien invader
-        /* 0x2 */ EnInvadepoh_Cow_Init,       // Abducted cow
-        /* 0x3 */ EnInvadepoh_CowTail_Init,   // Cow tail
-        /* 0x4 */ EnInvadepoh_Romani_Init,    // Abducted Romani
-        /* 0x5 */ EnInvadepoh_Romani_Init,    // Confused Romani
-        /* 0x6 */ EnInvadepoh_LightBall_Init, // Light ball
-        /* 0x7 */ EnInvadepoh_Romani_Init,    // Night 1 Romani
-        /* 0x8 */ EnInvadepoh_Romani_Init,    // Unknown Romani
-        /* 0x9 */ EnInvadepoh_Romani_Init,    // Reward Romani
-        /* 0xA */ EnInvadepoh_Dog_Init,       // Dog
-        /* 0xB */ EnInvadepoh_Cremia_Init,    // Night 3 Cremia
-        /* 0xC */ EnInvadepoh_Romani_Init,    // Night 3 Romani
-        /* 0xD */ EnInvadepoh_Alien_Init,     // Alien abductor
+    static ActorFunc sInitFuncs[ENINVADEPOH_TYPE_MAX] = {
+        EnInvadepoh_Event_Init,     // ENINVADEPOH_TYPE_HANDLER
+        EnInvadepoh_Alien_Init,     // ENINVADEPOH_TYPE_ALIEN_INVADER
+        EnInvadepoh_Cow_Init,       // ENINVADEPOH_TYPE_COW
+        EnInvadepoh_CowTail_Init,   // ENINVADEPOH_TYPE_COW_TAIL
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_LightBall_Init, // ENINVADEPOH_TYPE_LIGHT_BALL
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_BARN
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_REWARD
+        EnInvadepoh_Dog_Init,       // ENINVADEPOH_TYPE_DOG
+        EnInvadepoh_Cremia_Init,    // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
+        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
+        EnInvadepoh_Alien_Init,     // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
 
     sInitFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
@@ -1682,7 +1702,7 @@ void EnInvadepoh_CowTail_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Romani_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2; // both or neither recast required
+    PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
@@ -1693,7 +1713,7 @@ void EnInvadepoh_LightBall_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Dog_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2; // both or neither recast required
+    PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
@@ -1717,30 +1737,31 @@ void EnInvadepoh_Romani_Destroy2(Actor* thisx, PlayState* play2) {
 
 void EnInvadepoh_Abductor_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnInvadepoh* this = (EnInvadepoh*)thisx; // this recast required
+    EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
+
     if (this->actor.child != NULL) {
         this->actor.child->parent = NULL;
     }
 }
 
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
-    static ActorFunc sDestroyFuncs[14] = {
-        /* 0x0 */ EnInvadepoh_Event_Destroy,     // Event handler
-        /* 0x1 */ EnInvadepoh_Invader_Destroy,   // Alien invader
-        /* 0x2 */ EnInvadepoh_Cow_Destroy,       // Abducted cow
-        /* 0x3 */ EnInvadepoh_CowTail_Destroy,   // Cow tail
-        /* 0x4 */ EnInvadepoh_Romani_Destroy,    // Abducted Romani
-        /* 0x5 */ EnInvadepoh_Romani_Destroy,    // Confused Romani
-        /* 0x6 */ EnInvadepoh_LightBall_Destroy, // Light ball
-        /* 0x7 */ EnInvadepoh_Romani_Destroy,    // Night 1 Romani
-        /* 0x8 */ EnInvadepoh_Romani_Destroy,    // Unknown Romani
-        /* 0x9 */ EnInvadepoh_Romani_Destroy,    // Reward Romani
-        /* 0xA */ EnInvadepoh_Dog_Destroy,       // Dog
-        /* 0xB */ EnInvadepoh_Cremia_Destroy,    // Night 3 Cremia
-        /* 0xC */ EnInvadepoh_Romani_Destroy2,   // Night 3 Romani
-        /* 0xD */ EnInvadepoh_Abductor_Destroy,  // Alien abductor
+    static ActorFunc sDestroyFuncs[ENINVADEPOH_TYPE_MAX] = {
+        EnInvadepoh_Event_Destroy,     // ENINVADEPOH_TYPE_HANDLER
+        EnInvadepoh_Invader_Destroy,   // ENINVADEPOH_TYPE_ALIEN_INVADER
+        EnInvadepoh_Cow_Destroy,       // ENINVADEPOH_TYPE_COW
+        EnInvadepoh_CowTail_Destroy,   // ENINVADEPOH_TYPE_COW_TAIL
+        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
+        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_LightBall_Destroy, // ENINVADEPOH_TYPE_LIGHT_BALL
+        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
+        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_BARN
+        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_REWARD
+        EnInvadepoh_Dog_Destroy,       // ENINVADEPOH_TYPE_DOG
+        EnInvadepoh_Cremia_Destroy,    // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
+        EnInvadepoh_Romani_Destroy2,   // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
+        EnInvadepoh_Abductor_Destroy,  // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
 
     sDestroyFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
@@ -1752,7 +1773,7 @@ void EnInvadepoh_Event_SetupWait(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Event_Wait(EnInvadepoh* this, PlayState* play) {
-    if ((CLOCK_TIME(6, 00) > gSaveContext.save.time) && (gSaveContext.save.time >= CLOCK_TIME(2, 30))) {
+    if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 30))) {
         EnInvadepoh_Event_SpawnLightBall(this, play);
         EnInvadepoh_Event_SpawnInvaders(this, play);
         EnInvadepoh_Event_SetupQueueInvasionCs(this);
@@ -1768,11 +1789,11 @@ void EnInvadepoh_Event_SetupQueueInvasionCs(EnInvadepoh* this) {
 void EnInvadepoh_Event_QueueInvasionCs(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
-    } else if (CutsceneManager_IsNext(sCutsceneIds[0])) {
-        CutsceneManager_StartWithPlayerCs(sCutsceneIds[0], &this->actor);
+    } else if (CutsceneManager_IsNext(sCsIdList[0])) {
+        CutsceneManager_StartWithPlayerCs(sCsIdList[0], &this->actor);
         EnInvadepoh_Event_SetupInvasionCs(this);
     } else {
-        CutsceneManager_Queue(sCutsceneIds[0]);
+        CutsceneManager_Queue(sCsIdList[0]);
     }
 }
 
@@ -1783,20 +1804,21 @@ void EnInvadepoh_Event_SetupInvasionCs(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Event_InvasionCs(EnInvadepoh* this, PlayState* play) {
-    static s16 sAlienSpawnTimes[8] = {
+    static s16 sAlienSpawnTimes[] = {
         130, 125, 115, 100, 80, 78, 76, 74,
     };
     s32 i;
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < ARRAY_COUNT(sAlienSpawnTimes); i++) {
         if (this->actionTimer == sAlienSpawnTimes[i]) {
             sAlienStateFlags[i] |= ENINVADEPOH_INVADER_ACTIVE;
         }
     }
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        CutsceneManager_Stop(sCutsceneIds[0]);
-        AudioSeq_QueueSeqCmd(0x8000 | NA_BGM_ALIEN_INVASION);
+        CutsceneManager_Stop(sCsIdList[0]);
+        SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
         EnInvadepoh_Event_SetupInvasion(this);
     }
 }
@@ -1807,13 +1829,14 @@ void EnInvadepoh_Event_SetupInvasion(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Event_Invasion(EnInvadepoh* this, PlayState* play) {
-    if ((CLOCK_TIME(6, 00) > gSaveContext.save.time) && (gSaveContext.save.time >= CLOCK_TIME(5, 15))) {
+    if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(5, 15))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
         EnInvadepoh_Event_SetupQueueVictoryCs(this);
     } else {
         s32 i;
 
         EnInvadepoh_Event_SetClosestAlien(this);
+
         for (i = 0; i < this->spawnCount; i++) {
             if ((sAlienInvaders[i] != NULL) && (sAlienInvaders[i]->atBarn)) {
                 EnInvadepoh_Event_SetupFailure(this);
@@ -1829,11 +1852,11 @@ void EnInvadepoh_Event_SetupQueueVictoryCs(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Event_QueueVictoryCs(EnInvadepoh* this, PlayState* play) {
-    if (CutsceneManager_IsNext(sCutsceneIds[1])) {
-        CutsceneManager_StartWithPlayerCs(sCutsceneIds[1], &this->actor);
+    if (CutsceneManager_IsNext(sCsIdList[1])) {
+        CutsceneManager_StartWithPlayerCs(sCsIdList[1], &this->actor);
         EnInvadepoh_Event_SetupVictoryCs(this);
     } else {
-        CutsceneManager_Queue(sCutsceneIds[1]);
+        CutsceneManager_Queue(sCsIdList[1]);
     }
 }
 
@@ -1847,6 +1870,7 @@ void EnInvadepoh_Event_VictoryCs(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer == 100) {
         Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     }
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         play->nextEntrance = ENTRANCE(ROMANI_RANCH, 6);
@@ -1854,8 +1878,8 @@ void EnInvadepoh_Event_VictoryCs(EnInvadepoh* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_73;
         gSaveContext.nextTransitionType = TRANS_TYPE_72;
-        D_801BDAA0 = 1;
-        gHorseIsMounted = 0;
+        D_801BDAA0 = true;
+        gHorseIsMounted = false;
         EnInvadepoh_Event_SetupGoodEnd(this);
     }
 }
@@ -1933,6 +1957,7 @@ void EnInvadepoh_Invader_WaitForEvent(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Invader_SetProgress(this);
     EnInvadepoh_Invader_ApplyProgress(this, play);
     EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+
     if (sAlienStateFlags[ENINVADEPOH_GET_INDEX(&this->actor)] & ENINVADEPOH_INVADER_ACTIVE) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
@@ -1958,6 +1983,7 @@ void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Invader_SetProgress(this);
     EnInvadepoh_Invader_ApplyProgress(this, play);
     EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+
     if (this->progress > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
@@ -1985,19 +2011,23 @@ void EnInvadepoh_Invader_WarpIn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Invader_ApplyProgress(this, play);
     EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
+
     if (this->progress >= 0.9999f) {
         this->atBarn = true;
     }
+
     if (this->alpha >= 249) {
         this->alpha = 255;
     } else {
         this->alpha += 6;
     }
+
     if (this->alpha > 128) {
         this->collider.base.atFlags |= AT_ON;
         this->collider.base.acFlags |= AC_ON;
         this->collider.base.ocFlags1 |= OC1_ON;
     }
+
     if (this->alpha == 255) {
         if (this->eyeBeamAlpha >= 245) {
             this->eyeBeamAlpha = 255;
@@ -2039,7 +2069,7 @@ void EnInvadepoh_Invader_SetupHitstun(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienJerkingAnim);
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->present = true;
@@ -2053,6 +2083,7 @@ void EnInvadepoh_Invader_SetupHitstun(EnInvadepoh* this) {
 
 void EnInvadepoh_Invader_Hitstun(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Invader_Knockback(this, play);
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         EnInvadepoh_Invader_SetupDeath(this);
@@ -2076,11 +2107,11 @@ void EnInvadepoh_Invader_SetupDeath(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
-    static Vec3f sDeathScales[5] = {
+    static Vec3f sDeathScales[] = {
         { 0.01f, 0.01f, 0.01f }, { 0.02f, 0.01f, 0.005f }, { -0.01f, 0.0f, 0.0f },
         { 0.01f, 0.01f, 0.01f }, { 0.005f, 0.01f, 0.02f },
     };
-    static Vec3f sDeathFlashScales[7] = {
+    static Vec3f sDeathFlashScales[] = {
         { 0.0005f, 0.027999999f, 0.01f }, { -0.01f, 0.0f, 0.0f }, { -0.01f, 0.0f, 0.0f },
         { 0.016f, 0.0004f, 0.01f },       { -0.01f, 0.0f, 0.0f }, { 0.0005f, 0.0005f, 0.0005f },
         { 0.0002f, 0.0002f, 0.0002f },
@@ -2088,6 +2119,7 @@ void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
     Vec3f* deathScale;
 
     EnInvadepoh_Invader_EmptyFunc(this);
+
     if (this->stateTimer < 5) {
         deathScale = &sDeathScales[this->stateTimer];
         if (deathScale->x > 0.0f) {
@@ -2102,6 +2134,7 @@ void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
         this->present = false;
         this->eyeBeamAlpha = 0;
     }
+
     if ((this->stateTimer >= 2) && (this->stateTimer < 9)) {
         deathScale = &sDeathFlashScales[this->stateTimer - 2];
         if (deathScale->x > 0.0f) {
@@ -2113,19 +2146,23 @@ void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
     } else {
         this->drawDeathFlash = false;
     }
+
     this->stateTimer++;
+
     if (this->actionTimer == 8) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y - 10.0f,
                     this->actor.world.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_SMOKE));
     }
+
     if (this->actionTimer == 8) {
         Enemy_StartFinishingBlow(play, &this->actor);
     }
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         EnInvadepoh_Invader_SetRespawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
         EnInvadepoh_Invader_AddKill();
-        Item_DropCollectible(play, &this->actor.world.pos, 8);
+        Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_30);
         EnInvadepoh_Invader_SetupWaitToRespawn(this);
     }
 }
@@ -2134,8 +2171,8 @@ void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Alien_SetTexAnim();
         this->actor.update = EnInvadepoh_Invader_Update;
@@ -2147,7 +2184,8 @@ void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Invader_ApplyProgress(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
-        if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (gSaveContext.save.time < CLOCK_TIME(2, 31))) {
+
+        if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
             EnInvadepoh_Invader_SetupWaitForEvent(this);
         } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
             if (this->progress >= 0.0001f) {
@@ -2195,7 +2233,7 @@ void EnInvadepoh_Invader_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
 
     if (thisx->draw != NULL) {
-        this->finishedAnim = SkelAnime_Update(&this->skelAnime);
+        this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
 
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -2205,11 +2243,13 @@ void EnInvadepoh_Invader_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->collider.base.atFlags &= ~AT_HIT;
     }
+
     if (this->collider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     } else {
         this->collider.base.acFlags &= ~AC_HIT;
     }
+
     if (this->collider.base.ocFlags1 & OC1_ON) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
@@ -2221,8 +2261,8 @@ void EnInvadepoh_Cow_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->actor.update = EnInvadepoh_Cow_Update;
         this->actor.draw = EnInvadepoh_Cow_Draw;
@@ -2241,9 +2281,11 @@ void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2) {
         Actor_Kill(&this->actor);
         return;
     }
+
     index = ENINVADEPOH_GET_INDEX(&this->actor);
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[index], 0x32);
+
     if (this->actor.child != NULL) {
         s32 pad;
         MtxF tailMtxF;
@@ -2265,8 +2307,8 @@ void EnInvadepoh_CowTail_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->actor.update = EnInvadepoh_CowTail_Update;
         this->actor.draw = EnInvadepoh_CowTail_Draw;
@@ -2353,6 +2395,7 @@ void EnInvadepoh_AbductedRomani_Struggle(EnInvadepoh* this, PlayState* play) {
     } else if (this->actionTimer == 10) {
         this->interactInfo.headRotTarget.y = 0;
     }
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         EnInvadepoh_AbductedRomani_SetupEnd(this);
@@ -2382,8 +2425,8 @@ void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 pad;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         this->actor.update = EnInvadepoh_AbductedRomani_Update;
@@ -2405,9 +2448,12 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
         Actor_Kill(&this->actor);
         return;
     }
+
     this->actionFunc(this, play);
+
     SkelAnime_Update(&this->skelAnime);
     EnInvadepoh_Interact_Update(&this->interactInfo);
+
     if (interactInfo->torsoRotZ != 0) {
         this->actor.shape.rot.x = -interactInfo->torsoRotZ;
     }
@@ -2431,6 +2477,7 @@ void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->actor.speed, 1.6f, 0.1f);
+
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
         EnInvadepoh_ConfusedRomani_SetNextPathPoint(this);
         this->unk_370 = 0xC8;
@@ -2438,11 +2485,14 @@ void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play) {
     } else {
         Math_StepToS(&this->unk_370, 0x7D0, 0x46);
     }
+
     EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 0x46);
+
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2455,6 +2505,7 @@ void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
     f32 rand = Rand_ZeroOne();
 
     this->actionTimer = Rand_S16Offset(150, 150);
+
     if (rand < 0.5f) {
         this->unk_374 = 0;
         Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
@@ -2482,6 +2533,7 @@ void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
         interactInfo->scaledTurnRate = 0.04f;
         interactInfo->maxTurnRate = 0x3E8;
     }
+
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actionFunc = EnInvadepoh_ConfusedRomani_Idle;
 }
@@ -2490,9 +2542,11 @@ void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
+
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
         EnInvadepoh_ConfusedRomani_SetNextPathPoint(this);
     }
+
     if (this->unk_374 == 0) {
         if ((this->actor.xzDistToPlayer < 350.0f) && (play->gameplayFrames & 0x60)) {
             Player* player = GET_PLAYER(play);
@@ -2507,6 +2561,7 @@ void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
         interactInfo->headRotTarget.x = 0;
         interactInfo->headRotTarget.y = 0;
     }
+
     if (this->actionTimer > 0) {
         s32 timerMod32 = (u32)this->actionTimer % 0x20;
 
@@ -2539,6 +2594,7 @@ void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
         this->actionTimer--;
         return;
     }
+
     EnInvadepoh_ConfusedRomani_SetupWalk(this);
 }
 
@@ -2576,16 +2632,17 @@ void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         this->actor.update = EnInvadepoh_ConfusedRomani_Update;
         this->actor.draw = EnInvadepoh_Romani_Draw;
-        this->actor.textId = 0x3330; // ........
+        this->actor.textId = 0x3330;
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03f, 0.3f,
+                                  0.03f);
         EnInvadepoh_ConfusedRomani_SetupPath(this, play);
         EnInvadepoh_SetPosToPathPoint(this, 0);
         func_800B4AEC(play, &this->actor, 50.0f);
@@ -2598,17 +2655,19 @@ void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
-    s32 talkRequested = Actor_TalkOfferAccepted(&this->actor, &play->state);
+    s32 talkAccepted = Actor_TalkOfferAccepted(&this->actor, &play->state);
 
-    if (talkRequested) {
-        Message_BombersNotebookQueueEvent(play, 5);
+    if (talkAccepted) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_ConfusedRomani_SetupTalk(this);
     }
+
     this->actionFunc(this, play);
+
     if (inUncullRange) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_ConfusedRomani_Talk) && !talkRequested && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_ConfusedRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -2635,6 +2694,7 @@ void EnInvadepoh_LightBall_Descend(EnInvadepoh* this, PlayState* play) {
         Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + sLightBallSpawnOffset.y + 300.0f, 0.7f,
                            fabsf(this->actor.velocity.y), 1.0f);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
+
     if (fabsf(distToTargetY) < 1.0f) {
         EnInvadepoh_LightBall_SpawnSparkles(this, play, 50);
         EnInvadepoh_LightBall_SetupHover(this);
@@ -2658,9 +2718,11 @@ void EnInvadepoh_LightBall_Hover(EnInvadepoh* this, PlayState* play) {
     } else {
         this->actor.gravity = -2.0f;
     }
+
     this->actor.velocity.y *= 0.96f;
     Actor_MoveWithGravity(&this->actor);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
+
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         EnInvadepoh_LightBall_SetupSpawnInvaders(this);
@@ -2679,7 +2741,7 @@ void EnInvadepoh_LightBall_SetupSpawnInvaders(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_LightBall_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
-    static Vec3f sLightBallTargetOffsets[5] = {
+    static Vec3f sLightBallTargetOffsets[] = {
         { -1813.0f, 374.0f, 1900.0f }, { 2198.0f, 153.0f, 3365.0f }, { -1434.0f, 262.0f, 3365.0f },
         { -393.0f, 396.0f, 1084.0f },  { 0.0f, 1500.0f, 0.0f },
     };
@@ -2696,26 +2758,33 @@ void EnInvadepoh_LightBall_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
         this->actor.gravity = 33.0f;
         EnInvadepoh_LightBall_SpawnSparkles(this, play, 20);
     }
+
     Math_Vec3f_Sum(&sLightBallTargetOffsets[this->lightBallTarget], &this->actor.home.pos, &lightBallTargetPos);
+
     if (Math3D_Vec3fDistSq(&this->actor.world.pos, &lightBallTargetPos) < SQ(400.0f)) {
         this->actor.speed *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speed, 170.0f, 21.0f);
         this->actor.speed *= 0.98f;
     }
-    if (EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, lightBallTargetPos.x, lightBallTargetPos.z,
-                                 this->actor.speed)) {
+
+    if (EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, lightBallTargetPos.x,
+                                 lightBallTargetPos.z, this->actor.speed)) {
         this->actor.speed = 0.0f;
     }
+
     if (lightBallTargetPos.y < this->actor.world.pos.y) {
         Math_StepToF(&this->actor.gravity, -12.0f, 7.0f);
     } else {
         Math_StepToF(&this->actor.gravity, 5.0f, 4.0f);
     }
+
     this->actor.velocity.y += this->actor.gravity;
     this->actor.velocity.y *= 0.97f;
     this->actor.world.pos.y += this->actor.velocity.y;
+
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2738,15 +2807,20 @@ void EnInvadepoh_LightBall_AboveBarn(EnInvadepoh* this, PlayState* play) {
     lightBallTargetPos.x = this->actor.home.pos.x;
     lightBallTargetPos.y = this->actor.home.pos.y + 1500.0f;
     lightBallTargetPos.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 0xA, 0xBB8, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 0xA,
+                       0xBB8, 0x64);
+
     if ((play->gameplayFrames % 0x40) < 14) {
         Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
     } else {
         this->actor.speed *= 0.97f;
     }
+
     this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
     this->actor.velocity.y *= 0.97f;
+
     Actor_MoveWithGravity(&this->actor);
+
     if (sEventState == ENINVADEPOH_EVENT_CLEAR) {
         EnInvadepoh_LightBall_SetupLeaveBarn(this);
     }
@@ -2768,11 +2842,14 @@ void EnInvadepoh_LightBall_Circle(EnInvadepoh* this, PlayState* play) {
     lightBallTargetPos.x = this->actor.home.pos.x + sLightBallSpawnOffset.x;
     lightBallTargetPos.y = this->actor.home.pos.y + sLightBallSpawnOffset.y + 400.0f;
     lightBallTargetPos.z = this->actor.home.pos.z + sLightBallSpawnOffset.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40,
+                       0x64);
     Math_StepToF(&this->actor.speed, 70.0f, 3.0f);
     this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -2.0f : 2.0f;
     this->actor.velocity.y *= 0.97f;
+
     Actor_MoveWithGravity(&this->actor);
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2793,6 +2870,7 @@ void EnInvadepoh_LightBall_Flee(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2816,12 +2894,13 @@ void EnInvadepoh_LightBall_LeaveBarn(EnInvadepoh* this, PlayState* play) {
     lightBallTargetPos.x = this->actor.home.pos.x;
     lightBallTargetPos.y = this->actor.home.pos.y + 800.0f;
     lightBallTargetPos.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40,
+                       0x64);
     Math_StepToF(&this->actor.speed, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
     this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actionTimer > 0) {
         this->actionTimer--;
@@ -2864,11 +2943,11 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
     EnInvadepoh_Romani_TurnToPath(this, 6, 0x7D0, 0x64);
 
-    if ((this->currentPoint == 0) || (this->currentPoint + 1 == this->endPoint)) {
+    if ((this->currentPoint == 0) || ((this->currentPoint + 1) == this->endPoint)) {
         if (this->unk_378 == 0) {
             s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
             s32 doorTimer = trueTimeSpeed;
-            
+
             if (trueTimeSpeed > 0) {
                 // This is really dividing by trueTimeSpeed, but matching requires writing like this
                 doorTimer = (R_TIME_SPEED * -16.0f / doorTimer) - 0.5f;
@@ -2880,10 +2959,12 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
         this->unk_378 = 0;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
+
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
+
     if (this->progress >= 0.9999f) {
         Actor_Kill(&this->actor);
     }
@@ -2911,9 +2992,9 @@ void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        if (this->actor.textId == 0x332D) { // It's almost time, Grasshopper...
+        if (this->actor.textId == 0x332D) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
-            this->actor.textId = 0x332E; // If you run out of arrows...
+            this->actor.textId = 0x332E;
         }
         EnInvadepoh_Night1Romani_SetupWalk(this);
     }
@@ -2925,32 +3006,35 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
     s32 pad;
     s32 currentTime;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        currentTime = gSaveContext.save.time;
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        currentTime = CURRENT_TIME;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 0x64, 0.03f, 0.3f,
+                                  0.03f);
         EnInvadepoh_Night1Romani_SetupPath(this, play);
         EnInvadepoh_Night1Romani_SetProgress(this);
         EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
+
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
-                this->actor.textId = 0x332E; // If you run out of arrows...
+                this->actor.textId = 0x332E;
             } else {
-                this->actor.textId = 0x332D; // It's almost time, Grasshopper...
+                this->actor.textId = 0x332D;
             }
         } else {
-            this->actor.textId = 0x332C; // ...It's almost time.
+            this->actor.textId = 0x332C;
         }
+
         if ((currentTime >= CLOCK_TIME(18, 00)) || (currentTime < CLOCK_TIME(2, 00))) {
             this->actor.update = EnInvadepoh_Night1Romani_WaitForEvent;
             this->actor.draw = NULL;
-        } else if ((currentTime < CLOCK_TIME(6, 00)) && (CLOCK_TIME(2, 00) <= currentTime) &&
+        } else if ((currentTime < CLOCK_TIME(6, 00)) && (currentTime >= CLOCK_TIME(2, 00)) &&
                    (currentTime < CLOCK_TIME(2, 15))) {
             this->actor.update = EnInvadepoh_Night1Romani_Update;
             this->actor.draw = EnInvadepoh_Romani_Draw;
@@ -2965,7 +3049,7 @@ void EnInvadepoh_Night1Romani_WaitForEvent(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if ((CLOCK_TIME(6, 00) > gSaveContext.save.time) && (gSaveContext.save.time >= CLOCK_TIME(2, 00))) {
+    if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 00))) {
         this->actor.update = EnInvadepoh_Night1Romani_Update;
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_Night1Romani_SetupWalk(this);
@@ -2976,17 +3060,19 @@ void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
-    s32 talkRequested = Actor_TalkOfferAccepted(&this->actor, &play->state);
+    s32 talkAccepted = Actor_TalkOfferAccepted(&this->actor, &play->state);
 
-    if (talkRequested) {
-        Message_BombersNotebookQueueEvent(play, 5);
+    if (talkAccepted) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_Night1Romani_SetupTalk(this);
     }
+
     this->actionFunc(this, play);
+
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_Night1Romani_Talk) && !talkRequested && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_Night1Romani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -3025,6 +3111,7 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
     }
     Math_StepToS(&this->unk_370, 0x7D0, 0x28);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_304, 6, this->unk_370, 0x28);
+
     if (this->actor.xzDistToPlayer < 300.0f) {
         Player* player = GET_PLAYER(play);
         s16 angleToPlayer;
@@ -3043,6 +3130,7 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
     }
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -3064,7 +3152,7 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_BarnRomani_LookAround(EnInvadepoh* this, PlayState* play) {
-    if (this->finishedAnim) {
+    if (this->isAnimFinished) {
         EnInvadepoh_BarnRomani_SetupIdle(this);
     }
 }
@@ -3085,6 +3173,7 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
+
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
         EnInvadepoh_BarnRomani_SetNextPathPoint(this);
         this->unk_370 = 0x5DC;
@@ -3092,7 +3181,9 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
     } else {
         Math_StepToS(&this->unk_370, 0x190, 0x32);
     }
-    EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 0x32);
+
+    EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 50);
+
     if (this->currentPoint == 0) {
         if (this->unk_378 == 0) {
             this->unk_378 = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
@@ -3102,10 +3193,12 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
         this->unk_378 = 0;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
+
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
+
     if (this->currentPoint == this->endPoint) {
         EnInvadepoh_BarnRomani_SetupIdle(this);
     }
@@ -3131,11 +3224,13 @@ void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
 
     angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        if (this->actor.textId == 0x332D) { // It's almost time, Grasshopper
+        if (this->actor.textId == 0x332D) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
-            this->actor.textId = 0x332E; // If you run out of arrows...
+            this->actor.textId = 0x332E;
         }
+
         if (this->currentPoint == this->endPoint) {
             EnInvadepoh_BarnRomani_SetupIdle(this);
         } else {
@@ -3149,16 +3244,18 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 pad;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        s32 currentTime = gSaveContext.save.time;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        s32 currentTime = CURRENT_TIME;
 
-        this->actor.objectSlot = this->bankIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f,
+                                  0.03f);
         EnInvadepoh_BarnRomani_SetupPath(this, play2);
+
         if ((currentTime < CLOCK_TIME(2, 15)) || (currentTime >= CLOCK_TIME(6, 00))) {
             this->currentPoint = 0;
             this->actor.update = EnInvadepoh_BarnRomani_WaitForEvent;
@@ -3168,18 +3265,20 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
             this->actor.draw = EnInvadepoh_Romani_Draw;
             EnInvadepoh_BarnRomani_SetupIdle(this);
         }
+
         EnInvadepoh_SetPosToPathPoint(this, this->currentPoint);
         EnInvadepoh_SetYawAlongPath(this);
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
+
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
-                this->actor.textId = 0x332E; // If you run out of arrows...
+                this->actor.textId = 0x332E;
             } else {
-                this->actor.textId = 0x332D; // It's almost time, Grasshopper...
+                this->actor.textId = 0x332D;
             }
         } else {
-            this->actor.textId = 0x332C; // ...It's almost time.
+            this->actor.textId = 0x332C;
         }
     }
 }
@@ -3188,7 +3287,7 @@ void EnInvadepoh_BarnRomani_WaitForEvent(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if ((gSaveContext.save.time < CLOCK_TIME(6, 00)) && (gSaveContext.save.time >= CLOCK_TIME(2, 15))) {
+    if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 15))) {
         this->actor.update = EnInvadepoh_BarnRomani_Update;
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_BarnRomani_SetupWalk(this);
@@ -3199,17 +3298,19 @@ void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
-    s32 talkRequested = Actor_TalkOfferAccepted(&this->actor, &play->state);
+    s32 talkAccepted = Actor_TalkOfferAccepted(&this->actor, &play->state);
 
-    if (talkRequested) {
-        Message_BombersNotebookQueueEvent(play, 5);
+    if (talkAccepted) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_BarnRomani_SetupTalk(this);
     }
+
     this->actionFunc(this, play);
+
     if (inUncullRange) {
-        this->finishedAnim = SkelAnime_Update(&this->skelAnime);
+        this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_BarnRomani_Talk) && !talkRequested && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_BarnRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -3236,7 +3337,7 @@ void EnInvadepoh_RewardRomani_SetupStartCs(EnInvadepoh* this) {
 
 void EnInvadepoh_RewardRomani_StartCs(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x3331); // We did it...We won.
+        EnInvadepoh_Romani_StartTextBox(this, play, 0x3331);
         EnInvadepoh_RewardRomani_SetupTalk(this);
     } else {
         Actor_OfferTalk(&this->actor, play, 2000.0f);
@@ -3248,18 +3349,18 @@ void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        if (this->textId == 0x3331) { // We did it...We won.
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
+        if (this->textId == 0x3331) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
-                EnInvadepoh_Romani_StartTextBox(this, play, 0x3334); // I have to get back to bed...
-                Message_BombersNotebookQueueEvent(play, 0x1D);
-                Message_BombersNotebookQueueEvent(play, 5);
+                EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             } else {
-                EnInvadepoh_Romani_StartTextBox(this, play, 0x3333); // Here's Romani's thanks
+                EnInvadepoh_Romani_StartTextBox(this, play, 0x3333);
             }
-        } else if (this->textId == 0x3333) { // Here's Romani's thanks
+        } else if (this->textId == 0x3333) {
             EnInvadepoh_RewardRomani_SetupGiveBottle(this);
-        } else if (this->textId == 0x3334) { // I have to get back to bed...
+        } else if (this->textId == 0x3334) {
             Message_CloseTextbox(play);
             EnInvadepoh_RewardRomani_SetupFinished(this);
         }
@@ -3293,10 +3394,10 @@ void EnInvadepoh_RewardRomani_SetupAfterGiveBottle(EnInvadepoh* this) {
 
 void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x3334); // I have to get back to bed..
-        Message_BombersNotebookQueueEvent(play, 0x1E);
-        Message_BombersNotebookQueueEvent(play, 0x1D);
-        Message_BombersNotebookQueueEvent(play, 5);
+        EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_RewardRomani_SetupTalk(this);
     } else {
         Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
@@ -3313,7 +3414,7 @@ void EnInvadepoh_RewardRomani_Finished(EnInvadepoh* this, PlayState* play) {
         if (play->msgCtx.msgMode == 0) {
             sRewardFinished = true;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
-                   (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
+                   (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT)) {
             sRewardFinished = true;
         }
     }
@@ -3324,15 +3425,16 @@ void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
 
-    if (Object_IsLoaded(&play2->objectCtx, this->bankIndex)) {
-        this->actor.objectSlot = this->bankIndex;
+    if (Object_IsLoaded(&play2->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         this->actor.update = EnInvadepoh_RewardRomani_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
         Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f, 0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f,
+                                  0.03f);
         interactInfo->scaledTurnRate = 0.08f;
         interactInfo->maxTurnRate = 0x7D0;
         func_800B4AEC(play, &this->actor, 50.0f);
@@ -3384,13 +3486,17 @@ void EnInvadepoh_Dog_SetupWalk(EnInvadepoh* this) {
 
 void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 1.1f, 0.5f);
+
     if (EnInvadepoh_Dog_MoveAlongPath(this, play)) {
         EnInvadepoh_Dog_SetNextPathPoint(this);
     }
+
     EnInvadepoh_Dog_PlayWalkSfx(this);
+
     if (this->dogTargetPoint >= 0) {
         this->actionTimer = 0;
     }
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -3406,6 +3512,7 @@ void EnInvadepoh_Dog_SetupRun(EnInvadepoh* this) {
 
 void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 3.8f, 0.45f);
+
     if (this->dogTargetPoint >= 0) {
         f32 distToTarget;
         Vec3f targetPathPoint;
@@ -3423,10 +3530,13 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
             this->actionTimer = 0;
         }
     }
+
     EnInvadepoh_Dog_PlayWalkSfx(this);
+
     if (EnInvadepoh_Dog_MoveAlongPath(this, play)) {
         EnInvadepoh_Dog_SetNextPathPoint(this);
     }
+
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else if (this->dogTargetPoint >= 0) {
@@ -3451,10 +3561,12 @@ void EnInvadepoh_Dog_Bark(EnInvadepoh* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardActor(&this->actor, &sClosestAlien->actor), 5,
                        0x1388, 0x64);
     EnInvadepoh_Dog_Move(this, play);
+
     if (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 19.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
-    if (this->finishedAnim) {
+
+    if (this->isAnimFinished) {
         EnInvadepoh_Dog_SetupRun(this);
     }
 }
@@ -3467,7 +3579,8 @@ void EnInvadepoh_Dog_SetupJump(EnInvadepoh* this) {
 void EnInvadepoh_Dog_Jump(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.5f, 1.0f);
     EnInvadepoh_Dog_Move(this, play);
-    if (this->finishedAnim) {
+
+    if (this->isAnimFinished) {
         EnInvadepoh_Dog_SetupRun(this);
     }
 }
@@ -3476,28 +3589,30 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        if (1) {}
-        this->actor.objectSlot = this->bankIndex;
-        Actor_SetObjectDependency(play, &this->actor);
-        SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->jointTable, this->morphTable,
-                           DOG_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, NULL, 0, NULL, 0, &gZeroVec3s, 0xBB8, 0.1f, 0.0f, 0.0f);
-        EnInvadepoh_Dog_SetupPath(this, play);
-        EnInvadepoh_SetPosToPathPoint(this, 0);
-        func_800B4AEC(play, &this->actor, 50.0f);
-        EnInvadepoh_SnapToFloor(this);
-        Math_Vec3f_Copy(&this->unk_314, &this->actor.world.pos);
-        if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
-            this->actor.update = EnInvadepoh_Dog_Update;
-            this->actor.draw = EnInvadepoh_Dog_Draw;
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-            EnInvadepoh_Dog_SetupWalk(this);
-        } else if (sEventState == ENINVADEPOH_EVENT_WAIT) {
-            this->actor.update = EnInvadepoh_Dog_WaitForEvent;
-        } else {
-            Actor_Kill(&this->actor);
-        }
+    if (!Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        return;
+    }
+
+    this->actor.objectSlot = this->objectSlot;
+    Actor_SetObjectDependency(play, &this->actor);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->jointTable, this->morphTable,
+                       DOG_LIMB_MAX);
+    EnInvadepoh_Interact_Init(&this->interactInfo, NULL, 0, NULL, 0, &gZeroVec3s, 0xBB8, 0.1f, 0.0f, 0.0f);
+    EnInvadepoh_Dog_SetupPath(this, play);
+    EnInvadepoh_SetPosToPathPoint(this, 0);
+    func_800B4AEC(play, &this->actor, 50.0f);
+    EnInvadepoh_SnapToFloor(this);
+    Math_Vec3f_Copy(&this->unk_314, &this->actor.world.pos);
+
+    if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
+        this->actor.update = EnInvadepoh_Dog_Update;
+        this->actor.draw = EnInvadepoh_Dog_Draw;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        EnInvadepoh_Dog_SetupWalk(this);
+    } else if (sEventState == ENINVADEPOH_EVENT_WAIT) {
+        this->actor.update = EnInvadepoh_Dog_WaitForEvent;
+    } else {
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3546,8 +3661,11 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
+
     this->actionFunc(this, play);
-    this->finishedAnim = SkelAnime_Update(&this->skelAnime);
+
+    this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
+
     if (inUncullRange && (this->actor.update != NULL)) {
         EnInvadepoh_Interact_Update(&this->interactInfo);
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -3593,6 +3711,7 @@ void EnInvadepoh_Cremia_Walk(EnInvadepoh* this, PlayState* play) {
             Math_ScaledStepToS(&this->unk_304, -0x8000, 0x12C);
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
+
         angleToRomani = this->unk_304 + romani->actor.world.rot.y;
         this->actor.world.pos.x = (Math_SinS(angleToRomani) * this->unk_2F8) + romani->actor.world.pos.x;
         this->actor.world.pos.y = romani->actor.world.pos.y;
@@ -3600,10 +3719,12 @@ void EnInvadepoh_Cremia_Walk(EnInvadepoh* this, PlayState* play) {
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
         Math_StepToS(&this->unk_370, 0xBB8, 0x1F5);
+
         if (Math3D_Vec3fDistSq(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
                                3, this->unk_370, 0x1F4);
         }
+
         framesMod0x80 = (play->gameplayFrames + 20) % 0x80;
         if (framesMod0x80 & 0x40) {
             targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &romani->actor.world.pos);
@@ -3624,7 +3745,8 @@ void EnInvadepoh_Cremia_Walk(EnInvadepoh* this, PlayState* play) {
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
-    if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
+
+    if (CURRENT_TIME > CLOCK_TIME(20, 15)) {
         Actor_Kill(&this->actor);
     } else if ((romani != NULL) && (romani->actionFunc == EnInvadepoh_Night3Romani_Talk)) {
         EnInvadepoh_Cremia_SetupIdle(this);
@@ -3688,16 +3810,18 @@ void EnInvadepoh_Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 pad;
 
-    if (Object_IsLoaded(&play2->objectCtx, this->bankIndex)) {
-        s32 currentTime = gSaveContext.save.time;
+    if (Object_IsLoaded(&play2->objectCtx, this->objectSlot)) {
+        s32 currentTime = CURRENT_TIME;
 
-        this->actor.objectSlot = this->bankIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Cremia_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->jointTable, this->morphTable,
                            CREMIA_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        this->actor.textId = 0x33CD; // Good night... See you...tomorrow...OK?
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f,
+                                  0.03f);
+        this->actor.textId = 0x33CD;
+
         if (currentTime < CLOCK_TIME(20, 01) + 30) {
             this->unk_304 = -0x8000;
             this->unk_2F8 = 40.0f;
@@ -3708,6 +3832,7 @@ void EnInvadepoh_Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
             this->unk_304 = -0x8000;
             this->unk_2F8 = 40.0f;
         }
+
         if ((CLOCK_TIME(6, 00) <= currentTime) && (currentTime < CLOCK_TIME(20, 00) + 30)) {
             this->actor.update = EnInvadepoh_Cremia_WaitForEvent;
             this->actor.draw = NULL;
@@ -3725,7 +3850,7 @@ void EnInvadepoh_Cremia_WaitForEvent(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if ((gSaveContext.save.time >= CLOCK_TIME(20, 00) + 30) && (gSaveContext.save.time < CLOCK_TIME(20, 15))) {
+    if ((CURRENT_TIME >= CLOCK_TIME(20, 00) + 30) && (CURRENT_TIME < CLOCK_TIME(20, 15))) {
         this->actor.update = EnInvadepoh_Cremia_Update;
         this->actor.draw = EnInvadepoh_Cremia_Draw;
         EnInvadepoh_Cremia_SetupWalk(this);
@@ -3736,17 +3861,19 @@ void EnInvadepoh_Cremia_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
-    s32 talkRequested = Actor_TalkOfferAccepted(&this->actor, &play->state);
+    s32 talkAccepted = Actor_TalkOfferAccepted(&this->actor, &play->state);
 
-    if (talkRequested) {
-        Message_BombersNotebookQueueEvent(play, 6);
+    if (talkAccepted) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
         EnInvadepoh_Cremia_SetupTalk(this);
     }
+
     this->actionFunc(this, play2);
+
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_Cremia_Talk) && !talkRequested && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_Cremia_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -3785,6 +3912,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     Math_Vec3s_ToVec3f(&curPathPointF, &this->pathPoints[curPoint]);
     Math_Vec3s_ToVec3f(&nextPathPointF, &this->pathPoints[curPoint + 1]);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF) + 0, 5, 0x7D0, 100);
+
     if ((this->currentPoint == 0) || (this->currentPoint == this->endPoint - 1)) {
         if (this->unk_378 == 0) {
             s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
@@ -3817,10 +3945,12 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
         angleToPlayer = targetYaw - this->actor.shape.rot.y;
         interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
     }
+
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
+
     if (this->progress >= 0.9999f) {
         Actor_Kill(&this->actor);
     } else if ((cremia != NULL) && (cremia->actionFunc == EnInvadepoh_Cremia_Talk)) {
@@ -3873,6 +4003,7 @@ void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
 
     angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+
     if (sCremia == NULL) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
     } else if ((sCremia != NULL) && (sCremia->actionFunc != EnInvadepoh_Cremia_Talk)) {
@@ -3885,22 +4016,23 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 pad;
 
-    if (Object_IsLoaded(&play2->objectCtx, this->bankIndex)) {
-        s32 currentTime = gSaveContext.save.time;
+    if (Object_IsLoaded(&play2->objectCtx, this->objectSlot)) {
+        s32 currentTime = CURRENT_TIME;
 
-        this->actor.objectSlot = this->bankIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f,
+                                  0.03f);
         EnInvadepoh_Night3Romani_SetupPath(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         EnInvadepoh_Night3Romani_SetProgress(this);
         EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
-        this->actor.textId = 0x33CE; // See you tomorrow!
+        this->actor.textId = 0x33CE;
         if ((currentTime >= CLOCK_TIME(6, 00)) && (currentTime < CLOCK_TIME(20, 00))) {
             this->actor.update = EnInvadepoh_Night3Romani_WaitForEvent;
             this->actor.draw = NULL;
@@ -3918,7 +4050,7 @@ void EnInvadepoh_Night3Romani_WaitForEvent(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if ((gSaveContext.save.time >= CLOCK_TIME(20, 00)) && (gSaveContext.save.time < CLOCK_TIME(20, 14) + 15)) {
+    if ((CURRENT_TIME >= CLOCK_TIME(20, 00)) && (CURRENT_TIME < CLOCK_TIME(20, 14) + 15)) {
         this->actor.update = EnInvadepoh_Night3Romani_Update;
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_Night3Romani_SetupWalk(this);
@@ -3929,17 +4061,19 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
-    s32 talkRequested = Actor_TalkOfferAccepted(&this->actor, &play->state);
+    s32 talkAccepted = Actor_TalkOfferAccepted(&this->actor, &play->state);
 
-    if (talkRequested) {
-        Message_BombersNotebookQueueEvent(play, 5);
+    if (talkAccepted) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_Night3Romani_SetupTalk(this);
     }
+
     this->actionFunc(this, play);
+
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_Night3Romani_Talk) && !talkRequested && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_Night3Romani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -3984,6 +4118,7 @@ void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
+
     Math_StepToF(&this->actor.velocity.y, 15.0f, this->unk_300);
     distToTarget = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, 0.2f,
                                       this->actor.velocity.y, 0.01f);
@@ -4000,6 +4135,7 @@ void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play) {
         cow->world.pos.z = this->actor.world.pos.z;
         cow->shape.rot.y = this->actor.shape.rot.y;
     }
+
     if (distToTarget < 5.0f) {
         Actor_Kill(&this->actor);
     }
@@ -4028,12 +4164,14 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     }
+
     if (this->actionTimer > 160) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnInvadepoh_Alien_Draw;
         actionTimer = (reachedTargetY ? 0 : this->actionTimer);
-        if ((105 > actionTimer) && (actionTimer >= 100)) {
+
+        if ((actionTimer < 105) && (actionTimer >= 100)) {
             this->actor.gravity = -1.0f;
             Math_SmoothStepToS(&this->actor.shape.rot.x, 0x2000, 8, 0x320, 0x28);
         } else {
@@ -4043,6 +4181,7 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
 
         this->actor.velocity.y += this->actor.gravity;
         this->actor.velocity.y *= 0.92f;
+
         if (this->actionTimer > 80) {
             this->actor.world.pos.y += this->actor.velocity.y;
         } else {
@@ -4050,10 +4189,12 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
 
             reachedTargetY = Math_StepToF(&this->actor.world.pos.y, targetY, fabsf(this->actor.velocity.y));
         }
+
         tempUnk_306 = (this->unk_304 * -0.06f) + this->unk_306;
         tempUnk_306 *= 0.98f;
         this->unk_306 = tempUnk_306;
         this->actor.shape.rot.y += this->unk_306;
+
         if (this->actor.child != NULL) {
             Actor* romani = this->actor.child;
 
@@ -4063,6 +4204,7 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
             romani->shape.rot.y = this->actor.shape.rot.y;
         }
     }
+
     if ((this->actionTimer <= 0) || reachedTargetY) {
         Actor_Kill(&this->actor);
     }
@@ -4073,9 +4215,9 @@ void EnInvadepoh_Abuductor_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 index;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         index = ENINVADEPOH_GET_INDEX(&this->actor);
-        this->actor.objectSlot = this->bankIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Alien_SetTexAnim();
         this->actor.update = EnInvadepoh_Abductor_Update;
@@ -4121,8 +4263,9 @@ void EnInvadepoh_Event_DrawWarps(PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, warpEffect->alpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-            gSPSegment(POLY_XLU_DISP++, 0x8,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, warpScrollX1, 0, 0x20, 0x40, 1, 0, warpScrollY2, 0x20, 0x40));
+            gSPSegment(
+                POLY_XLU_DISP++, 0x8,
+                Gfx_TwoTexScroll(play->state.gfxCtx, 0, warpScrollX1, 0, 0x20, 0x40, 1, 0, warpScrollY2, 0x20, 0x40));
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_02E510);
         }
@@ -4172,6 +4315,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Push();
+
     if (this->present) {
         if (this->alpha == 255) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -4189,6 +4333,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
                                                this->skelAnime.dListCount, EnInvadepoh_Alien_OverrideLimbDraw,
                                                EnInvadepoh_Alien_PostLimbDraw, &this->actor, POLY_XLU_DISP);
         }
+
         if (this->eyeBeamAlpha != 0) {
             Gfx* ptr;
 
@@ -4213,6 +4358,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
+
     if (this->drawDeathFlash) {
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
@@ -4220,6 +4366,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gAlienDeathFlashDL);
     }
+
     if (this->present) {
         Gfx* ptr;
         Vec3f glowOffset;
@@ -4260,6 +4407,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
+
     Matrix_Pop();
 
     CLOSE_DISPS(play->state.gfxCtx);
