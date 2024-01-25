@@ -118,13 +118,13 @@ else
   CC_CHECK := @:
 endif
 
-CPP        := cpp
-MKLDSCRIPT := tools/buildtools/mkldscript
-MKDMADATA  := tools/buildtools/mkdmadata
-ZAPD       := tools/ZAPD/ZAPD.out
-FADO       := tools/fado/fado.elf
-MAKEYAR    := $(PYTHON) tools/buildtools/makeyar.py
-CHECKSUMMER:= $(PYTHON) tools/buildtools/checksummer.py
+CPP         := cpp
+MKLDSCRIPT  := tools/buildtools/mkldscript
+MKDMADATA   := tools/buildtools/mkdmadata
+ZAPD        := tools/ZAPD/ZAPD.out
+FADO        := tools/fado/fado.elf
+MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
+CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
