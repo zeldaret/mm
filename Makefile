@@ -29,9 +29,11 @@ ASM_PROC_FORCE ?= 0
 N_THREADS ?= $(shell nproc)
 # MIPS toolchain prefix
 MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
+# Python virtual environment
+VENV ?= .venv
 # Python interpreter
-PYTHON ?= python3
-# Emulator with flags
+PYTHON ?= $(VENV)/bin/python3
+# Emulator w/ flags
 N64_EMULATOR ?=
 
 #### Setup ####
@@ -268,9 +270,6 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum-compressed.md5
 endif
 
-.PHONY: all rom compress clean assetclean distclean assets disasm init setup run
-.DEFAULT_GOAL := rom
-all: rom compress
 
 $(ROM): $(ELF)
 	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
@@ -311,8 +310,13 @@ distclean: assetclean clean
 	$(RM) -rf asm baserom data
 	$(MAKE) -C tools clean
 
+venv:
+	test -d $(VENV) || python3 -m venv $(VENV)
+	$(PYTHON) -m pip install -U pip
+	$(PYTHON) -m pip install -U -r requirements.txt
+
 ## Extraction step
-setup:
+setup: venv
 	$(MAKE) -C tools
 	$(PYTHON) tools/fixbaserom.py
 	$(PYTHON) tools/extract_baserom.py
@@ -331,8 +335,7 @@ diff-init: rom
 	mkdir -p expected/
 	cp -r build expected/build
 
-init:
-	$(MAKE) distclean
+init: distclean
 	$(MAKE) setup
 	$(MAKE) assets
 	$(MAKE) disasm
@@ -344,6 +347,10 @@ ifeq ($(N64_EMULATOR),)
 	$(error Emulator path not set. Set N64_EMULATOR in the Makefile, .make_options, or define it as an environment variable)
 endif
 	$(N64_EMULATOR) $<
+
+.PHONY: all rom compress clean assetclean distclean assets disasm init venv setup run
+.DEFAULT_GOAL := rom
+all: rom compress
 
 #### Various Recipes ####
 

@@ -20,16 +20,6 @@ pipeline {
                 sh 'bash -c "tools/reloc_spec_check.sh"'
             }
         }
-        stage('Install Python dependencies') {
-            steps {
-                echo 'Installing Python dependencies'
-                sh 'python3 -m venv .venv'
-                sh '''. .venv/bin/activate
-                python3 -m pip install -U -r requirements.txt
-                python3 -m pip install -U GitPython
-                '''
-            }
-        }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
@@ -38,9 +28,7 @@ pipeline {
         }
         stage('Setup') {
             steps {
-                sh '''. .venv/bin/activate
-                bash -c "make -j setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)"
-                '''
+                sh 'bash -c "make -j setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)"'
             }
         }
         stage('Check setup warnings') {
@@ -50,9 +38,7 @@ pipeline {
         }
         stage('Assets') {
             steps {
-                sh '''. .venv/bin/activate
-                bash -c "make -j assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)"
-                '''
+                sh 'bash -c "make -j assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)"'
             }
         }
         stage('Check assets warnings') {
@@ -62,9 +48,7 @@ pipeline {
         }
         stage('Disasm') {
             steps {
-                sh '''. .venv/bin/activate
-                bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"
-                '''
+                sh 'bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"'
             }
         }
         stage('Check disasm warnings') {
@@ -74,9 +58,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh '''. .venv/bin/activate
-                bash -c "make -j rom 2> >(tee tools/warnings_count/warnings_build_new.txt)"
-                '''
+                sh 'bash -c "make -j rom 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
@@ -86,9 +68,7 @@ pipeline {
         }
         stage('Compress') {
             steps {
-                sh '''. .venv/bin/activate
-                bash -c "make -j compress 2> >(tee tools/warnings_count/warnings_compress_new.txt)"
-                '''
+                sh 'bash -c "make -j compress 2> >(tee tools/warnings_count/warnings_compress_new.txt)"'
             }
         }
         stage('Check compress warnings') {
@@ -102,15 +82,9 @@ pipeline {
             }
             steps {
                 sh 'mkdir reports'
-                sh '''. .venv/bin/activate
-                python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv
-                '''
-                sh '''. .venv/bin/activate
-                python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv
-                '''
-                sh '''. .venv/bin/activate
-                python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json
-                '''
+                sh 'python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
+                sh 'python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
+                sh 'python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
                 stash includes: 'reports/*', name: 'reports'
             }
         }

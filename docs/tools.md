@@ -42,6 +42,22 @@
 
 There are a variety of tools that are used to assist in the decompilation process. This guide is an introduction to some of the tools that are used. Most of these tools are located in the `mm/tools` directory, others are either in the project root, or are separate programs entirely. Almost all of these programs have more information available via running them with `-h`.
 
+**Important:** Many tools require activating a Python virtual environment that contains Python dependencies. This virtual environment is automatically installed into the `.venv` directory by `make setup`, but you need to **activate** it in your current terminal session in order to run Python tools. To start using the virtual environment in your current terminal run:
+
+```bash
+source .venv/bin/activate
+```
+
+Keep in mind that for each new terminal session, you will need to activate the Python virtual environment again. That is, run the above `source .venv/bin/activate` command.
+
+To deactivate the virtual environment, run
+
+```bash
+deactivate
+```
+
+and your terminal session state will be restored to what it was before.
+
 ## In the repository
 
 ### `diff.py`

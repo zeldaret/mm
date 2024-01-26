@@ -92,36 +92,11 @@ This will copy the GitHub repository contents into a new folder in the current d
 cd mm
 ```
 
-#### 3. Install python dependencies
-
-The build process has a few python packages required that are located in `requirements.txt`.
-
-It is recommend to setup a virtual environment for python to localize all dependencies. To create a virtual environment:
-
-```bash
-python3 -m venv .mm-env
-```
-
-To activate or deactivate the virtual environment run either:
-```bash
-# Activates the mm-env virtual environment
-source .mm-env/bin/activate 
-# Deactivates the active virtual environment
-deactivate
-```
-
-Once activated you can install the required dependencies:
-```bash
-pip install -r requirements.txt  # or python3 -m pip if you want
-```
-
-**Important:** This virtual environment will need to be activated everytime you enter the repo.
-
-#### 4. Prepare a base ROM
+#### 3. Prepare a base ROM
 
 Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
 
-#### 5. Make and Build the ROM
+#### 4. Make and Build the ROM
 
 To start the extraction/build process, run the following command:
 
@@ -129,7 +104,7 @@ To start the extraction/build process, run the following command:
 make init
 ```
 
-This will extract all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
+This downloads some dependencies (from pip), and compiles tools for the build process, extracts all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
 This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64" should be built and the following text should be printed:
 
