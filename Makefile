@@ -276,8 +276,8 @@ endif
 all: uncompressed compressed
 
 $(ROM): $(ELF)
-	$(OBJCOPY) --gap-fill=0x00 -O binary $< $(@:.z64=.bin)
-	$(CHECKSUMMER) $(@:.z64=.bin) $@
+	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
+	$(CHECKSUMMER) $@
 
 $(ROMC): $(ROM)
 	$(PYTHON) tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
