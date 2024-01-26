@@ -280,7 +280,7 @@ endseg
 
 beginseg
     name "icon_item_static_syms"
-    flags SYMS
+    flags UNSET
     romalign 0x1000
     include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
     number 8
@@ -288,7 +288,7 @@ endseg
 
 beginseg
     name "icon_item_24_static_syms"
-    flags SYMS
+    flags UNSET
     romalign 0x1000
     include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
     number 9
@@ -368,7 +368,7 @@ endseg
 
 beginseg
     name "schedule_dma_static_syms"
-    flags SYMS
+    flags UNSET
     include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
     number 7
 endseg
@@ -5025,7 +5025,7 @@ endseg
 
 beginseg
     name "gameplay_object_exchange_static"
-    compress
+    flags UNSET
     romalign 0x1000
     include "build/baserom/gameplay_object_exchange_static.o"
 endseg
@@ -12113,78 +12113,91 @@ endseg
 
 beginseg
     name "anime_model_1_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_1_static.o"
 endseg
 
 beginseg
     name "anime_model_2_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_2_static.o"
 endseg
 
 beginseg
     name "anime_model_3_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_3_static.o"
 endseg
 
 beginseg
     name "anime_model_4_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_4_static.o"
 endseg
 
 beginseg
     name "anime_model_5_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_5_static.o"
 endseg
 
 beginseg
     name "anime_model_6_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_model_6_static.o"
 endseg
 
 beginseg
     name "anime_texture_1_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_1_static.o"
 endseg
 
 beginseg
     name "anime_texture_2_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_2_static.o"
 endseg
 
 beginseg
     name "anime_texture_3_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_3_static.o"
 endseg
 
 beginseg
     name "anime_texture_4_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_4_static.o"
 endseg
 
 beginseg
     name "anime_texture_5_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_5_static.o"
 endseg
 
 beginseg
     name "anime_texture_6_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/anime_texture_6_static.o"
 endseg
 
 beginseg
     name "softsprite_matrix_static"
+    flags UNSET
     romalign 0x1000
     include "build/baserom/softsprite_matrix_static.o"
 endseg

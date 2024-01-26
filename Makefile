@@ -89,19 +89,20 @@ ifeq ($(ORIG_COMPILER),1)
   CC_OLD    = $(QEMU_IRIX) -L tools/ido5.3_compiler tools/ido5.3_compiler/usr/bin/cc
 endif
 
-AS         := $(MIPS_BINUTILS_PREFIX)as
-LD         := $(MIPS_BINUTILS_PREFIX)ld
-OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
-OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
-ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
+AS      := $(MIPS_BINUTILS_PREFIX)as
+LD      := $(MIPS_BINUTILS_PREFIX)ld
+OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
+OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
+NM      := $(MIPS_BINUTILS_PREFIX)nm
 
+ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
 ifneq ($(ASM_PROC_FORCE), 0)
 	ASM_PROC_FLAGS += --force
 endif
 
-IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
+IINC := -Iinclude -Isrc -Iassets -Ibuild -I.
 
 ifeq ($(KEEP_MDEBUG),0)
   RM_MDEBUG = $(OBJCOPY) --remove-section .mdebug $@
@@ -152,12 +153,6 @@ ifeq ($(shell getconf LONG_BIT), 32)
 else ifneq ($(RUN_CC_CHECK),0)
   # Ensure that gcc treats the code as 32-bit
   CC_CHECK += -m32
-endif
-
-# rom compression flags
-COMPFLAGS := --threads $(N_THREADS)
-ifneq ($(NON_MATCHING),1)
-  COMPFLAGS += --matching
 endif
 
 #### Files ####
@@ -281,8 +276,9 @@ $(ROM): $(ELF)
 	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
 	$(CHECKSUMMER) $@
 
-$(ROMC): $(ROM)
-	$(PYTHON) tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
+$(ROMC): $(ROM) $(ELF) build/compress_ranges.txt
+	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-range `tools/buildtools/dmadata_range.sh $(NM) $(ELF)` --compress `cat build/compress_ranges.txt` --threads $(N_THREADS)
+	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -360,8 +356,8 @@ build/$(SPEC): $(SPEC)
 build/ldscript.txt: build/$(SPEC)
 	$(MKLDSCRIPT) $< $@
 
-build/dmadata_table_spec.h: build/$(SPEC)
-	$(MKDMADATA) $< $@
+build/dmadata_table_spec.h build/compress_ranges.txt: build/$(SPEC)
+	$(MKDMADATA) $< build/dmadata_table_spec.h build/compress_ranges.txt
 
 # Dependencies for files that may include the dmadata header automatically generated from the spec file
 build/src/boot/z_std_dma.o: build/dmadata_table_spec.h

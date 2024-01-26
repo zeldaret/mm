@@ -22,7 +22,7 @@ static void write_dmadata_table(FILE *fout)
             continue;
         }
 
-        if (g_segments[i].flags & FLAG_SYMS) {
+        if (g_segments[i].flags & FLAG_UNSET) {
             // For segments set with SYMS, unset in the dma table
             fprintf(fout, "DEFINE_DMA_ENTRY_UNSET(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
         } else {
@@ -31,22 +31,60 @@ static void write_dmadata_table(FILE *fout)
     }
 }
 
+static void write_compress_ranges(FILE *fout)
+{
+    int i;
+    bool continue_list = false;
+    int stride_first = -1;
+    int shift = 0;
+
+    for (i = 0; i < g_segmentsCount; i++) {
+        if (g_segments[i].flags & FLAG_NOLOAD) {
+            shift++;
+            continue;
+        }
+
+        if (g_segments[i].compress) {
+            if (stride_first == -1)
+                stride_first = i - shift;
+        }
+
+        if (!g_segments[i].compress || i == g_segmentsCount - 1) {
+            if (stride_first != -1) {
+                int stride_last = i - shift - 1;
+                if (continue_list) {
+                    fprintf(fout, ",");
+                }
+                if (stride_first == stride_last) {
+                    fprintf(fout, "%d", stride_first);
+                } else {
+                    fprintf(fout, "%d-%d", stride_first, stride_last);
+                }
+                continue_list = true;
+                stride_first = -1;
+            }
+        }
+    }
+}
+
 static void usage(const char *execname)
 {
     fprintf(stderr, "zelda64 dmadata generation tool v0.01\n"
-                    "usage: %s SPEC_FILE DMADATA_TABLE\n"
-                    "SPEC_FILE      file describing the organization of object files into segments\n"
-                    "DMADATA_TABLE  filename of output dmadata table header\n",
+                    "usage: %s SPEC_FILE DMADATA_TABLE COMPRESS_RANGES\n"
+                    "SPEC_FILE       file describing the organization of object files into segments\n"
+                    "DMADATA_TABLE   filename of output dmadata table header\n"
+                    "COMPRESS_RANGES filename to write which files are compressed (e.g. 0-5,7,10-20)\n",
                     execname);
 }
 
 int main(int argc, char **argv)
 {
     FILE *dmaout;
+    FILE *compress_ranges_out;
     void *spec;
     size_t size;
 
-    if (argc != 3)
+    if (argc != 4)
     {
         usage(argv[0]);
         return 1;
@@ -60,6 +98,13 @@ int main(int argc, char **argv)
         util_fatal_error("failed to open file '%s' for writing", argv[2]);
     write_dmadata_table(dmaout);
     fclose(dmaout);
+
+    compress_ranges_out = fopen(argv[3], "w");
+    if (compress_ranges_out == NULL)
+        util_fatal_error("failed to open file '%s' for writing", argv[3]);
+    write_compress_ranges(compress_ranges_out);
+    fclose(compress_ranges_out);
+
     free_rom_spec(g_segments, g_segmentsCount);
     free(spec);
 

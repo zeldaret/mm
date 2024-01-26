@@ -6,7 +6,7 @@ ipl3checksum>=1.2.0,<2.0.0
 # disasm
 rabbitizer>=1.0.0,<2.0.0
 
-# Compression
+# yars
 pyelftools>=0.26
 
 # diff
