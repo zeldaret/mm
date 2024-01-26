@@ -13,7 +13,7 @@ asm_dir = root_dir + "asm/non_matchings/overlays"
 build_dir = root_dir + "build/"
 
 def read_rom():
-    with open("baserom_uncompressed.z64", "rb") as f:
+    with open("baserom-decompressed.z64", "rb") as f:
         return f.read()
 
 

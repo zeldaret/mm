@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 def apply(config, args):
-    config['baseimg'] = 'baserom_uncompressed.z64'
+    config['baseimg'] = 'baserom-decompressed.z64'
     config['myimg'] = 'mm-us.z64'
     config['mapfile'] = 'build/mm.map'
     config['source_directories'] = ['./src','./include']

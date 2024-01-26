@@ -2,7 +2,7 @@
 
 import os, struct, sys
 
-ROM_FILE_NAME = 'baserom_uncompressed.z64'
+ROM_FILE_NAME = 'baserom-decompressed.z64'
 FILE_TABLE_OFFSET = 0x1A500 # 0x1C110 for JP1.0, 0x1C050 for JP1.1, 0x24F60 for debug
 
 FILE_NAMES = [
