@@ -94,7 +94,7 @@ cd mm
 
 #### 3. Prepare a base ROM
 
-Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
+Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to `baserom.z64`.
 
 #### 4. Make and Build the ROM
 

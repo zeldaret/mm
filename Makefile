@@ -7,6 +7,8 @@ MAKEFLAGS += --no-builtin-rules
 
 #### Defaults ####
 
+# Version of the rom to build. Only us is currently supported.
+VERSION ?= us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
@@ -318,9 +320,9 @@ venv:
 ## Extraction step
 setup: venv
 	$(MAKE) -C tools
-	$(PYTHON) tools/fixbaserom.py
+	$(PYTHON) tools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/extract_baserom.py
-	$(PYTHON) tools/decompress_yars.py
+	$(PYTHON) tools/decompress_yars.py -v $(VERSION)
 
 assets:
 	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
