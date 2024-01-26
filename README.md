@@ -27,9 +27,10 @@ This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The
 
 The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
-It currently builds the following ROM:
+It currently builds the following ROM and compressed ROM:
 
-* mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
+* mm-us.z64 `md5: f46493eaa0628827dbd6ad3ecd8d65d6`
+* mm-us-compressed.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
@@ -130,16 +131,25 @@ make init
 
 This will extract all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm.us.rev1.rom.z64" should be built and the following text should be printed:
+This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64" should be built and the following text should be printed:
 
 ```bash
-mm.us.rev1.rom.z64: OK
+mm-us.z64: OK
+```
+and
+```bash
+mm-us-compressed.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-mm.us.rev1.rom.z64: FAILED
+mm-us.z64: FAILED
+md5sum: WARNING: 1 computed checksum did NOT match
+```
+or
+```bash
+mm-us-compressed.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 

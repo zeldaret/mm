@@ -161,8 +161,8 @@ endif
 #### Files ####
 
 # ROM image
-ROMC := mm.us.rev1.rom.z64
-ROM := $(ROMC:.rom.z64=.rom_uncompressed.z64)
+ROM := mm-us.z64
+ROMC := $(ROM:.z64=-compressed.z64)
 ELF := $(ROM:.z64=.elf)
 # description of ROM segments
 SPEC := spec
@@ -262,13 +262,13 @@ build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) 
 uncompressed: $(ROM)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROM)
-	@md5sum -c checksum_uncompressed.md5
+	@md5sum -c checksum.md5
 endif
 
 compressed: $(ROMC)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROMC)
-	@md5sum -c checksum.md5
+	@md5sum -c checksum-compressed.md5
 endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean assets disasm init setup

@@ -39,18 +39,18 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "N64 mm-us",
             "compilerPath": "${default}", // Needs to not be "" for -m32 to work
             "compilerArgs": [
                 "-m32" // Removes integer truncation warnings with gbi macros
             ],
             "intelliSenseMode": "${default}", // Shouldn't matter
             "includePath": [ // Matches makefile's includes
-                "${workspaceFolder}/**",
+                "include",
                 "src",
                 "assets",
                 "build",
-                "include"
+                "${workspaceFolder}",
             ],
             "defines": [
                 "_LANGUAGE_C" // For gbi.h
