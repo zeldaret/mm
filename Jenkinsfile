@@ -75,7 +75,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''. .venv/bin/activate
-                bash -c "make -j uncompressed 2> >(tee tools/warnings_count/warnings_build_new.txt)"
+                bash -c "make -j rom 2> >(tee tools/warnings_count/warnings_build_new.txt)"
                 '''
             }
         }
@@ -87,7 +87,7 @@ pipeline {
         stage('Compress') {
             steps {
                 sh '''. .venv/bin/activate
-                bash -c "make -j compressed 2> >(tee tools/warnings_count/warnings_compress_new.txt)"
+                bash -c "make -j compress 2> >(tee tools/warnings_count/warnings_compress_new.txt)"
                 '''
             }
         }

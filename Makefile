@@ -259,21 +259,21 @@ build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) 
 
 #### Main Targets ###
 
-uncompressed: $(ROM)
+rom: $(ROM)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROM)
 	@md5sum -c checksum.md5
 endif
 
-compressed: $(ROMC)
+compress: $(ROMC)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROMC)
 	@md5sum -c checksum-compressed.md5
 endif
 
-.PHONY: all uncompressed compressed clean assetclean distclean assets disasm init setup
-.DEFAULT_GOAL := uncompressed
-all: uncompressed compressed
+.PHONY: all rom compress clean assetclean distclean assets disasm init setup
+.DEFAULT_GOAL := rom
+all: rom compress
 
 $(ROM): $(ELF)
 	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
@@ -328,7 +328,7 @@ disasm:
 	$(RM) -rf asm data
 	$(PYTHON) tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
-diff-init: uncompressed
+diff-init: rom
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
