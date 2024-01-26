@@ -115,14 +115,14 @@ else
   CC_CHECK := @:
 endif
 
-CPP        := cpp
-ELF2ROM    := tools/buildtools/elf2rom
-MKLDSCRIPT := tools/buildtools/mkldscript
-MKDMADATA  := tools/buildtools/mkdmadata
-YAZ0       := tools/buildtools/yaz0
-ZAPD       := tools/ZAPD/ZAPD.out
-FADO       := tools/fado/fado.elf
-MAKEYAR    := tools/buildtools/makeyar
+CPP           := cpp
+ELF2ROM       := tools/buildtools/elf2rom
+MKLDSCRIPT    := tools/buildtools/mkldscript
+MKDMADATA     := tools/buildtools/mkdmadata
+YAZ0          := tools/buildtools/yaz0
+ZAPD          := tools/ZAPD/ZAPD.out
+FADO          := tools/fado/fado.elf
+MAKEYAR       := tools/buildtools/makeyar
 SHIFTJIS_CONV := tools/shiftjis_conv.py
 
 OPTFLAGS := -O2 -g3
