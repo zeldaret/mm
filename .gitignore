@@ -19,6 +19,7 @@ tags
 *.sra
 *.bin
 *.elf
+*.flash
 archive/
 build/
 baserom/

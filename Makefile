@@ -31,6 +31,8 @@ N_THREADS ?= $(shell nproc)
 MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 # Python interpreter
 PYTHON ?= python3
+# Emulator with flags
+N64_EMULATOR ?=
 
 #### Setup ####
 
@@ -271,7 +273,7 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum-compressed.md5
 endif
 
-.PHONY: all rom compress clean assetclean distclean assets disasm init setup
+.PHONY: all rom compress clean assetclean distclean assets disasm init setup run
 .DEFAULT_GOAL := rom
 all: rom compress
 
@@ -340,6 +342,12 @@ init:
 	$(MAKE) disasm
 	$(MAKE) all
 	$(MAKE) diff-init
+
+run: $(ROM)
+ifeq ($(N64_EMULATOR),)
+	$(error Emulator path not set. Set N64_EMULATOR in the Makefile, .make_options, or define it as an environment variable)
+endif
+	$(N64_EMULATOR) $<
 
 #### Various Recipes ####
 
