@@ -73,17 +73,18 @@ static ColliderCylinderInit sCylinderInit = {
 
 static Cylinder16 sBonusDekuScrubColliderDimensions[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
-typedef enum {
+typedef enum ShootingGalleryDekuScrubAnimation {
     /* 0 */ SG_DEKU_ANIM_UP,
     /* 1 */ SG_DEKU_ANIM_BURROW,
     /* 2 */ SG_DEKU_ANIM_IDLE, // unused
     /* 3 */ SG_DEKU_ANIM_LOOK_AROUND,
     /* 4 */ SG_DEKU_ANIM_DAMAGE,
     /* 5 */ SG_DEKU_ANIM_DIE,
-    /* 6 */ SG_DEKU_ANIM_UNBURROW // unused
+    /* 6 */ SG_DEKU_ANIM_UNBURROW, // unused
+    /* 7 */ SG_DEKU_ANIM_MAX
 } ShootingGalleryDekuScrubAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_DEKU_ANIM_MAX] = {
     { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },         // SG_DEKU_ANIM_UP
     { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },     // SG_DEKU_ANIM_BURROW
     { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },       // SG_DEKU_ANIM_IDLE

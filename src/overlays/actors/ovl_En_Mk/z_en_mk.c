@@ -185,7 +185,7 @@ void func_809596A0(EnMk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80959774;
@@ -288,7 +288,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xFA1:

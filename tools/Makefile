@@ -6,7 +6,8 @@ all: $(PROGRAMS)
 	$(MAKE) -C ZAPD
 	$(MAKE) -C fado
 	$(MAKE) -C buildtools
-	$(MAKE) -C z64compress
+# Some gcc versions give a warning about the -flto flag with no parameters. So we override the CFLAGS as a workaround
+	$(MAKE) -C z64compress CFLAGS="-Os -flto=auto"
 
 clean:
 	$(RM) $(PROGRAMS)

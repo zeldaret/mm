@@ -28,7 +28,7 @@ to install it via Homebrew.
 
 #### Linux / *nix
 
-ZAPD uses the clasic `Makefile` approach. To build just run `make` (or even better `make -j` for faster compilations).
+ZAPD uses the classic `Makefile` approach. To build just run `make` (or even better `make -j` for faster compilations).
 
 You can configure a bit your ZAPD build with the following options:
 

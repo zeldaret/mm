@@ -1,3 +1,5 @@
+#include "viconfig.h"
+
 #include "libc/stdbool.h"
 #include "idle.h"
 

@@ -4,7 +4,6 @@
  * Description: Takkuri
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
