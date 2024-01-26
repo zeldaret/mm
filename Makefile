@@ -55,6 +55,7 @@ ifneq ($(FULL_DISASM), 0)
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+BUILD_DIR   := build
 
 MAKE = make
 CPPFLAGS += -P
@@ -180,21 +181,21 @@ ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -p
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),$(BUILD_DIR)/$f)
 
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
-TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
-					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
+TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),$(BUILD_DIR)/$f) \
+					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),$(BUILD_DIR)/$f) \
 
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
-S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
-                 $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
-BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
+S_FILES       := $(shell grep -F "$(BUILD_DIR)/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
+                 $(shell grep -F "$(BUILD_DIR)/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+BASEROM_FILES := $(shell grep -F "$(BUILD_DIR)/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
-O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
-                 $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(BASEROM_FILES),build/$f.o) \
+O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
+                 $(foreach f,$(C_FILES:.c=.o),$(BUILD_DIR)/$f) \
+                 $(foreach f,$(BASEROM_FILES),$(BUILD_DIR)/$f.o) \
                  $(ARCHIVES_O)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
@@ -204,59 +205,59 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' 
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
+$(shell mkdir -p $(BUILD_DIR)/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(BUILD_DIR)/$(dir)))
 
 # directory flags
-build/src/boot/O2/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/O2/%.o: OPTFLAGS := -O2
 
-build/src/boot/libc/%.o: OPTFLAGS := -O2
-build/src/boot/libm/%.o: OPTFLAGS := -O2
-build/src/boot/libc64/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libc/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libm/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libc64/%.o: OPTFLAGS := -O2
 
-build/src/libultra/os/%.o: OPTFLAGS := -O1
-build/src/libultra/voice/%.o: OPTFLAGS := -O2
-build/src/libultra/io/%.o: OPTFLAGS := -O2
-build/src/libultra/libc/%.o: OPTFLAGS := -O2
-build/src/libultra/gu/%.o: OPTFLAGS := -O2
-build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
+$(BUILD_DIR)/src/libultra/voice/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/libultra/io/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/libultra/libc/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/libultra/gu/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/libultra/rmon/%.o: OPTFLAGS := -O2
 
-build/src/audio/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/audio/%.o: OPTFLAGS := -O2
 
-build/assets/%.o: OPTFLAGS := -O1
-build/assets/%.o: ASM_PROC_FLAGS := 
+$(BUILD_DIR)/assets/%.o: OPTFLAGS := -O1
+$(BUILD_DIR)/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
-build/src/boot/fault.o: CFLAGS += -trapuv
-build/src/boot/fault_drawer.o: CFLAGS += -trapuv
+$(BUILD_DIR)/src/boot/fault.o: CFLAGS += -trapuv
+$(BUILD_DIR)/src/boot/fault_drawer.o: CFLAGS += -trapuv
 
-build/src/code/jpegutils.o: OPTFLAGS := -O2
-build/src/code/jpegdecoder.o: OPTFLAGS := -O2
-build/src/code/jpegutils.o: CC := $(CC_OLD)
-build/src/code/jpegdecoder.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/jpegutils.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/code/jpegdecoder.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/code/jpegutils.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/jpegdecoder.o: CC := $(CC_OLD)
 
-build/src/code/osFlash.o: OPTFLAGS := -g
-build/src/code/osFlash.o: MIPS_VERSION := -mips1
-build/src/code/osFlash.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/osFlash.o: OPTFLAGS := -g
+$(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
+$(BUILD_DIR)/src/code/osFlash.o: CC := $(CC_OLD)
 
-build/src/libultra/libc/ll.o: OPTFLAGS := -O1
-build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
-build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
-build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -O1
+$(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/src/libultra/%.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/libultra/%.o: CC := $(CC_OLD)
 # Needed at least until voice is decompiled
-build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+$(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
@@ -277,12 +278,12 @@ $(ROM): $(ELF)
 	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
 	$(CHECKSUMMER) $@
 
-$(ROMC): $(ROM) $(ELF) build/compress_ranges.txt
-	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-range `tools/buildtools/dmadata_range.sh $(NM) $(ELF)` --compress `cat build/compress_ranges.txt` --threads $(N_THREADS)
+$(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/compress_ranges.txt
+	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-range `tools/buildtools/dmadata_range.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) build/ldscript.txt build/undefined_syms.txt
-	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(BUILD_DIR)/ldscript.txt $(BUILD_DIR)/undefined_syms.txt
+	$(LD) -T $(BUILD_DIR)/undefined_syms.txt -T $(BUILD_DIR)/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(BUILD_DIR)/mm.map -o $@
 
 ## Order-only prerequisites 
 # These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
@@ -300,12 +301,12 @@ $(O_FILES): | asset_files
 
 ## Cleaning ##
 clean:
-	$(RM) -rf $(ROMC) $(ROM) $(ELF) build
+	$(RM) -rf $(BUILD_DIR)
 
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
+	$(RM) -rf $(BUILD_DIR)/assets
 	$(RM) -rf assets/text/*.h
-	$(RM) -rf build/assets
 	$(RM) -rf .extracted-assets.json
 
 distclean: assetclean clean
@@ -356,74 +357,74 @@ all: rom compress
 
 #### Various Recipes ####
 
-build/undefined_syms.txt: undefined_syms.txt
-	$(CPP) $(CPPFLAGS) $< > build/undefined_syms.txt
+$(BUILD_DIR)/undefined_syms.txt: undefined_syms.txt
+	$(CPP) $(CPPFLAGS) $< > $(BUILD_DIR)/undefined_syms.txt
 
-build/$(SPEC): $(SPEC)
+$(BUILD_DIR)/$(SPEC): $(SPEC)
 	$(CPP) $(CPPFLAGS) $< > $@
 
-build/ldscript.txt: build/$(SPEC)
+$(BUILD_DIR)/ldscript.txt: $(BUILD_DIR)/$(SPEC)
 	$(MKLDSCRIPT) $< $@
 
-build/dmadata_table_spec.h build/compress_ranges.txt: build/$(SPEC)
-	$(MKDMADATA) $< build/dmadata_table_spec.h build/compress_ranges.txt
+$(BUILD_DIR)/dmadata_table_spec.h $(BUILD_DIR)/compress_ranges.txt: $(BUILD_DIR)/$(SPEC)
+	$(MKDMADATA) $< $(BUILD_DIR)/dmadata_table_spec.h $(BUILD_DIR)/compress_ranges.txt
 
 # Dependencies for files that may include the dmadata header automatically generated from the spec file
-build/src/boot/z_std_dma.o: build/dmadata_table_spec.h
-build/src/dmadata/dmadata.o: build/dmadata_table_spec.h
+$(BUILD_DIR)/src/boot/z_std_dma.o: $(BUILD_DIR)/dmadata_table_spec.h
+$(BUILD_DIR)/src/dmadata/dmadata.o: $(BUILD_DIR)/dmadata_table_spec.h
 
-build/asm/%.o: asm/%.s
+$(BUILD_DIR)/asm/%.o: asm/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
-build/assets/%.o: assets/%.c
+$(BUILD_DIR)/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
-build/%.yar.o: build/%.o
+$(BUILD_DIR)/%.yar.o: $(BUILD_DIR)/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
-build/baserom/%.o: baserom/%
+$(BUILD_DIR)/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
-build/data/%.o: data/%.s
+$(BUILD_DIR)/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
-build/assets/text/message_data.enc.h: assets/text/message_data.h
+$(BUILD_DIR)/assets/text/message_data.enc.h: assets/text/message_data.h
 	python3 tools/msg/nes/msgencNES.py -o $@ $<
 
-build/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
+$(BUILD_DIR)/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
 	python3 tools/msg/staff/msgencStaff.py -o $@ $<
 
-build/assets/text/message_data_static.o: build/assets/text/message_data.enc.h
-build/assets/text/staff_message_data_static.o: build/assets/text/staff_message_data.enc.h
-build/src/code/z_message.o: build/assets/text/message_data.enc.h build/assets/text/staff_message_data.enc.h
+$(BUILD_DIR)/assets/text/message_data_static.o: $(BUILD_DIR)/assets/text/message_data.enc.h
+$(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/staff_message_data.enc.h
+$(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/staff_message_data.enc.h
 
-build/src/overlays/%.o: src/overlays/%.c
+$(BUILD_DIR)/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
-build/src/overlays/%_reloc.o: build/$(SPEC)
+$(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/$(SPEC)
 	$(FADO) $$(tools/buildtools/reloc_prereq $< $(notdir $*)) -n $(notdir $*) -o $(@:.o=.s) -M $(@:.o=.d)
 	$(AS) $(ASFLAGS) $(@:.o=.s) -o $@
 
-build/src/%.o: src/%.c
+$(BUILD_DIR)/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
-build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
+$(BUILD_DIR)/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
-build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(PYTHON) tools/set_o32abi_bit.py $@
@@ -432,13 +433,13 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 
 # Build C files from assets
 
-build/%.inc.c: %.png
+$(BUILD_DIR)/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@
 
-build/assets/%.bin.inc.c: assets/%.bin
+$(BUILD_DIR)/assets/%.bin.inc.c: assets/%.bin
 	$(ZAPD) bblb -eh -i $< -o $@
 
-build/assets/%.jpg.inc.c: assets/%.jpg
+$(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 -include $(DEP_FILES)
