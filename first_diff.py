@@ -47,7 +47,7 @@ def firstDiffMain():
     buildFolder = Path("build")
 
     BUILTROM = buildFolder / f"mm-{args.version}.z64"
-    BUILTMAP = buildFolder / f"mm.map"
+    BUILTMAP = buildFolder / f"mm-{args.version}.map"
 
     EXPECTEDROM = Path(f"baseroms/{args.version}/baserom-decompressed.z64")
     EXPECTEDMAP = "expected" / BUILTMAP

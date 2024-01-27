@@ -72,7 +72,7 @@ To use `diff.py`, you need a copy of a matching build folder to diff against. In
 ./diff.py <flags> ObjTree_Init
 ```
 
-`diff.py` reads the respective `mm.map` files to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
+`diff.py` reads the respective `mm-us.map` file to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
 
 The recommended flags used are `-mwo`, `-mwo3`, or `-mwob`:
 

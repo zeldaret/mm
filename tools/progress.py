@@ -122,7 +122,7 @@ def CalculateNonNamedAssets(mapFileList, assetsTracker):
     return assetsTracker
 
 
-map_file = ReadAllLines('build/mm.map')
+map_file = ReadAllLines('build/mm-us.map')
 
 # Get list of Non-Matchings
 all_files = GetFiles("src", ".c")

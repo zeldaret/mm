@@ -14,10 +14,11 @@ def symInfoMain():
     parser = argparse.ArgumentParser(description="Display various information about a symbol or address.")
     parser.add_argument("symname", help="symbol name or VROM/VRAM address to lookup")
     parser.add_argument("-e", "--expected", dest="use_expected", action="store_true", help="use the map file in expected/build/ instead of build/")
+    parser.add_argument("-v", "--version", help="Which version should be processed", default="us")
 
     args = parser.parse_args()
 
-    BUILTMAP = Path(f"build") / f"mm.map"
+    BUILTMAP = Path(f"build") / f"mm-{args.version}.map"
 
     mapPath = BUILTMAP
     if args.use_expected:
