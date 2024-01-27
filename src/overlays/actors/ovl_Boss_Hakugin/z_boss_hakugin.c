@@ -2591,6 +2591,10 @@ void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
     }
 }
 
+/**
+ * Checks if Goht has been hit by an attack and updates its health if it has been hit. This function is also responsible
+ * for starting Goht's death cutscene when its health reaches 0. Returns true if Goht has been hit by an attack.
+ */
 s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
     if (this->bodyCollider.base.acFlags & AC_HIT) {
         s32 i;
@@ -2617,6 +2621,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         if (this->actionFunc == BossHakugin_Downed) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
+
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DEAD_OLD);
@@ -2689,16 +2694,18 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
 
             return true;
         } else {
+            // This block is for attacks with the effect of `GOHT_DMGEFF_NONE` hitting Goht while it's standing upright.
+            // These attacks deal no damage and instead just spawn sparks and play a metal sound.
             s32 j;
 
             this->disableCollidersTimer = 20;
             for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
                 Vec3f hitPos;
-                ColliderInfo* hurtbox = &this->bodyCollider.elements[j].info;
+                ColliderInfo* colliderInfo = &this->bodyCollider.elements[j].info;
 
-                if ((hurtbox->bumperFlags & BUMP_HIT) && (hurtbox->acHitInfo != NULL) &&
-                    !(hurtbox->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
-                    Math_Vec3s_ToVec3f(&hitPos, &hurtbox->bumper.hitPos);
+                if ((colliderInfo->bumperFlags & BUMP_HIT) && (colliderInfo->acHitInfo != NULL) &&
+                    !(colliderInfo->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
+                    Math_Vec3s_ToVec3f(&hitPos, &colliderInfo->bumper.hitPos);
                     EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
                     CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);
                     break;
