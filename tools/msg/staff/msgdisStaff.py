@@ -172,7 +172,7 @@ class MessageCredits:
 
 def parseTable(start):
     table = {}
-    with open("baserom/code","rb") as f:
+    with open("baseroms/us/segments/code","rb") as f:
         f.seek(start)
         buf = f.read(8)
         textId, typePos, segment = struct.unpack(">HBxI", buf)
@@ -183,14 +183,14 @@ def parseTable(start):
 
     return table
 
-STAFF_MESSAGE_TABLE_ADDR = 0x12A048 # Location of Staff message table in baserom/code
+STAFF_MESSAGE_TABLE_ADDR = 0x12A048 # Location of Staff message table in baseroms/us/segments/code
 STAFF_SEGMENT_ADDR = 0x07000000
 
 def main(outfile):
     msgTable = parseTable(STAFF_MESSAGE_TABLE_ADDR)
 
     buf = []
-    with open("baserom/staff_message_data_static", "rb") as f:
+    with open("baseroms/us/segments/staff_message_data_static", "rb") as f:
         buf = f.read()
 
     bufLen = len(buf)

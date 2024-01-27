@@ -94,7 +94,9 @@ cd mm
 
 #### 3. Prepare a base ROM
 
-Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to `baserom.z64`.
+Place a copy of the US ROM inside the `baseroms/us/` folder.
+
+Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension..
 
 #### 4. Make and Build the ROM
 
@@ -106,7 +108,7 @@ make init
 
 This downloads some dependencies (from pip), and compiles tools for the build process, extracts all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64" should be built and the following text should be printed:
+This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64", both located in `build/`, should be built and the following text printed:
 
 ```bash
 build/mm-us.z64: OK

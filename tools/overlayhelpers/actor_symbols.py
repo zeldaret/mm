@@ -710,7 +710,7 @@ def null_or_ptr(w):
 # (name, vrom_st, vrom_end, vram_st, vram_end)
 def read_actor_ovl_tbl():
     actortbl = []
-    with open(repo + "baserom/code","rb") as codefile:
+    with open(repo + "baseroms/us/code","rb") as codefile:
         codefile.seek(0x109510) # actor overlay table offset into code
         entry = as_word_list(codefile.read(0x20))
         i = 0

@@ -7,7 +7,7 @@
 #
 # This program decompresses every raw yar binary file listed in
 # `tools/filelists/{version}/archives.csv` to a corresponding
-# `baserom/{file}.unarchive` raw file.
+# `baseroms/{version}/segments/{file}.unarchive` raw file.
 #
 # It works by decompressing every Yaz0 block and appending them one by one into
 # a new raw binary file so it can be processed normally by other tools.
@@ -23,6 +23,7 @@ import struct
 
 
 PRINT_XML = False
+
 
 @dataclasses.dataclass
 class ArchiveMeta:
@@ -45,7 +46,9 @@ def getOffsetsList(archiveBytes: bytearray) -> list[ArchiveMeta]:
     firstEntryOffset = readBytesAsWord(archiveBytes, 0)
     firstEntrySize = readBytesAsWord(archiveBytes, 4)
 
-    archivesOffsets.append(ArchiveMeta(firstEntryOffset, firstEntryOffset + firstEntrySize))
+    archivesOffsets.append(
+        ArchiveMeta(firstEntryOffset, firstEntryOffset + firstEntrySize)
+    )
 
     offset = 4
     while offset < firstEntryOffset - 4:
@@ -71,29 +74,33 @@ def extractArchive(archivePath: Path, outPath: Path):
     archivesOffsets = getOffsetsList(archiveBytes)
 
     if PRINT_XML:
-        print('<Root>')
+        print("<Root>")
         print(f'    <File Name="{outPath.stem}">')
 
     with outPath.open("wb") as out:
         currentOffset = 0
         for meta in archivesOffsets:
-            decompressedBytes = crunch64.yaz0.decompress(archiveBytes[meta.start:meta.end])
+            decompressedBytes = crunch64.yaz0.decompress(
+                archiveBytes[meta.start : meta.end]
+            )
             decompressedSize = len(decompressedBytes)
             out.write(decompressedBytes)
 
             if PRINT_XML:
-                print(f'        <Blob Name="{archivePath.stem}_Blob_{currentOffset:06X}" Size="0x{decompressedSize:04X}" Offset="0x{currentOffset:X}" />')
+                print(
+                    f'        <Blob Name="{archivePath.stem}_Blob_{currentOffset:06X}" Size="0x{decompressedSize:04X}" Offset="0x{currentOffset:X}" />'
+                )
 
             currentOffset += decompressedSize
 
     if PRINT_XML:
-        print(f'    </File>')
-        print('</Root>')
+        print(f"    </File>")
+        print("</Root>")
 
 
 def main():
     parser = argparse.ArgumentParser(description="MM archives extractor")
-    parser.add_argument("-v", "--version", help="version to process", default="us")
+    parser.add_argument("version", help="version to process", default="us")
     parser.add_argument("--xml", help="Generate xml to stdout", action="store_true")
 
     args = parser.parse_args()
@@ -106,10 +113,11 @@ def main():
     with archivesCsvPath.open() as f:
         for line in f:
             archiveName = line.strip().split(",")[1]
-            archivePath = Path(f"baserom/{archiveName}")
+            archivePath = Path(f"baseroms/{args.version}/segments/{archiveName}")
 
             extractedPath = Path(str(archivePath) + ".unarchive")
             extractArchive(archivePath, extractedPath)
+
 
 if __name__ == "__main__":
     main()

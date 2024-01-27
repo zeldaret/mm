@@ -318,7 +318,7 @@ for srcCat in asmTracker:
 # Calculate size of all assets
 for assetCat in assetsTracker:
     for index, f in assetsTracker[assetCat]["files"]:
-        assetsTracker[assetCat]["totalSize"] += os.stat(os.path.join("baserom", f)).st_size
+        assetsTracker[assetCat]["totalSize"] += os.stat(os.path.join("baseroms", "us", "segments", f)).st_size
 
 if args.matching:
     for assetCat in assetsTracker:

@@ -7,7 +7,8 @@ MAKEFLAGS += --no-builtin-rules
 
 #### Defaults ####
 
-# Version of the rom to build. Only us is currently supported.
+# Target game version. Currently only the following version is supported:
+#   us   N64 USA (default)
 VERSION ?= us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -264,13 +265,13 @@ $(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(AS
 rom: $(ROM)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROM)
-	@md5sum -c checksum.md5
+	@md5sum -c baseroms/$(VERSION)/checksum.md5
 endif
 
 compress: $(ROMC)
 ifeq ($(COMPARE),1)
 	@md5sum $(ROMC)
-	@md5sum -c checksum-compressed.md5
+	@md5sum -c baseroms/$(VERSION)/checksum-compressed.md5
 endif
 
 
@@ -310,7 +311,7 @@ assetclean:
 	$(RM) -rf .extracted-assets.json
 
 distclean: assetclean clean
-	$(RM) -rf asm baserom data
+	$(RM) -rf asm baseroms/$(VERSION)/segments data
 	$(MAKE) -C tools clean
 
 venv:
@@ -323,7 +324,7 @@ setup: venv
 	$(MAKE) -C tools
 	$(PYTHON) tools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/extract_baserom.py
-	$(PYTHON) tools/decompress_yars.py -v $(VERSION)
+	$(PYTHON) tools/decompress_yars.py $(VERSION)
 
 assets:
 	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
@@ -385,7 +386,7 @@ $(BUILD_DIR)/%.yar.o: $(BUILD_DIR)/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
-$(BUILD_DIR)/baserom/%.o: baserom/%
+$(BUILD_DIR)/baserom/%.o: baseroms/$(VERSION)/segments/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 $(BUILD_DIR)/data/%.o: data/%.s
