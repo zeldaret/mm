@@ -2554,7 +2554,12 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
     this->timer++;
 }
 
-void func_80B0AC30(BossHakugin* this, PlayState* play) {
+/**
+ * This function checks to see if any of Goht's body colliders hit the player. If Goht is charging and the player
+ * touched Goht's head collider, this function can throw them. Otherwise, if the player doesn't currently have Goron
+ * Spikes and didn't block the collider with their shield, then this function will knock the player back.
+ */
+void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->bodyCollider.base.atFlags & AT_HIT) &&
@@ -2564,21 +2569,24 @@ void func_80B0AC30(BossHakugin* this, PlayState* play) {
             !(this->bodyCollider.base.atFlags & AT_BOUNCED) && play->grabPlayer(play, player)) {
             BossHakugin_SetupThrow(this, play);
         } else if (player->stateFlags3 & PLAYER_STATE3_1000) {
+            //! @bug This block is unreachable. This is trying to check if the player curled up as a Goron without
+            //! spikes, but if the player gets hit in this state, they will be forcibly uncurled before this function
+            //! gets called; it's impossible to have the state flags necessary to end up here in the final game.
             player->unk_B08 = player->linearVelocity = -5.0f;
             player->unk_B0C += player->unk_B08 * 0.05f;
             player->actor.velocity.y = 10.0f;
             player->unk_B8C = 4;
             player->actor.shape.rot.y = player->actor.home.rot.y = player->currentYaw = player->actor.world.rot.y;
         } else if (!(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
-            s16 var_a3 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+            s16 knockbackYaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-            if (var_a3 > 0) {
-                var_a3 = this->actor.shape.rot.y + (s32)(var_a3 / 2.0f) + 0x4000;
+            if (knockbackYaw > 0) {
+                knockbackYaw = this->actor.shape.rot.y + (s32)(knockbackYaw / 2.0f) + 0x4000;
             } else {
-                var_a3 = this->actor.shape.rot.y + (s32)(var_a3 / 2.0f) - 0x4000;
+                knockbackYaw = this->actor.shape.rot.y + (s32)(knockbackYaw / 2.0f) - 0x4000;
             }
 
-            func_800B8D50(play, &this->actor, 5.0f, var_a3, 6.0f, 0);
+            func_800B8D50(play, &this->actor, 5.0f, knockbackYaw, 6.0f, 0);
         }
     }
 }
@@ -2917,7 +2925,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc != BossHakugin_CutsceneStart) {
         if (!BossHakugin_UpdateDamage(this, play)) {
-            func_80B0AC30(this, play);
+            BossHakugin_CheckForBodyColliderHit(this, play);
         }
     }
 

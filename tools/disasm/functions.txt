@@ -12962,7 +12962,7 @@
     0x80B0A638:("BossHakugin_DeathCutsceneSwerveIntoWall",),
     0x80B0A87C:("BossHakugin_SetupDeathCutsceneCrushedByRocks",),
     0x80B0A8C4:("BossHakugin_DeathCutsceneCrushedByRocks",),
-    0x80B0AC30:("func_80B0AC30",),
+    0x80B0AC30:("BossHakugin_CheckForBodyColliderHit",),
     0x80B0ADFC:("BossHakugin_UpdateDamage",),
     0x80B0B238:("BossHakugin_UpdateRockEffects",),
     0x80B0B34C:("BossHakugin_UpdateFallingCrushingRocks",),
