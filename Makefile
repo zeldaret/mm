@@ -163,7 +163,7 @@ endif
 #### Files ####
 
 # ROM image
-ROM := mm-us.z64
+ROM := $(BUILD_DIR)/mm-$(VERSION).z64
 ROMC := $(ROM:.z64=-compressed.z64)
 ELF := $(ROM:.z64=.elf)
 # description of ROM segments

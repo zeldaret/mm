@@ -109,22 +109,22 @@ This downloads some dependencies (from pip), and compiles tools for the build pr
 This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64" should be built and the following text should be printed:
 
 ```bash
-mm-us.z64: OK
+build/mm-us.z64: OK
 ```
 and
 ```bash
-mm-us-compressed.z64: OK
+build/mm-us-compressed.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-mm-us.z64: FAILED
+build/mm-us.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 or
 ```bash
-mm-us-compressed.z64: FAILED
+build/mm-us-compressed.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 
