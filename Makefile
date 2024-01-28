@@ -172,10 +172,11 @@ endif
 #### Files ####
 
 # ROM image
-ROM := $(BUILD_DIR)/mm-$(VERSION).z64
-ROMC := $(ROM:.z64=-compressed.z64)
-ELF := $(ROM:.z64=.elf)
-MAP := $(ROM:.z64=.map)
+ROM      := $(BUILD_DIR)/mm-$(VERSION).z64
+ROMC     := $(ROM:.z64=-compressed.z64)
+ELF      := $(ROM:.z64=.elf)
+MAP      := $(ROM:.z64=.map)
+LDSCRIPT := $(ROM:.z64=.ld)
 # description of ROM segments
 SPEC := spec
 
@@ -291,8 +292,8 @@ $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/compress_ranges.txt
 	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-range `tools/buildtools/dmadata_range.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(BUILD_DIR)/ldscript.txt $(BUILD_DIR)/undefined_syms.txt
-	$(LD) -T $(BUILD_DIR)/undefined_syms.txt -T $(BUILD_DIR)/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/undefined_syms.txt
+	$(LD) -T $(LDSCRIPT) -T $(BUILD_DIR)/undefined_syms.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
 
 ## Order-only prerequisites 
 # These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
@@ -375,7 +376,7 @@ $(BUILD_DIR)/undefined_syms.txt: undefined_syms.txt
 $(BUILD_DIR)/$(SPEC): $(SPEC)
 	$(CPP) $(CPPFLAGS) $< > $@
 
-$(BUILD_DIR)/ldscript.txt: $(BUILD_DIR)/$(SPEC)
+$(LDSCRIPT): $(BUILD_DIR)/$(SPEC)
 	$(MKLDSCRIPT) $< $@
 
 $(BUILD_DIR)/dmadata_table_spec.h $(BUILD_DIR)/compress_ranges.txt: $(BUILD_DIR)/$(SPEC)
