@@ -108,25 +108,25 @@ make init
 
 This downloads some dependencies (from pip), and compiles tools for the build process, extracts all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64", both located in `build/`, should be built and the following text printed:
+This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64", both located in `build/us`, should be built and the following text printed:
 
 ```bash
-build/mm-us.z64: OK
+build/us/mm-us.z64: OK
 ```
 and
 ```bash
-build/mm-us-compressed.z64: OK
+build/us/mm-us-compressed.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-build/mm-us.z64: FAILED
+build/us/mm-us.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 or
 ```bash
-build/mm-us-compressed.z64: FAILED
+build/us/mm-us-compressed.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 

@@ -18,7 +18,7 @@ def symInfoMain():
 
     args = parser.parse_args()
 
-    BUILTMAP = Path(f"build") / f"mm-{args.version}.map"
+    BUILTMAP = Path(f"build/{args.version}/mm-{args.version}.map")
 
     mapPath = BUILTMAP
     if args.use_expected:

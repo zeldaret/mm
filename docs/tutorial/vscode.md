@@ -49,7 +49,7 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
                 "include",
                 "src",
                 "assets",
-                "build",
+                "build/us",
                 "${workspaceFolder}",
             ],
             "defines": [

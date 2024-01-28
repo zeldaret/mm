@@ -118,7 +118,7 @@ Can be given a symbol (function or variable name, for example), and will find it
 
 ```bash
 $ ./sym_info.py ObjTree_Init
-Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
+Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/us/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
 ```
 
 ### `extract_assets.py`

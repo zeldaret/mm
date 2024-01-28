@@ -62,7 +62,7 @@ ifneq ($(FULL_DISASM), 0)
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
-BUILD_DIR   := build
+BUILD_DIR   := build/$(VERSION)
 
 MAKE = make
 CPPFLAGS += -P
@@ -115,7 +115,7 @@ ifneq ($(ASM_PROC_FORCE), 0)
   ASM_PROC_FLAGS += --force
 endif
 
-IINC := -Iinclude -Isrc -Iassets -Ibuild -I.
+IINC := -Iinclude -Isrc -Iassets -I$(BUILD_DIR) -I.
 
 ifeq ($(KEEP_MDEBUG),0)
   RM_MDEBUG = $(OBJCOPY) --remove-section .mdebug $@
@@ -141,6 +141,10 @@ ZAPD        := tools/ZAPD/ZAPD.out
 FADO        := tools/fado/fado.elf
 MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
 CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
+
+# Command to replace path variables in the spec file. We can't use the C
+# preprocessor for this because it won't substitute inside string literals.
+SPEC_REPLACE_VARS := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -200,16 +204,16 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),$(BUILD_DIR)/$
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),$(BUILD_DIR)/$f) \
 
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
-S_FILES       := $(shell grep -F "$(BUILD_DIR)/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
-                 $(shell grep -F "$(BUILD_DIR)/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
-BASEROM_FILES := $(shell grep -F "$(BUILD_DIR)/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
-ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
+S_FILES       := $(shell grep -F "\$$(BUILD_DIR)/asm" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/') \
+                 $(shell grep -F "\$$(BUILD_DIR)/data" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/')
+BASEROM_FILES := $(shell grep -F "\$$(BUILD_DIR)/baserom" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*//')
+ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                  $(foreach f,$(C_FILES:.c=.o),$(BUILD_DIR)/$f) \
                  $(foreach f,$(BASEROM_FILES),$(BUILD_DIR)/$f.o) \
-                 $(ARCHIVES_O)
+                 $(foreach f,$(ARCHIVES_O),$(BUILD_DIR)/$f)
 
-OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
+OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | $(SPEC_REPLACE_VARS) | grep -o '[^"]*_reloc.o' )
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
@@ -374,7 +378,7 @@ $(BUILD_DIR)/undefined_syms.txt: undefined_syms.txt
 	$(CPP) $(CPPFLAGS) $< > $(BUILD_DIR)/undefined_syms.txt
 
 $(BUILD_DIR)/$(SPEC): $(SPEC)
-	$(CPP) $(CPPFLAGS) $< > $@
+	$(CPP) $(CPPFLAGS) $< | $(SPEC_REPLACE_VARS) > $@
 
 $(LDSCRIPT): $(BUILD_DIR)/$(SPEC)
 	$(MKLDSCRIPT) $< $@

@@ -44,7 +44,7 @@ def firstDiffMain():
 
     args = parser.parse_args()
 
-    buildFolder = Path("build")
+    buildFolder = Path(f"build/{args.version}")
 
     BUILTROM = buildFolder / f"mm-{args.version}.z64"
     BUILTMAP = buildFolder / f"mm-{args.version}.map"

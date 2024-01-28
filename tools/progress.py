@@ -105,13 +105,13 @@ def CalculateNonNamedAssets(mapFileList, assetsTracker):
     for mapFile in mapFileList:
         if mapFile["section"] != ".data" and mapFile["section"] != ".rodata":
             continue
-        if not mapFile["name"].startswith("build/assets/"):
+        if not mapFile["name"].startswith("build/us/assets/"):
             continue
 
-        if mapFile["name"].startswith("build/assets/c"):
-            assetCat = mapFile["name"].split("/")[3]
+        if mapFile["name"].startswith("build/us/assets/c"):
+            assetCat = mapFile["name"].split("/")[4]
         else:
-            assetCat = mapFile["name"].split("/")[2]
+            assetCat = mapFile["name"].split("/")[3]
 
 
         for symbol in mapFile["symbols"]:
@@ -122,7 +122,7 @@ def CalculateNonNamedAssets(mapFileList, assetsTracker):
     return assetsTracker
 
 
-map_file = ReadAllLines('build/mm-us.map')
+map_file = ReadAllLines('build/us/mm-us.map')
 
 # Get list of Non-Matchings
 all_files = GetFiles("src", ".c")
@@ -217,7 +217,7 @@ for line in map_file:
         mapFileList.append(fileData)
 
         if (section == ".text"):
-            srcCat = obj_file.split("/")[2]
+            srcCat = obj_file.split("/")[3]
             if srcCat in srcCategoriesFixer:
                 srcCat = srcCategoriesFixer[srcCat]
 
@@ -225,19 +225,19 @@ for line in map_file:
                 correctSection = fileSectionFixer[objFileName]
                 if correctSection in srcTracker:
                     srcTracker[correctSection]["totalSize"] += file_size
-            elif obj_file.startswith("build/src"):
+            elif obj_file.startswith("build/us/src"):
                 if srcCat in srcTracker:
                     srcTracker[srcCat]["totalSize"] += file_size
-            elif (obj_file.startswith("build/asm")):
+            elif (obj_file.startswith("build/us/asm")):
                 if srcCat in asmTracker:
                     asmTracker[srcCat]["totalSize"] += file_size
 
         if section == ".data" or section == ".rodata":
-            if obj_file.startswith("build/assets/"):
-                if obj_file.startswith("build/assets/c"):
-                    assetCat = obj_file.split("/")[3]
+            if obj_file.startswith("build/us/assets/"):
+                if obj_file.startswith("build/us/assets/c"):
+                    assetCat = obj_file.split("/")[4]
                 else:
-                    assetCat = obj_file.split("/")[2]
+                    assetCat = obj_file.split("/")[3]
                 if assetCat in assetsTracker:
                     assetsTracker[assetCat]["currentSize"] += file_size
                 elif assetCat in ignoredAssets:

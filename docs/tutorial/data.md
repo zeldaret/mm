@@ -78,9 +78,9 @@ First, we tell the compiler to ignore the original data file. To do this, open t
 beginseg
     name "ovl_En_Recepgirl"
     compress
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
 endseg
 ```
 
@@ -90,9 +90,9 @@ We will eventually remove both of the bottom two lines and replace them with our
 beginseg
     name "ovl_En_Recepgirl"
     compress
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    //include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    //include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
 endseg
 ```
 
@@ -131,7 +131,7 @@ The game has a convenient system that allows it to sometimes effectively use off
 There is an obvious problem here, which is that is that these symbols have to be defined *somewhere*, or the linker will complain (indeed, if we change the ones in the array to `D_...`, even if we extern them, we get
 
 ```
-mips-linux-gnu-ld: build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
+mips-linux-gnu-ld: build/us/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
 ```
 
 As we'd expect, of course: we didn't fulfil our promise that they were defined elsewhere.)
