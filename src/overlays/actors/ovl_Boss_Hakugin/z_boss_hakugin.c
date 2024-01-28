@@ -25,7 +25,6 @@
 #define THIS ((BossHakugin*)thisx)
 
 #define GOHT_LIMB_DRAW_FLAG(limbIndex) (1 << ((limbIndex)-1))
-#define GOHT_CRUSHING_ROCK_COUNT 36
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
