@@ -138,9 +138,9 @@ typedef struct BossHakugin {
     /* 0x01BC */ f32 distToRightWall;
     /* 0x01C0 */ f32 distToLeftWall;
     /* 0x01C4 */ f32 targetSpeed;
-    /* 0x01C8 */ f32 chargingLightOrbScale; // TODO: bad, but descriptive
-    /* 0x01CC */ f32 chargingLightningTranslateZ; // TODO: bad, but descriptive
-    /* 0x01D0 */ f32 chargingLightningScale; // TODO: bad, but descriptive
+    /* 0x01C8 */ f32 chargingLightOrbScale;
+    /* 0x01CC */ f32 chargingLightningTranslateZ;
+    /* 0x01D0 */ f32 chargingLightningScale;
     /* 0x01D4 */ f32 iceScaleY;
     /* 0x01D8 */ UNK_TYPE1 unk_01D8[0x4]; // probably unused float
     /* 0x01DC */ f32 drawDmgEffScale;
