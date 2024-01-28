@@ -5,6 +5,11 @@
 
 MAKEFLAGS += --no-builtin-rules
 
+# Ensure the build fails if a piped command fails
+SHELL = /bin/bash
+.SHELLFLAGS = -o pipefail -c
+
+
 #### Defaults ####
 
 # Target game version. Currently only the following version is supported:
@@ -38,6 +43,7 @@ VENV ?= .venv
 PYTHON ?= $(VENV)/bin/python3
 # Emulator w/ flags
 N64_EMULATOR ?=
+
 
 #### Setup ####
 
@@ -75,6 +81,7 @@ else
   endif
 endif
 
+
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
   $(error Unable to find $(MIPS_BINUTILS_PREFIX)ld. Please install or build MIPS binutils, commonly mips-linux-gnu. (or set MIPS_BINUTILS_PREFIX if your MIPS binutils install uses another prefix))
@@ -105,7 +112,7 @@ ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
 ifneq ($(ASM_PROC_FORCE), 0)
-	ASM_PROC_FLAGS += --force
+  ASM_PROC_FLAGS += --force
 endif
 
 IINC := -Iinclude -Isrc -Iassets -Ibuild -I.
@@ -161,6 +168,7 @@ else ifneq ($(RUN_CC_CHECK),0)
   CC_CHECK += -m32
 endif
 
+
 #### Files ####
 
 # ROM image
@@ -210,12 +218,6 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 $(shell mkdir -p $(BUILD_DIR)/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(BUILD_DIR)/$(dir)))
 
 # directory flags
-$(BUILD_DIR)/src/boot/O2/%.o: OPTFLAGS := -O2
-
-$(BUILD_DIR)/src/boot/libc/%.o: OPTFLAGS := -O2
-$(BUILD_DIR)/src/boot/libm/%.o: OPTFLAGS := -O2
-$(BUILD_DIR)/src/boot/libc64/%.o: OPTFLAGS := -O2
-
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/voice/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/libultra/io/%.o: OPTFLAGS := -O2
@@ -223,36 +225,40 @@ $(BUILD_DIR)/src/libultra/libc/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/libultra/gu/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/libultra/rmon/%.o: OPTFLAGS := -O2
 
+$(BUILD_DIR)/src/boot/O2/%.o: OPTFLAGS := -O2
+
+$(BUILD_DIR)/src/boot/libc/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libm/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libc64/%.o: OPTFLAGS := -O2
+
 $(BUILD_DIR)/src/audio/%.o: OPTFLAGS := -O2
 
 $(BUILD_DIR)/assets/%.o: OPTFLAGS := -O1
 $(BUILD_DIR)/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
-$(BUILD_DIR)/src/boot/fault.o: CFLAGS += -trapuv
-$(BUILD_DIR)/src/boot/fault_drawer.o: CFLAGS += -trapuv
-
-$(BUILD_DIR)/src/code/jpegutils.o: OPTFLAGS := -O2
-$(BUILD_DIR)/src/code/jpegdecoder.o: OPTFLAGS := -O2
-$(BUILD_DIR)/src/code/jpegutils.o: CC := $(CC_OLD)
-$(BUILD_DIR)/src/code/jpegdecoder.o: CC := $(CC_OLD)
-
-$(BUILD_DIR)/src/code/osFlash.o: OPTFLAGS := -g
-$(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
-$(BUILD_DIR)/src/code/osFlash.o: CC := $(CC_OLD)
-
 $(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
+$(BUILD_DIR)/src/boot/fault.o: CFLAGS += -trapuv
+$(BUILD_DIR)/src/boot/fault_drawer.o: CFLAGS += -trapuv
+
+$(BUILD_DIR)/src/code/jpegdecoder.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/jpegdecoder.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/code/jpegutils.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/jpegutils.o: OPTFLAGS := -O2
+
+$(BUILD_DIR)/src/code/osFlash.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/osFlash.o: OPTFLAGS := -g
+$(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
+
 # cc & asm-processor
+$(BUILD_DIR)/src/libultra/%.o: CC := $(CC_OLD)
+
 $(BUILD_DIR)/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-
-$(BUILD_DIR)/src/libultra/%.o: CC := $(CC_OLD)
-# Needed at least until voice is decompiled
-$(BUILD_DIR)/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 $(BUILD_DIR)/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 $(BUILD_DIR)/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
@@ -261,16 +267,17 @@ $(BUILD_DIR)/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS
 
 $(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
+
 #### Main Targets ###
 
 rom: $(ROM)
-ifeq ($(COMPARE),1)
+ifneq ($(COMPARE),0)
 	@md5sum $(ROM)
 	@md5sum -c baseroms/$(VERSION)/checksum.md5
 endif
 
 compress: $(ROMC)
-ifeq ($(COMPARE),1)
+ifneq ($(COMPARE),0)
 	@md5sum $(ROMC)
 	@md5sum -c baseroms/$(VERSION)/checksum-compressed.md5
 endif
@@ -299,20 +306,22 @@ $(O_FILES): | asset_files
 
 .PHONY: o_files asset_files
 
+
 #### Main commands ####
 
 ## Cleaning ##
 clean:
-	$(RM) -rf $(BUILD_DIR)
+	$(RM) -r $(BUILD_DIR)
 
 assetclean:
-	$(RM) -rf $(ASSET_BIN_DIRS)
-	$(RM) -rf $(BUILD_DIR)/assets
-	$(RM) -rf assets/text/*.h
-	$(RM) -rf .extracted-assets.json
+	$(RM) -r $(ASSET_BIN_DIRS)
+	$(RM) -r $(BUILD_DIR)/assets
+	$(RM) -r assets/text/*.h
+	$(RM) -r .extracted-assets.json
 
 distclean: assetclean clean
-	$(RM) -rf asm baseroms/$(VERSION)/segments data
+	$(RM) -r asm data
+	$(RM) -r baseroms/$(VERSION)/segments
 	$(MAKE) -C tools clean
 
 venv:
@@ -332,11 +341,11 @@ assets:
 
 ## Assembly generation
 disasm:
-	$(RM) -rf asm data
+	$(RM) -r asm data
 	$(PYTHON) tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: rom
-	$(RM) -rf expected/
+	$(RM) -r expected/
 	mkdir -p expected/
 	cp -r build expected/build
 
@@ -356,6 +365,7 @@ endif
 .PHONY: all rom compress clean assetclean distclean assets disasm init venv setup run
 .DEFAULT_GOAL := rom
 all: rom compress
+
 
 #### Various Recipes ####
 
@@ -406,7 +416,7 @@ $(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $
 $(BUILD_DIR)/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 $(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/$(SPEC)
