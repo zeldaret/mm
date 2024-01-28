@@ -362,7 +362,7 @@
     0x8009F888:("viCounterMsg","OSIoMesg","",0x18),
     0x8009F8A0:("viRetrace","u16","",0x2),
     0x8009F8B0:("dmadata","DmaEntry","[1568]",0x6200),
-    0x80186028:("D_80186028","s16","[1316]",0xa48),
+    0x80186028:("sNonKanjiIndices","s16","[1316]",0xa48),
     0x801AAAB0:("aspMainTextStart","UNK_TYPE1","",0x1),
     0x801ABAB0:("gspS2DEX2_fifoTextStart","UNK_TYPE1","",0x1),
     0x801AD370:("njpgdspMainTextStart","UNK_TYPE1","",0x1),

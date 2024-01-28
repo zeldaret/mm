@@ -481,7 +481,7 @@
             0x801830A0 : "c_keyframe",
             0x80185660 : "sys_slowly",
             0x801857C0 : "sys_flashrom",
-            0x80185F90 : "", # handwritten
+            0x80185F90 : "kanread", # handwritten
             0x80186A70 : "osFlash",
             0x801877A0 : "[PADDING]",
             0x801877D0 : "audio_synthesis",
