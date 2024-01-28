@@ -2762,6 +2762,10 @@ void BossHakugin_UpdateFallingCrushingRocks(BossHakugin* this) {
     }
 }
 
+/**
+ * Updates the black smoke component of the malfunction effect. The smoke will drift upwards and increase in scale; if
+ * the timer is below 0, the smoke will also decrease in alpha until it completely fades out.
+ */
 void BossHakugin_UpdateMalfunctionEffects(BossHakugin* this) {
     s32 i;
     s32 j;
@@ -2774,6 +2778,7 @@ void BossHakugin_UpdateMalfunctionEffects(BossHakugin* this) {
                 malfunctionEffect->timer--;
                 malfunctionEffect->pos.y += 3.5f;
                 malfunctionEffect->scaleXY += 0.003f;
+
                 if (malfunctionEffect->timer < 0) {
                     malfunctionEffect->alpha -= 15;
                     if (malfunctionEffect->alpha < 0) {
@@ -2785,6 +2790,11 @@ void BossHakugin_UpdateMalfunctionEffects(BossHakugin* this) {
     }
 }
 
+/**
+ * Updates the segments of the lightning attack that Goht can shoot at the player while it's waiting. Each segment's
+ * alpha is decreased by 20 for every frame; if the alpha is below 60, the lightning segment will no longer be able to
+ * hurt the player.
+ */
 void BossHakugin_UpdateLightningSegments(BossHakugin* this, PlayState* play) {
     GohtLightningSegment* lightningSegment;
     s16 rand;
@@ -2800,13 +2810,16 @@ void BossHakugin_UpdateLightningSegments(BossHakugin* this, PlayState* play) {
             Player_PlaySfx(player, NA_SE_EN_COMMON_E_BALL_HIT);
             lightningSegment->collider.base.atFlags &= ~AT_HIT;
         }
+
         if (lightningSegment->alpha > 0) {
             lightningSegment->alpha -= 20;
+
             if (lightningSegment->alpha <= 0) {
                 lightningSegment->alpha = 0;
             } else if (lightningSegment->alpha <= 255) {
                 rand = (s32)Rand_Next() >> 0x10;
                 lightningSegment->rot.z = rand;
+
                 if (lightningSegment->alpha > 60) {
                     CollisionCheck_SetAT(play, &play->colChkCtx, &lightningSegment->collider.base);
                 }
