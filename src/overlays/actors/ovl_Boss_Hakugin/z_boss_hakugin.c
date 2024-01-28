@@ -2482,7 +2482,7 @@ void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this) {
 typedef struct {
     /* 0x0 */ s32 colliderIndex;
     /* 0x4 */ u32 limbHideFlags;
-} ExplosionLimbHideInfo; // size = 0x4
+} ExplosionLimbHideInfo; // size = 0x8
 
 /**
  * This array is used to determine the timing of when certain rocks should fall to crush Goht. Rocks fall in four
