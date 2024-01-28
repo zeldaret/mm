@@ -2,6 +2,10 @@
  * File: z_boss_hakugin.c
  * Overlay: ovl_Boss_Hakugin
  * Description: Goht
+ *
+ * This actor is responsible for handling most things involving the Goht boss fight. In addition to Goht itself, this
+ * also includes the block of ice it is encased in before the fight begins, the lightning and electric ball attacks it
+ * can fire at the player, the various cutscenes that play during the fight, etc.
  */
 
 #include "z_boss_hakugin.h"
@@ -26,17 +30,10 @@
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
 void BossHakugin_Update(Actor* thisx, PlayState* play);
-void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
-void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play);
 
 void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this);
 void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* play);
-void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
-void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
-void BossHakugin_SpawnCrushingRocks(BossHakugin* this);
-void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this);
-
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupFrozenBeforeFight(BossHakugin* this);
 void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play);
@@ -63,6 +60,12 @@ void BossHakugin_SetupDeathCutsceneSwerveIntoWall(BossHakugin* this);
 void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this);
 void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play);
+void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
+void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
+void BossHakugin_SpawnCrushingRocks(BossHakugin* this);
+void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this);
+void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2);
+void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play);
 
 typedef enum GohtElectricBallState {
     // The electric ball is not active. Goht will start charging the electric ball the next time the player hits it with
@@ -404,48 +407,67 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum GohtDamageEffect {
-    /* 0x0 */ GOHT_DMGEFF_NONE,
+    // If an attack with this damage effect hits Goht while it's standing upright or running, it will deal no damage and
+    // spawn some spark effects. If it hits Goht while it's downed, however, it will deal damage with no special effect.
+    /* 0x0 */ GOHT_DMGEFF_DOWNED_ONLY,
+
+    // Deals damage and surrounds Goht with fire.
     /* 0x2 */ GOHT_DMGEFF_FIRE = 2,
+
+    // Deals damage and surrounds Goht with ice that instantly shatters.
     /* 0x3 */ GOHT_DMGEFF_FREEZE,
+
+    // Deals damage and surrounds Goht with yellow light orbs.
     /* 0x4 */ GOHT_DMGEFF_LIGHT_ORB,
+
+    // Deals damage and can additionally knock Goht down if it hits Goht on the head, thorax, pelvis, or upper legs
+    // while it isn't charging.
     /* 0xC */ GOHT_DMGEFF_EXPLOSIVE = 0xC,
+
+    // Deals damage and surrounds Goht with blue light orbs.
     /* 0xD */ GOHT_DMGEFF_BLUE_LIGHT_ORB,
-    /* 0xE */ GOHT_DMGEFF_ARROW,
+
+    // Deals damage with no special effect.
+    /* 0xE */ GOHT_DMGEFF_NONE,
+
+    // Deals damage and can additionally knock Goht down in the same manner as GOHT_DMGEFF_EXPLOSIVE. If Goht is hit by
+    // an attack with this damage effect and it does *not* knock it down, however, then Goht will charge up and fire an
+    // electric ball attack.
     /* 0xF */ GOHT_DMGEFF_GORON_SPIKES
 } GohtDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Horse trample  */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Deku Stick     */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Horse trample  */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
     /* Explosives     */ DMG_ENTRY(1, GOHT_DMGEFF_EXPLOSIVE),
-    /* Zora boomerang */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(1, GOHT_DMGEFF_ARROW),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Goron punch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Sword          */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Normal arrow   */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Hookshot       */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Goron punch    */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Sword          */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Goron pound    */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
     /* Fire arrow     */ DMG_ENTRY(1, GOHT_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(1, GOHT_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(1, GOHT_DMGEFF_LIGHT_ORB),
     /* Goron spikes   */ DMG_ENTRY(1, GOHT_DMGEFF_GORON_SPIKES),
-    /* Deku spin      */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Zora barrier   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Deku bubble    */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Deku launch    */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Zora barrier   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Normal shield  */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Light ray      */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Thrown object  */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Zora punch     */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Spin attack    */ DMG_ENTRY(1, GOHT_DMGEFF_DOWNED_ONLY),
     /* Sword beam     */ DMG_ENTRY(1, GOHT_DMGEFF_BLUE_LIGHT_ORB),
-    /* Normal Roll    */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* Unblockable    */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GOHT_DMGEFF_DOWNED_ONLY),
     /* Powder Keg     */ DMG_ENTRY(1, GOHT_DMGEFF_EXPLOSIVE),
 };
 
@@ -493,6 +515,10 @@ static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
     GOHT_BODYPART_BACK_LEFT_HOOF,        // GOHT_LIMB_BACK_LEFT_HOOF
 };
 
+/**
+ * Each type of malfunction effect is tied to a specific limb, and this array can be used to convert between the
+ * malfunction effect type and the limb with which it's associated.
+ */
 s32 sMalfunctionTypeToLimbIndex[GOHT_MALFUNCTION_NUM_TYPES] = {
     GOHT_LIMB_BACK_LEFT_THIGH,       // FHGFLASH_SHOCK_GOHT_BACK_LEFT_THIGH
     GOHT_LIMB_BACK_RIGHT_PASTERN,    // FHGFLASH_SHOCK_GOHT_BACK_RIGHT_PASTERN
@@ -501,10 +527,22 @@ s32 sMalfunctionTypeToLimbIndex[GOHT_MALFUNCTION_NUM_TYPES] = {
     GOHT_LIMB_FRONT_RIGHT_UPPER_LEG, // FHGFLASH_SHOCK_GOHT_FRONT_RIGHT_UPPER_LEG
 };
 
+/**
+ * These colors are used for the sparkles that appear around the block of ice when Goht is frozen before the fight.
+ */
 static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
 static Color_RGBA8 sSparkleEnvColor = { 180, 180, 180, 255 };
 
-static Color_RGB8 sLightColor = { 0, 150, 255 }; // For lights and light orbs
+/**
+ * This is used for the dynamic light that can light up the arena when various effects are active, the light orb that
+ * appears near Goht's head when it's charging up an attack, and the light orbs that make up the electric ball attack.
+ */
+static Color_RGB8 sLightColor = { 0, 150, 255 };
+
+/**
+ * This is used for both the lightning that appears near Goht's head when it's charging up an attack and the lightning
+ * segments that Goht fires to attack the player.
+ */
 static Color_RGB8 sLightningColor = { 0, 255, 255 };
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
@@ -2635,7 +2673,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         }
 
         if (((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) ||
-             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_ARROW) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_NONE) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FIRE) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_LIGHT_ORB) ||
@@ -2694,8 +2732,8 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
 
             return true;
         } else {
-            // This block is for attacks with the effect of `GOHT_DMGEFF_NONE` hitting Goht while it's standing upright.
-            // These attacks deal no damage and instead just spawn sparks and play a metal sound.
+            // This block is for attacks with the effect of `GOHT_DMGEFF_DOWNED_ONLY` hitting Goht while it's standing
+            // upright. These attacks deal no damage and instead just spawn sparks and play a metal sound.
             s32 j;
 
             this->disableBodyCollidersTimer = 20;
@@ -2828,6 +2866,9 @@ void BossHakugin_UpdateLightningSegments(BossHakugin* this, PlayState* play) {
     }
 }
 
+/**
+ * Updates the electric balls that Goht can shoot at the player.
+ */
 void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     CollisionPoly* poly = NULL;
@@ -2874,6 +2915,10 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         this->electricBallState = GOHT_ELECTRIC_BALL_STATE_NONE;
         this->electricBallCount = 0;
     } else {
+        // The electric ball attack is actually made up of a chain of light orbs; the first light orb is the one to
+        // which the collider is attached and the one that all other light orbs follow. This loop below will make it so
+        // that the position of `this->electricBallPos[N + 1]` will equal the position of `this->electricBallPos[N]` on
+        // the previous frame, creating a trail effect.
         ballPosIter = &this->electricBallPos[9];
         while (ballPosIter != firstBallPos) {
             Math_Vec3f_Copy(ballPosIter, ballPosIter - 1);
