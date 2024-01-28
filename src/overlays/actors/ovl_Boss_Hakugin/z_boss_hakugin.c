@@ -2980,7 +2980,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BossHakugin* this = (BossHakugin*)thisx;
+    BossHakugin* this = THIS;
     Vec3s targetRot;
     Player* player = GET_PLAYER(play);
 
