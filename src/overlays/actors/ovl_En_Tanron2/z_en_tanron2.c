@@ -4,6 +4,7 @@
  * Description: Wart's Bubbles
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_tanron2.h"
 #include "overlays/actors/ovl_Boss_04/z_boss_04.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -254,7 +255,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                 case 2:
                     sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x,
                                        player->actor.world.pos.z - this->actor.world.pos.z) +
-                           (s16)Rand_ZeroFloat(20000.0f);
+                           TRUNCF_BINANG(Rand_ZeroFloat(20000.0f));
                     this->actor.speed = Rand_ZeroFloat(7.0f) + 7.0f;
                     if ((this->unk_152 == 0) && (D_80BB8450->unk_1F6 == 0)) {
                         this->unk_158 = 1;

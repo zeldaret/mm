@@ -803,7 +803,7 @@ void func_80895738(EnTite* this, PlayState* play) {
             func_80893A9C(this, play);
         }
     }
-    this->actor.shape.rot.y += (s16)(this->actor.speed * 768.0f);
+    this->actor.shape.rot.y += TRUNCF_BINANG(this->actor.speed * 768.0f);
 }
 
 void func_8089595C(EnTite* this, PlayState* play) {

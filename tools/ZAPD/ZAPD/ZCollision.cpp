@@ -99,7 +99,7 @@ void ZCollisionHeader::ParseRawData()
 		// usually ordered. If for some reason the data was in some other funny
 		// order, this would probably break.
 		// The most common ordering is:
-		// - *CamData*
+		// - *BgCamInfo*
 		// - SurfaceType
 		// - CollisionPoly
 		// - Vertices
@@ -261,7 +261,7 @@ std::string ZCollisionHeader::GetBodySourceCode() const
 	declaration += StringHelper::Sprintf("\t%s,\n", surfaceName.c_str());
 
 	std::string camName;
-	Globals::Instance->GetSegmentedPtrName(camDataAddress, parent, "CamData", camName);
+	Globals::Instance->GetSegmentedPtrName(camDataAddress, parent, "BgCamInfo", camName);
 	declaration += StringHelper::Sprintf("\t%s,\n", camName.c_str());
 
 	std::string waterBoxName;
@@ -370,7 +370,7 @@ CameraDataList::CameraDataList(ZFile* parent, const std::string& prefix,
 	}
 
 	parent->AddDeclarationArray(
-		rawDataIndex, DeclarationAlignment::Align4, entries.size() * 8, "CamData",
+		rawDataIndex, DeclarationAlignment::Align4, entries.size() * 8, "BgCamInfo",
 		StringHelper::Sprintf("%sCamDataList", prefix.c_str(), rawDataIndex), entries.size(),
 		declaration);
 

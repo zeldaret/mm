@@ -91,7 +91,7 @@ void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadow
     actorShape->shadowAlpha = 255;
 }
 
-void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist, Color_RGBA8* color) {
+void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dList, Color_RGBA8* color) {
     if (actor->floorPoly != NULL) {
         f32 dy = actor->world.pos.y - actor->floorHeight;
 
@@ -122,7 +122,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
             Matrix_Put(&mtx);
 
-            if ((dlist != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
+            if ((dList != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
                 Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
@@ -130,7 +130,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dlist,
             Matrix_Scale(actor->scale.x * shadowScale, 1.0f, actor->scale.z * shadowScale, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-            gSPDisplayList(POLY_OPA_DISP++, dlist);
+            gSPDisplayList(POLY_OPA_DISP++, dList);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -1742,7 +1742,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     }
 }
 
-Gfx* Hilite_Draw(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hiliteP) {
+Gfx* Hilite_Draw(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* gfx, Hilite** hiliteP) {
     LookAt* lookAt = GRAPH_ALLOC(gfxCtx, sizeof(LookAt));
     f32 correctedEyeX = (eye->x == object->x) && (eye->z == object->z) ? eye->x + 0.001f : eye->x;
 
@@ -1752,10 +1752,10 @@ Gfx* Hilite_Draw(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gf
                    0.0f, 1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, lightDir->x, lightDir->y, lightDir->z, 0x10,
                    0x10);
 
-    gSPLookAt(dl++, lookAt);
-    gDPSetHilite1Tile(dl++, 1, *hiliteP, 0x10, 0x10);
+    gSPLookAt(gfx++, lookAt);
+    gDPSetHilite1Tile(gfx++, 1, *hiliteP, 0x10, 0x10);
 
-    return dl;
+    return gfx;
 }
 
 Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {

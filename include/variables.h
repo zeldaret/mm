@@ -6,31 +6,6 @@
 #include "macros.h"
 
 // data
-extern size_t gDmaMgrDmaBuffSize;
-extern vs32 gIrqMgrResetStatus;
-extern volatile OSTime sIrqMgrResetTime;
-extern volatile OSTime gIrqMgrRetraceTime;
-extern s32 sIrqMgrRetraceCount;
-
-// extern UNK_TYPE1 sGfxPrintFontTLUT;
-// extern UNK_TYPE1 sGfxPrintRainbowTLUT;
-// extern UNK_TYPE1 sGfxPrintRainbowData;
-// extern UNK_TYPE1 sGfxPrintFontData;
-// extern UNK_TYPE4 D_80097524;
-
-extern u8 sYaz0DataBuffer[0x400];
-extern u8* sYaz0CurDataEnd;
-extern u32 sYaz0CurRomStart;
-extern u32 sYaz0CurSize;
-extern u8* sYaz0MaxPtr;
-extern void* gYaz0DecompressDstEnd;
-
-// extern UNK_TYPE4 D_8009CD10;
-// extern UNK_TYPE4 sArenaLockMsg;
-
-extern DmaEntry dmadata[1568];
-// extern UNK_TYPE1 D_80186028;
-
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];
@@ -1455,7 +1430,7 @@ extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
 extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gVisMonoColor;
+extern Color_RGBA8_u32 gPlayVisMonoColor;
 
 extern GfxMasterList* gGfxMasterDL;
 

@@ -346,7 +346,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     if (this->unk_3D8) {
         Message_StartTextbox(play, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -373,7 +373,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
@@ -402,7 +402,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
                 this->unk_3B2 = 10;
             }
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
@@ -442,7 +442,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD417C(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, play);
@@ -528,7 +528,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
         this->unk_3B2 = 17;
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
     }
@@ -891,8 +891,8 @@ s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
         (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
-        rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->unk_33C[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->unk_372[limbIndex])) * 200;
     }
     return false;
 }

@@ -35,4 +35,12 @@
 
 #define	OS_MIN_STACKSIZE	72
 
+/*
+ * Boot addresses
+ */
+#define	BOOT_ADDRESS_ULTRA	0x80000400
+#define	BOOT_ADDRESS_COSIM	0x80002000
+#define	BOOT_ADDRESS_EMU	0x20010000
+#define	BOOT_ADDRESS_INDY 	0x88100000
+
 #endif

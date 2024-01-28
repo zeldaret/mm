@@ -19,7 +19,7 @@ typedef struct EnStoneheishi {
     /* 0x264 */ s32 animIndex;
     /* 0x268 */ s16 timer;
     /* 0x26A */ s16 drinkBottleState;
-    /* 0x26C */ f32 endFrame;
+    /* 0x26C */ f32 animEndFrame;
     /* 0x270 */ s16 action;
     /* 0x272 */ s16 textIdIndex;
     /* 0x274 */ s16 textIdSet;

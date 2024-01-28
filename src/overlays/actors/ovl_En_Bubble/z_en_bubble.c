@@ -238,7 +238,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
@@ -257,7 +257,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;

@@ -325,7 +325,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_2:
             // Slowly increase alpha to fill the screen with a black rectangle
-            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
+            R_PLAY_FILL_SCREEN_ALPHA = TRUNCF_BINANG(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {
@@ -414,8 +414,8 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
                 this->unk_26C = 0.0f;

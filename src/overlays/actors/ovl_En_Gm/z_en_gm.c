@@ -884,8 +884,8 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     s32 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_3AC == 120.0f) {
                 this->unk_3AC = 0.0f;
@@ -1782,8 +1782,8 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

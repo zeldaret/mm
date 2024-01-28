@@ -2,6 +2,7 @@
 #define Z_EN_SCOPENUTS_H
 
 #include "global.h"
+#include "objects/object_dnt/object_dnt.h"
 
 struct EnScopenuts;
 
@@ -18,8 +19,8 @@ typedef void (*EnScopenutsActionFunc)(struct EnScopenuts*, PlayState*);
 typedef struct EnScopenuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[28];
-    /* 0x230 */ Vec3s morphTable[28];
+    /* 0x188 */ Vec3s jointTable[BUSINESS_SCRUB_LIMB_MAX];
+    /* 0x230 */ Vec3s morphTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x2D8 */ EnScopenutsActionFunc actionFunc;
     /* 0x2DC */ ColliderCylinder collider;
     /* 0x328 */ u16 unk_328;
@@ -32,7 +33,7 @@ typedef struct EnScopenuts {
     /* 0x33E */ s16 unk_33E;
     /* 0x340 */ s16 unk_340;
     /* 0x342 */ UNK_TYPE1 unk342[0x6];
-    /* 0x348 */ s32 unk_348;
+    /* 0x348 */ s32 animIndex;
     /* 0x34C */ s16 unk_34C;
     /* 0x34E */ s16 unk_34E;
     /* 0x350 */ f32 unk_350;

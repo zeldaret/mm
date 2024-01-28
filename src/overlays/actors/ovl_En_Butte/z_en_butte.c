@@ -221,7 +221,7 @@ void func_8091C6B4(EnButte* this) {
     s16 temp_v0 = temp_a1 - this->actor.shape.rot.y;
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, temp_a1, ABS_ALT(temp_v0) >> 3);
-    this->actor.shape.rot.x = (s16)(Math_SinS(this->unk_258) * 600.0f) - 0x2320;
+    this->actor.shape.rot.x = TRUNCF_BINANG(Math_SinS(this->unk_258) * 600.0f) - 0x2320;
 }
 
 void func_8091C748(EnButte* this) {
@@ -272,7 +272,7 @@ void func_8091C794(EnButte* this, PlayState* play) {
             sp38 = 0.4f;
         }
     } else {
-        this->actor.world.rot.y += (s16)(Math_SinS(this->unk_254) * 100.0f);
+        this->actor.world.rot.y += TRUNCF_BINANG(Math_SinS(this->unk_254) * 100.0f);
     }
 
     func_8091C6B4(this);
@@ -329,7 +329,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &sp48);
         if (Math_ScaledStepToS(&this->actor.world.rot.y, yaw + (s32)(Rand_ZeroOne() * D_8091D3F0), 0x7D0)) {
             if ((play->gameplayFrames & 0x30) == 0x30) {
-                this->actor.world.rot.y += (s16)(Math_SinS(this->unk_254) * 60.0f);
+                this->actor.world.rot.y += TRUNCF_BINANG(Math_SinS(this->unk_254) * 60.0f);
             }
         } else {
             sp40 = 0.3f;

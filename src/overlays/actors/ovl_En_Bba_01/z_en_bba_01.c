@@ -187,7 +187,7 @@ void EnBba01_Talk(EnHy* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     talkState = Message_GetState(&play->msgCtx);
-    this->inMsgState3 = (talkState == TEXT_STATE_3) ? true : false;
+    this->msgFading = (talkState == TEXT_STATE_FADING) ? true : false;
 
     switch (talkState) {
         case TEXT_STATE_NONE:
@@ -284,13 +284,13 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 && ((play->state.frames % 2) == 0)) {
+    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.msgFading && ((play->state.frames % 2) == 0)) {
         Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
-        rot->y += (s16)(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;

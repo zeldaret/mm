@@ -203,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 0x3E8 : (s16)(ABS_ALT(sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 0x3E8 : TRUNCF_BINANG(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);

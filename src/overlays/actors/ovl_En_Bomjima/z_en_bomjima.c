@@ -488,7 +488,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 EffectSsHitmark_SpawnFixedScale(play, 0, &sp40);
                 this->unk_2BC++;
 
-                if (((s16)Rand_ZeroFloat(2.0f) + 3) < this->unk_2BC) {
+                if ((TRUNCF_BINANG(Rand_ZeroFloat(2.0f)) + 3) < this->unk_2BC) {
                     EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_5, 1.0f);
                     this->unk_29A = 0;
                     Math_Vec3f_Copy(&this->unk_2A4, &this->actor.home.pos);
@@ -695,7 +695,7 @@ void func_80BFF6CC(EnBomjima* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (curFrame >= this->animEndFrame) {
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_1, 1.0f);
             this->actionFunc = func_80BFF754;
@@ -800,7 +800,7 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFFB40(EnBomjima* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_15, 1.0f);
         D_80C009F0 = 100;
@@ -991,7 +991,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
         if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) ||
@@ -1105,7 +1105,7 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
         this->unk_2E0++;
         if (this->unk_2E0 >= 3) {
             this->unk_2E0 = 0;
-            this->unk_2E2 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2E2 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

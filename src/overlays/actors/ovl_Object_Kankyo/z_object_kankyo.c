@@ -678,8 +678,8 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
 
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            Matrix_RotateYS((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
-            Matrix_RotateXS((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
+            Matrix_RotateYS(TRUNCF_BINANG(this->unk_14C[2].unk_04) + (s16)(i << 5), MTXMODE_APPLY);
+            Matrix_RotateXS(TRUNCF_BINANG(this->unk_14C[2].unk_00) + (s16)(i << 5), MTXMODE_APPLY);
 
             if (this->unk_114C == 0) {
                 Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);

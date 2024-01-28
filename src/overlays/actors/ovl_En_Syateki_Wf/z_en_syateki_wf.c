@@ -113,17 +113,18 @@ ActorInit En_Syateki_Wf_InitVars = {
     /**/ EnSyatekiWf_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryWolfosAnimation {
     /* 0 */ SG_WOLFOS_ANIM_WAIT, // unused
     /* 1 */ SG_WOLFOS_ANIM_RUN,
     /* 2 */ SG_WOLFOS_ANIM_JUMP,
     /* 3 */ SG_WOLFOS_ANIM_LAND,
     /* 4 */ SG_WOLFOS_ANIM_BACKFLIP, // unused
     /* 5 */ SG_WOLFOS_ANIM_DAMAGED,
-    /* 6 */ SG_WOLFOS_ANIM_REAR_UP_FALL_OVER
+    /* 6 */ SG_WOLFOS_ANIM_REAR_UP_FALL_OVER,
+    /* 7 */ SG_WOLFOS_ANIM_MAX
 } ShootingGalleryWolfosAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_WOLFOS_ANIM_MAX] = {
     { &gWolfosWaitAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },           // SG_WOLFOS_ANIM_WAIT
     { &gWolfosRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },            // SG_WOLFOS_ANIM_RUN
     { &gWolfosRunAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },             // SG_WOLFOS_ANIM_JUMP
