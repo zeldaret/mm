@@ -1581,7 +1581,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->iceCollider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->iceCollider.base);
-    this->disableCollidersTimer = 20;
+    this->disableBodyCollidersTimer = 20;
 }
 
 void BossHakugin_SetupIntroCutsceneThaw(BossHakugin* this) {
@@ -1841,7 +1841,7 @@ void BossHakugin_SetupRun(BossHakugin* this) {
 void BossHakugin_Run(BossHakugin* this, PlayState* play) {
     s16 yawDiff;
 
-    if (this->disableCollidersTimer == 0) {
+    if (this->disableBodyCollidersTimer == 0) {
         this->bodyCollider.base.atFlags |= AT_ON;
     }
 
@@ -2050,7 +2050,7 @@ void BossHakugin_Downed(BossHakugin* this, PlayState* play) {
             this->bodyCollider.base.acFlags |= AC_HARD;
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
             BossHakugin_SetupRun(this);
-            this->disableCollidersTimer = 20;
+            this->disableBodyCollidersTimer = 20;
         }
     } else if (Math_StepToF(&this->actor.speed, 5.0f, 0.3f)) {
         Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
@@ -2630,7 +2630,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DAMAGE_OLD);
             }
 
-            this->disableCollidersTimer = 15;
+            this->disableBodyCollidersTimer = 15;
             return true;
         }
 
@@ -2654,7 +2654,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 }
             }
 
-            this->disableCollidersTimer = 15;
+            this->disableBodyCollidersTimer = 15;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
@@ -2698,7 +2698,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             // These attacks deal no damage and instead just spawn sparks and play a metal sound.
             s32 j;
 
-            this->disableCollidersTimer = 20;
+            this->disableBodyCollidersTimer = 20;
             for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
                 Vec3f hitPos;
                 ColliderInfo* colliderInfo = &this->bodyCollider.elements[j].info;
@@ -2979,11 +2979,11 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         this->bodyCollider.base.atFlags &= ~AT_HIT;
     }
 
-    if (this->disableCollidersTimer == 0) {
+    if (this->disableBodyCollidersTimer == 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
     } else {
         this->bodyCollider.base.acFlags &= ~AC_HIT;
-        this->disableCollidersTimer--;
+        this->disableBodyCollidersTimer--;
     }
 
     if (this->bodyCollider.base.ocFlags1 & OC1_ON) {

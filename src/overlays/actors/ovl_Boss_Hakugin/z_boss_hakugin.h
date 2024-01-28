@@ -117,8 +117,8 @@ typedef struct BossHakugin {
     /* 0x0194 */ u8 hasAppliedGoronSpikeBoost;
     /* 0x0195 */ u8 finishedFallingDown;
     /* 0x0196 */ u8 drawDmgEffType;
-    /* 0x0198 */ s16 lightOrbRotZ; // TODO: this name is bad!
-    /* 0x019A */ s16 damagedSpeedUpCounter; // TODO: maybe there's a better name for this? It's weird
+    /* 0x0198 */ s16 lightOrbRotZ;
+    /* 0x019A */ s16 damagedSpeedUpCounter;
     /* 0x019C */ union {
                     s16 nextCutsceneType;
                     s16 timer;
@@ -126,14 +126,14 @@ typedef struct BossHakugin {
     /* 0x019E */ s16 targetRotY;
     /* 0x01A0 */ s16 baseRotY;
     /* 0x01A2 */ s16 runOffsetRot;
-    /* 0x01A4 */ s16 disableCollidersTimer; // TODO: might be able to improve this one
+    /* 0x01A4 */ s16 disableBodyCollidersTimer;
     /* 0x01A6 */ s16 frontHalfRotZ;
     /* 0x01A8 */ s16 chargeUpTimer;
     /* 0x01AA */ s16 electricBallCount;
     /* 0x01AC */ s16 subCamId;
-    /* 0x01AE */ s16 deathCutsceneRandomHeadRot; // TODO: bad, but descriptive
+    /* 0x01AE */ s16 deathCutsceneRandomHeadRot;
     /* 0x01B0 */ u32 limbDrawFlags;
-    /* 0x01B4 */ s32 direction;
+    /* 0x01B4 */ s32 direction; // See `GohtDirection`
     /* 0x01B8 */ f32 electricBallSpeed;
     /* 0x01BC */ f32 distToRightWall;
     /* 0x01C0 */ f32 distToLeftWall;
@@ -150,7 +150,7 @@ typedef struct BossHakugin {
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
     /* 0x0374 */ Vec3s headRot;
     /* 0x037A */ Vec3s subCamRot;
-    /* 0x0380 */ Vec3f chargingLightningPos; // TODO: might be used for a few other things, look into this one further
+    /* 0x0380 */ Vec3f chargingLightningPos;
     /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
     /* 0x044C */ Vec3f transformedPlayerPos;
