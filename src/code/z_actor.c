@@ -2,35 +2,20 @@
  * File: z_actor.c
  * Description:
  */
-
-#include "z64actor.h"
-
-#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
-#include "z64horse.h"
-#include "z64malloc.h"
-#include "z64quake.h"
-#include "z64rumble.h"
 
-#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
-#include "overlays/actors/ovl_En_Part/z_en_part.h"
-#include "overlays/actors/ovl_En_Box/z_en_box.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
-
-// bss
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sActorFaultClient; // 2 funcs
 
-CollisionPoly* D_801ED8B0; // 1 func
-s32 D_801ED8B4;            // 2 funcs
+struct CollisionPoly* D_801ED8B0; // 1 func
+s32 D_801ED8B4;                   // 2 funcs
 
-Actor* sTargetableNearestActor;
-Actor* sTargetablePrioritizedActor;
-Actor* D_801ED8C0;
-Actor* D_801ED8C4;
+struct Actor* sTargetableNearestActor;
+struct Actor* sTargetablePrioritizedActor;
+struct Actor* D_801ED8C0;
+struct Actor* D_801ED8C4;
 
 f32 sTargetableNearestActorDistSq;
 f32 sBgmEnemyDistSq;
@@ -41,7 +26,22 @@ s16 sTargetPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
-Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+
+#include "z64actor.h"
+
+#include "z64horse.h"
+#include "z64malloc.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
+
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_bdoor/object_bdoor.h"
 
 #define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS (1 << 0)
 #define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 1)

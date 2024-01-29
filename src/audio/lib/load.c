@@ -1263,8 +1263,8 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     gAudioCtx.curAiBufferIndex = 0;
     gAudioCtx.soundMode = SOUNDMODE_STEREO;
     gAudioCtx.curTask = NULL;
-    gAudioCtx.rspTask[0].task.t.dataSize = 0;
-    gAudioCtx.rspTask[1].task.t.dataSize = 0;
+    gAudioCtx.rspTask[0].task.t.data_size = 0;
+    gAudioCtx.rspTask[1].task.t.data_size = 0;
 
     osCreateMesgQueue(&gAudioCtx.syncDmaQueue, &gAudioCtx.syncDmaMesg, 1);
     osCreateMesgQueue(&gAudioCtx.curAudioFrameDmaQueue, gAudioCtx.currAudioFrameDmaMesgBuf,
