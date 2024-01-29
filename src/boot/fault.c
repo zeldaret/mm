@@ -530,7 +530,8 @@ void osSyncPrintfThreadContext(OSThread* thread) {
 OSThread* Fault_FindFaultedThread(void) {
     OSThread* iter = __osGetActiveQueue();
 
-    while (iter->priority != OS_PRIORITY_THREADTAIL) {
+    // -1 indicates the end of the thread queue
+    while (iter->priority != -1) {
         if ((iter->priority > OS_PRIORITY_IDLE) && (iter->priority < OS_PRIORITY_APPMAX) &&
             (iter->flags & (OS_FLAG_CPU_BREAK | OS_FLAG_FAULT))) {
             return iter;
