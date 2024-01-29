@@ -1439,6 +1439,24 @@ s32 BossHakugin_ShouldWait(BossHakugin* this, PlayState* play) {
     posX = this->actor.world.pos.x * this->direction;
     posZ = this->actor.world.pos.z * this->direction;
 
+    /**
+     * Goht's arena is a square with rounded corners. If the player is standing in one of the "sides" of the square, and
+     * Goht is standing near one of the opposite corners (which specific corner depends on whether Goht is running
+     * clockwise or counterclockwise), then Goht will wait. The diagram below illustrates this; if the player is
+     * standing in the box labeled P, and Goht is standing in the box G1 (if Goht is running counterclockwise) or G2 (if
+     * Goht is running clockwise), then Goht will wait:
+     *    _____________________
+     *   /    |           |    \
+     *  /     |     P     |     \
+     * |      |___________|      |
+     * |      |           |      |
+     * |______|           |______|
+     * |      |           |      |
+     * |  G1  |           |  G2  |
+     * |      |‾‾‾‾‾‾‾‾‾‾‾|      |
+     *  \     |           |     /
+     *   \____|___________|____/
+     */
     if (((player->actor.world.pos.x > 1200.0f) && (player->actor.world.pos.z < 1200.0f) &&
          (player->actor.world.pos.z > -1200.0f) && (this->actor.world.pos.x < 0.0f) && (posZ > 1200.0f)) ||
         ((player->actor.world.pos.x < -1200.0f) && (player->actor.world.pos.z < 1200.0f) &&
