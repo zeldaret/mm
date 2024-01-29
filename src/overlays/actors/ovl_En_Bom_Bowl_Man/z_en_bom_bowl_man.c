@@ -656,7 +656,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
                 this->actionFunc = func_809C4DA4;
             } else {
                 s32 idx = D_809C6100 - 1;
-                
+
                 Camera_SetTargetActor(subCam, &this->unk_2DC[idx]->actor);
             }
         }
