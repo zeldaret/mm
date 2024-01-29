@@ -578,6 +578,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
 
+        //! FAKE:
         if (1) {}
     }
 

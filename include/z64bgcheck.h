@@ -2,6 +2,7 @@
 #define Z64BGCHECK_H
 
 #include "ultra64.h"
+
 #include "z64math.h"
 
 struct PlayState;

@@ -157,15 +157,15 @@ static Vec3f sPosOffset[] = {
 };
 
 void EnSob1_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 animIndex) {
-    f32 frameCount;
+    f32 endFrame;
 
     animations += animIndex;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animation);
+        endFrame = Animation_GetLastFrame(animations->animation);
     } else {
-        frameCount = animations->frameCount;
+        endFrame = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, endFrame,
                      animations->mode, animations->morphFrames);
 }
 
@@ -740,7 +740,7 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
     s32 pad;
     f32 distSq;
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&gBombShopkeeperWalkAnim) / TRUNCF_BINANG(this->skelAnime.playSpeed);
+    s16 endFrame = Animation_GetLastFrame(&gBombShopkeeperWalkAnim) / TRUNCF_BINANG(this->skelAnime.playSpeed);
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        EnSob1_GetDistSqAndOrient(this->path, this->waypoint - 1, &this->actor.world.pos, &distSq), 4,
@@ -749,7 +749,7 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
         this->actor.speed = 0.0f;
-        if (animLastFrame == curFrame) {
+        if (endFrame == curFrame) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationInfoBombShopkeeper,
                               BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
@@ -760,8 +760,9 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
 
 void EnSob1_SetupIdle(EnSob1* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
+    s16 endFrame = Animation_GetLastFrame(&gBombShopkeeperSitAtCounterStartAnim);
 
-    if (Animation_GetLastFrame(&gBombShopkeeperSitAtCounterStartAnim) == curFrame) {
+    if (endFrame == curFrame) {
         EnSob1_ChangeAnim(&this->skelAnime, sAnimationInfoBombShopkeeper, BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
@@ -1365,7 +1366,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
@@ -1374,7 +1375,7 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;

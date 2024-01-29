@@ -1,9 +1,12 @@
-#include "prevent_bss_reordering.h"
+#include "z64message.h"
 #include "global.h"
+
+#include "message_data_static.h"
+#include "padmgr.h"
+#include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
-#include "z64view.h"
-#include "message_data_static.h"
+
 #include "interface/parameter_static/parameter_static.h"
 
 u8 D_801C6A70 = 0;

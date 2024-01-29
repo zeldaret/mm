@@ -100,17 +100,17 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
 #define RUPEES_STR_SPA "Rupia(s)"
 
 char sRupeesTextLocalization[LANGUAGE_MAX - 1][8] = {
-    RUPEES_STR_EN,  // EN
-    RUPEES_STR_DE,  // DE
-    RUPEES_STR_FR,  // FR
-    RUPEES_STR_SPA, // SPA
+    RUPEES_STR_EN,  // LANGUAGE_ENG
+    RUPEES_STR_DE,  // LANGUAGE_GER
+    RUPEES_STR_FR,  // LANGUAGE_FRE
+    RUPEES_STR_SPA, // LANGUAGE_SPA
 };
 
 u8 sRupeesTextLength[LANGUAGE_MAX - 1] = {
-    sizeof(RUPEES_STR_EN) - 1,
-    sizeof(RUPEES_STR_DE) - 1,
-    sizeof(RUPEES_STR_FR) - 1,
-    sizeof(RUPEES_STR_SPA) - 1,
+    sizeof(RUPEES_STR_EN) - 1,  // LANGUAGE_ENG
+    sizeof(RUPEES_STR_DE) - 1,  // LANGUAGE_GER
+    sizeof(RUPEES_STR_FR) - 1,  // LANGUAGE_FRE
+    sizeof(RUPEES_STR_SPA) - 1, // LANGUAGE_SPA
 };
 
 void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {

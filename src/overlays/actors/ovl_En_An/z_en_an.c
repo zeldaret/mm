@@ -1037,10 +1037,10 @@ s32 EnAn_UpdateSkelAnime(EnAn* this, PlayState* play) {
     }
 
     if (otherObjectSlot > OBJECT_SLOT_NONE) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return ret;
@@ -1096,11 +1096,11 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     }
 
     if (changeAnim && (otherObjectSlot > OBJECT_SLOT_NONE)) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return didAnimChange;

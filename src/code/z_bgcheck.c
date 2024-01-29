@@ -1,10 +1,12 @@
 #include "z64bgcheck.h"
+#include "global.h"
 
-#include "fault.h"
 #include "libc64/fixed_point.h"
 #include "libc64/sprintf.h"
+
+#include "fault.h"
 #include "vt.h"
-#include "global.h"
+#include "z64actor.h"
 
 #define DYNA_RAYCAST_FLOORS 1
 #define DYNA_RAYCAST_WALLS 2

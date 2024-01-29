@@ -33,8 +33,8 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
         audioMgr->audioTask.msgQ = &audioMgr->cmdQueue;
 
         audioMgr->audioTask.msg = NULL;
-        osSendMesg(&audioMgr->sched->cmdQ, &audioMgr->audioTask, OS_MESG_BLOCK);
-        Sched_SendEntryMsg(audioMgr->sched);
+        osSendMesg(&audioMgr->sched->cmdQueue, &audioMgr->audioTask, OS_MESG_BLOCK);
+        Sched_SendNotifyMsg(audioMgr->sched);
     }
 
     if (SREG(20) >= 2) {
@@ -125,7 +125,7 @@ void AudioMgr_Unlock(AudioMgr* audioMgr) {
     osRecvMesg(&audioMgr->lockQueue, NULL, OS_MESG_BLOCK);
 }
 
-void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedContext* sched, IrqMgr* irqMgr) {
+void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, Scheduler* sched, IrqMgr* irqMgr) {
     bzero(audioMgr, sizeof(AudioMgr));
 
     audioMgr->sched = sched;

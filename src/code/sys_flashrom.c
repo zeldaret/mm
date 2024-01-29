@@ -1,11 +1,13 @@
-#include "global.h"
+#include "sys_flashrom.h"
+
+#include "libc64/malloc.h"
+#include "PR/os_internal_flash.h"
+
 #include "fault.h"
+#include "macros.h"
 #include "stack.h"
 #include "stackcheck.h"
-#include "libc64/malloc.h"
 #include "z64thread.h"
-#include "sys_flashrom.h"
-#include "PR/os_internal_flash.h"
 
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
