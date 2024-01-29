@@ -706,9 +706,9 @@ void BossHakugin_StepVector(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
  * are the stalactites that are destroyed when Goht is thawed just before the fight begins.
  */
 void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this) {
-    s32 i = 0;
+    s32 i;
     Actor* last;
-    Actor* now = this->stalactites[i++];
+    Actor* now = this->stalactites[0];
 
     now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
     now->world.pos.x = -500.0f;
@@ -717,9 +717,9 @@ void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this) {
     now->shape.rot.y = this->actor.shape.rot.y + 0x4000;
 
     // Spawns the six large stalactites in front of Goht
-    while (i < 6) {
+    for (i = 1; i < 6; i++) {
         last = now;
-        now = this->stalactites[i++];
+        now = this->stalactites[i];
 
         now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = last->world.pos.x;
@@ -729,9 +729,9 @@ void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this) {
     }
 
     // Spawns the four large stalactites to the left and right of Goht's ice block
-    while (i < ARRAY_COUNT(this->stalactites)) {
+    for (; i < ARRAY_COUNT(this->stalactites); i++) {
         last = (i < 8) ? this->stalactites[i - 6] : this->stalactites[i - 4];
-        now = this->stalactites[i++];
+        now = this->stalactites[i];
 
         now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = this->actor.world.pos.x;
