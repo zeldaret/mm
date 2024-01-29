@@ -489,21 +489,21 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
 void EnNwc_Draw(Actor* thisx, PlayState* play) {
     TexturePtr eyeTextures[] = { gNwcEyeOpenTex, gNwcEyeClosedTex };
     EnNwc* this = THIS;
-    Gfx* dispHead;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    dispHead = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPSegment(&dispHead[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
 
-    gSPMatrix(&dispHead[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(&dispHead[2], &gNwcBodyDL);
+    gSPDisplayList(&gfx[2], &gNwcBodyDL);
 
-    POLY_OPA_DISP = &dispHead[3];
+    POLY_OPA_DISP = &gfx[3];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

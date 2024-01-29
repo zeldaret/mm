@@ -2,6 +2,7 @@
 #define Z_EN_SW_H
 
 #include "global.h"
+#include "objects/object_st/object_st.h"
 
 struct EnSw;
 
@@ -37,8 +38,8 @@ typedef struct EnSw {
     /* 0x188 */ EnSwActionFunc actionFunc;
     /* 0x18C */ ColliderSphere collider;
     /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ Vec3s jointTable[30];
-    /* 0x29C */ Vec3s morphTable[30];
+    /* 0x1E8 */ Vec3s jointTable[OBJECT_ST_LIMB_MAX];
+    /* 0x29C */ Vec3s morphTable[OBJECT_ST_LIMB_MAX];
     /* 0x350 */ Vec3f unk_350;
     /* 0x35C */ Vec3f unk_35C;
     /* 0x368 */ Vec3f unk_368;

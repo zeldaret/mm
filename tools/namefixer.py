@@ -986,6 +986,9 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+    
+    "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
+    "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -1388,6 +1391,16 @@ wordReplace = {
     "COLPOLY_SURFACE_SAND": "SURFACE_MATERIAL_SAND",
     "COLPOLY_SURFACE_SNOW": "SURFACE_MATERIAL_SNOW",
     "CS_STATE_0": "CS_STATE_IDLE",
+
+    "TEXT_STATE_1": "TEXT_STATE_NEXT",
+    "TEXT_STATE_3": "TEXT_STATE_FADING",
+    "TEXT_STATE_5": "TEXT_STATE_EVENT",
+    "TEXT_STATE_7": "TEXT_STATE_SONG_DEMO_DONE",
+    "TEXT_STATE_10": "TEXT_STATE_AWAITING_NEXT",
+    "TEXT_STATE_14": "TEXT_STATE_INPUT_RUPEES",
+    "TEXT_STATE_15": "TEXT_STATE_INPUT_BOMBER_CODE",
+    "TEXT_STATE_16": "TEXT_STATE_PAUSE_MENU",
+    "TEXT_STATE_17": "TEXT_STATE_INPUT_LOTTERY_CODE",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
