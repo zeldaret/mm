@@ -2480,7 +2480,7 @@ void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this) {
 }
 
 typedef struct {
-    /* 0x0 */ s32 colliderIndex;
+    /* 0x0 */ GohtColliderBodyPart colliderIndex;
     /* 0x4 */ u32 limbHideFlags;
 } ExplosionLimbHideInfo; // size = 0x8
 
@@ -2891,9 +2891,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) {
         angleStep =
             BINANG_TO_RAD(Math3D_Vec3fDistSq(firstBallPos, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
-        if (angleStep > M_PI / 4.0f) {
-            angleStep = M_PI / 4.0f;
-        }
+        angleStep = CLAMP_MAX(angleStep, M_PI / 4.0f);
 
         Math_Vec3f_Diff(&player->actor.world.pos, firstBallPos, &targetRot);
 
