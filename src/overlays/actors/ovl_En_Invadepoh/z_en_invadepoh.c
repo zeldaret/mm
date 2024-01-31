@@ -31,6 +31,12 @@ typedef enum EnInvadepohEventState {
     /* 4 */ ENINVADEPOH_EVENT_FAILED
 } EnInvadepohEventState;
 
+typedef enum EnInvadepohFaceAnimationType {
+    /* 0 */ ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED,
+    /* 1 */ ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED,
+    /* 2 */ ENINVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED
+} EnInvadepohFaceAnimationType;
+
 void EnInvadepoh_Init(Actor* thisx, PlayState* play);
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play);
 void EnInvadepoh_Event_Update(Actor* thisx, PlayState* play2);
@@ -245,26 +251,74 @@ Vec3f sLightBallSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
 s32 sEventState = ENINVADEPOH_EVENT_UNSET;
 
-TexturePtr sRomaniEyeTextures[] = {
-    gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
+typedef enum RomaniEyeTexture {
+    /* 0 */ ROMANI_EYE_OPEN,
+    /* 1 */ ROMANI_EYE_HALF,
+    /* 2 */ ROMANI_EYE_CLOSED,
+    /* 3 */ ROMANI_EYE_HAPPY,
+    /* 4 */ ROMANI_EYE_SAD,
+    /* 5 */ ROMANI_EYE_MAX
+} RomaniEyeTexture;
+
+TexturePtr sRomaniEyeTextures[ROMANI_EYE_MAX] = {
+    gRomaniEyeOpenTex,   // ROMANI_EYE_OPEN
+    gRomaniEyeHalfTex,   // ROMANI_EYE_HALF
+    gRomaniEyeClosedTex, // ROMANI_EYE_CLOSED
+    gRomaniEyeHappyTex,  // ROMANI_EYE_HAPPY
+    gRomaniEyeSadTex,    // ROMANI_EYE_SAD
 };
-TexturePtr sRomaniMouthTextures[] = {
-    gRomaniMouthHappyTex,
-    gRomaniMouthFrownTex,
-    gRomaniMouthHangingOpenTex,
-    gRomaniMouthSmileTex,
+
+typedef enum RomaniMouthTexture {
+    /* 0 */ ROMANI_MOUTH_HAPPY,
+    /* 1 */ ROMANI_MOUTH_FROWN,
+    /* 2 */ ROMANI_MOUTH_HANGING_OPEN,
+    /* 3 */ ROMANI_MOUTH_SMILE,
+    /* 4 */ ROMANI_MOUTH_MAX
+} RomaniMouthTexture;
+
+TexturePtr sRomaniMouthTextures[ROMANI_MOUTH_MAX] = {
+    gRomaniMouthHappyTex,       // ROMANI_MOUTH_HAPPY
+    gRomaniMouthFrownTex,       // ROMANI_MOUTH_FROWN
+    gRomaniMouthHangingOpenTex, // ROMANI_MOUTH_HANGING_OPEN
+    gRomaniMouthSmileTex,       // ROMANI_MOUTH_SMILE
 };
+
 s8 sRomaniTexturesDesegmented = false;
 
-TexturePtr sCremiaEyeTextures[] = {
-    gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
+typedef enum CremiaEyeTexture {
+    /* 0 */ CREMIA_EYE_OPEN,
+    /* 1 */ CREMIA_EYE_HALF,
+    /* 2 */ CREMIA_EYE_CLOSED,
+    /* 3 */ CREMIA_EYE_HAPPY,
+    /* 4 */ CREMIA_EYE_ANGRY,
+    /* 5 */ CREMIA_EYE_SAD,
+    /* 6 */ CREMIA_EYE_MAX
+} CremiaEyeTexture;
+
+TexturePtr sCremiaEyeTextures[CREMIA_EYE_MAX] = {
+    gCremiaEyeOpenTex,   // CREMIA_EYE_OPEN
+    gCremiaEyeHalfTex,   // CREMIA_EYE_HALF
+    gCremiaEyeClosedTex, // CREMIA_EYE_CLOSED
+    gCremiaEyeHappyTex,  // CREMIA_EYE_HAPPY
+    gCremiaEyeAngryTex,  // CREMIA_EYE_ANGRY
+    gCremiaEyeSadTex,    // CREMIA_EYE_SAD
 };
-TexturePtr sCremiaMouthTextures[] = {
-    gCremiaMouthNormalTex,
-    gCremiaMouthSlightSmileTex,
-    gCremiaMouthFrownTex,
-    gCremiaMouthHangingOpenTex,
+
+typedef enum CremiaMouthTexture {
+    /* 0 */ CREMIA_MOUTH_NORMAL,
+    /* 1 */ CREMIA_MOUTH_SLIGHT_SMILE,
+    /* 2 */ CREMIA_MOUTH_FROWN,
+    /* 3 */ CREMIA_MOUTH_HANGING_OPEN,
+    /* 4 */ CREMIA_MOUTH_MAX
+} CremiaMouthTexture;
+
+TexturePtr sCremiaMouthTextures[CREMIA_MOUTH_MAX] = {
+    gCremiaMouthNormalTex,      // CREMIA_MOUTH_NORMAL
+    gCremiaMouthSlightSmileTex, // CREMIA_MOUTH_SLIGHT_SMILE
+    gCremiaMouthFrownTex,       // CREMIA_MOUTH_FROWN
+    gCremiaMouthHangingOpenTex, // CREMIA_MOUTH_HANGING_OPEN
 };
+
 s8 sCremiaTexturesDesegmented = false;
 
 s8 sRewardFinished = false;
@@ -1093,7 +1147,7 @@ void EnInvadepoh_Interact_SetNextAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvad
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
     faceInfo->curIndex = faceAnim->frames->texIndex[0];
-    if (faceInfo->curAnimType == 2) {
+    if (faceInfo->curAnimType == ENINVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED) {
         EnInvadepohFaceAnimDelayedBranched* faceDelayedLoopAnim = (EnInvadepohFaceAnimDelayedBranched*)faceAnim;
 
         faceInfo->delayTimer = Rand_S16Offset(faceDelayedLoopAnim->minDelay, faceDelayedLoopAnim->maxDelay);
@@ -1142,90 +1196,162 @@ void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadePohFaceAnimInfo* fac
     }
 }
 
-s8 D_80B4E99C[1] = { 0 };
-s8 D_80B4E9A0[4] = { 0, 1, 2, 0 };
-s8 D_80B4E9A4[5] = { 0, 1, 2, 1, 0 };
-s8 D_80B4E9AC[6] = { 0, 1, 2, 2, 1, 0 };
-s8 D_80B4E9B4[8] = { 0, 1, 2, 1, 0, 1, 2, 0 };
-s8 D_80B4E9BC[1] = { 1 };
-s8 D_80B4E9C0[1] = { 3 };
-EnInvadepohFaceFrames D_80B4E9C4 = { D_80B4E99C, 1 };
-EnInvadepohFaceFrames D_80B4E9CC = { D_80B4E9A0, 4 };
-EnInvadepohFaceFrames D_80B4E9D4 = { D_80B4E9A4, 5 };
-EnInvadepohFaceFrames D_80B4E9DC = { D_80B4E9AC, 6 };
-EnInvadepohFaceFrames D_80B4E9E4 = { D_80B4E9B4, 8 };
-EnInvadepohFaceFrames D_80B4E9EC = { D_80B4E9BC, 1 };
-EnInvadepohFaceFrames D_80B4E9F4 = { D_80B4E9C0, 1 };
-EnInvadepohFaceAnim D_80B4E9FC = { 0, &D_80B4E9C4 };
+typedef enum RomaniEyeAnimation {
+    /* 0 */ ROMANI_EYE_ANIMATION_0,
+    /* 1 */ ROMANI_EYE_ANIMATION_1,
+    /* 2 */ ROMANI_EYE_ANIMATION_2,
+    /* 3 */ ROMANI_EYE_ANIMATION_3,
+    /* 4 */ ROMANI_EYE_ANIMATION_4,
+    /* 5 */ ROMANI_EYE_ANIMATION_5,
+    /* 6 */ ROMANI_EYE_ANIMATION_6,
+    /* 7 */ ROMANI_EYE_ANIMATION_7,
+    /* 8 */ ROMANI_EYE_ANIMATION_MAX
+} RomaniEyeAnimation;
+
+s8 D_80B4E99C[1] = { ROMANI_EYE_OPEN };
+s8 D_80B4E9A0[4] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
+s8 D_80B4E9A4[5] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN };
+s8 D_80B4E9AC[6] = { ROMANI_EYE_OPEN,   ROMANI_EYE_HALF, ROMANI_EYE_CLOSED,
+                     ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN };
+s8 D_80B4E9B4[8] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
+                     ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
+s8 D_80B4E9BC[1] = { ROMANI_EYE_HALF };
+s8 D_80B4E9C0[1] = { ROMANI_EYE_HAPPY };
+EnInvadepohFaceFrames D_80B4E9C4 = { D_80B4E99C, ARRAY_COUNT(D_80B4E99C) };
+EnInvadepohFaceFrames D_80B4E9CC = { D_80B4E9A0, ARRAY_COUNT(D_80B4E9A0) };
+EnInvadepohFaceFrames D_80B4E9D4 = { D_80B4E9A4, ARRAY_COUNT(D_80B4E9A4) };
+EnInvadepohFaceFrames D_80B4E9DC = { D_80B4E9AC, ARRAY_COUNT(D_80B4E9AC) };
+EnInvadepohFaceFrames D_80B4E9E4 = { D_80B4E9B4, ARRAY_COUNT(D_80B4E9B4) };
+EnInvadepohFaceFrames D_80B4E9EC = { D_80B4E9BC, ARRAY_COUNT(D_80B4E9BC) };
+EnInvadepohFaceFrames D_80B4E9F4 = { D_80B4E9C0, ARRAY_COUNT(D_80B4E9C0) };
+EnInvadepohFaceAnim D_80B4E9FC = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9C4 };
 EnInvadepohFaceAnimNext D_80B4EA04[4] = {
-    { 2, 0.5f },
-    { 3, 0.9f },
-    { 4, 0.97f },
-    { 5, 1.0f },
+    { ROMANI_EYE_ANIMATION_2, 0.5f },
+    { ROMANI_EYE_ANIMATION_3, 0.9f },
+    { ROMANI_EYE_ANIMATION_4, 0.97f },
+    { ROMANI_EYE_ANIMATION_5, 1.0f },
 };
-EnInvadepohFaceAnimNext D_80B4EA24[1] = { 1, 1.0f };
-EnInvadepohFaceAnimDelayedBranched D_80B4EA2C = { { { 2, &D_80B4E9C4 }, 4, D_80B4EA04 }, 40, 60 };
-EnInvadepohFaceAnimBranched D_80B4EA40 = { { 1, &D_80B4E9CC }, 1, D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA50 = { { 1, &D_80B4E9D4 }, 1, D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA60 = { { 1, &D_80B4E9DC }, 1, D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA70 = { { 1, &D_80B4E9E4 }, 1, D_80B4EA24 };
-EnInvadepohFaceAnim D_80B4EA80 = { 0, &D_80B4E9EC };
-EnInvadepohFaceAnim D_80B4EA88 = { 0, &D_80B4E9F4 };
-EnInvadepohFaceAnim* D_80B4EA90[8] = {
-    &D_80B4E9FC,      &D_80B4EA2C.loop.anim, &D_80B4EA40.anim, &D_80B4EA50.anim,
-    &D_80B4EA60.anim, &D_80B4EA70.anim,      &D_80B4EA80,      &D_80B4EA88,
+EnInvadepohFaceAnimNext D_80B4EA24[1] = { ROMANI_EYE_ANIMATION_1, 1.0f };
+EnInvadepohFaceAnimDelayedBranched D_80B4EA2C = {
+    { { ENINVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4E9C4 }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04 }, 40, 60
 };
-
-s8 D_80B4EAB0[1] = { 0 };
-s8 D_80B4EAB4[1] = { 1 };
-s8 D_80B4EAB8[1] = { 2 };
-s8 D_80B4EABC[1] = { 3 };
-EnInvadepohFaceFrames D_80B4EAC0 = { D_80B4EAB0, 1 };
-EnInvadepohFaceFrames D_80B4EAC8 = { D_80B4EAB4, 1 };
-EnInvadepohFaceFrames D_80B4EAD0 = { D_80B4EAB8, 1 };
-EnInvadepohFaceFrames D_80B4EAD8 = { D_80B4EABC, 1 };
-EnInvadepohFaceAnim D_80B4EAE0 = { 0, &D_80B4EAC0 };
-EnInvadepohFaceAnim D_80B4EAE8 = { 0, &D_80B4EAC8 };
-EnInvadepohFaceAnim D_80B4EAF0 = { 0, &D_80B4EAD0 };
-EnInvadepohFaceAnim D_80B4EAF8 = { 0, &D_80B4EAD8 };
-EnInvadepohFaceAnim* D_80B4EB00[4] = {
-    &D_80B4EAE0,
-    &D_80B4EAE8,
-    &D_80B4EAF0,
-    &D_80B4EAF8,
+EnInvadepohFaceAnimBranched D_80B4EA40 = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9CC },
+                                           ARRAY_COUNT(D_80B4EA24),
+                                           D_80B4EA24 };
+EnInvadepohFaceAnimBranched D_80B4EA50 = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9D4 },
+                                           ARRAY_COUNT(D_80B4EA24),
+                                           D_80B4EA24 };
+EnInvadepohFaceAnimBranched D_80B4EA60 = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9DC },
+                                           ARRAY_COUNT(D_80B4EA24),
+                                           D_80B4EA24 };
+EnInvadepohFaceAnimBranched D_80B4EA70 = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9E4 },
+                                           ARRAY_COUNT(D_80B4EA24),
+                                           D_80B4EA24 };
+EnInvadepohFaceAnim D_80B4EA80 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9EC };
+EnInvadepohFaceAnim D_80B4EA88 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9F4 };
+EnInvadepohFaceAnim* D_80B4EA90[ROMANI_EYE_ANIMATION_MAX] = {
+    &D_80B4E9FC,           // ROMANI_EYE_ANIMATION_0
+    &D_80B4EA2C.loop.anim, // ROMANI_EYE_ANIMATION_1
+    &D_80B4EA40.anim,      // ROMANI_EYE_ANIMATION_2
+    &D_80B4EA50.anim,      // ROMANI_EYE_ANIMATION_3
+    &D_80B4EA60.anim,      // ROMANI_EYE_ANIMATION_4
+    &D_80B4EA70.anim,      // ROMANI_EYE_ANIMATION_5
+    &D_80B4EA80,           // ROMANI_EYE_ANIMATION_6
+    &D_80B4EA88,           // ROMANI_EYE_ANIMATION_7
 };
 
-s8 D_80B4EB10[1] = { 0 };
-s8 D_80B4EB14[4] = { 0, 1, 2, 0 };
-s8 D_80B4EB18[5] = { 0, 1, 2, 1, 0 };
-s8 D_80B4EB20[6] = { 0, 1, 2, 2, 1, 0 };
-s8 D_80B4EB28[8] = { 0, 1, 2, 1, 0, 1, 2, 0 };
-EnInvadepohFaceFrames D_80B4EB30 = { D_80B4EB10, 1 };
-EnInvadepohFaceFrames D_80B4EB38 = { D_80B4EB14, 4 };
-EnInvadepohFaceFrames D_80B4EB40 = { D_80B4EB18, 5 };
-EnInvadepohFaceFrames D_80B4EB48 = { D_80B4EB20, 6 };
-EnInvadepohFaceFrames D_80B4EB50 = { D_80B4EB28, 8 };
-EnInvadepohFaceAnim D_80B4EB58 = { 0, &D_80B4EB30 };
+typedef enum RomaniMouthAnimation {
+    /* 0 */ ROMANI_MOUTH_ANIMATION_0,
+    /* 1 */ ROMANI_MOUTH_ANIMATION_1,
+    /* 2 */ ROMANI_MOUTH_ANIMATION_2,
+    /* 3 */ ROMANI_MOUTH_ANIMATION_3,
+    /* 4 */ ROMANI_MOUTH_ANIMATION_MAX
+} RomaniMouthAnimation;
+
+s8 D_80B4EAB0[1] = { ROMANI_MOUTH_HAPPY };
+s8 D_80B4EAB4[1] = { ROMANI_MOUTH_FROWN };
+s8 D_80B4EAB8[1] = { ROMANI_MOUTH_HANGING_OPEN };
+s8 D_80B4EABC[1] = { ROMANI_MOUTH_SMILE };
+EnInvadepohFaceFrames D_80B4EAC0 = { D_80B4EAB0, ARRAY_COUNT(D_80B4EAB0) };
+EnInvadepohFaceFrames D_80B4EAC8 = { D_80B4EAB4, ARRAY_COUNT(D_80B4EAB4) };
+EnInvadepohFaceFrames D_80B4EAD0 = { D_80B4EAB8, ARRAY_COUNT(D_80B4EAB8) };
+EnInvadepohFaceFrames D_80B4EAD8 = { D_80B4EABC, ARRAY_COUNT(D_80B4EABC) };
+EnInvadepohFaceAnim D_80B4EAE0 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC0 };
+EnInvadepohFaceAnim D_80B4EAE8 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC8 };
+EnInvadepohFaceAnim D_80B4EAF0 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD0 };
+EnInvadepohFaceAnim D_80B4EAF8 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD8 };
+EnInvadepohFaceAnim* D_80B4EB00[ROMANI_MOUTH_ANIMATION_MAX] = {
+    &D_80B4EAE0, // ROMANI_MOUTH_ANIMATION_0
+    &D_80B4EAE8, // ROMANI_MOUTH_ANIMATION_1
+    &D_80B4EAF0, // ROMANI_MOUTH_ANIMATION_2
+    &D_80B4EAF8, // ROMANI_MOUTH_ANIMATION_3
+};
+
+typedef enum CremiaEyeAnimation {
+    /* 0 */ CREMIA_EYE_ANIMATION_0,
+    /* 1 */ CREMIA_EYE_ANIMATION_1,
+    /* 2 */ CREMIA_EYE_ANIMATION_2,
+    /* 3 */ CREMIA_EYE_ANIMATION_3,
+    /* 4 */ CREMIA_EYE_ANIMATION_4,
+    /* 5 */ CREMIA_EYE_ANIMATION_5,
+    /* 6 */ CREMIA_EYE_ANIMATION_MAX
+} CremiaEyeAnimation;
+
+s8 D_80B4EB10[1] = { CREMIA_EYE_OPEN };
+s8 D_80B4EB14[4] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
+s8 D_80B4EB18[5] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN };
+s8 D_80B4EB20[6] = { CREMIA_EYE_OPEN,   CREMIA_EYE_HALF, CREMIA_EYE_CLOSED,
+                     CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN };
+s8 D_80B4EB28[8] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
+                     CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
+EnInvadepohFaceFrames D_80B4EB30 = { D_80B4EB10, ARRAY_COUNT(D_80B4EB10) };
+EnInvadepohFaceFrames D_80B4EB38 = { D_80B4EB14, ARRAY_COUNT(D_80B4EB14) };
+EnInvadepohFaceFrames D_80B4EB40 = { D_80B4EB18, ARRAY_COUNT(D_80B4EB18) };
+EnInvadepohFaceFrames D_80B4EB48 = { D_80B4EB20, ARRAY_COUNT(D_80B4EB20) };
+EnInvadepohFaceFrames D_80B4EB50 = { D_80B4EB28, ARRAY_COUNT(D_80B4EB28) };
+EnInvadepohFaceAnim D_80B4EB58 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EB30 };
 EnInvadepohFaceAnimNext D_80B4EB60[4] = {
-    { 2, 0.5f },
-    { 3, 0.9f },
-    { 4, 0.95f },
-    { 5, 1.0f },
+    { CREMIA_EYE_ANIMATION_2, 0.5f },
+    { CREMIA_EYE_ANIMATION_3, 0.9f },
+    { CREMIA_EYE_ANIMATION_4, 0.95f },
+    { CREMIA_EYE_ANIMATION_5, 1.0f },
 };
-EnInvadepohFaceAnimNext D_80B4EB80[1] = { 1, 1.0f };
-EnInvadepohFaceAnimDelayedBranched D_80B4EB88 = { { { 2, &D_80B4EB30 }, 4, D_80B4EB60 }, 40, 60 };
-EnInvadepohFaceAnimBranched D_80B4EB9C = { { 1, &D_80B4EB38 }, 1, D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBAC = { { 1, &D_80B4EB40 }, 1, D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBBC = { { 1, &D_80B4EB48 }, 1, D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBCC = { { 1, &D_80B4EB50 }, 1, D_80B4EB80 };
-EnInvadepohFaceAnim* D_80B4EBDC[6] = {
-    &D_80B4EB58, &D_80B4EB88.loop.anim, &D_80B4EB9C.anim, &D_80B4EBAC.anim, &D_80B4EBBC.anim, &D_80B4EBCC.anim,
+EnInvadepohFaceAnimNext D_80B4EB80[1] = { CREMIA_EYE_ANIMATION_1, 1.0f };
+EnInvadepohFaceAnimDelayedBranched D_80B4EB88 = {
+    { { ENINVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4EB30 }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60 }, 40, 60
+};
+EnInvadepohFaceAnimBranched D_80B4EB9C = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB38 },
+                                           ARRAY_COUNT(D_80B4EB80),
+                                           D_80B4EB80 };
+EnInvadepohFaceAnimBranched D_80B4EBAC = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB40 },
+                                           ARRAY_COUNT(D_80B4EB80),
+                                           D_80B4EB80 };
+EnInvadepohFaceAnimBranched D_80B4EBBC = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB48 },
+                                           ARRAY_COUNT(D_80B4EB80),
+                                           D_80B4EB80 };
+EnInvadepohFaceAnimBranched D_80B4EBCC = { { ENINVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB50 },
+                                           ARRAY_COUNT(D_80B4EB80),
+                                           D_80B4EB80 };
+EnInvadepohFaceAnim* D_80B4EBDC[CREMIA_EYE_ANIMATION_MAX] = {
+    &D_80B4EB58,           // CREMIA_EYE_ANIMATION_0
+    &D_80B4EB88.loop.anim, // CREMIA_EYE_ANIMATION_1
+    &D_80B4EB9C.anim,      // CREMIA_EYE_ANIMATION_2
+    &D_80B4EBAC.anim,      // CREMIA_EYE_ANIMATION_3
+    &D_80B4EBBC.anim,      // CREMIA_EYE_ANIMATION_4
+    &D_80B4EBCC.anim,      // CREMIA_EYE_ANIMATION_5
 };
 
-s8 D_80B4EBF4[1] = { 0 };
-EnInvadepohFaceFrames D_80B4EBF8 = { D_80B4EBF4, 1 };
-EnInvadepohFaceAnim D_80B4EC00 = { 0, &D_80B4EBF8 };
-EnInvadepohFaceAnim* D_80B4EC08[1] = { &D_80B4EC00 };
+typedef enum CremiaMouthAnimation {
+    /* 0 */ CREMIA_MOUTH_ANIMATION_0,
+    /* 1 */ CREMIA_MOUTH_ANIMATION_MAX
+} CremiaMouthAnimation;
+
+s8 D_80B4EBF4[1] = { CREMIA_MOUTH_NORMAL };
+EnInvadepohFaceFrames D_80B4EBF8 = { D_80B4EBF4, ARRAY_COUNT(D_80B4EBF4) };
+EnInvadepohFaceAnim D_80B4EC00 = { ENINVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EBF8 };
+EnInvadepohFaceAnim* D_80B4EC08[CREMIA_MOUTH_ANIMATION_MAX] = {
+    &D_80B4EC00, // CREMIA_MOUTH_ANIMATION_0
+};
 
 void EnInvadepoh_Interact_UpdateAnimation(EnInvadePohFaceAnimInfo* faceInfo) {
     static EnInvadepohFaceFunc sFaceUpdateFuncs[3] = {
@@ -2432,8 +2558,8 @@ void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.update = EnInvadepoh_AbductedRomani_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 0x1388, 0.05f, 0.3f,
-                                  0.12f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_6, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_2, &gZeroVec3s, 0x1388, 0.05f, 0.3f, 0.12f);
         Animation_PlayLoop(&this->skelAnime, &gRomaniIdleAnim);
         EnInvadepoh_AbductedRomani_SetupWait(this);
     }
@@ -2641,8 +2767,8 @@ void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.textId = 0x3330;
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_6, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_2, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_ConfusedRomani_SetupPath(this, play);
         EnInvadepoh_SetPosToPathPoint(this, 0);
         func_800B4AEC(play, &this->actor, 50.0f);
@@ -3013,8 +3139,8 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 0x64, 0.03f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_Night1Romani_SetupPath(this, play);
         EnInvadepoh_Night1Romani_SetProgress(this);
         EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
@@ -3252,8 +3378,8 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_BarnRomani_SetupPath(this, play2);
 
         if ((currentTime < CLOCK_TIME(2, 15)) || (currentTime >= CLOCK_TIME(6, 00))) {
@@ -3433,8 +3559,8 @@ void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
         Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f, 0.03f);
         interactInfo->scaledTurnRate = 0.08f;
         interactInfo->maxTurnRate = 0x7D0;
         func_800B4AEC(play, &this->actor, 50.0f);
@@ -3818,8 +3944,8 @@ void EnInvadepoh_Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Cremia_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->jointTable, this->morphTable,
                            CREMIA_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EBDC, CREMIA_EYE_ANIMATION_1, D_80B4EC08,
+                                  CREMIA_MOUTH_ANIMATION_0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
 
         if (currentTime < CLOCK_TIME(20, 01) + 30) {
@@ -4024,8 +4150,8 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Romani_DesegmentTextures();
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
-        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f,
-                                  0.03f);
+        EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
+                                  ROMANI_MOUTH_ANIMATION_3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_Night3Romani_SetupPath(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         EnInvadepoh_Night3Romani_SetProgress(this);
