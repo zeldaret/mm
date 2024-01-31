@@ -35,7 +35,9 @@
 #include "irqmgr.h"
 
 #include "libc/stdbool.h"
+
 #include "macros.h"
+#include "scheduler.h"
 #include "stackcheck.h"
 #include "z64thread.h"
 
@@ -145,7 +147,7 @@ void IrqMgr_HandlePreNMI(IrqMgr* irqMgr) {
     sIrqMgrResetTime = irqMgr->resetTime = osGetTime();
 
     // Wait .45 seconds then generate a stage 2 prenmi interrupt
-    osSetTimer(&irqMgr->timer, OS_MSEC_TO_CYCLES(450), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI450_MSG);
+    osSetTimer(&irqMgr->timer, OS_USEC_TO_CYCLES(450 * 1000), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI450_MSG);
 
     IrqMgr_JamMesgToClients(irqMgr, (OSMesg)&irqMgr->prenmiMsg);
 }
@@ -159,14 +161,14 @@ void IrqMgr_HandlePRENMI450(IrqMgr* irqMgr) {
     irqMgr->resetStatus = IRQ_RESET_STATUS_NMI;
 
     // Wait .03 seconds then generate a stage 3 prenmi interrupt
-    osSetTimer(&irqMgr->timer, OS_MSEC_TO_CYCLES(30), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI480_MSG);
+    osSetTimer(&irqMgr->timer, OS_USEC_TO_CYCLES(30 * 1000), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI480_MSG);
 
     IrqMgr_SendMesgToClients(irqMgr, (OSMesg)&irqMgr->nmiMsg);
 }
 
 void IrqMgr_HandlePRENMI480(IrqMgr* irqMgr) {
     // Wait .52 seconds. After this we will have waited an entire second
-    osSetTimer(&irqMgr->timer, OS_MSEC_TO_CYCLES(520), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI500_MSG);
+    osSetTimer(&irqMgr->timer, OS_USEC_TO_CYCLES(520 * 1000), 0, &irqMgr->queue, (OSMesg)IRQ_PRENMI500_MSG);
 
     osAfterPreNMI();
 }

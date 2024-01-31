@@ -13,12 +13,13 @@ struct Dummy208 { int x; };
 struct Dummy209 { int x; };
 struct Dummy210 { int x; };
 struct Dummy211 { int x; };
-typedef int Dummmy212;
+struct Dummy212 { int x; };
+struct Dummy213 { int x; };
 // clang-format on
 
 #include "z64math.h"
+
 #include "libc/stdbool.h"
-#include "libc/math.h"
 #include "PR/gu.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))

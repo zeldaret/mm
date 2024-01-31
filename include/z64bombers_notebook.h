@@ -4,6 +4,8 @@
 #include "ultra64.h"
 #include "z64dma.h"
 
+struct GraphicsContext;
+struct Input;
 struct PlayState;
 
 #define DEFINE_PERSON(enum, _photo, _description, _metEnum, _metMessage, _metFlag) enum,
@@ -52,7 +54,7 @@ typedef struct {
 } BombersNotebook; // size = 0xAC
 
 void BombersNotebook_Draw(BombersNotebook* this, struct GraphicsContext* gfxCtx);
-void BombersNotebook_Update(struct PlayState* play, BombersNotebook* this, Input* input);
+void BombersNotebook_Update(struct PlayState* play, BombersNotebook* this, struct Input* input);
 void BombersNotebook_Init(BombersNotebook* this);
 void BombersNotebook_Destroy(BombersNotebook* this);
 

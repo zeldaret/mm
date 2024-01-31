@@ -184,7 +184,7 @@ beginseg
     include "build/src/libultra/io/visetspecial.o"
     include "build/src/libultra/gu/coss.o"
     include "build/src/libultra/os/settime.o"
-    include "build/src/libultra/voice/voicestopread.o"
+    include "build/src/libultra/voice/voicestopreaddata.o"
     include "build/src/libultra/io/visetevent.o"
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"

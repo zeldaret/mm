@@ -362,7 +362,7 @@ void ViMode_Update(ViMode* viMode, Input* input) {
             }
         }
 
-        ViMode_Configure(&viMode->customViMode, OS_VI_UNK28, osTvType, viMode->loRes, viMode->antialiasOff,
+        ViMode_Configure(&viMode->customViMode, OS_VI_MPAL_LPN1, osTvType, viMode->loRes, viMode->antialiasOff,
                          viMode->modeN, viMode->fb16Bit, viMode->viWidth, viMode->viHeight, viMode->leftAdjust,
                          viMode->rightAdjust, viMode->upperAdjust, viMode->lowerAdjust);
         ViMode_ConfigureFeatures(viMode, viMode->viFeatures);
