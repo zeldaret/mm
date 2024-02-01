@@ -96,7 +96,7 @@ cd mm
 
 Place a copy of the US ROM inside the `baseroms/n64-us/` folder.
 
-Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension..
+Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension.
 
 #### 4. Make and Build the ROM
 
@@ -106,9 +106,18 @@ To start the extraction/build process, run the following command:
 make init
 ```
 
-This downloads some dependencies (from pip), and compiles tools for the build process, extracts all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
+The extraction/build process process:
+1. Fetches dependencies: Downloads necessary tools from pip.
+2. Prepares build environment: Compiles tools for the build process.
+3. Extracts ROM contents:
+    - Creates a baserom folder to house individual files extracted from the ROM.
+    - Decompresses compressed files into a decomp folder.
+4. Disassembles code:
+    - Creates folders for the build process.
+    - Generates a folder containing ASM files and disassemblies of most code-containing files.
+5. Builds the ROM
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm-n64-us.z64" and compressed ROM called "mm-n64-us-compressed.z64", both located in `build/n64-us/`, should be built and the following text printed:
+If all goes well, a new ROM should be built at `build/n64-us/mm-n64-us.z64`, a compressed version built at `build/n64-us/mm-n64-us-compressed.z64`, and the following text printed:
 
 ```bash
 build/n64-us/mm-n64-us.z64: OK
