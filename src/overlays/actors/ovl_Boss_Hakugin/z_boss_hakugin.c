@@ -660,21 +660,21 @@ s32 BossHakugin_Vec3fNormalize(Vec3f* vec) {
 }
 
 /**
- * The intention behind this function is to call it repeatedly to gradually rotate `vector` to match the `targetVector`.
- * Specifically, this function rotates `vector` around the axis perpendicular to both `vector` and `targetVector` (in
- * other words, it rotates around the cross product). The amount by which to rotate `vector` per call is determined by
- * `angleStep`; if rotating `vector` by this amount would cause it to overshoot the `targetVector`, then the rotation
- * will be clamped such that the `vector` will reach its target exactly.
+ * The intention behind this function is to call it repeatedly to gradually rotate `norm` to match the `targetNorm`.
+ * Specifically, this function rotates `norm` around the axis perpendicular to both `norm` and `targetNorm` (in other
+ * words, it rotates around the cross product). The amount by which to rotate `norm` per call is determined by
+ * `angleStep`; if rotating `norm` by this amount would cause it to overshoot the `targetNorm`, then the rotation will
+ * be clamped such that the `norm` will reach its target exactly.
  *
- * This function assumes that both `vector` and `targetVector` are normalized unit vectors; if non-unit vectors are
+ * This function assumes that both `norm` and `targetNorm` are normalized unit vectors; if non-unit vectors are
  * supplied, then this function will do nothing at all if the dot product of the two non-unit vectors is positive. It is
- * also possible for this function to undershoot the `targetVector` if the angle between the `vector` and the
- * `targetVector` is less than one degree; in this case, this function will return without doing any rotation.
+ * also possible for this function to undershoot the `targetNorm` if the angle between the `norm` and the `targetNorm`
+ * is less than one degree; in this case, this function will return without doing any rotation.
  */
-void BossHakugin_StepVector(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
+void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
     Vec3f crossProduct;
     Vec3f result;
-    f32 dotProduct = (vector->x * targetVector->x) + (vector->y * targetVector->y) + (vector->z * targetVector->z);
+    f32 dotProduct = (norm->x * targetNorm->x) + (norm->y * targetNorm->y) + (norm->z * targetNorm->z);
     f32 maxAngle;
 
     if (fabsf(dotProduct) < 1.0f) {
@@ -692,12 +692,12 @@ void BossHakugin_StepVector(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
         return;
     }
 
-    Math3D_CrossProduct(vector, targetVector, &crossProduct);
+    Math3D_CrossProduct(norm, targetNorm, &crossProduct);
 
     if (BossHakugin_Vec3fNormalize(&crossProduct)) {
         Matrix_RotateAxisF(angleStep, &crossProduct, MTXMODE_NEW);
-        Matrix_MultVec3f(vector, &result);
-        Math_Vec3f_Copy(vector, &result);
+        Matrix_MultVec3f(norm, &result);
+        Math_Vec3f_Copy(norm, &result);
     }
 }
 
