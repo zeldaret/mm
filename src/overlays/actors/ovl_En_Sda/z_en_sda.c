@@ -123,6 +123,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
     Vec3f sp7C;
 
     for (i = 0; i < 16; i++) {
+        // TODO: match with a continue
         if ((arg2 == 0.0f) || ((j = D_80947ACC[i]) >= 0)) {
             if (arg2 > 0.0f) {
                 lerp.x = D_80947EA0[i].x + (D_80947EA0[j].x - D_80947EA0[i].x) * arg2;

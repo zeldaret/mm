@@ -3017,6 +3017,7 @@ void Boss01_FillShadowTex(Boss01* this, u8* tex, f32 weight) {
     Vec3f startVec;
 
     for (i = 0; i < ODOLWA_BODYPART_MAX; i++) {
+        // TODO: match with a continue
         if ((weight == 0.0f) || (y = sParentShadowBodyParts[i]) > BODYPART_NONE) {
             if (weight > 0.0f) {
                 VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[y], weight);

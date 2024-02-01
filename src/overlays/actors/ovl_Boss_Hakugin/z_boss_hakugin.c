@@ -3577,6 +3577,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
     Vec3f startVec;
 
     for (i = 0; i < GOHT_BODYPART_MAX; i++) {
+        // TODO: match with a continue
         if ((weight == 0.0f) || (y = sParentShadowBodyParts[i]) > BODYPART_NONE) {
             bodyPartPos = &this->bodyPartsPos[i];
             if (weight > 0.0f) {
