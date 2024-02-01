@@ -29,8 +29,8 @@ The only version currently supported is N64 US, but we intend to eventually supp
 
 It currently builds the following ROM and compressed ROM:
 
-* mm-us.z64 `md5: f46493eaa0628827dbd6ad3ecd8d65d6`
-* mm-us-compressed.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
+* mm-n64-us.z64 `md5: f46493eaa0628827dbd6ad3ecd8d65d6`
+* mm-n64-us-compressed.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
@@ -94,7 +94,7 @@ cd mm
 
 #### 3. Prepare a base ROM
 
-Place a copy of the US ROM inside the `baseroms/us/` folder.
+Place a copy of the US ROM inside the `baseroms/n64-us/` folder.
 
 Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension..
 
@@ -108,25 +108,25 @@ make init
 
 This downloads some dependencies (from pip), and compiles tools for the build process, extracts all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm-us.z64" and compressed ROM called "mm-us-compressed.z64", both located in `build/us`, should be built and the following text printed:
+This make target will also build the ROM. If all goes well, a new ROM called "mm-n64-us.z64" and compressed ROM called "mm-n64-us-compressed.z64", both located in `build/n64-us/`, should be built and the following text printed:
 
 ```bash
-build/us/mm-us.z64: OK
+build/n64-us/mm-n64-us.z64: OK
 ```
 and
 ```bash
-build/us/mm-us-compressed.z64: OK
+build/n64-us/mm-n64-us-compressed.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-build/us/mm-us.z64: FAILED
+build/n64-us/mm-n64-us.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 or
 ```bash
-build/us/mm-us-compressed.z64: FAILED
+build/n64-us/mm-n64-us-compressed.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 

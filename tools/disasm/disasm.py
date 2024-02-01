@@ -1802,7 +1802,7 @@ def disassemble_makerom(section):
 
     elif section[-1]["type"] == "ipl3":
         # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"baseroms/us/segments/makerom\", 0x40, 0xFC0\n"
+        out = f"{asm_header('.text')}\n.incbin \"baseroms/n64-us/segments/makerom\", 0x40, 0xFC0\n"
 
         with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
             outfile.write(out)

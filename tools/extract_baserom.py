@@ -5,8 +5,8 @@ from multiprocessing import Pool, cpu_count
 from pathlib import Path
 
 
-ROM_FILE_PATH = Path("baseroms/us/baserom-decompressed.z64")
-SEGMENTS_PATH = Path("baseroms/us/segments")
+ROM_FILE_PATH = Path("baseroms/n64-us/baserom-decompressed.z64")
+SEGMENTS_PATH = Path("baseroms/n64-us/segments")
 FILE_TABLE_OFFSET = 0x1A500
 
 FILE_NAMES = [

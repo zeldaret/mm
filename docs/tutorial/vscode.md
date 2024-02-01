@@ -39,7 +39,7 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
 {
     "configurations": [
         {
-            "name": "N64 mm-us",
+            "name": "n64-us",
             "compilerPath": "${default}", // Needs to not be "" for -m32 to work
             "compilerArgs": [
                 "-m32" // Removes integer truncation warnings with gbi macros
@@ -49,7 +49,7 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
                 "include",
                 "src",
                 "assets",
-                "build/us",
+                "build/n64-us/",
                 "${workspaceFolder}",
             ],
             "defines": [

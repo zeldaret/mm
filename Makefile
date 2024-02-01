@@ -14,7 +14,7 @@ SHELL = /bin/bash
 
 # Target game version. Currently only the following version is supported:
 #   us   N64 USA (default)
-VERSION ?= us
+VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building

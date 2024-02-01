@@ -100,7 +100,7 @@ def extractArchive(archivePath: Path, outPath: Path):
 
 def main():
     parser = argparse.ArgumentParser(description="MM archives extractor")
-    parser.add_argument("version", help="version to process", default="us")
+    parser.add_argument("version", help="version to process", default="n64-us")
     parser.add_argument("--xml", help="Generate xml to stdout", action="store_true")
 
     args = parser.parse_args()

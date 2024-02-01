@@ -5,7 +5,7 @@ import argparse, math, os, re
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"
 asm_dir = root_dir + "asm/non_matchings/overlays/actors"
-build_dir = root_dir + "build/us/src/overlays/actors"
+build_dir = root_dir + "build/n64-us/src/overlays/actors"
 
 
 def get_num_instructions(f_path):

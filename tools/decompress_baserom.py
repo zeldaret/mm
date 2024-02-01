@@ -34,7 +34,7 @@ def decompress(data: bytes, is_zlib_compressed: bool) -> bytes:
 
 
 FILE_TABLE_OFFSET = {
-    "us": 0x1A500,
+    "n64-us": 0x1A500,
 }
 
 

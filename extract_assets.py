@@ -27,7 +27,7 @@ def ExtractFile(xmlPath, outputPath, outputSourcePath):
             generateSourceFile = "0"
             break
 
-    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b baseroms/us/segments -o {outputPath} -osf {outputSourcePath} -gsf {generateSourceFile} -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
+    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b baseroms/n64-us/segments -o {outputPath} -osf {outputSourcePath} -gsf {generateSourceFile} -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
 
     if globalUnaccounted:
         execStr += " -Wunaccounted"

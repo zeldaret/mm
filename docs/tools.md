@@ -72,7 +72,7 @@ To use `diff.py`, you need a copy of a matching build folder to diff against. In
 ./diff.py <flags> ObjTree_Init
 ```
 
-`diff.py` reads the respective `mm-us.map` file to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
+`diff.py` reads the respective `mm-n64-us.map` file to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
 
 The recommended flags used are `-mwo`, `-mwo3`, or `-mwob`:
 
@@ -118,7 +118,7 @@ Can be given a symbol (function or variable name, for example), and will find it
 
 ```bash
 $ ./sym_info.py ObjTree_Init
-Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/us/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
+Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/n64-us/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
 ```
 
 ### `extract_assets.py`

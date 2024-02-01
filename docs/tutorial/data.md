@@ -131,7 +131,7 @@ The game has a convenient system that allows it to sometimes effectively use off
 There is an obvious problem here, which is that is that these symbols have to be defined *somewhere*, or the linker will complain (indeed, if we change the ones in the array to `D_...`, even if we extern them, we get
 
 ```
-mips-linux-gnu-ld: build/us/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
+mips-linux-gnu-ld: build/n64-us/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
 ```
 
 As we'd expect, of course: we didn't fulfil our promise that they were defined elsewhere.)
