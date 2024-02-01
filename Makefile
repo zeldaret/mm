@@ -57,6 +57,7 @@ ifeq ($(DETECTED_OS), windows)
   PYTHON ?= $(VENV)/Scripts/python3
 else
   PYTHON ?= $(VENV)/bin/python3
+endif
 # Emulator w/ flags
 N64_EMULATOR ?=
 
