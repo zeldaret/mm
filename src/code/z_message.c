@@ -3,9 +3,11 @@
 
 #include "message_data_static.h"
 #include "padmgr.h"
+#include "segment_symbols.h"
 #include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
+#include "z64save.h"
 
 #include "interface/parameter_static/parameter_static.h"
 
