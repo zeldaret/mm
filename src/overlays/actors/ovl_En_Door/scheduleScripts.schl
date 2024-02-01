@@ -2,7 +2,7 @@ D_808675D0 {
     if_day (3) {
         not if_time_range (6, 0, 23, 0) {
             not if_time_range (0, 0, 6, 0) {
-                return_s (7)
+                return_s (DOOR_SCH_7)
             }
         }
     }
@@ -11,7 +11,7 @@ D_808675D0 {
 
 D_808675E4 {
     if_before_time (9, 0) {
-        return_s (9)
+        return_s (DOOR_SCH_9)
     } else if_before_time (12, 0) {
         branch (label_0x1D)
     } else {
@@ -26,14 +26,14 @@ D_808675E4 {
             } else if_before_time (0, 0) {
                 branch (label_0x1C)
             } else {
-                return_s (9)
+                return_s (DOOR_SCH_9)
             }
 
         label_0x1C:
             return_none
 
         label_0x1D:
-            return_s (8)
+            return_s (DOOR_SCH_8)
         } else if_day (2) {
             if_week_event_reg (WEEKEVENTREG_28_08) {
                 if_before_time (13, 0) {
@@ -43,10 +43,10 @@ D_808675E4 {
                 } else if_before_time (0, 0) {
                     branch (label_0x1C)
                 } else {
-                    return_s (9)
+                    return_s (DOOR_SCH_9)
                 }
             } else if_since_time (13, 0) {
-                return_s (9)
+                return_s (DOOR_SCH_9)
             } else {
                 return_none
             }
@@ -55,7 +55,7 @@ D_808675E4 {
         } else if_before_time (13, 0) {
             branch (label_0x1D)
         } else if_before_time (18, 0) {
-            return_s (9)
+            return_s (DOOR_SCH_9)
         } else {
             return_none
         }
@@ -66,13 +66,13 @@ D_80867634 {
     if_time_range (6, 0, 23, 0) {
         return_none
     } else {
-        return_s (28)
+        return_s (DOOR_SCH_28)
     }
 }
 
 D_80867640 {
     if_time_range (21, 0, 22, 0) {
-        return_s (11)
+        return_s (DOOR_SCH_11)
     } else {
         return_none
     }
@@ -80,7 +80,7 @@ D_80867640 {
 
 D_8086764C {
     not if_time_range (22, 0, 5, 0) {
-        return_s (10)
+        return_s (DOOR_SCH_10)
     } else {
         return_none
     }
@@ -89,25 +89,25 @@ D_8086764C {
 D_80867658 {
     if_day (2) {
         not if_week_event_reg (WEEKEVENTREG_28_08) {
-            return_s (12)
+            return_s (DOOR_SCH_12)
         } else if_time_range (15, 10, 22, 0) {
             return_none
         } else {
-            return_s (12)
+            return_s (DOOR_SCH_12)
         }
     }
     if_day (3) {
         if_since_time (13, 0) {
             not if_week_event_reg (WEEKEVENTREG_51_08) {
-                return_s (12)
+                return_s (DOOR_SCH_12)
             } else if_since_time (22, 0) {
-                return_s (12)
+                return_s (DOOR_SCH_12)
             } else {
                 return_none
             }
         }
     }
-    return_s (12)
+    return_s (DOOR_SCH_12)
 }
 
 D_80867684 {
@@ -116,7 +116,7 @@ D_80867684 {
 
 D_80867688 {
     if_since_time (22, 0) {
-        return_s (15)
+        return_s (DOOR_SCH_15)
     } else {
         return_none
     }
@@ -124,7 +124,7 @@ D_80867688 {
 
 D_80867690 {
     if_since_time (22, 0) {
-        return_s (16)
+        return_s (DOOR_SCH_16)
     } else {
         return_none
     }
@@ -132,7 +132,7 @@ D_80867690 {
 
 D_80867698 {
     if_since_time (22, 0) {
-        return_s (17)
+        return_s (DOOR_SCH_17)
     } else {
         return_none
     }
@@ -143,12 +143,12 @@ D_808676A0 {
         return_none
     } else if_time_range (22, 0, 5, 0) {
         if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
-            return_s (33)
+            return_s (DOOR_SCH_33)
         } else {
-            return_s (34)
+            return_s (DOOR_SCH_34)
         }
     } else {
-        return_s (18)
+        return_s (DOOR_SCH_18)
     }
 }
 
@@ -156,14 +156,14 @@ D_808676B8 {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         if_day (3) {
             if_before_time (8, 0) {
-                return_s (19)
+                return_s (DOOR_SCH_19)
             } else {
                 return_none
             }
         } else if_time_range (8, 0, 20, 30) {
             return_none
         } else {
-            return_s (19)
+            return_s (DOOR_SCH_19)
         }
     } else {
         return_none
@@ -184,12 +184,12 @@ D_808676D8 {
             return_none
         }
     }
-    return_s (20)
+    return_s (DOOR_SCH_20)
 }
 
 D_808676E4 {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
-        return_s (22)
+        return_s (DOOR_SCH_22)
     } else {
         return_none
     }
@@ -212,7 +212,7 @@ D_808676F0 {
             branch (label_0x8)
         } else {
             label_0xF:
-            return_s (21)
+            return_s (DOOR_SCH_21)
         }
     }
 }
@@ -235,7 +235,7 @@ D_80867710 {
 
 D_80867714 {
     if_since_time (20, 0) {
-        return_s (23)
+        return_s (DOOR_SCH_23)
     } else {
         return_none
     }
@@ -244,14 +244,14 @@ D_80867714 {
 D_8086771C {
     if_day (1) {
         if_since_time (2, 30) {
-            return_s (24)
+            return_s (DOOR_SCH_24)
         } else {
             label_0x0A:
             return_none
         }
     } else if_day (3) {
         if_since_time (20, 0) {
-            return_s (12)
+            return_s (DOOR_SCH_12)
         } else {
             branch (label_0x0A)
         }
@@ -262,7 +262,7 @@ D_8086771C {
 
 D_80867734 {
     if_since_time (20, 0) {
-        return_s (25)
+        return_s (DOOR_SCH_25)
     } else {
         return_none
     }
@@ -270,7 +270,7 @@ D_80867734 {
 
 D_8086773C {
     if_since_time (20, 0) {
-        return_s (26)
+        return_s (DOOR_SCH_26)
     } else {
         return_none
     }
@@ -287,7 +287,7 @@ D_80867744 {
             if_before_time (20, 0) {
                 branch (label_0x14)
             } else {
-                return_s (27)
+                return_s (DOOR_SCH_27)
             }
         }
     }
@@ -296,7 +296,7 @@ D_80867744 {
     if_before_time (18, 0) {
         branch (label_0x14)
     } else {
-        return_s (27)
+        return_s (DOOR_SCH_27)
     }
 
     label_0x14:
@@ -307,12 +307,12 @@ D_8086775C {
     not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
         not if_week_event_reg (WEEKEVENTREG_75_20) {
             not if_week_event_reg (WEEKEVENTREG_14_04) {
-                return_s (29)
+                return_s (DOOR_SCH_29)
             } else not if_week_event_reg (WEEKEVENTREG_59_01) {
                 if_week_event_reg (WEEKEVENTREG_61_02) {
-                    return_s (31)
+                    return_s (DOOR_SCH_31)
                 } else {
-                    return_s (30)
+                    return_s (DOOR_SCH_30)
                 }
             } else {
                 return_none
@@ -324,7 +324,7 @@ D_8086775C {
 }
 
 D_80867778 {
-    return_s (32)
+    return_s (DOOR_SCH_32)
 }
 
 D_8086777C{
@@ -337,7 +337,7 @@ D_80867780 {
 
 D_80867784 {
     if_since_time (22, 0) {
-        return_s (35)
+        return_s (DOOR_SCH_35)
     } else {
         return_none
     }
