@@ -26,7 +26,7 @@ typedef enum EnInvadepohType {
     /* 0x3 */ ENINVADEPOH_TYPE_COW_TAIL,        // Abducted cow tail, spawned by abducted cow   
     /* 0x4 */ ENINVADEPOH_TYPE_ROMANI_ABDUCTED, // Abducted Romani, spawned by unused alien abductor       
     /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_CONFUSED, // Returned, confused Romani   
-    /* 0x6 */ ENINVADEPOH_TYPE_LIGHT_BALL,      // Light ball spaceship   
+    /* 0x6 */ ENINVADEPOH_TYPE_UFO,             // Light ball spaceship   
     /* 0x7 */ ENINVADEPOH_TYPE_ROMANI_NIGHT_1,  // Romani running to barn on night 1
     /* 0x8 */ ENINVADEPOH_TYPE_ROMANI_BARN,     // Romani in the barn on night 1
     /* 0x9 */ ENINVADEPOH_TYPE_ROMANI_REWARD,   // Romani rewarding you for defeating invasion
@@ -184,7 +184,7 @@ typedef struct EnInvadepoh {
     /* 0x3A4 */ f32 pulseScaleRate;
     /* 0x3A8 */ s16 pulsePhase;
     /* 0x3AA */ s16 pulseRate;
-    /* 0x3AC */ s8 lightBallTarget;
+    /* 0x3AC */ s8 ufoTarget;
     /* 0x3AD */ char pad3AD[3];
     /* 0x3B0 */ char pad3B0[0xC]; // unused? Vec3f?
     /* 0x3BC */ s8 dogTargetPoint;

@@ -52,7 +52,7 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2);
-void EnInvadepoh_LightBall_Update(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_WaitForEvent(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2);
@@ -79,7 +79,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_CowTail_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Romani_Draw(Actor* thisx, PlayState* play);
-void EnInvadepoh_LightBall_Draw(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_Draw(Actor* thisx, PlayState* play);
 void EnInvadepoh_Cremia_Draw(Actor* thisx, PlayState* play);
 
@@ -124,19 +124,19 @@ void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this);
 void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_ConfusedRomani_Talk(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupDescend(EnInvadepoh* this);
-void EnInvadepoh_LightBall_Descend(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupHover(EnInvadepoh* this);
-void EnInvadepoh_LightBall_Hover(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupSpawnInvaders(EnInvadepoh* this);
-void EnInvadepoh_LightBall_SpawnInvaders(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupAboveBarn(EnInvadepoh* this);
-void EnInvadepoh_LightBall_AboveBarn(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_Circle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupFlee(EnInvadepoh* this);
-void EnInvadepoh_LightBall_Flee(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_LightBall_SetupLeaveBarn(EnInvadepoh* this);
-void EnInvadepoh_LightBall_LeaveBarn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this);
+void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this);
+void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupSpawnInvaders(EnInvadepoh* this);
+void EnInvadepoh_Ufo_SpawnInvaders(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this);
+void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupFlee(EnInvadepoh* this);
+void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupLeaveBarn(EnInvadepoh* this);
+void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play);
@@ -247,7 +247,7 @@ ColliderCylinderInit sDogCylinderInit = {
     { 13, 19, 0, { 0, 0, 0 } },
 };
 
-Vec3f sLightBallSpawnOffset = { 216.0f, -20.0f, 1395.0f };
+Vec3f sUfoSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
 s32 sEventState = ENINVADEPOH_EVENT_UNSET;
 
@@ -329,7 +329,7 @@ EnInvadepoh* sAlienInvaders[8];
 u8 sAlienStateFlags[8];
 s8 sAliensTooClose;
 EnInvadepohWarpEffect sWarpEffects[10];
-EnInvadepoh* sLightBall;
+EnInvadepoh* sUfo;
 EnInvadepoh* sRomani;
 EnInvadepoh* sCremia;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
@@ -1020,13 +1020,13 @@ void EnInvadepoh_Abductor_SpawnRomani(EnInvadepoh* this, PlayState* play) {
                        ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_ROMANI_ABDUCTED, 0));
 }
 
-void EnInvadepoh_Event_SpawnLightBall(EnInvadepoh* this, PlayState* play) {
-    sLightBall = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
-                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                           ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_LIGHT_BALL, 0));
+void EnInvadepoh_Event_SpawnUfo(EnInvadepoh* this, PlayState* play) {
+    sUfo = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+                                     this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                     ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_UFO, 0));
 }
 
-void EnInvadepoh_LightBall_ReplaceTranslation(Vec3f* translation) {
+void EnInvadepoh_Ufo_ReplaceTranslation(Vec3f* translation) {
     MtxF* curMtxF = Matrix_GetCurrent();
 
     curMtxF->xw = translation->x;
@@ -1429,7 +1429,7 @@ void EnInvadepoh_Interact_Update(EnInvadePohInteractInfo* interactInfo) {
     EnInvadepoh_Interact_UpdateAnimation(&interactInfo->mouthAnim);
 }
 
-void EnInvadepoh_LightBall_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawnCount) {
+void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawnCount) {
     static Color_RGBA8 sLightYellow = { 255, 255, 200, 255 };
     static Color_RGBA8 sGoldenYellow = { 255, 200, 0, 0 };
     s32 i;
@@ -1537,7 +1537,7 @@ void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
         if (CURRENT_TIME < CLOCK_TIME(2, 31)) {
             EnInvadepoh_Event_SetupWait(this);
         } else {
-            EnInvadepoh_Event_SpawnLightBall(this, play);
+            EnInvadepoh_Event_SpawnUfo(this, play);
             EnInvadepoh_Event_SpawnInvaders(this, play);
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             EnInvadepoh_Event_SetupInvasion(this);
@@ -1696,28 +1696,28 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-InitChainEntry sLightBallInitChain[] = {
+InitChainEntry sUfoInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-void EnInvadepoh_LightBall_Init(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Ufo_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sLightBallInitChain);
-    this->actor.update = EnInvadepoh_LightBall_Update;
-    this->actor.draw = EnInvadepoh_LightBall_Draw;
+    Actor_ProcessInitChain(&this->actor, sUfoInitChain);
+    this->actor.update = EnInvadepoh_Ufo_Update;
+    this->actor.draw = EnInvadepoh_Ufo_Draw;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
-        this->actor.world.pos.x += sLightBallSpawnOffset.x;
-        this->actor.world.pos.y += sLightBallSpawnOffset.y + 3000.0f;
-        this->actor.world.pos.z += sLightBallSpawnOffset.z;
-        EnInvadepoh_LightBall_SetupDescend(this);
+        this->actor.world.pos.x += sUfoSpawnOffset.x;
+        this->actor.world.pos.y += sUfoSpawnOffset.y + 3000.0f;
+        this->actor.world.pos.z += sUfoSpawnOffset.z;
+        EnInvadepoh_Ufo_SetupDescend(this);
     } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
         this->actor.world.pos.y += 1500.0f;
-        EnInvadepoh_LightBall_SetupAboveBarn(this);
+        EnInvadepoh_Ufo_SetupAboveBarn(this);
     } else {
         Actor_Kill(&this->actor);
     }
@@ -1777,20 +1777,20 @@ void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
     static ActorFunc sInitFuncs[ENINVADEPOH_TYPE_MAX] = {
-        EnInvadepoh_Event_Init,     // ENINVADEPOH_TYPE_HANDLER
-        EnInvadepoh_Alien_Init,     // ENINVADEPOH_TYPE_ALIEN_INVADER
-        EnInvadepoh_Cow_Init,       // ENINVADEPOH_TYPE_COW
-        EnInvadepoh_CowTail_Init,   // ENINVADEPOH_TYPE_COW_TAIL
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_CONFUSED
-        EnInvadepoh_LightBall_Init, // ENINVADEPOH_TYPE_LIGHT_BALL
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_BARN
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_REWARD
-        EnInvadepoh_Dog_Init,       // ENINVADEPOH_TYPE_DOG
-        EnInvadepoh_Cremia_Init,    // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
-        EnInvadepoh_Romani_Init,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
-        EnInvadepoh_Alien_Init,     // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
+        EnInvadepoh_Event_Init,   // ENINVADEPOH_TYPE_HANDLER
+        EnInvadepoh_Alien_Init,   // ENINVADEPOH_TYPE_ALIEN_INVADER
+        EnInvadepoh_Cow_Init,     // ENINVADEPOH_TYPE_COW
+        EnInvadepoh_CowTail_Init, // ENINVADEPOH_TYPE_COW_TAIL
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_Ufo_Init,     // ENINVADEPOH_TYPE_UFO
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_BARN
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_REWARD
+        EnInvadepoh_Dog_Init,     // ENINVADEPOH_TYPE_DOG
+        EnInvadepoh_Cremia_Init,  // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
+        EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
+        EnInvadepoh_Alien_Init,   // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
 
     sInitFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
@@ -1834,8 +1834,8 @@ void EnInvadepoh_Romani_Destroy(Actor* thisx, PlayState* play2) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnInvadepoh_LightBall_Destroy(Actor* thisx, PlayState* play2) {
-    sLightBall = NULL;
+void EnInvadepoh_Ufo_Destroy(Actor* thisx, PlayState* play2) {
+    sUfo = NULL;
 }
 
 void EnInvadepoh_Dog_Destroy(Actor* thisx, PlayState* play2) {
@@ -1874,20 +1874,20 @@ void EnInvadepoh_Abductor_Destroy(Actor* thisx, PlayState* play2) {
 
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
     static ActorFunc sDestroyFuncs[ENINVADEPOH_TYPE_MAX] = {
-        EnInvadepoh_Event_Destroy,     // ENINVADEPOH_TYPE_HANDLER
-        EnInvadepoh_Invader_Destroy,   // ENINVADEPOH_TYPE_ALIEN_INVADER
-        EnInvadepoh_Cow_Destroy,       // ENINVADEPOH_TYPE_COW
-        EnInvadepoh_CowTail_Destroy,   // ENINVADEPOH_TYPE_COW_TAIL
-        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
-        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_CONFUSED
-        EnInvadepoh_LightBall_Destroy, // ENINVADEPOH_TYPE_LIGHT_BALL
-        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
-        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_BARN
-        EnInvadepoh_Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_REWARD
-        EnInvadepoh_Dog_Destroy,       // ENINVADEPOH_TYPE_DOG
-        EnInvadepoh_Cremia_Destroy,    // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
-        EnInvadepoh_Romani_Destroy2,   // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
-        EnInvadepoh_Abductor_Destroy,  // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
+        EnInvadepoh_Event_Destroy,    // ENINVADEPOH_TYPE_HANDLER
+        EnInvadepoh_Invader_Destroy,  // ENINVADEPOH_TYPE_ALIEN_INVADER
+        EnInvadepoh_Cow_Destroy,      // ENINVADEPOH_TYPE_COW
+        EnInvadepoh_CowTail_Destroy,  // ENINVADEPOH_TYPE_COW_TAIL
+        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
+        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_Ufo_Destroy,      // ENINVADEPOH_TYPE_UFO
+        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
+        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_BARN
+        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_REWARD
+        EnInvadepoh_Dog_Destroy,      // ENINVADEPOH_TYPE_DOG
+        EnInvadepoh_Cremia_Destroy,   // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
+        EnInvadepoh_Romani_Destroy2,  // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
+        EnInvadepoh_Abductor_Destroy, // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
 
     sDestroyFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
@@ -1900,7 +1900,7 @@ void EnInvadepoh_Event_SetupWait(EnInvadepoh* this) {
 
 void EnInvadepoh_Event_Wait(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 30))) {
-        EnInvadepoh_Event_SpawnLightBall(this, play);
+        EnInvadepoh_Event_SpawnUfo(this, play);
         EnInvadepoh_Event_SpawnInvaders(this, play);
         EnInvadepoh_Event_SetupQueueInvasionCs(this);
     }
@@ -2403,7 +2403,7 @@ void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
     s32 index;
 
-    if ((sLightBall == NULL) || (this->actor.parent == NULL)) {
+    if ((sUfo == NULL) || (this->actor.parent == NULL)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -2448,7 +2448,7 @@ void EnInvadepoh_CowTail_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    if ((sLightBall == NULL) || (this->actor.parent == NULL)) {
+    if ((sUfo == NULL) || (this->actor.parent == NULL)) {
         Actor_Kill(&this->actor);
     } else {
         SkelAnime_Update(&this->skelAnime);
@@ -2801,43 +2801,42 @@ void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_LightBall_SetupDescend(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this) {
     this->actor.gravity = -15.0f;
     this->pulseScale = 0.0f;
     this->pulseScaleTarget = 1.0f;
     this->pulseScaleRate = 0.0f;
     this->pulseRate = 0;
-    this->actionFunc = EnInvadepoh_LightBall_Descend;
+    this->actionFunc = EnInvadepoh_Ufo_Descend;
 }
 
-void EnInvadepoh_LightBall_Descend(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     f32 distToTargetY;
 
     Actor_UpdateVelocityWithGravity(&this->actor);
     this->actor.velocity.y *= 0.97f;
-    distToTargetY =
-        Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + sLightBallSpawnOffset.y + 300.0f, 0.7f,
-                           fabsf(this->actor.velocity.y), 1.0f);
+    distToTargetY = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + sUfoSpawnOffset.y + 300.0f,
+                                       0.7f, fabsf(this->actor.velocity.y), 1.0f);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
 
     if (fabsf(distToTargetY) < 1.0f) {
-        EnInvadepoh_LightBall_SpawnSparkles(this, play, 50);
-        EnInvadepoh_LightBall_SetupHover(this);
+        EnInvadepoh_Ufo_SpawnSparkles(this, play, 50);
+        EnInvadepoh_Ufo_SetupHover(this);
     }
 }
 
-void EnInvadepoh_LightBall_SetupHover(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this) {
     this->actor.velocity.y *= 0.1f;
     this->actionTimer = 20;
     this->pulseScaleTarget = 0.3f;
     this->pulseScaleRate = 0.03f;
     this->pulseRate = 0xBB8;
-    this->actionFunc = EnInvadepoh_LightBall_Hover;
+    this->actionFunc = EnInvadepoh_Ufo_Hover;
 }
 
-void EnInvadepoh_LightBall_Hover(EnInvadepoh* this, PlayState* play) {
-    f32 hoverY = this->actor.home.pos.y + sLightBallSpawnOffset.y + 300.0f;
+void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play) {
+    f32 hoverY = this->actor.home.pos.y + sUfoSpawnOffset.y + 300.0f;
 
     if (this->actor.world.pos.y < hoverY) {
         this->actor.gravity = 3.0f;
@@ -2851,55 +2850,55 @@ void EnInvadepoh_LightBall_Hover(EnInvadepoh* this, PlayState* play) {
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        EnInvadepoh_LightBall_SetupSpawnInvaders(this);
+        EnInvadepoh_Ufo_SetupSpawnInvaders(this);
     }
 }
 
-void EnInvadepoh_LightBall_SetupSpawnInvaders(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupSpawnInvaders(EnInvadepoh* this) {
     this->actionTimer = 120;
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
     this->actor.gravity = 33.0f;
     this->pulseRate = 0xBB8;
-    this->lightBallTarget = 0;
+    this->ufoTarget = 0;
     this->stateTimer = 0;
-    this->actionFunc = EnInvadepoh_LightBall_SpawnInvaders;
+    this->actionFunc = EnInvadepoh_Ufo_SpawnInvaders;
 }
 
-void EnInvadepoh_LightBall_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
-    static Vec3f sLightBallTargetOffsets[] = {
+void EnInvadepoh_Ufo_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
+    static Vec3f sUfoTargetOffsets[] = {
         { -1813.0f, 374.0f, 1900.0f }, { 2198.0f, 153.0f, 3365.0f }, { -1434.0f, 262.0f, 3365.0f },
         { -393.0f, 396.0f, 1084.0f },  { 0.0f, 1500.0f, 0.0f },
     };
     s32 pad;
-    Vec3f lightBallTargetPos;
+    Vec3f ufoTargetPos;
     s32 pad2;
 
     if (this->stateTimer < 25) {
         this->stateTimer++;
     } else {
         this->stateTimer = 0;
-        this->lightBallTarget++;
-        this->lightBallTarget = CLAMP_MAX(this->lightBallTarget, ARRAY_COUNT(sLightBallTargetOffsets) - 1);
+        this->ufoTarget++;
+        this->ufoTarget = CLAMP_MAX(this->ufoTarget, ARRAY_COUNT(sUfoTargetOffsets) - 1);
         this->actor.gravity = 33.0f;
-        EnInvadepoh_LightBall_SpawnSparkles(this, play, 20);
+        EnInvadepoh_Ufo_SpawnSparkles(this, play, 20);
     }
 
-    Math_Vec3f_Sum(&sLightBallTargetOffsets[this->lightBallTarget], &this->actor.home.pos, &lightBallTargetPos);
+    Math_Vec3f_Sum(&sUfoTargetOffsets[this->ufoTarget], &this->actor.home.pos, &ufoTargetPos);
 
-    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &lightBallTargetPos) < SQ(400.0f)) {
+    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &ufoTargetPos) < SQ(400.0f)) {
         this->actor.speed *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speed, 170.0f, 21.0f);
         this->actor.speed *= 0.98f;
     }
 
-    if (EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, lightBallTargetPos.x,
-                                 lightBallTargetPos.z, this->actor.speed)) {
+    if (EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, ufoTargetPos.x, ufoTargetPos.z,
+                                 this->actor.speed)) {
         this->actor.speed = 0.0f;
     }
 
-    if (lightBallTargetPos.y < this->actor.world.pos.y) {
+    if (ufoTargetPos.y < this->actor.world.pos.y) {
         Math_StepToF(&this->actor.gravity, -12.0f, 7.0f);
     } else {
         Math_StepToF(&this->actor.gravity, 5.0f, 4.0f);
@@ -2914,27 +2913,27 @@ void EnInvadepoh_LightBall_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        EnInvadepoh_LightBall_SetupAboveBarn(this);
+        EnInvadepoh_Ufo_SetupAboveBarn(this);
     }
 }
 
-void EnInvadepoh_LightBall_SetupAboveBarn(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this) {
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
     this->pulseRate = 0xBB8;
     this->actor.velocity.y *= 0.8f;
-    this->actionFunc = EnInvadepoh_LightBall_AboveBarn;
+    this->actionFunc = EnInvadepoh_Ufo_AboveBarn;
 }
 
-void EnInvadepoh_LightBall_AboveBarn(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3f lightBallTargetPos;
+    Vec3f ufoTargetPos;
 
-    lightBallTargetPos.x = this->actor.home.pos.x;
-    lightBallTargetPos.y = this->actor.home.pos.y + 1500.0f;
-    lightBallTargetPos.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 0xA,
-                       0xBB8, 0x64);
+    ufoTargetPos.x = this->actor.home.pos.x;
+    ufoTargetPos.y = this->actor.home.pos.y + 1500.0f;
+    ufoTargetPos.z = this->actor.home.pos.z;
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &ufoTargetPos), 0xA, 0xBB8,
+                       0x64);
 
     if ((play->gameplayFrames % 0x40) < 14) {
         Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
@@ -2942,36 +2941,36 @@ void EnInvadepoh_LightBall_AboveBarn(EnInvadepoh* this, PlayState* play) {
         this->actor.speed *= 0.97f;
     }
 
-    this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
+    this->actor.gravity = (ufoTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
     this->actor.velocity.y *= 0.97f;
 
     Actor_MoveWithGravity(&this->actor);
 
     if (sEventState == ENINVADEPOH_EVENT_CLEAR) {
-        EnInvadepoh_LightBall_SetupLeaveBarn(this);
+        EnInvadepoh_Ufo_SetupLeaveBarn(this);
     }
 }
 
-void EnInvadepoh_LightBall_SetupCircle(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupCircle(EnInvadepoh* this) {
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
     this->actor.gravity = -1.5f;
     this->pulseRate = 0xBB8;
     this->actionTimer = 35;
-    this->actionFunc = EnInvadepoh_LightBall_Circle;
+    this->actionFunc = EnInvadepoh_Ufo_Circle;
 }
 
-void EnInvadepoh_LightBall_Circle(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3f lightBallTargetPos;
+    Vec3f ufoTargetPos;
 
-    lightBallTargetPos.x = this->actor.home.pos.x + sLightBallSpawnOffset.x;
-    lightBallTargetPos.y = this->actor.home.pos.y + sLightBallSpawnOffset.y + 400.0f;
-    lightBallTargetPos.z = this->actor.home.pos.z + sLightBallSpawnOffset.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40,
+    ufoTargetPos.x = this->actor.home.pos.x + sUfoSpawnOffset.x;
+    ufoTargetPos.y = this->actor.home.pos.y + sUfoSpawnOffset.y + 400.0f;
+    ufoTargetPos.z = this->actor.home.pos.z + sUfoSpawnOffset.z;
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &ufoTargetPos), 4, 0x1F40,
                        0x64);
     Math_StepToF(&this->actor.speed, 70.0f, 3.0f);
-    this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -2.0f : 2.0f;
+    this->actor.gravity = (ufoTargetPos.y < this->actor.world.pos.y) ? -2.0f : 2.0f;
     this->actor.velocity.y *= 0.97f;
 
     Actor_MoveWithGravity(&this->actor);
@@ -2979,20 +2978,20 @@ void EnInvadepoh_LightBall_Circle(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        EnInvadepoh_LightBall_SetupFlee(this);
+        EnInvadepoh_Ufo_SetupFlee(this);
     }
 }
 
-void EnInvadepoh_LightBall_SetupFlee(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupFlee(EnInvadepoh* this) {
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
     this->actor.gravity = 1.0f;
     this->pulseRate = 0xBB8;
     this->actionTimer = 60;
-    this->actionFunc = EnInvadepoh_LightBall_Flee;
+    this->actionFunc = EnInvadepoh_Ufo_Flee;
 }
 
-void EnInvadepoh_LightBall_Flee(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);
@@ -3004,38 +3003,38 @@ void EnInvadepoh_LightBall_Flee(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_LightBall_SetupLeaveBarn(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupLeaveBarn(EnInvadepoh* this) {
     this->actionTimer = 40;
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
     this->actor.speed = 0.0f;
     this->pulseRate = 0xBB8;
-    this->actionFunc = EnInvadepoh_LightBall_LeaveBarn;
+    this->actionFunc = EnInvadepoh_Ufo_LeaveBarn;
 }
 
-void EnInvadepoh_LightBall_LeaveBarn(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3f lightBallTargetPos;
+    Vec3f ufoTargetPos;
 
-    lightBallTargetPos.x = this->actor.home.pos.x;
-    lightBallTargetPos.y = this->actor.home.pos.y + 800.0f;
-    lightBallTargetPos.z = this->actor.home.pos.z;
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &lightBallTargetPos), 4, 0x1F40,
+    ufoTargetPos.x = this->actor.home.pos.x;
+    ufoTargetPos.y = this->actor.home.pos.y + 800.0f;
+    ufoTargetPos.z = this->actor.home.pos.z;
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &ufoTargetPos), 4, 0x1F40,
                        0x64);
     Math_StepToF(&this->actor.speed, 30.0f, 3.0f);
     this->actor.velocity.y *= 0.98f;
-    this->actor.gravity = (lightBallTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
+    this->actor.gravity = (ufoTargetPos.y < this->actor.world.pos.y) ? -0.5f : 2.0f;
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        EnInvadepoh_LightBall_SetupCircle(this);
+        EnInvadepoh_Ufo_SetupCircle(this);
     }
 }
 
-void EnInvadepoh_LightBall_Update(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     f32 scaleMod;
@@ -4240,7 +4239,7 @@ void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play) {
     Actor* cow;
     f32 distToTarget;
 
-    if (sLightBall == NULL) {
+    if (sUfo == NULL) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -4613,7 +4612,7 @@ void EnInvadepoh_Romani_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnInvadepoh_LightBall_Draw(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     Vec3f flashPos;
@@ -4625,7 +4624,7 @@ void EnInvadepoh_LightBall_Draw(Actor* thisx, PlayState* play2) {
     flashPos.x += this->actor.world.pos.x;
     flashPos.y += this->actor.world.pos.y;
     flashPos.z += this->actor.world.pos.z;
-    EnInvadepoh_LightBall_ReplaceTranslation(&flashPos);
+    EnInvadepoh_Ufo_ReplaceTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateZS(this->unk_304, MTXMODE_APPLY);
 
