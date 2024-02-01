@@ -213,7 +213,7 @@ D_80BD3DB0 {
 ## Syntax
 
 The syntax is simple, it consists on the name of the schedule script followed
-by a sucession of commands. Some commands require arguments (by using
+by a succession of commands. Some commands require arguments (by using
 parentheses) and some (conditional checks) can have bodies with subcommands and
 an optional `else` with its corresponding body with subcommands.
 
