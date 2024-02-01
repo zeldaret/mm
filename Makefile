@@ -11,14 +11,20 @@ SHELL = /bin/bash
 
 # OS Detection
 ifeq ($(OS),Windows_NT)
-  DETECTED_OS=windows
+  DETECTED_OS = windows
+  MAKE = make
+  VENV_BIN_DIR = Scripts
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
-    DETECTED_OS=linux
+    DETECTED_OS = linux
+    MAKE = make
+    VENV_BIN_DIR = bin
   endif
   ifeq ($(UNAME_S),Darwin)
-    DETECTED_OS=macos
+    DETECTED_OS = macos
+    MAKE = gmake
+    VENV_BIN_DIR = bin
   endif
 endif
 
@@ -53,11 +59,7 @@ MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 # Python virtual environment
 VENV ?= .venv
 # Python interpreter
-ifeq ($(DETECTED_OS), windows)
-  PYTHON ?= $(VENV)/Scripts/python3
-else
-  PYTHON ?= $(VENV)/bin/python3
-endif
+PYTHON ?= $(VENV)/$(VENV_BIN_DIR)/python3
 # Emulator w/ flags
 N64_EMULATOR ?=
 
@@ -81,11 +83,9 @@ endif
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILD_DIR   := build/$(VERSION)
 
-MAKE = make
 CPPFLAGS += -P
 
 ifeq ($(DETECTED_OS), macos)
-  MAKE = gmake
   CPPFLAGS += -xc++
 endif
 
