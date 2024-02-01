@@ -513,8 +513,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
-
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
 void Play_DisableMotionBlur(void);
