@@ -9,6 +9,19 @@ MAKEFLAGS += --no-builtin-rules
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
+# OS Detection
+ifeq ($(OS),Windows_NT)
+  DETECTED_OS=windows
+else
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Linux)
+    DETECTED_OS=linux
+  endif
+  ifeq ($(UNAME_S),Darwin)
+    DETECTED_OS=macos
+  endif
+endif
+
 
 #### Defaults ####
 
@@ -40,7 +53,10 @@ MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 # Python virtual environment
 VENV ?= .venv
 # Python interpreter
-PYTHON ?= $(VENV)/bin/python3
+ifeq ($(DETECTED_OS), windows)
+  PYTHON ?= $(VENV)/Scripts/python3
+else
+  PYTHON ?= $(VENV)/bin/python3
 # Emulator w/ flags
 N64_EMULATOR ?=
 
@@ -67,18 +83,9 @@ BUILD_DIR   := build/$(VERSION)
 MAKE = make
 CPPFLAGS += -P
 
-ifeq ($(OS),Windows_NT)
-  DETECTED_OS=windows
-else
-  UNAME_S := $(shell uname -s)
-  ifeq ($(UNAME_S),Linux)
-    DETECTED_OS=linux
-  endif
-  ifeq ($(UNAME_S),Darwin)
-    DETECTED_OS=macos
-    MAKE=gmake
-    CPPFLAGS += -xc++
-  endif
+ifeq ($(DETECTED_OS), macos)
+  MAKE = gmake
+  CPPFLAGS += -xc++
 endif
 
 
