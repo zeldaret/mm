@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import struct
+import sys
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
 
@@ -1616,10 +1617,10 @@ def main():
     SEGMENTS_PATH.mkdir(parents=True, exist_ok=True)
 
     # read baserom data
-    try:
+    if ROM_FILE_PATH.exists():
         rom_data = ROM_FILE_PATH.read_bytes()
-    except IOError:
-        print(f"failed to read file {ROM_FILE_PATH}")
+    else:
+        print(f"Error: {ROM_FILE_PATH} doesn't exist", file=sys.stderr)
         exit(1)
 
     # extract files
