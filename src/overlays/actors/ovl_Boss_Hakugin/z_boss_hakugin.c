@@ -2922,11 +2922,12 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
 
     Audio_PlaySfx_AtPos(&this->electricBallSfxPos, NA_SE_EN_COMMON_E_BALL - SFX_FLAG);
 
-    if (this->electricBallCount < 10) {
+    if (this->electricBallCount < GOHT_ELECTRIC_BALL_COUNT_MAX) {
         this->electricBallCount++;
     }
 
-    if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FADE_OUT) && (this->electricBallCount == 9)) {
+    if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FADE_OUT) &&
+        (this->electricBallCount == GOHT_ELECTRIC_BALL_COUNT_MAX - 1)) {
         this->electricBallState = GOHT_ELECTRIC_BALL_STATE_NONE;
         this->electricBallCount = 0;
     } else {
@@ -2934,7 +2935,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         // which the collider is attached and the one that all other light orbs follow. This loop below will make it so
         // that the position of `this->electricBallPos[N + 1]` will equal the position of `this->electricBallPos[N]` on
         // the previous frame, creating a trail effect.
-        ballPosIter = &this->electricBallPos[9];
+        ballPosIter = &this->electricBallPos[GOHT_ELECTRIC_BALL_COUNT_MAX - 1];
         while (ballPosIter != firstBallPos) {
             Math_Vec3f_Copy(ballPosIter, ballPosIter - 1);
             ballPosIter--;
@@ -3374,7 +3375,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     Vec3f* pos;
 
     if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
-        i = 9;
+        i = GOHT_ELECTRIC_BALL_COUNT_MAX - 1;
         end = this->electricBallCount;
     } else if (this->electricBallCount != 0) {
         i = this->electricBallCount - 1;

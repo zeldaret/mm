@@ -39,6 +39,7 @@ typedef struct GohtCrushingRock {
 
 #define GOHT_ROCK_EFFECT_COUNT 180
 #define GOHT_CRUSHING_ROCK_COUNT 36
+#define GOHT_ELECTRIC_BALL_COUNT_MAX 10
 
 typedef struct GohtLightningSegment {
     /* 0x00 */ Vec3f pos;
@@ -169,7 +170,7 @@ typedef struct BossHakugin {
                  };
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
     /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_MALFUNCTION_EFFECTS_PER_TYPE]; // Black smoke and electric zaps on body parts as damage accumulates 
-    /* 0x3734 */ Vec3f electricBallPos[10];
+    /* 0x3734 */ Vec3f electricBallPos[GOHT_ELECTRIC_BALL_COUNT_MAX];
     /* 0x37AC */ Vec3f electricBallRot;
     /* 0x37B8 */ ColliderSphere electricBallCollider;
 } BossHakugin; // size = 0x3810
