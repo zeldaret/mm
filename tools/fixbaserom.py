@@ -3,70 +3,13 @@
 import hashlib, io, struct, sys
 from os import path
 
-from libyaz0 import decompress
+import crunch64
+import ipl3checksum
 
 UNCOMPRESSED_SIZE = 0x2F00000
 
-def as_word(b, off=0):
-    return struct.unpack(">I", b[off:off+4])[0]
-
 def as_word_list(b):
     return [i[0] for i in struct.iter_unpack(">I",  b)]
-
-def calc_crc(rom_data, cic_type):
-    start = 0x1000
-    end = 0x101000
-
-    unsigned_long = lambda i: i & 0xFFFFFFFF
-    rol = lambda i, b: unsigned_long(i << b) | (i >> (-b & 0x1F))
-
-    if cic_type == 6101 or cic_type == 6102:
-        seed = 0xF8CA4DDC
-    elif cic_type == 6103:
-        seed = 0xA3886759
-    elif cic_type == 6105:
-        seed = 0xDF26F436
-    elif cic_type == 6106:
-        seed = 0x1FEA617A
-    else:
-        assert False , f"Unknown cic type: {cic_type}"
-
-    t1 = t2 = t3 = t4 = t5 = t6 = seed
-
-    for pos in range(start, end, 4):
-        d = as_word(rom_data, pos)
-        r = rol(d, d & 0x1F)
-
-        t6d = unsigned_long(t6 + d)
-        if t6d < t6:
-            t4 = unsigned_long(t4 + 1)
-        t6 = t6d
-        t3 ^= d
-        t5 = unsigned_long(t5 + r)
-
-        if t2 > d:
-            t2 ^= r
-        else:
-            t2 ^= t6 ^ d
-
-        if cic_type == 6105:
-            t1 = unsigned_long(t1 + (as_word(rom_data, 0x0750 + (pos & 0xFF)) ^ d))
-        else:
-            t1 = unsigned_long(t1 + (t5 ^ d))
-
-    chksum = [0,0]
-
-    if cic_type == 6103:
-        chksum[0] = unsigned_long((t6 ^ t4) + t3)
-        chksum[1] = unsigned_long((t5 ^ t2) + t1)
-    elif cic_type == 6106:
-        chksum[0] = unsigned_long((t6 * t4) + t3)
-        chksum[1] = unsigned_long((t5 * t2) + t1)
-    else:
-        chksum[0] = t6 ^ t4 ^ t3
-        chksum[1] = t5 ^ t2 ^ t1
-
-    return struct.pack(">II", chksum[0], chksum[1])
 
 def read_dmadata_entry(addr):
     return as_word_list(fileContent[addr:addr+0x10])
@@ -87,7 +30,8 @@ def read_dmadata(start):
 
 def update_crc(decompressed):
     print("Recalculating crc...")
-    new_crc = calc_crc(decompressed.getbuffer(), 6105)
+    calculated_checksum = ipl3checksum.CICKind.CIC_X105.calculateChecksum(bytes(decompressed.getbuffer()))
+    new_crc = struct.pack(f">II", calculated_checksum[0], calculated_checksum[1])
 
     decompressed.seek(0x10)
     decompressed.write(new_crc)
@@ -106,7 +50,7 @@ def decompress_rom(dmadata_addr, dmadata):
         if p_end == 0: # uncompressed
             rom_segments.update({v_start : fileContent[p_start:p_start + v_end - v_start]})
         else: # compressed
-            rom_segments.update({v_start : decompress(fileContent[p_start:p_end])})
+            rom_segments.update({v_start : crunch64.yaz0.decompress(fileContent[p_start:p_end])})
         new_dmadata.extend(struct.pack(">IIII", v_start, v_end, v_start, 0))
 
     # write rom segments to vaddrs
