@@ -37,6 +37,7 @@ extern ObjectId gObjectTableSize;
 extern RomFile gObjectTable[OBJECT_ID_MAX];
 
 extern SceneTableEntry gSceneTable[SCENE_MAX];
+
 extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];
 extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 

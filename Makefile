@@ -125,6 +125,9 @@ ZAPD        := tools/ZAPD/ZAPD.out
 FADO        := tools/fado/fado.elf
 MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
 CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
+SCHC        := tools/buildtools/schc.py
+
+SCHC_FLAGS  :=
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -189,6 +192,7 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+SCHEDULE_FILES:= $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.schl))
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
@@ -197,6 +201,8 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(ARCHIVES_O)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
+
+SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),build/$f)
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
@@ -295,7 +301,10 @@ $(OVL_RELOC_FILES): | o_files
 asset_files: $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT)
 $(O_FILES): | asset_files
 
-.PHONY: o_files asset_files
+schedule_inc_files: $(SCHEDULE_INC_FILES)
+$(O_FILES): | schedule_inc_files
+
+.PHONY: o_files asset_files schedule_inc_files
 
 #### Main commands ####
 
@@ -427,6 +436,9 @@ build/assets/%.bin.inc.c: assets/%.bin
 
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
+
+build/%.schl.inc: %.schl
+	$(SCHC) $(SCHC_FLAGS) -o $@ $<
 
 -include $(DEP_FILES)
 
