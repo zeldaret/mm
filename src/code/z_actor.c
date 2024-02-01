@@ -3394,10 +3394,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     Actor_AddToCategory(actorCtx, actor, actorInit->type);
 
     {
-        u32 sp20 = gSegments[6];
+        uintptr_t prevSeg = gSegments[0x06];
 
         Actor_Init(actor, play);
-        gSegments[6] = sp20;
+        gSegments[0x06] = prevSeg;
     }
 
     return actor;

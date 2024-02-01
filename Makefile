@@ -27,8 +27,11 @@ OBJDUMP_BUILD ?= 0
 ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
-#MIPS toolchain
+# MIPS toolchain prefix
 MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
+# Python interpreter
+PYTHON ?= python3
+
 #### Setup ####
 
 # Ensure the map file being created using English localization
@@ -88,7 +91,7 @@ AS         := $(MIPS_BINUTILS_PREFIX)as
 LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
-ASM_PROC   := python3 tools/asm-processor/build.py
+ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
 
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
@@ -115,17 +118,16 @@ else
   CC_CHECK := @:
 endif
 
-CPP        := cpp
-ELF2ROM    := tools/buildtools/elf2rom
-MKLDSCRIPT := tools/buildtools/mkldscript
-MKDMADATA  := tools/buildtools/mkdmadata
-YAZ0       := tools/buildtools/yaz0
-ZAPD       := tools/ZAPD/ZAPD.out
-FADO       := tools/fado/fado.elf
-MAKEYAR    := tools/buildtools/makeyar
-SCHC       := tools/buildtools/schc.py
+CPP         := cpp
+MKLDSCRIPT  := tools/buildtools/mkldscript
+MKDMADATA   := tools/buildtools/mkdmadata
+ZAPD        := tools/ZAPD/ZAPD.out
+FADO        := tools/fado/fado.elf
+MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
+CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
+SCHC        := tools/buildtools/schc.py
 
-SCHC_FLAGS :=
+SCHC_FLAGS  :=
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -280,10 +282,11 @@ endif
 all: uncompressed compressed
 
 $(ROM): $(ELF)
-	$(ELF2ROM) -cic 6105 $< $@
+	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
+	$(CHECKSUMMER) $@
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
+	$(PYTHON) tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -322,17 +325,17 @@ distclean: assetclean clean
 ## Extraction step
 setup:
 	$(MAKE) -C tools
-	python3 tools/fixbaserom.py
-	python3 tools/extract_baserom.py
-	python3 tools/decompress_yars.py
+	$(PYTHON) tools/fixbaserom.py
+	$(PYTHON) tools/extract_baserom.py
+	$(PYTHON) tools/decompress_yars.py
 
 assets:
-	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
+	$(PYTHON) tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
@@ -412,14 +415,14 @@ build/src/%.o: src/%.c
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	python3 tools/set_o32abi_bit.py $@
+	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	python3 tools/set_o32abi_bit.py $@
+	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
