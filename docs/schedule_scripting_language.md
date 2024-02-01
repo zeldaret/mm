@@ -135,7 +135,7 @@ There are no commands that use more than 2 bytes to store the branch distance.
 
 The short and long distinction also exists for the returned value, in case the
 user wants to return a value that wouldn't fit on a single unsigned byte and
-requires an unsgined short (two bytes) instead. Please note that the vanilla
+requires an unsigned short (two bytes) instead. Please note that the vanilla
 built-in system interpreter has a bug on which the upper byte of a long returned
 value will be discarded, so please ensure your returned values always fit on the
 0-255 range.
