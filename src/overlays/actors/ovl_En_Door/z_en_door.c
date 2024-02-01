@@ -234,15 +234,15 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_SWITCH_FLAG(thisx);
-    if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
+    this->actionVar.actionVar = ENDOOR_GET_ACTION_VAR(thisx);
+    if ((this->doorType == ENDOOR_TYPE_7) && (this->actionVar.actionVar_7 == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);
     }
     SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, DOOR_LIMB_MAX);
     if (this->doorType == ENDOOR_TYPE_5) {
-        objectInfo = &sObjectInfo[17 + this->switchFlag];
+        objectInfo = &sObjectInfo[17 + this->actionVar.actionVar_5];
     } else {
         for (i = 0; i < ARRAY_COUNT(sObjectInfo) - 34; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
@@ -284,7 +284,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
-    } else if (this->switchFlag == 0) {
+    } else if (this->actionVar.actionVar_7 == 0) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->knobDoor.dyna.bgId);
     }
 }
@@ -295,7 +295,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
         this->actionFunc = func_80866B20;
         this->knobDoor.dyna.actor.world.rot.y = 0;
         if (this->doorType == ENDOOR_TYPE_1) {
-            if (!Flags_GetSwitch(play, this->switchFlag)) {
+            if (!Flags_GetSwitch(play, this->actionVar.switchFlag)) {
                 this->unk_1A6 = 10;
             }
         } else if ((this->doorType == ENDOOR_TYPE_4) &&
@@ -314,13 +314,15 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         (this->knobDoor.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
     }
+
     if (this->knobDoor.playOpenAnim) {
         this->actionFunc = func_80867144;
         Animation_PlayOnceSetSpeed(&this->knobDoor.skelAnime, sAnimations[this->knobDoor.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
+
         if (this->unk_1A6 != 0) {
             DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
-            Flags_SetSwitch(play, this->switchFlag);
+            Flags_SetSwitch(play, this->actionVar.switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->openTimer != 0) {
@@ -355,8 +357,8 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                            (this->doorType == ENDOOR_TYPE_3)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 temp_a2 = D_801AED48[this->switchFlag & 7];
-                    s32 textIdOffset = (this->switchFlag >> 3) & 0xF;
+                    s16 temp_a2 = D_801AED48[this->actionVar.actionVar_0_2_3 & 7];
+                    s32 textIdOffset = (this->actionVar.actionVar_0_2_3 >> 3) & 0xF;
 
                     if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
                         ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & temp_a2)) ||
@@ -374,9 +376,10 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 } else if ((this->doorType == ENDOOR_TYPE_5) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &scheduleOutput)) {
+                    if (Schedule_RunScript(play, D_8086778C[this->actionVar.actionVar_5], &scheduleOutput)) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
+                        // TODO: is really worth to do (0x1800 + DOOR_SCH_33)?
                         player->doorType = ((this->knobDoor.dyna.actor.textId == (0x1800 + DOOR_SCH_33)) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
                                                : PLAYER_DOORTYPE_TALKING;
@@ -499,7 +502,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
+        if ((this->doorType == ENDOOR_TYPE_7) && (this->actionVar.actionVar_7 == 0)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);

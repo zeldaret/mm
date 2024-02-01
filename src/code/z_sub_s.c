@@ -29,7 +29,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_5) && (door->actionVar.actionVar_5 == (u8)switchFlag)) {
             break;
         }
 
