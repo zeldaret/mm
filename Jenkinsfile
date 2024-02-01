@@ -20,6 +20,11 @@ pipeline {
                 sh 'bash -c "tools/reloc_spec_check.sh"'
             }
         }
+        stage('Install Python dependencies') {
+            steps {
+                sh 'bash -c "make -j venv"'
+            }
+        }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'

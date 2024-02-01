@@ -335,7 +335,7 @@ venv:
 	$(PYTHON) -m pip install -U -r requirements.txt
 
 ## Extraction step
-setup: venv
+setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/extract_baserom.py
@@ -355,6 +355,7 @@ diff-init: rom
 	cp -r build expected/build
 
 init: distclean
+	$(MAKE) venv
 	$(MAKE) setup
 	$(MAKE) assets
 	$(MAKE) disasm
