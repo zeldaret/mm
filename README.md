@@ -106,7 +106,7 @@ To start the extraction/build process, run the following command:
 make init
 ```
 
-The extraction/build process process:
+The extraction/build process:
 1. Fetches dependencies: Downloads necessary tools from pip.
 2. Prepares build environment: Compiles tools for the build process.
 3. Extracts ROM contents:
