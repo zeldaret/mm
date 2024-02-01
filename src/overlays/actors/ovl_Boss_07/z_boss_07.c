@@ -222,6 +222,13 @@ typedef enum MajorasWrathDeathState {
     /* 4 */ MAJORAS_WRATH_DEATH_STATE_4
 } MajorasWrathDeathState;
 
+typedef enum {
+    /* 0 */ MAJORAS_WRATH_SHADOW_SIZE_MEDIUM,
+    /* 1 */ MAJORAS_WRATH_SHADOW_SIZE_LARGE,
+    /* 2 */ MAJORAS_WRATH_SHADOW_SIZE_EXTRA_LARGE,
+    /* 3 */ MAJORAS_WRATH_SHADOW_SIZE_SMALL
+} MajorasWrathShadowSize;
+
 typedef enum MajorasDrawDmgEffState {
     /*  0 */ MAJORAS_DRAW_DMGEFF_STATE_NONE,
     /*  1 */ MAJORAS_DRAW_DMGEFF_STATE_FIRE_INIT,
@@ -301,9 +308,9 @@ void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play);
 void Boss07_Wrath_Shock(Boss07* this, PlayState* play);
 void Boss07_Wrath_ShockStun(Boss07* this, PlayState* play);
 
-void Boss07_Wrath_MakeShadowTex(u8* shadowTex, Boss07* this, PlayState* play);
-void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, PlayState* play);
-void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* shadowTex, f32 weight);
+void Boss07_Wrath_GenShadowTex(u8* tex, Boss07* this, PlayState* play);
+void Boss07_Wrath_DrawShadowTex(u8* tex, Boss07* this, PlayState* play);
+void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight);
 
 void Boss07_Mask_SetupIdle(Boss07* this, PlayState* play);
 void Boss07_Mask_Idle(Boss07* this, PlayState* play);
@@ -3062,7 +3069,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
                            MAJORAS_WRATH_LEFT_HAND);
 
     if (!this->noShadow) {
-        Boss07_Wrath_MakeShadowTex(shadowTex, this, play);
+        Boss07_Wrath_GenShadowTex(shadowTex, this, play);
         Boss07_Wrath_DrawShadowTex(shadowTex, this, play);
     }
 
@@ -3084,78 +3091,139 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* shadowTex, f32 weight) {
-    static s32 sShadowWidths6[6] = { 1, 2, 3, 3, 2, 1 };
-    static s32 sShadowWidths7[7] = { 2, 3, 4, 4, 4, 3, 2 };
-    static s32 sShadowWidths8[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
-    static s32 sShadowWidths12[12] = { 2, 4, 5, 5, 6, 6, 6, 6, 5, 5, 4, 2 };
-    static s32 sBodyPartsIndex[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 2, 9, 10, 2, 12, 13 };
-    static u8 sShadowSize[15] = { 3, 2, 2, 1, 3, 3, 1, 3, 3, 1, 0, 3, 1, 0, 3 };
-    s32 temp_t0;
-    s32 temp_t1;
-    s32 temp_v0;
-    s32 phi_a0;
-    s32 phi_a3;
-    s32 j = 0;
+/**
+ * These four arrays encode circular shadow maps of various sizes. For an array of length N, the shadow map is N rows
+ * tall, and each entry in the array describes the start and end point of the shadow within a given row (the exact
+ * values of the start and end points are determined by the loops within Boss01_FillShadowTex). To illustrate using the
+ * sShadowSmallMap as an example:
+ * -3 -2 -1  0  1
+ *  -------------
+ *  0  0  1  0  0
+ *  0  1  1  1  0
+ *  1  1  1  1  1
+ *  1  1  1  1  1
+ *  0  1  1  1  0
+ *  0  0  1  0  0
+ */
+static s32 sShadowSmallMap[] = {
+    1, 2, 3, 3, 2, 1,
+};
+
+static s32 sShadowMediumMap[] = {
+    2, 3, 4, 4, 4, 3, 2,
+};
+
+static s32 sShadowLargeMap[] = {
+    2, 3, 4, 4, 4, 4, 3, 2,
+};
+
+static s32 sShadowExtraLargeMap[] = {
+    2, 4, 5, 5, 6, 6, 6, 6, 5, 5, 4, 2,
+};
+
+static s32 sParentShadowBodyParts[MAJORAS_WRATH_BODYPART_MAX] = {
+    MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_BODYPART_HEAD
+    BODYPART_NONE,                               // MAJORAS_WRATH_BODYPART_TORSO
+    MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_BODYPART_PELVIS
+    MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM
+    MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM,       // MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT,  // MAJORAS_WRATH_BODYPART_LEFT_FOREARM
+    MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM
+    MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM,      // MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT, // MAJORAS_WRATH_BODYPART_RIGHT_FOREARM
+    MAJORAS_WRATH_BODYPART_PELVIS,               // MAJORAS_WRATH_BODYPART_RIGHT_THIGH
+    MAJORAS_WRATH_BODYPART_RIGHT_THIGH,          // MAJORAS_WRATH_BODYPART_RIGHT_SHIN
+    MAJORAS_WRATH_BODYPART_RIGHT_SHIN,           // MAJORAS_WRATH_BODYPART_RIGHT_FOOT
+    MAJORAS_WRATH_BODYPART_PELVIS,               // MAJORAS_WRATH_BODYPART_LEFT_THIGH
+    MAJORAS_WRATH_BODYPART_LEFT_THIGH,           // MAJORAS_WRATH_BODYPART_LEFT_SHIN
+    MAJORAS_WRATH_BODYPART_LEFT_SHIN             // MAJORAS_WRATH_BODYPART_LEFT_FOOT
+};
+
+static u8 sShadowSizes[MAJORAS_WRATH_BODYPART_MAX] = {
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_HEAD
+    MAJORAS_WRATH_SHADOW_SIZE_EXTRA_LARGE, // MAJORAS_WRATH_BODYPART_TORSO
+    MAJORAS_WRATH_SHADOW_SIZE_EXTRA_LARGE, // MAJORAS_WRATH_BODYPART_PELVIS
+    MAJORAS_WRATH_SHADOW_SIZE_LARGE,       // MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_LEFT_FOREARM
+    MAJORAS_WRATH_SHADOW_SIZE_LARGE,       // MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_RIGHT_FOREARM
+    MAJORAS_WRATH_SHADOW_SIZE_LARGE,       // MAJORAS_WRATH_BODYPART_RIGHT_THIGH
+    MAJORAS_WRATH_SHADOW_SIZE_MEDIUM,      // MAJORAS_WRATH_BODYPART_RIGHT_SHIN
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_RIGHT_FOOT
+    MAJORAS_WRATH_SHADOW_SIZE_LARGE,       // MAJORAS_WRATH_BODYPART_LEFT_THIGH
+    MAJORAS_WRATH_SHADOW_SIZE_MEDIUM,      // MAJORAS_WRATH_BODYPART_LEFT_SHIN
+    MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_LEFT_FOOT
+};
+
+void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
+    s32 index;
     s32 i;
+    s32 baseX;
+    s32 baseY;
+    s32 x;
+    s32 y = 0;
+    s32 addY;
     Vec3f lerp;
-    Vec3f sp74;
-    Vec3f sp68;
+    Vec3f pos;
+    Vec3f startVec;
 
     for (i = 0; i < MAJORAS_WRATH_BODYPART_MAX; i++) {
-        if ((weight == 0.0f) || ((j = sBodyPartsIndex[i]) >= 0)) {
+        if ((weight == 0.0f) || ((y = sParentShadowBodyParts[i]) > BODYPART_NONE)) {
             if (weight > 0.0f) {
-                VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[j], weight);
+                VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[y], weight);
 
-                sp74.x = lerp.x - this->actor.world.pos.x;
-                sp74.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
-                sp74.z = lerp.z - this->actor.world.pos.z;
+                pos.x = lerp.x - this->actor.world.pos.x;
+                pos.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
+                pos.z = lerp.z - this->actor.world.pos.z;
             } else {
-                sp74.x = this->bodyPartsPos[i].x - this->actor.world.pos.x;
-                sp74.y = this->bodyPartsPos[i].y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
-                sp74.z = this->bodyPartsPos[i].z - this->actor.world.pos.z;
+                pos.x = this->bodyPartsPos[i].x - this->actor.world.pos.x;
+                pos.y = this->bodyPartsPos[i].y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
+                pos.z = this->bodyPartsPos[i].z - this->actor.world.pos.z;
             }
 
-            Matrix_MultVec3f(&sp74, &sp68);
+            Matrix_MultVec3f(&pos, &startVec);
 
-            sp68.x *= 0.2f;
-            sp68.y *= 0.2f;
-            temp_t0 = (u16)(s32)(sp68.x + 32);
-            temp_t1 = (u16)((s32)sp68.y * 64);
+            startVec.x *= 0.2f;
+            startVec.y *= 0.2f;
 
-            if (sShadowSize[i] == 2) {
-                for (j = 0, phi_a3 = -6 * 0x40; j < ARRAY_COUNT(sShadowWidths12); j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -sShadowWidths12[j]; phi_a0 < sShadowWidths12[j]; phi_a0++) {
-                        temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
-                        if ((temp_v0 >= 0) && (temp_v0 < 0x40 * 0x40)) {
-                            shadowTex[temp_v0] = 255;
+            baseX = (u16)(s32)(startVec.x + 32.0f);
+            baseY = (u16)((s32)startVec.y * 64);
+
+            if (sShadowSizes[i] == MAJORAS_WRATH_SHADOW_SIZE_EXTRA_LARGE) {
+                for (y = 0, addY = -0x180; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 0x40) {
+                    for (x = -sShadowExtraLargeMap[y]; x < sShadowExtraLargeMap[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
+                            shadowTex[index] = 255;
                         }
                     }
                 }
-            } else if (sShadowSize[i] == 1) {
-                for (j = 0, phi_a3 = -4 * 0x40; j < ARRAY_COUNT(sShadowWidths8); j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -sShadowWidths8[j]; phi_a0 < sShadowWidths8[j]; phi_a0++) {
-                        temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
-                        if ((temp_v0 >= 0) && (temp_v0 < 0x40 * 0x40)) {
-                            shadowTex[temp_v0] = 255;
+            } else if (sShadowSizes[i] == MAJORAS_WRATH_SHADOW_SIZE_LARGE) {
+                for (y = 0, addY = -0x100; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 0x40) {
+                    for (x = -sShadowLargeMap[y]; x < sShadowLargeMap[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
+                            shadowTex[index] = 255;
                         }
                     }
                 }
-            } else if (sShadowSize[i] == 0) {
-                for (j = 0, phi_a3 = -3 * 0x40; j < ARRAY_COUNT(sShadowWidths7); j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -sShadowWidths7[j]; phi_a0 < sShadowWidths7[j] - 1; phi_a0++) {
-                        temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
-                        if ((temp_v0 >= 0) && (temp_v0 < 0x40 * 0x40)) {
-                            shadowTex[temp_v0] = 255;
+            } else if (sShadowSizes[i] == MAJORAS_WRATH_SHADOW_SIZE_MEDIUM) {
+                for (y = 0, addY = -0xC0; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 0x40) {
+                    for (x = -sShadowMediumMap[y]; x < sShadowMediumMap[y] - 1; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
+                            shadowTex[index] = 255;
                         }
                     }
                 }
             } else {
-                for (j = 0, phi_a3 = -2 * 0x40; j < ARRAY_COUNT(sShadowWidths6); j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -sShadowWidths6[j]; phi_a0 < sShadowWidths6[j] - 1; phi_a0++) {
-                        temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
-                        if ((temp_v0 >= 0) && (temp_v0 < 0x40 * 0x40)) {
-                            shadowTex[temp_v0] = 255;
+                for (y = 0, addY = -0x80; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 0x40) {
+                    for (x = -sShadowSmallMap[y]; x < sShadowSmallMap[y] - 1; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
+                            shadowTex[index] = 255;
                         }
                     }
                 }
@@ -3164,41 +3232,43 @@ void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* shadowTex, f32 weight) {
     }
 }
 
-void Boss07_Wrath_MakeShadowTex(u8* shadowTex, Boss07* this, PlayState* play) {
+void Boss07_Wrath_GenShadowTex(u8* tex, Boss07* this, PlayState* play) {
+    s32* iter = (s32*)tex;
     s32 i;
-    s32* shadowTex32 = (s32*)shadowTex;
 
-    for (i = 0; i < 0x40 * 0x40 / (s32)sizeof(s32); i++, shadowTex32++) {
-        *shadowTex32 = 0;
+    for (i = 0; i < (s32)(MAJORAS_WRATH_SHADOW_TEX_SIZE / sizeof(s32)); i++, iter++) {
+        *iter = 0;
     }
 
-    // angle of light source
     Matrix_RotateXFNew(1.0f);
 
     for (i = 0; i <= 5; i++) {
-        Boss07_Wrath_MakeShadowCircles(this, shadowTex, i / 5.0f);
+        Boss07_Wrath_FillShadowTex(this, tex, i / 5.0f);
     }
 }
 
-void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, PlayState* play) {
+void Boss07_Wrath_DrawShadowTex(u8* tex, Boss07* this, PlayState* play) {
     s32 pad[2];
-    f32 phi_f0;
+    f32 alpha;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    phi_f0 = (400.0f - this->actor.world.pos.y) * 0.0025f;
-    phi_f0 = CLAMP_MIN(phi_f0, 0.0f);
-    phi_f0 = CLAMP_MAX(phi_f0, 1.0f); // could be variant of clamp_var
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(s32)(phi_f0 * 80.0f) & 0xFF);
+
+    alpha = (400.0f - this->actor.world.pos.y) * (1.0f / 400.0f);
+    alpha = CLAMP_MIN(alpha, 0.0f);
+    alpha = CLAMP_MAX(alpha, 1.0f);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (s8)(alpha * 80.0f));
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z - 20.0f, MTXMODE_NEW);
     Matrix_Scale(1.75f, 1.0f, 1.75f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gMajorasWrathShadowMaterialDL);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, shadowTex, G_IM_FMT_I, G_IM_SIZ_8b, 0x40, 0x40, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                        G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, MAJORAS_WRATH_SHADOW_TEX_WIDTH,
+                        MAJORAS_WRATH_SHADOW_TEX_HEIGHT, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6,
+                        6, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(POLY_OPA_DISP++, gMajorasWrathShadowModelDL);
 
     CLOSE_DISPS(gfxCtx);
