@@ -107,17 +107,24 @@ make init
 ```
 
 The extraction/build process:
-1. Fetches dependencies: Downloads necessary tools from pip.
-2. Prepares build environment: Compiles tools for the build process.
-3. Extracts ROM contents:
-    - Creates a baserom folder to house individual files extracted from the ROM.
-    - Decompresses compressed files into a decomp folder.
+1. Prepares build environment:
+    - Creates a Python virtual environment
+    - Downloads necessary tools from pip
+    - Compiles tools for the build process
+2. Extracts ROM contents:
+    - Decompresses the ROM
+    - Extracts individual files
+    - Extracts archive files
+3. Extracts assets:
+    - Extracts assets based on the XML files found in `assets/xml`
 4. Disassembles code:
-    - Creates folders for the build process.
-    - Generates a folder containing ASM files and disassemblies of most code-containing files.
-5. Builds the ROM
+    - Disassembles code-containing files
+    - Disassembles data (data, rodata, and bss)
+5. Builds the ROM:
+    - Compiles the code and assets into a new ROM
+    - Generates a compressed version of the ROM
 
-If all goes well, a new ROM should be built at `build/n64-us/mm-n64-us.z64`, a compressed version built at `build/n64-us/mm-n64-us-compressed.z64`, and the following text printed:
+If all goes well, the new ROM should be built at `build/n64-us/mm-n64-us.z64`, a compressed version generated at `build/n64-us/mm-n64-us-compressed.z64`, and the following text printed:
 
 ```bash
 build/n64-us/mm-n64-us.z64: OK
