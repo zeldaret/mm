@@ -692,7 +692,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         return;
     }
 
-    Math3D_CrossProduct(norm, targetNorm, &crossProduct);
+    Math3D_Vec3f_Cross(norm, targetNorm, &crossProduct);
 
     if (BossHakugin_Vec3fNormalize(&crossProduct)) {
         Matrix_RotateAxisF(angleStep, &crossProduct, MTXMODE_NEW);
@@ -2980,7 +2980,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
                     normal.x = COLPOLY_GET_NORMAL(poly->normal.x);
                     normal.y = COLPOLY_GET_NORMAL(poly->normal.y);
                     normal.z = COLPOLY_GET_NORMAL(poly->normal.z);
-                    func_80179F64(&this->electricBallRot, &normal, &targetRot);
+                    Math3D_Vec3fReflect(&this->electricBallRot, &normal, &targetRot);
                     Math_Vec3f_Copy(&this->electricBallRot, &targetRot);
                 }
             } else {
