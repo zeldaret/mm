@@ -42,6 +42,7 @@ graphs/
 tools/**/*dSYM/
 tools/decomp-permuter/
 tools/mips_to_c/
+*.schl.inc
 
 # Assets
 *.png

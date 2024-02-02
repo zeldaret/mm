@@ -1,8 +1,6 @@
 # Build options can be changed by modifying the makefile or by building with 'make SETTING=value'.
 # It is also possible to override the settings in Defaults in a file called .make_options as 'SETTING=value'.
 
--include .make_options
-
 MAKEFLAGS += --no-builtin-rules
 
 # Ensure the build fails if a piped command fails
@@ -27,6 +25,9 @@ else
     VENV_BIN_DIR = bin
   endif
 endif
+
+
+-include .make_options
 
 
 #### Defaults ####
@@ -149,6 +150,9 @@ ZAPD        := tools/ZAPD/ZAPD.out
 FADO        := tools/fado/fado.elf
 MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
 CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
+SCHC        := $(PYTHON) tools/buildtools/schc.py
+
+SCHC_FLAGS  :=
 
 # Command to replace path variables in the spec file. We can't use the C
 # preprocessor for this because it won't substitute inside string literals.
@@ -209,11 +213,12 @@ ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),$(BUILD_DIR)/$
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),$(BUILD_DIR)/$f) \
-					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),$(BUILD_DIR)/$f) \
+                     $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),$(BUILD_DIR)/$f) \
 
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "\$$(BUILD_DIR)/asm" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "\$$(BUILD_DIR)/data" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/')
+SCHEDULE_FILES:= $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.schl))
 BASEROM_FILES := $(shell grep -F "\$$(BUILD_DIR)/baserom" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*//')
 ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
@@ -222,6 +227,8 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                  $(foreach f,$(ARCHIVES_O),$(BUILD_DIR)/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | $(SPEC_REPLACE_VARS) | grep -o '[^"]*_reloc.o' )
+
+SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),build/$f)
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
@@ -317,7 +324,10 @@ $(OVL_RELOC_FILES): | o_files
 asset_files: $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT)
 $(O_FILES): | asset_files
 
-.PHONY: o_files asset_files
+schedule_inc_files: $(SCHEDULE_INC_FILES)
+$(O_FILES): | schedule_inc_files
+
+.PHONY: o_files asset_files schedule_inc_files
 
 
 #### Main commands ####
@@ -467,6 +477,9 @@ $(BUILD_DIR)/assets/%.bin.inc.c: assets/%.bin
 
 $(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
+
+build/%.schl.inc: %.schl
+	$(SCHC) $(SCHC_FLAGS) -o $@ $<
 
 -include $(DEP_FILES)
 

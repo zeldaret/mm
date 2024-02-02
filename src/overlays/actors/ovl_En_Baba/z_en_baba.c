@@ -129,17 +129,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static u8 sSchedule[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x1D - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x1C - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 30, 0x16 - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(0, 30, 0x15 - 0x12),
-    /* 0x12 */ SCHEDULE_CMD_RET_VAL_L(BOMB_SHOP_LADY_SCH_KNOCKED_OVER),
-    /* 0x15 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x16 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 30, BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "build/src/overlays/actors/ovl_En_Baba/scheduleScripts.schl.inc"
 
 static s32 sSearchTimePathLimit[] = { -1, -1, 0 };
 
