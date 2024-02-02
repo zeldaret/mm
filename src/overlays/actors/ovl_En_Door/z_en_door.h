@@ -19,8 +19,8 @@ typedef enum EnDoorType {
     /* 3 */ ENDOOR_TYPE_3,
     /* 4 */ ENDOOR_TYPE_4,
     /* 5 */ ENDOOR_TYPE_5,
-    /* 6 */ ENDOOR_TYPE_6, // unused
-    /* 7 */ ENDOOR_TYPE_7
+    /* 6 */ ENDOOR_TYPE_6, // unreferenced
+    /* 7 */ ENDOOR_TYPE_7 // unused
 } EnDoorType;
 
 typedef struct EnDoor {

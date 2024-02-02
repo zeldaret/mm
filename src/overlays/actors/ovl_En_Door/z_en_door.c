@@ -99,19 +99,19 @@ ActorInit En_Door_InitVars = {
 
 typedef enum EnDoorDListIndex {
     /*  0 */ DOOR_DL_DEFAULT,
-    /*  1 */ DOOR_DL_1,
-    /*  2 */ DOOR_DL_2,
-    /*  3 */ DOOR_DL_3,
-    /*  4 */ DOOR_DL_4,
-    /*  5 */ DOOR_DL_5,
-    /*  6 */ DOOR_DL_6,
-    /*  7 */ DOOR_DL_7,
-    /*  8 */ DOOR_DL_8,
-    /*  9 */ DOOR_DL_9,
-    /* 10 */ DOOR_DL_10,
-    /* 11 */ DOOR_DL_11,
-    /* 12 */ DOOR_DL_12,
-    /* 13 */ DOOR_DL_13,
+    /*  1 */ DOOR_DL_WOODFALL,
+    /*  2 */ DOOR_DL_OBSERVATORY_LAB,
+    /*  3 */ DOOR_DL_ZORA_HALL,
+    /*  4 */ DOOR_DL_SWAMP,
+    /*  5 */ DOOR_DL_MAGIC_HAG_POTION_SHOP,
+    /*  6 */ DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE,
+    /*  7 */ DOOR_DL_POST_OFFICE_TRAIDING_POST,
+    /*  8 */ DOOR_DL_INN_SCHOOL,
+    /*  9 */ DOOR_DL_MILK_BAR,
+    /* 10 */ DOOR_DL_MUSIC_BOX,
+    /* 11 */ DOOR_DL_PIRATES_FORTESS,
+    /* 12 */ DOOR_DL_OCEANSIDE_SPIDER_HOUSE,
+    /* 13 */ DOOR_DL_DEFAULT_FIELD_KEEP,
     /* 14 */ DOOR_DL_MAX
 } EnDoorDListIndex;
 
@@ -121,56 +121,116 @@ typedef struct EnDoorInfo {
     /* 0x4 */ s16 objectId;
 } EnDoorInfo; // size = 0x6
 
-static EnDoorInfo sObjectInfo[] = {
-    /*  0 */ { SCENE_MITURIN, DOOR_DL_1, OBJECT_NUMA_OBJ },
-    /*  1 */ { SCENE_TENMON_DAI, DOOR_DL_2, OBJECT_DOR01 },
-    /*  2 */ { SCENE_00KEIKOKU, DOOR_DL_2, OBJECT_DOR01 },
-    /*  3 */ { SCENE_30GYOSON, DOOR_DL_2, OBJECT_DOR01 },
-    /*  4 */ { SCENE_LABO, DOOR_DL_2, OBJECT_DOR01 },
-    /*  5 */ { SCENE_33ZORACITY, DOOR_DL_3, OBJECT_DOR02 },
-    /*  6 */ { SCENE_UNSET_31, DOOR_DL_3, OBJECT_DOR02 },
-    /*  7 */ { SCENE_BANDROOM, DOOR_DL_3, OBJECT_DOR02 },
-    /*  8 */ { SCENE_20SICHITAI, DOOR_DL_4, OBJECT_DOR03 },
-    /*  9 */ { SCENE_20SICHITAI2, DOOR_DL_4, OBJECT_DOR03 },
-    /* 10 */ { SCENE_MAP_SHOP, DOOR_DL_4, OBJECT_DOR03 },
-    /* 11 */ { SCENE_KAIZOKU, DOOR_DL_11, OBJECT_KAIZOKU_OBJ },
-    /* 12 */ { SCENE_PIRATE, DOOR_DL_11, OBJECT_KAIZOKU_OBJ },
-    /* 13 */ { SCENE_TORIDE, DOOR_DL_11, OBJECT_KAIZOKU_OBJ },
-    /* 14 */ { SCENE_KINDAN2, DOOR_DL_12, OBJECT_KINSTA2_OBJ },
-    /* 15 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 16 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 17 */ { -1, DOOR_DL_8, OBJECT_WDOR03 },
-    /* 18 */ { -1, DOOR_DL_7, OBJECT_WDOR02 },
-    /* 19 */ { -1, DOOR_DL_6, OBJECT_WDOR01 },
-    /* 20 */ { -1, DOOR_DL_7, OBJECT_WDOR02 },
-    /* 21 */ { -1, DOOR_DL_6, OBJECT_WDOR01 },
-    /* 22 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 23 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 24 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 25 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 26 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 27 */ { -1, DOOR_DL_9, OBJECT_WDOR04 },
-    /* 28 */ { -1, DOOR_DL_8, OBJECT_WDOR03 },
-    /* 29 */ { -1, DOOR_DL_8, OBJECT_WDOR03 },
-    /* 30 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 31 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 32 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 33 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 34 */ { -1, DOOR_DL_6, OBJECT_WDOR01 },
-    /* 35 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 36 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 37 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 38 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 39 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 40 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 41 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 42 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 43 */ { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },
-    /* 44 */ { -1, DOOR_DL_10, OBJECT_WDOR05 },
-    /* 45 */ { -1, DOOR_DL_13, GAMEPLAY_FIELD_KEEP },
-    /* 46 */ { -1, DOOR_DL_5, OBJECT_DOR04 },
-    /* 47 */ { -1, DOOR_DL_9, OBJECT_WDOR04 },
-    /* 48 */ { -1, DOOR_DL_4, OBJECT_DOR03 },
+typedef enum EnDoorObjectInfoIndex {
+    /*  0 */ DOOR_OBJKIND_DEFAULT,
+    /*  0 */ DOOR_OBJINFO_0 = DOOR_OBJKIND_DEFAULT,
+    /*  1 */ DOOR_OBJINFO_1,
+    /*  2 */ DOOR_OBJINFO_2,
+    /*  3 */ DOOR_OBJINFO_3,
+    /*  4 */ DOOR_OBJINFO_4,
+    /*  5 */ DOOR_OBJINFO_5,
+    /*  6 */ DOOR_OBJINFO_6,
+    /*  7 */ DOOR_OBJINFO_7,
+    /*  8 */ DOOR_OBJINFO_8,
+    /*  9 */ DOOR_OBJINFO_9,
+    /* 10 */ DOOR_OBJINFO_10,
+    /* 11 */ DOOR_OBJINFO_11,
+    /* 12 */ DOOR_OBJINFO_12,
+    /* 13 */ DOOR_OBJINFO_13,
+    /* 14 */ DOOR_OBJINFO_14,
+
+    /* 15 */ DOOR_OBJKIND_KEEP,
+    /* 15 */ DOOR_OBJINFO_15 = DOOR_OBJKIND_KEEP,
+    /* 16 */ DOOR_OBJINFO_16,
+
+    /* 17 */ DOOR_OBJKIND_SCHEDULE,
+    /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE,
+    /* 18 */ DOOR_OBJINFO_18,
+    /* 19 */ DOOR_OBJINFO_19,
+    /* 20 */ DOOR_OBJINFO_20,
+    /* 21 */ DOOR_OBJINFO_21,
+    /* 22 */ DOOR_OBJINFO_22,
+    /* 23 */ DOOR_OBJINFO_23,
+    /* 24 */ DOOR_OBJINFO_24,
+    /* 25 */ DOOR_OBJINFO_25,
+    /* 26 */ DOOR_OBJINFO_26,
+    /* 27 */ DOOR_OBJINFO_27,
+    /* 28 */ DOOR_OBJINFO_28,
+    /* 29 */ DOOR_OBJINFO_29,
+    /* 30 */ DOOR_OBJINFO_30,
+    /* 31 */ DOOR_OBJINFO_31,
+    /* 32 */ DOOR_OBJINFO_32,
+    /* 33 */ DOOR_OBJINFO_33,
+    /* 34 */ DOOR_OBJINFO_34,
+    /* 35 */ DOOR_OBJINFO_35,
+    /* 36 */ DOOR_OBJINFO_36,
+    /* 37 */ DOOR_OBJINFO_37,
+    /* 38 */ DOOR_OBJINFO_38,
+    /* 39 */ DOOR_OBJINFO_39,
+    /* 40 */ DOOR_OBJINFO_40,
+    /* 41 */ DOOR_OBJINFO_41,
+    /* 42 */ DOOR_OBJINFO_42,
+    /* 43 */ DOOR_OBJINFO_43,
+    /* 44 */ DOOR_OBJINFO_44,
+    /* 45 */ DOOR_OBJINFO_45,
+    /* 46 */ DOOR_OBJINFO_46,
+    /* 47 */ DOOR_OBJINFO_47,
+    /* 48 */ DOOR_OBJINFO_48,
+    /* 49 */ DOOR_OBJINFO_MAX
+} EnDoorObjectInfoIndex;
+
+static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
+    { SCENE_MITURIN, DOOR_DL_WOODFALL, OBJECT_NUMA_OBJ },                  // DOOR_OBJINFO_0
+    { SCENE_TENMON_DAI, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },           // DOOR_OBJINFO_1
+    { SCENE_00KEIKOKU, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },            // DOOR_OBJINFO_2
+    { SCENE_30GYOSON, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },             // DOOR_OBJINFO_3
+    { SCENE_LABO, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },                 // DOOR_OBJINFO_4
+    { SCENE_33ZORACITY, DOOR_DL_ZORA_HALL, OBJECT_DOR02 },                 // DOOR_OBJINFO_5
+    { SCENE_UNSET_31, DOOR_DL_ZORA_HALL, OBJECT_DOR02 },                   // DOOR_OBJINFO_6
+    { SCENE_BANDROOM, DOOR_DL_ZORA_HALL, OBJECT_DOR02 },                   // DOOR_OBJINFO_7
+    { SCENE_20SICHITAI, DOOR_DL_SWAMP, OBJECT_DOR03 },                     // DOOR_OBJINFO_8
+    { SCENE_20SICHITAI2, DOOR_DL_SWAMP, OBJECT_DOR03 },                    // DOOR_OBJINFO_9
+    { SCENE_MAP_SHOP, DOOR_DL_SWAMP, OBJECT_DOR03 },                       // DOOR_OBJINFO_10
+    { SCENE_KAIZOKU, DOOR_DL_PIRATES_FORTESS, OBJECT_KAIZOKU_OBJ },        // DOOR_OBJINFO_11
+    { SCENE_PIRATE, DOOR_DL_PIRATES_FORTESS, OBJECT_KAIZOKU_OBJ },         // DOOR_OBJINFO_12
+    { SCENE_TORIDE, DOOR_DL_PIRATES_FORTESS, OBJECT_KAIZOKU_OBJ },         // DOOR_OBJINFO_13
+    { SCENE_KINDAN2, DOOR_DL_OCEANSIDE_SPIDER_HOUSE, OBJECT_KINSTA2_OBJ }, // DOOR_OBJINFO_14
+
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_15
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_16
+
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_17
+    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },              // DOOR_OBJINFO_18
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_19
+    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },              // DOOR_OBJINFO_20
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_21
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_22
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_23
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_24
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_25
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_26
+    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                               // DOOR_OBJINFO_27
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_28
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_29
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_30
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_31
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_32
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_33
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_34
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_35
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_36
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_37
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_38
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_39
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_40
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_41
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_42
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_43
+    { -1, DOOR_DL_MUSIC_BOX, OBJECT_WDOR05 },                              // DOOR_OBJINFO_44
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_45
+    { -1, DOOR_DL_MAGIC_HAG_POTION_SHOP, OBJECT_DOR04 },                   // DOOR_OBJINFO_46
+    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                               // DOOR_OBJINFO_47
+    { -1, DOOR_DL_SWAMP, OBJECT_DOR03 },                                   // DOOR_OBJINFO_48
 };
 
 static InitChainEntry sInitChain[] = {
@@ -225,20 +285,21 @@ static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
 };
 
 static Gfx* D_808679A4[DOOR_DL_MAX][2] = {
-    { gDoorLeftDL, gDoorRightDL },                                                    // DOOR_DL_DEFAULT
-    { gWoodfallDoorDL, gWoodfallDoorDL },                                             // DOOR_DL_1
-    { gObservatoryLabDoorDL, gObservatoryLabDoorDL },                                 // DOOR_DL_2
-    { gZoraHallDoorDL, gZoraHallDoorDL },                                             // DOOR_DL_3
-    { gSwampDoorDL, gSwampDoorDL },                                                   // DOOR_DL_4
-    { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },                         // DOOR_DL_5
-    { gLotteryCuriosityShopMayorHouseDoorDL, gLotteryCuriosityShopMayorHouseDoorDL }, // DOOR_DL_6
-    { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL },                   // DOOR_DL_7
-    { gInnSchoolDoorDL, gInnSchoolDoorDL },                                           // DOOR_DL_8
-    { gMilkBarDoorDL, gMilkBarDoorDL },                                               // DOOR_DL_9
-    { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },                                   // DOOR_DL_10
-    { gPiratesFortressDoorDL, gPiratesFortressDoorDL },                               // DOOR_DL_11
-    { gOceansideSpiderHouseDoorDL, gOceansideSpiderHouseDoorDL },                     // DOOR_DL_12
-    { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },                                  // DOOR_DL_13
+    { gDoorLeftDL, gDoorRightDL },                            // DOOR_DL_DEFAULT
+    { gWoodfallDoorDL, gWoodfallDoorDL },                     // DOOR_DL_WOODFALL
+    { gObservatoryLabDoorDL, gObservatoryLabDoorDL },         // DOOR_DL_OBSERVATORY_LAB
+    { gZoraHallDoorDL, gZoraHallDoorDL },                     // DOOR_DL_ZORA_HALL
+    { gSwampDoorDL, gSwampDoorDL },                           // DOOR_DL_SWAMP
+    { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL }, // DOOR_DL_MAGIC_HAG_POTION_SHOP
+    { gLotteryCuriosityShopMayorHouseDoorDL,
+      gLotteryCuriosityShopMayorHouseDoorDL },                      // DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE
+    { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL }, // DOOR_DL_POST_OFFICE_TRAIDING_POST
+    { gInnSchoolDoorDL, gInnSchoolDoorDL },                         // DOOR_DL_INN_SCHOOL
+    { gMilkBarDoorDL, gMilkBarDoorDL },                             // DOOR_DL_MILK_BAR
+    { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },                 // DOOR_DL_MUSIC_BOX
+    { gPiratesFortressDoorDL, gPiratesFortressDoorDL },             // DOOR_DL_PIRATES_FORTESS
+    { gOceansideSpiderHouseDoorDL, gOceansideSpiderHouseDoorDL },   // DOOR_DL_OCEANSIDE_SPIDER_HOUSE
+    { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },                // DOOR_DL_DEFAULT_FIELD_KEEP
 };
 
 void EnDoor_Init(Actor* thisx, PlayState* play2) {
@@ -262,14 +323,14 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
                    this->limbTable, DOOR_LIMB_MAX);
 
     if (this->doorType == ENDOOR_TYPE_5) {
-        objectInfo = &sObjectInfo[17 + this->actionVar.actionVar_5];
+        objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->actionVar.actionVar_5];
     } else {
-        for (i = 0; i < ARRAY_COUNT(sObjectInfo) - 34; i++, objectInfo++) {
+        for (i = 0; i < DOOR_OBJKIND_KEEP; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjectInfo) - 34) &&
+        if ((i >= DOOR_OBJKIND_KEEP) &&
             (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
@@ -278,7 +339,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     this->knobDoor.dlIndex = objectInfo->dListIndex;
     objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectSlot <= OBJECT_SLOT_NONE) {
-        objectInfo = &sObjectInfo[15];
+        objectInfo = &sObjectInfo[DOOR_OBJINFO_15];
         objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
         if (objectSlot != 0) {
             Actor_Kill(&this->knobDoor.dyna.actor);

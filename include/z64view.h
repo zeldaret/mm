@@ -94,7 +94,7 @@ s32 View_InitDistortion(View* view);
 s32 View_ClearDistortion(View* view);
 s32 View_SetDistortion(View* view, Vec3f orientation, Vec3f scale, f32 speed);
 
-void View_Apply(View* view, s32 mask);
+s32 View_Apply(View* view, s32 mask);
 s32 View_ApplyOrthoToOverlay(View* view);
 s32 View_ApplyPerspectiveToOverlay(View* view);
 s32 View_UpdateViewingMatrix(View* view);
