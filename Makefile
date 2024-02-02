@@ -27,8 +27,11 @@ OBJDUMP_BUILD ?= 0
 ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
-#MIPS toolchain
+# MIPS toolchain prefix
 MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
+# Python interpreter
+PYTHON ?= python3
+
 #### Setup ####
 
 # Ensure the map file being created using English localization
@@ -88,7 +91,7 @@ AS         := $(MIPS_BINUTILS_PREFIX)as
 LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
-ASM_PROC   := python3 tools/asm-processor/build.py
+ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
 
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
@@ -116,14 +119,16 @@ else
 endif
 
 CPP           := cpp
-ELF2ROM       := tools/buildtools/elf2rom
 MKLDSCRIPT    := tools/buildtools/mkldscript
 MKDMADATA     := tools/buildtools/mkdmadata
-YAZ0          := tools/buildtools/yaz0
 ZAPD          := tools/ZAPD/ZAPD.out
 FADO          := tools/fado/fado.elf
-MAKEYAR       := tools/buildtools/makeyar
-SHIFTJIS_CONV := tools/shiftjis_conv.py
+MAKEYAR       := $(PYTHON) tools/buildtools/makeyar.py
+CHECKSUMMER   := $(PYTHON) tools/buildtools/checksummer.py
+SHIFTJIS_CONV := $(PYTHON) tools/shiftjis_conv.py
+SCHC          := $(PYTHON) tools/buildtools/schc.py
+
+SCHC_FLAGS  :=
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -188,6 +193,7 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+SCHEDULE_FILES:= $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.schl))
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
@@ -199,6 +205,8 @@ SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external
 SHIFTJIS_O_FILES	:= $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),build/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
+
+SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),build/$f)
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
@@ -278,10 +286,11 @@ endif
 all: uncompressed compressed
 
 $(ROM): $(ELF)
-	$(ELF2ROM) -cic 6105 $< $@
+	$(OBJCOPY) --gap-fill=0x00 -O binary $< $@
+	$(CHECKSUMMER) $@
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
+	$(PYTHON) tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -296,7 +305,10 @@ $(OVL_RELOC_FILES): | o_files
 asset_files: $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT)
 $(O_FILES): | asset_files
 
-.PHONY: o_files asset_files
+schedule_inc_files: $(SCHEDULE_INC_FILES)
+$(O_FILES): | schedule_inc_files
+
+.PHONY: o_files asset_files schedule_inc_files
 
 #### Main commands ####
 
@@ -317,17 +329,17 @@ distclean: assetclean clean
 ## Extraction step
 setup:
 	$(MAKE) -C tools
-	python3 tools/fixbaserom.py
-	python3 tools/extract_baserom.py
-	python3 tools/decompress_yars.py
+	$(PYTHON) tools/fixbaserom.py
+	$(PYTHON) tools/extract_baserom.py
+	$(PYTHON) tools/decompress_yars.py
 
 assets:
-	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
+	$(PYTHON) tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
@@ -414,14 +426,14 @@ $(SHIFTJIS_O_FILES): build/src/%.o: src/%.c
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	python3 tools/set_o32abi_bit.py $@
+	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	python3 tools/set_o32abi_bit.py $@
+	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
@@ -435,6 +447,9 @@ build/assets/%.bin.inc.c: assets/%.bin
 
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
+
+build/%.schl.inc: %.schl
+	$(SCHC) $(SCHC_FLAGS) -o $@ $<
 
 -include $(DEP_FILES)
 

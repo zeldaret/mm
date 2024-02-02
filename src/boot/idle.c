@@ -2,9 +2,11 @@
 #include "buffers.h"
 #include "irqmgr.h"
 #include "main.h"
+#include "segment_symbols.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "viconfig.h"
+#include "z64dma.h"
 #include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -19,8 +21,6 @@ OSMesgQueue gPiMgrCmdQueue;
 OSViMode gViConfigMode;
 u8 gViConfigModeType;
 
-#include "global.h"
-#include "buffers.h"
 #include "idle.h"
 
 u8 D_80096B20 = 1;

@@ -87,7 +87,7 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, PlayState* play) {
     s16 phi_s0;
     s16 phi_s1;
 
-    Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, k = 0; i < 6; i++) {
         temp_a0 = (i + 1) * 15.f;

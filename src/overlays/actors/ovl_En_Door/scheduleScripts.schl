@@ -1,0 +1,344 @@
+D_808675D0 {
+    if_day (3) {
+        not if_time_range (6, 0, 23, 0) {
+            not if_time_range (0, 0, 6, 0) {
+                return_s (7)
+            }
+        }
+    }
+    return_none
+}
+
+D_808675E4 {
+    if_before_time (9, 0) {
+        return_s (9)
+    } else if_before_time (12, 0) {
+        branch (label_0x1D)
+    } else {
+        if_day (1) {
+            branch (label_0x0E)
+
+            label_0x0E:
+            if_before_time (13, 0) {
+                branch (label_0x1C)
+            } else if_before_time (15, 0) {
+                branch (label_0x1D)
+            } else if_before_time (0, 0) {
+                branch (label_0x1C)
+            } else {
+                return_s (9)
+            }
+
+        label_0x1C:
+            return_none
+
+        label_0x1D:
+            return_s (8)
+        } else if_day (2) {
+            if_week_event_reg (WEEKEVENTREG_28_08) {
+                if_before_time (13, 0) {
+                    branch (label_0x1C)
+                } else if_before_time (17, 0) {
+                    branch (label_0x1D)
+                } else if_before_time (0, 0) {
+                    branch (label_0x1C)
+                } else {
+                    return_s (9)
+                }
+            } else if_since_time (13, 0) {
+                return_s (9)
+            } else {
+                return_none
+            }
+        } else if_before_time (13, 0) {
+            branch (label_0x1C)
+        } else if_before_time (13, 0) {
+            branch (label_0x1D)
+        } else if_before_time (18, 0) {
+            return_s (9)
+        } else {
+            return_none
+        }
+    }
+}
+
+D_80867634 {
+    if_time_range (6, 0, 23, 0) {
+        return_none
+    } else {
+        return_s (28)
+    }
+}
+
+D_80867640 {
+    if_time_range (21, 0, 22, 0) {
+        return_s (11)
+    } else {
+        return_none
+    }
+}
+
+D_8086764C {
+    not if_time_range (22, 0, 5, 0) {
+        return_s (10)
+    } else {
+        return_none
+    }
+}
+
+D_80867658 {
+    if_day (2) {
+        not if_week_event_reg (WEEKEVENTREG_28_08) {
+            return_s (12)
+        } else if_time_range (15, 10, 22, 0) {
+            return_none
+        } else {
+            return_s (12)
+        }
+    }
+    if_day (3) {
+        if_since_time (13, 0) {
+            not if_week_event_reg (WEEKEVENTREG_51_08) {
+                return_s (12)
+            } else if_since_time (22, 0) {
+                return_s (12)
+            } else {
+                return_none
+            }
+        }
+    }
+    return_s (12)
+}
+
+D_80867684 {
+    return_none
+}
+
+D_80867688 {
+    if_since_time (22, 0) {
+        return_s (15)
+    } else {
+        return_none
+    }
+}
+
+D_80867690 {
+    if_since_time (22, 0) {
+        return_s (16)
+    } else {
+        return_none
+    }
+}
+
+D_80867698 {
+    if_since_time (22, 0) {
+        return_s (17)
+    } else {
+        return_none
+    }
+}
+
+D_808676A0 {
+    if_time_range (10, 0, 21, 0) {
+        return_none
+    } else if_time_range (22, 0, 5, 0) {
+        if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
+            return_s (33)
+        } else {
+            return_s (34)
+        }
+    } else {
+        return_s (18)
+    }
+}
+
+D_808676B8 {
+    not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+        if_day (3) {
+            if_before_time (8, 0) {
+                return_s (19)
+            } else {
+                return_none
+            }
+        } else if_time_range (8, 0, 20, 30) {
+            return_none
+        } else {
+            return_s (19)
+        }
+    } else {
+        return_none
+    }
+}
+
+D_808676D0 {
+    return_none
+}
+
+D_808676D4 {
+    return_none
+}
+
+D_808676D8 {
+    if_day (3) {
+        if_since_time (18, 0) {
+            return_none
+        }
+    }
+    return_s (20)
+}
+
+D_808676E4 {
+    not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+        return_s (22)
+    } else {
+        return_none
+    }
+}
+
+D_808676EC {
+    return_none
+}
+
+D_808676F0 {
+    if_day (3) {
+        if_since_time (10, 0) {
+            label_0x8:
+            return_none
+        } else {
+            branch (label_0xF)
+        }
+    } else {
+        if_time_range (10, 0, 20, 0) {
+            branch (label_0x8)
+        } else {
+            label_0xF:
+            return_s (21)
+        }
+    }
+}
+
+D_80867704 {
+    return_none
+}
+
+D_80867708 {
+    return_none
+}
+
+D_8086770C {
+    return_none
+}
+
+D_80867710 {
+    return_none
+}
+
+D_80867714 {
+    if_since_time (20, 0) {
+        return_s (23)
+    } else {
+        return_none
+    }
+}
+
+D_8086771C {
+    if_day (1) {
+        if_since_time (2, 30) {
+            return_s (24)
+        } else {
+            label_0x0A:
+            return_none
+        }
+    } else if_day (3) {
+        if_since_time (20, 0) {
+            return_s (12)
+        } else {
+            branch (label_0x0A)
+        }
+    } else {
+        branch (label_0x0A)
+    }
+}
+
+D_80867734 {
+    if_since_time (20, 0) {
+        return_s (25)
+    } else {
+        return_none
+    }
+}
+
+D_8086773C {
+    if_since_time (20, 0) {
+        return_s (26)
+    } else {
+        return_none
+    }
+}
+
+D_80867744 {
+    not if_day (2) {
+        branch (label_0x08)
+    } else {
+        if_week_event_reg (WEEKEVENTREG_99_80) {
+            branch (label_0x0E)
+        } else {
+            label_0x08:
+            if_before_time (20, 0) {
+                branch (label_0x14)
+            } else {
+                return_s (27)
+            }
+        }
+    }
+
+    label_0x0E:
+    if_before_time (18, 0) {
+        branch (label_0x14)
+    } else {
+        return_s (27)
+    }
+
+    label_0x14:
+    return_none
+}
+
+D_8086775C {
+    not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
+        not if_week_event_reg (WEEKEVENTREG_75_20) {
+            not if_week_event_reg (WEEKEVENTREG_14_04) {
+                return_s (29)
+            } else not if_week_event_reg (WEEKEVENTREG_59_01) {
+                if_week_event_reg (WEEKEVENTREG_61_02) {
+                    return_s (31)
+                } else {
+                    return_s (30)
+                }
+            } else {
+                return_none
+            }
+        }
+    }
+
+    return_none
+}
+
+D_80867778 {
+    return_s (32)
+}
+
+D_8086777C{
+    return_none
+}
+
+D_80867780 {
+    return_none
+}
+
+D_80867784 {
+    if_since_time (22, 0) {
+        return_s (35)
+    } else {
+        return_none
+    }
+}

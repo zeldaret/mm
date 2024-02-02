@@ -2,7 +2,7 @@
 #include "regs.h"
 #include "functions.h"
 #include "z64malloc.h"
-#include "z64vismono.h"
+#include "z64vis.h"
 #include "z64visfbuf.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -11,7 +11,7 @@ Input D_801F6C18;
 TransitionTile sTransitionTile;
 s32 gTransitionTileState;
 VisMono sPlayVisMono;
-Color_RGBA8_u32 gVisMonoColor;
+Color_RGBA8_u32 gPlayVisMonoColor;
 VisFbuf sPlayVisFbuf;
 VisFbuf* sPlayVisFbufInstance;
 BombersNotebook sBombersNotebook;
@@ -371,7 +371,7 @@ void Play_Destroy(GameState* thisx) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     if (sBombersNotebookOpen) {
-        MsgEvent_SendNullTask();
+        Sched_FlushTaskQueue();
         SysCfb_SetLoResMode();
         gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -922,13 +922,13 @@ void Play_UpdateMain(PlayState* this) {
     s32 sp5C = false;
     u8 freezeFlashTimer;
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[0x05] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
-        MsgEvent_SendNullTask();
+        Sched_FlushTaskQueue();
         Play_TakePictoPhoto(&this->pauseBgPreRender);
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
     }
@@ -1067,7 +1067,8 @@ void Play_Update(PlayState* this) {
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
-               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) ||
+               (gIrqMgrResetStatus != IRQ_RESET_STATUS_IDLE)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
         sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
@@ -1152,9 +1153,9 @@ void Play_DrawMain(PlayState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[0x05] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
@@ -1231,8 +1232,8 @@ void Play_DrawMain(PlayState* this) {
 
             TransitionFade_Draw(&this->unk_18E48, &sp218);
 
-            if (gVisMonoColor.a != 0) {
-                sPlayVisMono.primColor.rgba = gVisMonoColor.rgba;
+            if (gPlayVisMonoColor.a != 0) {
+                sPlayVisMono.vis.primColor.rgba = gPlayVisMonoColor.rgba;
                 VisMono_Draw(&sPlayVisMono, &sp218);
             }
 
@@ -1253,7 +1254,7 @@ void Play_DrawMain(PlayState* this) {
         PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
         if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
-            MsgEvent_SendNullTask();
+            Sched_FlushTaskQueue();
             if (!gSaveContext.screenScaleFlag) {
                 PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
             }
@@ -1448,7 +1449,7 @@ void Play_Draw(PlayState* this) {
 
         if (sBombersNotebookOpen) {
             if (gSysCfbHiResEnabled != 1) {
-                MsgEvent_SendNullTask();
+                Sched_FlushTaskQueue();
                 SysCfb_SetHiResMode();
                 gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
@@ -1460,7 +1461,7 @@ void Play_Draw(PlayState* this) {
             }
         } else {
             if (gSysCfbHiResEnabled != 0) {
-                MsgEvent_SendNullTask();
+                Sched_FlushTaskQueue();
                 SysCfb_SetLoResMode();
                 gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
@@ -1594,7 +1595,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     this->sceneConfig = scene->drawConfig;
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }
@@ -2300,7 +2301,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_Start(&this->unk_18E48);
     VisMono_Init(&sPlayVisMono);
 
-    gVisMonoColor.a = 0;
+    gPlayVisMonoColor.a = 0;
     sPlayVisFbufInstance = &sPlayVisFbuf;
     VisFbuf_Init(sPlayVisFbufInstance);
     sPlayVisFbufInstance->lodProportion = 0.0f;

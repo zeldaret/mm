@@ -184,7 +184,7 @@ beginseg
     include "build/src/libultra/io/visetspecial.o"
     include "build/src/libultra/gu/coss.o"
     include "build/src/libultra/os/settime.o"
-    include "build/src/libultra/voice/voicestopread.o"
+    include "build/src/libultra/voice/voicestopreaddata.o"
     include "build/src/libultra/io/visetevent.o"
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"
@@ -268,7 +268,7 @@ endseg
 
 beginseg
     name "kanji"
-    include "build/baserom/kanji.o"
+    include "build/assets/interface/kanji/kanji.o"
 endseg
 
 beginseg
@@ -500,7 +500,7 @@ beginseg
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
     include "build/src/code/z_nmi_buff.o"
-    include "build/src/code/code_8010C1B0.o"
+    include "build/src/code/z_nulltask.o"
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
@@ -584,7 +584,7 @@ beginseg
     include "build/src/code/c_keyframe.o"
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
-    include "build/asm/code/code_80185F90.text.o" // handwritten
+    include "build/asm/code/kanread.text.o" // handwritten
     include "build/src/code/osFlash.o"
     pad_text
     pad_text
@@ -3519,8 +3519,7 @@ beginseg
     name "ovl_Boss_Hakugin"
     compress
     include "build/src/overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.o"
-    include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.data.o"
-    include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_Hakugin/ovl_Boss_Hakugin_reloc.o"
 endseg
 
 beginseg

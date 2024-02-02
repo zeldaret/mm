@@ -1,0 +1,11 @@
+sScheduleScript {
+    if_scene (SCENE_YADOYA) {
+        if_time_range (0, 0, 6, 0) {
+            return_time (0, 0, 6, 0, TOILET_HAND_SCH_AVAILABLE)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}
