@@ -3519,8 +3519,7 @@ beginseg
     name "ovl_Boss_Hakugin"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.data.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_Hakugin/ovl_Boss_Hakugin_reloc.o"
 endseg
 
 beginseg
