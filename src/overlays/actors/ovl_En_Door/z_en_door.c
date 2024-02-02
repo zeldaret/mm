@@ -31,13 +31,13 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play);
 void EnDoor_Update(Actor* thisx, PlayState* play);
 void EnDoor_Draw(Actor* thisx, PlayState* play);
 
-void func_80866B20(EnDoor* this, PlayState* play);
+void EnDoor_Idle(EnDoor* this, PlayState* play);
 void func_8086704C(EnDoor* this, PlayState* play);
-void func_80866F94(EnDoor* this, PlayState* play);
+void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play);
 void func_80867080(EnDoor* this, PlayState* play);
-void func_80867144(EnDoor* this, PlayState* play);
+void EnDoor_Open(EnDoor* this, PlayState* play);
 void func_808670F0(EnDoor* this, PlayState* play);
-void func_80866A5C(EnDoor* this, PlayState* play);
+void EnDoor_SetupType(EnDoor* this, PlayState* play);
 
 typedef enum DoorScheduleResult {
     /*  0 */ DOOR_SCH_NONE,
@@ -152,6 +152,7 @@ typedef struct EnDoorInfo {
     /* 0x4 */ s16 objectId;
 } EnDoorInfo; // size = 0x6
 
+// TODO: This enum feels kinda overkill...
 typedef enum EnDoorObjectInfoIndex {
     /*  0 */ DOOR_OBJKIND_DEFAULT,
     /*  0 */ DOOR_OBJINFO_0 = DOOR_OBJKIND_DEFAULT,
@@ -214,6 +215,7 @@ static_assert(ENDOOR_SCH_TYPE_0 == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE, "The
 static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
 
 static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
+    // DOOR_OBJKIND_DEFAULT
     { SCENE_MITURIN, DOOR_DL_WOODFALL, OBJECT_NUMA_OBJ },                  // DOOR_OBJINFO_0
     { SCENE_TENMON_DAI, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },           // DOOR_OBJINFO_1
     { SCENE_00KEIKOKU, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },            // DOOR_OBJINFO_2
@@ -230,9 +232,11 @@ static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
     { SCENE_TORIDE, DOOR_DL_PIRATES_FORTESS, OBJECT_KAIZOKU_OBJ },         // DOOR_OBJINFO_13
     { SCENE_KINDAN2, DOOR_DL_OCEANSIDE_SPIDER_HOUSE, OBJECT_KINSTA2_OBJ }, // DOOR_OBJINFO_14
 
+    // DOOR_OBJKIND_KEEP
     { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_15
     { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_16
 
+    // DOOR_OBJKIND_SCHEDULE
     { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_17
     { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },              // DOOR_OBJINFO_18
     { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_19
@@ -359,18 +363,26 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     if (this->doorType == ENDOOR_TYPE_SCHEDULE) {
         objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->actionVar.schType];
     } else {
+        // Look for the EnDoorInfo corresponding to the current scene.
+        // If no EnDoorInfo matches the current scene then objectInfo will point to the GAMEPLAY_KEEP one
         for (i = 0; i < DOOR_OBJKIND_KEEP; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }
+
+        // If objectInfo is pointing to the GAMEPLAY_KEEP's EnDoorInfo one and GAMEPLAY_FIELD_KEEP is loaded then use that one instead
         if ((i >= DOOR_OBJKIND_KEEP) &&
             (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
     }
 
+    // This assignment is redundant since it is set later again
     this->knobDoor.dlIndex = objectInfo->dListIndex;
+
+    // Check if the object for the selected EnDoorInfo is loaded.
+    // If it isn't, then fallback to GAMEPLAY_KEEP
     objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectSlot <= OBJECT_SLOT_NONE) {
         objectInfo = &sObjectInfo[DOOR_OBJINFO_15];
@@ -382,11 +394,13 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->knobDoor.objectSlot = objectSlot;
-    this->knobDoor.dlIndex = objectInfo->dListIndex; // Set twice?
+    this->knobDoor.dlIndex = objectInfo->dListIndex;
+
+    // If the object that will be used is the one from the InitVars then call EnDoor_SetupType directly since we know the object will be loaded before this actor has spawned
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
-        func_80866A5C(this, play);
+        EnDoor_SetupType(this, play);
     } else {
-        this->actionFunc = func_80866A5C;
+        this->actionFunc = EnDoor_SetupType;
     }
 
     Actor_SetFocus(&this->knobDoor.dyna.actor, 35.0f);
@@ -406,25 +420,51 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80866A5C(EnDoor* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
-        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
-        this->actionFunc = func_80866B20;
-        this->knobDoor.dyna.actor.world.rot.y = 0;
-        if (this->doorType == ENDOOR_TYPE_1) {
-            if (!Flags_GetSwitch(play, this->actionVar.switchFlag)) {
-                this->unk_1A6 = 10;
-            }
-        } else if ((this->doorType == ENDOOR_TYPE_4) &&
-                   (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
-            this->actionFunc = func_8086704C;
-            this->knobDoor.dyna.actor.world.rot.y = -0x1800;
+// Alternative: EnDoor_WaitForObject
+void EnDoor_SetupType(EnDoor* this, PlayState* play) {
+    if (!Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
+        return;
+    }
+
+    this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
+    this->actionFunc = EnDoor_Idle;
+    this->knobDoor.dyna.actor.world.rot.y = 0;
+
+    if (this->doorType == ENDOOR_TYPE_LOCKED) {
+        if (!Flags_GetSwitch(play, this->actionVar.switchFlag)) {
+            this->lockTimer = 10;
         }
+    } else if ((this->doorType == ENDOOR_TYPE_4) &&
+                (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
+        this->actionFunc = func_8086704C;
+        this->knobDoor.dyna.actor.world.rot.y = -0x1800;
     }
 }
 
-void func_80866B20(EnDoor* this, PlayState* play) {
-    static s32 D_80867BC0;
+s32 D_80867BC0;
+
+/**
+ * Closed door waiting for interaction.
+ * 
+ * General flow of this function and what is prioritized:
+ * - Handle opening request from player
+ * - Handle opening request from schedule actor
+ * - If not on cs mode:
+ *   - If D_80867BC0? or player is near the door and looking at it
+ *     - Set this door as the one Player can interact with
+ *     - If it is a locked door
+ *       - Handle loocked door
+ *     - Otherwise if ENDOOR_TYPE_4?
+ *       - ??
+ *     - Otherwise if ENDOOR_TYPE_0? or ENDOOR_TYPE_2? or ENDOOR_TYPE_3?
+ *       - ??
+ *     - Otherwise if ENDOOR_TYPE_SCHEDULE
+ *       - Run schedule
+ *       - ?
+ *   - Otherwise if ENDOOR_TYPE_4??
+ *     - ??
+ */
+void EnDoor_Idle(EnDoor* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->knobDoor.dyna.actor, &play->state) &&
@@ -433,34 +473,42 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     }
 
     if (this->knobDoor.playOpenAnim) {
-        this->actionFunc = func_80867144;
+        // Player has requested this door to open
+
+        this->actionFunc = EnDoor_Open;
         Animation_PlayOnceSetSpeed(&this->knobDoor.skelAnime, sAnimations[this->knobDoor.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
 
-        if (this->unk_1A6 != 0) {
+        // If this is a locked door then handle small key counts, sfx and switch flag
+        if (this->lockTimer != 0) {
             DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
             Flags_SetSwitch(play, this->actionVar.switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->openTimer != 0) {
-        this->actionFunc = func_80866F94;
+        // An schedule actor has requested to open this door
+
+        this->actionFunc = EnDoor_OpenScheduleActor;
         Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
         Vec3f playerPosRelToDoor;
 
+        // Check if player is near this door and looking at it
         Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                            (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             s16 yawDiff = player->actor.shape.rot.y - this->knobDoor.dyna.actor.shape.rot.y;
 
             if (playerPosRelToDoor.z > 0.0f) {
-                yawDiff = (0x8000 - yawDiff);
+                yawDiff = 0x8000 - yawDiff;
             }
             if (ABS_ALT(yawDiff) < 0x3000) {
+                // Set this door as the one Player can interact with
                 player->doorType = PLAYER_DOORTYPE_HANDLE;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->knobDoor.dyna.actor;
-                if (this->unk_1A6 != 0) {
+
+                if (this->lockTimer != 0) {
                     if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->knobDoor.dyna.actor.textId = 0x1802;
@@ -511,7 +559,13 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     }
 }
 
-void func_80866F94(EnDoor* this, PlayState* play) {
+/**
+ * Handle opening and closing request from an schedule actor.
+ * 
+ * To trigger this an schedule actor must set the `openTimer` member, where its magnitude specifies for how many frames the door will be open (after the opening animation) and its sign indicates which direction the door will open.
+ * When the specified amount of frames has passed the door will closed automatically, without needing intervention from the schedule actor.
+ */
+void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play) {
     s32 direction;
 
     if (this->openTimer != 0) {
@@ -525,7 +579,7 @@ void func_80866F94(EnDoor* this, PlayState* play) {
         }
     } else {
         if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, 0, 0x7D0)) {
-            this->actionFunc = func_80866B20;
+            this->actionFunc = EnDoor_Idle;
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
         }
     }
@@ -548,17 +602,17 @@ void func_80867080(EnDoor* this, PlayState* play) {
 void func_808670F0(EnDoor* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, 0, 0x700)) {
         Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_CLOSE);
-        this->actionFunc = func_80866B20;
+        this->actionFunc = EnDoor_Idle;
     }
 }
 
-void func_80867144(EnDoor* this, PlayState* play) {
+void EnDoor_Open(EnDoor* this, PlayState* play) {
     s32 numEffects;
     s32 i;
 
-    if (DECR(this->unk_1A6) == 0) {
+    if (DECR(this->lockTimer) == 0) {
         if (SkelAnime_Update(&this->knobDoor.skelAnime)) {
-            this->actionFunc = func_80866B20;
+            this->actionFunc = EnDoor_Idle;
             this->knobDoor.playOpenAnim = false;
         } else if (Animation_OnFrame(&this->knobDoor.skelAnime, sAnimOpenFrames[this->knobDoor.animIndex])) {
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_OC_DOOR_OPEN);
@@ -624,8 +678,10 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
         } else {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
         }
+
         SkelAnime_DrawOpa(play, this->knobDoor.skelAnime.skeleton, this->knobDoor.skelAnime.jointTable,
                           EnDoor_OverrideLimbDraw, NULL, &this->knobDoor.dyna.actor);
+
         if (this->knobDoor.dyna.actor.world.rot.y != 0) {
             if (this->knobDoor.dyna.actor.world.rot.y > 0) {
                 gSPDisplayList(POLY_OPA_DISP++, gDoorRightDL);
@@ -633,8 +689,8 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
                 gSPDisplayList(POLY_OPA_DISP++, gDoorLeftDL);
             }
         }
-        if (this->unk_1A6) {
-            Actor_DrawDoorLock(play, this->unk_1A6, 0);
+        if (this->lockTimer) {
+            Actor_DrawDoorLock(play, this->lockTimer, DOORLOCK_NORMAL);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

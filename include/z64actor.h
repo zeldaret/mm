@@ -463,7 +463,7 @@ typedef enum ActorId {
 #undef DEFINE_ACTOR_INTERNAL
 #undef DEFINE_ACTOR_UNSET
 
-typedef enum {
+typedef enum DoorLockType {
     /* 0 */ DOORLOCK_NORMAL,
     /* 1 */ DOORLOCK_BOSS,
     /* 2 */ DOORLOCK_2, // DOORLOCK_NORMAL_SPIRIT on OoT

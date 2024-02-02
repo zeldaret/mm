@@ -14,10 +14,10 @@ typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
 typedef enum EnDoorType {
     /* 0 */ ENDOOR_TYPE_0,
-    /* 1 */ ENDOOR_TYPE_1,
+    /* 1 */ ENDOOR_TYPE_LOCKED,
     /* 2 */ ENDOOR_TYPE_2,
     /* 3 */ ENDOOR_TYPE_3,
-    /* 4 */ ENDOOR_TYPE_4,
+    /* 4 */ ENDOOR_TYPE_4, // OoT: AJAR.
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
     /* 7 */ ENDOOR_TYPE_7 // unused
@@ -65,12 +65,12 @@ typedef struct EnDoor {
     /* 0x1A5 */ union {
                     u8 actionVar; // generic
                     u8 actionVar_0_2_3; // ENDOOR_TYPE_0, ENDOOR_TYPE_2 and ENDOOR_TYPE_3
-                    u8 switchFlag; // ENDOOR_TYPE_1
+                    u8 switchFlag; // ENDOOR_TYPE_LOCKED
                     u8 schType; // ENDOOR_TYPE_SCHEDULE
                     u8 actionVar_7; // ENDOOR_TYPE_7
                 } actionVar; // TODO: think on a better name
-    /* 0x1A6 */ u8 unk_1A6;
-    /* 0x1A7 */ s8 openTimer; // For how long the door will be open. positive/negative means the opening direction
+    /* 0x1A6 */ u8 lockTimer; // Used by ENDOOR_TYPE_LOCKED. Also controls drawing the lock on the door and side effects of opening a locked door, like decreasing the key count and updating the switch flag
+    /* 0x1A7 */ s8 openTimer; // For how long the door will be open. positive/negative means the opening direction. It is meant to be used only by ENDOOR_TYPE_SCHEDULE, and set by schedule actors. See EnDoor_OpenScheduleActor.
     /* 0x1A8 */ Vec3s limbTable[DOOR_LIMB_MAX];
     /* 0x1C8 */ EnDoorActionFunc actionFunc;
 } EnDoor;

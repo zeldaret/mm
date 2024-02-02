@@ -8,7 +8,7 @@ typedef struct KnobDoorActor {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;
     /* 0x1A0 */ u8 animIndex;
-    /* 0x1A1 */ u8 playOpenAnim;
+    /* 0x1A1 */ u8 playOpenAnim; // Name suggestions: DoOpen? PerformOpen? closen't? requestOpen? (OoT calls this `playerIsOpening`, but the door may be interacter by NPCs, see func_800F0BB4)
     /* 0x1A2 */ s8 objectSlot;
     /* 0x1A3 */ s8 dlIndex;
 } KnobDoorActor; // size = 0x1A4

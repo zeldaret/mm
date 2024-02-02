@@ -12,7 +12,7 @@ pyelftools>=0.26
 # diff
 watchdog>=0.10.2
 argcomplete
-python-Levenshtein
+Levenshtein
 cxxfilt
 
 # map parsing

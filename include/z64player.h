@@ -911,7 +911,7 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_2000000    (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
-// Swimming?
+// Swimming? Standing underwater?
 #define PLAYER_STATE1_8000000    (1 << 27)
 // 
 #define PLAYER_STATE1_10000000   (1 << 28)
