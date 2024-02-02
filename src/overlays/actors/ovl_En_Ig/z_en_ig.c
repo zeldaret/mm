@@ -19,7 +19,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play);
 void func_80BF2AF8(EnIg* this, PlayState* play);
 void func_80BF2BD4(EnIg* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Ig/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Ig/scheduleScripts.schl.inc"
 
 static s32 D_80BF3318[] = { -1, -1, 3, 1, 3, 1, 2, 0, 3, 5, 0, 3, 1, 2, 4 };
 

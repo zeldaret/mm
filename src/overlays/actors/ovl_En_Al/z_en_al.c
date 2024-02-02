@@ -17,7 +17,7 @@ void EnAl_Draw(Actor* thisx, PlayState* play);
 
 void func_80BDF6C4(EnAl* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Al/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Al/scheduleScripts.schl.inc"
 
 s32 D_80BDFCBC[] = {
     0x09000017, 0x0E27A50C, 0x09000018, 0x0E27A60C, 0x09000017, 0x0E27A70C, 0x09000018, 0x0E27A80C,
