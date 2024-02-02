@@ -16,8 +16,8 @@
 from __future__ import annotations
 
 import argparse
+import crunch64
 import dataclasses
-import libyaz0
 from pathlib import Path
 import struct
 
@@ -77,7 +77,7 @@ def extractArchive(archivePath: Path, outPath: Path):
     with outPath.open("wb") as out:
         currentOffset = 0
         for meta in archivesOffsets:
-            decompressedBytes = libyaz0.decompress(archiveBytes[meta.start:meta.end])
+            decompressedBytes = crunch64.yaz0.decompress(archiveBytes[meta.start:meta.end])
             decompressedSize = len(decompressedBytes)
             out.write(decompressedBytes)
 

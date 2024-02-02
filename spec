@@ -184,7 +184,7 @@ beginseg
     include "build/src/libultra/io/visetspecial.o"
     include "build/src/libultra/gu/coss.o"
     include "build/src/libultra/os/settime.o"
-    include "build/src/libultra/voice/voicestopread.o"
+    include "build/src/libultra/voice/voicestopreaddata.o"
     include "build/src/libultra/io/visetevent.o"
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"
@@ -3517,8 +3517,7 @@ beginseg
     name "ovl_Boss_Hakugin"
     compress
     include "build/src/overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.o"
-    include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.data.o"
-    include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_Hakugin/ovl_Boss_Hakugin_reloc.o"
 endseg
 
 beginseg

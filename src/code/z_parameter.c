@@ -6231,8 +6231,8 @@ void Interface_Draw(PlayState* play) {
             gSPLoadUcodeL(OVERLAY_DISP++, gspS2DEX2_fifo);
             gfx = OVERLAY_DISP;
             Prerender_DrawBackground2D(&gfx, sStoryTextures[interfaceCtx->storyType],
-                                       sStoryTLUTs[interfaceCtx->storyType], SCREEN_WIDTH, SCREEN_HEIGHT, 2, 1, 0x8000,
-                                       0x100, 0.0f, 0.0f, 1.0f, 1.0f, 0);
+                                       sStoryTLUTs[interfaceCtx->storyType], SCREEN_WIDTH, SCREEN_HEIGHT, G_IM_FMT_CI,
+                                       G_IM_SIZ_8b, G_TT_RGBA16, 256, 0.0f, 0.0f, 1.0f, 1.0f, 0);
             OVERLAY_DISP = gfx;
             gSPLoadUcode(OVERLAY_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
 
@@ -7218,15 +7218,15 @@ void Interface_Init(PlayState* play) {
         (play->sceneId != SCENE_LAST_GORON) && (play->sceneId != SCENE_LAST_ZORA) &&
         (play->sceneId != SCENE_LAST_LINK)) {
 
-        CLEAR_EVENTINF(EVENTINF_53); // Goht intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_54); // Odolwa intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_55); // Twinmold intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_56); // Gyorg intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_57); // Igos du Ikana intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_60); // Wart intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_61); // Majoras intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_62); //
-        CLEAR_EVENTINF(EVENTINF_63); // Gomess intro cutscene watched
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA);
+        CLEAR_EVENTINF(EVENTINF_ENTR_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOMESS);
     }
 
     sFinalHoursClockDigitsRed = sFinalHoursClockFrameEnvRed = sFinalHoursClockFrameEnvGreen =

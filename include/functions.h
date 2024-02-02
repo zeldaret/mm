@@ -518,8 +518,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
-
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
