@@ -444,24 +444,24 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
     return foundActor;
 }
 
-EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
-    s32 switchFlag;
+EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
         case ANJU_SCH_DOOR_26:
         case ANJU_SCH_DOOR_27:
-            switchFlag = 0xD;
+            schType = ENDOOR_SCH_TYPE_13;
             break;
 
         case ANJU_SCH_DOOR_33:
         case ANJU_SCH_DOOR_34:
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
-            switchFlag = 0xB;
+            schType = ENDOOR_SCH_TYPE_11;
             break;
 
         case ANJU_SCH_DOOR_36:
-            switchFlag = 0x10;
+            schType = ENDOOR_SCH_TYPE_16;
             break;
 
         case ANJU_SCH_DOOR_28:
@@ -471,14 +471,14 @@ EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) 
         case ANJU_SCH_DOOR_32:
         case ANJU_SCH_DOOR_35:
         case ANJU_SCH_DOOR_39:
-            switchFlag = 0xE;
+            schType = ENDOOR_SCH_TYPE_14;
             break;
 
         default:
             return NULL;
     }
 
-    return SubS_FindDoor(play, switchFlag);
+    return SubS_FindDoorSchedule(play, schType);
 }
 
 /**
@@ -1933,7 +1933,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
     s32 ret = false;
 
     this->timePath = NULL;
-    door = EnAn_FindDoor(play, scheduleOutput->result);
+    door = EnAn_FindDoorSchedule(play, scheduleOutput->result);
 
     limit = sSearchTimePathLimit[scheduleOutput->result];
     if (limit >= 0) {
@@ -2437,7 +2437,7 @@ s32 EnAn_HandleSch_InteractActor(EnAn* this, PlayState* play) {
 }
 
 s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
-    EnDoor* door = EnAn_FindDoor(play, this->scheduleResult);
+    EnDoor* door = EnAn_FindDoorSchedule(play, this->scheduleResult);
     Vec3f sp38;
     f32 distance;
     s32 pad;

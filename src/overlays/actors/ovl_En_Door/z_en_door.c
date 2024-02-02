@@ -5,6 +5,9 @@
  */
 
 #include "z_en_door.h"
+
+#include "libc/assert.h"
+
 #include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
 #include "objects/object_dor02/object_dor02.h"
@@ -78,11 +81,39 @@ typedef enum DoorScheduleResult {
 
 #include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
-ScheduleScript* D_8086778C[] = {
-    D_808675D0, D_808675E4, D_80867634, D_80867640, D_8086764C, D_80867658, D_80867684, D_80867688,
-    D_80867690, D_80867698, D_808676A0, D_808676B8, D_808676D0, D_808676D4, D_808676D8, D_808676E4,
-    D_808676EC, D_808676F0, D_80867704, D_80867708, D_8086770C, D_80867710, D_80867714, D_8086771C,
-    D_80867734, D_8086773C, D_80867744, D_8086775C, D_80867778, D_8086777C, D_80867780, D_80867784,
+ScheduleScript* D_8086778C[ENDOOR_SCH_TYPE_MAX] = {
+    D_808675D0, // ENDOOR_SCH_TYPE_0
+    D_808675E4, // ENDOOR_SCH_TYPE_1
+    D_80867634, // ENDOOR_SCH_TYPE_2
+    D_80867640, // ENDOOR_SCH_TYPE_3
+    D_8086764C, // ENDOOR_SCH_TYPE_4
+    D_80867658, // ENDOOR_SCH_TYPE_5
+    D_80867684, // ENDOOR_SCH_TYPE_6
+    D_80867688, // ENDOOR_SCH_TYPE_7
+    D_80867690, // ENDOOR_SCH_TYPE_8
+    D_80867698, // ENDOOR_SCH_TYPE_9
+    D_808676A0, // ENDOOR_SCH_TYPE_10
+    D_808676B8, // ENDOOR_SCH_TYPE_11
+    D_808676D0, // ENDOOR_SCH_TYPE_12
+    D_808676D4, // ENDOOR_SCH_TYPE_13
+    D_808676D8, // ENDOOR_SCH_TYPE_14
+    D_808676E4, // ENDOOR_SCH_TYPE_15
+    D_808676EC, // ENDOOR_SCH_TYPE_16
+    D_808676F0, // ENDOOR_SCH_TYPE_17
+    D_80867704, // ENDOOR_SCH_TYPE_18
+    D_80867708, // ENDOOR_SCH_TYPE_19
+    D_8086770C, // ENDOOR_SCH_TYPE_20
+    D_80867710, // ENDOOR_SCH_TYPE_21
+    D_80867714, // ENDOOR_SCH_TYPE_22
+    D_8086771C, // ENDOOR_SCH_TYPE_23
+    D_80867734, // ENDOOR_SCH_TYPE_24
+    D_8086773C, // ENDOOR_SCH_TYPE_25
+    D_80867744, // ENDOOR_SCH_TYPE_26
+    D_8086775C, // ENDOOR_SCH_TYPE_27
+    D_80867778, // ENDOOR_SCH_TYPE_28
+    D_8086777C, // ENDOOR_SCH_TYPE_29
+    D_80867780, // ENDOOR_SCH_TYPE_30
+    D_80867784, // ENDOOR_SCH_TYPE_31
 };
 
 ActorInit En_Door_InitVars = {
@@ -144,40 +175,43 @@ typedef enum EnDoorObjectInfoIndex {
     /* 16 */ DOOR_OBJINFO_16,
 
     /* 17 */ DOOR_OBJKIND_SCHEDULE,
-    /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE,
-    /* 18 */ DOOR_OBJINFO_18,
-    /* 19 */ DOOR_OBJINFO_19,
-    /* 20 */ DOOR_OBJINFO_20,
-    /* 21 */ DOOR_OBJINFO_21,
-    /* 22 */ DOOR_OBJINFO_22,
-    /* 23 */ DOOR_OBJINFO_23,
-    /* 24 */ DOOR_OBJINFO_24,
-    /* 25 */ DOOR_OBJINFO_25,
-    /* 26 */ DOOR_OBJINFO_26,
-    /* 27 */ DOOR_OBJINFO_27,
-    /* 28 */ DOOR_OBJINFO_28,
-    /* 29 */ DOOR_OBJINFO_29,
-    /* 30 */ DOOR_OBJINFO_30,
-    /* 31 */ DOOR_OBJINFO_31,
-    /* 32 */ DOOR_OBJINFO_32,
-    /* 33 */ DOOR_OBJINFO_33,
-    /* 34 */ DOOR_OBJINFO_34,
-    /* 35 */ DOOR_OBJINFO_35,
-    /* 36 */ DOOR_OBJINFO_36,
-    /* 37 */ DOOR_OBJINFO_37,
-    /* 38 */ DOOR_OBJINFO_38,
-    /* 39 */ DOOR_OBJINFO_39,
-    /* 40 */ DOOR_OBJINFO_40,
-    /* 41 */ DOOR_OBJINFO_41,
-    /* 42 */ DOOR_OBJINFO_42,
-    /* 43 */ DOOR_OBJINFO_43,
-    /* 44 */ DOOR_OBJINFO_44,
-    /* 45 */ DOOR_OBJINFO_45,
-    /* 46 */ DOOR_OBJINFO_46,
-    /* 47 */ DOOR_OBJINFO_47,
-    /* 48 */ DOOR_OBJINFO_48,
+    /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE, // ENDOOR_SCH_TYPE_0
+    /* 18 */ DOOR_OBJINFO_18, // ENDOOR_SCH_TYPE_1
+    /* 19 */ DOOR_OBJINFO_19, // ENDOOR_SCH_TYPE_2
+    /* 20 */ DOOR_OBJINFO_20, // ENDOOR_SCH_TYPE_3
+    /* 21 */ DOOR_OBJINFO_21, // ENDOOR_SCH_TYPE_4
+    /* 22 */ DOOR_OBJINFO_22, // ENDOOR_SCH_TYPE_5
+    /* 23 */ DOOR_OBJINFO_23, // ENDOOR_SCH_TYPE_6
+    /* 24 */ DOOR_OBJINFO_24, // ENDOOR_SCH_TYPE_7
+    /* 25 */ DOOR_OBJINFO_25, // ENDOOR_SCH_TYPE_8
+    /* 26 */ DOOR_OBJINFO_26, // ENDOOR_SCH_TYPE_9
+    /* 27 */ DOOR_OBJINFO_27, // ENDOOR_SCH_TYPE_10
+    /* 28 */ DOOR_OBJINFO_28, // ENDOOR_SCH_TYPE_11
+    /* 29 */ DOOR_OBJINFO_29, // ENDOOR_SCH_TYPE_12
+    /* 30 */ DOOR_OBJINFO_30, // ENDOOR_SCH_TYPE_13
+    /* 31 */ DOOR_OBJINFO_31, // ENDOOR_SCH_TYPE_14
+    /* 32 */ DOOR_OBJINFO_32, // ENDOOR_SCH_TYPE_15
+    /* 33 */ DOOR_OBJINFO_33, // ENDOOR_SCH_TYPE_16
+    /* 34 */ DOOR_OBJINFO_34, // ENDOOR_SCH_TYPE_17
+    /* 35 */ DOOR_OBJINFO_35, // ENDOOR_SCH_TYPE_18
+    /* 36 */ DOOR_OBJINFO_36, // ENDOOR_SCH_TYPE_19
+    /* 37 */ DOOR_OBJINFO_37, // ENDOOR_SCH_TYPE_20
+    /* 38 */ DOOR_OBJINFO_38, // ENDOOR_SCH_TYPE_21
+    /* 39 */ DOOR_OBJINFO_39, // ENDOOR_SCH_TYPE_22
+    /* 40 */ DOOR_OBJINFO_40, // ENDOOR_SCH_TYPE_23
+    /* 41 */ DOOR_OBJINFO_41, // ENDOOR_SCH_TYPE_24
+    /* 42 */ DOOR_OBJINFO_42, // ENDOOR_SCH_TYPE_25
+    /* 43 */ DOOR_OBJINFO_43, // ENDOOR_SCH_TYPE_26
+    /* 44 */ DOOR_OBJINFO_44, // ENDOOR_SCH_TYPE_27
+    /* 45 */ DOOR_OBJINFO_45, // ENDOOR_SCH_TYPE_28
+    /* 46 */ DOOR_OBJINFO_46, // ENDOOR_SCH_TYPE_29
+    /* 47 */ DOOR_OBJINFO_47, // ENDOOR_SCH_TYPE_30
+    /* 48 */ DOOR_OBJINFO_48, // ENDOOR_SCH_TYPE_31
     /* 49 */ DOOR_OBJINFO_MAX
 } EnDoorObjectInfoIndex;
+
+static_assert(ENDOOR_SCH_TYPE_0 == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
+static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
 
 static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
     { SCENE_MITURIN, DOOR_DL_WOODFALL, OBJECT_NUMA_OBJ },                  // DOOR_OBJINFO_0
@@ -322,8 +356,8 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, DOOR_LIMB_MAX);
 
-    if (this->doorType == ENDOOR_TYPE_5) {
-        objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->actionVar.actionVar_5];
+    if (this->doorType == ENDOOR_TYPE_SCHEDULE) {
+        objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->actionVar.schType];
     } else {
         for (i = 0; i < DOOR_OBJKIND_KEEP; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
@@ -456,10 +490,10 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->knobDoor.dyna.actor.textId = baseTextId + textIdOffset;
                     }
-                } else if ((this->doorType == ENDOOR_TYPE_5) && (playerPosRelToDoor.z > 0.0f)) {
+                } else if ((this->doorType == ENDOOR_TYPE_SCHEDULE) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->actionVar.actionVar_5], &scheduleOutput)) {
+                    if (Schedule_RunScript(play, D_8086778C[this->actionVar.schType], &scheduleOutput)) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         // TODO: is really worth to do (0x1800 + DOOR_SCH_33)?

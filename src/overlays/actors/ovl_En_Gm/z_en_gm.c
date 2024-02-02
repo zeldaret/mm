@@ -172,39 +172,40 @@ Actor* func_8094DEE0(EnGm* this, PlayState* play, u8 arg2, s16 arg3) {
     return foundActor;
 }
 
-EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
-    s32 phi_a1;
+EnDoor* EnGm_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
-    switch (arg1) {
+    switch (scheduleOutputResult) {
         case 9:
         case 13:
         case 15:
-            phi_a1 = 11;
+            schType = ENDOOR_SCH_TYPE_11;
             break;
 
         case 10:
         case 11:
         case 16:
         case 17:
-            phi_a1 = 17;
+            schType = ENDOOR_SCH_TYPE_17;
             break;
 
         case 12:
         case 14:
         case 20:
-            phi_a1 = 10;
+            schType = ENDOOR_SCH_TYPE_10;
             break;
 
         case 18:
         case 19:
-            phi_a1 = 19;
+            schType = ENDOOR_SCH_TYPE_19;
             break;
 
         default:
-            phi_a1 = -1;
+            schType = -1;
+            break;
     }
 
-    return SubS_FindDoor(play, phi_a1);
+    return SubS_FindDoorSchedule(play, schType);
 }
 
 s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
@@ -943,7 +944,7 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = func_8094DF90(play, scheduleOutput->result);
+    door = EnGm_FindDoorSchedule(play, scheduleOutput->result);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
@@ -1380,7 +1381,7 @@ s32 func_80950804(EnGm* this, PlayState* play) {
     s32 pad;
     f32 temp_f0;
 
-    door = func_8094DF90(play, this->unk_258);
+    door = EnGm_FindDoorSchedule(play, this->unk_258);
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {

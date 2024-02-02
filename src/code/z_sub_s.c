@@ -15,9 +15,9 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
+ * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_SCHEDULE and the specified schType (a value from the EnDoorScheduleType enum).
  */
-EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
+EnDoor* SubS_FindDoorSchedule(PlayState* play, s32 schType) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -29,7 +29,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_5) && (door->actionVar.actionVar_5 == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->actionVar.schType == (u8)schType)) {
             break;
         }
 

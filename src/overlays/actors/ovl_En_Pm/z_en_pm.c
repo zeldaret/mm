@@ -266,36 +266,36 @@ Actor* func_80AF7CB0(EnPm* this, PlayState* play, u8 actorCat, s16 actorId) {
     return phi_s0;
 }
 
-EnDoor* func_80AF7D60(PlayState* play, s32 arg1) {
-    s32 phi_a1;
+EnDoor* func_80AF7D60(PlayState* play, s32 scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
-    switch (arg1) {
+    switch (scheduleOutputResult) {
         case 1:
         case 2:
         case 32:
         case 33:
-            phi_a1 = 1;
+            schType = ENDOOR_SCH_TYPE_1;
             break;
 
         case 34:
         case 35:
         case 36:
         case 37:
-            phi_a1 = 10;
+            schType = ENDOOR_SCH_TYPE_10;
             break;
 
         case 10:
         case 11:
         case 12:
         case 13:
-            phi_a1 = 11;
+            schType = ENDOOR_SCH_TYPE_11;
             break;
 
         default:
             return NULL;
     }
 
-    return SubS_FindDoor(play, phi_a1);
+    return SubS_FindDoorSchedule(play, schType);
 }
 
 Actor* func_80AF7DC4(EnPm* this, PlayState* play, s32 arg2) {
