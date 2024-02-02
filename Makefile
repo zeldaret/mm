@@ -227,7 +227,7 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | $(SPEC_REPLACE_VARS) | grep -o '[^"]*_reloc.o' )
 
-SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),build/$f)
+SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),$(BUILD_DIR)/$f)
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
@@ -477,7 +477,7 @@ $(BUILD_DIR)/assets/%.bin.inc.c: assets/%.bin
 $(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
-build/%.schl.inc: %.schl
+$(BUILD_DIR)/%.schl.inc: %.schl
 	$(SCHC) $(SCHC_FLAGS) -o $@ $<
 
 -include $(DEP_FILES)
