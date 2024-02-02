@@ -692,7 +692,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
 
         sMajorasRemains[thisx->params - MAJORAS_REMAINS] = this;
 
-        if (CHECK_EVENTINF(EVENTINF_61)) {
+        if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA)) {
             Actor_SetScale(&this->actor, 0.03f);
             this->actor.world.pos.x = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].x;
             this->actor.world.pos.y = 370.0f;
@@ -746,7 +746,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             Effect_Add(play, &this->effectIndex, EFFECT_TIRE_MARK, 0, 0, &sMaskTireMarkInit);
             sMajorasMask = this;
 
-            if (CHECK_EVENTINF(EVENTINF_61)) {
+            if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA)) {
                 this->actor.world.pos.x = 0.0f;
                 this->actor.world.pos.y = sREG(17) + 277.0f;
                 this->actor.world.pos.z = -922.5f;
@@ -5206,7 +5206,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     Cutscene_StopManual(play, &play->csCtx);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-                    SET_EVENTINF(EVENTINF_61);
+                    SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA);
                     Play_DisableMotionBlur();
                 }
             } else if ((this->timer_ABC8 % 2) != 0) {
