@@ -292,6 +292,7 @@ static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
     &gameplay_keep_Anim_022FF0, // PLAYER_FORM_DEKU
     &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
 };
+
 static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
     // left
     25, // PLAYER_FORM_FIERCE_DEITY
@@ -522,8 +523,8 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                            (this->doorType == ENDOOR_TYPE_3)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 temp_a2 = D_801AED48[this->actionVar.actionVar_0_2_3 & 7];
-                    s32 textIdOffset = (this->actionVar.actionVar_0_2_3 >> 3) & 0xF;
+                    s16 temp_a2 = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3)];
+                    s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3);
 
                     if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
                         ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & temp_a2)) ||

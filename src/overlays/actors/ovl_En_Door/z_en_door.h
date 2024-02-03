@@ -9,15 +9,12 @@ struct EnDoor;
 
 typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
-#define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
-#define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
-
 typedef enum EnDoorType {
     /* 0 */ ENDOOR_TYPE_0,
     /* 1 */ ENDOOR_TYPE_LOCKED,
     /* 2 */ ENDOOR_TYPE_2,
     /* 3 */ ENDOOR_TYPE_3,
-    /* 4 */ ENDOOR_TYPE_4, // OoT: AJAR.
+    /* 4 */ ENDOOR_TYPE_4, // OoT: AJAR. unused
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
     /* 7 */ ENDOOR_TYPE_7 // unused
@@ -58,6 +55,21 @@ typedef enum EnDoorScheduleType {
     /* 31 */ ENDOOR_SCH_TYPE_31,
     /* 32 */ ENDOOR_SCH_TYPE_MAX
 } EnDoorScheduleType;
+
+#define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
+#define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
+
+#define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(actionVar) ((actionVar) & 0x7)
+#define ENDOOR_GET_TEXTOFFSET_FROM_ACTIONVAR_0_2_3(actionVar) (((actionVar) >> 3) & 0xF)
+
+#define ENDOOR_PACK_ACTIONVAR_0_2_3(halfDayBitIndex, textOffset) ((((textOffset) & 0xF) << 3) | ((halfDayBitIndex) & 0x7))
+
+#define ENDOOR_PARAMS(type, actionVar) ((((type) & 7) << 7) | ((actionVar) & 0x7F))
+
+/**
+ * `scheduleType` must be a value of the `EnDoorScheduleType` enum
+ */
+#define ENDOOR_PARAMS_SCHEDULE(scheduleType) ENDOOR_PARAMS(ENDOOR_TYPE_SCHEDULE, scheduleType)
 
 typedef struct EnDoor {
     /* 0x000 */ KnobDoorActor knobDoor;
