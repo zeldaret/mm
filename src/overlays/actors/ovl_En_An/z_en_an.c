@@ -71,7 +71,7 @@ typedef enum AnjuScheduleResult {
     /* 20 */ ANJU_SCH_20,
     // 12:00 ~ 12:15, Day 1 and Day 2 (if did had the Midnight meeting). Give lunch to Granny
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANNY,
-    // Day 3, 06:00 ~ 11:00. Sweeping the Suite room. TODO: maybe rename to "cleaning Suite room"?
+    // Day 3, 06:00 ~ 11:00. Sweeping the Large Suite.
     /* 22 */ ANJU_SCH_SWEEPING,
     // Day 1, 00:00 ~ 06:00. Waiting for player at the kitchen to have the Midnight meeting.
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
@@ -450,7 +450,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
     switch (scheduleOutputResult) {
         case ANJU_SCH_DOOR_26:
         case ANJU_SCH_DOOR_27:
-            schType = ENDOOR_SCH_TYPE_13;
+            schType = ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR;
             break;
 
         case ANJU_SCH_DOOR_33:
@@ -461,7 +461,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
             break;
 
         case ANJU_SCH_DOOR_36:
-            schType = ENDOOR_SCH_TYPE_16;
+            schType = ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR;
             break;
 
         case ANJU_SCH_DOOR_28:
@@ -471,7 +471,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
         case ANJU_SCH_DOOR_32:
         case ANJU_SCH_DOOR_35:
         case ANJU_SCH_DOOR_39:
-            schType = ENDOOR_SCH_TYPE_14;
+            schType = ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR;
             break;
 
         default:

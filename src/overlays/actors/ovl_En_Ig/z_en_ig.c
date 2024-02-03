@@ -170,7 +170,7 @@ EnDoor* EnIg_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
             break;
 
         case 8:
-            schType = ENDOOR_SCH_TYPE_15;
+            schType = ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR;
             break;
 
         default:

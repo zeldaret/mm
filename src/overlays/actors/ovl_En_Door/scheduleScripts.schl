@@ -189,6 +189,7 @@ sDoorSch_MilkBar {
     }
 }
 
+// Stock Pot Inn: Main door
 sDoorSch_InnMainDoor {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         if_day (3) {
@@ -212,24 +213,32 @@ sDoorSch_InnMainDoor {
     }
 }
 
-D_808676D0 {
+// Stock Pot Inn: Entrance at the second floor
+sDoorSch_InnUpperEntrance {
     return_none
 }
 
-D_808676D4 {
+// Stock Pot Inn: Granny's door
+sDoorSch_InnGrannysDoor {
     return_none
 }
 
-D_808676D8 {
+// Stock Pot Inn: Staff room door
+sDoorSch_InnStaffRoomDoor {
+    // It is open at night 3
+
     if_day (3) {
         if_since_time (18, 0) {
             return_none
         }
     }
+
+    // "Only employees can enter"
     return_s (DOOR_SCH_20)
 }
 
-D_808676E4 {
+// Stock Pot Inn: Knife Chamber door
+sDoorSch_InnKnifeChamberDoor {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         return_s (DOOR_SCH_22)
     } else {
@@ -237,7 +246,8 @@ D_808676E4 {
     }
 }
 
-D_808676EC {
+// Stock Pot Inn: Large Suite door
+sDoorSch_InnLargeSuiteDoor {
     return_none
 }
 
