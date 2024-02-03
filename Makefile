@@ -69,7 +69,7 @@ N64_EMULATOR ?=
 # Ensure the map file being created using English localization
 export LANG := C
 
-ifeq ($(NON_MATCHING),1)
+ifneq ($(NON_MATCHING),0)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
