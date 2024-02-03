@@ -120,23 +120,16 @@ def main():
     """
 
     parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("mapFile", help="Path to a map file.")
-    parser.add_argument("mapFileExpected", help="Path to the expected map file. Optional, default is 'expected/mapFile'.", nargs="?", default="")
     parser.add_argument("-a", "--print-all", help="Print all bss, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     parser.add_argument("--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
     parser.add_argument("-s", "--section", help="Specify a section other than bss to check for reordered symbols", default=".bss")
     args = parser.parse_args()
 
-    mapfilePath = Path(args.mapFile)
+    mapfilePath = Path("build/mm.map")
+    mapfileExpectedPath = "expected" / mapfilePath
     reverseCheck: bool = not args.no_reverse_check
     section: str = args.section
-
-    if args.mapFileExpected == "":
-        mapfileExpectedPath = "expected" / mapfilePath
-    else:
-        mapfileExpectedPath = Path(args.mapFileExpected)
-
 
     comparisonInfo = compareMapFiles(mapfilePath, mapfileExpectedPath, section, reverseCheck)
     printSymbolComparison(comparisonInfo, args.print_all)
