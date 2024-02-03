@@ -23,7 +23,6 @@ static void write_dmadata_table(FILE *fout)
         }
 
         if (g_segments[i].flags & FLAG_UNSET) {
-            // For segments set with SYMS, unset in the dma table
             fprintf(fout, "DEFINE_DMA_ENTRY_UNSET(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
         } else {
             fprintf(fout, "DEFINE_DMA_ENTRY(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
@@ -34,24 +33,25 @@ static void write_dmadata_table(FILE *fout)
 static void write_compress_ranges(FILE *fout)
 {
     int i;
+    int rom_index = 0;
     bool continue_list = false;
     int stride_first = -1;
-    int shift = 0;
 
     for (i = 0; i < g_segmentsCount; i++) {
+        bool compress = g_segments[i].compress;
+
+        // Don't consider segments set with NOLOAD when calculating indices
         if (g_segments[i].flags & FLAG_NOLOAD) {
-            shift++;
             continue;
         }
 
-        if (g_segments[i].compress) {
+        if (compress) {
             if (stride_first == -1)
-                stride_first = i - shift;
+                stride_first = rom_index;
         }
-
-        if (!g_segments[i].compress || i == g_segmentsCount - 1) {
+        if (!compress || i == g_segmentsCount - 1) {
             if (stride_first != -1) {
-                int stride_last = i - shift - 1;
+                int stride_last = compress ? rom_index : rom_index - 1;
                 if (continue_list) {
                     fprintf(fout, ",");
                 }
@@ -64,6 +64,8 @@ static void write_compress_ranges(FILE *fout)
                 stride_first = -1;
             }
         }
+
+        rom_index++;
     }
 }
 

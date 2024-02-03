@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import struct
 import sys
 from multiprocessing import Pool, cpu_count
@@ -1614,6 +1615,13 @@ def ExtractFunc(i):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Extracts an uncompressed rom to individual segment files."
+    )
+    parser.add_argument(
+        "version", help="Version of the game to extract.", default="n64-us"
+    )
+
     SEGMENTS_PATH.mkdir(parents=True, exist_ok=True)
 
     # read baserom data

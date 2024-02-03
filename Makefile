@@ -307,7 +307,7 @@ $(ROM): $(ELF)
 	$(CHECKSUMMER) $@
 
 $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/compress_ranges.txt
-	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-range `tools/buildtools/dmadata_range.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/compress_ranges.txt` --threads $(N_THREADS)
+	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-start `tools/buildtools/dmadata_start.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/undefined_syms.txt
@@ -354,9 +354,9 @@ venv:
 ## Extraction step
 setup:
 	$(MAKE) -C tools
-	$(PYTHON) tools/decompress_baserom.py $(VERSION)
-	$(PYTHON) tools/extract_baserom.py
-	$(PYTHON) tools/decompress_yars.py $(VERSION)
+	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
+	$(PYTHON) tools/buildtools/extract_baserom.py $(VERSION)
+	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
 assets:
 	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
