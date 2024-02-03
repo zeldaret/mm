@@ -266,7 +266,7 @@ Actor* func_80AF7CB0(EnPm* this, PlayState* play, u8 actorCat, s16 actorId) {
     return phi_s0;
 }
 
-EnDoor* func_80AF7D60(PlayState* play, s32 scheduleOutputResult) {
+EnDoor* EnPm_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
     EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
@@ -883,7 +883,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = func_80AF7D60(play, scheduleOutput->result);
+    door = EnPm_FindDoorSchedule(play, scheduleOutput->result);
     if (D_80AFB430[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }
@@ -1344,7 +1344,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF9D04(EnPm* this, PlayState* play) {
-    EnDoor* door = (EnDoor*)func_80AF7D60(play, this->unk_258);
+    EnDoor* door = (EnDoor*)EnPm_FindDoorSchedule(play, this->unk_258);
     Vec3f sp38;
     s32 pad;
     f32 temp;

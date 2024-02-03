@@ -12729,7 +12729,7 @@
     0x80AF7B40:("func_80AF7B40",),
     0x80AF7BAC:("func_80AF7BAC",),
     0x80AF7CB0:("func_80AF7CB0",),
-    0x80AF7D60:("func_80AF7D60",),
+    0x80AF7D60:("EnPm_FindDoorSchedule",),
     0x80AF7DC4:("func_80AF7DC4",),
     0x80AF7E6C:("func_80AF7E6C",),
     0x80AF7E98:("func_80AF7E98",),

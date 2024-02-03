@@ -100,7 +100,7 @@ sDoorSch_LotteryShop {
 }
 
 // Trading Post
-D_80867640 {
+sDoorSch_TradingPost {
     if_time_range (21, 0, 22, 0) {
         return_s (DOOR_SCH_11)
     } else {
@@ -108,7 +108,8 @@ D_80867640 {
     }
 }
 
-D_8086764C {
+// Curiosity Shop
+sDoorSch_CuriosityShop {
     not if_time_range (22, 0, 5, 0) {
         return_s (DOOR_SCH_10)
     } else {
@@ -116,7 +117,8 @@ D_8086764C {
     }
 }
 
-D_80867658 {
+// Laundry Pool
+sDoorSch_LaundryPool {
     if_day (2) {
         not if_week_event_reg (WEEKEVENTREG_28_08) {
             return_s (DOOR_SCH_12)
@@ -137,14 +139,18 @@ D_80867658 {
             }
         }
     }
+
+    // Day 1
     return_s (DOOR_SCH_12)
 }
 
-D_80867684 {
+// Bomb Shop
+sDoorSch_BombShop {
     return_none
 }
 
-D_80867688 {
+// Town Shooting Gallery
+sDoorSch_TownShootingGallery {
     if_since_time (22, 0) {
         return_s (DOOR_SCH_15)
     } else {
@@ -152,7 +158,8 @@ D_80867688 {
     }
 }
 
-D_80867690 {
+// Treasure Chest Shop
+sDoorSch_TreasureChestShop {
     if_since_time (22, 0) {
         return_s (DOOR_SCH_16)
     } else {
@@ -160,7 +167,8 @@ D_80867690 {
     }
 }
 
-D_80867698 {
+// Honey & Darling's Shop
+sDoorSch_HoneyDarlingShop {
     if_since_time (22, 0) {
         return_s (DOOR_SCH_17)
     } else {
@@ -251,19 +259,20 @@ sDoorSch_InnLargeSuiteDoor {
     return_none
 }
 
-D_808676F0 {
+// The Mayor's Residence: Main entrance
+sDoorSch_MayorsResidenceMainEntrance {
     if_day (3) {
         if_since_time (10, 0) {
-            label_0x8:
+        open_residence:
             return_none
         } else {
-            branch (label_0xF)
+            branch (closed_residence)
         }
     } else {
         if_time_range (10, 0, 20, 0) {
-            branch (label_0x8)
+            branch (open_residence)
         } else {
-            label_0xF:
+        closed_residence:
             return_s (DOOR_SCH_21)
         }
     }
@@ -379,7 +388,8 @@ D_80867778 {
     return_s (DOOR_SCH_32)
 }
 
-D_8086777C{
+// Magic Hags' Potion Shop
+sDoorSch_MagicHagsPotionShop{
     return_none
 }
 
@@ -387,7 +397,8 @@ D_80867780 {
     return_none
 }
 
-D_80867784 {
+// Swamp Shooting Gallery
+sDoorSch_SwampShootingGallery {
     if_since_time (22, 0) {
         return_s (DOOR_SCH_35)
     } else {
