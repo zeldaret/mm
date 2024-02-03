@@ -3,136 +3,117 @@ import colorama
 colorama.init()
 
 import argparse
-import os
-import re
-import collections
+import dataclasses
+import sys
+import mapfile_parser
+from pathlib import Path
 
-regex_fileDataEntry = re.compile(r"^\s+(?P<section>[^\s]+)\s+(?P<vram>0x[^\s]+)\s+(?P<size>0x[^\s]+)\s+(?P<name>[^\s]+)$")
-regex_bssEntry = re.compile(r"^\s+(?P<vram>0x[^\s]+)\s+(?P<name>[^\s]+)$")
-regex_label = re.compile(r"^(?P<name>L[0-9A-F]{8})$")
+def mapPathToSource(origName: Path) -> Path:
+    # Try to map built path to the source path
+    parts = origName.parts
+    if parts[0] == "build":
+        parts = parts[1:]
 
-VarInfo = collections.namedtuple("VarInfo", ["file", "vram"])
+    path = Path(*parts)
+    # Assume every file in the asm folder has .s extension, while everything else has .c extension
+    if path.parts[0] == "asm":
+        path = path.with_suffix(".s")
+    else:
+        path = path.with_suffix(".c")
+    return path
 
-def parseMapFile(mapPath: str):
-    with open(mapPath) as f:
-        mapData = f.read()
-        startIndex = mapData.find("..makerom")
-        mapData = mapData[startIndex:]
-    # print(len(mapData))
+@dataclasses.dataclass
+class Compared:
+    symbol: mapfile_parser.Symbol
+    buildAddress: int
+    buildFile: mapfile_parser.File|None
+    expectedAddress: int
+    expectedFile: mapfile_parser.File|None
+    diff: int|None
 
-    symbolsDict = collections.OrderedDict()
 
-    inFile = False
-    currentFile = ""
+def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path) -> tuple[set[Path], set[Path], list[Compared]]:
+    badFiles: set[Path] = set()
+    missingFiles: set[Path] = set()
 
-    mapLines = mapData.split("\n")
-    for line in mapLines:
-        if inFile:
-            if line.startswith("                "):
-                entryMatch = regex_bssEntry.search(line)
+    print(f"Build mapfile:    {mapFileBuild}", file=sys.stderr)
+    print(f"Expected mapfile: {mapFileExpected}", file=sys.stderr)
+    print("", file=sys.stderr)
 
-                # Find variable
-                if entryMatch is not None:
-                    varName = entryMatch["name"]
-                    varVram = int(entryMatch["vram"], 16)
+    if not mapFileBuild.exists():
+        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: mapfile not found at {mapFileBuild}. Did you enter the correct path?", file=sys.stderr)
+        exit(1)
 
-                    # Filter out jump table labels
-                    labelMatch = regex_label.search(varName)
-                    if labelMatch is None:
-                        symbolsDict[varName] = VarInfo( currentFile, varVram )
-                        # print( symbolsDict[varName] )
+    if not mapFileExpected.exists():
+        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: expected mapfile not found at {mapFileExpected}. Is 'expected' missing or in a different folder?", file=sys.stderr)
+        exit(1)
 
+    buildMap = mapfile_parser.MapFile()
+    buildMap.readMapFile(mapFileBuild)
+    buildMap = buildMap.filterBySegmentType(".bss")
+
+    expectedMap = mapfile_parser.MapFile()
+    expectedMap.readMapFile(mapFileExpected)
+    expectedMap = expectedMap.filterBySegmentType(".bss")
+
+    comparedList: list[Compared] = []
+
+    for file in buildMap:
+        for symbol in file:
+            foundSymInfo = expectedMap.findSymbolByName(symbol.name)
+            if foundSymInfo is not None:
+                comp = Compared(symbol, symbol.vram, file, symbol.vram, foundSymInfo.file, symbol.vram - foundSymInfo.symbol.vram)
+                comparedList.append(comp)
+                if comp.diff != 0:
+                    badFiles.add(file.filepath)
             else:
-                inFile = False
-        else:
-            if line.startswith(" .bss "):
-                inFile = False
-                entryMatch = regex_fileDataEntry.search(line)
+                missingFiles.add(file.filepath)
+                comparedList.append(Compared(symbol, symbol.vram, file, -1, None, None))
 
-                # Find file
-                if entryMatch is not None:
-                    name = "/".join(entryMatch["name"].split("/")[1:])
+    for file in expectedMap:
+        for symbol in file:
+            foundSymInfo = buildMap.findSymbolByName(symbol.name)
+            if foundSymInfo is None:
+                missingFiles.add(file.filepath)
+                comparedList.append(Compared(symbol, -1, None, symbol.vram, file, None))
 
-                    # mapfile only contains .o files, so just strip the last character to replace it
-                    # we assume all the .c files are in the src folder, and all others are .s (true for OoT/MM)
-                    if name.split("/")[0] == "src":
-                        name = name[:-1] + "c"
-                    else:
-                        name = name[:-1] + "s"
-
-                    size = int(entryMatch["size"], 16)
-                    vram = int(entryMatch["vram"], 16)
-
-                    if size > 0:
-                        inFile = True
-                        currentFile = name
-
-    return symbolsDict
+    return badFiles, missingFiles, comparedList
 
 
-Compared = collections.namedtuple("Compared", [ "buildAddress", "buildFile", "expectedAddress", "expectedFile", "diff"])
-
-def compareMapFiles(mapFileBuild: str, mapFileExpected: str):
-    badFiles = set()
-    missingFiles = set()
-
-    print("Build mapfile:    " + mapFileBuild, file=os.sys.stderr)
-    print("Expected mapfile: " + mapFileExpected, file=os.sys.stderr)
-    print("", file=os.sys.stderr)
-
-    if not os.path.exists(mapFileBuild):
-        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: mapfile not found at {mapFileBuild}. Did you enter the correct path?", file=os.sys.stderr)
-        exit(1)
-
-    if not os.path.exists(mapFileExpected):
-        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: expected mapfile not found at {mapFileExpected}. Is 'expected' missing or in a different folder?", file=os.sys.stderr)
-        exit(1)
-
-    buildMap = parseMapFile(mapFileBuild)
-    expectedMap = parseMapFile(mapFileExpected)
-
-    comparedDict = collections.OrderedDict()
-
-    for symbol in buildMap:
-        if symbol in expectedMap:
-            comparedDict[symbol] = Compared( buildMap[symbol].vram, buildMap[symbol].file, expectedMap[symbol].vram, expectedMap[symbol].file, buildMap[symbol].vram - expectedMap[symbol].vram )
-            if comparedDict[symbol].diff != 0:
-                badFiles.add(buildMap[symbol].file)
-                
-        else:
-            missingFiles.add(buildMap[symbol].file)
-            comparedDict[symbol] = Compared( buildMap[symbol].vram, buildMap[symbol].file, -1, "", "Unknown" )
-
-    for symbol in expectedMap:
-        if not symbol in buildMap:
-            missingFiles.add(expectedMap[symbol].file)
-            comparedDict[symbol] = Compared( -1, "", expectedMap[symbol].vram, expectedMap[symbol].file, "Unknown" )
-
-    return badFiles, missingFiles, comparedDict
-
-
-def printCsv(badFiles, missingFiles, comparedDict, printAll = True):
+def printCsv(badFiles: set[Path], missingFiles: set[Path], comparedList: list[Compared], printAll = True):
     print("Symbol Name,Build Address,Build File,Expected Address,Expected File,Difference,GOOD/BAD/MISSING")
 
     # If it's bad or missing, don't need to do anything special.
     # If it's good, check for if it's in a file with bad or missing stuff, and check if print all is on. If none of these, print it.
-    
-    for symbol in comparedDict:
-        symbolInfo = comparedDict[symbol]
+
+    for symbolInfo in comparedList:
+        buildFile = symbolInfo.buildFile.filepath if symbolInfo.buildFile is not None else None
+        expectedFile = symbolInfo.expectedFile.filepath if symbolInfo.expectedFile is not None else None
+
+        buildFileName = ""
+        if buildFile is not None:
+            buildFileName = mapPathToSource(buildFile)
+
+        expectedFileName = ""
+        if expectedFile is not None:
+            expectedFileName = mapPathToSource(expectedFile)
+
         symbolGood = colorama.Fore.RED + "BAD" + colorama.Fore.RESET
-        if type(symbolInfo.diff) != int:
+        if symbolInfo.diff is None:
             symbolGood = colorama.Fore.YELLOW + "MISSING" + colorama.Fore.RESET
-            print(f"{symbol},{symbolInfo.buildAddress:X},{symbolInfo.buildFile},{symbolInfo.expectedAddress:X},{symbolInfo.expectedFile},{symbolInfo.diff},{symbolGood}")
+            print(f"{symbolInfo.symbol.name},{symbolInfo.buildAddress:X},{buildFileName},{symbolInfo.expectedAddress:X},{expectedFileName},{symbolInfo.diff},{symbolGood}")
             continue
 
         if symbolInfo.diff == 0:
             symbolGood = colorama.Fore.GREEN + "GOOD" + colorama.Fore.RESET
-            if (not symbolInfo.buildFile in badFiles and not symbolInfo.expectedFile in badFiles) and (not symbolInfo.buildFile in badFiles and not symbolInfo.expectedFile in badFiles) and not printAll:
-                continue
-        
-        if symbolInfo.buildFile != symbolInfo.expectedFile:
+            if not buildFile in badFiles and not expectedFile in badFiles:
+                if not buildFile in badFiles and not expectedFile in badFiles:
+                    if not printAll:
+                        continue
+
+        if buildFile != expectedFile:
             symbolGood += colorama.Fore.CYAN + " MOVED" + colorama.Fore.RESET
-        print(f"{symbol},{symbolInfo.buildAddress:X},{symbolInfo.buildFile},{symbolInfo.expectedAddress:X},{symbolInfo.expectedFile},{symbolInfo.diff:X},{symbolGood}")
+        print(f"{symbolInfo.symbol.name},{symbolInfo.buildAddress:X},{buildFileName},{symbolInfo.expectedAddress:X},{expectedFileName},{symbolInfo.diff:X},{symbolGood}")
 
 
 def main():
@@ -148,46 +129,51 @@ def main():
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     args = parser.parse_args()
 
-    if args.mapFileExpected == "":
-        args.mapFileExpected = os.path.join("expected", args.mapFile)
+    mapfilePath = Path(args.mapFile)
 
-    badFiles, missingFiles, comparedDict = compareMapFiles(args.mapFile, args.mapFileExpected)
-    printCsv(badFiles, missingFiles, comparedDict, args.print_all)
+    if args.mapFileExpected == "":
+        mapfileExpectedPath = "expected" / mapfilePath
+    else:
+        mapfileExpectedPath = Path(args.mapFileExpected)
+
+
+    badFiles, missingFiles, comparedList = compareMapFiles(mapfilePath, mapfileExpectedPath)
+    printCsv(badFiles, missingFiles, comparedList, args.print_all)
 
     if len(badFiles) + len(missingFiles) != 0:
-        print("", file=os.sys.stderr)
+        print("", file=sys.stderr)
 
         if len(badFiles) != 0:
             print(colorama.Fore.RED + "  BAD" + colorama.Style.RESET_ALL)
 
             for file in badFiles:
-                print(f"bss reordering in {file}", file=os.sys.stderr)
-            print("", file=os.sys.stderr)
-            
+                print(f"bss reordering in {mapPathToSource(file)}", file=sys.stderr)
+            print("", file=sys.stderr)
+
             if not args.no_fun_allowed:
                 print(colorama.Fore.LIGHTWHITE_EX +
                 "  BSS is REORDERED!!\n"
                 "  Oh! MY GOD!!" 
-                + colorama.Style.RESET_ALL, file=os.sys.stderr)
-                print("", file=os.sys.stderr)
+                + colorama.Style.RESET_ALL, file=sys.stderr)
+                print("", file=sys.stderr)
 
         if len(missingFiles) != 0:
             print(colorama.Fore.YELLOW + "  MISSING" + colorama.Style.RESET_ALL)
 
             for file in missingFiles:
-                print(f"Symbols missing from {file}", file=os.sys.stderr)
-            print("", file=os.sys.stderr)
+                print(f"Symbols missing from {mapPathToSource(file)}", file=sys.stderr)
+            print("", file=sys.stderr)
 
             if not args.no_fun_allowed:
-                print(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL, file=os.sys.stderr)
-                print("", file=os.sys.stderr)
+                print(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL, file=sys.stderr)
+                print("", file=sys.stderr)
 
-            print("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'", file=os.sys.stderr)
+            print("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'", file=sys.stderr)
 
         return 1
-    
-    print("", file=os.sys.stderr)
-    print(colorama.Fore.GREEN + "  GOOD" + colorama.Style.RESET_ALL, file=os.sys.stderr)
+
+    print("", file=sys.stderr)
+    print(colorama.Fore.GREEN + "  GOOD" + colorama.Style.RESET_ALL, file=sys.stderr)
 
     if args.no_fun_allowed:
         return 0
@@ -198,7 +184,7 @@ def main():
     colorama.Back.RED + "    All Global BSS is correct.    " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "             THANK YOU!           " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "      You are great decomper!     " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL , file=os.sys.stderr)
+    colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL , file=sys.stderr)
 
     return 0
 
