@@ -457,7 +457,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
         case ANJU_SCH_DOOR_34:
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
-            schType = ENDOOR_SCH_TYPE_11;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_DOOR;
             break;
 
         case ANJU_SCH_DOOR_36:

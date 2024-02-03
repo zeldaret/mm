@@ -1,4 +1,7 @@
-D_808675D0 {
+// Swordsman's School
+sDoorSch_SwordsmansSchool {
+    // The Swordsman's School is closed between 23:00 ~ 00:00 and says
+    // the teacher is "focusing his spirit"
     if_day (3) {
         not if_time_range (6, 0, 23, 0) {
             not if_time_range (0, 0, 6, 0) {
@@ -9,60 +12,86 @@ D_808675D0 {
     return_none
 }
 
-D_808675E4 {
+// Post Office
+sDoorSch_PostOffice {
     if_before_time (9, 0) {
+        // Closed between 00:00 ~ 09:00
         return_s (DOOR_SCH_9)
     } else if_before_time (12, 0) {
-        branch (label_0x1D)
+        // Delivering mail between 09:00 ~ 12:00
+        branch (delivering_mail_msg)
     } else {
         if_day (1) {
             branch (label_0x0E)
 
             label_0x0E:
             if_before_time (13, 0) {
-                branch (label_0x1C)
+                // Open between 12:00 ~ 13:00
+                branch (open_post_office)
             } else if_before_time (15, 0) {
-                branch (label_0x1D)
-            } else if_before_time (0, 0) {
-                branch (label_0x1C)
-            } else {
+                // Delivering mail between 13:00 ~ 15:00
+                branch (delivering_mail_msg)
+            } else if_since_time (0, 0) {
+                // Closed between 00:00 ~ 09:00
                 return_s (DOOR_SCH_9)
             }
+            // Open between 15:00 ~ 00:00
 
-        label_0x1C:
+        open_post_office:
             return_none
 
-        label_0x1D:
+        delivering_mail_msg:
+            // "Out delivering mail"
             return_s (DOOR_SCH_8)
         } else if_day (2) {
             if_week_event_reg (WEEKEVENTREG_28_08) {
+                // Related to letter to Kafei
+
                 if_before_time (13, 0) {
-                    branch (label_0x1C)
+                    // Open between 12:00 ~ 13:00
+                    branch (open_post_office)
                 } else if_before_time (17, 0) {
-                    branch (label_0x1D)
-                } else if_before_time (0, 0) {
-                    branch (label_0x1C)
-                } else {
+                    // Delivering mail between 13:00 ~ 17:00
+                    branch (delivering_mail_msg)
+                } else if_since_time (0, 0) {
+                    // Closed between 00:00 ~ 09:00
                     return_s (DOOR_SCH_9)
+                } else {
+                    // Open between 15:00 ~ 00:00
+                    branch (open_post_office)
                 }
-            } else if_since_time (13, 0) {
+            } else {
+                if_since_time (13, 0) {
+                    //! @bug Theis in-game message expliclty says the office should be open up to 15:00 (3 p.m.)
+                    //! Maybe it was a typo between 3 (p.m.) and 13?
+                    // Closed between 13:00 ~ 09:00
+                    return_s (DOOR_SCH_9)
+                } else {
+                    // Open between 12:00 ~ 13:00
+                    return_none
+                }
+            }
+        } else { // day 3
+            if_before_time (13, 0) {
+                // Open between 12:00 ~ 13:00
+                branch (open_post_office)
+            } else if_before_time (13, 0) {
+                //! @bug? unreachable code
+                branch (delivering_mail_msg)
+            } else if_before_time (18, 0) {
+                // Closed between 13:00 ~ 18:00
                 return_s (DOOR_SCH_9)
             } else {
+                // Open since 18:00
                 return_none
             }
-        } else if_before_time (13, 0) {
-            branch (label_0x1C)
-        } else if_before_time (13, 0) {
-            branch (label_0x1D)
-        } else if_before_time (18, 0) {
-            return_s (DOOR_SCH_9)
-        } else {
-            return_none
         }
     }
 }
 
-D_80867634 {
+// Lottery Shop
+sDoorSch_LotteryShop {
+    // Open between 06:00 ~ 23:00
     if_time_range (6, 0, 23, 0) {
         return_none
     } else {
@@ -70,6 +99,7 @@ D_80867634 {
     }
 }
 
+// Trading Post
 D_80867640 {
     if_time_range (21, 0, 22, 0) {
         return_s (DOOR_SCH_11)
@@ -138,34 +168,46 @@ D_80867698 {
     }
 }
 
-D_808676A0 {
+// Milk Bar
+sDoorSch_MilkBar {
     if_time_range (10, 0, 21, 0) {
+        // Open without requirements between 10:00 ~ 21:00
         return_none
     } else if_time_range (22, 0, 5, 0) {
         if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
+            // Player is a member of the Milk bar and can enter
             return_s (DOOR_SCH_33)
         } else {
+            // "Show you are a member"
             return_s (DOOR_SCH_34)
         }
     } else {
+        // Closed between 21:00 ~ 22:00 and 05:00 ~ 10:00
+
+        // Message saying when the Bar opens
         return_s (DOOR_SCH_18)
     }
 }
 
-D_808676B8 {
+sDoorSch_InnMainDoor {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         if_day (3) {
+            // Door is unlocked at night 3
+
             if_before_time (8, 0) {
                 return_s (DOOR_SCH_19)
             } else {
                 return_none
             }
-        } else if_time_range (8, 0, 20, 30) {
-            return_none
         } else {
-            return_s (DOOR_SCH_19)
+            not if_time_range (8, 0, 20, 30) {
+                return_s (DOOR_SCH_19)
+            } else {
+                return_none
+            }
         }
     } else {
+        // If player has the Room Key then they can enter the Inn at any time
         return_none
     }
 }

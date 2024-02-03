@@ -39,6 +39,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play);
 void func_808670F0(EnDoor* this, PlayState* play);
 void EnDoor_SetupType(EnDoor* this, PlayState* play);
 
+// TODO: Maybe this is a bit overkill? considering this is used as an offset to a text id
 typedef enum DoorScheduleResult {
     /*  0 */ DOOR_SCH_NONE,
     /*  1 */ DOOR_SCH_1,
@@ -81,10 +82,14 @@ typedef enum DoorScheduleResult {
 
 #include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
+/**
+ * A schedule returning none means the door can be used normally.
+ * Otherwise the result will be used as an offset relative to text message 0x1800
+ */
 ScheduleScript* D_8086778C[ENDOOR_SCH_TYPE_MAX] = {
-    D_808675D0, // ENDOOR_SCH_TYPE_0
-    D_808675E4, // ENDOOR_SCH_TYPE_1
-    D_80867634, // ENDOOR_SCH_TYPE_2
+    sDoorSch_SwordsmansSchool, // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
+    sDoorSch_PostOffice, // ENDOOR_SCH_TYPE_POST_OFFICE
+    sDoorSch_LotteryShop, // ENDOOR_SCH_TYPE_LOTTERY_SHOP
     D_80867640, // ENDOOR_SCH_TYPE_3
     D_8086764C, // ENDOOR_SCH_TYPE_4
     D_80867658, // ENDOOR_SCH_TYPE_5
@@ -92,8 +97,8 @@ ScheduleScript* D_8086778C[ENDOOR_SCH_TYPE_MAX] = {
     D_80867688, // ENDOOR_SCH_TYPE_7
     D_80867690, // ENDOOR_SCH_TYPE_8
     D_80867698, // ENDOOR_SCH_TYPE_9
-    D_808676A0, // ENDOOR_SCH_TYPE_10
-    D_808676B8, // ENDOOR_SCH_TYPE_11
+    sDoorSch_MilkBar, // ENDOOR_SCH_TYPE_MILK_BAR
+    sDoorSch_InnMainDoor, // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
     D_808676D0, // ENDOOR_SCH_TYPE_12
     D_808676D4, // ENDOOR_SCH_TYPE_13
     D_808676D8, // ENDOOR_SCH_TYPE_14
@@ -176,9 +181,9 @@ typedef enum EnDoorObjectInfoIndex {
     /* 16 */ DOOR_OBJINFO_16,
 
     /* 17 */ DOOR_OBJKIND_SCHEDULE,
-    /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE, // ENDOOR_SCH_TYPE_0
-    /* 18 */ DOOR_OBJINFO_18, // ENDOOR_SCH_TYPE_1
-    /* 19 */ DOOR_OBJINFO_19, // ENDOOR_SCH_TYPE_2
+    /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE, // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
+    /* 18 */ DOOR_OBJINFO_18, // ENDOOR_SCH_TYPE_POST_OFFICE
+    /* 19 */ DOOR_OBJINFO_19, // ENDOOR_SCH_TYPE_LOTTERY_SHOP
     /* 20 */ DOOR_OBJINFO_20, // ENDOOR_SCH_TYPE_3
     /* 21 */ DOOR_OBJINFO_21, // ENDOOR_SCH_TYPE_4
     /* 22 */ DOOR_OBJINFO_22, // ENDOOR_SCH_TYPE_5
@@ -186,8 +191,8 @@ typedef enum EnDoorObjectInfoIndex {
     /* 24 */ DOOR_OBJINFO_24, // ENDOOR_SCH_TYPE_7
     /* 25 */ DOOR_OBJINFO_25, // ENDOOR_SCH_TYPE_8
     /* 26 */ DOOR_OBJINFO_26, // ENDOOR_SCH_TYPE_9
-    /* 27 */ DOOR_OBJINFO_27, // ENDOOR_SCH_TYPE_10
-    /* 28 */ DOOR_OBJINFO_28, // ENDOOR_SCH_TYPE_11
+    /* 27 */ DOOR_OBJINFO_27, // ENDOOR_SCH_TYPE_MILK_BAR
+    /* 28 */ DOOR_OBJINFO_28, // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
     /* 29 */ DOOR_OBJINFO_29, // ENDOOR_SCH_TYPE_12
     /* 30 */ DOOR_OBJINFO_30, // ENDOOR_SCH_TYPE_13
     /* 31 */ DOOR_OBJINFO_31, // ENDOOR_SCH_TYPE_14
@@ -211,7 +216,7 @@ typedef enum EnDoorObjectInfoIndex {
     /* 49 */ DOOR_OBJINFO_MAX
 } EnDoorObjectInfoIndex;
 
-static_assert(ENDOOR_SCH_TYPE_0 == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
+static_assert(ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
 static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
 
 static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
@@ -468,6 +473,7 @@ s32 D_80867BC0;
 void EnDoor_Idle(EnDoor* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
+    // 0x1821: Player is a member of the "Latte" (Milk bar)
     if (Actor_TalkOfferAccepted(&this->knobDoor.dyna.actor, &play->state) &&
         (this->knobDoor.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
@@ -512,12 +518,14 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 if (this->lockTimer != 0) {
                     if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
+                        // 0x1802: "Missing small key"
                         this->knobDoor.dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->doorType == ENDOOR_TYPE_4) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
+                    // 0x1800: "It won't open"
                     this->knobDoor.dyna.actor.textId = 0x1800;
                 } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) ||
                            (this->doorType == ENDOOR_TYPE_3)) {
@@ -529,11 +537,13 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                     if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
                         ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & temp_a2)) ||
                         ((this->doorType == ENDOOR_TYPE_3) && !(halfDaysDayBit & temp_a2))) {
-                        s16 baseTextId = 0x182D;
+                        s16 baseTextId = 0x182D; // 0x182D does not exist, and there's no message for like 86 entries
 
                         if (this->doorType == ENDOOR_TYPE_3) {
+                            // 0x180D to 0x181C: messages indicating certain building is closed at night
                             baseTextId = 0x180D;
                         } else if (this->doorType == ENDOOR_TYPE_2) {
+                            // 0x181D to 0x1820: messages for when Pamela is inside the house with the door closed
                             baseTextId = 0x181D;
                         }
                         player->doorType = PLAYER_DOORTYPE_TALKING;
@@ -545,8 +555,9 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                     if (Schedule_RunScript(play, D_8086778C[this->actionVar.schType], &scheduleOutput)) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
-                        // TODO: is really worth to do (0x1800 + DOOR_SCH_33)?
-                        player->doorType = ((this->knobDoor.dyna.actor.textId == (0x1800 + DOOR_SCH_33)) && D_80867BC0)
+                        // 0x1821: Player is a member of the Milk bar
+                        // When player closes this specific message then the door changes to PLAYER_DOORTYPE_PROXIMITY, allowing player to open the door without having to press the A button again
+                        player->doorType = ((this->knobDoor.dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
                                                : PLAYER_DOORTYPE_TALKING;
                     }

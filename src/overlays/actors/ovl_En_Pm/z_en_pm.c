@@ -274,21 +274,21 @@ EnDoor* func_80AF7D60(PlayState* play, s32 scheduleOutputResult) {
         case 2:
         case 32:
         case 33:
-            schType = ENDOOR_SCH_TYPE_1;
+            schType = ENDOOR_SCH_TYPE_POST_OFFICE;
             break;
 
         case 34:
         case 35:
         case 36:
         case 37:
-            schType = ENDOOR_SCH_TYPE_10;
+            schType = ENDOOR_SCH_TYPE_MILK_BAR;
             break;
 
         case 10:
         case 11:
         case 12:
         case 13:
-            schType = ENDOOR_SCH_TYPE_11;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_DOOR;
             break;
 
         default:

@@ -12,8 +12,8 @@ typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 typedef enum EnDoorType {
     /* 0 */ ENDOOR_TYPE_0,
     /* 1 */ ENDOOR_TYPE_LOCKED,
-    /* 2 */ ENDOOR_TYPE_2,
-    /* 3 */ ENDOOR_TYPE_3,
+    /* 2 */ ENDOOR_TYPE_2, // Unused
+    /* 3 */ ENDOOR_TYPE_3, // Checks if current time is night and tells the Player the Shop/Store/Whatever is closed and gives a custom message for each kind of building. Used, but all uses makes the door behave like a normal door
     /* 4 */ ENDOOR_TYPE_4, // OoT: AJAR. unused
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
@@ -21,9 +21,9 @@ typedef enum EnDoorType {
 } EnDoorType;
 
 typedef enum EnDoorScheduleType {
-    /*  0 */ ENDOOR_SCH_TYPE_0,
-    /*  1 */ ENDOOR_SCH_TYPE_1,
-    /*  2 */ ENDOOR_SCH_TYPE_2,
+    /*  0 */ ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL,
+    /*  1 */ ENDOOR_SCH_TYPE_POST_OFFICE,
+    /*  2 */ ENDOOR_SCH_TYPE_LOTTERY_SHOP,
     /*  3 */ ENDOOR_SCH_TYPE_3,
     /*  4 */ ENDOOR_SCH_TYPE_4,
     /*  5 */ ENDOOR_SCH_TYPE_5,
@@ -31,8 +31,8 @@ typedef enum EnDoorScheduleType {
     /*  7 */ ENDOOR_SCH_TYPE_7,
     /*  8 */ ENDOOR_SCH_TYPE_8,
     /*  9 */ ENDOOR_SCH_TYPE_9,
-    /* 10 */ ENDOOR_SCH_TYPE_10,
-    /* 11 */ ENDOOR_SCH_TYPE_11,
+    /* 10 */ ENDOOR_SCH_TYPE_MILK_BAR,
+    /* 11 */ ENDOOR_SCH_TYPE_INN_MAIN_DOOR,
     /* 12 */ ENDOOR_SCH_TYPE_12,
     /* 13 */ ENDOOR_SCH_TYPE_13,
     /* 14 */ ENDOOR_SCH_TYPE_14,
@@ -42,7 +42,7 @@ typedef enum EnDoorScheduleType {
     /* 18 */ ENDOOR_SCH_TYPE_18,
     /* 19 */ ENDOOR_SCH_TYPE_19,
     /* 20 */ ENDOOR_SCH_TYPE_20,
-    /* 21 */ ENDOOR_SCH_TYPE_21,
+    /* 21 */ ENDOOR_SCH_TYPE_21, // unused
     /* 22 */ ENDOOR_SCH_TYPE_22,
     /* 23 */ ENDOOR_SCH_TYPE_23,
     /* 24 */ ENDOOR_SCH_TYPE_24,
@@ -51,7 +51,7 @@ typedef enum EnDoorScheduleType {
     /* 27 */ ENDOOR_SCH_TYPE_27,
     /* 28 */ ENDOOR_SCH_TYPE_28,
     /* 29 */ ENDOOR_SCH_TYPE_29,
-    /* 30 */ ENDOOR_SCH_TYPE_30,
+    /* 30 */ ENDOOR_SCH_TYPE_30, // unused
     /* 31 */ ENDOOR_SCH_TYPE_31,
     /* 32 */ ENDOOR_SCH_TYPE_MAX
 } EnDoorScheduleType;
