@@ -22,7 +22,7 @@ def mapPathToSource(origName: Path) -> Path:
         path = path.with_suffix(".c")
     return path
 
-def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, reverseCheck: bool=True) -> mapfile_parser.MapsComparisonInfo:
+def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, section: str=".bss", reverseCheck: bool=True) -> mapfile_parser.MapsComparisonInfo:
     print(f"Build mapfile:    {mapFileBuild}", file=sys.stderr)
     print(f"Expected mapfile: {mapFileExpected}", file=sys.stderr)
     print("", file=sys.stderr)
@@ -37,11 +37,11 @@ def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, reverseCheck: boo
 
     buildMap = mapfile_parser.MapFile()
     buildMap.readMapFile(mapFileBuild)
-    buildMap = buildMap.filterBySectionType(".bss")
+    buildMap = buildMap.filterBySectionType(section)
 
     expectedMap = mapfile_parser.MapFile()
     expectedMap.readMapFile(mapFileExpected)
-    expectedMap = expectedMap.filterBySectionType(".bss")
+    expectedMap = expectedMap.filterBySectionType(section)
 
     return buildMap.compareFilesAndSymbols(expectedMap, checkOtherOnSelf=reverseCheck)
 
@@ -89,7 +89,7 @@ def printFileComparison(comparisonInfo: mapfile_parser.MapsComparisonInfo, fun_a
         print(colorama.Fore.RED + "  BAD" + colorama.Style.RESET_ALL)
 
         for file in comparisonInfo.badFiles:
-            print(f"bss reordering in {mapPathToSource(file.filepath)}", file=sys.stderr)
+            print(f"Symbol reordering in {mapPathToSource(file.filepath)}", file=sys.stderr)
         print("", file=sys.stderr)
 
         if fun_allowed:
@@ -123,12 +123,14 @@ def main():
     parser.add_argument("mapFile", help="Path to a map file.")
     parser.add_argument("mapFileExpected", help="Path to the expected map file. Optional, default is 'expected/mapFile'.", nargs="?", default="")
     parser.add_argument("-a", "--print-all", help="Print all bss, not just non-matching.", action="store_true")
-    parser.add_argument("--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
+    parser.add_argument("--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
+    parser.add_argument("-s", "--section", help="Specify a section other than bss to check for reordered symbols", default=".bss")
     args = parser.parse_args()
 
     mapfilePath = Path(args.mapFile)
     reverseCheck: bool = not args.no_reverse_check
+    section: str = args.section
 
     if args.mapFileExpected == "":
         mapfileExpectedPath = "expected" / mapfilePath
@@ -136,7 +138,7 @@ def main():
         mapfileExpectedPath = Path(args.mapFileExpected)
 
 
-    comparisonInfo = compareMapFiles(mapfilePath, mapfileExpectedPath, reverseCheck=reverseCheck)
+    comparisonInfo = compareMapFiles(mapfilePath, mapfileExpectedPath, section, reverseCheck)
     printSymbolComparison(comparisonInfo, args.print_all)
 
     if len(comparisonInfo.badFiles) + len(comparisonInfo.missingFiles) != 0:
