@@ -8,12 +8,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import dataclasses
-import struct
 import time
 import multiprocessing
 import multiprocessing.pool
 
 import crunch64
+
 import dmadata
 
 
@@ -46,20 +46,20 @@ def set_sigint_ignored():
 
 def compress_rom(
     rom_data: memoryview,
-    offset: int,
+    dmadata_offset: int,
     compress_entries_indices: set[int],
     n_threads: int = None,
 ):
     """
     rom_data: the uncompressed rom data
-    dmadata_offset_start: the offset in the rom where the dmadata starts
+    dmadata_offset: the offset in the rom where the dmadata starts
     compress_entries_indices: the indices in the dmadata of the segments that should be compressed
     n_threads: how many cores to use for compression
     """
 
     # Segments of the compressed rom (not all are compressed)
     compressed_rom_segments: list[RomSegment] = []
-    dma_entries = dmadata.read_dmadata(rom_data, offset)
+    dma_entries = dmadata.read_dmadata(rom_data, dmadata_offset)
     # We sort the DMA entries by ROM start because `compress_entries_indices`
     # refers to indices in ROM order, but the uncompressed dmadata might not be
     # in ROM order.
@@ -188,7 +188,7 @@ def compress_rom(
         compressed_rom_data[i] = i % 256
 
     # Write the new dmadata
-    offset = offset
+    offset = dmadata_offset
     for dma_entry in compressed_rom_dma_entries:
         dma_entry.to_bin(compressed_rom_data[offset:])
         offset += dmadata.DmaEntry.SIZE_BYTES

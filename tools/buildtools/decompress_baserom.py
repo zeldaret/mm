@@ -13,9 +13,10 @@ import struct
 import sys
 
 import crunch64
-import dmadata
 import ipl3checksum
 import zlib
+
+import dmadata
 
 
 def decompress_zlib(data: bytes) -> bytes:
@@ -157,8 +158,14 @@ def find_baserom(version: str) -> Path | None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert a rom that uses dmadata to an uncompressed one.")
-    parser.add_argument("version", help="Version of the game to decompress.", default="n64-us")
+    parser = argparse.ArgumentParser(
+        description="Convert a rom that uses dmadata to an uncompressed one."
+    )
+    parser.add_argument(
+        "version",
+        help="Version of the game to decompress.",
+        choices=list(FILE_TABLE_OFFSET.keys()),
+    )
 
     args = parser.parse_args()
 
@@ -212,14 +219,16 @@ def main():
 
     file_content = per_version_fixes(file_content, version)
 
-    dmadata_entries = dmadata.read_dmadata(file_content, dmadata_offset)
+    dma_entries = dmadata.read_dmadata(file_content, dmadata_offset)
     # Decompress
-    if any(dma_entry.is_compressed() for dma_entry in dmadata_entries):
+    if any(dma_entry.is_compressed() for dma_entry in dma_entries):
         print("Decompressing rom...")
         is_zlib_compressed = version in {"ique-cn", "ique-zh"}
-        file_content = decompress_rom(file_content, dmadata_offset, dmadata_entries, is_zlib_compressed)
+        file_content = decompress_rom(
+            file_content, dmadata_offset, dma_entries, is_zlib_compressed
+        )
 
-    file_content = pad_rom(file_content, dmadata_entries)
+    file_content = pad_rom(file_content, dma_entries)
 
     # Check to see if the ROM is a "vanilla" ROM
     str_hash = get_str_hash(file_content)

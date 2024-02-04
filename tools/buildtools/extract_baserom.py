@@ -1597,7 +1597,7 @@ def ExtractFunc(i):
     physStart = read_uint32_be(entryOffset + 8)
     physEnd = read_uint32_be(entryOffset + 12)
 
-    if physStart == 0xFFFFFFFF:  # deleted
+    if physStart == 0xFFFFFFFF and physEnd == 0xFFFFFFFF:  # deleted
         if (virtEnd - virtStart) == 0:
             return
         physStart = virtStart
