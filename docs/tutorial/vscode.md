@@ -76,7 +76,7 @@ Add the following to (or create) the `.vscode/settings.json` file for VSCode to 
         "build/**": true,
         "expected/**": true,
         "nonmatchings/**": true,
-        ".venv": true,
+        ".venv/**": true,
     },
 }
 ```
