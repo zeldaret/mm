@@ -97,7 +97,7 @@ def printFileComparison(comparisonInfo: mapfile_parser.MapsComparisonInfo, fun_a
 
         if fun_allowed:
             eprint(colorama.Fore.LIGHTWHITE_EX +
-            "  BSS is REORDERED!!\n"
+            "  Symbols are REORDERED!!\n"
             "  Oh! MY GOD!!" 
             + colorama.Style.RESET_ALL)
             eprint("")
@@ -117,16 +117,16 @@ def printFileComparison(comparisonInfo: mapfile_parser.MapsComparisonInfo, fun_a
 
 
 def main():
-    description = "Check that globally visible bss has not been reordered."
+    description = "Check that globally visible symbols has not been reordered."
     epilog = """\
-    N.B. Since this script reads the map files, it can only see globally visible bss; in-function static bss must be examined with other tools.
+    N.B. Since this script reads the map files, it can only see globally visible symbols; in-function static symbols must be examined with other tools.
     """
 
     parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("-a", "--print-all", help="Print all bss, not just non-matching.", action="store_true")
+    parser.add_argument("-a", "--print-all", help="Print all symbols of the section, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     parser.add_argument("-r", "--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
-    parser.add_argument("-s", "--section", help="Specify a section other than bss to check for reordered symbols", default=".bss")
+    parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Defaults to .bss", default=".bss")
     args = parser.parse_args()
 
     mapfilePath = Path("build/mm.map")
@@ -148,12 +148,12 @@ def main():
         return 0
 
     eprint("\n" + colorama.Fore.LIGHTWHITE_EX +
-    colorama.Back.RED + "                                  " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "    All Global BSS is correct.    " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "             THANK YOU!           " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "      You are great decomper!     " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL )
+    colorama.Back.RED + f"                                  " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + f"         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + f"    All Global {section} is correct.    " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + f"             THANK YOU!           " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + f"      You are great decomper!     " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + f"                                  " + colorama.Style.RESET_ALL )
 
     return 0
 
