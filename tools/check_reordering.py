@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: © 2024 ZeldaRET
+# SPDX-License-Identifier: MIT
+
 import colorama
 colorama.init()
 
@@ -40,11 +43,13 @@ def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, section: str=".bs
 
     buildMap = mapfile_parser.MapFile()
     buildMap.readMapFile(mapFileBuild)
-    buildMap = buildMap.filterBySectionType(section)
+    if section != "*":
+        buildMap = buildMap.filterBySectionType(section)
 
     expectedMap = mapfile_parser.MapFile()
     expectedMap.readMapFile(mapFileExpected)
-    expectedMap = expectedMap.filterBySectionType(section)
+    if section != "*":
+        expectedMap = expectedMap.filterBySectionType(section)
 
     return buildMap.compareFilesAndSymbols(expectedMap, checkOtherOnSelf=reverseCheck)
 
@@ -126,7 +131,7 @@ def main():
     parser.add_argument("-a", "--print-all", help="Print all symbols of the section, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     parser.add_argument("-r", "--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
-    parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Defaults to .bss", default=".bss")
+    parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Use * to check all sections. Defaults to .bss", default=".bss")
     args = parser.parse_args()
 
     mapfilePath = Path("build/mm.map")
