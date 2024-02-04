@@ -125,7 +125,7 @@ def main():
     parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-a", "--print-all", help="Print all bss, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
-    parser.add_argument("--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
+    parser.add_argument("-r", "--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
     parser.add_argument("-s", "--section", help="Specify a section other than bss to check for reordered symbols", default=".bss")
     args = parser.parse_args()
 
