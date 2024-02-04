@@ -8,6 +8,9 @@ import sys
 import mapfile_parser
 from pathlib import Path
 
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 def mapPathToSource(origName: Path) -> Path:
     # Try to map built path to the source path
     parts = origName.parts
@@ -23,16 +26,16 @@ def mapPathToSource(origName: Path) -> Path:
     return path
 
 def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, section: str=".bss", reverseCheck: bool=True) -> mapfile_parser.MapsComparisonInfo:
-    print(f"Build mapfile:    {mapFileBuild}", file=sys.stderr)
-    print(f"Expected mapfile: {mapFileExpected}", file=sys.stderr)
-    print("", file=sys.stderr)
+    eprint(f"Build mapfile:    {mapFileBuild}")
+    eprint(f"Expected mapfile: {mapFileExpected}")
+    eprint("")
 
     if not mapFileBuild.exists():
-        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: mapfile not found at {mapFileBuild}. Did you enter the correct path?", file=sys.stderr)
+        eprint(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: mapfile not found at {mapFileBuild}. Did you forget to build the rom?")
         exit(1)
 
     if not mapFileExpected.exists():
-        print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: expected mapfile not found at {mapFileExpected}. Is 'expected' missing or in a different folder?", file=sys.stderr)
+        eprint(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: expected mapfile not found at {mapFileExpected}. A mapfile under the 'expected' folder is required")
         exit(1)
 
     buildMap = mapfile_parser.MapFile()
@@ -83,34 +86,34 @@ def printSymbolComparison(comparisonInfo: mapfile_parser.MapsComparisonInfo, pri
 
 
 def printFileComparison(comparisonInfo: mapfile_parser.MapsComparisonInfo, fun_allowed: bool = True):
-    print("", file=sys.stderr)
+    eprint("")
 
     if len(comparisonInfo.badFiles) != 0:
         print(colorama.Fore.RED + "  BAD" + colorama.Style.RESET_ALL)
 
         for file in comparisonInfo.badFiles:
-            print(f"Symbol reordering in {mapPathToSource(file.filepath)}", file=sys.stderr)
-        print("", file=sys.stderr)
+            eprint(f"Symbol reordering in {mapPathToSource(file.filepath)}")
+        eprint("")
 
         if fun_allowed:
-            print(colorama.Fore.LIGHTWHITE_EX +
+            eprint(colorama.Fore.LIGHTWHITE_EX +
             "  BSS is REORDERED!!\n"
             "  Oh! MY GOD!!" 
-            + colorama.Style.RESET_ALL, file=sys.stderr)
-            print("", file=sys.stderr)
+            + colorama.Style.RESET_ALL)
+            eprint("")
 
     if len(comparisonInfo.missingFiles) != 0:
         print(colorama.Fore.YELLOW + "  MISSING" + colorama.Style.RESET_ALL)
 
         for file in comparisonInfo.missingFiles:
-            print(f"Symbols missing from {mapPathToSource(file.filepath)}", file=sys.stderr)
-        print("", file=sys.stderr)
+            eprint(f"Symbols missing from {mapPathToSource(file.filepath)}")
+        eprint("")
 
         if fun_allowed:
-            print(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL, file=sys.stderr)
-            print("", file=sys.stderr)
+            eprint(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL)
+            eprint("")
 
-        print("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'", file=sys.stderr)
+        eprint("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'")
 
 
 def main():
@@ -138,19 +141,19 @@ def main():
         printFileComparison(comparisonInfo, not args.no_fun_allowed)
         return 1
 
-    print("", file=sys.stderr)
-    print(colorama.Fore.GREEN + "  GOOD" + colorama.Style.RESET_ALL, file=sys.stderr)
+    eprint("")
+    eprint(colorama.Fore.GREEN + "  GOOD" + colorama.Style.RESET_ALL)
 
     if args.no_fun_allowed:
         return 0
 
-    print("\n" + colorama.Fore.LIGHTWHITE_EX +
+    eprint("\n" + colorama.Fore.LIGHTWHITE_EX +
     colorama.Back.RED + "                                  " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "    All Global BSS is correct.    " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "             THANK YOU!           " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "      You are great decomper!     " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL , file=sys.stderr)
+    colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL )
 
     return 0
 
