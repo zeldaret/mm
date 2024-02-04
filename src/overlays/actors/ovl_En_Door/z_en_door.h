@@ -14,7 +14,7 @@ typedef enum EnDoorType {
     /* 1 */ ENDOOR_TYPE_LOCKED,
     /* 2 */ ENDOOR_TYPE_2, // Unused
     /* 3 */ ENDOOR_TYPE_3, // Checks if current time is night and tells the Player the Shop/Store/Whatever is closed and gives a custom message for each kind of building. Used, but all uses makes the door behave like a normal door
-    /* 4 */ ENDOOR_TYPE_4, // OoT: AJAR. unused
+    /* 4 */ ENDOOR_TYPE_AJAR, // OoT: AJAR. unused
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
     /* 7 */ ENDOOR_TYPE_7 // unused

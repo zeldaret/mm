@@ -24,6 +24,9 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
+#define DOOR_AJAR_SLAM_RANGE 120.0f
+#define DOOR_AJAR_OPEN_RANGE (2 * DOOR_AJAR_SLAM_RANGE)
+
 #define THIS ((EnDoor*)thisx)
 
 void EnDoor_Init(Actor* thisx, PlayState* play2);
@@ -32,11 +35,11 @@ void EnDoor_Update(Actor* thisx, PlayState* play);
 void EnDoor_Draw(Actor* thisx, PlayState* play);
 
 void EnDoor_Idle(EnDoor* this, PlayState* play);
-void func_8086704C(EnDoor* this, PlayState* play);
+void EnDoor_AjarWait(EnDoor* this, PlayState* play);
 void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play);
-void func_80867080(EnDoor* this, PlayState* play);
+void EnDoor_AjarOpen(EnDoor* this, PlayState* play);
 void EnDoor_Open(EnDoor* this, PlayState* play);
-void func_808670F0(EnDoor* this, PlayState* play);
+void EnDoor_AjarClose(EnDoor* this, PlayState* play);
 void EnDoor_SetupType(EnDoor* this, PlayState* play);
 
 // TODO: Maybe this is a bit overkill? considering this is used as an offset to a text id
@@ -440,9 +443,9 @@ void EnDoor_SetupType(EnDoor* this, PlayState* play) {
         if (!Flags_GetSwitch(play, this->actionVar.switchFlag)) {
             this->lockTimer = 10;
         }
-    } else if ((this->doorType == ENDOOR_TYPE_4) &&
-                (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) > 120.0f)) {
-        this->actionFunc = func_8086704C;
+    } else if ((this->doorType == ENDOOR_TYPE_AJAR) &&
+                (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) > DOOR_AJAR_SLAM_RANGE)) {
+        this->actionFunc = EnDoor_AjarWait;
         this->knobDoor.dyna.actor.world.rot.y = -0x1800;
     }
 }
@@ -460,14 +463,14 @@ s32 D_80867BC0;
  *     - Set this door as the one Player can interact with
  *     - If it is a locked door
  *       - Handle loocked door
- *     - Otherwise if ENDOOR_TYPE_4?
+ *     - Otherwise if ENDOOR_TYPE_AJAR?
  *       - ??
  *     - Otherwise if ENDOOR_TYPE_0? or ENDOOR_TYPE_2? or ENDOOR_TYPE_3?
  *       - ??
  *     - Otherwise if ENDOOR_TYPE_SCHEDULE
  *       - Run schedule
  *       - ?
- *   - Otherwise if ENDOOR_TYPE_4??
+ *   - Otherwise if ENDOOR_TYPE_AJAR??
  *     - ??
  */
 void EnDoor_Idle(EnDoor* this, PlayState* play) {
@@ -523,7 +526,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                     } else {
                         player->doorTimer = 10;
                     }
-                } else if (this->doorType == ENDOOR_TYPE_4) {
+                } else if (this->doorType == ENDOOR_TYPE_AJAR) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     // 0x1800: "It won't open"
                     this->knobDoor.dyna.actor.textId = 0x1800;
@@ -564,9 +567,9 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 }
                 func_80122F28(player);
             }
-        } else if ((this->doorType == ENDOOR_TYPE_4) && (this->knobDoor.dyna.actor.xzDistToPlayer > 240.0f)) {
+        } else if ((this->doorType == ENDOOR_TYPE_AJAR) && (this->knobDoor.dyna.actor.xzDistToPlayer > DOOR_AJAR_OPEN_RANGE)) {
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_OPEN);
-            this->actionFunc = func_80867080;
+            this->actionFunc = EnDoor_AjarOpen;
         }
     }
 }
@@ -597,21 +600,21 @@ void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play) {
     }
 }
 
-void func_8086704C(EnDoor* this, PlayState* play) {
-    if (this->knobDoor.dyna.actor.xzDistToPlayer < 120.0f) {
-        this->actionFunc = func_808670F0;
+void EnDoor_AjarWait(EnDoor* this, PlayState* play) {
+    if (this->knobDoor.dyna.actor.xzDistToPlayer < DOOR_AJAR_SLAM_RANGE) {
+        this->actionFunc = EnDoor_AjarClose;
     }
 }
 
-void func_80867080(EnDoor* this, PlayState* play) {
-    if (this->knobDoor.dyna.actor.xzDistToPlayer < 120.0f) {
-        this->actionFunc = func_808670F0;
+void EnDoor_AjarOpen(EnDoor* this, PlayState* play) {
+    if (this->knobDoor.dyna.actor.xzDistToPlayer < DOOR_AJAR_SLAM_RANGE) {
+        this->actionFunc = EnDoor_AjarClose;
     } else if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, -0x1800, 0x100)) {
-        this->actionFunc = func_8086704C;
+        this->actionFunc = EnDoor_AjarWait;
     }
 }
 
-void func_808670F0(EnDoor* this, PlayState* play) {
+void EnDoor_AjarClose(EnDoor* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, 0, 0x700)) {
         Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_CLOSE);
         this->actionFunc = EnDoor_Idle;
