@@ -16,4 +16,4 @@ Levenshtein
 cxxfilt
 
 # map parsing
-mapfile-parser>=2.3.4,<3.0.0
+mapfile-parser>=2.3.5,<3.0.0
