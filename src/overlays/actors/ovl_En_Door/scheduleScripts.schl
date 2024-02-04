@@ -278,15 +278,18 @@ sDoorSch_MayorsResidenceMainEntrance {
     }
 }
 
-D_80867704 {
+// The Mayor's Residence: Mayor Dotour
+sDoorSch_MayorsResidenceResidenceMayorDotour {
     return_none
 }
 
-D_80867708 {
+// The Mayor's Residence: Madame Aroma
+sDoorSch_MayorsResidenceResidenceMadameAroma {
     return_none
 }
 
-D_8086770C {
+// The Mayor's Residence: Bedroom
+sDoorSch_MayorsResidenceResidenceBedroom {
     return_none
 }
 
@@ -294,7 +297,8 @@ D_80867710 {
     return_none
 }
 
-D_80867714 {
+// Romani Ranch: Mama's House
+sDoorSch_RomaniRanchMamasHouse {
     if_since_time (20, 0) {
         return_s (DOOR_SCH_23)
     } else {
@@ -302,26 +306,38 @@ D_80867714 {
     }
 }
 
-D_8086771C {
+// Romani Ranch: Barn
+sDoorSch_RomaniRanchBarn {
     if_day (1) {
         if_since_time (2, 30) {
+            // Cremia is in the Barn during the Alien invasion
+
+            // "locked from inside" message
             return_s (DOOR_SCH_24)
         } else {
-            label_0x0A:
+        open_barn:
             return_none
         }
     } else if_day (3) {
         if_since_time (20, 0) {
+            // Cremia and Romani left the Barn locked on night 3.
+            // Them leaving the Barn at night 3 only happens if the
+            // aliens were defeated on night 1, so if player did not
+            // do that then the door would be mysteriously locked
+
+            // "locked door" message
             return_s (DOOR_SCH_12)
         } else {
-            branch (label_0x0A)
+            branch (open_barn)
         }
-    } else {
-        branch (label_0x0A)
+    } else { // day 2
+        branch (open_barn)
     }
 }
 
-D_80867734 {
+// Romani Ranch: Cucco Shack
+sDoorSch_RomaniRanchCuccoShack {
+    // Closed between 20:00 ~ 06:00
     if_since_time (20, 0) {
         return_s (DOOR_SCH_25)
     } else {
@@ -329,7 +345,9 @@ D_80867734 {
     }
 }
 
-D_8086773C {
+// Romani Ranch: Doggy Racetrack
+sDoorSch_RomaniRanchDoggyRacetrack {
+    // Closed between 20:00 ~ 06:00
     if_since_time (20, 0) {
         return_s (DOOR_SCH_26)
     } else {
@@ -337,7 +355,12 @@ D_8086773C {
     }
 }
 
-D_80867744 {
+// Romani Ranch: Bedroom
+sDoorSch_RomaniRanchBedroom {
+    //! @bug? All the codepaths that lead to a non none return are unreachable
+    //! in the base game, since nothing sets WEEKEVENTREG_99_80 and the player
+    //! is kicked out at 20:00
+
     not if_day (2) {
         branch (label_0x08)
     } else {
@@ -364,7 +387,8 @@ D_80867744 {
     return_none
 }
 
-D_8086775C {
+// Ikana Canyom: Music Box House
+sDoorSch_IkanaCanyonMusicBoxHouse {
     not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
         not if_week_event_reg (WEEKEVENTREG_75_20) {
             not if_week_event_reg (WEEKEVENTREG_14_04) {
@@ -384,7 +408,8 @@ D_8086775C {
     return_none
 }
 
-D_80867778 {
+// Ikana Graveyard: Dampé's House
+sDoorSch_DampesHouse {
     return_s (DOOR_SCH_32)
 }
 

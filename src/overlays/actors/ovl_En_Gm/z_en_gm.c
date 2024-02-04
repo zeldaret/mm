@@ -197,7 +197,7 @@ EnDoor* EnGm_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
 
         case 18:
         case 19:
-            schType = ENDOOR_SCH_TYPE_19;
+            schType = ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA;
             break;
 
         default:
