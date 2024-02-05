@@ -22,8 +22,8 @@ static void write_dmadata_table(FILE *fout)
             continue;
         }
 
-        if (g_segments[i].flags & FLAG_UNSET) {
-            fprintf(fout, "DEFINE_DMA_ENTRY_UNSET(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
+        if (g_segments[i].flags & FLAG_SYMS) {
+            fprintf(fout, "DEFINE_DMA_ENTRY_SYMS(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
         } else {
             fprintf(fout, "DEFINE_DMA_ENTRY(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
         }
