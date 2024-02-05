@@ -43,12 +43,12 @@ def compareMapFiles(mapFileBuild: Path, mapFileExpected: Path, section: str=".bs
 
     buildMap = mapfile_parser.MapFile()
     buildMap.readMapFile(mapFileBuild)
-    if section != "*":
+    if section != "all":
         buildMap = buildMap.filterBySectionType(section)
 
     expectedMap = mapfile_parser.MapFile()
     expectedMap.readMapFile(mapFileExpected)
-    if section != "*":
+    if section != "all":
         expectedMap = expectedMap.filterBySectionType(section)
 
     return buildMap.compareFilesAndSymbols(expectedMap, checkOtherOnSelf=reverseCheck)
@@ -131,7 +131,7 @@ def main():
     parser.add_argument("-a", "--print-all", help="Print all symbols of the section, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     parser.add_argument("-r", "--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
-    parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Use * to check all sections. Defaults to .bss", default=".bss")
+    parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Use `all` to check all sections. Defaults to .bss", default=".bss", choices=[".text", ".data", ".rodata", ".bss", "all"])
     args = parser.parse_args()
 
     mapfilePath = Path("build/mm.map")
@@ -155,7 +155,7 @@ def main():
     eprint("\n" + colorama.Fore.LIGHTWHITE_EX +
     colorama.Back.RED + f"                                  " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + f"    All Global {section} is correct.    " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + "{:^34}".format(f"All Global {section} is correct.") + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"             THANK YOU!           " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"      You are great decomper!     " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"                                  " + colorama.Style.RESET_ALL )
