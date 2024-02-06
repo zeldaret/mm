@@ -45,7 +45,7 @@ s32 gLoadLogSeverity = 2;
  * @param ovlRelocs Overlay relocation section containing overlay section layout and runtime relocations.
  * @param vramStart Virtual RAM address that the overlay was compiled at.
  */
-void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, uintptr_t vramStart) {
+void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, void* vramStart) {
     u32 sections[RELOC_SECTION_MAX];
     u32* relocDataP;
     u32 reloc;
@@ -86,7 +86,7 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0x0F000000) == 0) {
-                    *relocDataP = *relocDataP - vramStart + allocu32;
+                    *relocDataP = *relocDataP - (uintptr_t)vramStart + allocu32;
                 } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
@@ -99,7 +99,8 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
                 if (1) {
                     *relocDataP =
                         (*relocDataP & 0xFC000000) |
-                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - vramStart + allocu32) & 0x0FFFFFFF) >> 2);
+                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - (uintptr_t)vramStart + allocu32) & 0x0FFFFFFF) >>
+                         2);
                 }
                 break;
 
@@ -124,7 +125,7 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vramStart + allocu32;
+                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - (uintptr_t)vramStart + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
@@ -161,7 +162,7 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, vo
 
     if (gLoadLogSeverity >= 3) {}
 
-    Fragment_Relocate(allocatedRamAddr, ovlRelocs, (uintptr_t)vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
@@ -216,7 +217,7 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vra
 
     if (gLoadLogSeverity >= 3) {}
 
-    Fragment_Relocate(allocatedRamAddr, ovlRelocs, (uintptr_t)vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
