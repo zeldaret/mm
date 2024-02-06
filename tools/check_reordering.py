@@ -155,7 +155,7 @@ def main():
     eprint("\n" + colorama.Fore.LIGHTWHITE_EX +
     colorama.Back.RED + f"                                  " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "{:^34}".format(f"All Global {section} is correct.") + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + "{:^34}".format(f"All Global {section if section != 'all' else 'Symbols'} is correct.") + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"             THANK YOU!           " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"      You are great decomper!     " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + f"                                  " + colorama.Style.RESET_ALL )
