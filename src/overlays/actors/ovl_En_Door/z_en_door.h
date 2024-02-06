@@ -19,7 +19,7 @@
  * Type                 0000001110000000    Values of the EnDoorType enum
  * Action var           0000000001111111    Generic extra parameter. It is used differently by each door Type (or not used at all)
  *
- * If type is either ENDOOR_TYPE_0, ENDOOR_TYPE_2 or ENDOOR_TYPE_3 then the Action var is bitpacked like this:
+ * If type is either ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY or ENDOOR_TYPE_NIGHT then the Action var is bitpacked like this:
  *
  * |             |
  * | Text offset | Half day bit index
@@ -38,10 +38,10 @@ struct EnDoor;
 typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
 typedef enum EnDoorType {
-    /* 0 */ ENDOOR_TYPE_0,
+    /* 0 */ ENDOOR_TYPE_WHOLE_DAY, // Allows to specify the door may be closed for full specific days. Which days the door is closed is controlled by the "half day bit index" part of the parameter
     /* 1 */ ENDOOR_TYPE_LOCKED,
-    /* 2 */ ENDOOR_TYPE_2, // Unused
-    /* 3 */ ENDOOR_TYPE_3, // Checks if current time is night and tells the Player the Shop/Store/Whatever is closed and gives a custom message for each kind of building. Used, but all uses makes the door behave like a normal door
+    /* 2 */ ENDOOR_TYPE_DAY, // Allows to specify the door may be closed for specific dawns. Which dawns the door is closed is controlled by the "half day bit index" part of the parameter
+    /* 3 */ ENDOOR_TYPE_NIGHT, // Allows to specify the door may be closed for specific nights. Which nights the door is closed is controlled by the "half day bit index" part of the parameter
     /* 4 */ ENDOOR_TYPE_AJAR, // unused
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
@@ -94,8 +94,8 @@ typedef enum EnDoorFramedType {
 #define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
 
-#define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(actionVar) ((actionVar) & 0x7)
-#define ENDOOR_GET_TEXTOFFSET_FROM_ACTIONVAR_0_2_3(actionVar) (((actionVar) >> 3) & 0xF)
+#define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(actionVar) ((actionVar) & 0x7)
+#define ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(actionVar) (((actionVar) >> 3) & 0xF)
 
 #define ENDOOR_PACK_ACTIONVAR_0_2_3(halfDayBitIndex, textOffset) ((((textOffset) & 0xF) << 3) | ((halfDayBitIndex) & 0x7))
 
@@ -116,7 +116,7 @@ typedef struct EnDoor {
     /* 0x1A4 */ u8 doorType; // EnDoorType enum
     /* 0x1A5 */ union {
                     u8 actionVar; // generic
-                    u8 actionVar_0_2_3; // ENDOOR_TYPE_0, ENDOOR_TYPE_2 and ENDOOR_TYPE_3
+                    u8 halfDayCheck; // ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY and ENDOOR_TYPE_NIGHT
                     u8 switchFlag; // ENDOOR_TYPE_LOCKED
                     u8 schType; // ENDOOR_TYPE_SCHEDULE
                     u8 frameType; // ENDOOR_TYPE_FRAMED

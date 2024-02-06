@@ -459,19 +459,20 @@ s32 D_80867BC0;
  * - Handle opening request from player
  * - Handle opening request from schedule actor
  * - If not on cs mode:
- *   - If D_80867BC0? or player is near the door and looking at it
+ *   - If D_80867BC0 or player is near the door and looking at it
  *     - Set this door as the one Player can interact with
  *     - If it is a locked door
  *       - Handle loocked door
- *     - Otherwise if ENDOOR_TYPE_AJAR?
- *       - ??
- *     - Otherwise if ENDOOR_TYPE_0? or ENDOOR_TYPE_2? or ENDOOR_TYPE_3?
- *       - ??
+ *     - Otherwise if the door is an AJAR one
+ *       - Display a message saying it won't open
+ *     - Otherwise if ENDOOR_TYPE_WHOLE_DAY? or ENDOOR_TYPE_DAY? or ENDOOR_TYPE_NIGHT?
+ *       - Left the door closed depending on the day/night state expected by the door
  *     - Otherwise if ENDOOR_TYPE_SCHEDULE
  *       - Run schedule
- *       - ?
- *   - Otherwise if ENDOOR_TYPE_AJAR??
- *     - ??
+ *       - Possibly not allow to open the door and prompt a message depending on the schedule result.
+ *   - Otherwise if ENDOOR_TYPE_AJAR
+ *     - If player is further than DOOR_AJAR_OPEN_RANGE
+ *       - Play Ajar's open/close loop
  */
 void EnDoor_Idle(EnDoor* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -530,24 +531,24 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     // 0x1800: "It won't open"
                     this->knobDoor.dyna.actor.textId = 0x1800;
-                } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) ||
-                           (this->doorType == ENDOOR_TYPE_3)) {
+                } else if ((this->doorType == ENDOOR_TYPE_WHOLE_DAY) || (this->doorType == ENDOOR_TYPE_DAY) ||
+                           (this->doorType == ENDOOR_TYPE_NIGHT)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 openBit = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3)];
-                    s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3);
+                    s16 openBit = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck)];
+                    s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck);
 
                     // Check if the door should be closed, and prompt a message if its the case
-                    if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & openBit)) ||
-                        ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & openBit)) ||
-                        ((this->doorType == ENDOOR_TYPE_3) && !(halfDaysDayBit & openBit))) {
+                    if (((this->doorType == ENDOOR_TYPE_WHOLE_DAY) && !((halfDaysDayBit | halfDaysNightBit) & openBit)) ||
+                        ((this->doorType == ENDOOR_TYPE_DAY) && !(halfDaysNightBit & openBit)) ||
+                        ((this->doorType == ENDOOR_TYPE_NIGHT) && !(halfDaysDayBit & openBit))) {
                         s16 baseTextId = 0x182D; //! @bug 0x182D does not exist, and there's no message for like 86 entries
 
-                        if (this->doorType == ENDOOR_TYPE_3) {
+                        if (this->doorType == ENDOOR_TYPE_NIGHT) {
                             // 0x180D to 0x181C: messages indicating certain building are closed at night
                             baseTextId = 0x180D;
-                        } else if (this->doorType == ENDOOR_TYPE_2) {
-                            // 0x181D to 0x1820: messages for when Pamela is inside the house with the door closed
+                        } else if (this->doorType == ENDOOR_TYPE_DAY) {
+                            // 0x181D to 0x1820: messages for when Pamela is inside the Music Box house with the door closed
                             baseTextId = 0x181D;
                         }
                         player->doorType = PLAYER_DOORTYPE_TALKING;
