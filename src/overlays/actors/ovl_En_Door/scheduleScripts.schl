@@ -17,7 +17,7 @@ sDoorSch_SwordsmansSchool {
     if_day (3) {
         not if_time_range (6, 0, 23, 0) {
             not if_time_range (0, 0, 6, 0) {
-                return_s (DOOR_SCH_7)
+                return_s (0x7)
             }
         }
     }
@@ -28,7 +28,7 @@ sDoorSch_SwordsmansSchool {
 sDoorSch_PostOffice {
     if_before_time (9, 0) {
         // Closed between 00:00 ~ 09:00
-        return_s (DOOR_SCH_9)
+        return_s (0x9)
     } else if_before_time (12, 0) {
         // Delivering mail between 09:00 ~ 12:00
         branch (delivering_mail_msg)
@@ -45,7 +45,7 @@ sDoorSch_PostOffice {
                 branch (delivering_mail_msg)
             } else if_since_time (0, 0) {
                 // Closed between 00:00 ~ 09:00
-                return_s (DOOR_SCH_9)
+                return_s (0x9)
             }
             // Open between 15:00 ~ 00:00
 
@@ -54,7 +54,7 @@ sDoorSch_PostOffice {
 
         delivering_mail_msg:
             // "Out delivering mail"
-            return_s (DOOR_SCH_8)
+            return_s (0x8)
         } else if_day (2) {
             if_week_event_reg (WEEKEVENTREG_28_08) {
                 // Related to letter to Kafei
@@ -67,7 +67,7 @@ sDoorSch_PostOffice {
                     branch (delivering_mail_msg)
                 } else if_since_time (0, 0) {
                     // Closed between 00:00 ~ 09:00
-                    return_s (DOOR_SCH_9)
+                    return_s (0x9)
                 } else {
                     // Open between 15:00 ~ 00:00
                     branch (open_post_office)
@@ -77,7 +77,7 @@ sDoorSch_PostOffice {
                     //! @bug Theis in-game message expliclty says the office should be open up to 15:00 (3 p.m.)
                     //! Maybe it was a typo between 3 (p.m.) and 13?
                     // Closed between 13:00 ~ 09:00
-                    return_s (DOOR_SCH_9)
+                    return_s (0x9)
                 } else {
                     // Open between 12:00 ~ 13:00
                     return_none
@@ -92,7 +92,7 @@ sDoorSch_PostOffice {
                 branch (delivering_mail_msg)
             } else if_before_time (18, 0) {
                 // Closed between 13:00 ~ 18:00
-                return_s (DOOR_SCH_9)
+                return_s (0x9)
             } else {
                 // Open since 18:00
                 return_none
@@ -107,14 +107,14 @@ sDoorSch_LotteryShop {
     if_time_range (6, 0, 23, 0) {
         return_none
     } else {
-        return_s (DOOR_SCH_28)
+        return_s (0x1C)
     }
 }
 
 // Trading Post
 sDoorSch_TradingPost {
     if_time_range (21, 0, 22, 0) {
-        return_s (DOOR_SCH_11)
+        return_s (0xB)
     } else {
         return_none
     }
@@ -123,7 +123,7 @@ sDoorSch_TradingPost {
 // Curiosity Shop
 sDoorSch_CuriosityShop {
     not if_time_range (22, 0, 5, 0) {
-        return_s (DOOR_SCH_10)
+        return_s (0xA)
     } else {
         return_none
     }
@@ -133,19 +133,19 @@ sDoorSch_CuriosityShop {
 sDoorSch_LaundryPool {
     if_day (2) {
         not if_week_event_reg (WEEKEVENTREG_28_08) {
-            return_s (DOOR_SCH_12)
+            return_s (0xC)
         } else if_time_range (15, 10, 22, 0) {
             return_none
         } else {
-            return_s (DOOR_SCH_12)
+            return_s (0xC)
         }
     }
     if_day (3) {
         if_since_time (13, 0) {
             not if_week_event_reg (WEEKEVENTREG_51_08) {
-                return_s (DOOR_SCH_12)
+                return_s (0xC)
             } else if_since_time (22, 0) {
-                return_s (DOOR_SCH_12)
+                return_s (0xC)
             } else {
                 return_none
             }
@@ -153,7 +153,7 @@ sDoorSch_LaundryPool {
     }
 
     // Day 1
-    return_s (DOOR_SCH_12)
+    return_s (0xC)
 }
 
 // Bomb Shop
@@ -164,7 +164,7 @@ sDoorSch_BombShop {
 // Town Shooting Gallery
 sDoorSch_TownShootingGallery {
     if_since_time (22, 0) {
-        return_s (DOOR_SCH_15)
+        return_s (0xF)
     } else {
         return_none
     }
@@ -173,7 +173,7 @@ sDoorSch_TownShootingGallery {
 // Treasure Chest Shop
 sDoorSch_TreasureChestShop {
     if_since_time (22, 0) {
-        return_s (DOOR_SCH_16)
+        return_s (0x10)
     } else {
         return_none
     }
@@ -182,7 +182,7 @@ sDoorSch_TreasureChestShop {
 // Honey & Darling's Shop
 sDoorSch_HoneyDarlingShop {
     if_since_time (22, 0) {
-        return_s (DOOR_SCH_17)
+        return_s (0x11)
     } else {
         return_none
     }
@@ -196,16 +196,16 @@ sDoorSch_MilkBar {
     } else if_time_range (22, 0, 5, 0) {
         if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
             // Player is a member of the Milk bar and can enter
-            return_s (DOOR_SCH_33)
+            return_s (0x21)
         } else {
             // "Show you are a member"
-            return_s (DOOR_SCH_34)
+            return_s (0x22)
         }
     } else {
         // Closed between 21:00 ~ 22:00 and 05:00 ~ 10:00
 
         // Message saying when the Bar opens
-        return_s (DOOR_SCH_18)
+        return_s (0x12)
     }
 }
 
@@ -216,13 +216,13 @@ sDoorSch_InnMainEntrance {
             // Door is unlocked at night 3
 
             if_before_time (8, 0) {
-                return_s (DOOR_SCH_19)
+                return_s (0x13)
             } else {
                 return_none
             }
         } else {
             not if_time_range (8, 0, 20, 30) {
-                return_s (DOOR_SCH_19)
+                return_s (0x13)
             } else {
                 return_none
             }
@@ -254,13 +254,13 @@ sDoorSch_InnStaffRoom {
     }
 
     // "Only employees can enter"
-    return_s (DOOR_SCH_20)
+    return_s (0x14)
 }
 
 // Stock Pot Inn: Knife Chamber door
 sDoorSch_InnKnifeChamber {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
-        return_s (DOOR_SCH_22)
+        return_s (0x16)
     } else {
         return_none
     }
@@ -288,7 +288,7 @@ sDoorSch_MayorsResidenceMainEntrance {
             branch (open_residence)
         } else {
         closed_residence:
-            return_s (DOOR_SCH_21)
+            return_s (0x15)
         }
     }
 }
@@ -315,7 +315,7 @@ D_80867710 {
 // Romani Ranch: Mama's House
 sDoorSch_RomaniRanchMamasHouse {
     if_since_time (20, 0) {
-        return_s (DOOR_SCH_23)
+        return_s (0x17)
     } else {
         return_none
     }
@@ -328,7 +328,7 @@ sDoorSch_RomaniRanchBarn {
             // Cremia is in the Barn during the Alien invasion
 
             // "locked from inside" message
-            return_s (DOOR_SCH_24)
+            return_s (0x18)
         } else {
         open_barn:
             return_none
@@ -341,7 +341,7 @@ sDoorSch_RomaniRanchBarn {
             // do that then the door would be mysteriously locked
 
             // "locked door" message
-            return_s (DOOR_SCH_12)
+            return_s (0xC)
         } else {
             branch (open_barn)
         }
@@ -354,7 +354,7 @@ sDoorSch_RomaniRanchBarn {
 sDoorSch_RomaniRanchCuccoShack {
     // Closed between 20:00 ~ 06:00
     if_since_time (20, 0) {
-        return_s (DOOR_SCH_25)
+        return_s (0x19)
     } else {
         return_none
     }
@@ -364,7 +364,7 @@ sDoorSch_RomaniRanchCuccoShack {
 sDoorSch_RomaniRanchDoggyRacetrack {
     // Closed between 20:00 ~ 06:00
     if_since_time (20, 0) {
-        return_s (DOOR_SCH_26)
+        return_s (0x1A)
     } else {
         return_none
     }
@@ -386,7 +386,7 @@ sDoorSch_RomaniRanchBedroom {
             if_before_time (20, 0) {
                 branch (label_0x14)
             } else {
-                return_s (DOOR_SCH_27)
+                return_s (0x1B)
             }
         }
     }
@@ -395,7 +395,7 @@ sDoorSch_RomaniRanchBedroom {
     if_before_time (18, 0) {
         branch (label_0x14)
     } else {
-        return_s (DOOR_SCH_27)
+        return_s (0x1B)
     }
 
     label_0x14:
@@ -407,12 +407,12 @@ sDoorSch_IkanaCanyonMusicBoxHouse {
     not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
         not if_week_event_reg (WEEKEVENTREG_75_20) {
             not if_week_event_reg (WEEKEVENTREG_14_04) {
-                return_s (DOOR_SCH_29)
+                return_s (0x1D)
             } else not if_week_event_reg (WEEKEVENTREG_59_01) {
                 if_week_event_reg (WEEKEVENTREG_61_02) {
-                    return_s (DOOR_SCH_31)
+                    return_s (0x1F)
                 } else {
-                    return_s (DOOR_SCH_30)
+                    return_s (0x1E)
                 }
             } else {
                 return_none
@@ -425,7 +425,7 @@ sDoorSch_IkanaCanyonMusicBoxHouse {
 
 // Ikana Graveyard: Dampé's House
 sDoorSch_DampesHouse {
-    return_s (DOOR_SCH_32)
+    return_s (0x20)
 }
 
 // Magic Hags' Potion Shop
@@ -440,7 +440,7 @@ D_80867780 {
 // Swamp Shooting Gallery
 sDoorSch_SwampShootingGallery {
     if_since_time (22, 0) {
-        return_s (DOOR_SCH_35)
+        return_s (0x23)
     } else {
         return_none
     }

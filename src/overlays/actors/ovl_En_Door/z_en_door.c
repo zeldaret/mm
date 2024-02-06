@@ -42,47 +42,6 @@ void EnDoor_Open(EnDoor* this, PlayState* play);
 void EnDoor_AjarClose(EnDoor* this, PlayState* play);
 void EnDoor_SetupType(EnDoor* this, PlayState* play);
 
-// TODO: Maybe this is a bit overkill? considering they are used as an offset to a text id
-typedef enum DoorScheduleResult {
-    /*  0 */ DOOR_SCH_NONE,
-    /*  1 */ DOOR_SCH_1,
-    /*  2 */ DOOR_SCH_2,
-    /*  3 */ DOOR_SCH_3,
-    /*  4 */ DOOR_SCH_4,
-    /*  5 */ DOOR_SCH_5,
-    /*  6 */ DOOR_SCH_6,
-    /*  7 */ DOOR_SCH_7,
-    /*  8 */ DOOR_SCH_8,
-    /*  9 */ DOOR_SCH_9,
-    /* 10 */ DOOR_SCH_10,
-    /* 11 */ DOOR_SCH_11,
-    /* 12 */ DOOR_SCH_12,
-    /* 13 */ DOOR_SCH_13,
-    /* 14 */ DOOR_SCH_14,
-    /* 15 */ DOOR_SCH_15,
-    /* 16 */ DOOR_SCH_16,
-    /* 17 */ DOOR_SCH_17,
-    /* 18 */ DOOR_SCH_18,
-    /* 19 */ DOOR_SCH_19,
-    /* 20 */ DOOR_SCH_20,
-    /* 21 */ DOOR_SCH_21,
-    /* 22 */ DOOR_SCH_22,
-    /* 23 */ DOOR_SCH_23,
-    /* 24 */ DOOR_SCH_24,
-    /* 25 */ DOOR_SCH_25,
-    /* 26 */ DOOR_SCH_26,
-    /* 27 */ DOOR_SCH_27,
-    /* 28 */ DOOR_SCH_28,
-    /* 29 */ DOOR_SCH_29,
-    /* 30 */ DOOR_SCH_30,
-    /* 31 */ DOOR_SCH_31,
-    /* 32 */ DOOR_SCH_32,
-    /* 33 */ DOOR_SCH_33,
-    /* 34 */ DOOR_SCH_34,
-    /* 35 */ DOOR_SCH_35,
-    /* 36 */ DOOR_SCH_MAX
-} DoorScheduleResult;
-
 #include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
 /**
