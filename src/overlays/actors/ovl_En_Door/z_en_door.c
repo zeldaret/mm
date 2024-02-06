@@ -123,6 +123,8 @@ ScheduleScript* sDoorSchedules[ENDOOR_SCH_TYPE_MAX] = {
     D_80867780,                                   // ENDOOR_SCH_TYPE_30
     sDoorSch_SwampShootingGallery,                // ENDOOR_SCH_TYPE_SWAMP_SHOOTING_GALLERY
 };
+static_assert(ARRAY_COUNT(sDoorSchedules) == ENDOOR_SCH_TYPE_MAX,
+              "The entry count of `sDoorSchedules` should match the `EnDoorScheduleType` enum");
 
 ActorInit En_Door_InitVars = {
     /**/ ACTOR_EN_DOOR,
@@ -227,7 +229,7 @@ static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE,
               "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` "
               "onwards) must be synced.");
 
-static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
+static EnDoorInfo sObjectInfo[] = {
     // DOOR_OBJKIND_DEFAULT
     { SCENE_MITURIN, DOOR_DL_WOODFALL, OBJECT_NUMA_OBJ },                  // DOOR_OBJINFO_0
     { SCENE_TENMON_DAI, DOOR_DL_OBSERVATORY_LAB, OBJECT_DOR01 },           // DOOR_OBJINFO_1
@@ -283,6 +285,8 @@ static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
     { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                           // DOOR_OBJINFO_47
     { -1, DOOR_DL_SWAMP, OBJECT_DOR03 },                               // DOOR_OBJINFO_48
 };
+static_assert(ARRAY_COUNT(sObjectInfo) == DOOR_OBJINFO_MAX,
+              "The entry count of `sObjectInfo` should match the `EnDoorObjectInfoIndex` enum");
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
@@ -291,7 +295,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
-static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
+static AnimationHeader* sAnimations[] = {
     // left
     &gameplay_keep_Anim_020658, // PLAYER_FORM_FIERCE_DEITY
     &gameplay_keep_Anim_022CA8, // PLAYER_FORM_GORON
@@ -305,8 +309,10 @@ static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
     &gameplay_keep_Anim_022FF0, // PLAYER_FORM_DEKU
     &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
 };
+static_assert(ARRAY_COUNT(sAnimations) == 2 * PLAYER_FORM_MAX,
+              "The entry count of `sAnimations` should be exactly twice as PLAYER_FORM_MAX");
 
-static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
+static u8 sAnimOpenFrames[] = {
     // left
     25, // PLAYER_FORM_FIERCE_DEITY
     25, // PLAYER_FORM_GORON
@@ -320,8 +326,10 @@ static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
     25, // PLAYER_FORM_DEKU
     25, // PLAYER_FORM_HUMAN
 };
+static_assert(ARRAY_COUNT(sAnimOpenFrames) == 2 * PLAYER_FORM_MAX,
+              "The entry count of `sAnimOpenFrames` should be exactly twice as PLAYER_FORM_MAX");
 
-static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
+static u8 sAnimCloseFrames[] = {
     // left
     60, // PLAYER_FORM_FIERCE_DEITY
     60, // PLAYER_FORM_GORON
@@ -335,8 +343,10 @@ static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
     60, // PLAYER_FORM_DEKU
     70, // PLAYER_FORM_HUMAN
 };
+static_assert(ARRAY_COUNT(sAnimCloseFrames) == 2 * PLAYER_FORM_MAX,
+              "The entry count of `sAnimCloseFrames` should be exactly twice as PLAYER_FORM_MAX");
 
-static Gfx* sDoorDLists[DOOR_DL_MAX][2] = {
+static Gfx* sDoorDLists[][2] = {
     { gDoorLeftDL, gDoorRightDL },                            // DOOR_DL_DEFAULT
     { gWoodfallDoorDL, gWoodfallDoorDL },                     // DOOR_DL_WOODFALL
     { gObservatoryLabDoorDL, gObservatoryLabDoorDL },         // DOOR_DL_OBSERVATORY_LAB
@@ -353,6 +363,8 @@ static Gfx* sDoorDLists[DOOR_DL_MAX][2] = {
     { gOceansideSpiderHouseDoorDL, gOceansideSpiderHouseDoorDL },   // DOOR_DL_OCEANSIDE_SPIDER_HOUSE
     { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },                // DOOR_DL_DEFAULT_FIELD_KEEP
 };
+static_assert(ARRAY_COUNT(sDoorDLists) == DOOR_DL_MAX,
+              "The entry count of `sDoorDLists` should match the `EnDoorDListIndex` enum");
 
 void EnDoor_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;

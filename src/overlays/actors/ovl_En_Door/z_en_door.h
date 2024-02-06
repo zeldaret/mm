@@ -19,6 +19,7 @@
  * Type                 0000001110000000    Values of the EnDoorType enum
  * Action var           0000000001111111    Generic extra parameter. It is used differently by each door Type (or not used at all)
  *
+ *
  * If type is either ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY or ENDOOR_TYPE_NIGHT then the Action var is bitpacked like this:
  *
  * |             |
@@ -31,6 +32,8 @@
  * Text offset          0000000001111000    Used as an offset relative to a base text id. The base text id is different depending on the door type.
  * Half day bit index   0000000000000111    Index into the D_801AED48 array
  *
+ *
+ * The rest of the door types either don't use the actionv var or don't bitpack extra parameters on it (using the full 7 bits)
  */
 
 struct EnDoor;
