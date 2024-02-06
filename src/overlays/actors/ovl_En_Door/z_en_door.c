@@ -497,7 +497,7 @@ s32 D_80867BC0;
 void EnDoor_Idle(EnDoor* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    // 0x1821: Player is a member of the "Latte" (Milk bar)
+    // 0x1821: Player is a member of the Milk bar
     if (Actor_TalkOfferAccepted(&this->knobDoor.dyna.actor, &play->state) &&
         (this->knobDoor.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
