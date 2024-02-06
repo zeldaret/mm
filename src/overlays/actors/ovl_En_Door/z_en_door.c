@@ -297,17 +297,17 @@ static InitChainEntry sInitChain[] = {
 
 static AnimationHeader* sAnimations[] = {
     // left
-    &gameplay_keep_Anim_020658, // PLAYER_FORM_FIERCE_DEITY
-    &gameplay_keep_Anim_022CA8, // PLAYER_FORM_GORON
-    &gameplay_keep_Anim_020658, // PLAYER_FORM_ZORA
-    &gameplay_keep_Anim_022E68, // PLAYER_FORM_DEKU
-    &gameplay_keep_Anim_0204B4, // PLAYER_FORM_HUMAN
+    &gDoorFierceDeityZoraOpenLeftAnim, // PLAYER_FORM_FIERCE_DEITY
+    &gDoorGoronOpenLeftAnim,           // PLAYER_FORM_GORON
+    &gDoorFierceDeityZoraOpenLeftAnim, // PLAYER_FORM_ZORA
+    &gDoorDekuOpenLeftAnim,            // PLAYER_FORM_DEKU
+    &gDoorHumanOpenLeftAnim,           // PLAYER_FORM_HUMAN
     // right
-    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_FIERCE_DEITY
-    &gameplay_keep_Anim_022D90, // PLAYER_FORM_GORON
-    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_ZORA
-    &gameplay_keep_Anim_022FF0, // PLAYER_FORM_DEKU
-    &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
+    &gDoorFierceDeityZoraOpenRightAnim, // PLAYER_FORM_FIERCE_DEITY
+    &gDoorGoronOpenRightAnim,           // PLAYER_FORM_GORON
+    &gDoorFierceDeityZoraOpenRightAnim, // PLAYER_FORM_ZORA
+    &gDoorDekuOpenRightAnim,            // PLAYER_FORM_DEKU
+    &gDoorHumanOpenRightAnim,           // PLAYER_FORM_HUMAN
 };
 static_assert(ARRAY_COUNT(sAnimations) == 2 * PLAYER_FORM_MAX,
               "The entry count of `sAnimations` should be exactly twice as PLAYER_FORM_MAX");
@@ -383,7 +383,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gFramedDoorCol);
     }
 
-    SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
+    SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gDoorFierceDeityZoraOpenLeftAnim, this->limbTable,
                    this->limbTable, DOOR_LIMB_MAX);
 
     if (this->doorType == ENDOOR_TYPE_SCHEDULE) {
@@ -439,6 +439,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
     if (this->doorType != ENDOOR_TYPE_FRAMED) {
         TransitionActorEntry* transitionEntry =
             &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
@@ -686,10 +687,10 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
         Gfx** sideDLists = sDoorDLists[this->knobDoor.dlIndex];
 
         transitionEntry = NULL;
-
         if (this->doorType != ENDOOR_TYPE_FRAMED) {
             transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         }
+
         rot->z += this->knobDoor.dyna.actor.world.rot.y;
         if ((this->doorType == ENDOOR_TYPE_FRAMED) || (play->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
@@ -698,7 +699,6 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
                 Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
 
             *dList = (ABS_ALT(temp) < 0x4000) ? sideDLists[0] : sideDLists[1];
-
         } else {
             s32 index = 0;
 
@@ -708,12 +708,14 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
             *dList = sideDLists[index];
         }
     }
+
     return false;
 }
 
 void EnDoor_Draw(Actor* thisx, PlayState* play) {
     EnDoor* this = THIS;
 
+    // Ensure the object that will be used is loaded
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
