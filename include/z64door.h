@@ -19,6 +19,7 @@ typedef struct SlidingDoorActor {
     /* 0x15E */ s16 unk_15E;
 } SlidingDoorActor; // size = 0x160
 
-#define DOOR_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> 10)
+#define TRANSITION_ACTOR_PARAMS_INDEX_SHIFT 10
+#define DOOR_GET_TRANSITION_ID(thisx) ((u16)(thisx)->params >> TRANSITION_ACTOR_PARAMS_INDEX_SHIFT)
 
 #endif

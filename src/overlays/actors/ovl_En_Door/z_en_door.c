@@ -89,7 +89,7 @@ typedef enum DoorScheduleResult {
  * A schedule returning none means the door can be used normally.
  * Otherwise the result will be used as an offset relative to text message 0x1800
  */
-ScheduleScript* D_8086778C[ENDOOR_SCH_TYPE_MAX] = {
+ScheduleScript* sDoorSchedules[ENDOOR_SCH_TYPE_MAX] = {
     sDoorSch_SwordsmansSchool, // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
     sDoorSch_PostOffice, // ENDOOR_SCH_TYPE_POST_OFFICE
     sDoorSch_LotteryShop, // ENDOOR_SCH_TYPE_LOTTERY_SHOP
@@ -361,9 +361,9 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     this->doorType = ENDOOR_GET_TYPE(thisx);
     this->actionVar.actionVar = ENDOOR_GET_ACTION_VAR(thisx);
 
-    if ((this->doorType == ENDOOR_TYPE_7) && (this->actionVar.actionVar_7 == 0)) {
+    if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->actionVar.frameType == ENDOOR_FRAMED_FRAME)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
-        DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);
+        DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gFramedDoorCol);
     }
 
     SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
@@ -418,13 +418,13 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 void EnDoor_Destroy(Actor* thisx, PlayState* play) {
     EnDoor* this = (EnDoor*)thisx;
 
-    if (this->doorType != ENDOOR_TYPE_7) {
+    if (this->doorType != ENDOOR_TYPE_FRAMED) {
         TransitionActorEntry* transitionEntry =
             &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
-    } else if (this->actionVar.actionVar_7 == 0) {
+    } else if (this->actionVar.frameType == ENDOOR_FRAMED_FRAME) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->knobDoor.dyna.bgId);
     }
 }
@@ -534,16 +534,17 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                            (this->doorType == ENDOOR_TYPE_3)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 temp_a2 = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3)];
+                    s16 openBit = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3)];
                     s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_ACTIONVAR_0_2_3(this->actionVar.actionVar_0_2_3);
 
-                    if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & temp_a2)) ||
-                        ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & temp_a2)) ||
-                        ((this->doorType == ENDOOR_TYPE_3) && !(halfDaysDayBit & temp_a2))) {
-                        s16 baseTextId = 0x182D; // 0x182D does not exist, and there's no message for like 86 entries
+                    // Check if the door should be closed, and prompt a message if its the case
+                    if (((this->doorType == ENDOOR_TYPE_0) && !((halfDaysDayBit | halfDaysNightBit) & openBit)) ||
+                        ((this->doorType == ENDOOR_TYPE_2) && !(halfDaysNightBit & openBit)) ||
+                        ((this->doorType == ENDOOR_TYPE_3) && !(halfDaysDayBit & openBit))) {
+                        s16 baseTextId = 0x182D; //! @bug 0x182D does not exist, and there's no message for like 86 entries
 
                         if (this->doorType == ENDOOR_TYPE_3) {
-                            // 0x180D to 0x181C: messages indicating certain building is closed at night
+                            // 0x180D to 0x181C: messages indicating certain building are closed at night
                             baseTextId = 0x180D;
                         } else if (this->doorType == ENDOOR_TYPE_2) {
                             // 0x181D to 0x1820: messages for when Pamela is inside the house with the door closed
@@ -555,7 +556,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 } else if ((this->doorType == ENDOOR_TYPE_SCHEDULE) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->actionVar.schType], &scheduleOutput)) {
+                    if (Schedule_RunScript(play, sDoorSchedules[this->actionVar.schType], &scheduleOutput)) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         // 0x1821: Player is a member of the Milk bar
@@ -658,11 +659,11 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
         transitionEntry = NULL;
 
-        if (this->doorType != ENDOOR_TYPE_7) {
+        if (this->doorType != ENDOOR_TYPE_FRAMED) {
             transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         }
         rot->z += this->knobDoor.dyna.actor.world.rot.y;
-        if ((this->doorType == ENDOOR_TYPE_7) || (play->roomCtx.prevRoom.num >= 0) ||
+        if ((this->doorType == ENDOOR_TYPE_FRAMED) || (play->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s16 temp =
                 (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[DOOR_LIMB_3].z + rot->z) -
@@ -688,7 +689,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if ((this->doorType == ENDOOR_TYPE_7) && (this->actionVar.actionVar_7 == 0)) {
+        if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->actionVar.frameType == ENDOOR_FRAMED_FRAME)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);

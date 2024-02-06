@@ -5,6 +5,34 @@
 #include "z64door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
+/**
+ * Actor Parameters
+ *
+ * |                  |       |
+ * | Transition Index | Type  | Action var
+ * |------------------|-------|---------------
+ * | 0 0 0 0 0 0      | 0 0 0 | 0 0 0 0 0 0 0
+ * | 6                | 3     | 7
+ * |
+ *
+ * Transition Index     1111110000000000    Set by the actor engine when the door is spawned (See Actor_SpawnTransitionActors and DOOR_GET_TRANSITION_ID)
+ * Type                 0000001110000000    Values of the EnDoorType enum
+ * Action var           0000000001111111    Generic extra parameter. It is used differently by each door Type (or not used at all)
+ *
+ * If type is either ENDOOR_TYPE_0, ENDOOR_TYPE_2 or ENDOOR_TYPE_3 then the Action var is bitpacked like this:
+ *
+ * |             |
+ * | Text offset | Half day bit index
+ * |-------------|--------------------
+ * | 0 0 0 0     | 0 0 0 
+ * | 4           | 3
+ * |
+ *
+ * Text offset          0000000001111000    Used as an offset relative to a base text id. The base text id is different depending on the door type.
+ * Half day bit index   0000000000000111    Index into the D_801AED48 array
+ *
+ */
+
 struct EnDoor;
 
 typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
@@ -14,12 +42,13 @@ typedef enum EnDoorType {
     /* 1 */ ENDOOR_TYPE_LOCKED,
     /* 2 */ ENDOOR_TYPE_2, // Unused
     /* 3 */ ENDOOR_TYPE_3, // Checks if current time is night and tells the Player the Shop/Store/Whatever is closed and gives a custom message for each kind of building. Used, but all uses makes the door behave like a normal door
-    /* 4 */ ENDOOR_TYPE_AJAR, // OoT: AJAR. unused
+    /* 4 */ ENDOOR_TYPE_AJAR, // unused
     /* 5 */ ENDOOR_TYPE_SCHEDULE,
     /* 6 */ ENDOOR_TYPE_6, // unreferenced
-    /* 7 */ ENDOOR_TYPE_7 // unused
+    /* 7 */ ENDOOR_TYPE_FRAMED // unused
 } EnDoorType;
 
+// ENDOOR_TYPE_SCHEDULE
 typedef enum EnDoorScheduleType {
     /*  0 */ ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL,
     /*  1 */ ENDOOR_SCH_TYPE_POST_OFFICE,
@@ -56,6 +85,12 @@ typedef enum EnDoorScheduleType {
     /* 32 */ ENDOOR_SCH_TYPE_MAX
 } EnDoorScheduleType;
 
+// ENDOOR_TYPE_FRAMED
+typedef enum EnDoorFramedType {
+    /* 0 */ ENDOOR_FRAMED_FRAME,
+    /* 1 */ ENDOOR_FRAMED_NOFRAME
+} EnDoorFramedType;
+
 #define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
 
@@ -71,6 +106,11 @@ typedef enum EnDoorScheduleType {
  */
 #define ENDOOR_PARAMS_SCHEDULE(scheduleType) ENDOOR_PARAMS(ENDOOR_TYPE_SCHEDULE, scheduleType)
 
+/**
+ * `scheduleType` must be a value of the `EnDoorFramedType` enum
+ */
+#define ENDOOR_PARAMS_FRAMED(frameType) ENDOOR_PARAMS(ENDOOR_TYPE_FRAMED, frameType)
+
 typedef struct EnDoor {
     /* 0x000 */ KnobDoorActor knobDoor;
     /* 0x1A4 */ u8 doorType; // EnDoorType enum
@@ -79,7 +119,7 @@ typedef struct EnDoor {
                     u8 actionVar_0_2_3; // ENDOOR_TYPE_0, ENDOOR_TYPE_2 and ENDOOR_TYPE_3
                     u8 switchFlag; // ENDOOR_TYPE_LOCKED
                     u8 schType; // ENDOOR_TYPE_SCHEDULE
-                    u8 actionVar_7; // ENDOOR_TYPE_7
+                    u8 frameType; // ENDOOR_TYPE_FRAMED
                 } actionVar; // TODO: think on a better name
     /* 0x1A6 */ u8 lockTimer; // Used by ENDOOR_TYPE_LOCKED. Also controls drawing the lock on the door and side effects of opening a locked door, like decreasing the key count and updating the switch flag
     /* 0x1A7 */ s8 openTimer; // For how long the door will be open. positive/negative means the opening direction. It is meant to be used only by ENDOOR_TYPE_SCHEDULE, and set by schedule actors. See EnDoor_OpenScheduleActor.

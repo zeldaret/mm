@@ -5396,7 +5396,7 @@
     0x8086777C:("sDoorSch_MagicHagsPotionShop","UNK_TYPE1","",0x1),
     0x80867780:("D_80867780","UNK_TYPE1","",0x1),
     0x80867784:("sDoorSch_SwampShootingGallery","UNK_TYPE1","",0x1),
-    0x8086778C:("D_8086778C","UNK_PTR","",0x4),
+    0x8086778C:("sDoorSchedules","UNK_PTR","",0x4),
     0x8086780C:("En_Door_InitVars","UNK_TYPE1","",0x1),
     0x8086782C:("sObjectInfo","UNK_TYPE2","",0x126),
     0x80867954:("sInitChain","UNK_TYPE1","",0x1),

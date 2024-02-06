@@ -943,7 +943,7 @@
         <Animation Name="gameplay_keep_Anim_022E68" Offset="0x22E68" />
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
-        <Collision Name="gDoorCol" Offset="0x23100" />
+        <Collision Name="gFramedDoorCol" Offset="0x23100" />
         <DList Name="gEffDustDL" Offset="0x23130" />
         <DList Name="gEffFlash1DL" Offset="0x23210" />
         <DList Name="gEffFlash2DL" Offset="0x23288" />
