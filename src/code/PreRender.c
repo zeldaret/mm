@@ -769,7 +769,7 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
     alphaCompare = (bg2D->flags & BG2D_FLAGS_AC_THRESHOLD) ? G_AC_THRESHOLD : G_AC_NONE;
 
     gfxTemp = *gfxp;
-    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    bg = Gfx_Alloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     bg->b.imageX = 0;

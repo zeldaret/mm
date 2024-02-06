@@ -72,7 +72,7 @@ void Play_DrawMotionBlur(PlayState* this) {
         OPEN_DISPS(gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
 
         gSPDisplayList(OVERLAY_DISP++, gfx);
 
@@ -89,7 +89,7 @@ void Play_DrawMotionBlur(PlayState* this) {
 
         gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
 
         POLY_OPA_DISP = gfx;
 
@@ -1115,13 +1115,13 @@ void Play_PostWorldDraw(PlayState* this) {
         OPEN_DISPS(gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
         gSPDisplayList(OVERLAY_DISP++, gfx);
 
         VisFbuf_Draw(sPlayVisFbufInstance, &gfx, this->unk_18E60);
 
         gSPEndDisplayList(gfx++);
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
         POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);
@@ -1213,7 +1213,7 @@ void Play_DrawMain(PlayState* this) {
             Gfx* sp218;
             Gfx* sp214 = POLY_OPA_DISP;
 
-            sp218 = Graph_GfxPlusOne(sp214);
+            sp218 = Gfx_Open(sp214);
             gSPDisplayList(OVERLAY_DISP++, sp218);
 
             if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) ||
@@ -1238,7 +1238,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             gSPEndDisplayList(sp218++);
-            Graph_BranchDlist(sp214, sp218);
+            Gfx_Close(sp214, sp218);
             POLY_OPA_DISP = sp218;
         }
 
@@ -1384,7 +1384,7 @@ void Play_DrawMain(PlayState* this) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
-                sp74 = Graph_GfxPlusOne(sp70);
+                sp74 = Gfx_Open(sp70);
                 gSPDisplayList(OVERLAY_DISP++, sp74);
                 this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
 
@@ -1409,7 +1409,7 @@ void Play_DrawMain(PlayState* this) {
                 }
 
                 gSPEndDisplayList(sp74++);
-                Graph_BranchDlist(sp70, sp74);
+                Gfx_Close(sp70, sp74);
                 POLY_OPA_DISP = sp74;
                 this->unk_18B49 = 2;
                 SREG(33) |= 1;
