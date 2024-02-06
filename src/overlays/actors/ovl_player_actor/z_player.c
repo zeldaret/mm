@@ -6455,7 +6455,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     func_8082DAD4(this);
     Player_AnimReplace_Setup(
         play, this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_80 | ANIM_FLAG_200);
-    knobDoor->playOpenAnim = true;
+    knobDoor->requestOpen = true;
     if (this->doorType != PLAYER_DOORTYPE_FAKE) {
         CollisionPoly* poly;
         s32 bgId;

@@ -1,3 +1,15 @@
+/**
+ * Schedules for EnDoor
+ *
+ * EnDoor uses the schedule system to determine if it should be open or closed
+ * (and prompt a message) when the Player tries to open it.
+ *
+ * If a schedule returns `none` it means the door should be openable by Player.
+ * A non-`none` value means the door should be closed and prompt a message.
+ * Which message is used is determined by using the returned value from the
+ * schedule as an offset into text id 0x1800.
+ */
+
 // Swordsman's School
 sDoorSch_SwordsmansSchool {
     // The Swordsman's School is closed between 23:00 ~ 00:00 and says
@@ -261,6 +273,9 @@ sDoorSch_InnLargeSuite {
 
 // The Mayor's Residence: Main entrance
 sDoorSch_MayorsResidenceMainEntrance {
+    // Day 1 and 2: Open between 10:00 ~ 20:00
+    // Day 3: Open since 10:00
+
     if_day (3) {
         if_since_time (10, 0) {
         open_residence:

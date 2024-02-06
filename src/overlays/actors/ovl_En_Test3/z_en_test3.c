@@ -518,7 +518,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80A3F2BC(play, this, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
     Vec3f offset;
 
-    if ((door != NULL) && !door->knobDoor.playOpenAnim &&
+    if ((door != NULL) && !door->knobDoor.requestOpen &&
         ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
         Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
         Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);

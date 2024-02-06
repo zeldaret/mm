@@ -503,7 +503,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
         D_80867BC0 = true;
     }
 
-    if (this->knobDoor.playOpenAnim) {
+    if (this->knobDoor.requestOpen) {
         // Player or an NPC has requested this door to open
 
         this->actionFunc = EnDoor_Open;
@@ -658,7 +658,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play) {
     if (DECR(this->lockTimer) == 0) {
         if (SkelAnime_Update(&this->knobDoor.skelAnime)) {
             this->actionFunc = EnDoor_Idle;
-            this->knobDoor.playOpenAnim = false;
+            this->knobDoor.requestOpen = false;
         } else if (Animation_OnFrame(&this->knobDoor.skelAnime, sAnimOpenFrames[this->knobDoor.animIndex])) {
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->knobDoor.skelAnime.playSpeed < 1.5f) {
