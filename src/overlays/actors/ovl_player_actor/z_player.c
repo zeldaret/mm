@@ -6525,7 +6525,8 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
 
             if (this->actor.category == ACTORCAT_PLAYER) {
                 if ((this->doorType < PLAYER_DOORTYPE_FAKE) && (doorActor->category == ACTORCAT_DOOR) &&
-                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) || (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_FRAMED))) {
+                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) ||
+                     (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_FRAMED))) {
                     s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;

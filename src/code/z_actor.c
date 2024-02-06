@@ -3425,11 +3425,11 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                   (play->roomCtx.prevRoom.num == transitionActorList->sides[1].room)))) {
                 s16 rotY = DEG_TO_BINANG((transitionActorList->rotY >> 7) & 0x1FF);
 
-                if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
-                                                  transitionActorList->pos.x, transitionActorList->pos.y,
-                                                  transitionActorList->pos.z, 0, rotY, 0,
-                                                  (i << TRANSITION_ACTOR_PARAMS_INDEX_SHIFT) + (transitionActorList->params & 0x3FF),
-                                                  transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
+                if (Actor_SpawnAsChildAndCutscene(
+                        actorCtx, play, transitionActorList->id & 0x1FFF, transitionActorList->pos.x,
+                        transitionActorList->pos.y, transitionActorList->pos.z, 0, rotY, 0,
+                        (i << TRANSITION_ACTOR_PARAMS_INDEX_SHIFT) + (transitionActorList->params & 0x3FF),
+                        transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }
                 numTransitionActors = play->doorCtx.numTransitionActors;

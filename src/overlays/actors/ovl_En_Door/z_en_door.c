@@ -90,38 +90,38 @@ typedef enum DoorScheduleResult {
  * Otherwise the result will be used as an offset relative to text message 0x1800
  */
 ScheduleScript* sDoorSchedules[ENDOOR_SCH_TYPE_MAX] = {
-    sDoorSch_SwordsmansSchool, // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
-    sDoorSch_PostOffice, // ENDOOR_SCH_TYPE_POST_OFFICE
-    sDoorSch_LotteryShop, // ENDOOR_SCH_TYPE_LOTTERY_SHOP
-    sDoorSch_TradingPost, // ENDOOR_SCH_TYPE_TRADING_POST
-    sDoorSch_CuriosityShop, // ENDOOR_SCH_TYPE_CURIOSITY_SHOP
-    sDoorSch_LaundryPool, // ENDOOR_SCH_TYPE_LAUNDRY_POOL
-    sDoorSch_BombShop, // ENDOOR_SCH_TYPE_BOMB_SHOP
-    sDoorSch_TownShootingGallery, // ENDOOR_SCH_TYPE_TOWN_SHOOTING_GALLERY
-    sDoorSch_TreasureChestShop, // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
-    sDoorSch_HoneyDarlingShop, // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
-    sDoorSch_MilkBar, // ENDOOR_SCH_TYPE_MILK_BAR
-    sDoorSch_InnMainDoor, // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
-    sDoorSch_InnUpperEntrance, // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
-    sDoorSch_InnGrannysDoor, // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
-    sDoorSch_InnStaffRoomDoor, // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
-    sDoorSch_InnKnifeChamberDoor, // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
-    sDoorSch_InnLargeSuiteDoor, // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
-    sDoorSch_MayorsResidenceMainEntrance, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
+    sDoorSch_SwordsmansSchool,                    // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
+    sDoorSch_PostOffice,                          // ENDOOR_SCH_TYPE_POST_OFFICE
+    sDoorSch_LotteryShop,                         // ENDOOR_SCH_TYPE_LOTTERY_SHOP
+    sDoorSch_TradingPost,                         // ENDOOR_SCH_TYPE_TRADING_POST
+    sDoorSch_CuriosityShop,                       // ENDOOR_SCH_TYPE_CURIOSITY_SHOP
+    sDoorSch_LaundryPool,                         // ENDOOR_SCH_TYPE_LAUNDRY_POOL
+    sDoorSch_BombShop,                            // ENDOOR_SCH_TYPE_BOMB_SHOP
+    sDoorSch_TownShootingGallery,                 // ENDOOR_SCH_TYPE_TOWN_SHOOTING_GALLERY
+    sDoorSch_TreasureChestShop,                   // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
+    sDoorSch_HoneyDarlingShop,                    // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
+    sDoorSch_MilkBar,                             // ENDOOR_SCH_TYPE_MILK_BAR
+    sDoorSch_InnMainDoor,                         // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
+    sDoorSch_InnUpperEntrance,                    // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
+    sDoorSch_InnGrannysDoor,                      // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
+    sDoorSch_InnStaffRoomDoor,                    // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
+    sDoorSch_InnKnifeChamberDoor,                 // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
+    sDoorSch_InnLargeSuiteDoor,                   // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
+    sDoorSch_MayorsResidenceMainEntrance,         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
     sDoorSch_MayorsResidenceResidenceMayorDotour, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAYOR_DOTOUR
     sDoorSch_MayorsResidenceResidenceMadameAroma, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA
-    sDoorSch_MayorsResidenceResidenceBedroom, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_BEDROOM
-    D_80867710, // ENDOOR_SCH_TYPE_21
-    sDoorSch_RomaniRanchMamasHouse, // ENDOOR_SCH_TYPE_ROMANI_RANCH_MAMAS_HOUSE
-    sDoorSch_RomaniRanchBarn, // ENDOOR_SCH_TYPE_ROMANI_RANCH_BARN
-    sDoorSch_RomaniRanchCuccoShack, // ENDOOR_SCH_TYPE_ROMANI_RANCH_CUCCO_SHACK
-    sDoorSch_RomaniRanchDoggyRacetrack, // ENDOOR_SCH_TYPE_ROMANI_RANCH_DOGGY_RACETRACK
-    sDoorSch_RomaniRanchBedroom, // ENDOOR_SCH_TYPE_ROMANI_RANCH_BEDROOM
-    sDoorSch_IkanaCanyonMusicBoxHouse, // ENDOOR_SCH_TYPE_IKANA_CANYON_MUSIC_BOX_HOUSE
-    sDoorSch_DampesHouse, // ENDOOR_SCH_TYPE_DAMPES_HOUSE
-    sDoorSch_MagicHagsPotionShop, // ENDOOR_SCH_TYPE_MAGIC_HAGS_POTION_SHOP
-    D_80867780, // ENDOOR_SCH_TYPE_30
-    sDoorSch_SwampShootingGallery, // ENDOOR_SCH_TYPE_SWAMP_SHOOTING_GALLERY
+    sDoorSch_MayorsResidenceResidenceBedroom,     // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_BEDROOM
+    D_80867710,                                   // ENDOOR_SCH_TYPE_21
+    sDoorSch_RomaniRanchMamasHouse,               // ENDOOR_SCH_TYPE_ROMANI_RANCH_MAMAS_HOUSE
+    sDoorSch_RomaniRanchBarn,                     // ENDOOR_SCH_TYPE_ROMANI_RANCH_BARN
+    sDoorSch_RomaniRanchCuccoShack,               // ENDOOR_SCH_TYPE_ROMANI_RANCH_CUCCO_SHACK
+    sDoorSch_RomaniRanchDoggyRacetrack,           // ENDOOR_SCH_TYPE_ROMANI_RANCH_DOGGY_RACETRACK
+    sDoorSch_RomaniRanchBedroom,                  // ENDOOR_SCH_TYPE_ROMANI_RANCH_BEDROOM
+    sDoorSch_IkanaCanyonMusicBoxHouse,            // ENDOOR_SCH_TYPE_IKANA_CANYON_MUSIC_BOX_HOUSE
+    sDoorSch_DampesHouse,                         // ENDOOR_SCH_TYPE_DAMPES_HOUSE
+    sDoorSch_MagicHagsPotionShop,                 // ENDOOR_SCH_TYPE_MAGIC_HAGS_POTION_SHOP
+    D_80867780,                                   // ENDOOR_SCH_TYPE_30
+    sDoorSch_SwampShootingGallery,                // ENDOOR_SCH_TYPE_SWAMP_SHOOTING_GALLERY
 };
 
 ActorInit En_Door_InitVars = {
@@ -185,42 +185,46 @@ typedef enum EnDoorObjectInfoIndex {
 
     /* 17 */ DOOR_OBJKIND_SCHEDULE,
     /* 17 */ DOOR_OBJINFO_17 = DOOR_OBJKIND_SCHEDULE, // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
-    /* 18 */ DOOR_OBJINFO_18, // ENDOOR_SCH_TYPE_POST_OFFICE
-    /* 19 */ DOOR_OBJINFO_19, // ENDOOR_SCH_TYPE_LOTTERY_SHOP
-    /* 20 */ DOOR_OBJINFO_20, // ENDOOR_SCH_TYPE_TRADING_POST
-    /* 21 */ DOOR_OBJINFO_21, // ENDOOR_SCH_TYPE_CURIOSITY_SHOP
-    /* 22 */ DOOR_OBJINFO_22, // ENDOOR_SCH_TYPE_LAUNDRY_POOL
-    /* 23 */ DOOR_OBJINFO_23, // ENDOOR_SCH_TYPE_BOMB_SHOP
-    /* 24 */ DOOR_OBJINFO_24, // ENDOOR_SCH_TYPE_TOWN_SHOOTING_GALLERY
-    /* 25 */ DOOR_OBJINFO_25, // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
-    /* 26 */ DOOR_OBJINFO_26, // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
-    /* 27 */ DOOR_OBJINFO_27, // ENDOOR_SCH_TYPE_MILK_BAR
-    /* 28 */ DOOR_OBJINFO_28, // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
-    /* 29 */ DOOR_OBJINFO_29, // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
-    /* 30 */ DOOR_OBJINFO_30, // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
-    /* 31 */ DOOR_OBJINFO_31, // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
-    /* 32 */ DOOR_OBJINFO_32, // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
-    /* 33 */ DOOR_OBJINFO_33, // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
-    /* 34 */ DOOR_OBJINFO_34, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
-    /* 35 */ DOOR_OBJINFO_35, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAYOR_DOTOUR
-    /* 36 */ DOOR_OBJINFO_36, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA
-    /* 37 */ DOOR_OBJINFO_37, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_BEDROOM
-    /* 38 */ DOOR_OBJINFO_38, // ENDOOR_SCH_TYPE_21
-    /* 39 */ DOOR_OBJINFO_39, // ENDOOR_SCH_TYPE_ROMANI_RANCH_MAMAS_HOUSE
-    /* 40 */ DOOR_OBJINFO_40, // ENDOOR_SCH_TYPE_ROMANI_RANCH_BARN
-    /* 41 */ DOOR_OBJINFO_41, // ENDOOR_SCH_TYPE_ROMANI_RANCH_CUCCO_SHACK
-    /* 42 */ DOOR_OBJINFO_42, // ENDOOR_SCH_TYPE_ROMANI_RANCH_DOGGY_RACETRACK
-    /* 43 */ DOOR_OBJINFO_43, // ENDOOR_SCH_TYPE_ROMANI_RANCH_BEDROOM
-    /* 44 */ DOOR_OBJINFO_44, // ENDOOR_SCH_TYPE_IKANA_CANYON_MUSIC_BOX_HOUSE
-    /* 45 */ DOOR_OBJINFO_45, // ENDOOR_SCH_TYPE_DAMPES_HOUSE
-    /* 46 */ DOOR_OBJINFO_46, // ENDOOR_SCH_TYPE_MAGIC_HAGS_POTION_SHOP
-    /* 47 */ DOOR_OBJINFO_47, // ENDOOR_SCH_TYPE_30
-    /* 48 */ DOOR_OBJINFO_48, // ENDOOR_SCH_TYPE_SWAMP_SHOOTING_GALLERY
+    /* 18 */ DOOR_OBJINFO_18,                         // ENDOOR_SCH_TYPE_POST_OFFICE
+    /* 19 */ DOOR_OBJINFO_19,                         // ENDOOR_SCH_TYPE_LOTTERY_SHOP
+    /* 20 */ DOOR_OBJINFO_20,                         // ENDOOR_SCH_TYPE_TRADING_POST
+    /* 21 */ DOOR_OBJINFO_21,                         // ENDOOR_SCH_TYPE_CURIOSITY_SHOP
+    /* 22 */ DOOR_OBJINFO_22,                         // ENDOOR_SCH_TYPE_LAUNDRY_POOL
+    /* 23 */ DOOR_OBJINFO_23,                         // ENDOOR_SCH_TYPE_BOMB_SHOP
+    /* 24 */ DOOR_OBJINFO_24,                         // ENDOOR_SCH_TYPE_TOWN_SHOOTING_GALLERY
+    /* 25 */ DOOR_OBJINFO_25,                         // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
+    /* 26 */ DOOR_OBJINFO_26,                         // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
+    /* 27 */ DOOR_OBJINFO_27,                         // ENDOOR_SCH_TYPE_MILK_BAR
+    /* 28 */ DOOR_OBJINFO_28,                         // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
+    /* 29 */ DOOR_OBJINFO_29,                         // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
+    /* 30 */ DOOR_OBJINFO_30,                         // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
+    /* 31 */ DOOR_OBJINFO_31,                         // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
+    /* 32 */ DOOR_OBJINFO_32,                         // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
+    /* 33 */ DOOR_OBJINFO_33,                         // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
+    /* 34 */ DOOR_OBJINFO_34,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
+    /* 35 */ DOOR_OBJINFO_35,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAYOR_DOTOUR
+    /* 36 */ DOOR_OBJINFO_36,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA
+    /* 37 */ DOOR_OBJINFO_37,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_BEDROOM
+    /* 38 */ DOOR_OBJINFO_38,                         // ENDOOR_SCH_TYPE_21
+    /* 39 */ DOOR_OBJINFO_39,                         // ENDOOR_SCH_TYPE_ROMANI_RANCH_MAMAS_HOUSE
+    /* 40 */ DOOR_OBJINFO_40,                         // ENDOOR_SCH_TYPE_ROMANI_RANCH_BARN
+    /* 41 */ DOOR_OBJINFO_41,                         // ENDOOR_SCH_TYPE_ROMANI_RANCH_CUCCO_SHACK
+    /* 42 */ DOOR_OBJINFO_42,                         // ENDOOR_SCH_TYPE_ROMANI_RANCH_DOGGY_RACETRACK
+    /* 43 */ DOOR_OBJINFO_43,                         // ENDOOR_SCH_TYPE_ROMANI_RANCH_BEDROOM
+    /* 44 */ DOOR_OBJINFO_44,                         // ENDOOR_SCH_TYPE_IKANA_CANYON_MUSIC_BOX_HOUSE
+    /* 45 */ DOOR_OBJINFO_45,                         // ENDOOR_SCH_TYPE_DAMPES_HOUSE
+    /* 46 */ DOOR_OBJINFO_46,                         // ENDOOR_SCH_TYPE_MAGIC_HAGS_POTION_SHOP
+    /* 47 */ DOOR_OBJINFO_47,                         // ENDOOR_SCH_TYPE_30
+    /* 48 */ DOOR_OBJINFO_48,                         // ENDOOR_SCH_TYPE_SWAMP_SHOOTING_GALLERY
     /* 49 */ DOOR_OBJINFO_MAX
 } EnDoorObjectInfoIndex;
 
-static_assert(ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
-static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE, "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` onwards) must be synced.");
+static_assert(ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE,
+              "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` "
+              "onwards) must be synced.");
+static_assert(ENDOOR_SCH_TYPE_MAX == DOOR_OBJINFO_MAX - DOOR_OBJKIND_SCHEDULE,
+              "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` "
+              "onwards) must be synced.");
 
 static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
     // DOOR_OBJKIND_DEFAULT
@@ -241,42 +245,42 @@ static EnDoorInfo sObjectInfo[DOOR_OBJINFO_MAX] = {
     { SCENE_KINDAN2, DOOR_DL_OCEANSIDE_SPIDER_HOUSE, OBJECT_KINSTA2_OBJ }, // DOOR_OBJINFO_14
 
     // DOOR_OBJKIND_KEEP
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_15
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_16
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                  // DOOR_OBJINFO_15
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP }, // DOOR_OBJINFO_16
 
     // DOOR_OBJKIND_SCHEDULE
-    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_17
-    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },              // DOOR_OBJINFO_18
-    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_19
-    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },              // DOOR_OBJINFO_20
-    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_21
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_22
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_23
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_24
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_25
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_26
-    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                               // DOOR_OBJINFO_27
-    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_28
-    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                             // DOOR_OBJINFO_29
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_30
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_31
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_32
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_33
-    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 },     // DOOR_OBJINFO_34
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_35
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_36
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_37
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_38
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_39
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_40
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_41
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_42
-    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                                // DOOR_OBJINFO_43
-    { -1, DOOR_DL_MUSIC_BOX, OBJECT_WDOR05 },                              // DOOR_OBJINFO_44
-    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },               // DOOR_OBJINFO_45
-    { -1, DOOR_DL_MAGIC_HAG_POTION_SHOP, OBJECT_DOR04 },                   // DOOR_OBJINFO_46
-    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                               // DOOR_OBJINFO_47
-    { -1, DOOR_DL_SWAMP, OBJECT_DOR03 },                                   // DOOR_OBJINFO_48
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                         // DOOR_OBJINFO_17
+    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },          // DOOR_OBJINFO_18
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 }, // DOOR_OBJINFO_19
+    { -1, DOOR_DL_POST_OFFICE_TRAIDING_POST, OBJECT_WDOR02 },          // DOOR_OBJINFO_20
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 }, // DOOR_OBJINFO_21
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_22
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_23
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_24
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_25
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_26
+    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                           // DOOR_OBJINFO_27
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                         // DOOR_OBJINFO_28
+    { -1, DOOR_DL_INN_SCHOOL, OBJECT_WDOR03 },                         // DOOR_OBJINFO_29
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_30
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_31
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_32
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_33
+    { -1, DOOR_DL_LOTTERY_CURIOSITY_SHIP_MAYOR_HOUSE, OBJECT_WDOR01 }, // DOOR_OBJINFO_34
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_35
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_36
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_37
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_38
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_39
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_40
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_41
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_42
+    { -1, DOOR_DL_DEFAULT, GAMEPLAY_KEEP },                            // DOOR_OBJINFO_43
+    { -1, DOOR_DL_MUSIC_BOX, OBJECT_WDOR05 },                          // DOOR_OBJINFO_44
+    { -1, DOOR_DL_DEFAULT_FIELD_KEEP, GAMEPLAY_FIELD_KEEP },           // DOOR_OBJINFO_45
+    { -1, DOOR_DL_MAGIC_HAG_POTION_SHOP, OBJECT_DOR04 },               // DOOR_OBJINFO_46
+    { -1, DOOR_DL_MILK_BAR, OBJECT_WDOR04 },                           // DOOR_OBJINFO_47
+    { -1, DOOR_DL_SWAMP, OBJECT_DOR03 },                               // DOOR_OBJINFO_48
 };
 
 static InitChainEntry sInitChain[] = {
@@ -380,9 +384,9 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
             }
         }
 
-        // If objectInfo is pointing to the GAMEPLAY_KEEP's EnDoorInfo one and GAMEPLAY_FIELD_KEEP is loaded then use that one instead
-        if ((i >= DOOR_OBJKIND_KEEP) &&
-            (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
+        // If objectInfo is pointing to the GAMEPLAY_KEEP's EnDoorInfo one and GAMEPLAY_FIELD_KEEP is loaded then use
+        // that one instead
+        if ((i >= DOOR_OBJKIND_KEEP) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
     }
@@ -405,7 +409,8 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     this->knobDoor.objectSlot = objectSlot;
     this->knobDoor.dlIndex = objectInfo->dListIndex;
 
-    // If the object that will be used is the one from the InitVars then call EnDoor_SetupType directly since we know the object will be loaded before this actor has spawned
+    // If the object that will be used is the one from the InitVars then call EnDoor_SetupType directly since we know
+    // the object will be loaded before this actor has spawned
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         EnDoor_SetupType(this, play);
     } else {
@@ -444,7 +449,8 @@ void EnDoor_SetupType(EnDoor* this, PlayState* play) {
             this->lockTimer = 10;
         }
     } else if ((this->doorType == ENDOOR_TYPE_AJAR) &&
-                (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) > DOOR_AJAR_SLAM_RANGE)) {
+               (Actor_WorldDistXZToActor(&this->knobDoor.dyna.actor, &GET_PLAYER(play)->actor) >
+                DOOR_AJAR_SLAM_RANGE)) {
         this->actionFunc = EnDoor_AjarWait;
         this->knobDoor.dyna.actor.world.rot.y = -0x1800;
     }
@@ -454,7 +460,7 @@ s32 D_80867BC0;
 
 /**
  * Closed door waiting for interaction.
- * 
+ *
  * General flow of this function and what is prioritized:
  * - Handle opening request from player
  * - Handle opening request from schedule actor
@@ -535,20 +541,24 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                            (this->doorType == ENDOOR_TYPE_NIGHT)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 openBit = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck)];
+                    s16 openBit =
+                        D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck)];
                     s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck);
 
                     // Check if the door should be closed, and prompt a message if its the case
-                    if (((this->doorType == ENDOOR_TYPE_WHOLE_DAY) && !((halfDaysDayBit | halfDaysNightBit) & openBit)) ||
+                    if (((this->doorType == ENDOOR_TYPE_WHOLE_DAY) &&
+                         !((halfDaysDayBit | halfDaysNightBit) & openBit)) ||
                         ((this->doorType == ENDOOR_TYPE_DAY) && !(halfDaysNightBit & openBit)) ||
                         ((this->doorType == ENDOOR_TYPE_NIGHT) && !(halfDaysDayBit & openBit))) {
-                        s16 baseTextId = 0x182D; //! @bug 0x182D does not exist, and there's no message for like 86 entries
+                        //! @bug 0x182D does not exist, and there's no message for like 86 entries
+                        s16 baseTextId = 0x182D;
 
                         if (this->doorType == ENDOOR_TYPE_NIGHT) {
                             // 0x180D to 0x181C: messages indicating certain building are closed at night
                             baseTextId = 0x180D;
                         } else if (this->doorType == ENDOOR_TYPE_DAY) {
-                            // 0x181D to 0x1820: messages for when Pamela is inside the Music Box house with the door closed
+                            // 0x181D to 0x1820: messages for when Pamela is inside the Music Box house with the door
+                            // closed
                             baseTextId = 0x181D;
                         }
                         player->doorType = PLAYER_DOORTYPE_TALKING;
@@ -561,7 +571,8 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         // 0x1821: Player is a member of the Milk bar
-                        // When player closes this specific message then the door changes to PLAYER_DOORTYPE_PROXIMITY, allowing player to open the door without having to press the A button again
+                        // When player closes this specific message then the door changes to PLAYER_DOORTYPE_PROXIMITY,
+                        // allowing player to open the door without having to press the A button again
                         player->doorType = ((this->knobDoor.dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
                                                : PLAYER_DOORTYPE_TALKING;
@@ -569,7 +580,8 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 }
                 func_80122F28(player);
             }
-        } else if ((this->doorType == ENDOOR_TYPE_AJAR) && (this->knobDoor.dyna.actor.xzDistToPlayer > DOOR_AJAR_OPEN_RANGE)) {
+        } else if ((this->doorType == ENDOOR_TYPE_AJAR) &&
+                   (this->knobDoor.dyna.actor.xzDistToPlayer > DOOR_AJAR_OPEN_RANGE)) {
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = EnDoor_AjarOpen;
         }
@@ -578,9 +590,11 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
 
 /**
  * Handle opening and closing request from an schedule actor.
- * 
- * To trigger this an schedule actor must set the `openTimer` member, where its magnitude specifies for how many frames the door will be open (after the opening animation) and its sign indicates which direction the door will open.
- * When the specified amount of frames has passed the door will closed automatically, without needing intervention from the schedule actor.
+ *
+ * To trigger this an schedule actor must set the `openTimer` member, where its magnitude specifies for how many frames
+ * the door will be open (after the opening animation) and its sign indicates which direction the door will open. When
+ * the specified amount of frames has passed the door will closed automatically, without needing intervention from the
+ * schedule actor.
  */
 void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play) {
     s32 direction;
