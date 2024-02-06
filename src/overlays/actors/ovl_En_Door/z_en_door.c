@@ -42,7 +42,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play);
 void EnDoor_AjarClose(EnDoor* this, PlayState* play);
 void EnDoor_SetupType(EnDoor* this, PlayState* play);
 
-// TODO: Maybe this is a bit overkill? considering this is used as an offset to a text id
+// TODO: Maybe this is a bit overkill? considering they are used as an offset to a text id
 typedef enum DoorScheduleResult {
     /*  0 */ DOOR_SCH_NONE,
     /*  1 */ DOOR_SCH_1,
@@ -101,12 +101,12 @@ ScheduleScript* sDoorSchedules[ENDOOR_SCH_TYPE_MAX] = {
     sDoorSch_TreasureChestShop,                   // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
     sDoorSch_HoneyDarlingShop,                    // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
     sDoorSch_MilkBar,                             // ENDOOR_SCH_TYPE_MILK_BAR
-    sDoorSch_InnMainDoor,                         // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
+    sDoorSch_InnMainEntrance,                     // ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE
     sDoorSch_InnUpperEntrance,                    // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
-    sDoorSch_InnGrannysDoor,                      // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
-    sDoorSch_InnStaffRoomDoor,                    // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
-    sDoorSch_InnKnifeChamberDoor,                 // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
-    sDoorSch_InnLargeSuiteDoor,                   // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
+    sDoorSch_InnGrannys,                          // ENDOOR_SCH_TYPE_INN_GRANNYS
+    sDoorSch_InnStaffRoom,                        // ENDOOR_SCH_TYPE_INN_STAFF_ROOM
+    sDoorSch_InnKnifeChamber,                     // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER
+    sDoorSch_InnLargeSuite,                       // ENDOOR_SCH_TYPE_INN_LARGE_SUITE
     sDoorSch_MayorsResidenceMainEntrance,         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
     sDoorSch_MayorsResidenceResidenceMayorDotour, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAYOR_DOTOUR
     sDoorSch_MayorsResidenceResidenceMadameAroma, // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA
@@ -195,12 +195,12 @@ typedef enum EnDoorObjectInfoIndex {
     /* 25 */ DOOR_OBJINFO_25,                         // ENDOOR_SCH_TYPE_TREASURE_CHEST_SHOP
     /* 26 */ DOOR_OBJINFO_26,                         // ENDOOR_SCH_TYPE_HONEY_DARLING_SHOP
     /* 27 */ DOOR_OBJINFO_27,                         // ENDOOR_SCH_TYPE_MILK_BAR
-    /* 28 */ DOOR_OBJINFO_28,                         // ENDOOR_SCH_TYPE_INN_MAIN_DOOR
+    /* 28 */ DOOR_OBJINFO_28,                         // ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE
     /* 29 */ DOOR_OBJINFO_29,                         // ENDOOR_SCH_TYPE_INN_UPPER_ENTRANCE
-    /* 30 */ DOOR_OBJINFO_30,                         // ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR
-    /* 31 */ DOOR_OBJINFO_31,                         // ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR
-    /* 32 */ DOOR_OBJINFO_32,                         // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER_DOOR
-    /* 33 */ DOOR_OBJINFO_33,                         // ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR
+    /* 30 */ DOOR_OBJINFO_30,                         // ENDOOR_SCH_TYPE_INN_GRANNYS
+    /* 31 */ DOOR_OBJINFO_31,                         // ENDOOR_SCH_TYPE_INN_STAFF_ROOM
+    /* 32 */ DOOR_OBJINFO_32,                         // ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER
+    /* 33 */ DOOR_OBJINFO_33,                         // ENDOOR_SCH_TYPE_INN_LARGE_SUITE
     /* 34 */ DOOR_OBJINFO_34,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE
     /* 35 */ DOOR_OBJINFO_35,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAYOR_DOTOUR
     /* 36 */ DOOR_OBJINFO_36,                         // ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA
@@ -219,6 +219,7 @@ typedef enum EnDoorObjectInfoIndex {
     /* 49 */ DOOR_OBJINFO_MAX
 } EnDoorObjectInfoIndex;
 
+// These static asserts try to ensure the two enums don't get out of sync
 static_assert(ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL == DOOR_OBJINFO_17 - DOOR_OBJKIND_SCHEDULE,
               "The enums values of `EnDoorScheduleType` and `EnDoorObjectInfoIndex` (from `DOOR_OBJKIND_SCHEDULE` "
               "onwards) must be synced.");
@@ -490,7 +491,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
     }
 
     if (this->knobDoor.playOpenAnim) {
-        // Player has requested this door to open
+        // Player or an NPC has requested this door to open
 
         this->actionFunc = EnDoor_Open;
         Animation_PlayOnceSetSpeed(&this->knobDoor.skelAnime, sAnimations[this->knobDoor.animIndex],

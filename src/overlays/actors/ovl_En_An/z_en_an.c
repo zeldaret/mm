@@ -450,18 +450,18 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
     switch (scheduleOutputResult) {
         case ANJU_SCH_DOOR_26:
         case ANJU_SCH_DOOR_27:
-            schType = ENDOOR_SCH_TYPE_INN_GRANNYS_DOOR;
+            schType = ENDOOR_SCH_TYPE_INN_GRANNYS;
             break;
 
         case ANJU_SCH_DOOR_33:
         case ANJU_SCH_DOOR_34:
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
-            schType = ENDOOR_SCH_TYPE_INN_MAIN_DOOR;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE;
             break;
 
         case ANJU_SCH_DOOR_36:
-            schType = ENDOOR_SCH_TYPE_INN_LARGE_SUITE_DOOR;
+            schType = ENDOOR_SCH_TYPE_INN_LARGE_SUITE;
             break;
 
         case ANJU_SCH_DOOR_28:
@@ -471,7 +471,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
         case ANJU_SCH_DOOR_32:
         case ANJU_SCH_DOOR_35:
         case ANJU_SCH_DOOR_39:
-            schType = ENDOOR_SCH_TYPE_INN_STAFF_ROOM_DOOR;
+            schType = ENDOOR_SCH_TYPE_INN_STAFF_ROOM;
             break;
 
         default:

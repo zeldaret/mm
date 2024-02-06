@@ -198,7 +198,7 @@ sDoorSch_MilkBar {
 }
 
 // Stock Pot Inn: Main door
-sDoorSch_InnMainDoor {
+sDoorSch_InnMainEntrance {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         if_day (3) {
             // Door is unlocked at night 3
@@ -227,12 +227,12 @@ sDoorSch_InnUpperEntrance {
 }
 
 // Stock Pot Inn: Granny's door
-sDoorSch_InnGrannysDoor {
+sDoorSch_InnGrannys {
     return_none
 }
 
 // Stock Pot Inn: Staff room door
-sDoorSch_InnStaffRoomDoor {
+sDoorSch_InnStaffRoom {
     // It is open at night 3
 
     if_day (3) {
@@ -246,7 +246,7 @@ sDoorSch_InnStaffRoomDoor {
 }
 
 // Stock Pot Inn: Knife Chamber door
-sDoorSch_InnKnifeChamberDoor {
+sDoorSch_InnKnifeChamber {
     not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
         return_s (DOOR_SCH_22)
     } else {
@@ -255,7 +255,7 @@ sDoorSch_InnKnifeChamberDoor {
 }
 
 // Stock Pot Inn: Large Suite door
-sDoorSch_InnLargeSuiteDoor {
+sDoorSch_InnLargeSuite {
     return_none
 }
 
