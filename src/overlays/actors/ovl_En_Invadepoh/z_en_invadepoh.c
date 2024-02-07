@@ -12,8 +12,8 @@
 
 #define THIS ((EnInvadepoh*)thisx)
 
-#define ENINVADEPOH_INVADER_ACTIVE (1 << 0)
-#define ENINVADEPOH_INVADER_CLOSEST (1 << 1)
+#define ENINVADEPOH_ALIEN_ACTIVE (1 << 0)
+#define ENINVADEPOH_ALIEN_CLOSEST (1 << 1)
 
 #define BARN_X_POSITION -409
 #define BARN_Y_POSITION 265
@@ -42,8 +42,8 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play);
 void EnInvadepoh_Event_Update(Actor* thisx, PlayState* play2);
 
 // Update functions
-void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Invader_Update(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_CowTail_WaitForObject(Actor* thisx, PlayState* play2);
@@ -70,10 +70,10 @@ void EnInvadepoh_Cremia_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForEvent(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Abuductor_WaitForObject(Actor* thisx, PlayState* play2);
+void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2);
 
 // Draw functions
-void EnInvadepoh_Abductor_Update(Actor* thisx, PlayState* play2);
+void EnInvadepoh_AlienAbductor_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Event_Draw(Actor* thisx, PlayState* play);
 void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_Draw(Actor* thisx, PlayState* play2);
@@ -104,15 +104,15 @@ void EnInvadepoh_Event_SetupFailure(EnInvadepoh* this);
 void EnInvadepoh_Event_Failure(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Event_SetupBadEnd(EnInvadepoh* this);
 void EnInvadepoh_Event_BadEnd(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invader_WaitForEvent(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invader_SetupWarpIn(EnInvadepoh* this);
-void EnInvadepoh_Invader_WarpIn(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invader_SetupAttack(EnInvadepoh* this);
-void EnInvadepoh_Invader_Attack(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invader_Hitstun(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invader_SetupDeath(EnInvadepoh* this);
-void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
+void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this);
+void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_Hitstun(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this);
+void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AbductedRomani_SetupYell(EnInvadepoh* this);
 void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play);
@@ -128,8 +128,8 @@ void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this);
 void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this);
 void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupSpawnInvaders(EnInvadepoh* this);
-void EnInvadepoh_Ufo_SpawnInvaders(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this);
+void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this);
 void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play);
@@ -169,8 +169,8 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this);
 void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play);
 
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed);
@@ -325,7 +325,7 @@ s8 sRewardFinished = false;
 
 MtxF sAlienLeftEyeBeamMtxF;
 MtxF sAlienRightEyeBeamMtxF;
-EnInvadepoh* sAlienInvaders[8];
+EnInvadepoh* sAliens[8];
 u8 sAlienStateFlags[8];
 s8 sAliensTooClose;
 EnInvadepohWarpEffect sWarpEffects[10];
@@ -357,59 +357,59 @@ EnInvadepoh* sClosestAlien;
     }                                                    \
     (void)0
 
-void EnInvadepoh_Invader_SetSpawnTime(s32 invaderIndex, s32 warpTime) {
+void EnInvadepoh_Alien_SetSpawnTime(s32 alienIndex, s32 warpTime) {
     warpTime -= CLOCK_TIME(2, 30);
     warpTime = CLAMP_MIN(warpTime, 0);
 
-    if ((invaderIndex % 2) == 0) {
-        gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] =
-            (gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] & ~0xFFFF) | (warpTime & 0xFFFF);
+    if ((alienIndex % 2) == 0) {
+        gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] =
+            (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & ~0xFFFF) | (warpTime & 0xFFFF);
     } else {
-        gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] =
-            (gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] & 0xFFFF) | ((warpTime & 0xFFFF) << 0x10);
+        gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] =
+            (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & 0xFFFF) | ((warpTime & 0xFFFF) << 0x10);
     }
 }
 
-s32 EnInvadepoh_Invader_GetSpawnTime(s32 invaderIndex) {
+s32 EnInvadepoh_Alien_GetSpawnTime(s32 alienIndex) {
     u32 warpTime;
 
-    if ((invaderIndex % 2) == 0) {
-        warpTime = gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] & 0xFFFF;
+    if ((alienIndex % 2) == 0) {
+        warpTime = gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & 0xFFFF;
     } else {
-        warpTime = (gSaveContext.save.saveInfo.unk_E64[invaderIndex >> 1] & ~0xFFFF) >> 0x10;
+        warpTime = (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & ~0xFFFF) >> 0x10;
     }
     return warpTime + CLOCK_TIME(2, 30);
 }
 
-void EnInvadepoh_Invader_SetKillCount(s32 count) {
+void EnInvadepoh_Alien_SetKillCount(s32 count) {
     gSaveContext.save.saveInfo.unk_E64[4] = (gSaveContext.save.saveInfo.unk_E64[4] & ~0xFF) | (count & 0xFF);
 }
 
-s32 EnInvadepoh_Invader_GetKillCount(void) {
+s32 EnInvadepoh_Alien_GetKillCount(void) {
     return gSaveContext.save.saveInfo.unk_E64[4] & 0xFF;
 }
 
-s32 EnInvadepoh_Invader_AddKill(void) {
-    s32 killCount = EnInvadepoh_Invader_GetKillCount();
+s32 EnInvadepoh_Alien_AddKill(void) {
+    s32 killCount = EnInvadepoh_Alien_GetKillCount();
 
     if (killCount < 12) {
         killCount++;
-        EnInvadepoh_Invader_SetKillCount(killCount);
+        EnInvadepoh_Alien_SetKillCount(killCount);
     }
     return killCount;
 }
 
-void EnInvadepoh_Invader_SetRespawnTime(s32 invaderIndex) {
+void EnInvadepoh_Alien_SetRespawnTime(s32 alienIndex) {
     s32 currentTime = CURRENT_TIME;
 
     if ((CURRENT_DAY == 1) && (currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(5, 15))) {
-        s32 spawnDelay = (12 - EnInvadepoh_Invader_GetKillCount()) * 25.0f;
+        s32 spawnDelay = (12 - EnInvadepoh_Alien_GetKillCount()) * 25.0f;
 
-        EnInvadepoh_Invader_SetSpawnTime(invaderIndex, currentTime + spawnDelay);
+        EnInvadepoh_Alien_SetSpawnTime(alienIndex, currentTime + spawnDelay);
     }
 }
 
-s32 EnInvadepoh_Invader_GetCurrentPoint(EnInvadepoh* this) {
+s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
     s32 i;
     s32 lastPoint = this->endPoint - 1;
 
@@ -460,7 +460,7 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
     pathPosition->z = this->pathPoints[endPoint].z;
 }
 
-void EnInvadepoh_Invader_TurnToPath(EnInvadepoh* this, s16 step, s16 offset) {
+void EnInvadepoh_Alien_TurnToPath(EnInvadepoh* this, s16 step, s16 offset) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
     Vec3s* nextPathPoint = curPathPoint + 1;
@@ -590,10 +590,10 @@ s32 EnInvadepoh_Dog_FindClosestWaypoint(EnInvadepoh* this, Vec3f* pos) {
     return closestPoint;
 }
 
-void EnInvadepoh_Invader_SetProgress(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
     s32 pad;
     s32 currentTime = CURRENT_TIME;
-    s32 warpInTime = EnInvadepoh_Invader_GetSpawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
+    s32 warpInTime = EnInvadepoh_Alien_GetSpawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
 
     if (sEventState == ENINVADEPOH_EVENT_WAIT) {
         this->progress = 0.0f;
@@ -607,10 +607,10 @@ void EnInvadepoh_Invader_SetProgress(EnInvadepoh* this) {
             }
         }
     }
-    this->currentPoint = EnInvadepoh_Invader_GetCurrentPoint(this);
+    this->currentPoint = EnInvadepoh_Alien_GetCurrentPoint(this);
 }
 
-void EnInvadepoh_Invader_SetCheckpoints(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
     f32 invPathLength = 1.0f / this->pathLength;
     s32 endPoint = this->endPoint;
     s32 i;
@@ -636,10 +636,10 @@ void EnInvadepoh_Invader_SetCheckpoints(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Invader_SetupPath(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_SetupPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_SetPath(this, play);
     this->pathLength = EnInvadepoh_GetPathLength(this);
-    EnInvadepoh_Invader_SetCheckpoints(this);
+    EnInvadepoh_Alien_SetCheckpoints(this);
 }
 
 void EnInvadepoh_ConfusedRomani_SetupPath(EnInvadepoh* this, PlayState* play) {
@@ -713,7 +713,7 @@ void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Invader_ApplyProgress(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3s* curPathPoint;
     Vec3s* nextPathPoint;
@@ -775,7 +775,7 @@ void EnInvadepoh_Invader_ApplyProgress(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Invader_Knockback(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_Knockback(EnInvadepoh* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.velocity.y *= 0.3f;
         this->actor.speed *= 0.8f;
@@ -790,7 +790,7 @@ void EnInvadepoh_Invader_Knockback(EnInvadepoh* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
-void EnInvadepoh_Invader_EmptyFunc(EnInvadepoh* this) {
+void EnInvadepoh_Alien_EmptyFunc(EnInvadepoh* this) {
 }
 
 s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 speed, f32 height) {
@@ -973,7 +973,7 @@ void EnInvadepoh_Event_CheckState(EnInvadepoh* this, PlayState* play) {
                 s32 pad;
 
                 for (i = 0; i < this->spawnCount; i++) {
-                    s32 spawnTime = EnInvadepoh_Invader_GetSpawnTime(i);
+                    s32 spawnTime = EnInvadepoh_Alien_GetSpawnTime(i);
 
                     firstSpawn = MIN(spawnTime, firstSpawn);
                 }
@@ -992,14 +992,14 @@ void EnInvadepoh_Event_CheckState(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Event_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Event_SpawnAliens(EnInvadepoh* this, PlayState* play) {
     s32 pathIndex = ENINVADEPOH_GET_PATH(&this->actor);
     s32 i;
 
     for (i = 0; i < this->spawnCount; i++) {
-        sAlienInvaders[i] = (EnInvadepoh*)Actor_Spawn(
-            &play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_PARAMS(pathIndex, ENINVADEPOH_TYPE_ALIEN_INVADER, i));
+        sAliens[i] = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                               ENINVADEPOH_PARAMS(pathIndex, ENINVADEPOH_TYPE_ALIEN, i));
         if (pathIndex != EN_INVADEPOH_PATH_INDEX_NONE) {
             Path* path = &play->setupPathList[pathIndex];
 
@@ -1008,13 +1008,13 @@ void EnInvadepoh_Event_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Abductor_SpawnCow(EnInvadepoh* this, PlayState* play, s32 index) {
+void EnInvadepoh_AlienAbductor_SpawnCow(EnInvadepoh* this, PlayState* play, s32 index) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
                        this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                        ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_COW, index));
 }
 
-void EnInvadepoh_Abductor_SpawnRomani(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_AlienAbductor_SpawnRomani(EnInvadepoh* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
                        this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                        ENINVADEPOH_PARAMS(0, ENINVADEPOH_TYPE_ROMANI_ABDUCTED, 0));
@@ -1094,21 +1094,21 @@ void EnInvadepoh_Event_SetClosestAlien(EnInvadepoh* this) {
     s32 closestAlienIndex = -1;
 
     for (i = 0; i < this->spawnCount; i++) {
-        if ((sAlienInvaders[i] != NULL) && sAlienInvaders[i]->present) {
-            f32 distSqToBarn = Math3D_Vec3fDistSq(&sAlienInvaders[i]->actor.world.pos, &this->actor.world.pos);
+        if ((sAliens[i] != NULL) && sAliens[i]->present) {
+            f32 distSqToBarn = Math3D_Vec3fDistSq(&sAliens[i]->actor.world.pos, &this->actor.world.pos);
 
             if (minDistSqToBarn > distSqToBarn) {
                 minDistSqToBarn = distSqToBarn;
                 closestAlienIndex = i;
             }
         }
-        sAlienStateFlags[i] &= ~ENINVADEPOH_INVADER_CLOSEST;
+        sAlienStateFlags[i] &= ~ENINVADEPOH_ALIEN_CLOSEST;
     }
 
     sAliensTooClose = false;
 
     if (minDistSqToBarn <= SQ(2000.0f)) {
-        sAlienStateFlags[closestAlienIndex] |= ENINVADEPOH_INVADER_CLOSEST;
+        sAlienStateFlags[closestAlienIndex] |= ENINVADEPOH_ALIEN_CLOSEST;
         if (minDistSqToBarn <= SQ(340.0f)) {
             sAliensTooClose = true;
         }
@@ -1119,8 +1119,8 @@ EnInvadepoh* EnInvadepoh_Dog_GetClosestAlien(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        if (sAlienStateFlags[i] & ENINVADEPOH_INVADER_CLOSEST) {
-            return sAlienInvaders[i];
+        if (sAlienStateFlags[i] & ENINVADEPOH_ALIEN_CLOSEST) {
+            return sAliens[i];
         }
     }
     return NULL;
@@ -1461,7 +1461,7 @@ void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawn
     }
 }
 
-s32 EnInvadepoh_Invader_SpawnWarp(Vec3f* spawnPos) {
+s32 EnInvadepoh_Alien_SpawnWarp(Vec3f* spawnPos) {
     EnInvadepohWarpEffect* warpEffect = sWarpEffects;
     s32 i;
 
@@ -1538,7 +1538,7 @@ void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
             EnInvadepoh_Event_SetupWait(this);
         } else {
             EnInvadepoh_Event_SpawnUfo(this, play);
-            EnInvadepoh_Event_SpawnInvaders(this, play);
+            EnInvadepoh_Event_SpawnAliens(this, play);
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             EnInvadepoh_Event_SetupInvasion(this);
         }
@@ -1572,10 +1572,10 @@ void EnInvadepoh_Alien_Init(Actor* thisx, PlayState* play) {
     this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
 
     if (ENINVADEPOH_GET_TYPE(&this->actor) == ENINVADEPOH_TYPE_ALIEN_ABDUCTOR) {
-        this->actor.update = EnInvadepoh_Abuductor_WaitForObject;
+        this->actor.update = EnInvadepoh_AlienAbductor_WaitForObject;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;
     } else {
-        this->actor.update = EnInvadepoh_Invader_WaitForObject;
+        this->actor.update = EnInvadepoh_Alien_WaitForObject;
         Collider_SetCylinder(play, &this->collider, &this->actor, &sAlienCylinderInit);
         this->actor.colChkInfo.mass = 40;
     }
@@ -1778,7 +1778,7 @@ void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
 void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
     static ActorFunc sInitFuncs[ENINVADEPOH_TYPE_MAX] = {
         EnInvadepoh_Event_Init,   // ENINVADEPOH_TYPE_HANDLER
-        EnInvadepoh_Alien_Init,   // ENINVADEPOH_TYPE_ALIEN_INVADER
+        EnInvadepoh_Alien_Init,   // ENINVADEPOH_TYPE_ALIEN
         EnInvadepoh_Cow_Init,     // ENINVADEPOH_TYPE_COW
         EnInvadepoh_CowTail_Init, // ENINVADEPOH_TYPE_COW_TAIL
         EnInvadepoh_Romani_Init,  // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
@@ -1799,13 +1799,13 @@ void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
 void EnInvadepoh_Event_Destroy(Actor* thisx, PlayState* play2) {
 }
 
-void EnInvadepoh_Invader_Destroy(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Alien_Destroy(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
     s32 index = ENINVADEPOH_GET_INDEX(&this->actor);
     PlayState* play = play2;
 
     Collider_DestroyCylinder(play, &this->collider);
-    sAlienInvaders[index] = NULL;
+    sAliens[index] = NULL;
 }
 
 void EnInvadepoh_Cow_Destroy(Actor* thisx, PlayState* play2) {
@@ -1861,7 +1861,7 @@ void EnInvadepoh_Romani_Destroy2(Actor* thisx, PlayState* play2) {
     sRomani = NULL;
 }
 
-void EnInvadepoh_Abductor_Destroy(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_AlienAbductor_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -1874,20 +1874,20 @@ void EnInvadepoh_Abductor_Destroy(Actor* thisx, PlayState* play2) {
 
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
     static ActorFunc sDestroyFuncs[ENINVADEPOH_TYPE_MAX] = {
-        EnInvadepoh_Event_Destroy,    // ENINVADEPOH_TYPE_HANDLER
-        EnInvadepoh_Invader_Destroy,  // ENINVADEPOH_TYPE_ALIEN_INVADER
-        EnInvadepoh_Cow_Destroy,      // ENINVADEPOH_TYPE_COW
-        EnInvadepoh_CowTail_Destroy,  // ENINVADEPOH_TYPE_COW_TAIL
-        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
-        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_CONFUSED
-        EnInvadepoh_Ufo_Destroy,      // ENINVADEPOH_TYPE_UFO
-        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
-        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_BARN
-        EnInvadepoh_Romani_Destroy,   // ENINVADEPOH_TYPE_ROMANI_REWARD
-        EnInvadepoh_Dog_Destroy,      // ENINVADEPOH_TYPE_DOG
-        EnInvadepoh_Cremia_Destroy,   // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
-        EnInvadepoh_Romani_Destroy2,  // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
-        EnInvadepoh_Abductor_Destroy, // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
+        EnInvadepoh_Event_Destroy,         // ENINVADEPOH_TYPE_HANDLER
+        EnInvadepoh_Alien_Destroy,         // ENINVADEPOH_TYPE_ALIEN
+        EnInvadepoh_Cow_Destroy,           // ENINVADEPOH_TYPE_COW
+        EnInvadepoh_CowTail_Destroy,       // ENINVADEPOH_TYPE_COW_TAIL
+        EnInvadepoh_Romani_Destroy,        // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
+        EnInvadepoh_Romani_Destroy,        // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_Ufo_Destroy,           // ENINVADEPOH_TYPE_UFO
+        EnInvadepoh_Romani_Destroy,        // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
+        EnInvadepoh_Romani_Destroy,        // ENINVADEPOH_TYPE_ROMANI_BARN
+        EnInvadepoh_Romani_Destroy,        // ENINVADEPOH_TYPE_ROMANI_REWARD
+        EnInvadepoh_Dog_Destroy,           // ENINVADEPOH_TYPE_DOG
+        EnInvadepoh_Cremia_Destroy,        // ENINVADEPOH_TYPE_CREMIA_NIGHT_3
+        EnInvadepoh_Romani_Destroy2,       // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
+        EnInvadepoh_AlienAbductor_Destroy, // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
 
     sDestroyFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
@@ -1901,7 +1901,7 @@ void EnInvadepoh_Event_SetupWait(EnInvadepoh* this) {
 void EnInvadepoh_Event_Wait(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 30))) {
         EnInvadepoh_Event_SpawnUfo(this, play);
-        EnInvadepoh_Event_SpawnInvaders(this, play);
+        EnInvadepoh_Event_SpawnAliens(this, play);
         EnInvadepoh_Event_SetupQueueInvasionCs(this);
     }
 }
@@ -1937,7 +1937,7 @@ void EnInvadepoh_Event_InvasionCs(EnInvadepoh* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(sAlienSpawnTimes); i++) {
         if (this->actionTimer == sAlienSpawnTimes[i]) {
-            sAlienStateFlags[i] |= ENINVADEPOH_INVADER_ACTIVE;
+            sAlienStateFlags[i] |= ENINVADEPOH_ALIEN_ACTIVE;
         }
     }
 
@@ -1964,7 +1964,7 @@ void EnInvadepoh_Event_Invasion(EnInvadepoh* this, PlayState* play) {
         EnInvadepoh_Event_SetClosestAlien(this);
 
         for (i = 0; i < this->spawnCount; i++) {
-            if ((sAlienInvaders[i] != NULL) && (sAlienInvaders[i]->atBarn)) {
+            if ((sAliens[i] != NULL) && (sAliens[i]->atBarn)) {
                 EnInvadepoh_Event_SetupFailure(this);
                 break;
             }
@@ -2066,7 +2066,7 @@ void EnInvadepoh_Event_Update(Actor* thisx, PlayState* play2) {
     this->actor.draw = EnInvadepoh_Event_UpdateWarps() ? EnInvadepoh_Event_Draw : NULL;
 }
 
-void EnInvadepoh_Invader_SetupWaitForEvent(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -2076,23 +2076,23 @@ void EnInvadepoh_Invader_SetupWaitForEvent(EnInvadepoh* this) {
     this->present = false;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
-    this->actionFunc = EnInvadepoh_Invader_WaitForEvent;
+    this->actionFunc = EnInvadepoh_Alien_WaitForEvent;
 }
 
-void EnInvadepoh_Invader_WaitForEvent(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Invader_SetProgress(this);
-    EnInvadepoh_Invader_ApplyProgress(this, play);
-    EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_Alien_SetProgress(this);
+    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
 
-    if (sAlienStateFlags[ENINVADEPOH_GET_INDEX(&this->actor)] & ENINVADEPOH_INVADER_ACTIVE) {
+    if (sAlienStateFlags[ENINVADEPOH_GET_INDEX(&this->actor)] & ENINVADEPOH_ALIEN_ACTIVE) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_Invader_SpawnWarp(&this->actor.world.pos);
-        EnInvadepoh_Invader_SetupWarpIn(this);
+        EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
+        EnInvadepoh_Alien_SetupWarpIn(this);
     }
 }
 
-void EnInvadepoh_Invader_SetupWaitToRespawn(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -2106,19 +2106,19 @@ void EnInvadepoh_Invader_SetupWaitToRespawn(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Invader_SetProgress(this);
-    EnInvadepoh_Invader_ApplyProgress(this, play);
-    EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+    EnInvadepoh_Alien_SetProgress(this);
+    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
 
     if (this->progress > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_Invader_SpawnWarp(&this->actor.world.pos);
-        EnInvadepoh_Invader_SetupWarpIn(this);
+        EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
+        EnInvadepoh_Alien_SetupWarpIn(this);
     }
 }
 
-void EnInvadepoh_Invader_SetupWarpIn(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &gAlienFloatAnim, -6.0f);
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
@@ -2129,13 +2129,13 @@ void EnInvadepoh_Invader_SetupWarpIn(EnInvadepoh* this) {
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Invader_WarpIn;
+    this->actionFunc = EnInvadepoh_Alien_WarpIn;
 }
 
-void EnInvadepoh_Invader_WarpIn(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Invader_SetProgress(this);
-    EnInvadepoh_Invader_ApplyProgress(this, play);
-    EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_Alien_SetProgress(this);
+    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
 
     if (this->progress >= 0.9999f) {
@@ -2157,14 +2157,14 @@ void EnInvadepoh_Invader_WarpIn(EnInvadepoh* this, PlayState* play) {
     if (this->alpha == 255) {
         if (this->eyeBeamAlpha >= 245) {
             this->eyeBeamAlpha = 255;
-            EnInvadepoh_Invader_SetupAttack(this);
+            EnInvadepoh_Alien_SetupAttack(this);
         } else {
             this->eyeBeamAlpha += 10;
         }
     }
 }
 
-void EnInvadepoh_Invader_SetupAttack(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
     if (this->skelAnime.animation != &gAlienFloatAnim) {
         Animation_MorphToLoop(&this->skelAnime, &gAlienFloatAnim, -6.0f);
     }
@@ -2177,20 +2177,20 @@ void EnInvadepoh_Invader_SetupAttack(EnInvadepoh* this) {
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Invader_Attack;
+    this->actionFunc = EnInvadepoh_Alien_Attack;
 }
 
-void EnInvadepoh_Invader_Attack(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Invader_SetProgress(this);
-    EnInvadepoh_Invader_ApplyProgress(this, play);
-    EnInvadepoh_Invader_TurnToPath(this, 0x320, 0);
+void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_Alien_SetProgress(this);
+    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
     if (this->progress >= 0.9999f) {
         this->atBarn = true;
     }
 }
 
-void EnInvadepoh_Invader_SetupHitstun(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
@@ -2204,19 +2204,19 @@ void EnInvadepoh_Invader_SetupHitstun(EnInvadepoh* this) {
     this->actionTimer = 8;
     this->stateTimer = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Invader_Hitstun;
+    this->actionFunc = EnInvadepoh_Alien_Hitstun;
 }
 
-void EnInvadepoh_Invader_Hitstun(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Invader_Knockback(this, play);
+void EnInvadepoh_Alien_Hitstun(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_Alien_Knockback(this, play);
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        EnInvadepoh_Invader_SetupDeath(this);
+        EnInvadepoh_Alien_SetupDeath(this);
     }
 }
 
-void EnInvadepoh_Invader_SetupDeath(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -2229,10 +2229,10 @@ void EnInvadepoh_Invader_SetupDeath(EnInvadepoh* this) {
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Invader_Death;
+    this->actionFunc = EnInvadepoh_Alien_Death;
 }
 
-void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play) {
     static Vec3f sDeathScales[] = {
         { 0.01f, 0.01f, 0.01f }, { 0.02f, 0.01f, 0.005f }, { -0.01f, 0.0f, 0.0f },
         { 0.01f, 0.01f, 0.01f }, { 0.005f, 0.01f, 0.02f },
@@ -2244,7 +2244,7 @@ void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
     };
     Vec3f* deathScale;
 
-    EnInvadepoh_Invader_EmptyFunc(this);
+    EnInvadepoh_Alien_EmptyFunc(this);
 
     if (this->stateTimer < 5) {
         deathScale = &sDeathScales[this->stateTimer];
@@ -2286,14 +2286,14 @@ void EnInvadepoh_Invader_Death(EnInvadepoh* this, PlayState* play) {
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        EnInvadepoh_Invader_SetRespawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
-        EnInvadepoh_Invader_AddKill();
+        EnInvadepoh_Alien_SetRespawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
+        EnInvadepoh_Alien_AddKill();
         Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_30);
-        EnInvadepoh_Invader_SetupWaitToRespawn(this);
+        EnInvadepoh_Alien_SetupWaitToRespawn(this);
     }
 }
 
-void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -2301,23 +2301,23 @@ void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Alien_SetTexAnim();
-        this->actor.update = EnInvadepoh_Invader_Update;
+        this->actor.update = EnInvadepoh_Alien_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->jointTable, this->morphTable,
                            ALIEN_LIMB_MAX);
         this->skelAnime.curFrame = (ENINVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame / 8.0f;
-        EnInvadepoh_Invader_SetupPath(this, play);
-        EnInvadepoh_Invader_SetProgress(this);
-        EnInvadepoh_Invader_ApplyProgress(this, play);
+        EnInvadepoh_Alien_SetupPath(this, play);
+        EnInvadepoh_Alien_SetProgress(this);
+        EnInvadepoh_Alien_ApplyProgress(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
         if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
-            EnInvadepoh_Invader_SetupWaitForEvent(this);
+            EnInvadepoh_Alien_SetupWaitForEvent(this);
         } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
             if (this->progress >= 0.0001f) {
-                EnInvadepoh_Invader_SetupAttack(this);
+                EnInvadepoh_Alien_SetupAttack(this);
             } else {
-                EnInvadepoh_Invader_SetupWarpIn(this);
+                EnInvadepoh_Alien_SetupWarpIn(this);
             }
         } else {
             Actor_Kill(&this->actor);
@@ -2325,18 +2325,18 @@ void EnInvadepoh_Invader_WaitForObject(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Invader_Update(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
     if (sEventState == ENINVADEPOH_EVENT_CLEAR) {
-        if ((this->actionFunc == EnInvadepoh_Invader_Attack) || (this->actionFunc == EnInvadepoh_Invader_WarpIn)) {
+        if ((this->actionFunc == EnInvadepoh_Alien_Attack) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
             thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
-            EnInvadepoh_Invader_SetupHitstun(this);
+            EnInvadepoh_Alien_SetupHitstun(this);
         } else if ((this->actionFunc == EnInvadepoh_Invade_WaitToRespawn) ||
-                   (this->actionFunc == EnInvadepoh_Invader_WaitForEvent)) {
+                   (this->actionFunc == EnInvadepoh_Alien_WaitForEvent)) {
             Actor_Kill(thisx);
             return;
         }
@@ -2353,7 +2353,7 @@ void EnInvadepoh_Invader_Update(Actor* thisx, PlayState* play2) {
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
-        EnInvadepoh_Invader_SetupHitstun(this);
+        EnInvadepoh_Alien_SetupHitstun(this);
     }
 
     this->actionFunc(this, play);
@@ -2850,11 +2850,11 @@ void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play) {
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        EnInvadepoh_Ufo_SetupSpawnInvaders(this);
+        EnInvadepoh_Ufo_SetupSpawnAliens(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupSpawnInvaders(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this) {
     this->actionTimer = 120;
     this->pulseScaleTarget = 0.2f;
     this->pulseScaleRate = 0.01f;
@@ -2862,10 +2862,10 @@ void EnInvadepoh_Ufo_SetupSpawnInvaders(EnInvadepoh* this) {
     this->pulseRate = 0xBB8;
     this->ufoTarget = 0;
     this->stateTimer = 0;
-    this->actionFunc = EnInvadepoh_Ufo_SpawnInvaders;
+    this->actionFunc = EnInvadepoh_Ufo_SpawnAliens;
 }
 
-void EnInvadepoh_Ufo_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play) {
     static Vec3f sUfoTargetOffsets[] = {
         { -1813.0f, 374.0f, 1900.0f }, { 2198.0f, 153.0f, 3365.0f }, { -1434.0f, 262.0f, 3365.0f },
         { -393.0f, 396.0f, 1084.0f },  { 0.0f, 1500.0f, 0.0f },
@@ -4206,7 +4206,7 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Abductor_SetupCow(EnInvadepoh* this) {
+void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     static EnInvadepohUnkStruct1 D_80B4EE0C[3] = {
         { 0.08f, 0x2BC, -0xA },
         { 0.09f, 0x12C, -5 },
@@ -4231,11 +4231,11 @@ void EnInvadepoh_Abductor_SetupCow(EnInvadepoh* this) {
     this->actor.shape.rot.y = this->unk_304 + 0x4000;
     this->unk_370 = D_80B4EE0C[index].unk4;
     this->unk_372 = D_80B4EE0C[index].unk6;
-    this->actionFunc = EnInvadepoh_Abductor_Cow;
+    this->actionFunc = EnInvadepoh_AlienAbductor_Cow;
     this->actor.velocity.y = 0.0f;
 }
 
-void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play) {
     Actor* cow;
     f32 distToTarget;
 
@@ -4266,7 +4266,7 @@ void EnInvadepoh_Abductor_Cow(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Abductor_SetupRomani(EnInvadepoh* this) {
+void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
     this->skelAnime.curFrame = (ENINVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
@@ -4277,11 +4277,11 @@ void EnInvadepoh_Abductor_SetupRomani(EnInvadepoh* this) {
     this->unk_306 = 0x190;
     this->unk_304 = 0;
     this->actionTimer = 200;
-    this->actionFunc = EnInvadepoh_Abductor_Romani;
+    this->actionFunc = EnInvadepoh_AlienAbductor_Romani;
     this->actor.velocity.y = 0.0f;
 }
 
-void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
     s32 actionTimer;
     f32 tempUnk_306;
     s32 reachedTargetY = 0;
@@ -4335,7 +4335,7 @@ void EnInvadepoh_Abductor_Romani(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Abuductor_WaitForObject(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     s32 index;
@@ -4345,20 +4345,20 @@ void EnInvadepoh_Abuductor_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Alien_SetTexAnim();
-        this->actor.update = EnInvadepoh_Abductor_Update;
+        this->actor.update = EnInvadepoh_AlienAbductor_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienHoldingCowAnim, this->jointTable,
                            this->morphTable, ALIEN_LIMB_MAX);
         if (index < 3) {
-            EnInvadepoh_Abductor_SpawnCow(this, play, index);
-            EnInvadepoh_Abductor_SetupCow(this);
+            EnInvadepoh_AlienAbductor_SpawnCow(this, play, index);
+            EnInvadepoh_AlienAbductor_SetupCow(this);
         } else {
-            EnInvadepoh_Abductor_SpawnRomani(this, play);
-            EnInvadepoh_Abductor_SetupRomani(this);
+            EnInvadepoh_AlienAbductor_SpawnRomani(this, play);
+            EnInvadepoh_AlienAbductor_SetupRomani(this);
         }
     }
 }
 
-void EnInvadepoh_Abductor_Update(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_AlienAbductor_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 

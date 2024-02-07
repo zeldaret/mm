@@ -2,11 +2,11 @@
 #define Z_EN_INVADEPOH_H
 
 #include "global.h"
-#include "assets/objects/object_uch/object_uch.h"
-#include "assets/objects/object_ma1/object_ma1.h"
-#include "assets/objects/object_ma2/object_ma2.h"
 #include "assets/objects/object_cow/object_cow.h"
 #include "assets/objects/object_dog/object_dog.h"
+#include "assets/objects/object_ma1/object_ma1.h"
+#include "assets/objects/object_ma2/object_ma2.h"
+#include "assets/objects/object_uch/object_uch.h"
 
 struct EnInvadepoh;
 
@@ -21,7 +21,7 @@ typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState
 
 typedef enum EnInvadepohType {
     /* 0x0 */ ENINVADEPOH_TYPE_HANDLER,         // Invasion event handler   
-    /* 0x1 */ ENINVADEPOH_TYPE_ALIEN_INVADER,   // Alien invader
+    /* 0x1 */ ENINVADEPOH_TYPE_ALIEN,           // The aliens that approach the barn
     /* 0x2 */ ENINVADEPOH_TYPE_COW,             // Abudcted cow, spawned by unused alien abductor   
     /* 0x3 */ ENINVADEPOH_TYPE_COW_TAIL,        // Abducted cow tail, spawned by abducted cow   
     /* 0x4 */ ENINVADEPOH_TYPE_ROMANI_ABDUCTED, // Abducted Romani, spawned by unused alien abductor       
