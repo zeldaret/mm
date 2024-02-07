@@ -330,7 +330,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_SONG_DEMO_DONE) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
@@ -356,7 +356,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_SONG_DEMO_DONE) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
@@ -385,7 +385,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1208:
@@ -469,7 +469,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:
@@ -628,7 +628,7 @@ void func_80BA0A04(EnZob* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80BA0AD8;

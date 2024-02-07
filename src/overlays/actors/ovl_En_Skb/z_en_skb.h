@@ -2,6 +2,7 @@
 #define Z_EN_SKB_H
 
 #include "global.h"
+#include "objects/object_skb/object_skb.h"
 
 struct EnSkb;
 
@@ -41,8 +42,8 @@ typedef struct EnSkb {
     /* 0x230 */ f32 drawDmgEffScale;
     /* 0x234 */ Vec3f bodyPartsPos[ENSKB_BODYPART_MAX];
     /* 0x2DC */ s32 bodyPartsCount;
-    /* 0x2E0 */ Vec3s jointTable[20];
-    /* 0x358 */ Vec3s morphTable[20];
+    /* 0x2E0 */ Vec3s jointTable[STALCHILD_LIMB_MAX];
+    /* 0x358 */ Vec3s morphTable[STALCHILD_LIMB_MAX];
     /* 0x3D0 */ s16 unk_3D0;
     /* 0x3D2 */ s16 drawDmgEffTimer;
     /* 0x3D4 */ s16 unk_3D4;

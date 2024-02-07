@@ -488,6 +488,7 @@ typedef enum {
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
 #define SET_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
+#define TOGGLE_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems ^= (gBitFlags[item]))
 
 #define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
 #define EQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT))
@@ -1586,18 +1587,18 @@ typedef enum {
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
 #define EVENTINF_HAS_DAYTIME_TRANSITION_CS 0x52
-#define EVENTINF_53 0x53
-#define EVENTINF_54 0x54
-#define EVENTINF_55 0x55
 
-// Enabled when Gyorg's intro cutscene has been watched
-#define EVENTINF_56 0x56
+// Enabled when various boss intro cutscene has been watched
+#define EVENTINF_INTRO_CS_WATCHED_GOHT 0x53
+#define EVENTINF_INTRO_CS_WATCHED_ODOLWA 0x54
+#define EVENTINF_INTRO_CS_WATCHED_TWINMOLD 0x55
+#define EVENTINF_INTRO_CS_WATCHED_GYORG 0x56
+#define EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA 0x57
+#define EVENTINF_INTRO_CS_WATCHED_WART 0x60
+#define EVENTINF_INTRO_CS_WATCHED_MAJORA 0x61
+#define EVENTINF_ENTR_CS_WATCHED_GOHT 0x62
+#define EVENTINF_INTRO_CS_WATCHED_GOMESS 0x63
 
-#define EVENTINF_57 0x57
-#define EVENTINF_60 0x60
-#define EVENTINF_61 0x61
-#define EVENTINF_62 0x62
-#define EVENTINF_63 0x63
 #define EVENTINF_64 0x64
 #define EVENTINF_65 0x65
 #define EVENTINF_66 0x66

@@ -11,4 +11,7 @@ typedef struct Input {
     /* 0x12 */ OSContPad rel; // X/Y store adjusted
 } Input; // size = 0x18
 
+
+void PadUtils_UpdateRelXY(Input* input);
+
 #endif

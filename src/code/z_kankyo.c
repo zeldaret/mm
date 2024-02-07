@@ -1084,8 +1084,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
             size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
-                                   sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox1Index = skybox1Index;
         }
 
@@ -1093,8 +1093,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
             size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
-                                   sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox2Index = skybox2Index;
         }
 
@@ -3301,24 +3301,24 @@ void Environment_Draw(PlayState* play) {
 }
 
 void Environment_DrawSkyboxStars(PlayState* play) {
-    Gfx* nextOpa;
-    Gfx* opa;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
     if (sSkyboxStarsDList != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
 
-        gSPDisplayList(sSkyboxStarsDList, nextOpa);
+        gSPDisplayList(sSkyboxStarsDList, gfx);
 
-        Environment_DrawSkyboxStarsImpl(play, &nextOpa);
+        Environment_DrawSkyboxStarsImpl(play, &gfx);
 
-        gSPEndDisplayList(nextOpa++);
+        gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(opa, nextOpa);
+        Graph_BranchDlist(gfxHead, gfx);
 
-        POLY_OPA_DISP = nextOpa;
+        POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;
 
         CLOSE_DISPS(play->state.gfxCtx);

@@ -329,7 +329,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     sCsIdList[THREEDAY_DAYTIME_NIGHT] = csId;
     if (csId > CS_ID_NONE) {
-        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[THREEDAY_DAYTIME_NIGHT]);
+        CutsceneEntry* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[THREEDAY_DAYTIME_NIGHT]);
 
         SET_EVENTINF(EVENTINF_HAS_DAYTIME_TRANSITION_CS);
         sCsIdList[THREEDAY_DAYTIME_DAY] = csEntry->additionalCsId;

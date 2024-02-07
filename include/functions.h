@@ -3,68 +3,6 @@
 
 #include "z64.h"
 
-void bootproc(void);
-void ViConfig_UpdateVi(u32 black);
-void ViConfig_UpdateBlack(void);
-s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
-s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
-DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom);
-u32 DmaMgr_TranslateVromToRom(uintptr_t vrom);
-s32 DmaMgr_FindDmaIndex(uintptr_t vrom);
-const char* func_800809F4(uintptr_t param_1);
-void DmaMgr_ProcessMsg(DmaRequest* req);
-void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue, void* msg);
-s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
-void DmaMgr_Start(void);
-void DmaMgr_Stop(void);
-void* Yaz0_FirstDMA(void);
-void* Yaz0_NextDMA(void* curSrcPos);
-s32 Yaz0_DecompressImpl(u8* src, u8* dst);
-void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
-void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue);
-void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
-void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_HandlePreNMI(IrqMgr* irqmgr);
-void IrqMgr_CheckStack(void);
-void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr);
-void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
-void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
-void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
-
-void osSyncPrintfUnused(const char* fmt, ...);
-
-void rmonPrintf(const char* fmt, ...);
-
-void RcpUtils_PrintRegisterStatus(void);
-void RcpUtils_Reset(void);
-
-void PadUtils_Init(Input* input);
-void func_80085150(void);
-void PadUtils_ResetPressRel(Input* input);
-u32 PadUtils_CheckCurExact(Input* input, u16 value);
-u32 PadUtils_CheckCur(Input* input, u16 key);
-u32 PadUtils_CheckPressed(Input* input, u16 key);
-u32 PadUtils_CheckReleased(Input* input, u16 key);
-u16 PadUtils_GetCurButton(Input* input);
-u16 PadUtils_GetPressButton(Input* input);
-s8 PadUtils_GetCurX(Input* input);
-s8 PadUtils_GetCurY(Input* input);
-void PadUtils_SetRelXY(Input* input, s32 x, s32 y);
-s8 PadUtils_GetRelXImpl(Input* input);
-s8 PadUtils_GetRelYImpl(Input* input);
-s8 PadUtils_GetRelX(Input* input);
-s8 PadUtils_GetRelY(Input* input);
-void PadUtils_UpdateRelXY(Input* input);
-
-void MtxConv_F2L(Mtx* mtx, MtxF* mf);
-void MtxConv_L2F(MtxF* mtx, Mtx* mf);
-
-s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
-
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
 // void EnItem00_Destroy(Actor* thisx, PlayState* play);
@@ -256,8 +194,8 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist);
+void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
 
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
@@ -538,7 +476,6 @@ s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4,
 void Nmi_Init(void);
 void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
-void MsgEvent_SendNullTask(void);
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
@@ -580,8 +517,6 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId);
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
-
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
 
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
@@ -661,29 +596,6 @@ void Graph_ThreadEntry(void* arg);
 Gfx* Graph_GfxPlusOne(Gfx* gfx);
 Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
 void* Graph_DlistAlloc(Gfx** gfx, size_t size);
-
-void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
-void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
-void Sched_HandleReset(SchedContext* sched);
-void Sched_HandleStop(SchedContext* sched);
-void Sched_HandleAudioCancel(SchedContext* sched);
-void Sched_HandleGfxCancel(SchedContext* sched);
-void Sched_QueueTask(SchedContext* sched, OSScTask* task);
-void Sched_Yield(SchedContext* sched);
-s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 state);
-void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task);
-void Sched_NotifyDone(SchedContext* sched, OSScTask* task);
-void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask);
-void Sched_HandleEntry(SchedContext* sched);
-void Sched_HandleRetrace(SchedContext* sched);
-void Sched_HandleRSPDone(SchedContext* sched);
-void Sched_HandleRDPDone(SchedContext* sched);
-void Sched_SendEntryMsg(SchedContext* sched);
-void Sched_SendAudioCancelMsg(SchedContext* sched);
-void Sched_SendGfxCancelMsg(SchedContext* sched);
-void Sched_FaultClient(void* param1, void* param2);
-void Sched_ThreadEntry(void* arg);
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
@@ -849,8 +761,6 @@ void SysFlashrom_WriteDataAsync(u8* addr, u32 pageNum, u32 pageCount);
 s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
-
-s32 func_80185F90(u32 arg0);
 
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 

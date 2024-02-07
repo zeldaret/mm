@@ -303,7 +303,7 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
