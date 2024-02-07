@@ -48,7 +48,7 @@ void EnDoor_SetupType(EnDoor* this, PlayState* play);
  * A schedule returning none means the door can be used normally.
  * Otherwise the result will be used as an offset relative to text message 0x1800
  */
-ScheduleScript* sDoorSchedules[ENDOOR_SCH_TYPE_MAX] = {
+ScheduleScript* sDoorSchedules[] = {
     sDoorSch_SwordsmansSchool,                    // ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL
     sDoorSch_PostOffice,                          // ENDOOR_SCH_TYPE_POST_OFFICE
     sDoorSch_LotteryShop,                         // ENDOOR_SCH_TYPE_LOTTERY_SHOP
