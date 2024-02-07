@@ -1142,7 +1142,7 @@ s8 EnInvadepoh_Interact_GetNextAnim(EnInvadepohFaceAnimNext* nextAnims, s32 next
     return (nextAnims + nextIndex)->index;
 }
 
-void EnInvadepoh_Interact_SetNextAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim* faceAnim) {
+void EnInvadepoh_Interact_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim* faceAnim) {
     faceInfo->curAnimType = faceAnim->type;
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
@@ -1154,7 +1154,7 @@ void EnInvadepoh_Interact_SetNextAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvad
     }
 }
 
-void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
     EnInvadepohFaceAnim* faceAnim = faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnim->frames;
 
@@ -1164,7 +1164,7 @@ void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadePohFaceAnimInfo* faceInfo, EnI
     }
 }
 
-void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
     EnInvadepohFaceAnimBranched* faceAnimLoop = (EnInvadepohFaceAnimBranched*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoop->anim.frames;
 
@@ -1179,7 +1179,7 @@ void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadePohFaceAnimInfo* faceInfo, 
     }
 }
 
-void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadePohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
     EnInvadepohFaceAnimDelayedBranched* faceAnimLoopDelayed = (EnInvadepohFaceAnimDelayedBranched*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->loop.anim.frames;
 
@@ -1353,7 +1353,7 @@ EnInvadepohFaceAnim* D_80B4EC08[CREMIA_MOUTH_ANIMATION_MAX] = {
     &D_80B4EC00, // CREMIA_MOUTH_ANIMATION_0
 };
 
-void EnInvadepoh_Interact_UpdateAnimation(EnInvadePohFaceAnimInfo* faceInfo) {
+void EnInvadepoh_Interact_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
     static EnInvadepohFaceFunc sFaceUpdateFuncs[3] = {
         EnInvadepoh_Interact_UpdateFixedAnim,
         EnInvadepoh_Interact_UpdateBranchedAnim,
@@ -1365,7 +1365,7 @@ void EnInvadepoh_Interact_UpdateAnimation(EnInvadePohFaceAnimInfo* faceInfo) {
     }
 }
 
-void EnInvadepoh_Interact_Init(EnInvadePohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimSet, s32 curEyeAnim,
+void EnInvadepoh_Interact_Init(EnInvadepohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimSet, s32 curEyeAnim,
                                EnInvadepohFaceAnim** mouthAnimSet, s32 curMouthAnim, Vec3s* headRotTarget,
                                s16 maxTurnRate, f32 scaledTurnRate, f32 torsoRotXModTarget, f32 torsoRotXModStep) {
     Math_Vec3s_Copy(&interactInfo->headRotTarget, headRotTarget);
@@ -1395,7 +1395,7 @@ void EnInvadepoh_Interact_Init(EnInvadePohInteractInfo* interactInfo, EnInvadepo
     }
 }
 
-void EnInvadepoh_Interact_Update(EnInvadePohInteractInfo* interactInfo) {
+void EnInvadepoh_Interact_Update(EnInvadepohInteractInfo* interactInfo) {
     Vec3f scaledRotStep;
     Vec3s rotStep;
 
@@ -2480,7 +2480,7 @@ void EnInvadepoh_AbductedRomani_SetupYell(EnInvadepoh* this) {
 
 void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer == 20) {
-        EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+        EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
         interactInfo->headRotTarget.x = 0x7D0;
         interactInfo->headRotTarget.y = 0;
@@ -2568,7 +2568,7 @@ void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
 void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     if (this->actor.parent == NULL) {
         Actor_Kill(&this->actor);
@@ -2587,7 +2587,7 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
 
 void EnInvadepoh_ConfusedRomani_SetupWalk(EnInvadepoh* this) {
     static s16 D_80B4EDC8[4] = { -0x708, -0x3E8, 0, 0x7D0 };
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     this->actionTimer = Rand_S16Offset(150, 250);
     interactInfo->headRotTarget.x = D_80B4EDC8[Rand_Next() >> 0x1E];
@@ -2627,7 +2627,7 @@ void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     f32 rand = Rand_ZeroOne();
 
     this->actionTimer = Rand_S16Offset(150, 150);
@@ -2665,7 +2665,7 @@ void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 
@@ -2725,7 +2725,7 @@ void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_ConfusedRomani_SetupTalk(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     this->actor.speed = 0.0f;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
@@ -2736,7 +2736,7 @@ void EnInvadepoh_ConfusedRomani_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_ConfusedRomani_Talk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -3052,7 +3052,7 @@ void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     interactInfo->headRotTarget.x = 0;
@@ -3104,7 +3104,7 @@ void EnInvadepoh_Night1Romani_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -3206,7 +3206,7 @@ void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     interactInfo->headRotTarget.x = 0;
@@ -3223,7 +3223,7 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
 
 void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     if ((play->gameplayFrames % 0x100) == 0) {
         Vec3f pathPointF;
@@ -3264,7 +3264,7 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToPlayOnce(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     interactInfo->headRotTarget.x = 0;
@@ -3283,7 +3283,7 @@ void EnInvadepoh_BarnRomani_LookAround(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_BarnRomani_SetupWalk(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, 0.0f);
     interactInfo->headRotTarget.x = 0;
@@ -3338,7 +3338,7 @@ void EnInvadepoh_BarnRomani_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -3548,7 +3548,7 @@ void EnInvadepoh_RewardRomani_Finished(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     if (Object_IsLoaded(&play2->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
@@ -3571,7 +3571,7 @@ void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
 void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
 
     this->actionFunc(this, play);
@@ -3799,7 +3799,7 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Cremia_SetupWalk(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToLoop(&this->skelAnime, &gCremiaWalkAnim, -6.0f);
     interactInfo->headRotTarget.x = 0;
@@ -3813,7 +3813,7 @@ void EnInvadepoh_Cremia_SetupWalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Cremia_Walk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     EnInvadepoh* romani = sRomani;
     s32 pad;
     s32 framesMod0x80;
@@ -3887,7 +3887,7 @@ void EnInvadepoh_Cremia_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Cremia_Talk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -3912,7 +3912,7 @@ void EnInvadepoh_Cremia_SetupIdle(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Cremia_Idle(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -4007,7 +4007,7 @@ void EnInvadepoh_Cremia_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Night3Romani_SetupWalk(EnInvadepoh* this) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     interactInfo->headRotTarget.x = 0;
@@ -4019,7 +4019,7 @@ void EnInvadepoh_Night3Romani_SetupWalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     EnInvadepoh* cremia = sCremia;
     s32 curPoint;
     s32 framesMod0x80;
@@ -4092,7 +4092,7 @@ void EnInvadepoh_Night3Romani_SetupTalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
@@ -4117,7 +4117,7 @@ void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
-    EnInvadePohInteractInfo* interactInfo = &this->interactInfo;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 

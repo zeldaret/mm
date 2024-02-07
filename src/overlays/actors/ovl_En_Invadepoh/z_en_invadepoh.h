@@ -111,18 +111,18 @@ typedef union EnInvadepohFaceAnim {
 
 #endif
 
-typedef struct EnInvadePohFaceAnimInfo {
+typedef struct EnInvadepohFaceAnimInfo {
     /* 0x0 */ EnInvadepohFaceAnim** animSet;
     /* 0x4 */ s8 curAnimType;
     /* 0x8 */ EnInvadepohFaceAnim* curAnim;
     /* 0xC */ s16 delayTimer;
     /* 0xE */ s8 curFrame;
     /* 0xF */ s8 curIndex;
-} EnInvadePohFaceAnimInfo; // size = 0x10
+} EnInvadepohFaceAnimInfo; // size = 0x10
 
-typedef struct EnInvadePohInteractInfo {
-    /* 0x00 */ EnInvadePohFaceAnimInfo eyeAnim;
-    /* 0x10 */ EnInvadePohFaceAnimInfo mouthAnim;
+typedef struct EnInvadepohInteractInfo {
+    /* 0x00 */ EnInvadepohFaceAnimInfo eyeAnim;
+    /* 0x10 */ EnInvadepohFaceAnimInfo mouthAnim;
     /* 0x20 */ Vec3s headRot;
     /* 0x26 */ Vec3s headRotTarget;
     /* 0x2C */ s16 maxTurnRate;
@@ -134,9 +134,9 @@ typedef struct EnInvadePohInteractInfo {
     /* 0x42 */ s16 torsoRotZTarget;
     /* 0x44 */ f32 torsoMaxTurnRate;
     /* 0x48 */ s16 torsoMaxTurnStep;
-} EnInvadePohInteractInfo; // size = 0x4C
+} EnInvadepohInteractInfo; // size = 0x4C
 
-typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceAnimInfo*, EnInvadepohFaceAnim**);
+typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnim**);
 
 #define EN_INVADEPOH_LIMB_MAX 23
 // #define EN_INVADEPOH_LIMB_MAX MAX(MAX(MAX(MAX(MAX(ALIEN_LIMB_MAX, ROMANI_LIMB_MAX), CREMIA_LIMB_MAX), DOG_LIMB_MAX), COW_LIMB_MAX), COW_TAIL_LIMB_MAX)
@@ -164,7 +164,7 @@ typedef struct EnInvadepoh {
     /* 0x310 */ f32 pathLength;
     /* 0x314 */ Vec3f unk_314;
     /* 0x320 */ f32 progress;
-    /* 0x324 */ EnInvadePohInteractInfo interactInfo;
+    /* 0x324 */ EnInvadepohInteractInfo interactInfo;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
     /* 0x374 */ s8 unk_374;
