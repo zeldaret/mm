@@ -97,10 +97,11 @@ typedef enum EnDoorFramedType {
 #define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
 
+// TODO: rename after D_801AED48
 #define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(actionVar) ((actionVar) & 0x7)
 #define ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(actionVar) (((actionVar) >> 3) & 0xF)
 
-#define ENDOOR_PACK_ACTIONVAR_0_2_3(halfDayBitIndex, textOffset) ((((textOffset) & 0xF) << 3) | ((halfDayBitIndex) & 0x7))
+#define ENDOOR_PACK_HALFDAYCHECK(halfDayBitIndex, textOffset) ((((textOffset) & 0xF) << 3) | ((halfDayBitIndex) & 0x7))
 
 #define ENDOOR_PARAMS(type, actionVar) ((((type) & 7) << 7) | ((actionVar) & 0x7F))
 
