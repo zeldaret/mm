@@ -240,7 +240,7 @@ void EnKitan_Talk(EnKitan* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
