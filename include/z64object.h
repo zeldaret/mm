@@ -1,6 +1,13 @@
 #ifndef Z64OBJECT_H
 #define Z64OBJECT_H
 
+#include "libc/stdint.h"
+
+typedef struct RomFile {
+    /* 0x0 */ uintptr_t vromStart;
+    /* 0x4 */ uintptr_t vromEnd;
+} RomFile; // size = 0x8
+
 #define DEFINE_OBJECT(_name, enumValue) enumValue,
 #define DEFINE_OBJECT_UNSET(enumValue) enumValue,
 #define DEFINE_OBJECT_SIZE_ZERO(_name, enumValue) enumValue,
