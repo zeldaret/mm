@@ -13,6 +13,7 @@
 #include "global.h"
 #include "z64visfbuf.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 
 #define SCALE_MIN 0.032f
 #define SCALE_MAX 1.0f //!< also unchanged scale

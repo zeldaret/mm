@@ -15,8 +15,10 @@ OSTime sGraphPrevUpdateEndTime;
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 #include "libc64/malloc.h"
 #include "z64speed_meter.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
