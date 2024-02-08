@@ -3,21 +3,6 @@
 
 #include "z64.h"
 
-// void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
-// void EnItem00_Init(Actor* thisx, PlayState* play);
-// void EnItem00_Destroy(Actor* thisx, PlayState* play);
-// void EnItem00_WaitForHeartObject(EnItem00* this, PlayState* play);
-// void func_800A640C(EnItem00* this, PlayState* play);
-// void func_800A6650(EnItem00* this, PlayState* play);
-// void func_800A6780(EnItem00* this, PlayState* play);
-// void func_800A6A40(EnItem00* this, PlayState* play);
-// void EnItem00_Update(Actor* thisx, PlayState* play);
-// void EnItem00_Draw(Actor* thisx, PlayState* play);
-// void EnItem00_DrawRupee(EnItem00* this, PlayState* play);
-// void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
-// void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
-// void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
-// s16 func_800A7650(s16 dropId);
 Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params);
 Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params);
 void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnPos, s16 params);
