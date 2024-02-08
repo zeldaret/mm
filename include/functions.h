@@ -10,9 +10,6 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
 
-void FlagSet_Update(GameState* gameState);
-void FlagSet_Draw(GameState* gameState);
-
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry);
 void Overlay_FreeGameState(GameStateOverlay* overlayEntry);
 
