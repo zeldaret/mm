@@ -1,6 +1,5 @@
 #include "z64.h"
 #include "regs.h"
-#include "functions.h"
 #include "fault.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -10,7 +9,6 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
 
-#include "variables.h"
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"
