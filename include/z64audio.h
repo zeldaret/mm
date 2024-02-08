@@ -237,7 +237,7 @@ typedef struct {
     /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for ADSR
     /* 0x4454 */ u8* audioHeap;
     /* 0x4458 */ size_t audioHeapSize;
-    /* 0x445C */ struct Note* notes;
+    /* 0x445C */ struct Note* notes; // dynamically sized based on gAudioCtx.numNotes
     /* 0x4460 */ SequencePlayer seqPlayers[5];
     /* 0x4B40 */ SequenceLayer sequenceLayers[80];
     /* 0x7840 */ SequenceChannel sequenceChannelNone;

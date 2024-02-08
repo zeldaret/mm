@@ -43,7 +43,7 @@ typedef struct NoteSynthesisState {
     /* 0x10 */ NoteSynthesisBuffers* synthesisBuffers;
     /* 0x14 */ s16 curVolLeft;
     /* 0x16 */ s16 curVolRight;
-    /* 0x18 */ UNK_TYPE1 unk_14[0x6];
+    /* 0x18 */ UNK_TYPE1 unk_18[0x6];
     /* 0x1E */ u8 combFilterNeedsInit;
     /* 0x1F */ u8 unk_1F;
     /* 0x20 */ UNK_TYPE1 unk_20[0x4];

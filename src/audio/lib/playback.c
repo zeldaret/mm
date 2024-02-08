@@ -14,7 +14,7 @@ typedef struct {
     /* 0x04 */ StereoData stereoData;
     /* 0x08 */ f32 frequency;
     /* 0x0C */ f32 velocity;
-    /* 0x10 */ UNK_TYPE1 unk_0C[0x4];
+    /* 0x10 */ UNK_TYPE1 unk_10[0x4];
     /* 0x14 */ s16* filter;
     /* 0x18 */ u8 combFilterSize;
     /* 0x1A */ u16 combFilterGain;

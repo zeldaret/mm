@@ -209,7 +209,7 @@ typedef struct SequenceLayer {
     /* 0x54 */ f32 noteFreqScale;
     /* 0x58 */ struct Instrument* instrument;
     /* 0x5C */ struct TunedSample* tunedSample;
-    /* 0x60 */ SequenceChannel* channel; // Not SequenceChannel?
+    /* 0x60 */ SequenceChannel* channel;
     /* 0x64 */ SeqScriptState scriptState;
     /* 0x80 */ AudioListItem listItem;
 } SequenceLayer; // size = 0x90
