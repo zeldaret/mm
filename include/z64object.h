@@ -14,4 +14,7 @@ typedef enum ObjectId {
 #undef DEFINE_OBJECT_UNSET
 #undef DEFINE_OBJECT_SIZE_ZERO
 
+extern ObjectId gObjectTableSize;
+extern RomFile gObjectTable[OBJECT_ID_MAX];
+
 #endif

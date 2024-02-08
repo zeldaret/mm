@@ -9,13 +9,6 @@
 extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
 extern ActorId gMaxActorId;
 
-extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
-extern PlayerModelIndices gPlayerModelTypes[];
-extern struct_80124618 D_801C03A0[];
-extern struct_80124618 D_801C0490[];
-extern Gfx gCullBackDList[];
-extern Gfx gCullFrontDList[];
-
 extern u32 gBitFlags[32];
 extern u16 gEquipMasks[];
 extern u16 gEquipNegMasks[];
@@ -31,12 +24,6 @@ extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
-
-extern s16 gPlayerFormObjectIds[PLAYER_FORM_MAX];
-extern ObjectId gObjectTableSize;
-extern RomFile gObjectTable[OBJECT_ID_MAX];
-
-extern SceneTableEntry gSceneTable[SCENE_MAX];
 
 extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];
 extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;

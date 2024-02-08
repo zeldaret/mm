@@ -975,4 +975,6 @@ s32 Entrance_GetSceneIdAbsolute(u16 entrance);
 s32 Entrance_GetSpawnNum(u16 entrance);
 s32 Entrance_GetTransitionFlags(u16 entrance);
 
+extern SceneTableEntry gSceneTable[SCENE_MAX];
+
 #endif
