@@ -411,10 +411,6 @@ void Map_Update(PlayState* play);
 // void func_8010BF24(void);
 s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4, s32* param_5);
 
-void Nmi_Init(void);
-void Nmi_SetPrenmiStart(void);
-// s32 Nmi_GetPrenmiHasStarted(void);
-
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
