@@ -6,8 +6,11 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
+
+#include "sys_cmpdma.h"
 #include "z64skybox.h"
 #include "z64view.h"
+
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 
 #include "archives/icon_item_static/icon_item_static_yar.h"

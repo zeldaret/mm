@@ -2,6 +2,7 @@
 #include "message_data_static.h"
 
 #include "padmgr.h"
+#include "sys_cmpdma.h"
 #include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
