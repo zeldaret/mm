@@ -245,14 +245,14 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectSlot)) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }
@@ -489,21 +489,21 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
 void EnNwc_Draw(Actor* thisx, PlayState* play) {
     TexturePtr eyeTextures[] = { gNwcEyeOpenTex, gNwcEyeClosedTex };
     EnNwc* this = THIS;
-    Gfx* dispHead;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    dispHead = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPSegment(&dispHead[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
 
-    gSPMatrix(&dispHead[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(&dispHead[2], &gNwcBodyDL);
+    gSPDisplayList(&gfx[2], &gNwcBodyDL);
 
-    POLY_OPA_DISP = &dispHead[3];
+    POLY_OPA_DISP = &gfx[3];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -1,0 +1,51 @@
+sScheduleScript {
+    if_day (3) {
+        if_scene (SCENE_YADOYA) {
+            if_time_range (6, 0, 18, 0) {
+                return_l (EN_NB_SCH_3)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_OMOYA) {
+            if_time_range (18, 0, 6, 0) {
+                return_l (EN_NB_SCH_4)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        if_scene (SCENE_YADOYA) {
+            if_day (1) {
+                if_time_range (8, 0, 12, 0) {
+                    return_l (EN_NB_SCH_1)
+                } else if_time_range (12, 0, 12, 15) {
+                    return_l (EN_NB_SCH_2)
+                } else if_time_range (12, 15, 18, 0) {
+                    return_l (EN_NB_SCH_1)
+                } else {
+                    return_l (EN_NB_SCH_3)
+                }
+            } else {
+                if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+                    if_time_range (8, 0, 12, 0) {
+                        return_s (EN_NB_SCH_1)
+                    } else if_time_range (12, 0, 12, 15) {
+                        return_s (EN_NB_SCH_2)
+                    } else if_time_range (12, 15, 18, 0) {
+                        return_s (EN_NB_SCH_1)
+                    } else {
+                        return_l (EN_NB_SCH_3)
+                    }
+                } else if_time_range (8, 0, 18, 0) {
+                    return_l (EN_NB_SCH_1)
+                } else {
+                    return_l (EN_NB_SCH_3)
+                }
+            }
+        } else {
+            return_none
+        }
+    }
+}

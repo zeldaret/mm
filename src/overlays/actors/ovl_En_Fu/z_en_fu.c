@@ -127,7 +127,6 @@ void func_809616E0(EnFu* this, PlayState* play) {
     f32 temp_f22;
     s16 atan;
     s16 spA0 = false;
-    Vec3f sp94;
 
     if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
@@ -146,18 +145,19 @@ void func_809616E0(EnFu* this, PlayState* play) {
         }
 
         if (this->unk_546 == 1) {
-            Vec3f sp88 = { 0.0f, 0.0f, 0.0f };
-            Vec3f sp7C = { 0.0f, 0.2f, 0.0f };
-            Color_RGBA8 sp78 = { 255, 255, 255, 255 };
-            Color_RGBA8 sp74 = { 198, 198, 198, 255 };
+            Vec3f pos;
+            Vec3f velocity = { 0.0f, 0.0f, 0.0f };
+            Vec3f accel = { 0.0f, 0.2f, 0.0f };
+            Color_RGBA8 primColor = { 255, 255, 255, 255 };
+            Color_RGBA8 envColor = { 198, 198, 198, 255 };
 
-            sp94.x = this->pathPoints[i].x;
-            sp94.y = this->pathPoints[i].y;
-            sp94.z = this->pathPoints[i].z;
-            func_800B0EB0(play, &sp94, &sp88, &sp7C, &sp78, &sp74, 100, 150, 10);
-            sp94.x -= 0.1f * temp_f20;
-            sp94.z -= 0.1f * temp_f22;
-            func_800B3030(play, &sp94, &sp88, &sp7C, 100, 0, 3);
+            pos.x = this->pathPoints[i].x;
+            pos.y = this->pathPoints[i].y;
+            pos.z = this->pathPoints[i].z;
+            func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 100, 150, 10);
+            pos.x -= 0.1f * temp_f20;
+            pos.z -= 0.1f * temp_f22;
+            func_800B3030(play, &pos, &velocity, &accel, 100, 0, 3);
         }
     }
 }
@@ -601,16 +601,16 @@ void func_809628D0(EnFu* this, PlayState* play) {
 
     switch (talkState) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80962660(this, play);
             break;
 
@@ -640,7 +640,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (talkState != TEXT_STATE_3) {
+    if (talkState != TEXT_STATE_FADING) {
         func_80964190(this, play);
         func_8096426C(this, play);
     }
@@ -866,7 +866,7 @@ void func_80963350(EnFu* this, PlayState* play) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     if ((this->unk_54A == 0) &&
-        (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
+        (((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) ||
          ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
         Message_CloseTextbox(play);
         this->unk_54A = 2;

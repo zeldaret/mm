@@ -462,7 +462,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x12E8:

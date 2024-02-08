@@ -187,8 +187,8 @@ void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP) {
     TransitionTile_SetVtx(this);
     gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &this->modelView, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(gfx++, 0xA, this->frame == 0 ? this->vtxFrame1 : this->vtxFrame2);
-    gSPSegment(gfx++, 0xB, this->zBuffer);
+    gSPSegment(gfx++, 0x0A, this->frame == 0 ? this->vtxFrame1 : this->vtxFrame2);
+    gSPSegment(gfx++, 0x0B, this->zBuffer);
     gSPDisplayList(gfx++, sTransTileSetupDL);
     gSPDisplayList(gfx++, this->gfx);
     gDPPipeSync(gfx++);
