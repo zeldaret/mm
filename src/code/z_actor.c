@@ -30,6 +30,7 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 
 #include "z64actor.h"
 
+#include "z64circle_tex.h"
 #include "z64horse.h"
 #include "z64malloc.h"
 #include "z64quake.h"

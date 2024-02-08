@@ -73,8 +73,6 @@ extern u8 gAudioHeapResetState;
 extern AudioSpec gAudioSpecs[21];
 
 // rodata
-extern TexturePtr gCircleTex[];
-
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
 extern const AudioHeapInitSizes gAudioHeapInitSizes;

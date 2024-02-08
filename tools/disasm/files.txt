@@ -645,7 +645,7 @@
             0x801DE5C0 : "z_skin",
             0x801DE5D0 : "z_skin_matrix",
             0x801DE5E0 : "z_sub_s",
-            0x801DE890 : "code_801DE890",
+            0x801DE890 : "z_circle_tex",
             0x801DF090 : "z_rumble",
             0x801DF0A0 : "z_view",
             0x801DF0B0 : "z_vimode",

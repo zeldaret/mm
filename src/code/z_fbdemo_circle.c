@@ -1,8 +1,9 @@
 #include "z64transition.h"
 
+#include "main.h"
 #include "sys_cfb.h"
+#include "z64circle_tex.h"
 #include "z64math.h"
-#include "variables.h"
 
 typedef enum TransitionCircleDirection {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
