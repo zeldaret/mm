@@ -1,9 +1,9 @@
 #include "z64jpeg.h"
 
 #include "libc/stdbool.h"
+#include "main.h"
 #include "sys_ucode.h"
-#include "variables.h"
-#include "functions.h"
+#include "macros.h"
 
 #define MARKER_ESCAPE 0x00
 #define MARKER_SOI 0xD8

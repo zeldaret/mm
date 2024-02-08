@@ -1,4 +1,7 @@
+#include "z64save.h"
 #include "global.h"
+
+#include "sys_flashrom.h"
 #include "z64horse.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
