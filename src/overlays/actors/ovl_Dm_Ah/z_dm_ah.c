@@ -114,7 +114,11 @@ Actor* DmAh_FindAnjuActor(PlayState* play) {
     while (true) {
         actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_DM_AN);
 
-        if ((actorIter == NULL) || (actorIter->update != NULL)) {
+        if (actorIter == NULL) {
+            break;
+        }
+
+        if (actorIter->update != NULL) {
             break;
         }
 
