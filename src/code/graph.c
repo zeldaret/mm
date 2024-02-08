@@ -15,6 +15,7 @@ OSTime sGraphPrevUpdateEndTime;
 #include "sys_cfb.h"
 #include "sys_ucode.h"
 #include "libc64/malloc.h"
+#include "z64DLF.h"
 #include "z64speed_meter.h"
 
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"

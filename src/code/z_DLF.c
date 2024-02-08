@@ -1,4 +1,6 @@
+#include "z64DLF.h"
 #include "global.h"
+
 #include "libc64/malloc.h"
 #include "loadfragment.h"
 

@@ -10,9 +10,6 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
 
-void Overlay_LoadGameState(GameStateOverlay* overlayEntry);
-void Overlay_FreeGameState(GameStateOverlay* overlayEntry);
-
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
 void ActorShadow_DrawCircle(Actor* actor, Lights* lights, PlayState* play);
 void ActorShadow_DrawSquare(Actor* actor, Lights* lights, PlayState* play);
