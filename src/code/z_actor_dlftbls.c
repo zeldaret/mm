@@ -3,7 +3,9 @@
 #include "fault.h"
 
 // Segment and InitVars declarations (also used in the table below)
-#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName)  extern struct ActorInit name##_InitVars; DECLARE_OVERLAY_SEGMENT(name)
+#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) \
+    extern struct ActorInit name##_InitVars;                   \
+    DECLARE_OVERLAY_SEGMENT(name)
 #define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern struct ActorInit name##_InitVars;
 #define DEFINE_ACTOR_UNSET(_enumValue)
 
