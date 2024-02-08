@@ -132,39 +132,43 @@ void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* p
 
 void Lights_BindPoint(Lights* lights, LightParams* params, PlayState* play) {
     Light* light;
-    f32 radiusF = params->point.radius;
-    Vec3f posF;
+    f32 kq = params->point.radius;
+    Vec3f pos;
     Vec3f adjustedPos;
     s32 pad;
 
-    if (radiusF > 0) {
-        posF.x = params->point.x;
-        posF.y = params->point.y;
-        posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &posF, &adjustedPos);
-        if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
-            (400 > fabsf(adjustedPos.y) - radiusF)) {
+    if (kq > 0.0f) {
+        pos.x = params->point.x;
+        pos.y = params->point.y;
+        pos.z = params->point.z;
+        SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &pos, &adjustedPos);
+        if ((-kq < adjustedPos.z) && ((600.0f + kq) > adjustedPos.z) && ((fabsf(adjustedPos.x) - kq) < 400.0f) &&
+            ((fabsf(adjustedPos.y) - kq) < 400.0f)) {
             light = Lights_FindSlot(lights);
             if (light != NULL) {
-                radiusF = 4500000.0f / (radiusF * radiusF);
-                if (radiusF > 255) {
-                    radiusF = 255;
-                } else if (20 > radiusF) {
-                    radiusF = 20;
+                kq = 4500000.0f / SQ(kq);
+                if (kq > 255.0f) {
+                    kq = 255.0f;
+                } else if (20.0f > kq) {
+                    kq = 20.0f;
                 }
 
                 light->p.col[0] = params->point.color[0];
                 light->p.colc[0] = light->p.col[0];
+
                 light->p.col[1] = params->point.color[1];
                 light->p.colc[1] = light->p.col[1];
+
                 light->p.col[2] = params->point.color[2];
                 light->p.colc[2] = light->p.col[2];
+
                 light->p.pos[0] = params->point.x;
                 light->p.pos[1] = params->point.y;
                 light->p.pos[2] = params->point.z;
-                light->p.unk3 = 0x8;
-                light->p.unk7 = 0xFF;
-                light->p.unkE = (s32)radiusF;
+
+                light->p.kc = 8;
+                light->p.kl = -1;
+                light->p.kq = (s32)kq;
             }
         }
     }
@@ -415,21 +419,21 @@ void Lights_GlowCheck(PlayState* play) {
 }
 
 void Lights_DrawGlow(PlayState* play) {
-    Gfx* dl;
+    Gfx* gfx;
     LightPoint* params;
     LightNode* light = play->lightCtx.listHead;
 
     if (light != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        dl = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
+        gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(dl++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_CD_NOISE);
 
-        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -437,21 +441,21 @@ void Lights_DrawGlow(PlayState* play) {
                 if (params->drawGlow) {
                     f32 scale = SQ((f32)params->radius) * 2e-6f;
 
-                    gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
+                    gDPSetPrimColor(gfx++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
+                    gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
                 }
             }
 
             light = light->next;
         } while (light != NULL);
 
-        POLY_XLU_DISP = dl;
+        POLY_XLU_DISP = gfx;
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

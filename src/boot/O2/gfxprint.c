@@ -1,5 +1,4 @@
-#include "global.h"
-#include "libc64/aprintf.h"
+#include "gfxprint.h"
 
 #define GFXP_FLAG_HIRAGANA (1 << 0)
 #define GFXP_FLAG_RAINBOW (1 << 1)
@@ -127,30 +126,37 @@ void GfxPrint_PrintChar(GfxPrint* this, u8 c) {
         switch (c) {
             case '\0':
                 break;
+
             case '\n':
                 this->posY += 32;
             case '\r':
                 this->posX = this->baseX;
                 break;
+
             case '\t':
                 do {
                     GfxPrint_PrintCharImpl(this, ' ');
                 } while ((this->posX - this->baseX) % 256);
                 break;
+
             case GFXP_HIRAGANA_CHAR:
                 this->flags |= GFXP_FLAG_HIRAGANA;
                 break;
+
             case GFXP_KATAKANA_CHAR:
                 this->flags &= ~GFXP_FLAG_HIRAGANA;
                 break;
+
             case GFXP_RAINBOW_ON_CHAR:
                 this->flags |= GFXP_FLAG_RAINBOW;
                 this->flags |= GFXP_FLAG_UPDATE;
                 break;
+
             case GFXP_RAINBOW_OFF_CHAR:
                 this->flags &= ~GFXP_FLAG_RAINBOW;
                 this->flags |= GFXP_FLAG_UPDATE;
                 break;
+
             case GFXP_UNUSED_CHAR:
             default:
                 break;

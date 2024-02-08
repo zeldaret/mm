@@ -38,7 +38,7 @@ typedef struct EnSGoro {
     /* 0x302 */ UNK_TYPE1 unk_302[2];
     /* 0x304 */ u16 textId;
     /* 0x306 */ s16 snorePhase;
-    /* 0x308 */ s32 animInfoIndex;
+    /* 0x308 */ s32 animIndex;
     /* 0x30C */ s16 powderKegPrice;
 } EnSGoro; // size = 0x310
 

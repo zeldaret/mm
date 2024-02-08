@@ -200,7 +200,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->actor.world.pos.z = this->unk_6F0;
     Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART)) {
         func_809ECD00(this, play);
         this->actor.world.pos.y = this->actor.floorHeight + 160.0f;
         phi_f24 = this->actor.floorHeight;
@@ -393,7 +393,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 Play_DisableMotionBlur();
-                SET_EVENTINF(EVENTINF_60);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART);
             }
             break;
     }
@@ -475,7 +475,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
             this->unk_2D0 = 10000.0f;
             this->unk_2C8 = 100;
         } else {
-            this->actor.world.rot.y = BINANG_ROT180((s16)Rand_ZeroFloat(8000.0f) + this->actor.world.rot.y);
+            this->actor.world.rot.y = BINANG_ROT180(TRUNCF_BINANG(Rand_ZeroFloat(8000.0f)) + this->actor.world.rot.y);
         }
 
         this->actor.speed = 0.0f;
@@ -784,15 +784,15 @@ s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     }
 
     if ((limbIndex == WART_LIMB_TOP_EYELID_ROOT) || (limbIndex == WART_LIMB_BOTTOM_EYELID_ROOT)) {
-        rot->y = (rot->y + (s16)this->unk_2CC) - 0x500;
+        rot->y = (rot->y + TRUNCF_BINANG(this->unk_2CC)) - 0x500;
     }
 
     if (limbIndex == WART_LIMB_EYE) {
         rot->y += this->unk_2D8;
         rot->z += this->unk_2D4;
         if (this->unk_2DA != 0) {
-            rot->y = (s16)(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
-            rot->z = (s16)(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
+            rot->y = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
+            rot->z = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
         }
     }
 

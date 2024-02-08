@@ -21,17 +21,7 @@ void func_80BC2EA4(EnJa* this);
 void func_80BC32D8(EnJa* this, PlayState* play);
 void func_80BC3594(EnJa* this, PlayState* play);
 
-static u8 D_80BC35F0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x05 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x05 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x13 - 0x0B),
-    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12 - 0x0F),
-    /* 0x0F */ SCHEDULE_CMD_RET_VAL_L(2),
-    /* 0x12 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x13 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x1A - 0x17),
-    /* 0x17 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x1A */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "build/src/overlays/actors/ovl_En_Ja/scheduleScripts.schl.inc"
 
 s32 D_80BC360C[] = {
     0x0E29370C, 0x170E2938, 0x0C180E29, 0x390C170E, 0x293A0C09, 0x0000180E, 0x293B0C09, 0x00001000,
@@ -129,7 +119,7 @@ void func_80BC1984(EnJa* this, PlayState* play) {
     s32 pad[2];
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.height = (s16)fabsf(this->actor.focus.pos.y - this->actor.world.pos.y) + 5;
+    this->collider.dim.height = TRUNCF_BINANG(fabsf(this->actor.focus.pos.y - this->actor.world.pos.y)) + 5;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -233,8 +223,9 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0;
 
-    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->talkActor)) {
+    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING) &&
+        (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;

@@ -3,68 +3,6 @@
 
 #include "z64.h"
 
-void bootproc(void);
-void ViConfig_UpdateVi(u32 black);
-void ViConfig_UpdateBlack(void);
-s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
-s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
-DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom);
-u32 DmaMgr_TranslateVromToRom(uintptr_t vrom);
-s32 DmaMgr_FindDmaIndex(uintptr_t vrom);
-const char* func_800809F4(uintptr_t param_1);
-void DmaMgr_ProcessMsg(DmaRequest* req);
-void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue, void* msg);
-s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
-void DmaMgr_Start(void);
-void DmaMgr_Stop(void);
-void* Yaz0_FirstDMA(void);
-void* Yaz0_NextDMA(void* curSrcPos);
-s32 Yaz0_DecompressImpl(u8* src, u8* dst);
-void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
-void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue);
-void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
-void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg);
-void IrqMgr_HandlePreNMI(IrqMgr* irqmgr);
-void IrqMgr_CheckStack(void);
-void IrqMgr_HandlePRENMI450(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI480(IrqMgr* irqmgr);
-void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr);
-void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
-void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
-void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
-
-void osSyncPrintfUnused(const char* fmt, ...);
-
-void rmonPrintf(const char* fmt, ...);
-
-void RcpUtils_PrintRegisterStatus(void);
-void RcpUtils_Reset(void);
-
-void PadUtils_Init(Input* input);
-void func_80085150(void);
-void PadUtils_ResetPressRel(Input* input);
-u32 PadUtils_CheckCurExact(Input* input, u16 value);
-u32 PadUtils_CheckCur(Input* input, u16 key);
-u32 PadUtils_CheckPressed(Input* input, u16 key);
-u32 PadUtils_CheckReleased(Input* input, u16 key);
-u16 PadUtils_GetCurButton(Input* input);
-u16 PadUtils_GetPressButton(Input* input);
-s8 PadUtils_GetCurX(Input* input);
-s8 PadUtils_GetCurY(Input* input);
-void PadUtils_SetRelXY(Input* input, s32 x, s32 y);
-s8 PadUtils_GetRelXImpl(Input* input);
-s8 PadUtils_GetRelYImpl(Input* input);
-s8 PadUtils_GetRelX(Input* input);
-s8 PadUtils_GetRelY(Input* input);
-void PadUtils_UpdateRelXY(Input* input);
-
-void MtxConv_F2L(Mtx* mtx, MtxF* mf);
-void MtxConv_L2F(MtxF* mtx, Mtx* mf);
-
-s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
-
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
 // void EnItem00_Destroy(Actor* thisx, PlayState* play);
@@ -256,8 +194,8 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist);
+void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
 
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
@@ -538,7 +476,6 @@ s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4,
 void Nmi_Init(void);
 void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
-void MsgEvent_SendNullTask(void);
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
@@ -580,8 +517,6 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId);
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
-
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
 
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
@@ -661,29 +596,6 @@ void Graph_ThreadEntry(void* arg);
 Gfx* Graph_GfxPlusOne(Gfx* gfx);
 Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
 void* Graph_DlistAlloc(Gfx** gfx, size_t size);
-
-void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
-void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
-void Sched_HandleReset(SchedContext* sched);
-void Sched_HandleStop(SchedContext* sched);
-void Sched_HandleAudioCancel(SchedContext* sched);
-void Sched_HandleGfxCancel(SchedContext* sched);
-void Sched_QueueTask(SchedContext* sched, OSScTask* task);
-void Sched_Yield(SchedContext* sched);
-s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 state);
-void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task);
-void Sched_NotifyDone(SchedContext* sched, OSScTask* task);
-void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask);
-void Sched_HandleEntry(SchedContext* sched);
-void Sched_HandleRetrace(SchedContext* sched);
-void Sched_HandleRSPDone(SchedContext* sched);
-void Sched_HandleRDPDone(SchedContext* sched);
-void Sched_SendEntryMsg(SchedContext* sched);
-void Sched_SendAudioCancelMsg(SchedContext* sched);
-void Sched_SendGfxCancelMsg(SchedContext* sched);
-void Sched_FaultClient(void* param1, void* param2);
-void Sched_ThreadEntry(void* arg);
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
@@ -850,8 +762,6 @@ s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 
-s32 func_80185F90(u32 arg0);
-
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
 AudioTask* AudioThread_Update(void);
@@ -911,106 +821,6 @@ void Audio_ResetForAudioHeapStep3(void);
 void Audio_ResetForAudioHeapStep2(void);
 void Audio_ResetForAudioHeapStep1(s32 specId);
 void Audio_PreNMI(void);
-
-void AudioOcarina_SetSongStartingPos(void);
-void AudioOcarina_StartAtSongStartingPos(u32 ocarinaFlags);
-void AudioOcarina_StartForSongCheck(u32 ocarinaFlags, u8 ocarinaStaffPlayingPosStart);
-void AudioOcarina_StartWithSongNoteLengths(u32 ocarinaFlags);
-void AudioOcarina_StartDefault(u32 ocarinaFlags);
-u8 func_8019B5AC(void);
-void AudioOcarina_ResetAndReadInput(void);
-void AudioOcarina_SetOcarinaDisableTimer(u8 unused, u8 timer);
-void AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
-void AudioOcarina_SetPlaybackSong(s8 songIndexPlusOne, u8 playbackState);
-void AudioOcarina_SetRecordingState(u8 recordingState);
-OcarinaStaff* AudioOcarina_GetRecordingStaff(void);
-OcarinaStaff* AudioOcarina_GetPlayingStaff(void);
-OcarinaStaff* AudioOcarina_GetPlaybackStaff(void);
-void AudioOcarina_TerminaWallGenerateNotes(void);
-void AudioOcarina_PlayLongScarecrowSong(void);
-
-void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex);
-void AudioSfx_LowerSfxSettingsReverb(Vec3f* pos, s8 isReverbLowered);
-void AudioSfx_SetChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
-
-void Audio_PlayObjSoundBgm(Vec3f* pos, s8 seqId);
-void Audio_PlayObjSoundFanfare(Vec3f* pos, s8 seqId);
-void Audio_PlaySubBgmAtPos(Vec3f* pos, u8 seqId, f32 maxDist);
-void Audio_PlaySubBgmAtPosWithFilter(Vec3f* pos, u8 seqId, f32 maxDist);
-void Audio_PlaySequenceAtDefaultPos(u8 seqPlayerIndex, u16 seqId);
-void Audio_PlaySequenceAtPos(u8 seqPlayerIndex, Vec3f* pos, u16 seqId, f32 maxDist);
-void Audio_PlayMorningSceneSequence(u16 seqId, u8 dayMinusOne);
-void Audio_PlaySceneSequence(u16 seqId, u8 dayMinusOne);
-void Audio_PlaySubBgm(u16 seqId);
-void Audio_PlaySequenceInCutscene(u16 seqId);
-void Audio_PlayBgm_StorePrevBgm(u16 seqId);
-void Audio_PlayFanfareWithPlayerIOPort7(u16 seqId, u8 ioData);
-void Audio_PlayFanfare(u16 seqId);
-void Audio_PlayFanfareWithPlayerIOCustomPort(u16 seqId, s8 ioPort, u8 ioData);
-void Audio_PlaySequenceWithSeqPlayerIO(s8 seqPlayerIndex, u16 seqId, u8 fadeInDuration, s8 ioPort, u8 ioData);
-void Audio_PlayAmbience(u8 ambienceId);
-
-void Audio_StopSequenceAtDefaultPos(void);
-void Audio_StopSubBgm(void);
-void Audio_StopSequenceInCutscene(u16 seqId);
-void Audio_StopFanfare(u16 duration);
-
-void Audio_SetBgmVolumeOff(void);
-void Audio_SetBgmVolumeOn(void);
-void Audio_SetMainBgmVolume(u8 targetVolume, u8 volumeFadeTimer);
-void Audio_SetSequenceMode(u8 seqMode);
-void Audio_SetPauseState(u8 isPauseMenuOpen);
-void Audio_SetEnvReverb(s8 reverb);
-void Audio_SetCodeReverb(s8 reverb);
-void Audio_SetFileSelectSettings(s8 audioSetting);
-void Audio_SetBaseFilter(u8 filter);
-void Audio_SetExtraFilter(u8 filter);
-void Audio_SetCutsceneFlag(s8 flag);
-void Audio_SetSpec(u8 specId);
-void Audio_SetAmbienceChannelIO(u8 channelIndexRange, u8 ioPort, u8 ioData);
-void Audio_SetSeqTempoAndFreq(u8 seqPlayerIndex, f32 freqTempoScale, u8 duration);
-
-void Audio_MuteSeqPlayerBgmSub(u8 isMuted);
-void Audio_MuteAllSeqExceptSystemAndOcarina(u16 duration);
-void Audio_MuteSfxAndAmbienceSeqExceptSysAndOca(u16 duration);
-
-void func_801A0204(s8 seqId);
-void func_801A246C(u8 seqPlayerIndex, u8 type);
-s32 Audio_IsSequencePlaying(u8 seqId);
-void Audio_RestorePrevBgm(void);
-void Audio_UpdateEnemyBgmVolume(f32 dist);
-u8 func_801A3950(u8 seqPlayerIndex, u8 resetChannelIO);
-u8 func_801A39F8(void);
-s32 func_801A46F8(void);
-
-void AudioSfx_MuteBanks(u16 muteMask);
-void AudioSfx_LowerBgmVolume(u8 channelIndex);
-void AudioSfx_RestoreBgmVolume(u8 channelIndex);
-void AudioSfx_PlaySfx(u16 sfxId, Vec3f* pos, u8 token, f32* freqScale, f32* volume, s8* reverbAdd);
-void AudioSfx_ProcessRequest(void);
-void AudioSfx_StopByBank(u8 bankId);
-void AudioSfx_StopByPosAndBank(u8 bankId, Vec3f* pos);
-void AudioSfx_StopByPos(Vec3f* pos);
-void AudioSfx_StopByPosAndId(Vec3f* pos, u16 sfxId);
-void AudioSfx_StopByTokenAndId(u8 token, u16 sfxId);
-void AudioSfx_StopById(u32 sfxId);
-void AudioSfx_ProcessRequests(void);
-void AudioSfx_ProcessActiveSfx(void);
-u8 AudioSfx_IsPlaying(u32 sfxId);
-void AudioSfx_Reset(void);
-
-void AudioSeq_StartSequence(u8 seqPlayerIndex, u8 seqId, u8 seqArgs, u16 fadeInDuration);
-void AudioSeq_StopSequence(u8 seqPlayerIndex, u16 fadeOutDuration);
-void AudioSeq_QueueSeqCmd(u32 cmd);
-void AudioSeq_ProcessSeqCmds(void);
-u16 AudioSeq_GetActiveSeqId(u8 seqPlayerIndex);
-s32 AudioSeq_IsSeqCmdNotQueued(u32 cmdVal, u32 cmdMask);
-void AudioSeq_SetVolumeScale(u8 seqPlayerIndex, u8 scaleIndex, u8 targetVol, u8 volFadeTimer);
-void AudioSeq_UpdateActiveSequences(void);
-u8 AudioSeq_UpdateAudioHeapReset(void);
-u8 AudioSeq_ResetReverb(void);
-void AudioSeq_ResetActiveSequences(void);
-void AudioSeq_ResetActiveSequencesAndVolume(void);
 
 void Regs_InitData(PlayState* play);
 

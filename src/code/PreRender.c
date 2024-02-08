@@ -5,14 +5,16 @@
  * buffer copies and coverage drawing. Also contains software implementations of the Video Interface anti-aliasing and
  * divot filters.
  */
-
 #include "z64prerender.h"
-#include "global.h"
-#include "PR/gs2dex.h"
+
 #include "libc/alloca.h"
 #include "libc/stdbool.h"
+#include "PR/gs2dex.h"
+
+#include "global.h"
 #include "color.h"
 #include "macros.h"
+#include "gfx.h"
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"

@@ -29,13 +29,7 @@ typedef enum {
     /* 1 */ TOILET_HAND_SCH_AVAILABLE
 } ToiletHandScheduleResult;
 
-static u8 sScheduleScript[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x11 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x0B - 0x0A),
-    /* 0x0A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0B */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, TOILET_HAND_SCH_AVAILABLE),
-    /* 0x11 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "build/src/overlays/actors/ovl_En_Bjt/scheduleScripts.schl.inc"
 
 static u8 sMsgEventScript[] = {
     0x0E, 0x29, 0x48, 0x0C, 0x0E, 0x00, 0xFF, 0x2B, 0x00, 0x00, 0x00, 0x52, 0x00, 0x5F, 0x2C, 0x29, 0x4A, 0x0C, 0x2F,
@@ -244,12 +238,12 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
         case TOILET_HAND_BEHAVIOUR_WAIT_FOR_ITEM:
             switch (Message_GetState(&play->msgCtx)) {
                 case TEXT_STATE_CHOICE:
-                case TEXT_STATE_5:
+                case TEXT_STATE_EVENT:
                     if (!Message_ShouldAdvance(play)) {
                         break;
                     }
                     // Fallthrough
-                case TEXT_STATE_16:
+                case TEXT_STATE_PAUSE_MENU:
                     itemAction = func_80123810(play);
 
                     if ((itemAction == PLAYER_IA_DEED_LAND) || (itemAction == PLAYER_IA_LETTER_TO_KAFEI) ||

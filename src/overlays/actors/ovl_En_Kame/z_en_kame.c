@@ -714,7 +714,7 @@ void EnKame_Dead(EnKame* this, PlayState* play) {
         }
 
         this->actor.shape.rot.x += Rand_S16Offset(0x700, 0x1400);
-        this->actor.shape.rot.y += (s16)Rand_ZeroFloat(5120.0f);
+        this->actor.shape.rot.y += TRUNCF_BINANG(Rand_ZeroFloat(0x1400));
         this->actor.shape.rot.z += Rand_S16Offset(0x700, 0x1400);
     }
 }

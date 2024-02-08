@@ -133,7 +133,7 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
 void BgNumaHana_UpdateSettleRotation(s16* settleRotZ, s16* settleAngle, f32* settleScale, f32 scaleStep) {
     *settleAngle += 0x32C8;
     Math_StepToF(settleScale, 0.0f, scaleStep);
-    *settleRotZ += (s16)(Math_SinS(*settleAngle) * *settleScale);
+    *settleRotZ += TRUNCF_BINANG(Math_SinS(*settleAngle) * *settleScale);
 }
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play) {

@@ -3,7 +3,7 @@
  * Overlay: ovl_Bg_F40_Switch
  * Description: Stone Tower FloorSwitch
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_bg_f40_switch.h"
 #include "z64rumble.h"
 #include "objects/object_f40_switch/object_f40_switch.h"

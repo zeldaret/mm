@@ -517,8 +517,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
@@ -1377,7 +1376,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
 
-                SET_EVENTINF(EVENTINF_56);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
             }
             break;
     }
@@ -1574,11 +1573,13 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speed = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetX = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetX) + 0x8000;
+                        this->shapeRotTargetX =
+                            (TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->shapeRotTargetX) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetZ = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetZ) + 0x8000;
+                        this->shapeRotTargetZ =
+                            (TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->shapeRotTargetZ) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
@@ -2156,7 +2157,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
@@ -2488,8 +2489,8 @@ void Boss03_DrawEffects(PlayState* play) {
                 flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
-                            eff->alpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, TRUNCF_BINANG(eff->unk_40),
+                            ((void)0, TRUNCF_BINANG(eff->unk_40) + 55), 225, eff->alpha);
 
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 

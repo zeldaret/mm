@@ -301,7 +301,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y,
                                    Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x300);
             } else if (rand < 0.8f) {
-                this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x600);
+                this->actor.shape.rot.y += TRUNCF_BINANG(Rand_CenteredFloat(0x600));
             }
 
             // Climb if too close to ground

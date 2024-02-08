@@ -108,7 +108,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
     s32 pad;
-    Gfx* newDlist;
+    Gfx* newDList;
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
@@ -125,19 +125,19 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     pos.y = jointTable[LIMB_ROOT_POS].y;
     pos.z = jointTable[LIMB_ROOT_POS].z;
     rot = jointTable[LIMB_ROOT_ROT];
-    newDlist = rootLimb->dList;
+    newDList = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
         transformLimbDraw(play, 1, actor, &gfx);
 
-        if (newDlist != NULL) {
+        if (newDList != NULL) {
             Matrix_ToMtx(mtx);
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, newDlist);
+            gSPDisplayList(gfx++, newDList);
             mtx++;
         } else if (limbDList != NULL) {
             Matrix_ToMtx(mtx);
@@ -589,8 +589,8 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
 Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
-    s16 time1 = TIME_TO_MINUTES_F(CURRENT_TIME);
-    s16 time2 = TIME_TO_MINUTES_F(CURRENT_TIME);
+    s16 time1 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s16 time2 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
     s32 time = ((time1 % 60) + (time2 / 60) * 60) / 30;
     s32 day = CURRENT_DAY;
 
@@ -967,7 +967,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
     }
 }
 
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[],
                        s8 parentBodyParts[]) {
     Vec3f pos;
     Vec3f startVec;
@@ -982,9 +982,9 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
-            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
-            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
-            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * weight + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * weight + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * weight + (bodyPartPos->z - worldPos->z);
         } else {
             bodyPartPos = &bodyPartsPos[i];
 

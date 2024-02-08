@@ -395,7 +395,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
 void func_80B0FFA8(EnGb2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -563,7 +563,7 @@ void func_80B10584(EnGb2* this, PlayState* play) {
 void func_80B10634(EnGb2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -766,7 +766,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10E98(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -810,7 +810,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 }
 
 void func_80B110F8(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;

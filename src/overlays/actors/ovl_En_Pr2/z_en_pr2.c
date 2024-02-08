@@ -702,7 +702,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;
@@ -728,7 +728,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;

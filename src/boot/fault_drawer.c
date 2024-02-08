@@ -7,7 +7,8 @@
 
 #include "fault.h"
 #include "fault_internal.h"
-#include "global.h"
+
+#include "macros.h"
 #include "vt.h"
 
 typedef struct {

@@ -146,7 +146,7 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, vo
     if (gLoadLogSeverity >= 3) {}
 
     end = (uintptr_t)allocatedRamAddr + size;
-    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
+    DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
 
     ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
@@ -191,7 +191,7 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vra
 
     if (gLoadLogSeverity >= 3) {}
 
-    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
+    DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
 
     if (gLoadLogSeverity >= 3) {}
 

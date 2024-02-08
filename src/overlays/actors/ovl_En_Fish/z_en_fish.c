@@ -563,7 +563,7 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     s16 phi_v1;
 
     Math_SmoothStepToF(&this->actor.speed, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
-    phi_v1 = (s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f;
+    phi_v1 = TRUNCF_BINANG((s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f);
     if (sp40 & 4) {
         phi_v1 *= -1;
     }

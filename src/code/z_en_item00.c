@@ -415,7 +415,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
             }
-            this->actor.home.rot.z += (s16)((this->actor.velocity.y + 3.0f) * 1000.0f);
+            this->actor.home.rot.z += TRUNCF_BINANG((this->actor.velocity.y + 3.0f) * 1000.0f);
             this->actor.world.pos.x +=
                 (Math_CosS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
             this->actor.world.pos.z +=

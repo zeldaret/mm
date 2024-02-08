@@ -575,7 +575,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         gDPSetEnvColor((*gfx)++, envColor, envColor, envColor, envColor);
 
         if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            rotX = (s16)(this->timer * 6144.0f * (1 / 9.0f));
+            rotX = TRUNCF_BINANG(this->timer * 6144.0f * (1 / 9.0f));
             rot->x -= rotX;
         } else if (this->actionFunc == EnBigokuta_HoldPlayer) {
             if (this->timer == 1) {

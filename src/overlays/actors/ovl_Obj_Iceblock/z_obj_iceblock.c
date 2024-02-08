@@ -258,13 +258,13 @@ void func_80A23938(ObjIceblock* this) {
         }
 
         Math_StepToF(&ptr->unk_1C, phi_f0, 0.04f);
-        ptr->unk_22 += (s16)(ptr->unk_20 * -0.02f);
+        ptr->unk_22 += TRUNCF_BINANG(ptr->unk_20 * -0.02f);
         ptr->unk_22 = func_80A23090(ptr->unk_22, 50, 800);
         ptr->unk_20 += ptr->unk_22;
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += TRUNCF_BINANG(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 

@@ -1332,7 +1332,7 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
 void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
@@ -1372,13 +1372,13 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == TEXT_STATE_16) {
+    } else if (talkState == TEXT_STATE_PAUSE_MENU) {
         func_80BEE73C(this, play);
     }
 }
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_33C = 0;
@@ -1403,7 +1403,7 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENAKINDONUTS_ANIM_6);
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;

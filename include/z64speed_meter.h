@@ -1,13 +1,15 @@
 #ifndef Z64SPEED_METER_H
 #define Z64SPEED_METER_H
 
-#include "ultra64.h"
+#include "PR/ultratypes.h"
+#include "PR/os_time.h"
+#include "unk.h"
 
 struct GameState;
 struct GraphicsContext;
 
 typedef struct SpeedMeter {
-    /* 0x00 */ char unk_00[0x18];
+    /* 0x00 */ UNK_TYPE1 unk_00[0x18];
     /* 0x18 */ s32 x; // Unused
     /* 0x1C */ s32 y;
 } SpeedMeter; // size = 0x20

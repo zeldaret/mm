@@ -893,7 +893,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
             return true;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play) && func_80B795A0(play, this, arg2)) {
                 msgCtx->msgMode = MSGMODE_TEXT_CLOSING;
                 ret = true;

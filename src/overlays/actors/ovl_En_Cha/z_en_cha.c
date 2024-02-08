@@ -97,7 +97,7 @@ void EnCha_Idle(EnCha* this, PlayState* play) {
         }
     }
     this->actor.home.rot.x += this->actor.home.rot.z;
-    this->actor.home.rot.z -= (s16)(this->actor.home.rot.x * 0.1f);
+    this->actor.home.rot.z -= TRUNCF_BINANG(this->actor.home.rot.x * 0.1f);
     this->actor.home.rot.z *= 0.96f;
 }
 

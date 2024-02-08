@@ -1018,7 +1018,7 @@ static s8 sLimbToBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
     s32 armorBodyPart = sLimbToArmorBodyParts[limbIndex];
-    Gfx* xlu;
+    Gfx* gfx;
     IronKnuckleEffect* ikEffect;
     s16 sp76;
     Vec3f vtxC;
@@ -1078,11 +1078,11 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
          (sIronKnuckleArmorMarkings[armorBodyPart].unk00 != NULL))) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        xlu = POLY_XLU_DISP;
+        gfx = POLY_XLU_DISP;
 
-        gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[armorBodyPart].unk00);
-        POLY_XLU_DISP = &xlu[2];
+        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[1], sIronKnuckleArmorMarkings[armorBodyPart].unk00);
+        POLY_XLU_DISP = &gfx[2];
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

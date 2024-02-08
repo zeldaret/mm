@@ -664,7 +664,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
             EnMa4_HandlePlayerChoice(this, play);
             break;
 
-        case TEXT_STATE_5: // End message block
+        case TEXT_STATE_EVENT: // End message block
             EnMa4_ChooseNextDialogue(this, play);
             break;
 
@@ -676,9 +676,9 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
             }
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         default:
@@ -809,7 +809,7 @@ void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_BeginEponasSongCs;
 }
 
-// Epona's Song cutscene is an ActorCutscene
+// Epona's Song cutscene is an CutsceneEntry
 void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
     s16 csId = this->actor.csId;
 

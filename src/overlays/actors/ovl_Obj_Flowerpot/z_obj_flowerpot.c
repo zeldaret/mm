@@ -633,7 +633,7 @@ void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
     Actor_MoveWithGravity(thisx);
 
     if (!(this->unk_1EA & 2)) {
-        D_80A1D3F8 += (s16)(thisx->shape.rot.x * -0.06f);
+        D_80A1D3F8 += TRUNCF_BINANG(thisx->shape.rot.x * -0.06f);
     } else {
         Math_StepToS(&D_80A1D3F8, 0, 80);
         Math_StepToS(&D_80A1D3FC, 0, 20);

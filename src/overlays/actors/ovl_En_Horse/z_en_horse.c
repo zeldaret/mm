@@ -4121,7 +4121,7 @@ void EnHorse_TiltBody(EnHorse* this, PlayState* play) {
 
     speed = this->actor.speed / this->boostSpeed;
     turnVel = this->actor.shape.rot.y - this->lastYaw;
-    targetRoll = -((s16)((2730.0f * speed) * (turnVel / 960.00006f)));
+    targetRoll = -TRUNCF_BINANG((2730.0f * speed) * (turnVel / 960.00006f));
     rollDiff = targetRoll - this->actor.world.rot.z;
 
     if (fabsf(targetRoll) < 100.0f) {
@@ -4316,22 +4316,22 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
 
         if (this->type == HORSE_TYPE_2) {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
         } else {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
         }
 
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderCylinder1.base);

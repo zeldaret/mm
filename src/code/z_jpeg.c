@@ -53,10 +53,10 @@ void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     workBuf->taskData.qTableVPtr = &workBuf->qTableV;
 
     sJpegTask.flags = 0;
-    sJpegTask.ucodeBoot = SysUcode_GetUCodeBoot();
-    sJpegTask.ucodeBootSize = SysUcode_GetUCodeBootSize();
-    sJpegTask.yieldDataPtr = (u64*)&workBuf->yieldData;
-    sJpegTask.dataPtr = (u64*)&workBuf->taskData;
+    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
+    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
+    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
+    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
 
     jpegCtx->scTask.next = NULL;
     jpegCtx->scTask.flags = OS_SC_NEEDS_RSP;
@@ -65,8 +65,8 @@ void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     jpegCtx->scTask.framebuffer = NULL;
     jpegCtx->scTask.list.t = sJpegTask;
 
-    osSendMesg(&gSchedContext.cmdQ, (OSMesg*)&jpegCtx->scTask, OS_MESG_BLOCK);
-    Sched_SendEntryMsg(&gSchedContext); // osScKickEntryMsg
+    osSendMesg(&gScheduler.cmdQueue, (OSMesg*)&jpegCtx->scTask, OS_MESG_BLOCK);
+    Sched_SendNotifyMsg(&gScheduler); // osScKickEntryMsg
     osRecvMesg(&jpegCtx->mq, NULL, OS_MESG_BLOCK);
 }
 
@@ -223,7 +223,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     }
 
     osCreateMesgQueue(&jpegCtx.mq, &jpegCtx.msg, 1);
-    MsgEvent_SendNullTask();
+    Sched_FlushTaskQueue();
 
     jpegCtx.workBuf = workBuff;
 

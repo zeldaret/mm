@@ -36,39 +36,7 @@ typedef enum EnNbScheduleResult {
     /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
-static u8 sScheduleScript[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x21 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12 - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x0F - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0F */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x12 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x20 - 0x16),
-    /* 0x16 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x1D - 0x1C),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_4),
-    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x72 - 0x25),
-    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x47 - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x44 - 0x2F),
-    /* 0x2F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x41 - 0x35),
-    /* 0x35 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x3E - 0x3B),
-    /* 0x3B */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
-    /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x57 - 0x4B),
-    /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
-    /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x57 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x70 - 0x5D),
-    /* 0x5D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x6E - 0x63),
-    /* 0x63 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x6C - 0x69),
-    /* 0x69 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x6C */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_1),
-    /* 0x6E */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_2),
-    /* 0x70 */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_1),
-    /* 0x72 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "build/src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
 
 u8 D_80BC1464[] = {
     0x1B, 0x04, 0x08, 0x00, 0x6A, 0x0A, 0x00, 0x10, 0x00, 0x08, 0x00, 0x10, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x0E,
@@ -324,7 +292,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_2:
             // Slowly increase alpha to fill the screen with a black rectangle
-            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
+            R_PLAY_FILL_SCREEN_ALPHA = TRUNCF_BINANG(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {
@@ -413,8 +381,8 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
                 this->unk_26C = 0.0f;
