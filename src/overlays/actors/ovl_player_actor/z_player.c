@@ -3,6 +3,8 @@
  * Overlay: ovl_player_actor
  * Description: Player
  */
+
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "z64malloc.h"

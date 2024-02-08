@@ -1,7 +1,8 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "libc/string.h"
 
-static CutsceneCamera* sCurCsCamera;
+CutsceneCamera* sCurCsCamera;
 
 typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
 
@@ -789,7 +790,7 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
     return 0;
 }
 
-static f32 sKnots[38];
+f32 sKnots[38];
 
 // Only used by unused CutsceneCamera_Interp_Unused
 void func_80162FF8(s16 arg0) {

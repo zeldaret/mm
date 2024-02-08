@@ -10,6 +10,17 @@ s16 gPlayerFormObjectIds[PLAYER_FORM_MAX] = {
 
 ObjectId gObjectTableSize = OBJECT_ID_MAX;
 
+// Segment declarations (also used in the table below)
+#define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
+#define DEFINE_OBJECT_UNSET(_enumValue)
+#define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)
+
+#include "tables/object_table.h"
+
+#undef DEFINE_OBJECT
+#undef DEFINE_OBJECT_UNSET
+#undef DEFINE_OBJECT_SIZE_ZERO
+
 // Object Table definition
 #define DEFINE_OBJECT(name, _enumValue) { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) },
 #define DEFINE_OBJECT_UNSET(_enumValue) { 0, 0 },
