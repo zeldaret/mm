@@ -2,6 +2,7 @@
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
 #include "sys_ucode.h"
+#include "z64lifemeter.h"
 #include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"

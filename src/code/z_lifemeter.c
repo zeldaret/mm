@@ -1,4 +1,6 @@
 #include "prevent_bss_reordering.h"
+#include "z64lifemeter.h"
+
 #include "global.h"
 #include "su_mtx.h"
 

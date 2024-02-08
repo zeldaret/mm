@@ -231,15 +231,6 @@ void KaleidoSetup_Update(PlayState* play);
 void KaleidoSetup_Init(PlayState* play);
 void KaleidoSetup_Destroy(PlayState* play);
 
-void LifeMeter_Init(PlayState* play);
-void LifeMeter_UpdateColors(PlayState* play);
-s32 LifeMeter_SaveInterfaceHealth(PlayState* play);
-s32 LifeMeter_IncreaseInterfaceHealth(PlayState* play);
-s32 LifeMeter_DecreaseInterfaceHealth(PlayState* play);
-void LifeMeter_Draw(PlayState* play);
-void LifeMeter_UpdateSizeAndBeep(PlayState* play);
-u32 LifeMeter_IsCritical(void);
-
 // void func_80102E40(void);
 // void func_80102E90(void);
 // void func_80102EA4(void);
