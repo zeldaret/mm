@@ -72,7 +72,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
 void Object_UpdateEntries(ObjectContext* objectCtx) {
     s32 i;
     ObjectEntry* entry = &objectCtx->slots[0];
-    ObjectOverlay* objectFile;
+    RomFile* objectFile;
     size_t size;
 
     for (i = 0; i < objectCtx->numEntries; i++) {
@@ -234,8 +234,8 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
     static RomFile naviQuestHintFiles[2] = {
-        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
-        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
+        ROM_FILE(elf_message_field),
+        ROM_FILE(elf_message_ydan),
     };
 
     if (cmd->specialFiles.subKeepId != 0) {
@@ -357,15 +357,15 @@ void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
  */
 void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
-        { 0, 0 }, // Default
-        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
-        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
-        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
-        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
-        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
-        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
-        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
-        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
+        ROM_FILE_UNSET, // Default
+        ROM_FILE(scene_texture_01),
+        ROM_FILE(scene_texture_02),
+        ROM_FILE(scene_texture_03),
+        ROM_FILE(scene_texture_04),
+        ROM_FILE(scene_texture_05),
+        ROM_FILE(scene_texture_06),
+        ROM_FILE(scene_texture_07),
+        ROM_FILE(scene_texture_08),
     };
     uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
