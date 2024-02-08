@@ -26,7 +26,7 @@ ObjectId gObjectTableSize = OBJECT_ID_MAX;
 #define DEFINE_OBJECT_UNSET(_enumValue) { 0, 0 },
 #define DEFINE_OBJECT_SIZE_ZERO(name, _enumValue) { SEGMENT_ROM_START(name), SEGMENT_ROM_START(name) },
 
-RomFile gObjectTable[] = {
+ObjectOverlay gObjectTable[] = {
 #include "tables/object_table.h"
 };
 

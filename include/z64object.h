@@ -3,10 +3,10 @@
 
 #include "libc/stdint.h"
 
-typedef struct RomFile {
+typedef struct ObjectOverlay {
     /* 0x0 */ uintptr_t vromStart;
     /* 0x4 */ uintptr_t vromEnd;
-} RomFile; // size = 0x8
+} ObjectOverlay; // size = 0x8
 
 #define DEFINE_OBJECT(_name, enumValue) enumValue,
 #define DEFINE_OBJECT_UNSET(enumValue) enumValue,
@@ -22,6 +22,6 @@ typedef enum ObjectId {
 #undef DEFINE_OBJECT_SIZE_ZERO
 
 extern ObjectId gObjectTableSize;
-extern RomFile gObjectTable[OBJECT_ID_MAX];
+extern ObjectOverlay gObjectTable[OBJECT_ID_MAX];
 
 #endif

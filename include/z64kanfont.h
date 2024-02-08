@@ -12,7 +12,7 @@ struct PlayState;
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // Font textures are loaded into here
-typedef struct {
+typedef struct Font {
     /* 0x00000 */ union {
         u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
         u64 force_structure_alignment_charTex;

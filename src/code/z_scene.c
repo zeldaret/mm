@@ -72,7 +72,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
 void Object_UpdateEntries(ObjectContext* objectCtx) {
     s32 i;
     ObjectEntry* entry = &objectCtx->slots[0];
-    RomFile* objectFile;
+    ObjectOverlay* objectFile;
     size_t size;
 
     for (i = 0; i < objectCtx->numEntries; i++) {
