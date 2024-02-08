@@ -237,11 +237,6 @@ void KaleidoSetup_Update(PlayState* play);
 void KaleidoSetup_Init(PlayState* play);
 void KaleidoSetup_Destroy(PlayState* play);
 
-void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset);
-void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
-void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
-void Font_LoadOrderedFont(Font* font);
-
 void LifeMeter_Init(PlayState* play);
 void LifeMeter_UpdateColors(PlayState* play);
 s32 LifeMeter_SaveInterfaceHealth(PlayState* play);
