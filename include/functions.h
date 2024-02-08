@@ -196,11 +196,6 @@ s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
 void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount, s32 effectsPerBodyPart, f32 scale, f32 scaleRange);
 
-void ActorOverlayTable_FaultClient(void* arg0, void* arg1);
-uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param);
-void ActorOverlayTable_Init(void);
-void ActorOverlayTable_Cleanup(void);
-
 void DynaPolyActor_UpdateCarriedActorPos(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
 void DynaPolyActor_UpdateCarriedActorRotY(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
 void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedActor, s32 bgId);

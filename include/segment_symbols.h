@@ -85,16 +85,6 @@ DECLARE_SEGMENT(system_heap)
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
 
-#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(_name, _enumValue, _allocType, _debugName)
-#define DEFINE_ACTOR_UNSET(_enumValue)
-
-#include "tables/actor_table.h"
-
-#undef DEFINE_ACTOR
-#undef DEFINE_ACTOR_INTERNAL
-#undef DEFINE_ACTOR_UNSET
-
 #define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
 #define DEFINE_OBJECT_UNSET(_enumValue)
 #define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)

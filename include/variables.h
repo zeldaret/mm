@@ -6,8 +6,6 @@
 #include "macros.h"
 
 // data
-extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
-extern ActorId gMaxActorId;
 
 extern u32 gBitFlags[32];
 extern u16 gEquipMasks[];
