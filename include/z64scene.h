@@ -2,8 +2,9 @@
 #define Z64SCENE_H
 
 #include "ultra64.h"
-#include "z64dma.h"
 #include "z64cutscene.h"
+#include "z64dma.h"
+#include "z64path.h"
 #include "unk.h"
 
 struct GameState;
@@ -471,16 +472,6 @@ typedef struct {
     /* 0x00B */ u8 subKeepSlot; // "gameplay_field_keep" or "gameplay_dangeon_keep" slot
     /* 0x00C */ ObjectEntry slots[35];
 } ObjectContext; // size = 0x958
-
-#define PATH_INDEX_NONE -1
-#define ADDITIONAL_PATH_INDEX_NONE (u8)-1
-
-typedef struct {
-    /* 0x0 */ u8 count; // Number of points in the path
-    /* 0x1 */ u8 additionalPathIndex;
-    /* 0x2 */ s16 customValue; // Path specific to help distinguish different paths
-    /* 0x4 */ Vec3s* points; // Segment Address to the array of points
-} Path; // size = 0x8
 
 typedef struct {
     /* 0x0 */ UNK_TYPE2 unk0;

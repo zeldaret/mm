@@ -411,10 +411,6 @@ Vec3s OLib_Vec3fDiffBinAng(Vec3f* a, Vec3f* b);
 void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 void OLib_Vec3fAdd(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 
-Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone);
-f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
-void Path_CopyLastPoint(Path* path, Vec3f* dest);
-
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
 size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
