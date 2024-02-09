@@ -584,7 +584,7 @@
             0x801D1530 : "padmgr",
             0x801D1540 : "speed_meter",
             0x801D1570 : "sys_math",
-            0x801D15B0 : "",
+            0x801D15B0 : "sys_math3d",
             0x801D15D0 : "sys_math_atan",
             0x801D1DE0 : "sys_matrix",
             0x801D1E60 : "sys_ucode",

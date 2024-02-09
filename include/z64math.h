@@ -138,6 +138,9 @@ typedef union {
     };
 } MtxF; // size = 0x40
 
+extern Vec3f gZeroVec3f;
+extern Vec3s gZeroVec3s;
+
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define LERPIMP_ALT(v0, v1, t) (((v1) - (v0)) * (t) + (v0))
 #define S16_LERP(v0, v1, t) ((s16)(((v1) - (v0)) * (t)) + (v0))
