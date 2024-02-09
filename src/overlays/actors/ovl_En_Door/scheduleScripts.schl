@@ -74,7 +74,7 @@ sDoorSch_PostOffice {
                 }
             } else {
                 if_since_time (13, 0) {
-                    //! @bug Theis in-game message expliclty says the office should be open up to 15:00 (3 p.m.)
+                    //! @bug The in-game message expliclty says the office should be open up to 15:00 (3 p.m.)
                     //! Maybe it was a typo between 3 (p.m.) and 13?
                     // Closed between 13:00 ~ 09:00
                     return_s (0x9)
