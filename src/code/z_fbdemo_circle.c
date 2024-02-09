@@ -93,7 +93,7 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     }
 }
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
     Gfx* gfx = *gfxp;
     s32 xh = gCfbWidth;

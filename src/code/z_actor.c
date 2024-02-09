@@ -2821,7 +2821,7 @@ s32 Actor_AddToLensActors(PlayState* play, Actor* actor) {
 }
 
 void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
-    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, 4, 0, 6, 6,
+    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, G_IM_FMT_I, 0, 6, 6,
                                        ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
