@@ -233,7 +233,7 @@ void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd) {
 void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
-    static RomFile naviQuestHintFiles[2] = {
+    static RomFile sNaviQuestHintFiles[2] = {
         ROM_FILE(elf_message_field),
         ROM_FILE(elf_message_ydan),
     };
@@ -245,7 +245,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &sNaviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -356,7 +356,7 @@ void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
  * These later are stored in segment 0x06, and used in maps.
  */
 void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
-    static RomFile sceneTextureFiles[9] = {
+    static RomFile sSceneTextureFiles[9] = {
         ROM_FILE_UNSET, // Default
         ROM_FILE(scene_texture_01),
         ROM_FILE(scene_texture_02),
@@ -367,8 +367,8 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
         ROM_FILE(scene_texture_07),
         ROM_FILE(scene_texture_08),
     };
-    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
-    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    uintptr_t vromStart = sSceneTextureFiles[fileIndex].vromStart;
+    size_t size = sSceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
