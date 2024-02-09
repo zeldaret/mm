@@ -87,7 +87,6 @@ typedef enum EnDoorScheduleType {
     /* 32 */ ENDOOR_SCH_TYPE_MAX
 } EnDoorScheduleType;
 
-// ENDOOR_TYPE_FRAMED
 typedef enum EnDoorFramedType {
     /* 0 */ ENDOOR_FRAMED_FRAME,
     /* 1 */ ENDOOR_FRAMED_NOFRAME
