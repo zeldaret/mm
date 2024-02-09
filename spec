@@ -4734,8 +4734,7 @@ beginseg
     name "ovl_En_Kitan"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Kitan/z_en_kitan.o"
-    include "$(BUILD_DIR)/data/ovl_En_Kitan/ovl_En_Kitan.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Kitan/ovl_En_Kitan.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Kitan/ovl_En_Kitan_reloc.o"
 endseg
 
 beginseg
