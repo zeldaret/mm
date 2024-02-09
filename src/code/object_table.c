@@ -13,18 +13,18 @@ ObjectId gObjectTableSize = OBJECT_ID_MAX;
 // Segment declarations (also used in the table below)
 #define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
 #define DEFINE_OBJECT_UNSET(_enumValue)
-#define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)
+#define DEFINE_OBJECT_EMPTY(_name, _enumValue)
 
 #include "tables/object_table.h"
 
 #undef DEFINE_OBJECT
 #undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_SIZE_ZERO
+#undef DEFINE_OBJECT_EMPTY
 
 // Object Table definition
 #define DEFINE_OBJECT(name, _enumValue) ROM_FILE(name),
 #define DEFINE_OBJECT_UNSET(_enumValue) ROM_FILE_UNSET,
-#define DEFINE_OBJECT_SIZE_ZERO(name, _enumValue) { SEGMENT_ROM_START(name), SEGMENT_ROM_START(name) },
+#define DEFINE_OBJECT_EMPTY(name, _enumValue) ROM_FILE_EMPTY(name),
 
 RomFile gObjectTable[] = {
 #include "tables/object_table.h"
@@ -32,4 +32,4 @@ RomFile gObjectTable[] = {
 
 #undef DEFINE_OBJECT
 #undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_SIZE_ZERO
+#undef DEFINE_OBJECT_EMPTY

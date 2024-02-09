@@ -5,7 +5,7 @@
 
 #define DEFINE_OBJECT(_name, enumValue) enumValue,
 #define DEFINE_OBJECT_UNSET(enumValue) enumValue,
-#define DEFINE_OBJECT_SIZE_ZERO(_name, enumValue) enumValue,
+#define DEFINE_OBJECT_EMPTY(_name, enumValue) enumValue,
 
 typedef enum ObjectId {
     #include "tables/object_table.h"
@@ -14,7 +14,7 @@ typedef enum ObjectId {
 
 #undef DEFINE_OBJECT
 #undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_SIZE_ZERO
+#undef DEFINE_OBJECT_EMPTY
 
 extern ObjectId gObjectTableSize;
 extern RomFile gObjectTable[OBJECT_ID_MAX];

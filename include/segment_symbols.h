@@ -36,6 +36,8 @@
 
 #define ROM_FILE(name) \
     { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }
+#define ROM_FILE_EMPTY(name) \
+    { SEGMENT_ROM_START(name), SEGMENT_ROM_START(name) }
 #define ROM_FILE_UNSET \
     { 0, 0 }
 
