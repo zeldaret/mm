@@ -4952,7 +4952,7 @@
     0x80866398:("EnLight_Draw",),
     0x80866800:("EnDoor_Init",),
     0x808669E0:("EnDoor_Destroy",),
-    0x80866A5C:("EnDoor_SetupType",),
+    0x80866A5C:("EnDoor_WaitForObject",),
     0x80866B20:("EnDoor_Idle",),
     0x80866F94:("EnDoor_OpenScheduleActor",),
     0x8086704C:("EnDoor_AjarWait",),

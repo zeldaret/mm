@@ -30,7 +30,7 @@ EnDoor* SubS_FindDoorSchedule(PlayState* play, s32 schType) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->actionVar.schType == (u8)schType)) {
+        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->typeVar.schType == (u8)schType)) {
             break;
         }
 

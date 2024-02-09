@@ -40,7 +40,7 @@ void EnDoor_OpenScheduleActor(EnDoor* this, PlayState* play);
 void EnDoor_AjarOpen(EnDoor* this, PlayState* play);
 void EnDoor_Open(EnDoor* this, PlayState* play);
 void EnDoor_AjarClose(EnDoor* this, PlayState* play);
-void EnDoor_SetupType(EnDoor* this, PlayState* play);
+void EnDoor_WaitForObject(EnDoor* this, PlayState* play);
 
 #include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
@@ -335,9 +335,9 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->knobDoor.dyna.actor, sInitChain);
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
-    this->actionVar.actionVar = ENDOOR_GET_ACTION_VAR(thisx);
+    this->typeVar.data = ENDOOR_GET_TYPE_VAR(thisx);
 
-    if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->actionVar.frameType == ENDOOR_FRAMED_FRAME)) {
+    if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->typeVar.frameType == ENDOOR_FRAMED_FRAME)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gFramedDoorCol);
     }
@@ -346,7 +346,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
                    this->limbTable, DOOR_LIMB_MAX);
 
     if (this->doorType == ENDOOR_TYPE_SCHEDULE) {
-        objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->actionVar.schType];
+        objectInfo = &sObjectInfo[DOOR_OBJKIND_SCHEDULE + this->typeVar.schType];
     } else {
         // Look for the EnDoorInfo corresponding to the current scene.
         // If no EnDoorInfo matches the current scene then objectInfo will point to the GAMEPLAY_KEEP one
@@ -381,12 +381,12 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     this->knobDoor.objectSlot = objectSlot;
     this->knobDoor.dlIndex = objectInfo->dListIndex;
 
-    // If the object that will be used is the one from the InitVars then call EnDoor_SetupType directly since we know
-    // the object will be loaded before this actor has spawned
+    // If the object that will be used is the one from the InitVars then call EnDoor_WaitForObject directly since we
+    // know the object will be loaded before this actor has spawned
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
-        EnDoor_SetupType(this, play);
+        EnDoor_WaitForObject(this, play);
     } else {
-        this->actionFunc = EnDoor_SetupType;
+        this->actionFunc = EnDoor_WaitForObject;
     }
 
     Actor_SetFocus(&this->knobDoor.dyna.actor, 35.0f);
@@ -402,13 +402,12 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
-    } else if (this->actionVar.frameType == ENDOOR_FRAMED_FRAME) {
+    } else if (this->typeVar.frameType == ENDOOR_FRAMED_FRAME) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->knobDoor.dyna.bgId);
     }
 }
 
-// Alternative: EnDoor_WaitForObject
-void EnDoor_SetupType(EnDoor* this, PlayState* play) {
+void EnDoor_WaitForObject(EnDoor* this, PlayState* play) {
     if (!Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
         return;
     }
@@ -418,7 +417,7 @@ void EnDoor_SetupType(EnDoor* this, PlayState* play) {
     this->knobDoor.dyna.actor.world.rot.y = 0;
 
     if (this->doorType == ENDOOR_TYPE_LOCKED) {
-        if (!Flags_GetSwitch(play, this->actionVar.switchFlag)) {
+        if (!Flags_GetSwitch(play, this->typeVar.switchFlag)) {
             this->lockTimer = 10;
         }
     } else if ((this->doorType == ENDOOR_TYPE_AJAR) &&
@@ -429,7 +428,8 @@ void EnDoor_SetupType(EnDoor* this, PlayState* play) {
     }
 }
 
-s32 D_80867BC0;
+// Set to true when the MilkBar door acknowledges player is a member
+s32 sDoorIsMilkBarMember;
 
 /**
  * Closed door waiting for interaction.
@@ -438,7 +438,7 @@ s32 D_80867BC0;
  * - Handle opening request from player
  * - Handle opening request from schedule actor
  * - If not on cs mode:
- *   - If D_80867BC0 or player is near the door and looking at it
+ *   - If sDoorIsMilkBarMember or player is near the door and looking at it
  *     - Set this door as the one Player can interact with
  *     - If it is a locked door
  *       - Handle loocked door
@@ -459,7 +459,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
     // 0x1821: Player is a member of the Milk bar
     if (Actor_TalkOfferAccepted(&this->knobDoor.dyna.actor, &play->state) &&
         (this->knobDoor.dyna.actor.textId == 0x1821)) {
-        D_80867BC0 = true;
+        sDoorIsMilkBarMember = true;
     }
 
     if (this->knobDoor.requestOpen) {
@@ -472,7 +472,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
         // If this is a locked door then handle small key counts, sfx and switch flag
         if (this->lockTimer != 0) {
             DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
-            Flags_SetSwitch(play, this->actionVar.switchFlag);
+            Flags_SetSwitch(play, this->typeVar.switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->openTimer != 0) {
@@ -485,8 +485,8 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
 
         // Check if player is near this door and looking at it
         Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
-        if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
-                           (fabsf(playerPosRelToDoor.z) < 50.0f))) {
+        if (sDoorIsMilkBarMember || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
+                                     (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             s16 yawDiff = player->actor.shape.rot.y - this->knobDoor.dyna.actor.shape.rot.y;
 
             if (playerPosRelToDoor.z > 0.0f) {
@@ -514,9 +514,8 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                            (this->doorType == ENDOOR_TYPE_NIGHT)) {
                     s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
-                    s16 openBit =
-                        D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck)];
-                    s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(this->actionVar.halfDayCheck);
+                    s16 openBit = D_801AED48[ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(this->typeVar.halfDayCheck)];
+                    s32 textIdOffset = ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(this->typeVar.halfDayCheck);
 
                     // Check if the door should be closed, and prompt a message if its the case
                     if (((this->doorType == ENDOOR_TYPE_WHOLE_DAY) &&
@@ -540,13 +539,13 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 } else if ((this->doorType == ENDOOR_TYPE_SCHEDULE) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput scheduleOutput;
 
-                    if (Schedule_RunScript(play, sDoorSchedules[this->actionVar.schType], &scheduleOutput)) {
+                    if (Schedule_RunScript(play, sDoorSchedules[this->typeVar.schType], &scheduleOutput)) {
                         this->knobDoor.dyna.actor.textId = scheduleOutput.result + 0x1800;
 
                         // 0x1821: Player is a member of the Milk bar
                         // When player closes this specific message then the door changes to PLAYER_DOORTYPE_PROXIMITY,
                         // allowing player to open the door without having to press the A button again
-                        player->doorType = ((this->knobDoor.dyna.actor.textId == 0x1821) && D_80867BC0)
+                        player->doorType = ((this->knobDoor.dyna.actor.textId == 0x1821) && sDoorIsMilkBarMember)
                                                ? PLAYER_DOORTYPE_PROXIMITY
                                                : PLAYER_DOORTYPE_TALKING;
                     }
@@ -678,7 +677,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->actionVar.frameType == ENDOOR_FRAMED_FRAME)) {
+        if ((this->doorType == ENDOOR_TYPE_FRAMED) && (this->typeVar.frameType == ENDOOR_FRAMED_FRAME)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);

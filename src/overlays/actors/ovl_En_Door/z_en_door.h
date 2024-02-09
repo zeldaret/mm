@@ -9,7 +9,7 @@
  * Actor Parameters
  *
  * |                  |       |
- * | Transition Index | Type  | Action var
+ * | Transition Index | Type  | Type var
  * |------------------|-------|---------------
  * | 0 0 0 0 0 0      | 0 0 0 | 0 0 0 0 0 0 0
  * | 6                | 3     | 7
@@ -17,10 +17,10 @@
  *
  * Transition Index     1111110000000000    Set by the actor engine when the door is spawned (See Actor_SpawnTransitionActors and DOOR_GET_TRANSITION_ID)
  * Type                 0000001110000000    Values of the EnDoorType enum
- * Action var           0000000001111111    Generic extra parameter. It is used differently by each door Type (or not used at all)
+ * Type var             0000000001111111    Generic extra parameter. It is used differently by each door Type (or not used at all)
  *
  *
- * If type is either ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY or ENDOOR_TYPE_NIGHT then the Action var is bitpacked like this:
+ * If type is either ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY or ENDOOR_TYPE_NIGHT then the Type var is bitpacked like this:
  *
  * |             |
  * | Text offset | Half day bit index
@@ -93,15 +93,15 @@ typedef enum EnDoorFramedType {
 } EnDoorFramedType;
 
 #define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
-#define ENDOOR_GET_ACTION_VAR(thisx) (((thisx)->params) & 0x7F)
+#define ENDOOR_GET_TYPE_VAR(thisx) (((thisx)->params) & 0x7F)
 
 // TODO: rename after D_801AED48
-#define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(actionVar) ((actionVar) & 0x7)
-#define ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(actionVar) (((actionVar) >> 3) & 0xF)
+#define ENDOOR_GET_HALFDAYBIT_INDEX_FROM_HALFDAYCHECK(typeVar) ((typeVar) & 0x7)
+#define ENDOOR_GET_TEXTOFFSET_FROM_HALFDAYCHECK(typeVar) (((typeVar) >> 3) & 0xF)
 
 #define ENDOOR_PACK_HALFDAYCHECK(halfDayBitIndex, textOffset) ((((textOffset) & 0xF) << 3) | ((halfDayBitIndex) & 0x7))
 
-#define ENDOOR_PARAMS(type, actionVar) ((((type) & 7) << 7) | ((actionVar) & 0x7F))
+#define ENDOOR_PARAMS(type, typeVar) ((((type) & 7) << 7) | ((typeVar) & 0x7F))
 
 /**
  * `scheduleType` must be a value of the `EnDoorScheduleType` enum
@@ -117,12 +117,12 @@ typedef struct EnDoor {
     /* 0x000 */ KnobDoorActor knobDoor;
     /* 0x1A4 */ u8 doorType; // EnDoorType enum
     /* 0x1A5 */ union {
-                    u8 actionVar; // generic
+                    u8 data; // generic
                     u8 halfDayCheck; // ENDOOR_TYPE_WHOLE_DAY, ENDOOR_TYPE_DAY and ENDOOR_TYPE_NIGHT
                     u8 switchFlag; // ENDOOR_TYPE_LOCKED
                     u8 schType; // ENDOOR_TYPE_SCHEDULE
                     u8 frameType; // ENDOOR_TYPE_FRAMED
-                } actionVar; // TODO: think on a better name
+                } typeVar;
     /* 0x1A6 */ u8 lockTimer; // Used by ENDOOR_TYPE_LOCKED. Also controls drawing the lock on the door and side effects of opening a locked door, like decreasing the key count and updating the switch flag
     /* 0x1A7 */ s8 openTimer; // For how long the door will be open. positive/negative means the opening direction. It is meant to be used only by ENDOOR_TYPE_SCHEDULE, and set by schedule actors. See EnDoor_OpenScheduleActor.
     /* 0x1A8 */ Vec3s limbTable[DOOR_LIMB_MAX];

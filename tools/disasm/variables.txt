@@ -5405,7 +5405,7 @@
     0x80867998:("sAnimCloseFrames","u8","[10]",0x10),
     0x808679A4:("sDoorDLists","UNK_TYPE1","",0x1),
     0x80867A20:("D_80867A20","f32","",0x4),
-    0x80867BC0:("D_80867BC0","UNK_TYPE1","",0x1),
+    0x80867BC0:("sDoorIsMilkBarMember","UNK_TYPE1","",0x1),
     0x80869B30:("En_Box_InitVars","UNK_TYPE1","",0x1),
     0x80869B50:("D_80869B50","UNK_TYPE1","",0x1),
     0x80869B54:("D_80869B54","UNK_TYPE4","",0x4),
