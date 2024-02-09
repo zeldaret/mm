@@ -2630,7 +2630,7 @@ asm/non_matchings/code/audio_thread_manager/AudioMgr_HandlePreNMI.s,AudioMgr_Han
 asm/non_matchings/code/audio_thread_manager/AudioMgr_ThreadEntry.s,AudioMgr_ThreadEntry,0x80172ED0,0x5E
 asm/non_matchings/code/audio_thread_manager/AudioMgr_Unlock.s,AudioMgr_Unlock,0x80173048,0xB
 asm/non_matchings/code/audio_thread_manager/AudioMgr_Init.s,AudioMgr_Init,0x80173074,0x2F
-asm/non_matchings/code/title_setup/Setup_SetRegs.s,Setup_SetRegs,0x80173130,0x6B
+asm/non_matchings/code/title_setup/Setup_InitRegs.s,Setup_InitRegs,0x80173130,0x6B
 asm/non_matchings/code/title_setup/Setup_InitImpl.s,Setup_InitImpl,0x801732DC,0x14
 asm/non_matchings/code/title_setup/Setup_Destroy.s,Setup_Destroy,0x8017332C,0x3
 asm/non_matchings/code/title_setup/Setup_Init.s,Setup_Init,0x80173338,0xA
