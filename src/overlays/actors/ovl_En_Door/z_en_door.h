@@ -51,7 +51,6 @@ typedef enum EnDoorType {
     /* 7 */ ENDOOR_TYPE_FRAMED // unused
 } EnDoorType;
 
-// ENDOOR_TYPE_SCHEDULE
 typedef enum EnDoorScheduleType {
     /*  0 */ ENDOOR_SCH_TYPE_SWORDSMANS_SCHOOL,
     /*  1 */ ENDOOR_SCH_TYPE_POST_OFFICE,
