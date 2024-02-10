@@ -839,14 +839,16 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
     for (i = 1; i < FUNC_801631DC_ORDER; i++) {
         for (j = arg2 - i, k = (FUNC_801631DC_ORDER - 1) - i; j <= arg2; j++, k++) {
             if (sCsCamKnots[j + i] != sCsCamKnots[j]) {
-                coeffTemp[i][k] = ((progress - sCsCamKnots[j]) / (sCsCamKnots[j + i] - sCsCamKnots[j])) * coeffTemp[i - 1][k];
+                coeffTemp[i][k] =
+                    ((progress - sCsCamKnots[j]) / (sCsCamKnots[j + i] - sCsCamKnots[j])) * coeffTemp[i - 1][k];
             } else {
                 coeffTemp[i][k] = 0.0f;
             }
 
             if (sCsCamKnots[j + i + 1] != sCsCamKnots[j + 1]) {
                 coeffTemp[i][k] +=
-                    ((sCsCamKnots[j + i + 1] - progress) / (sCsCamKnots[j + i + 1] - sCsCamKnots[j + 1])) * coeffTemp[i - 1][k + 1];
+                    ((sCsCamKnots[j + i + 1] - progress) / (sCsCamKnots[j + i + 1] - sCsCamKnots[j + 1])) *
+                    coeffTemp[i - 1][k + 1];
             }
         }
     }
