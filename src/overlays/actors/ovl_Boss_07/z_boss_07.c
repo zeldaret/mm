@@ -1038,7 +1038,10 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     s32 spC0 = 0;
     Vec3f spB4;
     Vec3f spA8 = { 0.0f, 0.0f, 0.0f };
-    f32 spA4 = 0.0f, spA0 = 0.1f; //! FAKE: same line declaration?
+    // clang-format off
+    f32 spA4 = 0.0f; \
+    f32 spA0 = 0.1f;
+    // clang-format on
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     this->invincibilityTimer = 1000;
