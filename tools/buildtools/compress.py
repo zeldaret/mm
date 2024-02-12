@@ -46,20 +46,20 @@ def set_sigint_ignored():
 
 def compress_rom(
     rom_data: memoryview,
-    dmadata_offset: int,
+    dmadata_start: int,
     compress_entries_indices: set[int],
     n_threads: int = None,
 ):
     """
     rom_data: the uncompressed rom data
-    dmadata_offset: the offset in the rom where the dmadata starts
+    dmadata_start: the offset in the rom where the dmadata starts
     compress_entries_indices: the indices in the dmadata of the segments that should be compressed
     n_threads: how many cores to use for compression
     """
 
     # Segments of the compressed rom (not all are compressed)
     compressed_rom_segments: list[RomSegment] = []
-    dma_entries = dmadata.read_dmadata(rom_data, dmadata_offset)
+    dma_entries = dmadata.read_dmadata(rom_data, dmadata_start)
     # We sort the DMA entries by ROM start because `compress_entries_indices`
     # refers to indices in ROM order, but the uncompressed dmadata might not be
     # in ROM order.
@@ -187,7 +187,7 @@ def compress_rom(
         compressed_rom_data[i] = i % 256
 
     # Write the new dmadata
-    offset = dmadata_offset
+    offset = dmadata_start
     for dma_entry in compressed_rom_dma_entries:
         dma_entry.to_bin(compressed_rom_data[offset:])
         offset += dmadata.DmaEntry.SIZE_BYTES
@@ -244,7 +244,7 @@ def main():
 
     out_rom_p = Path(args.out_rom)
 
-    dmadata_offset = args.dma_start
+    dmadata_start = args.dma_start
 
     compress_ranges_str: str = args.compress_ranges
     compress_entries_indices = set()
@@ -270,7 +270,7 @@ def main():
     in_rom_data = in_rom_p.read_bytes()
     out_rom_data = compress_rom(
         memoryview(in_rom_data),
-        dmadata_offset,
+        dmadata_start,
         compress_entries_indices,
         n_threads,
     )
