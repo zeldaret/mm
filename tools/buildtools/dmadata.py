@@ -6,6 +6,7 @@ from __future__ import annotations
 import dataclasses
 import struct
 
+
 STRUCT_IIII = struct.Struct(">IIII")
 
 
@@ -50,17 +51,24 @@ class DmaEntry:
             self.rom_end,
         )
 
-    def is_compressed(self) -> bool:
-        return self.rom_end != 0
-
-    def is_syms(self) -> bool:
-        return self.rom_start == 0xFFFFFFFF and self.rom_end == 0xFFFFFFFF
-
     @staticmethod
     def from_bin(data: memoryview):
         return DmaEntry(*STRUCT_IIII.unpack_from(data))
 
+    def is_compressed(self) -> bool:
+        return self.rom_end != 0
+
+    def is_syms(self) -> bool:
+        """
+        "SYMS" DMA entries describe segments that are always filled with 0's in the ROM.
+        The DMA entry has both rom_start and rom_end set to 0xFFFFFFFF, where the actual rom start and end is given by vrom_start and vrom_end instead.
+        These zeroed segments are used to record the offsets/sizes of subfiles in compressed yaz0 archive files but are not used by the game directly.
+        """
+        return self.rom_start == 0xFFFFFFFF and self.rom_end == 0xFFFFFFFF
+
+
 DMA_ENTRY_END = DmaEntry(0, 0, 0, 0)
+
 
 def read_dmadata(rom_data: memoryview, start_offset: int) -> list[DmaEntry]:
     result = []
