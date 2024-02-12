@@ -82,6 +82,7 @@ endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILD_DIR   := build/$(VERSION)
+BASEROM_DIR := baseroms/$(VERSION)
 
 CPPFLAGS += -P
 
@@ -292,13 +293,13 @@ $(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(AS
 rom: $(ROM)
 ifneq ($(COMPARE),0)
 	@md5sum $(ROM)
-	@md5sum -c baseroms/$(VERSION)/checksum.md5
+	@md5sum -c $(BASEROM_DIR)/checksum.md5
 endif
 
 compress: $(ROMC)
 ifneq ($(COMPARE),0)
 	@md5sum $(ROMC)
-	@md5sum -c baseroms/$(VERSION)/checksum-compressed.md5
+	@md5sum -c $(BASEROM_DIR)/checksum-compressed.md5
 endif
 
 
@@ -343,7 +344,7 @@ assetclean:
 
 distclean: assetclean clean
 	$(RM) -r asm data
-	$(RM) -r baseroms/$(VERSION)/segments
+	$(RM) -r $(BASEROM_DIR)/segments
 	$(MAKE) -C tools clean
 
 venv:
@@ -355,7 +356,7 @@ venv:
 setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
-	$(PYTHON) tools/buildtools/extract_baserom.py $(VERSION)
+	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(BASEROM_DIR)/segments --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
 assets:
@@ -420,7 +421,7 @@ $(BUILD_DIR)/%.yar.o: $(BUILD_DIR)/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
-$(BUILD_DIR)/baserom/%.o: baseroms/$(VERSION)/segments/%
+$(BUILD_DIR)/baserom/%.o: $(BASEROM_DIR)/segments/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 $(BUILD_DIR)/data/%.o: data/%.s
