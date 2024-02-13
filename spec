@@ -512,7 +512,7 @@ beginseg
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
-    include "build/src/code/code_8012EC80.o"
+    include "build/src/code/z_inventory.o"
     pad_text
     include "build/src/code/z_scene.o"
     include "build/src/code/object_table.o"
