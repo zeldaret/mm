@@ -17,21 +17,31 @@ struct Boss07;
 #define MAJORAS_WRATH_SHADOW_TEX_HEIGHT 64
 #define MAJORAS_WRATH_SHADOW_TEX_SIZE ((s32)sizeof(u8[MAJORAS_WRATH_SHADOW_TEX_HEIGHT][MAJORAS_WRATH_SHADOW_TEX_WIDTH]))
 
+#define MAJORAS_GET_TYPE(thisx) ((thisx)->params)
+
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
-typedef enum MajoraParams {
-    /*   0 */ MAJORAS_BOSS,
-    /*  10 */ MAJORAS_MASK = 10,
-    /*  11 */ MAJORAS_MASK_CS,
-    /*  20 */ MAJORAS_INCARNATION = 20,
-    /*  21 */ MAJORAS_AFTERIMAGE,
-    /*  30 */ MAJORAS_WRATH = 30,
-    /* 100 */ MAJORAS_REMAINS_SHOT = 100,
-    /* 101 */ MAJORAS_INCARNATION_SHOT,
-    /* 150 */ MAJORAS_STATIC = 150,
-    /* 180 */ MAJORAS_TOP = 180,
-    /* 200 */ MAJORAS_REMAINS = 200
-} MajoraParams;
+typedef enum MajoraType {
+    /*   0 */ MAJORAS_TYPE_BOSS,
+    /*  10 */ MAJORAS_TYPE_MASK = 10,
+    /*  11 */ MAJORAS_TYPE_MASK_CS,
+    /*  20 */ MAJORAS_TYPE_INCARNATION = 20,
+    /*  21 */ MAJORAS_TYPE_AFTERIMAGE,
+    /*  30 */ MAJORAS_TYPE_WRATH = 30,
+    /* 100 */ MAJORAS_TYPE_REMAINS_SHOT = 100,
+    /* 101 */ MAJORAS_TYPE_INCARNATION_SHOT,
+    /* 150 */ MAJORAS_TYPE_BATTLE_HANDLER = 150,
+    /* 180 */ MAJORAS_TYPE_TOP = 180,
+    /* 200 */ MAJORAS_TYPE_REMAINS = 200
+} MajoraType;
+
+typedef enum MajorasRemainsType {
+    /* 0 */ MAJORAS_REMAINS_TYPE_ODOLWA,
+    /* 1 */ MAJORAS_REMAINS_TYPE_GYORG,
+    /* 2 */ MAJORAS_REMAINS_TYPE_GOHT,
+    /* 3 */ MAJORAS_REMAINS_TYPE_TWINMOLD,
+    /* 4 */ MAJORAS_REMAINS_MAX
+} MajorasRemainsType;
 
 typedef struct {
     /* 0x00 */ Vec3f base;

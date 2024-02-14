@@ -98,14 +98,6 @@ typedef enum MajorasTopDamageEffect {
     /* 0xF */ MAJORAS_TOP_DMGEFF_F
 } MajorasTopDamageEffect;
 
-typedef enum MajorasRemainsIndex {
-    /* 0 */ MAJORAS_REMAINS_ODOLWA,
-    /* 1 */ MAJORAS_REMAINS_GYORG,
-    /* 2 */ MAJORAS_REMAINS_GOHT,
-    /* 3 */ MAJORAS_REMAINS_TWINMOLD,
-    /* 4 */ MAJORAS_REMAINS_MAX
-} MajorasRemainsIndex;
-
 typedef enum MajorasEffectType {
     /* 0 */ MAJORAS_EFFECT_NONE,
     /* 1 */ MAJORAS_EFFECT_FLAME
@@ -260,7 +252,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2);
 void Boss07_Destroy(Actor* thisx, PlayState* play2);
 
 void Boss07_Wrath_Update(Actor* thisx, PlayState* play2);
-void Boss07_Static_Update(Actor* thisx, PlayState* play2);
+void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2);
 void Boss07_Remains_Update(Actor* thisx, PlayState* play2);
 void Boss07_Top_Update(Actor* thisx, PlayState* play2);
 void Boss07_Projectile_Update(Actor* thisx, PlayState* play2);
@@ -269,7 +261,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2);
 void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2);
 
 void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2);
-void Boss07_Static_Draw(Actor* thisx, PlayState* play2);
+void Boss07_BattleHandler_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Remains_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Top_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Projectile_Draw(Actor* thisx, PlayState* play2);
@@ -360,8 +352,8 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play);
 void Boss07_Top_SetupThrown(Boss07* this, PlayState* play);
 void Boss07_Top_SetupGround(Boss07* this, PlayState* play);
 
-void Boss07_Static_UpdateEffects(PlayState* play);
-void Boss07_Static_DrawEffects(PlayState* play);
+void Boss07_BattleHandler_UpdateEffects(PlayState* play);
+void Boss07_BattleHandler_DrawEffects(PlayState* play);
 
 static s16 sShotEnvColors[4][3] = {
     { 255, 255, 100 }, // light yellow
@@ -647,18 +639,18 @@ static Vec3s sRemainsEnd[MAJORAS_REMAINS_MAX] = {
 
 void Boss07_Init(Actor* thisx, PlayState* play2) {
     static s16 sMajorasRemainsParams[MAJORAS_REMAINS_MAX] = {
-        MAJORAS_REMAINS + MAJORAS_REMAINS_ODOLWA,
-        MAJORAS_REMAINS + MAJORAS_REMAINS_GYORG,
-        MAJORAS_REMAINS + MAJORAS_REMAINS_GOHT,
-        MAJORAS_REMAINS + MAJORAS_REMAINS_TWINMOLD,
+        MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_ODOLWA,
+        MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_GYORG,
+        MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_GOHT,
+        MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_TWINMOLD,
     };
     PlayState* play = play2;
     Boss07* this = THIS;
     s32 i;
 
-    if (this->actor.params == MAJORAS_STATIC) {
-        this->actor.update = Boss07_Static_Update;
-        this->actor.draw = Boss07_Static_Draw;
+    if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_BATTLE_HANDLER) {
+        this->actor.update = Boss07_BattleHandler_Update;
+        this->actor.draw = Boss07_BattleHandler_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sMajoraStatic = this;
         sKillProjectiles = false;
@@ -667,10 +659,10 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if (this->actor.params == MAJORAS_BOSS) {
-        this->actor.params = MAJORAS_MASK;
+    if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_BOSS) {
+        this->actor.params = MAJORAS_TYPE_MASK;
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, MAJORAS_STATIC);
+                    this->actor.world.pos.z, 0, 0, 0, MAJORAS_TYPE_BATTLE_HANDLER);
         play->specialEffects = (void*)sMajorasEffects;
 
         for (i = 0; i < MAJORAS_EFFECT_COUNT; i++) {
@@ -686,18 +678,18 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.gravity = -2.5f;
 
-    if (thisx->params >= MAJORAS_REMAINS) {
+    if (MAJORAS_GET_TYPE(thisx) >= MAJORAS_TYPE_REMAINS) {
         this->actor.update = Boss07_Remains_Update;
         this->actor.draw = Boss07_Remains_Draw;
 
-        sMajorasRemains[thisx->params - MAJORAS_REMAINS] = this;
+        sMajorasRemains[MAJORAS_GET_TYPE(thisx) - MAJORAS_TYPE_REMAINS] = this;
 
         if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA)) {
             Actor_SetScale(&this->actor, 0.03f);
-            this->actor.world.pos.x = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].x;
+            this->actor.world.pos.x = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].x;
             this->actor.world.pos.y = 370.0f;
-            this->actor.world.pos.z = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].z;
-            this->actor.shape.rot.y = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].y;
+            this->actor.world.pos.z = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].z;
+            this->actor.shape.rot.y = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].y;
             Boss07_Remains_SetupFly(this, play);
         } else {
             Boss07_Remains_SetupIntro(this, play);
@@ -707,7 +699,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if (this->actor.params == MAJORAS_TOP) {
+    if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_TOP) {
         static EffectTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
 
         this->actor.update = Boss07_Top_Update;
@@ -722,7 +714,8 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if ((this->actor.params == MAJORAS_REMAINS_SHOT) || (this->actor.params == MAJORAS_INCARNATION_SHOT)) {
+    if ((MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_REMAINS_SHOT) ||
+        (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_INCARNATION_SHOT)) {
         this->actor.update = Boss07_Projectile_Update;
         this->actor.draw = Boss07_Projectile_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -732,13 +725,13 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if ((this->actor.params == MAJORAS_MASK) || (this->actor.params == MAJORAS_MASK_CS)) {
+    if ((MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_MASK) || (this->actor.params == MAJORAS_TYPE_MASK_CS)) {
         this->actor.colChkInfo.damageTable = &sMaskDmgTable;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
         SkelAnime_Init(play, &this->skelAnime, &gMajorasMaskSkel, &gMajorasMaskFloatingAnim, this->jointTable,
                        this->morphTable, MAJORAS_MASK_LIMB_MAX);
 
-        if (this->actor.params == MAJORAS_MASK) {
+        if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_MASK) {
             static EffectTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
 
             this->actor.update = Boss07_Mask_Update;
@@ -775,11 +768,12 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if ((this->actor.params == MAJORAS_INCARNATION) || (this->actor.params == MAJORAS_AFTERIMAGE)) {
+    if ((MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_INCARNATION) ||
+        (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_AFTERIMAGE)) {
         Actor_SetScale(&this->actor, 0.015000001f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasIncarnationSkel, &gMajorasIncarnationTauntDance1Anim,
                            this->jointTable, this->morphTable, MAJORAS_INCARNATION_LIMB_MAX);
-        if (this->actor.params == MAJORAS_AFTERIMAGE) {
+        if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_AFTERIMAGE) {
             this->timers[0] = this->actor.world.rot.z;
             this->actor.world.rot.z = 0;
             this->actor.update = Boss07_Afterimage_Update;
@@ -847,11 +841,11 @@ void Boss07_Destroy(Actor* thisx, PlayState* play2) {
 
     switch (this->actor.params) {
             //! @bug this should be MAJORAS_MASK
-        case MAJORAS_WRATH:
+        case MAJORAS_TYPE_WRATH:
             Collider_DestroyQuad(play, &this->maskFrontCollider);
             Collider_DestroyQuad(play, &this->maskBackCollider);
             // fallthrough
-        case MAJORAS_TOP:
+        case MAJORAS_TYPE_TOP:
             Effect_Destroy(play, this->effectIndex);
             break;
 
@@ -987,7 +981,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                     Play_DisableMotionBlur();
 
-                    if (sMajorasRemains[MAJORAS_REMAINS_ODOLWA] != NULL) {
+                    if (sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA] != NULL) {
                         for (i = 0; i < MAJORAS_REMAINS_MAX; i++) {
                             Actor_ChangeCategory(play, &play->actorCtx, &sMajorasRemains[i]->actor, ACTORCAT_BOSS);
                         }
@@ -1024,7 +1018,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->csState = MAJORAS_WRATH_DEATH_STATE_0;
     this->timer_ABC8 = 0;
 
-    if (sMajorasRemains[MAJORAS_REMAINS_ODOLWA] != NULL) {
+    if (sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA] != NULL) {
         for (i = 0; i < MAJORAS_REMAINS_MAX; i++) {
             sMajorasRemains[i]->actionState = MAJORAS_REMAINS_DEATH;
         }
@@ -1935,7 +1929,7 @@ void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
 
     if (this->actionTimer == 8) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, MAJORAS_TOP);
+                    this->actor.world.pos.z, 0, 0, 0, MAJORAS_TYPE_TOP);
     }
 
     //! FAKE:
@@ -2993,7 +2987,7 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void Boss07_Static_DrawLight(Boss07* this, PlayState* play) {
+void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
     s32 pad;
     GraphicsContext* gfxCtx;
     f32 sp54;
@@ -3037,7 +3031,7 @@ void Boss07_Static_DrawLight(Boss07* this, PlayState* play) {
 void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
-    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, sizeof(u8[0x40][0x40]));
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, MAJORAS_WRATH_SHADOW_TEX_SIZE);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3664,12 +3658,12 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incLeftHandPos.x, this->incLeftHandPos.y,
-                    this->incLeftHandPos.z, 0, 0, 0, MAJORAS_INCARNATION_SHOT);
+                    this->incLeftHandPos.z, 0, 0, 0, MAJORAS_TYPE_INCARNATION_SHOT);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incRightHandPos.x, this->incRightHandPos.y,
-                    this->incRightHandPos.z, 0, 0, 0, MAJORAS_INCARNATION_SHOT);
+                    this->incRightHandPos.z, 0, 0, 0, MAJORAS_TYPE_INCARNATION_SHOT);
     }
 
     if (this->timers[0] == 0) {
@@ -3923,7 +3917,7 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
             }
             if (this->timer_ABC8 == 40) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, this->subCamId, MAJORAS_WRATH);
+                            this->actor.world.pos.z, 0, 0, this->subCamId, MAJORAS_TYPE_WRATH);
                 Actor_Kill(&this->actor);
             }
             break;
@@ -4106,7 +4100,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     if ((this->timer_18D6 != 0) && !(this->actionTimer & 1)) {
         Boss07* afterimage = (Boss07*)Actor_SpawnAsChild(
             &play->actorCtx, &this->actor, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, 7, MAJORAS_AFTERIMAGE);
+            this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, 7, MAJORAS_TYPE_AFTERIMAGE);
 
         if (afterimage != NULL) {
             for (i = 0; i < MAJORAS_INCARNATION_LIMB_MAX; i++) {
@@ -5041,10 +5035,10 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->timer_ABC8 == 20) {
-                sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_CS_FLY;
-                sMajorasRemains[MAJORAS_REMAINS_GYORG]->actionState = MAJORAS_REMAINS_CS_FLY;
-                sMajorasRemains[MAJORAS_REMAINS_GOHT]->actionState = MAJORAS_REMAINS_CS_FLY;
-                sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_CS_FLY;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actionState = MAJORAS_REMAINS_CS_FLY;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actionState = MAJORAS_REMAINS_CS_FLY;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actionState = MAJORAS_REMAINS_CS_FLY;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actionState = MAJORAS_REMAINS_CS_FLY;
             }
 
             if (this->timer_ABC8 == 0) {
@@ -5063,14 +5057,14 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->timer_ABC8 >= 160) {
                 if (this->timer_ABC8 == 160) {
-                    sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
-                    sMajorasRemains[MAJORAS_REMAINS_GYORG]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
-                    sMajorasRemains[MAJORAS_REMAINS_GOHT]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
-                    sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
+                    sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
+                    sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
+                    sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
+                    sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actionState = MAJORAS_REMAINS_CS_ATTACH_WAIT;
                 }
 
                 if (this->timer_ABC8 == 161) {
-                    sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_CS_ATTACH;
+                    sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actionState = MAJORAS_REMAINS_CS_ATTACH;
                 }
 
                 if ((this->timer_ABC8 == 180) || (this->timer_ABC8 == 200) || (this->timer_ABC8 == 220)) {
@@ -5094,10 +5088,10 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     this->subCamAt.x = this->actor.world.pos.x;
                     this->subCamAt.y = this->actor.world.pos.y;
                     this->subCamAt.z = this->actor.world.pos.z;
-                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_ODOLWA], play);
-                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_GYORG], play);
-                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_GOHT], play);
-                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_TWINMOLD], play);
+                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA], play);
+                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG], play);
+                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT], play);
+                    Boss07_Remains_SetupFly(sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD], play);
                     this->subCamSpeedMod = 0.0f;
                     sMajoraStatic->introOrbScale = 0.0f;
                     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
@@ -5312,7 +5306,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             // fallthrough
         case MAJORAS_MASK_DEATH_STATE_2:
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
-                        this->subCamId, MAJORAS_INCARNATION);
+                        this->subCamId, MAJORAS_TYPE_INCARNATION);
             Actor_Kill(&this->actor);
             break;
 
@@ -5827,7 +5821,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
 
     this->actionTimer++;
 
-    if (this->actor.params == MAJORAS_REMAINS_SHOT) {
+    if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_REMAINS_SHOT) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_BEAM - SFX_FLAG);
     }
 
@@ -5845,7 +5839,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             this->actionState = MAJORAS_PROJECTILE_STATE_1;
             this->actor.speed = 30.0f;
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
-            if (this->actor.params == MAJORAS_INCARNATION_SHOT) {
+            if (MAJORAS_GET_TYPE(&this->actor) == MAJORAS_TYPE_INCARNATION_SHOT) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_FIRE_OLD);
             }
         }
@@ -5958,9 +5952,12 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
                 this->actor.world.pos.y += 30.0f + KREG(48);
             }
-            this->moveTarget.x = sRemainsStart[this->actor.params - MAJORAS_REMAINS].x + player->actor.world.pos.x;
-            this->moveTarget.y = sRemainsStart[this->actor.params - MAJORAS_REMAINS].y + player->actor.world.pos.y;
-            this->moveTarget.z = sRemainsStart[this->actor.params - MAJORAS_REMAINS].z + player->actor.world.pos.z;
+            this->moveTarget.x =
+                sRemainsStart[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].x + player->actor.world.pos.x;
+            this->moveTarget.y =
+                sRemainsStart[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].y + player->actor.world.pos.y;
+            this->moveTarget.z =
+                sRemainsStart[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].z + player->actor.world.pos.z;
             sp54 = this->moveTarget.x - this->actor.world.pos.x;
             sp50 = this->moveTarget.y - this->actor.world.pos.y;
             sp4C = this->moveTarget.z - this->actor.world.pos.z;
@@ -5977,9 +5974,9 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
             this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
             if (this->timer_ABC8 > 90) {
-                this->moveTarget.x = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].x;
+                this->moveTarget.x = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].x;
                 this->moveTarget.y = 370.0f;
-                this->moveTarget.z = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].z;
+                this->moveTarget.z = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].z;
                 sp38 = 20.0f;
                 sp34 = 0.5f;
                 sp40 = 0x1000;
@@ -6010,10 +6007,10 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             Actor_SetScale(&this->actor, 0.0f);
             this->eyeBeamsZscale = 0.0f;
             this->actor.speed = 0.0f;
-            this->actor.world.pos.x = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].x * 0.6f;
+            this->actor.world.pos.x = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].x * 0.6f;
             this->actor.world.pos.y = 370.0f;
-            this->actor.world.pos.z = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].z * 0.6f;
-            this->actor.shape.rot.y = sRemainsEnd[this->actor.params - MAJORAS_REMAINS].y;
+            this->actor.world.pos.z = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].z * 0.6f;
+            this->actor.shape.rot.y = sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].y;
             this->timer_ABCC = 0;
             break;
 
@@ -6023,8 +6020,10 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_STAY);
             }
             Actor_SetScale(&this->actor, 0.03f);
-            Math_ApproachF(&this->actor.world.pos.x, sRemainsEnd[this->actor.params - MAJORAS_REMAINS].x, 0.5f, 40.0f);
-            Math_ApproachF(&this->actor.world.pos.z, sRemainsEnd[this->actor.params - MAJORAS_REMAINS].z, 0.5f, 22.0f);
+            Math_ApproachF(&this->actor.world.pos.x,
+                           sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].x, 0.5f, 40.0f);
+            Math_ApproachF(&this->actor.world.pos.z,
+                           sRemainsEnd[MAJORAS_GET_TYPE(&this->actor) - MAJORAS_TYPE_REMAINS].z, 0.5f, 22.0f);
             break;
 
         default:
@@ -6163,7 +6162,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         this->readyShot = false;
         if (Boss07_IsFacingPlayer(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, MAJORAS_REMAINS_SHOT);
+                        this->actor.world.pos.z, 0, 0, 0, MAJORAS_TYPE_REMAINS_SHOT);
         }
     }
 
@@ -6253,20 +6252,20 @@ void Boss07_Remains_Draw(Actor* thisx, PlayState* play2) {
     Matrix_RotateXFApply(sp60);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    switch (this->actor.params) {
-        case MAJORAS_REMAINS + MAJORAS_REMAINS_ODOLWA:
+    switch (MAJORAS_GET_TYPE(&this->actor)) {
+        case MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_ODOLWA:
             gSPDisplayList(POLY_OPA_DISP++, gBossMaskOdolwaDL);
             break;
 
-        case MAJORAS_REMAINS + MAJORAS_REMAINS_GYORG:
+        case MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_GYORG:
             gSPDisplayList(POLY_OPA_DISP++, gBossMaskGyorgDL);
             break;
 
-        case MAJORAS_REMAINS + MAJORAS_REMAINS_GOHT:
+        case MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_GOHT:
             gSPDisplayList(POLY_OPA_DISP++, gBossMaskGohtDL);
             break;
 
-        case MAJORAS_REMAINS + MAJORAS_REMAINS_TWINMOLD:
+        case MAJORAS_TYPE_REMAINS + MAJORAS_REMAINS_TYPE_TWINMOLD:
             gSPDisplayList(POLY_OPA_DISP++, gBossMaskTwinmoldDL);
             break;
 
@@ -6429,7 +6428,7 @@ void Boss07_Top_Collide(Boss07* this, PlayState* play) {
         top = (Boss07*)play->actorCtx.actorLists[ACTORCAT_BOSS].first;
 
         while (top != NULL) {
-            if ((this != top) && (top->actor.params == MAJORAS_TOP) && (top->collisionTimer == 0)) {
+            if ((this != top) && (MAJORAS_GET_TYPE(&top->actor) == MAJORAS_TYPE_TOP) && (top->collisionTimer == 0)) {
                 dx = top->actor.world.pos.x - this->actor.world.pos.x;
                 dy = top->actor.world.pos.y - this->actor.world.pos.y;
                 dz = top->actor.world.pos.z - this->actor.world.pos.z;
@@ -6598,11 +6597,11 @@ void Boss07_Top_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
+void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
 
-    Boss07_Static_UpdateEffects(play);
+    Boss07_BattleHandler_UpdateEffects(play);
 
     if (sHeartbeatTimer != 0) {
         sHeartbeatTimer--;
@@ -6642,17 +6641,17 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             this->timer_ABC8 = 0;
             this->csState = MAJORAS_STATIC_CS_STATE_2;
             Play_EnableMotionBlur(150);
-            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.x * 0.7f;
-            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.y * 0.7f;
-            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.z * 0.7f;
+            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.x * 0.7f;
+            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.y * 0.7f;
+            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.z * 0.7f;
             // fallthrough
         case MAJORAS_STATIC_CS_STATE_2:
             if (this->timer_ABC8 == 20) {
-                sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actionState = MAJORAS_REMAINS_ACTIVATE;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actionState = MAJORAS_REMAINS_ACTIVATE;
             }
-            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.x;
-            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.y;
-            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_ODOLWA]->actor.world.pos.z;
+            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.x;
+            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.y;
+            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_ODOLWA]->actor.world.pos.z;
 
             if (this->timer_ABC8 != 40) {
                 break;
@@ -6660,17 +6659,17 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
 
             this->csState = MAJORAS_STATIC_CS_STATE_3;
             this->timer_ABC8 = 0;
-            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.x * 0.7f;
-            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.y * 0.7f;
-            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.z * 0.7f;
+            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.x * 0.7f;
+            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.y * 0.7f;
+            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.z * 0.7f;
             // fallthrough
         case MAJORAS_STATIC_CS_STATE_3:
             if (this->timer_ABC8 == 20) {
-                sMajorasRemains[MAJORAS_REMAINS_GYORG]->actionState = MAJORAS_REMAINS_ACTIVATE;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actionState = MAJORAS_REMAINS_ACTIVATE;
             }
-            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.x;
-            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.y;
-            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_GYORG]->actor.world.pos.z;
+            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.x;
+            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.y;
+            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_GYORG]->actor.world.pos.z;
 
             if (this->timer_ABC8 != 40) {
                 break;
@@ -6678,34 +6677,34 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
 
             this->csState = MAJORAS_STATIC_CS_STATE_4;
             this->timer_ABC8 = 0;
-            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.x * 0.7f;
-            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.y * 0.7f;
-            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.z * 0.7f;
+            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.x * 0.7f;
+            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.y * 0.7f;
+            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.z * 0.7f;
             // fallthrough
         case MAJORAS_STATIC_CS_STATE_4:
             if (this->timer_ABC8 == 20) {
-                sMajorasRemains[MAJORAS_REMAINS_GOHT]->actionState = MAJORAS_REMAINS_ACTIVATE;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actionState = MAJORAS_REMAINS_ACTIVATE;
             }
-            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.x;
-            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.y;
-            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_GOHT]->actor.world.pos.z;
+            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.x;
+            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.y;
+            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_GOHT]->actor.world.pos.z;
             if (this->timer_ABC8 != 40) {
                 break;
             }
             this->csState = MAJORAS_STATIC_CS_STATE_5;
             this->timer_ABC8 = 0;
-            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.x * 0.7f;
-            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.y * 0.7f;
-            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.z * 0.7f;
+            this->subCamEye.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.x * 0.7f;
+            this->subCamEye.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.y * 0.7f;
+            this->subCamEye.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.z * 0.7f;
             // fallthrough
         case MAJORAS_STATIC_CS_STATE_5:
             if (this->timer_ABC8 == 20) {
-                sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actionState = MAJORAS_REMAINS_ACTIVATE;
+                sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actionState = MAJORAS_REMAINS_ACTIVATE;
             }
 
-            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.x;
-            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.y;
-            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TWINMOLD]->actor.world.pos.z;
+            this->subCamAt.x = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.x;
+            this->subCamAt.y = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.y;
+            this->subCamAt.z = sMajorasRemains[MAJORAS_REMAINS_TYPE_TWINMOLD]->actor.world.pos.z;
 
             if (this->timer_ABC8 == 40) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -6751,15 +6750,15 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void Boss07_Static_Draw(Actor* thisx, PlayState* play2) {
+void Boss07_BattleHandler_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
 
-    Boss07_Static_DrawEffects(play);
-    Boss07_Static_DrawLight(this, play);
+    Boss07_BattleHandler_DrawEffects(play);
+    Boss07_BattleHandler_DrawLight(this, play);
 }
 
-void Boss07_Static_UpdateEffects(PlayState* play) {
+void Boss07_BattleHandler_UpdateEffects(PlayState* play) {
     MajorasEffect* effect = (MajorasEffect*)play->specialEffects;
     s32 i;
 
@@ -6794,7 +6793,7 @@ void Boss07_Static_UpdateEffects(PlayState* play) {
     }
 }
 
-void Boss07_Static_DrawEffects(PlayState* play) {
+void Boss07_BattleHandler_DrawEffects(PlayState* play) {
     MajorasEffect* effect = (MajorasEffect*)play->specialEffects;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 i;
