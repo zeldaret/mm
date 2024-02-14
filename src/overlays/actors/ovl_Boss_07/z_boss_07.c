@@ -2661,7 +2661,8 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     if (x > (xmax))              \
         x = (xmax);              \
     if (x < (xmin))              \
-    x = (xmin)
+        x = (xmin);              \
+    (void)0
 
         // if (velocity->x > 200.0f) velocity->x = 200.0f;if (velocity->x < -200.0f) velocity->x = -200.0f;
         CLAMP_VAR(velocity->x, -200.0f, 200.0f);
@@ -2693,8 +2694,8 @@ void Boss07_Wrath_DrawWhips(Boss07* this, PlayState* play, Vec3f* pos, Vec3f* ro
     s32 i;
     f32 xyScale;
     s32 pad[2];
-    Vec3f* vec2 = pos;
-    Vec3f* vec3 = rot;
+    Vec3f* prevPos = pos;
+    Vec3f* prevRot = rot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -2714,8 +2715,8 @@ void Boss07_Wrath_DrawWhips(Boss07* this, PlayState* play, Vec3f* pos, Vec3f* ro
         gSPDisplayList(POLY_OPA_DISP++, gMajorasWrathWhipModelDL);
     }
 
-    pos = vec2;
-    rot = vec3;
+    pos = prevPos;
+    rot = prevRot;
     gSPDisplayList(POLY_OPA_DISP++, gMajorasWrathWhipMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
 
@@ -2909,7 +2910,8 @@ void Boss07_Wrath_DrawShocks(Boss07* this, PlayState* play) {
             }
 
             for (i = this->whipShockIndexHigh; i >= this->whipShockIndexLow; i--) {
-                Matrix_Translate(this->rightWhip.pos[i].x, this->rightWhip.pos[i].y, this->rightWhip.pos[i].z, 0);
+                Matrix_Translate(this->rightWhip.pos[i].x, this->rightWhip.pos[i].y, this->rightWhip.pos[i].z,
+                                 MTXMODE_NEW);
                 Matrix_ReplaceRotation(&play->billboardMtxF);
                 Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
                 Matrix_RotateZF(Rand_ZeroFloat(2.0f * M_PI), MTXMODE_APPLY);
@@ -2938,10 +2940,10 @@ void Boss07_Wrath_DrawShocks(Boss07* this, PlayState* play) {
 
 void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
     s32 i;
-    f32 temp_f12_2;
-    f32 temp_f20;
+    f32 scale;
+    f32 yPosOffset;
     GraphicsContext* gfxCtx;
-    s16* temp;
+    s16* color;
 
     OPEN_DISPS(gfxCtx = play->state.gfxCtx);
 
@@ -2951,15 +2953,15 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
         gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
 
         for (i = 0; i < ARRAY_COUNT(this->deathLightScale); i++) {
-            temp = sShotEnvColors[0];
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, temp[0], temp[1], temp[2], 40);
-            temp_f20 = (Boss07_RandZeroOne() * 40.0f) - 30.0f;
+            color = sShotEnvColors[0];
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color[0], color[1], color[2], 40);
+            yPosOffset = (Boss07_RandZeroOne() * 40.0f) - 30.0f;
             Matrix_Translate(this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].x,
-                             this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].y - 30.0f + 50.0f + temp_f20 + 25.0f,
+                             this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].y - 30.0f + 50.0f + yPosOffset + 25.0f,
                              this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].z, MTXMODE_NEW);
-            Matrix_Translate(pos->x, pos->y + temp_f20, pos->z, MTXMODE_NEW);
+            Matrix_Translate(pos->x, pos->y + yPosOffset, pos->z, MTXMODE_NEW);
             Matrix_RotateYF(Boss07_RandZeroOne() * M_PI * 2.0f, MTXMODE_APPLY);
-            Matrix_RotateXFApply(-0.024999999f * temp_f20);
+            Matrix_RotateXFApply(-250.0f * 0.0001f * yPosOffset);
             Matrix_RotateZF(Boss07_RandZeroOne() * M_PI * 2.0f, MTXMODE_APPLY);
             if (this->deathLightScale[i] > 0.0f) {
                 Matrix_Scale(this->deathLightScale[i], 1.0f, 12.0f, MTXMODE_APPLY);
@@ -2978,8 +2980,8 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
                          this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_RotateZS(play->gameplayFrames * 0x80, MTXMODE_APPLY);
-        temp_f12_2 = (sREG(17) + 800) * 0.01f * this->deathOrbScale;
-        Matrix_Scale(temp_f12_2, temp_f12_2, 1.0f, MTXMODE_APPLY);
+        scale = (sREG(17) + 800) * 0.01f * this->deathOrbScale;
+        Matrix_Scale(scale, scale, 1.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
@@ -2990,8 +2992,8 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
 void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
     s32 pad;
     GraphicsContext* gfxCtx;
-    f32 sp54;
-    f32 sp50;
+    f32 yPosOffset;
+    f32 zPosOffset;
     Player* player;
 
     OPEN_DISPS(gfxCtx = play->state.gfxCtx);
@@ -3005,18 +3007,18 @@ void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            sp54 = -10.0f;
-            sp50 = -20.0f;
+            yPosOffset = -10.0f;
+            zPosOffset = -20.0f;
         } else {
-            sp54 = sp50 = 0.0f;
+            yPosOffset = zPosOffset = 0.0f;
         }
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            sp54 -= 43.0f;
+            yPosOffset -= 43.0f;
         }
 
         Matrix_Translate(player->actor.world.pos.x,
-                         player->actor.world.pos.y + Player_GetHeight(player) - 20.0f + sp54 + sREG(60),
-                         player->actor.world.pos.z + sREG(61) - 15.0f + sp50, MTXMODE_NEW);
+                         player->actor.world.pos.y + Player_GetHeight(player) - 20.0f + yPosOffset + sREG(60),
+                         player->actor.world.pos.z + sREG(61) - 15.0f + zPosOffset, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         Matrix_Scale(this->introOrbScale, this->introOrbScale, this->introOrbScale, MTXMODE_APPLY);
@@ -3073,12 +3075,12 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     Boss07_Wrath_DrawShocks(this, play);
 
     {
-        Vec3f sp58;
+        Vec3f lightsPos;
 
-        sp58.x = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].x;
-        sp58.y = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].y - 30.0f + 50.0f;
-        sp58.z = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].z;
-        Boss07_Wrath_DrawDeathLights(this, play, &sp58);
+        lightsPos.x = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].x;
+        lightsPos.y = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].y - 30.0f + 50.0f;
+        lightsPos.z = this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].z;
+        Boss07_Wrath_DrawDeathLights(this, play, &lightsPos);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, MAJORAS_WRATH_BODYPART_MAX, this->drawDmgEffScale,
