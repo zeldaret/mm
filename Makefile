@@ -32,7 +32,7 @@ endif
 #### Defaults ####
 
 # Target game version. Currently only the following version is supported:
-#   us   N64 USA (default)
+#   n64-us   N64 USA (default)
 VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
