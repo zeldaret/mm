@@ -50,8 +50,8 @@ void EnInvadepoh_CowTail_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_CowTail_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2);
+void EnInvadepoh_SilentRomani_WaitForObject(Actor* thisx, PlayState* play2);
+void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_WaitForEvent(Actor* thisx, PlayState* play2);
@@ -120,10 +120,10 @@ void EnInvadepoh_AbductedRomani_SetupStruggle(EnInvadepoh* this);
 void EnInvadepoh_AbductedRomani_Struggle(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AbductedRomani_SetupEnd(EnInvadepoh* this);
 void EnInvadepoh_AbductedRomani_End(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this);
-void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_ConfusedRomani_Talk(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this);
+void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this);
 void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this);
@@ -642,11 +642,11 @@ void EnInvadepoh_Alien_SetupPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetCheckpoints(this);
 }
 
-void EnInvadepoh_ConfusedRomani_SetupPath(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_SilentRomani_SetupPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_SetPath(this, play);
 }
 
-void EnInvadepoh_ConfusedRomani_SetNextPathPoint(EnInvadepoh* this) {
+void EnInvadepoh_SilentRomani_SetNextPathPoint(EnInvadepoh* this) {
     this->currentPoint++;
     if (this->currentPoint >= this->endPoint) {
         this->currentPoint = 0;
@@ -1656,8 +1656,8 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
 
     if (romaniType == ENINVADEPOH_TYPE_ROMANI_ABDUCTED) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
-    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_CONFUSED) {
-        this->actor.update = EnInvadepoh_ConfusedRomani_WaitForObject;
+    } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_SILENT) {
+        this->actor.update = EnInvadepoh_SilentRomani_WaitForObject;
         this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE;
     } else if (romaniType == ENINVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
@@ -1674,7 +1674,7 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    if (romaniType == ENINVADEPOH_TYPE_ROMANI_CONFUSED) {
+    if (romaniType == ENINVADEPOH_TYPE_ROMANI_SILENT) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             Actor_Kill(&this->actor);
         }
@@ -1782,7 +1782,7 @@ void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
         EnInvadepoh_Cow_Init,             // ENINVADEPOH_TYPE_COW
         EnInvadepoh_CowTail_Init,         // ENINVADEPOH_TYPE_COW_TAIL
         EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
-        EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_SILENT
         EnInvadepoh_Ufo_Init,             // ENINVADEPOH_TYPE_UFO
         EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
         EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_BARN
@@ -1879,7 +1879,7 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
         EnInvadepoh_Cow_Destroy,             // ENINVADEPOH_TYPE_COW
         EnInvadepoh_CowTail_Destroy,         // ENINVADEPOH_TYPE_COW_TAIL
         EnInvadepoh_Romani_Destroy,          // ENINVADEPOH_TYPE_ROMANI_ABDUCTED
-        EnInvadepoh_Romani_Destroy,          // ENINVADEPOH_TYPE_ROMANI_CONFUSED
+        EnInvadepoh_Romani_Destroy,          // ENINVADEPOH_TYPE_ROMANI_SILENT
         EnInvadepoh_Ufo_Destroy,             // ENINVADEPOH_TYPE_UFO
         EnInvadepoh_Romani_Destroy,          // ENINVADEPOH_TYPE_ROMANI_NIGHT_1
         EnInvadepoh_Romani_Destroy,          // ENINVADEPOH_TYPE_ROMANI_BARN
@@ -2585,7 +2585,7 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_ConfusedRomani_SetupWalk(EnInvadepoh* this) {
+void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
     static s16 D_80B4EDC8[4] = { -0x708, -0x3E8, 0, 0x7D0 };
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
@@ -2596,16 +2596,16 @@ void EnInvadepoh_ConfusedRomani_SetupWalk(EnInvadepoh* this) {
     interactInfo->scaledTurnRate = 0.1f;
     interactInfo->maxTurnRate = 0x320;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
-    this->actionFunc = EnInvadepoh_ConfusedRomani_Walk;
+    this->actionFunc = EnInvadepoh_SilentRomani_Walk;
 }
 
-void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->actor.speed, 1.6f, 0.1f);
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
-        EnInvadepoh_ConfusedRomani_SetNextPathPoint(this);
+        EnInvadepoh_SilentRomani_SetNextPathPoint(this);
         this->unk_370 = 0xC8;
         this->actor.speed *= 0.25f;
     } else {
@@ -2622,11 +2622,11 @@ void EnInvadepoh_ConfusedRomani_Walk(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        EnInvadepoh_ConfusedRomani_SetupIdle(this);
+        EnInvadepoh_SilentRomani_SetupIdle(this);
     }
 }
 
-void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
+void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     f32 rand = Rand_ZeroOne();
 
@@ -2661,16 +2661,16 @@ void EnInvadepoh_ConfusedRomani_SetupIdle(EnInvadepoh* this) {
     }
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
-    this->actionFunc = EnInvadepoh_ConfusedRomani_Idle;
+    this->actionFunc = EnInvadepoh_SilentRomani_Idle;
 }
 
-void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
-        EnInvadepoh_ConfusedRomani_SetNextPathPoint(this);
+        EnInvadepoh_SilentRomani_SetNextPathPoint(this);
     }
 
     if (this->unk_374 == 0) {
@@ -2721,10 +2721,10 @@ void EnInvadepoh_ConfusedRomani_Idle(EnInvadepoh* this, PlayState* play) {
         return;
     }
 
-    EnInvadepoh_ConfusedRomani_SetupWalk(this);
+    EnInvadepoh_SilentRomani_SetupWalk(this);
 }
 
-void EnInvadepoh_ConfusedRomani_SetupTalk(EnInvadepoh* this) {
+void EnInvadepoh_SilentRomani_SetupTalk(EnInvadepoh* this) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     this->actor.speed = 0.0f;
@@ -2732,10 +2732,10 @@ void EnInvadepoh_ConfusedRomani_SetupTalk(EnInvadepoh* this) {
     this->unk_370 = 0;
     interactInfo->scaledTurnRate = 0.05f;
     interactInfo->maxTurnRate = 0x4B0;
-    this->actionFunc = EnInvadepoh_ConfusedRomani_Talk;
+    this->actionFunc = EnInvadepoh_SilentRomani_Talk;
 }
 
-void EnInvadepoh_ConfusedRomani_Talk(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
@@ -2750,11 +2750,11 @@ void EnInvadepoh_ConfusedRomani_Talk(EnInvadepoh* this, PlayState* play) {
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        EnInvadepoh_ConfusedRomani_SetupIdle(this);
+        EnInvadepoh_SilentRomani_SetupIdle(this);
     }
 }
 
-void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_SilentRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -2762,22 +2762,22 @@ void EnInvadepoh_ConfusedRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
-        this->actor.update = EnInvadepoh_ConfusedRomani_Update;
+        this->actor.update = EnInvadepoh_SilentRomani_Update;
         this->actor.draw = EnInvadepoh_Romani_Draw;
         this->actor.textId = 0x3330;
         SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_6, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_2, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_ConfusedRomani_SetupPath(this, play);
+        EnInvadepoh_SilentRomani_SetupPath(this, play);
         EnInvadepoh_SetPosToPathPoint(this, 0);
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_ConfusedRomani_SetupWalk(this);
+        EnInvadepoh_SilentRomani_SetupWalk(this);
     }
 }
 
-void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
@@ -2785,7 +2785,7 @@ void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
 
     if (talkAccepted) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
-        EnInvadepoh_ConfusedRomani_SetupTalk(this);
+        EnInvadepoh_SilentRomani_SetupTalk(this);
     }
 
     this->actionFunc(this, play);
@@ -2793,7 +2793,7 @@ void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
-        if ((this->actionFunc != EnInvadepoh_ConfusedRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
+        if ((this->actionFunc != EnInvadepoh_SilentRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);

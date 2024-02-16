@@ -25,7 +25,7 @@ typedef enum EnInvadepohType {
     /* 0x2 */ ENINVADEPOH_TYPE_COW,              // An unused abudcted cow, spawned by the alien abductor
     /* 0x3 */ ENINVADEPOH_TYPE_COW_TAIL,         // An unused abducted cow tail, spawned by the abducted cow
     /* 0x4 */ ENINVADEPOH_TYPE_ROMANI_ABDUCTED,  // An unused abducted Romani, spawned by alien abductor
-    /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_CONFUSED,  // A confused, silent Romani that wanders the ranch on day 2
+    /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_SILENT,  // A confused, silent Romani that wanders the ranch on day 2
     /* 0x6 */ ENINVADEPOH_TYPE_UFO,              // The spinning ball of light that spawns the aliens and hovers over the barn
     /* 0x7 */ ENINVADEPOH_TYPE_ROMANI_NIGHT_1,   // Romani running to the barn on night 1
     /* 0x8 */ ENINVADEPOH_TYPE_ROMANI_BARN,      // Romani in the barn on night 1
