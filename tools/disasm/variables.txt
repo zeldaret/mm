@@ -10058,7 +10058,7 @@
     0x809E0422:("sIsInGiantMode","UNK_TYPE1","",0x1),
     0x809E0424:("sRedTwinmold","UNK_TYPE4","",0x4),
     0x809E0428:("sBlueTwinmold","UNK_TYPE4","",0x4),
-    0x809E042C:("sTwinmoldStatic","UNK_TYPE4","",0x4),
+    0x809E042C:("sTwinmoldBattleHandler","UNK_TYPE4","",0x4),
     0x809E0430:("sTwinmoldMusicStartTimer","UNK_TYPE1","",0x1),
     0x809E0434:("sBlueWarp","UNK_TYPE4","",0x4),
     0x809E0438:("sTwinmoldEffects","UNK_TYPE1","",0x1),
