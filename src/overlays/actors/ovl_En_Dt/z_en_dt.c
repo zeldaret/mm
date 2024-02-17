@@ -92,7 +92,16 @@ typedef enum {
 
 extern AnimationHeader* D_80BEB2C8[EN_DT_ANIMATION_MAX]; // sEnDtAnimations[EN_DT_ANIMATION_MAX] = { &object_dt_Anim_00112C, &object_dt_Anim_0005A4, &object_dt_Anim_000854, &object_dt_Anim_000DA8, &object_dt_Anim_000BE0, &object_dt_Anim_00B500 };
 extern u8 D_80BEB2E0[EN_DT_ANIMATION_MAX]; // sEnDtAnimationModes[EN_DT_ANIMATION_MAX] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
-//extern u8 D_80BEB2E8;
+extern s32 D_80BEB2E8[24];
+
+// static s32 D_80BEB2E8[] = {
+//     0x00000000, 0x00000001, 0x00000003, 0x00000001,
+//     0x00000000, 0x00000002, 0x00000003, 0x00000001,
+//     0x00000000, 0x00000003, 0x00000003, 0x00000001,
+//     0x00000000, 0x00000003, 0x00000000, 0x00000000,
+//     0x00000000, 0x00000005, 0x00000000, 0x00000000,
+//     0x00000000, 0x00000004, 0x00000000, 0x00000000
+// };
 
 extern TexturePtr D_80BEB348[5]; // sEnDtEyeTextures[5] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex, gDotourEyeSquintTex };
 extern TexturePtr D_80BEB35C[3]; // sEnDtBrowTextyres[3] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
@@ -163,43 +172,27 @@ void func_80BE9CE8(EnDt *this, s32 animIndex) {
     Animation_Change(&this->skelAnime, D_80BEB2C8[this->animIndex], 1.0f, 0.0f, this->animEndFrame, D_80BEB2E0[this->animIndex], morphFrames);
 }
 
-// EnDt_UpdateNpcState?
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9D9C.s")
-// void func_80BE9D9C(EnDt *this) {
-//     static s32 D_80BEB2E8[] = {
-//         0x00000000, 0x00000001, 0x00000003, 0x00000001,
-//         0x00000000, 0x00000002, 0x00000003, 0x00000001,
-//         0x00000000, 0x00000003, 0x00000003, 0x00000001,
-//         0x00000000, 0x00000003, 0x00000000, 0x00000000,
-//         0x00000000, 0x00000005, 0x00000000, 0x00000000,
-//         0x00000000, 0x00000004, 0x00000000, 0x00000000
-//     };
-//     /*
-//     s32* p = &D_80BEB2E8[this->unk280].npcVisualState;
+// EnDt_UpdateVisualState?
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9D9C.s")
+void func_80BE9D9C(EnDt *this) {
+    s32 i = this->unk280;
+    s32* p = D_80BEB2E8;
+    s32 v; // Permuter silliness 
 
-//     func_80BE9CE8(this, *p);
+    i = i * 4 + 1;
+    p += i;
 
-//     this->eyeTexIndex = *(++p);
-//     this->disableBlinking = *(++p);
-//     */
+    i = *p;
+    v = *p;
 
-//     s32 index = this->unk280;
-//     s32* p;
+    // Extreme permuter silliness 
+    goto dummy_label; dummy_label: ;
 
-//     index *= 4;
-//     index++;
-    
-//     p = (s32*)(((u8*)&D_80BEB2E8) + index * 4); // &4 &20 &36
+    func_80BE9CE8(this, v);
 
-//     index = *p;
-//     func_80BE9CE8(this, *p); // 1 2 3 
-
-//     ++p;
-//     this->eyeTexIndex = *p; // 3 3 3
-    
-//     ++p;
-//     this->disableBlinking = *p;  // 1 1 1
-// }
+    this->eyeTexIndex = *(++p);
+    this->disableBlinking = *(++p);
+}
 
 // EnDt_UpdateTargetActors? or EnDt_MainAction?
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9DF8.s")
