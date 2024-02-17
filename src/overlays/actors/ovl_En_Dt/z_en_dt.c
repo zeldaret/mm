@@ -69,11 +69,6 @@ static ColliderCylinderInit D_80BEB29C = {
 #endif
 
 typedef struct {
-    s32 unk0;
-    s32 npcVisualState[3];
-} UnkStruct1;
-
-typedef struct {
     s16 unk0;
     u16 textId;
 } DialogSequenceEntry;
@@ -97,7 +92,7 @@ typedef enum {
 
 extern AnimationHeader* D_80BEB2C8[EN_DT_ANIMATION_MAX]; // sEnDtAnimations[EN_DT_ANIMATION_MAX] = { &object_dt_Anim_00112C, &object_dt_Anim_0005A4, &object_dt_Anim_000854, &object_dt_Anim_000DA8, &object_dt_Anim_000BE0, &object_dt_Anim_00B500 };
 extern u8 D_80BEB2E0[EN_DT_ANIMATION_MAX]; // sEnDtAnimationModes[EN_DT_ANIMATION_MAX] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
-extern u8 D_80BEB2E8;
+//extern u8 D_80BEB2E8;
 
 extern TexturePtr D_80BEB348[5]; // sEnDtEyeTextures[5] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex, gDotourEyeSquintTex };
 extern TexturePtr D_80BEB35C[3]; // sEnDtBrowTextyres[3] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
@@ -171,13 +166,21 @@ void func_80BE9CE8(EnDt *this, s32 animIndex) {
 // EnDt_UpdateNpcState?
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9D9C.s")
 // void func_80BE9D9C(EnDt *this) {
+//     static s32 D_80BEB2E8[] = {
+//         0x00000000, 0x00000001, 0x00000003, 0x00000001,
+//         0x00000000, 0x00000002, 0x00000003, 0x00000001,
+//         0x00000000, 0x00000003, 0x00000003, 0x00000001,
+//         0x00000000, 0x00000003, 0x00000000, 0x00000000,
+//         0x00000000, 0x00000005, 0x00000000, 0x00000000,
+//         0x00000000, 0x00000004, 0x00000000, 0x00000000
+//     };
 //     /*
 //     s32* p = &D_80BEB2E8[this->unk280].npcVisualState;
 
 //     func_80BE9CE8(this, *p);
 
 //     this->eyeTexIndex = *(++p);
-//     this->unk248 = *(++p);
+//     this->disableBlinking = *(++p);
 //     */
 
 //     s32 index = this->unk280;
@@ -186,7 +189,7 @@ void func_80BE9CE8(EnDt *this, s32 animIndex) {
 //     index *= 4;
 //     index++;
     
-//     p = (s32*)(&D_80BEB2E8 + index * 4); // &4 &20 &36
+//     p = (s32*)(((u8*)&D_80BEB2E8) + index * 4); // &4 &20 &36
 
 //     index = *p;
 //     func_80BE9CE8(this, *p); // 1 2 3 
@@ -195,7 +198,7 @@ void func_80BE9CE8(EnDt *this, s32 animIndex) {
 //     this->eyeTexIndex = *p; // 3 3 3
     
 //     ++p;
-//     this->unk248 = *p;  // 1 1 1
+//     this->disableBlinking = *p;  // 1 1 1
 // }
 
 // EnDt_UpdateTargetActors? or EnDt_MainAction?
@@ -612,17 +615,17 @@ void func_80BEABF8(EnDt* this, PlayState *play) {
 void func_80BEAC84(EnDt* this, PlayState* play) {
     func_80BE9CE8(this, 3);
 
-    this->unk248 = 1;
-    this->textIdIndex = 0x18;
+    this->disableBlinking = 1;
+    this->textIdIndex = 0x18; // Unclear which way things will go cus Mutoh said he would call wife" 
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_PERSON_MAYOR_DOTOUR);
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_40)) {
-        this->textIdIndex = 0x1A;
+        this->textIdIndex = 0x1A; // "Hard to figure out which way things will go"
     }
 
     this->actor.textId = D_80BEB1D0[this->textIdIndex];
     this->eyeTexIndex = 3;
-    this->unk248 = 1;
+    this->disableBlinking = 1;
     this->unk254 = 4;
     this->actionFunc = func_80BEAD2C;
 }
@@ -655,10 +658,10 @@ void func_80BEADB8(EnDt* this) {
 void func_80BEADD4(EnDt* this, PlayState* play) {
     func_80BE9C74(this);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && (Message_ShouldAdvance(play) != 0)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_60_40)) {
-            this->textIdIndex = 0x19;
+            this->textIdIndex = 0x19; // "The carnival is... on"
             Message_ContinueTextbox(play, D_80BEB1D0[this->textIdIndex]);
             SET_WEEKEVENTREG(WEEKEVENTREG_60_40);
             return;
@@ -684,19 +687,19 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
         Actor_PlaySfx(&this->actor, 0x205DU);
     }
 
-    DECR(this->unk24A);
+    DECR(this->blinkTimer);
     DECR(this->timer);
 
     if (this->unk290 != 0) {
         func_80BE9C74(this);
     }
 
-    // Blinking update?
-    if ((this->unk248 == 0) && (this->unk24A == 0)) {
+    // Blinking update
+    if (!this->disableBlinking && this->blinkTimer == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= 3) {
             this->eyeTexIndex = 0;
-            this->unk24A = (s32) Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = (s32) Rand_ZeroFloat(60.0f) + 20;
         }
     }
 

@@ -17,8 +17,8 @@ typedef struct EnDt {
     /* 0x240 */ s32 unk240;
     /* 0x244 */ s16 timer;
     /* 0x246 */ s16 animIndex;
-    /* 0x248 */ s16 unk248;
-    /* 0x24A */ s16 unk24A;
+    /* 0x248 */ s16 disableBlinking;
+    /* 0x24A */ s16 blinkTimer;
     /* 0x24C */ s16 eyeTexIndex;
     /* 0x24E */ char pad24E[0x02];
     /* 0x250 */ f32 animEndFrame;
