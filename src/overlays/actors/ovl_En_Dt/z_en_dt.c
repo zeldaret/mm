@@ -36,7 +36,32 @@ void func_80BE9D9C(EnDt *this);
 void func_80BEADB8(EnDt *this);
 void func_80BE9DF8(EnDt *this);
 
-#if 0
+typedef enum {
+    /* 0 */ EN_DT_ANIMATION_0,
+    /* 1 */ EN_DT_ANIMATION_1,
+    /* 2 */ EN_DT_ANIMATION_2,
+    /* 3 */ EN_DT_ANIMATION_3,
+    /* 4 */ EN_DT_ANIMATION_4,
+    /* 5 */ EN_DT_ANIMATION_5,
+    /* 6 */ EN_DT_ANIMATION_MAX
+} EnDtAnimation;
+
+typedef enum {
+    EN_DT_EYE_TEXTURE_SHOCK,
+    EN_DT_EYE_TEXTURE_OPEN,
+    EN_DT_EYE_TEXTURE_CLOSED,
+    EN_DT_EYE_TEXTURE_LOOK_DOWN,
+    EN_DT_EYE_TEXTURE_SQUINT,
+    EN_DT_EYE_TEXTURE_MAX
+} EnDtEyeTextures;
+
+typedef enum {
+    EN_DT_BROW_TEXTURE_HIGH,
+    EN_DT_BROW_TEXTURE_MID,
+    EN_DT_BROW_TEXTURE_LOW,
+    EN_DT_BROW_TEXTURE_MAX
+} EnDtBrowTextures;
+
 ActorInit En_Dt_InitVars = {
     /**/ ACTOR_EN_DT,
     /**/ ACTORCAT_NPC,
@@ -49,7 +74,8 @@ ActorInit En_Dt_InitVars = {
     /**/ EnDt_Draw,
 };
 
-static u16 sTextIds[] = { // D_80BEB1D0
+//static u16 sTextIds[] = {
+static u16 D_80BEB1D0[] = {
     0x2ABD, 0x2ABE, 0x2ABF, 0x2AC0, 
     0x2ABE, 0x2AC1, 0x2AC2, 0x2AC3, 
     0x2AC4, 0x2ABB, 0x2ABC, 0x2AC6, 
@@ -59,6 +85,72 @@ static u16 sTextIds[] = { // D_80BEB1D0
     0x2AD3, 0x2AD4, 0x2AD2, 0x0000 
 };
 
+// static s32 sCutsceneTargetFocusTable[] = {
+static s32 D_80BEB208[] = {
+    0x00000001,  /* [2ABD]Baisen: "Most of the townsfolk already sheltered" */
+    0x00000002,  /* [2ABE]Mayor:  "Ahh...hmm...well..." */
+    0x00000000,  /* [2ABF]Muto:   "You cowards! The moon won't fall" */
+    0x00000000,  /* [2AC0]Muto:   "Isn't that right Mayor?" */
+    0x00000002,  /* [2ABE]Mayor:  "Ahh...hmm...well..." */
+    0x00000001,  /* [2AC1]Baisen: "You serious Mutoh? Missed the huge rock?" */
+    0x00000002,  /* [2AC2]Mayor:  "Mmm...Hmm..." */
+    0x00000000,  /* [2AC3]Muto:   "If the soldiers wish to run, then abandon us"   */
+    0x00000002,  /* [2AC4]Mayor:  "Let's not bring my wife into this" */
+    0x00000001,  /* [2ABB]Baisen: "All must take refuge!!!" */
+    0x00000000,  /* [2ABC]Muto:   "On with the carnival!!!" */
+    0x00000001,  /* [2AC6]Baisen: "Ah!" */
+    0x00000002,  /* [2AC7]Mayor:  "Ah!" */
+    0x00000000,  /* [2AC8]Muto:   "Ah!" */
+    0x00000002,  /* [2AC9]Mayor:  "The Couple's Mask. Someone got married" */
+    0x00000000,  /* [2ACA]Muto:   "I wonder if my wife fled" */
+    0x00000001,  /* [2ACB]Baisen: "What did you just say!?" */
+    0x00000002,  /* [2ACB]Mayor:  "We're all worried, let's end the meeting" */
+    0x00000001,  /* [2ACD]Baisen: "But Mayor!" */
+    0x00000002,  /* [2ACE]Mayor:  "Stay or run, that's up to people to decide" */
+    0x00000000,  /* [2ACF]Muto:   "..!" */
+    0x00000002,  /* [2AD0]Mayor:  "Thanks for helping me end that. Here's your reward" */
+    0x00000002,  /* [2AD1]Mayor:  "I'm an unreliable mayor, but I want to protect my family" (notebook unlock here)  */
+    0x00000002   /* [2AC5]Mayor:  "You take refuge, too." */
+};
+
+typedef struct {
+    s16 D_80BEB268[1];
+    s16 D_80BEB26A[25];
+} CutsceneIndexTable;
+
+static CutsceneIndexTable CsIndexTable = {
+    {
+        0x2ABB
+    },
+    {   
+        0x0000,
+        0x2ABD,
+        0x0000,
+        0x2AC0,
+        0x0001,
+        0x2AC1,
+        0x0002,
+        0x2AC4,
+        0x0003,
+        0x2AC6,
+        0x0004,
+        0x2AC7,
+        0x0005,
+        0x2AC8,
+        0x0006,
+        0x2AC9,
+        0x0007,
+        0x2ACC,
+        0x0008,
+        0x2ACF,
+        0x0009,
+        0x2AD0,
+        0x000A,
+        0x0309,
+        0x0309
+    }
+};
+
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BEB29C = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -66,47 +158,52 @@ static ColliderCylinderInit D_80BEB29C = {
     { 25, 70, 0, { 0, 0, 0 } },
 };
 
-#endif
+// static AnimationHeader* sAnimations[EN_DT_ANIMATION_MAX] = {
+static AnimationHeader* D_80BEB2C8[EN_DT_ANIMATION_MAX] = {
+    &object_dt_Anim_00112C, 
+    &object_dt_Anim_0005A4, 
+    &object_dt_Anim_000854, 
+    &object_dt_Anim_000DA8, 
+    &object_dt_Anim_000BE0, 
+    &object_dt_Anim_00B500 
+};
 
-typedef struct {
-    s16 unk0;
-    u16 textId;
-} DialogSequenceEntry;
+// static u8 sAnimationModes[EN_DT_ANIMATION_MAX] = {
+static u8 D_80BEB2E0[EN_DT_ANIMATION_MAX] = {
+    ANIMMODE_LOOP, 
+    ANIMMODE_LOOP, 
+    ANIMMODE_ONCE, 
+    ANIMMODE_LOOP, 
+    ANIMMODE_LOOP, 
+    ANIMMODE_ONCE 
+};
 
-extern ColliderCylinderInit D_80BEB29C;
+//static s32 sVisualStateTable[] = {
+static s32 D_80BEB2E8[] = {
+    0, 0x00000001, 0x00000003, 0x00000001,
+    0, 0x00000002, 0x00000003, 0x00000001,
+    0, 0x00000003, 0x00000003, 0x00000001,
+    0, 0x00000003, 0x00000000, 0x00000000,
+    0, 0x00000005, 0x00000000, 0x00000000,
+    0, 0x00000004, 0x00000000, 0x00000000
+};
 
-extern u16 D_80BEB1D0[24];  //sTextIds
-extern s32 D_80BEB208[24];  //sDialogFocusStates?
-extern s16 D_80BEB268[24];  // sTextId?
-extern s16 D_80BEB26A[24];  // DialogSequenceEntries?
+// static TexturePtr sEyeTextures[] = {
+static TexturePtr D_80BEB348[] = { 
+    gDotourEyeShockTex, 
+    gDotourEyeOpenTex, 
+    gDotourEyeClosedTex, 
+    gDotourEyeLookDownTex, 
+    gDotourEyeSquintTex 
+};
 
-typedef enum {
-    /* 0 */ EN_DT_ANIMATION_0,
-    /* 1 */ EN_DT_ANIMATION_1,
-    /* 2 */ EN_DT_ANIMATION_2,
-    /* 3 */ EN_DT_ANIMATION_3,
-    /* 4 */ EN_DT_ANIMATION_4,
-    /* 5 */ EN_DT_ANIMATION_5,
-    /* 6 */ EN_DT_ANIMATION_MAX
-} EnDtAnimation;
+// static TexturePtr sBrowTextures[] = {
+static TexturePtr D_80BEB35C[] = { 
+    gDotourEyebrowHighTex, 
+    gDotourEyebrowMidTex, 
+    gDotourEyebrowLowTex 
+};
 
-extern AnimationHeader* D_80BEB2C8[EN_DT_ANIMATION_MAX]; // sEnDtAnimations[EN_DT_ANIMATION_MAX] = { &object_dt_Anim_00112C, &object_dt_Anim_0005A4, &object_dt_Anim_000854, &object_dt_Anim_000DA8, &object_dt_Anim_000BE0, &object_dt_Anim_00B500 };
-extern u8 D_80BEB2E0[EN_DT_ANIMATION_MAX]; // sEnDtAnimationModes[EN_DT_ANIMATION_MAX] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
-extern s32 D_80BEB2E8[24];
-
-// static s32 D_80BEB2E8[] = {
-//     0x00000000, 0x00000001, 0x00000003, 0x00000001,
-//     0x00000000, 0x00000002, 0x00000003, 0x00000001,
-//     0x00000000, 0x00000003, 0x00000003, 0x00000001,
-//     0x00000000, 0x00000003, 0x00000000, 0x00000000,
-//     0x00000000, 0x00000005, 0x00000000, 0x00000000,
-//     0x00000000, 0x00000004, 0x00000000, 0x00000000
-// };
-
-extern TexturePtr D_80BEB348[5]; // sEnDtEyeTextures[5] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex, gDotourEyeSquintTex };
-extern TexturePtr D_80BEB35C[3]; // sEnDtBrowTextyres[3] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/EnDt_Init.s")
 void EnDt_Init(Actor *thisx, PlayState *play) {
     EnDt* this = THIS;
 
@@ -132,13 +229,11 @@ void EnDt_Init(Actor *thisx, PlayState *play) {
     this->actionFunc = func_80BE9E94;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/EnDt_Destroy.s")
 void EnDt_Destroy(Actor *thisx, PlayState *play) {
     EnDt *this = THIS;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9C74.s")
 // EnDt_UpdateHeadRotate?
 void func_80BE9C74(EnDt *this) {
     s32 deltaAngle = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y);
@@ -157,7 +252,6 @@ void func_80BE9C74(EnDt *this) {
 }
 
 // EnDt_ChangeAnim?
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9CE8.s")
 void func_80BE9CE8(EnDt *this, s32 animIndex) {
     f32 morphFrames;
 
@@ -173,7 +267,6 @@ void func_80BE9CE8(EnDt *this, s32 animIndex) {
 }
 
 // EnDt_UpdateVisualState?
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9D9C.s")
 void func_80BE9D9C(EnDt *this) {
     s32 i = this->unk280;
     s32* p = D_80BEB2E8;
@@ -195,7 +288,6 @@ void func_80BE9D9C(EnDt *this) {
 }
 
 // EnDt_UpdateTargetActors? or EnDt_MainAction?
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9DF8.s")
 void func_80BE9DF8(EnDt* this) {
     if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
         EnMuto* npcEnMuto = (EnMuto*)this->npcEnMuto; 
@@ -221,7 +313,6 @@ void func_80BE9DF8(EnDt* this) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9E94.s")
 // EnDt_SetupCutsceneNpcs?
 void func_80BE9E94(EnDt* this, PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
@@ -238,7 +329,6 @@ void func_80BE9E94(EnDt* this, PlayState* play) {
     func_80BE9EF8(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BE9EF8.s")
 void func_80BE9EF8(EnDt* this, PlayState* play) {
     EnDtActionFunc actionFn;
     u32 textId;
@@ -290,7 +380,6 @@ void func_80BE9EF8(EnDt* this, PlayState* play) {
     this->actionFunc = actionFn;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEA088.s")
 void func_80BEA088(EnDt* this, PlayState* play) {
     EnMuto* npcMuto = NULL;
     EnBaisen* npcBaisen = NULL;
@@ -335,7 +424,6 @@ void func_80BEA088(EnDt* this, PlayState* play) {
     Actor_OfferTalk(&this->actor, play, 150.0f);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEA254.s")
 void func_80BEA254(EnDt* this, PlayState* play) {
     EnMuto* npcMuto;
     EnBaisen* npcBaisen;
@@ -366,7 +454,7 @@ void func_80BEA254(EnDt* this, PlayState* play) {
 
     this->cutsceneState = 0;
     for (index = 0; index < 24; index += 2) {
-        if ((play->msgCtx.currentTextId == D_80BEB268[index]) || (this->actor.textId == D_80BEB268[index])) {
+        if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) || (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
             this->cutsceneState = 1;
             this->csIdIndex = index;
             break;
@@ -378,12 +466,11 @@ void func_80BEA254(EnDt* this, PlayState* play) {
 }
 
 // EnDt_UpdateCutscene?
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEA394.s")
 void func_80BEA394(EnDt* this, PlayState* play)  {
     EnMuto* sp3C = NULL;
     EnBaisen* sp38 = NULL;
-    s32 index = D_80BEB26A[this->csIdIndex];
-    s32 unk30 = D_80BEB26A[this->csIdIndex];
+    s32 index = CsIndexTable.D_80BEB26A[this->csIdIndex];
+    s32 unk30 = CsIndexTable.D_80BEB26A[this->csIdIndex];
 
     if (this->cutsceneState == 1) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -492,13 +579,13 @@ void func_80BEA394(EnDt* this, PlayState* play)  {
 
             // Sets the cutscene ID index based off the current textId
             for (index = 0; index < 24; index += 2) {
-                if (play->msgCtx.currentTextId == D_80BEB268[index] || this->actor.textId == D_80BEB268[index]) {
+                if (play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index] || this->actor.textId == CsIndexTable.D_80BEB268[index]) {
                     this->csIdIndex = index;
                     break;
                 }
             }
 
-            index = D_80BEB26A[this->csIdIndex];
+            index = CsIndexTable.D_80BEB26A[this->csIdIndex];
             if (this->cutsceneState == 2 && (index != unk30)) {
                 this->cutsceneState = 1;
                 CutsceneManager_Stop(this->csIds[unk30]);
@@ -513,7 +600,6 @@ void func_80BEA394(EnDt* this, PlayState* play)  {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEA8F0.s")
 void func_80BEA8F0(EnDt* this, PlayState* play) {
     f32 currFrame = this->skelAnime.curFrame;
 
@@ -531,7 +617,7 @@ void func_80BEA8F0(EnDt* this, PlayState* play) {
     } else if (this->animEndFrame <= currFrame) {
         Camera* pCamera;
         s32 index;
-        s32 currTextId = D_80BEB26A[this->csIdIndex];
+        s32 currTextId = CsIndexTable.D_80BEB26A[this->csIdIndex];
 
         func_80BE9D9C(this);
 
@@ -545,12 +631,12 @@ void func_80BEA8F0(EnDt* this, PlayState* play) {
 
         // Loop through the text id array and set the index if it matches the current text id
         for (index = 0; index < 24; index++) {
-            if ((play->msgCtx.currentTextId == D_80BEB268[index]) || (this->actor.textId == D_80BEB268[index])) {
+            if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) || (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
                 this->csIdIndex = index;
             }
         }
 
-        index = D_80BEB26A[this->csIdIndex];
+        index = CsIndexTable.D_80BEB26A[this->csIdIndex];
         if ((this->cutsceneState == 2) && (index != currTextId)) {
             this->cutsceneState = 1;
             CutsceneManager_Stop(this->csIds[currTextId]);
@@ -567,7 +653,6 @@ void func_80BEA8F0(EnDt* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEAAF8.s")
 // EnDt_OfferReward?
 void func_80BEAAF8(EnDt* this, PlayState* play) {
     Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -575,7 +660,6 @@ void func_80BEAAF8(EnDt* this, PlayState* play) {
     this->actionFunc = func_80BEAB44;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEAB44.s")
 void func_80BEAB44(EnDt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->textIdIndex = 0x16;
@@ -591,7 +675,6 @@ void func_80BEAB44(EnDt* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEABF8.s")
 void func_80BEABF8(EnDt* this, PlayState *play) {
     SkelAnime_Update(&this->skelAnime);
 
@@ -604,7 +687,6 @@ void func_80BEABF8(EnDt* this, PlayState *play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEAC84.s")
 void func_80BEAC84(EnDt* this, PlayState* play) {
     func_80BE9CE8(this, 3);
 
@@ -623,7 +705,6 @@ void func_80BEAC84(EnDt* this, PlayState* play) {
     this->actionFunc = func_80BEAD2C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEAD2C.s")
 void func_80BEAD2C(EnDt* this, PlayState *play) {
     func_80BE9C74(this);
 
@@ -640,13 +721,11 @@ void func_80BEAD2C(EnDt* this, PlayState *play) {
     Actor_OfferTalk(&this->actor, play, 150.0f);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEADB8.s")
 void func_80BEADB8(EnDt* this) {
     this->unk254 = 5;
     this->actionFunc = func_80BEADD4;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEADD4.s")
 // EnDt_InDialogue?
 void func_80BEADD4(EnDt* this, PlayState* play) {
     func_80BE9C74(this);
@@ -663,7 +742,6 @@ void func_80BEADD4(EnDt* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/EnDt_Update.s")
 void EnDt_Update(Actor* thisx, PlayState* play) {
     EnDt* this = THIS;
     ColliderCylinder* collider;
@@ -709,7 +787,6 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &collider->base);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/func_80BEB06C.s")
 // EnDt_OverrideLimbDraw
 s32 func_80BEB06C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDt* this = THIS;
@@ -721,7 +798,6 @@ s32 func_80BEB06C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dt/EnDt_Draw.s")
 void EnDt_Draw(Actor* thisx, PlayState* play) {
     EnDt* this = THIS;
     s32 eyebrowIndex = 0;
