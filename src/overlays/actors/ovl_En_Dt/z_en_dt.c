@@ -19,22 +19,22 @@ void EnDt_Destroy(Actor* thisx, PlayState* play);
 void EnDt_Update(Actor* thisx, PlayState* play);
 void EnDt_Draw(Actor* thisx, PlayState* play);
 
-void EnDt_ChangeAnim(EnDt *this, s32 animIndex);
-void EnDt_SetupRegularState(EnDt *this, PlayState* play);
-void EnDt_SetupCutsceneNpcs(EnDt *this, PlayState* play);
-void EnDt_OfferRegularTalk(EnDt *this, PlayState* play);
-void EnDt_SetupMeetingCutscene(EnDt *this, PlayState* play);
-void EnDt_UpdateMeetingCutscene(EnDt *this, PlayState* play);
-void EnDt_FinishMeetingCutscene(EnDt *this, PlayState* play);
-void EnDt_OfferMeetingReward(EnDt *this, PlayState* play);
-void EnDt_OfferFinalNightTalk(EnDt *this, PlayState* play);
-void EnDt_TriggerFinalNightTalkEvent(EnDt *this, PlayState* play);
-void EnDt_TriggerMeetingRewardEvent(EnDt *this, PlayState* play);
-void EnDt_TriggerMeetingNotebookEvent(EnDt *this, PlayState* play);
-void EnDt_SetupFinalNightState(EnDt *this, PlayState* play);
-void EnDt_UpdateVisualState(EnDt *this);
-void EnDt_StartFinalNightTalk(EnDt *this);
-void EnDt_UpdateCutsceneFocusTarget(EnDt *this);
+void EnDt_ChangeAnim(EnDt* this, s32 animIndex);
+void EnDt_SetupRegularState(EnDt* this, PlayState* play);
+void EnDt_SetupCutsceneNpcs(EnDt* this, PlayState* play);
+void EnDt_OfferRegularTalk(EnDt* this, PlayState* play);
+void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play);
+void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play);
+void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play);
+void EnDt_OfferMeetingReward(EnDt* this, PlayState* play);
+void EnDt_OfferFinalNightTalk(EnDt* this, PlayState* play);
+void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play);
+void EnDt_TriggerMeetingRewardEvent(EnDt* this, PlayState* play);
+void EnDt_TriggerMeetingNotebookEvent(EnDt* this, PlayState* play);
+void EnDt_SetupFinalNightState(EnDt* this, PlayState* play);
+void EnDt_UpdateVisualState(EnDt* this);
+void EnDt_StartFinalNightTalk(EnDt* this);
+void EnDt_UpdateCutsceneFocusTarget(EnDt* this);
 
 typedef enum {
     /* 0 */ EN_DT_NPC_STATE_DEFAULT,
@@ -95,45 +95,39 @@ ActorInit En_Dt_InitVars = {
     /**/ EnDt_Draw,
 };
 
-static u16 sTextIds[] = {
-    0x2ABD, 0x2ABE, 0x2ABF, 0x2AC0, 
-    0x2ABE, 0x2AC1, 0x2AC2, 0x2AC3, 
-    0x2AC4, 0x2ABB, 0x2ABC, 0x2AC6, 
-    0x2AC7, 0x2AC8, 0x2AC9, 0x2ACA, 
-    0x2ACB, 0x2ACC, 0x2ACD, 0x2ACE,
-    0x2ACF, 0x2AD0, 0x2AD1, 0x2AC5, 
-    0x2AD3, 0x2AD4, 0x2AD2, 0x0000 
-};
+static u16 sTextIds[] = { 0x2ABD, 0x2ABE, 0x2ABF, 0x2AC0, 0x2ABE, 0x2AC1, 0x2AC2, 0x2AC3, 0x2AC4, 0x2ABB,
+                          0x2ABC, 0x2AC6, 0x2AC7, 0x2AC8, 0x2AC9, 0x2ACA, 0x2ACB, 0x2ACC, 0x2ACD, 0x2ACE,
+                          0x2ACF, 0x2AD0, 0x2AD1, 0x2AC5, 0x2AD3, 0x2AD4, 0x2AD2, 0x0000 };
 
 // The code uses EnDt::textIdIndex as an index into this lookup table
 static s32 sCutsceneFocusTargetTable[] = {
-    /* 00 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2ABD] "Most of the townsfolk already sheltered" */
-    /* 01 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2ABE] "Ahh...hmm...well..." */
-    /* 02 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2ABF] "You cowards! The moon won't fall" */
-    /* 03 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2AC0] "Isn't that right Mayor?" */
-    /* 04 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2ABE] "Ahh...hmm...well..." */
-    /* 05 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2AC1] "You serious Mutoh? Missed the huge rock?" */
-    /* 06 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AC2] "Mmm...Hmm..." */
-    /* 07 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2AC3] "If the soldiers wish to run, then abandon us"   */
-    /* 08 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AC4] "Let's not bring my wife into this" */
-    
-    /* 09 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2ABB] "All must take refuge!!!" */
-    /* 10 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2ABC] "On with the carnival!!!" */
-    
-    /* 11 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2AC6] "Ah!" */
-    /* 12 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AC7] "Ah!" */
-    /* 13 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2AC8] "Ah!" */
-    /* 14 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AC9] "The Couple's Mask. Someone got married" */
-    /* 15 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2ACA] "I wonder if my wife fled" */
-    /* 16 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2ACB] "What did you just say!?" */
-    /* 17 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2ACB] "We're all worried, let's end the meeting" */
-    /* 18 */ EN_DT_CS_FOCUS_TARGET_BAISEN,   /* [2ACD] "But Mayor!" */
-    /* 19 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2ACE] "Stay or run, that's up to people to decide" */
-    /* 20 */ EN_DT_CS_FOCUS_TARGET_MUTO,     /* [2ACF] "..!" */
-    /* 21 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AD0] "Thanks for helping me end that. Here's your reward" */
-    /* 22 */ EN_DT_CS_FOCUS_TARGET_MAYOR,    /* [2AD1] "I'm an unreliable mayor, but I want to protect my family" (notebook unlock here)  */
-    
-    /* 23 */ EN_DT_CS_FOCUS_TARGET_MAYOR     /* [2AC5] "You take refuge, too." */
+    /* 00 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2ABD] "Most of the townsfolk already sheltered" */
+    /* 01 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2ABE] "Ahh...hmm...well..." */
+    /* 02 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2ABF] "You cowards! The moon won't fall" */
+    /* 03 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2AC0] "Isn't that right Mayor?" */
+    /* 04 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2ABE] "Ahh...hmm...well..." */
+    /* 05 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2AC1] "You serious Mutoh? Missed the huge rock?" */
+    /* 06 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AC2] "Mmm...Hmm..." */
+    /* 07 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2AC3] "If the soldiers wish to run, then abandon us"   */
+    /* 08 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AC4] "Let's not bring my wife into this" */
+
+    /* 09 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2ABB] "All must take refuge!!!" */
+    /* 10 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2ABC] "On with the carnival!!!" */
+
+    /* 11 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2AC6] "Ah!" */
+    /* 12 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AC7] "Ah!" */
+    /* 13 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2AC8] "Ah!" */
+    /* 14 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AC9] "The Couple's Mask. Someone got married" */
+    /* 15 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2ACA] "I wonder if my wife fled" */
+    /* 16 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2ACB] "What did you just say!?" */
+    /* 17 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2ACB] "We're all worried, let's end the meeting" */
+    /* 18 */ EN_DT_CS_FOCUS_TARGET_BAISEN, /* [2ACD] "But Mayor!" */
+    /* 19 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2ACE] "Stay or run, that's up to people to decide" */
+    /* 20 */ EN_DT_CS_FOCUS_TARGET_MUTO,   /* [2ACF] "..!" */
+    /* 21 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AD0] "Thanks for helping me end that. Here's your reward" */
+    /* 22 */ EN_DT_CS_FOCUS_TARGET_MAYOR,  /* [2AD1] "I'm an unreliable mayor, but I want to protect my family" */
+
+    /* 23 */ EN_DT_CS_FOCUS_TARGET_MAYOR /* [2AC5] "You take refuge, too." */
 };
 
 typedef struct {
@@ -141,92 +135,61 @@ typedef struct {
     s16 D_80BEB26A[25];
 } CutsceneIndexTable;
 
-static CutsceneIndexTable CsIndexTable = {
-    {
-        0x2ABB
-    },
-    {   
-        0x0000,
-        0x2ABD,
-        0x0000,
-        0x2AC0,
-        0x0001,
-        0x2AC1,
-        0x0002,
-        0x2AC4,
-        0x0003,
-        0x2AC6,
-        0x0004,
-        0x2AC7,
-        0x0005,
-        0x2AC8,
-        0x0006,
-        0x2AC9,
-        0x0007,
-        0x2ACC,
-        0x0008,
-        0x2ACF,
-        0x0009,
-        0x2AD0,
-        0x000A,
-        0x0309,
-        0x0309
-    }
-};
+static CutsceneIndexTable CsIndexTable = { { 0x2ABB },
+                                           { 0x0000, 0x2ABD, 0x0000, 0x2AC0, 0x0001, 0x2AC1, 0x0002, 0x2AC4, 0x0003,
+                                             0x2AC6, 0x0004, 0x2AC7, 0x0005, 0x2AC8, 0x0006, 0x2AC9, 0x0007, 0x2ACC,
+                                             0x0008, 0x2ACF, 0x0009, 0x2AD0, 0x000A, 0x0309, 0x0309 } };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 25, 70, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[EN_DT_ANIMATION_MAX] = {
-    &object_dt_Anim_00112C, 
-    &object_dt_Anim_0005A4, 
-    &object_dt_Anim_000854, 
-    &object_dt_Anim_000DA8, 
-    &object_dt_Anim_000BE0, 
-    &object_dt_Anim_00B500 
-};
+static AnimationHeader* sAnimations[EN_DT_ANIMATION_MAX] = { &object_dt_Anim_00112C, &object_dt_Anim_0005A4,
+                                                             &object_dt_Anim_000854, &object_dt_Anim_000DA8,
+                                                             &object_dt_Anim_000BE0, &object_dt_Anim_00B500 };
 
-static u8 sAnimationModes[EN_DT_ANIMATION_MAX] = {
-    ANIMMODE_LOOP, 
-    ANIMMODE_LOOP, 
-    ANIMMODE_ONCE, 
-    ANIMMODE_LOOP, 
-    ANIMMODE_LOOP, 
-    ANIMMODE_ONCE 
-};
+static u8 sAnimationModes[EN_DT_ANIMATION_MAX] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+                                                   ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
 
+// clang-format off
 static s32 sVisualStateTable[] = {
-    0, EN_DT_ANIMATION_1, EN_DT_EYE_TEXTURE_LOOK_DOWN,  true,
-    0, EN_DT_ANIMATION_2, EN_DT_EYE_TEXTURE_LOOK_DOWN,  true,
-    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_LOOK_DOWN,  true,
-    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_SHOCK,      false,
-    0, EN_DT_ANIMATION_5, EN_DT_EYE_TEXTURE_SHOCK,      false,
-    0, EN_DT_ANIMATION_4, EN_DT_EYE_TEXTURE_SHOCK,      false
+    0, EN_DT_ANIMATION_1, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  
+    0, EN_DT_ANIMATION_2, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,
+    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  
+    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_SHOCK,     false,
+    0, EN_DT_ANIMATION_5, EN_DT_EYE_TEXTURE_SHOCK,     false, 
+    0, EN_DT_ANIMATION_4, EN_DT_EYE_TEXTURE_SHOCK,     false
 };
+// clang-format on
 
-static TexturePtr sEyeTextures[] = { 
-    gDotourEyeShockTex, 
-    gDotourEyeOpenTex, 
-    gDotourEyeClosedTex, 
-    gDotourEyeLookDownTex, 
-    gDotourEyeSquintTex 
-};
+static TexturePtr sEyeTextures[] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex,
+                                     gDotourEyeSquintTex };
 
-static TexturePtr sBrowTextures[] = { 
-    gDotourEyebrowHighTex, 
-    gDotourEyebrowMidTex, 
-    gDotourEyebrowLowTex 
-};
+static TexturePtr sBrowTextures[] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
 
-void EnDt_Init(Actor *thisx, PlayState *play) {
+void EnDt_Init(Actor* thisx, PlayState* play) {
     EnDt* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_00112C, this->jointTable, this->morphTable, OBJECT_DT_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_00112C, this->jointTable,
+                       this->morphTable, OBJECT_DT_LIMB_MAX);
 
     this->actor.targetMode = TARGET_MODE_6;
     this->npcEnMuto = NULL;
@@ -238,7 +201,7 @@ void EnDt_Init(Actor *thisx, PlayState *play) {
     } else {
         s32 csId = this->actor.csId;
         s32 i = 0;
-        
+
         // clang-format off
         while (csId != CS_ID_NONE) { this->csIds[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
         // clang-format on
@@ -246,12 +209,12 @@ void EnDt_Init(Actor *thisx, PlayState *play) {
     this->actionFunc = EnDt_SetupCutsceneNpcs;
 }
 
-void EnDt_Destroy(Actor *thisx, PlayState *play) {
-    EnDt *this = THIS;
+void EnDt_Destroy(Actor* thisx, PlayState* play) {
+    EnDt* this = THIS;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDt_UpdateHeadRotate(EnDt *this) {
+void EnDt_UpdateHeadRotate(EnDt* this) {
     s32 deltaAngle = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y);
     s32 absDeltaAngle = ABS_ALT(deltaAngle);
 
@@ -267,7 +230,7 @@ void EnDt_UpdateHeadRotate(EnDt *this) {
     }
 }
 
-void EnDt_ChangeAnim(EnDt *this, s32 animIndex) {
+void EnDt_ChangeAnim(EnDt* this, s32 animIndex) {
     f32 morphFrames;
 
     this->animIndex = animIndex;
@@ -277,14 +240,15 @@ void EnDt_ChangeAnim(EnDt *this, s32 animIndex) {
         morphFrames = 0.0f;
     }
 
-    this->animEndFrame = (f32) Animation_GetLastFrame(sAnimations[this->animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame, sAnimationModes[this->animIndex], morphFrames);
+    this->animEndFrame = (f32)Animation_GetLastFrame(sAnimations[this->animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
+                     sAnimationModes[this->animIndex], morphFrames);
 }
 
-void EnDt_UpdateVisualState(EnDt *this) {
+void EnDt_UpdateVisualState(EnDt* this) {
     s32 i = this->visualState;
     s32* p = sVisualStateTable;
-    s32 v; // Permuter silliness 
+    s32 v; // Permuter silliness
 
     i = i * 4 + 1;
     p += i;
@@ -292,8 +256,9 @@ void EnDt_UpdateVisualState(EnDt *this) {
     i = *p;
     v = *p;
 
-    // Extreme permuter silliness 
-    goto dummy_label; dummy_label: ;
+    // Extreme permuter silliness
+    goto dummy_label;
+dummy_label:;
 
     EnDt_ChangeAnim(this, v);
 
@@ -303,7 +268,7 @@ void EnDt_UpdateVisualState(EnDt *this) {
 
 void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
     if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
-        EnMuto* npcEnMuto = (EnMuto*)this->npcEnMuto; 
+        EnMuto* npcEnMuto = (EnMuto*)this->npcEnMuto;
         EnBaisen* npcEnBaisen = (EnBaisen*)this->npcEnBaisen;
 
         switch (sCutsceneFocusTargetTable[this->textIdIndex]) {
@@ -337,7 +302,7 @@ void EnDt_SetupCutsceneNpcs(EnDt* this, PlayState* play) {
         }
         npc = npc->next;
     }
-    
+
     EnDt_SetupRegularState(this, play);
 }
 
@@ -415,7 +380,7 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
             this->showedCouplesMask = true;
 
             if (this->npcEnMuto && this->npcEnBaisen) {
-                npcMuto->textIdIndex = 4; // "Ah!"
+                npcMuto->textIdIndex = 4;   // "Ah!"
                 npcBaisen->textIdIndex = 6; // "Ah!"
             }
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
@@ -424,7 +389,8 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && this->npcEnMuto != NULL && this->npcEnBaisen != NULL && (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && this->npcEnMuto != NULL && this->npcEnBaisen != NULL &&
+        (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
         EnDt_SetupMeetingCutscene(this, play);
     }
 
@@ -453,7 +419,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
             npcMuto->cutsceneState = 1;
             npcBaisen->cutsceneState = 1;
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
-                npcMuto->textIdIndex = 4; // "Ah!"
+                npcMuto->textIdIndex = 4;   // "Ah!"
                 npcBaisen->textIdIndex = 6; // "Ah!"
                 this->visualState = 5;
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
@@ -466,7 +432,8 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
 
     this->cutsceneState = EN_DT_CS_STATE_NONE;
     for (index = 0; index < 24; index += 2) {
-        if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) || (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
+        if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) ||
+            (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
             this->cutsceneState = EN_DT_CS_STATE_WAITING;
             this->csIdIndex = index;
             break;
@@ -477,7 +444,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
     this->actionFunc = EnDt_UpdateMeetingCutscene;
 }
 
-void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
+void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
     EnMuto* muto = NULL;
     EnBaisen* baisen = NULL;
     s32 index = CsIndexTable.D_80BEB26A[this->csIdIndex];
@@ -515,8 +482,8 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
             EnDt_OfferMeetingReward(this, play);
             return;
         }
-        
-        // After Muto and Baisen react to the Couple's Mask, 
+
+        // After Muto and Baisen react to the Couple's Mask,
         // they leave the office and trigger a transition.
         if (this->textIdIndex == 20) { // Muto says "...!" in response to Mayor's final comments
             Message_CloseTextbox(play);
@@ -533,7 +500,8 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
             }
         } else {
             // At the end of each cutscene dialog, trigger an event flag
-            if ((this->textIdIndex == 8) || (this->textIdIndex == 10) || (this->textIdIndex == 22) || (this->textIdIndex == 23)) {
+            if ((this->textIdIndex == 8) || (this->textIdIndex == 10) || (this->textIdIndex == 22) ||
+                (this->textIdIndex == 23)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_60_08);
                 Message_CloseTextbox(play);
 
@@ -563,8 +531,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
                 play->msgCtx.msgLength = 0;
                 EnDt_UpdateCutsceneFocusTarget(this);
                 Actor_ChangeFocus(&this->actor, play, this->targetActor);
-                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIds[index])), this->targetActor);
-                
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIds[index])),
+                                      this->targetActor);
+
                 this->timer = 2;
                 this->actionFunc = EnDt_FinishMeetingCutscene;
                 return;
@@ -587,15 +556,17 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
 
             EnDt_UpdateCutsceneFocusTarget(this);
             Actor_ChangeFocus(&this->actor, play, this->targetActor);
-            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIds[index])), this->targetActor);
-            
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIds[index])),
+                                  this->targetActor);
+
             this->actor.textId = sTextIds[this->textIdIndex];
             Message_CloseTextbox(play);
             Message_StartTextbox(play, this->actor.textId, &this->actor);
 
             // Sets the cutscene ID index based off the current textId
             for (index = 0; index < 24; index += 2) {
-                if (play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index] || this->actor.textId == CsIndexTable.D_80BEB268[index]) {
+                if (play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index] ||
+                    this->actor.textId == CsIndexTable.D_80BEB268[index]) {
                     this->csIdIndex = index;
                     break;
                 }
@@ -647,7 +618,8 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
 
         // Loop through the text id array and set the index if it matches the current text id
         for (index = 0; index < 24; index++) {
-            if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) || (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
+            if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) ||
+                (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
                 this->csIdIndex = index;
             }
         }
@@ -658,13 +630,13 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
             CutsceneManager_Stop(this->csIds[currTextId]);
             CutsceneManager_Queue(this->csIds[index]);
         }
-        
+
         EnDt_UpdateCutsceneFocusTarget(this);
         Actor_ChangeFocus(&this->actor, play, this->targetActor);
 
         pCamera = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIds[index]));
         Camera_SetTargetActor(pCamera, this->targetActor);
-        
+
         this->actionFunc = EnDt_UpdateMeetingCutscene;
     }
 }
@@ -690,7 +662,7 @@ void EnDt_TriggerMeetingRewardEvent(EnDt* this, PlayState* play) {
     }
 }
 
-void EnDt_TriggerMeetingNotebookEvent(EnDt* this, PlayState *play) {
+void EnDt_TriggerMeetingNotebookEvent(EnDt* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -706,7 +678,7 @@ void EnDt_SetupFinalNightState(EnDt* this, PlayState* play) {
     EnDt_ChangeAnim(this, EN_DT_ANIMATION_3);
 
     this->disableBlinking = true;
-    this->textIdIndex = 24; // "Unclear which way things will go, cus Mutoh said he would call wife" 
+    this->textIdIndex = 24; // "Unclear which way things will go, cus Mutoh said he would call wife"
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_PERSON_MAYOR_DOTOUR);
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_40)) {
@@ -720,7 +692,7 @@ void EnDt_SetupFinalNightState(EnDt* this, PlayState* play) {
     this->actionFunc = EnDt_OfferFinalNightTalk;
 }
 
-void EnDt_OfferFinalNightTalk(EnDt* this, PlayState *play) {
+void EnDt_OfferFinalNightTalk(EnDt* this, PlayState* play) {
     EnDt_UpdateHeadRotate(this);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -767,7 +739,8 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
         EnDt_SetupFinalNightState(this, play);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && (gSaveContext.save.day != 3 || (gSaveContext.save.day == 3 && !gSaveContext.save.isNight))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) &&
+        (gSaveContext.save.day != 3 || (gSaveContext.save.day == 3 && !gSaveContext.save.isNight))) {
         Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &gSfxDefaultPos, NA_BGM_MAYORS_OFFICE, 1000.0f);
         Actor_PlaySfx(&this->actor, 0x205DU);
     }
@@ -784,7 +757,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= EN_DT_EYE_TEXTURE_LOOK_DOWN) {
             this->eyeTexIndex = EN_DT_EYE_TEXTURE_SHOCK;
-            this->blinkTimer = (s32) Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = (s32)Rand_ZeroFloat(60.0f) + 20;
         }
     }
 
@@ -792,7 +765,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_SmoothStepToS(&this->headRotValue.y, this->headRotTarget.y, 1, 3000, 0);
-    
+
     Actor_SetFocus(&this->actor, 60.0f);
     Actor_MoveWithGravity(&this->actor);
 
@@ -807,7 +780,7 @@ s32 EnDt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     if (limbIndex == OBJECT_DT_LIMB_0C) {
         rot->y += -1 * this->headRotValue.y;
     }
-    
+
     return false;
 }
 
@@ -816,7 +789,7 @@ void EnDt_Draw(Actor* thisx, PlayState* play) {
     s32 eyebrowIndex = 0;
 
     OPEN_DISPS(play->state.gfxCtx);
-    
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
@@ -828,7 +801,8 @@ void EnDt_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBrowTextures[eyebrowIndex]));
 
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, EnDt_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnDt_OverrideLimbDraw, NULL, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
