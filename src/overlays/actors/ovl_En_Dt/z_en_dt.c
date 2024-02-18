@@ -46,6 +46,12 @@ typedef enum {
 } EnDtNpcState;
 
 typedef enum {
+    /* 0 */ EN_DT_CS_STATE_NONE,
+    /* 1 */ EN_DT_CS_STATE_WAITING,
+    /* 2 */ EN_DT_CS_STATE_PLAYING
+} EnDtCutsceneState;
+
+typedef enum {
     /* 0 */ EN_DT_CS_FOCUS_TARGET_MUTO,
     /* 1 */ EN_DT_CS_FOCUS_TARGET_BAISEN,
     /* 2 */ EN_DT_CS_FOCUS_TARGET_MAYOR
@@ -458,10 +464,10 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
         }
     }
 
-    this->cutsceneState = 0;
+    this->cutsceneState = EN_DT_CS_STATE_NONE;
     for (index = 0; index < 24; index += 2) {
         if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) || (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
-            this->cutsceneState = 1;
+            this->cutsceneState = EN_DT_CS_STATE_WAITING;
             this->csIdIndex = index;
             break;
         }
@@ -477,7 +483,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
     s32 index = CsIndexTable.D_80BEB26A[this->csIdIndex];
     s32 unk30 = CsIndexTable.D_80BEB26A[this->csIdIndex];
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == EN_DT_CS_STATE_WAITING) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             CutsceneManager_Queue(this->csIds[index]);
@@ -491,7 +497,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
 
         CutsceneManager_StartWithPlayerCs(this->csIds[index], this->targetActor);
         Actor_ChangeFocus(&this->actor, play, this->targetActor);
-        this->cutsceneState = 2;
+        this->cutsceneState = EN_DT_CS_STATE_PLAYING;
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && (this->npcEnMuto != NULL || this->npcEnBaisen != NULL)) {
@@ -502,9 +508,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
     if (this->timer == 0 && Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT && Message_ShouldAdvance((play))) {
         if (this->textIdIndex == 21) { // "Thanks for helping me end that..."
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-            if (this->cutsceneState == 2) {
+            if (this->cutsceneState == EN_DT_CS_STATE_PLAYING) {
                 CutsceneManager_Stop(this->csIds[index]);
-                this->cutsceneState = 0;
+                this->cutsceneState = EN_DT_CS_STATE_NONE;
             }
             EnDt_OfferMeetingReward(this, play);
             return;
@@ -521,9 +527,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
             SET_WEEKEVENTREG(WEEKEVENTREG_63_80);
             this->meetingFinished = true;
 
-            if (this->cutsceneState == 2) {
+            if (this->cutsceneState == EN_DT_CS_STATE_PLAYING) {
                 CutsceneManager_Stop(this->csIds[index]);
-                this->cutsceneState = 0;
+                this->cutsceneState = EN_DT_CS_STATE_NONE;
             }
         } else {
             // At the end of each cutscene dialog, trigger an event flag
@@ -542,9 +548,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
                     this->targetActor = &this->actor;
                 }
 
-                if (this->cutsceneState == 2) {
+                if (this->cutsceneState == EN_DT_CS_STATE_PLAYING) {
                     CutsceneManager_Stop(this->csIds[index]);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = EN_DT_CS_STATE_NONE;
                 }
                 EnDt_SetupRegularState(this, play);
                 return;
@@ -596,8 +602,8 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
             }
 
             index = CsIndexTable.D_80BEB26A[this->csIdIndex];
-            if (this->cutsceneState == 2 && (index != unk30)) {
-                this->cutsceneState = 1;
+            if (this->cutsceneState == EN_DT_CS_STATE_PLAYING && (index != unk30)) {
+                this->cutsceneState = EN_DT_CS_STATE_WAITING;
                 CutsceneManager_Stop(this->csIds[unk30]);
                 CutsceneManager_Queue(this->csIds[index]);
             }
@@ -647,8 +653,8 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
         }
 
         index = CsIndexTable.D_80BEB26A[this->csIdIndex];
-        if ((this->cutsceneState == 2) && (index != currTextId)) {
-            this->cutsceneState = 1;
+        if ((this->cutsceneState == EN_DT_CS_STATE_PLAYING) && (index != currTextId)) {
+            this->cutsceneState = EN_DT_CS_STATE_WAITING;
             CutsceneManager_Stop(this->csIds[currTextId]);
             CutsceneManager_Queue(this->csIds[index]);
         }
