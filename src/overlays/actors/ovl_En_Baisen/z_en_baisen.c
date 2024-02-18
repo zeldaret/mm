@@ -174,7 +174,7 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
                 this->textIdIndex = 6;
             }
-            if (this->unk2AC == 1) {
+            if (this->cutsceneState == 1) {
                 func_80BE895C(this, play);
                 return;
             }
@@ -185,14 +185,14 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
 }
 
 void func_80BE895C(EnBaisen* this, PlayState* play) {
-    if (this->unk2A4 != NULL) {
+    if (this->targetActor != NULL) {
         this->unk290 = true;
-        this->unk2AC = 1;
-        Actor_ChangeFocus(this->unk2A4, play, this->unk2A4);
+        this->cutsceneState = 1;
+        Actor_ChangeFocus(this->targetActor, play, this->targetActor);
     }
     this->unk29C = 1;
     if (this->paramCopy == 0) {
-        this->unk2A4 = this->heishiPointer;
+        this->targetActor = this->heishiPointer;
         this->actionFunc = func_80BE8AAC;
     } else {
         this->actionFunc = func_80BE89D8;
@@ -200,13 +200,13 @@ void func_80BE895C(EnBaisen* this, PlayState* play) {
 }
 
 void func_80BE89D8(EnBaisen* this, PlayState* play) {
-    if (&this->actor == this->unk2A4) {
+    if (&this->actor == this->targetActor) {
         this->unk29E = this->actor.world.rot.y;
         if (this->animIndex == ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
-        this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
+        this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         if (this->animIndex != ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
         }
@@ -216,7 +216,7 @@ void func_80BE89D8(EnBaisen* this, PlayState* play) {
         this->skelAnime.playSpeed = 0.0f;
         this->unk29E = this->actor.yawTowardsPlayer;
     }
-    if (this->unk2AC == 2) { // Note: This variable is only ever set to 1.
+    if (this->cutsceneState == 2) { // Note: This variable is also set by EnDt.
         func_80BE87FC(this);
     }
 }
@@ -228,8 +228,8 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
-        if (this->unk2A4 != NULL) {
-            this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
+        if (this->targetActor != NULL) {
+            this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         }
         if (this->animIndex != ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
@@ -241,11 +241,11 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
         if (this->textIdIndex < 6) {
             Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
             if ((this->textIdIndex % 2) == 0) {
-                this->unk2A4 = this->heishiPointer;
+                this->targetActor = this->heishiPointer;
             } else {
-                this->unk2A4 = &this->actor;
+                this->targetActor = &this->actor;
             }
-            Actor_ChangeFocus(this->unk2A4, play, this->unk2A4);
+            Actor_ChangeFocus(this->targetActor, play, this->targetActor);
         } else {
             func_80BE87FC(this);
         }

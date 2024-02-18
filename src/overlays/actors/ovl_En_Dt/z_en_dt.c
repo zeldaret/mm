@@ -303,17 +303,17 @@ void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
         switch (sCutsceneFocusTargetTable[this->textIdIndex]) {
             case EN_DT_CS_FOCUS_TARGET_MUTO:
                 npcEnMuto->targetActor = this->npcEnMuto;
-                npcEnBaisen->unk2A4 = this->npcEnMuto;
+                npcEnBaisen->targetActor = this->npcEnMuto;
                 this->targetActor = this->npcEnMuto;
                 break;
             case EN_DT_CS_FOCUS_TARGET_BAISEN:
                 npcEnMuto->targetActor = this->npcEnBaisen;
-                npcEnBaisen->unk2A4 = this->npcEnBaisen;
+                npcEnBaisen->targetActor = this->npcEnBaisen;
                 this->targetActor = this->npcEnBaisen;
                 break;
             case EN_DT_CS_FOCUS_TARGET_MAYOR:
                 npcEnMuto->targetActor = &this->actor;
-                npcEnBaisen->unk2A4 = &this->actor;
+                npcEnBaisen->targetActor = &this->actor;
                 this->targetActor = &this->actor;
                 break;
         }
@@ -418,7 +418,7 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && this->npcEnMuto != NULL && this->npcEnBaisen != NULL && (npcMuto->cutsceneState == 1 || npcBaisen->unk2AC == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && this->npcEnMuto != NULL && this->npcEnBaisen != NULL && (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
         EnDt_SetupMeetingCutscene(this, play);
     }
 
@@ -445,7 +445,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
         }
         if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
             npcMuto->cutsceneState = 1;
-            npcBaisen->unk2AC = 1;
+            npcBaisen->cutsceneState = 1;
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
                 npcMuto->textIdIndex = 4; // "Ah!"
                 npcBaisen->textIdIndex = 6; // "Ah!"
@@ -535,9 +535,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play)  {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
                     if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
                         muto->cutsceneState = 2;
-                        baisen->unk2AC = 2;
+                        baisen->cutsceneState = 2;
                         muto->targetActor = this->npcEnMuto;
-                        baisen->unk2A4 = this->npcEnBaisen;
+                        baisen->targetActor = this->npcEnBaisen;
                     }
                     this->targetActor = &this->actor;
                 }
