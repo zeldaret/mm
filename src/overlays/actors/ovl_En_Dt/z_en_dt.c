@@ -448,7 +448,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
     EnMuto* muto = NULL;
     EnBaisen* baisen = NULL;
     s32 index = CsIndexTable.D_80BEB26A[this->csIdIndex];
-    s32 unk30 = CsIndexTable.D_80BEB26A[this->csIdIndex];
+    s32 csIdIndex = CsIndexTable.D_80BEB26A[this->csIdIndex];
 
     if (this->cutsceneState == EN_DT_CS_STATE_WAITING) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -573,9 +573,9 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
             }
 
             index = CsIndexTable.D_80BEB26A[this->csIdIndex];
-            if (this->cutsceneState == EN_DT_CS_STATE_PLAYING && (index != unk30)) {
+            if (this->cutsceneState == EN_DT_CS_STATE_PLAYING && (index != csIdIndex)) {
                 this->cutsceneState = EN_DT_CS_STATE_WAITING;
-                CutsceneManager_Stop(this->csIds[unk30]);
+                CutsceneManager_Stop(this->csIds[csIdIndex]);
                 CutsceneManager_Queue(this->csIds[index]);
             }
 
