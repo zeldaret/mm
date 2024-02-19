@@ -40,12 +40,6 @@ typedef enum EnInvadepohType {
 
 #define EN_INVADEPOH_PATH_INDEX_NONE 0xFF
 
-typedef struct EnInvadepohUnkStruct1 {
-    /* 0x0 */ f32 unk0;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ s16 unk6;
-} EnInvadepohUnkStruct1; // size = 0x8
-
 typedef struct EnInvadepohFaceFrames {
     /* 0x0 */ s8* texIndex;
     /* 0x1 */ s8 count;

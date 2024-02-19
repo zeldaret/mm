@@ -4189,6 +4189,12 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
+typedef struct EnInvadepohUnkStruct1 {
+    /* 0x0 */ f32 unk0;
+    /* 0x4 */ s16 unk4;
+    /* 0x6 */ s16 unk6;
+} EnInvadepohUnkStruct1; // size = 0x8
+
 void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     static EnInvadepohUnkStruct1 D_80B4EE0C[3] = {
         { 0.08f, 0x2BC, -0xA },
