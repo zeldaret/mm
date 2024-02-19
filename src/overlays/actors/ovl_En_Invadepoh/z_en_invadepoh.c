@@ -737,7 +737,7 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
     nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->checkpoints[this->currentPoint] : 1.0f;
 
     if (nextCheckpoint - curCheckpoint < 0.001f) {
-        Math_Vec3s_ToVec3f(&this->unk_314, curPathPoint);
+        Math_Vec3s_ToVec3f(&this->currentPos, curPathPoint);
     } else {
         f32 nextWeight = this->progress - curCheckpoint;
         f32 prevWeight = nextCheckpoint - this->progress;
@@ -746,12 +746,12 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
 
         Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
         Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-        this->unk_314.x = ((curPathPointF.x * prevWeight) + (nextPathPointF.x * nextWeight)) * invPathLength;
-        this->unk_314.y = ((curPathPointF.y * prevWeight) + (nextPathPointF.y * nextWeight)) * invPathLength;
-        this->unk_314.z = ((curPathPointF.z * prevWeight) + (nextPathPointF.z * nextWeight)) * invPathLength;
+        this->currentPos.x = ((curPathPointF.x * prevWeight) + (nextPathPointF.x * nextWeight)) * invPathLength;
+        this->currentPos.y = ((curPathPointF.y * prevWeight) + (nextPathPointF.y * nextWeight)) * invPathLength;
+        this->currentPos.z = ((curPathPointF.z * prevWeight) + (nextPathPointF.z * nextWeight)) * invPathLength;
     }
 
-    Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_314);
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->currentPos);
     func_800B4AEC(play, &this->actor, 0.0f);
 
     if (this->actor.floorHeight > (BGCHECK_Y_MIN + 1.0f)) {
@@ -2589,13 +2589,13 @@ void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
         EnInvadepoh_SilentRomani_SetNextPathPoint(this);
-        this->unk_370 = 0xC8;
+        this->shapeAngularVelocityY = 0xC8;
         this->actor.speed *= 0.25f;
     } else {
-        Math_StepToS(&this->unk_370, 0x7D0, 0x46);
+        Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x46);
     }
 
-    EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 0x46);
+    EnInvadepoh_Romani_TurnToPath(this, 6, this->shapeAngularVelocityY, 0x46);
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
@@ -2616,26 +2616,26 @@ void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     this->actionTimer = Rand_S16Offset(150, 150);
 
     if (rand < 0.5f) {
-        this->unk_374 = 0;
+        this->silentRomaniState = 0;
         Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
         interactInfo->scaledTurnRate = 0.1f;
         interactInfo->maxTurnRate = 0x3E8;
     } else if (rand < 0.75f) {
-        this->unk_374 = 1;
+        this->silentRomaniState = 1;
         interactInfo->headRotTarget.x = Rand_S16Offset(0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
         interactInfo->scaledTurnRate = 0.06f;
         interactInfo->maxTurnRate = 0x3E8;
     } else if (rand < 0.8f) {
-        this->unk_374 = 2;
+        this->silentRomaniState = 2;
         interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
         interactInfo->scaledTurnRate = 0.05f;
         interactInfo->maxTurnRate = 0x3E8;
     } else {
-        this->unk_374 = 3;
+        this->silentRomaniState = 3;
         interactInfo->headRotTarget.x = 0;
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = Rand_S16Offset(-0x9C4, 0x1388);
@@ -2656,7 +2656,7 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         EnInvadepoh_SilentRomani_SetNextPathPoint(this);
     }
 
-    if (this->unk_374 == 0) {
+    if (this->silentRomaniState == 0) {
         if ((this->actor.xzDistToPlayer < 350.0f) && (play->gameplayFrames & 0x60)) {
             Player* player = GET_PLAYER(play);
             s16 angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
@@ -2675,19 +2675,19 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         s32 timerMod32 = (u32)this->actionTimer % 0x20;
 
         if ((timerMod32 == 0) && (Rand_ZeroOne() < 0.3f)) {
-            s32 next_unk_374 = (s32)Rand_Next() % 4;
+            s32 next_silentRomaniState = (s32)Rand_Next() % 4;
 
-            if (next_unk_374 != this->unk_374) {
-                this->unk_374 = next_unk_374;
-                if (this->unk_374 == 0) {
+            if (next_silentRomaniState != this->silentRomaniState) {
+                this->silentRomaniState = next_silentRomaniState;
+                if (this->silentRomaniState == 0) {
                     Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
                     interactInfo->scaledTurnRate = 0.07f;
-                } else if (this->unk_374 == 1) {
+                } else if (this->silentRomaniState == 1) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(0x3E8, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
                     interactInfo->scaledTurnRate = 0.06f;
-                } else if (this->unk_374 == 2) {
+                } else if (this->silentRomaniState == 2) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
@@ -2712,7 +2712,7 @@ void EnInvadepoh_SilentRomani_SetupTalk(EnInvadepoh* this) {
 
     this->actor.speed = 0.0f;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     interactInfo->scaledTurnRate = 0.05f;
     interactInfo->maxTurnRate = 0x4B0;
     this->actionFunc = EnInvadepoh_SilentRomani_Talk;
@@ -2723,8 +2723,8 @@ void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x7D0, 0x32);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->unk_370, 0x23);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x32);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 0x23);
 
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
@@ -3081,7 +3081,7 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_Night1Romani_SetupTalk(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0x7D0;
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actionFunc = EnInvadepoh_Night1Romani_Talk;
 }
@@ -3091,8 +3091,8 @@ void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->unk_370, 0x28);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3215,10 +3215,10 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
         Math_Vec3s_ToVec3f(&pathPointF, this->pathPoints);
         yawToPath = Math_Vec3f_Yaw(&this->actor.world.pos, &pathPointF);
         this->angle = Rand_S16Offset(-0x1F40, 0x3E80) + yawToPath;
-        this->unk_370 = 0;
+        this->shapeAngularVelocityY = 0;
     }
-    Math_StepToS(&this->unk_370, 0x7D0, 0x28);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->angle, 6, this->unk_370, 0x28);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->angle, 6, this->shapeAngularVelocityY, 0x28);
 
     if (this->actor.xzDistToPlayer < 300.0f) {
         Player* player = GET_PLAYER(play);
@@ -3284,13 +3284,13 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
         EnInvadepoh_BarnRomani_SetNextPathPoint(this);
-        this->unk_370 = 0x5DC;
+        this->shapeAngularVelocityY = 0x5DC;
         this->actor.speed *= 0.5f;
     } else {
-        Math_StepToS(&this->unk_370, 0x190, 0x32);
+        Math_StepToS(&this->shapeAngularVelocityY, 0x190, 0x32);
     }
 
-    EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 50);
+    EnInvadepoh_Romani_TurnToPath(this, 6, this->shapeAngularVelocityY, 50);
 
     if (this->currentPoint == 0) {
         if (!this->doorOpened) {
@@ -3315,7 +3315,7 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_BarnRomani_SetupTalk(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0x7D0;
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
     this->actionFunc = EnInvadepoh_BarnRomani_Talk;
 }
@@ -3325,8 +3325,8 @@ void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x7D0, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->unk_370, (s16)0x28);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3565,8 +3565,8 @@ void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2) {
 
         SkelAnime_Update(&this->skelAnime);
         player = GET_PLAYER(play);
-        Math_StepToS(&this->unk_370, 0x7D0, 0x28);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->unk_370, 40);
+        Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
         angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f;
         interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3710,7 +3710,7 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh_SetPosToPathPoint(this, 0);
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
-    Math_Vec3f_Copy(&this->unk_314, &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->currentPos, &this->actor.world.pos);
 
     if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
@@ -3791,7 +3791,7 @@ void EnInvadepoh_Night3Cremia_SetupWalk(EnInvadepoh* this) {
     interactInfo->scaledTurnRate = 0.1f;
     interactInfo->maxTurnRate = 0x320;
 
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Walk;
 }
 
@@ -3799,7 +3799,7 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     EnInvadepoh* romani = sRomani;
     s32 pad;
-    s32 framesMod0x80;
+    s32 tempFrames;
     s32 pad2;
     s16 angleToRomani;
     s16 targetYaw;
@@ -3807,40 +3807,40 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
 
     if (romani != NULL) {
         if (romani->currentPoint == 0) {
-            this->unk_2F8 = 40.0f;
+            this->distanceToRomani = 40.0f;
             this->angle = -0x8000;
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         } else if (romani->currentPoint < (romani->endPoint - 1)) {
-            this->unk_2F8 = 40.0f;
+            this->distanceToRomani = 40.0f;
             Math_ScaledStepToS(&this->angle, -0x4800, 0xC8);
             this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         } else {
-            Math_StepToF(&this->unk_2F8, 5.0f, 3.0f);
+            Math_StepToF(&this->distanceToRomani, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->angle, -0x8000, 0x12C);
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
 
         angleToRomani = this->angle + romani->actor.world.rot.y;
-        this->actor.world.pos.x = (Math_SinS(angleToRomani) * this->unk_2F8) + romani->actor.world.pos.x;
+        this->actor.world.pos.x = (Math_SinS(angleToRomani) * this->distanceToRomani) + romani->actor.world.pos.x;
         this->actor.world.pos.y = romani->actor.world.pos.y;
-        this->actor.world.pos.z = (Math_CosS(angleToRomani) * this->unk_2F8) + romani->actor.world.pos.z;
+        this->actor.world.pos.z = (Math_CosS(angleToRomani) * this->distanceToRomani) + romani->actor.world.pos.z;
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
-        Math_StepToS(&this->unk_370, 0xBB8, 0x1F5);
+        Math_StepToS(&this->shapeAngularVelocityY, 0xBB8, 0x1F5);
 
         if (Math3D_Vec3fDistSq(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
-                               3, this->unk_370, 0x1F4);
+                               3, this->shapeAngularVelocityY, 0x1F4);
         }
 
-        framesMod0x80 = (play->gameplayFrames + 20) % 0x80;
-        if (framesMod0x80 & 0x40) {
+        tempFrames = (play->gameplayFrames + 20) % 0x80;
+        if (tempFrames & 0x40) {
             targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &romani->actor.world.pos);
-            if (framesMod0x80 == 0x40) {
-                this->unk_370 = 0;
+            if (tempFrames == 0x40) {
+                this->shapeAngularVelocityY = 0;
             }
-            Math_StepToS(&this->unk_370, 0x7D0, 0x28);
-            Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->unk_370, 0x28);
+            Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 0x28);
             angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &romani->actor.focus.pos) * 0.85f;
             interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3865,7 +3865,7 @@ void EnInvadepoh_Night3Cremia_SetupTalk(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Talk;
 }
 
@@ -3874,8 +3874,8 @@ void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x9C4, 0x1C2);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->unk_370, 0x28);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x9C4, 0x1C2);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3890,7 +3890,7 @@ void EnInvadepoh_Night3Cremia_SetupIdle(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Idle;
 }
 
@@ -3899,8 +3899,8 @@ void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->unk_370, 0x28);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 0x28);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -3932,13 +3932,13 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
 
         if (currentTime < CLOCK_TIME(20, 01) + 30) {
             this->angle = -0x8000;
-            this->unk_2F8 = 40.0f;
+            this->distanceToRomani = 40.0f;
         } else if (currentTime > CLOCK_TIME(20, 14) + 1) {
             this->angle = -0x4800;
-            this->unk_2F8 = 20.0f;
+            this->distanceToRomani = 20.0f;
         } else {
             this->angle = -0x8000;
-            this->unk_2F8 = 40.0f;
+            this->distanceToRomani = 40.0f;
         }
 
         if ((CLOCK_TIME(6, 00) <= currentTime) && (currentTime < CLOCK_TIME(20, 00) + 30)) {
@@ -4005,7 +4005,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     EnInvadepoh* cremia = sCremia;
     s32 curPoint;
-    s32 framesMod0x80;
+    s32 tempFrames;
     s32 doorTimer;
     s32 pad;
     Vec3f curPathPointF;
@@ -4037,16 +4037,16 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
         this->doorOpened = false;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
-    framesMod0x80 = play->gameplayFrames % 0x80;
-    if (framesMod0x80 & 0x40) {
+    tempFrames = play->gameplayFrames % 0x80;
+    if (tempFrames & 0x40) {
         s16 targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &cremia->actor.world.pos);
         s16 angleToPlayer;
 
-        if (framesMod0x80 == 0x40) {
-            this->unk_370 = 0;
+        if (tempFrames == 0x40) {
+            this->shapeAngularVelocityY = 0;
         }
-        Math_StepToS(&this->unk_370, 0x7D0, 0x28);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->unk_370, 40);
+        Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 40);
         angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &cremia->actor.focus.pos) * 0.85f;
         interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -4070,7 +4070,7 @@ void EnInvadepoh_Night3Romani_SetupTalk(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0xFA0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Romani_Talk;
 }
 
@@ -4079,8 +4079,8 @@ void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0xBB8, 0x1F4);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->unk_370, 40);
+    Math_StepToS(&this->shapeAngularVelocityY, 0xBB8, 0x1F4);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -4095,7 +4095,7 @@ void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this) {
     this->interactInfo.scaledTurnRate = 0.08f;
     this->interactInfo.maxTurnRate = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
-    this->unk_370 = 0;
+    this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Romani_Idle;
 }
 
@@ -4104,8 +4104,8 @@ void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    Math_StepToS(&this->unk_370, 0x7D0, 0xC8);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->unk_370, 40);
+    Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
     angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
     interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
 
@@ -4190,16 +4190,16 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
 }
 
 typedef struct EnInvadepohUnkStruct1 {
-    /* 0x0 */ f32 unk0;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ s16 unk6;
+    /* 0x0 */ f32 accel;
+    /* 0x4 */ s16 angularVelocity;
+    /* 0x6 */ s16 angularAcceleration;
 } EnInvadepohUnkStruct1; // size = 0x8
 
 void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     static EnInvadepohUnkStruct1 D_80B4EE0C[3] = {
         { 0.08f, 0x2BC, -0xA },
-        { 0.09f, 0x12C, -5 },
-        { 0.05f, 0x190, 0 },
+        { 0.09f, 0x12C, -0x5 },
+        { 0.05f, 0x190, 0x0 },
     };
     s32 pad;
     s32 index = ENINVADEPOH_GET_INDEX(&this->actor);
@@ -4212,14 +4212,14 @@ void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     this->present = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
-    this->unk_300 = D_80B4EE0C[index].unk0;
+    this->alienAbductorAccelY = D_80B4EE0C[index].accel;
     this->angle = index * 0x5555;
     this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
     this->actor.world.pos.y = this->actor.home.pos.y;
     this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
     this->actor.shape.rot.y = this->angle + 0x4000;
-    this->unk_370 = D_80B4EE0C[index].unk4;
-    this->unk_372 = D_80B4EE0C[index].unk6;
+    this->shapeAngularVelocityY = D_80B4EE0C[index].angularVelocity;
+    this->shapeAngularAccelerationY = D_80B4EE0C[index].angularAcceleration;
     this->actionFunc = EnInvadepoh_AlienAbductor_Cow;
     this->actor.velocity.y = 0.0f;
 }
@@ -4233,14 +4233,14 @@ void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play) {
         return;
     }
 
-    Math_StepToF(&this->actor.velocity.y, 15.0f, this->unk_300);
+    Math_StepToF(&this->actor.velocity.y, 15.0f, this->alienAbductorAccelY);
     distToTarget = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, 0.2f,
                                       this->actor.velocity.y, 0.01f);
     this->angle += 0x2BC;
     this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
     this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
-    this->unk_370 += this->unk_372;
-    this->actor.shape.rot.y += this->unk_370;
+    this->shapeAngularVelocityY += this->shapeAngularAccelerationY;
+    this->actor.shape.rot.y += this->shapeAngularVelocityY;
 
     if (this->actor.child != NULL) {
         cow = this->actor.child;

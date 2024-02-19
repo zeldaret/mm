@@ -136,12 +136,12 @@ typedef struct EnInvadepoh {
     /* 0x29C */ s8 isAnimFinished;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;
-    /* 0x2F0 */ s16 actionTimer;
-    /* 0x2F2 */ s16 stateTimer;
+    /* 0x2F0 */ s16 actionTimer; // TODO: consider different name
+    /* 0x2F2 */ s16 stateTimer; // TODO: consider different name
     /* 0x2F4 */ s8 objectSlot;
-    /* 0x2F8 */ f32 unk_2F8;
+    /* 0x2F8 */ f32 distanceToRomani;
     /* 0x2FC */ UNK_TYPE1 unk_2FC[4];
-    /* 0x300 */ f32 unk_300;
+    /* 0x300 */ f32 alienAbductorAccelY;
     /* 0x304 */ s16 angle;
     /* 0x306 */ s16 angularVelocity;
     /* 0x308 */ s8 endPoint;
@@ -149,31 +149,31 @@ typedef struct EnInvadepoh {
     /* 0x30A */ s8 pathStep;
     /* 0x30C */ Vec3s *pathPoints;
     /* 0x310 */ f32 pathLength;
-    /* 0x314 */ Vec3f unk_314;
+    /* 0x314 */ Vec3f currentPos;
     /* 0x320 */ f32 progress;
     /* 0x324 */ EnInvadepohInteractInfo interactInfo;
-    /* 0x370 */ s16 unk_370;
-    /* 0x372 */ s16 unk_372;
-    /* 0x374 */ s8 unk_374;
+    /* 0x370 */ s16 shapeAngularVelocityY;
+    /* 0x372 */ s16 shapeAngularAccelerationY;
+    /* 0x374 */ s8 silentRomaniState;
     /* 0x376 */ u16 textId;
     /* 0x378 */ s8 doorOpened;
-    /* 0x379 */ s8 spawnCount;
-    /* 0x37C */ f32 checkpoints[3];
+    /* 0x379 */ s8 spawnCount; // TODO: consider different name
+    /* 0x37C */ f32 checkpoints[3]; // TODO: consider different name
     /* 0x388 */ UNK_TYPE1 unk_388;
-    /* 0x389 */ u8 alpha;
-    /* 0x38A */ s8 atBarn;
-    /* 0x38B */ s8 present;
-    /* 0x38C */ s8 drawDeathFlash;
-    /* 0x38D */ u8 eyeBeamAlpha;
-    /* 0x390 */ Vec3f deathFlashScale;
-    /* 0x39C */ f32 pulseScale;
-    /* 0x3A0 */ f32 pulseScaleTarget;
-    /* 0x3A4 */ f32 pulseScaleRate;
-    /* 0x3A8 */ s16 pulsePhase;
-    /* 0x3AA */ s16 pulseRate;
-    /* 0x3AC */ s8 ufoTarget;
+    /* 0x389 */ u8 alpha; // TODO: consider different name
+    /* 0x38A */ s8 atBarn; // TODO: consider different name
+    /* 0x38B */ s8 present; // TODO: consider different name
+    /* 0x38C */ s8 drawDeathFlash; // TODO: consider different name
+    /* 0x38D */ u8 eyeBeamAlpha; // TODO: consider different name
+    /* 0x390 */ Vec3f deathFlashScale; // TODO: consider different name
+    /* 0x39C */ f32 pulseScale; // TODO: consider different name 
+    /* 0x3A0 */ f32 pulseScaleTarget; // TODO: consider different name
+    /* 0x3A4 */ f32 pulseScaleRate; // TODO: consider different name
+    /* 0x3A8 */ s16 pulsePhase; // TODO: consider different name
+    /* 0x3AA */ s16 pulseRate; // TODO: consider different name
+    /* 0x3AC */ s8 ufoTarget; // TODO: consider different name
     /* 0x3AD */ UNK_TYPE1 unk_3AD[0xF];
-    /* 0x3BC */ s8 dogTargetPoint;
+    /* 0x3BC */ s8 dogTargetPoint; // TODO: consider different name
 } EnInvadepoh; // size = 0x3C0
 
 #endif // Z_EN_INVADEPOH_H
