@@ -3029,9 +3029,9 @@ void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2) {
 
     scaleMod = 1.0f + (Math_SinS(this->pulsePhase) * this->pulseScale);
     Actor_SetScale(&this->actor, 0.27f * scaleMod);
-    Math_StepToS(&this->unk_306, 0x258, 8);
-    this->actor.world.rot.y += this->unk_306;
-    this->unk_304 += 0x258;
+    Math_StepToS(&this->angularVelocity, 0x258, 8);
+    this->actor.world.rot.y += this->angularVelocity;
+    this->angle += 0x258;
 }
 
 void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
@@ -3052,19 +3052,19 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Romani_TurnToPath(this, 6, 0x7D0, 0x64);
 
     if ((this->currentPoint == 0) || ((this->currentPoint + 1) == this->endPoint)) {
-        if (this->unk_378 == 0) {
+        if (!this->doorOpened) {
             s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
             s32 doorTimer = trueTimeSpeed;
 
             if (trueTimeSpeed > 0) {
                 // This is really dividing by trueTimeSpeed, but matching requires writing like this
                 doorTimer = (R_TIME_SPEED * -16.0f / doorTimer) - 0.5f;
-                this->unk_378 = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
+                this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
             }
         }
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
-        this->unk_378 = 0;
+        this->doorOpened = false;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
 
@@ -3199,7 +3199,7 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     interactInfo->maxTurnRate = 0x5DC;
 
     this->actionTimer = Rand_S16Offset(200, 200);
-    this->unk_304 = this->actor.shape.rot.y;
+    this->angle = this->actor.shape.rot.y;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_Idle;
 }
@@ -3214,11 +3214,11 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
 
         Math_Vec3s_ToVec3f(&pathPointF, this->pathPoints);
         yawToPath = Math_Vec3f_Yaw(&this->actor.world.pos, &pathPointF);
-        this->unk_304 = Rand_S16Offset(-0x1F40, 0x3E80) + yawToPath;
+        this->angle = Rand_S16Offset(-0x1F40, 0x3E80) + yawToPath;
         this->unk_370 = 0;
     }
     Math_StepToS(&this->unk_370, 0x7D0, 0x28);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_304, 6, this->unk_370, 0x28);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->angle, 6, this->unk_370, 0x28);
 
     if (this->actor.xzDistToPlayer < 300.0f) {
         Player* player = GET_PLAYER(play);
@@ -3293,12 +3293,12 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Romani_TurnToPath(this, 6, this->unk_370, 50);
 
     if (this->currentPoint == 0) {
-        if (this->unk_378 == 0) {
-            this->unk_378 = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
+        if (!this->doorOpened) {
+            this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
         }
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
-        this->unk_378 = 0;
+        this->doorOpened = false;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
 
@@ -3808,19 +3808,19 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
     if (romani != NULL) {
         if (romani->currentPoint == 0) {
             this->unk_2F8 = 40.0f;
-            this->unk_304 = -0x8000;
+            this->angle = -0x8000;
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         } else if (romani->currentPoint < (romani->endPoint - 1)) {
             this->unk_2F8 = 40.0f;
-            Math_ScaledStepToS(&this->unk_304, -0x4800, 0xC8);
+            Math_ScaledStepToS(&this->angle, -0x4800, 0xC8);
             this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         } else {
             Math_StepToF(&this->unk_2F8, 5.0f, 3.0f);
-            Math_ScaledStepToS(&this->unk_304, -0x8000, 0x12C);
+            Math_ScaledStepToS(&this->angle, -0x8000, 0x12C);
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
 
-        angleToRomani = this->unk_304 + romani->actor.world.rot.y;
+        angleToRomani = this->angle + romani->actor.world.rot.y;
         this->actor.world.pos.x = (Math_SinS(angleToRomani) * this->unk_2F8) + romani->actor.world.pos.x;
         this->actor.world.pos.y = romani->actor.world.pos.y;
         this->actor.world.pos.z = (Math_CosS(angleToRomani) * this->unk_2F8) + romani->actor.world.pos.z;
@@ -3931,13 +3931,13 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.textId = 0x33CD;
 
         if (currentTime < CLOCK_TIME(20, 01) + 30) {
-            this->unk_304 = -0x8000;
+            this->angle = -0x8000;
             this->unk_2F8 = 40.0f;
         } else if (currentTime > CLOCK_TIME(20, 14) + 1) {
-            this->unk_304 = -0x4800;
+            this->angle = -0x4800;
             this->unk_2F8 = 20.0f;
         } else {
-            this->unk_304 = -0x8000;
+            this->angle = -0x8000;
             this->unk_2F8 = 40.0f;
         }
 
@@ -4022,19 +4022,19 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF) + 0, 5, 0x7D0, 100);
 
     if ((this->currentPoint == 0) || (this->currentPoint == this->endPoint - 1)) {
-        if (this->unk_378 == 0) {
+        if (!this->doorOpened) {
             s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
             doorTimer = trueTimeSpeed;
 
             if (trueTimeSpeed > 0) {
                 // This is really dividing by trueTimeSpeed, but matching requires writing like this
                 doorTimer = (R_TIME_SPEED * -23.0f / doorTimer) - 0.5f;
-                this->unk_378 = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
+                this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
             }
         }
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
-        this->unk_378 = 0;
+        this->doorOpened = false;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
     framesMod0x80 = play->gameplayFrames % 0x80;
@@ -4213,11 +4213,11 @@ void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->unk_300 = D_80B4EE0C[index].unk0;
-    this->unk_304 = index * 0x5555;
-    this->actor.world.pos.x = Math_SinS(this->unk_304) * 80.0f + this->actor.home.pos.x;
+    this->angle = index * 0x5555;
+    this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
     this->actor.world.pos.y = this->actor.home.pos.y;
-    this->actor.world.pos.z = Math_CosS(this->unk_304) * 80.0f + this->actor.home.pos.z;
-    this->actor.shape.rot.y = this->unk_304 + 0x4000;
+    this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
+    this->actor.shape.rot.y = this->angle + 0x4000;
     this->unk_370 = D_80B4EE0C[index].unk4;
     this->unk_372 = D_80B4EE0C[index].unk6;
     this->actionFunc = EnInvadepoh_AlienAbductor_Cow;
@@ -4236,9 +4236,9 @@ void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.velocity.y, 15.0f, this->unk_300);
     distToTarget = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, 0.2f,
                                       this->actor.velocity.y, 0.01f);
-    this->unk_304 += 0x2BC;
-    this->actor.world.pos.x = Math_SinS(this->unk_304) * 80.0f + this->actor.home.pos.x;
-    this->actor.world.pos.z = Math_CosS(this->unk_304) * 80.0f + this->actor.home.pos.z;
+    this->angle += 0x2BC;
+    this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
+    this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
     this->unk_370 += this->unk_372;
     this->actor.shape.rot.y += this->unk_370;
 
@@ -4263,8 +4263,8 @@ void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
     this->present = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
-    this->unk_306 = 0x190;
-    this->unk_304 = 0;
+    this->angularVelocity = 0x190;
+    this->angle = 0;
     this->actionTimer = 200;
     this->actionFunc = EnInvadepoh_AlienAbductor_Romani;
     this->actor.velocity.y = 0.0f;
@@ -4272,7 +4272,7 @@ void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
 
 void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
     s32 actionTimer;
-    f32 tempUnk_306;
+    f32 tempAngularVelocity;
     s32 reachedTargetY = 0;
 
     if (this->actionTimer > 0) {
@@ -4304,10 +4304,10 @@ void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
             reachedTargetY = Math_StepToF(&this->actor.world.pos.y, targetY, fabsf(this->actor.velocity.y));
         }
 
-        tempUnk_306 = (this->unk_304 * -0.06f) + this->unk_306;
-        tempUnk_306 *= 0.98f;
-        this->unk_306 = tempUnk_306;
-        this->actor.shape.rot.y += this->unk_306;
+        tempAngularVelocity = (this->angle * -0.06f) + this->angularVelocity;
+        tempAngularVelocity *= 0.98f;
+        this->angularVelocity = tempAngularVelocity;
+        this->actor.shape.rot.y += this->angularVelocity;
 
         if (this->actor.child != NULL) {
             Actor* romani = this->actor.child;
@@ -4615,7 +4615,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     flashPos.z += this->actor.world.pos.z;
     EnInvadepoh_Ufo_ReplaceTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
-    Matrix_RotateZS(this->unk_304, MTXMODE_APPLY);
+    Matrix_RotateZS(this->angle, MTXMODE_APPLY);
 
     OPEN_DISPS(play->state.gfxCtx);
 

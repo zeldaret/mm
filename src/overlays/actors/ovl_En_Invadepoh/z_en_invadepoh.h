@@ -126,8 +126,7 @@ typedef struct EnInvadepohInteractInfo {
 
 typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnim**);
 
-#define EN_INVADEPOH_LIMB_MAX 23
-// #define EN_INVADEPOH_LIMB_MAX MAX(MAX(MAX(MAX(MAX(ALIEN_LIMB_MAX, ROMANI_LIMB_MAX), CREMIA_LIMB_MAX), DOG_LIMB_MAX), COW_LIMB_MAX), COW_TAIL_LIMB_MAX)
+#define EN_INVADEPOH_LIMB_MAX ROMANI_LIMB_MAX
 
 typedef struct EnInvadepoh {
     /* 0x000 */ Actor actor;
@@ -141,10 +140,10 @@ typedef struct EnInvadepoh {
     /* 0x2F2 */ s16 stateTimer;
     /* 0x2F4 */ s8 objectSlot;
     /* 0x2F8 */ f32 unk_2F8;
-    /* 0x2FC */ char unk_2FC[4]; // unused? f32?
+    /* 0x2FC */ UNK_TYPE1 unk_2FC[4];
     /* 0x300 */ f32 unk_300;
-    /* 0x304 */ s16 unk_304;
-    /* 0x306 */ s16 unk_306;
+    /* 0x304 */ s16 angle;
+    /* 0x306 */ s16 angularVelocity;
     /* 0x308 */ s8 endPoint;
     /* 0x309 */ s8 currentPoint;
     /* 0x30A */ s8 pathStep;
@@ -157,10 +156,10 @@ typedef struct EnInvadepoh {
     /* 0x372 */ s16 unk_372;
     /* 0x374 */ s8 unk_374;
     /* 0x376 */ u16 textId;
-    /* 0x378 */ s8 unk_378;
+    /* 0x378 */ s8 doorOpened;
     /* 0x379 */ s8 spawnCount;
     /* 0x37C */ f32 checkpoints[3];
-    /* 0x388 */ char unk_388; // unused?
+    /* 0x388 */ UNK_TYPE1 unk_388;
     /* 0x389 */ u8 alpha;
     /* 0x38A */ s8 atBarn;
     /* 0x38B */ s8 present;
@@ -173,8 +172,7 @@ typedef struct EnInvadepoh {
     /* 0x3A8 */ s16 pulsePhase;
     /* 0x3AA */ s16 pulseRate;
     /* 0x3AC */ s8 ufoTarget;
-    /* 0x3AD */ char pad3AD[3];
-    /* 0x3B0 */ char pad3B0[0xC]; // unused? Vec3f?
+    /* 0x3AD */ UNK_TYPE1 unk_3AD[0xF];
     /* 0x3BC */ s8 dogTargetPoint;
 } EnInvadepoh; // size = 0x3C0
 
