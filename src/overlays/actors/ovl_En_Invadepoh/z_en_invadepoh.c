@@ -37,8 +37,8 @@ typedef enum EnInvadepohFaceAnimationType {
     /* 2 */ ENINVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED
 } EnInvadepohFaceAnimationType;
 
-void EnInvadepoh_Init(Actor* thisx, PlayState* play);
-void EnInvadepoh_Destroy(Actor* thisx, PlayState* play);
+void EnInvadepoh_Init(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2);
 void EnInvadepoh_InvasionHandler_Update(Actor* thisx, PlayState* play2);
 
 // Update functions
@@ -328,6 +328,14 @@ MtxF sAlienRightEyeBeamMtxF;
 EnInvadepoh* sAliens[8];
 u8 sAlienStateFlags[8];
 s8 sAliensTooClose;
+
+typedef struct EnInvadepohWarpEffect {
+    /* 0x0 */ s8 type;
+    /* 0x1 */ s8 timer;
+    /* 0x2 */ u8 alpha;
+    /* 0x4 */ Vec3f pos;
+} EnInvadepohWarpEffect; // size = 0x10
+
 EnInvadepohWarpEffect sWarpEffects[10];
 EnInvadepoh* sUfo;
 EnInvadepoh* sRomani;
@@ -1509,8 +1517,7 @@ s32 EnInvadepoh_InvasionHandler_UpdateWarps(void) {
     return warpActive;
 }
 
-void EnInvadepoh_InvasionHandler_Init(Actor* thisx, PlayState* play) {
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     s32 spawnCount;
     s32 pathIndex;
 
@@ -1562,8 +1569,8 @@ InitChainEntry sAlienInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Alien_Init(Actor* thisx, PlayState* play) {
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_Alien_Init(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
     Collider_InitCylinder(play, &this->collider);
@@ -1593,10 +1600,7 @@ InitChainEntry sCowInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Cow_Init(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Cow_Init(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowInitChain);
     this->actor.update = EnInvadepoh_Cow_WaitForObject;
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
@@ -1615,10 +1619,7 @@ InitChainEntry sCowTailInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-void EnInvadepoh_CowTail_Init(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_CowTail_Init(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowTailInitChain);
     this->actor.update = EnInvadepoh_CowTail_WaitForObject;
 
@@ -1634,8 +1635,8 @@ InitChainEntry sRomaniInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
     s32 romaniType = ENINVADEPOH_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
@@ -1702,10 +1703,7 @@ InitChainEntry sUfoInitChain[] = {
     ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Ufo_Init(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sUfoInitChain);
     this->actor.update = EnInvadepoh_Ufo_Update;
     this->actor.draw = EnInvadepoh_Ufo_Draw;
@@ -1729,8 +1727,8 @@ InitChainEntry sDogInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Dog_Init(Actor* thisx, PlayState* play) {
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sDogInitChain);
     this->actor.update = EnInvadepoh_Dog_WaitForObject;
@@ -1751,9 +1749,8 @@ InitChainEntry sCremiaInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Stack size problems
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sCremiaInitChain);
     this->actor.update = EnInvadepoh_Night3Cremia_WaitForObject;
@@ -1775,8 +1772,8 @@ void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
     sCremia = this;
 }
 
-void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
-    static ActorFunc sInitFuncs[ENINVADEPOH_TYPE_MAX] = {
+void EnInvadepoh_Init(Actor* thisx, PlayState* play2) {
+    static EnInvadepohInitFunc sInitFuncs[ENINVADEPOH_TYPE_MAX] = {
         EnInvadepoh_InvasionHandler_Init, // ENINVADEPOH_TYPE_INVASION_HANDLER
         EnInvadepoh_Alien_Init,           // ENINVADEPOH_TYPE_ALIEN
         EnInvadepoh_Cow_Init,             // ENINVADEPOH_TYPE_COW
@@ -1792,25 +1789,24 @@ void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
         EnInvadepoh_Romani_Init,          // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
         EnInvadepoh_Alien_Init,           // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
-
-    sInitFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
-}
-
-void EnInvadepoh_InvasionHandler_Destroy(Actor* thisx, PlayState* play2) {
-}
-
-void EnInvadepoh_Alien_Destroy(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
-    s32 index = ENINVADEPOH_GET_INDEX(&this->actor);
     PlayState* play = play2;
+
+    sInitFuncs[ENINVADEPOH_GET_TYPE(&this->actor)](this, play);
+}
+
+void EnInvadepoh_InvasionHandler_Destroy(EnInvadepoh* this, PlayState* play) {
+}
+
+void EnInvadepoh_Alien_Destroy(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
+    s32 index = ENINVADEPOH_GET_INDEX(&this->actor);
 
     Collider_DestroyCylinder(play, &this->collider);
     sAliens[index] = NULL;
 }
 
-void EnInvadepoh_Cow_Destroy(Actor* thisx, PlayState* play2) {
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Cow_Destroy(EnInvadepoh* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         this->actor.parent->child = NULL;
     }
@@ -1819,61 +1815,46 @@ void EnInvadepoh_Cow_Destroy(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_CowTail_Destroy(Actor* thisx, PlayState* play2) {
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_CowTail_Destroy(EnInvadepoh* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         this->actor.parent->child = NULL;
     }
 }
 
-void EnInvadepoh_Romani_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Romani_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnInvadepoh_Ufo_Destroy(Actor* thisx, PlayState* play2) {
+void EnInvadepoh_Ufo_Destroy(EnInvadepoh* this, PlayState* play) {
     sUfo = NULL;
 }
 
-void EnInvadepoh_Dog_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Dog_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnInvadepoh_Cremia_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Cremia_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
     sCremia = NULL;
 }
 
-void EnInvadepoh_Night3Romani_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
-
+void EnInvadepoh_Night3Romani_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
     sRomani = NULL;
 }
 
-void EnInvadepoh_AlienAbductor_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    EnInvadepoh* this = THIS;
+void EnInvadepoh_AlienAbductor_Destroy(EnInvadepoh* this, PlayState* play) {
+    Actor* thisx = &this->actor;
 
     Collider_DestroyCylinder(play, &this->collider);
 
-    if (this->actor.child != NULL) {
-        this->actor.child->parent = NULL;
+    if (thisx->child != NULL) {
+        thisx->child->parent = NULL;
     }
 }
 
-void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
-    static ActorFunc sDestroyFuncs[ENINVADEPOH_TYPE_MAX] = {
+void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2) {
+    static EnInvadepohDestroyFunc sDestroyFuncs[ENINVADEPOH_TYPE_MAX] = {
         EnInvadepoh_InvasionHandler_Destroy, // ENINVADEPOH_TYPE_INVASION_HANDLER
         EnInvadepoh_Alien_Destroy,           // ENINVADEPOH_TYPE_ALIEN
         EnInvadepoh_Cow_Destroy,             // ENINVADEPOH_TYPE_COW
@@ -1889,8 +1870,10 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
         EnInvadepoh_Night3Romani_Destroy,    // ENINVADEPOH_TYPE_ROMANI_NIGHT_3
         EnInvadepoh_AlienAbductor_Destroy,   // ENINVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
+    EnInvadepoh* this = THIS;
+    PlayState* play = play2;
 
-    sDestroyFuncs[ENINVADEPOH_GET_TYPE(thisx)](thisx, play);
+    sDestroyFuncs[ENINVADEPOH_GET_TYPE(&this->actor)](this, play);
 }
 
 void EnInvadepoh_InvasionHandler_SetupWait(EnInvadepoh* this) {

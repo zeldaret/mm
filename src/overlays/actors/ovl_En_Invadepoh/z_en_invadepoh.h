@@ -11,7 +11,8 @@
 struct EnInvadepoh;
 
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
-typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState, not GameState
+typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh* this, PlayState* play);
+typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh* this, PlayState* play);
 
 #define ENINVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
 #define ENINVADEPOH_GET_TYPE(thisx) ((thisx)->params >> 4 & 0xF)
@@ -25,7 +26,7 @@ typedef enum EnInvadepohType {
     /* 0x2 */ ENINVADEPOH_TYPE_COW,              // An unused abudcted cow, spawned by the alien abductor
     /* 0x3 */ ENINVADEPOH_TYPE_COW_TAIL,         // An unused abducted cow tail, spawned by the abducted cow
     /* 0x4 */ ENINVADEPOH_TYPE_ROMANI_ABDUCTED,  // An unused abducted Romani, spawned by alien abductor
-    /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_SILENT,  // A confused, silent Romani that wanders the ranch on day 2
+    /* 0x5 */ ENINVADEPOH_TYPE_ROMANI_SILENT,    // A confused, silent Romani that wanders the ranch on day 2
     /* 0x6 */ ENINVADEPOH_TYPE_UFO,              // The spinning ball of light that spawns the aliens and hovers over the barn
     /* 0x7 */ ENINVADEPOH_TYPE_ROMANI_NIGHT_1,   // Romani running to the barn on night 1
     /* 0x8 */ ENINVADEPOH_TYPE_ROMANI_BARN,      // Romani in the barn on night 1
@@ -44,13 +45,6 @@ typedef struct EnInvadepohUnkStruct1 {
     /* 0x4 */ s16 unk4;
     /* 0x6 */ s16 unk6;
 } EnInvadepohUnkStruct1; // size = 0x8
-
-typedef struct EnInvadepohWarpEffect {
-    /* 0x0 */ s8 type;
-    /* 0x1 */ s8 timer;
-    /* 0x2 */ u8 alpha;
-    /* 0x4 */ Vec3f pos;
-} EnInvadepohWarpEffect; // size = 0x10
 
 typedef struct EnInvadepohFaceFrames {
     /* 0x0 */ s8* texIndex;
