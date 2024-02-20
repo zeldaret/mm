@@ -150,21 +150,21 @@ typedef struct EnInvadepoh {
     /* 0x30C */ Vec3s *pathPoints;
     /* 0x310 */ f32 pathLength;
     /* 0x314 */ Vec3f currentPos;
-    /* 0x320 */ f32 progress;
+    /* 0x320 */ f32 pathProgress;
     /* 0x324 */ EnInvadepohInteractInfo interactInfo;
     /* 0x370 */ s16 shapeAngularVelocityY;
     /* 0x372 */ s16 shapeAngularAccelerationY;
     /* 0x374 */ s8 silentRomaniState;
     /* 0x376 */ u16 textId;
     /* 0x378 */ s8 doorOpened;
-    /* 0x379 */ s8 spawnCount; // TODO: consider different name
-    /* 0x37C */ f32 checkpoints[3]; // TODO: consider different name
+    /* 0x379 */ s8 alienCount;
+    /* 0x37C */ f32 pathCheckpoints[3];
     /* 0x388 */ UNK_TYPE1 unk_388;
-    /* 0x389 */ u8 alpha; // TODO: consider different name
-    /* 0x38A */ s8 atBarn; // TODO: consider different name
-    /* 0x38B */ s8 present; // TODO: consider different name
+    /* 0x389 */ u8 alpha;
+    /* 0x38A */ s8 pathCompleted;
+    /* 0x38B */ s8 shouldDraw;
     /* 0x38C */ s8 drawDeathFlash; // TODO: consider different name
-    /* 0x38D */ u8 eyeBeamAlpha; // TODO: consider different name
+    /* 0x38D */ u8 eyeBeamAlpha;
     /* 0x390 */ Vec3f deathFlashScale; // TODO: consider different name
     /* 0x39C */ f32 pulseScale; // TODO: consider different name 
     /* 0x3A0 */ f32 pulseScaleTarget; // TODO: consider different name

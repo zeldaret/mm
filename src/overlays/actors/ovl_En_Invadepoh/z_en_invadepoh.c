@@ -422,7 +422,7 @@ s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
     s32 lastPoint = this->endPoint - 1;
 
     for (i = 0; i < lastPoint; i++) {
-        if (this->progress < this->checkpoints[i]) {
+        if (this->pathProgress < this->pathCheckpoints[i]) {
             break;
         }
     }
@@ -450,9 +450,9 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
         pathSegLength = Math3D_Vec3fMagnitude(&curToNext);
         nextPathLength = curPathLength + pathSegLength;
         nextCheckpoint = nextPathLength * invPathLength;
-        if (this->progress <= nextCheckpoint) {
+        if (this->pathProgress <= nextCheckpoint) {
             *currentPoint = i;
-            segmentProgress = (this->progress - curCheckpoint) / (nextCheckpoint - curCheckpoint);
+            segmentProgress = (this->pathProgress - curCheckpoint) / (nextCheckpoint - curCheckpoint);
             pathPosition->x = (segmentProgress * curToNext.x) + curPathPoint->x;
             pathPosition->y = (segmentProgress * curToNext.y) + curPathPoint->y;
             pathPosition->z = (segmentProgress * curToNext.z) + curPathPoint->z;
@@ -604,14 +604,14 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
     s32 warpInTime = EnInvadepoh_Alien_GetSpawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
 
     if (sEventState == ENINVADEPOH_EVENT_WAIT) {
-        this->progress = 0.0f;
+        this->pathProgress = 0.0f;
     } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
         if ((currentTime - warpInTime) < 0) {
-            this->progress = 0.0f;
+            this->pathProgress = 0.0f;
         } else {
-            this->progress = (currentTime - warpInTime) * (1.0f / 3600.0f);
-            if (this->progress > 1.0f) {
-                this->progress = 1.0f;
+            this->pathProgress = (currentTime - warpInTime) * (1.0f / 3600.0f);
+            if (this->pathProgress > 1.0f) {
+                this->pathProgress = 1.0f;
             }
         }
     }
@@ -626,20 +626,20 @@ void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
     Vec3f pathPointF;
     Vec3s* pathPoint = this->pathPoints;
     f32 pathPointLength = 0.0f;
-    f32* checkpoints;
+    f32* pathCheckpoints;
 
     Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
     pathPoint++;
-    checkpoints = this->checkpoints;
-    for (i = 1; i < endPoint; i++, pathPoint++, checkpoints++) {
+    pathCheckpoints = this->pathCheckpoints;
+    for (i = 1; i < endPoint; i++, pathPoint++, pathCheckpoints++) {
         Math_Vec3f_Copy(&prevPathPoint, &pathPointF);
         Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
         pathPointLength += Math3D_Distance(&prevPathPoint, &pathPointF);
-        *checkpoints = pathPointLength * invPathLength;
-        if (*checkpoints < 0.0f) {
-            *checkpoints = 0.0f;
-        } else if (*checkpoints > 1.0f) {
-            *checkpoints = 1.0f;
+        *pathCheckpoints = pathPointLength * invPathLength;
+        if (*pathCheckpoints < 0.0f) {
+            *pathCheckpoints = 0.0f;
+        } else if (*pathCheckpoints > 1.0f) {
+            *pathCheckpoints = 1.0f;
         }
     }
 }
@@ -668,14 +668,14 @@ void EnInvadepoh_Night1Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Night1Romani_SetProgress(EnInvadepoh* this) {
     if ((CURRENT_TIME < CLOCK_TIME(2, 00)) || (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
-        this->progress = 0.0f;
+        this->pathProgress = 0.0f;
     } else if ((CURRENT_TIME >= CLOCK_TIME(2, 15)) && (CURRENT_TIME < CLOCK_TIME(6, 00))) {
-        this->progress = 1.0f;
+        this->pathProgress = 1.0f;
     } else {
         f32 progress = (CURRENT_TIME - CLOCK_TIME(2, 00)) * (1.0f / (CLOCK_TIME(2, 15) - CLOCK_TIME(2, 00)));
 
-        this->progress = progress;
-        this->progress = CLAMP(this->progress, 0.0f, 1.0f);
+        this->pathProgress = progress;
+        this->pathProgress = CLAMP(this->pathProgress, 0.0f, 1.0f);
     }
 }
 
@@ -710,14 +710,14 @@ void EnInvadepoh_Night3Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
     if ((CURRENT_TIME < CLOCK_TIME(20, 00)) && (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
-        this->progress = 0.0f;
+        this->pathProgress = 0.0f;
     } else if ((CURRENT_TIME >= CLOCK_TIME(20, 14) + 15) || (CURRENT_TIME < CLOCK_TIME(6, 00))) {
-        this->progress = 1.0f;
+        this->pathProgress = 1.0f;
     } else {
         f32 progress = (CURRENT_TIME - CLOCK_TIME(20, 00)) * (1.0f / (CLOCK_TIME(20, 14) + 15 - CLOCK_TIME(20, 00)));
 
-        this->progress = progress;
-        this->progress = CLAMP(this->progress, 0.0f, 1.0f);
+        this->pathProgress = progress;
+        this->pathProgress = CLAMP(this->pathProgress, 0.0f, 1.0f);
     }
 }
 
@@ -733,14 +733,14 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
 
     curPathPoint = this->pathPoints + this->currentPoint;
     nextPathPoint = curPathPoint + 1;
-    curCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->checkpoints[this->currentPoint - 1];
-    nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->checkpoints[this->currentPoint] : 1.0f;
+    curCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
+    nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->pathCheckpoints[this->currentPoint] : 1.0f;
 
     if (nextCheckpoint - curCheckpoint < 0.001f) {
         Math_Vec3s_ToVec3f(&this->currentPos, curPathPoint);
     } else {
-        f32 nextWeight = this->progress - curCheckpoint;
-        f32 prevWeight = nextCheckpoint - this->progress;
+        f32 nextWeight = this->pathProgress - curCheckpoint;
+        f32 prevWeight = nextCheckpoint - this->pathProgress;
         f32 invPathLength = 1.0f / (nextCheckpoint - curCheckpoint);
         s32 pad3;
 
@@ -980,7 +980,7 @@ void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) 
                 s32 firstSpawn = CLOCK_TIME(5, 15);
                 s32 pad;
 
-                for (i = 0; i < this->spawnCount; i++) {
+                for (i = 0; i < this->alienCount; i++) {
                     s32 spawnTime = EnInvadepoh_Alien_GetSpawnTime(i);
 
                     firstSpawn = MIN(spawnTime, firstSpawn);
@@ -1004,7 +1004,7 @@ void EnInvadepoh_InvasionHandler_SpawnAliens(EnInvadepoh* this, PlayState* play)
     s32 pathIndex = ENINVADEPOH_GET_PATH(&this->actor);
     s32 i;
 
-    for (i = 0; i < this->spawnCount; i++) {
+    for (i = 0; i < this->alienCount; i++) {
         sAliens[i] = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
                                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
                                                ENINVADEPOH_PARAMS(pathIndex, ENINVADEPOH_TYPE_ALIEN, i));
@@ -1101,8 +1101,8 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
     f32 minDistSqToBarn = FLT_MAX;
     s32 closestAlienIndex = -1;
 
-    for (i = 0; i < this->spawnCount; i++) {
-        if ((sAliens[i] != NULL) && sAliens[i]->present) {
+    for (i = 0; i < this->alienCount; i++) {
+        if ((sAliens[i] != NULL) && sAliens[i]->shouldDraw) {
             f32 distSqToBarn = Math3D_Vec3fDistSq(&sAliens[i]->actor.world.pos, &this->actor.world.pos);
 
             if (minDistSqToBarn > distSqToBarn) {
@@ -1518,13 +1518,13 @@ s32 EnInvadepoh_InvasionHandler_UpdateWarps(void) {
 }
 
 void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
-    s32 spawnCount;
+    s32 alienCount;
     s32 pathIndex;
 
     this->actor.flags |= ACTOR_FLAG_20;
     pathIndex = ENINVADEPOH_GET_PATH(&this->actor);
 
-    for (spawnCount = 1; spawnCount < 8; spawnCount++) {
+    for (alienCount = 1; alienCount < 8; alienCount++) {
         Path* path = &play->setupPathList[pathIndex];
 
         pathIndex = path->additionalPathIndex;
@@ -1533,7 +1533,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
         }
     }
 
-    this->spawnCount = spawnCount;
+    this->alienCount = alienCount;
     EnInvadepoh_InvasionHandler_CheckState(this, play);
     EnInvadepoh_InvasionHandler_SetCutscenes(this);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_SWITCH);
@@ -1946,8 +1946,8 @@ void EnInvadepoh_InvasionHandler_Invasion(EnInvadepoh* this, PlayState* play) {
 
         EnInvadepoh_InvasionHandler_SetClosestAlien(this);
 
-        for (i = 0; i < this->spawnCount; i++) {
-            if ((sAliens[i] != NULL) && (sAliens[i]->atBarn)) {
+        for (i = 0; i < this->alienCount; i++) {
+            if ((sAliens[i] != NULL) && (sAliens[i]->pathCompleted)) {
                 EnInvadepoh_InvasionHandler_SetupFailure(this);
                 break;
             }
@@ -2056,7 +2056,7 @@ void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
     this->actor.flags &= ~ACTOR_FLAG_80000000;
     this->alpha = 0;
     this->actor.draw = NULL;
-    this->present = false;
+    this->shouldDraw = false;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actionFunc = EnInvadepoh_Alien_WaitForEvent;
@@ -2082,7 +2082,7 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->actor.flags &= ~ACTOR_FLAG_80000000;
     this->alpha = 0;
     this->actor.draw = NULL;
-    this->present = false;
+    this->shouldDraw = false;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actionFunc = EnInvadepoh_Invade_WaitToRespawn;
@@ -2093,7 +2093,7 @@ void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
 
-    if (this->progress > 0.0f) {
+    if (this->pathProgress > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
         EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
@@ -2108,7 +2108,7 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->alpha = 0;
     this->actor.draw = EnInvadepoh_Alien_Draw;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
@@ -2121,8 +2121,8 @@ void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
 
-    if (this->progress >= 0.9999f) {
-        this->atBarn = true;
+    if (this->pathProgress >= 0.9999f) {
+        this->pathCompleted = true;
     }
 
     if (this->alpha >= 249) {
@@ -2156,7 +2156,7 @@ void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
     this->collider.base.ocFlags1 |= OC1_ON;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
@@ -2168,8 +2168,8 @@ void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
-    if (this->progress >= 0.9999f) {
-        this->atBarn = true;
+    if (this->pathProgress >= 0.9999f) {
+        this->pathCompleted = true;
     }
 }
 
@@ -2181,7 +2181,7 @@ void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actionTimer = 8;
@@ -2208,7 +2208,7 @@ void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this) {
     this->actionTimer = 10;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
@@ -2232,15 +2232,15 @@ void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play) {
     if (this->stateTimer < 5) {
         deathScale = &sDeathScales[this->stateTimer];
         if (deathScale->x > 0.0f) {
-            this->present = true;
+            this->shouldDraw = true;
             this->eyeBeamAlpha = 255;
             Math_Vec3f_Copy(&this->actor.scale, deathScale);
         } else {
-            this->present = false;
+            this->shouldDraw = false;
             this->eyeBeamAlpha = 0;
         }
     } else {
-        this->present = false;
+        this->shouldDraw = false;
         this->eyeBeamAlpha = 0;
     }
 
@@ -2297,7 +2297,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         if ((sEventState == ENINVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
             EnInvadepoh_Alien_SetupWaitForEvent(this);
         } else if (sEventState == ENINVADEPOH_EVENT_ACTIVE) {
-            if (this->progress >= 0.0001f) {
+            if (this->pathProgress >= 0.0001f) {
                 EnInvadepoh_Alien_SetupAttack(this);
             } else {
                 EnInvadepoh_Alien_SetupWarpIn(this);
@@ -3073,7 +3073,7 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
-    if (this->progress >= 0.9999f) {
+    if (this->pathProgress >= 0.9999f) {
         Actor_Kill(&this->actor);
     }
 }
@@ -4059,7 +4059,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
-    if (this->progress >= 0.9999f) {
+    if (this->pathProgress >= 0.9999f) {
         Actor_Kill(&this->actor);
     } else if ((cremia != NULL) && (cremia->actionFunc == EnInvadepoh_Night3Cremia_Talk)) {
         EnInvadepoh_Night3Romani_SetupIdle(this);
@@ -4209,7 +4209,7 @@ void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     this->skelAnime.curFrame = (ENINVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->alienAbductorAccelY = D_80B4EE0C[index].accel;
@@ -4260,7 +4260,7 @@ void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
     this->skelAnime.curFrame = (ENINVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
     this->actor.draw = NULL;
-    this->present = true;
+    this->shouldDraw = true;
     this->drawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->angularVelocity = 0x190;
@@ -4430,7 +4430,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Push();
 
-    if (this->present) {
+    if (this->shouldDraw) {
         if (this->alpha == 255) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
             AnimatedMat_Draw(play, sAlienEmptyTexAnim);
@@ -4481,7 +4481,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_XLU_DISP++, gAlienDeathFlashDL);
     }
 
-    if (this->present) {
+    if (this->shouldDraw) {
         Gfx* ptr;
         Vec3f glowOffset;
         Vec3f glowPos;
