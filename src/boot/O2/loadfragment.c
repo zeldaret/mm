@@ -64,7 +64,9 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
     u32 luiVals[32];
     u32 isLoNeg;
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // "DoRelocation(%08x, %08x, %08x)\n"
+    }
 
     sections[RELOC_SECTION_NULL] = 0;
     sections[RELOC_SECTION_TEXT] = allocu32;
@@ -88,6 +90,8 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
                 if ((*relocDataP & 0x0F000000) == 0) {
                     *relocDataP = *relocDataP - (uintptr_t)vramStart + allocu32;
                 } else if (gLoadLogSeverity >= 3) {
+                    // Segment pointer 32 %08x
+                    // "セグメントポインタ32です %08x\n"
                 }
                 break;
 
@@ -101,6 +105,9 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
                         (*relocDataP & 0xFC000000) |
                         (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - (uintptr_t)vramStart + allocu32) & 0x0FFFFFFF) >>
                          2);
+                } else if (gLoadLogSeverity >= 3) {
+                    // Segment pointer 26 %08x
+                    // "セグメントポインタ26です %08x\n"
                 }
                 break;
 
@@ -130,6 +137,8 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
                 } else if (gLoadLogSeverity >= 3) {
+                    // Segment pointer 16 %08x %08x %08x
+                    // "セグメントポインタ16です %08x %08x %08x"
                 }
                 break;
         }
@@ -143,36 +152,56 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, vo
     s32 pad;
     OverlayRelocationSection* ovlRelocs;
 
-    if (gLoadLogSeverity >= 3) {}
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // Starting loading dynamic link function
+        // "\nダイナミックリンクファンクションのロードを開始します\n"
+    }
+    if (gLoadLogSeverity >= 3) {
+        // DMA transfer TEXT, DATA, RODATA+rel (%08x-%08x)
+        // "TEXT,DATA,RODATA+relをＤＭＡ転送します(%08x-%08x)\n"
+    }
 
     end = (uintptr_t)allocatedRamAddr + size;
     DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
 
     ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // "TEXT(%08x), DATA(%08x), RODATA(%08x), BSS(%08x)\n"
+    }
 
     if (allocatedBytes < ovlRelocs->bssSize + size) {
-        if (gLoadLogSeverity >= 3) {}
+        if (gLoadLogSeverity >= 3) {
+            // ramSize is too small (ramSize=%08x, NeedRamSize=%08x)
+            // "ramSizeが小さすぎます(ramSize=%08x, NeedRamSize=%08x)\n"
+        }
         return 0;
     }
 
     allocatedBytes = ovlRelocs->bssSize + size;
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // I will relocate
+        // "リロケーションします\n"
+    }
 
     Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
-        if (gLoadLogSeverity >= 3) {}
+        if (gLoadLogSeverity >= 3) {
+            // Clear BSS area (%08x-%08x)
+            // "BSS領域をクリアします(%08x-%08x)\n"
+        }
         bzero((void*)end, ovlRelocs->bssSize);
     }
 
     osWritebackDCache(allocatedRamAddr, allocatedBytes);
     osInvalICache(allocatedRamAddr, allocatedBytes);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // Finish loading the dynamic link function
+        // "ダイナミックリンクファンクションのロードを終了します\n\n"
+    }
 
     return allocatedBytes;
 }
@@ -185,48 +214,74 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vra
     OverlayRelocationSection* ovlRelocs;
     size_t allocatedBytes;
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // Start loading dynamic link function
+        // "\nダイナミックリンクファンクションのロードを開始します\n"
+
+        // "LoadFragment(%08x, %08x, %08x)\n"
+    }
 
     allocatedRamAddr = malloc_r(size);
     end = (uintptr_t)allocatedRamAddr + size;
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // DMA transfer TEXT, DATA, RODATA+rel (%08x-%08x)
+        // "TEXT,DATA,RODATA+relをＤＭＡ転送します(%08x-%08x)\n"
+    }
 
     DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // "TEXT(%08x), DATA(%08x), RODATA(%08x), BSS(%08x)\n"
+    }
 
     ovlOffset = end - sizeof(s32);
     ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
+    //! FAKE:
     if (1) {}
 
     allocatedBytes = ovlRelocs->bssSize + size;
 
     allocatedRamAddr = realloc(allocatedRamAddr, allocatedBytes);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // No reallocation.
+        // "リアロケーションしません。\n"
+    }
 
     if (allocatedRamAddr == NULL) {
-        if (gLoadLogSeverity >= 3) {}
+        if (gLoadLogSeverity >= 3) {
+            // Reallocation failed. .
+            // "リアロケーションに失敗しました。"
+        }
         return allocatedRamAddr;
     }
 
     end = (uintptr_t)allocatedRamAddr + size;
     ovlRelocs = (OverlayRelocationSection*)(end - *(uintptr_t*)ovlOffset);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // I will relocate
+        // "リロケーションします\n"
+    }
 
     Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
-        if (gLoadLogSeverity >= 3) {}
+        if (gLoadLogSeverity >= 3) {
+            // Clear BSS area (%08x-%08x)
+            // "BSS領域をクリアします(%08x-%08x)\n"
+        }
         bzero((void*)end, ovlRelocs->bssSize);
     }
 
     osInvalICache(allocatedRamAddr, allocatedBytes);
 
-    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {
+        // Finish loading the dynamic link function
+        // "ダイナミックリンクファンクションのロードを終了します\n\n"
+    }
 
     return allocatedRamAddr;
 }
