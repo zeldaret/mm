@@ -50,7 +50,6 @@ typedef struct EnInvadepohFaceAnimNext {
     /* 0x4 */ f32 chance;
 } EnInvadepohFaceAnimNext; // size = 0x8
 
-#if 1
 typedef struct {
     /* 0x0 */ s8 type;
     /* 0x4 */ EnInvadepohFaceFrames* frames;
@@ -67,37 +66,6 @@ typedef struct {
     /* 0x10 */ s16 minDelay;
     /* 0x12 */ s16 maxDelay;
 } EnInvadepohFaceAnimDelayedBranched; // size = 0x14
-
-#else
-
-typedef struct EnInvadepohFaceAnimOnce {
-    /* 0x0 */ s8 type;
-    /* 0x4 */ EnInvadepohFaceFrames* frames;
-} EnInvadepohFaceAnimOnce; // size = 0x8
-
-typedef struct EnInvadepohFaceAnimBranched {
-    /* 0x0 */ s8 type;
-    /* 0x4 */ EnInvadepohFaceFrames* frames;
-    /* 0x8 */ s8 nextCount;
-    /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
-} EnInvadepohFaceAnimBranched; // size = 0x10
-
-typedef struct EnInvadepohFaceAnimDelayedBranched {
-    /* 0x0 */ s8 type;
-    /* 0x4 */ EnInvadepohFaceFrames* frames;
-    /* 0x8 */ s8 nextCount;
-    /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
-    /* 0x10 */ s16 minDelay;
-    /* 0x12 */ s16 maxDelay;
-} EnInvadepohFaceAnimDelayedBranched; // size = 0x14
-
-typedef union EnInvadepohFaceAnim {
-    EnInvadepohFaceAnimOnce once;
-    EnInvadepohFaceAnimBranched branch;
-    EnInvadepohFaceAnimDelayedBranched delay;
-} EnInvadepohFaceAnim;
-
-#endif
 
 typedef struct EnInvadepohFaceAnimInfo {
     /* 0x0 */ EnInvadepohFaceAnim** animations;
