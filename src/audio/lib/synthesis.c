@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audio/synthesis.h"
 
 // DMEM Addresses for the RSP
 #define DMEM_TEMP 0x3B0

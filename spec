@@ -512,9 +512,8 @@ beginseg
     include "build/src/code/z_rcp.o"
     pad_text
     include "build/src/code/z_room.o"
-    include "build/src/code/code_8012EC80.o"
+    include "build/src/code/z_inventory.o"
     pad_text
-    include "build/data/code/code_801C2410.data.o"
     include "build/src/code/z_scene.o"
     include "build/src/code/object_table.o"
     include "build/src/code/z_scene_proc.o"
@@ -526,7 +525,7 @@ beginseg
     include "build/src/code/z_skin_matrix.o"
     include "build/src/code/z_snap.o"
     include "build/src/code/z_sub_s.o"
-    include "build/data/code/code_801DE890.rodata.o"
+    include "build/src/code/z_circle_tex.o"
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
@@ -4732,8 +4731,7 @@ beginseg
     name "ovl_En_Kitan"
     compress
     include "build/src/overlays/actors/ovl_En_Kitan/z_en_kitan.o"
-    include "build/data/ovl_En_Kitan/ovl_En_Kitan.data.o"
-    include "build/data/ovl_En_Kitan/ovl_En_Kitan.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kitan/ovl_En_Kitan_reloc.o"
 endseg
 
 beginseg

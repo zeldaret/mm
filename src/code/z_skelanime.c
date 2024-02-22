@@ -1187,8 +1187,9 @@ void AnimationContext_MoveActor(PlayState* play, AnimationEntryData* data) {
 void AnimationContext_Update(PlayState* play, AnimationContext* animationCtx) {
     AnimationEntry* entry = animationCtx->entries;
 
-    for (; animationCtx->animationCount != 0; entry++, animationCtx->animationCount--) {
+    for (; animationCtx->animationCount != 0; animationCtx->animationCount--) {
         sAnimationLoadDone[entry->type](play, &entry->data);
+        entry++;
     }
 
     sAnimQueueFlags = 1;

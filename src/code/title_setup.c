@@ -1,7 +1,7 @@
 #include "z_title_setup.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void Setup_SetRegs(void) {
+void Setup_InitRegs(void) {
     XREG(2) = 0;
     XREG(10) = 26;
     XREG(11) = 20;
@@ -50,7 +50,7 @@ void Setup_SetRegs(void) {
 void Setup_InitImpl(SetupState* this) {
     SysFlashrom_InitFlash();
     SaveContext_Init();
-    Setup_SetRegs();
+    Setup_InitRegs();
 
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
