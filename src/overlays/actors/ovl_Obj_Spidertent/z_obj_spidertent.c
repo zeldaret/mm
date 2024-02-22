@@ -328,7 +328,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80B2FB10(Vec3f* arg0, Vec3f* arg1) {
-    f32 temp_f0 = Math3D_LengthSquared(arg0);
+    f32 temp_f0 = Math3D_Vec3fMagnitudeSq(arg0);
     f32 temp_f2;
 
     if (temp_f0 < 9.999999e-9f) {
@@ -396,7 +396,7 @@ bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
             sp78.y = vtx2->y - arg1->y;
             sp78.z = vtx2->z - arg1->z;
 
-            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+            Math3D_Vec3f_Cross(&sp84, &sp78, &sp4C[i]);
 
             vtx2 = vtx;
         }
@@ -416,7 +416,7 @@ bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
             sp78.y = 0.0f;
             sp78.z = vtx2->z - arg1->z;
 
-            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+            Math3D_Vec3f_Cross(&sp84, &sp78, &sp4C[i]);
 
             vtx2 = vtx;
         }
@@ -436,7 +436,7 @@ bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
             sp78.y = vtx2->y - arg1->y;
             sp78.z = 0.0f;
 
-            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+            Math3D_Vec3f_Cross(&sp84, &sp78, &sp4C[i]);
 
             vtx2 = vtx;
         }
@@ -467,9 +467,9 @@ void func_80B300F4(ObjSpidertent* thisx, PlayState* play, TriNorm* triNorm, Vec3
     spAC.z = triNorm->plane.normal.z;
 
     if (triNorm->plane.normal.y < 0.5f) {
-        Math3D_CrossProduct(&spAC, &D_80B3140C, &sp88);
+        Math3D_Vec3f_Cross(&spAC, &D_80B3140C, &sp88);
     } else {
-        Math3D_CrossProduct(&spAC, &D_80B31400, &sp88);
+        Math3D_Vec3f_Cross(&spAC, &D_80B31400, &sp88);
     }
 
     if (func_80B2FB10(&sp88, &spA0)) {

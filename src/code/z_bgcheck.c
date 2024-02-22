@@ -357,14 +357,14 @@ s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f3
     D_801EDA18[2].y = sVerts->y;
     D_801EDA18[2].z = sVerts->z;
 
-    if (!func_8017A304(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], z, x, checkDist)) {
+    if (!Math3D_CirSquareVsTriSquareZX(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], z, x, checkDist)) {
         return 0;
     }
     nx = COLPOLY_GET_NORMAL(poly->normal.x);
     ny = COLPOLY_GET_NORMAL(poly->normal.y);
     nz = COLPOLY_GET_NORMAL(poly->normal.z);
-    return Math3D_TriChkPointParaYIntersectInsideTri2(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], nx, ny, nz,
-                                                      poly->dist, z, x, yIntersect, checkDist);
+    return Math3D_TriChkPointParaYNoRangeCheckIntersectInsideTri(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], nx, ny,
+                                                                 nz, poly->dist, z, x, yIntersect, checkDist);
 }
 
 s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
@@ -427,17 +427,17 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
 
     CollisionPoly_GetNormalF(a0->poly, &sPlane.normal.x, &sPlane.normal.y, &sPlane.normal.z);
     CollisionPoly_GetVertices(a0->poly, a0->vtxList, sPolyVerts);
-    Math3D_Lerp(a0->posA, a0->posB, planeDistA / (planeDistA - planeDistB), a0->planeIntersect);
+    Math3D_LineSplitRatio(a0->posA, a0->posB, planeDistA / (planeDistA - planeDistB), a0->planeIntersect);
 
     if (((fabsf(sPlane.normal.x) > 0.5f) &&
-         Math3D_TriChkPointParaXDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->y,
+         Math3D_TriChkPointParaXImpl(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->y,
                                      a0->planeIntersect->z, 0.0f, a0->checkDist, sPlane.normal.x)) ||
         ((fabsf(sPlane.normal.y) > 0.5f) &&
-         Math3D_TriChkPointParaYDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->z,
+         Math3D_TriChkPointParaYImpl(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->z,
                                      a0->planeIntersect->x, 0.0f, a0->checkDist, sPlane.normal.y)) ||
         ((fabsf(sPlane.normal.z) > 0.5f) &&
-         Math3D_TriChkLineSegParaZDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->x,
-                                       a0->planeIntersect->y, 0.0f, a0->checkDist, sPlane.normal.z))) {
+         Math3D_TriChkPointParaZImpl(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->x,
+                                     a0->planeIntersect->y, 0.0f, a0->checkDist, sPlane.normal.z))) {
         return true;
     }
     return false;
@@ -455,7 +455,7 @@ s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, 
     sSphere.center.y = center->y;
     sSphere.center.z = center->z;
     sSphere.radius = radius;
-    return Math3D_ColSphereTri(&sSphere, &sTri, &intersect);
+    return Math3D_TriVsSphIntersect(&sSphere, &sTri, &intersect);
 }
 
 /**
@@ -3827,7 +3827,7 @@ s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* p
     s32 pad;
     s32 i;
     s32 result = false;
-    LineSegment line;
+    Linef line;
     f32 ay;
     f32 by;
 

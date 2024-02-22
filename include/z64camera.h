@@ -2,6 +2,7 @@
 #define Z64CAMERA_H
 
 #include "ultra64.h"
+#include "z64math.h"
 #include "z64actor.h"
 #include "z64save.h"
 #include "unk.h"
@@ -1193,8 +1194,7 @@ typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ Vec3f unk_28;
+    /* 0x1C */ InfiniteLine unk_1C;
     /* 0x34 */ Vec3s unk_34;
     /* 0x3A */ s16 unk_3A;
     /* 0x3C */ s16 timer;

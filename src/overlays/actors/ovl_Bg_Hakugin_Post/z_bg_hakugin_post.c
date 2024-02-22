@@ -485,12 +485,12 @@ void func_80A9BD24(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         }
 
         if (unkStruct->unk_0000[i].unk_34 == 2) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) >
+            if (Math3D_Dist1DSq(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) >
                 SQ(440.0f) + 0.02f) {
                 unkStruct->unk_0000[i].unk_34 = 3;
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
+            if (Math3D_Dist1DSq(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
                 func_80A9B554(this, play, unkStruct, &unkStruct->unk_0000[i]);
                 Audio_PlaySfx_2(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
@@ -543,8 +543,8 @@ void BgHakuginPost_RequestQuakeAndRumble(BgHakuginPost* this, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
     s16 quakeIndex;
 
-    Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
-                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
+    Rumble_Request(Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->dyna.actor.home.pos.x,
+                                   this->dyna.actor.home.pos.z),
                    255, 20, 150);
 
     quakeIndex = Quake_Request(activeCam, QUAKE_TYPE_3);
@@ -576,7 +576,7 @@ void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 spB8.x = Math_SinS(temp_s0) * temp_f20 + spC8->unk_14.x;
                 spB8.z = Math_CosS(temp_s0) * temp_f20 + spC8->unk_14.z;
 
-                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
+                if (Math3D_Dist1DSq(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
                     spB8.x += this->dyna.actor.home.pos.x;
                     spB8.y = spC8->unk_14.y + this->unk_16C + 20.0f;
                     spB8.z += this->dyna.actor.home.pos.z;

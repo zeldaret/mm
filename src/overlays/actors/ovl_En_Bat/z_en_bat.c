@@ -228,8 +228,8 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
         this->yawTarget = this->actor.wallYaw;
-    } else if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
-                                        this->actor.home.pos.z) > SQ(300.0f)) {
+    } else if (Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
+                               this->actor.home.pos.z) > SQ(300.0f)) {
         this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
         this->yawTarget =

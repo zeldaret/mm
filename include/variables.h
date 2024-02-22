@@ -43,9 +43,6 @@ extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 
 extern s32 gDbgCamEnabled;
 
-extern Vec3f gZeroVec3f;
-extern Vec3s gZeroVec3s;
-
 extern s16 gLowPassFilterData[];
 extern s16 gHighPassFilterData[];
 extern s16 gBandStopFilterData[];

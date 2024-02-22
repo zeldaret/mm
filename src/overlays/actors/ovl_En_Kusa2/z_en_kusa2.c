@@ -514,7 +514,7 @@ void func_80A5C410(EnKusa2UnkBssStruct* arg0, EnKusa2UnkBssSubStruct2* arg1, Vec
             s32 phi_s2 = true;
 
             Math_Vec3f_Diff(&arg1->unk_04, &s->unk_00, &sp98);
-            temp_f0 = Math3D_LengthSquared(&sp98);
+            temp_f0 = Math3D_Vec3fMagnitudeSq(&sp98);
 
             phi_v0 = false;
             if (temp_f0 <= s->unk_4C) {
@@ -921,7 +921,7 @@ void func_80A5D62C(EnKusa2* this, PlayState* play) {
     if (this->unk_1BE != 0) {
         func_80A5B490(this, play);
         func_80A5D754(this);
-    } else if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1600.0f)) {
+    } else if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1600.0f)) {
         func_80A5B160(this, play);
         func_80A5D6B0(this);
     }
@@ -936,7 +936,7 @@ void func_80A5D6C4(EnKusa2* this, PlayState* play) {
     if (this->unk_1BE != 0) {
         func_80A5B490(this, play);
         func_80A5D754(this);
-    } else if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) > SQ(1750.0f)) {
+    } else if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) > SQ(1750.0f)) {
         func_80A5B334(this, play);
         func_80A5D618(this);
     }

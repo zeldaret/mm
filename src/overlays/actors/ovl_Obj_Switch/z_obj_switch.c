@@ -652,7 +652,7 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_MultVecZ(1.0f, &sp20);
             Matrix_Pop();
-            if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
+            if ((Math3D_Cos(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
                 return true;
             }
         }

@@ -686,8 +686,8 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
         Vec3f sp54;
         f32 sp50;
 
-        if (Math3D_PointDistToLine2D(play->view.eye.x, play->view.eye.z, this->unk_190.x, this->unk_190.z,
-                                     this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
+        if (Math3D_PointDistSqToLine2DImpl(play->view.eye.x, play->view.eye.z, this->unk_190.x, this->unk_190.z,
+                                           this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
             sp54.y = this->dyna.actor.world.pos.y;
         } else {
             if (Math_Vec3f_DistXYZ(&play->view.eye, &this->unk_190) <=

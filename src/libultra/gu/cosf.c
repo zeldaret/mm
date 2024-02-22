@@ -1,6 +1,5 @@
 #include "ultra64.h"
 #include "libc/math.h"
-#include "macros.h"
 
 #pragma weak cosf = __cosf
 
@@ -55,7 +54,7 @@ f32 __cosf(f32 x) {
         dx -= dn * pihi.d;
         dx -= dn * pilo.d;
 
-        xSq = SQ(dx);
+        xSq = dx * dx;
         polyApprox = ((P[4].d * xSq + P[3].d) * xSq + P[2].d) * xSq + P[1].d;
         result = dx + (dx * xSq) * polyApprox; // Actual Maclaurin polynomial for sin(x)
 

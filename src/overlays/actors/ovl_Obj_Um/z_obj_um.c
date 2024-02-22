@@ -372,7 +372,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
         return 0;
     }
 
-    if (Math3D_Distance(&bandit->actor.world.pos, &this->dyna.actor.world.pos) < 800.0f) {
+    if (Math3D_Vec3f_DistXYZ(&bandit->actor.world.pos, &this->dyna.actor.world.pos) < 800.0f) {
         if (banditIndex == 0) {
             this->flags |= OBJ_UM_FLAG_0200;
         } else {
@@ -399,7 +399,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
 
-    func_8017B7F8(&sp50, temp_a1, &sp4C, &sp48, &sp44);
+    Math3D_RotateXZPlane(&sp50, temp_a1, &sp4C, &sp48, &sp44);
     if (((bandit->actor.world.pos.x * sp4C) + (sp48 * bandit->actor.world.pos.z) + sp44) > 0.0f) {
         bandit->curRaceWaypoint++;
         if (bandit->curRaceWaypoint >= sp68) {
@@ -482,14 +482,14 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
         func_80B781DC(this, bandit1, bandit2, play);
     }
 
-    Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560),
-                &sp30);
+    Math3D_LineSplitRatio(&bandit1->unk_540, &this->unk_360[bandit1->unk_550],
+                          1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
     bandit1->banditPosition = sp30;
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
 
     if ((bandit1->unk_550 == 10) || ((bandit1->unk_550 == 8))) {
         phi_v1_5 = bandit1->unk_588;
-    } else if (Math3D_Distance(&bandit1->actor.prevPos, &bandit1->actor.world.pos) < 10.0f) {
+    } else if (Math3D_Vec3f_DistXYZ(&bandit1->actor.prevPos, &bandit1->actor.world.pos) < 10.0f) {
         phi_v1_5 = bandit1->unk_588;
     } else {
         phi_v1_5 = Math_Vec3f_Yaw(&bandit1->actor.prevPos, &bandit1->actor.world.pos);
@@ -1073,7 +1073,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
     angle = Math_Atan2S(xDiff, zDiff);
 
-    func_8017B7F8(&sp50, angle, &sp4C, &sp48, &sp44);
+    Math3D_RotateXZPlane(&sp50, angle, &sp4C, &sp48, &sp44);
     if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
         this->pointIndex++;
 
@@ -1834,7 +1834,7 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
             temp_v0_3 = Math_Atan2S(
                 this->dyna.actor.focus.pos.y - sp30.y,
-                Math3D_XZLength(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
+                Math3D_Dist1D(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
             this->unk_2FE.x = rot->x + sp3E;
             this->unk_2FE.y = rot->y;
             this->unk_2FE.z = rot->z + temp_v0_3;

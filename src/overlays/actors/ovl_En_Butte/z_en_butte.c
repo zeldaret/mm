@@ -233,8 +233,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
     EnButteStruct* sp4C = &D_8091D324[this->unk_24E];
     f32 distSq;
     Player* player = GET_PLAYER(play);
-    f32 distFromHomeSq = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z,
-                                                  this->actor.home.pos.x, this->actor.home.pos.z);
+    f32 distFromHomeSq = Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
+                                         this->actor.home.pos.z);
     f32 playSpeed;
     f32 sp38;
     s32 pad;
@@ -289,8 +289,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
 
     if ((BUTTERFLY_GET_1(&this->actor) == BUTTERFLY_1) && (player->heldItemAction == PLAYER_IA_DEKU_STICK) &&
         (this->unk_252 <= 0) &&
-        ((Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
-                                   this->actor.home.pos.z) < SQ(120.0f)) ||
+        ((Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
+                          this->actor.home.pos.z) < SQ(120.0f)) ||
          (this->actor.xzDistToPlayer < 60.0f))) {
         func_8091CB68(this);
         this->unk_24F = 2;
@@ -354,14 +354,14 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         D_8091D3F0 = -D_8091D3F0;
     }
 
-    distSq = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
-                                      this->actor.home.pos.z);
+    distSq = Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
+                             this->actor.home.pos.z);
     if ((player->heldItemAction != PLAYER_IA_DEKU_STICK) || !(fabsf(player->actor.speed) < 1.8f) ||
         (this->unk_252 > 0) || !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
-               (Math3D_XZDistanceSquared(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
-                                         this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
+               (Math3D_Dist2DSq(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
+                                this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
         func_8091CF64(this);
     }
 }

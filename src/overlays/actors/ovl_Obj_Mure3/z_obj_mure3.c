@@ -173,7 +173,7 @@ void func_8098F5D0(ObjMure3* this) {
 void func_8098F5E4(ObjMure3* this, PlayState* play) {
     static ObjMure3SpawnFunc sSpawnFuncs[] = { func_8098F040, func_8098F110, func_8098F220 };
 
-    if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1150.0f)) {
+    if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1150.0f)) {
         this->actor.flags |= ACTOR_FLAG_10;
         sSpawnFuncs[OBJMURE3_PARAM_RUPEEINDEX(&this->actor)](this, play);
         func_8098F66C(this);
@@ -186,7 +186,7 @@ void func_8098F66C(ObjMure3* this) {
 
 void func_8098F680(ObjMure3* this, PlayState* play) {
     func_8098F438(this, play);
-    if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) >= SQ(1450.0f)) {
+    if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) >= SQ(1450.0f)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         func_8098F364(this, play);
         func_8098F5D0(this);

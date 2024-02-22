@@ -1880,7 +1880,7 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
 
     OPEN_DISPS(gfxCtx);
 
-    dist = Math3D_Distance(&pos, &view->eye) / 12.0f;
+    dist = Math3D_Vec3f_DistXYZ(&pos, &view->eye) / 12.0f;
 
     // compute a unit vector in the look direction
     tempX = view->at.x - view->eye.x;
