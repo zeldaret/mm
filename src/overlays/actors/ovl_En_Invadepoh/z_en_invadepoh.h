@@ -136,8 +136,8 @@ typedef struct EnInvadepoh {
     /* 0x29C */ s8 isAnimFinished;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;
-    /* 0x2F0 */ s16 actionTimer; // TODO: consider different name
-    /* 0x2F2 */ s16 stateTimer; // TODO: consider different name
+    /* 0x2F0 */ s16 timer;
+    /* 0x2F2 */ s16 frameCounter;
     /* 0x2F4 */ s8 objectSlot;
     /* 0x2F8 */ f32 distanceToRomani;
     /* 0x2FC */ UNK_TYPE1 unk_2FC[4];
@@ -163,17 +163,17 @@ typedef struct EnInvadepoh {
     /* 0x389 */ u8 alpha;
     /* 0x38A */ s8 pathCompleted;
     /* 0x38B */ s8 shouldDraw;
-    /* 0x38C */ s8 drawDeathFlash; // TODO: consider different name
+    /* 0x38C */ s8 shouldDrawDeathFlash;
     /* 0x38D */ u8 eyeBeamAlpha;
-    /* 0x390 */ Vec3f deathFlashScale; // TODO: consider different name
-    /* 0x39C */ f32 pulseScale; // TODO: consider different name 
-    /* 0x3A0 */ f32 pulseScaleTarget; // TODO: consider different name
-    /* 0x3A4 */ f32 pulseScaleRate; // TODO: consider different name
-    /* 0x3A8 */ s16 pulsePhase; // TODO: consider different name
-    /* 0x3AA */ s16 pulseRate; // TODO: consider different name
-    /* 0x3AC */ s8 ufoTarget; // TODO: consider different name
+    /* 0x390 */ Vec3f deathFlashScale;
+    /* 0x39C */ f32 ufoPulseScale;
+    /* 0x3A0 */ f32 ufoPulseScaleTarget;
+    /* 0x3A4 */ f32 ufoPulseScaleSpeed;
+    /* 0x3A8 */ s16 ufoPulsePhase;
+    /* 0x3AA */ s16 ufoPulsePhaseVelocity;
+    /* 0x3AC */ s8 ufoTargetPosIndex;
     /* 0x3AD */ UNK_TYPE1 unk_3AD[0xF];
-    /* 0x3BC */ s8 dogTargetPoint; // TODO: consider different name
+    /* 0x3BC */ s8 dogTargetPoint;
 } EnInvadepoh; // size = 0x3C0
 
 #endif // Z_EN_INVADEPOH_H

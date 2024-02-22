@@ -1891,13 +1891,13 @@ void EnInvadepoh_InvasionHandler_Wait(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_InvasionHandler_SetupQueueInvasionCs(EnInvadepoh* this) {
     sEventState = ENINVADEPOH_EVENT_ACTIVE;
-    this->actionTimer = 2;
+    this->timer = 2;
     this->actionFunc = EnInvadepoh_InvasionHandler_QueueInvasionCs;
 }
 
 void EnInvadepoh_InvasionHandler_QueueInvasionCs(EnInvadepoh* this, PlayState* play) {
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else if (CutsceneManager_IsNext(sCsIdList[0])) {
         CutsceneManager_StartWithPlayerCs(sCsIdList[0], &this->actor);
         EnInvadepoh_InvasionHandler_SetupInvasionCs(this);
@@ -1908,7 +1908,7 @@ void EnInvadepoh_InvasionHandler_QueueInvasionCs(EnInvadepoh* this, PlayState* p
 
 void EnInvadepoh_InvasionHandler_SetupInvasionCs(EnInvadepoh* this) {
     sEventState = ENINVADEPOH_EVENT_ACTIVE;
-    this->actionTimer = 160;
+    this->timer = 160;
     this->actionFunc = EnInvadepoh_InvasionHandler_InvasionCs;
 }
 
@@ -1919,13 +1919,13 @@ void EnInvadepoh_InvasionHandler_InvasionCs(EnInvadepoh* this, PlayState* play) 
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sAlienSpawnTimes); i++) {
-        if (this->actionTimer == sAlienSpawnTimes[i]) {
+        if (this->timer == sAlienSpawnTimes[i]) {
             sAlienStateFlags[i] |= ENINVADEPOH_ALIEN_ACTIVE;
         }
     }
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         CutsceneManager_Stop(sCsIdList[0]);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
         EnInvadepoh_InvasionHandler_SetupInvasion(this);
@@ -1971,17 +1971,17 @@ void EnInvadepoh_InvasionHandler_QueueVictoryCs(EnInvadepoh* this, PlayState* pl
 
 void EnInvadepoh_InvasionHandler_SetupVictoryCs(EnInvadepoh* this) {
     sEventState = ENINVADEPOH_EVENT_CLEAR;
-    this->actionTimer = 110;
+    this->timer = 110;
     this->actionFunc = EnInvadepoh_InvasionHandler_VictoryCs;
 }
 
 void EnInvadepoh_InvasionHandler_VictoryCs(EnInvadepoh* this, PlayState* play) {
-    if (this->actionTimer == 100) {
+    if (this->timer == 100) {
         Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     }
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         play->nextEntrance = ENTRANCE(ROMANI_RANCH, 6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -2057,7 +2057,7 @@ void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
     this->alpha = 0;
     this->actor.draw = NULL;
     this->shouldDraw = false;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actionFunc = EnInvadepoh_Alien_WaitForEvent;
 }
@@ -2083,7 +2083,7 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->alpha = 0;
     this->actor.draw = NULL;
     this->shouldDraw = false;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actionFunc = EnInvadepoh_Invade_WaitToRespawn;
 }
@@ -2109,7 +2109,7 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
     this->alpha = 0;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_Alien_WarpIn;
@@ -2157,7 +2157,7 @@ void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_Alien_Attack;
@@ -2182,10 +2182,10 @@ void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
-    this->actionTimer = 8;
-    this->stateTimer = 0;
+    this->timer = 8;
+    this->frameCounter = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_Alien_Hitstun;
 }
@@ -2193,8 +2193,8 @@ void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
 void EnInvadepoh_Alien_Hitstun(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_Knockback(this, play);
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_Alien_SetupDeath(this);
     }
 }
@@ -2205,11 +2205,11 @@ void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienDeathAnim);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->actionTimer = 10;
+    this->timer = 10;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_Alien_Death;
@@ -2229,8 +2229,8 @@ void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play) {
 
     EnInvadepoh_Alien_EmptyFunc(this);
 
-    if (this->stateTimer < 5) {
-        deathScale = &sDeathScales[this->stateTimer];
+    if (this->frameCounter < 5) {
+        deathScale = &sDeathScales[this->frameCounter];
         if (deathScale->x > 0.0f) {
             this->shouldDraw = true;
             this->eyeBeamAlpha = 255;
@@ -2244,31 +2244,31 @@ void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play) {
         this->eyeBeamAlpha = 0;
     }
 
-    if ((this->stateTimer >= 2) && (this->stateTimer < 9)) {
-        deathScale = &sDeathFlashScales[this->stateTimer - 2];
+    if ((this->frameCounter >= 2) && (this->frameCounter < 9)) {
+        deathScale = &sDeathFlashScales[this->frameCounter - 2];
         if (deathScale->x > 0.0f) {
-            this->drawDeathFlash = true;
+            this->shouldDrawDeathFlash = true;
             Math_Vec3f_Copy(&this->deathFlashScale, deathScale);
         } else {
-            this->drawDeathFlash = false;
+            this->shouldDrawDeathFlash = false;
         }
     } else {
-        this->drawDeathFlash = false;
+        this->shouldDrawDeathFlash = false;
     }
 
-    this->stateTimer++;
+    this->frameCounter++;
 
-    if (this->actionTimer == 8) {
+    if (this->timer == 8) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y - 10.0f,
                     this->actor.world.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_SMOKE));
     }
 
-    if (this->actionTimer == 8) {
+    if (this->timer == 8) {
         Enemy_StartFinishingBlow(play, &this->actor);
     }
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_Alien_SetRespawnTime(ENINVADEPOH_GET_INDEX(&this->actor));
         EnInvadepoh_Alien_AddKill();
         Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_30);
@@ -2439,15 +2439,15 @@ void EnInvadepoh_CowTail_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_AbductedRomani_SetupWait(EnInvadepoh* this) {
-    this->actionTimer = 40;
+    this->timer = 40;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     this->actor.draw = NULL;
     this->actionFunc = EnInvadepoh_AbductedRomani_Wait;
 }
 
 void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play) {
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_Romani_StartTextBox(this, play, 0x332F); // Romani's scream when abducted
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_AbductedRomani_SetupYell(this);
@@ -2455,14 +2455,14 @@ void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_AbductedRomani_SetupYell(EnInvadepoh* this) {
-    this->actionTimer = 60;
+    this->timer = 60;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     this->actor.draw = EnInvadepoh_Romani_Draw;
     this->actionFunc = EnInvadepoh_AbductedRomani_Yell;
 }
 
 void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
-    if (this->actionTimer == 20) {
+    if (this->timer == 20) {
         EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
         interactInfo->headRotTarget.x = 0x7D0;
@@ -2472,8 +2472,8 @@ void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
         interactInfo->maxTurnRate = 0x3E8;
     }
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_AbductedRomani_SetupStruggle(this);
     }
 }
@@ -2487,7 +2487,7 @@ void EnInvadepoh_AbductedRomani_SetupStruggle(EnInvadepoh* this) {
     this->interactInfo.torsoRotZTarget = 0x3A98;
     this->interactInfo.torsoMaxTurnRate = 0.1f;
     this->interactInfo.torsoMaxTurnStep = 0x7D0;
-    this->actionTimer = 50;
+    this->timer = 50;
 
     Animation_Change(&this->skelAnime, &gRomaniRunAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
     this->actor.draw = EnInvadepoh_Romani_Draw;
@@ -2495,18 +2495,18 @@ void EnInvadepoh_AbductedRomani_SetupStruggle(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_AbductedRomani_Struggle(EnInvadepoh* this, PlayState* play) {
-    if (this->actionTimer == 40) {
+    if (this->timer == 40) {
         this->interactInfo.headRotTarget.y = 0x1B58;
-    } else if (this->actionTimer == 30) {
+    } else if (this->timer == 30) {
         this->interactInfo.headRotTarget.y = -0x1B58;
-    } else if (this->actionTimer == 20) {
+    } else if (this->timer == 20) {
         this->interactInfo.headRotTarget.y = 0x1B58;
-    } else if (this->actionTimer == 10) {
+    } else if (this->timer == 10) {
         this->interactInfo.headRotTarget.y = 0;
     }
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_AbductedRomani_SetupEnd(this);
     }
 }
@@ -2572,7 +2572,7 @@ void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
     static s16 D_80B4EDC8[4] = { -0x708, -0x3E8, 0, 0x7D0 };
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
-    this->actionTimer = Rand_S16Offset(150, 250);
+    this->timer = Rand_S16Offset(150, 250);
     interactInfo->headRotTarget.x = D_80B4EDC8[Rand_Next() >> 0x1E];
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
@@ -2602,8 +2602,8 @@ void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_SilentRomani_SetupIdle(this);
     }
@@ -2613,7 +2613,7 @@ void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     f32 rand = Rand_ZeroOne();
 
-    this->actionTimer = Rand_S16Offset(150, 150);
+    this->timer = Rand_S16Offset(150, 150);
 
     if (rand < 0.5f) {
         this->silentRomaniState = 0;
@@ -2671,8 +2671,8 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         interactInfo->headRotTarget.y = 0;
     }
 
-    if (this->actionTimer > 0) {
-        s32 timerMod32 = (u32)this->actionTimer % 0x20;
+    if (this->timer > 0) {
+        s32 timerMod32 = (u32)this->timer % 0x20;
 
         if ((timerMod32 == 0) && (Rand_ZeroOne() < 0.3f)) {
             s32 next_silentRomaniState = (s32)Rand_Next() % 4;
@@ -2700,7 +2700,7 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
                 }
             }
         }
-        this->actionTimer--;
+        this->timer--;
         return;
     }
 
@@ -2786,10 +2786,10 @@ void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2) {
 
 void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this) {
     this->actor.gravity = -15.0f;
-    this->pulseScale = 0.0f;
-    this->pulseScaleTarget = 1.0f;
-    this->pulseScaleRate = 0.0f;
-    this->pulseRate = 0;
+    this->ufoPulseScale = 0.0f;
+    this->ufoPulseScaleTarget = 1.0f;
+    this->ufoPulseScaleSpeed = 0.0f;
+    this->ufoPulsePhaseVelocity = 0;
     this->actionFunc = EnInvadepoh_Ufo_Descend;
 }
 
@@ -2811,10 +2811,10 @@ void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this) {
     this->actor.velocity.y *= 0.1f;
-    this->actionTimer = 20;
-    this->pulseScaleTarget = 0.3f;
-    this->pulseScaleRate = 0.03f;
-    this->pulseRate = 0xBB8;
+    this->timer = 20;
+    this->ufoPulseScaleTarget = 0.3f;
+    this->ufoPulseScaleSpeed = 0.03f;
+    this->ufoPulsePhaseVelocity = 0xBB8;
     this->actionFunc = EnInvadepoh_Ufo_Hover;
 }
 
@@ -2831,20 +2831,20 @@ void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
 
-    this->actionTimer--;
-    if (this->actionTimer <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         EnInvadepoh_Ufo_SetupSpawnAliens(this);
     }
 }
 
 void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this) {
-    this->actionTimer = 120;
-    this->pulseScaleTarget = 0.2f;
-    this->pulseScaleRate = 0.01f;
+    this->timer = 120;
+    this->ufoPulseScaleTarget = 0.2f;
+    this->ufoPulseScaleSpeed = 0.01f;
     this->actor.gravity = 33.0f;
-    this->pulseRate = 0xBB8;
-    this->ufoTarget = 0;
-    this->stateTimer = 0;
+    this->ufoPulsePhaseVelocity = 0xBB8;
+    this->ufoTargetPosIndex = 0;
+    this->frameCounter = 0;
     this->actionFunc = EnInvadepoh_Ufo_SpawnAliens;
 }
 
@@ -2857,17 +2857,17 @@ void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play) {
     Vec3f ufoTargetPos;
     s32 pad2;
 
-    if (this->stateTimer < 25) {
-        this->stateTimer++;
+    if (this->frameCounter < 25) {
+        this->frameCounter++;
     } else {
-        this->stateTimer = 0;
-        this->ufoTarget++;
-        this->ufoTarget = CLAMP_MAX(this->ufoTarget, ARRAY_COUNT(sUfoTargetOffsets) - 1);
+        this->frameCounter = 0;
+        this->ufoTargetPosIndex++;
+        this->ufoTargetPosIndex = CLAMP_MAX(this->ufoTargetPosIndex, ARRAY_COUNT(sUfoTargetOffsets) - 1);
         this->actor.gravity = 33.0f;
         EnInvadepoh_Ufo_SpawnSparkles(this, play, 20);
     }
 
-    Math_Vec3f_Sum(&sUfoTargetOffsets[this->ufoTarget], &this->actor.home.pos, &ufoTargetPos);
+    Math_Vec3f_Sum(&sUfoTargetOffsets[this->ufoTargetPosIndex], &this->actor.home.pos, &ufoTargetPos);
 
     if (Math3D_Vec3fDistSq(&this->actor.world.pos, &ufoTargetPos) < SQ(400.0f)) {
         this->actor.speed *= 0.8f;
@@ -2893,17 +2893,17 @@ void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play) {
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_Ufo_SetupAboveBarn(this);
     }
 }
 
 void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this) {
-    this->pulseScaleTarget = 0.2f;
-    this->pulseScaleRate = 0.01f;
-    this->pulseRate = 0xBB8;
+    this->ufoPulseScaleTarget = 0.2f;
+    this->ufoPulseScaleSpeed = 0.01f;
+    this->ufoPulsePhaseVelocity = 0xBB8;
     this->actor.velocity.y *= 0.8f;
     this->actionFunc = EnInvadepoh_Ufo_AboveBarn;
 }
@@ -2935,11 +2935,11 @@ void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Ufo_SetupCircle(EnInvadepoh* this) {
-    this->pulseScaleTarget = 0.2f;
-    this->pulseScaleRate = 0.01f;
+    this->ufoPulseScaleTarget = 0.2f;
+    this->ufoPulseScaleSpeed = 0.01f;
     this->actor.gravity = -1.5f;
-    this->pulseRate = 0xBB8;
-    this->actionTimer = 35;
+    this->ufoPulsePhaseVelocity = 0xBB8;
+    this->timer = 35;
     this->actionFunc = EnInvadepoh_Ufo_Circle;
 }
 
@@ -2958,19 +2958,19 @@ void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_Ufo_SetupFlee(this);
     }
 }
 
 void EnInvadepoh_Ufo_SetupFlee(EnInvadepoh* this) {
-    this->pulseScaleTarget = 0.2f;
-    this->pulseScaleRate = 0.01f;
+    this->ufoPulseScaleTarget = 0.2f;
+    this->ufoPulseScaleSpeed = 0.01f;
     this->actor.gravity = 1.0f;
-    this->pulseRate = 0xBB8;
-    this->actionTimer = 60;
+    this->ufoPulsePhaseVelocity = 0xBB8;
+    this->timer = 60;
     this->actionFunc = EnInvadepoh_Ufo_Flee;
 }
 
@@ -2979,19 +2979,19 @@ void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play) {
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         Actor_Kill(&this->actor);
     }
 }
 
 void EnInvadepoh_Ufo_SetupLeaveBarn(EnInvadepoh* this) {
-    this->actionTimer = 40;
-    this->pulseScaleTarget = 0.2f;
-    this->pulseScaleRate = 0.01f;
+    this->timer = 40;
+    this->ufoPulseScaleTarget = 0.2f;
+    this->ufoPulseScaleSpeed = 0.01f;
     this->actor.speed = 0.0f;
-    this->pulseRate = 0xBB8;
+    this->ufoPulsePhaseVelocity = 0xBB8;
     this->actionFunc = EnInvadepoh_Ufo_LeaveBarn;
 }
 
@@ -3010,8 +3010,8 @@ void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_Ufo_SetupCircle(this);
     }
@@ -3024,10 +3024,10 @@ void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
 
-    this->pulsePhase += this->pulseRate;
-    Math_StepToF(&this->pulseScale, this->pulseScaleTarget, this->pulseScaleRate);
+    this->ufoPulsePhase += this->ufoPulsePhaseVelocity;
+    Math_StepToF(&this->ufoPulseScale, this->ufoPulseScaleTarget, this->ufoPulseScaleSpeed);
 
-    scaleMod = 1.0f + (Math_SinS(this->pulsePhase) * this->pulseScale);
+    scaleMod = 1.0f + (Math_SinS(this->ufoPulsePhase) * this->ufoPulseScale);
     Actor_SetScale(&this->actor, 0.27f * scaleMod);
     Math_StepToS(&this->angularVelocity, 0x258, 8);
     this->actor.world.rot.y += this->angularVelocity;
@@ -3198,7 +3198,7 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     interactInfo->scaledTurnRate = 0.1f;
     interactInfo->maxTurnRate = 0x5DC;
 
-    this->actionTimer = Rand_S16Offset(200, 200);
+    this->timer = Rand_S16Offset(200, 200);
     this->angle = this->actor.shape.rot.y;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_Idle;
@@ -3239,8 +3239,8 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
         interactInfo->headRotTarget.z = 0;
     }
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_BarnRomani_SetupLookAround(this);
     }
@@ -3476,14 +3476,14 @@ void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_RewardRomani_SetupGiveBottle(EnInvadepoh* this) {
-    this->actionTimer = 2;
+    this->timer = 2;
     this->actionFunc = EnInvadepoh_RewardRomani_GiveBottle;
 }
 
 void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play) {
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
-        if (this->actionTimer == 0) {
+    if (this->timer > 0) {
+        this->timer--;
+        if (this->timer == 0) {
             Message_CloseTextbox(play);
         }
     }
@@ -3588,7 +3588,7 @@ void EnInvadepoh_Dog_PlayWalkSfx(EnInvadepoh* this) {
 
 void EnInvadepoh_Dog_SetupWalk(EnInvadepoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &gDogWalkAnim, -6.0f);
-    this->actionTimer = Rand_S16Offset(50, 80);
+    this->timer = Rand_S16Offset(50, 80);
     this->actionFunc = EnInvadepoh_Dog_Walk;
 }
 
@@ -3602,11 +3602,11 @@ void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Dog_PlayWalkSfx(this);
 
     if (this->dogTargetPoint >= 0) {
-        this->actionTimer = 0;
+        this->timer = 0;
     }
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
         EnInvadepoh_Dog_SetupRun(this);
     }
@@ -3614,7 +3614,7 @@ void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Dog_SetupRun(EnInvadepoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &gDogRunAnim, -6.0f);
-    this->actionTimer = Rand_S16Offset(50, 200);
+    this->timer = Rand_S16Offset(50, 200);
     this->actionFunc = EnInvadepoh_Dog_Run;
 }
 
@@ -3635,7 +3635,7 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
             this->actor.speed *= 0.96f;
         }
         if ((this->currentPoint == this->dogTargetPoint) || (distToTarget < SQ(50.0f))) {
-            this->actionTimer = 0;
+            this->timer = 0;
         }
     }
 
@@ -3645,8 +3645,8 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
         EnInvadepoh_Dog_SetNextPathPoint(this);
     }
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     } else if (this->dogTargetPoint >= 0) {
         if (!sAliensTooClose && (Rand_ZeroOne() < 0.4f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
@@ -4210,7 +4210,7 @@ void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->alienAbductorAccelY = D_80B4EE0C[index].accel;
     this->angle = index * 0x5555;
@@ -4261,31 +4261,31 @@ void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
     this->alpha = 255;
     this->actor.draw = NULL;
     this->shouldDraw = true;
-    this->drawDeathFlash = false;
+    this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->angularVelocity = 0x190;
     this->angle = 0;
-    this->actionTimer = 200;
+    this->timer = 200;
     this->actionFunc = EnInvadepoh_AlienAbductor_Romani;
     this->actor.velocity.y = 0.0f;
 }
 
 void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
-    s32 actionTimer;
+    s32 timer;
     f32 tempAngularVelocity;
     s32 reachedTargetY = 0;
 
-    if (this->actionTimer > 0) {
-        this->actionTimer--;
+    if (this->timer > 0) {
+        this->timer--;
     }
 
-    if (this->actionTimer > 160) {
+    if (this->timer > 160) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnInvadepoh_Alien_Draw;
-        actionTimer = (reachedTargetY ? 0 : this->actionTimer);
+        timer = (reachedTargetY ? 0 : this->timer);
 
-        if ((actionTimer < 105) && (actionTimer >= 100)) {
+        if ((timer < 105) && (timer >= 100)) {
             this->actor.gravity = -1.0f;
             Math_SmoothStepToS(&this->actor.shape.rot.x, 0x2000, 8, 0x320, 0x28);
         } else {
@@ -4296,7 +4296,7 @@ void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
         this->actor.velocity.y += this->actor.gravity;
         this->actor.velocity.y *= 0.92f;
 
-        if (this->actionTimer > 80) {
+        if (this->timer > 80) {
             this->actor.world.pos.y += this->actor.velocity.y;
         } else {
             f32 targetY = this->actor.home.pos.y + 850.0f;
@@ -4319,7 +4319,7 @@ void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
         }
     }
 
-    if ((this->actionTimer <= 0) || reachedTargetY) {
+    if ((this->timer <= 0) || reachedTargetY) {
         Actor_Kill(&this->actor);
     }
 }
@@ -4473,7 +4473,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         }
     }
 
-    if (this->drawDeathFlash) {
+    if (this->shouldDrawDeathFlash) {
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_Scale(this->deathFlashScale.x, this->deathFlashScale.y, this->deathFlashScale.z, MTXMODE_APPLY);
