@@ -1,27 +1,44 @@
-#include "z_en_invadepoh.h"
+/*
+ * File: z_en_invadepoh.c
+ * Overlay: ovl_En_Invadepoh
+ * Description: Various ranch actors (aliens, the UFO, the dog during the alien invasion, Romani and Cremia, etc.)
+ *
+ * This actor handles a large number of things related to Romani Ranch. As its name suggests, it handles almost
+ * everything associated with the alien invasion that occurs on Night 1, though it is responsible for a few other things
+ * as well. To be specific, this actor handles the following things:
+ * - The aliens that invade the ranch. This includes both the aliens the slowly approach the barn as well as an unused
+ *   "abductor" variant that carries cows or Romani into the sky.
+ * - The UFO that spawns the aliens and sits over the barn during the invasion. It appears as a spinning ball of light.
+ * - An invisible "invasion handler" that manages the state of the alien invasion, including playing the right
+ *   cutscenes, starting and ending the invasion, making the warp effects gradually fade out, etc.
+ * - The dog that barks at the alien nearest to the barn during the invasion.
+ * - A cow that gets carried up into the sky by the unused "abductor" alien, thus making it also unused.
+ * - A cow tail attached to the unused cow, thus making it also unused.
+ * - A variant of Romani that gets carried up into the sky by the unused "abductor" alien, thus making it also unused.
+ * - A variant of Romani that walks from the house to the barn on Night 1 before the invasion begins.
+ * - A variant of Romani that waits in the barn on Night 1 until the invasion begins.
+ * - A variant of Romani that rewards the player with a bottle of milk if they defend the ranch from the alien invasion.
+ * - A variant of Romani that wanders the ranch on Day 2 if the player failed to defend the ranch from the alien
+ *   invasion. If the player tries to talk with her, she is silent and looks confused.
+ * - A variant of Romani that walks from the barn to the house on Night 3 if the player defended the ranch.
+ * - A variant of Cremia that walks from the barn to the house on Night 3 if the player defended the ranch. She walks a
+ *   fixed distance from the above Romani variant.
+ */
 
 #include "prevent_bss_reordering.h"
+#include "z_en_invadepoh.h"
 #include "sys_cfb.h"
 #include "z64horse.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#include "assets/objects/gameplay_keep/gameplay_keep.h"
-
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnInvadepoh*)thisx)
 
 #define EN_INVADEPOH_ALIEN_ACTIVE (1 << 0)
 #define EN_INVADEPOH_ALIEN_CLOSEST (1 << 1)
-
-#define BARN_X_POSITION -409
-#define BARN_Y_POSITION 265
-#define BARN_Z_POSITION -1829
-
-#define SPAWN_X_POSITION -193
-#define SPAWN_Y_POSITION 235
-#define SPAWN_Z_POSITION -434
 
 typedef enum EnInvadepohEventState {
     /* 0 */ EN_INVADEPOH_EVENT_UNSET,
