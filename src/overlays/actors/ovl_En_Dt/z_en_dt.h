@@ -23,7 +23,7 @@ typedef struct EnDt {
     /* 0x24A */ s16 blinkTimer;
     /* 0x24C */ s16 eyeTexIndex;
     /* 0x250 */ f32 animEndFrame;
-    /* 0x254 */ s16 npcState;
+    /* 0x254 */ s16 state;
     /* 0x256 */ s16 textIdIndex;
     /* 0x258 */ s16 csIds[EN_DT_CUTSCENE_COUNT];
     /* 0x26E */ s16 csIdIndex;
@@ -36,6 +36,6 @@ typedef struct EnDt {
     /* 0x28A */ Vec3s headRotTarget;
     /* 0x290 */ s32 meetingFinished;
     /* 0x294 */ ColliderCylinder collider;
-} EnDt;                                             /* size = 0x2E0 */
+} EnDt; // size = 0x2E0
 
 #endif // Z_EN_DT_H
