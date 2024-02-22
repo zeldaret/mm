@@ -103,7 +103,7 @@ typedef struct TransitionCircle {
     /* 0x14 */ u8 direction; // Direction the circle is transitioning ( In / Out )
     /* 0x15 */ u8 maskType; // Positive / Negative mask type. Value of 0 will create a black circle
     /* 0x16 */ u8 isDone; // Signals when Transition is done updating
-    /* 0x18 */ TexturePtr texture;
+    /* 0x18 */ void const* texture;
     /* 0x1C */ u8 masks;
     /* 0x1D */ u8 maskt;
     /* 0x1E */ s8 unk_1E; // Set to 4 and never used
@@ -243,7 +243,7 @@ void TransitionFade_SetType(void* thisx, s32 type);
 
 // z_fbdemo_circle.c
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
 
 // z_overlay.c
 

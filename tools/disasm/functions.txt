@@ -3116,7 +3116,7 @@
     0x80172ED0:("AudioMgr_ThreadEntry",),
     0x80173048:("AudioMgr_Unlock",),
     0x80173074:("AudioMgr_Init",),
-    0x80173130:("Setup_SetRegs",),
+    0x80173130:("Setup_InitRegs",),
     0x801732DC:("Setup_InitImpl",),
     0x8017332C:("Setup_Destroy",),
     0x80173338:("Setup_Init",),
