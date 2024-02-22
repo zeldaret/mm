@@ -94,7 +94,13 @@ typedef struct EnInvadepohInteractInfo {
 
 typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnim**);
 
-#define EN_INVADEPOH_LIMB_MAX ROMANI_LIMB_MAX
+#define EN_INVADEPOH_LIMB_MAX \
+    MAX(MAX(MAX(MAX(MAX((s32)COW_LIMB_MAX, \
+                        (s32)COW_TAIL_LIMB_MAX), \
+                        (s32)DOG_LIMB_MAX), \
+                        (s32)ROMANI_LIMB_MAX), \
+                        (s32)CREMIA_LIMB_MAX), \
+                        (s32)ALIEN_LIMB_MAX)
 
 typedef struct EnInvadepoh {
     /* 0x000 */ Actor actor;
