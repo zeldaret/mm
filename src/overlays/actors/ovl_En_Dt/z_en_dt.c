@@ -135,10 +135,10 @@ typedef struct {
     s16 D_80BEB26A[25];
 } CutsceneIndexTable;
 
-static CutsceneIndexTable CsIndexTable = { { 0x2ABB },
-                                           { 0x0000, 0x2ABD, 0x0000, 0x2AC0, 0x0001, 0x2AC1, 0x0002, 0x2AC4, 0x0003,
-                                             0x2AC6, 0x0004, 0x2AC7, 0x0005, 0x2AC8, 0x0006, 0x2AC9, 0x0007, 0x2ACC,
-                                             0x0008, 0x2ACF, 0x0009, 0x2AD0, 0x000A, 0x0309, 0x0309 } };
+static CutsceneIndexTable sCsIndexTable = { { 0x2ABB },
+                                            { 0x0000, 0x2ABD, 0x0000, 0x2AC0, 0x0001, 0x2AC1, 0x0002, 0x2AC4, 0x0003,
+                                              0x2AC6, 0x0004, 0x2AC7, 0x0005, 0x2AC8, 0x0006, 0x2AC9, 0x0007, 0x2ACC,
+                                              0x0008, 0x2ACF, 0x0009, 0x2AD0, 0x000A, 0x0309, 0x0309 } };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -211,6 +211,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
 
 void EnDt_Destroy(Actor* thisx, PlayState* play) {
     EnDt* this = THIS;
+
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -240,30 +241,22 @@ void EnDt_ChangeAnim(EnDt* this, s32 animIndex) {
         morphFrames = 0.0f;
     }
 
-    this->animEndFrame = (f32)Animation_GetLastFrame(sAnimations[this->animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], morphFrames);
 }
 
 void EnDt_UpdateVisualState(EnDt* this) {
-    s32 i = this->visualState;
-    s32* p = sVisualStateTable;
-    s32 v; // Permuter silliness
+    s32 index = this->visualState * 4;
 
-    i = i * 4 + 1;
-    p += i;
+    index++;
+    EnDt_ChangeAnim(this, sVisualStateTable[index]);
 
-    i = *p;
-    v = *p;
+    index++;
+    this->eyeTexIndex = sVisualStateTable[index];
 
-    // Extreme permuter silliness
-    goto dummy_label;
-dummy_label:;
-
-    EnDt_ChangeAnim(this, v);
-
-    this->eyeTexIndex = *(++p);
-    this->disableBlinking = *(++p);
+    index++;
+    this->disableBlinking = sVisualStateTable[index];
 }
 
 void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
@@ -409,12 +402,11 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
     s16* pTextData;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
-        if (this->npcEnMuto != NULL) {
-            if (this->npcEnBaisen != NULL) {
-                npcMuto = (EnMuto*)this->npcEnMuto;
-                npcBaisen = (EnBaisen*)this->npcEnBaisen;
-            }
+        if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
+            npcMuto = (EnMuto*)this->npcEnMuto;
+            npcBaisen = (EnBaisen*)this->npcEnBaisen;
         }
+
         if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
             npcMuto->cutsceneState = 1;
             npcBaisen->cutsceneState = 1;
@@ -432,8 +424,8 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
 
     this->cutsceneState = EN_DT_CS_STATE_NONE;
     for (index = 0; index < 24; index += 2) {
-        if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) ||
-            (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
+        if ((play->msgCtx.currentTextId == sCsIndexTable.D_80BEB268[index]) ||
+            (this->actor.textId == sCsIndexTable.D_80BEB268[index])) {
             this->cutsceneState = EN_DT_CS_STATE_WAITING;
             this->csIdIndex = index;
             break;
@@ -447,8 +439,8 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
 void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
     EnMuto* muto = NULL;
     EnBaisen* baisen = NULL;
-    s32 index = CsIndexTable.D_80BEB26A[this->csIdIndex];
-    s32 csIdIndex = CsIndexTable.D_80BEB26A[this->csIdIndex];
+    s32 index = sCsIndexTable.D_80BEB26A[this->csIdIndex];
+    s32 csIdIndex = sCsIndexTable.D_80BEB26A[this->csIdIndex];
 
     if (this->cutsceneState == EN_DT_CS_STATE_WAITING) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -565,14 +557,14 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
 
             // Sets the cutscene ID index based off the current textId
             for (index = 0; index < 24; index += 2) {
-                if (play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index] ||
-                    this->actor.textId == CsIndexTable.D_80BEB268[index]) {
+                if (play->msgCtx.currentTextId == sCsIndexTable.D_80BEB268[index] ||
+                    this->actor.textId == sCsIndexTable.D_80BEB268[index]) {
                     this->csIdIndex = index;
                     break;
                 }
             }
 
-            index = CsIndexTable.D_80BEB26A[this->csIdIndex];
+            index = sCsIndexTable.D_80BEB26A[this->csIdIndex];
             if (this->cutsceneState == EN_DT_CS_STATE_PLAYING && (index != csIdIndex)) {
                 this->cutsceneState = EN_DT_CS_STATE_WAITING;
                 CutsceneManager_Stop(this->csIds[csIdIndex]);
@@ -604,7 +596,7 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
     } else if (this->animEndFrame <= currFrame) {
         Camera* pCamera;
         s32 index;
-        s32 currTextId = CsIndexTable.D_80BEB26A[this->csIdIndex];
+        s32 currTextId = sCsIndexTable.D_80BEB26A[this->csIdIndex];
 
         EnDt_UpdateVisualState(this);
 
@@ -618,13 +610,13 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
 
         // Loop through the text id array and set the index if it matches the current text id
         for (index = 0; index < 24; index++) {
-            if ((play->msgCtx.currentTextId == CsIndexTable.D_80BEB268[index]) ||
-                (this->actor.textId == CsIndexTable.D_80BEB268[index])) {
+            if ((play->msgCtx.currentTextId == sCsIndexTable.D_80BEB268[index]) ||
+                (this->actor.textId == sCsIndexTable.D_80BEB268[index])) {
                 this->csIdIndex = index;
             }
         }
 
-        index = CsIndexTable.D_80BEB26A[this->csIdIndex];
+        index = sCsIndexTable.D_80BEB26A[this->csIdIndex];
         if ((this->cutsceneState == EN_DT_CS_STATE_PLAYING) && (index != currTextId)) {
             this->cutsceneState = EN_DT_CS_STATE_WAITING;
             CutsceneManager_Stop(this->csIds[currTextId]);
@@ -722,9 +714,9 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
             this->textIdIndex = 25; // "The carnival is... on"
             Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
             SET_WEEKEVENTREG(WEEKEVENTREG_60_40);
-            return;
+        } else {
+            EnDt_SetupFinalNightState(this, play);
         }
-        EnDt_SetupFinalNightState(this, play);
     }
 }
 

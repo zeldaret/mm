@@ -22,14 +22,12 @@ typedef struct EnDt {
     /* 0x248 */ s16 disableBlinking;
     /* 0x24A */ s16 blinkTimer;
     /* 0x24C */ s16 eyeTexIndex;
-    /* 0x24E */ // compiler padding
     /* 0x250 */ f32 animEndFrame;
     /* 0x254 */ s16 npcState;
     /* 0x256 */ s16 textIdIndex;
     /* 0x258 */ s16 csIds[EN_DT_CUTSCENE_COUNT];
     /* 0x26E */ s16 csIdIndex;
     /* 0x270 */ s16 cutsceneState;
-    /* 0x272 */ // compiler padding
     /* 0x274 */ Actor* npcEnMuto;
     /* 0x278 */ Actor* npcEnBaisen;
     /* 0x27C */ Actor* targetActor;
