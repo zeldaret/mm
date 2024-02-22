@@ -1112,7 +1112,7 @@ def asm_header(section_name: str):
 def getImmOverride(insn: rabbitizer.Instruction):
     if insn.isBranch():
         return f".L{insn.getBranchOffset() + insn.vram:08X}"
-    elif insn.isJump():
+    elif insn.isJumpWithAddress():
         return proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
 
     elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
