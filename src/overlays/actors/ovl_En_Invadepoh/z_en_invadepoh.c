@@ -1162,7 +1162,7 @@ void EnInvadepoh_Interact_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvad
     }
 }
 
-void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animations) {
     EnInvadepohFaceAnim* faceAnim = faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnim->frames;
 
@@ -1172,7 +1172,7 @@ void EnInvadepoh_Interact_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnI
     }
 }
 
-void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animations) {
     EnInvadepohFaceAnimBranched* faceAnimLoop = (EnInvadepohFaceAnimBranched*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoop->anim.frames;
 
@@ -1181,13 +1181,14 @@ void EnInvadepoh_Interact_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, 
         faceInfo->curIndex = faceFrames->texIndex[faceInfo->curFrame];
     } else {
         EnInvadepohFaceAnim* nextAnim =
-            animSet[EnInvadepoh_Interact_GetNextAnim(faceAnimLoop->nextAnims, faceAnimLoop->nextCount)];
+            animations[EnInvadepoh_Interact_GetNextAnim(faceAnimLoop->nextAnims, faceAnimLoop->nextCount)];
 
         EnInvadepoh_Interact_SetNextAnim(faceInfo, nextAnim);
     }
 }
 
-void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animSet) {
+void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo,
+                                                    EnInvadepohFaceAnim** animations) {
     EnInvadepohFaceAnimDelayedBranched* faceAnimLoopDelayed = (EnInvadepohFaceAnimDelayedBranched*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->loop.anim.frames;
 
@@ -1197,8 +1198,8 @@ void EnInvadepoh_Interact_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* fac
     } else if (faceInfo->delayTimer > 0) {
         faceInfo->delayTimer--;
     } else {
-        EnInvadepohFaceAnim* nextAnim = animSet[EnInvadepoh_Interact_GetNextAnim(faceAnimLoopDelayed->loop.nextAnims,
-                                                                                 faceAnimLoopDelayed->loop.nextCount)];
+        EnInvadepohFaceAnim* nextAnim = animations[EnInvadepoh_Interact_GetNextAnim(
+            faceAnimLoopDelayed->loop.nextAnims, faceAnimLoopDelayed->loop.nextCount)];
 
         EnInvadepoh_Interact_SetNextAnim(faceInfo, nextAnim);
     }
@@ -1368,33 +1369,34 @@ void EnInvadepoh_Interact_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
         EnInvadepoh_Interact_UpdateDelayedBranchedAnim,
     };
 
-    if ((faceInfo->animSet != NULL) && (faceInfo->curAnim != NULL)) {
-        sFaceUpdateFuncs[faceInfo->curAnimType](faceInfo, faceInfo->animSet);
+    if ((faceInfo->animations != NULL) && (faceInfo->curAnim != NULL)) {
+        sFaceUpdateFuncs[faceInfo->curAnimType](faceInfo, faceInfo->animations);
     }
 }
 
-void EnInvadepoh_Interact_Init(EnInvadepohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimSet, s32 curEyeAnim,
-                               EnInvadepohFaceAnim** mouthAnimSet, s32 curMouthAnim, Vec3s* headRotTarget,
-                               s16 maxTurnRate, f32 scaledTurnRate, f32 torsoRotXModTarget, f32 torsoRotXModStep) {
+void EnInvadepoh_Interact_Init(EnInvadepohInteractInfo* interactInfo, EnInvadepohFaceAnim** eyeAnimations,
+                               s32 curEyeAnim, EnInvadepohFaceAnim** mouthAnimations, s32 curMouthAnim,
+                               Vec3s* headRotTarget, s16 headRotMaxStep, f32 headRotStepScale, f32 torsoRotScaleTargetY,
+                               f32 torsoRotScaleStepY) {
     Math_Vec3s_Copy(&interactInfo->headRotTarget, headRotTarget);
-    interactInfo->maxTurnRate = maxTurnRate;
-    interactInfo->scaledTurnRate = scaledTurnRate;
-    interactInfo->torsoRotXModTarget = torsoRotXModTarget;
-    interactInfo->torsoRotXModStep = torsoRotXModStep;
-    if (eyeAnimSet != NULL) {
-        EnInvadepohFaceAnim* faceAnim = eyeAnimSet[curEyeAnim];
+    interactInfo->headRotMaxStep = headRotMaxStep;
+    interactInfo->headRotStepScale = headRotStepScale;
+    interactInfo->torsoRotScaleTargetY = torsoRotScaleTargetY;
+    interactInfo->torsoRotScaleStepY = torsoRotScaleStepY;
+    if (eyeAnimations != NULL) {
+        EnInvadepohFaceAnim* faceAnim = eyeAnimations[curEyeAnim];
 
-        interactInfo->eyeAnim.animSet = eyeAnimSet;
+        interactInfo->eyeAnim.animations = eyeAnimations;
         interactInfo->eyeAnim.curAnimType = faceAnim->type;
         interactInfo->eyeAnim.curAnim = faceAnim;
         interactInfo->eyeAnim.delayTimer = 0;
         interactInfo->eyeAnim.curFrame = 0;
         interactInfo->eyeAnim.curIndex = faceAnim->frames->texIndex[0];
     }
-    if (mouthAnimSet != NULL) {
-        EnInvadepohFaceAnim* faceAnim = mouthAnimSet[curMouthAnim];
+    if (mouthAnimations != NULL) {
+        EnInvadepohFaceAnim* faceAnim = mouthAnimations[curMouthAnim];
 
-        interactInfo->mouthAnim.animSet = mouthAnimSet;
+        interactInfo->mouthAnim.animations = mouthAnimations;
         interactInfo->mouthAnim.curAnimType = faceAnim->type;
         interactInfo->mouthAnim.curAnim = faceAnim;
         interactInfo->mouthAnim.delayTimer = 0;
@@ -1411,27 +1413,27 @@ void EnInvadepoh_Interact_Update(EnInvadepohInteractInfo* interactInfo) {
     rotStep.y = interactInfo->headRotTarget.y - interactInfo->headRot.y;
     rotStep.z = interactInfo->headRotTarget.z - interactInfo->headRot.z;
     Math_Vec3s_ToVec3f(&scaledRotStep, &rotStep);
-    Math_Vec3f_Scale(&scaledRotStep, interactInfo->scaledTurnRate);
+    Math_Vec3f_Scale(&scaledRotStep, interactInfo->headRotStepScale);
     Math_Vec3f_ToVec3s(&rotStep, &scaledRotStep);
     rotStep.x = ABS(rotStep.x);
     rotStep.y = ABS(rotStep.y);
     rotStep.z = ABS(rotStep.z);
-    rotStep.x = CLAMP_MAX(rotStep.x, interactInfo->maxTurnRate);
-    rotStep.y = CLAMP_MAX(rotStep.y, interactInfo->maxTurnRate);
-    rotStep.z = CLAMP_MAX(rotStep.z, interactInfo->maxTurnRate);
+    rotStep.x = CLAMP_MAX(rotStep.x, interactInfo->headRotMaxStep);
+    rotStep.y = CLAMP_MAX(rotStep.y, interactInfo->headRotMaxStep);
+    rotStep.z = CLAMP_MAX(rotStep.z, interactInfo->headRotMaxStep);
 
     Math_ScaledStepToS(&interactInfo->headRot.x, interactInfo->headRotTarget.x, rotStep.x);
     Math_ScaledStepToS(&interactInfo->headRot.y, interactInfo->headRotTarget.y, rotStep.y);
     Math_ScaledStepToS(&interactInfo->headRot.z, interactInfo->headRotTarget.z, rotStep.z);
-    Math_StepToF(&interactInfo->torsoRotXMod, interactInfo->torsoRotXModTarget, interactInfo->torsoRotXModStep);
+    Math_StepToF(&interactInfo->torsoRotScaleY, interactInfo->torsoRotScaleTargetY, interactInfo->torsoRotScaleStepY);
 
-    if (interactInfo->torsoRotZ != interactInfo->torsoRotZTarget) {
-        s16 torsoRotStep = interactInfo->torsoRotZTarget - interactInfo->torsoRotZ;
+    if (interactInfo->torsoRotX != interactInfo->torsoTargetRotX) {
+        s16 torsoRotStep = interactInfo->torsoTargetRotX - interactInfo->torsoRotX;
 
-        torsoRotStep *= interactInfo->torsoMaxTurnRate;
+        torsoRotStep *= interactInfo->torsoRotStepScale;
         torsoRotStep = ABS(torsoRotStep);
-        torsoRotStep = CLAMP(torsoRotStep, 0x64, interactInfo->torsoMaxTurnStep);
-        Math_ScaledStepToS(&interactInfo->torsoRotZ, interactInfo->torsoRotZTarget, torsoRotStep);
+        torsoRotStep = CLAMP(torsoRotStep, 0x64, interactInfo->torsoRotMaxStep);
+        Math_ScaledStepToS(&interactInfo->torsoRotX, interactInfo->torsoTargetRotX, torsoRotStep);
     }
     EnInvadepoh_Interact_UpdateAnimation(&interactInfo->eyeAnim);
     EnInvadepoh_Interact_UpdateAnimation(&interactInfo->mouthAnim);
@@ -2468,8 +2470,8 @@ void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
         interactInfo->headRotTarget.x = 0x7D0;
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
-        interactInfo->scaledTurnRate = 0.1f;
-        interactInfo->maxTurnRate = 0x3E8;
+        interactInfo->headRotStepScale = 0.1f;
+        interactInfo->headRotMaxStep = 0x3E8;
     }
 
     this->timer--;
@@ -2482,11 +2484,11 @@ void EnInvadepoh_AbductedRomani_SetupStruggle(EnInvadepoh* this) {
     this->interactInfo.headRotTarget.x = 0xBB8;
     this->interactInfo.headRotTarget.y = 0;
     this->interactInfo.headRotTarget.z = 0;
-    this->interactInfo.scaledTurnRate = 0.24f;
-    this->interactInfo.maxTurnRate = 0xBB8;
-    this->interactInfo.torsoRotZTarget = 0x3A98;
-    this->interactInfo.torsoMaxTurnRate = 0.1f;
-    this->interactInfo.torsoMaxTurnStep = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.24f;
+    this->interactInfo.headRotMaxStep = 0xBB8;
+    this->interactInfo.torsoTargetRotX = 0x3A98;
+    this->interactInfo.torsoRotStepScale = 0.1f;
+    this->interactInfo.torsoRotMaxStep = 0x7D0;
     this->timer = 50;
 
     Animation_Change(&this->skelAnime, &gRomaniRunAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
@@ -2515,11 +2517,11 @@ void EnInvadepoh_AbductedRomani_SetupEnd(EnInvadepoh* this) {
     this->interactInfo.headRotTarget.x = 0;
     this->interactInfo.headRotTarget.y = 0;
     this->interactInfo.headRotTarget.z = 0;
-    this->interactInfo.scaledTurnRate = 0.24f;
-    this->interactInfo.maxTurnRate = 0x1388;
-    this->interactInfo.torsoRotZTarget = 0;
-    this->interactInfo.torsoMaxTurnRate = 0.28f;
-    this->interactInfo.torsoMaxTurnStep = 0x1B58;
+    this->interactInfo.headRotStepScale = 0.24f;
+    this->interactInfo.headRotMaxStep = 0x1388;
+    this->interactInfo.torsoTargetRotX = 0;
+    this->interactInfo.torsoRotStepScale = 0.28f;
+    this->interactInfo.torsoRotMaxStep = 0x1B58;
 
     Animation_MorphToPlayOnce(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actor.draw = EnInvadepoh_Romani_Draw;
@@ -2563,8 +2565,8 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
     SkelAnime_Update(&this->skelAnime);
     EnInvadepoh_Interact_Update(&this->interactInfo);
 
-    if (interactInfo->torsoRotZ != 0) {
-        this->actor.shape.rot.x = -interactInfo->torsoRotZ;
+    if (interactInfo->torsoRotX != 0) {
+        this->actor.shape.rot.x = -interactInfo->torsoRotX;
     }
 }
 
@@ -2576,8 +2578,8 @@ void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = D_80B4EDC8[Rand_Next() >> 0x1E];
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     this->actionFunc = EnInvadepoh_SilentRomani_Walk;
 }
@@ -2618,29 +2620,29 @@ void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     if (rand < 0.5f) {
         this->silentRomaniState = 0;
         Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
-        interactInfo->scaledTurnRate = 0.1f;
-        interactInfo->maxTurnRate = 0x3E8;
+        interactInfo->headRotStepScale = 0.1f;
+        interactInfo->headRotMaxStep = 0x3E8;
     } else if (rand < 0.75f) {
         this->silentRomaniState = 1;
         interactInfo->headRotTarget.x = Rand_S16Offset(0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
-        interactInfo->scaledTurnRate = 0.06f;
-        interactInfo->maxTurnRate = 0x3E8;
+        interactInfo->headRotStepScale = 0.06f;
+        interactInfo->headRotMaxStep = 0x3E8;
     } else if (rand < 0.8f) {
         this->silentRomaniState = 2;
         interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
-        interactInfo->scaledTurnRate = 0.05f;
-        interactInfo->maxTurnRate = 0x3E8;
+        interactInfo->headRotStepScale = 0.05f;
+        interactInfo->headRotMaxStep = 0x3E8;
     } else {
         this->silentRomaniState = 3;
         interactInfo->headRotTarget.x = 0;
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = Rand_S16Offset(-0x9C4, 0x1388);
-        interactInfo->scaledTurnRate = 0.04f;
-        interactInfo->maxTurnRate = 0x3E8;
+        interactInfo->headRotStepScale = 0.04f;
+        interactInfo->headRotMaxStep = 0x3E8;
     }
 
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
@@ -2681,22 +2683,22 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
                 this->silentRomaniState = next_silentRomaniState;
                 if (this->silentRomaniState == 0) {
                     Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
-                    interactInfo->scaledTurnRate = 0.07f;
+                    interactInfo->headRotStepScale = 0.07f;
                 } else if (this->silentRomaniState == 1) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(0x3E8, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
-                    interactInfo->scaledTurnRate = 0.06f;
+                    interactInfo->headRotStepScale = 0.06f;
                 } else if (this->silentRomaniState == 2) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
-                    interactInfo->scaledTurnRate = 0.05f;
+                    interactInfo->headRotStepScale = 0.05f;
                 } else {
                     interactInfo->headRotTarget.x = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x7D0, 0xFA0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x7D0, 0xFA0);
-                    interactInfo->scaledTurnRate = 0.04f;
+                    interactInfo->headRotStepScale = 0.04f;
                 }
             }
         }
@@ -2713,8 +2715,8 @@ void EnInvadepoh_SilentRomani_SetupTalk(EnInvadepoh* this) {
     this->actor.speed = 0.0f;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->shapeAngularVelocityY = 0;
-    interactInfo->scaledTurnRate = 0.05f;
-    interactInfo->maxTurnRate = 0x4B0;
+    interactInfo->headRotStepScale = 0.05f;
+    interactInfo->headRotMaxStep = 0x4B0;
     this->actionFunc = EnInvadepoh_SilentRomani_Talk;
 }
 
@@ -3041,8 +3043,8 @@ void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
     this->actionFunc = EnInvadepoh_Night1Romani_Walk;
 }
 
@@ -3079,8 +3081,8 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night1Romani_SetupTalk(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0x7D0;
     this->shapeAngularVelocityY = 0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actionFunc = EnInvadepoh_Night1Romani_Talk;
@@ -3195,8 +3197,8 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x5DC;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x5DC;
 
     this->timer = Rand_S16Offset(200, 200);
     this->angle = this->actor.shape.rot.y;
@@ -3253,8 +3255,8 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_LookAround;
 }
@@ -3272,8 +3274,8 @@ void EnInvadepoh_BarnRomani_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
     this->actionFunc = EnInvadepoh_BarnRomani_Walk;
 }
 
@@ -3313,8 +3315,8 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_BarnRomani_SetupTalk(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0x7D0;
     this->shapeAngularVelocityY = 0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
     this->actionFunc = EnInvadepoh_BarnRomani_Talk;
@@ -3543,8 +3545,8 @@ void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f, 0.03f);
-        interactInfo->scaledTurnRate = 0.08f;
-        interactInfo->maxTurnRate = 0x7D0;
+        interactInfo->headRotStepScale = 0.08f;
+        interactInfo->headRotMaxStep = 0x7D0;
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
         EnInvadepoh_RewardRomani_SetupClearCheck(this);
@@ -3788,8 +3790,8 @@ void EnInvadepoh_Night3Cremia_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
 
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Walk;
@@ -3862,8 +3864,8 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night3Cremia_SetupTalk(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Talk;
@@ -3887,8 +3889,8 @@ void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night3Cremia_SetupIdle(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Idle;
@@ -3996,8 +3998,8 @@ void EnInvadepoh_Night3Romani_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.x = 0;
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
-    interactInfo->scaledTurnRate = 0.1f;
-    interactInfo->maxTurnRate = 0x320;
+    interactInfo->headRotStepScale = 0.1f;
+    interactInfo->headRotMaxStep = 0x320;
     this->actionFunc = EnInvadepoh_Night3Romani_Walk;
 }
 
@@ -4067,8 +4069,8 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night3Romani_SetupTalk(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0xFA0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0xFA0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Romani_Talk;
@@ -4092,8 +4094,8 @@ void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this) {
-    this->interactInfo.scaledTurnRate = 0.08f;
-    this->interactInfo.maxTurnRate = 0x7D0;
+    this->interactInfo.headRotStepScale = 0.08f;
+    this->interactInfo.headRotMaxStep = 0x7D0;
     Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Romani_Idle;
@@ -4558,16 +4560,18 @@ void EnInvadepoh_CowTail_Draw(Actor* thisx, PlayState* play2) {
 s32 EnInvadepoh_Romani_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                         Actor* thisx) {
     if (limbIndex == ROMANI_LIMB_HEAD) {
-        EnInvadepoh* this = ((EnInvadepoh*)thisx);
+        EnInvadepoh* this = THIS;
 
         rot->x += this->interactInfo.headRot.y;
         rot->y += this->interactInfo.headRot.z;
         rot->z += this->interactInfo.headRot.x;
     } else if (limbIndex == ROMANI_LIMB_TORSO) {
-        EnInvadepoh* this = ((EnInvadepoh*)thisx);
+        EnInvadepoh* this = THIS;
 
-        rot->x += (s16)(this->interactInfo.torsoRotXMod * this->interactInfo.headRot.y);
-        rot->z += this->interactInfo.torsoRotZ;
+        // The rot variable here is in model space, whereas the interactInfo variables are in world space.
+        // Romani's torso is lying on its side in model space, which is why this assignment looks weird.
+        rot->x += (s16)(this->interactInfo.torsoRotScaleY * this->interactInfo.headRot.y);
+        rot->z += this->interactInfo.torsoRotX;
     }
     return false;
 }
@@ -4677,7 +4681,9 @@ s32 EnInvadepoh_Cremia_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     } else if (limbIndex == CREMIA_LIMB_TORSO) {
         EnInvadepoh* this = THIS;
 
-        rot->x += (s16)(this->interactInfo.torsoRotXMod * this->interactInfo.headRot.y);
+        // The rot variable here is in model space, whereas the interactInfo variables are in world space.
+        // Cremia's torso is lying on its side in model space, which is why this assignment looks weird.
+        rot->x += (s16)(this->interactInfo.torsoRotScaleY * this->interactInfo.headRot.y);
     }
     return false;
 }

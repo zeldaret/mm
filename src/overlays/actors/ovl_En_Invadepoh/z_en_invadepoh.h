@@ -100,7 +100,7 @@ typedef union EnInvadepohFaceAnim {
 #endif
 
 typedef struct EnInvadepohFaceAnimInfo {
-    /* 0x0 */ EnInvadepohFaceAnim** animSet;
+    /* 0x0 */ EnInvadepohFaceAnim** animations;
     /* 0x4 */ s8 curAnimType;
     /* 0x8 */ EnInvadepohFaceAnim* curAnim;
     /* 0xC */ s16 delayTimer;
@@ -113,15 +113,15 @@ typedef struct EnInvadepohInteractInfo {
     /* 0x10 */ EnInvadepohFaceAnimInfo mouthAnim;
     /* 0x20 */ Vec3s headRot;
     /* 0x26 */ Vec3s headRotTarget;
-    /* 0x2C */ s16 maxTurnRate;
-    /* 0x30 */ f32 scaledTurnRate;
-    /* 0x34 */ f32 torsoRotXMod;
-    /* 0x38 */ f32 torsoRotXModTarget;
-    /* 0x3c */ f32 torsoRotXModStep;
-    /* 0x40 */ s16 torsoRotZ;
-    /* 0x42 */ s16 torsoRotZTarget;
-    /* 0x44 */ f32 torsoMaxTurnRate;
-    /* 0x48 */ s16 torsoMaxTurnStep;
+    /* 0x2C */ s16 headRotMaxStep;
+    /* 0x30 */ f32 headRotStepScale;
+    /* 0x34 */ f32 torsoRotScaleY;
+    /* 0x38 */ f32 torsoRotScaleTargetY;
+    /* 0x3c */ f32 torsoRotScaleStepY;
+    /* 0x40 */ s16 torsoRotX;
+    /* 0x42 */ s16 torsoTargetRotX;
+    /* 0x44 */ f32 torsoRotStepScale;
+    /* 0x48 */ s16 torsoRotMaxStep;
 } EnInvadepohInteractInfo; // size = 0x4C
 
 typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnim**);
