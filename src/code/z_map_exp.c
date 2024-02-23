@@ -11,12 +11,16 @@ s16 sPlayerInitDir = 0;
  */
 s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     static s32 sDungeonAndBossSceneIds[] = {
-        SCENE_MITURIN,  // DUNGEON_INDEX_WOODFALL_TEMPLE
-        SCENE_HAKUGIN,  // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-        SCENE_SEA,      // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-        SCENE_INISIE_N, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
-        SCENE_INISIE_R, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
-        SCENE_MITURIN_BS, SCENE_HAKUGIN_BS, SCENE_SEA_BS, SCENE_INISIE_BS,
+        SCENE_MITURIN,    // DUNGEON_INDEX_WOODFALL_TEMPLE
+        SCENE_HAKUGIN,    // DUNGEON_INDEX_SNOWHEAD_TEMPLE
+        SCENE_SEA,        // DUNGEON_INDEX_GREAT_BAY_TEMPLE
+        SCENE_INISIE_N,   // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_INISIE_R,   // Play_GetOriginalSceneId converts play->sceneId to SCENE_INISIE_N, returning
+                          // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_MITURIN_BS, //
+        SCENE_HAKUGIN_BS, //
+        SCENE_SEA_BS,     //
+        SCENE_INISIE_BS,  //
     };
     s32 i;
 
@@ -59,7 +63,8 @@ s32 Map_GetDungeonAreaIndex(PlayState* play) {
         SCENE_HAKUGIN,  // DUNGEON_INDEX_SNOWHEAD_TEMPLE
         SCENE_SEA,      // DUNGEON_INDEX_GREAT_BAY_TEMPLE
         SCENE_INISIE_N, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
-        SCENE_INISIE_R, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_INISIE_R, // Play_GetOriginalSceneId converts play->sceneId to SCENE_INISIE_N, returning
+                        // DUNGEON_INDEX_STONE_TOWER_TEMPLE
     };
     s32 i;
 

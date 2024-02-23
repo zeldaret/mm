@@ -738,8 +738,8 @@ void FileSelect_StartOptions(GameState* thisx) {
     }
 }
 
-// bss padding
 u8 sSelectedSetting;
+// bss padding
 s32 D_80814E94;
 s32 D_80814E98;
 s32 D_80814E9C;

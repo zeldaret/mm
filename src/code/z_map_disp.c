@@ -1054,7 +1054,7 @@ void MapDisp_Minimap_DrawRedCompassIcon(PlayState* play, s32 x, s32 z, s32 rot) 
     }
 }
 
-s32 MapDisp_IsLocationRomaniRanchCutscene(PlayState* play) {
+s32 MapDisp_IsLocationRomaniRanchAltScene(PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0)) {
         return true;
     }
@@ -1070,7 +1070,7 @@ s32 MapDisp_CanDisplayMinimap(PlayState* play) {
 }
 
 s32 MapDisp_IsLocationMinimapBlocked(PlayState* play) {
-    if (((play->csCtx.state != CS_STATE_IDLE) && !MapDisp_IsLocationRomaniRanchCutscene(play)) ||
+    if (((play->csCtx.state != CS_STATE_IDLE) && !MapDisp_IsLocationRomaniRanchAltScene(play)) ||
         (sMapDisp.unk20 & 2) || Map_IsInBossScene(play)) {
         return true;
     }
@@ -1133,7 +1133,7 @@ void MapDisp_DrawMinimap(PlayState* play, s32 playerInitX, s32 playerInitZ, s32 
     }
 }
 
-void MapDisp_ResetIMap(void) {
+void MapDisp_ResetMapI(void) {
     s32 i;
 
     sPauseDungeonMap.textureCount = 0;
@@ -1148,11 +1148,11 @@ void MapDisp_ResetIMap(void) {
 }
 
 void MapDisp_InitMapI(PlayState* play) {
-    MapDisp_ResetIMap();
+    MapDisp_ResetMapI();
 }
 
 void MapDisp_DestroyMapI(PlayState* play) {
-    MapDisp_ResetIMap();
+    MapDisp_ResetMapI();
 }
 
 // alloc pause screen dungeon map
@@ -1283,15 +1283,15 @@ s32 MapDisp_ConvertBossSceneToDungeonScene(s32 sceneId) {
  */
 void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
                        s32 dungeonIndex) {
-    static u16 sUnvisitedRoomPal[0x10] = {
+    static u16 sUnvisitedRoomPal[16] = {
         0x0000, 0x0000, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
         0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
     }; // palette 0
-    static u16 sVisitedRoomPal[0x10] = {
+    static u16 sVisitedRoomPal[16] = {
         0x0000, 0x027F, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
         0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
     }; // palette 1
-    static u16 sCurrentRoomPal[0x10] = {
+    static u16 sCurrentRoomPal[16] = {
         0x0000, 0x0623, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
         0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
     }; // palette 2
@@ -1306,11 +1306,11 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
     if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonIndex)) {
         s32 requiredScopeTemp;
 
-        sUnvisitedRoomPal[0xF] = 0xAD5F;
-        sVisitedRoomPal[0xF] = 0xAD5F;
-        sCurrentRoomPal[0xF] = 0xAD5F;
+        sUnvisitedRoomPal[15] = 0xAD5F;
+        sVisitedRoomPal[15] = 0xAD5F;
+        sCurrentRoomPal[15] = 0xAD5F;
     } else {
-        sCurrentRoomPal[0xF] = sVisitedRoomPal[0xF] = sUnvisitedRoomPal[0xF] = 0;
+        sCurrentRoomPal[15] = sVisitedRoomPal[15] = sUnvisitedRoomPal[15] = 0;
     }
 
     OPEN_DISPS(play->state.gfxCtx);

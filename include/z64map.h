@@ -130,7 +130,6 @@ void MapData_CPID_GetTexOffset(s32 mapCompactId, s32* offsetX, s32* offsetY);
 s16 MapData_CPID_GetMapScale(s32 mapCompactId);
 
 /* z_map_exp */
-s32 Map_GetDungeonOrBossAreaIndex(struct PlayState* play);
 s32 Map_IsInDungeonOrBossArea(struct PlayState* play);
 s32 MapExp_CurRoomHasMapI(struct PlayState* play);
 s32 Map_IsInBossScene(struct PlayState* play);

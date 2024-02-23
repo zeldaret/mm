@@ -1446,13 +1446,13 @@ asm/non_matchings/code/z_map_disp/MapDisp_Destroy.s,MapDisp_Destroy,0x80105A40,0
 asm/non_matchings/code/z_map_disp/MapDisp_Update.s,MapDisp_Update,0x80105B34,0x43
 asm/non_matchings/code/z_map_disp/MapDisp_SwapRooms.s,MapDisp_SwapRooms,0x80105C40,0xE8
 asm/non_matchings/code/z_map_disp/MapDisp_Minimap_DrawRedCompassIcon.s,MapDisp_Minimap_DrawRedCompassIcon,0x80105FE0,0x10A
-asm/non_matchings/code/z_map_disp/MapDisp_IsLocationRomaniRanchCutscene.s,MapDisp_IsLocationRomaniRanchCutscene,0x80106408,0x12
+asm/non_matchings/code/z_map_disp/MapDisp_IsLocationRomaniRanchAltScene.s,MapDisp_IsLocationRomaniRanchAltScene,0x80106408,0x12
 asm/non_matchings/code/z_map_disp/MapDisp_CanDisplayMinimap.s,MapDisp_CanDisplayMinimap,0x80106450,0x1F
 asm/non_matchings/code/z_map_disp/MapDisp_IsLocationMinimapBlocked.s,MapDisp_IsLocationMinimapBlocked,0x801064CC,0x19
 asm/non_matchings/code/z_map_disp/MapDisp_IsMinimapToggleBlocked.s,MapDisp_IsMinimapToggleBlocked,0x80106530,0x13
 asm/non_matchings/code/z_map_disp/MapDisp_AreRoomsSameStorey.s,MapDisp_AreRoomsSameStorey,0x8010657C,0x32
 asm/non_matchings/code/z_map_disp/MapDisp_DrawMinimap.s,MapDisp_DrawMinimap,0x80106644,0x7E
-asm/non_matchings/code/z_map_disp/MapDisp_ResetIMap.s,MapDisp_ResetIMap,0x8010683C,0x1E
+asm/non_matchings/code/z_map_disp/MapDisp_ResetMapI.s,MapDisp_ResetMapI,0x8010683C,0x1E
 asm/non_matchings/code/z_map_disp/MapDisp_InitMapI.s,MapDisp_InitMapI,0x801068B4,0x9
 asm/non_matchings/code/z_map_disp/MapDisp_DestroyMapI.s,MapDisp_DestroyMapI,0x801068D8,0x9
 asm/non_matchings/code/z_map_disp/MapDisp_AllocDungeonMap.s,MapDisp_AllocDungeonMap,0x801068FC,0xBC
