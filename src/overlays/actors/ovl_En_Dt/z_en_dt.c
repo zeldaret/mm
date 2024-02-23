@@ -259,7 +259,7 @@ void EnDt_ChangeAnim(EnDt* this, s32 animIndex) {
     this->animIndex = animIndex;
 
     morphFrames = -4.0f;
-    if (this->animIndex == EN_DT_ANIMATION_2 || this->animIndex == EN_DT_ANIMATION_5) {
+    if ((this->animIndex == EN_DT_ANIMATION_2) || (this->animIndex == EN_DT_ANIMATION_5)) {
         morphFrames = 0.0f;
     }
 
@@ -282,7 +282,7 @@ void EnDt_UpdateVisualState(EnDt* this) {
 }
 
 void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
-    if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
+    if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
         EnMuto* npcEnMuto = (EnMuto*)this->npcEnMuto;
         EnBaisen* npcEnBaisen = (EnBaisen*)this->npcEnBaisen;
 
@@ -379,7 +379,7 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
-        if (this->npcEnMuto != NULL && this->npcEnBaisen) {
+        if ((this->npcEnMuto != NULL) && (this->npcEnBaisen)) {
             npcMuto = (EnMuto*)this->npcEnMuto;
             npcBaisen = (EnBaisen*)this->npcEnBaisen;
         }
@@ -401,8 +401,8 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && this->npcEnMuto != NULL &&
-        this->npcEnBaisen != NULL && (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && (this->npcEnMuto != NULL) &&
+        (this->npcEnBaisen != NULL) && (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
         EnDt_SetupMeetingCutscene(this, play);
     }
 
@@ -421,7 +421,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
     s16* pTextData;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
-        if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
+        if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
             npcMuto = (EnMuto*)this->npcEnMuto;
             npcBaisen = (EnBaisen*)this->npcEnBaisen;
         }
@@ -480,12 +480,12 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
-        (this->npcEnMuto != NULL || this->npcEnBaisen != NULL)) {
+        ((this->npcEnMuto != NULL) || (this->npcEnBaisen != NULL))) {
         muto = (EnMuto*)this->npcEnMuto;
         baisen = (EnBaisen*)this->npcEnBaisen;
     }
 
-    if (this->timer == 0 && Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT && Message_ShouldAdvance((play))) {
+    if ((this->timer == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textIdIndex == 21) {
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
             if (this->cutsceneState == EN_DT_CS_STATE_PLAYING) {
@@ -593,7 +593,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
             }
 
             // Mutoh turns his head to focus on the Mayor after saying "Isn't that right Mayor?"
-            if (this->textIdIndex == 3 && this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
+            if ((this->textIdIndex == 3) && (this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
                 muto->targetActor = &this->actor;
             }
         }
@@ -715,7 +715,7 @@ void EnDt_OfferFinalNightTalk(EnDt* this, PlayState* play) {
     }
 
     // After completing Couple's Mask event and wearing Kafeis Mask
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2368; // "My wife hired you? Go ask the Curiosity Shop"
     }
 
@@ -730,7 +730,7 @@ void EnDt_StartFinalNightTalk(EnDt* this) {
 void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
     EnDt_UpdateHeadRotate(this);
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3)) {
             this->textIdIndex = 25;
@@ -749,7 +749,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (this->state != 4 && this->state != 5 && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
+    if ((this->state != 4) && (this->state != 5) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         EnDt_SetupFinalNightState(this, play);
     }
 
@@ -767,7 +767,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
     }
 
     // Blinking update
-    if (!this->disableBlinking && this->blinkTimer == 0) {
+    if (!this->disableBlinking && (this->blinkTimer == 0)) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= EN_DT_EYE_TEXTURE_LOOK_DOWN) {
             this->eyeTexIndex = EN_DT_EYE_TEXTURE_SHOCK;
