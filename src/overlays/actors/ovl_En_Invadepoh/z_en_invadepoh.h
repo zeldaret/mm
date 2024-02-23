@@ -9,10 +9,12 @@
 #include "assets/objects/object_uch/object_uch.h"
 
 struct EnInvadepoh;
+struct EnInvadepohWarpEffect;
 
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
 typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh* this, PlayState* play);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh* this, PlayState* play);
+typedef void (*EnInvadepohWarpEffectUpdateFunc)(struct EnInvadepohWarpEffect* warpEffect);
 
 #define EN_INVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
 #define EN_INVADEPOH_GET_TYPE(thisx) ((thisx)->params >> 4 & 0xF)

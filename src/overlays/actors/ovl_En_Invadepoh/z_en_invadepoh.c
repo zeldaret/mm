@@ -122,7 +122,7 @@ void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_InvasionHandler_SetupBadEnd(EnInvadepoh* this);
 void EnInvadepoh_InvasionHandler_BadEnd(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this);
@@ -359,7 +359,7 @@ EnInvadepoh* sRomani;
 EnInvadepoh* sCremia;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
-static s16 sCsIdList[3];
+s16 sInvadepohCsIdList[3];
 EnInvadepoh* sClosestAlien;
 
 #define BITPACK(field, value, width, offset) \
@@ -1089,8 +1089,8 @@ void EnInvadepoh_InvasionHandler_SetCutscenes(EnInvadepoh* this) {
     s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
-        sCsIdList[i] = csId;
+    for (i = 0; i < ARRAY_COUNT(sInvadepohCsIdList); i++) {
+        sInvadepohCsIdList[i] = csId;
         csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 }
@@ -1521,14 +1521,14 @@ void EnInvadepoh_InvasionHandler_WarpFade(EnInvadepohWarpEffect* warpEffect) {
 }
 
 s32 EnInvadepoh_InvasionHandler_UpdateWarps(void) {
-    static void (*sEnInvadepohWarpUpdateFuncs[1])(EnInvadepohWarpEffect*) = { EnInvadepoh_InvasionHandler_WarpFade };
+    static EnInvadepohWarpEffectUpdateFunc sWarpEffectUpdateFuncs[1] = { EnInvadepoh_InvasionHandler_WarpFade };
     s32 warpActive = false;
     s32 i;
     EnInvadepohWarpEffect* warpEffect;
 
     for (i = 0, warpEffect = sWarpEffects; i < 10; i++, warpEffect++) {
         if (warpEffect->timer > 0) {
-            sEnInvadepohWarpUpdateFuncs[warpEffect->type](warpEffect);
+            sWarpEffectUpdateFuncs[warpEffect->type](warpEffect);
             warpActive = true;
             warpEffect->timer--;
         }
@@ -1917,11 +1917,11 @@ void EnInvadepoh_InvasionHandler_SetupQueueInvasionCs(EnInvadepoh* this) {
 void EnInvadepoh_InvasionHandler_QueueInvasionCs(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
-    } else if (CutsceneManager_IsNext(sCsIdList[0])) {
-        CutsceneManager_StartWithPlayerCs(sCsIdList[0], &this->actor);
+    } else if (CutsceneManager_IsNext(sInvadepohCsIdList[0])) {
+        CutsceneManager_StartWithPlayerCs(sInvadepohCsIdList[0], &this->actor);
         EnInvadepoh_InvasionHandler_SetupInvasionCs(this);
     } else {
-        CutsceneManager_Queue(sCsIdList[0]);
+        CutsceneManager_Queue(sInvadepohCsIdList[0]);
     }
 }
 
@@ -1945,7 +1945,7 @@ void EnInvadepoh_InvasionHandler_InvasionCs(EnInvadepoh* this, PlayState* play) 
 
     this->timer--;
     if (this->timer <= 0) {
-        CutsceneManager_Stop(sCsIdList[0]);
+        CutsceneManager_Stop(sInvadepohCsIdList[0]);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
         EnInvadepoh_InvasionHandler_SetupInvasion(this);
     }
@@ -1980,11 +1980,11 @@ void EnInvadepoh_InvasionHandler_SetupQueueVictoryCs(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_InvasionHandler_QueueVictoryCs(EnInvadepoh* this, PlayState* play) {
-    if (CutsceneManager_IsNext(sCsIdList[1])) {
-        CutsceneManager_StartWithPlayerCs(sCsIdList[1], &this->actor);
+    if (CutsceneManager_IsNext(sInvadepohCsIdList[1])) {
+        CutsceneManager_StartWithPlayerCs(sInvadepohCsIdList[1], &this->actor);
         EnInvadepoh_InvasionHandler_SetupVictoryCs(this);
     } else {
-        CutsceneManager_Queue(sCsIdList[1]);
+        CutsceneManager_Queue(sInvadepohCsIdList[1]);
     }
 }
 
@@ -2104,10 +2104,10 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->shouldDraw = false;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
-    this->actionFunc = EnInvadepoh_Invade_WaitToRespawn;
+    this->actionFunc = EnInvadepoh_Alien_WaitToRespawn;
 }
 
-void EnInvadepoh_Invade_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
@@ -2337,7 +2337,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
             EnInvadepoh_Alien_SetupHitstun(this);
-        } else if ((this->actionFunc == EnInvadepoh_Invade_WaitToRespawn) ||
+        } else if ((this->actionFunc == EnInvadepoh_Alien_WaitToRespawn) ||
                    (this->actionFunc == EnInvadepoh_Alien_WaitForEvent)) {
             Actor_Kill(thisx);
             return;
