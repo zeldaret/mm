@@ -532,11 +532,14 @@ void MapDisp_AwaitGameplayDangeonKeep(PlayState* play) {
 
     if (objectSlot <= OBJECT_SLOT_NONE) {
         sMapDisp.unk20 |= 1;
-    } else {
-        do { } while (!Object_IsLoaded(&play->objectCtx, objectSlot)); }
+        return;
+    }
 
-    //! FAKE: https://decomp.me/scratch/kvGBZ
-    if (&play->objectCtx) {}
+    while (true) {
+        if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+            break;
+        }
+    }
 }
 
 void MapDisp_Init(PlayState* play) {

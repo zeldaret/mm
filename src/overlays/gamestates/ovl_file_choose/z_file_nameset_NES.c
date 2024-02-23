@@ -4,6 +4,7 @@
  * Description: Entering name on a new file, selecting options from the options menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_file_select.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
@@ -738,9 +739,9 @@ void FileSelect_StartOptions(GameState* thisx) {
 }
 
 // bss padding
+u8 sSelectedSetting;
 s32 D_80814E94;
 s32 D_80814E98;
-u8 sSelectedSetting; // D_80814E90
 s32 D_80814E9C;
 s32 D_80814EA0;
 
