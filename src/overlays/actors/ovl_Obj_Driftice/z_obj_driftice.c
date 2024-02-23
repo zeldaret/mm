@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A66570(ObjDriftice* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->unk_16C[arg1]);
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->pathPoints[arg1]);
 }
 
 void func_80A665AC(s16* arg0, s16 arg1) {
@@ -308,12 +308,12 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     } else {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
 
-        path = &play->setupPathList[OBJDRIFTICE_GET_1FC(&this->dyna.actor)];
+        path = &play->setupPathList[OBJDRIFTICE_GET_PATH_INDEX(&this->dyna.actor)];
         this->unk_164 = 0;
         this->unk_160 = path->count - 1;
         this->unk_168 = 1;
 
-        this->unk_16C = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         func_80A66570(this, this->unk_164);
         func_80A671CC(this);
     }
@@ -345,7 +345,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
     s32 sp30;
     Actor* thisx = &this->dyna.actor;
 
-    Math_Vec3s_ToVec3f(&sp40, &(&this->unk_16C[this->unk_164])[this->unk_168]);
+    Math_Vec3s_ToVec3f(&sp40, &(&this->pathPoints[this->unk_164])[this->unk_168]);
     Math_Vec3f_Diff(&sp40, &this->dyna.actor.world.pos, &thisx->velocity);
 
     sp3C = Math3D_Vec3fMagnitude(&thisx->velocity);
@@ -377,7 +377,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
                 this->unk_168 = -this->unk_168;
                 func_80A674A8(this);
             } else {
-                points = &this->unk_16C[this->unk_160];
+                points = &this->pathPoints[this->unk_160];
 
                 if (this->unk_168 > 0) {
                     this->unk_164 = 0;
@@ -385,8 +385,8 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
                     this->unk_164 = this->unk_160;
                 }
 
-                if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
-                    (this->unk_16C[0].z != points->z)) {
+                if ((this->pathPoints[0].x != points->x) || (this->pathPoints[0].y != points->y) ||
+                    (this->pathPoints[0].z != points->z)) {
                     func_80A6743C(this);
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;

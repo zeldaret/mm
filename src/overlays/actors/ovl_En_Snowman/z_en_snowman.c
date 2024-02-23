@@ -618,7 +618,7 @@ void EnSnowman_Melt(EnSnowman* this, PlayState* play) {
     Vec3f smokePos;
 
     this->work.timer--;
-    if ((this->work.timer >= 38) && (!(this->work.timer & 1))) {
+    if ((this->work.timer >= 38) && !(this->work.timer & 1)) {
         smokeVelocity.y = (this->work.timer - 38) * (1.0f / 12.0f);
         smokeVelocity.x = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
         smokeVelocity.z = Rand_CenteredFloat(1.5f) * smokeVelocity.y;

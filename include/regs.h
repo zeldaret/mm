@@ -144,7 +144,7 @@ extern RegEditor* gRegEditor;
 #define R_PAUSE_DBG_MAP_CLOUD_Y             XREG(53)
 #define R_MOON_CRASH_TIMER_Y                XREG(80)
 #define R_MOON_CRASH_TIMER_X                XREG(81)
-#define R_PAUSE_OWLWARP_ALPHA               XREG(87)
+#define R_PAUSE_OWL_WARP_ALPHA              XREG(87)
 #define R_STORY_FILL_SCREEN_ALPHA           XREG(91)
 #define R_PLAYER_FLOOR_REVERSE_INDEX        XREG(94) // stores what floor the player is on
 #define R_MINIMAP_DISABLED                  XREG(95)

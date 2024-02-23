@@ -1,7 +1,8 @@
 ﻿<Root>
     <File Name="object_moonend" Segment="6">
-        <!-- <Blob Name="object_moonend_Blob_000000" Size="0x1214" Offset="0x0" /> -->
-        <Blob Name="object_moonend_Blob_001214" Size="0x43DC" Offset="0x1214" />
+        <Blob Name="object_moonend_Blob_000000" Size="0x1214" Offset="0x0" />
+        <Blob Name="object_moonend_Blob_001214" Size="0x1C" Offset="0x1214" />
+
         <DList Name="object_moonend_DL_0055F0" Offset="0x55F0" />
         <DList Name="object_moonend_DL_0061F8" Offset="0x61F8" />
         <DList Name="object_moonend_DL_006460" Offset="0x6460" />
@@ -20,8 +21,10 @@
         <Texture Name="object_moonend_Tex_009530" OutName="tex_009530" Format="i8" Width="64" Height="64" Offset="0x9530" />
         <Texture Name="object_moonend_Tex_00A530" OutName="tex_00A530" Format="i8" Width="64" Height="64" Offset="0xA530" />
         <TextureAnimation Name="object_moonend_Matanimheader_00B540" Offset="0xB540" />
-        <!-- <Blob Name="object_moonend_Blob_00B550" Size="0x50" Offset="0xB550" /> -->
-        <Blob Name="object_moonend_Blob_00B5A0" Size="0x1750" Offset="0xB5A0" />
+
+        <Blob Name="object_moonend_Blob_00B550" Size="0x50" Offset="0xB550" />
+        <Blob Name="object_moonend_Blob_00B5A0" Size="0x170" Offset="0xB5A0" />
+
         <DList Name="object_moonend_DL_00CCF0" Offset="0xCCF0" />
         <DList Name="object_moonend_DL_00CF58" Offset="0xCF58" />
         <DList Name="object_moonend_DL_00D080" Offset="0xD080" />

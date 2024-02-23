@@ -581,9 +581,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
             contactPos.y = this->actor.world.pos.y + this->actor.depthInWater;
             for (angleOffset = 0, i = 0; i < 4; i++, angleOffset += 0x4000) {
                 contactPos.x =
-                    (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 15.0f) + this->actor.world.pos.x;
+                    this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 15.0f);
                 contactPos.z =
-                    (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 15.0f) + this->actor.world.pos.z;
+                    this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 15.0f);
                 EffectSsGSplash_Spawn(play, &contactPos, NULL, NULL, 0, 190);
             }
             contactPos.x = this->actor.world.pos.x;

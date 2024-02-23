@@ -30,7 +30,7 @@ ActorInit Oceff_Wipe3_InitVars = {
 
 #include "assets/overlays/ovl_Oceff_Wipe3/ovl_Oceff_Wipe3.c"
 
-s32 D_80989130;
+static s32 sBssPad;
 
 void OceffWipe3_Init(Actor* thisx, PlayState* play) {
     OceffWipe3* this = THIS;
@@ -66,9 +66,7 @@ void OceffWipe3_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
     Vec3f eye = GET_ACTIVE_CAM(play)->eye;
     Vtx* vtxPtr;
-    Vec3f quakeOffset;
-
-    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
+    Vec3f quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
 
     vtxPtr = sSariaSongFrustumVtx;
 

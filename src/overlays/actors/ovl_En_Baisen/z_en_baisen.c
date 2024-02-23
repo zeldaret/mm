@@ -163,7 +163,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BE895C(this, play);
     } else {
         if (this->paramCopy != 0) {
@@ -235,7 +235,7 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
         }
     }
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {

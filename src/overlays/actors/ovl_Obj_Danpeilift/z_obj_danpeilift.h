@@ -22,7 +22,7 @@ typedef struct ObjDanpeilift {
     /* 0x164 */ s32 endPoint;
     /* 0x168 */ s32 curPoint;
     /* 0x16C */ s32 direction;
-    /* 0x170 */ Vec3s* points;
+    /* 0x170 */ Vec3s* pathPoints;
     /* 0x174 */ s32 isPlayerOnTop;
     /* 0x178 */ s32 isPlayerOnTopPrev;
     /* 0x17C */ f32 cycleSpeed;

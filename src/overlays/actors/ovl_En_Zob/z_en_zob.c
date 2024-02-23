@@ -330,7 +330,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_SONG_DEMO_DONE) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
@@ -356,7 +356,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_SONG_DEMO_DONE) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
@@ -385,7 +385,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1208:
@@ -469,7 +469,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:
@@ -535,7 +535,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
 
 void func_80BA0610(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, 0x120D, &this->actor);
         this->unk_304 = 3;
@@ -574,7 +574,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
         this->csIdIndex = 0;
         this->unk_2F4 |= 1;
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, play);
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
@@ -628,7 +628,7 @@ void func_80BA0A04(EnZob* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80BA0AD8;
@@ -653,7 +653,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0A04;
         func_80BA08E8(this, play);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
@@ -727,26 +727,26 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_2F4 & 1) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_2F6, &this->unk_2FC, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_2F6.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2F6.y, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2FC.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2FC.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
-s32 func_80BA0F64(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
-        rot->x += this->unk_2F6.y;
-        rot->y += this->unk_2F6.x;
+        rot->x += this->headRot.y;
+        rot->y += this->headRot.x;
     }
     return false;
 }
 
-void func_80BA0FAC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
@@ -766,7 +766,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80BA0F64, func_80BA0FAC, &this->actor);
+                          EnZob_OverrideLimbDraw, EnZob_PostLimbDraw, &this->actor);
 
     if (this->unk_2F4 & 0x20) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);

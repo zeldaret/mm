@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 static CutsceneCamera* sCurCsCamera;
 
@@ -44,8 +45,8 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
 
     sCurCsCamera = csCamera;
 
-    __osMemset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
-    __osMemset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
+    memset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
+    memset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
 
     csCamera->eyeInterp.type = csCamera->atInterp.type = CS_CAM_INTERP_OFF;
 
@@ -400,9 +401,9 @@ s16 CutsceneCamera_Interp_Linear(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll = (s16)interpState->initRoll + (s16)(rollDiffToTarget * lerp);
+        *camRoll = TRUNCF_BINANG(interpState->initRoll) + TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -466,9 +467,9 @@ s16 CutsceneCamera_Interp_Scale(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdC
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll += (s16)(rollDiffToTarget * lerp);
+        *camRoll += TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -516,9 +517,9 @@ s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCam
     interpState->curFrame++;
 
     if (camPos != NULL) {
-        OLib_Vec3fDiffToVecGeo(&sp40, &interpState->curPos, camPos);
+        sp40 = OLib_Vec3fDiffToVecGeo(&interpState->curPos, camPos);
         sp40.r = interpState->unk_20 / Math_FTanF(DEG_TO_RAD(*camFov));
-        OLib_AddVecGeoToVec3f(camPos, &interpState->curPos, &sp40);
+        *camPos = OLib_AddVecGeoToVec3f(&interpState->curPos, &sp40);
     }
 
     if (camFov != NULL) {
@@ -531,9 +532,9 @@ s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCam
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll += (s16)(rollDiffToTarget * lerp);
+        *camRoll += TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {

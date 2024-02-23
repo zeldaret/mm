@@ -154,7 +154,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_BEAMOS, ICHAIN_STOP),
 };
 
-s32 D_808CD5B8 = false;
+static s32 sTexturesDesegmented = false;
 
 Color_RGBA8 D_808CD5BC = { 0, 0, 255, 0 };
 
@@ -181,11 +181,11 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
     thisx->params &= 0xFF;
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
 
-    if (!D_808CD5B8) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_808CD58C); i++) {
             D_808CD58C[i] = Lib_SegmentedToVirtual(D_808CD58C[i]);
         }
-        D_808CD5B8 = true;
+        sTexturesDesegmented = true;
     }
     func_808CC420(this);
 }
@@ -245,10 +245,10 @@ void func_808CC610(EnVm* this, PlayState* play) {
     sp38 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.world.pos);
     sp38 = CLAMP_MAX(sp38, 0x1B91);
 
-    sp3A = BINANG_ADD((s32)((this->unk_21C - this->actor.xzDistToPlayer) * 60.0f), 4000);
+    sp3A = BINANG_ADD((s32)((this->unk_21C - this->actor.xzDistToPlayer) * 60.0f), 0xFA0);
     sp3A = CLAMP_MAX(sp3A, 0x1000);
 
-    Math_SmoothStepToS(&this->unk_216, sp38, 10, 4000, 0);
+    Math_SmoothStepToS(&this->unk_216, sp38, 10, 0xFA0, 0);
 
     if ((sp38 < 0xAAA) || (sp3A <= 0)) {
         func_808CC420(this);

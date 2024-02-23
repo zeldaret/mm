@@ -122,7 +122,7 @@ typedef struct Actor {
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ s8 csId; // ActorCutscene index, see `CutsceneId`
+    /* 0x038 */ s8 csId; // CutsceneEntry index, see `CutsceneId`
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
@@ -186,7 +186,7 @@ typedef enum {
 #define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
 #define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
 
-typedef struct {
+typedef struct DynaPolyActor {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 pushForce;
@@ -289,7 +289,7 @@ typedef enum {
 } ActorType;
 
 #define ACTORCTX_FLAG_0 (1 << 0)
-#define ACTORCTX_FLAG_1 (1 << 1)
+#define ACTORCTX_FLAG_TELESCOPE_ON (1 << 1)
 #define ACTORCTX_FLAG_PICTO_BOX_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
@@ -382,7 +382,7 @@ typedef struct ActorContextSceneFlags {
 typedef struct ActorListEntry {
     /* 0x0 */ s32 length; // number of actors loaded of this type
     /* 0x4 */ Actor* first; // pointer to first actor of this type
-    /* 0x8 */ s32 unk_08;
+    /* 0x8 */ s32 categoryChanged; // at least one actor has changed categories and needs to be moved to a different list
 } ActorListEntry; // size = 0xC
 
 typedef enum {
@@ -433,9 +433,9 @@ typedef struct ActorContext {
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
     /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
-    /* 0x268 */ u8 unk268;
+    /* 0x268 */ u8 isOverrideInputOn;
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
-    /* 0x26C */ Input unk_26C;
+    /* 0x26C */ Input overrideInput;
 } ActorContext; // size = 0x284
 
 typedef enum {
@@ -486,8 +486,10 @@ typedef enum {
 #define ACTOR_FLAG_40            (1 << 6)
 // hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
-// Player has requested to talk to the actor; Player uses this flag differently than every other actor
-#define ACTOR_FLAG_TALK_REQUESTED (1 << 8)
+// Signals that player has accepted an offer to talk to an actor
+// Player will retain this flag until the player is finished talking
+// Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
+#define ACTOR_FLAG_TALK (1 << 8)
 // 
 #define ACTOR_FLAG_200           (1 << 9)
 // 

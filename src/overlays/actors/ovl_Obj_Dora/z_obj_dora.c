@@ -266,7 +266,7 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
     u16 time;
 
     if (this->colliderTris.base.acFlags & AC_HIT) {
-        time = gSaveContext.save.time;
+        time = CURRENT_TIME;
         this->colliderTris.base.acFlags &= ~AC_HIT;
         this->collisionCooldownTimer = 5;
 
@@ -316,7 +316,7 @@ void ObjDora_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjDora_Draw(Actor* thisx, PlayState* play) {
-    static Vec3f position = { 0.0f, -61.5f, 0.0f };
+    static Vec3f sPos = { 0.0f, -61.5f, 0.0f };
     ObjDora* this = THIS;
     f32 gongForceX;
 
@@ -335,9 +335,9 @@ void ObjDora_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
 
-        Matrix_Translate(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
+        Matrix_Translate(sPos.x, sPos.y + gongForceX, sPos.z + gongForceX, MTXMODE_APPLY);
         Matrix_RotateXS(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
-        Matrix_Translate(-position.x, -position.y, -position.z, MTXMODE_APPLY);
+        Matrix_Translate(-sPos.x, -sPos.y, -sPos.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);

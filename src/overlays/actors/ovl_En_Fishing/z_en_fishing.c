@@ -3,7 +3,6 @@
  * Overlay: ovl_En_Fishing
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
-
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -958,7 +957,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
     if (thisx->params == 200) {
         this->unk_150 = 100;
-        func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         thisx->targetMode = TARGET_MODE_0;
         thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
@@ -1127,7 +1126,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     Message_StartTextbox(play, 0x40B3, NULL);
                 }
 
-                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
+                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT)) {
                     if (Message_ShouldAdvance(play) || (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                         Message_CloseTextbox(play);
                         Rupees_ChangeBy(-50);
@@ -2820,7 +2819,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
         if (this->unk_1CC == 0) {
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
-            if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                 D_8090CCF8 = D_809171CC;
                 this->unk_1CB = 1;
             } else {
@@ -3061,11 +3060,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
-                if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= 0xC01B)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) && (CURRENT_TIME <= (CLOCK_TIME(18, 1) - 0x12))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
-                if ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= 0x3AC5)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= (CLOCK_TIME(5, 31) - 0x13))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
@@ -3308,9 +3307,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 multiplier = 1.0f;
             }
 
-            if ((gSaveContext.save.time >= 0xB555) && (gSaveContext.save.time <= 0xCAAA)) {
+            if ((CURRENT_TIME >= CLOCK_TIME(17, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
                 multiplier *= 1.75f;
-            } else if ((gSaveContext.save.time >= 0x3555) && (gSaveContext.save.time <= 0x4AAA)) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(5, 0)) && (CURRENT_TIME <= CLOCK_TIME(7, 0))) {
                 multiplier *= 1.5f;
             } else if (D_809171CA != 0) {
                 multiplier *= 1.5f;
@@ -3365,7 +3364,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_149 = 6;
             sp134 = 2;
 
-            if (((s16)player->actor.world.pos.x + D_80917268) & 1) {
+            if ((TRUNCF_BINANG(player->actor.world.pos.x) + D_80917268) & 1) {
                 sp10C.x = 30.0f;
             } else {
                 sp10C.x = -30.0f;
@@ -3874,7 +3873,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                         D_809171D2 = D_80917206;
                                         Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
-                                               ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
+                                               (TRUNCF_BINANG(this->unk_1A4) < TRUNCF_BINANG(D_8090CCF0))) {
                                         this->unk_1CD = 1;
                                         this->unk_172[0] = 0x3C;
                                         Message_StartTextbox(play, 0x4098, NULL);
@@ -4074,7 +4073,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 func_80903C60(this, 1);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
-                this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
+                this->unk_162 = TRUNCF_BINANG(Rand_CenteredFloat(0x8000));
             } else if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
                        (this->actor.prevPos.y >= WATER_SURFACE_Y(play))) {
                 if (this->unk_17C < -5.0f) {
@@ -4135,10 +4134,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->unk_15E = 0;
                     } else {
-                        this->unk_15E = (s16)(s32)Rand_CenteredFloat(0x20) + 0x8000;
+                        this->unk_15E = TRUNCF_BINANG(Rand_CenteredFloat(0x20)) + 0x8000;
                     }
 
-                    this->unk_160 = (s16)(s32)Rand_CenteredFloat(0x4000);
+                    this->unk_160 = TRUNCF_BINANG(Rand_CenteredFloat(0x4000));
                     this->unk_188 = 1.0f;
                     this->unk_18C = 5000.0f;
                     this->unk_194 = 5000.0f;
@@ -4707,7 +4706,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 this->actor.textId = 0x4097;
             }
 
-            if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                 if (D_809171FC == 0) {
                     this->unk_154 = 1;
                     if (sLinkAge != 1) {
@@ -4756,7 +4755,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 2:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Message_ContinueTextbox(play, 0x407F);
                 this->unk_154 = 4;
@@ -4764,7 +4763,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 3:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }
@@ -4795,7 +4794,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 5:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
 
                 play->interfaceCtx.unk_27E = 1;
@@ -4842,7 +4841,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 this->unk_154 = 20;
                             } else if (D_809171D0 == 0) {
                                 D_8090CCF8 = D_8090CCF0;
-                                if ((s16)D_809171CC < (s16)D_8090CCF0) {
+                                if (TRUNCF_BINANG(D_809171CC) < TRUNCF_BINANG(D_8090CCF0)) {
                                     if (D_809171D2 == 2) {
                                         this->actor.textId = 0x40B0;
                                     } else {
@@ -4909,7 +4908,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 11:
-            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) ||
+            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) ||
                  Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) &&
                 Message_ShouldAdvance(play)) {
                 s32 getItemId;
@@ -4924,11 +4923,11 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         f32 temp;
 
                         HIGH_SCORE(HS_FISHING) &= 0xFFFFFF00;
-                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F);
+                        HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F);
                         temp = (HIGH_SCORE(HS_FISHING) & 0x7F000000) >> 0x18;
                         if (temp < D_809171CC) {
                             HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
-                            HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
+                            HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F) << 0x18;
 
                             if (D_809171D2 == 2) {
                                 HIGH_SCORE(HS_FISHING) |= 0x80000000;
@@ -4942,7 +4941,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         }
                     } else {
                         HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
-                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
+                        HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F) << 0x18;
 
                         if (D_809171D2 == 2) {
                             HIGH_SCORE(HS_FISHING) |= 0x80000000;
@@ -4986,7 +4985,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 20:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }
@@ -5324,7 +5323,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
@@ -5351,7 +5350,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
                 func_80169AFC(play, sSubCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 D_8090CD4C = 0;
                 sSubCamId = SUB_CAM_ID_DONE;
                 D_8090CD50 = 30;
@@ -5365,7 +5364,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
@@ -5383,7 +5382,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             if ((D_8090CD50 == 0) && Message_ShouldAdvance(play)) {
                 D_8090CD4C = 22;
                 D_8090CD50 = 40;
-                // func_800B7298 call removed in MM
+                // Player_SetCsActionWithHaltedActors call removed in MM
                 D_80911F64 = 0.0f;
             }
             break;
@@ -5452,7 +5451,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                         mainCam->at = sSubCamAt;
                         func_80169AFC(play, sSubCamId, 0);
                         Cutscene_StopManual(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                         D_8090CD4C = 0;
                         sSubCamId = SUB_CAM_ID_DONE;
                         player->unk_B28 = -5;

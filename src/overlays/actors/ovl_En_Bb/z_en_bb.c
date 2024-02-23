@@ -325,7 +325,7 @@ void EnBb_Down(EnBb* this, PlayState* play) {
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, false);
         Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
 

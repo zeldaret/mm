@@ -71,7 +71,7 @@ void DmChar09_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AB1FA0(DmChar09* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk_224[arg1]);
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
 void func_80AB1FDC(DmChar09* this, PlayState* play) {
@@ -85,7 +85,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
     Vec3s* temp_v1;
 
     Math_Vec3f_Copy(&sp40, &thisx->world.pos);
-    Math_Vec3s_ToVec3f(&sp58, this->unk_224 + this->unk_21C + this->unk_220);
+    Math_Vec3s_ToVec3f(&sp58, this->pathPoints + this->unk_21C + this->unk_220);
     Math_Vec3f_Diff(&sp58, &thisx->world.pos, &thisx->velocity);
     sp54 = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((sp54 < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -107,9 +107,9 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
-            temp_v1 = this->unk_224 + this->unk_218;
-            if (((this->unk_224->x == temp_v1->x) && (this->unk_224->y == temp_v1->y)) &&
-                (this->unk_224->z == temp_v1->z)) {
+            temp_v1 = &this->pathPoints[this->unk_218];
+            if (((this->pathPoints[0].x == temp_v1->x) && (this->pathPoints[0].y == temp_v1->y)) &&
+                (this->pathPoints[0].z == temp_v1->z)) {
                 this->unk_21C = 0;
                 this->unk_220 = 1;
             } else {
@@ -179,7 +179,7 @@ void DmChar09_HandleCutscene(DmChar09* this, PlayState* play) {
                     path = &play->setupPathList[pathIndex];
                 }
 
-                this->unk_224 = Lib_SegmentedToVirtual(path->points);
+                this->pathPoints = Lib_SegmentedToVirtual(path->points);
                 this->unk_214 = path->count;
                 this->unk_21C = 0;
                 this->unk_218 = path->count - 1;

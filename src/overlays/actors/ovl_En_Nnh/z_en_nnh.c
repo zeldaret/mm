@@ -76,7 +76,7 @@ void EnNnh_SetupWaitForDialogue(EnNnh* this) {
 }
 
 void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x228, &this->actor);
         EnNnh_SetupDialogue(this);
     } else {

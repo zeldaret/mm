@@ -32,7 +32,7 @@ void* THA_GetTail(TwoHeadArena* tha) {
 void* THA_AllocHead(TwoHeadArena* tha, size_t size) {
     void* start = tha->head;
 
-    tha->head = (u8*)tha->head + size;
+    tha->head = (void*)((uintptr_t)tha->head + size);
     return start;
 }
 
@@ -102,8 +102,8 @@ void* THA_AllocTailAlign(TwoHeadArena* tha, size_t size, uintptr_t mask) {
  *
  * @return Remaining size. A negative number indicates an overflow.
  */
-s32 THA_GetRemaining(TwoHeadArena* tha) {
-    return (s32)((u8*)tha->tail - (u8*)tha->head);
+ptrdiff_t THA_GetRemaining(TwoHeadArena* tha) {
+    return (uintptr_t)tha->tail - (uintptr_t)tha->head;
 }
 
 /**
@@ -115,7 +115,7 @@ u32 THA_IsCrash(TwoHeadArena* tha) {
 
 void THA_Reset(TwoHeadArena* tha) {
     tha->head = tha->start;
-    tha->tail = (u8*)tha->start + tha->size;
+    tha->tail = (void*)((uintptr_t)tha->start + tha->size);
 }
 
 /**

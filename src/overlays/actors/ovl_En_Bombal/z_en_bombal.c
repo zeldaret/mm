@@ -24,7 +24,7 @@ void func_80C05DE8(EnBombal* this, PlayState* play);
 void func_80C05B24(EnBombal* this);
 void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
-void EnBombal_DrawEffects(EnBombal*, PlayState*);
+void EnBombal_DrawEffects(EnBombal* this, PlayState* play);
 
 ActorInit En_Bombal_InitVars = {
     /**/ ACTOR_EN_BOMBAL,

@@ -7,7 +7,8 @@
 
 #include "fault.h"
 #include "fault_internal.h"
-#include "global.h"
+
+#include "macros.h"
 #include "vt.h"
 
 typedef struct {
@@ -216,7 +217,7 @@ void FaultDrawer_FillScreen() {
 }
 
 void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
-    for (; count != 0; count--, str++) {
+    for (; count > 0; count--, str++) {
         if (sFaultDrawerInstance->escCode) {
             sFaultDrawerInstance->escCode = false;
             if (*str >= '1' && *str <= '9') {

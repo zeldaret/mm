@@ -23,7 +23,7 @@ typedef struct {
 struct LightningStrike;
 
 u8 D_801F4E30;
-u8 D_801F4E31;
+u8 sInitSkyboxConfig;
 u8 gCustomLensFlare1On;
 Vec3f gCustomLensFlare1Pos;
 f32 D_801F4E44;
@@ -65,6 +65,7 @@ Gfx* sSkyboxStarsDList;
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "libc/string.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -156,7 +157,17 @@ TimeBasedLightEntry sTimeBasedLightConfigs[][7] = {
     },
 };
 
-TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
+typedef struct {
+    /* 0x0 */ u16 startTime;
+    /* 0x2 */ u16 endTime;
+    /* 0x4 */ u8 skybox1Index;
+    /* 0x5 */ u8 skybox2Index;
+    /* 0x6 */ u8 color1Index;
+    /* 0x7 */ u8 color2Index;
+} TimeBasedSkyboxEntry; // size = 0x8
+
+TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[SKYBOX_CONFIG_MAX][9] = {
+    // SKYBOX_CONFIG_0
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 3, 3 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 3, 4 },
@@ -168,6 +179,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 2, 3 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 3, 3 },
     },
+    // SKYBOX_CONFIG_1
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 7, 7 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 7, 8 },
@@ -179,6 +191,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 6, 7 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 7, 7 },
     },
+    // SKYBOX_CONFIG_2
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 11, 52 },
@@ -190,6 +203,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 10, 11 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 11, 11 },
     },
+    // SKYBOX_CONFIG_3
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 15, 15 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 15, 16 },
@@ -201,6 +215,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 14, 15 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 15, 15 },
     },
+    // SKYBOX_CONFIG_4
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 19, 19 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 19, 20 },
@@ -212,6 +227,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 18, 19 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 19, 19 },
     },
+    // SKYBOX_CONFIG_5
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 23, 23 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 23, 52 },
@@ -223,6 +239,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 22, 23 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 23, 23 },
     },
+    // SKYBOX_CONFIG_6
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 27, 27 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 27, 28 },
@@ -234,6 +251,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 26, 27 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 27, 27 },
     },
+    // SKYBOX_CONFIG_7
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 31, 31 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 31, 32 },
@@ -245,6 +263,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 30, 31 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 31, 31 },
     },
+    // SKYBOX_CONFIG_8
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 35, 35 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 35, 52 },
@@ -256,6 +275,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 34, 35 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 35, 35 },
     },
+    // SKYBOX_CONFIG_9
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 39, 39 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 39, 40 },
@@ -267,6 +287,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 38, 39 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 39, 39 },
     },
+    // SKYBOX_CONFIG_10
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 43, 43 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 43, 44 },
@@ -278,6 +299,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 42, 43 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 43, 43 },
     },
+    // SKYBOX_CONFIG_11
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 47, 47 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 47, 52 },
@@ -289,6 +311,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 46, 47 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 47, 47 },
     },
+    // SKYBOX_CONFIG_12
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 51, 51 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 51, 48 },
@@ -300,6 +323,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 50, 51 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 51, 51 },
     },
+    // SKYBOX_CONFIG_13
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 55, 55 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 55, 52 },
@@ -311,6 +335,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 54, 54 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 55, 55 },
     },
+    // SKYBOX_CONFIG_14
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 59, 59 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 59, 56 },
@@ -322,6 +347,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 58, 58 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 59, 59 },
     },
+    // SKYBOX_CONFIG_15
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 63, 63 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 63, 60 },
@@ -333,6 +359,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 62, 62 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 63, 63 },
     },
+    // SKYBOX_CONFIG_16
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 67, 67 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 67, 64 },
@@ -344,6 +371,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 66, 66 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 67, 67 },
     },
+    // SKYBOX_CONFIG_17
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 1, 1 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 0, 1, 1 },
@@ -355,6 +383,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 1, 1 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 1, 1 },
     },
+    // SKYBOX_CONFIG_18
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 71, 71 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 71, 72 },
@@ -366,6 +395,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 70, 71 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 71, 71 },
     },
+    // SKYBOX_CONFIG_19
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 75, 75 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 75, 76 },
@@ -377,6 +407,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 74, 75 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 75, 75 },
     },
+    // SKYBOX_CONFIG_20
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 79, 79 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 79, 52 },
@@ -388,6 +419,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 78, 79 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 79, 79 },
     },
+    // SKYBOX_CONFIG_21
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 83, 83 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 83, 84 },
@@ -399,6 +431,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 82, 83 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 83, 83 },
     },
+    // SKYBOX_CONFIG_22
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 87, 87 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 87, 88 },
@@ -410,6 +443,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 86, 87 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 87, 87 },
     },
+    // SKYBOX_CONFIG_23
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 91, 91 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 91, 52 },
@@ -421,6 +455,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 90, 91 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 91, 91 },
     },
+    // SKYBOX_CONFIG_24
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 0, 11, 11 },
@@ -432,6 +467,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 11, 11 },
     },
+    // SKYBOX_CONFIG_25
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 95, 95 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 95, 96 },
@@ -443,6 +479,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 94, 95 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 95, 95 },
     },
+    // SKYBOX_CONFIG_26
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 99, 99 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 99, 100 },
@@ -454,6 +491,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 98, 99 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 99, 99 },
     },
+    // SKYBOX_CONFIG_27
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 103, 103 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 103, 52 },
@@ -525,26 +563,21 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// The 2 constant from the `gWeatherMode` switch branch is reused when checking `CURRENT_DAY`
-// A near identical issue is present in the non-matching `func_809F24C8` from `z_boss_06.c`
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
-    u8 var_a0;
-    u8 temp;
+    u8 dayOffset;
     s16 i;
 
     CREG(1) = 0;
 
     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
 
-    gSaveContext.skyboxTime = ((void)0, gSaveContext.save.time);
+    gSaveContext.skyboxTime = CURRENT_TIME;
 
     Environment_JumpForwardInTime();
 
-    if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(18, 0)) ||
-        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))) {
+    if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         gSaveContext.save.isNight = true;
     } else {
         gSaveContext.save.isNight = false;
@@ -644,9 +677,9 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->adjLightSettings.fogNear = 0;
     envCtx->adjLightSettings.zFar = 0;
 
-    envCtx->sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    envCtx->sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    envCtx->sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
+    envCtx->sunPos.x = -(Math_SinS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.y = (Math_CosS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.z = (Math_CosS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
     envCtx->windDirection.x = 80;
     envCtx->windDirection.y = 80;
@@ -658,7 +691,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->lightBlendRateOverride = LIGHT_BLENDRATE_OVERRIDE_NONE;
 
     R_TIME_SPEED = envCtx->sceneTimeSpeed = 0;
-    R_TIME_SPEED = R_TIME_SPEED;
+    R_TIME_SPEED = R_TIME_SPEED; // Set to itself
     R_ENV_DISABLE_DBG = false;
 
     CREG(64) = 0;
@@ -668,47 +701,46 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
     play->envCtx.precipitation[PRECIP_SOS_MAX] = 0;
 
-    D_801F4E31 = envCtx->skyboxConfig;
+    sInitSkyboxConfig = envCtx->skyboxConfig;
 
-    var_a0 = 0;
+    dayOffset = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        //! FAKE: temp
-        var_a0 = ((void)0, temp = gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
-    envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
-        envCtx->skyboxConfig = 0xE;
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
-        envCtx->skyboxConfig = 0x10;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
-        envCtx->skyboxConfig = 0x11;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = var_a0 + 0x12;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = var_a0 + 0x15;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
-        envCtx->skyboxConfig = 0x18;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = var_a0 + 0x19;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (var_a0 >= 3) {
-        envCtx->skyboxConfig = 0xD;
-        envCtx->changeSkyboxNextConfig = 0xD;
+    if (dayOffset >= 3) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_13;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_13;
     }
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
-        envCtx->changeSkyboxNextConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_0;
     }
 
     D_801F4E74 = 0.0f;
@@ -723,19 +755,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        // if (gWeatherMode == WEATHER_MODE_2) {
-        //     if (1) {}
-        //     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-        //         play->skyboxId = SKYBOX_3;
-        //         envCtx->lightConfig = 5;
-        //         envCtx->changeLightNextConfig = 5;
-        //         D_801F4E74 = 1.0f;
-        //     } else {
-        //         gWeatherMode = WEATHER_MODE_CLEAR;
-        //     }
-        // }
-
-        switch (gWeatherMode) {
+        switch ((u32)gWeatherMode) {
             case WEATHER_MODE_2:
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                     play->skyboxId = SKYBOX_3;
@@ -754,9 +774,8 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
-        if (gWeatherMode == WEATHER_MODE_1) {
-            if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
-                (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
+        if (gWeatherMode == WEATHER_MODE_RAIN) {
+            if (((u32)CURRENT_DAY == 2) && (CURRENT_TIME >= CLOCK_TIME(7, 0)) && (CURRENT_TIME < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
                     play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
                 }
@@ -821,9 +840,6 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     Environment_UpdatePostmanEvents(play);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
-#endif
 
 u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
     s16 stepSize = 0;
@@ -990,8 +1006,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
     u8 skyboxBlend = 0;
     f32 colorWeight = 0.0f;
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
     }
 
     if ((skyboxId == SKYBOX_NORMAL_SKY) || ((skyboxId == SKYBOX_3) && (D_801F4E74 < 1.0f))) {
@@ -1068,8 +1084,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
             size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
-                                   sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox1Index = skybox1Index;
         }
 
@@ -1077,8 +1093,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
             size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
-                                   sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox2Index = skybox2Index;
         }
 
@@ -1192,10 +1208,9 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
                 ((play->transitionMode == TRANS_MODE_OFF) || (gSaveContext.gameMode != GAMEMODE_NORMAL))) {
                 if (play->transitionTrigger == TRANS_TRIGGER_OFF) {
                     if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && !Play_InCsMode(play)) {
-                        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+                        gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
                         if (R_TIME_SPEED != 0) {
-                            gSaveContext.save.time =
-                                ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+                            gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                         }
                     }
                 }
@@ -1203,13 +1218,12 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
         }
     }
 
-    if ((((void)0, gSaveContext.skyboxTime) >= CLOCK_TIME(6, 0)) ||
-        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) ||
-        (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(6, 0) + 0x10))) {
-        gSaveContext.skyboxTime = gSaveContext.save.time;
+    if ((((void)0, gSaveContext.skyboxTime) >= CLOCK_TIME(6, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)) ||
+        (CURRENT_TIME >= (CLOCK_TIME(6, 0) + 0x10))) {
+        gSaveContext.skyboxTime = CURRENT_TIME;
     }
 
-    time = ((void)0, gSaveContext.save.time);
+    time = CURRENT_TIME;
 
     if ((time >= CLOCK_TIME(18, 0)) || (time < CLOCK_TIME(6, 0))) {
         gSaveContext.save.isNight = true;
@@ -1239,7 +1253,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
     }
 
-    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
+    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_RAIN)) {
         adjLightSettings->ambientColor[0] = -50;
         adjLightSettings->ambientColor[1] = -100;
         adjLightSettings->ambientColor[2] = -100;
@@ -1273,9 +1287,6 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// Something is happening with the indexing of:
-// `lightSettingsList[(s32)envCtx->lightSetting]` and `lightSettingsList[(s32)envCtx->prevLightSetting]`
 void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx) {
     EnvLightSettings* lightSettingsList;
     f32 var_fs3;
@@ -1288,7 +1299,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
     AdjLightSettings spA4[4];
 
     var_fs3 = 0.0f;
-    __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
+    memset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
     lightSettingsList = play->envCtx.lightSettingsList;
 
     if ((envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE) &&
@@ -1372,9 +1383,9 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     }
 
                     if (Environment_IsSceneUpsideDown(play)) {
-                        var_v0 = ((void)0, gSaveContext.save.time) + CLOCK_TIME(12, 0);
+                        var_v0 = CURRENT_TIME + CLOCK_TIME(12, 0);
                     } else {
-                        var_v0 = ((void)0, gSaveContext.save.time);
+                        var_v0 = CURRENT_TIME;
                     }
                     temp_s0_2 = var_v0 - CLOCK_TIME(12, 0);
 
@@ -1438,30 +1449,29 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
             }
         } else {
+            u8 lightSetting;
+            u8 var_v0_3;
+
             if ((envCtx->lightSetting >= envCtx->numLightSettings) && !D_801BDBA8) {
                 D_801BDBA8 = true;
             }
 
             if (!envCtx->lightBlendEnabled) {
                 for (i = 0; i < 3; i++) {
-                    envCtx->lightSettings.ambientColor[i] =
-                        lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i];
-                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i];
-                    envCtx->lightSettings.light1Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Color[i];
-                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i];
-                    envCtx->lightSettings.light2Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Color[i];
-                    envCtx->lightSettings.fogColor[i] = lightSettingsList[(s32)envCtx->lightSetting].fogColor[i];
+                    envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
+                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[envCtx->lightSetting].light1Dir[i];
+                    envCtx->lightSettings.light1Color[i] = lightSettingsList[envCtx->lightSetting].light1Color[i];
+                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[envCtx->lightSetting].light2Dir[i];
+                    envCtx->lightSettings.light2Color[i] = lightSettingsList[envCtx->lightSetting].light2Color[i];
+                    envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
                 }
+
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear =
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
-                envCtx->lightSettings.zFar = lightSettingsList[(s32)envCtx->lightSetting].zFar;
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear);
+                envCtx->lightSettings.zFar = lightSettingsList[(s32)lightSetting].zFar;
                 envCtx->lightBlend = 1.0f;
             } else {
-                u8 var_v0_3;
-
-                //! FAKE:
-                if (1) {}
-
                 var_v0_3 =
                     ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
 
@@ -1483,33 +1493,33 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
 
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].ambientColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                                    lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.fogColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].fogColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                                    lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
                 }
 
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear = LERPIMP_ALT(
                     ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->prevLightSetting].blendRateAndFogNear),
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear),
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear),
                     envCtx->lightBlend);
 
-                envCtx->lightSettings.zFar =
-                    LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
-                                lightSettingsList[(s32)envCtx->lightSetting].zFar, envCtx->lightBlend);
+                envCtx->lightSettings.zFar = LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
+                                                         lightSettingsList[(s32)lightSetting].zFar, envCtx->lightBlend);
             }
         }
     }
@@ -1588,10 +1598,6 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         envCtx->dirLight2.params.dir.x = 1;
     }
 }
-#else
-void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
-#endif
 
 void Environment_UpdateSun(PlayState* play) {
     f32 temp_f0;
@@ -1606,9 +1612,9 @@ void Environment_UpdateSun(PlayState* play) {
         }
 
         if (Environment_IsSceneUpsideDown(play)) {
-            phi_v0 = ((void)0, gSaveContext.save.time) + CLOCK_TIME(12, 0);
+            phi_v0 = CURRENT_TIME + CLOCK_TIME(12, 0);
         } else {
-            phi_v0 = ((void)0, gSaveContext.save.time);
+            phi_v0 = CURRENT_TIME;
         }
 
         temp_a0 = phi_v0 - CLOCK_TIME(12, 0);
@@ -1738,7 +1744,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
-        temp_a2_2 = ((void)0, gSaveContext.save.time) - D_801F4E78;
+        temp_a2_2 = CURRENT_TIME - D_801F4E78;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (u16)SCHEDULE_TIME(5, 0))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
@@ -1746,7 +1752,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
             D_801F4E78 = 0;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80) && (temp_a2_2 >= (CLOCK_TIME(1, 39) - 1))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
-            D_801F4E78 = gSaveContext.save.time;
+            D_801F4E78 = CURRENT_TIME;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01) && (temp_a2_2 >= (CLOCK_TIME(1, 9) - 1))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_85_80);
         }
@@ -1779,7 +1785,7 @@ void Environment_DrawSun(PlayState* play) {
         if ((play->envCtx.sunPos.y > -800.0f) || Environment_IsSceneUpsideDown(play)) {
             Matrix_Translate(play->view.eye.x + play->envCtx.sunPos.x, play->view.eye.y + play->envCtx.sunPos.y,
                              play->view.eye.z + play->envCtx.sunPos.z, MTXMODE_NEW);
-            if (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)) {
+            if (CURRENT_TIME < CLOCK_TIME(12, 0)) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, (u8)((u8)(sSunColor * 52.0f) + 203),
                                 (u8)((u8)(sSunColor * 19.0f) + 181), (u8)sSunPrimAlpha);
                 gDPSetEnvColor(POLY_OPA_DISP++, (u8)(-(u8)(sSunColor * 5.0f) + 175),
@@ -1804,7 +1810,7 @@ void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, V
                                   Vec3f vec) {
     if ((play->envCtx.precipitation[PRECIP_RAIN_CUR] == 0) &&
         !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
-        f32 v0 = Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0));
+        f32 v0 = Math_CosS(CURRENT_TIME - CLOCK_TIME(12, 0));
 
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, vec, 370.0f, v0 * 120.0f, 0x190,
                                   true);
@@ -2441,11 +2447,10 @@ void Environment_PlaySceneSequence(PlayState* play) {
                 if (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId)) {
                     Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
                 }
-            } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
-                       (((void)0, gSaveContext.save.time) <= CLOCK_TIME(17, 10))) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(17, 10))) {
                 if (gSceneSeqState != SCENESEQ_DEFAULT) {
                     Audio_PlayMorningSceneSequence(play->sequenceCtx.seqId, dayMinusOne);
-                } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 1)) &&
+                } else if ((CURRENT_TIME >= CLOCK_TIME(6, 1)) &&
                            (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId))) {
                     Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
                 }
@@ -2454,11 +2459,9 @@ void Environment_PlaySceneSequence(PlayState* play) {
                 if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
                     Audio_PlayAmbience(play->sequenceCtx.ambienceId);
                 }
-                if ((((void)0, gSaveContext.save.time) > CLOCK_TIME(17, 10)) &&
-                    (((void)0, gSaveContext.save.time) < CLOCK_TIME(19, 0))) {
+                if ((CURRENT_TIME > CLOCK_TIME(17, 10)) && (CURRENT_TIME < CLOCK_TIME(19, 0))) {
                     play->envCtx.timeSeqState = TIMESEQ_EARLY_NIGHT_CRITTERS;
-                } else if ((((void)0, gSaveContext.save.time) > CLOCK_TIME(19, 0)) ||
-                           (((void)0, gSaveContext.save.time) < CLOCK_TIME(5, 0))) {
+                } else if ((CURRENT_TIME > CLOCK_TIME(19, 0)) || (CURRENT_TIME < CLOCK_TIME(5, 0))) {
                     play->envCtx.timeSeqState = TIMESEQ_NIGHT_CRITTERS;
                 } else {
                     play->envCtx.timeSeqState = TIMESEQ_MORNING_CRITTERS;
@@ -2474,22 +2477,22 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     s32 pad;
 
     //! FAKE:
-    if (!gSaveContext.sceneLayer) {}
+    if (gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;
 
             case TIMESEQ_FADE_DAY_BGM:
-                if (((void)0, gSaveContext.save.time) > CLOCK_TIME(17, 10)) {
+                if (CURRENT_TIME > CLOCK_TIME(17, 10)) {
                     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 240);
                     play->envCtx.timeSeqState++;
                 }
                 break;
 
             case TIMESEQ_NIGHT_BEGIN_SFX:
-                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(18, 0)) {
+                if (CURRENT_TIME >= CLOCK_TIME(18, 0)) {
                     play->envCtx.timeSeqState++;
                 }
                 break;
@@ -2503,7 +2506,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
                 break;
 
             case TIMESEQ_NIGHT_DELAY:
-                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(19, 0)) {
+                if (CURRENT_TIME >= CLOCK_TIME(19, 0)) {
                     play->envCtx.timeSeqState++;
                 }
                 break;
@@ -2515,8 +2518,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
                 break;
 
             case TIMESEQ_DAY_BEGIN_SFX:
-                if ((((void)0, gSaveContext.save.time) < CLOCK_TIME(19, 0)) &&
-                    (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0))) {
+                if ((CURRENT_TIME < CLOCK_TIME(19, 0)) && (CURRENT_TIME >= CLOCK_TIME(5, 0))) {
                     play->envCtx.timeSeqState++;
                 }
                 break;
@@ -2536,9 +2538,9 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     }
 
     if ((play->envCtx.timeSeqState != TIMESEQ_REQUEST) && (((void)0, gSaveContext.save.day) == 3) &&
-        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) &&
-        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
-        (play->csCtx.state == 0) && ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
+        (CURRENT_TIME < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == CS_STATE_IDLE) &&
+        ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
         (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS) &&
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_SONG_OF_SOARING)) {
@@ -3052,8 +3054,7 @@ void Environment_PlayStormNatureAmbience(PlayState* play) {
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         Audio_PlayAmbience(AMBIENCE_ID_07);
     } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
-        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
-            (((void)0, gSaveContext.save.time) < CLOCK_TIME(18, 0))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
             Audio_PlayAmbience(play->sequenceCtx.ambienceId);
         }
     }
@@ -3067,8 +3068,7 @@ void Environment_StopStormNatureAmbience(PlayState* play) {
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
     } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
-        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
-            (((void)0, gSaveContext.save.time) < CLOCK_TIME(18, 0))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
         }
     }
@@ -3091,18 +3091,17 @@ void Environment_SetupSkyboxStars(PlayState* play) {
     f32 phi_f0;
 
     if ((play->envCtx.skybox1Index == 0) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
-        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(21, 0)) ||
-            (((void)0, gSaveContext.save.time) < CLOCK_TIME(2, 0))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(21, 0)) || (CURRENT_TIME < CLOCK_TIME(2, 0))) {
             phi_f0 = 1.0f;
-        } else if (((void)0, gSaveContext.save.time) > CLOCK_TIME(19, 0)) {
-            phi_f0 = 1.0f - ((CLOCK_TIME(21, 0) - ((void)0, gSaveContext.save.time)) * (1.0f / (CLOCK_TIME(2, 0) + 1)));
-        } else if (((void)0, gSaveContext.save.time) < CLOCK_TIME(3, 0)) {
-            phi_f0 = (CLOCK_TIME(3, 0) - ((void)0, gSaveContext.save.time)) * (1.0f / (CLOCK_TIME(1, 0) + 1));
+        } else if (CURRENT_TIME > CLOCK_TIME(19, 0)) {
+            phi_f0 = 1.0f - ((CLOCK_TIME(21, 0) - CURRENT_TIME) * (1.0f / (CLOCK_TIME(2, 0) + 1)));
+        } else if (CURRENT_TIME < CLOCK_TIME(3, 0)) {
+            phi_f0 = (CLOCK_TIME(3, 0) - CURRENT_TIME) * (1.0f / (CLOCK_TIME(1, 0) + 1));
         } else {
             phi_f0 = 0.0f;
         }
 
-        phi_f0 = (play->envCtx.skyboxConfig == 0x18) ? 1.0f : phi_f0;
+        phi_f0 = (play->envCtx.skyboxConfig == SKYBOX_CONFIG_24) ? 1.0f : phi_f0;
 
         D_801F4F28 = phi_f0;
         sEnvSkyboxNumStars = gSkyboxNumStars;
@@ -3136,10 +3135,6 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-#ifdef NON_MATCHING
-// `D_801DD900`is loading unaligned but storing aligned
-// Also small float regalloc at the gRandFloat section
-// https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
         { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
@@ -3147,24 +3142,26 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
         { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
     };
-    // Possibly Color_RGBA8_u32
-    static const u32 D_801DD8E0[] = {
-        0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
+    static const Color_RGBA8_u32 D_801DD8E0[] = {
+        { 65, 164, 255, 255 },  { 131, 164, 230, 255 }, { 98, 205, 255, 255 }, { 82, 82, 255, 255 },
+        { 123, 164, 164, 255 }, { 98, 205, 255, 255 },  { 98, 164, 230, 255 }, { 255, 90, 0, 255 },
     };
-    static const u32 D_801DD900[] = {
-        0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
-        0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
+    UNALIGNED static const Color_RGBA8_u32 D_801DD900[] = {
+        { 64, 80, 112, 255 },   { 96, 96, 128, 255 },   { 128, 112, 144, 255 }, { 160, 128, 160, 255 },
+        { 192, 144, 168, 255 }, { 224, 160, 176, 255 }, { 224, 160, 176, 255 }, { 104, 104, 136, 255 },
+        { 136, 120, 152, 255 }, { 168, 136, 168, 255 }, { 200, 152, 184, 255 }, { 232, 168, 184, 255 },
+        { 224, 176, 184, 255 }, { 240, 192, 192, 255 }, { 232, 184, 192, 255 }, { 248, 200, 192, 255 },
     };
     Vec3f pos;
-    s32 pad1;
-    f32 imgY; // spF4
-    f32 imgX; // spF0
+    f32 temp;
+    f32 imgY;
+    f32 imgX;
     Gfx* gfx;
-    s32 phi_v1;  // spE8
-    s32 negateY; // spE4
+    s32 phi_v1;
+    s32 negateY;
     f32 invScale;
     f32 temp_f20;
-    Gfx* gfxTemp; // spD8
+    Gfx* gfxTemp;
     f32 scale;
     s32 i;
     u32 randInt;
@@ -3218,17 +3215,18 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             f32 temp_f2;
 
             // temp_f4 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
-            gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f4 = *((f32*)&gRandFloat) - 1.0f;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
+            gRandFloat.i = (randInt >> 9) | 0x3F800000;
+            temp = gRandFloat.f;
+            temp_f4 = temp - 1.0f;
 
             // temp_f20 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
-            gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f20 = ((*((f32*)&gRandFloat) - 1.0f) + temp_f4) * 0.5f;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
+            gRandFloat.i = (randInt >> 9) | 0x3F800000;
+            temp_f20 = ((gRandFloat.f - 1.0f) + temp_f4) * 0.5f;
 
-            // randInt = Rand_Next_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            // Rand_Next_Variable(&randInt);
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 
             // Set random position
             pos.y = play->view.eye.y + (SQ(temp_f20) * SQ(128.0f)) - 1000.0f;
@@ -3236,9 +3234,9 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             pos.z = play->view.eye.z + (Math_CosS(randInt) * (1.2f - temp_f20) * SQ(128.0f));
 
             // temp_f2 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
-            gRandFloat = ((randInt >> 9) | 0x3F800000);
-            temp_f2 = *((f32*)&gRandFloat) - 1.0f;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
+            gRandFloat.i = ((randInt >> 9) | 0x3F800000);
+            temp_f2 = gRandFloat.f - 1.0f;
 
             // Set random width
             imgWidth = (u32)((SQ(temp_f2) * 8.0f) + 2.0f);
@@ -3249,9 +3247,9 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         }
 
         if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)].rgba);
         } else if (((i & 0x3F) == 0) || (i == 16)) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)].rgba);
             phi_v1++;
         }
 
@@ -3293,10 +3291,6 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStarsImpl.s")
-#endif
 
 void Environment_Draw(PlayState* play) {
     Environment_SetupSkyboxStars(play);
@@ -3307,24 +3301,24 @@ void Environment_Draw(PlayState* play) {
 }
 
 void Environment_DrawSkyboxStars(PlayState* play) {
-    Gfx* nextOpa;
-    Gfx* opa;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
     if (sSkyboxStarsDList != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
 
-        gSPDisplayList(sSkyboxStarsDList, nextOpa);
+        gSPDisplayList(sSkyboxStarsDList, gfx);
 
-        Environment_DrawSkyboxStarsImpl(play, &nextOpa);
+        Environment_DrawSkyboxStarsImpl(play, &gfx);
 
-        gSPEndDisplayList(nextOpa++);
+        gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(opa, nextOpa);
+        Graph_BranchDlist(gfxHead, gfx);
 
-        POLY_OPA_DISP = nextOpa;
+        POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -3381,7 +3375,7 @@ u32 Environment_GetStormState(PlayState* play) {
 u8 Environment_IsFinalHours(PlayState* play) {
     u8 ret = false;
 
-    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+    if ((gSaveContext.save.day == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         ret = true;
     }
 
@@ -3421,8 +3415,8 @@ u8 func_800FE6F8(PlayState* play, s16 timeAdvanceScaling, s16 nextTimeLimit) {
     u8 ret = false;
 
     if (R_TIME_SPEED != 0) {
-        nextTime = ((void)0, gSaveContext.save.time) +
-                   (R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset)) * timeAdvanceScaling * 20;
+        nextTime =
+            CURRENT_TIME + (R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset)) * timeAdvanceScaling * 20;
         if (nextTime > nextTimeLimit) {
             ret = true;
         }
@@ -3514,52 +3508,52 @@ void func_800FEAB0() {
 
 void Environment_JumpForwardInTime(void) {
     if (sTimeJump != 0) {
-        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + sTimeJump;
+        gSaveContext.save.time = CURRENT_TIME + sTimeJump;
         sTimeJump = 0;
     }
 }
 
-void func_800FEAF4(EnvironmentContext* envCtx) {
-    u8 phi_v1 = 0;
+void Environment_NewDay(EnvironmentContext* envCtx) {
+    u8 dayOffset = 0;
 
     if (((void)0, gSaveContext.save.day) != 0) {
-        phi_v1 = ((void)0, gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
 
-    envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
-        envCtx->skyboxConfig = 0xE;
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
-        envCtx->skyboxConfig = 0x10;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
-        envCtx->skyboxConfig = 0x11;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = phi_v1 + 0x12;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = phi_v1 + 0x15;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
-        envCtx->skyboxConfig = 0x18;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = phi_v1 + 0x19;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (phi_v1 >= 3) {
-        envCtx->skyboxConfig = 0xD;
-        envCtx->changeSkyboxNextConfig = 0xD;
+    if (dayOffset >= 3) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_13;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_13;
     }
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
-        envCtx->changeSkyboxNextConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_0;
     }
 
     switch (((void)0, gSaveContext.save.day)) {

@@ -11,7 +11,7 @@ typedef struct ObjHariko {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjHarikoActionFunc actionFunc;
     /* 0x148 */ f32 bobbleStep;
-    /* 0x14C */ Vec3s headRotation;
+    /* 0x14C */ Vec3s headRot;
     /* 0x152 */ s16 headOffset;
     /* 0x154 */ s16 unk154; // Set but not used
 } ObjHariko; // size = 0x158

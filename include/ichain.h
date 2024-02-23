@@ -3,7 +3,7 @@
 
 #include "libc/stddef.h"
 
-typedef struct {
+typedef struct InitChainEntry {
     u32 cont:   1;
     u32 type:   4;
     u32 offset: 11;

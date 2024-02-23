@@ -154,7 +154,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 6:
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -171,7 +171,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -211,7 +211,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->msgEventScript = func_80C22880(this, play);

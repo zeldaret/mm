@@ -314,7 +314,7 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
                 i2++;
                 this->children[i]->child = this->children[i];
                 for (j = 0; j < maxChildren; j++) {
-                    if (i != j && this->children[j]->child == this->children[i]) {
+                    if ((i != j) && (this->children[j]->child == this->children[i])) {
                         this->children[j]->child = NULL;
                     }
                 }

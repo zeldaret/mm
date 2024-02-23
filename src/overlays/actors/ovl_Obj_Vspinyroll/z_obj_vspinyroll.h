@@ -7,12 +7,12 @@ struct ObjVspinyroll;
 
 typedef void (*ObjVspinyrollActionFunc)(struct ObjVspinyroll*, PlayState*);
 
-#define OBJVSPINYROLL_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJVSPINYROLL_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJVSPINYROLL_GET_380(thisx) (((thisx)->params >> 7) & 7)
 #define OBJVSPINYROLL_GET_1C00(thisx) (((thisx)->params >> 0xA) & 7)
 #define OBJVSPINYROLL_GET_4000(thisx) (((thisx)->params >> 0xE) & 1)
 
-#define OBJVSPINYROLL_7F_7F 0x7F
+#define OBJVSPINYROLL_PATH_INDEX_NONE 0x7F
 #define OBJVSPINYROLL_4000_1 1
 
 typedef struct {

@@ -2,6 +2,7 @@
 #define Z_EN_PEEHAT_H
 
 #include "global.h"
+#include "objects/object_ph/object_ph.h"
 
 struct EnPeehat;
 
@@ -32,8 +33,8 @@ typedef enum PeehatBodyPart {
 typedef struct EnPeehat {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[24];
-    /* 0x188 */ Vec3s morphTable[24];
+    /* 0x188 */ Vec3s jointTable[OBJECT_PH_LIMB_MAX];
+    /* 0x188 */ Vec3s morphTable[OBJECT_PH_LIMB_MAX];
     /* 0x2A8 */ EnPeehatActionFunc actionFunc;
     /* 0x2AC */ u8 unk_2AC;
     /* 0x2AD */ s8 unk_2AD;

@@ -66,7 +66,15 @@ static u8 sDamages[] = {
     1, 2, 3, 4, // Great Spin
 };
 
-static u16 sChargingSfxIds[] = {
+typedef enum {
+    /* 0 */ ENMTHUNDER_SUBTYPE_SPIN_GREAT,
+    /* 1 */ ENMTHUNDER_SUBTYPE_SPIN_REGULAR,
+    /* 2 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT,
+    /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR,
+    /* 4 */ ENMTHUNDER_SUBTYPE_MAX
+} EnMThunderSubType;
+
+static u16 sChargingSfxIds[ENMTHUNDER_SUBTYPE_MAX] = {
     NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SPIN_GREAT
     NA_SE_IT_ROLLING_CUT_LV1, // ENMTHUNDER_SUBTYPE_SPIN_REGULAR
     NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT
@@ -74,13 +82,6 @@ static u16 sChargingSfxIds[] = {
 };
 
 static f32 sScales[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
-
-typedef enum {
-    /* 0 */ ENMTHUNDER_SUBTYPE_SPIN_GREAT,
-    /* 1 */ ENMTHUNDER_SUBTYPE_SPIN_REGULAR,
-    /* 2 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT,
-    /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR
-} EnMThunderSubType;
 
 void EnMThunder_UnkType_Setup(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);

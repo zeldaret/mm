@@ -8,7 +8,7 @@ struct EnJgameTsn;
 
 typedef void (*EnJgameTsnActionFunc)(struct EnJgameTsn*, PlayState*);
 
-#define ENJGAMETSN_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENJGAMETSN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct {
     /* 0x00 */ Vec3s* points;
@@ -28,8 +28,8 @@ typedef struct EnJgameTsn {
     /* 0x21C */ s32 unk_21C;
     /* 0x220 */ Vec3s jointTable[OBJECT_TSN_LIMB_MAX];
     /* 0x286 */ Vec3s morphTable[OBJECT_TSN_LIMB_MAX];
-    /* 0x2EC */ Vec3s unk_2EC;
-    /* 0x2F2 */ Vec3s unk_2F2;
+    /* 0x2EC */ Vec3s headRot;
+    /* 0x2F2 */ Vec3s torsoRot;
     /* 0x2F8 */ s16 unk_2F8;
     /* 0x2FA */ s16 unk_2FA;
     /* 0x2FC */ s16 unk_2FC;

@@ -148,11 +148,11 @@ void func_809A13A0(ObjHamishi* this, PlayState* play) {
 
 s32 func_809A1408(ObjHamishi* this, PlayState* play) {
     s32 pad;
-    WaterBox* sp30;
+    WaterBox* waterBox;
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
                                 &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;

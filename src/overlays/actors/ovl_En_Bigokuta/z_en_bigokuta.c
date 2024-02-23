@@ -184,13 +184,13 @@ s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
 }
 
 s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {
-    WaterBox* box;
+    WaterBox* waterBox;
     s32 bgId;
 
     this->picto.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->picto.actor.floorPoly, &bgId,
                                                                 &this->picto.actor, &this->picto.actor.world.pos);
     if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->picto.actor.world.pos.x, this->picto.actor.world.pos.z,
-                                &this->picto.actor.home.pos.y, &box) ||
+                                &this->picto.actor.home.pos.y, &waterBox) ||
         (this->picto.actor.home.pos.y <= this->picto.actor.floorHeight)) {
         return false;
     } else {
@@ -378,7 +378,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
         CutsceneManager_Start(this->csId, &this->picto.actor);
 
         if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-            func_800B724C(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsAction(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
         } else {
             player = GET_PLAYER(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
@@ -454,7 +454,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 Actor_Kill(&this->picto.actor);
 
                 if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-                    func_800B724C(play, &this->picto.actor, PLAYER_CSACTION_END);
+                    Player_SetCsAction(play, &this->picto.actor, PLAYER_CSACTION_END);
                 } else {
                     Player* player = GET_PLAYER(play);
 
@@ -575,7 +575,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         gDPSetEnvColor((*gfx)++, envColor, envColor, envColor, envColor);
 
         if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            rotX = (s16)(this->timer * 6144.0f * (1 / 9.0f));
+            rotX = TRUNCF_BINANG(this->timer * 6144.0f * (1 / 9.0f));
             rot->x -= rotX;
         } else if (this->actionFunc == EnBigokuta_HoldPlayer) {
             if (this->timer == 1) {

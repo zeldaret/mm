@@ -319,30 +319,30 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
 
 void EnHoll_Draw(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
-    Gfx* dList;
+    Gfx* gfx;
     u32 setupDListIndex;
 
     if (this->alpha != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha == 255) {
-            dList = POLY_OPA_DISP;
+            gfx = POLY_OPA_DISP;
             setupDListIndex = SETUPDL_37;
         } else {
-            dList = POLY_XLU_DISP;
+            gfx = POLY_XLU_DISP;
             setupDListIndex = SETUPDL_0;
         }
-        dList = Gfx_SetupDL(dList, setupDListIndex);
+        gfx = Gfx_SetupDL(gfx, setupDListIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
             Matrix_RotateYF(M_PI, MTXMODE_APPLY);
         }
-        gSPMatrix(dList++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(dList++, 0, 0, 0, 0, 0, this->alpha);
-        gSPDisplayList(dList++, gEnHollCentralPlaneDL);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, this->alpha);
+        gSPDisplayList(gfx++, gEnHollCentralPlaneDL);
         if (this->alpha == 255) {
-            POLY_OPA_DISP = dList;
+            POLY_OPA_DISP = gfx;
         } else {
-            POLY_XLU_DISP = dList;
+            POLY_XLU_DISP = gfx;
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

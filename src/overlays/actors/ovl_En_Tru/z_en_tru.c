@@ -686,7 +686,7 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_34E & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->unk_34E &= ~0x80;
         }
@@ -830,12 +830,12 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
         // Fallthrough
-        case TEXT_STATE_16:
+        case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
             if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
@@ -1118,7 +1118,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }

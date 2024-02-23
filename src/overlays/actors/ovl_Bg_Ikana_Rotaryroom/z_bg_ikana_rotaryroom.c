@@ -594,12 +594,12 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
             sp58.y = ptr->unk_4C.y + 50.0f;
             sp58.z = ptr->unk_4C.z;
 
-            sp64 = Math_ScaledStepToS(&player->actor.shape.rot.x, ptr->unk_40.x, 2000) & 1;
-            sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.y, ptr->unk_40.y, 2000);
-            sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.z, ptr->unk_40.z, 2000);
+            sp64 = Math_ScaledStepToS(&player->actor.shape.rot.x, ptr->unk_40.x, 0x7D0) & 1;
+            sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.y, ptr->unk_40.y, 0x7D0);
+            sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.z, ptr->unk_40.z, 0x7D0);
 
-            ptr->unk_48 = ptr->unk_48 - 2.1f;
-            ptr->unk_48 = ptr->unk_48 * 0.98f;
+            ptr->unk_48 -= 2.1f;
+            ptr->unk_48 *= 0.98f;
             if (ptr->unk_48 < -30.0f) {
                 ptr->unk_48 = -30.0f;
             }
@@ -794,7 +794,7 @@ void func_80B819F0(Actor* thisx, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (this->dyna.actor.csId >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         }
         func_80B81A64(this);
     } else {

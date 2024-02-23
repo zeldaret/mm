@@ -51,7 +51,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-s32 func_80C0A740(BgIkninSusceil* this, PlayState* play) {
+bool func_80C0A740(BgIkninSusceil* this, PlayState* play) {
     s32 pad2[2];
     Vec3f offset;
     Player* player = GET_PLAYER(play);
@@ -218,7 +218,7 @@ void func_80C0AE5C(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y += -0.1f;
     this->dyna.actor.velocity.y *= 0.95f;
     this->dyna.actor.velocity.y = CLAMP_MIN(this->dyna.actor.velocity.y, 1.0f);
-    this->dyna.actor.world.pos.y = this->dyna.actor.world.pos.y + this->dyna.actor.velocity.y;
+    this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if ((this->dyna.actor.home.pos.y + 365.0f) < this->dyna.actor.world.pos.y) {
         BgIkninSusceil_RequestQuakeAndRumble(this, play, 3, 14, 2);
         func_80C0AB14(this);

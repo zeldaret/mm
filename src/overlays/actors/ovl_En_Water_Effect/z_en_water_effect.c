@@ -438,7 +438,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
             ptr->unk_04.x += ptr->unk_10.x;
             ptr->unk_04.y += ptr->unk_10.y;
             ptr->unk_04.z += ptr->unk_10.z;
-            ptr->unk_10.y = ptr->unk_10.y + ptr->unk_1C.y;
+            ptr->unk_10.y += ptr->unk_1C.y;
 
             if (ptr->unk_00 == 4) {
                 if (ptr->unk_2A > 0) {

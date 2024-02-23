@@ -7,9 +7,13 @@ void MtxConv_F2L(Mtx* mtx, MtxF* mf) {
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
             s32 value = (mf->mf[i][j] * 0x10000);
+            struct {
+                u16 intPart[4][4];
+                u16 fracPart[4][4];
+            }* mu = (void*)mtx;
 
-            mtx->intPart[i][j] = value >> 16;
-            mtx->fracPart[i][j] = value;
+            mu->intPart[i][j] = value >> 16;
+            mu->fracPart[i][j] = value;
         }
     }
 }

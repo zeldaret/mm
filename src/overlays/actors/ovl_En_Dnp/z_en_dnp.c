@@ -212,7 +212,7 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
 
     temp_s0 = CLAMP(temp_s0, -0x3FFC, 0x3FFC);
 
-    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 0x1);
+    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 1);
     sp30 = player->actor.world.pos;
     sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp3C = this->actor.world.pos;
@@ -222,7 +222,7 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     //! FAKE
     if (1) {}
 
-    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
+    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 1);
 
     return 1;
 }
@@ -248,7 +248,7 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_322 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
@@ -356,7 +356,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
     }
 
     if (this->unk_32E == 0) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->unk_32E = 1;
         } else {
             this->actor.textId = 0x971;

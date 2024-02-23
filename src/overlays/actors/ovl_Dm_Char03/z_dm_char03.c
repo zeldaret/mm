@@ -37,7 +37,7 @@ typedef enum {
     /* 1 */ DMCHAR03_ANIM_MAX
 } DmChar03Animation;
 
-AnimationInfo sAnimationInfo[DMCHAR03_ANIM_MAX] = {
+static AnimationInfo sAnimationInfo[DMCHAR03_ANIM_MAX] = {
     { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR03_ANIM_FALL_OVER
 };
 

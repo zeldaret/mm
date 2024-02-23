@@ -2,12 +2,12 @@
     <!-- Object for Poe -->
     <File Name="object_po" Segment="6">
         <!-- Animations -->
-        <Animation Name="gPoeAttackAnim" Offset="0x1A8" />
-        <Animation Name="gPoeDamagedAnim" Offset="0x4EC" />
-        <Animation Name="gPoeFleeAnim" Offset="0x6E0" />
-        <Animation Name="gPoeFloatAnim" Offset="0xA60" />
-        <Animation Name="gPoeAppearAnim" Offset="0x11C4" />
-        <Animation Name="gPoeDisappearAnim" Offset="0x15B0" />
+        <Animation Name="gPoeAttackAnim" Offset="0x1A8" /> <!-- Original name is "po_atack" -->
+        <Animation Name="gPoeDamagedAnim" Offset="0x4EC" /> <!-- Original name is "po_damage" -->
+        <Animation Name="gPoeFleeAnim" Offset="0x6E0" /> <!-- Original name is "po_escape" -->
+        <Animation Name="gPoeFloatAnim" Offset="0xA60" /> <!-- Original name is "po_fly" -->
+        <Animation Name="gPoeAppearAnim" Offset="0x11C4" /> <!-- Original name is "po_start" -->
+        <Animation Name="gPoeDisappearAnim" Offset="0x15B0" /> <!-- Original name is "po_wait" -->
 
         <!-- Poe Limb DisplayLists -->
         <DList Name="gPoeRightUpperArmDL" Offset="0x1620" />
@@ -23,7 +23,7 @@
 
         <!-- Poe Soul -->
         <Texture Name="gPoeSoulTex" OutName="poe_soul" Format="i8" Width="32" Height="64" Offset="0x3010" />
-        <DList Name="gPoeSoulDL" Offset="0x3850" />
+        <DList Name="gPoeSoulDL" Offset="0x3850" /> <!-- Original name is "poh_soul_modelT" -->
 
         <!-- Textures -->
         <Texture Name="gPoeArmTex" OutName="poe_arm" Format="rgba16" Width="32" Height="16" Offset="0x3910" />

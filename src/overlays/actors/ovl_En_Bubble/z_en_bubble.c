@@ -238,7 +238,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
@@ -257,7 +257,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
@@ -333,7 +333,8 @@ void EnBubble_Init(Actor* thisx, PlayState* play) {
     Collider_InitJntSph(play, &this->colliderSphere);
     Collider_SetJntSph(play, &this->colliderSphere, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(9), &sColChkInfoInit);
-    this->actor.hintId = 0x16;
+    //! @bug: hint Id not correctly migrated from OoT `NAVI_ENEMY_SHABOM`
+    this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     this->bounceDirection.x = Rand_ZeroOne();
     this->bounceDirection.y = Rand_ZeroOne();
     this->bounceDirection.z = Rand_ZeroOne();

@@ -6,6 +6,7 @@
 
 #include "z_en_cow.h"
 #include "z64horse.h"
+#include "z64voice.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -132,7 +133,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
             this->actor.targetMode = TARGET_MODE_6;
 
             gHorsePlayedEponasSong = false;
-            func_801A5080(4);
+            AudioVoice_InitWord(VOICE_WORD_ID_MILK);
             break;
 
         case EN_COW_TYPE_TAIL:
@@ -158,7 +159,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
 }
 
 void EnCow_Destroy(Actor* thisx, PlayState* play) {
@@ -205,7 +206,7 @@ void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
 }
 
 void EnCow_TalkEnd(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_CloseTextbox(play);
         this->actionFunc = EnCow_Idle;
@@ -229,7 +230,7 @@ void EnCow_GiveMilkWait(EnCow* this, PlayState* play) {
 }
 
 void EnCow_GiveMilk(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_CloseTextbox(play);
         this->actionFunc = EnCow_GiveMilkWait;
@@ -238,7 +239,7 @@ void EnCow_GiveMilk(EnCow* this, PlayState* play) {
 }
 
 void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
             Message_ContinueTextbox(play, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
@@ -250,7 +251,7 @@ void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
 }
 
 void EnCow_Talk(EnCow* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.textId == 0x32C8) { // Text to give milk after playing Epona's Song.
             this->actionFunc = EnCow_CheckForEmptyBottle;
         } else if (this->actor.textId == 0x32C9) { // Text to give milk.
@@ -291,11 +292,11 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
         }
     }
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
-        if (func_801A5100() == 4) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_01)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_87_01);
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 0x61A8)) {
+        if (AudioVoice_GetWord() == VOICE_WORD_ID_MILK) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
                 if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
@@ -306,7 +307,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 this->actionFunc = EnCow_Talk;
             }
         } else {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
         }
     }
 
@@ -322,8 +323,8 @@ void EnCow_DoTail(EnCow* this, PlayState* play) {
                          Animation_GetLastFrame(&gCowTailIdleAnim), ANIMMODE_ONCE, 1.0f);
     }
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 25000) {
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 0x61A8)) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
             if (this->skelAnime.animation == &gCowTailIdleAnim) {
@@ -360,8 +361,8 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT(Math_Vec3f_Yaw(&thisx->world.pos, &player->actor.world.pos)) < 0xC000) {
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT(Math_Vec3f_Yaw(&thisx->world.pos, &player->actor.world.pos)) < 0xC000)) {
         targetX = Math_Vec3f_Pitch(&thisx->focus.pos, &player->actor.focus.pos);
         targetY = Math_Vec3f_Yaw(&thisx->focus.pos, &player->actor.focus.pos) - this->actor.shape.rot.y;
 
@@ -380,8 +381,8 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
         targetX = targetY = 0;
     }
 
-    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 200, 10);
-    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 200, 10);
+    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 0xC8, 0xA);
+    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 0xC8, 0xA);
 }
 
 void EnCow_UpdateTail(Actor* thisx, PlayState* play) {

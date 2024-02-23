@@ -34,10 +34,10 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
     s32 objectSlot;
 
     objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
-    if ((objectSlot > OBJECT_SLOT_NONE) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
-        void* segBackup = gSegments[6];
+    if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
+        uintptr_t segBackup = gSegments[0x06];
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -50,7 +50,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rTimer = 5;
         this->rObjectSlot = objectSlot;
 
-        gSegments[6] = segBackup;
+        gSegments[0x06] = segBackup;
         return 1;
     }
     return 0;
@@ -66,7 +66,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(objectPtr);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(objectPtr);
 
     gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 

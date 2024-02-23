@@ -1,12 +1,12 @@
 ﻿<Root>
     <File Name="object_ot" Segment="6">
         <DList Name="object_ot_DL_000040" Offset="0x40" />
-        <DList Name="object_ot_DL_000078" Offset="0x78" />
-        <Animation Name="object_ot_Anim_000420" Offset="0x420" />
-        <DList Name="object_ot_DL_0004A0" Offset="0x4A0" />
+        <DList Name="object_ot_DL_000078" Offset="0x78" /> <!-- Original name is "ot_item_model" -->
+        <Animation Name="object_ot_Anim_000420" Offset="0x420" /> <!-- Original name is "ot_kissing" -->
+        <DList Name="object_ot_DL_0004A0" Offset="0x4A0" /> <!-- Original name is "ot_light_model" -->
         <Texture Name="object_ot_Tex_000550" OutName="tex_000550" Format="ia16" Width="8" Height="8" Offset="0x550" />
         <TextureAnimation Name="object_ot_Matanimheader_0005F8" Offset="0x5F8" />
-        <Animation Name="object_ot_Anim_0008D8" Offset="0x8D8" />
+        <Animation Name="object_ot_Anim_0008D8" Offset="0x8D8" /> <!-- Original name is "ot_swim" -->
         <DList Name="object_ot_DL_001800" Offset="0x1800" />
         <DList Name="object_ot_DL_0018D0" Offset="0x18D0" />
         <DList Name="object_ot_DL_001988" Offset="0x1988" />
@@ -49,6 +49,6 @@
         <Limb Name="object_ot_Standardlimb_0047A0" Type="Standard" EnumName="OBJECT_OT_LIMB_11" Offset="0x47A0" />
         <Limb Name="object_ot_Standardlimb_0047AC" Type="Standard" EnumName="OBJECT_OT_LIMB_12" Offset="0x47AC" />
         <Skeleton Name="object_ot_Skel_004800" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OT_LIMB_NONE" LimbMax="OBJECT_OT_LIMB_MAX" EnumName="ObjectOtLimb" Offset="0x4800" />
-        <Animation Name="object_ot_Anim_004B30" Offset="0x4B30" />
+        <Animation Name="object_ot_Anim_004B30" Offset="0x4B30" /> <!-- Original name is "ot_wait" -->
     </File>
 </Root>

@@ -422,9 +422,9 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Items
     // Loop over rows (i)
-    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+    for (slot = 0, i = 0, rectTop = 38; i < ITEM_GRID_ROWS; i++, rectTop += 14) {
         // Loop over columns (j)
-        for (j = 0, rectLeft = 44; j < 6; j++, slot++, rectLeft += 23) {
+        for (j = 0, rectLeft = 44; j < ITEM_GRID_COLS; j++, slot++, rectLeft += 23) {
             counterDigits[3] = 0;
             counterDigits[2] = 0;
             if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_DEKU_NUT)) || (slot == SLOT_POWDER_KEG) ||
@@ -456,12 +456,12 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Masks
     // Loop over rows (i)
-    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+    for (slot = 0, i = 0, rectTop = 38; i < MASK_GRID_ROWS; i++, rectTop += 14) {
         // Loop over columns (j)
-        for (j = 0, rectLeft = 204; j < 6; j++, slot++, rectLeft += 14) {
+        for (j = 0, rectLeft = 204; j < MASK_GRID_COLS; j++, slot++, rectLeft += 14) {
             counterDigits[2] = 0;
 
-            if (gSaveContext.save.saveInfo.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
+            if (gSaveContext.save.saveInfo.inventory.items[slot + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 counterDigits[2] = 1;
             }
             KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
@@ -1006,13 +1006,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
+                    TOGGLE_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
+                    TOGGLE_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_LULLABY_INTRO) {
@@ -1021,7 +1021,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 //! have also been taken
                 slot = sCurSection - INV_EDITOR_SECTION_BOSS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[slot];
+                    TOGGLE_QUEST_ITEM(slot);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {

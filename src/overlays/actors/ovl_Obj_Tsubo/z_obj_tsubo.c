@@ -101,7 +101,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_809275C0(ObjTsubo* this, PlayState* play) {
+bool func_809275C0(ObjTsubo* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
 
@@ -159,7 +159,7 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
     }
 }
 
-s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
+bool ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
     return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
@@ -307,8 +307,8 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
     pos.y = worldPos->y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
-        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->x;
-        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->z;
+        pos.x = worldPos->x + Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f;
+        pos.z = worldPos->z + Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f;
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;
@@ -352,8 +352,8 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
-        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->x;
-        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->z;
+        pos.x = worldPos->x + Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f;
+        pos.z = worldPos->z + Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f;
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;

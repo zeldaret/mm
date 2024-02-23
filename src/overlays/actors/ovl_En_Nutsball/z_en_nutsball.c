@@ -93,7 +93,7 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;
-    f32 spdXZ;
+    f32 speedXZ;
     s32 bgId;
     CollisionPoly* poly;
 
@@ -102,9 +102,9 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
-            spdXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) +
-                          (this->actor.velocity.z * this->actor.velocity.z));
-            this->actor.world.rot.x = Math_Atan2S_XY(spdXZ, this->actor.velocity.y);
+            speedXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) +
+                            (this->actor.velocity.z * this->actor.velocity.z));
+            this->actor.world.rot.x = Math_Atan2S_XY(speedXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||

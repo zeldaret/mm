@@ -16,14 +16,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play);
 void EnNb_Update(Actor* thisx, PlayState* play);
 void EnNb_Draw(Actor* thisx, PlayState* play);
 
-void EnNb_FollowSchedule(EnNb* this, PlayState* play);
 void func_80BC0EAC(EnNb* this, PlayState* play);
-
-void func_80BC08E0(EnNb* this, PlayState* play);
-void func_80BC0978(EnNb* this, PlayState* play);
-
-s32 func_80BC00AC(Actor* thisx, PlayState* play);
-s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
 #define EN_NB_FLAG_NONE (0)
 #define EN_NB_FLAG_8 (1 << 3)
@@ -43,39 +36,7 @@ typedef enum EnNbScheduleResult {
     /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
-static u8 sScheduleScript[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x21 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12 - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x0F - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0F */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x12 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x20 - 0x16),
-    /* 0x16 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x1D - 0x1C),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_4),
-    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x72 - 0x25),
-    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x47 - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x44 - 0x2F),
-    /* 0x2F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x41 - 0x35),
-    /* 0x35 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x3E - 0x3B),
-    /* 0x3B */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
-    /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x57 - 0x4B),
-    /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
-    /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x57 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 12, 0, 0x70 - 0x5D),
-    /* 0x5D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x6E - 0x63),
-    /* 0x63 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 18, 0, 0x6C - 0x69),
-    /* 0x69 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
-    /* 0x6C */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_1),
-    /* 0x6E */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_2),
-    /* 0x70 */ SCHEDULE_CMD_RET_VAL_S(EN_NB_SCH_1),
-    /* 0x72 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "build/src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
 
 u8 D_80BC1464[] = {
     0x1B, 0x04, 0x08, 0x00, 0x6A, 0x0A, 0x00, 0x10, 0x00, 0x08, 0x00, 0x10, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x0E,
@@ -141,15 +102,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
-    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
-    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
-};
-
 Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* thisx;
     Actor* actor = NULL;
@@ -181,25 +133,34 @@ void EnNb_UpdateSkelAnime(EnNb* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
+static AnimationInfoS sAnimationInfo[EN_NB_ANIM_MAX] = {
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
+    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
+    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
+};
+
 s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
-    s32 shouldChange = false;
-    s32 didAnimationChange = false;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == EN_NB_ANIM_0) || (animIndex == EN_NB_ANIM_1)) {
         if ((this->animIndex != EN_NB_ANIM_0) && (this->animIndex != EN_NB_ANIM_1)) {
-            shouldChange = true;
+            changeAnim = true;
         }
     } else if (animIndex != this->animIndex) {
-        shouldChange = true;
+        changeAnim = true;
     }
 
-    if (shouldChange) {
+    if (changeAnim) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didAnimationChange;
+    return didAnimChange;
 }
 
 void func_80BBFF24(EnNb* this, PlayState* play) {
@@ -301,6 +262,9 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
             this->behaviour++;
             ret = true;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -329,18 +293,15 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_2:
             // Slowly increase alpha to fill the screen with a black rectangle
-            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
+            R_PLAY_FILL_SCREEN_ALPHA = TRUNCF_BINANG(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {
-                    // play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
-                    play->interfaceCtx.storyType = 0;
+                    play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
                 } else {
-                    // play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
-                    play->interfaceCtx.storyType = 1;
+                    play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
                 }
-                // play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
-                play->interfaceCtx.storyState = 6;
+                play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
                 R_STORY_FILL_SCREEN_ALPHA = 255;
             }
 
@@ -350,15 +311,13 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             break;
 
         case ENNB_BEHAVIOUR_3:
-            // play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
-            play->interfaceCtx.storyState = 4;
+            play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
             this->behaviour++;
             ret = true;
             break;
 
         case ENNB_BEHAVIOUR_4:
-            // play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
-            play->interfaceCtx.storyState = 5;
+            play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
             this->behaviour++;
             // fallthrough
         case ENNB_BEHAVIOUR_5:
@@ -376,6 +335,9 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             SET_EVENTINF(EVENTINF_43);
+            break;
+
+        default:
             break;
     }
 
@@ -401,7 +363,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= EN_NB_FLAG_20;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = ENNB_BEHAVIOUR_0;
@@ -420,8 +382,8 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
                 this->unk_26C = 0.0f;
@@ -527,8 +489,8 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
                     break;
 
-                case 0x2904: // "You want to hear the carnival of time story? ..."
-                case 0x290B: // "You want to hear the four giants story? ..."
+                case 0x2904:
+                case 0x290B:
                     this->unk_18C = func_80BC08E0;
                     this->unk_284 = 0;
                     break;
@@ -538,7 +500,7 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     this->unk_284 = 0;
                     break;
 
-                case 0x28CB: // "I told you I already ate!"
+                case 0x28CB:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_ANGRY);
                     break;
 
@@ -549,6 +511,9 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                 case 0x290D:
                 case 0x2912:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -601,10 +566,6 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
     this->unk_274 = 40.0f;
 
     switch (scheduleOutput->result) {
-        default:
-            success = false;
-            break;
-
         case EN_NB_SCH_1:
         case EN_NB_SCH_3:
         case EN_NB_SCH_4:
@@ -613,6 +574,10 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
 
         case EN_NB_SCH_2:
             success = func_80BC0B98(this, play, scheduleOutput);
+            break;
+
+        default:
+            success = false;
             break;
     }
     return success;
@@ -706,7 +671,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    play->interfaceCtx.storyState = 3;
+    play->interfaceCtx.storyState = STORY_STATE_DESTROY;
 }
 
 void EnNb_Update(Actor* thisx, PlayState* play) {

@@ -3,8 +3,10 @@
 
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"
-#include "z64math.h"
+#include "color.h"
 #include "z64dma.h"
+#include "z64light.h"
+#include "z64math.h"
 #include "unk.h"
 
 struct GameOverContext;
@@ -61,7 +63,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ WEATHER_MODE_CLEAR,
-    /* 1 */ WEATHER_MODE_1, // rain?
+    /* 1 */ WEATHER_MODE_RAIN,
     /* 2 */ WEATHER_MODE_2,
     /* 3 */ WEATHER_MODE_SNOW
 } WeatherMode;
@@ -78,6 +80,38 @@ typedef enum {
     /*  1 */ SKYBOX_DMA_TEXTURE1_START,
     /* 11 */ SKYBOX_DMA_TEXTURE2_START = 11
 } SkyboxDmaState;
+
+typedef enum SkyboxConfig {
+    /* 0x00 */ SKYBOX_CONFIG_0,
+    /* 0x01 */ SKYBOX_CONFIG_1,
+    /* 0x02 */ SKYBOX_CONFIG_2,
+    /* 0x03 */ SKYBOX_CONFIG_3,
+    /* 0x04 */ SKYBOX_CONFIG_4,
+    /* 0x05 */ SKYBOX_CONFIG_5,
+    /* 0x06 */ SKYBOX_CONFIG_6,
+    /* 0x07 */ SKYBOX_CONFIG_7,
+    /* 0x08 */ SKYBOX_CONFIG_8,
+    /* 0x09 */ SKYBOX_CONFIG_9,
+    /* 0x0A */ SKYBOX_CONFIG_10,
+    /* 0x0B */ SKYBOX_CONFIG_11,
+    /* 0x0C */ SKYBOX_CONFIG_12,
+    /* 0x0D */ SKYBOX_CONFIG_13,
+    /* 0x0E */ SKYBOX_CONFIG_14,
+    /* 0x0F */ SKYBOX_CONFIG_15,
+    /* 0x10 */ SKYBOX_CONFIG_16,
+    /* 0x11 */ SKYBOX_CONFIG_17,
+    /* 0x12 */ SKYBOX_CONFIG_18,
+    /* 0x13 */ SKYBOX_CONFIG_19,
+    /* 0x14 */ SKYBOX_CONFIG_20,
+    /* 0x15 */ SKYBOX_CONFIG_21,
+    /* 0x16 */ SKYBOX_CONFIG_22,
+    /* 0x17 */ SKYBOX_CONFIG_23,
+    /* 0x18 */ SKYBOX_CONFIG_24,
+    /* 0x19 */ SKYBOX_CONFIG_25,
+    /* 0x1A */ SKYBOX_CONFIG_26,
+    /* 0x1B */ SKYBOX_CONFIG_27,
+    /* 0x1C */ SKYBOX_CONFIG_MAX
+} SkyboxConfig;
 
 //! @TODO: Verify from OoT (may not be the same)
 typedef enum {
@@ -142,15 +176,6 @@ typedef struct LightningStrike {
     /* 0x04 */ u8 flashAlphaTarget;
     /* 0x08 */ f32 delayTimer;
 } LightningStrike; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u16 startTime;
-    /* 0x2 */ u16 endTime;
-    /* 0x4 */ u8 skybox1Index;
-    /* 0x5 */ u8 skybox2Index;
-    /* 0x6 */ u8 color1Index;
-    /* 0x7 */ u8 color2Index;
-} TimeBasedSkyboxEntry; // size = 0x8
 
 #define ENV_FOGNEAR_MAX 996
 #define ENV_ZFAR_MAX 15000
@@ -296,7 +321,7 @@ void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDs
 u8 func_800FE9B4(struct PlayState* play);
 void func_800FEA50(struct PlayState* play);
 void func_800FEAB0(void);
-void func_800FEAF4(EnvironmentContext* envCtx);
+void Environment_NewDay(EnvironmentContext* envCtx);
 
 // Data
 extern u8 gWeatherMode;

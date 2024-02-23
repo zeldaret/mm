@@ -105,7 +105,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.shadowScale = 12.0f;
 
     if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
     }
 
     this->actor.hintId = TATL_HINT_ID_GIANT_BEE;
@@ -151,7 +151,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     s32 pad[2];
 
     if ((this->actor.category != ACTORCAT_ENEMY) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
     Math_Vec3f_Copy(&nextPos, &this->targetPos[this->posIndex]);

@@ -508,7 +508,7 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                             if (validName) {
                                 Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                                 gSaveContext.fileNum = this->buttonIndex;
-                                time = ((void)0, gSaveContext.save.time);
+                                time = CURRENT_TIME;
                                 Sram_InitSave(this, sramCtx);
                                 gSaveContext.save.time = time;
 
@@ -737,10 +737,10 @@ void FileSelect_StartOptions(GameState* thisx) {
     }
 }
 
-u8 sSelectedSetting;
 // bss padding
 s32 D_80814E94;
 s32 D_80814E98;
+u8 sSelectedSetting; // D_80814E90
 s32 D_80814E9C;
 s32 D_80814EA0;
 
@@ -1027,6 +1027,8 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         }
 
+        //! @bug the gOptionsMenuHeaders usage here will produce an OoB read for i == 5. It reads the first element of
+        //! `gOptionsMenuSettings`
         gDPLoadTextureBlock(POLY_OPA_DISP++, gOptionsMenuSettings[i].texture, G_IM_FMT_IA, G_IM_SIZ_8b,
                             gOptionsMenuSettings[i].width, gOptionsMenuHeaders[i].height, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);

@@ -1,4 +1,7 @@
-#include "global.h"
+#include "z64transition.h"
+
+#include "segment_symbols.h"
+#include "z64lib.h"
 
 // InitVars and Linker symbol declarations (used in the table below)
 #define DEFINE_TRANSITION(_enumValue, structName, _instanceName, name) \

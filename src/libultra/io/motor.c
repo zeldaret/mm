@@ -1,11 +1,12 @@
 #include "ultra64.h"
 #include "PR/os_motor.h"
 #include "PR/controller.h"
+#include "alignment.h"
 
 #define BANK_ADDR 0x400
 #define MOTOR_ID 0x80
 
-OSPifRam __MotorDataBuf[MAXCONTROLLERS];
+OSPifRam __MotorDataBuf[MAXCONTROLLERS] ALIGNED(16);
 
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
 
@@ -49,7 +50,7 @@ s32 __osMotorAccess(OSPfs* pfs, s32 flag) {
     return ret;
 }
 
-void _MakeMotorData(s32 channel, OSPifRam* mdata) {
+void __osMakeMotorData(s32 channel, OSPifRam* mdata) {
     u8* ptr = (u8*)mdata->ramarray;
     __OSContRamReadFormat ramreadformat;
     s32 i;
@@ -116,7 +117,7 @@ s32 osMotorInit(OSMesgQueue* mq, OSPfs* pfs, s32 channel) {
         return PFS_ERR_DEVICE;
     }
     if (!(pfs->status & PFS_MOTOR_INITIALIZED)) {
-        _MakeMotorData(channel, &__MotorDataBuf[channel]);
+        __osMakeMotorData(channel, &__MotorDataBuf[channel]);
     }
     pfs->status = PFS_MOTOR_INITIALIZED;
     return 0;

@@ -31,12 +31,10 @@ void func_808B057C(EnAm* this);
 void func_808B05C8(EnAm* this, PlayState* play);
 void func_808B0640(EnAm* this);
 void func_808B066C(EnAm* this, PlayState* play);
-void EnAm_TakeDamage(EnAm* this, PlayState* play);
 void func_808B07A8(EnAm* this, PlayState* play);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
-void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Am_InitVars = {
     /**/ ACTOR_EN_AM,
@@ -134,18 +132,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-static Vec3f sVelocity = { 0.0f, -1.5f, 0.0f };
-
-static Vec3f sAccel = { 0.0f, -(1.0f / 5.0f), 0.0f };
-
-static Color_RGBA8 D_808B1118 = { 100, 100, 100, 0 };
-
-static Color_RGBA8 D_808B111C = { 40, 40, 40, 0 };
-
-static Color_RGBA8 D_808B1120 = { 150, 150, 150, 255 };
-
-static Color_RGBA8 D_808B1124 = { 100, 100, 100, 150 };
-
 void EnAm_Init(Actor* thisx, PlayState* play) {
     EnAm* this = THIS;
 
@@ -171,6 +157,10 @@ void EnAm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
+    static Vec3f sVelocity = { 0.0f, -1.5f, 0.0f };
+    static Vec3f sAccel = { 0.0f, -(1.0f / 5.0f), 0.0f };
+    static Color_RGBA8 sPrimColor = { 100, 100, 100, 0 };
+    static Color_RGBA8 sEnvColor = { 40, 40, 40, 0 };
     s32 i;
     Vec3f effectPos;
     s32 pad;
@@ -180,10 +170,10 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         effectPos.x = Rand_CenteredFloat(65.0f) + this->actor.world.pos.x;
         effectPos.y = Rand_CenteredFloat(10.0f) + (this->actor.world.pos.y + 40.0f);
         effectPos.z = Rand_CenteredFloat(65.0f) + this->actor.world.pos.z;
-        EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
+        EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &sPrimColor, &sEnvColor);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, false);
 }
 
 void func_808AFF9C(EnAm* this) {
@@ -399,6 +389,8 @@ void func_808B0820(EnAm* this) {
 }
 
 void func_808B0894(EnAm* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 150, 150, 150, 255 };
+    static Color_RGBA8 sEnvColor = { 100, 100, 100, 150 };
     s32 i;
     Vec3f dustPos;
     s32 pad;
@@ -421,7 +413,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
             dustPos.y = (Rand_CenteredFloat(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
             dustPos.z = (Math_CosS(0) * 7.0f) + this->actor.world.pos.z;
 
-            func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
+            func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &sPrimColor, &sEnvColor, 200, 45, 12);
         }
     } else if (this->explodeTimer == 0) {
         Actor_Kill(&this->actor);

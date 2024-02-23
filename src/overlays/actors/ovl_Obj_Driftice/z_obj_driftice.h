@@ -8,7 +8,7 @@ struct ObjDriftice;
 typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, PlayState*);
 
 #define OBJDRIFTICE_GET_3(thisx) ((thisx)->params & 3)
-#define OBJDRIFTICE_GET_1FC(thisx) (((thisx)->params >> 2) & 0x7F)
+#define OBJDRIFTICE_GET_PATH_INDEX(thisx) (((thisx)->params >> 2) & 0x7F)
 #define OBJDRIFTICE_GET_E00(thisx) (((thisx)->params >> 9) & 7)
 #define OBJDRIFTICE_GET_1000(thisx) (((thisx)->params >> 0xC) & 1)
 #define OBJDRIFTICE_GET_ROT(thisx) ((thisx)->home.rot.x & 3)
@@ -49,7 +49,7 @@ typedef struct ObjDriftice {
     /* 0x160 */ s32 unk_160;
     /* 0x164 */ s32 unk_164;
     /* 0x168 */ s32 unk_168;
-    /* 0x16C */ Vec3s* unk_16C;
+    /* 0x16C */ Vec3s* pathPoints;
     /* 0x170 */ ObjDrifticeStruct unk_170;
     /* 0x23C */ f32 unk_23C;
     /* 0x240 */ f32 unk_240;

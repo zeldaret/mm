@@ -136,7 +136,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     D_809F4970 = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_57)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA)) {
         this->actionFunc = func_809F2E14;
     } else {
         this->actionFunc = func_809F2B64;
@@ -182,8 +182,6 @@ void func_809F24A8(Boss06* this) {
     this->unk_1AC = 0.0f;
 }
 
-#ifdef NON_MATCHING
-// The 1 constant from the switch branch is reused in case 2 for some reason.
 void func_809F24C8(Boss06* this, PlayState* play) {
     s16 sp4E = 0;
     Player* player = GET_PLAYER(play);
@@ -200,7 +198,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -240,7 +238,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 this->unk_1D8 = 0.0f;
                 if (this->unk_1CA == 60) {
                     D_809F4970->unk_154++;
-                    func_800B7298(play, &this->actor, PLAYER_CSACTION_132);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
@@ -333,7 +331,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 D_809F4970->unk_151 = 0;
             }
             break;
@@ -344,9 +342,6 @@ void func_809F24C8(Boss06* this, PlayState* play) {
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F24C8.s")
-#endif
 
 void func_809F2B64(Boss06* this, PlayState* play) {
     this->actionFunc = func_809F2C44;
@@ -519,7 +514,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    temp_v0 = gSaveContext.save.time;
+    temp_v0 = CURRENT_TIME;
     if (temp_v0 > CLOCK_TIME(12, 0)) {
         temp_v0 = (DAY_LENGTH - 1) - temp_v0;
     }
@@ -532,16 +527,16 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
         temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
 
-        temp_v0_2[0].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[3].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[4].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[7].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
+        temp_v0_2[0].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[3].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[4].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[7].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
 
         temp_v0_2[5].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[5].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[5].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[6].v.ob[0] = temp_s0 - 0x2A3;
-        temp_v0_2[6].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[6].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[9].v.ob[0] = temp_s0 + 0x2A3;
         temp_v0_2[9].v.ob[2] = temp_f10 - 0x1C2;
@@ -583,6 +578,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
 
+        //! FAKE:
         if (1) {}
     }
 
