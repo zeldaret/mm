@@ -387,6 +387,9 @@ s32 EnInvadepoh_Alien_GetKillCount(void) {
     return ALIEN_GET_KILL_COUNT();
 }
 
+/**
+ * If the player has killed fewer than `MAX_KILL_COUNT` aliens, this function will increment the kill counter.
+ */
 s32 EnInvadepoh_Alien_AddKill(void) {
     s32 killCount = EnInvadepoh_Alien_GetKillCount();
 
@@ -394,9 +397,15 @@ s32 EnInvadepoh_Alien_AddKill(void) {
         killCount++;
         EnInvadepoh_Alien_SetKillCount(killCount);
     }
+
     return killCount;
 }
 
+/**
+ * Sets the alien's spawn time with a delay based on how many aliens the player has already killed. As the player kills
+ * more aliens, the delay gets shorter and shorter; once the player has killed `MAX_KILL_COUNT` number of aliens, the
+ * delay will become zero and aliens will instantly respawn after being defeated.
+ */
 void EnInvadepoh_Alien_SetRespawnTime(s32 index) {
     s32 currentTime = CURRENT_TIME;
 
@@ -416,10 +425,11 @@ s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
             break;
         }
     }
+
     return i;
 }
 
-void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f* pathPosition) {
+void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f* pos) {
     f32 curPathLength = 0.0f;
     f32 curCheckpoint = 0.0f;
     f32 invPathLength = 1.0f / this->pathLength;
@@ -440,22 +450,25 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
         pathSegLength = Math3D_Vec3fMagnitude(&curToNext);
         nextPathLength = curPathLength + pathSegLength;
         nextCheckpoint = nextPathLength * invPathLength;
+
         if (this->pathProgress <= nextCheckpoint) {
             *currentPoint = i;
             segmentProgress = (this->pathProgress - curCheckpoint) / (nextCheckpoint - curCheckpoint);
-            pathPosition->x = (segmentProgress * curToNext.x) + curPathPoint->x;
-            pathPosition->y = (segmentProgress * curToNext.y) + curPathPoint->y;
-            pathPosition->z = (segmentProgress * curToNext.z) + curPathPoint->z;
+            pos->x = (segmentProgress * curToNext.x) + curPathPoint->x;
+            pos->y = (segmentProgress * curToNext.y) + curPathPoint->y;
+            pos->z = (segmentProgress * curToNext.z) + curPathPoint->z;
             return;
         }
+
         curPathPoint = nextPathPoint++;
         curPathLength = nextPathLength;
         curCheckpoint = nextCheckpoint;
     }
+
     *currentPoint = endPoint;
-    pathPosition->x = this->pathPoints[endPoint].x;
-    pathPosition->y = this->pathPoints[endPoint].y;
-    pathPosition->z = this->pathPoints[endPoint].z;
+    pos->x = this->pathPoints[endPoint].x;
+    pos->y = this->pathPoints[endPoint].y;
+    pos->z = this->pathPoints[endPoint].z;
 }
 
 void EnInvadepoh_Alien_TurnToPath(EnInvadepoh* this, s16 step, s16 offset) {
@@ -514,6 +527,7 @@ f32 EnInvadepoh_GetPathLength(EnInvadepoh* this) {
         Math_Vec3s_ToVec3f(&curPathVec, curPathPoint);
         pathLength += Math3D_Distance(&prevPathVec, &curPathVec);
     }
+
     return pathLength;
 }
 
@@ -565,6 +579,7 @@ s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* this, f32 highValue, f32 lowValue) {
     if ((distAlongPath < 0.0f) || (pathSegmentLength < distAlongPath)) {
         return false;
     }
+
     return true;
 }
 
@@ -580,11 +595,13 @@ s32 EnInvadepoh_Dog_FindClosestWaypoint(EnInvadepoh* this, Vec3f* pos) {
     for (waypoint = 0, pathPoint = this->pathPoints; waypoint < endPoint; waypoint++, pathPoint++) {
         Math_Vec3s_ToVec3f(&pathPoint3f, pathPoint);
         pointToPos = Math3D_Vec3fDistSq(&pathPoint3f, pos);
+
         if (pointToPos < minDist) {
             minDist = pointToPos;
             closestPoint = waypoint;
         }
     }
+
     return closestPoint;
 }
 
@@ -600,11 +617,13 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
             this->pathProgress = 0.0f;
         } else {
             this->pathProgress = (currentTime - warpInTime) * (1.0f / 3600.0f);
+
             if (this->pathProgress > 1.0f) {
                 this->pathProgress = 1.0f;
             }
         }
     }
+
     this->currentPoint = EnInvadepoh_Alien_GetCurrentPoint(this);
 }
 
@@ -621,11 +640,13 @@ void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
     Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
     pathPoint++;
     pathCheckpoints = this->pathCheckpoints;
+
     for (i = 1; i < endPoint; i++, pathPoint++, pathCheckpoints++) {
         Math_Vec3f_Copy(&prevPathPoint, &pathPointF);
         Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
         pathPointLength += Math3D_Distance(&prevPathPoint, &pathPointF);
         *pathCheckpoints = pathPointLength * invPathLength;
+
         if (*pathCheckpoints < 0.0f) {
             *pathCheckpoints = 0.0f;
         } else if (*pathCheckpoints > 1.0f) {
@@ -686,6 +707,7 @@ void EnInvadepoh_Dog_SetupPath(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Dog_SetNextPathPoint(EnInvadepoh* this) {
     this->currentPoint += this->pathStep;
+
     if (this->currentPoint >= this->endPoint) {
         this->currentPoint = 0;
     } else if (this->currentPoint < 0) {
@@ -752,7 +774,9 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
                 this->actor.velocity.y += 2.0f;
                 this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 30.0f);
             }
+
             this->actor.world.pos.y = this->actor.velocity.y + yPosTemp;
+
             if (this->actor.floorHeight < this->actor.world.pos.y) {
                 this->actor.world.pos.y = this->actor.floorHeight;
             }
@@ -762,7 +786,9 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
             } else {
                 this->actor.velocity.y -= 2.0f;
             }
+
             this->actor.world.pos.y = this->actor.velocity.y + yPosTemp;
+
             if (this->actor.world.pos.y < this->actor.floorHeight) {
                 this->actor.world.pos.y = this->actor.floorHeight;
                 this->actor.velocity.y = CLAMP_MIN(this->actor.velocity.y, -30.0f);
@@ -784,6 +810,7 @@ void EnInvadepoh_Alien_Knockback(EnInvadepoh* this, PlayState* play) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speed *= 0.8f;
     }
+
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
@@ -896,16 +923,18 @@ void EnInvadepoh_Night3Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* p
 }
 
 void EnInvadepoh_Romani_DesegmentTextures(void) {
-    TexturePtr* texPtr;
+    TexturePtr* texture;
     s32 i;
 
     if (!sRomaniTexturesDesegmented) {
         sRomaniTexturesDesegmented = true;
-        for (i = 0, texPtr = sRomaniEyeTextures; i < 5; i++, texPtr++) {
-            *texPtr = Lib_SegmentedToVirtual(*texPtr);
+
+        for (i = 0, texture = sRomaniEyeTextures; i < 5; i++, texture++) {
+            *texture = Lib_SegmentedToVirtual(*texture);
         }
-        for (i = 0, texPtr = sRomaniMouthTextures; i < 4; i++, texPtr++) {
-            *texPtr = Lib_SegmentedToVirtual(*texPtr);
+
+        for (i = 0, texture = sRomaniMouthTextures; i < 4; i++, texture++) {
+            *texture = Lib_SegmentedToVirtual(*texture);
         }
     }
 }
@@ -916,9 +945,11 @@ void EnInvadepoh_Cremia_DesegmentTextures(void) {
 
     if (!sCremiaTexturesDesegmented) {
         sCremiaTexturesDesegmented = true;
+
         for (i = 0, texture = sCremiaEyeTextures; i < 6; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
+
         for (i = 0, texture = sCremiaMouthTextures; i < 4; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
@@ -953,6 +984,7 @@ s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this) {
         this->actor.world.pos.y = this->actor.floorHeight;
         return true;
     }
+
     return false;
 }
 
@@ -975,11 +1007,13 @@ void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) 
 
                     firstSpawn = MIN(spawnTime, firstSpawn);
                 }
+
                 if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
                     sEventState = EN_INVADEPOH_EVENT_ACTIVE;
                 }
             }
         }
+
         if (sEventState == EN_INVADEPOH_EVENT_UNSET) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 sEventState = EN_INVADEPOH_EVENT_CLEAR;
@@ -998,6 +1032,7 @@ void EnInvadepoh_InvasionHandler_SpawnAliens(EnInvadepoh* this, PlayState* play)
         sAliens[i] = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
                                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
                                                EN_INVADEPOH_PARAMS(pathIndex, EN_INVADEPOH_TYPE_ALIEN, i));
+
         if (pathIndex != EN_INVADEPOH_PATH_INDEX_NONE) {
             Path* path = &play->setupPathList[pathIndex];
 
@@ -1040,6 +1075,7 @@ s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 rangeSq,
     while (doorActor != NULL) {
         if ((doorActor->id == ACTOR_EN_DOOR) && (doorActor->update != NULL)) {
             door = (EnDoor*)doorActor;
+
             if ((door->knobDoor.dyna.actor.room == this->actor.room) &&
                 (Math3D_Vec3fDistSq(&door->knobDoor.dyna.actor.world.pos, &this->actor.world.pos) < rangeSq)) {
 
@@ -1048,8 +1084,10 @@ s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 rangeSq,
                 break;
             }
         }
+
         doorActor = doorActor->next;
     }
+
     return doorOpened;
 }
 
@@ -1083,6 +1121,7 @@ s32 EnInvadepoh_Alien_LensFlareDepthCheck(PlayState* play, Vec3f* pos) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -1100,6 +1139,7 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
                 closestAlienIndex = i;
             }
         }
+
         sAlienStateFlags[i] &= ~ALIEN_STATE_FLAG_CLOSEST;
     }
 
@@ -1107,6 +1147,7 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
 
     if (minDistSqToBarn <= SQ(2000.0f)) {
         sAlienStateFlags[closestAlienIndex] |= ALIEN_STATE_FLAG_CLOSEST;
+
         if (minDistSqToBarn <= SQ(340.0f)) {
             sAliensTooClose = true;
         }
