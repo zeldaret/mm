@@ -14124,7 +14124,7 @@
     0x80B43460:("D_80B43460","f32","",0x4),
     0x80B4E890:("En_Invadepoh_InitVars","ActorInit","",0x20),
     0x80B4E8B0:("sAlienCylinderInit","ColliderCylinderInit","",0x2C),
-    0x80B4E8DC:("sHumanCylinderInit","ColliderCylinderInit","",0x2C),
+    0x80B4E8DC:("sRomaniAndCremiaCylinderInit","ColliderCylinderInit","",0x2C),
     0x80B4E908:("sDogCylinderInit","ColliderCylinderInit","",0x2C),
     0x80B4E934:("sUfoSpawnOffset","Vec3f","",0xC),
     0x80B4E940:("sEventState","s32","",0x4),

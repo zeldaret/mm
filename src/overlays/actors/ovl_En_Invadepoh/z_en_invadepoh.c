@@ -204,7 +204,7 @@ ActorInit En_Invadepoh_InitVars = {
     (ActorFunc)NULL,
 };
 
-ColliderCylinderInit sAlienCylinderInit = {
+static ColliderCylinderInit sAlienCylinderInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -224,7 +224,7 @@ ColliderCylinderInit sAlienCylinderInit = {
     { 40, 95, 10, { 0, 0, 0 } },
 };
 
-ColliderCylinderInit sHumanCylinderInit = {
+static ColliderCylinderInit sRomaniAndCremiaCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -244,7 +244,7 @@ ColliderCylinderInit sHumanCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-ColliderCylinderInit sDogCylinderInit = {
+static ColliderCylinderInit sDogCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -264,9 +264,9 @@ ColliderCylinderInit sDogCylinderInit = {
     { 13, 19, 0, { 0, 0, 0 } },
 };
 
-Vec3f sUfoSpawnOffset = { 216.0f, -20.0f, 1395.0f };
+static Vec3f sUfoSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
-s32 sEventState = EN_INVADEPOH_EVENT_UNSET;
+static s32 sEventState = EN_INVADEPOH_EVENT_UNSET;
 
 typedef enum RomaniEyeTexture {
     /* 0 */ ROMANI_EYE_OPEN,
@@ -277,7 +277,7 @@ typedef enum RomaniEyeTexture {
     /* 5 */ ROMANI_EYE_MAX
 } RomaniEyeTexture;
 
-TexturePtr sRomaniEyeTextures[ROMANI_EYE_MAX] = {
+static TexturePtr sRomaniEyeTextures[ROMANI_EYE_MAX] = {
     gRomaniEyeOpenTex,   // ROMANI_EYE_OPEN
     gRomaniEyeHalfTex,   // ROMANI_EYE_HALF
     gRomaniEyeClosedTex, // ROMANI_EYE_CLOSED
@@ -293,14 +293,14 @@ typedef enum RomaniMouthTexture {
     /* 4 */ ROMANI_MOUTH_MAX
 } RomaniMouthTexture;
 
-TexturePtr sRomaniMouthTextures[ROMANI_MOUTH_MAX] = {
+static TexturePtr sRomaniMouthTextures[ROMANI_MOUTH_MAX] = {
     gRomaniMouthHappyTex,       // ROMANI_MOUTH_HAPPY
     gRomaniMouthFrownTex,       // ROMANI_MOUTH_FROWN
     gRomaniMouthHangingOpenTex, // ROMANI_MOUTH_HANGING_OPEN
     gRomaniMouthSmileTex,       // ROMANI_MOUTH_SMILE
 };
 
-s8 sRomaniTexturesDesegmented = false;
+static s8 sRomaniTexturesDesegmented = false;
 
 typedef enum CremiaEyeTexture {
     /* 0 */ CREMIA_EYE_OPEN,
@@ -312,7 +312,7 @@ typedef enum CremiaEyeTexture {
     /* 6 */ CREMIA_EYE_MAX
 } CremiaEyeTexture;
 
-TexturePtr sCremiaEyeTextures[CREMIA_EYE_MAX] = {
+static TexturePtr sCremiaEyeTextures[CREMIA_EYE_MAX] = {
     gCremiaEyeOpenTex,   // CREMIA_EYE_OPEN
     gCremiaEyeHalfTex,   // CREMIA_EYE_HALF
     gCremiaEyeClosedTex, // CREMIA_EYE_CLOSED
@@ -329,16 +329,16 @@ typedef enum CremiaMouthTexture {
     /* 4 */ CREMIA_MOUTH_MAX
 } CremiaMouthTexture;
 
-TexturePtr sCremiaMouthTextures[CREMIA_MOUTH_MAX] = {
+static TexturePtr sCremiaMouthTextures[CREMIA_MOUTH_MAX] = {
     gCremiaMouthNormalTex,      // CREMIA_MOUTH_NORMAL
     gCremiaMouthSlightSmileTex, // CREMIA_MOUTH_SLIGHT_SMILE
     gCremiaMouthFrownTex,       // CREMIA_MOUTH_FROWN
     gCremiaMouthHangingOpenTex, // CREMIA_MOUTH_HANGING_OPEN
 };
 
-s8 sCremiaTexturesDesegmented = false;
+static s8 sCremiaTexturesDesegmented = false;
 
-s8 sRewardFinished = false;
+static s8 sRewardFinished = false;
 
 MtxF sAlienLeftEyeBeamMtxF;
 MtxF sAlienRightEyeBeamMtxF;
@@ -362,56 +362,25 @@ AnimatedMaterial* sAlienEmptyTexAnim;
 s16 sInvadepohCsIdList[3];
 EnInvadepoh* sClosestAlien;
 
-#define BITPACK(field, value, width, offset) \
-    (((field) & ~(((1 << (width)) - 1) << (offset))) | (((value) & ((1 << (width)) - 1)) << (offset)))
-#define BITUNPACK(field, width, offset) (((field) & (((1 << width) - 1) << (offset))) >> (offset))
+void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
+    spawnTime -= CLOCK_TIME(2, 30);
+    spawnTime = CLAMP_MIN(spawnTime, 0);
 
-#define PACK_U16_INTO_U32_ARRAY(u32array, index, value)                          \
-    if (((index) % 2) == 0) {                                                    \
-        u32array[(index) >> 1] = BITPACK(u32array[(index) >> 1], value, 16, 0);  \
-    } else {                                                                     \
-        u32array[(index) >> 1] = BITPACK(u32array[(index) >> 1], value, 16, 16); \
-    }                                                                            \
-    (void)0
-
-#define UNPACK_U16_FROM_U32_ARRAY(var, u32array, index)  \
-    if (((index) % 2) == 0) {                            \
-        var = BITUNPACK(u32array[(index) >> 1], 16, 0);  \
-    } else {                                             \
-        var = BITUNPACK(u32array[(index) >> 1], 16, 16); \
-    }                                                    \
-    (void)0
-
-void EnInvadepoh_Alien_SetSpawnTime(s32 alienIndex, s32 warpTime) {
-    warpTime -= CLOCK_TIME(2, 30);
-    warpTime = CLAMP_MIN(warpTime, 0);
-
-    if ((alienIndex % 2) == 0) {
-        gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] =
-            (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & ~0xFFFF) | (warpTime & 0xFFFF);
-    } else {
-        gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] =
-            (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & 0xFFFF) | ((warpTime & 0xFFFF) << 0x10);
-    }
+    ALIEN_SET_SPAWN_TIME(index, spawnTime);
 }
 
-s32 EnInvadepoh_Alien_GetSpawnTime(s32 alienIndex) {
-    u32 warpTime;
+s32 EnInvadepoh_Alien_GetSpawnTime(s32 index) {
+    u32 spawnTime = ALIEN_GET_SPAWN_TIME(index);
 
-    if ((alienIndex % 2) == 0) {
-        warpTime = gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & 0xFFFF;
-    } else {
-        warpTime = (gSaveContext.save.saveInfo.unk_E64[alienIndex >> 1] & ~0xFFFF) >> 0x10;
-    }
-    return warpTime + CLOCK_TIME(2, 30);
+    return spawnTime + CLOCK_TIME(2, 30);
 }
 
 void EnInvadepoh_Alien_SetKillCount(s32 count) {
-    gSaveContext.save.saveInfo.unk_E64[4] = (gSaveContext.save.saveInfo.unk_E64[4] & ~0xFF) | (count & 0xFF);
+    ALIEN_SET_KILL_COUNT(count);
 }
 
 s32 EnInvadepoh_Alien_GetKillCount(void) {
-    return gSaveContext.save.saveInfo.unk_E64[4] & 0xFF;
+    return ALIEN_GET_KILL_COUNT();
 }
 
 s32 EnInvadepoh_Alien_AddKill(void) {
@@ -424,13 +393,13 @@ s32 EnInvadepoh_Alien_AddKill(void) {
     return killCount;
 }
 
-void EnInvadepoh_Alien_SetRespawnTime(s32 alienIndex) {
+void EnInvadepoh_Alien_SetRespawnTime(s32 index) {
     s32 currentTime = CURRENT_TIME;
 
     if ((CURRENT_DAY == 1) && (currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(5, 15))) {
         s32 spawnDelay = (12 - EnInvadepoh_Alien_GetKillCount()) * 25.0f;
 
-        EnInvadepoh_Alien_SetSpawnTime(alienIndex, currentTime + spawnDelay);
+        EnInvadepoh_Alien_SetSpawnTime(index, currentTime + spawnDelay);
     }
 }
 
@@ -1581,7 +1550,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sAlienInitChain[] = {
+static InitChainEntry sAlienInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),
@@ -1612,7 +1581,7 @@ void EnInvadepoh_Alien_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sCowInitChain[] = {
+static InitChainEntry sCowInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
@@ -1631,7 +1600,7 @@ void EnInvadepoh_Cow_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sCowTailInitChain[] = {
+static InitChainEntry sCowTailInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
@@ -1648,7 +1617,7 @@ void EnInvadepoh_CowTail_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sRomaniInitChain[] = {
+static InitChainEntry sRomaniInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
@@ -1670,7 +1639,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     if (romaniType != EN_INVADEPOH_TYPE_ROMANI_ABDUCTED) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-        Collider_SetCylinder(play, &this->collider, &this->actor, &sHumanCylinderInit);
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sRomaniAndCremiaCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
 
@@ -1716,7 +1685,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sUfoInitChain[] = {
+static InitChainEntry sUfoInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
@@ -1740,7 +1709,7 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sDogInitChain[] = {
+static InitChainEntry sDogInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),  ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),   ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
@@ -1762,7 +1731,7 @@ void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-InitChainEntry sCremiaInitChain[] = {
+static InitChainEntry sCremiaInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
@@ -1775,7 +1744,7 @@ void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
     this->actor.update = EnInvadepoh_Night3Cremia_WaitForObject;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &sHumanCylinderInit);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sRomaniAndCremiaCylinderInit);
     this->actor.colChkInfo.mass = MASS_HEAVY;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
 
