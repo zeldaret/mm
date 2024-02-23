@@ -326,8 +326,8 @@ void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
 
     this->textIdIndex = 0;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_60_10)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
             this->textIdIndex = 21;
             this->visualState = 5;
             EnDt_UpdateVisualState(this);
@@ -340,7 +340,7 @@ void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
             this->actionFunc = EnDt_UpdateMeetingCutscene;
             return;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         this->textIdIndex = 23;
         this->visualState = 5;
         this->meetingFinished = true;
@@ -349,19 +349,19 @@ void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
     }
 
     if (this->visualState == 0) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->textIdIndex = 9;
             this->visualState = 2;
         }
 
         EnDt_UpdateVisualState(this);
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->visualState = 1;
         }
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         EnDt_UpdateCutsceneFocusTarget(this);
     }
 
@@ -378,7 +378,7 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
         return;
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         if (this->npcEnMuto != NULL && this->npcEnBaisen) {
             npcMuto = (EnMuto*)this->npcEnMuto;
             npcBaisen = (EnBaisen*)this->npcEnBaisen;
@@ -395,19 +395,19 @@ void EnDt_OfferRegularTalk(EnDt* this, PlayState* play) {
                 npcMuto->textIdIndex = 4;
                 npcBaisen->textIdIndex = 6;
             }
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->textIdIndex = 9;
         }
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && this->npcEnMuto != NULL && this->npcEnBaisen != NULL &&
-        (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && this->npcEnMuto != NULL &&
+        this->npcEnBaisen != NULL && (npcMuto->cutsceneState == 1 || npcBaisen->cutsceneState == 1)) {
         EnDt_SetupMeetingCutscene(this, play);
     }
 
     // After completing Couple's Mask event and wearing Kafeis Mask
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2368; // "My wife hired you? Go ask the Curiosity Shop"
     }
 
@@ -420,7 +420,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
     s32 index;
     s16* pTextData;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         if (this->npcEnMuto != NULL && this->npcEnBaisen != NULL) {
             npcMuto = (EnMuto*)this->npcEnMuto;
             npcBaisen = (EnBaisen*)this->npcEnBaisen;
@@ -434,7 +434,7 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
                 npcMuto->textIdIndex = 4;
                 npcBaisen->textIdIndex = 6;
                 this->visualState = 5;
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
                     this->visualState = 4;
                 }
                 EnDt_UpdateVisualState(this);
@@ -479,7 +479,8 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
         this->cutsceneState = EN_DT_CS_STATE_PLAYING;
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && (this->npcEnMuto != NULL || this->npcEnBaisen != NULL)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
+        (this->npcEnMuto != NULL || this->npcEnBaisen != NULL)) {
         muto = (EnMuto*)this->npcEnMuto;
         baisen = (EnBaisen*)this->npcEnBaisen;
     }
@@ -503,7 +504,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
             Scene_SetExitFade(play);
             play->transitionTrigger = TRANS_TRIGGER_START;
 
-            SET_WEEKEVENTREG(WEEKEVENTREG_63_80);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING);
             this->meetingFinished = true;
 
             if (this->cutsceneState == EN_DT_CS_STATE_PLAYING) {
@@ -514,11 +515,11 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
             // At the end of each cutscene dialog, trigger an event flag
             if ((this->textIdIndex == 8) || (this->textIdIndex == 10) || (this->textIdIndex == 22) ||
                 (this->textIdIndex == 23)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_60_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING);
                 Message_CloseTextbox(play);
 
                 // If the meeting is ongoing, reset all of the npc targets
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
                     if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
                         muto->cutsceneState = 2;
                         baisen->cutsceneState = 2;
@@ -552,7 +553,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
             }
 
             if (this->textIdIndex == 12) { // Mayor reacts to Couple's mask
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
                     EnDt_UpdateVisualState(this);
                     this->timer = 25;
                 } else {
@@ -668,7 +669,7 @@ void EnDt_TriggerMeetingRewardEvent(EnDt* this, PlayState* play) {
 
         Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
 
-        SET_WEEKEVENTREG(WEEKEVENTREG_60_10);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD);
         this->actionFunc = EnDt_TriggerMeetingNotebookEvent;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -694,7 +695,7 @@ void EnDt_SetupFinalNightState(EnDt* this, PlayState* play) {
     this->textIdIndex = 24;
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_PERSON_MAYOR_DOTOUR);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3)) {
         this->textIdIndex = 26;
     }
 
@@ -714,7 +715,7 @@ void EnDt_OfferFinalNightTalk(EnDt* this, PlayState* play) {
     }
 
     // After completing Couple's Mask event and wearing Kafeis Mask
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         this->actor.textId = 0x2368; // "My wife hired you? Go ask the Curiosity Shop"
     }
 
@@ -731,10 +732,10 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_60_40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3)) {
             this->textIdIndex = 25;
             Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
-            SET_WEEKEVENTREG(WEEKEVENTREG_60_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3);
         } else {
             EnDt_SetupFinalNightState(this, play);
         }
@@ -752,7 +753,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
         EnDt_SetupFinalNightState(this, play);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
         (gSaveContext.save.day != 3 || (gSaveContext.save.day == 3 && !gSaveContext.save.isNight))) {
         Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &gSfxDefaultPos, NA_BGM_MAYORS_OFFICE, 1000.0f);
         Actor_PlaySfx(&this->actor, NA_SE_EV_CROWD - SFX_FLAG);
