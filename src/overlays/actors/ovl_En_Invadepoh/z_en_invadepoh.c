@@ -37,8 +37,12 @@
 
 #define THIS ((EnInvadepoh*)thisx)
 
-#define EN_INVADEPOH_ALIEN_ACTIVE (1 << 0)
-#define EN_INVADEPOH_ALIEN_CLOSEST (1 << 1)
+#define ALIEN_COUNT 8
+#define EFFECT_COUNT 10
+#define MAX_KILL_COUNT 12
+
+#define ALIEN_STATE_FLAG_ACTIVE (1 << 0)
+#define ALIEN_STATE_FLAG_CLOSEST (1 << 1)
 
 typedef enum EnInvadepohEventState {
     /* 0 */ EN_INVADEPOH_EVENT_UNSET,
@@ -342,8 +346,8 @@ static s8 sRewardFinished = false;
 
 MtxF sAlienLeftEyeBeamMtxF;
 MtxF sAlienRightEyeBeamMtxF;
-EnInvadepoh* sAliens[8];
-u8 sAlienStateFlags[8];
+EnInvadepoh* sAliens[ALIEN_COUNT];
+u8 sAlienStateFlags[ALIEN_COUNT];
 s8 sAliensTooClose;
 
 typedef struct EnInvadepohWarpEffect {
@@ -353,7 +357,7 @@ typedef struct EnInvadepohWarpEffect {
     /* 0x4 */ Vec3f pos;
 } EnInvadepohWarpEffect; // size = 0x10
 
-EnInvadepohWarpEffect sWarpEffects[10];
+EnInvadepohWarpEffect sWarpEffects[EFFECT_COUNT];
 EnInvadepoh* sUfo;
 EnInvadepoh* sRomani;
 EnInvadepoh* sCremia;
@@ -386,7 +390,7 @@ s32 EnInvadepoh_Alien_GetKillCount(void) {
 s32 EnInvadepoh_Alien_AddKill(void) {
     s32 killCount = EnInvadepoh_Alien_GetKillCount();
 
-    if (killCount < 12) {
+    if (killCount < MAX_KILL_COUNT) {
         killCount++;
         EnInvadepoh_Alien_SetKillCount(killCount);
     }
@@ -397,7 +401,7 @@ void EnInvadepoh_Alien_SetRespawnTime(s32 index) {
     s32 currentTime = CURRENT_TIME;
 
     if ((CURRENT_DAY == 1) && (currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(5, 15))) {
-        s32 spawnDelay = (12 - EnInvadepoh_Alien_GetKillCount()) * 25.0f;
+        s32 spawnDelay = (MAX_KILL_COUNT - EnInvadepoh_Alien_GetKillCount()) * 25.0f;
 
         EnInvadepoh_Alien_SetSpawnTime(index, currentTime + spawnDelay);
     }
@@ -1096,13 +1100,13 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
                 closestAlienIndex = i;
             }
         }
-        sAlienStateFlags[i] &= ~EN_INVADEPOH_ALIEN_CLOSEST;
+        sAlienStateFlags[i] &= ~ALIEN_STATE_FLAG_CLOSEST;
     }
 
     sAliensTooClose = false;
 
     if (minDistSqToBarn <= SQ(2000.0f)) {
-        sAlienStateFlags[closestAlienIndex] |= EN_INVADEPOH_ALIEN_CLOSEST;
+        sAlienStateFlags[closestAlienIndex] |= ALIEN_STATE_FLAG_CLOSEST;
         if (minDistSqToBarn <= SQ(340.0f)) {
             sAliensTooClose = true;
         }
@@ -1112,8 +1116,8 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
 EnInvadepoh* EnInvadepoh_Dog_GetClosestAlien(void) {
     s32 i;
 
-    for (i = 0; i < 8; i++) {
-        if (sAlienStateFlags[i] & EN_INVADEPOH_ALIEN_CLOSEST) {
+    for (i = 0; i < ALIEN_COUNT; i++) {
+        if (sAlienStateFlags[i] & ALIEN_STATE_FLAG_CLOSEST) {
             return sAliens[i];
         }
     }
@@ -1461,7 +1465,7 @@ s32 EnInvadepoh_Alien_SpawnWarp(Vec3f* spawnPos) {
     EnInvadepohWarpEffect* warpEffect = sWarpEffects;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sWarpEffects); i++, warpEffect++) {
+    for (i = 0; i < EFFECT_COUNT; i++, warpEffect++) {
         if (warpEffect->timer <= 0) {
             warpEffect->type = 0;
             warpEffect->timer = 40;
@@ -1495,7 +1499,7 @@ s32 EnInvadepoh_InvasionHandler_UpdateWarps(void) {
     s32 i;
     EnInvadepohWarpEffect* warpEffect;
 
-    for (i = 0, warpEffect = sWarpEffects; i < 10; i++, warpEffect++) {
+    for (i = 0, warpEffect = sWarpEffects; i < EFFECT_COUNT; i++, warpEffect++) {
         if (warpEffect->timer > 0) {
             sWarpEffectUpdateFuncs[warpEffect->type](warpEffect);
             warpActive = true;
@@ -1512,7 +1516,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_20;
     pathIndex = EN_INVADEPOH_GET_PATH(&this->actor);
 
-    for (alienCount = 1; alienCount < 8; alienCount++) {
+    for (alienCount = 1; alienCount < ALIEN_COUNT; alienCount++) {
         Path* path = &play->setupPathList[pathIndex];
 
         pathIndex = path->additionalPathIndex;
@@ -1901,14 +1905,14 @@ void EnInvadepoh_InvasionHandler_SetupInvasionCs(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_InvasionHandler_InvasionCs(EnInvadepoh* this, PlayState* play) {
-    static s16 sAlienSpawnTimes[] = {
+    static s16 sAlienSpawnTimes[ALIEN_COUNT] = {
         130, 125, 115, 100, 80, 78, 76, 74,
     };
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sAlienSpawnTimes); i++) {
         if (this->timer == sAlienSpawnTimes[i]) {
-            sAlienStateFlags[i] |= EN_INVADEPOH_ALIEN_ACTIVE;
+            sAlienStateFlags[i] |= ALIEN_STATE_FLAG_ACTIVE;
         }
     }
 
@@ -2055,7 +2059,7 @@ void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
 
-    if (sAlienStateFlags[EN_INVADEPOH_GET_INDEX(&this->actor)] & EN_INVADEPOH_ALIEN_ACTIVE) {
+    if (sAlienStateFlags[EN_INVADEPOH_GET_INDEX(&this->actor)] & ALIEN_STATE_FLAG_ACTIVE) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
         EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
@@ -4355,7 +4359,7 @@ void EnInvadepoh_InvasionHandler_DrawWarps(PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    for (i = 0, warpEffect = sWarpEffects; i < 10; i++, warpEffect++) {
+    for (i = 0, warpEffect = sWarpEffects; i < EFFECT_COUNT; i++, warpEffect++) {
         if (warpEffect->timer > 0) {
             u32 warpScrollX1 = (play->gameplayFrames + (u8)(i * 0x10)) % 0x80;
             u32 warpScrollY2 = (play->gameplayFrames * -0xF) % 0x100;
