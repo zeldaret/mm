@@ -200,7 +200,7 @@ static TexturePtr sEyeTextures[] = {
     gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex, gDotourEyeSquintTex,
 };
 
-static TexturePtr sBrowTextures[] = {
+static TexturePtr sEyebrowTextures[] = {
     gDotourEyebrowHighTex,
     gDotourEyebrowMidTex,
     gDotourEyebrowLowTex,
@@ -219,7 +219,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
     this->npcEnBaisen = NULL;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    if ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
+    if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         EnDt_SetupFinalNightState(this, play);
     } else {
         s32 csId = this->actor.csId;
@@ -292,15 +292,20 @@ void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
                 npcEnBaisen->targetActor = this->npcEnMuto;
                 this->targetActor = this->npcEnMuto;
                 break;
+
             case EN_DT_CS_FOCUS_TARGET_BAISEN:
                 npcEnMuto->targetActor = this->npcEnBaisen;
                 npcEnBaisen->targetActor = this->npcEnBaisen;
                 this->targetActor = this->npcEnBaisen;
                 break;
+
             case EN_DT_CS_FOCUS_TARGET_MAYOR:
                 npcEnMuto->targetActor = &this->actor;
                 npcEnBaisen->targetActor = &this->actor;
                 this->targetActor = &this->actor;
+                break;
+
+            default:
                 break;
         }
     }
@@ -322,8 +327,6 @@ void EnDt_SetupCutsceneNpcs(EnDt* this, PlayState* play) {
 }
 
 void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
-    u32 textId;
-
     this->textIdIndex = 0;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD)) {
@@ -418,7 +421,6 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
     EnMuto* npcMuto;
     EnBaisen* npcBaisen;
     s32 index;
-    s16* pTextData;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         if ((this->npcEnMuto != NULL) && (this->npcEnBaisen != NULL)) {
@@ -617,7 +619,7 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
     } else if (this->animEndFrame <= currFrame) {
         Camera* subCam;
         s32 index;
-        s32 currCsIndex = sStringIdCsIndexTable[this->csIdIndex + 1];
+        s32 csIdIndex = sStringIdCsIndexTable[this->csIdIndex + 1];
 
         EnDt_UpdateVisualState(this);
 
@@ -639,9 +641,9 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
         }
 
         index = sStringIdCsIndexTable[this->csIdIndex + 1];
-        if ((this->cutsceneState == EN_DT_CS_STATE_PLAYING) && (index != currCsIndex)) {
+        if ((this->cutsceneState == EN_DT_CS_STATE_PLAYING) && (index != csIdIndex)) {
             this->cutsceneState = EN_DT_CS_STATE_WAITING;
-            CutsceneManager_Stop(this->csIds[currCsIndex]);
+            CutsceneManager_Stop(this->csIds[csIdIndex]);
             CutsceneManager_Queue(this->csIds[index]);
         }
 
@@ -695,7 +697,7 @@ void EnDt_SetupFinalNightState(EnDt* this, PlayState* play) {
     this->textIdIndex = 24;
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_PERSON_MAYOR_DOTOUR);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_MAYOR_NIGHT_3)) {
         this->textIdIndex = 26;
     }
 
@@ -732,10 +734,10 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_MAYOR_NIGHT_3)) {
             this->textIdIndex = 25;
             Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
-            SET_WEEKEVENTREG(WEEKEVENTREG_SPOKE_WITH_MAYOR_ON_NIGHT_3);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_MAYOR_NIGHT_3);
         } else {
             EnDt_SetupFinalNightState(this, play);
         }
@@ -743,8 +745,8 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
 }
 
 void EnDt_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnDt* this = THIS;
-    ColliderCylinder* collider;
 
     SkelAnime_Update(&this->skelAnime);
     Actor_SetScale(&this->actor, 0.01f);
@@ -754,7 +756,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
-        (gSaveContext.save.day != 3 || (gSaveContext.save.day == 3 && !gSaveContext.save.isNight))) {
+        ((gSaveContext.save.day != 3) || ((gSaveContext.save.day == 3) && !gSaveContext.save.isNight))) {
         Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &gSfxDefaultPos, NA_BGM_MAYORS_OFFICE, 1000.0f);
         Actor_PlaySfx(&this->actor, NA_SE_EV_CROWD - SFX_FLAG);
     }
@@ -783,9 +785,8 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 60.0f);
     Actor_MoveWithGravity(&this->actor);
 
-    collider = &this->collider;
-    Collider_UpdateCylinder(&this->actor, collider);
-    CollisionCheck_SetOC(play, &play->colChkCtx, &collider->base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 EnDt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -813,7 +814,7 @@ void EnDt_Draw(Actor* thisx, PlayState* play) {
         eyebrowIndex = this->eyeTexIndex;
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBrowTextures[eyebrowIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyebrowTextures[eyebrowIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDt_OverrideLimbDraw, NULL, &this->actor);
