@@ -16183,7 +16183,7 @@
     0x80BE9C48:("EnDt_Destroy",),
     0x80BE9C74:("EnDt_UpdateHeadRotate",),
     0x80BE9CE8:("EnDt_ChangeAnim",),
-    0x80BE9D9C:("EnDt_UpdateVisualState",),
+    0x80BE9D9C:("EnDt_UpdateAppearance",),
     0x80BE9DF8:("EnDt_UpdateCutsceneFocusTarget",),
     0x80BE9E94:("EnDt_SetupCutsceneNpcs",),
     0x80BE9EF8:("EnDt_SetupRegularState",),

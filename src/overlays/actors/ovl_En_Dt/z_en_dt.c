@@ -35,7 +35,7 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play);
 void EnDt_TriggerMeetingRewardEvent(EnDt* this, PlayState* play);
 void EnDt_TriggerMeetingNotebookEvent(EnDt* this, PlayState* play);
 void EnDt_SetupFinalNightState(EnDt* this, PlayState* play);
-void EnDt_UpdateVisualState(EnDt* this);
+void EnDt_UpdateAppearance(EnDt* this);
 void EnDt_StartFinalNightTalk(EnDt* this);
 void EnDt_UpdateCutsceneFocusTarget(EnDt* this);
 
@@ -61,12 +61,22 @@ typedef enum {
 } EnDtCutsceneFocusTarget;
 
 typedef enum {
-    /* 0 */ EN_DT_ANIMATION_0,
-    /* 1 */ EN_DT_ANIMATION_1,
-    /* 2 */ EN_DT_ANIMATION_2,
-    /* 3 */ EN_DT_ANIMATION_3,
-    /* 4 */ EN_DT_ANIMATION_4,
-    /* 5 */ EN_DT_ANIMATION_5,
+    /* 0 */ EN_DT_APPEARANCE_DEFAULT,
+    /* 1 */ EN_DT_APPEARANCE_PRE_MEETING,
+    /* 2 */ EN_DT_APPEARANCE_POST_MEETING,
+    /* 3 */ EN_DT_APPEARANCE_UNUSED,
+    /* 4 */ EN_DT_APPEARANCE_RESOLUTION_TALK,
+    /* 5 */ EN_DT_APPEARANCE_RESOLVED_MEETING,
+    /* 6 */ EN_DT_APPEARANCE_MAX
+} EnDtAppearance;
+
+typedef enum {
+    /* 0 */ EN_DT_ANIMATION_WAIT,
+    /* 1 */ EN_DT_ANIMATION_DISTRESS,
+    /* 2 */ EN_DT_ANIMATION_SHOCK,
+    /* 3 */ EN_DT_ANIMATION_TAP_DESK,
+    /* 4 */ EN_DT_ANIMATION_UPRIGHT,
+    /* 5 */ EN_DT_ANIMATION_SIT_UP,
     /* 6 */ EN_DT_ANIMATION_MAX
 } EnDtAnimation;
 
@@ -179,31 +189,48 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* sAnimations[EN_DT_ANIMATION_MAX] = {
-    &object_dt_Anim_00112C, &object_dt_Anim_0005A4, &object_dt_Anim_000854,
-    &object_dt_Anim_000DA8, &object_dt_Anim_000BE0, &object_dt_Anim_00B500,
+    &object_dt_Anim_00112C, // EN_DT_ANIMATION_WAIT
+    &object_dt_Anim_0005A4, // EN_DT_ANIMATION_DISTRESS
+    &object_dt_Anim_000854, // EN_DT_ANIMATION_SHOCK
+    &object_dt_Anim_000DA8, // EN_DT_ANIMATION_TAP_DESK
+    &object_dt_Anim_000BE0, // EN_DT_ANIMATION_UPRIGHT
+    &object_dt_Anim_00B500, // EN_DT_ANIMATION_SIT_UP
 };
 
 static u8 sAnimationModes[EN_DT_ANIMATION_MAX] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    ANIMMODE_LOOP, // EN_DT_ANIMATION_WAIT
+    ANIMMODE_LOOP, // EN_DT_ANIMATION_DISTRESS
+    ANIMMODE_ONCE, // EN_DT_ANIMATION_SHOCK
+    ANIMMODE_LOOP, // EN_DT_ANIMATION_TAP_DESK
+    ANIMMODE_LOOP, // EN_DT_ANIMATION_UPRIGHT
+    ANIMMODE_ONCE, // EN_DT_ANIMATION_SIT_UP
 };
 
-static s32 sVisualStateTable[] = {
-    0, EN_DT_ANIMATION_1, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  //
-    0, EN_DT_ANIMATION_2, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  //
-    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  //
-    0, EN_DT_ANIMATION_3, EN_DT_EYE_TEXTURE_SHOCK,     false, //
-    0, EN_DT_ANIMATION_5, EN_DT_EYE_TEXTURE_SHOCK,     false, //
-    0, EN_DT_ANIMATION_4, EN_DT_EYE_TEXTURE_SHOCK,     false  //
+// Based on the usage in its accompanying method, this must be an array where each row
+// is 4 values wide. The first value is never used and always 0, while indexes 1, 2,
+// and 3 are the animation index, the eye texture index, and a flag determining if
+// the actor should have a dead-panned expression (not blinking).
+static s32 sAppearancePropertiesTable[] = {
+    0, EN_DT_ANIMATION_DISTRESS, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  // EN_DT_APPEARANCE_DEFAULT
+    0, EN_DT_ANIMATION_SHOCK,    EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  // EN_DT_APPEARANCE_PRE_MEETING
+    0, EN_DT_ANIMATION_TAP_DESK, EN_DT_EYE_TEXTURE_LOOK_DOWN, true,  // EN_DT_APPEARANCE_POST_MEETING
+    0, EN_DT_ANIMATION_TAP_DESK, EN_DT_EYE_TEXTURE_SHOCK,     false, // EN_DT_APPEARANCE_UNUSED
+    0, EN_DT_ANIMATION_SIT_UP,   EN_DT_EYE_TEXTURE_SHOCK,     false, // EN_DT_APPEARANCE_RESOLUTION_TALK
+    0, EN_DT_ANIMATION_UPRIGHT,  EN_DT_EYE_TEXTURE_SHOCK,     false  // EN_DT_APPEARANCE_RESOLVED_MEETING
 };
 
 static TexturePtr sEyeTextures[] = {
-    gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex, gDotourEyeLookDownTex, gDotourEyeSquintTex,
+    gDotourEyeShockTex,    // EN_DT_EYE_TEXTURE_SHOCK
+    gDotourEyeOpenTex,     // EN_DT_EYE_TEXTURE_OPEN
+    gDotourEyeClosedTex,   // EN_DT_EYE_TEXTURE_CLOSED
+    gDotourEyeLookDownTex, // EN_DT_EYE_TEXTURE_LOOK_DOWN
+    gDotourEyeSquintTex,   // EN_DT_EYE_TEXTURE_SQUINT
 };
 
 static TexturePtr sEyebrowTextures[] = {
-    gDotourEyebrowHighTex,
-    gDotourEyebrowMidTex,
-    gDotourEyebrowLowTex,
+    gDotourEyebrowHighTex, // EN_DT_BROW_TEXTURE_HIGH
+    gDotourEyebrowMidTex,  // EN_DT_BROW_TEXTURE_MID
+    gDotourEyebrowLowTex,  // EN_DT_BROW_TEXTURE_LOW
 };
 
 void EnDt_Init(Actor* thisx, PlayState* play) {
@@ -259,7 +286,7 @@ void EnDt_ChangeAnim(EnDt* this, s32 animIndex) {
     this->animIndex = animIndex;
 
     morphFrames = -4.0f;
-    if ((this->animIndex == EN_DT_ANIMATION_2) || (this->animIndex == EN_DT_ANIMATION_5)) {
+    if ((this->animIndex == EN_DT_ANIMATION_SHOCK) || (this->animIndex == EN_DT_ANIMATION_SIT_UP)) {
         morphFrames = 0.0f;
     }
 
@@ -268,17 +295,17 @@ void EnDt_ChangeAnim(EnDt* this, s32 animIndex) {
                      sAnimationModes[this->animIndex], morphFrames);
 }
 
-void EnDt_UpdateVisualState(EnDt* this) {
-    s32 index = this->visualState * 4;
+void EnDt_UpdateAppearance(EnDt* this) {
+    s32 index = this->appearancePhase * 4;
 
     index++;
-    EnDt_ChangeAnim(this, sVisualStateTable[index]);
+    EnDt_ChangeAnim(this, sAppearancePropertiesTable[index]);
 
     index++;
-    this->eyeTexIndex = sVisualStateTable[index];
+    this->eyeTexIndex = sAppearancePropertiesTable[index];
 
     index++;
-    this->disableBlinking = sVisualStateTable[index];
+    this->disableBlinking = sAppearancePropertiesTable[index];
 }
 
 void EnDt_UpdateCutsceneFocusTarget(EnDt* this) {
@@ -332,8 +359,8 @@ void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
             this->textIdIndex = 21;
-            this->visualState = 5;
-            EnDt_UpdateVisualState(this);
+            this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
+            EnDt_UpdateAppearance(this);
 
             this->actor.textId = sTextIds[this->textIdIndex];
             Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -345,21 +372,21 @@ void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
         this->textIdIndex = 23;
-        this->visualState = 5;
+        this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
         this->meetingFinished = true;
-        EnDt_UpdateVisualState(this);
+        EnDt_UpdateAppearance(this);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_PERSON_MAYOR_DOTOUR);
     }
 
-    if (this->visualState == 0) {
+    if (this->appearancePhase == EN_DT_APPEARANCE_DEFAULT) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->textIdIndex = 9;
-            this->visualState = 2;
+            this->appearancePhase = EN_DT_APPEARANCE_POST_MEETING;
         }
 
-        EnDt_UpdateVisualState(this);
+        EnDt_UpdateAppearance(this);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
-            this->visualState = 1;
+            this->appearancePhase = EN_DT_APPEARANCE_PRE_MEETING;
         }
     }
 
@@ -435,11 +462,11 @@ void EnDt_SetupMeetingCutscene(EnDt* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
                 npcMuto->textIdIndex = 4;
                 npcBaisen->textIdIndex = 6;
-                this->visualState = 5;
+                this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
-                    this->visualState = 4;
+                    this->appearancePhase = EN_DT_APPEARANCE_RESOLUTION_TALK;
                 }
-                EnDt_UpdateVisualState(this);
+                EnDt_UpdateAppearance(this);
             }
         }
     }
@@ -556,16 +583,16 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
 
             if (this->textIdIndex == 12) { // Mayor reacts to Couple's mask
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
-                    EnDt_UpdateVisualState(this);
+                    EnDt_UpdateAppearance(this);
                     this->timer = 25;
                 } else {
-                    EnDt_ChangeAnim(this, EN_DT_ANIMATION_4);
+                    EnDt_ChangeAnim(this, EN_DT_ANIMATION_UPRIGHT);
                     SkelAnime_Update(&this->skelAnime);
                 }
             }
 
             if (this->textIdIndex == 13) { // Muto reacts to Couple's mask
-                EnDt_ChangeAnim(this, EN_DT_ANIMATION_4);
+                EnDt_ChangeAnim(this, EN_DT_ANIMATION_UPRIGHT);
                 SkelAnime_Update(&this->skelAnime);
             }
 
@@ -607,13 +634,13 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
 
     if (this->timer != 0) {
         if (this->timer == 1) {
-            if ((this->textIdIndex == 8) || (this->visualState == 4)) {
-                EnDt_UpdateVisualState(this);
+            if ((this->textIdIndex == 8) || (this->appearancePhase == EN_DT_APPEARANCE_RESOLUTION_TALK)) {
+                EnDt_UpdateAppearance(this);
             }
 
-            this->visualState++;
-            if (this->visualState > 5) {
-                this->visualState = 5;
+            this->appearancePhase++;
+            if (this->appearancePhase >= EN_DT_APPEARANCE_MAX) {
+                this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
             }
         }
     } else if (this->animEndFrame <= currFrame) {
@@ -621,7 +648,7 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
         s32 index;
         s32 csIdIndex = sStringIdCsIndexTable[this->csIdIndex + 1];
 
-        EnDt_UpdateVisualState(this);
+        EnDt_UpdateAppearance(this);
 
         Message_CloseTextbox(play);
         this->actor.textId = sTextIds[this->textIdIndex];
@@ -691,7 +718,7 @@ void EnDt_TriggerMeetingNotebookEvent(EnDt* this, PlayState* play) {
 }
 
 void EnDt_SetupFinalNightState(EnDt* this, PlayState* play) {
-    EnDt_ChangeAnim(this, EN_DT_ANIMATION_3);
+    EnDt_ChangeAnim(this, EN_DT_ANIMATION_TAP_DESK);
 
     this->disableBlinking = true;
     this->textIdIndex = 24;

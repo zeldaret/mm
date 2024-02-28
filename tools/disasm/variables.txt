@@ -15876,7 +15876,7 @@
     0x80BEB29C:("sCylinderInit","UNK_TYPE1","",0x1),
     0x80BEB2C8:("sAnimations","UNK_TYPE1","",0x1),
     0x80BEB2E0:("sAnimationModes","UNK_TYPE1","",0x1),
-    0x80BEB2E8:("sVisualStateTable","UNK_TYPE1","",0x1),
+    0x80BEB2E8:("sAppearancePropertiesTable","UNK_TYPE1","",0x1),
     0x80BEB348:("sEyeTextures","UNK_TYPE1","",0x1),
     0x80BEB35C:("sBrowTextures","UNK_TYPE1","",0x1),
     0x80BEB860:("En_Cha_InitVars","UNK_TYPE1","",0x1),

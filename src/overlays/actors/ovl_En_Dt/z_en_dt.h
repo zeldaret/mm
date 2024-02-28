@@ -31,7 +31,7 @@ typedef struct EnDt {
     /* 0x274 */ Actor* npcEnMuto;
     /* 0x278 */ Actor* npcEnBaisen;
     /* 0x27C */ Actor* targetActor;
-    /* 0x280 */ s32 visualState;
+    /* 0x280 */ s32 appearancePhase;
     /* 0x284 */ Vec3s headRotValue;
     /* 0x28A */ Vec3s headRotTarget;
     /* 0x290 */ s32 meetingFinished;
