@@ -87,9 +87,9 @@ pipeline {
             }
             steps {
                 sh 'mkdir reports'
-                sh 'python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
-                sh 'python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
-                sh 'python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
+                sh '.venv/bin/python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
+                sh '.venv/bin/python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
+                sh '.venv/bin/python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
                 stash includes: 'reports/*', name: 'reports'
             }
         }
