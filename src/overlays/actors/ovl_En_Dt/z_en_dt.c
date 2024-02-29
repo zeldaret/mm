@@ -189,12 +189,12 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* sAnimations[EN_DT_ANIMATION_MAX] = {
-    &object_dt_Anim_00112C, // EN_DT_ANIMATION_WAIT
-    &object_dt_Anim_0005A4, // EN_DT_ANIMATION_DISTRESS
-    &object_dt_Anim_000854, // EN_DT_ANIMATION_SHOCK
-    &object_dt_Anim_000DA8, // EN_DT_ANIMATION_TAP_DESK
-    &object_dt_Anim_000BE0, // EN_DT_ANIMATION_UPRIGHT
-    &object_dt_Anim_00B500, // EN_DT_ANIMATION_SIT_UP
+    &gDotourWaitAnim,     // EN_DT_ANIMATION_WAIT
+    &gDotourDistressAnim, // EN_DT_ANIMATION_DISTRESS
+    &gDotourShockAnim,    // EN_DT_ANIMATION_SHOCK
+    &gDotourTapDeskAnim,  // EN_DT_ANIMATION_TAP_DESK
+    &gDotourUprightAnim,  // EN_DT_ANIMATION_UPRIGHT
+    &gDotourSitUpAnim,    // EN_DT_ANIMATION_SIT_UP
 };
 
 static u8 sAnimationModes[EN_DT_ANIMATION_MAX] = {
@@ -238,7 +238,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_00112C, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &gDotourWaitAnim, this->jointTable,
                        this->morphTable, OBJECT_DT_LIMB_MAX);
 
     this->actor.targetMode = TARGET_MODE_6;
