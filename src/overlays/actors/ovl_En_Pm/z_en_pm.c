@@ -1344,7 +1344,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF9D04(EnPm* this, PlayState* play) {
-    EnDoor* door = (EnDoor*)EnPm_FindDoorSchedule(play, this->unk_258);
+    EnDoor* door = EnPm_FindDoorSchedule(play, this->unk_258);
     Vec3f sp38;
     s32 pad;
     f32 temp;
