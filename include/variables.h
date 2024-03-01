@@ -73,8 +73,6 @@ extern u8 gAudioHeapResetState;
 extern AudioSpec gAudioSpecs[21];
 
 // rodata
-extern TexturePtr gCircleTex[];
-
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
 extern const AudioHeapInitSizes gAudioHeapInitSizes;
@@ -98,10 +96,6 @@ extern u8 sResetAudioHeapTimer;
 extern u16 sResetAudioHeapFadeReverbVolume;
 extern u16 sResetAudioHeapFadeReverbVolumeStep;
 extern AudioContext gAudioCtx; // at 0x80200C70
-extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
-extern AudioCustomSeqFunction gAudioCustomSeqFunction;
-extern AudioCustomReverbFunction gAudioCustomReverbFunction;
-extern AudioCustomSynthFunction gAudioCustomSynthFunction;
 
 // other segments
 extern Mtx D_01000000;
