@@ -15,7 +15,7 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_SCHEDULE and the specified schType (a value from the
+ * Finds the first EnDoor instance of type `ENDOOR_TYPE_SCHEDULE` and the specified schType (a value from the
  * EnDoorScheduleType enum).
  */
 EnDoor* SubS_FindDoorSchedule(PlayState* play, s32 schType) {
