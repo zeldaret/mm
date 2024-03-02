@@ -362,7 +362,7 @@ void Graph_ThreadEntry(void* arg) {
 
         size = ovl->instanceSize;
 
-        func_800809F4(ovl->vromStart);
+        func_800809F4(ovl->file.vromStart);
 
         gameState = malloc(size);
 
