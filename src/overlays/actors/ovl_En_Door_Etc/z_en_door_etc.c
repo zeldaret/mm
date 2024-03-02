@@ -176,7 +176,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
     s32 yawDiffAbs;
 
     Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerOffsetFromDoor, &player->actor.world.pos);
-    if (!this->knobDoor.playOpenAnim) {
+    if (!this->knobDoor.requestOpen) {
         if ((!Player_InCsMode(play)) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&
             (fabsf(playerOffsetFromDoor.z) < 50.0f)) {
