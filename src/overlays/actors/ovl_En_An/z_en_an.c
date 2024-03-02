@@ -444,7 +444,7 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
     return foundActor;
 }
 
-EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
+EnDoor* EnAn_FindScheduleDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
     EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
@@ -478,7 +478,7 @@ EnDoor* EnAn_FindDoorSchedule(PlayState* play, AnjuScheduleResult scheduleOutput
             return NULL;
     }
 
-    return SubS_FindDoorSchedule(play, schType);
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 /**
@@ -1933,7 +1933,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
     s32 ret = false;
 
     this->timePath = NULL;
-    door = EnAn_FindDoorSchedule(play, scheduleOutput->result);
+    door = EnAn_FindScheduleDoor(play, scheduleOutput->result);
 
     limit = sSearchTimePathLimit[scheduleOutput->result];
     if (limit >= 0) {
@@ -2437,7 +2437,7 @@ s32 EnAn_HandleSch_InteractActor(EnAn* this, PlayState* play) {
 }
 
 s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
-    EnDoor* door = EnAn_FindDoorSchedule(play, this->scheduleResult);
+    EnDoor* door = EnAn_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     f32 distance;
     s32 pad;

@@ -158,7 +158,7 @@ Actor* func_80BF1150(EnIg* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-EnDoor* EnIg_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
+EnDoor* EnIg_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
     EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
@@ -178,7 +178,7 @@ EnDoor* EnIg_FindDoorSchedule(PlayState* play, s32 scheduleOutputResult) {
             break;
     }
 
-    return SubS_FindDoorSchedule(play, schType);
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 void EnIg_UpdateSkelAnime(EnIg* this) {
@@ -537,7 +537,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = EnIg_FindDoorSchedule(play, scheduleOutput->result);
+    door = EnIg_FindScheduleDoor(play, scheduleOutput->result);
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
@@ -722,7 +722,7 @@ s32 func_80BF2400(EnIg* this, PlayState* play) {
 }
 
 s32 func_80BF2470(EnIg* this, PlayState* play) {
-    EnDoor* door = EnIg_FindDoorSchedule(play, this->scheduleResult);
+    EnDoor* door = EnIg_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     f32 temp;
     s32 pad;

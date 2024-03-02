@@ -2169,7 +2169,7 @@ asm/non_matchings/code/z_snap/func_8013A46C.s,func_8013A46C,0x8013A46C,0x16
 asm/non_matchings/code/z_snap/func_8013A4C4.s,func_8013A4C4,0x8013A4C4,0x10
 asm/non_matchings/code/z_snap/func_8013A504.s,func_8013A504,0x8013A504,0xB
 asm/non_matchings/code/z_snap/func_8013A530.s,func_8013A530,0x8013A530,0xA4
-asm/non_matchings/code/z_sub_s/SubS_FindDoorSchedule.s,SubS_FindDoorSchedule,0x8013A7C0,0x28
+asm/non_matchings/code/z_sub_s/SubS_FindScheduleDoor.s,SubS_FindScheduleDoor,0x8013A7C0,0x28
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC
