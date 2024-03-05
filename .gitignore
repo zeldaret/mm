@@ -24,10 +24,10 @@ tags
 archive/
 build/
 baserom/
-baseroms/*/segments/
 decomp/
 asm/
 data/
+extracted/
 expected/
 nonmatchings/
 

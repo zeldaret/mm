@@ -80,9 +80,11 @@ ifneq ($(FULL_DISASM), 0)
   DISASM_FLAGS += --all
 endif
 
-PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
-BUILD_DIR   := build/$(VERSION)
-BASEROM_DIR := baseroms/$(VERSION)
+PROJECT_DIR   := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
+BASEROM_DIR   := baseroms/$(VERSION)
+BUILD_DIR     := build/$(VERSION)
+EXTRACTED_DIR := extracted/$(VERSION)
 
 CPPFLAGS += -P
 
@@ -113,9 +115,9 @@ endif
 
 AS      := $(MIPS_BINUTILS_PREFIX)as
 LD      := $(MIPS_BINUTILS_PREFIX)ld
+NM      := $(MIPS_BINUTILS_PREFIX)nm
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
-NM      := $(MIPS_BINUTILS_PREFIX)nm
 
 ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
@@ -197,7 +199,7 @@ LDSCRIPT := $(ROM:.z64=.ld)
 SPEC := spec
 
 # create asm directories
-$(shell mkdir -p asm data)
+$(shell mkdir -p asm data extracted)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
@@ -343,8 +345,7 @@ assetclean:
 	$(RM) -r .extracted-assets.json
 
 distclean: assetclean clean
-	$(RM) -r asm data
-	$(RM) -r $(BASEROM_DIR)/segments
+	$(RM) -r asm data extracted
 	$(MAKE) -C tools clean
 
 venv:
@@ -356,7 +357,7 @@ venv:
 setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
-	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(BASEROM_DIR)/segments --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
+	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
 assets:
@@ -421,7 +422,7 @@ $(BUILD_DIR)/%.yar.o: $(BUILD_DIR)/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
-$(BUILD_DIR)/baserom/%.o: $(BASEROM_DIR)/segments/%
+$(BUILD_DIR)/baserom/%.o: $(EXTRACTED_DIR)/baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 $(BUILD_DIR)/data/%.o: data/%.s

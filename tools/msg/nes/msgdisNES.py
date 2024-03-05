@@ -252,7 +252,7 @@ class MessageNES:
 
 def parseTable(start):
     table = {}
-    with open("baseroms/n64-us/segments/code","rb") as f:
+    with open("extracted/n64-us/baserom/code","rb") as f:
         f.seek(start)
         buf = f.read(8)
         textId, typePos, segment = struct.unpack(">HBxI", buf)
@@ -263,14 +263,14 @@ def parseTable(start):
 
     return table
 
-NES_MESSAGE_TABLE_ADDR = 0x1210D8 # Location of NES message table in baseroms/n64-us/segments/code
+NES_MESSAGE_TABLE_ADDR = 0x1210D8 # Location of NES message table in extracted/n64-us/baserom/code
 NES_SEGMENT_ADDR = 0x08000000
 
 def main(outfile):
     msgTable = parseTable(NES_MESSAGE_TABLE_ADDR)
 
     buf = []
-    with open("baseroms/n64-us/segments/message_data_static", "rb") as f:
+    with open("extracted/n64-us/baserom/message_data_static", "rb") as f:
         buf = f.read()
 
     bufLen = len(buf)

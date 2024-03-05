@@ -7,7 +7,7 @@
 #
 # This program decompresses every raw yar binary file listed in
 # `tools/filelists/{version}/archives.csv` to a corresponding
-# `baseroms/{version}/segments/{file}.unarchive` raw file.
+# `extracted/{version}/baserom/{file}.unarchive` raw file.
 #
 # It works by decompressing every Yaz0 block and appending them one by one into
 # a new raw binary file so it can be processed normally by other tools.
@@ -113,7 +113,7 @@ def main():
     with archivesCsvPath.open() as f:
         for line in f:
             archiveName = line.strip().split(",")[1]
-            archivePath = Path(f"baseroms/{args.version}/segments/{archiveName}")
+            archivePath = Path(f"extracted/{args.version}/baserom/{archiveName}")
 
             extractedPath = Path(str(archivePath) + ".unarchive")
             extractArchive(archivePath, extractedPath)
