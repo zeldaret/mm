@@ -471,7 +471,7 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
     pos->z = this->pathPoints[endPoint].z;
 }
 
-void EnInvadepoh_Alien_TurnToPath(EnInvadepoh* this, s16 step, s16 offset) {
+void EnInvadepoh_Alien_StepYawAlongPath(EnInvadepoh* this, s16 step, s16 offset) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
     Vec3s* nextPathPoint = curPathPoint + 1;
@@ -485,7 +485,7 @@ void EnInvadepoh_Alien_TurnToPath(EnInvadepoh* this, s16 step, s16 offset) {
     }
 }
 
-void EnInvadepoh_Romani_TurnToPath(EnInvadepoh* this, s16 scale, s16 step, s16 minStep) {
+void EnInvadepoh_Romani_StepYawAlongPath(EnInvadepoh* this, s16 scale, s16 step, s16 minStep) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
     Vec3s* nextPathPoint = curPathPoint + 1;
@@ -2098,7 +2098,7 @@ void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
 void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
-    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
+    EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
 
     if (sAlienStateFlags[EN_INVADEPOH_GET_INDEX(&this->actor)] & ALIEN_STATE_FLAG_ACTIVE) {
         Actor_SetScale(&this->actor, 0.01f);
@@ -2124,7 +2124,7 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
-    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
+    EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
 
     if (this->pathProgress > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
@@ -2151,7 +2151,7 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
-    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
+    EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
 
     if (this->pathProgress >= 0.9999f) {
@@ -2199,7 +2199,7 @@ void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
 void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
-    EnInvadepoh_Alien_TurnToPath(this, 0x320, 0);
+    EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
     if (this->pathProgress >= 0.9999f) {
         this->pathCompleted = true;
@@ -2628,7 +2628,7 @@ void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
         Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x46);
     }
 
-    EnInvadepoh_Romani_TurnToPath(this, 6, this->shapeAngularVelocityY, 0x46);
+    EnInvadepoh_Romani_StepYawAlongPath(this, 6, this->shapeAngularVelocityY, 0x46);
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
@@ -3082,7 +3082,7 @@ void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
 void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Night1Romani_SetProgress(this);
     EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
-    EnInvadepoh_Romani_TurnToPath(this, 6, 0x7D0, 0x64);
+    EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
     if ((this->currentPoint == 0) || ((this->currentPoint + 1) == this->endPoint)) {
         if (!this->doorOpened) {
@@ -3323,7 +3323,7 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
         Math_StepToS(&this->shapeAngularVelocityY, 0x190, 0x32);
     }
 
-    EnInvadepoh_Romani_TurnToPath(this, 6, this->shapeAngularVelocityY, 50);
+    EnInvadepoh_Romani_StepYawAlongPath(this, 6, this->shapeAngularVelocityY, 50);
 
     if (this->currentPoint == 0) {
         if (!this->doorOpened) {
@@ -4046,7 +4046,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
 
     EnInvadepoh_Night3Romani_SetProgress(this);
     EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
-    EnInvadepoh_Romani_TurnToPath(this, 6, 0x7D0, 0x64);
+    EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
     curPoint = (this->currentPoint < this->endPoint) ? this->currentPoint : this->endPoint - 1;
 
