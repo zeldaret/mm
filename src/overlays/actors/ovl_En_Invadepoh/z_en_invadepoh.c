@@ -131,9 +131,9 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this);
 void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Alien_Hitstun(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this);
-void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_Damaged(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this);
+void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AbductedRomani_SetupYell(EnInvadepoh* this);
 void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play);
@@ -2218,7 +2218,7 @@ void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupDamaged(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
@@ -2232,19 +2232,22 @@ void EnInvadepoh_Alien_SetupHitstun(EnInvadepoh* this) {
     this->timer = 8;
     this->frameCounter = 0;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Alien_Hitstun;
+    this->actionFunc = EnInvadepoh_Alien_Damaged;
 }
 
-void EnInvadepoh_Alien_Hitstun(EnInvadepoh* this, PlayState* play) {
+/**
+ * Knocks the alien backwards for 8 frames, then starts the alien's death sequence.
+ */
+void EnInvadepoh_Alien_Damaged(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_Knockback(this, play);
 
     this->timer--;
     if (this->timer <= 0) {
-        EnInvadepoh_Alien_SetupDeath(this);
+        EnInvadepoh_Alien_SetupDead(this);
     }
 }
 
-void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -2257,10 +2260,10 @@ void EnInvadepoh_Alien_SetupDeath(EnInvadepoh* this) {
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Alien_Death;
+    this->actionFunc = EnInvadepoh_Alien_Dead;
 }
 
-void EnInvadepoh_Alien_Death(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
     static Vec3f sDeathScales[] = {
         { 0.01f, 0.01f, 0.01f }, { 0.02f, 0.01f, 0.005f }, { -0.01f, 0.0f, 0.0f },
         { 0.01f, 0.01f, 0.01f }, { 0.005f, 0.01f, 0.02f },
@@ -2362,7 +2365,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
             thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
-            EnInvadepoh_Alien_SetupHitstun(this);
+            EnInvadepoh_Alien_SetupDamaged(this);
         } else if ((this->actionFunc == EnInvadepoh_Alien_WaitToRespawn) ||
                    (this->actionFunc == EnInvadepoh_Alien_WaitForEvent)) {
             Actor_Kill(thisx);
@@ -2381,7 +2384,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
-        EnInvadepoh_Alien_SetupHitstun(this);
+        EnInvadepoh_Alien_SetupDamaged(this);
     }
 
     this->actionFunc(this, play);
