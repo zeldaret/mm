@@ -732,6 +732,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
     flashPos.x = this->actor.world.pos.x;
     flashPos.y = this->actor.world.pos.y;
     flashPos.z = this->actor.world.pos.z;
+
     EnInvadepohDemo_Ufo_UpdateMatrixTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateZS(this->ufoRotZ, MTXMODE_APPLY);

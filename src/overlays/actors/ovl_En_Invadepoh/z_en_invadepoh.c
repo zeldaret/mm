@@ -4461,6 +4461,7 @@ void EnInvadepoh_Alien_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
         Matrix_Get(&sAlienRightEyeBeamMtxF);
         Matrix_Pop();
     }
+
     if (limbIndex == ALIEN_LIMB_HEAD) {
         Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
@@ -4579,6 +4580,7 @@ s32 EnInvadepoh_Cow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
 
         rot->x -= this->actor.shape.rot.x;
     }
+
     return false;
 }
 
@@ -4587,7 +4589,7 @@ void EnInvadepoh_Cow_Draw(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_Cow_OverrideLimbDraw, NULL, &this->actor);
 }
 
@@ -4611,11 +4613,10 @@ s32 EnInvadepoh_Romani_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     } else if (limbIndex == ROMANI_LIMB_TORSO) {
         EnInvadepoh* this = THIS;
 
-        // The rot variable here is in model space, whereas the interactInfo variables are in world space.
-        // Romani's torso is lying on its side in model space, which is why this assignment looks weird.
         rot->x += (s16)(this->interactInfo.torsoRotScaleY * this->interactInfo.headRot.y);
         rot->z += this->interactInfo.torsoRotX;
     }
+
     return false;
 }
 
@@ -4657,9 +4658,11 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     Matrix_Mult(&play->billboardMtxF, MTXMODE_NEW);
     Matrix_MultVecZ(200.0f, &flashPos);
     Matrix_Pop();
+
     flashPos.x += this->actor.world.pos.x;
     flashPos.y += this->actor.world.pos.y;
     flashPos.z += this->actor.world.pos.z;
+
     EnInvadepoh_Ufo_ReplaceTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateZS(this->angle, MTXMODE_APPLY);
@@ -4673,7 +4676,8 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
 
     if (EnInvadepoh_Alien_LensFlareDepthCheck(play, &flashPos)) {
-        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0, 0);
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0,
+                                  false);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4689,6 +4693,7 @@ s32 EnInvadepoh_Dog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         rot->y += this->interactInfo.headRot.y;
         rot->z += this->interactInfo.headRot.z;
     }
+
     return false;
 }
 
@@ -4724,10 +4729,9 @@ s32 EnInvadepoh_Cremia_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     } else if (limbIndex == CREMIA_LIMB_TORSO) {
         EnInvadepoh* this = THIS;
 
-        // The rot variable here is in model space, whereas the interactInfo variables are in world space.
-        // Cremia's torso is lying on its side in model space, which is why this assignment looks weird.
         rot->x += (s16)(this->interactInfo.torsoRotScaleY * this->interactInfo.headRot.y);
     }
+
     return false;
 }
 
