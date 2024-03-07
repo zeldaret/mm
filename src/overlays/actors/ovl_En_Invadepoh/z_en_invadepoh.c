@@ -471,6 +471,11 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
     pos->z = this->pathPoints[endPoint].z;
 }
 
+/**
+ * This function can be called repeatedly to make the alien gradually turn to face the next point in its path. Unlike
+ * the below function, this function takes an `offset` parameter; if this parameter is non-zero, then the alien will not
+ * be perfectly aligned with the path.
+ */
 void EnInvadepoh_Alien_StepYawAlongPath(EnInvadepoh* this, s16 step, s16 offset) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
@@ -485,6 +490,10 @@ void EnInvadepoh_Alien_StepYawAlongPath(EnInvadepoh* this, s16 step, s16 offset)
     }
 }
 
+/**
+ * This function can be called repeatedly to make Romani gradually turn to face the next point in her path. Unlike the
+ * above function, this function uses a smooth step rather than a scaled step.
+ */
 void EnInvadepoh_Romani_StepYawAlongPath(EnInvadepoh* this, s16 scale, s16 step, s16 minStep) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
@@ -500,6 +509,9 @@ void EnInvadepoh_Romani_StepYawAlongPath(EnInvadepoh* this, s16 scale, s16 step,
     }
 }
 
+/**
+ * This function immediately sets the y-rotation of the actor to face the next point in its path.
+ */
 void EnInvadepoh_SetYawAlongPath(EnInvadepoh* this) {
     s32 pad;
     Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
