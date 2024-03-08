@@ -827,7 +827,7 @@ void EnInvadepoh_Alien_Knockback(EnInvadepoh* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 40.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
-void EnInvadepoh_Alien_EmptyFunc(EnInvadepoh* this) {
+void EnInvadepoh_Alien_DoNothing(EnInvadepoh* this) {
 }
 
 s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 speed, f32 height) {
@@ -2265,17 +2265,24 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
 
 void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
     static Vec3f sDeathScales[] = {
-        { 0.01f, 0.01f, 0.01f }, { 0.02f, 0.01f, 0.005f }, { -0.01f, 0.0f, 0.0f },
-        { 0.01f, 0.01f, 0.01f }, { 0.005f, 0.01f, 0.02f },
+        { 10000 * 0.000001f, 10000 * 0.000001f, 10000 * 0.000001f },
+        { 20000 * 0.000001f, 10000 * 0.000001f, 5000 * 0.000001f },
+        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
+        { 10000 * 0.000001f, 10000 * 0.000001f, 10000 * 0.000001f },
+        { 5000 * 0.000001f, 10000 * 0.000001f, 20000 * 0.000001f },
     };
     static Vec3f sDeathFlashScales[] = {
-        { 0.0005f, 0.027999999f, 0.01f }, { -0.01f, 0.0f, 0.0f }, { -0.01f, 0.0f, 0.0f },
-        { 0.016f, 0.0004f, 0.01f },       { -0.01f, 0.0f, 0.0f }, { 0.0005f, 0.0005f, 0.0005f },
-        { 0.0002f, 0.0002f, 0.0002f },
+        { 500 * 0.000001f, 28000 * 0.000001f, 10000 * 0.000001f },
+        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
+        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
+        { 16000 * 0.000001f, 400 * 0.000001f, 10000 * 0.000001f },
+        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
+        { 500 * 0.000001f, 500 * 0.000001f, 500 * 0.000001f },
+        { 200 * 0.000001f, 200 * 0.000001f, 200 * 0.000001f },
     };
     Vec3f* deathScale;
 
-    EnInvadepoh_Alien_EmptyFunc(this);
+    EnInvadepoh_Alien_DoNothing(this);
 
     if (this->frameCounter < 5) {
         deathScale = &sDeathScales[this->frameCounter];

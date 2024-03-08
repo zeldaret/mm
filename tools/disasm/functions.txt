@@ -13755,7 +13755,7 @@
     0x80B44700:("EnInvadepoh_Night3Romani_SetProgress",),
     0x80B447C0:("EnInvadepoh_Alien_ApplyProgress",),
     0x80B44A90:("EnInvadepoh_Alien_Knockback",),
-    0x80B44B78:("EnInvadepoh_Alien_EmptyFunc",),
+    0x80B44B78:("EnInvadepoh_Alien_DoNothing",),
     0x80B44B84:("EnInvadepoh_Romani_MoveAlongPath",),
     0x80B44C24:("EnInvadepoh_Night1Romani_MoveAlongPathTimed",),
     0x80B44C80:("EnInvadepoh_Dog_MoveAlongPath",),
