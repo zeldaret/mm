@@ -14127,7 +14127,7 @@
     0x80B4E8DC:("sRomaniAndCremiaCylinderInit","ColliderCylinderInit","",0x2C),
     0x80B4E908:("sDogCylinderInit","ColliderCylinderInit","",0x2C),
     0x80B4E934:("sUfoSpawnOffset","Vec3f","",0xC),
-    0x80B4E940:("sEventState","s32","",0x4),
+    0x80B4E940:("sInvasionState","s32","",0x4),
     0x80B4E944:("sRomaniEyeTextures","TexturePtr","[5]",0x14),
     0x80B4E958:("sRomaniMouthTextures","TexturePtr","[4]",0x10),
     0x80B4E968:("sRomaniTexturesDesegmented","s8","",0x1),

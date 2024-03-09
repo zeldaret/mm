@@ -44,13 +44,13 @@
 #define ALIEN_STATE_FLAG_ACTIVE (1 << 0)
 #define ALIEN_STATE_FLAG_CLOSEST (1 << 1)
 
-typedef enum EnInvadepohEventState {
-    /* 0 */ EN_INVADEPOH_EVENT_UNSET,
-    /* 1 */ EN_INVADEPOH_EVENT_WAIT,
-    /* 2 */ EN_INVADEPOH_EVENT_ACTIVE,
-    /* 3 */ EN_INVADEPOH_EVENT_CLEAR,
-    /* 4 */ EN_INVADEPOH_EVENT_FAILED
-} EnInvadepohEventState;
+typedef enum EnInvadepohInvasionState {
+    /* 0 */ EN_INVADEPOH_INVASION_STATE_NONE,
+    /* 1 */ EN_INVADEPOH_INVASION_STATE_WAIT,
+    /* 2 */ EN_INVADEPOH_INVASION_STATE_ACTIVE,
+    /* 3 */ EN_INVADEPOH_INVASION_STATE_SUCCESS,
+    /* 4 */ EN_INVADEPOH_INVASION_STATE_FAILURE
+} EnInvadepohInvasionState;
 
 typedef enum EnInvadepohFaceAnimationType {
     /* 0 */ EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED,
@@ -270,7 +270,7 @@ static ColliderCylinderInit sDogCylinderInit = {
 
 static Vec3f sUfoSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
-static s32 sEventState = EN_INVADEPOH_EVENT_UNSET;
+static s32 sInvasionState = EN_INVADEPOH_INVASION_STATE_NONE;
 
 typedef enum RomaniEyeTexture {
     /* 0 */ ROMANI_EYE_OPEN,
@@ -622,9 +622,9 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
     s32 currentTime = CURRENT_TIME;
     s32 warpInTime = EnInvadepoh_Alien_GetSpawnTime(EN_INVADEPOH_GET_INDEX(&this->actor));
 
-    if (sEventState == EN_INVADEPOH_EVENT_WAIT) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
         this->pathProgress = 0.0f;
-    } else if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         if ((currentTime - warpInTime) < 0) {
             this->pathProgress = 0.0f;
         } else {
@@ -1001,14 +1001,14 @@ s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) {
-    if (sEventState == EN_INVADEPOH_EVENT_UNSET) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
         if (CURRENT_DAY < 1) {
-            sEventState = EN_INVADEPOH_EVENT_WAIT;
+            sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
         } else if (CURRENT_DAY == 1) {
             s32 currentTime = CURRENT_TIME;
 
             if (!((currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(6, 00)))) {
-                sEventState = EN_INVADEPOH_EVENT_WAIT;
+                sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
             } else if (currentTime < CLOCK_TIME(5, 15)) {
                 s32 i;
                 s32 firstSpawn = CLOCK_TIME(5, 15);
@@ -1021,16 +1021,16 @@ void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) 
                 }
 
                 if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
-                    sEventState = EN_INVADEPOH_EVENT_ACTIVE;
+                    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
                 }
             }
         }
 
-        if (sEventState == EN_INVADEPOH_EVENT_UNSET) {
+        if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
-                sEventState = EN_INVADEPOH_EVENT_CLEAR;
+                sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
             } else {
-                sEventState = EN_INVADEPOH_EVENT_FAILED;
+                sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
             }
         }
     }
@@ -1583,9 +1583,9 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InvasionHandler_SetCutscenes(this);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_SWITCH);
 
-    if (sEventState == EN_INVADEPOH_EVENT_WAIT) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
         EnInvadepoh_InvasionHandler_SetupWait(this);
-    } else if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         if (CURRENT_TIME < CLOCK_TIME(2, 31)) {
             EnInvadepoh_InvasionHandler_SetupWait(this);
         } else {
@@ -1594,7 +1594,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             EnInvadepoh_InvasionHandler_SetupInvasion(this);
         }
-    } else if (sEventState == EN_INVADEPOH_EVENT_CLEAR) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
         if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
             EnInvadepoh_InvasionHandler_SetupRomaniReward(this);
         } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
@@ -1602,7 +1602,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
         } else {
             EnInvadepoh_InvasionHandler_SetupGoodEnd(this);
         }
-    } else if (sEventState == EN_INVADEPOH_EVENT_FAILED) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_FAILURE) {
         EnInvadepoh_InvasionHandler_SetupBadEnd(this);
     }
 }
@@ -1753,12 +1753,12 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
     this->actor.update = EnInvadepoh_Ufo_Update;
     this->actor.draw = EnInvadepoh_Ufo_Draw;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
-    if ((sEventState == EN_INVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
+    if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
         this->actor.world.pos.x += sUfoSpawnOffset.x;
         this->actor.world.pos.y += sUfoSpawnOffset.y + 3000.0f;
         this->actor.world.pos.z += sUfoSpawnOffset.z;
         EnInvadepoh_Ufo_SetupDescend(this);
-    } else if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         this->actor.world.pos.y += 1500.0f;
         EnInvadepoh_Ufo_SetupAboveBarn(this);
     } else {
@@ -1922,7 +1922,7 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupWait(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_WAIT;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
     this->actionFunc = EnInvadepoh_InvasionHandler_Wait;
 }
 
@@ -1935,7 +1935,7 @@ void EnInvadepoh_InvasionHandler_Wait(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupQueueInvasionCs(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_ACTIVE;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
     this->timer = 2;
     this->actionFunc = EnInvadepoh_InvasionHandler_QueueInvasionCs;
 }
@@ -1952,7 +1952,7 @@ void EnInvadepoh_InvasionHandler_QueueInvasionCs(EnInvadepoh* this, PlayState* p
 }
 
 void EnInvadepoh_InvasionHandler_SetupInvasionCs(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_ACTIVE;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
     this->timer = 160;
     this->actionFunc = EnInvadepoh_InvasionHandler_InvasionCs;
 }
@@ -1978,7 +1978,7 @@ void EnInvadepoh_InvasionHandler_InvasionCs(EnInvadepoh* this, PlayState* play) 
 }
 
 void EnInvadepoh_InvasionHandler_SetupInvasion(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_ACTIVE;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
     this->actionFunc = EnInvadepoh_InvasionHandler_Invasion;
 }
 
@@ -2001,7 +2001,7 @@ void EnInvadepoh_InvasionHandler_Invasion(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupQueueVictoryCs(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_CLEAR;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_QueueVictoryCs;
 }
 
@@ -2015,7 +2015,7 @@ void EnInvadepoh_InvasionHandler_QueueVictoryCs(EnInvadepoh* this, PlayState* pl
 }
 
 void EnInvadepoh_InvasionHandler_SetupVictoryCs(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_CLEAR;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
     this->timer = 110;
     this->actionFunc = EnInvadepoh_InvasionHandler_VictoryCs;
 }
@@ -2039,7 +2039,7 @@ void EnInvadepoh_InvasionHandler_VictoryCs(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupRomaniReward(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_CLEAR;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_RomaniReward;
 }
 
@@ -2055,7 +2055,7 @@ void EnInvadepoh_InvasionHandler_RomaniReward(EnInvadepoh* this, PlayState* play
 }
 
 void EnInvadepoh_InvasionHandler_SetupGoodEnd(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_CLEAR;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_GoodEnd;
 }
 
@@ -2063,7 +2063,7 @@ void EnInvadepoh_InvasionHandler_GoodEnd(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupFailure(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_FAILED;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
     this->actionFunc = EnInvadepoh_InvasionHandler_Failure;
 }
 
@@ -2078,7 +2078,7 @@ void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupBadEnd(EnInvadepoh* this) {
-    sEventState = EN_INVADEPOH_EVENT_FAILED;
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
     this->actionFunc = EnInvadepoh_InvasionHandler_BadEnd;
 }
 
@@ -2367,9 +2367,9 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
-        if ((sEventState == EN_INVADEPOH_EVENT_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
+        if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
             EnInvadepoh_Alien_SetupWaitForEvent(this);
-        } else if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+        } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
             if (this->pathProgress >= 0.0001f) {
                 EnInvadepoh_Alien_SetupFloatForward(this);
             } else {
@@ -2385,7 +2385,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    if (sEventState == EN_INVADEPOH_EVENT_CLEAR) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
         if ((this->actionFunc == EnInvadepoh_Alien_FloatForward) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
             thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
@@ -3002,7 +3002,7 @@ void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (sEventState == EN_INVADEPOH_EVENT_CLEAR) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
         EnInvadepoh_Ufo_SetupLeaveBarn(this);
     }
 }
@@ -3785,12 +3785,12 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh_SnapToFloor(this);
     Math_Vec3f_Copy(&this->currentPos, &this->actor.world.pos);
 
-    if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnInvadepoh_Dog_SetupWalk(this);
-    } else if (sEventState == EN_INVADEPOH_EVENT_WAIT) {
+    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
         this->actor.update = EnInvadepoh_Dog_WaitForEvent;
     } else {
         Actor_Kill(&this->actor);
@@ -3801,7 +3801,7 @@ void EnInvadepoh_Dog_WaitForEvent(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
+    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
