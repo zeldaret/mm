@@ -129,8 +129,8 @@ void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this);
-void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_SetupFloatForward(EnInvadepoh* this);
+void EnInvadepoh_Alien_FloatForward(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_Damaged(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this);
 void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play);
@@ -2133,6 +2133,9 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Alien_WaitToRespawn;
 }
 
+/**
+ * Waits until the current time is later than the alien's respawn time, then makes the alien warp in.
+ */
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
@@ -2160,6 +2163,10 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Alien_WarpIn;
 }
 
+/**
+ * Slowly fade in the alien and its eye beams as it floats forward along its path. When the alien is halfway done with
+ * fading in, its collider becomes enabled, allowing the player to hit it and allowing it to hit the player.
+ */
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
@@ -2170,7 +2177,7 @@ void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
         this->pathCompleted = true;
     }
 
-    if (this->alpha >= 249) {
+    if (this->alpha >= (255 - 6)) {
         this->alpha = 255;
     } else {
         this->alpha += 6;
@@ -2185,17 +2192,18 @@ void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
     if (this->alpha == 255) {
         if (this->eyeBeamAlpha >= 245) {
             this->eyeBeamAlpha = 255;
-            EnInvadepoh_Alien_SetupAttack(this);
+            EnInvadepoh_Alien_SetupFloatForward(this);
         } else {
             this->eyeBeamAlpha += 10;
         }
     }
 }
 
-void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupFloatForward(EnInvadepoh* this) {
     if (this->skelAnime.animation != &gAlienFloatAnim) {
         Animation_MorphToLoop(&this->skelAnime, &gAlienFloatAnim, -6.0f);
     }
+
     this->collider.base.atFlags |= AT_ON;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
@@ -2205,14 +2213,18 @@ void EnInvadepoh_Alien_SetupAttack(EnInvadepoh* this) {
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
-    this->actionFunc = EnInvadepoh_Alien_Attack;
+    this->actionFunc = EnInvadepoh_Alien_FloatForward;
 }
 
-void EnInvadepoh_Alien_Attack(EnInvadepoh* this, PlayState* play) {
+/**
+ * Slowly moves the alien forward along its path while playing its floating animation.
+ */
+void EnInvadepoh_Alien_FloatForward(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
+
     if (this->pathProgress >= 0.9999f) {
         this->pathCompleted = true;
     }
@@ -2263,6 +2275,10 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Alien_Dead;
 }
 
+/**
+ * Plays the alien's death animation for 10 frames, rapidly changing the scale of both the alien and a bright flash of
+ * light. Afterwards, the alien disappears into a puff of smoke, drops 30 arrows, and then begins waiting to respawn.
+ */
 void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
     static Vec3f sDeathScales[] = {
         { 10000 * 0.000001f, 10000 * 0.000001f, 10000 * 0.000001f },
@@ -2280,16 +2296,17 @@ void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
         { 500 * 0.000001f, 500 * 0.000001f, 500 * 0.000001f },
         { 200 * 0.000001f, 200 * 0.000001f, 200 * 0.000001f },
     };
-    Vec3f* deathScale;
+    Vec3f* scale;
 
     EnInvadepoh_Alien_DoNothing(this);
 
     if (this->frameCounter < 5) {
-        deathScale = &sDeathScales[this->frameCounter];
-        if (deathScale->x > 0.0f) {
+        scale = &sDeathScales[this->frameCounter];
+
+        if (scale->x > 0.0f) {
             this->shouldDraw = true;
             this->eyeBeamAlpha = 255;
-            Math_Vec3f_Copy(&this->actor.scale, deathScale);
+            Math_Vec3f_Copy(&this->actor.scale, scale);
         } else {
             this->shouldDraw = false;
             this->eyeBeamAlpha = 0;
@@ -2300,10 +2317,11 @@ void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
     }
 
     if ((this->frameCounter >= 2) && (this->frameCounter < 9)) {
-        deathScale = &sDeathFlashScales[this->frameCounter - 2];
-        if (deathScale->x > 0.0f) {
+        scale = &sDeathFlashScales[this->frameCounter - 2];
+
+        if (scale->x > 0.0f) {
             this->shouldDrawDeathFlash = true;
-            Math_Vec3f_Copy(&this->deathFlashScale, deathScale);
+            Math_Vec3f_Copy(&this->deathFlashScale, scale);
         } else {
             this->shouldDrawDeathFlash = false;
         }
@@ -2353,7 +2371,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
             EnInvadepoh_Alien_SetupWaitForEvent(this);
         } else if (sEventState == EN_INVADEPOH_EVENT_ACTIVE) {
             if (this->pathProgress >= 0.0001f) {
-                EnInvadepoh_Alien_SetupAttack(this);
+                EnInvadepoh_Alien_SetupFloatForward(this);
             } else {
                 EnInvadepoh_Alien_SetupWarpIn(this);
             }
@@ -2368,7 +2386,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
 
     if (sEventState == EN_INVADEPOH_EVENT_CLEAR) {
-        if ((this->actionFunc == EnInvadepoh_Alien_Attack) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
+        if ((this->actionFunc == EnInvadepoh_Alien_FloatForward) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
             thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
