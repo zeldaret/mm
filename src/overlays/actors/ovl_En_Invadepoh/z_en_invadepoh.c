@@ -1027,7 +1027,7 @@ void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) 
         }
 
         if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
             } else {
                 sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
@@ -1721,7 +1721,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     }
 
     if (romaniType == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
             Actor_Kill(&this->actor);
         }
     } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
@@ -1735,7 +1735,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
             Actor_Kill(&this->actor);
         }
         sRomani = this;
@@ -1810,7 +1810,7 @@ void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         Actor_Kill(&this->actor);
     }
 
@@ -1984,7 +1984,7 @@ void EnInvadepoh_InvasionHandler_SetupInvasion(EnInvadepoh* this) {
 
 void EnInvadepoh_InvasionHandler_Invasion(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(5, 15))) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
+        SET_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS);
         EnInvadepoh_InvasionHandler_SetupQueueVictoryCs(this);
     } else {
         s32 i;
@@ -2073,7 +2073,7 @@ void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play) {
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;
     gSaveContext.nextTransitionType = TRANS_TYPE_72;
-    SET_WEEKEVENTREG(WEEKEVENTREG_89_10);
+    SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_TO_DEFEND_AGAINST_ALIENS);
     EnInvadepoh_InvasionHandler_SetupBadEnd(this);
 }
 
@@ -3174,7 +3174,7 @@ void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1);
             this->actor.textId = 0x332E;
         }
         EnInvadepoh_Night1Romani_SetupWalk(this);
@@ -3202,8 +3202,8 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3408,7 +3408,7 @@ void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1);
             this->actor.textId = 0x332E;
         }
 
@@ -3452,8 +3452,8 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3504,7 +3504,7 @@ void EnInvadepoh_RewardRomani_SetupClearCheck(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_RewardRomani_ClearCheck(EnInvadepoh* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         EnInvadepoh_RewardRomani_SetupStartCs(this);
@@ -3532,9 +3532,9 @@ void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE)) {
                 EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
-                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             } else {
                 EnInvadepoh_Romani_StartTextBox(this, play, 0x3333);
@@ -3562,7 +3562,7 @@ void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play) {
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        SET_WEEKEVENTREG(WEEKEVENTREG_22_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE);
         EnInvadepoh_RewardRomani_SetupAfterGiveBottle(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
@@ -3577,7 +3577,7 @@ void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
-        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_RewardRomani_SetupTalk(this);
     } else {
