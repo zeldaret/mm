@@ -125,7 +125,7 @@ void EnInvadepoh_InvasionHandler_SetupFailure(EnInvadepoh* this);
 void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_InvasionHandler_SetupBadEnd(EnInvadepoh* this);
 void EnInvadepoh_InvasionHandler_BadEnd(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Alien_WaitForInvasion(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play);
@@ -359,8 +359,8 @@ typedef struct EnInvadepohWarpEffect {
 
 EnInvadepohWarpEffect sWarpEffects[EFFECT_COUNT];
 EnInvadepoh* sUfo;
-EnInvadepoh* sRomani;
-EnInvadepoh* sCremia;
+EnInvadepoh* sNight3Romani;
+EnInvadepoh* sNight3Cremia;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
 s16 sInvadepohCsIdList[3];
@@ -941,11 +941,11 @@ void EnInvadepoh_Romani_DesegmentTextures(void) {
     if (!sRomaniTexturesDesegmented) {
         sRomaniTexturesDesegmented = true;
 
-        for (i = 0, texture = sRomaniEyeTextures; i < 5; i++, texture++) {
+        for (i = 0, texture = sRomaniEyeTextures; i < ROMANI_EYE_MAX; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
 
-        for (i = 0, texture = sRomaniMouthTextures; i < 4; i++, texture++) {
+        for (i = 0, texture = sRomaniMouthTextures; i < ROMANI_MOUTH_MAX; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
     }
@@ -958,17 +958,17 @@ void EnInvadepoh_Cremia_DesegmentTextures(void) {
     if (!sCremiaTexturesDesegmented) {
         sCremiaTexturesDesegmented = true;
 
-        for (i = 0, texture = sCremiaEyeTextures; i < 6; i++, texture++) {
+        for (i = 0, texture = sCremiaEyeTextures; i < CREMIA_EYE_MAX; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
 
-        for (i = 0, texture = sCremiaMouthTextures; i < 4; i++, texture++) {
+        for (i = 0, texture = sCremiaMouthTextures; i < CREMIA_MOUTH_MAX; i++, texture++) {
             *texture = Lib_SegmentedToVirtual(*texture);
         }
     }
 }
 
-void EnInvadepoh_Alien_SetTexAnim(void) {
+void EnInvadepoh_Alien_DesegmentTexAnims(void) {
     sAlienEmptyTexAnim = Lib_SegmentedToVirtual(gAlienEmptyTexAnim);
     sAlienEyeBeamTexAnim = Lib_SegmentedToVirtual(gAlienEyeBeamTexAnim);
 }
@@ -1738,7 +1738,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
             Actor_Kill(&this->actor);
         }
-        sRomani = this;
+        sNight3Romani = this;
     }
 }
 
@@ -1814,7 +1814,7 @@ void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    sCremia = this;
+    sNight3Cremia = this;
 }
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play2) {
@@ -1834,8 +1834,8 @@ void EnInvadepoh_Init(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Romani_Init,          // EN_INVADEPOH_TYPE_ROMANI_NIGHT_3
         EnInvadepoh_Alien_Init,           // EN_INVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
-    EnInvadepoh* this = THIS;
     PlayState* play = play2;
+    EnInvadepoh* this = THIS;
 
     sInitFuncs[EN_INVADEPOH_GET_TYPE(&this->actor)](this, play);
 }
@@ -1855,6 +1855,7 @@ void EnInvadepoh_Cow_Destroy(EnInvadepoh* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         this->actor.parent->child = NULL;
     }
+
     if (this->actor.child != NULL) {
         this->actor.child->parent = NULL;
     }
@@ -1880,12 +1881,12 @@ void EnInvadepoh_Dog_Destroy(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Cremia_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
-    sCremia = NULL;
+    sNight3Cremia = NULL;
 }
 
 void EnInvadepoh_Night3Romani_Destroy(EnInvadepoh* this, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
-    sRomani = NULL;
+    sNight3Romani = NULL;
 }
 
 void EnInvadepoh_AlienAbductor_Destroy(EnInvadepoh* this, PlayState* play) {
@@ -1915,8 +1916,8 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Night3Romani_Destroy,    // EN_INVADEPOH_TYPE_ROMANI_NIGHT_3
         EnInvadepoh_AlienAbductor_Destroy,   // EN_INVADEPOH_TYPE_ALIEN_ABDUCTOR
     };
-    EnInvadepoh* this = THIS;
     PlayState* play = play2;
+    EnInvadepoh* this = THIS;
 
     sDestroyFuncs[EN_INVADEPOH_GET_TYPE(&this->actor)](this, play);
 }
@@ -2094,7 +2095,7 @@ void EnInvadepoh_InvasionHandler_Update(Actor* thisx, PlayState* play2) {
     this->actor.draw = EnInvadepoh_InvasionHandler_UpdateWarps() ? EnInvadepoh_InvasionHandler_Draw : NULL;
 }
 
-void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
+void EnInvadepoh_Alien_SetupWaitForInvasion(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -2104,10 +2105,14 @@ void EnInvadepoh_Alien_SetupWaitForEvent(EnInvadepoh* this) {
     this->shouldDraw = false;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
-    this->actionFunc = EnInvadepoh_Alien_WaitForEvent;
+    this->actionFunc = EnInvadepoh_Alien_WaitForInvasion;
 }
 
-void EnInvadepoh_Alien_WaitForEvent(EnInvadepoh* this, PlayState* play) {
+/**
+ * Waits until the invasion handler has signaled that the invasion has started, then the alien will spawn a warp effect
+ * and warp in.
+ */
+void EnInvadepoh_Alien_WaitForInvasion(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Alien_SetProgress(this);
     EnInvadepoh_Alien_ApplyProgress(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
@@ -2356,7 +2361,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
-        EnInvadepoh_Alien_SetTexAnim();
+        EnInvadepoh_Alien_DesegmentTexAnims();
         this->actor.update = EnInvadepoh_Alien_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->jointTable, this->morphTable,
                            ALIEN_LIMB_MAX);
@@ -2368,7 +2373,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SnapToFloor(this);
 
         if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
-            EnInvadepoh_Alien_SetupWaitForEvent(this);
+            EnInvadepoh_Alien_SetupWaitForInvasion(this);
         } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
             if (this->pathProgress >= 0.0001f) {
                 EnInvadepoh_Alien_SetupFloatForward(this);
@@ -2392,7 +2397,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
             thisx->gravity = 0.0f;
             EnInvadepoh_Alien_SetupDamaged(this);
         } else if ((this->actionFunc == EnInvadepoh_Alien_WaitToRespawn) ||
-                   (this->actionFunc == EnInvadepoh_Alien_WaitForEvent)) {
+                   (this->actionFunc == EnInvadepoh_Alien_WaitForInvasion)) {
             Actor_Kill(thisx);
             return;
         }
@@ -3870,7 +3875,7 @@ void EnInvadepoh_Night3Cremia_SetupWalk(EnInvadepoh* this) {
 
 void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
-    EnInvadepoh* romani = sRomani;
+    EnInvadepoh* romani = sNight3Romani;
     s32 pad;
     s32 tempFrames;
     s32 pad2;
@@ -3979,9 +3984,9 @@ void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
 
     angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
-    if (sRomani == NULL) {
+    if (sNight3Romani == NULL) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
-    } else if ((sRomani != NULL) && (sRomani->actionFunc != EnInvadepoh_Night3Romani_Talk)) {
+    } else if ((sNight3Romani != NULL) && (sNight3Romani->actionFunc != EnInvadepoh_Night3Romani_Talk)) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
     }
 }
@@ -4076,7 +4081,7 @@ void EnInvadepoh_Night3Romani_SetupWalk(EnInvadepoh* this) {
 
 void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
-    EnInvadepoh* cremia = sCremia;
+    EnInvadepoh* cremia = sNight3Cremia;
     s32 curPoint;
     s32 tempFrames;
     s32 doorTimer;
@@ -4185,9 +4190,9 @@ void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
     angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
 
-    if (sCremia == NULL) {
+    if (sNight3Cremia == NULL) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
-    } else if ((sCremia != NULL) && (sCremia->actionFunc != EnInvadepoh_Night3Cremia_Talk)) {
+    } else if ((sNight3Cremia != NULL) && (sNight3Cremia->actionFunc != EnInvadepoh_Night3Cremia_Talk)) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
     }
 }
@@ -4406,7 +4411,7 @@ void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2) {
         index = EN_INVADEPOH_GET_INDEX(&this->actor);
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
-        EnInvadepoh_Alien_SetTexAnim();
+        EnInvadepoh_Alien_DesegmentTexAnims();
         this->actor.update = EnInvadepoh_AlienAbductor_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienHoldingCowAnim, this->jointTable,
                            this->morphTable, ALIEN_LIMB_MAX);
