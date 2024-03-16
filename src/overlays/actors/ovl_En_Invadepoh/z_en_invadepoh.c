@@ -2391,6 +2391,8 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
 
     if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
+        // The player successfully defended the ranch from the aliens, so this alien should either play its death
+        // animation if it's currently alive or have its instance silently killed if it's waiting to respawn.
         if ((this->actionFunc == EnInvadepoh_Alien_FloatForward) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
             thisx->speed = 0.0f;
             thisx->velocity.y = 0.0f;
@@ -2402,15 +2404,15 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
             return;
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
-        Actor* hitbox = this->collider.base.ac;
+        Actor* ac = this->collider.base.ac;
 
-        thisx->speed = hitbox->speed * 0.5f;
+        thisx->speed = ac->speed * 0.5f;
         thisx->speed = CLAMP(thisx->speed, -60.0f, 60.0f);
 
-        thisx->world.rot.y = hitbox->world.rot.y;
+        thisx->world.rot.y = ac->world.rot.y;
         thisx->gravity = 0.0f;
 
-        thisx->velocity.y = hitbox->velocity.y * 0.5f;
+        thisx->velocity.y = ac->velocity.y * 0.5f;
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
@@ -2459,7 +2461,7 @@ void EnInvadepoh_Cow_WaitForObject(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2) {
-    static s16 D_80B4EDC0[3] = { -0x1F40, -0x1770, -0x2AF8 };
+    static s16 sCowAngularVelocity[3] = { -0x1F40, -0x1770, -0x2AF8 };
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     s32 index;
@@ -2471,7 +2473,7 @@ void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2) {
 
     index = EN_INVADEPOH_GET_INDEX(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[index], 0x32);
+    Math_ScaledStepToS(&this->actor.shape.rot.x, sCowAngularVelocity[index], 0x32);
 
     if (this->actor.child != NULL) {
         s32 pad;

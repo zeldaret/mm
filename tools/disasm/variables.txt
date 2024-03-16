@@ -14212,7 +14212,7 @@
     0x80B4ED20:("sAlienSpawnTimes","s16","[8]",0x10),
     0x80B4ED30:("sDeathScales","Vec3f","[5]",0x3C),
     0x80B4ED6C:("sDeathFlashScales","Vec3f","[7]",0x54),
-    0x80B4EDC0:("D_80B4EDC0","s16","[3]",0x6),
+    0x80B4EDC0:("sCowAngularVelocity","s16","[3]",0x6),
     0x80B4EDC8:("D_80B4EDC8","s16","[4]",0x8),
     0x80B4EDD0:("sUfoTargetOffsets","Vec3f","[5]",0x3C),
     0x80B4EE0C:("D_80B4EE0C","EnInvadepohUnkStruct1","[3]",0x18),
