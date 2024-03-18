@@ -1682,11 +1682,11 @@ static InitChainEntry sRomaniInitChain[] = {
 
 void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    s32 romaniType = EN_INVADEPOH_GET_TYPE(&this->actor);
+    s32 type = EN_INVADEPOH_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
 
-    if ((romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) || (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3)) {
+    if ((type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) || (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3)) {
         this->actor.targetMode = TARGET_MODE_3;
     } else {
         this->actor.targetMode = TARGET_MODE_6;
@@ -1694,22 +1694,23 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
 
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(play, &this->collider);
-    if (romaniType != EN_INVADEPOH_TYPE_ROMANI_ABDUCTED) {
+
+    if (type != EN_INVADEPOH_TYPE_ROMANI_ABDUCTED) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sRomaniAndCremiaCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
 
-    if (romaniType == EN_INVADEPOH_TYPE_ROMANI_ABDUCTED) {
+    if (type == EN_INVADEPOH_TYPE_ROMANI_ABDUCTED) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
         this->actor.update = EnInvadepoh_SilentRomani_WaitForObject;
         this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE;
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_BARN) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_BARN) {
         this->actor.update = EnInvadepoh_BarnRomani_WaitForObject;
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_REWARD) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_REWARD) {
         this->actor.update = EnInvadepoh_RewardRomani_WaitForObject;
     } else {
         this->actor.update = EnInvadepoh_Night3Romani_WaitForObject;
@@ -1720,24 +1721,25 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    if (romaniType == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
+    if (type == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
         if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 15))) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_BARN) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_BARN) {
         // nothing
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_REWARD) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_REWARD) {
         if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
             Actor_Kill(&this->actor);
         }
-    } else if (romaniType == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3) {
+    } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
             Actor_Kill(&this->actor);
         }
+
         sNight3Romani = this;
     }
 }
@@ -1753,6 +1755,7 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
     this->actor.update = EnInvadepoh_Ufo_Update;
     this->actor.draw = EnInvadepoh_Ufo_Draw;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
+
     if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
         this->actor.world.pos.x += sUfoSpawnOffset.x;
         this->actor.world.pos.y += sUfoSpawnOffset.y + 3000.0f;
