@@ -344,8 +344,8 @@ static s8 sCremiaTexturesDesegmented = false;
 
 static s8 sRewardFinished = false;
 
-MtxF sAlienLeftEyeBeamMtxF;
-MtxF sAlienRightEyeBeamMtxF;
+MtxF sInvadepohAlienLeftEyeBeamMtxF;
+MtxF sInvadepohAlienRightEyeBeamMtxF;
 EnInvadepoh* sAliens[ALIEN_COUNT];
 u8 sAlienStateFlags[ALIEN_COUNT];
 s8 sAliensTooClose;
@@ -4486,14 +4486,14 @@ void EnInvadepoh_Alien_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_Get(&sAlienLeftEyeBeamMtxF);
+        Matrix_Get(&sInvadepohAlienLeftEyeBeamMtxF);
         Matrix_Pop();
     } else if ((limbIndex == ALIEN_LIMB_RIGHT_EYE) && (this->eyeBeamAlpha != 0)) {
         Matrix_Push();
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x47D0, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_Get(&sAlienRightEyeBeamMtxF);
+        Matrix_Get(&sInvadepohAlienRightEyeBeamMtxF);
         Matrix_Pop();
     }
 
@@ -4541,11 +4541,11 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
             gDPSetPrimColor(ptr++, 0, 0xFF, 240, 180, 100, 60);
             gDPSetEnvColor(ptr++, 255, 255, 255, 100.0f / 170.0f * this->eyeBeamAlpha);
 
-            Matrix_Mult(&sAlienLeftEyeBeamMtxF, MTXMODE_NEW);
+            Matrix_Mult(&sInvadepohAlienLeftEyeBeamMtxF, MTXMODE_NEW);
             gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(ptr++, gAlienEyeBeamDL);
 
-            Matrix_Mult(&sAlienRightEyeBeamMtxF, MTXMODE_NEW);
+            Matrix_Mult(&sInvadepohAlienRightEyeBeamMtxF, MTXMODE_NEW);
             gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(ptr++, gAlienEyeBeamDL);
 
