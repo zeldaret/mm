@@ -350,14 +350,19 @@ EnInvadepoh* sAliens[ALIEN_COUNT];
 u8 sAlienStateFlags[ALIEN_COUNT];
 s8 sAliensTooClose;
 
-typedef struct EnInvadepohWarpEffect {
+typedef enum EnInvadepohEffectType {
+    /* 0 */ EN_INVADEPOH_EFFECT_TYPE_WARP,
+    /* 1 */ EN_INVADEPOH_EFFECT_TYPE_MAX
+} EnInvadepohEffectType;
+
+typedef struct EnInvadepohEffect {
     /* 0x0 */ s8 type;
     /* 0x1 */ s8 timer;
     /* 0x2 */ u8 alpha;
     /* 0x4 */ Vec3f pos;
-} EnInvadepohWarpEffect; // size = 0x10
+} EnInvadepohEffect; // size = 0x10
 
-EnInvadepohWarpEffect sWarpEffects[EFFECT_COUNT];
+EnInvadepohEffect sEffects[EFFECT_COUNT];
 EnInvadepoh* sUfo;
 EnInvadepoh* sNight3Romani;
 EnInvadepoh* sNight3Cremia;
@@ -1514,23 +1519,34 @@ void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawn
     }
 }
 
-s32 EnInvadepoh_Alien_SpawnWarp(Vec3f* spawnPos) {
-    EnInvadepohWarpEffect* warpEffect = sWarpEffects;
+/**
+ * Attempts to spawn an alien warp effect at the specified position. If at least one entry in the list of effects is
+ * inactive (i.e., its timer is equal to less than or equal to zero), then this function will use that entry for the
+ * warp effect and return true. Otherwise, it returns false.
+ */
+s32 EnInvadepoh_SpawnWarpEffect(Vec3f* pos) {
+    EnInvadepohEffect* warpEffect = sEffects;
     s32 i;
 
     for (i = 0; i < EFFECT_COUNT; i++, warpEffect++) {
         if (warpEffect->timer <= 0) {
-            warpEffect->type = 0;
+            warpEffect->type = EN_INVADEPOH_EFFECT_TYPE_WARP;
             warpEffect->timer = 40;
-            Math_Vec3f_Copy(&warpEffect->pos, spawnPos);
+            Math_Vec3f_Copy(&warpEffect->pos, pos);
             warpEffect->alpha = 0;
             return true;
         }
     }
+
     return false;
 }
 
-void EnInvadepoh_InvasionHandler_WarpFade(EnInvadepohWarpEffect* warpEffect) {
+/**
+ * If the warp effect has been active for less than 20 frames, this function will gradually increase the alpha of the
+ * warp effect until it reaches a value of 135. Otherwise, it will gradually decrease the alpha of the warp effect until
+ * it reaches 0.
+ */
+void EnInvadepoh_UpdateWarpEffect(EnInvadepohEffect* warpEffect) {
     if (warpEffect->timer > 20) {
         if (warpEffect->alpha < 125) {
             warpEffect->alpha += 10;
@@ -1546,20 +1562,28 @@ void EnInvadepoh_InvasionHandler_WarpFade(EnInvadepohWarpEffect* warpEffect) {
     }
 }
 
-s32 EnInvadepoh_InvasionHandler_UpdateWarps(void) {
-    static EnInvadepohWarpEffectUpdateFunc sWarpEffectUpdateFuncs[1] = { EnInvadepoh_InvasionHandler_WarpFade };
-    s32 warpActive = false;
+/**
+ * This function iterates through all effects and checks to see if the effect is active (i.e., the effect's timer is
+ * greater than zero). If it is, then this function will update the effect and eventually return true. If no effect is
+ * active, then this function will return false.
+ */
+s32 EnInvadepoh_UpdateEffects(void) {
+    static EnInvadepohEffectUpdateFunc sEffectUpdateFuncs[EN_INVADEPOH_EFFECT_TYPE_MAX] = {
+        EnInvadepoh_UpdateWarpEffect // EN_INVADEPOH_EFFECT_TYPE_WARP
+    };
+    s32 effectActive = false;
     s32 i;
-    EnInvadepohWarpEffect* warpEffect;
+    EnInvadepohEffect* effect;
 
-    for (i = 0, warpEffect = sWarpEffects; i < EFFECT_COUNT; i++, warpEffect++) {
-        if (warpEffect->timer > 0) {
-            sWarpEffectUpdateFuncs[warpEffect->type](warpEffect);
-            warpActive = true;
-            warpEffect->timer--;
+    for (i = 0, effect = sEffects; i < EFFECT_COUNT; i++, effect++) {
+        if (effect->timer > 0) {
+            sEffectUpdateFuncs[effect->type](effect);
+            effectActive = true;
+            effect->timer--;
         }
     }
-    return warpActive;
+
+    return effectActive;
 }
 
 void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
@@ -2095,7 +2119,7 @@ void EnInvadepoh_InvasionHandler_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
 
-    this->actor.draw = EnInvadepoh_InvasionHandler_UpdateWarps() ? EnInvadepoh_InvasionHandler_Draw : NULL;
+    this->actor.draw = EnInvadepoh_UpdateEffects() ? EnInvadepoh_InvasionHandler_Draw : NULL;
 }
 
 void EnInvadepoh_Alien_SetupWaitForInvasion(EnInvadepoh* this) {
@@ -2123,7 +2147,7 @@ void EnInvadepoh_Alien_WaitForInvasion(EnInvadepoh* this, PlayState* play) {
     if (sAlienStateFlags[EN_INVADEPOH_GET_INDEX(&this->actor)] & ALIEN_STATE_FLAG_ACTIVE) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
+        EnInvadepoh_SpawnWarpEffect(&this->actor.world.pos);
         EnInvadepoh_Alien_SetupWarpIn(this);
     }
 }
@@ -2152,7 +2176,7 @@ void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
     if (this->pathProgress > 0.0f) {
         Actor_SetScale(&this->actor, 0.01f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_Alien_SpawnWarp(&this->actor.world.pos);
+        EnInvadepoh_SpawnWarpEffect(&this->actor.world.pos);
         EnInvadepoh_Alien_SetupWarpIn(this);
     }
 }
@@ -4420,6 +4444,7 @@ void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.update = EnInvadepoh_AlienAbductor_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienHoldingCowAnim, this->jointTable,
                            this->morphTable, ALIEN_LIMB_MAX);
+
         if (index < 3) {
             EnInvadepoh_AlienAbductor_SpawnCow(this, play, index);
             EnInvadepoh_AlienAbductor_SetupCow(this);
@@ -4442,27 +4467,28 @@ void EnInvadepoh_AlienAbductor_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_InvasionHandler_DrawWarps(PlayState* play) {
+void EnInvadepoh_DrawWarpEffects(PlayState* play) {
     s32 i;
-    EnInvadepohWarpEffect* warpEffect;
+    EnInvadepohEffect* warpEffect;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    for (i = 0, warpEffect = sWarpEffects; i < EFFECT_COUNT; i++, warpEffect++) {
+    for (i = 0, warpEffect = sEffects; i < EFFECT_COUNT; i++, warpEffect++) {
         if (warpEffect->timer > 0) {
-            u32 warpScrollX1 = (play->gameplayFrames + (u8)(i * 0x10)) % 0x80;
-            u32 warpScrollY2 = (play->gameplayFrames * -0xF) % 0x100;
+            u8 offset = i * 16;
+            u32 warpScrollX1 = (play->gameplayFrames + offset) & 0x7F;
+            u32 warpScrollY2 = (play->gameplayFrames * -15) & 0xFF;
 
             Matrix_Translate(warpEffect->pos.x, warpEffect->pos.y, warpEffect->pos.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, warpEffect->alpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x8,
-                Gfx_TwoTexScroll(play->state.gfxCtx, 0, warpScrollX1, 0, 0x20, 0x40, 1, 0, warpScrollY2, 0x20, 0x40));
+            gSPSegment(POLY_XLU_DISP++, 0x8,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, warpScrollX1, 0, 32, 64, 1, 0,
+                                        warpScrollY2, 32, 64));
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_02E510);
         }
@@ -4472,7 +4498,7 @@ void EnInvadepoh_InvasionHandler_DrawWarps(PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_Draw(Actor* thisx, PlayState* play) {
-    EnInvadepoh_InvasionHandler_DrawWarps(play);
+    EnInvadepoh_DrawWarpEffects(play);
 }
 
 s32 EnInvadepoh_Alien_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -4533,26 +4559,28 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         }
 
         if (this->eyeBeamAlpha != 0) {
-            Gfx* ptr;
+            Gfx* gfx;
 
             AnimatedMat_Draw(play, sAlienEyeBeamTexAnim);
 
             OPEN_DISPS(play->state.gfxCtx);
-            ptr = POLY_XLU_DISP;
 
-            gDPPipeSync(ptr++);
-            gDPSetPrimColor(ptr++, 0, 0xFF, 240, 180, 100, 60);
-            gDPSetEnvColor(ptr++, 255, 255, 255, 100.0f / 170.0f * this->eyeBeamAlpha);
+            gfx = POLY_XLU_DISP;
+
+            gDPPipeSync(gfx++);
+            gDPSetPrimColor(gfx++, 0, 0xFF, 240, 180, 100, 60);
+            gDPSetEnvColor(gfx++, 255, 255, 255, 100.0f / 170.0f * this->eyeBeamAlpha);
 
             Matrix_Mult(&sInvadepohAlienLeftEyeBeamMtxF, MTXMODE_NEW);
-            gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(ptr++, gAlienEyeBeamDL);
+            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, gAlienEyeBeamDL);
 
             Matrix_Mult(&sInvadepohAlienRightEyeBeamMtxF, MTXMODE_NEW);
-            gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(ptr++, gAlienEyeBeamDL);
+            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, gAlienEyeBeamDL);
 
-            POLY_XLU_DISP = ptr;
+            POLY_XLU_DISP = gfx;
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -4566,18 +4594,18 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
     }
 
     if (this->shouldDraw) {
-        Gfx* ptr;
+        Gfx* gfx;
         Vec3f glowOffset;
         Vec3f glowPos;
         s32 glowAlpha;
 
         OPEN_DISPS(play->state.gfxCtx);
-        ptr = POLY_XLU_DISP;
 
-        ptr = Gfx_SetupDL20_NoCD(ptr);
+        gfx = POLY_XLU_DISP;
+        gfx = Gfx_SetupDL20_NoCD(gfx);
 
-        gDPSetDither(ptr++, G_CD_NOISE);
-        gDPSetCombineLERP(ptr++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
         Matrix_Mult(&play->billboardMtxF, MTXMODE_NEW);
@@ -4592,12 +4620,12 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
         glowAlpha = 100.0f / 255.0f * this->alpha;
 
-        gSPDisplayList(ptr++, gameplay_keep_DL_029CB0);
-        gDPSetPrimColor(ptr++, 0, 0, 240, 180, 100, glowAlpha);
-        gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(ptr++, gameplay_keep_DL_029CF0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
+        gDPSetPrimColor(gfx++, 0, 0, 240, 180, 100, glowAlpha);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
 
-        POLY_XLU_DISP = ptr;
+        POLY_XLU_DISP = gfx;
 
         if ((this->alpha > 128) && EnInvadepoh_Alien_LensFlareDepthCheck(play, &glowPos)) {
             Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, glowPos, 10.0f, 9.0f, 0, 0);
