@@ -548,7 +548,7 @@ f32 EnInvadepoh_GetPathLength(EnInvadepoh* this) {
     return pathLength;
 }
 
-void EnInvadepoh_SetPath(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InitPath(EnInvadepoh* this, PlayState* play) {
     Path* path = &play->setupPathList[EN_INVADEPOH_GET_PATH(&this->actor)];
 
     this->endPoint = path->count - 1;
@@ -675,14 +675,14 @@ void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Alien_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_Alien_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
     this->pathLength = EnInvadepoh_GetPathLength(this);
     EnInvadepoh_Alien_SetCheckpoints(this);
 }
 
-void EnInvadepoh_SilentRomani_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_SilentRomani_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
 }
 
 void EnInvadepoh_SilentRomani_SetNextPathPoint(EnInvadepoh* this) {
@@ -692,8 +692,8 @@ void EnInvadepoh_SilentRomani_SetNextPathPoint(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Night1Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_Night1Romani_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
     this->pathLength = EnInvadepoh_GetPathLength(this);
 }
 
@@ -710,8 +710,8 @@ void EnInvadepoh_Night1Romani_SetProgress(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_BarnRomani_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_BarnRomani_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
 }
 
 void EnInvadepoh_BarnRomani_SetNextPathPoint(EnInvadepoh* this) {
@@ -720,8 +720,8 @@ void EnInvadepoh_BarnRomani_SetNextPathPoint(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Dog_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_Dog_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
     this->pathStep = 1;
 }
 
@@ -735,8 +735,8 @@ void EnInvadepoh_Dog_SetNextPathPoint(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Night3Romani_SetupPath(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_SetPath(this, play);
+void EnInvadepoh_Night3Romani_InitPath(EnInvadepoh* this, PlayState* play) {
+    EnInvadepoh_InitPath(this, play);
     this->pathLength = EnInvadepoh_GetPathLength(this);
 }
 
@@ -2404,7 +2404,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->jointTable, this->morphTable,
                            ALIEN_LIMB_MAX);
         this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame / 8.0f;
-        EnInvadepoh_Alien_SetupPath(this, play);
+        EnInvadepoh_Alien_InitPath(this, play);
         EnInvadepoh_Alien_SetProgress(this);
         EnInvadepoh_Alien_ApplyProgress(this, play);
         EnInvadepoh_SetYawAlongPath(this);
@@ -2874,7 +2874,7 @@ void EnInvadepoh_SilentRomani_WaitForObject(Actor* thisx, PlayState* play2) {
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_6, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_2, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_SilentRomani_SetupPath(this, play);
+        EnInvadepoh_SilentRomani_InitPath(this, play);
         EnInvadepoh_SetPosToPathPoint(this, 0);
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
@@ -3245,7 +3245,7 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_Night1Romani_SetupPath(this, play);
+        EnInvadepoh_Night1Romani_InitPath(this, play);
         EnInvadepoh_Night1Romani_SetProgress(this);
         EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
@@ -3484,7 +3484,7 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_BarnRomani_SetupPath(this, play2);
+        EnInvadepoh_BarnRomani_InitPath(this, play2);
 
         if ((currentTime < CLOCK_TIME(2, 15)) || (currentTime >= CLOCK_TIME(6, 00))) {
             this->currentPoint = 0;
@@ -3828,7 +3828,7 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->jointTable, this->morphTable,
                        DOG_LIMB_MAX);
     EnInvadepoh_Interact_Init(&this->interactInfo, NULL, 0, NULL, 0, &gZeroVec3s, 0xBB8, 0.1f, 0.0f, 0.0f);
-    EnInvadepoh_Dog_SetupPath(this, play);
+    EnInvadepoh_Dog_InitPath(this, play);
     EnInvadepoh_SetPosToPathPoint(this, 0);
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
@@ -4256,7 +4256,7 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_Night3Romani_SetupPath(this, play);
+        EnInvadepoh_Night3Romani_InitPath(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         EnInvadepoh_Night3Romani_SetProgress(this);
         EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
