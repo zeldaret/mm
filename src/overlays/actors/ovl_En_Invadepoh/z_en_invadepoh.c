@@ -555,6 +555,9 @@ void EnInvadepoh_SetPath(EnInvadepoh* this, PlayState* play) {
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
 }
 
+/**
+ * Sets the actor's current position to be the same as the point along with the path with the index of `point`.
+ */
 void EnInvadepoh_SetPosToPathPoint(EnInvadepoh* this, s32 point) {
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[point]);
 }
@@ -816,6 +819,10 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
     }
 }
 
+/**
+ * Decreases the alien's y-velocity and speed when hit by an arrow. The extent of the decrease depends on whether the
+ * alien is touching the ground or a wall.
+ */
 void EnInvadepoh_Alien_Knockback(EnInvadepoh* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.velocity.y *= 0.3f;
@@ -996,6 +1003,10 @@ s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarge
     }
 }
 
+/**
+ * If there is a floor under the actor, this function will set the actor's y-position to the floor's y-position and
+ * return true. Otherwise, it will return false.
+ */
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this) {
     if (this->actor.floorHeight > BGCHECK_Y_MIN + 1.0f) {
         this->actor.world.pos.y = this->actor.floorHeight;
