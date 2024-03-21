@@ -23,22 +23,39 @@ typedef void (*EnInvadepohEffectUpdateFunc)(struct EnInvadepohEffect* warpEffect
 #define EN_INVADEPOH_PARAMS(path, type, index) (((index) & 7) | (((path) << 8) & 0x7F00) | (((type) << 4) & 0xF0))
 
 typedef enum EnInvadepohType {
-    /* 0x0 */ EN_INVADEPOH_TYPE_INVASION_HANDLER, // Alien invasion event handler
-    /* 0x1 */ EN_INVADEPOH_TYPE_ALIEN,            // The aliens that approach the barn
-    /* 0x2 */ EN_INVADEPOH_TYPE_COW,              // An unused abudcted cow, spawned by the alien abductor
-    /* 0x3 */ EN_INVADEPOH_TYPE_COW_TAIL,         // An unused abducted cow tail, spawned by the abducted cow
-    /* 0x4 */ EN_INVADEPOH_TYPE_ROMANI_ABDUCTED,  // An unused abducted Romani, spawned by alien abductor
-    /* 0x5 */ EN_INVADEPOH_TYPE_ROMANI_SILENT,    // A confused, silent Romani that wanders the ranch on day 2
-    /* 0x6 */ EN_INVADEPOH_TYPE_UFO,              // The spinning ball of light that spawns the aliens and hovers over the barn
-    /* 0x7 */ EN_INVADEPOH_TYPE_ROMANI_NIGHT_1,   // Romani running to the barn on night 1
-    /* 0x8 */ EN_INVADEPOH_TYPE_ROMANI_BARN,      // Romani in the barn on night 1
-    /* 0x9 */ EN_INVADEPOH_TYPE_ROMANI_REWARD,    // Romani rewarding you for defending the ranch from the aliens
-    /* 0xA */ EN_INVADEPOH_TYPE_DOG,              // Dog during alien invasion
-    /* 0xB */ EN_INVADEPOH_TYPE_CREMIA_NIGHT_3,   // Cremia walking from the barn to the house on night 3
-    /* 0xC */ EN_INVADEPOH_TYPE_ROMANI_NIGHT_3,   // Romnani walking from the barn to the house on night 3
-    /* 0xD */ EN_INVADEPOH_TYPE_ALIEN_ABDUCTOR,   // An unused alien variant that can carry either a cow or Romani
-    /* 0xE */ EN_INVADEPOH_TYPE_MAX
+    /*  0 */ EN_INVADEPOH_TYPE_INVASION_HANDLER, // Alien invasion event handler
+    /*  1 */ EN_INVADEPOH_TYPE_ALIEN,            // The aliens that approach the barn
+    /*  2 */ EN_INVADEPOH_TYPE_COW,              // An unused abudcted cow, spawned by the alien abductor
+    /*  3 */ EN_INVADEPOH_TYPE_COW_TAIL,         // An unused abducted cow tail, spawned by the abducted cow
+    /*  4 */ EN_INVADEPOH_TYPE_ROMANI_ABDUCTED,  // An unused abducted Romani, spawned by alien abductor
+    /*  5 */ EN_INVADEPOH_TYPE_ROMANI_SILENT,    // A confused, silent Romani that wanders the ranch on day 2
+    /*  6 */ EN_INVADEPOH_TYPE_UFO,              // The spinning ball of light that spawns the aliens and hovers over the barn
+    /*  7 */ EN_INVADEPOH_TYPE_ROMANI_NIGHT_1,   // Romani running to the barn on night 1
+    /*  8 */ EN_INVADEPOH_TYPE_ROMANI_BARN,      // Romani in the barn on night 1
+    /*  9 */ EN_INVADEPOH_TYPE_ROMANI_REWARD,    // Romani rewarding you for defending the ranch from the aliens
+    /* 10 */ EN_INVADEPOH_TYPE_DOG,              // Dog during alien invasion
+    /* 11 */ EN_INVADEPOH_TYPE_CREMIA_NIGHT_3,   // Cremia walking from the barn to the house on night 3
+    /* 12 */ EN_INVADEPOH_TYPE_ROMANI_NIGHT_3,   // Romnani walking from the barn to the house on night 3
+    /* 13 */ EN_INVADEPOH_TYPE_ALIEN_ABDUCTOR,   // An unused alien variant that can carry either a cow or Romani
+    /* 14 */ EN_INVADEPOH_TYPE_MAX
 } EnInvadepohType;
+
+typedef enum EnInvadepohCowIndex {
+    /* 0 */ EN_INVADEPOH_COW_INDEX_0,
+    /* 1 */ EN_INVADEPOH_COW_INDEX_1,
+    /* 2 */ EN_INVADEPOH_COW_INDEX_2,
+    /* 3 */ EN_INVADEPOH_COW_INDEX_MAX
+} EnInvadepohCowIndex;
+
+typedef enum EnInvadepohAlienAbductorIndex {
+    /* 0 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_0,
+    /* 1 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_1,
+    /* 2 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_2,
+    /* 3 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_MAX,
+    
+    // Any alien abductor with an index of 3 or higher will be carrying Romani
+    /* 3 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_ROMANI = 3
+} EnInvadepohAlienAbductorIndex;
 
 #define EN_INVADEPOH_PATH_INDEX_NONE 0xFF
 

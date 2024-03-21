@@ -14215,7 +14215,7 @@
     0x80B4EDC0:("sCowAngularVelocity","s16","[3]",0x6),
     0x80B4EDC8:("D_80B4EDC8","s16","[4]",0x8),
     0x80B4EDD0:("sUfoTargetOffsets","Vec3f","[5]",0x3C),
-    0x80B4EE0C:("D_80B4EE0C","EnInvadepohUnkStruct1","[3]",0x18),
+    0x80B4EE0C:("sCowAbductionInfo","EnInvadepohCowAbductionInfo","[3]",0x18),
     0x80B4EE24:("sFocusOffset","Vec3f","",0xC),
     0x80B4EE30:("sFocusOffset","Vec3f","",0xC),
     0x80B4EE40:("D_80B4EE40","f32","",0x4),

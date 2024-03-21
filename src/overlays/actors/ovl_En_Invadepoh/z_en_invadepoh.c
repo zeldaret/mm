@@ -190,8 +190,8 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this);
 void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_AlienAbductor_AbductCow(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_AlienAbductor_AbductRomani(EnInvadepoh* this, PlayState* play);
 
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed);
@@ -2488,7 +2488,11 @@ void EnInvadepoh_Cow_WaitForObject(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2) {
-    static s16 sCowAngularVelocity[3] = { -0x1F40, -0x1770, -0x2AF8 };
+    static s16 sCowAngularVelocity[EN_INVADEPOH_COW_INDEX_MAX] = {
+        -0x1F40, // EN_INVADEPOH_COW_INDEX_0
+        -0x1770, // EN_INVADEPOH_COW_INDEX_1
+        -0x2AF8  // EN_INVADEPOH_COW_INDEX_2
+    };
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     s32 index;
@@ -4296,17 +4300,17 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-typedef struct EnInvadepohUnkStruct1 {
+typedef struct EnInvadepohCowAbductionInfo {
     /* 0x0 */ f32 accel;
     /* 0x4 */ s16 angularVelocity;
     /* 0x6 */ s16 angularAcceleration;
-} EnInvadepohUnkStruct1; // size = 0x8
+} EnInvadepohCowAbductionInfo; // size = 0x8
 
-void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
-    static EnInvadepohUnkStruct1 D_80B4EE0C[3] = {
-        { 0.08f, 0x2BC, -0xA },
-        { 0.09f, 0x12C, -0x5 },
-        { 0.05f, 0x190, 0x0 },
+void EnInvadepoh_AlienAbductor_SetupAbductCow(EnInvadepoh* this) {
+    static EnInvadepohCowAbductionInfo sCowAbductionInfo[EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_MAX] = {
+        { 0.08f, 0x2BC, -0xA }, // EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_0
+        { 0.09f, 0x12C, -0x5 }, // EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_1
+        { 0.05f, 0x190, 0x0 },  // EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_2
     };
     s32 pad;
     s32 index = EN_INVADEPOH_GET_INDEX(&this->actor);
@@ -4319,42 +4323,46 @@ void EnInvadepoh_AlienAbductor_SetupCow(EnInvadepoh* this) {
     this->shouldDraw = true;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
-    this->alienAbductorAccelY = D_80B4EE0C[index].accel;
+    this->alienAbductorAccelY = sCowAbductionInfo[index].accel;
     this->angle = index * 0x5555;
     this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
     this->actor.world.pos.y = this->actor.home.pos.y;
     this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
     this->actor.shape.rot.y = this->angle + 0x4000;
-    this->shapeAngularVelocityY = D_80B4EE0C[index].angularVelocity;
-    this->shapeAngularAccelerationY = D_80B4EE0C[index].angularAcceleration;
-    this->actionFunc = EnInvadepoh_AlienAbductor_Cow;
+    this->shapeAngularVelocityY = sCowAbductionInfo[index].angularVelocity;
+    this->shapeAngularAccelerationY = sCowAbductionInfo[index].angularAcceleration;
+    this->actionFunc = EnInvadepoh_AlienAbductor_AbductCow;
     this->actor.velocity.y = 0.0f;
 }
 
-void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play) {
-    Actor* cow;
+/**
+ * Rises into the air while carrying a cow in its arms. After the alien gets within 5 units of its target y-coordinate
+ * (850 units above its spawn position), this function will kill the actor.
+ */
+void EnInvadepoh_AlienAbductor_AbductCow(EnInvadepoh* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     f32 distToTarget;
 
     if (sUfo == NULL) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(thisx);
         return;
     }
 
-    Math_StepToF(&this->actor.velocity.y, 15.0f, this->alienAbductorAccelY);
-    distToTarget = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, 0.2f,
-                                      this->actor.velocity.y, 0.01f);
+    Math_StepToF(&thisx->velocity.y, 15.0f, this->alienAbductorAccelY);
+    distToTarget = Math_SmoothStepToF(&thisx->world.pos.y, thisx->home.pos.y + 850.0f, 0.2f, thisx->velocity.y, 0.01f);
     this->angle += 0x2BC;
-    this->actor.world.pos.x = Math_SinS(this->angle) * 80.0f + this->actor.home.pos.x;
-    this->actor.world.pos.z = Math_CosS(this->angle) * 80.0f + this->actor.home.pos.z;
+    thisx->world.pos.x = Math_SinS(this->angle) * 80.0f + thisx->home.pos.x;
+    thisx->world.pos.z = Math_CosS(this->angle) * 80.0f + thisx->home.pos.z;
     this->shapeAngularVelocityY += this->shapeAngularAccelerationY;
-    this->actor.shape.rot.y += this->shapeAngularVelocityY;
+    thisx->shape.rot.y += this->shapeAngularVelocityY;
 
-    if (this->actor.child != NULL) {
-        cow = this->actor.child;
-        cow->world.pos.x = this->actor.world.pos.x;
-        cow->world.pos.y = this->actor.world.pos.y - 38.0f;
-        cow->world.pos.z = this->actor.world.pos.z;
-        cow->shape.rot.y = this->actor.shape.rot.y;
+    if (thisx->child != NULL) {
+        Actor* cow = thisx->child;
+
+        cow->world.pos.x = thisx->world.pos.x;
+        cow->world.pos.y = thisx->world.pos.y - 38.0f;
+        cow->world.pos.z = thisx->world.pos.z;
+        cow->shape.rot.y = thisx->shape.rot.y;
     }
 
     if (distToTarget < 5.0f) {
@@ -4362,7 +4370,7 @@ void EnInvadepoh_AlienAbductor_Cow(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
+void EnInvadepoh_AlienAbductor_SetupAbductRomani(EnInvadepoh* this) {
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
     this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
@@ -4373,56 +4381,60 @@ void EnInvadepoh_AlienAbductor_SetupRomani(EnInvadepoh* this) {
     this->angularVelocity = 0x190;
     this->angle = 0;
     this->timer = 200;
-    this->actionFunc = EnInvadepoh_AlienAbductor_Romani;
+    this->actionFunc = EnInvadepoh_AlienAbductor_AbductRomani;
     this->actor.velocity.y = 0.0f;
 }
 
-void EnInvadepoh_AlienAbductor_Romani(EnInvadepoh* this, PlayState* play) {
-    s32 timer;
+/**
+ * Waits around and draws nothing for 40 frames, then slowly rises into the air while carrying Romani in its arms. After
+ * 200 frames have passed, or after the alien has reached its target y-coordinate (850 units above its spawn position),
+ * this function will kill the actor.
+ */
+void EnInvadepoh_AlienAbductor_AbductRomani(EnInvadepoh* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     f32 tempAngularVelocity;
-    s32 reachedTargetY = 0;
+    s32 reachedTargetY = false;
 
     if (this->timer > 0) {
         this->timer--;
     }
 
     if (this->timer > 160) {
-        this->actor.draw = NULL;
+        thisx->draw = NULL;
     } else {
-        this->actor.draw = EnInvadepoh_Alien_Draw;
-        timer = (reachedTargetY ? 0 : this->timer);
+        thisx->draw = EnInvadepoh_Alien_Draw;
 
-        if ((timer < 105) && (timer >= 100)) {
-            this->actor.gravity = -1.0f;
-            Math_SmoothStepToS(&this->actor.shape.rot.x, 0x2000, 8, 0x320, 0x28);
+        if ((this->timer < 105) && (this->timer >= 100)) {
+            thisx->gravity = -1.0f;
+            Math_SmoothStepToS(&thisx->shape.rot.x, 0x2000, 8, 0x320, 0x28);
         } else {
-            this->actor.gravity = 0.7f;
-            Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 8, 0x320, 0x28);
+            thisx->gravity = 0.7f;
+            Math_SmoothStepToS(&thisx->shape.rot.x, 0, 8, 0x320, 0x28);
         }
 
-        this->actor.velocity.y += this->actor.gravity;
-        this->actor.velocity.y *= 0.92f;
+        thisx->velocity.y += thisx->gravity;
+        thisx->velocity.y *= 0.92f;
 
         if (this->timer > 80) {
-            this->actor.world.pos.y += this->actor.velocity.y;
+            thisx->world.pos.y += thisx->velocity.y;
         } else {
-            f32 targetY = this->actor.home.pos.y + 850.0f;
+            f32 targetY = thisx->home.pos.y + 850.0f;
 
-            reachedTargetY = Math_StepToF(&this->actor.world.pos.y, targetY, fabsf(this->actor.velocity.y));
+            reachedTargetY = Math_StepToF(&thisx->world.pos.y, targetY, fabsf(thisx->velocity.y));
         }
 
         tempAngularVelocity = (this->angle * -0.06f) + this->angularVelocity;
         tempAngularVelocity *= 0.98f;
         this->angularVelocity = tempAngularVelocity;
-        this->actor.shape.rot.y += this->angularVelocity;
+        thisx->shape.rot.y += this->angularVelocity;
 
-        if (this->actor.child != NULL) {
-            Actor* romani = this->actor.child;
+        if (thisx->child != NULL) {
+            Actor* romani = thisx->child;
 
-            romani->world.pos.x = this->actor.world.pos.x;
-            romani->world.pos.y = this->actor.world.pos.y - 30.0f;
-            romani->world.pos.z = this->actor.world.pos.z;
-            romani->shape.rot.y = this->actor.shape.rot.y;
+            romani->world.pos.x = thisx->world.pos.x;
+            romani->world.pos.y = thisx->world.pos.y - 30.0f;
+            romani->world.pos.z = thisx->world.pos.z;
+            romani->shape.rot.y = thisx->shape.rot.y;
         }
     }
 
@@ -4445,12 +4457,12 @@ void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienHoldingCowAnim, this->jointTable,
                            this->morphTable, ALIEN_LIMB_MAX);
 
-        if (index < 3) {
+        if (index < EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_MAX) {
             EnInvadepoh_AlienAbductor_SpawnCow(this, play, index);
-            EnInvadepoh_AlienAbductor_SetupCow(this);
+            EnInvadepoh_AlienAbductor_SetupAbductCow(this);
         } else {
             EnInvadepoh_AlienAbductor_SpawnRomani(this, play);
-            EnInvadepoh_AlienAbductor_SetupRomani(this);
+            EnInvadepoh_AlienAbductor_SetupAbductRomani(this);
         }
     }
 }
