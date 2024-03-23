@@ -431,9 +431,9 @@ void func_80BAAF1C(EnSuttari* this) {
 
 void func_80BAAFDC(EnSuttari* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
-        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
-        Vec3f effectVel;
+        Vec3f effectVelocity;
 
         Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
@@ -441,11 +441,11 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        effectVelOffset.z = 20.0f;
-        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        effectVelocityOffset.z = 20.0f;
+        Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
         Matrix_Pop();
         if (!this->playerDetected) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50, &this->playerDetected,
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
@@ -464,9 +464,9 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
 
 void func_80BAB1A0(EnSuttari* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
-        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
-        Vec3f effectVel;
+        Vec3f effectVelocity;
 
         Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
@@ -474,11 +474,11 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        effectVelOffset.z = 20.0f;
-        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        effectVelocityOffset.z = 20.0f;
+        Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
         Matrix_Pop();
         if (!this->playerDetected) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50, &this->playerDetected,
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {

@@ -106,25 +106,28 @@ TexturePtr D_80BE1B24[] = {
     object_tab_Tex_006928,
 };
 
-EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
-        if ((foundActor == NULL) || (((EnTab*)foundActor != this) && (foundActor->update != NULL))) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnTab*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     };
 
-    return (EnGm*)foundActor;
+    return actorIter;
 }
 
 void func_80BE0590(EnTab* this) {
@@ -351,7 +354,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
 
 s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
-    EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    EnGm* sp28 = (EnGm*)EnTab_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
     if (sp28) {
         Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1AF0);
