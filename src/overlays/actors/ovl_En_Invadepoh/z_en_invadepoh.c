@@ -145,19 +145,19 @@ void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this);
 void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this);
-void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this);
-void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this);
-void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this);
-void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupFlee(EnInvadepoh* this);
-void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_Ufo_SetupLeaveBarn(EnInvadepoh* this);
-void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupIntroDescend(EnInvadepoh* this);
+void EnInvadepoh_Ufo_IntroDescend(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupIntroWait(EnInvadepoh* this);
+void EnInvadepoh_Ufo_IntroWait(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupIntroFlyAround(EnInvadepoh* this);
+void EnInvadepoh_Ufo_IntroFlyAround(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupHoverAboveBarn(EnInvadepoh* this);
+void EnInvadepoh_Ufo_HoverAboveBarn(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_OutroCircle(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupOutroFlee(EnInvadepoh* this);
+void EnInvadepoh_Ufo_OutroFlee(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_Ufo_SetupOutroDescend(EnInvadepoh* this);
+void EnInvadepoh_Ufo_OutroDescend(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play);
@@ -1795,10 +1795,10 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
         this->actor.world.pos.x += sUfoSpawnOffset.x;
         this->actor.world.pos.y += sUfoSpawnOffset.y + 3000.0f;
         this->actor.world.pos.z += sUfoSpawnOffset.z;
-        EnInvadepoh_Ufo_SetupDescend(this);
+        EnInvadepoh_Ufo_SetupIntroDescend(this);
     } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
         this->actor.world.pos.y += 1500.0f;
-        EnInvadepoh_Ufo_SetupAboveBarn(this);
+        EnInvadepoh_Ufo_SetupHoverAboveBarn(this);
     } else {
         Actor_Kill(&this->actor);
     }
@@ -2906,16 +2906,20 @@ void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Ufo_SetupDescend(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupIntroDescend(EnInvadepoh* this) {
     this->actor.gravity = -15.0f;
     this->ufoPulseScale = 0.0f;
     this->ufoPulseScaleTarget = 1.0f;
     this->ufoPulseScaleSpeed = 0.0f;
     this->ufoPulsePhaseVelocity = 0;
-    this->actionFunc = EnInvadepoh_Ufo_Descend;
+    this->actionFunc = EnInvadepoh_Ufo_IntroDescend;
 }
 
-void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play) {
+/**
+ * This function handles the beginning of the invasion intro cutscene where the UFO descends from the sky. Once it gets
+ * close enough to its target y-coordinate, the UFO will transition to waiting.
+ */
+void EnInvadepoh_Ufo_IntroDescend(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     f32 distToTargetY;
 
@@ -2927,23 +2931,27 @@ void EnInvadepoh_Ufo_Descend(EnInvadepoh* this, PlayState* play) {
 
     if (fabsf(distToTargetY) < 1.0f) {
         EnInvadepoh_Ufo_SpawnSparkles(this, play, 50);
-        EnInvadepoh_Ufo_SetupHover(this);
+        EnInvadepoh_Ufo_SetupIntroWait(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupHover(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupIntroWait(EnInvadepoh* this) {
     this->actor.velocity.y *= 0.1f;
     this->timer = 20;
     this->ufoPulseScaleTarget = 0.3f;
     this->ufoPulseScaleSpeed = 0.03f;
     this->ufoPulsePhaseVelocity = 0xBB8;
-    this->actionFunc = EnInvadepoh_Ufo_Hover;
+    this->actionFunc = EnInvadepoh_Ufo_IntroWait;
 }
 
-void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play) {
-    f32 hoverY = this->actor.home.pos.y + sUfoSpawnOffset.y + 300.0f;
+/**
+ * This function handles the middle of the invasion intro cutscene where the UFO waits for 20 frames while gently
+ * bobbing up and down. Once 20 frames pass, the UFO will start flying around while the aliens spawn.
+ */
+void EnInvadepoh_Ufo_IntroWait(EnInvadepoh* this, PlayState* play) {
+    f32 targetY = this->actor.home.pos.y + sUfoSpawnOffset.y + 300.0f;
 
-    if (this->actor.world.pos.y < hoverY) {
+    if (this->actor.world.pos.y < targetY) {
         this->actor.gravity = 3.0f;
     } else {
         this->actor.gravity = -2.0f;
@@ -2955,11 +2963,11 @@ void EnInvadepoh_Ufo_Hover(EnInvadepoh* this, PlayState* play) {
 
     this->timer--;
     if (this->timer <= 0) {
-        EnInvadepoh_Ufo_SetupSpawnAliens(this);
+        EnInvadepoh_Ufo_SetupIntroFlyAround(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupIntroFlyAround(EnInvadepoh* this) {
     this->timer = 120;
     this->ufoPulseScaleTarget = 0.2f;
     this->ufoPulseScaleSpeed = 0.01f;
@@ -2967,10 +2975,17 @@ void EnInvadepoh_Ufo_SetupSpawnAliens(EnInvadepoh* this) {
     this->ufoPulsePhaseVelocity = 0xBB8;
     this->ufoTargetPosIndex = 0;
     this->frameCounter = 0;
-    this->actionFunc = EnInvadepoh_Ufo_SpawnAliens;
+    this->actionFunc = EnInvadepoh_Ufo_IntroFlyAround;
 }
 
-void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play) {
+/**
+ * This function handles the end of the invasion intro cutscene where the UFO zips around the ranch while the aliens
+ * spawn. Note that this function doesn't actually spawn the aliens (`EnInvadepoh_InvasionHandler_SpawnAliens` is
+ * responsible for that), but the in-game visuals make it appear as if the UFO is spawning the aliens as it flies
+ * around. The UFO will move to five different positions, and will switch its target position every 25 frames. After 120
+ * frames pass, this function will make the UFO fly to a point above the barn.
+ */
+void EnInvadepoh_Ufo_IntroFlyAround(EnInvadepoh* this, PlayState* play) {
     static Vec3f sUfoTargetOffsets[] = {
         { -1813.0f, 374.0f, 1900.0f }, { 2198.0f, 153.0f, 3365.0f }, { -1434.0f, 262.0f, 3365.0f },
         { -393.0f, 396.0f, 1084.0f },  { 0.0f, 1500.0f, 0.0f },
@@ -3018,19 +3033,23 @@ void EnInvadepoh_Ufo_SpawnAliens(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        EnInvadepoh_Ufo_SetupAboveBarn(this);
+        EnInvadepoh_Ufo_SetupHoverAboveBarn(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupAboveBarn(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupHoverAboveBarn(EnInvadepoh* this) {
     this->ufoPulseScaleTarget = 0.2f;
     this->ufoPulseScaleSpeed = 0.01f;
     this->ufoPulsePhaseVelocity = 0xBB8;
     this->actor.velocity.y *= 0.8f;
-    this->actionFunc = EnInvadepoh_Ufo_AboveBarn;
+    this->actionFunc = EnInvadepoh_Ufo_HoverAboveBarn;
 }
 
-void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
+/**
+ * Moves the UFO to directly above the barn if it is not already there, or makes it gently bob in place if it is. If the
+ * player sucessfully defends the ranch from the aliens, then this function will make the UFO leave the barn.
+ */
+void EnInvadepoh_Ufo_HoverAboveBarn(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3f ufoTargetPos;
 
@@ -3040,7 +3059,7 @@ void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &ufoTargetPos), 0xA, 0xBB8,
                        0x64);
 
-    if ((play->gameplayFrames % 0x40) < 14) {
+    if ((play->gameplayFrames % 64) < 14) {
         Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
     } else {
         this->actor.speed *= 0.97f;
@@ -3052,20 +3071,24 @@ void EnInvadepoh_Ufo_AboveBarn(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
-        EnInvadepoh_Ufo_SetupLeaveBarn(this);
+        EnInvadepoh_Ufo_SetupOutroDescend(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupCircle(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupOutroCircle(EnInvadepoh* this) {
     this->ufoPulseScaleTarget = 0.2f;
     this->ufoPulseScaleSpeed = 0.01f;
     this->actor.gravity = -1.5f;
     this->ufoPulsePhaseVelocity = 0xBB8;
     this->timer = 35;
-    this->actionFunc = EnInvadepoh_Ufo_Circle;
+    this->actionFunc = EnInvadepoh_Ufo_OutroCircle;
 }
 
-void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play) {
+/**
+ * This function handles the middle of the invasion outro cutscene where the UFO flies to a position dictated by
+ * `sUfoSpawnOffset` and circles in place for 35 frames before flying away.
+ */
+void EnInvadepoh_Ufo_OutroCircle(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3f ufoTargetPos;
 
@@ -3083,20 +3106,24 @@ void EnInvadepoh_Ufo_Circle(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        EnInvadepoh_Ufo_SetupFlee(this);
+        EnInvadepoh_Ufo_SetupOutroFlee(this);
     }
 }
 
-void EnInvadepoh_Ufo_SetupFlee(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupOutroFlee(EnInvadepoh* this) {
     this->ufoPulseScaleTarget = 0.2f;
     this->ufoPulseScaleSpeed = 0.01f;
     this->actor.gravity = 1.0f;
     this->ufoPulsePhaseVelocity = 0xBB8;
     this->timer = 60;
-    this->actionFunc = EnInvadepoh_Ufo_Flee;
+    this->actionFunc = EnInvadepoh_Ufo_OutroFlee;
 }
 
-void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play) {
+/**
+ * This function handles the end of the invasion outro cutscene where the UFO quickly flies away from the ranch. Once 60
+ * frames pass, the UFO actor is killed.
+ */
+void EnInvadepoh_Ufo_OutroFlee(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);
@@ -3108,16 +3135,21 @@ void EnInvadepoh_Ufo_Flee(EnInvadepoh* this, PlayState* play) {
     }
 }
 
-void EnInvadepoh_Ufo_SetupLeaveBarn(EnInvadepoh* this) {
+void EnInvadepoh_Ufo_SetupOutroDescend(EnInvadepoh* this) {
     this->timer = 40;
     this->ufoPulseScaleTarget = 0.2f;
     this->ufoPulseScaleSpeed = 0.01f;
     this->actor.speed = 0.0f;
     this->ufoPulsePhaseVelocity = 0xBB8;
-    this->actionFunc = EnInvadepoh_Ufo_LeaveBarn;
+    this->actionFunc = EnInvadepoh_Ufo_OutroDescend;
 }
 
-void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play) {
+/**
+ * This function handles the beginning of the invasion outro cutscene where the UFO moves 700 units closer to the ground
+ * and waits for 40 frames. During the outro cutscene, this entire process happens off-camera, so the player can't
+ * actually see this descent.
+ */
+void EnInvadepoh_Ufo_OutroDescend(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3f ufoTargetPos;
 
@@ -3135,7 +3167,7 @@ void EnInvadepoh_Ufo_LeaveBarn(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        EnInvadepoh_Ufo_SetupCircle(this);
+        EnInvadepoh_Ufo_SetupOutroCircle(this);
     }
 }
 
@@ -3151,6 +3183,7 @@ void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2) {
 
     scaleMod = 1.0f + (Math_SinS(this->ufoPulsePhase) * this->ufoPulseScale);
     Actor_SetScale(&this->actor, 0.27f * scaleMod);
+
     Math_StepToS(&this->angularVelocity, 0x258, 8);
     this->actor.world.rot.y += this->angularVelocity;
     this->angle += 0x258;
