@@ -36,7 +36,7 @@ typedef enum EnNbScheduleResult {
     /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
-#include "build/src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
 
 u8 D_80BC1464[] = {
     0x1B, 0x04, 0x08, 0x00, 0x6A, 0x0A, 0x00, 0x10, 0x00, 0x08, 0x00, 0x10, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x0E,

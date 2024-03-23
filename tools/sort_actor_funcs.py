@@ -17,7 +17,7 @@ if "/overlays/actors/" not in str(file_path):
     exit()
 
 map_path = file_path.parent.parent.parent.parent.parent
-map_lines = (map_path / "build" / "mm.map").read_text().splitlines()[10000:]
+map_lines = (map_path / "build" / "n64-us" / "mm-n64-us.map").read_text().splitlines()[10000:]
 
 i = 0
 while not f"{file_path.stem}.o(.text)" in map_lines[i]:

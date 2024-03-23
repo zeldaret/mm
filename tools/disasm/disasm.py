@@ -73,8 +73,8 @@ def discard_decomped_files(files_spec, include_files):
             i += 1
 
         # For every file within this segment, look through the seg for lines with this file's name
-        # if found, check whether it's still in build/asm/ or build/data/, in which case it's not decomped
-        # if all references to it are in build/src/ then it should be ok to skip, some code/boot files are a bit different
+        # if found, check whether it's still in $(BUILD_DIR)/asm/ or $(BUILD_DIR)/data/, in which case it's not decomped
+        # if all references to it are in $(BUILD_DIR)/src/ then it should be ok to skip, some code/boot files are a bit different
 
         seg_start = i
         new_files = {}
@@ -99,20 +99,20 @@ def discard_decomped_files(files_spec, include_files):
                     if f"/{file}." in spec[i]:
                         if spec[i].count(".") == 1:
                             last_line = spec[i]
-                        if "build/asm/" in spec[i] or "build/data/" in spec[i]:
+                        if "$(BUILD_DIR)/asm/" in spec[i] or "$(BUILD_DIR)/data/" in spec[i]:
                             include = True
                             break
                     i += 1
                 else:
                     # Many code/boot files only have a single section (i.e .text)
-                    # In that case it will be inside build/src/ and pragma in the asm
+                    # In that case it will be inside $(BUILD_DIR)/src/ and pragma in the asm
                     # For these files, open the source and look for the pragmas to be sure
                     # Overlays always have at least a data section we can check in the spec, so it's not needed for them
                     if type != "overlay" and last_line != "":
                         assert last_line.count(".") == 1
                         last_line = (
                             last_line.strip()
-                            .split("build/", 1)[1]
+                            .split("$(BUILD_DIR)/", 1)[1]
                             .replace(".o", ".c")[:-1]
                         )
                         with open(root_path / last_line, "r") as f2:
@@ -1802,7 +1802,7 @@ def disassemble_makerom(section):
 
     elif section[-1]["type"] == "ipl3":
         # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
+        out = f"{asm_header('.text')}\n.incbin \"extracted/n64-us/baserom/makerom\", 0x40, 0xFC0\n"
 
         with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
             outfile.write(out)

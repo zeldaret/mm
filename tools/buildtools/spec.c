@@ -152,7 +152,6 @@ bool parse_segment_statement(struct Segment* currSeg, STMTId stmt, char* args, i
         util_fatal_error("line %i: duplicate '%s' statement", lineNum, stmtNames[stmt]);
 
     currSeg->fields |= 1 << stmt;
-    currSeg->compress = false;
 
     // statements valid within a segment definition
     switch (stmt) {

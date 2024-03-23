@@ -36,7 +36,7 @@ void func_80867144(EnDoor* this, PlayState* play);
 void func_808670F0(EnDoor* this, PlayState* play);
 void func_80866A5C(EnDoor* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
 ScheduleScript* D_8086778C[] = {
     D_808675D0, D_808675E4, D_80867634, D_80867640, D_8086764C, D_80867658, D_80867684, D_80867688,

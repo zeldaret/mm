@@ -42,6 +42,22 @@
 
 There are a variety of tools that are used to assist in the decompilation process. This guide is an introduction to some of the tools that are used. Most of these tools are located in the `mm/tools` directory, others are either in the project root, or are separate programs entirely. Almost all of these programs have more information available via running them with `-h`.
 
+**Important:** Many tools require activating a Python virtual environment that contains Python dependencies. This virtual environment is automatically installed into the `.venv` directory by `make setup`, but you need to **activate** it in your current terminal session in order to run Python tools. To start using the virtual environment in your current terminal run:
+
+```bash
+source .venv/bin/activate
+```
+
+Keep in mind that for each new terminal session, you will need to activate the Python virtual environment again. That is, run the above `source .venv/bin/activate` command.
+
+To deactivate the virtual environment, run
+
+```bash
+deactivate
+```
+
+and your terminal session state will be restored to what it was before.
+
 ## In the repository
 
 ### `diff.py`
@@ -56,7 +72,7 @@ To use `diff.py`, you need a copy of a matching build folder to diff against. In
 ./diff.py <flags> ObjTree_Init
 ```
 
-`diff.py` reads the respective `mm.map` files to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
+`diff.py` reads the respective `mm-n64-us.map` file to find the function. If the function has been renamed, it will not be able to find it. You should not edit map files yourself, but instead rerun `make diff-init` (it is possible to copy the build folder manually, but it's better not to, since `make diff-init` guarantees an OK `expected` folder).
 
 The recommended flags used are `-mwo`, `-mwo3`, or `-mwob`:
 
@@ -102,7 +118,7 @@ Can be given a symbol (function or variable name, for example), and will find it
 
 ```bash
 $ ./sym_info.py ObjTree_Init
-Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
+Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/n64-us/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
 ```
 
 ### `extract_assets.py`

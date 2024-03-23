@@ -12,9 +12,9 @@ Specifically, to use the automatically generated reloc, rather than the original
 ```
 beginseg
     name "ovl_En_Recepgirl"
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    //include "build/data/overlays/actors/ovl_En_Recepgirl.data.o"
-    include "build/data/overlays/actors/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    //include "$(BUILD_DIR)/data/overlays/actors/ovl_En_Recepgirl.data.o"
+    include "$(BUILD_DIR)/data/overlays/actors/ovl_En_Recepgirl.reloc.o"
 endseg
 ```
 
@@ -23,8 +23,8 @@ and change to use our reloc:
 ```
 beginseg
     name "ovl_En_Recepgirl"
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    include "build/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
 endseg
 ```
 
@@ -51,11 +51,11 @@ in the C file. Also, due to the way `GLOBAL_ASM` works, we also cannot use gener
 beginseg
     name "ovl_En_Recepgirl"
     compress
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
 #ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
 #else
-    include "build/data/overlays/actors/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/data/overlays/actors/ovl_En_Recepgirl.reloc.o"
 #endif
 endseg
 ```

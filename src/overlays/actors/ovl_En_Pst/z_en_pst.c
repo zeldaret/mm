@@ -28,7 +28,7 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
-#include "build/src/overlays/actors/ovl_En_Pst/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Pst/scheduleScripts.schl.inc"
 
 s32 D_80B2C23C[] = {
     0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,

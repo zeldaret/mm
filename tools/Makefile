@@ -6,15 +6,12 @@ all: $(PROGRAMS)
 	$(MAKE) -C ZAPD
 	$(MAKE) -C fado
 	$(MAKE) -C buildtools
-# Some gcc versions give a warning about the -flto flag with no parameters. So we override the CFLAGS as a workaround
-	$(MAKE) -C z64compress CFLAGS="-Os -flto=auto"
 
 clean:
 	$(RM) $(PROGRAMS)
 	$(MAKE) -C ZAPD clean
 	$(MAKE) -C fado clean
 	$(MAKE) -C buildtools clean
-	$(MAKE) -C z64compress clean
 
 vtxdis_SOURCES	   := vtxdis.c
 

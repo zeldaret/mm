@@ -10,6 +10,7 @@ __pycache__/
 CMakeLists.txt
 cmake-build-debug
 venv/
+.venv/
 tags
 
 # Project-specific ignores
@@ -19,12 +20,14 @@ tags
 *.sra
 *.bin
 *.elf
+*.flash
 archive/
 build/
 baserom/
 decomp/
 asm/
 data/
+extracted/
 expected/
 nonmatchings/
 
