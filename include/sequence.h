@@ -409,7 +409,7 @@ s32 func_801A46F8(void);
 
 extern SeqRequest sSeqRequests[][5];
 extern u8 sNumSeqRequests[5];
-extern u32 sAudioSeqCmds[0xB0];
+extern u32 sAudioSeqCmds[0x100];
 extern ActiveSequence gActiveSeqs[];
 
 #endif
