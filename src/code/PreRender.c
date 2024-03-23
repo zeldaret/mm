@@ -18,6 +18,7 @@
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "sys_ucode.h"
 
 /**
  * Assigns the "save" values in PreRender

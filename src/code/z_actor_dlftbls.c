@@ -1,9 +1,12 @@
-#include "global.h"
+#include "z64actor_dlftbls.h"
+
 #include "fault.h"
 
-// Init Vars declarations (also used in the table below)
-#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
-#define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
+// Segment and InitVars declarations (also used in the table below)
+#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) \
+    extern struct ActorInit name##_InitVars;                   \
+    DECLARE_OVERLAY_SEGMENT(name)
+#define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern struct ActorInit name##_InitVars;
 #define DEFINE_ACTOR_UNSET(_enumValue)
 
 #include "tables/actor_table.h"

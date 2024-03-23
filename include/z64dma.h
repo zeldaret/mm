@@ -15,6 +15,11 @@ typedef struct {
     /* 0x1C */ OSMesg notifyMsg;         // Completion notification message
 } DmaRequest; // size = 0x20
 
+typedef struct RomFile {
+    /* 0x0 */ uintptr_t vromStart;
+    /* 0x4 */ uintptr_t vromEnd;
+} RomFile; // size = 0x8
+
 typedef struct {
     /* 0x0 */ uintptr_t vromStart;
     /* 0x4 */ uintptr_t vromEnd;

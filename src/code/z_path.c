@@ -1,4 +1,7 @@
+#include "z64path.h"
 #include "global.h"
+
+#include "z64lib.h"
 
 Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone) {
     Path* path;

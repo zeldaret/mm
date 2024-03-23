@@ -1,6 +1,5 @@
 #include "z64.h"
 #include "regs.h"
-#include "functions.h"
 #include "z64malloc.h"
 #include "z64vis.h"
 #include "z64visfbuf.h"
@@ -18,7 +17,6 @@ BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
 
-#include "variables.h"
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"

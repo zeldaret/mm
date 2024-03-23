@@ -1,7 +1,6 @@
 #include "z64.h"
 #include "buffers.h"
 #include "regs.h"
-#include "functions.h"
 #include "macros.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -34,7 +33,6 @@ s16 gCfbUpperAdjust;
 
 u8 gSysCfbHiResEnabled;
 
-#include "variables.h"
 #include "sys_cfb.h"
 #include "libc/stdbool.h"
 #include "buffers.h"

@@ -1,7 +1,9 @@
 #include "z64jpeg.h"
+
 #include "libc/stdbool.h"
-#include "variables.h"
-#include "functions.h"
+#include "main.h"
+#include "sys_ucode.h"
+#include "macros.h"
 
 #define MARKER_ESCAPE 0x00
 #define MARKER_SOI 0xD8
@@ -107,7 +109,7 @@ void Jpeg_CopyToZbuffer(u16* src, u16* zbuffer, s32 x, s32 y) {
  * unaligned values in JPEG header files.
  */
 u16 Jpeg_GetUnalignedU16(u8* ptr) {
-    if (((u32)ptr & 1) == 0) {
+    if (((uintptr_t)ptr & 1) == 0) {
         // Read the value normally if it's aligned to a 16-bit address.
         return *(u16*)ptr;
     } else {

@@ -12,7 +12,6 @@
 
 #include "tha.h"
 #include "alignment.h"
-#include "functions.h"
 
 void* THA_GetHead(TwoHeadArena* tha) {
     return tha->head;

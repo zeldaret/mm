@@ -1423,4 +1423,14 @@ s32 func_80128640(struct PlayState* play, Player* player, Gfx* dList);
 void Player_SetFeetPos(struct PlayState* play, Player* player, s32 limbIndex);
 void Player_PostLimbDrawGameplay(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 
+extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
+extern PlayerModelIndices gPlayerModelTypes[];
+extern struct_80124618 D_801C03A0[];
+extern struct_80124618 D_801C0490[];
+extern Gfx gCullBackDList[];
+extern Gfx gCullFrontDList[];
+
+// object_table.c
+extern s16 gPlayerFormObjectIds[PLAYER_FORM_MAX];
+
 #endif

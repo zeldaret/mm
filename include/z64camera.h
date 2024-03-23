@@ -6,7 +6,10 @@
 #include "z64save.h"
 #include "unk.h"
 
+struct CollisionContext;
 struct CollisionPoly;
+struct PlayState;
+struct View;
 
 // these two angle conversion macros are slightly inaccurate
 #define CAM_DEG_TO_BINANG(degrees) (s16)((degrees) * ((f32)0xFFFF / 360) + .5f)
@@ -1611,5 +1614,48 @@ typedef struct Camera {
     /* 0x168 */ s16 unk168;
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
+
+Camera* Camera_Create(struct View* view, struct CollisionContext* colCtx, struct PlayState* play);
+void Camera_Destroy(Camera* camera);
+void Camera_Init(Camera* camera, struct View* view, struct CollisionContext* colCtx, struct PlayState* play);
+void func_800DDFE0(Camera* camera);
+void Camera_InitFocalActorSettings(Camera* camera, struct Actor* focalActor);
+s32 Camera_ChangeStatus(Camera* camera, s16 status);
+s32 Camera_UpdateWater(Camera* camera);
+void Camera_EarthquakeDay3(Camera* camera);
+s32 Camera_UpdateHotRoom(Camera* camera);
+s32 Camera_SetSwordDistortion(Camera* camera);
+s32 Camera_RequestGiantsMaskSetting(Camera* camera);
+Vec3s Camera_Update(Camera* camera);
+s32 func_800DF498(Camera* camera);
+s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange);
+s32 Camera_ChangeMode(Camera* camera, s16 mode);
+s32 Camera_CheckValidMode(Camera* camera, s16 mode);
+s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
+s32 Camera_ChangeSetting(Camera* camera, s16 setting);
+s32 Camera_ChangeActorCsCamIndex(Camera* camera, s32 bgCamIndex);
+Vec3s Camera_GetInputDir(Camera* camera);
+s16 Camera_GetInputDirPitch(Camera* camera);
+s16 Camera_GetInputDirYaw(Camera* camera);
+Vec3s Camera_GetCamDir(Camera* camera);
+s16 Camera_GetCamDirPitch(Camera* camera);
+s16 Camera_GetCamDirYaw(Camera* camera);
+s32 Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown);
+s32 Camera_SetViewParam(Camera* camera, s32 viewFlag, void* param);
+s32 Camera_UnsetViewFlag(Camera* camera, s16 viewFlag);
+s32 Camera_OverwriteStateFlags(Camera* camera, s16 stateFlags);
+s16 Camera_SetStateFlag(Camera* camera, s16 flags);
+s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
+s32 Camera_ChangeDoorCam(Camera* camera, struct Actor* doorActor, s16 bgCamIndex, f32 arg3, s16 timer1, s16 timer2, s16 timer3);
+s32 Camera_Copy(Camera* dstCam, Camera* srcCam);
+s32 Camera_IsDbgCamEnabled(void);
+Vec3f Camera_GetQuakeOffset(Camera* camera);
+void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3);
+s32 Camera_GetNegOne(void);
+s16 func_800E0238(Camera* camera);
+void Camera_SetFocalActor(Camera* camera, struct Actor* actor);
+void Camera_SetTargetActor(Camera* camera, struct Actor* actor);
+f32 Camera_GetWaterYPos(Camera* camera);
+void func_800E0348(Camera* camera);
 
 #endif

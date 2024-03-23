@@ -1,5 +1,6 @@
 #include "global.h"
 #include "sys_cfb.h"
+#include "sys_cmpdma.h"
 #include "z64bombers_notebook.h"
 #include "z64malloc.h"
 
