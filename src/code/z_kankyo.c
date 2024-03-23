@@ -3308,7 +3308,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
 
         gSPDisplayList(sSkyboxStarsDList, gfx);
 
@@ -3316,7 +3316,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
 
         gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
 
         POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;

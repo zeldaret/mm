@@ -84,7 +84,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    gfx = Graph_GfxPlusOne(gfxHead = POLY_OPA_DISP);
+    gfx = Gfx_Open(gfxHead = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     if ((R_FB_FILTER_TYPE != 0) && (R_FB_FILTER_ENV_COLOR(3) == 0)) {
@@ -96,7 +96,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     }
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxHead, gfx);
+    Gfx_Close(gfxHead, gfx);
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);
@@ -128,10 +128,10 @@ void GameState_DrawEnd(GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    gfx = Graph_GfxPlusOne(gfxHead = POLY_OPA_DISP);
+    gfx = Gfx_Open(gfxHead = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, gfx);
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxHead, gfx);
+    Gfx_Close(gfxHead, gfx);
 
     POLY_OPA_DISP = gfx;
 

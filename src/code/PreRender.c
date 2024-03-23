@@ -404,7 +404,7 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     s32 buffB[3 * 5];
     s32 xi;
     s32 yi;
-    s32 temp;
+    s32 invCvg;
     s32 pmaxR;
     s32 pmaxG;
     s32 pmaxB;
@@ -511,10 +511,10 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     //      BackGround = (pMax + pMin) - (ForeGround) * 2
 
     // OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
-    temp = 7 - buffCvg[7];
-    outR = buffR[7] + ((s32)(temp * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
-    outG = buffG[7] + ((s32)(temp * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
-    outB = buffB[7] + ((s32)(temp * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
+    invCvg = 7 - buffCvg[7];
+    outR = buffR[7] + ((s32)(invCvg * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
+    outG = buffG[7] + ((s32)(invCvg * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
+    outB = buffB[7] + ((s32)(invCvg * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
 
     pxOut.r = outR >> 3;
     pxOut.g = outG >> 3;
@@ -768,7 +768,7 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
     alphaCompare = (bg2D->flags & BG2D_FLAGS_AC_THRESHOLD) ? G_AC_THRESHOLD : G_AC_NONE;
 
     gfxTemp = *gfxp;
-    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    bg = Gfx_Alloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     bg->b.imageX = 0;

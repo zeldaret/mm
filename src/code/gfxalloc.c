@@ -1,10 +1,10 @@
 #include "global.h"
 
-Gfx* Graph_GfxPlusOne(Gfx* gfx) {
+Gfx* Gfx_Open(Gfx* gfx) {
     return &gfx[1];
 }
 
-Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst) {
+Gfx* Gfx_Close(Gfx* gfx, Gfx* dst) {
     gSPBranchList(gfx, dst);
     return dst;
 }
@@ -15,15 +15,15 @@ Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst) {
  * Since the alloc may not itself be display list commands, a BranchList
  * command is used to step over this region.
  */
-void* Graph_DlistAlloc(Gfx** gfx, size_t size) {
+void* Gfx_Alloc(Gfx** gfxP, size_t size) {
     u8* start;
-    Gfx* end;
+    Gfx* gfx;
 
     size = ALIGN8(size);
-    start = (u8*)&(*gfx)[1];
-    end = (Gfx*)(start + size);
-    gSPBranchList(*gfx, end);
+    start = (u8*)&(*gfxP)[1];
+    gfx = (Gfx*)(start + size);
+    gSPBranchList(*gfxP, gfx);
 
-    *gfx = end;
+    *gfxP = gfx;
     return start;
 }

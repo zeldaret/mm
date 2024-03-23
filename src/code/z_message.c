@@ -5120,7 +5120,7 @@ void Message_Draw(PlayState* play) {
     OPEN_DISPS(gfxCtx);
 
     gfxHead = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(gfxHead);
+    gfx = Gfx_Open(gfxHead);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     if ((play->msgCtx.currentTextId != 0x5E6) || !Play_InCsMode(play)) {
@@ -5128,7 +5128,7 @@ void Message_Draw(PlayState* play) {
     }
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxHead, gfx);
+    Gfx_Close(gfxHead, gfx);
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);
