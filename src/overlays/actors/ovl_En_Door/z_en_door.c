@@ -240,7 +240,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 
     if (this->doorType != ENDOOR_TYPE_7) {
         TransitionActorEntry* transitionEntry =
-            &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
@@ -430,7 +430,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
         transitionEntry = NULL;
 
         if (this->doorType != ENDOOR_TYPE_7) {
-            transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            transitionEntry = &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         }
         rot->z += this->knobDoor.dyna.actor.world.rot.y;
         if ((this->doorType == ENDOOR_TYPE_7) || (play->roomCtx.prevRoom.num >= 0) ||

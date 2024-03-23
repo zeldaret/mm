@@ -493,8 +493,6 @@ beginseg
     include "build/src/code/z_lights.o"
     include "build/src/code/z_malloc.o"
     include "build/src/code/z_map_disp.o"
-    include "build/data/code/z_map_disp.data.o"
-    include "build/data/code/z_map_disp.bss.o"
     include "build/src/code/z_map_data.o"
     include "build/src/code/z_map_exp.o"
     include "build/src/code/z_msgevent.o"

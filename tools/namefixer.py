@@ -13,8 +13,8 @@ simpleReplace = {
 # if the occurence is the whole word
 # for example, if there is a space before and an open parenthesis after,
 # like for a function call: ` func_8002E4B4(`
-# 
-# Custom behaviour can be enabled by using a tuple as the value (see 
+#
+# Custom behaviour can be enabled by using a tuple as the value (see
 # explanation in replace_single below)
 wordReplace = {
     # Functions
@@ -879,13 +879,16 @@ wordReplace = {
     "func_8010A074": "Map_IsInDungeonOrBossArea",
     "func_8010A0F0": "Map_GetDungeonAreaIndex",
     "func_8010A164": "Map_IsInDungeonArea",
+    "Map_IsInDungeonArea": "Map_IsInDungeonScene",
     "func_8010A194": "Map_GetBossAreaIndex",
     "func_8010A208": "Map_IsInBossArea",
+    "Map_IsInBossArea": "Map_IsInBossScene",
     "func_8010A2DC": "Minimap_SavePlayerRoomInitInfo",
     "func_8010A33C": "Map_InitRoomData",
     "func_8010A410": "Map_Destroy",
     "func_8010A430": "Map_Init",
     "func_8010A54C": "Minimap_Draw",
+    "Minimap_Draw": "Map_DrawMinimap",
     "func_8010A580": "Map_Update",
 
     "Entrance_CreateIndex": "Entrance_Create",
@@ -1238,6 +1241,7 @@ wordReplace = {
     "play->actorCtx.targetCtx.unk4C": "play->actorCtx.targetCtx.lockOnIndex",
     "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnTriangleSets",
     "play->actorCtx.targetCtx.unk8C": "play->actorCtx.targetCtx.nextTarget",
+    "play->doorCtx.transitionActorList": "play->transitionActors.list"
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",

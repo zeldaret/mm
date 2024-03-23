@@ -9,6 +9,7 @@ struct EnDoor;
 
 typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
+#define ENDOOR_PARAMS_GET_TYPE(params) ((params >> 7) & 7)
 #define ENDOOR_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_SWITCH_FLAG(thisx) (((thisx)->params) & 0x7F)
 

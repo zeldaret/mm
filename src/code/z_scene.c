@@ -334,15 +334,15 @@ void Scene_CommandPathList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
-void Scene_CommandTransiActorList(PlayState* play, SceneCmd* cmd) {
-    play->doorCtx.numTransitionActors = cmd->transiActorList.num;
-    play->doorCtx.transitionActorList = Lib_SegmentedToVirtual(cmd->transiActorList.segment);
-    func_80105818(play, play->doorCtx.numTransitionActors, play->doorCtx.transitionActorList);
+void Scene_CommandTransitionActorList(PlayState* play, SceneCmd* cmd) {
+    play->transitionActors.count = cmd->transitionActorList.num;
+    play->transitionActors.list = Lib_SegmentedToVirtual(cmd->transitionActorList.segment);
+    MapDisp_InitTransitionActorData(play, play->transitionActors.count, play->transitionActors.list);
 }
 
 // Init function for the transition system.
-void Door_InitContext(GameState* state, DoorContext* doorCtx) {
-    doorCtx->numTransitionActors = 0;
+void Scene_ResetTransitionActorList(GameState* state, TransitionActorList* transitionActors) {
+    transitionActors->count = 0;
 }
 
 // SceneTableEntry Header Command 0x0F: Environment Light Settings List
@@ -495,19 +495,19 @@ void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
     CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneList.segment), cmd->cutsceneList.num);
 }
 
-// SceneTableEntry Header Command 0x1C: Mini Maps
-void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd) {
-    func_80104CF4(play);
-    func_8010549C(play, cmd->minimapSettings.segment);
+// SceneTableEntry Header Command 0x1C: Map Data
+void Scene_CommandMapData(PlayState* play, SceneCmd* cmd) {
+    MapDisp_Init(play);
+    MapDisp_InitMapData(play, cmd->mapData.segment);
 }
 
 // SceneTableEntry Header Command 0x1D: Undefined
 void Scene_Command1D(PlayState* play, SceneCmd* cmd) {
 }
 
-// SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
-void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
-    func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
+// SceneTableEntry Header Command 0x1E: Map Data Chests
+void Scene_CommandMapDataChests(PlayState* play, SceneCmd* cmd) {
+    MapDisp_InitChestData(play, cmd->mapDataChests.num, cmd->mapDataChests.segment);
 }
 
 // SceneTableEntry Header Command 0x19: Sets Region Visited Flag
@@ -565,7 +565,7 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandObjectList,           // SCENE_CMD_ID_OBJECT_LIST
     Scene_CommandLightList,            // SCENE_CMD_ID_LIGHT_LIST
     Scene_CommandPathList,             // SCENE_CMD_ID_PATH_LIST
-    Scene_CommandTransiActorList,      // SCENE_CMD_ID_TRANSI_ACTOR_LIST
+    Scene_CommandTransitionActorList,  // SCENE_CMD_ID_TRANSI_ACTOR_LIST
     Scene_CommandEnvLightSettings,     // SCENE_CMD_ID_ENV_LIGHT_SETTINGS
     Scene_CommandTimeSettings,         // SCENE_CMD_ID_TIME_SETTINGS
     Scene_CommandSkyboxSettings,       // SCENE_CMD_ID_SKYBOX_SETTINGS
@@ -579,9 +579,9 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandSetRegionVisitedFlag, // SCENE_CMD_ID_SET_REGION_VISITED
     Scene_CommandAnimatedMaterials,    // SCENE_CMD_ID_ANIMATED_MATERIAL_LIST
     Scene_CommandCutsceneList,         // SCENE_CMD_ID_ACTOR_CUTSCENE_LIST
-    Scene_CommandMiniMap,              // SCENE_CMD_ID_MINIMAP_INFO
+    Scene_CommandMapData,              // SCENE_CMD_ID_MAP_DATA
     Scene_Command1D,                   // SCENE_CMD_ID_UNUSED_1D
-    Scene_CommandMiniMapCompassInfo,   // SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO
+    Scene_CommandMapDataChests,        // SCENE_CMD_ID_MAP_DATA_CHESTS
 };
 
 /**

@@ -118,7 +118,7 @@ typedef struct PauseContext {
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
-    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
+    /* 0x256 */ s16 cursorMapDungeonItem; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
@@ -207,7 +207,7 @@ typedef struct PlayState {
     /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
-    /* 0x18760 */ DoorContext doorCtx;
+    /* 0x18760 */ TransitionActorList transitionActors;
     /* 0x18768 */ void (*playerInit)(Player* player, struct PlayState* play, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct PlayState* play, Input* input);
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);

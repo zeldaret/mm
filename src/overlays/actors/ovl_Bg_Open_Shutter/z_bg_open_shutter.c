@@ -101,7 +101,7 @@ void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
     s32 transition = DOOR_GET_TRANSITION_ID(thisx);
 
-    play->doorCtx.transitionActorList[transition].id = -play->doorCtx.transitionActorList[transition].id;
+    play->transitionActors.list[transition].id = -play->transitionActors.list[transition].id;
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->slidingDoor.dyna.bgId);
 }
 

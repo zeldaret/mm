@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "z64map.h"
 #include "z64skybox.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -562,7 +563,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 KaleidoScope_DrawDungeonMap(play);
                 Gfx_SetupDL42_Opa(gfxCtx);
                 gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                func_801091F0(play);
+                MapDisp_DrawDungeonMap(play);
             } else {
                 KaleidoScope_DrawWorldMap(play);
             }
@@ -659,7 +660,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-                    func_801091F0(play);
+                    MapDisp_DrawDungeonMap(play);
                 } else {
                     Matrix_RotateYF(R_PAUSE_WORLD_MAP_YAW / 1000.0f, MTXMODE_NEW);
 
@@ -2834,7 +2835,7 @@ void KaleidoScope_Update(PlayState* play) {
     s16 stepA;
     s16 stickAdjX = input->rel.stick_x;
 
-    func_80109428(play);
+    MapDisp_UpdateDungeonMap(play);
 
     pauseCtx->stickAdjX = input->rel.stick_x;
     pauseCtx->stickAdjY = input->rel.stick_y;
@@ -2851,8 +2852,9 @@ void KaleidoScope_Update(PlayState* play) {
             sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem =
+                R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
 
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;
@@ -2875,12 +2877,12 @@ void KaleidoScope_Update(PlayState* play) {
             CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
-            if (func_8010A0A4(play)) {
+            if (MapExp_CurRoomHasMapI(play)) {
                 size_t size = SEGMENT_ROM_SIZE(icon_item_dungeon_static);
 
                 DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);
                 iconItemLangSegment =
-                    func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size), size);
+                    MapDisp_AllocDungeonMap(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size));
                 sInDungeonScene = true;
             } else {
                 size_t size;
@@ -3178,8 +3180,8 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_GAMEOVER_2:
-            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;
             pauseCtx->roll = -434.0f;
@@ -3428,8 +3430,9 @@ void KaleidoScope_Update(PlayState* play) {
             sUnpausedButtonStatus[EQUIP_SLOT_A] = gSaveContext.buttonStatus[EQUIP_SLOT_A];
 
             pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-            pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
-            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256 = R_REVERSE_FLOOR_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorSlot[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
+            pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem =
+                R_PLAYER_FLOOR_REVERSE_INDEX + DUNGEON_FLOOR_INDEX_4;
 
             sPauseCursorLeftX = -175;
             sPauseCursorRightX = 155;

@@ -268,7 +268,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         }
     }
 
-    func_80108AF8(play);
+    MapDisp_DrawDungeonFloorSelect(play);
 
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
         // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and always return
@@ -283,12 +283,13 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
                 Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, 62,
-                                      sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
+                                      sDungeonMapFloorIconPosY[R_PLAYER_FLOOR_REVERSE_INDEX], 16, 16, 1 << 10, 1 << 10);
 
+            // Draw skull face next to the dungeon floor icon the boss is located at.
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
-                POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
-                                                      sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16,
-                                                      16, 1 << 10, 1 << 10);
+                POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(
+                    POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
+                    sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - MapDisp_GetBossRoomStorey()], 16, 16, 1 << 10, 1 << 10);
             }
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -320,8 +321,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                     KaleidoScope_MoveCursorFromSpecialPos(play);
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
-                    pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
+                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
+                    pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
                 } else if (pauseCtx->cursorSpecialPos == 0) {
                     if (pauseCtx->cursorXIndex[PAUSE_MAP] == 0) {
                         pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
@@ -366,8 +367,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     } else if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
                         pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-                        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
-                        pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
+                        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
+                        pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
                     } else {
                         while (true) {
                             pauseCtx->cursorPoint[PAUSE_MAP]--;
@@ -385,9 +386,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
                 if (pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 + 1); i >= 0; i--) {
-                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
-                             gBitFlags[i]) ||
-                            func_801090B0(FLOOR_INDEX_MAX - i)) {
+                        if (GET_DUNGEON_FLOOR_VISITED(((void)0, gSaveContext.dungeonIndex), i) ||
+                            MapDisp_IsValidStorey(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
                             pauseCtx->cursorShrinkRate = 4.0f;
                             break;
@@ -395,8 +395,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     }
                 } else if (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES) {
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
-                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
-                    pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
+                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
+                    pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->cursorMapDungeonItem;
                 } else {
                     pauseCtx->cursorSlot[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
                     pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_STRAY_FAIRIES;
@@ -406,9 +406,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     (pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_FLOOR_INDEX_1)) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 - 1); i <= DUNGEON_FLOOR_INDEX_0;
                          i++) {
-                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
-                             gBitFlags[i]) ||
-                            func_801090B0(FLOOR_INDEX_MAX - i)) {
+                        if (GET_DUNGEON_FLOOR_VISITED(((void)0, gSaveContext.dungeonIndex), i) ||
+                            MapDisp_IsValidStorey(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
                             pauseCtx->cursorShrinkRate = 4.0f;
                             break;
@@ -448,7 +447,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if ((pauseCtx->cursorXIndex[PAUSE_MAP] == 0) && (pauseCtx->cursorSpecialPos == 0)) {
-                pauseCtx->unk_256 = pauseCtx->cursorPoint[PAUSE_MAP];
+                pauseCtx->cursorMapDungeonItem = pauseCtx->cursorPoint[PAUSE_MAP];
             }
 
             if (pauseCtx->cursorSpecialPos == 0) {

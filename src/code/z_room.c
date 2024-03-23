@@ -501,11 +501,11 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    if ((u32)play->doorCtx.numTransitionActors != 0) {
+    if ((u32)play->transitionActors.count != 0) {
         RomFile* roomList = play->roomList;
-        TransitionActorEntry* transitionActor = &play->doorCtx.transitionActorList[0];
+        TransitionActorEntry* transitionActor = &play->transitionActors.list[0];
 
-        for (j = 0; j < play->doorCtx.numTransitionActors; j++) {
+        for (j = 0; j < play->transitionActors.count; j++) {
             frontRoom = transitionActor->sides[0].room;
             backRoom = transitionActor->sides[1].room;
             frontRoomSize = (frontRoom < 0) ? 0 : roomList[frontRoom].vromEnd - roomList[frontRoom].vromStart;
@@ -619,7 +619,7 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     Actor_SpawnTransitionActors(play, &play->actorCtx);
     if (roomCtx->curRoom.num > -1) {
         Map_InitRoomData(play, roomCtx->curRoom.num);
-        Minimap_SavePlayerRoomInitInfo(play);
+        Map_SetAreaEntrypoint(play);
     }
     Audio_SetEnvReverb(play->roomCtx.curRoom.echo);
 }
