@@ -114,7 +114,8 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
