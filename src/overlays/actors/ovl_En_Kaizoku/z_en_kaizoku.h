@@ -12,6 +12,8 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 #define KAIZOKU_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x3F)
 #define KAIZOKU_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 6) & 0x7F)
 
+#define KAIZOKU_GET_TYPE(this) ((this)->picto.actor.world.rot.z)
+
 #define KAIZOKU_SWITCH_FLAG_NONE 0x7F
 
 typedef enum EnKaizokuAnimation {
@@ -63,30 +65,30 @@ typedef struct EnKaizoku {
     /* 0x21C */ Vec3s morphTable[KAIZOKU_LIMB_MAX];
     /* 0x2AC */ EnKaizokuActionFunc actionFunc;
     /* 0x2B0 */ s16 action;
-    /* 0x2B2 */ s16 unk_2B2;
+    /* 0x2B2 */ s16 timer2B2; // unk timer
     /* 0x2B4 */ s16 lookTimer;
-    /* 0x2B6 */ s16 unk_2B6;
-    /* 0x2B8 */ s16 unk_2B8;
+    /* 0x2B6 */ s16 unk_2B6; // timer 
+    /* 0x2B8 */ s16 colorFilterTimer; // name taken from oot, actor is damaged flashing red
     /* 0x2BA */ s16 drawDmgEffType;
     /* 0x2BC */ s16 switchFlag;
     /* 0x2BE */ s16 unk_2BE;
     /* 0x2C0 */ f32 drawDmgEffScale;
     /* 0x2C4 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2C8 */ s16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2CA */ s16 textId;
     /* 0x2CC */ s16 eyeIndex;
     /* 0x2CE */ s16 blinkTimer;
     /* 0x2D0 */ s16 unk_2D0;
     /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 csId;
-    /* 0x2D8 */ u8 unk_2D8;
+    /* 0x2D8 */ u8 bool2D8; // bool
     /* 0x2D9 */ u8 unk_2D9;
     /* 0x2DC */ f32 animEndFrame;
     /* 0x2E0 */ f32 unk_2E0;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;
-    /* 0x2EC */ s32 unk_2EC;
+    /* 0x2EC */ s32 colorType;
     /* 0x2F0 */ f32 unk_2F0;
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F8 */ Vec3f unk_2F8;
@@ -101,8 +103,8 @@ typedef struct EnKaizoku {
     /* 0x578 */ Vec3s headRot;
     /* 0x580 */ Vec3f rightFootPos;
     /* 0x58C */ Vec3f leftFootPos;
-    /* 0x598 */ s32 unk_598;
-    /* 0x59C */ s16 unk_59C;
+    /* 0x598 */ s32 unk_598; // timer?? why is it double len?
+    /* 0x59C */ s16 escapeCsState; 
     /* 0x59E */ s16 subCamId;
     /* 0x5A0 */ s16 unk_5A0;
     /* 0x5A2 */ s16 unk_5A2;
