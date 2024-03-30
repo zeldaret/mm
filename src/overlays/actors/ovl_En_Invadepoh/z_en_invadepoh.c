@@ -107,24 +107,24 @@ void EnInvadepoh_Cremia_Draw(Actor* thisx, PlayState* play);
 // Action functions
 void EnInvadepoh_InvasionHandler_SetupWaitForInvasion(EnInvadepoh* this);
 void EnInvadepoh_InvasionHandler_WaitForInvasion(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupStartInvasionCutscene(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_StartInvasionCutscene(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupInvasionCutscene(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_InvasionCutscene(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupHandleInvasion(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_HandleInvasion(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupStartVictoryCutscene(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_StartVictoryCutscene(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupVictoryCutscene(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_VictoryCutscene(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupRomaniReward(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_RomaniReward(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupGoodEnd(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_GoodEnd(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupFailure(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_InvasionHandler_SetupBadEnd(EnInvadepoh* this);
-void EnInvadepoh_InvasionHandler_BadEnd(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupStartIntroCutscene(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_StartIntroCutscene(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupIntroCutscene(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_IntroCutscene(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupHandle(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_Handle(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupStartSuccessCutscene(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_StartSuccessCutscene(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupSuccessCutscene(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_SuccessCutscene(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupWaitForRomaniReward(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_WaitForRomaniReward(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupSuccessEnd(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_SuccessEnd(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupStartFailureCutscene(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_StartFailureCutscene(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_InvasionHandler_SetupFailureEnd(EnInvadepoh* this);
+void EnInvadepoh_InvasionHandler_FailureEnd(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_WaitForInvasion(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this);
@@ -1627,18 +1627,18 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
             EnInvadepoh_InvasionHandler_SpawnUfo(this, play);
             EnInvadepoh_InvasionHandler_SpawnAliens(this, play);
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
-            EnInvadepoh_InvasionHandler_SetupHandleInvasion(this);
+            EnInvadepoh_InvasionHandler_SetupHandle(this);
         }
     } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
         if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
-            EnInvadepoh_InvasionHandler_SetupRomaniReward(this);
+            EnInvadepoh_InvasionHandler_SetupWaitForRomaniReward(this);
         } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
-            EnInvadepoh_InvasionHandler_SetupGoodEnd(this);
+            EnInvadepoh_InvasionHandler_SetupSuccessEnd(this);
         } else {
-            EnInvadepoh_InvasionHandler_SetupGoodEnd(this);
+            EnInvadepoh_InvasionHandler_SetupSuccessEnd(this);
         }
     } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_FAILURE) {
-        EnInvadepoh_InvasionHandler_SetupBadEnd(this);
+        EnInvadepoh_InvasionHandler_SetupFailureEnd(this);
     }
 }
 
@@ -1966,47 +1966,47 @@ void EnInvadepoh_InvasionHandler_SetupWaitForInvasion(EnInvadepoh* this) {
 }
 
 /**
- * Waits until 2:30 AM, then spawns the UFO and Aliens and starts the invasion cutscene.
+ * Waits until 2:30 AM, then spawns the UFO and Aliens and starts the invasion intro cutscene.
  */
 void EnInvadepoh_InvasionHandler_WaitForInvasion(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(2, 30))) {
         EnInvadepoh_InvasionHandler_SpawnUfo(this, play);
         EnInvadepoh_InvasionHandler_SpawnAliens(this, play);
-        EnInvadepoh_InvasionHandler_SetupStartInvasionCutscene(this);
+        EnInvadepoh_InvasionHandler_SetupStartIntroCutscene(this);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupStartInvasionCutscene(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupStartIntroCutscene(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
     this->timer = 2;
-    this->actionFunc = EnInvadepoh_InvasionHandler_StartInvasionCutscene;
+    this->actionFunc = EnInvadepoh_InvasionHandler_StartIntroCutscene;
 }
 
 /**
- * Waits 2 frames, then queues up the invasion cutscene and starts it.
+ * Waits 2 frames, then queues up the invasion intro cutscene and starts it.
  */
-void EnInvadepoh_InvasionHandler_StartInvasionCutscene(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_StartIntroCutscene(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else if (CutsceneManager_IsNext(sInvadepohCsIdList[0])) {
         CutsceneManager_StartWithPlayerCs(sInvadepohCsIdList[0], &this->actor);
-        EnInvadepoh_InvasionHandler_SetupInvasionCutscene(this);
+        EnInvadepoh_InvasionHandler_SetupIntroCutscene(this);
     } else {
         CutsceneManager_Queue(sInvadepohCsIdList[0]);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupInvasionCutscene(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupIntroCutscene(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
     this->timer = 160;
-    this->actionFunc = EnInvadepoh_InvasionHandler_InvasionCutscene;
+    this->actionFunc = EnInvadepoh_InvasionHandler_IntroCutscene;
 }
 
 /**
  * Activates the eight aliens at various points in the cutscene. After 160 frames pass, this function stops the cutscene
  * and starts handling the invasion proper.
  */
-void EnInvadepoh_InvasionHandler_InvasionCutscene(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_IntroCutscene(EnInvadepoh* this, PlayState* play) {
     static s16 sAlienSpawnTimes[ALIEN_COUNT] = {
         130, 125, 115, 100, 80, 78, 76, 74,
     };
@@ -2022,24 +2022,24 @@ void EnInvadepoh_InvasionHandler_InvasionCutscene(EnInvadepoh* this, PlayState* 
     if (this->timer <= 0) {
         CutsceneManager_Stop(sInvadepohCsIdList[0]);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
-        EnInvadepoh_InvasionHandler_SetupHandleInvasion(this);
+        EnInvadepoh_InvasionHandler_SetupHandle(this);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupHandleInvasion(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupHandle(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
-    this->actionFunc = EnInvadepoh_InvasionHandler_HandleInvasion;
+    this->actionFunc = EnInvadepoh_InvasionHandler_Handle;
 }
 
 /**
- * If it's 5:15 AM or later, this function will start the victory cutscene. Otherwise, this function updates which alien
+ * If it's 5:15 AM or later, this function will start the success cutscene. Otherwise, this function updates which alien
  * is closest to the barn and checks to see if any alien has reached the end of its path (i.e., it reached the barn). If
- * this happens, then this function will start the defeat cutscene.
+ * this happens, then this function will start the failure cutscene.
  */
-void EnInvadepoh_InvasionHandler_HandleInvasion(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_Handle(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(5, 15))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS);
-        EnInvadepoh_InvasionHandler_SetupStartVictoryCutscene(this);
+        EnInvadepoh_InvasionHandler_SetupStartSuccessCutscene(this);
     } else {
         s32 i;
 
@@ -2047,41 +2047,41 @@ void EnInvadepoh_InvasionHandler_HandleInvasion(EnInvadepoh* this, PlayState* pl
 
         for (i = 0; i < this->alienCount; i++) {
             if ((sAliens[i] != NULL) && (sAliens[i]->pathCompleted)) {
-                EnInvadepoh_InvasionHandler_SetupFailure(this);
+                EnInvadepoh_InvasionHandler_SetupStartFailureCutscene(this);
                 break;
             }
         }
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupStartVictoryCutscene(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupStartSuccessCutscene(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
-    this->actionFunc = EnInvadepoh_InvasionHandler_StartVictoryCutscene;
+    this->actionFunc = EnInvadepoh_InvasionHandler_StartSuccessCutscene;
 }
 
 /**
- * Immediately cues up the victory cutscene and starts it.
+ * Immediately cues up the success cutscene and starts it.
  */
-void EnInvadepoh_InvasionHandler_StartVictoryCutscene(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_StartSuccessCutscene(EnInvadepoh* this, PlayState* play) {
     if (CutsceneManager_IsNext(sInvadepohCsIdList[1])) {
         CutsceneManager_StartWithPlayerCs(sInvadepohCsIdList[1], &this->actor);
-        EnInvadepoh_InvasionHandler_SetupVictoryCutscene(this);
+        EnInvadepoh_InvasionHandler_SetupSuccessCutscene(this);
     } else {
         CutsceneManager_Queue(sInvadepohCsIdList[1]);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupVictoryCutscene(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupSuccessCutscene(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
     this->timer = 110;
-    this->actionFunc = EnInvadepoh_InvasionHandler_VictoryCutscene;
+    this->actionFunc = EnInvadepoh_InvasionHandler_SuccessCutscene;
 }
 
 /**
  * This function is responsible for playing the fanfare for defending the ranch. After a total of 110 frames pass, this
  * function transitions the player to a special layer of Romani Ranch where Romani gives the player the Bottle of Milk.
  */
-void EnInvadepoh_InvasionHandler_VictoryCutscene(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_SuccessCutscene(EnInvadepoh* this, PlayState* play) {
     if (this->timer == 100) {
         Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     }
@@ -2095,61 +2095,69 @@ void EnInvadepoh_InvasionHandler_VictoryCutscene(EnInvadepoh* this, PlayState* p
         gSaveContext.nextTransitionType = TRANS_TYPE_72;
         D_801BDAA0 = true;
         gHorseIsMounted = false;
-        EnInvadepoh_InvasionHandler_SetupGoodEnd(this);
+        EnInvadepoh_InvasionHandler_SetupSuccessEnd(this);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupRomaniReward(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupWaitForRomaniReward(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
-    this->actionFunc = EnInvadepoh_InvasionHandler_RomaniReward;
+    this->actionFunc = EnInvadepoh_InvasionHandler_WaitForRomaniReward;
 }
 
 /**
  * Waits until Romani is done giving her reward, then transitions the player back to the normal version of Romani Ranch.
  */
-void EnInvadepoh_InvasionHandler_RomaniReward(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_WaitForRomaniReward(EnInvadepoh* this, PlayState* play) {
     if (sRewardFinished) {
         play->nextEntrance = ENTRANCE(ROMANI_RANCH, 7);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_72;
         gSaveContext.nextTransitionType = TRANS_TYPE_72;
-        EnInvadepoh_InvasionHandler_SetupGoodEnd(this);
+        EnInvadepoh_InvasionHandler_SetupSuccessEnd(this);
     }
 }
 
-void EnInvadepoh_InvasionHandler_SetupGoodEnd(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupSuccessEnd(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
-    this->actionFunc = EnInvadepoh_InvasionHandler_GoodEnd;
-}
-
-void EnInvadepoh_InvasionHandler_GoodEnd(EnInvadepoh* this, PlayState* play) {
-}
-
-void EnInvadepoh_InvasionHandler_SetupFailure(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
-    this->actionFunc = EnInvadepoh_InvasionHandler_Failure;
+    this->actionFunc = EnInvadepoh_InvasionHandler_SuccessEnd;
 }
 
 /**
- * Starts the failure cutscene where the aliens abduct the cows and Romani.
+ * After the player successfully defended the ranch, the invasion handler will remain in this state until it is killed.
  */
-void EnInvadepoh_InvasionHandler_Failure(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_InvasionHandler_SuccessEnd(EnInvadepoh* this, PlayState* play) {
+}
+
+void EnInvadepoh_InvasionHandler_SetupStartFailureCutscene(EnInvadepoh* this) {
+    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
+    this->actionFunc = EnInvadepoh_InvasionHandler_StartFailureCutscene;
+}
+
+/**
+ * Starts the failure cutscene where the aliens abduct the cows and Romani. Unlike other cutscenes, this cutscene is
+ * triggered by transitioning the player to Romani Ranch with a specific `nextCutsceneIndex`. As a consequence, the game
+ * will display a transition animation before the cutscene starts.
+ */
+void EnInvadepoh_InvasionHandler_StartFailureCutscene(EnInvadepoh* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF3;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;
     gSaveContext.nextTransitionType = TRANS_TYPE_72;
     SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_TO_DEFEND_AGAINST_ALIENS);
-    EnInvadepoh_InvasionHandler_SetupBadEnd(this);
+    EnInvadepoh_InvasionHandler_SetupFailureEnd(this);
 }
 
-void EnInvadepoh_InvasionHandler_SetupBadEnd(EnInvadepoh* this) {
+void EnInvadepoh_InvasionHandler_SetupFailureEnd(EnInvadepoh* this) {
     sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
-    this->actionFunc = EnInvadepoh_InvasionHandler_BadEnd;
+    this->actionFunc = EnInvadepoh_InvasionHandler_FailureEnd;
 }
 
-void EnInvadepoh_InvasionHandler_BadEnd(EnInvadepoh* this, PlayState* play) {
+/**
+ * After the player failed to defend the ranch, the invasion handler will remain in this state until it is killed.
+ */
+void EnInvadepoh_InvasionHandler_FailureEnd(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_Update(Actor* thisx, PlayState* play2) {
