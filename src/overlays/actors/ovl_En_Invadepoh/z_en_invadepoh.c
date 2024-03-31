@@ -197,15 +197,15 @@ s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed);
 
 ActorInit En_Invadepoh_InitVars = {
-    ACTOR_EN_INVADEPOH,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInvadepoh),
-    (ActorFunc)EnInvadepoh_Init,
-    (ActorFunc)EnInvadepoh_Destroy,
-    (ActorFunc)EnInvadepoh_InvasionHandler_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_INVADEPOH,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnInvadepoh),
+    /**/ EnInvadepoh_Init,
+    /**/ EnInvadepoh_Destroy,
+    /**/ EnInvadepoh_InvasionHandler_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sAlienCylinderInit = {
