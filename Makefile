@@ -118,14 +118,15 @@ else
   CC_CHECK := @:
 endif
 
-CPP         := cpp
-MKLDSCRIPT  := tools/buildtools/mkldscript
-MKDMADATA   := tools/buildtools/mkdmadata
-ZAPD        := tools/ZAPD/ZAPD.out
-FADO        := tools/fado/fado.elf
-MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
-CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
-SCHC        := tools/buildtools/schc.py
+CPP           := cpp
+MKLDSCRIPT    := tools/buildtools/mkldscript
+MKDMADATA     := tools/buildtools/mkdmadata
+ZAPD          := tools/ZAPD/ZAPD.out
+FADO          := tools/fado/fado.elf
+MAKEYAR       := $(PYTHON) tools/buildtools/makeyar.py
+CHECKSUMMER   := $(PYTHON) tools/buildtools/checksummer.py
+SHIFTJIS_CONV := $(PYTHON) tools/shiftjis_conv.py
+SCHC          := $(PYTHON) tools/buildtools/schc.py
 
 SCHC_FLAGS  :=
 
@@ -200,6 +201,9 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
+SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c src/code/z_message_nes.c
+SHIFTJIS_O_FILES	:= $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),build/$f)
+
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
 
 SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),build/$f)
@@ -253,8 +257,6 @@ build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS
 build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
-# Needed at least until voice is decompiled
-build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
@@ -262,6 +264,8 @@ build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAG
 build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+
+$(SHIFTJIS_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
 #### Main Targets ###
 
@@ -409,6 +413,13 @@ build/src/overlays/%_reloc.o: build/$(SPEC)
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
+
+$(SHIFTJIS_O_FILES): build/src/%.o: src/%.c
+	$(SHIFTJIS_CONV) -o $(@:.o=.enc.c) $<
+	$(CC_CHECK) $(@:.o=.enc.c)
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
