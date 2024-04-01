@@ -33,7 +33,6 @@ u8 sMotionBlurStatus;
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "debug.h"
 
 s32 gDbgCamEnabled = false;
@@ -973,7 +972,7 @@ void Play_UpdateMain(PlayState* this) {
                 KaleidoSetup_Update(this);
             }
 
-            sp5C = (this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE);
+            sp5C = IS_PAUSED(&this->pauseCtx);
 
             AnimationContext_Reset(&this->animationCtx);
             Object_UpdateEntries(&this->objectCtx);
@@ -1015,7 +1014,7 @@ void Play_UpdateMain(PlayState* this) {
             Room_Noop(this, &this->roomCtx.prevRoom, &input[1], 1);
             Skybox_Update(&this->skyboxCtx);
 
-            if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+            if (IS_PAUSED(&this->pauseCtx)) {
                 KaleidoScopeCall_Update(this);
             } else if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
                 GameOver_Update(this);
@@ -1087,7 +1086,7 @@ void Play_Update(PlayState* this) {
 }
 
 void Play_PostWorldDraw(PlayState* this) {
-    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+    if (IS_PAUSED(&this->pauseCtx)) {
         KaleidoScopeCall_Draw(this);
     }
 
@@ -1095,8 +1094,7 @@ void Play_PostWorldDraw(PlayState* this) {
         Interface_Draw(this);
     }
 
-    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) ||
-        (this->msgCtx.currentTextId != 0xFF)) {
+    if (!IS_PAUSED(&this->pauseCtx) || (this->msgCtx.currentTextId != 0xFF)) {
         Message_Draw(this);
     }
 
@@ -1302,7 +1300,8 @@ void Play_DrawMain(PlayState* this) {
                 Lights_Draw(lights, gfxCtx);
 
                 if (1) {
-                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); // FAKE:
+                    //! FAKE:
+                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0);
 
                     Scene_Draw(this);
                     if (this->roomCtx.unk78) {

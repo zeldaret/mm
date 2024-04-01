@@ -145,14 +145,15 @@ else
   CC_CHECK := @:
 endif
 
-CPP         := cpp
-MKLDSCRIPT  := tools/buildtools/mkldscript
-MKDMADATA   := tools/buildtools/mkdmadata
-ZAPD        := tools/ZAPD/ZAPD.out
-FADO        := tools/fado/fado.elf
-MAKEYAR     := $(PYTHON) tools/buildtools/makeyar.py
-CHECKSUMMER := $(PYTHON) tools/buildtools/checksummer.py
-SCHC        := $(PYTHON) tools/buildtools/schc.py
+CPP           := cpp
+MKLDSCRIPT    := tools/buildtools/mkldscript
+MKDMADATA     := tools/buildtools/mkdmadata
+ZAPD          := tools/ZAPD/ZAPD.out
+FADO          := tools/fado/fado.elf
+MAKEYAR       := $(PYTHON) tools/buildtools/makeyar.py
+CHECKSUMMER   := $(PYTHON) tools/buildtools/checksummer.py
+SHIFTJIS_CONV := $(PYTHON) tools/buildtools/shiftjis_conv.py
+SCHC          := $(PYTHON) tools/buildtools/schc.py
 
 SCHC_FLAGS  :=
 
@@ -228,6 +229,9 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                  $(foreach f,$(BASEROM_FILES),$(BUILD_DIR)/$f.o) \
                  $(foreach f,$(ARCHIVES_O),$(BUILD_DIR)/$f)
 
+SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c src/code/z_message_nes.c
+SHIFTJIS_O_FILES	:= $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),$(BUILD_DIR)/$f)
+
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | $(SPEC_REPLACE_VARS) | grep -o '[^"]*_reloc.o' )
 
 SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),$(BUILD_DIR)/$f)
@@ -289,6 +293,8 @@ $(BUILD_DIR)/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS
 
 $(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
+
+$(SHIFTJIS_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
 #### Main Targets ###
 
@@ -437,6 +443,13 @@ $(BUILD_DIR)/assets/text/staff_message_data.enc.h: assets/text/staff_message_dat
 $(BUILD_DIR)/assets/text/message_data_static.o: $(BUILD_DIR)/assets/text/message_data.enc.h
 $(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/staff_message_data.enc.h
 $(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/staff_message_data.enc.h
+
+$(SHIFTJIS_O_FILES): $(BUILD_DIR)/src/%.o: src/%.c
+	$(SHIFTJIS_CONV) -o $(@:.o=.enc.c) $<
+	$(CC_CHECK) $(@:.o=.enc.c)
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
 
 $(BUILD_DIR)/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<

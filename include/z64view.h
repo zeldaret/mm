@@ -3,6 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
+#include "main.h"
 #include "z64math.h"
 #include "unk.h"
 

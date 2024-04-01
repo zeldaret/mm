@@ -8,7 +8,6 @@
 #include "z64speed_meter.h"
 #include "z64vimode.h"
 #include "z64vis.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "debug.h"
 
 s32 gFramerateDivisor = 1;
