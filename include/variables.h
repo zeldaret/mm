@@ -38,9 +38,6 @@ extern RomFile gObjectTable[OBJECT_ID_MAX];
 
 extern SceneTableEntry gSceneTable[SCENE_MAX];
 
-extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];
-extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
-
 extern s32 gDbgCamEnabled;
 
 extern Vec3f gZeroVec3f;
@@ -82,6 +79,7 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
+
 extern s32 gTransitionTileState;
 extern Color_RGBA8_u32 gPlayVisMonoColor;
 
