@@ -42,7 +42,11 @@
 #define MAX_KILL_COUNT 12
 
 #define ALIEN_STATE_FLAG_ACTIVE (1 << 0)
-#define ALIEN_STATE_FLAG_CLOSEST (1 << 1)
+
+// This flag will be set for the living alien that is closest to the barn, so long as that alien is within 2000 units of
+// the barn. Since it's possible that no living aliens are within 2000 units of the barn, it's also possible that no
+// alien has this flag set. In other words, this flag will only be set for a single alien or for no alien at all.
+#define ALIEN_STATE_FLAG_CLOSEST_THREAT (1 << 1)
 
 typedef enum EnInvadepohInvasionState {
     /* 0 */ EN_INVADEPOH_INVASION_STATE_NONE,
@@ -1153,7 +1157,14 @@ s32 EnInvadepoh_Alien_LensFlareDepthCheck(PlayState* play, Vec3f* pos) {
     return false;
 }
 
-void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
+/**
+ * This function calculates how close every living alien is to the barn; it actually checks how close they are to the
+ * invasion handler, but that is spawned within the barn. If the alien closest to the barn is fewer than 2000 units
+ * away, then this function will set the `ALIEN_STATE_FLAG_CLOSEST_THREAT` flag on that alien and clear that flag on all
+ * other aliens. If every living alien is *greater* than 2000 units away from the barn, however, then this function does
+ * not think any alien is "threatening", so no alien will have the `ALIEN_STATE_FLAG_CLOSEST_THREAT` flag set.
+ */
+void EnInvadepoh_InvasionHandler_SetClosestAlienThreat(EnInvadepoh* this) {
     s32 i;
     f32 minDistSqToBarn = FLT_MAX;
     s32 closestAlienIndex = -1;
@@ -1168,13 +1179,13 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
             }
         }
 
-        sAlienStateFlags[i] &= ~ALIEN_STATE_FLAG_CLOSEST;
+        sAlienStateFlags[i] &= ~ALIEN_STATE_FLAG_CLOSEST_THREAT;
     }
 
     sAliensTooClose = false;
 
     if (minDistSqToBarn <= SQ(2000.0f)) {
-        sAlienStateFlags[closestAlienIndex] |= ALIEN_STATE_FLAG_CLOSEST;
+        sAlienStateFlags[closestAlienIndex] |= ALIEN_STATE_FLAG_CLOSEST_THREAT;
 
         if (minDistSqToBarn <= SQ(340.0f)) {
             sAliensTooClose = true;
@@ -1182,14 +1193,20 @@ void EnInvadepoh_InvasionHandler_SetClosestAlien(EnInvadepoh* this) {
     }
 }
 
-EnInvadepoh* EnInvadepoh_Dog_GetClosestAlien(void) {
+/**
+ * Returns a pointer to the alien that is the most threatening to the barn (in other words, the alien that is the
+ * closest). However, it is possible for no alien to actually be considered a threat; this can be the case if every
+ * living alien is greater than 2000 units away from the barn. In that case, this function will return NULL.
+ */
+EnInvadepoh* EnInvadepoh_Dog_GetClosestAlienThreat(void) {
     s32 i;
 
     for (i = 0; i < ALIEN_COUNT; i++) {
-        if (sAlienStateFlags[i] & ALIEN_STATE_FLAG_CLOSEST) {
+        if (sAlienStateFlags[i] & ALIEN_STATE_FLAG_CLOSEST_THREAT) {
             return sAliens[i];
         }
     }
+
     return NULL;
 }
 
@@ -2032,9 +2049,9 @@ void EnInvadepoh_InvasionHandler_SetupHandle(EnInvadepoh* this) {
 }
 
 /**
- * If it's 5:15 AM or later, this function will start the success cutscene. Otherwise, this function updates which alien
- * is closest to the barn and checks to see if any alien has reached the end of its path (i.e., it reached the barn). If
- * this happens, then this function will start the failure cutscene.
+ * If it's 5:15 AM or later, this function will start the success cutscene. Otherwise, this function decides which alien
+ * (if any) is the most threatening and checks to see if any alien has reached the end of its path (i.e., it reached the
+ * barn). If this happens, then this function will start the failure cutscene.
  */
 void EnInvadepoh_InvasionHandler_Handle(EnInvadepoh* this, PlayState* play) {
     if ((CURRENT_TIME < CLOCK_TIME(6, 00)) && (CURRENT_TIME >= CLOCK_TIME(5, 15))) {
@@ -2043,7 +2060,7 @@ void EnInvadepoh_InvasionHandler_Handle(EnInvadepoh* this, PlayState* play) {
     } else {
         s32 i;
 
-        EnInvadepoh_InvasionHandler_SetClosestAlien(this);
+        EnInvadepoh_InvasionHandler_SetClosestAlienThreat(this);
 
         for (i = 0; i < this->alienCount; i++) {
             if ((sAliens[i] != NULL) && (sAliens[i]->pathCompleted)) {
@@ -3932,7 +3949,7 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
 
-    sClosestAlien = EnInvadepoh_Dog_GetClosestAlien();
+    sClosestAlien = EnInvadepoh_Dog_GetClosestAlienThreat();
     if (sClosestAlien == NULL) {
         s32 hadTarget = (this->dogTargetPoint >= 0);
 
