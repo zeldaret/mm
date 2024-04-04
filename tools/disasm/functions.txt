@@ -13924,7 +13924,7 @@
     0x80B4B820:("EnInvadepoh_Dog_SetupJump",),
     0x80B4B864:("EnInvadepoh_Dog_Jump",),
     0x80B4B8BC:("EnInvadepoh_Dog_WaitForObject",),
-    0x80B4BA30:("EnInvadepoh_Dog_WaitForEvent",),
+    0x80B4BA30:("EnInvadepoh_Dog_WaitForInvasion",),
     0x80B4BA84:("EnInvadepoh_Dog_Update",),
     0x80B4BBE0:("EnInvadepoh_Night3Cremia_SetupWalk",),
     0x80B4BC4C:("EnInvadepoh_Night3Cremia_Walk",),

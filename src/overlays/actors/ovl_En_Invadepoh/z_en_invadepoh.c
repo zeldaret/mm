@@ -87,7 +87,7 @@ void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Dog_WaitForEvent(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_WaitForEvent(Actor* thisx, PlayState* play2);
@@ -352,7 +352,11 @@ MtxF sInvadepohAlienLeftEyeBeamMtxF;
 MtxF sInvadepohAlienRightEyeBeamMtxF;
 EnInvadepoh* sAliens[ALIEN_COUNT];
 u8 sAlienStateFlags[ALIEN_COUNT];
-s8 sAliensTooClose;
+
+/**
+ * This variable is true if any alien is within 340 units of the barn and is otherwise false.
+ */
+s8 sAliensExtremeThreat;
 
 typedef enum EnInvadepohEffectType {
     /* 0 */ EN_INVADEPOH_EFFECT_TYPE_WARP,
@@ -373,7 +377,7 @@ EnInvadepoh* sNight3Cremia;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
 s16 sInvadepohCsIdList[3];
-EnInvadepoh* sClosestAlien;
+EnInvadepoh* sClosestAlienThreat;
 
 void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
     spawnTime -= CLOCK_TIME(2, 30);
@@ -1182,13 +1186,13 @@ void EnInvadepoh_InvasionHandler_SetClosestAlienThreat(EnInvadepoh* this) {
         sAlienStateFlags[i] &= ~ALIEN_STATE_FLAG_CLOSEST_THREAT;
     }
 
-    sAliensTooClose = false;
+    sAliensExtremeThreat = false;
 
     if (minDistSqToBarn <= SQ(2000.0f)) {
         sAlienStateFlags[closestAlienIndex] |= ALIEN_STATE_FLAG_CLOSEST_THREAT;
 
         if (minDistSqToBarn <= SQ(340.0f)) {
-            sAliensTooClose = true;
+            sAliensExtremeThreat = true;
         }
     }
 }
@@ -3800,6 +3804,13 @@ void EnInvadepoh_Dog_SetupWalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Dog_Walk;
 }
 
+/**
+ * Makes the dog walk for a random amount of time between 50 and 80 frames, then makes the dog run again. This function
+ * will only run if the dog does not currently have a point along its path to target; this only happens if all living
+ * aliens are greater than 2000 units away from the barn, and thus none of them are considered a threat. If an alien
+ * gets within 2000 units of the barn while the dog is walking, then the dog will have a new target point along its
+ * path, and this function will make the dog immediately start running regardless of how long it was previously walking.
+ */
 void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 1.1f, 0.5f);
 
@@ -3826,6 +3837,12 @@ void EnInvadepoh_Dog_SetupRun(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Dog_Run;
 }
 
+/**
+ * Makes the dog run for a random amount of time between 50 and 200 frames or until it reaches the target point along
+ * its path. Once either of these conditions are met, the dog can do one of two things. If there are no living aliens
+ * within 2000 units of the barn, then the dog will start walking. Otherwise, it will stop and bark (and sometimes
+ * randomly growl) at whichever alien is closest to the barn.
+ */
 void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 3.8f, 0.45f);
 
@@ -3835,6 +3852,7 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
 
         Math_Vec3s_ToVec3f(&targetPathPoint, &this->pathPoints[this->dogTargetPoint]);
         distToTarget = Math3D_Vec3fDistSq(&this->actor.world.pos, &targetPathPoint);
+
         if (distToTarget < SQ(80.0f)) {
             this->actor.speed *= 0.85f;
         } else if (distToTarget < SQ(150.0f)) {
@@ -3842,6 +3860,7 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
         } else if (distToTarget < SQ(250.0f)) {
             this->actor.speed *= 0.96f;
         }
+
         if ((this->currentPoint == this->dogTargetPoint) || (distToTarget < SQ(50.0f))) {
             this->timer = 0;
         }
@@ -3856,9 +3875,11 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else if (this->dogTargetPoint >= 0) {
-        if (!sAliensTooClose && (Rand_ZeroOne() < 0.4f)) {
+        // Assuming no alien is within 340 units of the barn, the dog has a 40% chance of growling before barking.
+        if (!sAliensExtremeThreat && (Rand_ZeroOne() < 0.4f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
         }
+
         EnInvadepoh_Dog_SetupBark(this);
     } else {
         EnInvadepoh_Dog_SetupWalk(this);
@@ -3870,12 +3891,15 @@ void EnInvadepoh_Dog_SetupBark(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Dog_Bark;
 }
 
+/**
+ * Turns the dog to face the closest alien threat, then plays its barking animation before running again.
+ */
 void EnInvadepoh_Dog_Bark(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardActor(&this->actor, &sClosestAlien->actor), 5,
-                       0x1388, 0x64);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Actor_WorldYawTowardActor(&this->actor, &sClosestAlienThreat->actor),
+                       5, 0x1388, 0x64);
     EnInvadepoh_Dog_Move(this, play);
 
     if (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 19.0f)) {
@@ -3892,6 +3916,9 @@ void EnInvadepoh_Dog_SetupJump(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Dog_Jump;
 }
 
+/**
+ * Makes the dog play its jump animation to completion before running again.
+ */
 void EnInvadepoh_Dog_Jump(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.5f, 1.0f);
     EnInvadepoh_Dog_Move(this, play);
@@ -3926,13 +3953,17 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnInvadepoh_Dog_SetupWalk(this);
     } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
-        this->actor.update = EnInvadepoh_Dog_WaitForEvent;
+        this->actor.update = EnInvadepoh_Dog_WaitForInvasion;
     } else {
         Actor_Kill(&this->actor);
     }
 }
 
-void EnInvadepoh_Dog_WaitForEvent(Actor* thisx, PlayState* play2) {
+/**
+ * Waits for the invasion to start by checking the `sInvasionState`. If the invasion hasn't started yet, then the dog
+ * will be invisble. Once it starts, the dog becomes visible and starts walking.
+ */
+void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -3949,8 +3980,10 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = THIS;
     s32 inUncullRange = CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40);
 
-    sClosestAlien = EnInvadepoh_Dog_GetClosestAlienThreat();
-    if (sClosestAlien == NULL) {
+    sClosestAlienThreat = EnInvadepoh_Dog_GetClosestAlienThreat();
+    if (sClosestAlienThreat == NULL) {
+        // To enter this block, there must be no living aliens within 2000 units of the barn. If the dog was previously
+        // targeting an alien before this point, then this code will make the dog do a little jump for joy.
         s32 hadTarget = (this->dogTargetPoint >= 0);
 
         this->dogTargetPoint = -1;
@@ -3958,21 +3991,35 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
             EnInvadepoh_Dog_SetupJump(this);
         }
     } else {
-        s32 lastTargetPoint = this->dogTargetPoint;
-        s32 pointsToTarget;
-        s32 halfwayPoint;
+        s32 previousTargetPoint = this->dogTargetPoint;
+        s32 counterclockwisePointsToTarget;
+        s32 halfPathLength;
 
-        this->dogTargetPoint = EnInvadepoh_Dog_FindClosestWaypoint(this, &sClosestAlien->actor.world.pos);
-        if (lastTargetPoint != this->dogTargetPoint) {
-            pointsToTarget = this->dogTargetPoint - this->currentPoint;
-            if (pointsToTarget < 0) {
-                pointsToTarget += this->endPoint;
+        this->dogTargetPoint = EnInvadepoh_Dog_FindClosestWaypoint(this, &sClosestAlienThreat->actor.world.pos);
+        if (previousTargetPoint != this->dogTargetPoint) {
+            counterclockwisePointsToTarget = this->dogTargetPoint - this->currentPoint;
+
+            // This assumes that the dog is on a circular path, which is what it uses in the final game. This code, and
+            // the code that follows it, is trying to determine if the dog should run counterclockwise (where the dog
+            // runs from point N to point N+1) or clockwise (where the dog runs from point N to point N-1) along that
+            // circular path. To do that, we need to know how many points the dog must run through to reach the target
+            // point while running counterclockwise. If `counterclockwisePointsToTarget` is negative, then we need to
+            // adjust it by adding the length of the path minus 1, which is the same as the index of the ending point.
+            // We add the length minus 1 because in the final game, the first point and the last point on the dog's path
+            // overlap; you can pretend one of those two points does not actually exist.
+            if (counterclockwisePointsToTarget < 0) {
+                counterclockwisePointsToTarget += this->endPoint;
             }
 
-            halfwayPoint = this->endPoint >> 1;
-            if (halfwayPoint < pointsToTarget) {
+            // If the dog needs to run through *more* than half the total number of path points in order to run in a
+            // counterclockwise direction, then it's more efficient to run clockwise instead. If the dog needs to run
+            // through *fewer* than half the total number of path points, though, then it's more efficient to run
+            // counterclockwise. If the dog needs to run through exactly half of the total number of path points, then
+            // it doesn't matter which direction the dog chooses; the below code just leaves `this->pathStep` unchanged.
+            halfPathLength = this->endPoint >> 1;
+            if (halfPathLength < counterclockwisePointsToTarget) {
                 this->pathStep = -1;
-            } else if (pointsToTarget < halfwayPoint) {
+            } else if (counterclockwisePointsToTarget < halfPathLength) {
                 this->pathStep = 1;
             }
         }
