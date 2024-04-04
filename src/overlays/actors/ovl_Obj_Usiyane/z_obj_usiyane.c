@@ -41,14 +41,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-s32 func_80C07C80(s32 arg0) {
-    s32 var_v1 = ALIEN_GET_SPAWN_TIME(arg0);
+s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {
+    u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(alienIndex);
 
-    return var_v1 + CLOCK_TIME(2, 30);
+    // The time that each alien spawns is stored as an offset from 2:30 AM.
+    return spawnTimeOffset + CLOCK_TIME(2, 30);
 }
 
 s32 func_80C07CD0(void) {
-    if (CURRENT_DAY <= 0) {
+    if (CURRENT_DAY < 1) {
         return false;
     }
 
@@ -61,15 +62,15 @@ s32 func_80C07CD0(void) {
         }
 
         if (time < CLOCK_TIME(5, 15)) {
-            s32 var_s1 = CLOCK_TIME(5, 15);
-            s32 temp_v0_2;
+            s32 firstSpawn = CLOCK_TIME(5, 15);
+            s32 spawnTime;
 
             for (i = 0; i < 8; i++) {
-                temp_v0_2 = func_80C07C80(i);
-                var_s1 = CLAMP_MAX(var_s1, temp_v0_2);
+                spawnTime = ObjUsiyane_GetAlienSpawnTime(i);
+                firstSpawn = CLAMP_MAX(firstSpawn, spawnTime);
             }
 
-            if (time < (var_s1 + 0xE11)) {
+            if (time < (firstSpawn + 3601)) { // 79 in-game minutes
                 return false;
             }
         }

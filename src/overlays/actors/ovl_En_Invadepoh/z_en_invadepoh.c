@@ -198,7 +198,7 @@ void EnInvadepoh_AlienAbductor_AbductCow(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AlienAbductor_AbductRomani(EnInvadepoh* this, PlayState* play);
 
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
-s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed);
+s32 EnInvadepoh_StepToXZ(f32* pValueX, f32* pValueZ, f32 targetX, f32 targetZ, f32 step);
 
 ActorInit En_Invadepoh_InitVars = {
     /**/ ACTOR_EN_INVADEPOH,
@@ -380,16 +380,20 @@ s16 sInvadepohCsIdList[3];
 EnInvadepoh* sClosestAlienThreat;
 
 void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
+    // The time that each alien spawns is stored as an offset from 2:30 AM, so we need to subtract that from the spawn
+    // time in order to get the offset we need. We also clamp this offset so that it's never negative, though this
+    // operation should always be redundant in practice.
     spawnTime -= CLOCK_TIME(2, 30);
     spawnTime = CLAMP_MIN(spawnTime, 0);
 
-    ALIEN_SET_SPAWN_TIME(index, spawnTime);
+    ALIEN_SET_SPAWN_TIME_OFFSET(index, spawnTime);
 }
 
 s32 EnInvadepoh_Alien_GetSpawnTime(s32 index) {
-    u32 spawnTime = ALIEN_GET_SPAWN_TIME(index);
+    u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(index);
 
-    return spawnTime + CLOCK_TIME(2, 30);
+    // The time that each alien spawns is stored as an offset from 2:30 AM.
+    return spawnTimeOffset + CLOCK_TIME(2, 30);
 }
 
 void EnInvadepoh_Alien_SetKillCount(s32 count) {
@@ -611,22 +615,26 @@ s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* this, f32 highValue, f32 lowValue) {
     return true;
 }
 
-s32 EnInvadepoh_Dog_FindClosestWaypoint(EnInvadepoh* this, Vec3f* pos) {
-    s32 waypoint;
+/**
+ * Returns the index of the point along the dog's path that is closest to the supplied `target` position. This is used
+ * by the dog to move along its path towards the closest threatening alien.
+ */
+s32 EnInvadepoh_Dog_FindClosestPointToTarget(EnInvadepoh* this, Vec3f* target) {
+    s32 point;
     s32 endPoint = this->endPoint;
     Vec3s* pathPoint;
-    Vec3f pathPoint3f;
-    f32 minDist = FLT_MAX;
+    Vec3f pointPos;
+    f32 minDistSqToTarget = FLT_MAX;
+    f32 distSqToTarget;
     s32 closestPoint = 0;
-    f32 pointToPos;
 
-    for (waypoint = 0, pathPoint = this->pathPoints; waypoint < endPoint; waypoint++, pathPoint++) {
-        Math_Vec3s_ToVec3f(&pathPoint3f, pathPoint);
-        pointToPos = Math3D_Vec3fDistSq(&pathPoint3f, pos);
+    for (point = 0, pathPoint = this->pathPoints; point < endPoint; point++, pathPoint++) {
+        Math_Vec3s_ToVec3f(&pointPos, pathPoint);
+        distSqToTarget = Math3D_Vec3fDistSq(&pointPos, target);
 
-        if (pointToPos < minDist) {
-            minDist = pointToPos;
-            closestPoint = waypoint;
+        if (distSqToTarget < minDistSqToTarget) {
+            minDistSqToTarget = distSqToTarget;
+            closestPoint = point;
         }
     }
 
@@ -853,8 +861,8 @@ void EnInvadepoh_Alien_DoNothing(EnInvadepoh* this) {
 s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 speed, f32 height) {
     s32 pad;
     Vec3s* nextPathPoint = &this->pathPoints[this->currentPoint + 1];
-    s32 reachedNextPoint = EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z,
-                                                    nextPathPoint->x, nextPathPoint->z, speed);
+    s32 reachedNextPoint = EnInvadepoh_StepToXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, nextPathPoint->x,
+                                                nextPathPoint->z, speed);
 
     func_800B4AEC(play, &this->actor, height);
     EnInvadepoh_SnapToFloor(this);
@@ -993,20 +1001,20 @@ void EnInvadepoh_Alien_DesegmentTexAnims(void) {
     sAlienEyeBeamTexAnim = Lib_SegmentedToVirtual(gAlienEyeBeamTexAnim);
 }
 
-s32 EnInvadepoh_StepTowardXZ(f32* pxValue, f32* pzValue, f32 xTarget, f32 zTarget, f32 speed) {
-    f32 xDiff = xTarget - *pxValue;
-    f32 zDiff = zTarget - *pzValue;
-    f32 distToTarget = Math3D_XZLength(xDiff, zDiff);
+s32 EnInvadepoh_StepToXZ(f32* pValueX, f32* pValueZ, f32 targetX, f32 targetZ, f32 step) {
+    f32 diffX = targetX - *pValueX;
+    f32 diffZ = targetZ - *pValueZ;
+    f32 distToTarget = Math3D_XZLength(diffX, diffZ);
 
-    if (speed < distToTarget) {
-        f32 progressStep = speed / distToTarget;
+    if (step < distToTarget) {
+        f32 stepFraction = step / distToTarget;
 
-        *pxValue += progressStep * xDiff;
-        *pzValue += progressStep * zDiff;
+        *pValueX += stepFraction * diffX;
+        *pValueZ += stepFraction * diffZ;
         return false;
     } else {
-        *pxValue = xTarget;
-        *pzValue = zTarget;
+        *pValueX = targetX;
+        *pValueZ = targetZ;
         return true;
     }
 }
@@ -1024,33 +1032,42 @@ s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this) {
     return false;
 }
 
-void EnInvadepoh_InvasionHandler_CheckState(EnInvadepoh* this, PlayState* play) {
+/**
+ * Sets the initial value of `sInvasionState` based on the current date and time and whether the weekeventreg for
+ * defending the ranch is set. If the state is anything other than `EN_INVADEPOH_INVASION_STATE_NONE`, this function
+ * does nothing; the invasion state is already set in this circumstance.
+ */
+void EnInvadepoh_InvasionHandler_SetInitialInvasionState(EnInvadepoh* this, PlayState* play) {
     if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
         if (CURRENT_DAY < 1) {
+            // It's before the first day, so the invasion hasn't started yet.
             sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
         } else if (CURRENT_DAY == 1) {
             s32 currentTime = CURRENT_TIME;
 
             if (!((currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(6, 00)))) {
+                // It's before 2:30 AM on the first day, so the invasion hasn't started yet.
                 sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
             } else if (currentTime < CLOCK_TIME(5, 15)) {
                 s32 i;
                 s32 firstSpawn = CLOCK_TIME(5, 15);
-                s32 pad;
+                s32 spawnTime;
 
                 for (i = 0; i < this->alienCount; i++) {
-                    s32 spawnTime = EnInvadepoh_Alien_GetSpawnTime(i);
-
+                    spawnTime = EnInvadepoh_Alien_GetSpawnTime(i);
                     firstSpawn = MIN(spawnTime, firstSpawn);
                 }
 
                 if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
+                    // The alien with the earliest spawn time hasn't reached the barn, so the invasion is ongoing.
                     sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
                 }
             }
         }
 
         if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
+            // The only way to reach this point is if the invasion is over, so check to see if the player successfully
+            // defended the ranch to determine the state of the invasion.
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
             } else {
@@ -1635,7 +1652,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     }
 
     this->alienCount = alienCount;
-    EnInvadepoh_InvasionHandler_CheckState(this, play);
+    EnInvadepoh_InvasionHandler_SetInitialInvasionState(this, play);
     EnInvadepoh_InvasionHandler_SetCutscenes(this);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_SWITCH);
 
@@ -3070,8 +3087,8 @@ void EnInvadepoh_Ufo_IntroFlyAround(EnInvadepoh* this, PlayState* play) {
         this->actor.speed *= 0.98f;
     }
 
-    if (EnInvadepoh_StepTowardXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, ufoTargetPos.x, ufoTargetPos.z,
-                                 this->actor.speed)) {
+    if (EnInvadepoh_StepToXZ(&this->actor.world.pos.x, &this->actor.world.pos.z, ufoTargetPos.x, ufoTargetPos.z,
+                             this->actor.speed)) {
         this->actor.speed = 0.0f;
     }
 
@@ -3995,7 +4012,7 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
         s32 counterclockwisePointsToTarget;
         s32 halfPathLength;
 
-        this->dogTargetPoint = EnInvadepoh_Dog_FindClosestWaypoint(this, &sClosestAlienThreat->actor.world.pos);
+        this->dogTargetPoint = EnInvadepoh_Dog_FindClosestPointToTarget(this, &sClosestAlienThreat->actor.world.pos);
         if (previousTargetPoint != this->dogTargetPoint) {
             counterclockwisePointsToTarget = this->dogTargetPoint - this->currentPoint;
 

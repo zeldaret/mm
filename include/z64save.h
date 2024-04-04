@@ -557,11 +557,11 @@ typedef enum {
 #define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
 #define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
 
-#define ALIEN_GET_SPAWN_TIME(index) \
+#define ALIEN_GET_SPAWN_TIME_OFFSET(index) \
     ((index % 2) == 0) ? ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF)) \
                        : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10)
 
-#define ALIEN_SET_SPAWN_TIME(index, spawnTime) \
+#define ALIEN_SET_SPAWN_TIME_OFFSET(index, spawnTime) \
     ((index % 2) == 0) ? (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) | (spawnTime & 0xFFFF)) \
                        : (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF) | ((spawnTime & 0xFFFF) << 0x10))
 
