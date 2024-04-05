@@ -13738,7 +13738,7 @@
     0x80B43F70:("EnInvadepoh_GetPathLength",),
     0x80B44024:("EnInvadepoh_InitPath",),
     0x80B4407C:("EnInvadepoh_SetPosToPathPoint",),
-    0x80B440B8:("EnInvadepoh_Dog_IsOnPath",),
+    0x80B440B8:("EnInvadepoh_Dog_IsCloseToPath",),
     0x80B44234:("EnInvadepoh_Dog_FindClosestPointToTarget",),
     0x80B442E4:("EnInvadepoh_Alien_SetProgress",),
     0x80B443A0:("EnInvadepoh_Alien_SetCheckpoints",),

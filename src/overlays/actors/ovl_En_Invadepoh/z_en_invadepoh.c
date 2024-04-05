@@ -574,21 +574,44 @@ void EnInvadepoh_SetPosToPathPoint(EnInvadepoh* this, s32 point) {
     Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[point]);
 }
 
-s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* this, f32 highValue, f32 lowValue) {
+/**
+ * Returns true if the dog is considered sufficiently "close enough" to the path it's running along and false otherwise.
+ * Specifically, it checks to see if the dog's position is contained within a parallelogram that looks like this:
+ *           ____________________________
+ *          |                            |
+ *  (a - b) |                            |
+ *          |                            |
+ *          C----------------------------N
+ *          |                            |
+ *  (a - b) |                            |
+ *          |____________________________|
+ *
+ * Based on the dog's current point along the path (labeled C in the above diagram) and the dog's "next" point (labeled
+ * as N), the parallelogram extends `(a - b)` units in both perpendicular directions from the line formed by those two
+ * points. Note that this function does not work properly when the dog is running clockwise due to a bug.
+ */
+s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
+    //! @bug: When the dog is running clockwise, this calculation is incorrect. The path points are laid out such that
+    //! if the dog is on point N, then point N+1 is the next point in the counterclockwise direction, and point N-1 is
+    //! the next point in the clockwise direction. Using `pathStep` instead of hardcoding +1 here would fix the bug.
+    //! Because of this bug, the dog is never considered to be "close enough" to the path when running clockwise.
     Vec3s* nextPoint = &this->pathPoints[this->currentPoint] + 1;
     Vec3s* currentPoint = &this->pathPoints[this->currentPoint];
     s32 pad;
     f32 pathSegmentX;
     f32 pathSegmentZ;
-    f32 pathUnitVecZ;
-    f32 pathUnitVecX;
-    f32 travelSegmentX;
-    f32 travelSegmentZ;
+    f32 cos;
+    f32 sin;
+    f32 offsetFromPointX;
+    f32 offsetFromPointZ;
     f32 distAlongPath;
-    f32 pathSegmentLength;
     f32 distOffPath;
+    f32 pathSegmentLength;
     s16 pathYaw;
 
+    // The dog's current point should never be set to the `endPoint`, so this code should never run in practice. The dog
+    // is placed on a circular path in the final game, where the last point on the path overlaps with the first one. To
+    // account for this, `EnInvadepoh_Dog_MoveAlongPath` will ensure that the last point will always be skipped.
     if (this->currentPoint >= this->endPoint) {
         return false;
     }
@@ -596,18 +619,24 @@ s32 EnInvadepoh_Dog_IsOnPath(EnInvadepoh* this, f32 highValue, f32 lowValue) {
     pathSegmentX = (nextPoint->x - currentPoint->x);
     pathSegmentZ = (nextPoint->z - currentPoint->z);
     pathYaw = Math_Atan2S_XY(pathSegmentZ, pathSegmentX);
-    pathUnitVecZ = Math_CosS(pathYaw);
-    pathUnitVecX = Math_SinS(pathYaw);
-    travelSegmentX = this->actor.world.pos.x - currentPoint->x;
-    travelSegmentZ = this->actor.world.pos.z - currentPoint->z;
+    cos = Math_CosS(pathYaw);
+    sin = Math_SinS(pathYaw);
+    offsetFromPointX = this->actor.world.pos.x - currentPoint->x;
+    offsetFromPointZ = this->actor.world.pos.z - currentPoint->z;
 
-    distOffPath = fabsf((travelSegmentX * pathUnitVecZ) - (travelSegmentZ * pathUnitVecX));
-    if (distOffPath > (highValue - lowValue)) {
+    // Computes the perpendicular distance from the dog to the line formed by the current and next path points and
+    // checks to see if this distance is less than `(a - b)`. In other words, the dog must be less than `(a - b)` units
+    // away from the path in either perpendicular direction in order to be considered close to the path.
+    distOffPath = fabsf((offsetFromPointX * cos) - (offsetFromPointZ * sin));
+    if (distOffPath > (a - b)) {
         return false;
     }
 
+    // Projects the dog's current position onto the line formed by the current and next path points and checks to see if
+    // the projected position lies between the current and next points along the path. In other words, it makes sure the
+    // dog is not "behind" the current point or "ahead of" the next point along the axis formed by the two points.
     pathSegmentLength = Math3D_XZLength(pathSegmentX, pathSegmentZ);
-    distAlongPath = (travelSegmentZ * pathUnitVecZ) + (travelSegmentX * pathUnitVecX);
+    distAlongPath = (offsetFromPointZ * cos) + (offsetFromPointX * sin);
     if ((distAlongPath < 0.0f) || (pathSegmentLength < distAlongPath)) {
         return false;
     }
@@ -938,7 +967,7 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Atan2S_XY(worldToTarget.z, worldToTarget.x), 4, 0xFA0, 0x64);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f,
-                            EnInvadepoh_Dog_IsOnPath(this, 50.0f, 15.0f)
+                            EnInvadepoh_Dog_IsCloseToPath(this, 50.0f, 15.0f)
                                 ? UPDBGCHECKINFO_FLAG_4
                                 : UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
