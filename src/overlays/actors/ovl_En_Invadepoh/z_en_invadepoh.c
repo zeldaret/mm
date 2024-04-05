@@ -4021,18 +4021,28 @@ void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2) {
             // runs from point N to point N+1) or clockwise (where the dog runs from point N to point N-1) along that
             // circular path. To do that, we need to know how many points the dog must run through to reach the target
             // point while running counterclockwise. If `counterclockwisePointsToTarget` is negative, then we need to
-            // adjust it by adding the length of the path minus 1, which is the same as the index of the ending point.
-            // We add the length minus 1 because in the final game, the first point and the last point on the dog's path
-            // overlap; you can pretend one of those two points does not actually exist.
+            // adjust it by adding the length of the path. In the final game, the first point and the last point on the
+            // dog's path overlap, which means that the length of the path is effectively the same as the index of the
+            // end point.
             if (counterclockwisePointsToTarget < 0) {
                 counterclockwisePointsToTarget += this->endPoint;
             }
 
-            // If the dog needs to run through *more* than half the total number of path points in order to run in a
-            // counterclockwise direction, then it's more efficient to run clockwise instead. If the dog needs to run
-            // through *fewer* than half the total number of path points, though, then it's more efficient to run
-            // counterclockwise. If the dog needs to run through exactly half of the total number of path points, then
-            // it doesn't matter which direction the dog chooses; the below code just leaves `this->pathStep` unchanged.
+            //! @bug The intent of the code below is to implement the following logic:
+            //! - If the dog needs to run through *more than* half the total number of path points in order to run
+            //!   counterclockwise, then make the dog run clockwise.
+            //! - If the dog needs to run through *fewer than* half the total number of path points in order to run
+            //!   counterclockwise, then make the dog counterclockwise.
+            //! - If the dog needs to run through *exactly* half of the total number of path points in order to run
+            //!   counterclockwise, then don't change the dog's direction; either direction is fine.
+            //!
+            //! This code mostly works, but it can occasionally get the wrong result for paths with an odd number of
+            //! points; the path that the dog runs along in the final game is effectively a 17-point path, so the bug
+            //! can manifest in-game. For an odd-numbered length, dividing the length by 2 results in a non-whole
+            //! number, so the result is truncated when stored as an integer. If the `counterclockwisePointsToTarget`
+            //! happens to exactly equal this truncated value, then this code will fail to recognize that going
+            //! counterclockwise is more efficient, and `pathStep` will be left untouched. This can result in the dog
+            //! taking a less-efficient clockwise path under certain circumstances.
             halfPathLength = this->endPoint >> 1;
             if (halfPathLength < counterclockwisePointsToTarget) {
                 this->pathStep = -1;
