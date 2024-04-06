@@ -180,7 +180,7 @@ s32 func_80BC3D08(BgF40Block* this, PlayState* play, s32 arg2) {
         return false;
     }
 
-    if (arg2 != 0) {
+    if (arg2) {
         sp48.x =
             (D_80BC4620[this->unk_168].x * ((800.0f * this->dyna.actor.scale.x) - (this->dyna.actor.speed * 0.5f))) +
             this->dyna.actor.world.pos.x;
@@ -205,7 +205,7 @@ s32 func_80BC3D08(BgF40Block* this, PlayState* play, s32 arg2) {
     }
 
     if (BgCheck_AnyLineTest1(&play->colCtx, &sp48, &sp3C, &sp30, &sp54, true)) {
-        if (arg2 == 0) {
+        if (!arg2) {
             this->dyna.actor.world.pos.x -= sp3C.x - sp30.x;
             this->dyna.actor.world.pos.y -= sp3C.y - sp30.y;
             this->dyna.actor.world.pos.z -= sp3C.z - sp30.z;
@@ -260,7 +260,7 @@ void BgF40Block_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BC41AC(BgF40Block* this, PlayState* play) {
-    if (func_80BC3D08(this, play, 1)) {
+    if (func_80BC3D08(this, play, true)) {
         if (!Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
             func_80BC4038(this);
             this->actionFunc = func_80BC44F4;
@@ -282,7 +282,7 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
         }
     }
 
-    if (func_80BC3D08(this, play, 0)) {
+    if (func_80BC3D08(this, play, false)) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC41AC;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
@@ -320,7 +320,7 @@ void func_80BC4380(BgF40Block* this, PlayState* play) {
 }
 
 void func_80BC43CC(BgF40Block* this, PlayState* play) {
-    if (func_80BC3D08(this, play, 1)) {
+    if (func_80BC3D08(this, play, true)) {
         if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
             func_80BC4038(this);
             this->actionFunc = func_80BC4344;
@@ -342,7 +342,7 @@ void func_80BC4448(BgF40Block* this, PlayState* play) {
         }
     }
 
-    if (func_80BC3D08(this, play, 0)) {
+    if (func_80BC3D08(this, play, false)) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC43CC;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);

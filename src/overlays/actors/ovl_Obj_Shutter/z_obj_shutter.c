@@ -34,7 +34,7 @@ void ObjShutter_Init(Actor* thisx, PlayState* play) {
 void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
-#include "build/src/overlays/actors/ovl_Obj_Shutter/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_Obj_Shutter/scheduleScripts.schl.inc"
 
 void ObjShutter_Update(Actor* thisx, PlayState* play2) {
     ObjShutter* this = THIS;

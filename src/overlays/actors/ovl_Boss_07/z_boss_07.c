@@ -3,7 +3,7 @@
  * Overlay: ovl_Boss_07
  * Description: Majora
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_boss_07.h"
 
 #include "z64shrink_window.h"

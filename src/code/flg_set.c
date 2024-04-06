@@ -9,8 +9,8 @@
  *  B: exit
  *  Hold Start and press B: clear all weekEventReg and eventInf flags
  */
+
 #include "global.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 typedef struct FlagSetEntry {
     /* 0x0 */ u8* value;
@@ -277,7 +277,7 @@ void FlagSet_Draw(GameState* gameState) {
     s32 pad;
 
     polyOpa = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(polyOpa);
+    gfx = Gfx_Open(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     GfxPrint_Init(&printer);
@@ -313,7 +313,7 @@ void FlagSet_Draw(GameState* gameState) {
     GfxPrint_Destroy(&printer);
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(polyOpa, gfx);
+    Gfx_Close(polyOpa, gfx);
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);

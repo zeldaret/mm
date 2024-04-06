@@ -5,7 +5,7 @@
 #include "libc/stddef.h"
 #include "unk.h"
 
-typedef struct {
+typedef struct AudioHeapInitSizes {
     /* 0x0 */ size_t heapSize; // total number of bytes allocated to the audio heap. Must be <= the size of `gAudioHeap` (ideally about the same size)
     /* 0x4 */ size_t initPoolSize; // The entire audio heap is split into two pools. 
     /* 0x8 */ size_t permanentPoolSize;
@@ -14,7 +14,7 @@ typedef struct {
 /**
  * Meta-data associated with a pool (contain withing the Audio Heap)
  */
-typedef struct {
+typedef struct AudioAllocPool {
     /* 0x0 */ u8* startAddr; // start addr of the pool
     /* 0x4 */ u8* curAddr; // address of the next available memory for allocation
     /* 0x8 */ size_t size; // size of the pool
@@ -24,7 +24,7 @@ typedef struct {
 /**
  * Audio cache entry data to store a single entry containing either a sequence, soundfont, or entire sample banks
  */
-typedef struct {
+typedef struct AudioCacheEntry {
     /* 0x0 */ u8* addr;
     /* 0x4 */ size_t size;
     /* 0x8 */ s16 tableType;
@@ -34,7 +34,7 @@ typedef struct {
 /**
  * Audio cache entry data to store a single entry containing an individual sample
  */
-typedef struct {
+typedef struct SampleCacheEntry {
     /* 0x00 */ s8 inUse;
     /* 0x01 */ s8 origMedium;
     /* 0x02 */ u8 sampleBankId;
@@ -47,42 +47,42 @@ typedef struct {
 /**
  * Audio cache entry data to store individual samples
  */
-typedef struct {
+typedef struct AudioSampleCache {
     /* 0x000 */ AudioAllocPool pool;
     /* 0x010 */ SampleCacheEntry entries[128];
     /* 0xA10 */ s32 numEntries;
 } AudioSampleCache; // size = 0xA14
 
-typedef struct {
+typedef struct AudioPersistentCache {
     /* 0x00 */ u32 numEntries;
     /* 0x04 */ AudioAllocPool pool;
     /* 0x14 */ AudioCacheEntry entries[16];
 } AudioPersistentCache; // size = 0xD4
 
-typedef struct {
+typedef struct AudioTemporaryCache {
     /* 0x00 */ u32 nextSide;
     /* 0x04 */ AudioAllocPool pool;
     /* 0x14 */ AudioCacheEntry entries[2];
 } AudioTemporaryCache; // size = 0x3C
 
-typedef struct {
+typedef struct AudioCache {
     /* 0x000 */ AudioPersistentCache persistent;
     /* 0x0D4 */ AudioTemporaryCache temporary;
     /* 0x100 */ UNK_TYPE1 pad100[0x10];
 } AudioCache; // size = 0x110
 
-typedef struct {
+typedef struct AudioCachePoolSplit {
     /* 0x0 */ size_t persistentCommonPoolSize;
     /* 0x4 */ size_t temporaryCommonPoolSize;
 } AudioCachePoolSplit; // size = 0x8
 
-typedef struct {
+typedef struct AudioCommonPoolSplit {
     /* 0x0 */ size_t seqCacheSize;
     /* 0x4 */ size_t fontCacheSize;
     /* 0x8 */ size_t sampleBankCacheSize;
 } AudioCommonPoolSplit; // size = 0xC
 
-typedef struct {
+typedef struct AudioSessionPoolSplit {
     /* 0x0 */ size_t miscPoolSize;
     /* 0x4 */ size_t unusedSizes[2];
     /* 0xC */ size_t cachePoolSize; 
