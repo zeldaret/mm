@@ -25,7 +25,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
         actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
-        if (actor == NULL) {
+        if (door == NULL) {
             break;
         }
 
@@ -541,7 +541,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
         endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
     startFrame = animationInfo->startFrame;
-    if (startFrame >= endFrame || startFrame < 0) {
+    if ((startFrame >= endFrame) || (startFrame < 0)) {
         return false;
     }
     if (animationInfo->playSpeed < 0.0f) {
@@ -967,7 +967,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
     }
 }
 
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[],
                        s8 parentBodyParts[]) {
     Vec3f pos;
     Vec3f startVec;
@@ -982,9 +982,9 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
-            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
-            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
-            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * weight + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * weight + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * weight + (bodyPartPos->z - worldPos->z);
         } else {
             bodyPartPos = &bodyPartsPos[i];
 

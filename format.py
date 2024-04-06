@@ -29,7 +29,7 @@ APPLY_OPTS = ""
 
 # Compiler options used with Clang-Tidy
 # Normal warnings are disabled with -Wno-everything to focus only on tidying
-INCLUDES = "-Iinclude -Isrc -Ibuild -I."
+INCLUDES = "-Iinclude -Isrc -Ibuild/n64-us -I."
 DEFINES = "-D_LANGUAGE_C -DNON_MATCHING"
 COMPILER_OPTS = f"-fno-builtin -std=gnu90 -m32 -Wno-everything {INCLUDES} {DEFINES}"
 
@@ -181,6 +181,7 @@ def main():
     else:
         files = glob.glob("src/**/*.c", recursive=True)
         extra_files = glob.glob("assets/**/*.xml", recursive=True)
+        extra_files += glob.glob("src/**/*.schl", recursive=True)
 
     format_files(files, extra_files, nb_jobs)
 

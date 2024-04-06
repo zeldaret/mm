@@ -1,7 +1,6 @@
 #include "global.h"
 #include "message_data_fmt_nes.h"
 #include "message_data_static.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 f32 sNESFontWidths[160] = {
     8.0f,  8.0f,  6.0f,  9.0f,  9.0f,  14.0f, 12.0f, 3.0f,  7.0f,  7.0f,  7.0f,  9.0f,  4.0f,  6.0f,  4.0f,  9.0f,
@@ -868,23 +867,24 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
             default:
                 switch (character) {
-                    case 0x8169:
-                    case 0x8175:
+                    case '（':
+                    case '「':
                         msgCtx->textPosX -= TRUNCF_BINANG(6.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8145:
+                    case '・':
                         msgCtx->textPosX -= TRUNCF_BINANG(3.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8148:
-                    case 0x8149:
+                    case '？':
+                    case '！':
                         msgCtx->textPosX -= TRUNCF_BINANG(2.0f * msgCtx->textCharScale);
                         break;
 
                     default:
                         break;
                 }
+
                 if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) && ((i + 1) == msgCtx->textDrawPos)) {
                     Audio_PlaySfx(NA_SE_NONE);
                 }
@@ -908,28 +908,27 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 charTexIndex += FONT_CHAR_TEX_SIZE;
 
-                //! @TODO: u8 character but > 0x255 cases
                 switch (character) {
-                    case 0x8144:
+                    case '．':
                         msgCtx->textPosX += TRUNCF_BINANG(8.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x816A:
-                    case 0x8176:
+                    case '）':
+                    case '」':
                         msgCtx->textPosX += TRUNCF_BINANG(10.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8141:
-                    case 0x8142:
-                    case 0x8168:
+                    case '、':
+                    case '。':
+                    case '”':
                         msgCtx->textPosX += TRUNCF_BINANG(12.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8194:
+                    case '＃':
                         msgCtx->textPosX += TRUNCF_BINANG(14.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8145:
+                    case '・':
                         msgCtx->textPosX += TRUNCF_BINANG(15.0f * msgCtx->textCharScale);
                         break;
 
@@ -1626,6 +1625,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
         } else if (curChar == MESSAGE_BOMBER_CODE) {
             for (i = 0; i < 5; i++) {
+                //! @bug OoB read & write for i == 4, digits array is only 4 elements
                 digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                 Font_LoadCharNES(play, digits[i] + '0', charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;

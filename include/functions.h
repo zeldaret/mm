@@ -294,11 +294,6 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
-void func_800F4A10(PlayState* play);
-void KaleidoSetup_Update(PlayState* play);
-void KaleidoSetup_Init(PlayState* play);
-void KaleidoSetup_Destroy(PlayState* play);
-
 void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset);
 void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
@@ -518,20 +513,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
-
-uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(PlayState* play);
-void KaleidoScopeCall_Destroy(PlayState* play);
-void KaleidoScopeCall_Update(PlayState* play);
-void KaleidoScopeCall_Draw(PlayState* play);
-
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
 void Play_DisableMotionBlur(void);
@@ -595,9 +576,9 @@ void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);
-Gfx* Graph_GfxPlusOne(Gfx* gfx);
-Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
-void* Graph_DlistAlloc(Gfx** gfx, size_t size);
+Gfx* Gfx_Open(Gfx* gfx);
+Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
+void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
@@ -764,8 +745,6 @@ s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 
-Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
-
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);
 void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
@@ -783,35 +762,6 @@ void AudioThread_InitMesgQueues(void);
 
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
-
-void AudioPlayback_NoteDisable(Note* note);
-void AudioPlayback_ProcessNotes(void);
-TunedSample* AudioPlayback_GetInstrumentTunedSample(Instrument* instrument, s32 semitone);
-Instrument* AudioPlayback_GetInstrumentInner(s32 fontId, s32 instId);
-Drum* AudioPlayback_GetDrum(s32 fontId, s32 drumId);
-SoundEffect* AudioPlayback_GetSoundEffect(s32 fontId, s32 sfxId);
-s32 AudioPlayback_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
-void AudioPlayback_SeqLayerNoteDecay(SequenceLayer* layer);
-void AudioPlayback_SeqLayerNoteRelease(SequenceLayer* layer);
-void AudioPlayback_InitSyntheticWave(Note* note, SequenceLayer* layer);
-void AudioPlayback_InitNoteLists(NotePool* pool);
-void AudioPlayback_InitNoteFreeList(void);
-void AudioPlayback_NotePoolClear(NotePool* pool);
-void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
-void AudioPlayback_AudioListRemove(AudioListItem* item);
-Note* AudioPlayback_AllocNote(SequenceLayer* layer);
-void AudioPlayback_NoteInitAll(void);
-
-void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
-void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
-void AudioScript_SequencePlayerDisable(SequencePlayer* seqPlayer);
-void AudioScript_AudioListPushBack(AudioListItem* list, AudioListItem* item);
-void* AudioScript_AudioListPopBack(AudioListItem* list);
-void AudioScript_ProcessSequences(s32 arg0);
-void AudioScript_SkipForwardSequence(SequencePlayer* seqPlayer);
-void AudioScript_ResetSequencePlayer(SequencePlayer* seqPlayer);
-void AudioScript_InitSequencePlayerChannels(s32 seqPlayerIndex);
-void AudioScript_InitSequencePlayers(void);
 
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);

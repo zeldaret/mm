@@ -33,7 +33,6 @@ u8 sMotionBlurStatus;
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "debug.h"
 
 s32 gDbgCamEnabled = false;
@@ -72,7 +71,7 @@ void Play_DrawMotionBlur(PlayState* this) {
         OPEN_DISPS(gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
 
         gSPDisplayList(OVERLAY_DISP++, gfx);
 
@@ -89,7 +88,7 @@ void Play_DrawMotionBlur(PlayState* this) {
 
         gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
 
         POLY_OPA_DISP = gfx;
 
@@ -922,9 +921,9 @@ void Play_UpdateMain(PlayState* this) {
     s32 sp5C = false;
     u8 freezeFlashTimer;
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[0x05] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
@@ -973,7 +972,7 @@ void Play_UpdateMain(PlayState* this) {
                 KaleidoSetup_Update(this);
             }
 
-            sp5C = (this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE);
+            sp5C = IS_PAUSED(&this->pauseCtx);
 
             AnimationContext_Reset(&this->animationCtx);
             Object_UpdateEntries(&this->objectCtx);
@@ -1015,7 +1014,7 @@ void Play_UpdateMain(PlayState* this) {
             Room_Noop(this, &this->roomCtx.prevRoom, &input[1], 1);
             Skybox_Update(&this->skyboxCtx);
 
-            if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+            if (IS_PAUSED(&this->pauseCtx)) {
                 KaleidoScopeCall_Update(this);
             } else if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
                 GameOver_Update(this);
@@ -1087,7 +1086,7 @@ void Play_Update(PlayState* this) {
 }
 
 void Play_PostWorldDraw(PlayState* this) {
-    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+    if (IS_PAUSED(&this->pauseCtx)) {
         KaleidoScopeCall_Draw(this);
     }
 
@@ -1095,8 +1094,7 @@ void Play_PostWorldDraw(PlayState* this) {
         Interface_Draw(this);
     }
 
-    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) ||
-        (this->msgCtx.currentTextId != 0xFF)) {
+    if (!IS_PAUSED(&this->pauseCtx) || (this->msgCtx.currentTextId != 0xFF)) {
         Message_Draw(this);
     }
 
@@ -1115,13 +1113,13 @@ void Play_PostWorldDraw(PlayState* this) {
         OPEN_DISPS(gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
         gSPDisplayList(OVERLAY_DISP++, gfx);
 
         VisFbuf_Draw(sPlayVisFbufInstance, &gfx, this->unk_18E60);
 
         gSPEndDisplayList(gfx++);
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
         POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);
@@ -1153,9 +1151,9 @@ void Play_DrawMain(PlayState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[0x05] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
@@ -1213,7 +1211,7 @@ void Play_DrawMain(PlayState* this) {
             Gfx* sp218;
             Gfx* sp214 = POLY_OPA_DISP;
 
-            sp218 = Graph_GfxPlusOne(sp214);
+            sp218 = Gfx_Open(sp214);
             gSPDisplayList(OVERLAY_DISP++, sp218);
 
             if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) ||
@@ -1238,7 +1236,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             gSPEndDisplayList(sp218++);
-            Graph_BranchDlist(sp214, sp218);
+            Gfx_Close(sp214, sp218);
             POLY_OPA_DISP = sp218;
         }
 
@@ -1302,7 +1300,8 @@ void Play_DrawMain(PlayState* this) {
                 Lights_Draw(lights, gfxCtx);
 
                 if (1) {
-                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); // FAKE:
+                    //! FAKE:
+                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0);
 
                     Scene_Draw(this);
                     if (this->roomCtx.unk78) {
@@ -1384,7 +1383,7 @@ void Play_DrawMain(PlayState* this) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
-                sp74 = Graph_GfxPlusOne(sp70);
+                sp74 = Gfx_Open(sp70);
                 gSPDisplayList(OVERLAY_DISP++, sp74);
                 this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
 
@@ -1409,7 +1408,7 @@ void Play_DrawMain(PlayState* this) {
                 }
 
                 gSPEndDisplayList(sp74++);
-                Graph_BranchDlist(sp70, sp74);
+                Gfx_Close(sp70, sp74);
                 POLY_OPA_DISP = sp74;
                 this->unk_18B49 = 2;
                 SREG(33) |= 1;
@@ -1595,7 +1594,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     this->sceneConfig = scene->drawConfig;
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
-    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
+    gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }

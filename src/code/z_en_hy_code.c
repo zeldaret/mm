@@ -116,8 +116,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-        door = (EnDoor*)doorIter;
+        door = (EnDoor*)SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         dist = Actor_WorldDistXYZToActor(actor, &door->knobDoor.dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
@@ -127,13 +126,14 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
         doorIter = door->knobDoor.dyna.actor.next;
     } while (doorIter != NULL);
 
+    //! FAKE:
     if (1) {}
 
     return nearestDoor;
 }
 
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
@@ -141,7 +141,7 @@ s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -168,7 +168,7 @@ s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg
         enHy->actor.objectSlot = enHy->skelLowerObjectSlot;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
         SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, play, animIndex);

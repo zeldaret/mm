@@ -53,10 +53,10 @@ void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     workBuf->taskData.qTableVPtr = &workBuf->qTableV;
 
     sJpegTask.flags = 0;
-    sJpegTask.ucodeBoot = SysUcode_GetUCodeBoot();
-    sJpegTask.ucodeBootSize = SysUcode_GetUCodeBootSize();
-    sJpegTask.yieldDataPtr = (u64*)&workBuf->yieldData;
-    sJpegTask.dataPtr = (u64*)&workBuf->taskData;
+    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
+    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
+    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
+    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
 
     jpegCtx->scTask.next = NULL;
     jpegCtx->scTask.flags = OS_SC_NEEDS_RSP;

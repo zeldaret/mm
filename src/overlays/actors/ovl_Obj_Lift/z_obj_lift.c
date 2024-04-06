@@ -58,7 +58,7 @@ static f32 yOffsets[] = { -18.0f, -9.0f };
 
 void func_8093D3C0(ObjLift* this, PlayState* play) {
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f* actorPos = &this->dyna.actor.world.pos;
     s32 i;
     s32 rand;
@@ -69,9 +69,9 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
         pos.y = actorPos->y;
         pos.z = (D_8093DD60[i].z * this->dyna.actor.scale.z) + actorPos->z;
 
-        vel.x = D_8093DD60[i].x * this->dyna.actor.scale.x * 0.8f;
-        vel.y = (Rand_ZeroOne() * 10.0f) + 6.0f;
-        vel.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
+        velocity.x = D_8093DD60[i].x * this->dyna.actor.scale.x * 0.8f;
+        velocity.y = (Rand_ZeroOne() * 10.0f) + 6.0f;
+        velocity.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
 
         if ((s32)Rand_Next() > 0) {
             rand = 0x40;
@@ -79,7 +79,7 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
             rand = 0x20;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, rand, 15, 15, 0,
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0x100, rand, 15, 15, 0,
                              ((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x, 0, 32, 50, -1,
                              OBJECT_D_LIFT, gDampeGraveBrownElevatorDL);
     }

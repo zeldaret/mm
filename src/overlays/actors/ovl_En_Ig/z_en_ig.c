@@ -19,45 +19,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play);
 void func_80BF2AF8(EnIg* this, PlayState* play);
 void func_80BF2BD4(EnIg* this, PlayState* play);
 
-static u8 D_80BF3260[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0xB6 - 0x05),
-    /* 0x05 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x57 - 0x09),
-    /* 0x09 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 45, 0x51 - 0x0F),
-    /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0x4B - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x1A - 0x19),
-    /* 0x19 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x45 - 0x20),
-    /* 0x20 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 55, 17, 15, 0x3F - 0x26),
-    /* 0x26 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 15, 18, 0, 0x39 - 0x2C),
-    /* 0x2C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x33 - 0x32),
-    /* 0x32 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x33 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 4),
-    /* 0x39 */ SCHEDULE_CMD_RET_TIME(17, 15, 6, 0, 2),
-    /* 0x3F */ SCHEDULE_CMD_RET_TIME(16, 55, 17, 15, 11),
-    /* 0x45 */ SCHEDULE_CMD_RET_TIME(16, 50, 16, 55, 6),
-    /* 0x4B */ SCHEDULE_CMD_RET_TIME(15, 45, 15, 50, 5),
-    /* 0x51 */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 45, 10),
-    /* 0x57 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0xB5 - 0x5B),
-    /* 0x5B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0xAF - 0x61),
-    /* 0x61 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 50, 16, 10, 0xA9 - 0x67),
-    /* 0x67 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 10, 16, 30, 0xA3 - 0x6D),
-    /* 0x6D */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x8A - 0x71),
-    /* 0x71 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 30, 16, 50, 0x84 - 0x77),
-    /* 0x77 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x7E - 0x7D),
-    /* 0x7D */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x7E */ SCHEDULE_CMD_RET_TIME(16, 50, 16, 55, 8),
-    /* 0x84 */ SCHEDULE_CMD_RET_TIME(16, 30, 16, 50, 13),
-    /* 0x8A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 30, 16, 50, 0x9D - 0x90),
-    /* 0x90 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x97 - 0x96),
-    /* 0x96 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x97 */ SCHEDULE_CMD_RET_TIME(16, 50, 16, 55, 9),
-    /* 0x9D */ SCHEDULE_CMD_RET_TIME(16, 30, 16, 50, 14),
-    /* 0xA3 */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, 3),
-    /* 0xA9 */ SCHEDULE_CMD_RET_TIME(15, 50, 16, 10, 12),
-    /* 0xAF */ SCHEDULE_CMD_RET_TIME(15, 45, 15, 50, 7),
-    /* 0xB5 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0xB6 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Ig/scheduleScripts.schl.inc"
 
 static s32 D_80BF3318[] = { -1, -1, 3, 1, 3, 1, 2, 0, 3, 5, 0, 3, 1, 2, 4 };
 
@@ -170,30 +132,28 @@ static AnimationInfoS sAnimationInfo[ENIG_ANIM_MAX] = {
     { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIG_ANIM_9
 };
 
-Actor* func_80BF1150(EnIg* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* temp_v0;
+Actor* EnIg_FindActor(EnIg* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnIg*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnIg*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        temp_v0 = foundActor->next;
-        if (temp_v0 == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
-        foundActor = temp_v0;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 EnDoor* func_80BF1200(PlayState* play, s32 arg1) {
@@ -279,7 +239,7 @@ Actor* func_80BF146C(EnIg* this, PlayState* play) {
     Actor* retActor;
 
     if (this->scheduleResult == 3) {
-        retActor = func_80BF1150(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+        retActor = EnIg_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
         retActor = &GET_PLAYER(play)->actor;
     }
@@ -520,7 +480,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s32 arg3, s32 arg4) {
+s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s32 actorCategory, s32 actorId) {
     u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -529,7 +489,7 @@ s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s
     s32 pad;
     s32 sp24 = false;
 
-    sp2C = func_80BF1150(this, play, arg3, arg4);
+    sp2C = EnIg_FindActor(this, play, actorCategory, actorId);
     this->timePath = NULL;
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {

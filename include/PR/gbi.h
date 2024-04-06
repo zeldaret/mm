@@ -5,6 +5,8 @@
 
 #include "ultratypes.h"
 
+/* Not original to libultra: Point Lights, DW, and Mtx intPart/FracPart union */
+
 /* To enable Fast3DEX grucode support, define F3DEX_GBI. */
 
 /* Types */
@@ -1277,12 +1279,12 @@ typedef struct {
 
 // Added in MM
 typedef struct {
-    unsigned char col[3];
-    unsigned char unk3;
-    unsigned char colc[3];
-    unsigned char unk7;
-    short pos[3];
-    unsigned char unkE;
+  unsigned char col[3];
+  unsigned char kc;
+  unsigned char colc[3];
+  unsigned char kl;
+  short pos[3];
+  unsigned char kq;
 } PointLight_t;
 
 typedef struct {

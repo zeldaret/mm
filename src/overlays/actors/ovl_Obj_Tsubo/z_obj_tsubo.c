@@ -206,7 +206,7 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     ObjTsubo* this = (ObjTsubo*)thisx;
 
     Collider_DestroyCylinder(play, &this->cylinderCollider);
@@ -218,7 +218,7 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
     s32 phi_s0;
     s32 pad;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 randf;
     f32 sin;
@@ -232,9 +232,9 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
         pos.x = sin * 8.0f;
         pos.y = Rand_ZeroOne() * 12.0f + 2.0f;
         pos.z = cos * 8.0f;
-        vel.x = pos.x * 0.23f;
-        vel.y = Rand_ZeroOne() * 5.0f + 2.5f;
-        vel.z = pos.z * 0.23f;
+        velocity.x = pos.x * 0.23f;
+        velocity.y = Rand_ZeroOne() * 5.0f + 2.5f;
+        velocity.z = pos.z * 0.23f;
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
         randf = Rand_ZeroOne();
         if (randf < 0.2f) {
@@ -245,7 +245,7 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 110.0f + 15.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
                              typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
@@ -258,7 +258,7 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
     s32 i;
     ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 randf;
     f32 sin;
     f32 cos;
@@ -271,9 +271,9 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
         pos.x = sin * 10.0f;
         pos.y = Rand_ZeroOne() * 20.0f + 2.0f;
         pos.z = cos * 10.0f;
-        vel.x = pos.x * 0.3f;
-        vel.y = Rand_ZeroOne() * 10.0f + 2.0f;
-        vel.z = pos.z * 0.3f;
+        velocity.x = pos.x * 0.3f;
+        velocity.y = Rand_ZeroOne() * 10.0f + 2.0f;
+        velocity.z = pos.z * 0.3f;
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
         randf = Rand_ZeroOne();
         if (randf < 0.2f) {
@@ -284,7 +284,7 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
             phi_s0 = 0xA0;
         }
         scale = Rand_ZeroOne() * 160.0f + 15.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
                              typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 40, 50, true);
@@ -292,12 +292,12 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
 }
 
 void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     s16 rot;
     s32 i;
     s32 phi_s0;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f* worldPos = &this->actor.world.pos;
     ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 sin;
@@ -320,9 +320,9 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
         pos.x = sin * 8.0f;
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
-        vel.x = pos.x * 0.2f;
-        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
-        vel.z = pos.z * 0.2f;
+        velocity.x = pos.x * 0.2f;
+        velocity.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        velocity.z = pos.z * 0.2f;
         Math_Vec3f_Sum(&pos, worldPos, &pos);
         if (Rand_ZeroOne() < .2f) {
             phi_s0 = 0x40;
@@ -330,18 +330,18 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 105.0f + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
                              typeData->objectId, typeData->shardDL);
     }
 }
 
 void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     s32 pad;
     s16 rot;
     s32 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     Vec3f* worldPos = &this->actor.world.pos;
     f32 sin;
@@ -365,9 +365,9 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
         pos.x = sin * 10.0f;
         pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
         pos.z = cos * 10.0f;
-        vel.x = pos.x * 0.3f;
-        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
-        vel.z = pos.z * 0.3f;
+        velocity.x = pos.x * 0.3f;
+        velocity.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        velocity.z = pos.z * 0.3f;
         Math_Vec3f_Sum(&pos, worldPos, &pos);
         if (Rand_ZeroOne() < 0.2f) {
             phi_s0 = 0xC0;
@@ -375,48 +375,54 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0xA0;
         }
         scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
                              typeData->objectId, typeData->shardDL);
     }
 }
 
 void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
-    s32 i;
+    PlayState* play = play2;
+    Actor* thisx = &this->actor;
     s16 rot;
     s32 phi_s0;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 randf;
     f32 temp_f20;
     f32 cos;
     f32 sin;
+    s32 i;
 
     for (i = 0, rot = 0; i < 13; i++, rot += 0x4E20) {
         randf = Rand_ZeroOne();
         temp_f20 = (1.0f - SQ(randf)) * 4.8f + 3.2f;
-        if (this) {}
         sin = Math_SinS(rot);
         cos = Math_CosS(rot);
+
         pos.x = sin * temp_f20;
         pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
         pos.z = cos * temp_f20;
-        vel.x = pos.x * 0.4f;
-        vel.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
-        vel.z = pos.z * 0.4f;
+
+        velocity.x = pos.x * 0.4f;
+        velocity.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
+        velocity.z = pos.z * 0.4f;
+
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+
         if (Rand_ZeroOne() < 0.2f) {
             phi_s0 = 0x40;
         } else {
             phi_s0 = 0x20;
         }
-        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
+
+        EffectSsKakera_Spawn(play, &pos, &velocity, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
                              (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objectId, typeData->shardDL);
     }
+
     for (i = 0; i < 7; i++) {
-        EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
-        EffectSsBubble_Spawn(play, &this->actor.world.pos, 10.0f, 10.0f, 10.0f, (Rand_ZeroOne() * 0.08f) + 0.09f);
+        EffectSsBubble_Spawn(play, &thisx->world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
+        EffectSsBubble_Spawn(play, &thisx->world.pos, 10.0f, 10.0f, 10.0f, (Rand_ZeroOne() * 0.08f) + 0.09f);
     }
 }
 
@@ -692,7 +698,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjTsubo_Draw(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
 
     Gfx_DrawDListOpa(play, sPotTypeData[OBJ_TSUBO_GET_TYPE(thisx)].modelDL);
 }

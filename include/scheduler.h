@@ -2,12 +2,17 @@
 #define SCHEDULER_H
 
 #include "PR/ultratypes.h"
-#include "PR/sched.h"
 #include "PR/os_vi.h"
+#include "PR/sched.h"
 #include "PR/sptask.h"
-#include "irqmgr.h"
 
+#include "irqmgr.h"
 #include "unk.h"
+
+#define OS_SC_RETRACE_MSG       1
+#define OS_SC_DONE_MSG          2
+#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_PRE_NMI_MSG       4
 
 #define TASK_FRAMEBUFFER(task) ((CfbInfo*)(task)->framebuffer)
 

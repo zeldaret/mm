@@ -18,25 +18,7 @@ void EnAh_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD3768(EnAh* this, PlayState* play);
 
-static u8 D_80BD3DB0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x20 - 0x0F),
-    /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 23, 0, 0x1D - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x1C - 0x19),
-    /* 0x19 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(3),
-    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x37 - 0x25),
-    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x36 - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x30 - 0x2F),
-    /* 0x2F */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x30 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
-    /* 0x36 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
 
@@ -114,26 +96,28 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+Actor* EnAh_FindActor(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if ((foundActor == NULL) || (((EnAh*)foundActor != this) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnAh*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 void EnAh_UpdateSkelAnime(EnAh* this) {
@@ -385,10 +369,10 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
     s32 pad;
     s32 ret = false;
-    Actor* temp_v0 = func_80BD2A30(this, play, actorCat, actorId);
+    Actor* temp_v0 = EnAh_FindActor(this, play, actorCategory, actorId);
 
     if (temp_v0 != NULL) {
         this->actor.child = temp_v0;
@@ -532,7 +516,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
 void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
-    if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
+    if (EnAh_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
         Actor_Kill(&this->actor);
         return;
     }
