@@ -560,7 +560,7 @@ beginseg
     include "build/src/code/game.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
-    include "build/src/code/graphalloc.o"
+    include "build/src/code/gfxalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
     include "build/src/code/padmgr.o"
