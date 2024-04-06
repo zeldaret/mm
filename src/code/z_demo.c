@@ -34,6 +34,7 @@ s16 gDungeonBossWarpSceneId;
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 

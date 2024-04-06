@@ -106,15 +106,15 @@ void func_80ACB7F4(ObjAqua* this, PlayState* play) {
 void func_80ACB940(ObjAqua* this, PlayState* play) {
     s32 pad;
     Vec3f effectPos;
-    Vec3f effectVel;
+    Vec3f effectVelocity;
 
-    effectVel.x = Rand_ZeroOne() - 0.5f;
-    effectVel.y = 2.0f;
-    effectVel.z = Rand_ZeroOne() - 0.5f;
-    effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
+    effectVelocity.x = Rand_ZeroOne() - 0.5f;
+    effectVelocity.y = 2.0f;
+    effectVelocity.z = Rand_ZeroOne() - 0.5f;
+    effectPos.x = this->actor.world.pos.x + (effectVelocity.x * 40.0f);
     effectPos.y = this->actor.world.pos.y;
-    effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
-    EffectSsIceSmoke_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+    effectPos.z = this->actor.world.pos.z + (effectVelocity.z * 40.0f);
+    EffectSsIceSmoke_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
 }
 
 void func_80ACBA10(ObjAqua* this) {

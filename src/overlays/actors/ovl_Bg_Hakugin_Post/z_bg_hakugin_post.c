@@ -146,7 +146,7 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
             if ((unkStruct->unk_0000[i].unk_34 == 0) ||
                 (this->dyna.actor.world.pos.y < unkStruct->unk_0000[i].unk_08.y)) {
                 for (j = 10; j >= i; j--) {
-                    bcopy(&unkStruct->unk_0000[j], &unkStruct->unk_0000[j + 1], 0x38);
+                    bcopy(&unkStruct->unk_0000[j], &unkStruct->unk_0000[j + 1], sizeof(BgHakuginPostUnkStruct1));
                 }
                 break;
             }

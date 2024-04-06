@@ -60,12 +60,13 @@ u8 sGameOverLightsIntensity;
 Gfx* sSkyboxStarsDList;
 
 #include "z64environment.h"
+
 #include "global.h"
+#include "libc/string.h"
 #include "sys_cfb.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "libc/string.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -1168,8 +1169,7 @@ void Environment_WipeRumbleRequests(void) {
 }
 
 void Environment_UpdateSkyboxRotY(PlayState* play) {
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
+    if (!IS_PAUSED(&play->pauseCtx) && ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
         play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
 }
@@ -3308,7 +3308,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
 
         gSPDisplayList(sSkyboxStarsDList, gfx);
 
@@ -3316,7 +3316,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
 
         gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
 
         POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;

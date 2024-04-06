@@ -2357,7 +2357,7 @@ asm/non_matchings/code/z_message/Message_HandleOcarina.s,Message_HandleOcarina,0
 asm/non_matchings/code/z_message/Message_DrawTextDefault.s,Message_DrawTextDefault,0x8014ADBC,0x654
 asm/non_matchings/code/z_message/Message_LoadItemIcon.s,Message_LoadItemIcon,0x8014C70C,0x142
 asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
-asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
+asm/non_matchings/code/z_message/Message_LoadRupeesJPN.s,Message_LoadRupeesJPN,0x8014CCB4,0x4F
 asm/non_matchings/code/z_message/Message_GetTimerDigits.s,Message_GetTimerDigits,0x8014CDF0,0x7B
 asm/non_matchings/code/z_message/Message_DecodeHeader.s,Message_DecodeHeader,0x8014CFDC,0xCA
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
@@ -2670,9 +2670,9 @@ asm/non_matchings/code/graph/Graph_UpdateGame.s,Graph_UpdateGame,0x801744AC,0x13
 asm/non_matchings/code/graph/Graph_ExecuteAndDraw.s,Graph_ExecuteAndDraw,0x801744F8,0xDC
 asm/non_matchings/code/graph/Graph_Update.s,Graph_Update,0x80174868,0xE
 asm/non_matchings/code/graph/Graph_ThreadEntry.s,Graph_ThreadEntry,0x801748A0,0x68
-asm/non_matchings/code/graphalloc/Graph_GfxPlusOne.s,Graph_GfxPlusOne,0x80174A40,0x3
-asm/non_matchings/code/graphalloc/Graph_BranchDlist.s,Graph_BranchDlist,0x80174A4C,0x6
-asm/non_matchings/code/graphalloc/Graph_DlistAlloc.s,Graph_DlistAlloc,0x80174A64,0xF
+asm/non_matchings/code/gfxalloc/Gfx_Open.s,Gfx_Open,0x80174A40,0x3
+asm/non_matchings/code/gfxalloc/Gfx_Close.s,Gfx_Close,0x80174A4C,0x6
+asm/non_matchings/code/gfxalloc/Gfx_Alloc.s,Gfx_Alloc,0x80174A64,0xF
 asm/non_matchings/code/listalloc/func_80174AA0.s,func_80174AA0,0x80174AA0,0x5
 asm/non_matchings/code/listalloc/func_80174AB4.s,func_80174AB4,0x80174AB4,0x1B
 asm/non_matchings/code/listalloc/func_80174B20.s,func_80174B20,0x80174B20,0x20

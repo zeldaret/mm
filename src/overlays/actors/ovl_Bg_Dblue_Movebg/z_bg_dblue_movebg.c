@@ -294,20 +294,20 @@ void BgDblueMovebg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80A2A128(BgDblueMovebg* this, PlayState* play) {
-    Actor* phi_s0 = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        phi_s0 = SubS_FindActor(play, phi_s0, ACTORCAT_BG, ACTOR_OBJ_HUNSUI);
-        if (phi_s0 != NULL) {
-            if ((OBJHUNSUI_GET_F000(phi_s0) == 5) && (phi_s0->update != NULL)) {
-                this->unk_2F8[1] = phi_s0;
-            } else if ((OBJHUNSUI_GET_F000(phi_s0) == 6) && (phi_s0->update != NULL)) {
-                this->unk_2F8[0] = phi_s0;
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_BG, ACTOR_OBJ_HUNSUI);
+        if (actorIter != NULL) {
+            if ((OBJHUNSUI_GET_F000(actorIter) == 5) && (actorIter->update != NULL)) {
+                this->unk_2F8[1] = actorIter;
+            } else if ((OBJHUNSUI_GET_F000(actorIter) == 6) && (actorIter->update != NULL)) {
+                this->unk_2F8[0] = actorIter;
             }
-            phi_s0 = phi_s0->next;
+            actorIter = actorIter->next;
         }
 
-        if (phi_s0 == NULL) {
+        if (actorIter == NULL) {
             break;
         }
     }
