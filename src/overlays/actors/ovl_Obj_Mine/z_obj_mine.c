@@ -442,7 +442,7 @@ void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
     if (waterChain->wallCheckDistSq > -1e-6f) {
         //  Checks for walls if mine is sufficiently far from home. If found, sets ejection force towards home.
         if (waterChain->wallCheckDistSq <= Math3D_Dist2DSq(this->actor.home.pos.x, this->actor.home.pos.z,
-                                                                    this->actor.world.pos.x, this->actor.world.pos.z)) {
+                                                           this->actor.world.pos.x, this->actor.world.pos.z)) {
             Vec3f centerPos;
             Vec3f offsetPos;
             Vec3f result; // not used
@@ -925,7 +925,7 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
     // speed. If speed is close to zero when hitting wall, weakly eject it instead.
     if (airChain->wallCheckDistSq > -1e-6f) {
         if (airChain->wallCheckDistSq <= Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z,
-                                                                  this->actor.home.pos.x, this->actor.home.pos.z)) {
+                                                         this->actor.home.pos.x, this->actor.home.pos.z)) {
 
             Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, AIR_RADIUS, 0.0f, UPDBGCHECKINFO_FLAG_1);
 
