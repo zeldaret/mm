@@ -142,7 +142,7 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-#include "build/src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
 
 static s32 D_80BAE8F8[] = {
     -1, -1, -1, -1, -1, -1, 1, 2, 0, 3, 1, 2, 0, 0, 3, 0,

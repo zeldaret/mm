@@ -129,7 +129,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-#include "build/src/overlays/actors/ovl_En_Baba/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Baba/scheduleScripts.schl.inc"
 
 static s32 sSearchTimePathLimit[] = { -1, -1, 0 };
 
