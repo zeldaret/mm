@@ -1357,7 +1357,7 @@ void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx) {
 }
 
 Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* gfx = Graph_DlistAlloc(gfxp, 3 * sizeof(Gfx));
+    Gfx* gfx = Gfx_Alloc(gfxp, 3 * sizeof(Gfx));
 
     gDPTileSync(&gfx[0]);
     gDPSetTileSize(&gfx[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));

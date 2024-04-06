@@ -560,7 +560,7 @@ beginseg
     include "$(BUILD_DIR)/src/code/game.o"
     include "$(BUILD_DIR)/src/code/gamealloc.o"
     include "$(BUILD_DIR)/src/code/graph.o"
-    include "$(BUILD_DIR)/src/code/graphalloc.o"
+    include "$(BUILD_DIR)/src/code/gfxalloc.o"
     include "$(BUILD_DIR)/src/code/listalloc.o"
     include "$(BUILD_DIR)/src/code/main.o"
     include "$(BUILD_DIR)/src/code/padmgr.o"
@@ -2905,9 +2905,7 @@ beginseg
     name "ovl_Obj_Mine"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Obj_Mine/z_obj_mine.o"
-    include "$(BUILD_DIR)/data/ovl_Obj_Mine/ovl_Obj_Mine.data.o"
-    include "$(BUILD_DIR)/data/ovl_Obj_Mine/ovl_Obj_Mine.bss.o"
-    include "$(BUILD_DIR)/data/ovl_Obj_Mine/ovl_Obj_Mine.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Obj_Mine/ovl_Obj_Mine_reloc.o"
 endseg
 
 beginseg
@@ -4529,8 +4527,7 @@ beginseg
     name "ovl_En_Dt"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Dt/z_en_dt.o"
-    include "$(BUILD_DIR)/data/ovl_En_Dt/ovl_En_Dt.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Dt/ovl_En_Dt.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Dt/ovl_En_Dt_reloc.o"
 endseg
 
 beginseg
