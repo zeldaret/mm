@@ -988,6 +988,9 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     return reachedNextPoint;
 }
 
+/**
+ * Moves the dog forward without doing any sort of path checks; it simply moves forward based on its current rotation.
+ */
 void EnInvadepoh_Dog_Move(EnInvadepoh* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
