@@ -23,6 +23,7 @@ pipeline {
         stage('Install Python dependencies') {
             steps {
                 sh 'bash -c "make -j venv"'
+                sh '.venv/bin/python3 -m pip install GitPython' // Progress script from jenkins requires GitPython
             }
         }
         stage('Copy ROM') {
