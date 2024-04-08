@@ -730,8 +730,9 @@ void EnInvadepoh_SilentRomani_InitPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InitPath(this, play);
 }
 
-void EnInvadepoh_SilentRomani_SetNextPathPoint(EnInvadepoh* this) {
+void EnInvadepoh_SilentRomani_SetPathPointToNext(EnInvadepoh* this) {
     this->currentPoint++;
+
     if (this->currentPoint >= this->endPoint) {
         this->currentPoint = 0;
     }
@@ -759,7 +760,7 @@ void EnInvadepoh_BarnRomani_InitPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InitPath(this, play);
 }
 
-void EnInvadepoh_BarnRomani_SetNextPathPoint(EnInvadepoh* this) {
+void EnInvadepoh_BarnRomani_SetPathPointToNext(EnInvadepoh* this) {
     if (this->currentPoint < this->endPoint) {
         this->currentPoint++;
     }
@@ -770,9 +771,11 @@ void EnInvadepoh_Dog_InitPath(EnInvadepoh* this, PlayState* play) {
     this->pathStep = 1;
 }
 
-void EnInvadepoh_Dog_SetNextPathPoint(EnInvadepoh* this) {
+void EnInvadepoh_Dog_SetPathPointToNext(EnInvadepoh* this) {
     this->currentPoint += this->pathStep;
 
+    // The dog is placed on a circular path where the first and last point overlap. This code ensures that the
+    // `currentPoint` will never be the last point.
     if (this->currentPoint >= this->endPoint) {
         this->currentPoint = 0;
     } else if (this->currentPoint < 0) {
@@ -2829,7 +2832,7 @@ void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 1.6f, 0.1f);
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
-        EnInvadepoh_SilentRomani_SetNextPathPoint(this);
+        EnInvadepoh_SilentRomani_SetPathPointToNext(this);
         this->shapeAngularVelocityY = 0xC8;
         this->actor.speed *= 0.25f;
     } else {
@@ -2894,7 +2897,7 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
-        EnInvadepoh_SilentRomani_SetNextPathPoint(this);
+        EnInvadepoh_SilentRomani_SetPathPointToNext(this);
     }
 
     if (this->silentRomaniState == 0) {
@@ -3557,7 +3560,7 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 5.0f, 1.0f);
 
     if (EnInvadepoh_Romani_MoveAlongPath(this, play, this->actor.speed, 50.0f)) {
-        EnInvadepoh_BarnRomani_SetNextPathPoint(this);
+        EnInvadepoh_BarnRomani_SetPathPointToNext(this);
         this->shapeAngularVelocityY = 0x5DC;
         this->actor.speed *= 0.5f;
     } else {
@@ -3877,7 +3880,7 @@ void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 1.1f, 0.5f);
 
     if (EnInvadepoh_Dog_MoveAlongPath(this, play)) {
-        EnInvadepoh_Dog_SetNextPathPoint(this);
+        EnInvadepoh_Dog_SetPathPointToNext(this);
     }
 
     EnInvadepoh_Dog_PlayWalkSfx(this);
@@ -3931,7 +3934,7 @@ void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_Dog_PlayWalkSfx(this);
 
     if (EnInvadepoh_Dog_MoveAlongPath(this, play)) {
-        EnInvadepoh_Dog_SetNextPathPoint(this);
+        EnInvadepoh_Dog_SetPathPointToNext(this);
     }
 
     if (this->timer > 0) {
