@@ -2903,12 +2903,14 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
     if (this->silentRomaniState == 0) {
         if ((this->actor.xzDistToPlayer < 350.0f) && (play->gameplayFrames & 0x60)) {
             Player* player = GET_PLAYER(play);
-            s16 angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
+            s16 pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) -
+                        this->actor.shape.rot.x;
+            s16 yaw;
 
-            interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0x9C4, 0x9C4);
+            interactInfo->headRotTarget.x = CLAMP(pitch, -0x9C4, 0x9C4);
 
-            angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-            interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+            yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+            interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
         }
     } else {
         interactInfo->headRotTarget.x = 0;
@@ -2965,16 +2967,17 @@ void EnInvadepoh_SilentRomani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x32);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 0x23);
 
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnInvadepoh_SilentRomani_SetupIdle(this);
@@ -3366,15 +3369,16 @@ void EnInvadepoh_Night1Romani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
@@ -3499,13 +3503,14 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 300.0f) {
         Player* player = GET_PLAYER(play);
-        s16 angleToPlayer;
+        s16 pitch =
+            (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+        s16 yaw;
 
-        angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-        interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0x9C4, 0x9C4);
+        interactInfo->headRotTarget.x = CLAMP(pitch, -0x9C4, 0x9C4);
 
-        angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-        interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+        yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
         if ((play->gameplayFrames % 0x100) == 0) {
             interactInfo->headRotTarget.z = Rand_S16Offset(-0x5DC, 0xBB8);
@@ -3600,15 +3605,16 @@ void EnInvadepoh_BarnRomani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
@@ -3838,17 +3844,19 @@ void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2) {
 
     if (inUncullRange && (this->actor.update != NULL)) {
         Player* player;
-        s16 angleToPlayer;
+        s16 pitch;
+        s16 yaw;
 
         SkelAnime_Update(&this->skelAnime);
         player = GET_PLAYER(play);
         Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
-        angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f;
-        interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+        pitch =
+            (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f) - this->actor.shape.rot.x;
+        interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-        angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-        interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+        yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
         EnInvadepoh_Interact_Update(&this->interactInfo);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -4126,14 +4134,14 @@ void EnInvadepoh_Night3Cremia_SetupWalk(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
-    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
-    EnInvadepoh* romani = sNight3Romani;
     s32 pad;
+    EnInvadepoh* romani = sNight3Romani;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     s32 tempFrames;
-    s32 pad2;
+    s16 pitch;
+    s16 yaw;
     s16 angleToRomani;
     s16 targetYaw;
-    s16 angleToPlayer;
 
     if (romani != NULL) {
         if (romani->currentPoint == 0) {
@@ -4171,11 +4179,12 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
             }
             Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
             Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 0x28);
-            angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &romani->actor.focus.pos) * 0.85f;
-            interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+            pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &romani->actor.focus.pos) * 0.85f) -
+                    this->actor.shape.rot.x;
+            interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-            angleToPlayer = targetYaw - this->actor.shape.rot.y;
-            interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+            yaw = targetYaw - this->actor.shape.rot.y;
+            interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
         }
     }
 
@@ -4202,15 +4211,16 @@ void EnInvadepoh_Night3Cremia_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x9C4, 0x1C2);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
     }
@@ -4227,15 +4237,16 @@ void EnInvadepoh_Night3Cremia_SetupIdle(EnInvadepoh* this) {
 void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 0x28);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
     if (sNight3Romani == NULL) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
     } else if ((sNight3Romani != NULL) && (sNight3Romani->actionFunc != EnInvadepoh_Night3Romani_Talk)) {
@@ -4370,18 +4381,20 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     tempFrames = play->gameplayFrames % 0x80;
     if (tempFrames & 0x40) {
         s16 targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &cremia->actor.world.pos);
-        s16 angleToPlayer;
+        s16 pitch;
+        s16 yaw;
 
         if (tempFrames == 0x40) {
             this->shapeAngularVelocityY = 0;
         }
         Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
         Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 40);
-        angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &cremia->actor.focus.pos) * 0.85f;
-        interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+        pitch =
+            (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &cremia->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+        interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-        angleToPlayer = targetYaw - this->actor.shape.rot.y;
-        interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+        yaw = targetYaw - this->actor.shape.rot.y;
+        interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
     }
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
@@ -4407,15 +4420,16 @@ void EnInvadepoh_Night3Romani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0xBB8, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
     }
@@ -4432,15 +4446,16 @@ void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this) {
 void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
-    s16 angleToPlayer;
+    s16 pitch;
+    s16 yaw;
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
-    angleToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
-    interactInfo->headRotTarget.x = CLAMP((s16)(angleToPlayer - this->actor.shape.rot.x), -0xBB8, 0xBB8);
+    pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
+    interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
-    angleToPlayer = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    interactInfo->headRotTarget.y = CLAMP((s16)(angleToPlayer * 0.7f), -0x1F40, 0x1F40);
+    yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
     if (sNight3Cremia == NULL) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
