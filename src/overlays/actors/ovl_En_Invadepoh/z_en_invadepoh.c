@@ -79,10 +79,10 @@ void EnInvadepoh_SilentRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Night1Romani_WaitForEvent(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Night1Romani_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_BarnRomani_WaitForEvent(Actor* thisx, PlayState* play2);
+void EnInvadepoh_BarnRomani_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2);
@@ -3326,22 +3326,27 @@ void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night1Romani_Walk;
 }
 
+/**
+ * Walks Romani along the path to the barn, opening the door at the beginning and end of her path. Once Romani gets very
+ * close to the end of her path, this function kills the actor.
+ */
 void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
+    s32 pad;
+
     EnInvadepoh_Night1Romani_SetProgress(this);
     EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
     if ((this->currentPoint == 0) || ((this->currentPoint + 1) == this->endPoint)) {
         if (!this->doorOpened) {
-            s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
-            s32 doorTimer = trueTimeSpeed;
+            s32 doorTimer = Environment_GetTimeSpeed(play);
 
-            if (trueTimeSpeed > 0) {
-                // This is really dividing by trueTimeSpeed, but matching requires writing like this
+            if (doorTimer > 0) {
                 doorTimer = (R_TIME_SPEED * -16.0f / doorTimer) - 0.5f;
                 this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
             }
         }
+
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
@@ -3366,6 +3371,10 @@ void EnInvadepoh_Night1Romani_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night1Romani_Talk;
 }
 
+/**
+ * Rotates Romani to face the player and handles the conversation she has with them. When she's done talking, Romani
+ * will continue walking towards the barn.
+ */
 void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -3385,6 +3394,7 @@ void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1);
             this->actor.textId = 0x332E;
         }
+
         EnInvadepoh_Night1Romani_SetupWalk(this);
     }
 }
@@ -3393,10 +3403,10 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
     s32 pad;
-    s32 currentTime;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
-        currentTime = CURRENT_TIME;
+        s32 currentTime = CURRENT_TIME;
+
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_Romani_DesegmentTextures();
@@ -3421,7 +3431,7 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         }
 
         if ((currentTime >= CLOCK_TIME(18, 00)) || (currentTime < CLOCK_TIME(2, 00))) {
-            this->actor.update = EnInvadepoh_Night1Romani_WaitForEvent;
+            this->actor.update = EnInvadepoh_Night1Romani_WaitForTime;
             this->actor.draw = NULL;
         } else if ((currentTime < CLOCK_TIME(6, 00)) && (currentTime >= CLOCK_TIME(2, 00)) &&
                    (currentTime < CLOCK_TIME(2, 15))) {
@@ -3434,7 +3444,10 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Night1Romani_WaitForEvent(Actor* thisx, PlayState* play2) {
+/**
+ * Waits until 2:00 AM, then Romani becomes visible and starts walking.
+ */
+void EnInvadepoh_Night1Romani_WaitForTime(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -3461,9 +3474,11 @@ void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
+
         if ((this->actionFunc != EnInvadepoh_Night1Romani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
+
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
@@ -3485,19 +3500,25 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_BarnRomani_Idle;
 }
 
+/**
+ * Waits for a random amount of time between 200 and 400 frames, then begins looking around. Her rotation will initially
+ * be unchanged, but after a certain amount of time passes (specifically, when `play->gameplayFrames` is divisible by
+ * 256), Romani will turn and look towards the door instead.
+ */
 void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     if ((play->gameplayFrames % 0x100) == 0) {
-        Vec3f pathPointF;
-        s16 yawToPath;
+        Vec3f initialPoint;
+        s16 yawToDoor;
 
-        Math_Vec3s_ToVec3f(&pathPointF, this->pathPoints);
-        yawToPath = Math_Vec3f_Yaw(&this->actor.world.pos, &pathPointF);
-        this->angle = Rand_S16Offset(-0x1F40, 0x3E80) + yawToPath;
+        Math_Vec3s_ToVec3f(&initialPoint, &this->pathPoints[0]);
+        yawToDoor = Math_Vec3f_Yaw(&this->actor.world.pos, &initialPoint);
+        this->angle = Rand_S16Offset(-0x1F40, 0x3E80) + yawToDoor;
         this->shapeAngularVelocityY = 0;
     }
+
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->angle, 6, this->shapeAngularVelocityY, 0x28);
 
@@ -3541,6 +3562,9 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_BarnRomani_LookAround;
 }
 
+/**
+ * Plays Romani's look around animation to completion, then goes back to being idle.
+ */
 void EnInvadepoh_BarnRomani_LookAround(EnInvadepoh* this, PlayState* play) {
     if (this->isAnimFinished) {
         EnInvadepoh_BarnRomani_SetupIdle(this);
@@ -3559,6 +3583,10 @@ void EnInvadepoh_BarnRomani_SetupWalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_BarnRomani_Walk;
 }
 
+/**
+ * Walks Romani along the path in the barn, opening the door if necessary. Each time she reaches a new path point, she
+ * gradually slows down; once she reaches the final path point, she stops entirely and becomes idle.
+ */
 void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
@@ -3578,6 +3606,7 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
         if (!this->doorOpened) {
             this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
         }
+
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
@@ -3602,6 +3631,10 @@ void EnInvadepoh_BarnRomani_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_BarnRomani_Talk;
 }
 
+/**
+ * Rotates Romani to face the player and handles the conversation she has with them. When she's done talking, Romani
+ * will either begin walking or stand idly, depending on whether or not she has reached the end of her path yet.
+ */
 void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -3645,11 +3678,11 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
                            ROMANI_LIMB_MAX);
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
-        EnInvadepoh_BarnRomani_InitPath(this, play2);
+        EnInvadepoh_BarnRomani_InitPath(this, play);
 
         if ((currentTime < CLOCK_TIME(2, 15)) || (currentTime >= CLOCK_TIME(6, 00))) {
             this->currentPoint = 0;
-            this->actor.update = EnInvadepoh_BarnRomani_WaitForEvent;
+            this->actor.update = EnInvadepoh_BarnRomani_WaitForTime;
         } else {
             this->currentPoint = this->endPoint;
             this->actor.update = EnInvadepoh_BarnRomani_Update;
@@ -3674,7 +3707,10 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_BarnRomani_WaitForEvent(Actor* thisx, PlayState* play2) {
+/**
+ * Waits until 2:15 AM, then Romani becomes visible and starts walking.
+ */
+void EnInvadepoh_BarnRomani_WaitForTime(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -3701,9 +3737,11 @@ void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange) {
         this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
+
         if ((this->actionFunc != EnInvadepoh_BarnRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
+
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
