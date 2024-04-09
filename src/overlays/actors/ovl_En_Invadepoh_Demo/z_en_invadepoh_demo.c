@@ -556,7 +556,7 @@ void EnInvadepohDemo_CowTail_WaitForObject(EnInvadepohDemo* this, PlayState* pla
     }
 }
 
-void EnInvadepohDemo_Ufo_UpdateMatrixTranslation(Vec3f* translation) {
+void EnInvadepohDemo_Ufo_SetMatrixTranslation(Vec3f* translation) {
     MtxF* currentMatrix = Matrix_GetCurrent();
 
     currentMatrix->xw = translation->x;
@@ -733,7 +733,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
     flashPos.y = this->actor.world.pos.y;
     flashPos.z = this->actor.world.pos.z;
 
-    EnInvadepohDemo_Ufo_UpdateMatrixTranslation(&flashPos);
+    EnInvadepohDemo_Ufo_SetMatrixTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateZS(this->ufoRotZ, MTXMODE_APPLY);
 

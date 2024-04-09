@@ -1160,7 +1160,7 @@ void EnInvadepoh_InvasionHandler_SpawnUfo(EnInvadepoh* this, PlayState* play) {
                                      EN_INVADEPOH_PARAMS(0, EN_INVADEPOH_TYPE_UFO, 0));
 }
 
-void EnInvadepoh_Ufo_ReplaceTranslation(Vec3f* translation) {
+void EnInvadepoh_Ufo_SetMatrixTranslation(Vec3f* translation) {
     MtxF* curMtxF = Matrix_GetCurrent();
 
     curMtxF->xw = translation->x;
@@ -4960,7 +4960,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     flashPos.y += this->actor.world.pos.y;
     flashPos.z += this->actor.world.pos.z;
 
-    EnInvadepoh_Ufo_ReplaceTranslation(&flashPos);
+    EnInvadepoh_Ufo_SetMatrixTranslation(&flashPos);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateZS(this->angle, MTXMODE_APPLY);
 
