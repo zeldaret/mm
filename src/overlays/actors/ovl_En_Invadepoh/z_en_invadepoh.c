@@ -170,16 +170,16 @@ void EnInvadepoh_BarnRomani_LookAround(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_RewardRomani_SetupStartCs(EnInvadepoh* this);
-void EnInvadepoh_RewardRomani_StartCs(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_RewardRomani_SetupStartTalking(EnInvadepoh* this);
+void EnInvadepoh_RewardRomani_StartTalking(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this);
 void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_RewardRomani_SetupGiveBottle(EnInvadepoh* this);
 void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_RewardRomani_SetupAfterGiveBottle(EnInvadepoh* this);
-void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_RewardRomani_SetupFinished(EnInvadepoh* this);
-void EnInvadepoh_RewardRomani_Finished(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_RewardRomani_SetupAfterGivingBottle(EnInvadepoh* this);
+void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_RewardRomani_SetupFinish(EnInvadepoh* this);
+void EnInvadepoh_RewardRomani_Finish(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Dog_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_Dog_SetupRun(EnInvadepoh* this);
 void EnInvadepoh_Dog_Run(EnInvadepoh* this, PlayState* play);
@@ -3720,16 +3720,19 @@ void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play)
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-        EnInvadepoh_RewardRomani_SetupStartCs(this);
+        EnInvadepoh_RewardRomani_SetupStartTalking(this);
     }
 }
 
-void EnInvadepoh_RewardRomani_SetupStartCs(EnInvadepoh* this) {
+void EnInvadepoh_RewardRomani_SetupStartTalking(EnInvadepoh* this) {
     this->actor.flags |= ACTOR_FLAG_10000;
-    this->actionFunc = EnInvadepoh_RewardRomani_StartCs;
+    this->actionFunc = EnInvadepoh_RewardRomani_StartTalking;
 }
 
-void EnInvadepoh_RewardRomani_StartCs(EnInvadepoh* this, PlayState* play) {
+/**
+ * Starts the conversation with Romani where she thanks you for defending the ranch.
+ */
+void EnInvadepoh_RewardRomani_StartTalking(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnInvadepoh_Romani_StartTextBox(this, play, 0x3331);
         EnInvadepoh_RewardRomani_SetupTalk(this);
@@ -3742,6 +3745,10 @@ void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_RewardRomani_Talk;
 }
 
+/**
+ * Handles the conversation with Romani, including giving the player the Milk Bottle reward (if they have not already
+ * received it in a previous cycle) and ending the conversation.
+ */
 void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
@@ -3756,7 +3763,7 @@ void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
             EnInvadepoh_RewardRomani_SetupGiveBottle(this);
         } else if (this->textId == 0x3334) {
             Message_CloseTextbox(play);
-            EnInvadepoh_RewardRomani_SetupFinished(this);
+            EnInvadepoh_RewardRomani_SetupFinish(this);
         }
     }
 }
@@ -3766,6 +3773,9 @@ void EnInvadepoh_RewardRomani_SetupGiveBottle(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_RewardRomani_GiveBottle;
 }
 
+/**
+ * Waits two frames, then offers the player the Milk Bottle.
+ */
 void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
@@ -3773,20 +3783,24 @@ void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play) {
             Message_CloseTextbox(play);
         }
     }
+
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE);
-        EnInvadepoh_RewardRomani_SetupAfterGiveBottle(this);
+        EnInvadepoh_RewardRomani_SetupAfterGivingBottle(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 
-void EnInvadepoh_RewardRomani_SetupAfterGiveBottle(EnInvadepoh* this) {
-    this->actionFunc = EnInvadepoh_RewardRomani_AfterGiveBottle;
+void EnInvadepoh_RewardRomani_SetupAfterGivingBottle(EnInvadepoh* this) {
+    this->actionFunc = EnInvadepoh_RewardRomani_AfterGivingBottle;
 }
 
-void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play) {
+/**
+ * Restarts the conversation after the player has received the Milk Bottle from Romani.
+ */
+void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
@@ -3798,12 +3812,17 @@ void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play
     }
 }
 
-void EnInvadepoh_RewardRomani_SetupFinished(EnInvadepoh* this) {
+void EnInvadepoh_RewardRomani_SetupFinish(EnInvadepoh* this) {
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-    this->actionFunc = EnInvadepoh_RewardRomani_Finished;
+    this->actionFunc = EnInvadepoh_RewardRomani_Finish;
 }
 
-void EnInvadepoh_RewardRomani_Finished(EnInvadepoh* this, PlayState* play) {
+/**
+ * Waits until all messages and Bomber's Notebook events are done, then sets `sRewardFinished` to true. Doing this will
+ * cause the invasion handler to transition the player back to the normal version of Romani Ranch where Romani is no
+ * longer present.
+ */
+void EnInvadepoh_RewardRomani_Finish(EnInvadepoh* this, PlayState* play) {
     if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
         if (play->msgCtx.msgMode == 0) {
             sRewardFinished = true;
