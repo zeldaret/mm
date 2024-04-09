@@ -169,7 +169,7 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this);
 void EnInvadepoh_BarnRomani_LookAround(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_RewardRomani_ClearCheck(EnInvadepoh* this, PlayState* play);
+void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_RewardRomani_SetupStartCs(EnInvadepoh* this);
 void EnInvadepoh_RewardRomani_StartCs(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this);
@@ -3709,11 +3709,14 @@ void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_RewardRomani_SetupClearCheck(EnInvadepoh* this) {
-    this->actionFunc = EnInvadepoh_RewardRomani_ClearCheck;
+void EnInvadepoh_RewardRomani_SetupWaitForSuccess(EnInvadepoh* this) {
+    this->actionFunc = EnInvadepoh_RewardRomani_WaitForSuccess;
 }
 
-void EnInvadepoh_RewardRomani_ClearCheck(EnInvadepoh* this, PlayState* play) {
+/**
+ * Waits until the weekeventreg for defending the ranch is set, then becomes visible and starts talking.
+ */
+void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
@@ -3830,7 +3833,7 @@ void EnInvadepoh_RewardRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         interactInfo->headRotMaxStep = 0x7D0;
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
-        EnInvadepoh_RewardRomani_SetupClearCheck(this);
+        EnInvadepoh_RewardRomani_SetupWaitForSuccess(this);
     }
 }
 
