@@ -2973,6 +2973,10 @@ void EnInvadepoh_SilentRomani_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_SilentRomani_Talk;
 }
 
+/**
+ * Rotates Romani to face the player and handles the conversation she has with them. When she's done talking, Romani
+ * will become idle, even if she was walking before the conversation started.
+ */
 void EnInvadepoh_SilentRomani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -3032,9 +3036,11 @@ void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
+
         if ((this->actionFunc != EnInvadepoh_SilentRomani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
+
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
