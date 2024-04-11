@@ -2925,6 +2925,9 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         s32 timerMod32 = (u32)this->timer % 32;
 
         if ((timerMod32 == 0) && (Rand_ZeroOne() < 0.3f)) {
+            //! @bug: This calculation can result in negative values for `nextSilentRomaniState`, which doesn't seem
+            //! like that's supposed to happen. When this happens, Romani will act the same as she does in `STATE_3`,
+            //! which effectively makes this state far more likely than the developers probably intended.
             s32 nextSilentRomaniState = (s32)Rand_Next() % 4;
 
             if (nextSilentRomaniState != this->silentRomaniState) {
