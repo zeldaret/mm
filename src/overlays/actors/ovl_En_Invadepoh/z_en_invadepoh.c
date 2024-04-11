@@ -2813,11 +2813,11 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
-    static s16 D_80B4EDC8[4] = { -0x708, -0x3E8, 0, 0x7D0 };
+    static s16 sHeadRotTargetX[4] = { -0x708, -0x3E8, 0, 0x7D0 };
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
     this->timer = Rand_S16Offset(150, 250);
-    interactInfo->headRotTarget.x = D_80B4EDC8[Rand_Next() >> 0x1E];
+    interactInfo->headRotTarget.x = sHeadRotTargetX[Rand_Next() >> 0x1E];
     interactInfo->headRotTarget.y = 0;
     interactInfo->headRotTarget.z = 0;
     interactInfo->headRotStepScale = 0.1f;
@@ -2826,6 +2826,10 @@ void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_SilentRomani_Walk;
 }
 
+/**
+ * Makes Romani walk along her path for a random amount of time between 150 and 400 frames. Once the timer reaches zero,
+ * Romani will stop walking and wait.
+ */
 void EnInvadepoh_SilentRomani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
@@ -2918,13 +2922,14 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
     }
 
     if (this->timer > 0) {
-        s32 timerMod32 = (u32)this->timer % 0x20;
+        s32 timerMod32 = (u32)this->timer % 32;
 
         if ((timerMod32 == 0) && (Rand_ZeroOne() < 0.3f)) {
-            s32 next_silentRomaniState = (s32)Rand_Next() % 4;
+            s32 nextSilentRomaniState = (s32)Rand_Next() % 4;
 
-            if (next_silentRomaniState != this->silentRomaniState) {
-                this->silentRomaniState = next_silentRomaniState;
+            if (nextSilentRomaniState != this->silentRomaniState) {
+                this->silentRomaniState = nextSilentRomaniState;
+
                 if (this->silentRomaniState == 0) {
                     Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
                     interactInfo->headRotStepScale = 0.07f;
@@ -2946,6 +2951,7 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
                 }
             }
         }
+
         this->timer--;
         return;
     }
@@ -3509,7 +3515,7 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
-    if ((play->gameplayFrames % 0x100) == 0) {
+    if ((play->gameplayFrames % 256) == 0) {
         Vec3f initialPoint;
         s16 yawToDoor;
 
@@ -3533,7 +3539,7 @@ void EnInvadepoh_BarnRomani_Idle(EnInvadepoh* this, PlayState* play) {
         yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
 
-        if ((play->gameplayFrames % 0x100) == 0) {
+        if ((play->gameplayFrames % 256) == 0) {
             interactInfo->headRotTarget.z = Rand_S16Offset(-0x5DC, 0xBB8);
         }
     } else {
