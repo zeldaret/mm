@@ -1594,21 +1594,21 @@ void EnInvadepoh_Interact_Update(EnInvadepohInteractInfo* interactInfo) {
 }
 
 void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawnCount) {
-    static Color_RGBA8 sLightYellow = { 255, 255, 200, 255 };
-    static Color_RGBA8 sGoldenYellow = { 255, 200, 0, 0 };
+    static Color_RGBA8 sPrimColor = { 255, 255, 200, 255 };
+    static Color_RGBA8 sEnvColor = { 255, 200, 0, 0 };
     s32 i;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
-    f32 spawnOffset;
-    s16 spawnAngle = 0;
+    f32 offset;
+    s16 angle = 0;
 
     for (i = 0; i < spawnCount; i++) {
-        spawnAngle += (s16)(0x10000 * 1.0f / spawnCount);
-        spawnOffset = (Rand_ZeroOne() * 0.5f) + 0.5f;
+        angle += (s16)(0x10000 * 1.0f / spawnCount);
+        offset = (Rand_ZeroOne() * 0.5f) + 0.5f;
 
-        pos.x = Math_SinS(spawnAngle) * spawnOffset;
-        pos.z = Math_CosS(spawnAngle) * spawnOffset;
+        pos.x = Math_SinS(angle) * offset;
+        pos.z = Math_CosS(angle) * offset;
 
         velocity.x = (Rand_ZeroOne() * 16.0f) + (pos.x * 30.0f) - 8.0f;
         velocity.y = -8.0f;
@@ -1621,7 +1621,8 @@ void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawn
         pos.x = (pos.x * 100.0f) + this->actor.world.pos.x;
         pos.y = (Rand_ZeroOne() * 180.0f) + this->actor.world.pos.y - 90.0f;
         pos.z = (pos.z * 100.0f) + this->actor.world.pos.z;
-        EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &sLightYellow, &sGoldenYellow, 6000, -40);
+
+        EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor, 6000, -40);
     }
 }
 
@@ -2698,10 +2699,15 @@ void EnInvadepoh_AbductedRomani_SetupWait(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_AbductedRomani_Wait;
 }
 
+/**
+ * Waits for 40 frames, then Romani becomes visible, looks around, and starts yelling.
+ */
 void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play) {
     this->timer--;
+
     if (this->timer <= 0) {
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x332F); // Romani's scream when abducted
+        // Romani's scream when abducted by the aliens
+        EnInvadepoh_Romani_StartTextBox(this, play, 0x332F);
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_AbductedRomani_SetupYell(this);
     }
@@ -2714,6 +2720,9 @@ void EnInvadepoh_AbductedRomani_SetupYell(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_AbductedRomani_Yell;
 }
 
+/**
+ * Looks around for 60 frames, then makes Romani start struggling.
+ */
 void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
     if (this->timer == 20) {
         EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
@@ -2726,6 +2735,7 @@ void EnInvadepoh_AbductedRomani_Yell(EnInvadepoh* this, PlayState* play) {
     }
 
     this->timer--;
+
     if (this->timer <= 0) {
         EnInvadepoh_AbductedRomani_SetupStruggle(this);
     }
@@ -2741,12 +2751,15 @@ void EnInvadepoh_AbductedRomani_SetupStruggle(EnInvadepoh* this) {
     this->interactInfo.torsoRotStepScale = 0.1f;
     this->interactInfo.torsoRotMaxStep = 0x7D0;
     this->timer = 50;
-
     Animation_Change(&this->skelAnime, &gRomaniRunAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
     this->actor.draw = EnInvadepoh_Romani_Draw;
     this->actionFunc = EnInvadepoh_AbductedRomani_Struggle;
 }
 
+/**
+ * Makes Romani struggle for 50 frames by running in place while looking side-to-side. Once the timer reaches zero,
+ * Romani will become idle and disappear.
+ */
 void EnInvadepoh_AbductedRomani_Struggle(EnInvadepoh* this, PlayState* play) {
     if (this->timer == 40) {
         this->interactInfo.headRotTarget.y = 0x1B58;
@@ -2759,6 +2772,7 @@ void EnInvadepoh_AbductedRomani_Struggle(EnInvadepoh* this, PlayState* play) {
     }
 
     this->timer--;
+
     if (this->timer <= 0) {
         EnInvadepoh_AbductedRomani_SetupEnd(this);
     }
@@ -2773,12 +2787,15 @@ void EnInvadepoh_AbductedRomani_SetupEnd(EnInvadepoh* this) {
     this->interactInfo.torsoTargetRotX = 0;
     this->interactInfo.torsoRotStepScale = 0.28f;
     this->interactInfo.torsoRotMaxStep = 0x1B58;
-
     Animation_MorphToPlayOnce(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actor.draw = EnInvadepoh_Romani_Draw;
     this->actionFunc = EnInvadepoh_AbductedRomani_End;
 }
 
+/**
+ * Plays Romani's idle animation once. Once the alien holding Romani is killed, `EnInvadepoh_AbductedRomani_Update` will
+ * kill this instance of Romani, thus preventing the player from seeing that the idle animation doesn't loop.
+ */
 void EnInvadepoh_AbductedRomani_End(EnInvadepoh* this, PlayState* play) {
 }
 
