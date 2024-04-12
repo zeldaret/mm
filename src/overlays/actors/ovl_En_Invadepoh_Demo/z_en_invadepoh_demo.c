@@ -569,6 +569,7 @@ s32 EnInvadepohDemo_Ufo_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
     f32 invW;
 
     Actor_GetProjectedPos(play, pos, &projectedPos, &invW);
+
     if ((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f) && (fabsf(projectedPos.y * invW) < 1.0f)) {
         f32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
         f32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);

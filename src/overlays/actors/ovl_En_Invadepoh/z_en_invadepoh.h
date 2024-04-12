@@ -141,7 +141,7 @@ typedef struct EnInvadepoh {
     /* 0x309 */ s8 currentPoint;
     /* 0x30A */ s8 pathStep;
     /* 0x30C */ Vec3s *pathPoints;
-    /* 0x310 */ f32 pathLength;
+    /* 0x310 */ f32 totalPathDistance;
     /* 0x314 */ Vec3f currentPos;
     /* 0x320 */ f32 pathProgress;
     /* 0x324 */ EnInvadepohInteractInfo interactInfo;

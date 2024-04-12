@@ -443,9 +443,9 @@ void EnInvadepoh_Alien_SetRespawnTime(s32 index) {
 
 s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
     s32 i;
-    s32 lastPoint = this->endPoint - 1;
+    s32 secondToLastPoint = this->endPoint - 1;
 
-    for (i = 0; i < lastPoint; i++) {
+    for (i = 0; i < secondToLastPoint; i++) {
         if (this->pathProgress < this->pathCheckpoints[i]) {
             break;
         }
@@ -457,7 +457,7 @@ s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
 void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f* pos) {
     f32 curPathLength = 0.0f;
     f32 curCheckpoint = 0.0f;
-    f32 invPathLength = 1.0f / this->pathLength;
+    f32 invPathLength = 1.0f / this->totalPathDistance;
     s32 endPoint = this->endPoint;
     s32 i;
     Vec3f currentToNext;
@@ -550,23 +550,23 @@ void EnInvadepoh_SetYawAlongPath(EnInvadepoh* this) {
     this->actor.shape.rot.y = Math_Vec3f_Yaw(&currentPathPointPos, &nextPathPointPos);
 }
 
-f32 EnInvadepoh_GetPathLength(EnInvadepoh* this) {
+f32 EnInvadepoh_GetTotalPathDistance(EnInvadepoh* this) {
     s32 pointCount = this->endPoint + 1;
     s32 i;
-    Vec3f prevPathVec;
-    Vec3f curPathVec;
+    Vec3f previousPathPointPos;
+    Vec3f currentPathPointPos;
     Vec3s* currentPathPoint = &this->pathPoints[0];
-    f32 pathLength = 0.0f;
+    f32 totalPathDistance = 0.0f;
 
-    Math_Vec3s_ToVec3f(&curPathVec, currentPathPoint);
+    Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
 
     for (currentPathPoint++, i = 1; i < pointCount; currentPathPoint++, i++) {
-        Math_Vec3f_Copy(&prevPathVec, &curPathVec);
-        Math_Vec3s_ToVec3f(&curPathVec, currentPathPoint);
-        pathLength += Math3D_Distance(&prevPathVec, &curPathVec);
+        Math_Vec3f_Copy(&previousPathPointPos, &currentPathPointPos);
+        Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+        totalPathDistance += Math3D_Distance(&previousPathPointPos, &currentPathPointPos);
     }
 
-    return pathLength;
+    return totalPathDistance;
 }
 
 void EnInvadepoh_InitPath(EnInvadepoh* this, PlayState* play) {
@@ -702,7 +702,7 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
-    f32 invPathLength = 1.0f / this->pathLength;
+    f32 invPathLength = 1.0f / this->totalPathDistance;
     s32 endPoint = this->endPoint;
     s32 i;
     Vec3f prevPathPoint;
@@ -731,7 +731,7 @@ void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
 
 void EnInvadepoh_Alien_InitPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InitPath(this, play);
-    this->pathLength = EnInvadepoh_GetPathLength(this);
+    this->totalPathDistance = EnInvadepoh_GetTotalPathDistance(this);
     EnInvadepoh_Alien_SetCheckpoints(this);
 }
 
@@ -749,7 +749,7 @@ void EnInvadepoh_SilentRomani_SetPathPointToNext(EnInvadepoh* this) {
 
 void EnInvadepoh_Night1Romani_InitPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InitPath(this, play);
-    this->pathLength = EnInvadepoh_GetPathLength(this);
+    this->totalPathDistance = EnInvadepoh_GetTotalPathDistance(this);
 }
 
 void EnInvadepoh_Night1Romani_SetProgress(EnInvadepoh* this) {
@@ -794,7 +794,7 @@ void EnInvadepoh_Dog_SetPathPointToNext(EnInvadepoh* this) {
 
 void EnInvadepoh_Night3Romani_InitPath(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InitPath(this, play);
-    this->pathLength = EnInvadepoh_GetPathLength(this);
+    this->totalPathDistance = EnInvadepoh_GetTotalPathDistance(this);
 }
 
 void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
@@ -1201,7 +1201,7 @@ s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 rangeSq,
     return doorOpened;
 }
 
-void EnInvadepoh_Romani_StartTextBox(EnInvadepoh* this, PlayState* play, u16 textId) {
+void EnInvadepoh_Romani_StartTextbox(EnInvadepoh* this, PlayState* play, u16 textId) {
     this->textId = textId;
     Message_StartTextbox(play, textId, &this->actor);
 }
@@ -1216,7 +1216,7 @@ void EnInvadepoh_InvasionHandler_SetCutscenes(EnInvadepoh* this) {
     }
 }
 
-s32 EnInvadepoh_Alien_LensFlareDepthCheck(PlayState* play, Vec3f* pos) {
+s32 EnInvadepoh_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
     Vec3f projectedPos;
     f32 invW;
 
@@ -2707,7 +2707,7 @@ void EnInvadepoh_AbductedRomani_Wait(EnInvadepoh* this, PlayState* play) {
 
     if (this->timer <= 0) {
         // Romani's scream when abducted by the aliens
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x332F);
+        EnInvadepoh_Romani_StartTextbox(this, play, 0x332F);
         this->actor.draw = EnInvadepoh_Romani_Draw;
         EnInvadepoh_AbductedRomani_SetupYell(this);
     }
@@ -3821,7 +3821,7 @@ void EnInvadepoh_RewardRomani_SetupStartTalking(EnInvadepoh* this) {
  */
 void EnInvadepoh_RewardRomani_StartTalking(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x3331);
+        EnInvadepoh_Romani_StartTextbox(this, play, 0x3331);
         EnInvadepoh_RewardRomani_SetupTalk(this);
     } else {
         Actor_OfferTalk(&this->actor, play, 2000.0f);
@@ -3840,11 +3840,11 @@ void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE)) {
-                EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
+                EnInvadepoh_Romani_StartTextbox(this, play, 0x3334);
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             } else {
-                EnInvadepoh_Romani_StartTextBox(this, play, 0x3333);
+                EnInvadepoh_Romani_StartTextbox(this, play, 0x3333);
             }
         } else if (this->textId == 0x3333) {
             EnInvadepoh_RewardRomani_SetupGiveBottle(this);
@@ -3889,7 +3889,7 @@ void EnInvadepoh_RewardRomani_SetupAfterGivingBottle(EnInvadepoh* this) {
  */
 void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        EnInvadepoh_Romani_StartTextBox(this, play, 0x3334);
+        EnInvadepoh_Romani_StartTextbox(this, play, 0x3334);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
@@ -5033,7 +5033,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
         POLY_XLU_DISP = gfx;
 
-        if ((this->alpha > 128) && EnInvadepoh_Alien_LensFlareDepthCheck(play, &glowPos)) {
+        if ((this->alpha > 128) && EnInvadepoh_ShouldDrawLensFlare(play, &glowPos)) {
             Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, glowPos, 10.0f, 9.0f, 0, 0);
         }
 
@@ -5147,7 +5147,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
 
-    if (EnInvadepoh_Alien_LensFlareDepthCheck(play, &flashPos)) {
+    if (EnInvadepoh_ShouldDrawLensFlare(play, &flashPos)) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0,
                                   false);
     }
