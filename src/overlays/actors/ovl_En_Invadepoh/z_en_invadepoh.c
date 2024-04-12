@@ -48,19 +48,27 @@
 // alien has this flag set. In other words, this flag will only be set for a single alien or for no alien at all.
 #define ALIEN_STATE_FLAG_CLOSEST_THREAT (1 << 1)
 
-typedef enum EnInvadepohInvasionState {
-    /* 0 */ EN_INVADEPOH_INVASION_STATE_NONE,
-    /* 1 */ EN_INVADEPOH_INVASION_STATE_WAIT,
-    /* 2 */ EN_INVADEPOH_INVASION_STATE_ACTIVE,
-    /* 3 */ EN_INVADEPOH_INVASION_STATE_SUCCESS,
-    /* 4 */ EN_INVADEPOH_INVASION_STATE_FAILURE
-} EnInvadepohInvasionState;
+typedef enum InvasionState {
+    /* 0 */ INVASION_STATE_NONE,
+    /* 1 */ INVASION_STATE_WAIT,
+    /* 2 */ INVASION_STATE_ACTIVE,
+    /* 3 */ INVASION_STATE_SUCCESS,
+    /* 4 */ INVASION_STATE_FAILURE
+} InvasionState;
 
-typedef enum EnInvadepohFaceAnimationType {
-    /* 0 */ EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED,
-    /* 1 */ EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED,
-    /* 2 */ EN_INVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED
-} EnInvadepohFaceAnimationType;
+typedef enum SilentRomaniStareState {
+    /* 0 */ SILENT_ROMANI_STARE_STATE_STARE_AT_NEARBY_PLAYER,
+    /* 1 */ SILENT_ROMANI_STARE_STATE_STARE_RANDOM_FAST,
+    /* 2 */ SILENT_ROMANI_STARE_STATE_STARE_RANDOM_MEDIUM,
+    /* 3 */ SILENT_ROMANI_STARE_STATE_STARE_RANDOM_SLOW,
+    /* 4 */ SILENT_ROMANI_STARE_STATE_MAX
+} SilentRomaniStareState;
+
+typedef enum FaceAnimationType {
+    /* 0 */ FACE_ANIMATION_TYPE_FIXED,
+    /* 1 */ FACE_ANIMATION_TYPE_BRANCHED,
+    /* 2 */ FACE_ANIMATION_TYPE_DELAYED_BRANCHED
+} FaceAnimationType;
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2);
@@ -274,7 +282,7 @@ static ColliderCylinderInit sDogCylinderInit = {
 
 static Vec3f sUfoSpawnOffset = { 216.0f, -20.0f, 1395.0f };
 
-static s32 sInvasionState = EN_INVADEPOH_INVASION_STATE_NONE;
+static s32 sInvasionState = INVASION_STATE_NONE;
 
 typedef enum RomaniEyeTexture {
     /* 0 */ ROMANI_EYE_OPEN,
@@ -675,9 +683,9 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
     s32 currentTime = CURRENT_TIME;
     s32 warpInTime = EnInvadepoh_Alien_GetSpawnTime(EN_INVADEPOH_GET_INDEX(&this->actor));
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
+    if (sInvasionState == INVASION_STATE_WAIT) {
         this->pathProgress = 0.0f;
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+    } else if (sInvasionState == INVASION_STATE_ACTIVE) {
         if ((currentTime - warpInTime) < 0) {
             this->pathProgress = 0.0f;
         } else {
@@ -1082,20 +1090,20 @@ s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this) {
 
 /**
  * Sets the initial value of `sInvasionState` based on the current date and time and whether the weekeventreg for
- * defending the ranch is set. If the state is anything other than `EN_INVADEPOH_INVASION_STATE_NONE`, this function
+ * defending the ranch is set. If the state is anything other than `INVASION_STATE_NONE`, this function
  * does nothing; the invasion state is already set in this circumstance.
  */
 void EnInvadepoh_InvasionHandler_SetInitialInvasionState(EnInvadepoh* this, PlayState* play) {
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
+    if (sInvasionState == INVASION_STATE_NONE) {
         if (CURRENT_DAY < 1) {
             // It's before the first day, so the invasion hasn't started yet.
-            sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
+            sInvasionState = INVASION_STATE_WAIT;
         } else if (CURRENT_DAY == 1) {
             s32 currentTime = CURRENT_TIME;
 
             if (!((currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(6, 00)))) {
                 // It's before 2:30 AM on the first day, so the invasion hasn't started yet.
-                sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
+                sInvasionState = INVASION_STATE_WAIT;
             } else if (currentTime < CLOCK_TIME(5, 15)) {
                 s32 i;
                 s32 firstSpawn = CLOCK_TIME(5, 15);
@@ -1108,18 +1116,18 @@ void EnInvadepoh_InvasionHandler_SetInitialInvasionState(EnInvadepoh* this, Play
 
                 if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
                     // The alien with the earliest spawn time hasn't reached the barn, so the invasion is ongoing.
-                    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
+                    sInvasionState = INVASION_STATE_ACTIVE;
                 }
             }
         }
 
-        if (sInvasionState == EN_INVADEPOH_INVASION_STATE_NONE) {
+        if (sInvasionState == INVASION_STATE_NONE) {
             // The only way to reach this point is if the invasion is over, so check to see if the player successfully
             // defended the ranch to determine the state of the invasion.
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
-                sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
+                sInvasionState = INVASION_STATE_SUCCESS;
             } else {
-                sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
+                sInvasionState = INVASION_STATE_FAILURE;
             }
         }
     }
@@ -1300,7 +1308,7 @@ void EnInvadepoh_Interact_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvad
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
     faceInfo->curIndex = faceAnim->frames->texIndex[0];
-    if (faceInfo->curAnimType == EN_INVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED) {
+    if (faceInfo->curAnimType == FACE_ANIMATION_TYPE_DELAYED_BRANCHED) {
         EnInvadepohFaceAnimDelayedBranched* faceDelayedLoopAnim = (EnInvadepohFaceAnimDelayedBranched*)faceAnim;
 
         faceInfo->delayTimer = Rand_S16Offset(faceDelayedLoopAnim->minDelay, faceDelayedLoopAnim->maxDelay);
@@ -1378,7 +1386,7 @@ EnInvadepohFaceFrames D_80B4E9DC = { D_80B4E9AC, ARRAY_COUNT(D_80B4E9AC) };
 EnInvadepohFaceFrames D_80B4E9E4 = { D_80B4E9B4, ARRAY_COUNT(D_80B4E9B4) };
 EnInvadepohFaceFrames D_80B4E9EC = { D_80B4E9BC, ARRAY_COUNT(D_80B4E9BC) };
 EnInvadepohFaceFrames D_80B4E9F4 = { D_80B4E9C0, ARRAY_COUNT(D_80B4E9C0) };
-EnInvadepohFaceAnim D_80B4E9FC = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9C4 };
+EnInvadepohFaceAnim D_80B4E9FC = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9C4 };
 EnInvadepohFaceAnimNext D_80B4EA04[4] = {
     { ROMANI_EYE_ANIMATION_2, 0.5f },
     { ROMANI_EYE_ANIMATION_3, 0.9f },
@@ -1387,22 +1395,22 @@ EnInvadepohFaceAnimNext D_80B4EA04[4] = {
 };
 EnInvadepohFaceAnimNext D_80B4EA24[1] = { ROMANI_EYE_ANIMATION_1, 1.0f };
 EnInvadepohFaceAnimDelayedBranched D_80B4EA2C = {
-    { { EN_INVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4E9C4 }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04 }, 40, 60
+    { { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4E9C4 }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04 }, 40, 60
 };
-EnInvadepohFaceAnimBranched D_80B4EA40 = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9CC },
+EnInvadepohFaceAnimBranched D_80B4EA40 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9CC },
                                            ARRAY_COUNT(D_80B4EA24),
                                            D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA50 = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9D4 },
+EnInvadepohFaceAnimBranched D_80B4EA50 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9D4 },
                                            ARRAY_COUNT(D_80B4EA24),
                                            D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA60 = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9DC },
+EnInvadepohFaceAnimBranched D_80B4EA60 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9DC },
                                            ARRAY_COUNT(D_80B4EA24),
                                            D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA70 = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9E4 },
+EnInvadepohFaceAnimBranched D_80B4EA70 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9E4 },
                                            ARRAY_COUNT(D_80B4EA24),
                                            D_80B4EA24 };
-EnInvadepohFaceAnim D_80B4EA80 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9EC };
-EnInvadepohFaceAnim D_80B4EA88 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4E9F4 };
+EnInvadepohFaceAnim D_80B4EA80 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9EC };
+EnInvadepohFaceAnim D_80B4EA88 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9F4 };
 EnInvadepohFaceAnim* D_80B4EA90[ROMANI_EYE_ANIMATION_MAX] = {
     &D_80B4E9FC,           // ROMANI_EYE_ANIMATION_0
     &D_80B4EA2C.loop.anim, // ROMANI_EYE_ANIMATION_1
@@ -1430,10 +1438,10 @@ EnInvadepohFaceFrames D_80B4EAC0 = { D_80B4EAB0, ARRAY_COUNT(D_80B4EAB0) };
 EnInvadepohFaceFrames D_80B4EAC8 = { D_80B4EAB4, ARRAY_COUNT(D_80B4EAB4) };
 EnInvadepohFaceFrames D_80B4EAD0 = { D_80B4EAB8, ARRAY_COUNT(D_80B4EAB8) };
 EnInvadepohFaceFrames D_80B4EAD8 = { D_80B4EABC, ARRAY_COUNT(D_80B4EABC) };
-EnInvadepohFaceAnim D_80B4EAE0 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC0 };
-EnInvadepohFaceAnim D_80B4EAE8 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC8 };
-EnInvadepohFaceAnim D_80B4EAF0 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD0 };
-EnInvadepohFaceAnim D_80B4EAF8 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD8 };
+EnInvadepohFaceAnim D_80B4EAE0 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC0 };
+EnInvadepohFaceAnim D_80B4EAE8 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC8 };
+EnInvadepohFaceAnim D_80B4EAF0 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD0 };
+EnInvadepohFaceAnim D_80B4EAF8 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD8 };
 EnInvadepohFaceAnim* D_80B4EB00[ROMANI_MOUTH_ANIMATION_MAX] = {
     &D_80B4EAE0, // ROMANI_MOUTH_ANIMATION_0
     &D_80B4EAE8, // ROMANI_MOUTH_ANIMATION_1
@@ -1463,7 +1471,7 @@ EnInvadepohFaceFrames D_80B4EB38 = { D_80B4EB14, ARRAY_COUNT(D_80B4EB14) };
 EnInvadepohFaceFrames D_80B4EB40 = { D_80B4EB18, ARRAY_COUNT(D_80B4EB18) };
 EnInvadepohFaceFrames D_80B4EB48 = { D_80B4EB20, ARRAY_COUNT(D_80B4EB20) };
 EnInvadepohFaceFrames D_80B4EB50 = { D_80B4EB28, ARRAY_COUNT(D_80B4EB28) };
-EnInvadepohFaceAnim D_80B4EB58 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EB30 };
+EnInvadepohFaceAnim D_80B4EB58 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EB30 };
 EnInvadepohFaceAnimNext D_80B4EB60[4] = {
     { CREMIA_EYE_ANIMATION_2, 0.5f },
     { CREMIA_EYE_ANIMATION_3, 0.9f },
@@ -1472,18 +1480,18 @@ EnInvadepohFaceAnimNext D_80B4EB60[4] = {
 };
 EnInvadepohFaceAnimNext D_80B4EB80[1] = { CREMIA_EYE_ANIMATION_1, 1.0f };
 EnInvadepohFaceAnimDelayedBranched D_80B4EB88 = {
-    { { EN_INVADEPOH_FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4EB30 }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60 }, 40, 60
+    { { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4EB30 }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60 }, 40, 60
 };
-EnInvadepohFaceAnimBranched D_80B4EB9C = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB38 },
+EnInvadepohFaceAnimBranched D_80B4EB9C = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB38 },
                                            ARRAY_COUNT(D_80B4EB80),
                                            D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBAC = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB40 },
+EnInvadepohFaceAnimBranched D_80B4EBAC = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB40 },
                                            ARRAY_COUNT(D_80B4EB80),
                                            D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBBC = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB48 },
+EnInvadepohFaceAnimBranched D_80B4EBBC = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB48 },
                                            ARRAY_COUNT(D_80B4EB80),
                                            D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBCC = { { EN_INVADEPOH_FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB50 },
+EnInvadepohFaceAnimBranched D_80B4EBCC = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB50 },
                                            ARRAY_COUNT(D_80B4EB80),
                                            D_80B4EB80 };
 EnInvadepohFaceAnim* D_80B4EBDC[CREMIA_EYE_ANIMATION_MAX] = {
@@ -1502,7 +1510,7 @@ typedef enum CremiaMouthAnimation {
 
 s8 D_80B4EBF4[1] = { CREMIA_MOUTH_NORMAL };
 EnInvadepohFaceFrames D_80B4EBF8 = { D_80B4EBF4, ARRAY_COUNT(D_80B4EBF4) };
-EnInvadepohFaceAnim D_80B4EC00 = { EN_INVADEPOH_FACE_ANIMATION_TYPE_FIXED, &D_80B4EBF8 };
+EnInvadepohFaceAnim D_80B4EC00 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EBF8 };
 EnInvadepohFaceAnim* D_80B4EC08[CREMIA_MOUTH_ANIMATION_MAX] = {
     &D_80B4EC00, // CREMIA_MOUTH_ANIMATION_0
 };
@@ -1704,9 +1712,9 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
     EnInvadepoh_InvasionHandler_SetCutscenes(this);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_SWITCH);
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
+    if (sInvasionState == INVASION_STATE_WAIT) {
         EnInvadepoh_InvasionHandler_SetupWaitForInvasion(this);
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+    } else if (sInvasionState == INVASION_STATE_ACTIVE) {
         if (CURRENT_TIME < CLOCK_TIME(2, 31)) {
             EnInvadepoh_InvasionHandler_SetupWaitForInvasion(this);
         } else {
@@ -1715,7 +1723,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ALIEN_INVASION | SEQ_FLAG_ASYNC);
             EnInvadepoh_InvasionHandler_SetupHandle(this);
         }
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
+    } else if (sInvasionState == INVASION_STATE_SUCCESS) {
         if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
             EnInvadepoh_InvasionHandler_SetupWaitForRomaniReward(this);
         } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
@@ -1723,7 +1731,7 @@ void EnInvadepoh_InvasionHandler_Init(EnInvadepoh* this, PlayState* play) {
         } else {
             EnInvadepoh_InvasionHandler_SetupSuccessEnd(this);
         }
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_FAILURE) {
+    } else if (sInvasionState == INVASION_STATE_FAILURE) {
         EnInvadepoh_InvasionHandler_SetupFailureEnd(this);
     }
 }
@@ -1877,12 +1885,12 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
     this->actor.draw = EnInvadepoh_Ufo_Draw;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
 
-    if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
+    if ((sInvasionState == INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
         this->actor.world.pos.x += sUfoSpawnOffset.x;
         this->actor.world.pos.y += sUfoSpawnOffset.y + 3000.0f;
         this->actor.world.pos.z += sUfoSpawnOffset.z;
         EnInvadepoh_Ufo_SetupIntroDescend(this);
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+    } else if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.world.pos.y += 1500.0f;
         EnInvadepoh_Ufo_SetupHoverAboveBarn(this);
     } else {
@@ -2047,7 +2055,7 @@ void EnInvadepoh_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupWaitForInvasion(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_WAIT;
+    sInvasionState = INVASION_STATE_WAIT;
     this->actionFunc = EnInvadepoh_InvasionHandler_WaitForInvasion;
 }
 
@@ -2063,7 +2071,7 @@ void EnInvadepoh_InvasionHandler_WaitForInvasion(EnInvadepoh* this, PlayState* p
 }
 
 void EnInvadepoh_InvasionHandler_SetupStartIntroCutscene(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
+    sInvasionState = INVASION_STATE_ACTIVE;
     this->timer = 2;
     this->actionFunc = EnInvadepoh_InvasionHandler_StartIntroCutscene;
 }
@@ -2083,7 +2091,7 @@ void EnInvadepoh_InvasionHandler_StartIntroCutscene(EnInvadepoh* this, PlayState
 }
 
 void EnInvadepoh_InvasionHandler_SetupIntroCutscene(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
+    sInvasionState = INVASION_STATE_ACTIVE;
     this->timer = 160;
     this->actionFunc = EnInvadepoh_InvasionHandler_IntroCutscene;
 }
@@ -2113,7 +2121,7 @@ void EnInvadepoh_InvasionHandler_IntroCutscene(EnInvadepoh* this, PlayState* pla
 }
 
 void EnInvadepoh_InvasionHandler_SetupHandle(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_ACTIVE;
+    sInvasionState = INVASION_STATE_ACTIVE;
     this->actionFunc = EnInvadepoh_InvasionHandler_Handle;
 }
 
@@ -2141,7 +2149,7 @@ void EnInvadepoh_InvasionHandler_Handle(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_InvasionHandler_SetupStartSuccessCutscene(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
+    sInvasionState = INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_StartSuccessCutscene;
 }
 
@@ -2158,7 +2166,7 @@ void EnInvadepoh_InvasionHandler_StartSuccessCutscene(EnInvadepoh* this, PlaySta
 }
 
 void EnInvadepoh_InvasionHandler_SetupSuccessCutscene(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
+    sInvasionState = INVASION_STATE_SUCCESS;
     this->timer = 110;
     this->actionFunc = EnInvadepoh_InvasionHandler_SuccessCutscene;
 }
@@ -2186,7 +2194,7 @@ void EnInvadepoh_InvasionHandler_SuccessCutscene(EnInvadepoh* this, PlayState* p
 }
 
 void EnInvadepoh_InvasionHandler_SetupWaitForRomaniReward(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
+    sInvasionState = INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_WaitForRomaniReward;
 }
 
@@ -2205,7 +2213,7 @@ void EnInvadepoh_InvasionHandler_WaitForRomaniReward(EnInvadepoh* this, PlayStat
 }
 
 void EnInvadepoh_InvasionHandler_SetupSuccessEnd(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_SUCCESS;
+    sInvasionState = INVASION_STATE_SUCCESS;
     this->actionFunc = EnInvadepoh_InvasionHandler_SuccessEnd;
 }
 
@@ -2216,7 +2224,7 @@ void EnInvadepoh_InvasionHandler_SuccessEnd(EnInvadepoh* this, PlayState* play) 
 }
 
 void EnInvadepoh_InvasionHandler_SetupStartFailureCutscene(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
+    sInvasionState = INVASION_STATE_FAILURE;
     this->actionFunc = EnInvadepoh_InvasionHandler_StartFailureCutscene;
 }
 
@@ -2236,7 +2244,7 @@ void EnInvadepoh_InvasionHandler_StartFailureCutscene(EnInvadepoh* this, PlaySta
 }
 
 void EnInvadepoh_InvasionHandler_SetupFailureEnd(EnInvadepoh* this) {
-    sInvasionState = EN_INVADEPOH_INVASION_STATE_FAILURE;
+    sInvasionState = INVASION_STATE_FAILURE;
     this->actionFunc = EnInvadepoh_InvasionHandler_FailureEnd;
 }
 
@@ -2532,9 +2540,9 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
-        if ((sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
+        if ((sInvasionState == INVASION_STATE_WAIT) || (CURRENT_TIME < CLOCK_TIME(2, 31))) {
             EnInvadepoh_Alien_SetupWaitForInvasion(this);
-        } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+        } else if (sInvasionState == INVASION_STATE_ACTIVE) {
             if (this->pathProgress >= 0.0001f) {
                 EnInvadepoh_Alien_SetupFloatForward(this);
             } else {
@@ -2550,7 +2558,7 @@ void EnInvadepoh_Alien_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
+    if (sInvasionState == INVASION_STATE_SUCCESS) {
         // The player successfully defended the ranch from the aliens, so this alien should either play its death
         // animation if it's currently alive or have its instance silently killed if it's waiting to respawn.
         if ((this->actionFunc == EnInvadepoh_Alien_FloatForward) || (this->actionFunc == EnInvadepoh_Alien_WarpIn)) {
@@ -2864,26 +2872,26 @@ void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     this->timer = Rand_S16Offset(150, 150);
 
     if (rand < 0.5f) {
-        this->silentRomaniState = 0;
+        this->silentRomaniStareState = SILENT_ROMANI_STARE_STATE_STARE_AT_NEARBY_PLAYER;
         Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
         interactInfo->headRotStepScale = 0.1f;
         interactInfo->headRotMaxStep = 0x3E8;
     } else if (rand < 0.75f) {
-        this->silentRomaniState = 1;
+        this->silentRomaniStareState = SILENT_ROMANI_STARE_STATE_STARE_RANDOM_FAST;
         interactInfo->headRotTarget.x = Rand_S16Offset(0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
         interactInfo->headRotStepScale = 0.06f;
         interactInfo->headRotMaxStep = 0x3E8;
     } else if (rand < 0.8f) {
-        this->silentRomaniState = 2;
+        this->silentRomaniStareState = SILENT_ROMANI_STARE_STATE_STARE_RANDOM_MEDIUM;
         interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x7D0);
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = 0;
         interactInfo->headRotStepScale = 0.05f;
         interactInfo->headRotMaxStep = 0x3E8;
     } else {
-        this->silentRomaniState = 3;
+        this->silentRomaniStareState = SILENT_ROMANI_STARE_STATE_STARE_RANDOM_SLOW;
         interactInfo->headRotTarget.x = 0;
         interactInfo->headRotTarget.y = 0;
         interactInfo->headRotTarget.z = Rand_S16Offset(-0x9C4, 0x1388);
@@ -2895,6 +2903,10 @@ void EnInvadepoh_SilentRomani_SetupIdle(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_SilentRomani_Idle;
 }
 
+/**
+ * Waits for a random amount of time between 150 and 300 frames, during which Romani can either stare at the player if
+ * they're nearby or stare off in a random direction. When the timer reaches 0, Romani will begin walking again.
+ */
 void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
 
@@ -2904,7 +2916,7 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         EnInvadepoh_SilentRomani_SetPathPointToNext(this);
     }
 
-    if (this->silentRomaniState == 0) {
+    if (this->silentRomaniStareState == SILENT_ROMANI_STARE_STATE_STARE_AT_NEARBY_PLAYER) {
         if ((this->actor.xzDistToPlayer < 350.0f) && (play->gameplayFrames & 0x60)) {
             Player* player = GET_PLAYER(play);
             s16 pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) -
@@ -2917,6 +2929,8 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
             interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
         }
     } else {
+        // For any state other than `SILENT_ROMANI_STARE_STATE_STARE_AT_NEARBY_PLAYER`, this will essentially clear the
+        // target X and Y-rotation of her head, making the code that sets these target rotations somewhat pointless.
         interactInfo->headRotTarget.x = 0;
         interactInfo->headRotTarget.y = 0;
     }
@@ -2925,23 +2939,24 @@ void EnInvadepoh_SilentRomani_Idle(EnInvadepoh* this, PlayState* play) {
         s32 timerMod32 = (u32)this->timer % 32;
 
         if ((timerMod32 == 0) && (Rand_ZeroOne() < 0.3f)) {
-            //! @bug: This calculation can result in negative values for `nextSilentRomaniState`, which doesn't seem
-            //! like that's supposed to happen. When this happens, Romani will act the same as she does in `STATE_3`,
-            //! which effectively makes this state far more likely than the developers probably intended.
-            s32 nextSilentRomaniState = (s32)Rand_Next() % 4;
+            //! @bug: This calculation can result in negative values for `nextSilentRomaniStareState`, which doesn't
+            //! seem like that's supposed to happen. When this happens, Romani will act the same as she does in
+            //! `SILENT_ROMANI_STARE_STATE_STARE_RANDOM_SLOW`, which effectively makes this state far more likely than
+            //! the developers probably intended.
+            s32 nextSilentRomaniStareState = (s32)Rand_Next() % SILENT_ROMANI_STARE_STATE_MAX;
 
-            if (nextSilentRomaniState != this->silentRomaniState) {
-                this->silentRomaniState = nextSilentRomaniState;
+            if (nextSilentRomaniStareState != this->silentRomaniStareState) {
+                this->silentRomaniStareState = nextSilentRomaniStareState;
 
-                if (this->silentRomaniState == 0) {
+                if (this->silentRomaniStareState == SILENT_ROMANI_STARE_STATE_STARE_AT_NEARBY_PLAYER) {
                     Math_Vec3s_Copy(&interactInfo->headRotTarget, &gZeroVec3s);
                     interactInfo->headRotStepScale = 0.07f;
-                } else if (this->silentRomaniState == 1) {
+                } else if (this->silentRomaniStareState == SILENT_ROMANI_STARE_STATE_STARE_RANDOM_FAST) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(0x3E8, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
                     interactInfo->headRotStepScale = 0.06f;
-                } else if (this->silentRomaniState == 2) {
+                } else if (this->silentRomaniStareState == SILENT_ROMANI_STARE_STATE_STARE_RANDOM_MEDIUM) {
                     interactInfo->headRotTarget.x = Rand_S16Offset(-0x7D0, 0x3E8);
                     interactInfo->headRotTarget.y = Rand_S16Offset(-0x3E8, 0x7D0);
                     interactInfo->headRotTarget.z = Rand_S16Offset(-0x320, 0x640);
@@ -3210,7 +3225,7 @@ void EnInvadepoh_Ufo_HoverAboveBarn(EnInvadepoh* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_SUCCESS) {
+    if (sInvasionState == INVASION_STATE_SUCCESS) {
         EnInvadepoh_Ufo_SetupOutroDescend(this);
     }
 }
@@ -4095,12 +4110,12 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     EnInvadepoh_SnapToFloor(this);
     Math_Vec3f_Copy(&this->currentPos, &this->actor.world.pos);
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+    if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         EnInvadepoh_Dog_SetupWalk(this);
-    } else if (sInvasionState == EN_INVADEPOH_INVASION_STATE_WAIT) {
+    } else if (sInvasionState == INVASION_STATE_WAIT) {
         this->actor.update = EnInvadepoh_Dog_WaitForInvasion;
     } else {
         Actor_Kill(&this->actor);
@@ -4115,7 +4130,7 @@ void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
-    if (sInvasionState == EN_INVADEPOH_INVASION_STATE_ACTIVE) {
+    if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;

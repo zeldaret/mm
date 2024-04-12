@@ -147,7 +147,7 @@ typedef struct EnInvadepoh {
     /* 0x324 */ EnInvadepohInteractInfo interactInfo;
     /* 0x370 */ s16 shapeAngularVelocityY;
     /* 0x372 */ s16 shapeAngularAccelerationY;
-    /* 0x374 */ s8 silentRomaniState;
+    /* 0x374 */ s8 silentRomaniStareState;
     /* 0x376 */ u16 textId;
     /* 0x378 */ s8 doorOpened;
     /* 0x379 */ s8 alienCount;
