@@ -101,7 +101,7 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Night3Romani_WaitForEvent(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Night3Romani_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2);
 
@@ -460,32 +460,32 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
     f32 invPathLength = 1.0f / this->pathLength;
     s32 endPoint = this->endPoint;
     s32 i;
-    Vec3f curToNext;
-    Vec3s* curPathPoint = this->pathPoints;
-    Vec3s* nextPathPoint = curPathPoint + 1;
+    Vec3f currentToNext;
+    Vec3s* currentPathPoint = this->pathPoints;
+    Vec3s* nextPathPoint = currentPathPoint + 1;
     f32 nextCheckpoint;
     f32 nextPathLength;
     f32 segmentProgress;
     f32 pathSegLength;
 
     for (i = 0; i < endPoint; i++) {
-        curToNext.x = nextPathPoint->x - curPathPoint->x;
-        curToNext.y = nextPathPoint->y - curPathPoint->y;
-        curToNext.z = nextPathPoint->z - curPathPoint->z;
-        pathSegLength = Math3D_Vec3fMagnitude(&curToNext);
+        currentToNext.x = nextPathPoint->x - currentPathPoint->x;
+        currentToNext.y = nextPathPoint->y - currentPathPoint->y;
+        currentToNext.z = nextPathPoint->z - currentPathPoint->z;
+        pathSegLength = Math3D_Vec3fMagnitude(&currentToNext);
         nextPathLength = curPathLength + pathSegLength;
         nextCheckpoint = nextPathLength * invPathLength;
 
         if (this->pathProgress <= nextCheckpoint) {
             *currentPoint = i;
             segmentProgress = (this->pathProgress - curCheckpoint) / (nextCheckpoint - curCheckpoint);
-            pos->x = (segmentProgress * curToNext.x) + curPathPoint->x;
-            pos->y = (segmentProgress * curToNext.y) + curPathPoint->y;
-            pos->z = (segmentProgress * curToNext.z) + curPathPoint->z;
+            pos->x = (segmentProgress * currentToNext.x) + currentPathPoint->x;
+            pos->y = (segmentProgress * currentToNext.y) + currentPathPoint->y;
+            pos->z = (segmentProgress * currentToNext.z) + currentPathPoint->z;
             return;
         }
 
-        curPathPoint = nextPathPoint++;
+        currentPathPoint = nextPathPoint++;
         curPathLength = nextPathLength;
         curCheckpoint = nextCheckpoint;
     }
@@ -503,15 +503,16 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
  */
 void EnInvadepoh_Alien_StepYawAlongPath(EnInvadepoh* this, s16 step, s16 offset) {
     s32 pad;
-    Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint = curPathPoint + 1;
-    Vec3f curPathPointF;
-    Vec3f nextPathPointF;
+    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
+    Vec3s* nextPathPoint = currentPathPoint + 1;
+    Vec3f currentPathPointPos;
+    Vec3f nextPathPointPos;
 
     if (this->currentPoint != this->endPoint) {
-        Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
-        Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF) + offset, step);
+        Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+        Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&currentPathPointPos, &nextPathPointPos) + offset,
+                           step);
     }
 }
 
@@ -521,16 +522,16 @@ void EnInvadepoh_Alien_StepYawAlongPath(EnInvadepoh* this, s16 step, s16 offset)
  */
 void EnInvadepoh_Romani_StepYawAlongPath(EnInvadepoh* this, s16 scale, s16 step, s16 minStep) {
     s32 pad;
-    Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint = curPathPoint + 1;
-    Vec3f curPathPointF;
-    Vec3f nextPathPointF;
+    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
+    Vec3s* nextPathPoint = currentPathPoint + 1;
+    Vec3f currentPathPointPos;
+    Vec3f nextPathPointPos;
 
     if (this->currentPoint != this->endPoint) {
-        Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
-        Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF), scale, step,
-                           minStep);
+        Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+        Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&currentPathPointPos, &nextPathPointPos), scale,
+                           step, minStep);
     }
 }
 
@@ -539,14 +540,14 @@ void EnInvadepoh_Romani_StepYawAlongPath(EnInvadepoh* this, s16 scale, s16 step,
  */
 void EnInvadepoh_SetYawAlongPath(EnInvadepoh* this) {
     s32 pad;
-    Vec3s* curPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint = curPathPoint + 1;
-    Vec3f curPathPointF;
-    Vec3f nextPathPointF;
+    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
+    Vec3s* nextPathPoint = currentPathPoint + 1;
+    Vec3f currentPathPointPos;
+    Vec3f nextPathPointPos;
 
-    Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
-    Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-    this->actor.shape.rot.y = Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF);
+    Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+    Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
+    this->actor.shape.rot.y = Math_Vec3f_Yaw(&currentPathPointPos, &nextPathPointPos);
 }
 
 f32 EnInvadepoh_GetPathLength(EnInvadepoh* this) {
@@ -554,14 +555,14 @@ f32 EnInvadepoh_GetPathLength(EnInvadepoh* this) {
     s32 i;
     Vec3f prevPathVec;
     Vec3f curPathVec;
-    Vec3s* curPathPoint = this->pathPoints;
+    Vec3s* currentPathPoint = &this->pathPoints[0];
     f32 pathLength = 0.0f;
 
-    Math_Vec3s_ToVec3f(&curPathVec, curPathPoint);
+    Math_Vec3s_ToVec3f(&curPathVec, currentPathPoint);
 
-    for (curPathPoint++, i = 1; i < pointCount; curPathPoint++, i++) {
+    for (currentPathPoint++, i = 1; i < pointCount; currentPathPoint++, i++) {
         Math_Vec3f_Copy(&prevPathVec, &curPathVec);
-        Math_Vec3s_ToVec3f(&curPathVec, curPathPoint);
+        Math_Vec3s_ToVec3f(&curPathVec, currentPathPoint);
         pathLength += Math3D_Distance(&prevPathVec, &curPathVec);
     }
 
@@ -603,8 +604,8 @@ s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
     //! if the dog is on point N, then point N+1 is the next point in the counterclockwise direction, and point N-1 is
     //! the next point in the clockwise direction. Using `pathStep` instead of hardcoding +1 here would fix the bug.
     //! Because of this bug, the dog is never considered to be "close enough" to the path when running clockwise.
-    Vec3s* nextPoint = &this->pathPoints[this->currentPoint] + 1;
-    Vec3s* currentPoint = &this->pathPoints[this->currentPoint];
+    Vec3s* nextPathPoint = &this->pathPoints[this->currentPoint] + 1;
+    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
     s32 pad;
     f32 diffX;
     f32 diffZ;
@@ -624,13 +625,13 @@ s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
         return false;
     }
 
-    diffX = nextPoint->x - currentPoint->x;
-    diffZ = nextPoint->z - currentPoint->z;
+    diffX = nextPathPoint->x - currentPathPoint->x;
+    diffZ = nextPathPoint->z - currentPathPoint->z;
     pathYaw = Math_Atan2S_XY(diffZ, diffX);
     cos = Math_CosS(pathYaw);
     sin = Math_SinS(pathYaw);
-    offsetFromPointX = this->actor.world.pos.x - currentPoint->x;
-    offsetFromPointZ = this->actor.world.pos.z - currentPoint->z;
+    offsetFromPointX = this->actor.world.pos.x - currentPathPoint->x;
+    offsetFromPointZ = this->actor.world.pos.z - currentPathPoint->z;
 
     // Computes the perpendicular distance from the dog to the line formed by the current and next path points and
     // checks to see if this distance is less than `(a - b)`. In other words, the dog must be less than `(a - b)` units
@@ -811,32 +812,32 @@ void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
 
 void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3s* curPathPoint;
+    Vec3s* currentPathPoint;
     Vec3s* nextPathPoint;
-    Vec3f curPathPointF;
-    Vec3f nextPathPointF;
+    Vec3f currentPathPointPos;
+    Vec3f nextPathPointPos;
     f32 yPosTemp = this->actor.world.pos.y;
     f32 curCheckpoint;
     f32 nextCheckpoint;
 
-    curPathPoint = this->pathPoints + this->currentPoint;
-    nextPathPoint = curPathPoint + 1;
+    currentPathPoint = this->pathPoints + this->currentPoint;
+    nextPathPoint = currentPathPoint + 1;
     curCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
     nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->pathCheckpoints[this->currentPoint] : 1.0f;
 
     if (nextCheckpoint - curCheckpoint < 0.001f) {
-        Math_Vec3s_ToVec3f(&this->currentPos, curPathPoint);
+        Math_Vec3s_ToVec3f(&this->currentPos, currentPathPoint);
     } else {
         f32 nextWeight = this->pathProgress - curCheckpoint;
         f32 prevWeight = nextCheckpoint - this->pathProgress;
         f32 invPathLength = 1.0f / (nextCheckpoint - curCheckpoint);
         s32 pad3;
 
-        Math_Vec3s_ToVec3f(&curPathPointF, curPathPoint);
-        Math_Vec3s_ToVec3f(&nextPathPointF, nextPathPoint);
-        this->currentPos.x = ((curPathPointF.x * prevWeight) + (nextPathPointF.x * nextWeight)) * invPathLength;
-        this->currentPos.y = ((curPathPointF.y * prevWeight) + (nextPathPointF.y * nextWeight)) * invPathLength;
-        this->currentPos.z = ((curPathPointF.z * prevWeight) + (nextPathPointF.z * nextWeight)) * invPathLength;
+        Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+        Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
+        this->currentPos.x = ((currentPathPointPos.x * prevWeight) + (nextPathPointPos.x * nextWeight)) * invPathLength;
+        this->currentPos.y = ((currentPathPointPos.y * prevWeight) + (nextPathPointPos.y * nextWeight)) * invPathLength;
+        this->currentPos.z = ((currentPathPointPos.z * prevWeight) + (nextPathPointPos.z * nextWeight)) * invPathLength;
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->currentPos);
@@ -1169,11 +1170,11 @@ void EnInvadepoh_InvasionHandler_SpawnUfo(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_Ufo_SetMatrixTranslation(Vec3f* translation) {
-    MtxF* curMtxF = Matrix_GetCurrent();
+    MtxF* currentMatrix = Matrix_GetCurrent();
 
-    curMtxF->xw = translation->x;
-    curMtxF->yw = translation->y;
-    curMtxF->zw = translation->z;
+    currentMatrix->xw = translation->x;
+    currentMatrix->yw = translation->y;
+    currentMatrix->zw = translation->z;
 }
 
 s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 rangeSq, s32 doorTimer) {
@@ -3413,6 +3414,7 @@ void EnInvadepoh_Night1Romani_Talk(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
@@ -3672,6 +3674,7 @@ void EnInvadepoh_BarnRomani_Talk(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
@@ -3940,12 +3943,14 @@ void EnInvadepoh_RewardRomani_Update(Actor* thisx, PlayState* play2) {
         player = GET_PLAYER(play);
         Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
+
         pitch =
             (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f) - this->actor.shape.rot.x;
         interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
         yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
+
         EnInvadepoh_Interact_Update(&this->interactInfo);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -4276,6 +4281,7 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
 
             Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
             Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 0x28);
+
             pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &romani->actor.focus.pos) * 0.85f) -
                     this->actor.shape.rot.x;
             interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
@@ -4317,6 +4323,7 @@ void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x9C4, 0x1C2);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, this->shapeAngularVelocityY, 0x28);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
@@ -4347,6 +4354,7 @@ void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 0x28);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
@@ -4453,43 +4461,49 @@ void EnInvadepoh_Night3Romani_SetupWalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night3Romani_Walk;
 }
 
+/**
+ * Walks from the barn to the house by following the path between them. If Cremia is currently talking, then Romani will
+ * become idle. Once Romani has reached the end of the path, this function will kill the actor instance.
+ */
 void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
-    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
-    EnInvadepoh* cremia = sNight3Cremia;
-    s32 curPoint;
-    s32 tempFrames;
-    s32 doorTimer;
     s32 pad;
-    Vec3f curPathPointF;
-    Vec3f nextPathPointF;
+    EnInvadepoh* cremia = sNight3Cremia;
+    EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
+    s32 tempFrames;
+    s32 pad2;
+    s32 currentPoint;
+    Vec3f currentPathPointPos;
+    Vec3f nextPathPointPos;
 
     EnInvadepoh_Night3Romani_SetProgress(this);
     EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
-    curPoint = (this->currentPoint < this->endPoint) ? this->currentPoint : this->endPoint - 1;
+    currentPoint = (this->currentPoint < this->endPoint) ? this->currentPoint : this->endPoint - 1;
 
-    Math_Vec3s_ToVec3f(&curPathPointF, &this->pathPoints[curPoint]);
-    Math_Vec3s_ToVec3f(&nextPathPointF, &this->pathPoints[curPoint + 1]);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&curPathPointF, &nextPathPointF) + 0, 5, 0x7D0, 100);
+    Math_Vec3s_ToVec3f(&currentPathPointPos, &this->pathPoints[currentPoint]);
+    Math_Vec3s_ToVec3f(&nextPathPointPos, &this->pathPoints[currentPoint + 1]);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&currentPathPointPos, &nextPathPointPos), 5, 0x7D0,
+                       100);
 
     if ((this->currentPoint == 0) || (this->currentPoint == this->endPoint - 1)) {
         if (!this->doorOpened) {
-            s32 trueTimeSpeed = Environment_GetTimeSpeed(play);
-            doorTimer = trueTimeSpeed;
+            s32 doorTimer = Environment_GetTimeSpeed(play);
 
-            if (trueTimeSpeed > 0) {
-                // This is really dividing by trueTimeSpeed, but matching requires writing like this
+            if (doorTimer > 0) {
                 doorTimer = (R_TIME_SPEED * -23.0f / doorTimer) - 0.5f;
                 this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), doorTimer);
             }
         }
+
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
+
     tempFrames = play->gameplayFrames % 0x80;
+
     if (tempFrames & 0x40) {
         s16 targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &cremia->actor.world.pos);
         s16 pitch;
@@ -4498,8 +4512,10 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
         if (tempFrames == 0x40) {
             this->shapeAngularVelocityY = 0;
         }
+
         Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
         Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 40);
+
         pitch =
             (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &cremia->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
         interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
@@ -4528,6 +4544,10 @@ void EnInvadepoh_Night3Romani_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night3Romani_Talk;
 }
 
+/**
+ * Rotates Romani to face the player and handles the conversation she has with them. When she's done talking, Romani
+ * will begin to walk again.
+ */
 void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -4536,11 +4556,13 @@ void EnInvadepoh_Night3Romani_Talk(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0xBB8, 0x1F4);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
     yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
+
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnInvadepoh_Night3Romani_SetupWalk(this);
     }
@@ -4554,6 +4576,9 @@ void EnInvadepoh_Night3Romani_SetupIdle(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night3Romani_Idle;
 }
 
+/**
+ * Rotates Romani to face the player and waits until Cremia is done talking, at which point Romani will walk again.
+ */
 void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -4562,6 +4587,7 @@ void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play) {
 
     Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0xC8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->shapeAngularVelocityY, 40);
+
     pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f) - this->actor.shape.rot.x;
     interactInfo->headRotTarget.x = CLAMP(pitch, -0xBB8, 0xBB8);
 
@@ -4597,8 +4623,9 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
         this->actor.textId = 0x33CE;
+
         if ((currentTime >= CLOCK_TIME(6, 00)) && (currentTime < CLOCK_TIME(20, 00))) {
-            this->actor.update = EnInvadepoh_Night3Romani_WaitForEvent;
+            this->actor.update = EnInvadepoh_Night3Romani_WaitForTime;
             this->actor.draw = NULL;
         } else if ((currentTime >= CLOCK_TIME(20, 00)) && (currentTime < CLOCK_TIME(20, 14) + 15)) {
             this->actor.update = EnInvadepoh_Night3Romani_Update;
@@ -4610,7 +4637,10 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Night3Romani_WaitForEvent(Actor* thisx, PlayState* play2) {
+/**
+ * Waits until slightly after 8:00 PM, then Cremia becomes visible and starts walking.
+ */
+void EnInvadepoh_Night3Romani_WaitForTime(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -4637,9 +4667,11 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
+
         if ((this->actionFunc != EnInvadepoh_Night3Romani_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
+
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }

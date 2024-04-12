@@ -13942,7 +13942,7 @@
     0x80B4CC70:("EnInvadepoh_Night3Romani_SetupIdle",),
     0x80B4CCCC:("EnInvadepoh_Night3Romani_Idle",),
     0x80B4CE54:("EnInvadepoh_Night3Romani_WaitForObject",),
-    0x80B4CFFC:("EnInvadepoh_Night3Romani_WaitForEvent",),
+    0x80B4CFFC:("EnInvadepoh_Night3Romani_WaitForTime",),
     0x80B4D054:("EnInvadepoh_Night3Romani_Update",),
     0x80B4D15C:("EnInvadepoh_AlienAbductor_SetupAbductCow",),
     0x80B4D290:("EnInvadepoh_AlienAbductor_AbductCow",),
