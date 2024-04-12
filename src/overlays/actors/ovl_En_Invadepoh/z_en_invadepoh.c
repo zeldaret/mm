@@ -98,7 +98,7 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2);
-void EnInvadepoh_Night3Cremia_WaitForEvent(Actor* thisx, PlayState* play2);
+void EnInvadepoh_Night3Cremia_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Cremia_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForEvent(Actor* thisx, PlayState* play2);
@@ -3523,7 +3523,6 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     interactInfo->headRotTarget.z = 0;
     interactInfo->headRotStepScale = 0.1f;
     interactInfo->headRotMaxStep = 0x5DC;
-
     this->timer = Rand_S16Offset(200, 200);
     this->angle = this->actor.shape.rot.y;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
@@ -4218,11 +4217,14 @@ void EnInvadepoh_Night3Cremia_SetupWalk(EnInvadepoh* this) {
     interactInfo->headRotTarget.z = 0;
     interactInfo->headRotStepScale = 0.1f;
     interactInfo->headRotMaxStep = 0x320;
-
     this->shapeAngularVelocityY = 0;
     this->actionFunc = EnInvadepoh_Night3Cremia_Walk;
 }
 
+/**
+ * Walks from the barn to the house by maintaining a set distance from Romani. If Romani is currently talking, then
+ * Cremia will become idle. After 8:15 PM, this function will kill the actor instance.
+ */
 void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     EnInvadepoh* romani = sNight3Romani;
@@ -4235,6 +4237,7 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
 
     if (romani != NULL) {
         if (romani->currentPoint == 0) {
+            // Romani is opening the door to the barn
             this->distanceToRomani = 40.0f;
             this->angle = -0x8000;
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
@@ -4243,6 +4246,7 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
             Math_ScaledStepToS(&this->angle, -0x4800, 0xC8);
             this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         } else {
+            // Romani is opening the door to the house
             Math_StepToF(&this->distanceToRomani, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->angle, -0x8000, 0x12C);
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
@@ -4262,11 +4266,14 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
         }
 
         tempFrames = (play->gameplayFrames + 20) % 0x80;
+
         if (tempFrames & 0x40) {
             targetYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &romani->actor.world.pos);
+
             if (tempFrames == 0x40) {
                 this->shapeAngularVelocityY = 0;
             }
+
             Math_StepToS(&this->shapeAngularVelocityY, 0x7D0, 0x28);
             Math_SmoothStepToS(&this->actor.shape.rot.y, targetYaw, 6, this->shapeAngularVelocityY, 0x28);
             pitch = (s16)(Math_Vec3f_Pitch(&this->actor.focus.pos, &romani->actor.focus.pos) * 0.85f) -
@@ -4298,6 +4305,10 @@ void EnInvadepoh_Night3Cremia_SetupTalk(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night3Cremia_Talk;
 }
 
+/**
+ * Rotates Cremia to face the player and handles the conversation she has with them. When she's done talking, Cremia
+ * will begin to walk again.
+ */
 void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -4311,6 +4322,7 @@ void EnInvadepoh_Night3Cremia_Talk(EnInvadepoh* this, PlayState* play) {
 
     yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
+
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
     }
@@ -4324,6 +4336,9 @@ void EnInvadepoh_Night3Cremia_SetupIdle(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Night3Cremia_Idle;
 }
 
+/**
+ * Rotates Cremia to face the player and waits until Romani is done talking, at which point Cremia will walk again.
+ */
 void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
     EnInvadepohInteractInfo* interactInfo = &this->interactInfo;
     Player* player = GET_PLAYER(play);
@@ -4337,6 +4352,7 @@ void EnInvadepoh_Night3Cremia_Idle(EnInvadepoh* this, PlayState* play) {
 
     yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     interactInfo->headRotTarget.y = CLAMP((s16)(yaw * 0.7f), -0x1F40, 0x1F40);
+
     if (sNight3Romani == NULL) {
         EnInvadepoh_Night3Cremia_SetupWalk(this);
     } else if ((sNight3Romani != NULL) && (sNight3Romani->actionFunc != EnInvadepoh_Night3Romani_Talk)) {
@@ -4373,7 +4389,7 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
         }
 
         if ((CLOCK_TIME(6, 00) <= currentTime) && (currentTime < CLOCK_TIME(20, 00) + 30)) {
-            this->actor.update = EnInvadepoh_Night3Cremia_WaitForEvent;
+            this->actor.update = EnInvadepoh_Night3Cremia_WaitForTime;
             this->actor.draw = NULL;
         } else if ((CLOCK_TIME(20, 00) + 30 <= currentTime) && (currentTime < CLOCK_TIME(20, 15))) {
             this->actor.update = EnInvadepoh_Night3Cremia_Update;
@@ -4385,7 +4401,10 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnInvadepoh_Night3Cremia_WaitForEvent(Actor* thisx, PlayState* play2) {
+/**
+ * Waits until slightly after 8:00 PM, then Cremia becomes visible and starts walking.
+ */
+void EnInvadepoh_Night3Cremia_WaitForTime(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = THIS;
 
@@ -4412,9 +4431,11 @@ void EnInvadepoh_Night3Cremia_Update(Actor* thisx, PlayState* play2) {
     if (inUncullRange && (this->actor.update != NULL)) {
         SkelAnime_Update(&this->skelAnime);
         EnInvadepoh_Interact_Update(&this->interactInfo);
+
         if ((this->actionFunc != EnInvadepoh_Night3Cremia_Talk) && !talkAccepted && this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 350.0f);
         }
+
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }

@@ -13933,7 +13933,7 @@
     0x80B4C1BC:("EnInvadepoh_Night3Cremia_SetupIdle",),
     0x80B4C218:("EnInvadepoh_Night3Cremia_Idle",),
     0x80B4C3A0:("EnInvadepoh_Night3Cremia_WaitForObject",),
-    0x80B4C568:("EnInvadepoh_Night3Cremia_WaitForEvent",),
+    0x80B4C568:("EnInvadepoh_Night3Cremia_WaitForTime",),
     0x80B4C5C0:("EnInvadepoh_Night3Cremia_Update",),
     0x80B4C6C8:("EnInvadepoh_Night3Romani_SetupWalk",),
     0x80B4C730:("EnInvadepoh_Night3Romani_Walk",),
