@@ -441,6 +441,9 @@ void EnInvadepoh_Alien_SetRespawnTime(s32 index) {
     }
 }
 
+/**
+ * Determines the alien's current point by comparing its path progress to the checkpoints for its path.
+ */
 s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
     s32 i;
     s32 secondToLastPoint = this->endPoint - 1;
@@ -456,7 +459,7 @@ s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
 
 void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f* pos) {
     f32 curPathLength = 0.0f;
-    f32 curCheckpoint = 0.0f;
+    f32 currentCheckpoint = 0.0f;
     f32 invPathLength = 1.0f / this->totalPathDistance;
     s32 endPoint = this->endPoint;
     s32 i;
@@ -478,7 +481,7 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
 
         if (this->pathProgress <= nextCheckpoint) {
             *currentPoint = i;
-            segmentProgress = (this->pathProgress - curCheckpoint) / (nextCheckpoint - curCheckpoint);
+            segmentProgress = (this->pathProgress - currentCheckpoint) / (nextCheckpoint - currentCheckpoint);
             pos->x = (segmentProgress * currentToNext.x) + currentPathPoint->x;
             pos->y = (segmentProgress * currentToNext.y) + currentPathPoint->y;
             pos->z = (segmentProgress * currentToNext.z) + currentPathPoint->z;
@@ -487,7 +490,7 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
 
         currentPathPoint = nextPathPoint++;
         curPathLength = nextPathLength;
-        curCheckpoint = nextCheckpoint;
+        currentCheckpoint = nextCheckpoint;
     }
 
     *currentPoint = endPoint;
@@ -559,8 +562,9 @@ f32 EnInvadepoh_GetTotalPathDistance(EnInvadepoh* this) {
     f32 totalPathDistance = 0.0f;
 
     Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+    currentPathPoint++;
 
-    for (currentPathPoint++, i = 1; i < pointCount; currentPathPoint++, i++) {
+    for (i = 1; i < pointCount; currentPathPoint++, i++) {
         Math_Vec3f_Copy(&previousPathPointPos, &currentPathPointPos);
         Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
         totalPathDistance += Math3D_Distance(&previousPathPointPos, &currentPathPointPos);
@@ -679,7 +683,11 @@ s32 EnInvadepoh_Dog_FindClosestPointToTarget(EnInvadepoh* this, Vec3f* target) {
     return closestPoint;
 }
 
-void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
+/**
+ * Computes the alien's progress along the path based on how much in-game time has passed since the alien spawned, then
+ * sets the alien's current point based on its path progress.
+ */
+void EnInvadepoh_Alien_PathComputeProgress(EnInvadepoh* this) {
     s32 pad;
     s32 currentTime = CURRENT_TIME;
     s32 warpInTime = EnInvadepoh_Alien_GetSpawnTime(EN_INVADEPOH_GET_INDEX(&this->actor));
@@ -701,30 +709,34 @@ void EnInvadepoh_Alien_SetProgress(EnInvadepoh* this) {
     this->currentPoint = EnInvadepoh_Alien_GetCurrentPoint(this);
 }
 
+/**
+ * This function calculates a "checkpoint" for each point on the alien's path; when the alien's path progress surpasses
+ * the value of a given checkpoint, that is used as a signal to move the alien's current point forward along the path.
+ */
 void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
-    f32 invPathLength = 1.0f / this->totalPathDistance;
+    f32 invTotalPathDistance = 1.0f / this->totalPathDistance;
     s32 endPoint = this->endPoint;
     s32 i;
-    Vec3f prevPathPoint;
-    Vec3f pathPointF;
-    Vec3s* pathPoint = this->pathPoints;
-    f32 pathPointLength = 0.0f;
-    f32* pathCheckpoints;
+    Vec3f previousPathPointPos;
+    Vec3f currentPathPointPos;
+    Vec3s* currentPathPoint = &this->pathPoints[0];
+    f32 pathSegmentDistance = 0.0f;
+    f32* pathCheckpoint;
 
-    Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
-    pathPoint++;
-    pathCheckpoints = this->pathCheckpoints;
+    Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+    currentPathPoint++;
+    pathCheckpoint = &this->pathCheckpoints[0];
 
-    for (i = 1; i < endPoint; i++, pathPoint++, pathCheckpoints++) {
-        Math_Vec3f_Copy(&prevPathPoint, &pathPointF);
-        Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
-        pathPointLength += Math3D_Distance(&prevPathPoint, &pathPointF);
-        *pathCheckpoints = pathPointLength * invPathLength;
+    for (i = 1; i < endPoint; i++, currentPathPoint++, pathCheckpoint++) {
+        Math_Vec3f_Copy(&previousPathPointPos, &currentPathPointPos);
+        Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
+        pathSegmentDistance += Math3D_Distance(&previousPathPointPos, &currentPathPointPos);
+        *pathCheckpoint = pathSegmentDistance * invTotalPathDistance;
 
-        if (*pathCheckpoints < 0.0f) {
-            *pathCheckpoints = 0.0f;
-        } else if (*pathCheckpoints > 1.0f) {
-            *pathCheckpoints = 1.0f;
+        if (*pathCheckpoint < 0.0f) {
+            *pathCheckpoint = 0.0f;
+        } else if (*pathCheckpoint > 1.0f) {
+            *pathCheckpoint = 1.0f;
         }
     }
 }
@@ -810,41 +822,47 @@ void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
     }
 }
 
-void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
+/**
+ * Updates the alien's position and y-velocity based on its current path progress.
+ */
+void EnInvadepoh_Alien_PathUpdate(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3s* currentPathPoint;
     Vec3s* nextPathPoint;
     Vec3f currentPathPointPos;
     Vec3f nextPathPointPos;
-    f32 yPosTemp = this->actor.world.pos.y;
-    f32 curCheckpoint;
+    f32 tempPosY = this->actor.world.pos.y;
+    f32 currentCheckpoint;
     f32 nextCheckpoint;
 
-    currentPathPoint = this->pathPoints + this->currentPoint;
+    currentPathPoint = &this->pathPoints[this->currentPoint];
     nextPathPoint = currentPathPoint + 1;
-    curCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
+    currentCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
     nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->pathCheckpoints[this->currentPoint] : 1.0f;
 
-    if (nextCheckpoint - curCheckpoint < 0.001f) {
+    if (nextCheckpoint - currentCheckpoint < 0.001f) {
         Math_Vec3s_ToVec3f(&this->currentPos, currentPathPoint);
     } else {
-        f32 nextWeight = this->pathProgress - curCheckpoint;
-        f32 prevWeight = nextCheckpoint - this->pathProgress;
-        f32 invPathLength = 1.0f / (nextCheckpoint - curCheckpoint);
+        f32 nextWeight = this->pathProgress - currentCheckpoint;
+        f32 currentWeight = nextCheckpoint - this->pathProgress;
+        f32 invCheckpointDistance = 1.0f / (nextCheckpoint - currentCheckpoint);
         s32 pad3;
 
         Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
         Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
-        this->currentPos.x = ((currentPathPointPos.x * prevWeight) + (nextPathPointPos.x * nextWeight)) * invPathLength;
-        this->currentPos.y = ((currentPathPointPos.y * prevWeight) + (nextPathPointPos.y * nextWeight)) * invPathLength;
-        this->currentPos.z = ((currentPathPointPos.z * prevWeight) + (nextPathPointPos.z * nextWeight)) * invPathLength;
+        this->currentPos.x =
+            ((currentPathPointPos.x * currentWeight) + (nextPathPointPos.x * nextWeight)) * invCheckpointDistance;
+        this->currentPos.y =
+            ((currentPathPointPos.y * currentWeight) + (nextPathPointPos.y * nextWeight)) * invCheckpointDistance;
+        this->currentPos.z =
+            ((currentPathPointPos.z * currentWeight) + (nextPathPointPos.z * nextWeight)) * invCheckpointDistance;
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->currentPos);
     func_800B4AEC(play, &this->actor, 0.0f);
 
     if (this->actor.floorHeight > (BGCHECK_Y_MIN + 1.0f)) {
-        if (yPosTemp < this->actor.floorHeight) {
+        if (tempPosY < this->actor.floorHeight) {
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -852,7 +870,7 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
                 this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 30.0f);
             }
 
-            this->actor.world.pos.y = this->actor.velocity.y + yPosTemp;
+            this->actor.world.pos.y = this->actor.velocity.y + tempPosY;
 
             if (this->actor.floorHeight < this->actor.world.pos.y) {
                 this->actor.world.pos.y = this->actor.floorHeight;
@@ -864,7 +882,7 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
                 this->actor.velocity.y -= 2.0f;
             }
 
-            this->actor.world.pos.y = this->actor.velocity.y + yPosTemp;
+            this->actor.world.pos.y = this->actor.velocity.y + tempPosY;
 
             if (this->actor.world.pos.y < this->actor.floorHeight) {
                 this->actor.world.pos.y = this->actor.floorHeight;
@@ -872,7 +890,7 @@ void EnInvadepoh_Alien_ApplyProgress(EnInvadepoh* this, PlayState* play) {
             }
         }
     } else {
-        this->actor.world.pos.y = yPosTemp;
+        this->actor.world.pos.y = tempPosY;
     }
 }
 
@@ -912,10 +930,10 @@ s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 spe
 
 void EnInvadepoh_Night1Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    f32 yPosTemp = this->actor.world.pos.y;
+    f32 tempPosY = this->actor.world.pos.y;
 
     EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
-    this->actor.world.pos.y = yPosTemp;
+    this->actor.world.pos.y = tempPosY;
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
 }
@@ -1011,10 +1029,10 @@ void EnInvadepoh_Dog_Move(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_Night3Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    f32 yPosTemp = this->actor.world.pos.y;
+    f32 tempPosY = this->actor.world.pos.y;
 
     EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
-    this->actor.world.pos.y = yPosTemp;
+    this->actor.world.pos.y = tempPosY;
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
 }
@@ -2283,8 +2301,8 @@ void EnInvadepoh_Alien_SetupWaitForInvasion(EnInvadepoh* this) {
  * and warp in.
  */
 void EnInvadepoh_Alien_WaitForInvasion(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Alien_SetProgress(this);
-    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_PathComputeProgress(this);
+    EnInvadepoh_Alien_PathUpdate(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
 
     if (sAlienStateFlags[EN_INVADEPOH_GET_INDEX(&this->actor)] & ALIEN_STATE_FLAG_ACTIVE) {
@@ -2312,8 +2330,8 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
  * Waits until the current time is later than the alien's respawn time, then makes the alien warp in.
  */
 void EnInvadepoh_Alien_WaitToRespawn(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Alien_SetProgress(this);
-    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_PathComputeProgress(this);
+    EnInvadepoh_Alien_PathUpdate(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
 
     if (this->pathProgress > 0.0f) {
@@ -2343,8 +2361,8 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
  * fading in, its collider becomes enabled, allowing the player to hit it and allowing it to hit the player.
  */
 void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Alien_SetProgress(this);
-    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_PathComputeProgress(this);
+    EnInvadepoh_Alien_PathUpdate(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
 
@@ -2395,8 +2413,8 @@ void EnInvadepoh_Alien_SetupFloatForward(EnInvadepoh* this) {
  * Slowly moves the alien forward along its path while playing its floating animation.
  */
 void EnInvadepoh_Alien_FloatForward(EnInvadepoh* this, PlayState* play) {
-    EnInvadepoh_Alien_SetProgress(this);
-    EnInvadepoh_Alien_ApplyProgress(this, play);
+    EnInvadepoh_Alien_PathComputeProgress(this);
+    EnInvadepoh_Alien_PathUpdate(this, play);
     EnInvadepoh_Alien_StepYawAlongPath(this, 0x320, 0);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FOLLOWERS_BEAM_PRE - SFX_FLAG);
 
@@ -2537,8 +2555,8 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
                            ALIEN_LIMB_MAX);
         this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame / 8.0f;
         EnInvadepoh_Alien_InitPath(this, play);
-        EnInvadepoh_Alien_SetProgress(this);
-        EnInvadepoh_Alien_ApplyProgress(this, play);
+        EnInvadepoh_Alien_PathComputeProgress(this);
+        EnInvadepoh_Alien_PathUpdate(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
