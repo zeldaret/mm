@@ -457,27 +457,30 @@ s32 EnInvadepoh_Alien_GetCurrentPoint(EnInvadepoh* this) {
     return i;
 }
 
-void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f* pos) {
-    f32 curPathLength = 0.0f;
+/**
+ * Updates Romani's position and current point index based on her current path progress.
+ */
+void EnInvadepoh_Romani_PathUpdate(EnInvadepoh* this, s8* currentPoint, Vec3f* pos) {
+    f32 distanceToCurrent = 0.0f;
     f32 currentCheckpoint = 0.0f;
-    f32 invPathLength = 1.0f / this->totalPathDistance;
+    f32 invTotalPathDistance = 1.0f / this->totalPathDistance;
     s32 endPoint = this->endPoint;
     s32 i;
     Vec3f currentToNext;
-    Vec3s* currentPathPoint = this->pathPoints;
+    Vec3s* currentPathPoint = &this->pathPoints[0];
     Vec3s* nextPathPoint = currentPathPoint + 1;
     f32 nextCheckpoint;
-    f32 nextPathLength;
+    f32 distanceToNext;
     f32 segmentProgress;
-    f32 pathSegLength;
+    f32 pathSegmentDistance;
 
     for (i = 0; i < endPoint; i++) {
         currentToNext.x = nextPathPoint->x - currentPathPoint->x;
         currentToNext.y = nextPathPoint->y - currentPathPoint->y;
         currentToNext.z = nextPathPoint->z - currentPathPoint->z;
-        pathSegLength = Math3D_Vec3fMagnitude(&currentToNext);
-        nextPathLength = curPathLength + pathSegLength;
-        nextCheckpoint = nextPathLength * invPathLength;
+        pathSegmentDistance = Math3D_Vec3fMagnitude(&currentToNext);
+        distanceToNext = distanceToCurrent + pathSegmentDistance;
+        nextCheckpoint = distanceToNext * invTotalPathDistance;
 
         if (this->pathProgress <= nextCheckpoint) {
             *currentPoint = i;
@@ -488,8 +491,9 @@ void EnInvadepoh_Romani_ApplyProgress(EnInvadepoh* this, s8* currentPoint, Vec3f
             return;
         }
 
-        currentPathPoint = nextPathPoint++;
-        curPathLength = nextPathLength;
+        currentPathPoint = nextPathPoint;
+        nextPathPoint++;
+        distanceToCurrent = distanceToNext;
         currentCheckpoint = nextCheckpoint;
     }
 
@@ -619,7 +623,7 @@ s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
     f32 offsetFromPointZ;
     f32 distanceAlongPath;
     f32 perpendicularDistance;
-    f32 pathSegmentLength;
+    f32 pathSegmentDistance;
     s16 pathYaw;
 
     // The dog's current point should never be set to the `endPoint`, so this code should never run in practice. The dog
@@ -648,9 +652,9 @@ s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
     // Projects the dog's current position onto the line formed by the current and next path points and checks to see if
     // the projected position lies between the current and next points along the path. In other words, it makes sure the
     // dog is not "behind" the current point or "ahead of" the next point along the axis formed by the two points.
-    pathSegmentLength = Math3D_XZLength(diffX, diffZ);
+    pathSegmentDistance = Math3D_XZLength(diffX, diffZ);
     distanceAlongPath = (offsetFromPointZ * cos) + (offsetFromPointX * sin);
-    if ((distanceAlongPath < 0.0f) || (pathSegmentLength < distanceAlongPath)) {
+    if ((distanceAlongPath < 0.0f) || (pathSegmentDistance < distanceAlongPath)) {
         return false;
     }
 
@@ -764,7 +768,10 @@ void EnInvadepoh_Night1Romani_InitPath(EnInvadepoh* this, PlayState* play) {
     this->totalPathDistance = EnInvadepoh_GetTotalPathDistance(this);
 }
 
-void EnInvadepoh_Night1Romani_SetProgress(EnInvadepoh* this) {
+/**
+ * Computes Romani's progress along the path based on the current in-game time.
+ */
+void EnInvadepoh_Night1Romani_PathComputeProgress(EnInvadepoh* this) {
     if ((CURRENT_TIME < CLOCK_TIME(2, 00)) || (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
         this->pathProgress = 0.0f;
     } else if ((CURRENT_TIME >= CLOCK_TIME(2, 15)) && (CURRENT_TIME < CLOCK_TIME(6, 00))) {
@@ -809,7 +816,10 @@ void EnInvadepoh_Night3Romani_InitPath(EnInvadepoh* this, PlayState* play) {
     this->totalPathDistance = EnInvadepoh_GetTotalPathDistance(this);
 }
 
-void EnInvadepoh_Night3Romani_SetProgress(EnInvadepoh* this) {
+/**
+ * Computes Romani's progress along the path based on the current in-game time.
+ */
+void EnInvadepoh_Night3Romani_PathComputeProgress(EnInvadepoh* this) {
     if ((CURRENT_TIME < CLOCK_TIME(20, 00)) && (CURRENT_TIME >= CLOCK_TIME(6, 00))) {
         this->pathProgress = 0.0f;
     } else if ((CURRENT_TIME >= CLOCK_TIME(20, 14) + 15) || (CURRENT_TIME < CLOCK_TIME(6, 00))) {
@@ -932,7 +942,7 @@ void EnInvadepoh_Night1Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* p
     s32 pad;
     f32 tempPosY = this->actor.world.pos.y;
 
-    EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
+    EnInvadepoh_Romani_PathUpdate(this, &this->currentPoint, &this->actor.world.pos);
     this->actor.world.pos.y = tempPosY;
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
@@ -1031,7 +1041,7 @@ void EnInvadepoh_Night3Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* p
     s32 pad;
     f32 tempPosY = this->actor.world.pos.y;
 
-    EnInvadepoh_Romani_ApplyProgress(this, &this->currentPoint, &this->actor.world.pos);
+    EnInvadepoh_Romani_PathUpdate(this, &this->currentPoint, &this->actor.world.pos);
     this->actor.world.pos.y = tempPosY;
     func_800B4AEC(play, &this->actor, 50.0f);
     EnInvadepoh_SnapToFloor(this);
@@ -3399,7 +3409,7 @@ void EnInvadepoh_Night1Romani_SetupWalk(EnInvadepoh* this) {
 void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
-    EnInvadepoh_Night1Romani_SetProgress(this);
+    EnInvadepoh_Night1Romani_PathComputeProgress(this);
     EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
@@ -3482,7 +3492,7 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Interact_Init(&this->interactInfo, D_80B4EA90, ROMANI_EYE_ANIMATION_1, D_80B4EB00,
                                   ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_Night1Romani_InitPath(this, play);
-        EnInvadepoh_Night1Romani_SetProgress(this);
+        EnInvadepoh_Night1Romani_PathComputeProgress(this);
         EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
@@ -4510,7 +4520,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     Vec3f currentPathPointPos;
     Vec3f nextPathPointPos;
 
-    EnInvadepoh_Night3Romani_SetProgress(this);
+    EnInvadepoh_Night3Romani_PathComputeProgress(this);
     EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
@@ -4653,7 +4663,7 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
                                   ROMANI_MOUTH_ANIMATION_3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_Night3Romani_InitPath(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        EnInvadepoh_Night3Romani_SetProgress(this);
+        EnInvadepoh_Night3Romani_PathComputeProgress(this);
         EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
