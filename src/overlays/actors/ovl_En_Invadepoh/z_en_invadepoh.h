@@ -95,7 +95,7 @@ typedef struct EnInvadepohFaceAnimInfo {
     /* 0xF */ s8 curIndex;
 } EnInvadepohFaceAnimInfo; // size = 0x10
 
-typedef struct EnInvadepohInteractInfo {
+typedef struct EnInvadepohModelInfo {
     /* 0x00 */ EnInvadepohFaceAnimInfo eyeAnim;
     /* 0x10 */ EnInvadepohFaceAnimInfo mouthAnim;
     /* 0x20 */ Vec3s headRot;
@@ -104,12 +104,12 @@ typedef struct EnInvadepohInteractInfo {
     /* 0x30 */ f32 headRotStepScale;
     /* 0x34 */ f32 torsoRotScaleY;
     /* 0x38 */ f32 torsoRotScaleTargetY;
-    /* 0x3c */ f32 torsoRotScaleStepY;
+    /* 0x3C */ f32 torsoRotScaleStepY;
     /* 0x40 */ s16 torsoRotX;
     /* 0x42 */ s16 torsoTargetRotX;
     /* 0x44 */ f32 torsoRotStepScale;
     /* 0x48 */ s16 torsoRotMaxStep;
-} EnInvadepohInteractInfo; // size = 0x4C
+} EnInvadepohModelInfo; // size = 0x4C
 
 typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnim**);
 
@@ -144,7 +144,7 @@ typedef struct EnInvadepoh {
     /* 0x310 */ f32 totalPathDistance;
     /* 0x314 */ Vec3f currentPos;
     /* 0x320 */ f32 pathProgress;
-    /* 0x324 */ EnInvadepohInteractInfo interactInfo;
+    /* 0x324 */ EnInvadepohModelInfo modelInfo;
     /* 0x370 */ s16 shapeAngularVelocityY;
     /* 0x372 */ s16 shapeAngularAccelerationY;
     /* 0x374 */ s8 silentRomaniStareState;
