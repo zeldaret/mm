@@ -927,6 +927,10 @@ void EnInvadepoh_Alien_Knockback(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_Alien_DoNothing(EnInvadepoh* this) {
 }
 
+/**
+ * Moves Romani towards the next point along her path based on the supplied `speed`. Returns true if she reached the
+ * next point, false otherwise.
+ */
 s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 speed, f32 height) {
     s32 pad;
     Vec3s* nextPathPoint = &this->pathPoints[this->currentPoint + 1];
@@ -938,7 +942,7 @@ s32 EnInvadepoh_Romani_MoveAlongPath(EnInvadepoh* this, PlayState* play, f32 spe
     return reachedNextPoint;
 }
 
-void EnInvadepoh_Night1Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Night1Romani_MoveAlongTimePath(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     f32 tempPosY = this->actor.world.pos.y;
 
@@ -1037,7 +1041,7 @@ void EnInvadepoh_Dog_Move(EnInvadepoh* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
 
-void EnInvadepoh_Night3Romani_MoveAlongPathTimed(EnInvadepoh* this, PlayState* play) {
+void EnInvadepoh_Night3Romani_MoveAlongTimePath(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     f32 tempPosY = this->actor.world.pos.y;
 
@@ -3410,7 +3414,7 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
     s32 pad;
 
     EnInvadepoh_Night1Romani_PathComputeProgress(this);
-    EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
+    EnInvadepoh_Night1Romani_MoveAlongTimePath(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
     if ((this->currentPoint == 0) || ((this->currentPoint + 1) == this->endPoint)) {
@@ -3493,7 +3497,7 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
                                   ROMANI_MOUTH_ANIMATION_1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_Night1Romani_InitPath(this, play);
         EnInvadepoh_Night1Romani_PathComputeProgress(this);
-        EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
+        EnInvadepoh_Night1Romani_MoveAlongTimePath(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
 
@@ -4521,7 +4525,7 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
     Vec3f nextPathPointPos;
 
     EnInvadepoh_Night3Romani_PathComputeProgress(this);
-    EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
+    EnInvadepoh_Night3Romani_MoveAlongTimePath(this, play);
     EnInvadepoh_Romani_StepYawAlongPath(this, 6, 0x7D0, 0x64);
 
     currentPoint = (this->currentPoint < this->endPoint) ? this->currentPoint : this->endPoint - 1;
@@ -4664,7 +4668,7 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Night3Romani_InitPath(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         EnInvadepoh_Night3Romani_PathComputeProgress(this);
-        EnInvadepoh_Night3Romani_MoveAlongPathTimed(this, play);
+        EnInvadepoh_Night3Romani_MoveAlongTimePath(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
         this->actor.textId = 0x33CE;
