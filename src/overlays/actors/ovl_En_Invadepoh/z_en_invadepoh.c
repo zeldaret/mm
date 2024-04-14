@@ -1336,7 +1336,7 @@ s8 EnInvadepoh_ModelInfo_GetNextAnim(EnInvadepohFaceAnimNext* nextAnims, s32 nex
     return (nextAnims + nextIndex)->index;
 }
 
-void EnInvadepoh_ModelInfo_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim* faceAnim) {
+void EnInvadepoh_ModelInfo_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase* faceAnim) {
     faceInfo->curAnimType = faceAnim->type;
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
@@ -1348,9 +1348,9 @@ void EnInvadepoh_ModelInfo_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInva
     }
 }
 
-void EnInvadepoh_ModelInfo_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animations) {
-    EnInvadepohFaceAnim* faceAnim = faceInfo->curAnim;
-    EnInvadepohFaceFrames* faceFrames = faceAnim->frames;
+void EnInvadepoh_ModelInfo_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
+    EnInvadepohFaceAnimFixed* faceAnim = (EnInvadepohFaceAnimFixed*)faceInfo->curAnim;
+    EnInvadepohFaceFrames* faceFrames = faceAnim->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
@@ -1358,15 +1358,15 @@ void EnInvadepoh_ModelInfo_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, En
     }
 }
 
-void EnInvadepoh_ModelInfo_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnim** animations) {
+void EnInvadepoh_ModelInfo_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
     EnInvadepohFaceAnimBranched* faceAnimLoop = (EnInvadepohFaceAnimBranched*)faceInfo->curAnim;
-    EnInvadepohFaceFrames* faceFrames = faceAnimLoop->anim.frames;
+    EnInvadepohFaceFrames* faceFrames = faceAnimLoop->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
         faceInfo->curIndex = faceFrames->texIndex[faceInfo->curFrame];
     } else {
-        EnInvadepohFaceAnim* nextAnim =
+        EnInvadepohFaceAnimBase* nextAnim =
             animations[EnInvadepoh_ModelInfo_GetNextAnim(faceAnimLoop->nextAnims, faceAnimLoop->nextCount)];
 
         EnInvadepoh_ModelInfo_SetNextAnim(faceInfo, nextAnim);
@@ -1374,9 +1374,9 @@ void EnInvadepoh_ModelInfo_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo,
 }
 
 void EnInvadepoh_ModelInfo_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo,
-                                                     EnInvadepohFaceAnim** animations) {
+                                                     EnInvadepohFaceAnimBase** animations) {
     EnInvadepohFaceAnimDelayedBranched* faceAnimLoopDelayed = (EnInvadepohFaceAnimDelayedBranched*)faceInfo->curAnim;
-    EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->loop.anim.frames;
+    EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
@@ -1384,8 +1384,8 @@ void EnInvadepoh_ModelInfo_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* fa
     } else if (faceInfo->delayTimer > 0) {
         faceInfo->delayTimer--;
     } else {
-        EnInvadepohFaceAnim* nextAnim = animations[EnInvadepoh_ModelInfo_GetNextAnim(
-            faceAnimLoopDelayed->loop.nextAnims, faceAnimLoopDelayed->loop.nextCount)];
+        EnInvadepohFaceAnimBase* nextAnim = animations[EnInvadepoh_ModelInfo_GetNextAnim(
+            faceAnimLoopDelayed->nextAnims, faceAnimLoopDelayed->nextCount)];
 
         EnInvadepoh_ModelInfo_SetNextAnim(faceInfo, nextAnim);
     }
@@ -1419,7 +1419,7 @@ EnInvadepohFaceFrames D_80B4E9DC = { D_80B4E9AC, ARRAY_COUNT(D_80B4E9AC) };
 EnInvadepohFaceFrames D_80B4E9E4 = { D_80B4E9B4, ARRAY_COUNT(D_80B4E9B4) };
 EnInvadepohFaceFrames D_80B4E9EC = { D_80B4E9BC, ARRAY_COUNT(D_80B4E9BC) };
 EnInvadepohFaceFrames D_80B4E9F4 = { D_80B4E9C0, ARRAY_COUNT(D_80B4E9C0) };
-EnInvadepohFaceAnim D_80B4E9FC = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9C4 };
+EnInvadepohFaceAnimFixed D_80B4E9FC = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9C4 } };
 EnInvadepohFaceAnimNext D_80B4EA04[4] = {
     { ROMANI_EYE_ANIMATION_2, 0.5f },
     { ROMANI_EYE_ANIMATION_3, 0.9f },
@@ -1428,7 +1428,7 @@ EnInvadepohFaceAnimNext D_80B4EA04[4] = {
 };
 EnInvadepohFaceAnimNext D_80B4EA24[1] = { ROMANI_EYE_ANIMATION_1, 1.0f };
 EnInvadepohFaceAnimDelayedBranched D_80B4EA2C = {
-    { { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4E9C4 }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04 }, 40, 60
+    { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4E9C4 }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04, 40, 60
 };
 EnInvadepohFaceAnimBranched D_80B4EA40 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9CC },
                                            ARRAY_COUNT(D_80B4EA24),
@@ -1442,17 +1442,17 @@ EnInvadepohFaceAnimBranched D_80B4EA60 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80
 EnInvadepohFaceAnimBranched D_80B4EA70 = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4E9E4 },
                                            ARRAY_COUNT(D_80B4EA24),
                                            D_80B4EA24 };
-EnInvadepohFaceAnim D_80B4EA80 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9EC };
-EnInvadepohFaceAnim D_80B4EA88 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9F4 };
-EnInvadepohFaceAnim* D_80B4EA90[ROMANI_EYE_ANIMATION_MAX] = {
-    &D_80B4E9FC,           // ROMANI_EYE_ANIMATION_0
-    &D_80B4EA2C.loop.anim, // ROMANI_EYE_ANIMATION_1
-    &D_80B4EA40.anim,      // ROMANI_EYE_ANIMATION_2
-    &D_80B4EA50.anim,      // ROMANI_EYE_ANIMATION_3
-    &D_80B4EA60.anim,      // ROMANI_EYE_ANIMATION_4
-    &D_80B4EA70.anim,      // ROMANI_EYE_ANIMATION_5
-    &D_80B4EA80,           // ROMANI_EYE_ANIMATION_6
-    &D_80B4EA88,           // ROMANI_EYE_ANIMATION_7
+EnInvadepohFaceAnimFixed D_80B4EA80 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9EC } };
+EnInvadepohFaceAnimFixed D_80B4EA88 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4E9F4 } };
+EnInvadepohFaceAnimBase* D_80B4EA90[ROMANI_EYE_ANIMATION_MAX] = {
+    &D_80B4E9FC.base, // ROMANI_EYE_ANIMATION_0
+    &D_80B4EA2C.base, // ROMANI_EYE_ANIMATION_1
+    &D_80B4EA40.base, // ROMANI_EYE_ANIMATION_2
+    &D_80B4EA50.base, // ROMANI_EYE_ANIMATION_3
+    &D_80B4EA60.base, // ROMANI_EYE_ANIMATION_4
+    &D_80B4EA70.base, // ROMANI_EYE_ANIMATION_5
+    &D_80B4EA80.base, // ROMANI_EYE_ANIMATION_6
+    &D_80B4EA88.base, // ROMANI_EYE_ANIMATION_7
 };
 
 typedef enum RomaniMouthAnimation {
@@ -1471,15 +1471,15 @@ EnInvadepohFaceFrames D_80B4EAC0 = { D_80B4EAB0, ARRAY_COUNT(D_80B4EAB0) };
 EnInvadepohFaceFrames D_80B4EAC8 = { D_80B4EAB4, ARRAY_COUNT(D_80B4EAB4) };
 EnInvadepohFaceFrames D_80B4EAD0 = { D_80B4EAB8, ARRAY_COUNT(D_80B4EAB8) };
 EnInvadepohFaceFrames D_80B4EAD8 = { D_80B4EABC, ARRAY_COUNT(D_80B4EABC) };
-EnInvadepohFaceAnim D_80B4EAE0 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC0 };
-EnInvadepohFaceAnim D_80B4EAE8 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC8 };
-EnInvadepohFaceAnim D_80B4EAF0 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD0 };
-EnInvadepohFaceAnim D_80B4EAF8 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD8 };
-EnInvadepohFaceAnim* D_80B4EB00[ROMANI_MOUTH_ANIMATION_MAX] = {
-    &D_80B4EAE0, // ROMANI_MOUTH_ANIMATION_0
-    &D_80B4EAE8, // ROMANI_MOUTH_ANIMATION_1
-    &D_80B4EAF0, // ROMANI_MOUTH_ANIMATION_2
-    &D_80B4EAF8, // ROMANI_MOUTH_ANIMATION_3
+EnInvadepohFaceAnimFixed D_80B4EAE0 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC0 } };
+EnInvadepohFaceAnimFixed D_80B4EAE8 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAC8 } };
+EnInvadepohFaceAnimFixed D_80B4EAF0 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD0 } };
+EnInvadepohFaceAnimFixed D_80B4EAF8 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EAD8 } };
+EnInvadepohFaceAnimBase* D_80B4EB00[ROMANI_MOUTH_ANIMATION_MAX] = {
+    &D_80B4EAE0.base, // ROMANI_MOUTH_ANIMATION_0
+    &D_80B4EAE8.base, // ROMANI_MOUTH_ANIMATION_1
+    &D_80B4EAF0.base, // ROMANI_MOUTH_ANIMATION_2
+    &D_80B4EAF8.base, // ROMANI_MOUTH_ANIMATION_3
 };
 
 typedef enum CremiaEyeAnimation {
@@ -1504,7 +1504,7 @@ EnInvadepohFaceFrames D_80B4EB38 = { D_80B4EB14, ARRAY_COUNT(D_80B4EB14) };
 EnInvadepohFaceFrames D_80B4EB40 = { D_80B4EB18, ARRAY_COUNT(D_80B4EB18) };
 EnInvadepohFaceFrames D_80B4EB48 = { D_80B4EB20, ARRAY_COUNT(D_80B4EB20) };
 EnInvadepohFaceFrames D_80B4EB50 = { D_80B4EB28, ARRAY_COUNT(D_80B4EB28) };
-EnInvadepohFaceAnim D_80B4EB58 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EB30 };
+EnInvadepohFaceAnimFixed D_80B4EB58 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EB30 } };
 EnInvadepohFaceAnimNext D_80B4EB60[4] = {
     { CREMIA_EYE_ANIMATION_2, 0.5f },
     { CREMIA_EYE_ANIMATION_3, 0.9f },
@@ -1513,7 +1513,7 @@ EnInvadepohFaceAnimNext D_80B4EB60[4] = {
 };
 EnInvadepohFaceAnimNext D_80B4EB80[1] = { CREMIA_EYE_ANIMATION_1, 1.0f };
 EnInvadepohFaceAnimDelayedBranched D_80B4EB88 = {
-    { { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4EB30 }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60 }, 40, 60
+    { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &D_80B4EB30 }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60, 40, 60
 };
 EnInvadepohFaceAnimBranched D_80B4EB9C = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB38 },
                                            ARRAY_COUNT(D_80B4EB80),
@@ -1527,13 +1527,13 @@ EnInvadepohFaceAnimBranched D_80B4EBBC = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80
 EnInvadepohFaceAnimBranched D_80B4EBCC = { { FACE_ANIMATION_TYPE_BRANCHED, &D_80B4EB50 },
                                            ARRAY_COUNT(D_80B4EB80),
                                            D_80B4EB80 };
-EnInvadepohFaceAnim* D_80B4EBDC[CREMIA_EYE_ANIMATION_MAX] = {
-    &D_80B4EB58,           // CREMIA_EYE_ANIMATION_0
-    &D_80B4EB88.loop.anim, // CREMIA_EYE_ANIMATION_1
-    &D_80B4EB9C.anim,      // CREMIA_EYE_ANIMATION_2
-    &D_80B4EBAC.anim,      // CREMIA_EYE_ANIMATION_3
-    &D_80B4EBBC.anim,      // CREMIA_EYE_ANIMATION_4
-    &D_80B4EBCC.anim,      // CREMIA_EYE_ANIMATION_5
+EnInvadepohFaceAnimBase* D_80B4EBDC[CREMIA_EYE_ANIMATION_MAX] = {
+    &D_80B4EB58.base, // CREMIA_EYE_ANIMATION_0
+    &D_80B4EB88.base, // CREMIA_EYE_ANIMATION_1
+    &D_80B4EB9C.base, // CREMIA_EYE_ANIMATION_2
+    &D_80B4EBAC.base, // CREMIA_EYE_ANIMATION_3
+    &D_80B4EBBC.base, // CREMIA_EYE_ANIMATION_4
+    &D_80B4EBCC.base, // CREMIA_EYE_ANIMATION_5
 };
 
 typedef enum CremiaMouthAnimation {
@@ -1543,9 +1543,9 @@ typedef enum CremiaMouthAnimation {
 
 s8 D_80B4EBF4[1] = { CREMIA_MOUTH_NORMAL };
 EnInvadepohFaceFrames D_80B4EBF8 = { D_80B4EBF4, ARRAY_COUNT(D_80B4EBF4) };
-EnInvadepohFaceAnim D_80B4EC00 = { FACE_ANIMATION_TYPE_FIXED, &D_80B4EBF8 };
-EnInvadepohFaceAnim* D_80B4EC08[CREMIA_MOUTH_ANIMATION_MAX] = {
-    &D_80B4EC00, // CREMIA_MOUTH_ANIMATION_0
+EnInvadepohFaceAnimFixed D_80B4EC00 = { { FACE_ANIMATION_TYPE_FIXED, &D_80B4EBF8 } };
+EnInvadepohFaceAnimBase* D_80B4EC08[CREMIA_MOUTH_ANIMATION_MAX] = {
+    &D_80B4EC00.base, // CREMIA_MOUTH_ANIMATION_0
 };
 
 void EnInvadepoh_ModelInfo_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
@@ -1560,17 +1560,17 @@ void EnInvadepoh_ModelInfo_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
     }
 }
 
-void EnInvadepoh_ModelInfo_Init(EnInvadepohModelInfo* modelInfo, EnInvadepohFaceAnim** eyeAnimations, s32 curEyeAnim,
-                                EnInvadepohFaceAnim** mouthAnimations, s32 curMouthAnim, Vec3s* headRotTarget,
-                                s16 headRotMaxStep, f32 headRotStepScale, f32 torsoRotScaleTargetY,
-                                f32 torsoRotScaleStepY) {
+void EnInvadepoh_ModelInfo_Init(EnInvadepohModelInfo* modelInfo, EnInvadepohFaceAnimBase** eyeAnimations,
+                                s32 curEyeAnim, EnInvadepohFaceAnimBase** mouthAnimations, s32 curMouthAnim,
+                                Vec3s* headRotTarget, s16 headRotMaxStep, f32 headRotStepScale,
+                                f32 torsoRotScaleTargetY, f32 torsoRotScaleStepY) {
     Math_Vec3s_Copy(&modelInfo->headRotTarget, headRotTarget);
     modelInfo->headRotMaxStep = headRotMaxStep;
     modelInfo->headRotStepScale = headRotStepScale;
     modelInfo->torsoRotScaleTargetY = torsoRotScaleTargetY;
     modelInfo->torsoRotScaleStepY = torsoRotScaleStepY;
     if (eyeAnimations != NULL) {
-        EnInvadepohFaceAnim* faceAnim = eyeAnimations[curEyeAnim];
+        EnInvadepohFaceAnimBase* faceAnim = eyeAnimations[curEyeAnim];
 
         modelInfo->eyeAnim.animations = eyeAnimations;
         modelInfo->eyeAnim.curAnimType = faceAnim->type;
@@ -1580,7 +1580,7 @@ void EnInvadepoh_ModelInfo_Init(EnInvadepohModelInfo* modelInfo, EnInvadepohFace
         modelInfo->eyeAnim.curIndex = faceAnim->frames->texIndex[0];
     }
     if (mouthAnimations != NULL) {
-        EnInvadepohFaceAnim* faceAnim = mouthAnimations[curMouthAnim];
+        EnInvadepohFaceAnimBase* faceAnim = mouthAnimations[curMouthAnim];
 
         modelInfo->mouthAnim.animations = mouthAnimations;
         modelInfo->mouthAnim.curAnimType = faceAnim->type;
