@@ -61,8 +61,8 @@ typedef enum EnInvadepohAlienAbductorIndex {
 
 typedef struct EnInvadepohFaceFrames {
     /* 0x0 */ s8* texIndex;
-    /* 0x1 */ s8 count;
-} EnInvadepohFaceFrames; // size = 0x2
+    /* 0x4 */ s8 count;
+} EnInvadepohFaceFrames; // size = 0x5
 
 typedef struct EnInvadepohFaceAnimNext {
     /* 0x0 */ s8 index;
