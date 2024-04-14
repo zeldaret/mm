@@ -65,9 +65,9 @@ typedef enum SilentRomaniStareState {
 } SilentRomaniStareState;
 
 typedef enum FaceAnimationType {
-    /* 0 */ FACE_ANIMATION_TYPE_FIXED,
-    /* 1 */ FACE_ANIMATION_TYPE_BRANCHED,
-    /* 2 */ FACE_ANIMATION_TYPE_DELAYED_BRANCHED
+    /* 0 */ FACE_ANIMATION_TYPE_ONCE,
+    /* 1 */ FACE_ANIMATION_TYPE_CHAINED,
+    /* 2 */ FACE_ANIMATION_TYPE_CHAINED_DELAY
 } FaceAnimationType;
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play2);
@@ -1341,15 +1341,15 @@ void EnInvadepoh_ModelInfo_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInva
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
     faceInfo->curIndex = faceAnim->frames->texIndex[0];
-    if (faceInfo->curAnimType == FACE_ANIMATION_TYPE_DELAYED_BRANCHED) {
-        EnInvadepohFaceAnimDelayedBranched* faceDelayedLoopAnim = (EnInvadepohFaceAnimDelayedBranched*)faceAnim;
+    if (faceInfo->curAnimType == FACE_ANIMATION_TYPE_CHAINED_DELAY) {
+        EnInvadepohFaceAnimChainedDelay* faceDelayedLoopAnim = (EnInvadepohFaceAnimChainedDelay*)faceAnim;
 
         faceInfo->delayTimer = Rand_S16Offset(faceDelayedLoopAnim->minDelay, faceDelayedLoopAnim->maxDelay);
     }
 }
 
-void EnInvadepoh_ModelInfo_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
-    EnInvadepohFaceAnimFixed* faceAnim = (EnInvadepohFaceAnimFixed*)faceInfo->curAnim;
+void EnInvadepoh_ModelInfo_UpdateFaceAnimOnce(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
+    EnInvadepohFaceAnimOnce* faceAnim = (EnInvadepohFaceAnimOnce*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnim->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
@@ -1358,8 +1358,9 @@ void EnInvadepoh_ModelInfo_UpdateFixedAnim(EnInvadepohFaceAnimInfo* faceInfo, En
     }
 }
 
-void EnInvadepoh_ModelInfo_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
-    EnInvadepohFaceAnimBranched* faceAnimLoop = (EnInvadepohFaceAnimBranched*)faceInfo->curAnim;
+void EnInvadepoh_ModelInfo_UpdateFaceAnimChained(EnInvadepohFaceAnimInfo* faceInfo,
+                                                 EnInvadepohFaceAnimBase** animations) {
+    EnInvadepohFaceAnimChained* faceAnimLoop = (EnInvadepohFaceAnimChained*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoop->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
@@ -1373,9 +1374,9 @@ void EnInvadepoh_ModelInfo_UpdateBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo,
     }
 }
 
-void EnInvadepoh_ModelInfo_UpdateDelayedBranchedAnim(EnInvadepohFaceAnimInfo* faceInfo,
-                                                     EnInvadepohFaceAnimBase** animations) {
-    EnInvadepohFaceAnimDelayedBranched* faceAnimLoopDelayed = (EnInvadepohFaceAnimDelayedBranched*)faceInfo->curAnim;
+void EnInvadepoh_ModelInfo_UpdateFaceAnimChainedDelay(EnInvadepohFaceAnimInfo* faceInfo,
+                                                      EnInvadepohFaceAnimBase** animations) {
+    EnInvadepohFaceAnimChainedDelay* faceAnimLoopDelayed = (EnInvadepohFaceAnimChainedDelay*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
@@ -1405,12 +1406,16 @@ typedef enum RomaniEyeAnimation {
 
 s8 sRomaniEyeOpenIndices[1] = { ROMANI_EYE_OPEN };
 s8 sRomaniFastBlinkIndices[4] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
-s8 sRomaniMediumBlinkIndices[5] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
-                                    ROMANI_EYE_OPEN };
-s8 sRomaniSlowBlinkIndices[6] = { ROMANI_EYE_OPEN,   ROMANI_EYE_HALF, ROMANI_EYE_CLOSED,
-                                  ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN };
-s8 sRomaniDoubleBlinkIndices[8] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
-                                    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
+s8 sRomaniMediumBlinkIndices[5] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
+};
+s8 sRomaniSlowBlinkIndices[6] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
+};
+s8 sRomaniDoubleBlinkIndices[8] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN,
+};
 s8 sRomaniEyeHalfIndices[1] = { ROMANI_EYE_HALF };
 s8 sRomaniEyeHappyIndices[1] = { ROMANI_EYE_HAPPY };
 EnInvadepohFaceFrames sRomaniEyeOpenFrames = { sRomaniEyeOpenIndices, ARRAY_COUNT(sRomaniEyeOpenIndices) };
@@ -1420,7 +1425,7 @@ EnInvadepohFaceFrames sRomaniSlowBlinkFrames = { sRomaniSlowBlinkIndices, ARRAY_
 EnInvadepohFaceFrames sRomaniDoubleBlinkFrames = { sRomaniDoubleBlinkIndices, ARRAY_COUNT(sRomaniDoubleBlinkIndices) };
 EnInvadepohFaceFrames sRomaniEyeHalfFrames = { sRomaniEyeHalfIndices, ARRAY_COUNT(sRomaniEyeHalfIndices) };
 EnInvadepohFaceFrames sRomaniEyeHappyFrames = { sRomaniEyeHappyIndices, ARRAY_COUNT(sRomaniEyeHappyIndices) };
-EnInvadepohFaceAnimFixed D_80B4E9FC = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniEyeOpenFrames } };
+EnInvadepohFaceAnimOnce D_80B4E9FC = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames } };
 EnInvadepohFaceAnimNext D_80B4EA04[4] = {
     { ROMANI_EYE_ANIMATION_2, 0.5f },
     { ROMANI_EYE_ANIMATION_3, 0.9f },
@@ -1428,23 +1433,31 @@ EnInvadepohFaceAnimNext D_80B4EA04[4] = {
     { ROMANI_EYE_ANIMATION_5, 1.0f },
 };
 EnInvadepohFaceAnimNext D_80B4EA24[1] = { ROMANI_EYE_ANIMATION_1, 1.0f };
-EnInvadepohFaceAnimDelayedBranched D_80B4EA2C = {
-    { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &sRomaniEyeOpenFrames }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04, 40, 60
+EnInvadepohFaceAnimChainedDelay D_80B4EA2C = {
+    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sRomaniEyeOpenFrames }, ARRAY_COUNT(D_80B4EA04), D_80B4EA04, 40, 60
 };
-EnInvadepohFaceAnimBranched D_80B4EA40 = { { FACE_ANIMATION_TYPE_BRANCHED, &sRomaniFastBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EA24),
-                                           D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA50 = { { FACE_ANIMATION_TYPE_BRANCHED, &sRomaniMediumBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EA24),
-                                           D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA60 = { { FACE_ANIMATION_TYPE_BRANCHED, &sRomaniSlowBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EA24),
-                                           D_80B4EA24 };
-EnInvadepohFaceAnimBranched D_80B4EA70 = { { FACE_ANIMATION_TYPE_BRANCHED, &sRomaniDoubleBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EA24),
-                                           D_80B4EA24 };
-EnInvadepohFaceAnimFixed D_80B4EA80 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniEyeHalfFrames } };
-EnInvadepohFaceAnimFixed D_80B4EA88 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniEyeHappyFrames } };
+EnInvadepohFaceAnimChained D_80B4EA40 = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniFastBlinkFrames },
+    ARRAY_COUNT(D_80B4EA24),
+    D_80B4EA24,
+};
+EnInvadepohFaceAnimChained D_80B4EA50 = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniMediumBlinkFrames },
+    ARRAY_COUNT(D_80B4EA24),
+    D_80B4EA24,
+};
+EnInvadepohFaceAnimChained D_80B4EA60 = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniSlowBlinkFrames },
+    ARRAY_COUNT(D_80B4EA24),
+    D_80B4EA24,
+};
+EnInvadepohFaceAnimChained D_80B4EA70 = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniDoubleBlinkFrames },
+    ARRAY_COUNT(D_80B4EA24),
+    D_80B4EA24,
+};
+EnInvadepohFaceAnimOnce D_80B4EA80 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHalfFrames } };
+EnInvadepohFaceAnimOnce D_80B4EA88 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHappyFrames } };
 EnInvadepohFaceAnimBase* sRomaniEyeAnimations[ROMANI_EYE_ANIMATION_MAX] = {
     &D_80B4E9FC.base, // ROMANI_EYE_ANIMATION_0
     &D_80B4EA2C.base, // ROMANI_EYE_ANIMATION_1
@@ -1473,10 +1486,10 @@ EnInvadepohFaceFrames sRomaniMouthFrownFrames = { sRomaniMouthFrownIndices, ARRA
 EnInvadepohFaceFrames sRomaniMouthHangingOpenFrames = { sRomaniMouthHangingOpenIndices,
                                                         ARRAY_COUNT(sRomaniMouthHangingOpenIndices) };
 EnInvadepohFaceFrames sRomaniMouthSmileFrames = { sRomaniMouthSmileIndices, ARRAY_COUNT(sRomaniMouthSmileIndices) };
-EnInvadepohFaceAnimFixed D_80B4EAE0 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniMouthHappyFrames } };
-EnInvadepohFaceAnimFixed D_80B4EAE8 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniMouthFrownFrames } };
-EnInvadepohFaceAnimFixed D_80B4EAF0 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniMouthHangingOpenFrames } };
-EnInvadepohFaceAnimFixed D_80B4EAF8 = { { FACE_ANIMATION_TYPE_FIXED, &sRomaniMouthSmileFrames } };
+EnInvadepohFaceAnimOnce D_80B4EAE0 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHappyFrames } };
+EnInvadepohFaceAnimOnce D_80B4EAE8 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthFrownFrames } };
+EnInvadepohFaceAnimOnce D_80B4EAF0 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHangingOpenFrames } };
+EnInvadepohFaceAnimOnce D_80B4EAF8 = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthSmileFrames } };
 EnInvadepohFaceAnimBase* sRomaniMouthAnimations[ROMANI_MOUTH_ANIMATION_MAX] = {
     &D_80B4EAE0.base, // ROMANI_MOUTH_ANIMATION_0
     &D_80B4EAE8.base, // ROMANI_MOUTH_ANIMATION_1
@@ -1496,18 +1509,22 @@ typedef enum CremiaEyeAnimation {
 
 s8 sCremiaEyeOpenIndices[1] = { CREMIA_EYE_OPEN };
 s8 sCremiaFastBlinkIndices[4] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
-s8 sCremiaMediumBlinkIndices[5] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
-                                    CREMIA_EYE_OPEN };
-s8 sCremiaSlowBlinkIndices[6] = { CREMIA_EYE_OPEN,   CREMIA_EYE_HALF, CREMIA_EYE_CLOSED,
-                                  CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN };
-s8 sCremiaDoubleBlinkIndices[8] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
-                                    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
+s8 sCremiaMediumBlinkIndices[5] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
+};
+s8 sCremiaSlowBlinkIndices[6] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
+};
+s8 sCremiaDoubleBlinkIndices[8] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN,
+};
 EnInvadepohFaceFrames sCremiaEyeOpenFrames = { sCremiaEyeOpenIndices, ARRAY_COUNT(sCremiaEyeOpenIndices) };
 EnInvadepohFaceFrames sCremiaFastBlinkFrames = { sCremiaFastBlinkIndices, ARRAY_COUNT(sCremiaFastBlinkIndices) };
 EnInvadepohFaceFrames sCremiaMediumBlinkFrames = { sCremiaMediumBlinkIndices, ARRAY_COUNT(sCremiaMediumBlinkIndices) };
 EnInvadepohFaceFrames sCremiaSlowBlinkFrames = { sCremiaSlowBlinkIndices, ARRAY_COUNT(sCremiaSlowBlinkIndices) };
 EnInvadepohFaceFrames sCremiaDoubleBlinkFrames = { sCremiaDoubleBlinkIndices, ARRAY_COUNT(sCremiaDoubleBlinkIndices) };
-EnInvadepohFaceAnimFixed D_80B4EB58 = { { FACE_ANIMATION_TYPE_FIXED, &sCremiaEyeOpenFrames } };
+EnInvadepohFaceAnimOnce D_80B4EB58 = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames } };
 EnInvadepohFaceAnimNext D_80B4EB60[4] = {
     { CREMIA_EYE_ANIMATION_2, 0.5f },
     { CREMIA_EYE_ANIMATION_3, 0.9f },
@@ -1515,21 +1532,29 @@ EnInvadepohFaceAnimNext D_80B4EB60[4] = {
     { CREMIA_EYE_ANIMATION_5, 1.0f },
 };
 EnInvadepohFaceAnimNext D_80B4EB80[1] = { CREMIA_EYE_ANIMATION_1, 1.0f };
-EnInvadepohFaceAnimDelayedBranched D_80B4EB88 = {
-    { FACE_ANIMATION_TYPE_DELAYED_BRANCHED, &sCremiaEyeOpenFrames }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60, 40, 60
+EnInvadepohFaceAnimChainedDelay D_80B4EB88 = {
+    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sCremiaEyeOpenFrames }, ARRAY_COUNT(D_80B4EB60), D_80B4EB60, 40, 60
 };
-EnInvadepohFaceAnimBranched D_80B4EB9C = { { FACE_ANIMATION_TYPE_BRANCHED, &sCremiaFastBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EB80),
-                                           D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBAC = { { FACE_ANIMATION_TYPE_BRANCHED, &sCremiaMediumBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EB80),
-                                           D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBBC = { { FACE_ANIMATION_TYPE_BRANCHED, &sCremiaSlowBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EB80),
-                                           D_80B4EB80 };
-EnInvadepohFaceAnimBranched D_80B4EBCC = { { FACE_ANIMATION_TYPE_BRANCHED, &sCremiaDoubleBlinkFrames },
-                                           ARRAY_COUNT(D_80B4EB80),
-                                           D_80B4EB80 };
+EnInvadepohFaceAnimChained D_80B4EB9C = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaFastBlinkFrames },
+    ARRAY_COUNT(D_80B4EB80),
+    D_80B4EB80,
+};
+EnInvadepohFaceAnimChained D_80B4EBAC = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaMediumBlinkFrames },
+    ARRAY_COUNT(D_80B4EB80),
+    D_80B4EB80,
+};
+EnInvadepohFaceAnimChained D_80B4EBBC = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaSlowBlinkFrames },
+    ARRAY_COUNT(D_80B4EB80),
+    D_80B4EB80,
+};
+EnInvadepohFaceAnimChained D_80B4EBCC = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaDoubleBlinkFrames },
+    ARRAY_COUNT(D_80B4EB80),
+    D_80B4EB80,
+};
 EnInvadepohFaceAnimBase* sCremiaEyeAnimations[CREMIA_EYE_ANIMATION_MAX] = {
     &D_80B4EB58.base, // CREMIA_EYE_ANIMATION_0
     &D_80B4EB88.base, // CREMIA_EYE_ANIMATION_1
@@ -1546,16 +1571,16 @@ typedef enum CremiaMouthAnimation {
 
 s8 sCremiaMouthNormalIndices[1] = { CREMIA_MOUTH_NORMAL };
 EnInvadepohFaceFrames sCremiaMouthNormalFrames = { sCremiaMouthNormalIndices, ARRAY_COUNT(sCremiaMouthNormalIndices) };
-EnInvadepohFaceAnimFixed D_80B4EC00 = { { FACE_ANIMATION_TYPE_FIXED, &sCremiaMouthNormalFrames } };
+EnInvadepohFaceAnimOnce D_80B4EC00 = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaMouthNormalFrames } };
 EnInvadepohFaceAnimBase* sCremiaMouthAnimations[CREMIA_MOUTH_ANIMATION_MAX] = {
     &D_80B4EC00.base, // CREMIA_MOUTH_ANIMATION_0
 };
 
 void EnInvadepoh_ModelInfo_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
     static EnInvadepohFaceFunc sFaceUpdateFuncs[3] = {
-        EnInvadepoh_ModelInfo_UpdateFixedAnim,
-        EnInvadepoh_ModelInfo_UpdateBranchedAnim,
-        EnInvadepoh_ModelInfo_UpdateDelayedBranchedAnim,
+        EnInvadepoh_ModelInfo_UpdateFaceAnimOnce,
+        EnInvadepoh_ModelInfo_UpdateFaceAnimChained,
+        EnInvadepoh_ModelInfo_UpdateFaceAnimChainedDelay,
     };
 
     if ((faceInfo->animations != NULL) && (faceInfo->curAnim != NULL)) {

@@ -74,23 +74,23 @@ typedef struct EnInvadepohFaceAnimBase {
     /* 0x4 */ EnInvadepohFaceFrames* frames;
 } EnInvadepohFaceAnimBase; // size = 0x8
 
-typedef struct EnInvadepohFaceAnimFixed {
+typedef struct EnInvadepohFaceAnimOnce {
     /* 0x0 */ EnInvadepohFaceAnimBase base;
-} EnInvadepohFaceAnimFixed; // size = 0x8
+} EnInvadepohFaceAnimOnce; // size = 0x8
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimChained {
     /* 0x0 */ EnInvadepohFaceAnimBase base;
     /* 0x8 */ s8 nextCount;
     /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
-} EnInvadepohFaceAnimBranched; // size = 0x10
+} EnInvadepohFaceAnimChained; // size = 0x10
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimChainedDelay {
     /* 0x00 */ EnInvadepohFaceAnimBase base;
     /* 0x08 */ s8 nextCount;
     /* 0x0C */ EnInvadepohFaceAnimNext* nextAnims;
     /* 0x10 */ s16 minDelay;
     /* 0x12 */ s16 maxDelay;
-} EnInvadepohFaceAnimDelayedBranched; // size = 0x14
+} EnInvadepohFaceAnimChainedDelay; // size = 0x14
 
 typedef struct EnInvadepohFaceAnimInfo {
     /* 0x0 */ EnInvadepohFaceAnimBase** animations;
