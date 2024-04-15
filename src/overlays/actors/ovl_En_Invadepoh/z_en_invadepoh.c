@@ -23,11 +23,15 @@
  * - A variant of Romani that walks from the barn to the house on Night 3 if the player defended the ranch.
  * - A variant of Cremia that walks from the barn to the house on Night 3 if the player defended the ranch. She walks a
  *   fixed distance from the above Romani variant.
+ *
+ * This actor also implements a custom animation system exclusively used to control Romani and Cremia's eye and mouth
+ * animations. However, the Romani and Cremia variants used by this actor always have static mouths, so this animation
+ * system is solely used to manage their blinking.
  */
 
 #include "prevent_bss_reordering.h"
-#include "z_en_invadepoh.h"
 #include "sys_cfb.h"
+#include "z_en_invadepoh.h"
 #include "z64horse.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
@@ -49,10 +53,23 @@
 #define ALIEN_STATE_FLAG_CLOSEST_THREAT (1 << 1)
 
 typedef enum InvasionState {
+    // This value is only used when `sInvasionState` has not been initialized yet. It should be immediately set to one
+    // of the below values as soon as the invasion handler is initialized.
     /* 0 */ INVASION_STATE_NONE,
+
+    // This value indicates that the invasion hasn't started yet, i.e. it's before 2:31 AM on the First Day.
     /* 1 */ INVASION_STATE_WAIT,
+
+    // This value indicates that the invasion is in-progress. The aliens have spawned and are approaching the barn, but
+    // they have not reached it yet; the player still has the chance to defend the ranch from the aliens.
     /* 2 */ INVASION_STATE_ACTIVE,
+
+    // This value indicates that the player successfully defended the ranch from the aliens, i.e., it's after 5:15 AM on
+    // the First Day, and no aliens reached the barn before that point in time.
     /* 3 */ INVASION_STATE_SUCCESS,
+
+    // This value indicates that the player failed to defend the ranch from the aliens, i.e., an alien reached the barn
+    // before 5:15 AM on the First Day.
     /* 4 */ INVASION_STATE_FAILURE
 } InvasionState;
 
