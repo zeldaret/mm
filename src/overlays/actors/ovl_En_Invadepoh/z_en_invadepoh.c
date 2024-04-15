@@ -67,7 +67,8 @@ typedef enum SilentRomaniStareState {
 typedef enum FaceAnimationType {
     /* 0 */ FACE_ANIMATION_TYPE_ONCE,
     /* 1 */ FACE_ANIMATION_TYPE_CHAINED,
-    /* 2 */ FACE_ANIMATION_TYPE_CHAINED_DELAY
+    /* 2 */ FACE_ANIMATION_TYPE_CHAINED_DELAY,
+    /* 3 */ FACE_ANIMATION_TYPE_MAX
 } FaceAnimationType;
 
 void EnInvadepoh_Init(Actor* thisx, PlayState* play2);
@@ -1320,12 +1321,13 @@ EnInvadepoh* EnInvadepoh_Dog_GetClosestAlienThreat(void) {
     return NULL;
 }
 
-s8 EnInvadepoh_ModelInfo_GetNextAnim(EnInvadepohFaceAnimNext* nextAnims, s32 nextAnimCount) {
+s8 EnInvadepoh_ModelInfo_GetNextFaceAnim(EnInvadepohFaceAnimNext* nextAnims, s32 nextAnimCount) {
     f32 rand = Rand_ZeroOne();
     EnInvadepohFaceAnimNext* nextAnim = nextAnims;
     s32 nextIndex;
 
     nextAnimCount--;
+
     for (nextIndex = 0; nextIndex < nextAnimCount; nextIndex++, nextAnim++) {
         if (rand <= nextAnim->chance) {
             break;
@@ -1336,59 +1338,73 @@ s8 EnInvadepoh_ModelInfo_GetNextAnim(EnInvadepohFaceAnimNext* nextAnims, s32 nex
     return (nextAnims + nextIndex)->index;
 }
 
-void EnInvadepoh_ModelInfo_SetNextAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase* faceAnim) {
-    faceInfo->curAnimType = faceAnim->type;
+void EnInvadepoh_ModelInfo_SetNextFaceAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase* faceAnim) {
+    faceInfo->type = faceAnim->type;
     faceInfo->curAnim = faceAnim;
     faceInfo->curFrame = 0;
-    faceInfo->curIndex = faceAnim->frames->texIndex[0];
-    if (faceInfo->curAnimType == FACE_ANIMATION_TYPE_CHAINED_DELAY) {
-        EnInvadepohFaceAnimChainedDelay* faceDelayedLoopAnim = (EnInvadepohFaceAnimChainedDelay*)faceAnim;
+    faceInfo->curTexIndex = faceAnim->frames->texIndex[0];
 
-        faceInfo->delayTimer = Rand_S16Offset(faceDelayedLoopAnim->minDelay, faceDelayedLoopAnim->maxDelay);
+    if (faceInfo->type == FACE_ANIMATION_TYPE_CHAINED_DELAY) {
+        EnInvadepohFaceAnimChainedDelay* chainedDelayFaceAnim = (EnInvadepohFaceAnimChainedDelay*)faceAnim;
+
+        faceInfo->delayTimer = Rand_S16Offset(chainedDelayFaceAnim->minDelay, chainedDelayFaceAnim->maxDelay);
     }
 }
 
+/**
+ * Simply plays the face animation to its conclusion once. When the animation runs out of frames, the eyes or mouth will
+ * remain on the last frame of the animation until the animation is changed.
+ */
 void EnInvadepoh_ModelInfo_UpdateFaceAnimOnce(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase** animations) {
     EnInvadepohFaceAnimOnce* faceAnim = (EnInvadepohFaceAnimOnce*)faceInfo->curAnim;
     EnInvadepohFaceFrames* faceFrames = faceAnim->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
-        faceInfo->curIndex = faceFrames->texIndex[faceInfo->curFrame];
+        faceInfo->curTexIndex = faceFrames->texIndex[faceInfo->curFrame];
     }
 }
 
+/**
+ * Plays the face animation to its conclusion, then sets the next face animation based on what the current animation
+ * says should come next.
+ */
 void EnInvadepoh_ModelInfo_UpdateFaceAnimChained(EnInvadepohFaceAnimInfo* faceInfo,
                                                  EnInvadepohFaceAnimBase** animations) {
-    EnInvadepohFaceAnimChained* faceAnimLoop = (EnInvadepohFaceAnimChained*)faceInfo->curAnim;
-    EnInvadepohFaceFrames* faceFrames = faceAnimLoop->base.frames;
+    EnInvadepohFaceAnimChained* chainedFaceAnim = (EnInvadepohFaceAnimChained*)faceInfo->curAnim;
+    EnInvadepohFaceFrames* faceFrames = chainedFaceAnim->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
-        faceInfo->curIndex = faceFrames->texIndex[faceInfo->curFrame];
+        faceInfo->curTexIndex = faceFrames->texIndex[faceInfo->curFrame];
     } else {
         EnInvadepohFaceAnimBase* nextAnim =
-            animations[EnInvadepoh_ModelInfo_GetNextAnim(faceAnimLoop->nextAnims, faceAnimLoop->nextCount)];
+            animations[EnInvadepoh_ModelInfo_GetNextFaceAnim(chainedFaceAnim->nextAnims, chainedFaceAnim->nextCount)];
 
-        EnInvadepoh_ModelInfo_SetNextAnim(faceInfo, nextAnim);
+        EnInvadepoh_ModelInfo_SetNextFaceAnim(faceInfo, nextAnim);
     }
 }
 
+/**
+ * Plays the face animation to its conclusion, then waits until the delay timer reaches 0; during this time, the eyes or
+ * mouth will remain on the last frame of the animation. Once the timer runs out, this will set the next face animation
+ * based on what the current animation says should come next.
+ */
 void EnInvadepoh_ModelInfo_UpdateFaceAnimChainedDelay(EnInvadepohFaceAnimInfo* faceInfo,
                                                       EnInvadepohFaceAnimBase** animations) {
-    EnInvadepohFaceAnimChainedDelay* faceAnimLoopDelayed = (EnInvadepohFaceAnimChainedDelay*)faceInfo->curAnim;
-    EnInvadepohFaceFrames* faceFrames = faceAnimLoopDelayed->base.frames;
+    EnInvadepohFaceAnimChainedDelay* chainedDelayFaceAnim = (EnInvadepohFaceAnimChainedDelay*)faceInfo->curAnim;
+    EnInvadepohFaceFrames* faceFrames = chainedDelayFaceAnim->base.frames;
 
     if (faceInfo->curFrame < (faceFrames->count - 1)) {
         faceInfo->curFrame++;
-        faceInfo->curIndex = faceFrames->texIndex[faceInfo->curFrame];
+        faceInfo->curTexIndex = faceFrames->texIndex[faceInfo->curFrame];
     } else if (faceInfo->delayTimer > 0) {
         faceInfo->delayTimer--;
     } else {
-        EnInvadepohFaceAnimBase* nextAnim = animations[EnInvadepoh_ModelInfo_GetNextAnim(
-            faceAnimLoopDelayed->nextAnims, faceAnimLoopDelayed->nextCount)];
+        EnInvadepohFaceAnimBase* nextAnim = animations[EnInvadepoh_ModelInfo_GetNextFaceAnim(
+            chainedDelayFaceAnim->nextAnims, chainedDelayFaceAnim->nextCount)];
 
-        EnInvadepoh_ModelInfo_SetNextAnim(faceInfo, nextAnim);
+        EnInvadepoh_ModelInfo_SetNextFaceAnim(faceInfo, nextAnim);
     }
 }
 
@@ -1502,7 +1518,7 @@ EnInvadepohFaceAnimBase* sRomaniMouthAnimations[ROMANI_MOUTH_ANIM_MAX] = {
 };
 
 typedef enum CremiaEyeAnimation {
-    /* 0 */ CREMIA_EYE_ANIM_OPEN,
+    /* 0 */ CREMIA_EYE_ANIM_OPEN, // unused
     /* 1 */ CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK,
     /* 2 */ CREMIA_EYE_ANIM_FAST_BLINK,
     /* 3 */ CREMIA_EYE_ANIM_MEDIUM_BLINK,
@@ -1584,20 +1600,20 @@ EnInvadepohFaceAnimBase* sCremiaMouthAnimations[CREMIA_MOUTH_ANIM_MAX] = {
     &sCremiaMouthNormalAnim.base, // CREMIA_MOUTH_ANIM_NORMAL
 };
 
-void EnInvadepoh_ModelInfo_UpdateAnimation(EnInvadepohFaceAnimInfo* faceInfo) {
-    static EnInvadepohFaceFunc sFaceUpdateFuncs[3] = {
+void EnInvadepoh_ModelInfo_UpdateFaceAnim(EnInvadepohFaceAnimInfo* faceInfo) {
+    static EnInvadepohFaceAnimFunc sFaceAnimUpdateFuncs[FACE_ANIMATION_TYPE_MAX] = {
         EnInvadepoh_ModelInfo_UpdateFaceAnimOnce,
         EnInvadepoh_ModelInfo_UpdateFaceAnimChained,
         EnInvadepoh_ModelInfo_UpdateFaceAnimChainedDelay,
     };
 
     if ((faceInfo->animations != NULL) && (faceInfo->curAnim != NULL)) {
-        sFaceUpdateFuncs[faceInfo->curAnimType](faceInfo, faceInfo->animations);
+        sFaceAnimUpdateFuncs[faceInfo->type](faceInfo, faceInfo->animations);
     }
 }
 
 void EnInvadepoh_ModelInfo_Init(EnInvadepohModelInfo* modelInfo, EnInvadepohFaceAnimBase** eyeAnimations,
-                                s32 curEyeAnim, EnInvadepohFaceAnimBase** mouthAnimations, s32 curMouthAnim,
+                                s32 eyeAnimIndex, EnInvadepohFaceAnimBase** mouthAnimations, s32 mouthAnimIndex,
                                 Vec3s* headRotTarget, s16 headRotMaxStep, f32 headRotStepScale,
                                 f32 torsoRotScaleTargetY, f32 torsoRotScaleStepY) {
     Math_Vec3s_Copy(&modelInfo->headRotTarget, headRotTarget);
@@ -1605,25 +1621,27 @@ void EnInvadepoh_ModelInfo_Init(EnInvadepohModelInfo* modelInfo, EnInvadepohFace
     modelInfo->headRotStepScale = headRotStepScale;
     modelInfo->torsoRotScaleTargetY = torsoRotScaleTargetY;
     modelInfo->torsoRotScaleStepY = torsoRotScaleStepY;
+
     if (eyeAnimations != NULL) {
-        EnInvadepohFaceAnimBase* faceAnim = eyeAnimations[curEyeAnim];
+        EnInvadepohFaceAnimBase* eyeAnim = eyeAnimations[eyeAnimIndex];
 
         modelInfo->eyeAnim.animations = eyeAnimations;
-        modelInfo->eyeAnim.curAnimType = faceAnim->type;
-        modelInfo->eyeAnim.curAnim = faceAnim;
+        modelInfo->eyeAnim.type = eyeAnim->type;
+        modelInfo->eyeAnim.curAnim = eyeAnim;
         modelInfo->eyeAnim.delayTimer = 0;
         modelInfo->eyeAnim.curFrame = 0;
-        modelInfo->eyeAnim.curIndex = faceAnim->frames->texIndex[0];
+        modelInfo->eyeAnim.curTexIndex = eyeAnim->frames->texIndex[0];
     }
+
     if (mouthAnimations != NULL) {
-        EnInvadepohFaceAnimBase* faceAnim = mouthAnimations[curMouthAnim];
+        EnInvadepohFaceAnimBase* mouthAnim = mouthAnimations[mouthAnimIndex];
 
         modelInfo->mouthAnim.animations = mouthAnimations;
-        modelInfo->mouthAnim.curAnimType = faceAnim->type;
-        modelInfo->mouthAnim.curAnim = faceAnim;
+        modelInfo->mouthAnim.type = mouthAnim->type;
+        modelInfo->mouthAnim.curAnim = mouthAnim;
         modelInfo->mouthAnim.delayTimer = 0;
         modelInfo->mouthAnim.curFrame = 0;
-        modelInfo->mouthAnim.curIndex = faceAnim->frames->texIndex[0];
+        modelInfo->mouthAnim.curTexIndex = mouthAnim->frames->texIndex[0];
     }
 }
 
@@ -1634,12 +1652,15 @@ void EnInvadepoh_ModelInfo_Update(EnInvadepohModelInfo* modelInfo) {
     rotStep.x = modelInfo->headRotTarget.x - modelInfo->headRot.x;
     rotStep.y = modelInfo->headRotTarget.y - modelInfo->headRot.y;
     rotStep.z = modelInfo->headRotTarget.z - modelInfo->headRot.z;
+
     Math_Vec3s_ToVec3f(&scaledRotStep, &rotStep);
     Math_Vec3f_Scale(&scaledRotStep, modelInfo->headRotStepScale);
     Math_Vec3f_ToVec3s(&rotStep, &scaledRotStep);
+
     rotStep.x = ABS(rotStep.x);
     rotStep.y = ABS(rotStep.y);
     rotStep.z = ABS(rotStep.z);
+
     rotStep.x = CLAMP_MAX(rotStep.x, modelInfo->headRotMaxStep);
     rotStep.y = CLAMP_MAX(rotStep.y, modelInfo->headRotMaxStep);
     rotStep.z = CLAMP_MAX(rotStep.z, modelInfo->headRotMaxStep);
@@ -1657,8 +1678,9 @@ void EnInvadepoh_ModelInfo_Update(EnInvadepohModelInfo* modelInfo) {
         torsoRotStep = CLAMP(torsoRotStep, 0x64, modelInfo->torsoRotMaxStep);
         Math_ScaledStepToS(&modelInfo->torsoRotX, modelInfo->torsoTargetRotX, torsoRotStep);
     }
-    EnInvadepoh_ModelInfo_UpdateAnimation(&modelInfo->eyeAnim);
-    EnInvadepoh_ModelInfo_UpdateAnimation(&modelInfo->mouthAnim);
+
+    EnInvadepoh_ModelInfo_UpdateFaceAnim(&modelInfo->eyeAnim);
+    EnInvadepoh_ModelInfo_UpdateFaceAnim(&modelInfo->mouthAnim);
 }
 
 void EnInvadepoh_Ufo_SpawnSparkles(EnInvadepoh* this, PlayState* play, s32 spawnCount) {
@@ -5186,8 +5208,8 @@ void EnInvadepoh_Romani_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, sRomaniMouthTextures[this->modelInfo.mouthAnim.curIndex]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, sRomaniEyeTextures[this->modelInfo.eyeAnim.curIndex]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sRomaniMouthTextures[this->modelInfo.mouthAnim.curTexIndex]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sRomaniEyeTextures[this->modelInfo.eyeAnim.curTexIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_Romani_OverrideLimbDraw, EnInvadepoh_Romani_PostLimbDraw, &this->actor);
 
@@ -5294,8 +5316,8 @@ void EnInvadepoh_Cremia_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->modelInfo.mouthAnim.curIndex]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->modelInfo.eyeAnim.curIndex]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->modelInfo.mouthAnim.curTexIndex]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->modelInfo.eyeAnim.curTexIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_Cremia_OverrideLimbDraw, EnInvadepoh_Cremia_PostLimbDraw, &this->actor);
 

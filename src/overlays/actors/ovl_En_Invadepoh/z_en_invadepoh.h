@@ -94,11 +94,11 @@ typedef struct EnInvadepohFaceAnimChainedDelay {
 
 typedef struct EnInvadepohFaceAnimInfo {
     /* 0x0 */ EnInvadepohFaceAnimBase** animations;
-    /* 0x4 */ s8 curAnimType;
+    /* 0x4 */ s8 type;
     /* 0x8 */ EnInvadepohFaceAnimBase* curAnim;
     /* 0xC */ s16 delayTimer;
     /* 0xE */ s8 curFrame;
-    /* 0xF */ s8 curIndex;
+    /* 0xF */ s8 curTexIndex;
 } EnInvadepohFaceAnimInfo; // size = 0x10
 
 typedef struct EnInvadepohModelInfo {
@@ -117,7 +117,7 @@ typedef struct EnInvadepohModelInfo {
     /* 0x48 */ s16 torsoRotMaxStep;
 } EnInvadepohModelInfo; // size = 0x4C
 
-typedef void (*EnInvadepohFaceFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnimBase**);
+typedef void (*EnInvadepohFaceAnimFunc) (EnInvadepohFaceAnimInfo*, EnInvadepohFaceAnimBase**);
 
 #define EN_INVADEPOH_LIMB_MAX \
     MAX(MAX(MAX(MAX(MAX((s32)COW_LIMB_MAX, \

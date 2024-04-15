@@ -14180,7 +14180,7 @@
     0x80B4EBF8:("sCremiaMouthNormalFrames","EnInvadepohFaceFrames","",0x5),
     0x80B4EC00:("sCremiaMouthNormalAnim","EnInvadepohFaceAnimOnce","",0x8),
     0x80B4EC08:("sCremiaMouthAnimations","EnInvadepohFaceAnimBase*","[1]",0x4),
-    0x80B4EC0C:("sFaceUpdateFuncs","EnInvadepohFaceFunc","[3]",0xC),
+    0x80B4EC0C:("sFaceAnimUpdateFuncs","EnInvadepohFaceFunc","[3]",0xC),
     0x80B4EC18:("sPrimColor","Color_RGBA8","",0x4),
     0x80B4EC1C:("sEnvColor","Color_RGBA8","",0x4),
     0x80B4EC20:("sEffectUpdateFuncs","EnInvadepohEffectUpdateFunc","[1]",0x4),
