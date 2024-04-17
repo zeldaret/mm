@@ -26,7 +26,7 @@
  *
  * This actor also implements a custom animation system exclusively used to control Romani and Cremia's eye and mouth
  * animations. However, the Romani and Cremia variants used by this actor always have static mouths, so this animation
- * system is solely used to manage their blinking.
+ * system is mainly used to manage their blinking.
  */
 
 #include "prevent_bss_reordering.h"
@@ -99,8 +99,8 @@ void EnInvadepoh_Cow_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_CowTail_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_CowTail_Update(Actor* thisx, PlayState* play2);
-void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AbductedRomani_WaitForObject(Actor* thisx, PlayState* play2);
+void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_SilentRomani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_SilentRomani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Ufo_Update(Actor* thisx, PlayState* play2);
@@ -122,9 +122,9 @@ void EnInvadepoh_Night3Romani_WaitForObject(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_WaitForTime(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_AlienAbductor_WaitForObject(Actor* thisx, PlayState* play2);
+void EnInvadepoh_AlienAbductor_Update(Actor* thisx, PlayState* play2);
 
 // Draw functions
-void EnInvadepoh_AlienAbductor_Update(Actor* thisx, PlayState* play2);
 void EnInvadepoh_InvasionHandler_Draw(Actor* thisx, PlayState* play);
 void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Cow_Draw(Actor* thisx, PlayState* play2);
@@ -134,7 +134,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2);
 void EnInvadepoh_Dog_Draw(Actor* thisx, PlayState* play);
 void EnInvadepoh_Cremia_Draw(Actor* thisx, PlayState* play);
 
-// Action functions
+// Action and Setup Action functions
 void EnInvadepoh_InvasionHandler_SetupWaitForInvasion(EnInvadepoh* this);
 void EnInvadepoh_InvasionHandler_WaitForInvasion(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_InvasionHandler_SetupStartIntroCutscene(EnInvadepoh* this);
@@ -223,6 +223,7 @@ void EnInvadepoh_Night3Romani_Idle(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AlienAbductor_AbductCow(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_AlienAbductor_AbductRomani(EnInvadepoh* this, PlayState* play);
 
+// Library functions
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepToXZ(f32* pValueX, f32* pValueZ, f32 targetX, f32 targetZ, f32 step);
 
