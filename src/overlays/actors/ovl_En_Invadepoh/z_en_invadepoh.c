@@ -82,9 +82,16 @@ typedef enum SilentRomaniStareState {
 } SilentRomaniStareState;
 
 typedef enum FaceAnimationType {
+    // Plays the animation, then displays the final frame of the animation indefinitely
     /* 0 */ FACE_ANIMATION_TYPE_ONCE,
+
+    // Plays the animation, then immediately transitions to another animation
     /* 1 */ FACE_ANIMATION_TYPE_CHAINED,
+
+    // Plays the animation, then displays the final frame of the animation for a random amount of time, after which it
+    // will transition to another animation
     /* 2 */ FACE_ANIMATION_TYPE_CHAINED_DELAY,
+
     /* 3 */ FACE_ANIMATION_TYPE_MAX
 } FaceAnimationType;
 
@@ -373,10 +380,15 @@ static TexturePtr sCremiaMouthTextures[CREMIA_MOUTH_MAX] = {
 
 static s8 sCremiaTexturesDesegmented = false;
 
+/**
+ * Used to determine if Romani is done giving the Milk Bottle reward. This is checked by the invasion handler instance
+ * of EnInvadepoh to transition the player to a different version of the ranch once Romani is done giving her reward.
+ */
 static s8 sRewardFinished = false;
 
 MtxF sInvadepohAlienLeftEyeBeamMtxF;
 MtxF sInvadepohAlienRightEyeBeamMtxF;
+
 EnInvadepoh* sAliens[ALIEN_COUNT];
 u8 sAlienStateFlags[ALIEN_COUNT];
 
@@ -398,12 +410,20 @@ typedef struct EnInvadepohEffect {
 } EnInvadepohEffect; // size = 0x10
 
 EnInvadepohEffect sEffects[EFFECT_COUNT];
+
 EnInvadepoh* sUfo;
 EnInvadepoh* sNight3Romani;
 EnInvadepoh* sNight3Cremia;
+
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
+
 s16 sInvadepohCsIdList[3];
+
+/**
+ * If there are any aliens within 2000 units of the barn, then this will point to the alien that is closest to the barn.
+ * Otherwise, this will be set to `NULL`.
+ */
 EnInvadepoh* sClosestAlienThreat;
 
 void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
@@ -856,16 +876,14 @@ void EnInvadepoh_Night3Romani_PathComputeProgress(EnInvadepoh* this) {
  */
 void EnInvadepoh_Alien_PathUpdate(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3s* currentPathPoint;
-    Vec3s* nextPathPoint;
+    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
+    Vec3s* nextPathPoint = currentPathPoint + 1;
     Vec3f currentPathPointPos;
     Vec3f nextPathPointPos;
     f32 tempPosY = this->actor.world.pos.y;
     f32 currentCheckpoint;
     f32 nextCheckpoint;
 
-    currentPathPoint = &this->pathPoints[this->currentPoint];
-    nextPathPoint = currentPathPoint + 1;
     currentCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
     nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->pathCheckpoints[this->currentPoint] : 1.0f;
 
@@ -979,7 +997,7 @@ void EnInvadepoh_Night1Romani_MoveAlongTimePath(EnInvadepoh* this, PlayState* pl
 s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint;
+    Vec3s* nextPathPoint = this->currentPoint + this->pathStep;
     s32 nextPoint;
     f32 nextPathPointX;
     f32 nextPathPointZ;
@@ -992,8 +1010,6 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     f32 angleToNext;
     s32 reachedNextPoint = false;
     u32 updBgCheckInfoFlags;
-
-    nextPoint = this->currentPoint + this->pathStep;
 
     // The dog is placed on a circular path where the first and last point overlap. This code ensures that the
     // `nextPoint` will never be the last point.
