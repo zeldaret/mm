@@ -1359,6 +1359,306 @@ EnInvadepoh* EnInvadepoh_Dog_GetClosestAlienThreat(void) {
     return NULL;
 }
 
+typedef enum RomaniEyeAnimation {
+    /* 0 */ ROMANI_EYE_ANIM_OPEN, // unused
+    /* 1 */ ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK,
+    /* 2 */ ROMANI_EYE_ANIM_FAST_BLINK,
+    /* 3 */ ROMANI_EYE_ANIM_MEDIUM_BLINK,
+    /* 4 */ ROMANI_EYE_ANIM_SLOW_BLINK,
+    /* 5 */ ROMANI_EYE_ANIM_DOUBLE_BLINK,
+    /* 6 */ ROMANI_EYE_ANIM_HALF,
+    /* 7 */ ROMANI_EYE_ANIM_HAPPY, // unused
+    /* 8 */ ROMANI_EYE_ANIM_MAX
+} RomaniEyeAnimation;
+
+static s8 sRomaniEyeOpenIndices[1] = { ROMANI_EYE_OPEN };
+
+static s8 sRomaniFastBlinkIndices[4] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
+
+static s8 sRomaniMediumBlinkIndices[5] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
+};
+
+static s8 sRomaniSlowBlinkIndices[6] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
+};
+
+static s8 sRomaniDoubleBlinkIndices[8] = {
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
+    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN,
+};
+
+static s8 sRomaniEyeHalfIndices[1] = { ROMANI_EYE_HALF };
+
+static s8 sRomaniEyeHappyIndices[1] = { ROMANI_EYE_HAPPY };
+
+static EnInvadepohFaceFrames sRomaniEyeOpenFrames = {
+    sRomaniEyeOpenIndices,
+    ARRAY_COUNT(sRomaniEyeOpenIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniFastBlinkFrames = {
+    sRomaniFastBlinkIndices,
+    ARRAY_COUNT(sRomaniFastBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniMediumBlinkFrames = {
+    sRomaniMediumBlinkIndices,
+    ARRAY_COUNT(sRomaniMediumBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniSlowBlinkFrames = {
+    sRomaniSlowBlinkIndices,
+    ARRAY_COUNT(sRomaniSlowBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniDoubleBlinkFrames = {
+    sRomaniDoubleBlinkIndices,
+    ARRAY_COUNT(sRomaniDoubleBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniEyeHalfFrames = {
+    sRomaniEyeHalfIndices,
+    ARRAY_COUNT(sRomaniEyeHalfIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniEyeHappyFrames = {
+    sRomaniEyeHappyIndices,
+    ARRAY_COUNT(sRomaniEyeHappyIndices),
+};
+
+static EnInvadepohFaceAnimOnce sRomaniEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames } };
+
+static EnInvadepohFaceAnimNext sRomaniRandomBlinkNext[4] = {
+    { ROMANI_EYE_ANIM_FAST_BLINK, 0.5f },
+    { ROMANI_EYE_ANIM_MEDIUM_BLINK, 0.9f },
+    { ROMANI_EYE_ANIM_SLOW_BLINK, 0.97f },
+    { ROMANI_EYE_ANIM_DOUBLE_BLINK, 1.0f },
+};
+
+static EnInvadepohFaceAnimNext sRomaniEyeOpenNext[1] = { ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
+
+static EnInvadepohFaceAnimChainedDelay sRomaniEyeOpenThenRandomBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sRomaniEyeOpenFrames },
+    ARRAY_COUNT(sRomaniRandomBlinkNext),
+    sRomaniRandomBlinkNext,
+    40,
+    60,
+};
+
+static EnInvadepohFaceAnimChained sRomaniFastBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniFastBlinkFrames },
+    ARRAY_COUNT(sRomaniEyeOpenNext),
+    sRomaniEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sRomaniMediumBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniMediumBlinkFrames },
+    ARRAY_COUNT(sRomaniEyeOpenNext),
+    sRomaniEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sRomaniSlowBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniSlowBlinkFrames },
+    ARRAY_COUNT(sRomaniEyeOpenNext),
+    sRomaniEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sRomaniDoubleBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniDoubleBlinkFrames },
+    ARRAY_COUNT(sRomaniEyeOpenNext),
+    sRomaniEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimOnce sRomaniEyeHalfAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHalfFrames } };
+
+static EnInvadepohFaceAnimOnce sRomaniEyeHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHappyFrames } };
+
+static EnInvadepohFaceAnimBase* sRomaniEyeAnimations[ROMANI_EYE_ANIM_MAX] = {
+    &sRomaniEyeOpenAnim.base,                // ROMANI_EYE_ANIM_OPEN
+    &sRomaniEyeOpenThenRandomBlinkAnim.base, // ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK
+    &sRomaniFastBlinkAnim.base,              // ROMANI_EYE_ANIM_FAST_BLINK
+    &sRomaniMediumBlinkAnim.base,            // ROMANI_EYE_ANIM_MEDIUM_BLINK
+    &sRomaniSlowBlinkAnim.base,              // ROMANI_EYE_ANIM_SLOW_BLINK
+    &sRomaniDoubleBlinkAnim.base,            // ROMANI_EYE_ANIM_DOUBLE_BLINK
+    &sRomaniEyeHalfAnim.base,                // ROMANI_EYE_ANIM_HALF
+    &sRomaniEyeHappyAnim.base,               // ROMANI_EYE_ANIM_HAPPY
+};
+
+typedef enum RomaniMouthAnimation {
+    /* 0 */ ROMANI_MOUTH_ANIM_HAPPY, // unused
+    /* 1 */ ROMANI_MOUTH_ANIM_FROWN,
+    /* 2 */ ROMANI_MOUTH_ANIM_HANGING_OPEN,
+    /* 3 */ ROMANI_MOUTH_ANIM_SMILE,
+    /* 4 */ ROMANI_MOUTH_ANIM_MAX
+} RomaniMouthAnimation;
+
+static s8 sRomaniMouthHappyIndices[1] = { ROMANI_MOUTH_HAPPY };
+
+static s8 sRomaniMouthFrownIndices[1] = { ROMANI_MOUTH_FROWN };
+
+static s8 sRomaniMouthHangingOpenIndices[1] = { ROMANI_MOUTH_HANGING_OPEN };
+
+static s8 sRomaniMouthSmileIndices[1] = { ROMANI_MOUTH_SMILE };
+
+static EnInvadepohFaceFrames sRomaniMouthHappyFrames = {
+    sRomaniMouthHappyIndices,
+    ARRAY_COUNT(sRomaniMouthHappyIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniMouthFrownFrames = {
+    sRomaniMouthFrownIndices,
+    ARRAY_COUNT(sRomaniMouthFrownIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniMouthHangingOpenFrames = {
+    sRomaniMouthHangingOpenIndices,
+    ARRAY_COUNT(sRomaniMouthHangingOpenIndices),
+};
+
+static EnInvadepohFaceFrames sRomaniMouthSmileFrames = {
+    sRomaniMouthSmileIndices,
+    ARRAY_COUNT(sRomaniMouthSmileIndices),
+};
+
+static EnInvadepohFaceAnimOnce sRomaniMouthHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHappyFrames } };
+
+static EnInvadepohFaceAnimOnce sRomaniMouthFrownAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthFrownFrames } };
+
+static EnInvadepohFaceAnimOnce sRomaniMouthHangingOpenAnim = { { FACE_ANIMATION_TYPE_ONCE,
+                                                                 &sRomaniMouthHangingOpenFrames } };
+
+static EnInvadepohFaceAnimOnce sRomaniMouthSmileAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthSmileFrames } };
+
+static EnInvadepohFaceAnimBase* sRomaniMouthAnimations[ROMANI_MOUTH_ANIM_MAX] = {
+    &sRomaniMouthHappyAnim.base,       // ROMANI_MOUTH_ANIM_HAPPY
+    &sRomaniMouthFrownAnim.base,       // ROMANI_MOUTH_ANIM_FROWN
+    &sRomaniMouthHangingOpenAnim.base, // ROMANI_MOUTH_ANIM_HANGING_OPEN
+    &sRomaniMouthSmileAnim.base,       // ROMANI_MOUTH_ANIM_SMILE
+};
+
+typedef enum CremiaEyeAnimation {
+    /* 0 */ CREMIA_EYE_ANIM_OPEN, // unused
+    /* 1 */ CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK,
+    /* 2 */ CREMIA_EYE_ANIM_FAST_BLINK,
+    /* 3 */ CREMIA_EYE_ANIM_MEDIUM_BLINK,
+    /* 4 */ CREMIA_EYE_ANIM_SLOW_BLINK,
+    /* 5 */ CREMIA_EYE_ANIM_DOUBLE_BLINK,
+    /* 6 */ CREMIA_EYE_ANIM_MAX
+} CremiaEyeAnimation;
+
+static s8 sCremiaEyeOpenIndices[1] = { CREMIA_EYE_OPEN };
+
+static s8 sCremiaFastBlinkIndices[4] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
+
+static s8 sCremiaMediumBlinkIndices[5] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
+};
+
+static s8 sCremiaSlowBlinkIndices[6] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
+};
+
+static s8 sCremiaDoubleBlinkIndices[8] = {
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
+    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN,
+};
+
+static EnInvadepohFaceFrames sCremiaEyeOpenFrames = {
+    sCremiaEyeOpenIndices,
+    ARRAY_COUNT(sCremiaEyeOpenIndices),
+};
+
+static EnInvadepohFaceFrames sCremiaFastBlinkFrames = {
+    sCremiaFastBlinkIndices,
+    ARRAY_COUNT(sCremiaFastBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sCremiaMediumBlinkFrames = {
+    sCremiaMediumBlinkIndices,
+    ARRAY_COUNT(sCremiaMediumBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sCremiaSlowBlinkFrames = {
+    sCremiaSlowBlinkIndices,
+    ARRAY_COUNT(sCremiaSlowBlinkIndices),
+};
+
+static EnInvadepohFaceFrames sCremiaDoubleBlinkFrames = {
+    sCremiaDoubleBlinkIndices,
+    ARRAY_COUNT(sCremiaDoubleBlinkIndices),
+};
+
+static EnInvadepohFaceAnimOnce sCremiaEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames } };
+
+static EnInvadepohFaceAnimNext sCremiaRandomBlinkNext[4] = {
+    { CREMIA_EYE_ANIM_FAST_BLINK, 0.5f },
+    { CREMIA_EYE_ANIM_MEDIUM_BLINK, 0.9f },
+    { CREMIA_EYE_ANIM_SLOW_BLINK, 0.95f },
+    { CREMIA_EYE_ANIM_DOUBLE_BLINK, 1.0f },
+};
+
+static EnInvadepohFaceAnimNext sCremiaEyeOpenNext[1] = { CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
+
+static EnInvadepohFaceAnimChainedDelay sCremiaEyeOpenThenRandomBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sCremiaEyeOpenFrames },
+    ARRAY_COUNT(sCremiaRandomBlinkNext),
+    sCremiaRandomBlinkNext,
+    40,
+    60,
+};
+
+static EnInvadepohFaceAnimChained sCremiaFastBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaFastBlinkFrames },
+    ARRAY_COUNT(sCremiaEyeOpenNext),
+    sCremiaEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sCremiaMediumBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaMediumBlinkFrames },
+    ARRAY_COUNT(sCremiaEyeOpenNext),
+    sCremiaEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sCremiaSlowBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaSlowBlinkFrames },
+    ARRAY_COUNT(sCremiaEyeOpenNext),
+    sCremiaEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimChained sCremiaDoubleBlinkAnim = {
+    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaDoubleBlinkFrames },
+    ARRAY_COUNT(sCremiaEyeOpenNext),
+    sCremiaEyeOpenNext,
+};
+
+static EnInvadepohFaceAnimBase* sCremiaEyeAnimations[CREMIA_EYE_ANIM_MAX] = {
+    &sCremiaEyeOpenAnim.base,                // CREMIA_EYE_ANIM_OPEN
+    &sCremiaEyeOpenThenRandomBlinkAnim.base, // CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK
+    &sCremiaFastBlinkAnim.base,              // CREMIA_EYE_ANIM_FAST_BLINK
+    &sCremiaMediumBlinkAnim.base,            // CREMIA_EYE_ANIM_MEDIUM_BLINK
+    &sCremiaSlowBlinkAnim.base,              // CREMIA_EYE_ANIM_SLOW_BLINK
+    &sCremiaDoubleBlinkAnim.base,            // CREMIA_EYE_ANIM_DOUBLE_BLINK
+};
+
+typedef enum CremiaMouthAnimation {
+    /* 0 */ CREMIA_MOUTH_ANIM_NORMAL,
+    /* 1 */ CREMIA_MOUTH_ANIM_MAX
+} CremiaMouthAnimation;
+
+static s8 sCremiaMouthNormalIndices[1] = { CREMIA_MOUTH_NORMAL };
+
+static EnInvadepohFaceFrames sCremiaMouthNormalFrames = {
+    sCremiaMouthNormalIndices,
+    ARRAY_COUNT(sCremiaMouthNormalIndices),
+};
+
+static EnInvadepohFaceAnimOnce sCremiaMouthNormalAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaMouthNormalFrames } };
+
+static EnInvadepohFaceAnimBase* sCremiaMouthAnimations[CREMIA_MOUTH_ANIM_MAX] = {
+    &sCremiaMouthNormalAnim.base, // CREMIA_MOUTH_ANIM_NORMAL
+};
+
 s8 EnInvadepoh_ModelInfo_GetNextFaceAnim(EnInvadepohFaceAnimNext* nextAnims, s32 nextAnimCount) {
     f32 rand = Rand_ZeroOne();
     EnInvadepohFaceAnimNext* nextAnim = nextAnims;
@@ -1445,198 +1745,6 @@ void EnInvadepoh_ModelInfo_UpdateFaceAnimChainedDelay(EnInvadepohFaceAnimInfo* f
         EnInvadepoh_ModelInfo_SetNextFaceAnim(faceInfo, nextAnim);
     }
 }
-
-typedef enum RomaniEyeAnimation {
-    /* 0 */ ROMANI_EYE_ANIM_OPEN, // unused
-    /* 1 */ ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK,
-    /* 2 */ ROMANI_EYE_ANIM_FAST_BLINK,
-    /* 3 */ ROMANI_EYE_ANIM_MEDIUM_BLINK,
-    /* 4 */ ROMANI_EYE_ANIM_SLOW_BLINK,
-    /* 5 */ ROMANI_EYE_ANIM_DOUBLE_BLINK,
-    /* 6 */ ROMANI_EYE_ANIM_HALF,
-    /* 7 */ ROMANI_EYE_ANIM_HAPPY, // unused
-    /* 8 */ ROMANI_EYE_ANIM_MAX
-} RomaniEyeAnimation;
-
-s8 sRomaniEyeOpenIndices[1] = { ROMANI_EYE_OPEN };
-s8 sRomaniFastBlinkIndices[4] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
-s8 sRomaniMediumBlinkIndices[5] = {
-    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
-};
-s8 sRomaniSlowBlinkIndices[6] = {
-    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
-};
-s8 sRomaniDoubleBlinkIndices[8] = {
-    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
-    ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN,
-};
-s8 sRomaniEyeHalfIndices[1] = { ROMANI_EYE_HALF };
-s8 sRomaniEyeHappyIndices[1] = { ROMANI_EYE_HAPPY };
-EnInvadepohFaceFrames sRomaniEyeOpenFrames = { sRomaniEyeOpenIndices, ARRAY_COUNT(sRomaniEyeOpenIndices) };
-EnInvadepohFaceFrames sRomaniFastBlinkFrames = { sRomaniFastBlinkIndices, ARRAY_COUNT(sRomaniFastBlinkIndices) };
-EnInvadepohFaceFrames sRomaniMediumBlinkFrames = { sRomaniMediumBlinkIndices, ARRAY_COUNT(sRomaniMediumBlinkIndices) };
-EnInvadepohFaceFrames sRomaniSlowBlinkFrames = { sRomaniSlowBlinkIndices, ARRAY_COUNT(sRomaniSlowBlinkIndices) };
-EnInvadepohFaceFrames sRomaniDoubleBlinkFrames = { sRomaniDoubleBlinkIndices, ARRAY_COUNT(sRomaniDoubleBlinkIndices) };
-EnInvadepohFaceFrames sRomaniEyeHalfFrames = { sRomaniEyeHalfIndices, ARRAY_COUNT(sRomaniEyeHalfIndices) };
-EnInvadepohFaceFrames sRomaniEyeHappyFrames = { sRomaniEyeHappyIndices, ARRAY_COUNT(sRomaniEyeHappyIndices) };
-EnInvadepohFaceAnimOnce sRomaniEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames } };
-EnInvadepohFaceAnimNext sRomaniRandomBlinkNext[4] = {
-    { ROMANI_EYE_ANIM_FAST_BLINK, 0.5f },
-    { ROMANI_EYE_ANIM_MEDIUM_BLINK, 0.9f },
-    { ROMANI_EYE_ANIM_SLOW_BLINK, 0.97f },
-    { ROMANI_EYE_ANIM_DOUBLE_BLINK, 1.0f },
-};
-EnInvadepohFaceAnimNext sRomaniEyeOpenNext[1] = { ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
-EnInvadepohFaceAnimChainedDelay sRomaniEyeOpenThenRandomBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sRomaniEyeOpenFrames },
-    ARRAY_COUNT(sRomaniRandomBlinkNext),
-    sRomaniRandomBlinkNext,
-    40,
-    60,
-};
-EnInvadepohFaceAnimChained sRomaniFastBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniFastBlinkFrames },
-    ARRAY_COUNT(sRomaniEyeOpenNext),
-    sRomaniEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sRomaniMediumBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniMediumBlinkFrames },
-    ARRAY_COUNT(sRomaniEyeOpenNext),
-    sRomaniEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sRomaniSlowBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniSlowBlinkFrames },
-    ARRAY_COUNT(sRomaniEyeOpenNext),
-    sRomaniEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sRomaniDoubleBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sRomaniDoubleBlinkFrames },
-    ARRAY_COUNT(sRomaniEyeOpenNext),
-    sRomaniEyeOpenNext,
-};
-EnInvadepohFaceAnimOnce sRomaniEyeHalfAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHalfFrames } };
-EnInvadepohFaceAnimOnce sRomaniEyeHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHappyFrames } };
-EnInvadepohFaceAnimBase* sRomaniEyeAnimations[ROMANI_EYE_ANIM_MAX] = {
-    &sRomaniEyeOpenAnim.base,                // ROMANI_EYE_ANIM_OPEN
-    &sRomaniEyeOpenThenRandomBlinkAnim.base, // ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK
-    &sRomaniFastBlinkAnim.base,              // ROMANI_EYE_ANIM_FAST_BLINK
-    &sRomaniMediumBlinkAnim.base,            // ROMANI_EYE_ANIM_MEDIUM_BLINK
-    &sRomaniSlowBlinkAnim.base,              // ROMANI_EYE_ANIM_SLOW_BLINK
-    &sRomaniDoubleBlinkAnim.base,            // ROMANI_EYE_ANIM_DOUBLE_BLINK
-    &sRomaniEyeHalfAnim.base,                // ROMANI_EYE_ANIM_HALF
-    &sRomaniEyeHappyAnim.base,               // ROMANI_EYE_ANIM_HAPPY
-};
-
-typedef enum RomaniMouthAnimation {
-    /* 0 */ ROMANI_MOUTH_ANIM_HAPPY, // unused
-    /* 1 */ ROMANI_MOUTH_ANIM_FROWN,
-    /* 2 */ ROMANI_MOUTH_ANIM_HANGING_OPEN,
-    /* 3 */ ROMANI_MOUTH_ANIM_SMILE,
-    /* 4 */ ROMANI_MOUTH_ANIM_MAX
-} RomaniMouthAnimation;
-
-s8 sRomaniMouthHappyIndices[1] = { ROMANI_MOUTH_HAPPY };
-s8 sRomaniMouthFrownIndices[1] = { ROMANI_MOUTH_FROWN };
-s8 sRomaniMouthHangingOpenIndices[1] = { ROMANI_MOUTH_HANGING_OPEN };
-s8 sRomaniMouthSmileIndices[1] = { ROMANI_MOUTH_SMILE };
-EnInvadepohFaceFrames sRomaniMouthHappyFrames = { sRomaniMouthHappyIndices, ARRAY_COUNT(sRomaniMouthHappyIndices) };
-EnInvadepohFaceFrames sRomaniMouthFrownFrames = { sRomaniMouthFrownIndices, ARRAY_COUNT(sRomaniMouthFrownIndices) };
-EnInvadepohFaceFrames sRomaniMouthHangingOpenFrames = { sRomaniMouthHangingOpenIndices,
-                                                        ARRAY_COUNT(sRomaniMouthHangingOpenIndices) };
-EnInvadepohFaceFrames sRomaniMouthSmileFrames = { sRomaniMouthSmileIndices, ARRAY_COUNT(sRomaniMouthSmileIndices) };
-EnInvadepohFaceAnimOnce sRomaniMouthHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHappyFrames } };
-EnInvadepohFaceAnimOnce sRomaniMouthFrownAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthFrownFrames } };
-EnInvadepohFaceAnimOnce sRomaniMouthHangingOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHangingOpenFrames } };
-EnInvadepohFaceAnimOnce sRomaniMouthSmileAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthSmileFrames } };
-EnInvadepohFaceAnimBase* sRomaniMouthAnimations[ROMANI_MOUTH_ANIM_MAX] = {
-    &sRomaniMouthHappyAnim.base,       // ROMANI_MOUTH_ANIM_HAPPY
-    &sRomaniMouthFrownAnim.base,       // ROMANI_MOUTH_ANIM_FROWN
-    &sRomaniMouthHangingOpenAnim.base, // ROMANI_MOUTH_ANIM_HANGING_OPEN
-    &sRomaniMouthSmileAnim.base,       // ROMANI_MOUTH_ANIM_SMILE
-};
-
-typedef enum CremiaEyeAnimation {
-    /* 0 */ CREMIA_EYE_ANIM_OPEN, // unused
-    /* 1 */ CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK,
-    /* 2 */ CREMIA_EYE_ANIM_FAST_BLINK,
-    /* 3 */ CREMIA_EYE_ANIM_MEDIUM_BLINK,
-    /* 4 */ CREMIA_EYE_ANIM_SLOW_BLINK,
-    /* 5 */ CREMIA_EYE_ANIM_DOUBLE_BLINK,
-    /* 6 */ CREMIA_EYE_ANIM_MAX
-} CremiaEyeAnimation;
-
-s8 sCremiaEyeOpenIndices[1] = { CREMIA_EYE_OPEN };
-s8 sCremiaFastBlinkIndices[4] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
-s8 sCremiaMediumBlinkIndices[5] = {
-    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
-};
-s8 sCremiaSlowBlinkIndices[6] = {
-    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
-};
-s8 sCremiaDoubleBlinkIndices[8] = {
-    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
-    CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN,
-};
-EnInvadepohFaceFrames sCremiaEyeOpenFrames = { sCremiaEyeOpenIndices, ARRAY_COUNT(sCremiaEyeOpenIndices) };
-EnInvadepohFaceFrames sCremiaFastBlinkFrames = { sCremiaFastBlinkIndices, ARRAY_COUNT(sCremiaFastBlinkIndices) };
-EnInvadepohFaceFrames sCremiaMediumBlinkFrames = { sCremiaMediumBlinkIndices, ARRAY_COUNT(sCremiaMediumBlinkIndices) };
-EnInvadepohFaceFrames sCremiaSlowBlinkFrames = { sCremiaSlowBlinkIndices, ARRAY_COUNT(sCremiaSlowBlinkIndices) };
-EnInvadepohFaceFrames sCremiaDoubleBlinkFrames = { sCremiaDoubleBlinkIndices, ARRAY_COUNT(sCremiaDoubleBlinkIndices) };
-EnInvadepohFaceAnimOnce sCremiaEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames } };
-EnInvadepohFaceAnimNext sCremiaRandomBlinkNext[4] = {
-    { CREMIA_EYE_ANIM_FAST_BLINK, 0.5f },
-    { CREMIA_EYE_ANIM_MEDIUM_BLINK, 0.9f },
-    { CREMIA_EYE_ANIM_SLOW_BLINK, 0.95f },
-    { CREMIA_EYE_ANIM_DOUBLE_BLINK, 1.0f },
-};
-EnInvadepohFaceAnimNext sCremiaEyeOpenNext[1] = { CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
-EnInvadepohFaceAnimChainedDelay sCremiaEyeOpenThenRandomBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sCremiaEyeOpenFrames },
-    ARRAY_COUNT(sCremiaRandomBlinkNext),
-    sCremiaRandomBlinkNext,
-    40,
-    60,
-};
-EnInvadepohFaceAnimChained sCremiaFastBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaFastBlinkFrames },
-    ARRAY_COUNT(sCremiaEyeOpenNext),
-    sCremiaEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sCremiaMediumBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaMediumBlinkFrames },
-    ARRAY_COUNT(sCremiaEyeOpenNext),
-    sCremiaEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sCremiaSlowBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaSlowBlinkFrames },
-    ARRAY_COUNT(sCremiaEyeOpenNext),
-    sCremiaEyeOpenNext,
-};
-EnInvadepohFaceAnimChained sCremiaDoubleBlinkAnim = {
-    { FACE_ANIMATION_TYPE_CHAINED, &sCremiaDoubleBlinkFrames },
-    ARRAY_COUNT(sCremiaEyeOpenNext),
-    sCremiaEyeOpenNext,
-};
-EnInvadepohFaceAnimBase* sCremiaEyeAnimations[CREMIA_EYE_ANIM_MAX] = {
-    &sCremiaEyeOpenAnim.base,                // CREMIA_EYE_ANIM_OPEN
-    &sCremiaEyeOpenThenRandomBlinkAnim.base, // CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK
-    &sCremiaFastBlinkAnim.base,              // CREMIA_EYE_ANIM_FAST_BLINK
-    &sCremiaMediumBlinkAnim.base,            // CREMIA_EYE_ANIM_MEDIUM_BLINK
-    &sCremiaSlowBlinkAnim.base,              // CREMIA_EYE_ANIM_SLOW_BLINK
-    &sCremiaDoubleBlinkAnim.base,            // CREMIA_EYE_ANIM_DOUBLE_BLINK
-};
-
-typedef enum CremiaMouthAnimation {
-    /* 0 */ CREMIA_MOUTH_ANIM_NORMAL,
-    /* 1 */ CREMIA_MOUTH_ANIM_MAX
-} CremiaMouthAnimation;
-
-s8 sCremiaMouthNormalIndices[1] = { CREMIA_MOUTH_NORMAL };
-EnInvadepohFaceFrames sCremiaMouthNormalFrames = { sCremiaMouthNormalIndices, ARRAY_COUNT(sCremiaMouthNormalIndices) };
-EnInvadepohFaceAnimOnce sCremiaMouthNormalAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaMouthNormalFrames } };
-EnInvadepohFaceAnimBase* sCremiaMouthAnimations[CREMIA_MOUTH_ANIM_MAX] = {
-    &sCremiaMouthNormalAnim.base, // CREMIA_MOUTH_ANIM_NORMAL
-};
 
 void EnInvadepoh_ModelInfo_UpdateFaceAnim(EnInvadepohFaceAnimInfo* faceInfo) {
     static EnInvadepohFaceAnimFunc sFaceAnimUpdateFuncs[FACE_ANIMATION_TYPE_MAX] = {
