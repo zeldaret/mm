@@ -876,14 +876,16 @@ void EnInvadepoh_Night3Romani_PathComputeProgress(EnInvadepoh* this) {
  */
 void EnInvadepoh_Alien_PathUpdate(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint = currentPathPoint + 1;
+    Vec3s* currentPathPoint;
+    Vec3s* nextPathPoint;
     Vec3f currentPathPointPos;
     Vec3f nextPathPointPos;
     f32 tempPosY = this->actor.world.pos.y;
     f32 currentCheckpoint;
     f32 nextCheckpoint;
 
+    currentPathPoint = &this->pathPoints[this->currentPoint];
+    nextPathPoint = currentPathPoint + 1;
     currentCheckpoint = (this->currentPoint <= 0) ? 0.0f : this->pathCheckpoints[this->currentPoint - 1];
     nextCheckpoint = (this->currentPoint < (this->endPoint - 1)) ? this->pathCheckpoints[this->currentPoint] : 1.0f;
 
@@ -997,7 +999,7 @@ void EnInvadepoh_Night1Romani_MoveAlongTimePath(EnInvadepoh* this, PlayState* pl
 s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     s32 pad;
     Vec3s* currentPathPoint = &this->pathPoints[this->currentPoint];
-    Vec3s* nextPathPoint = this->currentPoint + this->pathStep;
+    Vec3s* nextPathPoint;
     s32 nextPoint;
     f32 nextPathPointX;
     f32 nextPathPointZ;
@@ -1010,6 +1012,8 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     f32 angleToNext;
     s32 reachedNextPoint = false;
     u32 updBgCheckInfoFlags;
+
+    nextPoint = this->currentPoint + this->pathStep;
 
     // The dog is placed on a circular path where the first and last point overlap. This code ensures that the
     // `nextPoint` will never be the last point.
