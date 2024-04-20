@@ -368,7 +368,180 @@ static s16 sShotPrimColors[4][3] = {
     { 255, 255, 255 }, // white
 };
 
-#include "z_boss_07_dmgtbl.inc"
+static DamageTable sMajorasMaskDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Horse trample  */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Explosives     */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_F),
+    /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Goron punch    */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Sword          */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Goron pound    */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Fire arrow     */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_2),
+    /* Ice arrow      */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_3),
+    /* Light arrow    */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_4),
+    /* Goron spikes   */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Deku spin      */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Deku bubble    */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Zora barrier   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Normal shield  */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Light ray      */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Thrown object  */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Zora punch     */ DMG_ENTRY(1, MAJORAS_MASK_DMGEFF_F),
+    /* Spin attack    */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_F),
+    /* Sword beam     */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_9),
+    /* Normal Roll    */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_MASK_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(2, MAJORAS_MASK_DMGEFF_F),
+};
+
+static DamageTable sMajorasIncarnationDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Horse trample  */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Explosives     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_C),
+    /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Goron punch    */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_E),
+    /* Sword          */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_E),
+    /* Goron pound    */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Fire arrow     */ DMG_ENTRY(2, MAJORAS_INCARNATION_DMGEFF_2),
+    /* Ice arrow      */ DMG_ENTRY(2, MAJORAS_INCARNATION_DMGEFF_3),
+    /* Light arrow    */ DMG_ENTRY(2, MAJORAS_INCARNATION_DMGEFF_4),
+    /* Goron spikes   */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Deku spin      */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Deku bubble    */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Zora barrier   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_A),
+    /* Normal shield  */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Light ray      */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Thrown object  */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Zora punch     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_F),
+    /* Spin attack    */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_D),
+    /* Sword beam     */ DMG_ENTRY(2, MAJORAS_INCARNATION_DMGEFF_9),
+    /* Normal Roll    */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(4, MAJORAS_INCARNATION_DMGEFF_C),
+};
+
+static DamageTable sMajorasWrathDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Horse trample  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Explosives     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_C),
+    /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Goron punch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Sword          */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Goron pound    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
+    /* Fire arrow     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_2),
+    /* Ice arrow      */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_3),
+    /* Light arrow    */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_4),
+    /* Goron spikes   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Deku spin      */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Deku bubble    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Zora barrier   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_A),
+    /* Normal shield  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Light ray      */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Thrown object  */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
+    /* Zora punch     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
+    /* Spin attack    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_D),
+    /* Sword beam     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_9),
+    /* Normal Roll    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_C),
+};
+
+static DamageTable sRemainsDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Deku Stick     */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Horse trample  */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Explosives     */ DMG_ENTRY(2, REMAINS_DMGEFF_E),
+    /* Zora boomerang */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Goron punch    */ DMG_ENTRY(1, REMAINS_DMGEFF_E),
+    /* Sword          */ DMG_ENTRY(1, REMAINS_DMGEFF_E),
+    /* Goron pound    */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Fire arrow     */ DMG_ENTRY(2, REMAINS_DMGEFF_2),
+    /* Ice arrow      */ DMG_ENTRY(2, REMAINS_DMGEFF_3),
+    /* Light arrow    */ DMG_ENTRY(2, REMAINS_DMGEFF_4),
+    /* Goron spikes   */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Deku spin      */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Deku bubble    */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Zora barrier   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Normal shield  */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Light ray      */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Thrown object  */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Zora punch     */ DMG_ENTRY(1, REMAINS_DMGEFF_F),
+    /* Spin attack    */ DMG_ENTRY(1, REMAINS_DMGEFF_D),
+    /* Sword beam     */ DMG_ENTRY(2, REMAINS_DMGEFF_9),
+    /* Normal Roll    */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, REMAINS_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(2, REMAINS_DMGEFF_E),
+};
+
+static DamageTable sTopDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Deku Stick     */ DMG_ENTRY(1, TOP_DMGEFF_D),
+    /* Horse trample  */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Explosives     */ DMG_ENTRY(1, TOP_DMGEFF_B),
+    /* Zora boomerang */ DMG_ENTRY(1, TOP_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(1, TOP_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Goron punch    */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Sword          */ DMG_ENTRY(1, TOP_DMGEFF_D),
+    /* Goron pound    */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Fire arrow     */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Ice arrow      */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Light arrow    */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Goron spikes   */ DMG_ENTRY(1, TOP_DMGEFF_C),
+    /* Deku spin      */ DMG_ENTRY(1, TOP_DMGEFF_F),
+    /* Deku bubble    */ DMG_ENTRY(1, TOP_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(1, TOP_DMGEFF_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Zora barrier   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Normal shield  */ DMG_ENTRY(1, TOP_DMGEFF_D),
+    /* Light ray      */ DMG_ENTRY(1, TOP_DMGEFF_D),
+    /* Thrown object  */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Zora punch     */ DMG_ENTRY(1, TOP_DMGEFF_E),
+    /* Spin attack    */ DMG_ENTRY(1, TOP_DMGEFF_A),
+    /* Sword beam     */ DMG_ENTRY(1, TOP_DMGEFF_A),
+    /* Normal Roll    */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, TOP_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(2, TOP_DMGEFF_B),
+};
 
 ActorInit Boss_07_InitVars = {
     /**/ ACTOR_BOSS_07,
@@ -694,7 +867,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             Boss07_Remains_SetupIntro(this, play);
         }
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        this->actor.colChkInfo.damageTable = &sRemainsDmgTable;
+        this->actor.colChkInfo.damageTable = &sRemainsDamageTable;
         return;
     }
 
@@ -704,7 +877,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.update = Boss07_Top_Update;
         this->actor.draw = Boss07_Top_Draw;
         Boss07_Top_SetupThrown(this, play);
-        this->actor.colChkInfo.damageTable = &sTopDmgTable;
+        this->actor.colChkInfo.damageTable = &sTopDamageTable;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 9.0f + KREG(55));
         this->actor.shape.shadowAlpha = 180;
         Collider_InitAndSetCylinder(play, &this->spawnCollider, &this->actor, &sTopCylInit);
@@ -725,7 +898,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     }
 
     if ((MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_MASK) || (this->actor.params == MAJORA_TYPE_MASK_CS)) {
-        this->actor.colChkInfo.damageTable = &sMaskDmgTable;
+        this->actor.colChkInfo.damageTable = &sMajorasMaskDamageTable;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
         SkelAnime_Init(play, &this->skelAnime, &gMajorasMaskSkel, &gMajorasMaskFloatingAnim, this->jointTable,
                        this->morphTable, MAJORAS_MASK_LIMB_MAX);
@@ -779,7 +952,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             this->actor.draw = Boss07_Afterimage_Draw;
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         } else {
-            this->actor.colChkInfo.damageTable = &sIncarnationDmgTable;
+            this->actor.colChkInfo.damageTable = &sMajorasIncarnationDamageTable;
             this->actor.colChkInfo.health = 30;
             this->actor.update = Boss07_Incarnation_Update;
             this->actor.draw = Boss07_Incarnation_Draw;
@@ -807,7 +980,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
 
     sMajorasWrath = this;
     this->actor.colChkInfo.health = 40;
-    this->actor.colChkInfo.damageTable = &sWrathDmgTable;
+    this->actor.colChkInfo.damageTable = &sMajorasWrathDamageTable;
     Actor_SetScale(&this->actor, 0.01f);
     this->subCamId = this->actor.shape.rot.z;
 
