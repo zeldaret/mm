@@ -1186,7 +1186,7 @@ void EnInvadepoh_InvasionHandler_SetInitialInvasionState(EnInvadepoh* this, Play
                     firstSpawn = MIN(spawnTime, firstSpawn);
                 }
 
-                if (currentTime < (firstSpawn + 3601)) { // 79 in-game minutes
+                if (currentTime < (firstSpawn + (80 * CLOCK_TIME_MINUTE) + 1)) {
                     // The alien with the earliest spawn time hasn't reached the barn, so the invasion is ongoing.
                     sInvasionState = INVASION_STATE_ACTIVE;
                 }
@@ -1287,7 +1287,7 @@ void EnInvadepoh_InvasionHandler_SetCutscenes(EnInvadepoh* this) {
     }
 }
 
-s32 EnInvadepoh_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
+s32 EnInvadepoh_LensFlareCheck(PlayState* play, Vec3f* pos) {
     Vec3f projectedPos;
     f32 invW;
 
@@ -1296,7 +1296,7 @@ s32 EnInvadepoh_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
     if ((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f) && (fabsf(projectedPos.y * invW) < 1.0f)) {
         f32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
         f32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
-        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 wZ = (s32)(projectedPos.z * invW * ((G_MAXZ / 2) * 32)) + ((G_MAXZ / 2) * 32);
 
         if (wZ < SysCfb_GetZBufferInt(screenPosX, screenPosY)) {
             return true;
@@ -1427,7 +1427,9 @@ static EnInvadepohFaceFrames sRomaniEyeHappyFrames = {
     ARRAY_COUNT(sRomaniEyeHappyIndices),
 };
 
-static EnInvadepohFaceAnimOnce sRomaniEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames } };
+static EnInvadepohFaceAnimOnce sRomaniEyeOpenAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames },
+};
 
 static EnInvadepohFaceAnimNext sRomaniRandomBlinkNext[4] = {
     { ROMANI_EYE_ANIM_FAST_BLINK, 0.5f },
@@ -1470,9 +1472,13 @@ static EnInvadepohFaceAnimChained sRomaniDoubleBlinkAnim = {
     sRomaniEyeOpenNext,
 };
 
-static EnInvadepohFaceAnimOnce sRomaniEyeHalfAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHalfFrames } };
+static EnInvadepohFaceAnimOnce sRomaniEyeHalfAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHalfFrames },
+};
 
-static EnInvadepohFaceAnimOnce sRomaniEyeHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHappyFrames } };
+static EnInvadepohFaceAnimOnce sRomaniEyeHappyAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeHappyFrames },
+};
 
 static EnInvadepohFaceAnimBase* sRomaniEyeAnimations[ROMANI_EYE_ANIM_MAX] = {
     &sRomaniEyeOpenAnim.base,                // ROMANI_EYE_ANIM_OPEN
@@ -1521,14 +1527,21 @@ static EnInvadepohFaceFrames sRomaniMouthSmileFrames = {
     ARRAY_COUNT(sRomaniMouthSmileIndices),
 };
 
-static EnInvadepohFaceAnimOnce sRomaniMouthHappyAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHappyFrames } };
+static EnInvadepohFaceAnimOnce sRomaniMouthHappyAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHappyFrames },
+};
 
-static EnInvadepohFaceAnimOnce sRomaniMouthFrownAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthFrownFrames } };
+static EnInvadepohFaceAnimOnce sRomaniMouthFrownAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthFrownFrames },
+};
 
-static EnInvadepohFaceAnimOnce sRomaniMouthHangingOpenAnim = { { FACE_ANIMATION_TYPE_ONCE,
-                                                                 &sRomaniMouthHangingOpenFrames } };
+static EnInvadepohFaceAnimOnce sRomaniMouthHangingOpenAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthHangingOpenFrames },
+};
 
-static EnInvadepohFaceAnimOnce sRomaniMouthSmileAnim = { { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthSmileFrames } };
+static EnInvadepohFaceAnimOnce sRomaniMouthSmileAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sRomaniMouthSmileFrames },
+};
 
 static EnInvadepohFaceAnimBase* sRomaniMouthAnimations[ROMANI_MOUTH_ANIM_MAX] = {
     &sRomaniMouthHappyAnim.base,       // ROMANI_MOUTH_ANIM_HAPPY
@@ -1589,7 +1602,9 @@ static EnInvadepohFaceFrames sCremiaDoubleBlinkFrames = {
     ARRAY_COUNT(sCremiaDoubleBlinkIndices),
 };
 
-static EnInvadepohFaceAnimOnce sCremiaEyeOpenAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames } };
+static EnInvadepohFaceAnimOnce sCremiaEyeOpenAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames },
+};
 
 static EnInvadepohFaceAnimNext sCremiaRandomBlinkNext[4] = {
     { CREMIA_EYE_ANIM_FAST_BLINK, 0.5f },
@@ -1653,7 +1668,9 @@ static EnInvadepohFaceFrames sCremiaMouthNormalFrames = {
     ARRAY_COUNT(sCremiaMouthNormalIndices),
 };
 
-static EnInvadepohFaceAnimOnce sCremiaMouthNormalAnim = { { FACE_ANIMATION_TYPE_ONCE, &sCremiaMouthNormalFrames } };
+static EnInvadepohFaceAnimOnce sCremiaMouthNormalAnim = {
+    { FACE_ANIMATION_TYPE_ONCE, &sCremiaMouthNormalFrames },
+};
 
 static EnInvadepohFaceAnimBase* sCremiaMouthAnimations[CREMIA_MOUTH_ANIM_MAX] = {
     &sCremiaMouthNormalAnim.base, // CREMIA_MOUTH_ANIM_NORMAL
@@ -2771,7 +2788,7 @@ void EnInvadepoh_Alien_WaitForObject(Actor* thisx, PlayState* play2) {
         this->actor.update = EnInvadepoh_Alien_Update;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->jointTable, this->morphTable,
                            ALIEN_LIMB_MAX);
-        this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame / 8.0f;
+        this->skelAnime.curFrame = EN_INVADEPOH_GET_INDEX(&this->actor) * this->skelAnime.endFrame / 8.0f;
         EnInvadepoh_Alien_InitPath(this, play);
         EnInvadepoh_Alien_PathComputeProgress(this);
         EnInvadepoh_Alien_PathUpdate(this, play);
@@ -4952,7 +4969,7 @@ void EnInvadepoh_AlienAbductor_SetupAbductCow(EnInvadepoh* this) {
     s32 pad2;
 
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
-    this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
+    this->skelAnime.curFrame = EN_INVADEPOH_GET_INDEX(&this->actor) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
     this->shouldDraw = true;
@@ -5007,7 +5024,7 @@ void EnInvadepoh_AlienAbductor_AbductCow(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_AlienAbductor_SetupAbductRomani(EnInvadepoh* this) {
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
-    this->skelAnime.curFrame = (EN_INVADEPOH_GET_INDEX(&this->actor)) * this->skelAnime.endFrame * 0.25f;
+    this->skelAnime.curFrame = EN_INVADEPOH_GET_INDEX(&this->actor) * this->skelAnime.endFrame * 0.25f;
     this->alpha = 255;
     this->actor.draw = NULL;
     this->shouldDraw = true;
@@ -5274,7 +5291,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
         POLY_XLU_DISP = gfx;
 
-        if ((this->alpha > 128) && EnInvadepoh_ShouldDrawLensFlare(play, &glowPos)) {
+        if ((this->alpha > 128) && EnInvadepoh_LensFlareCheck(play, &glowPos)) {
             Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, glowPos, 10.0f, 9.0f, 0, 0);
         }
 
@@ -5388,7 +5405,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
 
-    if (EnInvadepoh_ShouldDrawLensFlare(play, &flashPos)) {
+    if (EnInvadepoh_LensFlareCheck(play, &flashPos)) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0,
                                   false);
     }

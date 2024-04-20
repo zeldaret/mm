@@ -70,7 +70,7 @@ s32 func_80C07CD0(void) {
                 firstSpawn = CLAMP_MAX(firstSpawn, spawnTime);
             }
 
-            if (time < (firstSpawn + 3601)) { // 79 in-game minutes
+            if (time < (firstSpawn + (80 * CLOCK_TIME_MINUTE) + 1)) {
                 return false;
             }
         }

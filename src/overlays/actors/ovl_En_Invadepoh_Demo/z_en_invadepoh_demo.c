@@ -564,7 +564,7 @@ void EnInvadepohDemo_Ufo_SetMatrixTranslation(Vec3f* translation) {
     currentMatrix->zw = translation->z;
 }
 
-s32 EnInvadepohDemo_Ufo_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
+s32 EnInvadepohDemo_Ufo_LensFlareCheck(PlayState* play, Vec3f* pos) {
     Vec3f projectedPos;
     f32 invW;
 
@@ -573,7 +573,7 @@ s32 EnInvadepohDemo_Ufo_ShouldDrawLensFlare(PlayState* play, Vec3f* pos) {
     if ((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f) && (fabsf(projectedPos.y * invW) < 1.0f)) {
         f32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
         f32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
-        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 wZ = (s32)(projectedPos.z * invW * ((G_MAXZ / 2) * 32)) + ((G_MAXZ / 2) * 32);
 
         if (wZ < SysCfb_GetZBufferInt(screenPosX, screenPosY)) {
             return true;
@@ -751,7 +751,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (EnInvadepohDemo_Ufo_ShouldDrawLensFlare(play, &flashPos)) {
+    if (EnInvadepohDemo_Ufo_LensFlareCheck(play, &flashPos)) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0,
                                   false);
     }
