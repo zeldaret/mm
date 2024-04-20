@@ -6,62 +6,62 @@
 
 struct Boss07;
 
-#define MAJORAS_TENT_LENGTH 10
-#define MAJORAS_TENT_COUNT 25
-#define MAJORAS_TENT_MAX 100
-#define MAJORAS_WHIP_MAX_LENGTH 50
+#define MAJORA_TENT_LENGTH 10
+#define MAJORA_TENT_COUNT 25
+#define MAJORA_TENT_MAX 100
+#define MAJORA_WHIP_MAX_LENGTH 50
 
-#define MAJORAS_LIMB_COUNT MAX((s32)MAJORAS_MASK_LIMB_MAX, MAX((s32)MAJORAS_INCARNATION_LIMB_MAX, (s32)MAJORAS_WRATH_LIMB_MAX))
+#define MAJORA_LIMB_COUNT MAX((s32)MAJORAS_MASK_LIMB_MAX, MAX((s32)MAJORAS_INCARNATION_LIMB_MAX, (s32)MAJORAS_WRATH_LIMB_MAX))
 
 #define MAJORAS_WRATH_SHADOW_TEX_WIDTH 64
 #define MAJORAS_WRATH_SHADOW_TEX_HEIGHT 64
 #define MAJORAS_WRATH_SHADOW_TEX_SIZE ((s32)sizeof(u8[MAJORAS_WRATH_SHADOW_TEX_HEIGHT][MAJORAS_WRATH_SHADOW_TEX_WIDTH]))
 
-#define MAJORAS_GET_TYPE(thisx) ((thisx)->params)
+#define MAJORA_GET_TYPE(thisx) ((thisx)->params)
 
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
 typedef enum MajoraType {
-    /*   0 */ MAJORAS_TYPE_BOSS,
-    /*  10 */ MAJORAS_TYPE_MASK = 10,
-    /*  11 */ MAJORAS_TYPE_MASK_CS,
-    /*  20 */ MAJORAS_TYPE_INCARNATION = 20,
-    /*  21 */ MAJORAS_TYPE_AFTERIMAGE,
-    /*  30 */ MAJORAS_TYPE_WRATH = 30,
-    /* 100 */ MAJORAS_TYPE_REMAINS_SHOT = 100,
-    /* 101 */ MAJORAS_TYPE_INCARNATION_SHOT,
-    /* 150 */ MAJORAS_TYPE_BATTLE_HANDLER = 150,
-    /* 180 */ MAJORAS_TYPE_TOP = 180,
-    /* 200 */ MAJORAS_TYPE_REMAINS = 200
+    /*   0 */ MAJORA_TYPE_BOSS,
+    /*  10 */ MAJORA_TYPE_MASK = 10,
+    /*  11 */ MAJORA_TYPE_MASK_CS,
+    /*  20 */ MAJORA_TYPE_INCARNATION = 20,
+    /*  21 */ MAJORA_TYPE_AFTERIMAGE,
+    /*  30 */ MAJORA_TYPE_WRATH = 30,
+    /* 100 */ MAJORA_TYPE_REMAINS_SHOT = 100,
+    /* 101 */ MAJORA_TYPE_INCARNATION_SHOT,
+    /* 150 */ MAJORA_TYPE_BATTLE_HANDLER = 150,
+    /* 180 */ MAJORA_TYPE_TOP = 180,
+    /* 200 */ MAJORA_TYPE_REMAINS = 200
 } MajoraType;
 
-typedef enum MajorasRemainsType {
-    /* 0 */ MAJORAS_REMAINS_TYPE_ODOLWA,
-    /* 1 */ MAJORAS_REMAINS_TYPE_GYORG,
-    /* 2 */ MAJORAS_REMAINS_TYPE_GOHT,
-    /* 3 */ MAJORAS_REMAINS_TYPE_TWINMOLD,
-    /* 4 */ MAJORAS_REMAINS_MAX
-} MajorasRemainsType;
+typedef enum MajoraRemainsType {
+    /* 0 */ MAJORA_REMAINS_TYPE_ODOLWA,
+    /* 1 */ MAJORA_REMAINS_TYPE_GYORG,
+    /* 2 */ MAJORA_REMAINS_TYPE_GOHT,
+    /* 3 */ MAJORA_REMAINS_TYPE_TWINMOLD,
+    /* 4 */ MAJORA_REMAINS_TYPE_MAX
+} MajoraRemainsType;
 
-typedef struct {
+typedef struct MajoraTentacle {
     /* 0x00 */ Vec3f base;
-    /* 0x0C */ Vec3f pos[MAJORAS_TENT_LENGTH];
-    /* 0x84 */ Vec3f rot[MAJORAS_TENT_LENGTH];
-    /* 0xFC */ Vec3f velocity[MAJORAS_TENT_LENGTH];
-} Boss07Tentacle; // size = 0x174
+    /* 0x0C */ Vec3f pos[MAJORA_TENT_LENGTH];
+    /* 0x84 */ Vec3f rot[MAJORA_TENT_LENGTH];
+    /* 0xFC */ Vec3f velocity[MAJORA_TENT_LENGTH];
+} MajoraTentacle; // size = 0x174
 
-typedef struct {
+typedef struct MajoraWhip {
     /* 0x000 */ Vec3s baseRot;
     /* 0x008 */ f32 gravity;
     /* 0x00C */ f32 mobility;
     /* 0x010 */ f32 drag;
     /* 0x014 */ f32 tension;
     /* 0x018 */ Vec3f basePos;
-    /* 0x024 */ Vec3f pos[MAJORAS_WHIP_MAX_LENGTH];
-    /* 0x27C */ Vec3f rot[MAJORAS_WHIP_MAX_LENGTH];
-    /* 0x4D4 */ Vec3f velocity[MAJORAS_WHIP_MAX_LENGTH];
-    /* 0x72C */ f32 unk_72C[MAJORAS_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
-} Boss07Whip; // size = 0x7F4
+    /* 0x024 */ Vec3f pos[MAJORA_WHIP_MAX_LENGTH];
+    /* 0x27C */ Vec3f rot[MAJORA_WHIP_MAX_LENGTH];
+    /* 0x4D4 */ Vec3f velocity[MAJORA_WHIP_MAX_LENGTH];
+    /* 0x72C */ f32 unk_72C[MAJORA_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
+} MajoraWhip; // size = 0x7F4
 
 typedef enum MajorasWrathBodyPart {
     /*  0 */ MAJORAS_WRATH_BODYPART_HEAD,
@@ -173,8 +173,8 @@ typedef struct Boss07 {
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ f32 animEndFrame;
     /* 0x01D8 */ s32 bodyDecayRate;
-    /* 0x01DC */ Vec3s jointTable[MAJORAS_LIMB_COUNT];
-    /* 0x0284 */ Vec3s morphTable[MAJORAS_LIMB_COUNT];
+    /* 0x01DC */ Vec3s jointTable[MAJORA_LIMB_COUNT];
+    /* 0x0284 */ Vec3s morphTable[MAJORA_LIMB_COUNT];
     /* 0x032C */ f32 unk_32C; // shock scale related
     /* 0x0330 */ f32 unk_330; // shock scale related
     /* 0x0334 */ Vec3f bodyPartsPos[MAJORA_BODYPART_MAX];
@@ -188,13 +188,13 @@ typedef struct Boss07 {
     /* 0x077C */ f32 whipScale;
     /* 0x0780 */ s32 whipShockIndexHigh; // whip shock index
     /* 0x0784 */ s32 whipShockIndexLow; // whip shock index
-    /* 0x0788 */ Boss07Whip rightWhip;
+    /* 0x0788 */ MajoraWhip rightWhip;
     /* 0x0F7C */ s16 whipWrapIndex;
     /* 0x0F7E */ s16 whipGrabIndex;
     /* 0x0F80 */ Vec3f whipGrabPos;
     /* 0x0F8C */ f32 unk_F8C;
     /* 0x0F90 */ f32 unk_F90;
-    /* 0x0F94 */ Boss07Whip leftWhip;
+    /* 0x0F94 */ MajoraWhip leftWhip;
     /* 0x1788 */ Vec3f incFeetPos[2];
     /* 0x17A0 */ Vec3f incLeftHandPos;
     /* 0x17AC */ Vec3f incRightHandPos;
@@ -248,7 +248,7 @@ typedef struct Boss07 {
     /* 0x18ED */ u8 beamOnLastFrame;
     /* 0x18F0 */ ColliderQuad maskFrontCollider;
     /* 0x1970 */ ColliderQuad maskBackCollider;
-    /* 0x19F0 */ Boss07Tentacle tentacles[MAJORAS_TENT_MAX];
+    /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENT_MAX];
     /* 0xAB40 */ s16 timer_AB40;
     /* 0xAB44 */ f32 introOrbScale;
     /* 0xAB48 */ u8 noShadow;
