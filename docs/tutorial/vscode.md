@@ -50,7 +50,7 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
                 "src",
                 "assets",
                 "build/n64-us/",
-                "${workspaceFolder}",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_LANGUAGE_C" // For gbi.h
