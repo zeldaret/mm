@@ -741,7 +741,7 @@ void EnInvadepoh_Alien_PathComputeProgress(EnInvadepoh* this) {
         if ((currentTime - warpInTime) < 0) {
             this->pathProgress = 0.0f;
         } else {
-            this->pathProgress = (currentTime - warpInTime) * (1.0f / 3600.0f);
+            this->pathProgress = (currentTime - warpInTime) * (1.0f / (80 * CLOCK_TIME_MINUTE));
 
             if (this->pathProgress > 1.0f) {
                 this->pathProgress = 1.0f;
