@@ -42,7 +42,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play);
 void EnDoor_AjarClose(EnDoor* this, PlayState* play);
 void EnDoor_WaitForObject(EnDoor* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Door/scheduleScripts.schl.inc"
 
 /**
  * A schedule returning none means the door can be used normally.

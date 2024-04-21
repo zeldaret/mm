@@ -20,7 +20,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play);
 void func_80AFA4D0(EnPm* this, PlayState* play);
 void func_80AFA5FC(EnPm* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Pm/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Pm/scheduleScripts.schl.inc"
 
 static s32 D_80AFB430[] = {
     -1, 0, 4, 1,  0,  0, 1, 4,  -1, -1, 15, 5, 0, 3, -1, -1, 1, 2, 11, 3, -1, -1, -1, 0, 0, 0, 0, 0, 1,  12, -1,
@@ -238,32 +238,29 @@ s32 func_80AF7BAC(EnPm* this) {
     return true;
 }
 
-Actor* func_80AF7CB0(EnPm* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* phi_s0 = NULL;
-    Actor* actor;
+Actor* EnPm_FindActor(EnPm* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, phi_s0, actorCat, actorId);
-        phi_s0 = actor;
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (actor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if (((EnPm*)phi_s0 != this) && (actor->update != NULL)) {
+        if ((this != (EnPm*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        actor = actor->next;
-        if (actor == NULL) {
-            phi_s0 = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        phi_s0 = actor;
+        actorIter = actorIter->next;
     }
 
-    return phi_s0;
+    return actorIter;
 }
 
 EnDoor* EnPm_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
@@ -299,31 +296,28 @@ EnDoor* EnPm_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
 }
 
 Actor* func_80AF7DC4(EnPm* this, PlayState* play, s32 arg2) {
-    Actor* phi_s0 = NULL;
-    Actor* actor;
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
-        phi_s0 = actor;
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_PROP, ACTOR_EN_PST);
 
-        if (actor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if (((EnPm*)actor != this) && (actor->update != NULL) && (actor->params == (s16)arg2)) {
+        if ((this != (EnPm*)actorIter) && (actorIter->update != NULL) && (actorIter->params == (s16)arg2)) {
             break;
         }
 
-        actor = actor->next;
-        if (actor == NULL) {
-            phi_s0 = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        phi_s0 = actor;
+        actorIter = actorIter->next;
     }
 
-    return phi_s0;
+    return actorIter;
 }
 
 void func_80AF7E6C(EnPm* this) {
@@ -395,15 +389,15 @@ Actor* func_80AF8040(EnPm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 16:
-            actor = func_80AF7CB0(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+            actor = EnPm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
             break;
 
         case 17:
-            actor = func_80AF7CB0(this, play, ACTORCAT_NPC, ACTOR_EN_TEST3);
+            actor = EnPm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TEST3);
             break;
 
         case 28:
-            actor = func_80AF7CB0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+            actor = EnPm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
             break;
 
         case 3:
@@ -842,7 +836,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCat, s16 actorId) {
+s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
     u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -852,7 +846,7 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     s32 ret = false;
 
     this->timePath = NULL;
-    sp2C = func_80AF7CB0(this, play, actorCat, actorId);
+    sp2C = EnPm_FindActor(this, play, actorCategory, actorId);
     if (D_80AFB430[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }

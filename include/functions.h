@@ -294,11 +294,6 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
-void func_800F4A10(PlayState* play);
-void KaleidoSetup_Update(PlayState* play);
-void KaleidoSetup_Init(PlayState* play);
-void KaleidoSetup_Destroy(PlayState* play);
-
 void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset);
 void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
@@ -518,18 +513,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(PlayState* play);
-void KaleidoScopeCall_Destroy(PlayState* play);
-void KaleidoScopeCall_Update(PlayState* play);
-void KaleidoScopeCall_Draw(PlayState* play);
-
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
 void Play_DisableMotionBlur(void);
@@ -593,9 +576,9 @@ void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);
-Gfx* Graph_GfxPlusOne(Gfx* gfx);
-Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
-void* Graph_DlistAlloc(Gfx** gfx, size_t size);
+Gfx* Gfx_Open(Gfx* gfx);
+Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
+void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);

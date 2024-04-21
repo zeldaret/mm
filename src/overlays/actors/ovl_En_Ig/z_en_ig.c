@@ -19,7 +19,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play);
 void func_80BF2AF8(EnIg* this, PlayState* play);
 void func_80BF2BD4(EnIg* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Ig/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Ig/scheduleScripts.schl.inc"
 
 static s32 D_80BF3318[] = { -1, -1, 3, 1, 3, 1, 2, 0, 3, 5, 0, 3, 1, 2, 4 };
 
@@ -132,30 +132,28 @@ static AnimationInfoS sAnimationInfo[ENIG_ANIM_MAX] = {
     { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIG_ANIM_9
 };
 
-Actor* func_80BF1150(EnIg* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* temp_v0;
+Actor* EnIg_FindActor(EnIg* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnIg*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnIg*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        temp_v0 = foundActor->next;
-        if (temp_v0 == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
-        foundActor = temp_v0;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 EnDoor* EnIg_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
@@ -242,7 +240,7 @@ Actor* func_80BF146C(EnIg* this, PlayState* play) {
     Actor* retActor;
 
     if (this->scheduleResult == 3) {
-        retActor = func_80BF1150(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+        retActor = EnIg_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
         retActor = &GET_PLAYER(play)->actor;
     }
@@ -483,7 +481,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s32 arg3, s32 arg4) {
+s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s32 actorCategory, s32 actorId) {
     u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -492,7 +490,7 @@ s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s
     s32 pad;
     s32 sp24 = false;
 
-    sp2C = func_80BF1150(this, play, arg3, arg4);
+    sp2C = EnIg_FindActor(this, play, actorCategory, actorId);
     this->timePath = NULL;
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {

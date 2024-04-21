@@ -570,8 +570,8 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
 
-    if (arg4 == 0) {
-        if (arg5 != 0) {
+    if (!arg4) {
+        if (arg5) {
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
@@ -602,14 +602,14 @@ void EnDns_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     s32 phi_v0;
 
     if (this->unk_2C6 & 0x10) {
-        phi_v1 = 1;
-        phi_v0 = 0;
+        phi_v1 = true;
+        phi_v0 = false;
     } else {
-        phi_v1 = 0;
+        phi_v1 = false;
         if (this->unk_2C6 & 0x20) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
     }
 

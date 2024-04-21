@@ -163,11 +163,11 @@ void DmBal_UpdateEyes(DmBal* this) {
     }
 }
 
-void DmBal_SpawnPaper(DmBal* this, PlayState* play, Vec3f* pos, Vec3f* vel, f32 gravity) {
+void DmBal_SpawnPaper(DmBal* this, PlayState* play, Vec3f* pos, Vec3f* velocity, f32 gravity) {
     Actor* paper = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PAPER, pos->x, pos->y, pos->z, 0, 0, 0, 0);
 
     if (paper != NULL) {
-        paper->velocity = *vel;
+        paper->velocity = *velocity;
         paper->gravity = gravity;
     }
 }
@@ -179,15 +179,15 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     // Throw confetti
     if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleFloatThrowConfettiAnim)) {
         Vec3f pos = this->actor.world.pos;
-        Vec3f vel = { 0.0f, 9.0f, 0.0f };
+        Vec3f velocity = { 0.0f, 9.0f, 0.0f };
 
         pos.x += 7.0f * Math_SinS(this->actor.shape.rot.y);
         pos.y += 2.5f;
         pos.z += 7.0f * Math_CosS(this->actor.shape.rot.y);
-        vel.x = Math_SinS(this->actor.shape.rot.y) * 5.0f;
-        vel.z = Math_CosS(this->actor.shape.rot.y) * 5.0f;
-        DmBal_SpawnPaper(this, play, &pos, &vel, -0.4f);
-        DmBal_SpawnPaper(this, play, &pos, &vel, -0.5f);
+        velocity.x = Math_SinS(this->actor.shape.rot.y) * 5.0f;
+        velocity.z = Math_CosS(this->actor.shape.rot.y) * 5.0f;
+        DmBal_SpawnPaper(this, play, &pos, &velocity, -0.4f);
+        DmBal_SpawnPaper(this, play, &pos, &velocity, -0.5f);
     }
     this->actionFunc(this, play);
     DmBal_HandleCutscene(this, play);

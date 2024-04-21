@@ -1,5 +1,4 @@
 #include "global.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s16 sMinimapInitPosX = 0;
 s16 sMinimapInitPosZ = 0;
@@ -240,7 +239,7 @@ void Map_Update(PlayState* play) {
 
     func_80105B34(play);
 
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {

@@ -487,8 +487,8 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Matrix_Get(&sp2C);
     Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
-    if (arg4 == 0) {
-        if (arg5 != 0) {
+    if (!arg4) {
+        if (arg5) {
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
@@ -509,17 +509,18 @@ void EnDnp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnDnp_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnDnp* this = THIS;
-    s32 phi_v1 = 1;
+    s32 phi_v1;
     s32 phi_v0;
 
     if (this->unk_322 & 0x10) {
-        phi_v0 = 0;
+        phi_v1 = true;
+        phi_v0 = false;
     } else {
-        phi_v1 = 0;
+        phi_v1 = false;
         if (this->unk_322 & 0x40) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
     }
 
