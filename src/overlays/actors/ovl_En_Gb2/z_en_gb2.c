@@ -633,7 +633,7 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 void func_80B10924(EnGb2* this, PlayState* play) {
     s32 getItemId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE)) {
         getItemId = GI_RUPEE_PURPLE;
     } else {
         getItemId = GI_HEART_PIECE;
@@ -642,7 +642,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (getItemId == GI_HEART_PIECE) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE);
         } else {
             Rupees_ChangeBy(50);
         }
