@@ -439,7 +439,6 @@ void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
 s32 EnInvadepoh_Alien_GetSpawnTime(s32 index) {
     u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(index);
 
-    // The time that each alien spawns is stored as an offset from 2:30 AM.
     return spawnTimeOffset + CLOCK_TIME(2, 30);
 }
 
@@ -1173,7 +1172,7 @@ void EnInvadepoh_InvasionHandler_SetInitialInvasionState(EnInvadepoh* this, Play
         } else if (CURRENT_DAY == 1) {
             s32 currentTime = CURRENT_TIME;
 
-            if (!((currentTime >= CLOCK_TIME(2, 30)) && (currentTime < CLOCK_TIME(6, 00)))) {
+            if ((currentTime < CLOCK_TIME(2, 30)) || (currentTime >= CLOCK_TIME(6, 00))) {
                 // It's before 2:30 AM on the first day, so the invasion hasn't started yet.
                 sInvasionState = INVASION_STATE_WAIT;
             } else if (currentTime < CLOCK_TIME(5, 15)) {

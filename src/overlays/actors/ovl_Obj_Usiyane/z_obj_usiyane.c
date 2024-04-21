@@ -44,7 +44,6 @@ static InitChainEntry sInitChain[] = {
 s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {
     u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(alienIndex);
 
-    // The time that each alien spawns is stored as an offset from 2:30 AM.
     return spawnTimeOffset + CLOCK_TIME(2, 30);
 }
 
