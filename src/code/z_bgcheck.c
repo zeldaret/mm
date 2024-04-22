@@ -1,3 +1,5 @@
+#include "prevent_bss_reordering.h"
+
 #include "z64bgcheck.h"
 #include "global.h"
 
