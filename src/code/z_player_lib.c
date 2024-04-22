@@ -2262,7 +2262,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 if (sPlayerRightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != PLAYER_SHIELD_NONE) {
-                            //! FAKE
+                            //! FAKE:
                             rightHandDLists = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
@@ -2870,7 +2870,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
-        //! FAKE
+        //! FAKE:
         if (1) {}
 
         D_801F59B0[i].y += -10.0f * scaleY;
@@ -3607,7 +3607,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        //! FAKE
+        //! FAKE:
         if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
@@ -3702,17 +3702,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         }
 
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             *temp = spF0[0].x;
-                            temp++;
                         }
                     } else {
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             spF0[i].x = *temp;
                             spF0[i].y = *temp;
                             spF0[i].z = *temp;
-                            temp++;
                         }
                     }
 
@@ -3731,7 +3729,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        //! FAKE (yes, all of them are required)
+                        //! FAKE: (yes, all of them are required)
                         // https://decomp.me/scratch/AdU3G
                         if (1) {}
                         if (1) {}

@@ -226,11 +226,6 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
-void func_800F4A10(PlayState* play);
-void KaleidoSetup_Update(PlayState* play);
-void KaleidoSetup_Init(PlayState* play);
-void KaleidoSetup_Destroy(PlayState* play);
-
 // void func_80102E40(void);
 // void func_80102E90(void);
 // void func_80102EA4(void);
@@ -430,18 +425,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(PlayState* play);
-void KaleidoScopeCall_Destroy(PlayState* play);
-void KaleidoScopeCall_Update(PlayState* play);
-void KaleidoScopeCall_Draw(PlayState* play);
-
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
 void Play_DisableMotionBlur(void);
@@ -505,9 +488,9 @@ void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);
-Gfx* Graph_GfxPlusOne(Gfx* gfx);
-Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
-void* Graph_DlistAlloc(Gfx** gfx, size_t size);
+Gfx* Gfx_Open(Gfx* gfx);
+Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
+void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);

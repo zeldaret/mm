@@ -84,7 +84,7 @@ extern RegEditor* gRegEditor;
 #define R_MOTION_BLUR_ENABLED             SREG(91)
 #define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
 #define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
-#define R_PAUSE_BG_PRERENDER_STATE        SREG(94)
+#define R_PAUSE_BG_PRERENDER_STATE        SREG(94) // PauseBgPreRenderState enum
 
 #define R_PLAY_FILL_SCREEN_ON             MREG(64)
 #define R_PLAY_FILL_SCREEN_R              MREG(65)

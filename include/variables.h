@@ -23,9 +23,6 @@ extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
 
-extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];
-extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
-
 extern s32 gDbgCamEnabled;
 
 extern Vec3f gZeroVec3f;
@@ -58,8 +55,6 @@ extern u8 gAudioHeapResetState;
 extern AudioSpec gAudioSpecs[21];
 
 // rodata
-extern TexturePtr gCircleTex[];
-
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
 extern const AudioHeapInitSizes gAudioHeapInitSizes;
@@ -69,6 +64,7 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
+
 extern s32 gTransitionTileState;
 extern Color_RGBA8_u32 gPlayVisMonoColor;
 

@@ -453,7 +453,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    if (!IS_PAUSE_STATE_GAMEOVER) {
+    if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
         if (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) {
 
             stepR =
@@ -1747,7 +1747,7 @@ s16 KaleidoScope_SetPageVertices(PlayState* play, Vtx* vtx, s16 vtxPage, s16 num
 
             vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + quadsWidth[i];
 
-            if (!IS_PAUSE_STATE_GAMEOVER) {
+            if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
                 vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = quadsY[i] + pauseCtx->offsetY;
             } else if (gameOverCtx->state == GAMEOVER_INACTIVE) {
                 vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = quadsY[i] + pauseCtx->offsetY;
@@ -2305,7 +2305,7 @@ void KaleidoScope_SetVertices(PlayState* play, GraphicsContext* gfxCtx) {
 
     pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 28 * sizeof(Vtx));
 
-    if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER) {
+    if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
         pauseCtx->promptPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_SAVE_QUADS) * 4) * sizeof(Vtx));
         KaleidoScope_SetPageVertices(play, pauseCtx->promptPageVtx, VTX_PAGE_PROMPT, VTX_PAGE_SAVE_QUADS);
     }
@@ -2478,14 +2478,14 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
 
             case PAUSE_MAP:
                 if (!sInDungeonScene) {
-                    if (IS_PAUSE_STATE_OWL_WARP) {
+                    if (IS_PAUSE_STATE_OWL_WARP(pauseCtx)) {
                         pauseCtx->cursorX = sOwlWarpWorldMapCursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                         pauseCtx->cursorY = sOwlWarpWorldMapCursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     } else {
                         pauseCtx->cursorX = sWorldMapCursorsX[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                         pauseCtx->cursorY = sWorldMapCursorsY[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
                     }
-                    if (!IS_PAUSE_STATE_OWL_WARP) {
+                    if (!IS_PAUSE_STATE_OWL_WARP(pauseCtx)) {
                         pauseCtx->cursorHeight = 10.0f;
                         pauseCtx->cursorWidth = 10.0f;
                     } else {
@@ -2689,7 +2689,7 @@ void KaleidoScope_Draw(PlayState* play) {
         KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
         Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
-        if (!IS_PAUSE_STATE_OWL_WARP) {
+        if (!IS_PAUSE_STATE_OWL_WARP(pauseCtx)) {
             // Draw Default or Game Over Menus
             KaleidoScope_SetVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
@@ -2700,7 +2700,7 @@ void KaleidoScope_Draw(PlayState* play) {
 
             KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
-            if (!IS_PAUSE_STATE_GAMEOVER) {
+            if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
                 KaleidoScope_DrawInfoPanel(play);
             }
 
@@ -3624,7 +3624,7 @@ void KaleidoScope_Update(PlayState* play) {
 
     // If stickAdj is held, set a delay to allow the cursor to read the next input.
     // The first delay is given a longer time than all subsequent delays.
-    if (!IS_PAUSE_STATE_GAMEOVER && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT)) {
+    if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT)) {
         if (pauseCtx->stickAdjX < -30) {
             if (sStickXRepeatState == -1) {
                 sStickXRepeatTimer--;
@@ -3696,10 +3696,10 @@ void KaleidoScope_Update(PlayState* play) {
 
     // Process the Cursor input
     if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-        !IS_PAUSE_STATE_OWL_WARP &&
+        !IS_PAUSE_STATE_OWL_WARP(pauseCtx) &&
         (((pauseCtx->state >= PAUSE_STATE_OPENING_3) && (pauseCtx->state <= PAUSE_STATE_SAVEPROMPT)) ||
          ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_2) && (pauseCtx->state <= PAUSE_STATE_UNPAUSE_SETUP)))) {
-        if (!IS_PAUSE_STATE_GAMEOVER) {
+        if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
             switch (pauseCtx->pageIndex) {
                 case PAUSE_ITEM:
                     KaleidoScope_UpdateItemCursor(play);

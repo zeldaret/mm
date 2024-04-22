@@ -48,7 +48,7 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3f vel;
+    /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f accel;
     /* 0x24 */ u8 type;
     /* 0x25 */ u8 timer;
@@ -227,8 +227,8 @@ u8 D_8090CCFC = 0;
 s32 D_8090CD00 = 0;
 s16 D_8090CD04 = 0;
 u8 D_8090CD08 = 0;
-u8 D_8090CD0C = 0;
-u8 D_8090CD10 = 0;
+u8 D_8090CD0C = false;
+u8 D_8090CD10 = false;
 s16 D_8090CD14 = 0;
 Vec3f sFishMouthOffset = { 500.0f, 500.0f, 0.0f };
 u8 D_8090CD24 = 0;
@@ -459,7 +459,7 @@ void EnFishing_SpawnRipple(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_RIPPLE;
             effect->pos = *pos;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = sZeroVec;
             effect->unk_30 = arg3 * 0.0025f;
             effect->unk_34 = arg4 * 0.0025f;
@@ -481,7 +481,7 @@ void EnFishing_SpawnRipple(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
     }
 }
 
-void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, Vec3f* vel, f32 scale) {
+void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, Vec3f* velocity, f32 scale) {
     s16 i;
     Vec3f accel = { 0.0f, -1.0f, 0.0f };
 
@@ -494,7 +494,7 @@ void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f
             (effect->type == FS_EFF_RAIN_RIPPLE) || (effect->type == FS_EFF_RAIN_SPLASH)) {
             effect->type = FS_EFF_DUST_SPLASH;
             effect->pos = *pos;
-            effect->vel = *vel;
+            effect->velocity = *velocity;
             effect->accel = accel;
             effect->alpha = 100 + Rand_ZeroFloat(100.0f);
             effect->unk_30 = scale;
@@ -517,7 +517,7 @@ void EnFishing_SpawnWaterDust(Vec3f* projectedPos, FishingEffect* effect, Vec3f*
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_WATER_DUST;
             effect->pos = *pos;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = accel;
             effect->alpha = 255;
             effect->timer = Rand_ZeroFloat(100.0f);
@@ -532,7 +532,7 @@ void EnFishing_SpawnWaterDust(Vec3f* projectedPos, FishingEffect* effect, Vec3f*
 
 void EnFishing_SpawnBubble(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, f32 scale, u8 arg4) {
     s16 i;
-    Vec3f vel = { 0.0f, 1.0f, 0.0f };
+    Vec3f velocity = { 0.0f, 1.0f, 0.0f };
 
     if ((projectedPos != NULL) && ((projectedPos->z > 500.0f) || (projectedPos->z < 0.0f))) {
         return;
@@ -542,7 +542,7 @@ void EnFishing_SpawnBubble(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_BUBBLE;
             effect->pos = *pos;
-            effect->vel = vel;
+            effect->velocity = velocity;
             effect->accel = sZeroVec;
             effect->timer = Rand_ZeroFloat(100.0f);
             effect->unk_30 = scale;
@@ -556,11 +556,11 @@ void EnFishing_SpawnBubble(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
 
 void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
     s16 i;
-    Vec3f velSrc;
+    Vec3f velocity;
 
-    velSrc.x = 0.0f;
-    velSrc.y = 0.0f;
-    velSrc.z = 300.0f;
+    velocity.x = 0.0f;
+    velocity.y = 0.0f;
+    velocity.z = 300.0f;
 
     effect += 30;
 
@@ -574,7 +574,7 @@ void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
             effect->unk_3C = rot->z;
             Matrix_RotateYF(rot->y, MTXMODE_NEW);
             Matrix_RotateXFApply(rot->x);
-            Matrix_MultVec3f(&velSrc, &effect->vel);
+            Matrix_MultVec3f(&velocity, &effect->velocity);
             break;
         }
 
@@ -810,7 +810,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         s16 i;
         FishingGroupFish* fish;
 
-        D_809171C8 = 0;
+        D_809171C8 = false;
         sFishingMain = this;
         Collider_InitJntSph(play, &sFishingMain->collider);
         Collider_SetJntSph(play, &sFishingMain->collider, thisx, &sJntSphInit, sFishingMain->colliderElements);
@@ -867,10 +867,10 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         D_809171D1 = (HIGH_SCORE(HS_FISHING) & 0xFF0000) >> 0x10;
         if ((D_809171D1 & 7) == 7) {
             play->roomCtx.unk7A[0] = 90;
-            D_809171CA = 1;
+            D_809171CA = true;
         } else {
             play->roomCtx.unk7A[0] = 40;
-            D_809171CA = 0;
+            D_809171CA = false;
         }
 
         if ((D_809171D1 & 7) == 6) {
@@ -1003,10 +1003,10 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < EFFECT_COUNT; i++) {
         if (effect->type) {
             effect->timer++;
-            effect->pos.x += effect->vel.x;
-            effect->pos.y += effect->vel.y;
-            effect->pos.z += effect->vel.z;
-            effect->vel.y += effect->accel.y;
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->velocity.y += effect->accel.y;
 
             if (effect->type == FS_EFF_RIPPLE) {
                 Math_ApproachF(&effect->unk_30, effect->unk_34, 0.2f, effect->unk_38);
@@ -1031,7 +1031,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
 
                 if (effect->pos.y > (WATER_SURFACE_Y(play) - 5.0f)) {
                     effect->accel.y = 0.0f;
-                    effect->vel.y = 0.0f;
+                    effect->velocity.y = 0.0f;
                     effect->alpha -= 5;
                 }
 
@@ -1055,8 +1055,8 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     }
                 }
             } else if (effect->type == FS_EFF_DUST_SPLASH) {
-                if (effect->vel.y < -20.0f) {
-                    effect->vel.y = -20.0f;
+                if (effect->velocity.y < -20.0f) {
+                    effect->velocity.y = -20.0f;
                     effect->accel.y = 0.0f;
                 }
 
@@ -1064,6 +1064,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     effect->type = FS_EFF_NONE;
                     if (Rand_ZeroOne() < 0.5f) {
                         Vec3f pos = effect->pos;
+
                         pos.y = WATER_SURFACE_Y(play);
                         EnFishing_SpawnRipple(NULL, play->specialEffects, &pos, 40.0f, 110.0f, 150, 90);
                     }
@@ -1082,14 +1083,14 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                         effect->timer = 0;
                         if (Rand_ZeroOne() < 0.75f) {
                             effect->type = FS_EFF_RAIN_RIPPLE;
-                            effect->vel = sZeroVec;
+                            effect->velocity = sZeroVec;
                             effect->unk_30 = 30 * 0.001f;
                         } else {
                             effect->type = FS_EFF_NONE;
                         }
                     }
 
-                    effect->vel = sZeroVec;
+                    effect->velocity = sZeroVec;
                 }
             } else if (effect->type >= FS_EFF_RAIN_RIPPLE) {
                 effect->unk_30 += (KREG(18) + 30) * 0.001f;
@@ -1116,6 +1117,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
 
                 if ((effect->timer % 16) == 0) {
                     Vec3f pos = effect->pos;
+
                     pos.y = WATER_SURFACE_Y(play);
                     EnFishing_SpawnRipple(NULL, play->specialEffects, &pos, 30.0f, 300.0f, 150, 90);
                 }
@@ -1547,7 +1549,7 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
 
     Matrix_Push();
 
-    if ((D_8090CD14 == 3) && ((pos->y > WATER_SURFACE_Y(play)) || ((D_8090CD0C != 0) && hookIndex))) {
+    if ((D_8090CD14 == 3) && ((pos->y > WATER_SURFACE_Y(play)) || (D_8090CD0C && ((u32)hookIndex != 0)))) {
         offsetY = 0.0f;
     } else if (pos->y < WATER_SURFACE_Y(play)) {
         offsetY = -1.0f;
@@ -1592,12 +1594,12 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gFishingLureHookDL);
 
-    if ((hookIndex == 1) && (D_8090CD0C != 0)) {
+    if ((hookIndex == 1) && D_8090CD0C) {
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
         Matrix_Translate(250.0f, 0.0f, -1400.0f, MTXMODE_APPLY);
         Matrix_Push();
 
-        if (D_8090CD10 != 0) {
+        if (D_8090CD10) {
             FishingEffect* effect = play->specialEffects;
             MtxF mf;
 
@@ -1605,12 +1607,12 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
             Matrix_Get(&mf);
             Matrix_MtxFToYXZRot(&mf, &sEffOwnerHatRot, false);
 
-            D_8090CD10 = 0;
-            D_8090CD0C = 0;
+            D_8090CD10 = false;
+            D_8090CD0C = false;
 
             effect->type = FS_EFF_OWNER_HAT;
             effect->unk_2C = 0;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = sZeroVec;
         }
 
@@ -1826,7 +1828,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
     gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 55);
 
-    if ((D_8090CD14 == 4) && ((D_80917274 != 0) || (D_80917206 != 2))) {
+    if ((D_8090CD14 == 4) && (D_80917274 || (D_80917206 != 2))) {
         f32 rx;
         f32 ry;
         f32 dist;
@@ -1857,13 +1859,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
                 f32 rx;
                 f32 ry;
                 f32 dist;
-                f32 dx;
-                f32 dy;
-                f32 dz;
-
-                dx = D_80917218.x - (linePos + i)->x;
-                dy = D_80917218.y - (linePos + i)->y;
-                dz = D_80917218.z - (linePos + i)->z;
+                f32 dx = D_80917218.x - (linePos + i)->x;
+                f32 dy = D_80917218.y - (linePos + i)->y;
+                f32 dz = D_80917218.z - (linePos + i)->z;
 
                 ry = Math_FAtan2F(dx, dz);
                 dist = sqrtf(SQ(dx) + SQ(dz));
@@ -1931,7 +1929,7 @@ void EnFishing_DrawRod(PlayState* play) {
     } else {
         s16 target = 0;
 
-        if ((D_8090CD14 == 4) && (D_80917274 != 0)) {
+        if ((D_8090CD14 == 4) && D_80917274) {
             target = Math_SinS(D_809171FE * 25600) * 1500.0f;
         } else {
             Math_ApproachZeroF(&D_8090CD40, 0.1f, 10.0f);
@@ -2197,10 +2195,10 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             D_80917238.y += D_80917248.y;
             D_80917238.z += D_80917248.z;
 
-            if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (D_8090CD0C != 0)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_A) || D_8090CD0C) {
                 D_80917238.x *= 0.9f;
                 D_80917238.z *= 0.9f;
-                if (D_8090CD0C == 0) {
+                if (!D_8090CD0C) {
                     Audio_PlaySfx(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
                 }
             }
@@ -2338,15 +2336,15 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             break;
 
         case 3: {
-            f32 pad;
+            s32 pad;
             f32 sp70;
             Vec3f sp64;
             Vec3f sp58;
 
             D_80911F20 = 0;
 
-            if ((D_8090CD0C != 0) && ((SQ(sLurePos.x) + SQ(sLurePos.z)) < SQ(500.0f))) {
-                D_8090CD10 = 1;
+            if (D_8090CD0C && ((SQ(sLurePos.x) + SQ(sLurePos.z)) < SQ(500.0f))) {
+                D_8090CD10 = true;
             }
 
             player->unk_B28 = 2;
@@ -2383,7 +2381,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                         sp70 = 0.5f;
                     }
 
-                    if (D_8090CD0C != 0) {
+                    if (D_8090CD0C) {
                         if (sp70 > 0.3f) {
                             sp70 = 0.3f;
                         }
@@ -2596,7 +2594,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             }
 
             if ((D_809171FE & 0x1F) == 0) {
-                if ((D_80917274 != 0) || (D_80917206 != 2)) {
+                if (D_80917274 || (D_80917206 != 2)) {
                     D_8090CD24 = 5;
                 }
             }
@@ -2622,7 +2620,7 @@ s32 func_809033F0(EnFishing* this, PlayState* play, u8 ignorePosCheck) {
     s16 count;
     f32 scale;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 speedXZ;
     f32 angle;
 
@@ -2645,16 +2643,16 @@ s32 func_809033F0(EnFishing* this, PlayState* play, u8 ignorePosCheck) {
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = sinf(angle) * speedXZ;
-        vel.z = cosf(angle) * speedXZ;
-        vel.y = (Rand_ZeroFloat(3.0f) + 3.0f) * scale;
+        velocity.x = sinf(angle) * speedXZ;
+        velocity.z = cosf(angle) * speedXZ;
+        velocity.y = (Rand_ZeroFloat(3.0f) + 3.0f) * scale;
 
         pos = this->actor.world.pos;
-        pos.x += vel.x * 3.0f;
+        pos.x += velocity.x * 3.0f;
         pos.y = WATER_SURFACE_Y(play);
-        pos.z += vel.z * 3.0f;
+        pos.z += velocity.z * 3.0f;
 
-        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &vel,
+        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &velocity,
                                   (Rand_ZeroFloat(0.02f) + 0.025f) * scale);
     }
 
@@ -2673,7 +2671,7 @@ void func_809036BC(EnFishing* this, PlayState* play) {
     s16 i;
     f32 scale;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 speedXZ;
     f32 angle;
 
@@ -2692,16 +2690,16 @@ void func_809036BC(EnFishing* this, PlayState* play) {
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = sinf(angle) * speedXZ;
-        vel.z = cosf(angle) * speedXZ;
-        vel.y = Rand_ZeroFloat(2.0f) + 2.0f;
+        velocity.x = sinf(angle) * speedXZ;
+        velocity.z = cosf(angle) * speedXZ;
+        velocity.y = Rand_ZeroFloat(2.0f) + 2.0f;
 
         pos = this->actor.world.pos;
-        pos.x += (vel.x * 3.0f);
-        pos.y += (vel.y * 3.0f);
-        pos.z += (vel.z * 3.0f);
+        pos.x += (velocity.x * 3.0f);
+        pos.y += (velocity.y * 3.0f);
+        pos.z += (velocity.z * 3.0f);
 
-        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &vel,
+        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &velocity,
                                   (Rand_ZeroFloat(0.02f) + 0.025f) * scale);
     }
 }
@@ -2717,7 +2715,7 @@ void func_809038A4(EnFishing* this, Input* input) {
 
     sp24 = SQ(sp34.x) + SQ(sp34.y) + SQ(sp34.z);
 
-    if ((D_8090CD14 == 3) && (this->unk_19A == 0) && (D_8090CD0C == 0)) {
+    if ((D_8090CD14 == 3) && (this->unk_19A == 0) && !D_8090CD0C) {
         Matrix_RotateYF(BINANG_TO_RAD_ALT(-this->actor.shape.rot.y), MTXMODE_NEW);
         Matrix_MultVec3f(&sp34, &sp28);
 
@@ -2747,7 +2745,7 @@ void func_809038A4(EnFishing* this, Input* input) {
                 }
             }
         }
-    } else if ((D_8090CD14 == 4) && (D_80917274 != 0) && (sp24 < SQ(100.0f)) && (this->unk_150 >= 10)) {
+    } else if ((D_8090CD14 == 4) && D_80917274 && (sp24 < SQ(100.0f)) && (this->unk_150 >= 10)) {
         this->unk_152 = 0;
         this->unk_150 = 1;
         this->unk_19C = 1000;
@@ -2775,7 +2773,7 @@ void func_80903C60(EnFishing* this, u8 arg1) {
         temp = 2.0f * this->unk_1A4;
     }
 
-    if (arg1 == 0) {
+    if (!arg1) {
         if (temp >= 50) {
             sfxId = NA_SE_EV_DIVE_INTO_WATER;
         } else if (temp >= 40) {
@@ -3313,7 +3311,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 multiplier *= 1.75f;
             } else if ((CURRENT_TIME >= CLOCK_TIME(5, 0)) && (CURRENT_TIME <= CLOCK_TIME(7, 0))) {
                 multiplier *= 1.5f;
-            } else if (D_809171CA != 0) {
+            } else if (D_809171CA) {
                 multiplier *= 1.5f;
             } else if ((u8)D_8090CCD0 != 0) {
                 multiplier *= 3.0f;
@@ -3419,7 +3417,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 s16 phi_v0;
 
                 if (func_809033F0(this, play, false)) {
-                    func_80903C60(this, 0);
+                    func_80903C60(this, false);
                 }
 
                 this->unk_150 = 5;
@@ -3462,7 +3460,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     Rumble_Override(0.0f, 180, phi_v0 * 3, 10);
                 }
 
-                D_80917274 = 0;
+                D_80917274 = false;
                 D_80917266 = 100;
                 D_809171D4 = 0;
             }
@@ -3508,7 +3506,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     Rumble_Override(0.0f, 180, 90, 10);
                 }
 
-                D_80917274 = 0;
+                D_80917274 = false;
                 D_80917266 = 100;
                 D_809171D4 = 0;
             }
@@ -3543,7 +3541,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                     this->unk_190 = 1.7f;
                     this->unk_194 = 7000.0f;
-                    D_80917274 = 1;
+                    D_80917274 = true;
                     SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ENEMY | 0x800 | SEQ_FLAG_ASYNC);
                     D_809171F6 = 0;
 
@@ -3648,7 +3646,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         Math_ApproachF(&this->actor.speed, 7.5f, 1.0f, 1.0f);
                         Math_ApproachS(&this->unk_168, 0x4E20, 2, 0xFA0);
                     } else {
-                        if ((D_80917274 == 0) && (D_80917206 == 2)) {
+                        if (!D_80917274 && (D_80917206 == 2)) {
                             this->unk_188 = 1.0f;
                             this->unk_18C = 2000.0f;
                             Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.2f);
@@ -3696,7 +3694,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if (D_809171C8 != 0) {
+            if (D_809171C8) {
                 D_8091726C = 0.0f;
             }
 
@@ -3741,12 +3739,12 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if ((D_8090CD14 < 3) || ((D_809171C8 != 0) && (D_809171D4 > 50)) || (D_809171D4 >= 6000) ||
-                ((D_80917272 == 0) && (D_80917274 == 0)) || (D_80917266 == 0) ||
+            if ((D_8090CD14 < 3) || (D_809171C8 && (D_809171D4 > 50)) || (D_809171D4 >= 6000) ||
+                ((D_80917272 == 0) && !D_80917274) || (D_80917266 == 0) ||
                 (((D_809171FE & 0x7F) == 0) && (Rand_ZeroOne() < 0.05f) && (D_80917206 != 2))) {
                 // Assignment of OoT's D_80B7A67C here removed in MM
 
-                if ((D_80917272 == 0) && (D_80917274 == 0)) {
+                if ((D_80917272 == 0) && !D_80917274) {
                     // Assignment of OoT's D_80B7E086 here removed in MM
                     if (((sLinkAge == 1) && (HIGH_SCORE(HS_FISHING) & 0x400)) ||
                         ((sLinkAge != 1) && (HIGH_SCORE(HS_FISHING) & 0x800))) {
@@ -3788,7 +3786,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_194 = 5000.0f;
 
                 if (this->actor.world.pos.y <= WATER_SURFACE_Y(play)) {
-                    func_80903C60(this, 1);
+                    func_80903C60(this, true);
                     func_809033F0(this, play, true);
                 }
                 goto case_6;
@@ -3882,6 +3880,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                     } else {
                                         f32 temp1 = D_8090CCF0;
                                         s16 temp2 = D_809171D0;
+
                                         D_8090CCF0 = this->unk_1A4;
                                         D_809171D0 = this->unk_148;
                                         D_809171D2 = D_80917206;
@@ -3904,6 +3903,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                 if (play->msgCtx.choiceIndex != 0) {
                                     f32 temp1 = D_8090CCF0;
                                     s16 temp2 = D_809171D0;
+
                                     D_8090CCF0 = this->unk_1A4;
                                     D_809171D2 = D_80917206;
                                     this->unk_1A4 = temp1;
@@ -4036,8 +4036,6 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
         this->actor.world.pos.y += (this->unk_17C * 1.5f);
 
-        if (1) {}
-
         if (this->unk_14A != 0) {
             this->unk_160 = this->unk_14C;
             this->unk_14A--;
@@ -4072,7 +4070,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         if ((this->unk_150 != -1) && (this->unk_150 != -2) && (this->unk_150 != -25)) {
             if ((this->actor.world.pos.y > WATER_SURFACE_Y(play)) && (this->actor.prevPos.y <= WATER_SURFACE_Y(play))) {
                 func_809033F0(this, play, true);
-                func_80903C60(this, 1);
+                func_80903C60(this, true);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
                 this->unk_162 = TRUNCF_BINANG(Rand_CenteredFloat(0x8000));
@@ -4084,7 +4082,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->actor.world.rot.x = -0xFA0;
                 func_809033F0(this, play, true);
                 this->unk_1CA = 20;
-                func_80903C60(this, 0);
+                func_80903C60(this, false);
             }
         }
 
@@ -4702,7 +4700,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 } else {
                     this->actor.textId = 0x407B;
                 }
-            } else if (D_8090CD0C == 0) {
+            } else if (!D_8090CD0C) {
                 this->actor.textId = 0x4084;
             } else {
                 this->actor.textId = 0x4097;
@@ -4812,7 +4810,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 10:
-            if (D_8090CD0C != 0) {
+            if (D_8090CD0C) {
                 if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     Message_CloseTextbox(play);
 
@@ -4820,7 +4818,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         case 0:
                             Message_ContinueTextbox(play, 0x40B2);
                             D_8090CD08 = 1;
-                            D_8090CD0C = 0;
+                            D_8090CD0C = false;
                             this->unk_154 = 20;
                             break;
 
@@ -4866,7 +4864,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 D_8090CD00 = 30000;
                                 Message_ContinueTextbox(play, 0x4088);
                             } else {
-                                if (D_809171CA == 0) {
+                                if (!D_809171CA) {
                                     if (D_809171D6 == 0) {
                                         D_809171D6++;
                                     }
@@ -5020,9 +5018,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
         case 22:
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 this->unk_154 = 0;
-                if (D_8090CD0C != 0) {
+                if (D_8090CD0C) {
                     D_8090CD08 = 1;
-                    D_8090CD0C = 0;
+                    D_8090CD0C = false;
                 }
                 D_809171FC = 0;
                 play->interfaceCtx.unk_27E = 0;
@@ -5127,14 +5125,14 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         D_8090CD04--;
     }
 
-    if ((D_8090CD0C == 0) && (D_80917206 != 2) && (D_8090CD14 > 0) && (D_8090CD08 == 1) && (D_8090CD04 == 0)) {
+    if (!D_8090CD0C && (D_80917206 != 2) && (D_8090CD14 > 0) && (D_8090CD08 == 1) && (D_8090CD04 == 0)) {
         f32 dx = sOwnerHeadPos.x - sLurePos.x;
         f32 dy = sOwnerHeadPos.y - sLurePos.y;
         f32 dz = sOwnerHeadPos.z - sLurePos.z;
 
         if ((sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 25.0f)) {
             D_8090CD08 = 0;
-            D_8090CD0C = 1;
+            D_8090CD0C = true;
             Message_StartTextbox(play, 0x4087, NULL);
         }
     }
@@ -5477,7 +5475,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         if (sSubCamEye.y <= (WATER_SURFACE_Y(play) + 1.0f)) {
             Environment_EnableUnderwaterLights(play, 1);
-            if (D_809171CA != 0) {
+            if (D_809171CA) {
                 play->envCtx.adjLightSettings.fogNear = -178;
             } else {
                 play->envCtx.adjLightSettings.fogNear = -46;
@@ -5506,22 +5504,23 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         for (i = 0; i < 10; i++) {
             Vec3f pos;
-            Vec3f vel;
+            Vec3f velocity;
             f32 speedXZ;
             f32 angle;
 
             speedXZ = Rand_ZeroFloat(1.5f) + 1.5f;
             angle = Rand_ZeroFloat(6.28f);
 
-            vel.x = sinf(angle) * speedXZ;
-            vel.z = cosf(angle) * speedXZ;
-            vel.y = Rand_ZeroFloat(3.0f) + 2.0f;
+            velocity.x = sinf(angle) * speedXZ;
+            velocity.z = cosf(angle) * speedXZ;
+            velocity.y = Rand_ZeroFloat(3.0f) + 2.0f;
 
             pos = player->actor.world.pos;
-            pos.x += 2.0f * vel.x;
+            pos.x += 2.0f * velocity.x;
             pos.y = WATER_SURFACE_Y(play);
-            pos.z += 2.0f * vel.z;
-            EnFishing_SpawnDustSplash(NULL, play->specialEffects, &pos, &vel, Rand_ZeroFloat(0.01f) + 0.020000001f);
+            pos.z += 2.0f * velocity.z;
+            EnFishing_SpawnDustSplash(NULL, play->specialEffects, &pos, &velocity,
+                                      Rand_ZeroFloat(0.01f) + 0.020000001f);
         }
     }
 
