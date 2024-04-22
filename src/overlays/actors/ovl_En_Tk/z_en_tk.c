@@ -62,7 +62,7 @@ void func_80AEF5F4(Actor* thisx, PlayState* play);
 
 static s32 D_80AF0050;
 
-#include "build/src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
 
 ActorInit En_Tk_InitVars = {
     /**/ ACTOR_EN_TK,
@@ -370,6 +370,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
 void func_80AECE0C(EnTk* this, PlayState* play) {
     if (this->unk_3CC != 0) {
+        //! FAKE:
         if (1) {}
         func_80AECE60(this, play);
     }

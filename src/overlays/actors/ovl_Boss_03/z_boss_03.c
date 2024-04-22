@@ -49,6 +49,7 @@
  * - Seaweed
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -517,8 +518,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
@@ -1377,7 +1377,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
 
-                SET_EVENTINF(EVENTINF_56);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
             }
             break;
     }

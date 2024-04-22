@@ -39,18 +39,18 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "n64-us",
             "compilerPath": "${default}", // Needs to not be "" for -m32 to work
             "compilerArgs": [
                 "-m32" // Removes integer truncation warnings with gbi macros
             ],
             "intelliSenseMode": "${default}", // Shouldn't matter
             "includePath": [ // Matches makefile's includes
-                "${workspaceFolder}/**",
+                "include",
                 "src",
                 "assets",
-                "build",
-                "include"
+                "build/n64-us/",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_LANGUAGE_C" // For gbi.h
@@ -72,11 +72,11 @@ Add the following to (or create) the `.vscode/settings.json` file for VSCode to 
     "search.useIgnoreFiles": false,
     "search.exclude": {
         "**/.git": true,
-        "baserom/**": true,
+        "baseroms/**": true,
         "build/**": true,
         "expected/**": true,
         "nonmatchings/**": true,
-        ".venv/**": true,
+        ".venv/**": true
     },
 }
 ```

@@ -540,11 +540,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
 
                     case 0xD7C:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE)) {
                             Message_ContinueTextbox(play, 0xD7E);
                         } else {
                             Message_ContinueTextbox(play, 0xD7D); // Get Heart Piece
-                            SET_WEEKEVENTREG(WEEKEVENTREG_35_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE);
                         }
                         break;
 

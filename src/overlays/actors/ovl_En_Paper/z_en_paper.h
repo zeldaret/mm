@@ -13,7 +13,7 @@ typedef struct {
     /* 0x00 */ Vec3f normal; // normal to the plane of the confetti piece
     /* 0x0C */ Vec3f rotAxis; // axis to spin around
     /* 0x18 */ Vec3f pos;
-    /* 0x24 */ Vec3f vel;
+    /* 0x24 */ Vec3f velocity;
     /* 0x30 */ s16 angle;  // angle to rotate around `rotAxis`
     /* 0x32 */ s16 angVel; // angular velocity of `angle`
 } EnPaperConfetto; // size = 0x34

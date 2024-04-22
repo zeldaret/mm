@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
             this->actor.speed = 0.0f;
         }
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -139,7 +139,7 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_56_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE);
         Actor_Kill(&this->actor);
     }
 }
