@@ -356,7 +356,7 @@ void EnDt_SetupCutsceneNpcs(EnDt* this, PlayState* play) {
 void EnDt_SetupRegularState(EnDt* this, PlayState* play) {
     this->textIdIndex = 0;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_HEART_PIECE)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
             this->textIdIndex = 21;
             this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
@@ -698,7 +698,7 @@ void EnDt_TriggerMeetingRewardEvent(EnDt* this, PlayState* play) {
 
         Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
 
-        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_REWARD);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_HEART_PIECE);
         this->actionFunc = EnDt_TriggerMeetingNotebookEvent;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
