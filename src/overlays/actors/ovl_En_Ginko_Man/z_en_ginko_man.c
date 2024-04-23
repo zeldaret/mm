@@ -118,7 +118,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
     switch (this->curTextId) {
         case 0x44C:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
                 Message_StartTextbox(play, 0x44E, &this->actor);
                 this->curTextId = 0x44E;
             } else {
@@ -544,7 +544,7 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
             Actor_OfferGetItem(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -566,8 +566,8 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE) && (this->curTextId == 0x45B)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE);
             Message_StartTextbox(play, 0x47A, &this->actor);
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
