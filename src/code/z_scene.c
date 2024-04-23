@@ -108,7 +108,7 @@ s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId) {
         }
     }
 
-    return -1;
+    return OBJECT_SLOT_NONE;
 }
 
 s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot) {

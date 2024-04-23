@@ -6456,12 +6456,12 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     func_8082DAD4(this);
     Player_AnimReplace_Setup(
         play, this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_80 | ANIM_FLAG_200);
-    knobDoor->playOpenAnim = true;
+    knobDoor->requestOpen = true;
     if (this->doorType != PLAYER_DOORTYPE_FAKE) {
         CollisionPoly* poly;
         s32 bgId;
         Vec3f pos;
-        s32 enDoorType = ENDOOR_GET_TYPE(&knobDoor->dyna.actor);
+        EnDoorType enDoorType = ENDOOR_GET_TYPE(&knobDoor->dyna.actor);
 
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
@@ -6473,7 +6473,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
 
             if (Player_HandleExitsAndVoids(play, this, poly, BGCHECK_SCENE)) {
                 gSaveContext.entranceSpeed = 2.0f;
-            } else if (enDoorType != ENDOOR_TYPE_7) {
+            } else if (enDoorType != ENDOOR_TYPE_FRAMED) {
                 Camera* mainCam;
 
                 this->av1.actionVar1 = 38.0f * D_8085C3E8;
@@ -6526,7 +6526,8 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
 
             if (this->actor.category == ACTORCAT_PLAYER) {
                 if ((this->doorType < PLAYER_DOORTYPE_FAKE) && (doorActor->category == ACTORCAT_DOOR) &&
-                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) || (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_7))) {
+                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) ||
+                     (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_FRAMED))) {
                     s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
@@ -15308,7 +15309,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 // door stuff
 void Player_Action_36(Player* this, PlayState* play) {
     EnDoor* doorActor = (EnDoor*)this->doorActor;
-    s32 sp38 = (doorActor != NULL) && (doorActor->doorType == ENDOOR_TYPE_7);
+    s32 framedDoor = (doorActor != NULL) && (doorActor->doorType == ENDOOR_TYPE_FRAMED);
     s32 animFinished;
     CollisionPoly* poly;
     s32 bgId;
@@ -15332,7 +15333,7 @@ void Player_Action_36(Player* this, PlayState* play) {
             Player_StopCutscene(this);
             func_80839E74(this, play);
 
-            if ((this->actor.category == ACTORCAT_PLAYER) && !sp38) {
+            if ((this->actor.category == ACTORCAT_PLAYER) && !framedDoor) {
                 if (play->roomCtx.prevRoom.num >= 0) {
                     func_8012EBF8(play, &play->roomCtx);
                 }
@@ -15344,7 +15345,7 @@ void Player_Action_36(Player* this, PlayState* play) {
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
         Player_StopCutscene(this);
         play->func_18780(this, play);
-    } else if (sp38 && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
+    } else if (framedDoor && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
         s16 exitIndexPlusOne = (this->doorDirection < 0) ? doorActor->knobDoor.dyna.actor.world.rot.x
                                                          : doorActor->knobDoor.dyna.actor.world.rot.z;
 
