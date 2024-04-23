@@ -504,8 +504,8 @@ void func_8099874C(EnGs* this, PlayState* play) {
                         break;
                 }
 
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE);
                     this->getItemId = GI_HEART_PIECE;
                 }
 

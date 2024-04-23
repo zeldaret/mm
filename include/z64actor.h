@@ -430,7 +430,7 @@ typedef enum {
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
 
-typedef enum {
+typedef enum DoorLockType {
     /* 0 */ DOORLOCK_NORMAL,
     /* 1 */ DOORLOCK_BOSS,
     /* 2 */ DOORLOCK_2, // DOORLOCK_NORMAL_SPIRIT on OoT
