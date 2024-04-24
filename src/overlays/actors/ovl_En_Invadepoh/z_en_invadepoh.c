@@ -2702,26 +2702,28 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->actionFunc = EnInvadepoh_Alien_Dead;
 }
 
+#define DEATH_SCALE 0.000001f
+
 /**
  * Plays the alien's death animation for 10 frames, rapidly changing the scale of both the alien and a bright flash of
  * light. Afterwards, the alien disappears into a puff of smoke, drops 30 arrows, and then begins waiting to respawn.
  */
 void EnInvadepoh_Alien_Dead(EnInvadepoh* this, PlayState* play) {
     static Vec3f sDeathScales[] = {
-        { 10000 * 0.000001f, 10000 * 0.000001f, 10000 * 0.000001f },
-        { 20000 * 0.000001f, 10000 * 0.000001f, 5000 * 0.000001f },
-        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
-        { 10000 * 0.000001f, 10000 * 0.000001f, 10000 * 0.000001f },
-        { 5000 * 0.000001f, 10000 * 0.000001f, 20000 * 0.000001f },
+        { 10000 * DEATH_SCALE, 10000 * DEATH_SCALE, 10000 * DEATH_SCALE },
+        { 20000 * DEATH_SCALE, 10000 * DEATH_SCALE, 5000 * DEATH_SCALE },
+        { -10000 * DEATH_SCALE, 0 * DEATH_SCALE, 0 * DEATH_SCALE },
+        { 10000 * DEATH_SCALE, 10000 * DEATH_SCALE, 10000 * DEATH_SCALE },
+        { 5000 * DEATH_SCALE, 10000 * DEATH_SCALE, 20000 * DEATH_SCALE },
     };
     static Vec3f sDeathFlashScales[] = {
-        { 500 * 0.000001f, 28000 * 0.000001f, 10000 * 0.000001f },
-        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
-        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
-        { 16000 * 0.000001f, 400 * 0.000001f, 10000 * 0.000001f },
-        { -10000 * 0.000001f, 0 * 0.000001f, 0 * 0.000001f },
-        { 500 * 0.000001f, 500 * 0.000001f, 500 * 0.000001f },
-        { 200 * 0.000001f, 200 * 0.000001f, 200 * 0.000001f },
+        { 500 * DEATH_SCALE, 28000 * DEATH_SCALE, 10000 * DEATH_SCALE },
+        { -10000 * DEATH_SCALE, 0 * DEATH_SCALE, 0 * DEATH_SCALE },
+        { -10000 * DEATH_SCALE, 0 * DEATH_SCALE, 0 * DEATH_SCALE },
+        { 16000 * DEATH_SCALE, 400 * DEATH_SCALE, 10000 * DEATH_SCALE },
+        { -10000 * DEATH_SCALE, 0 * DEATH_SCALE, 0 * DEATH_SCALE },
+        { 500 * DEATH_SCALE, 500 * DEATH_SCALE, 500 * DEATH_SCALE },
+        { 200 * DEATH_SCALE, 200 * DEATH_SCALE, 200 * DEATH_SCALE },
     };
     Vec3f* scale;
 
