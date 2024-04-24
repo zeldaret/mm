@@ -128,13 +128,14 @@ def main():
     """
 
     parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("-v", "--version", help="MM version to check. Defaults to n64-us", default="n64-us")
     parser.add_argument("-a", "--print-all", help="Print all symbols of the section, not just non-matching.", action="store_true")
     parser.add_argument("-n", "--no-fun-allowed", help="Remove amusing messages.", action="store_true")
     parser.add_argument("-r", "--no-reverse-check", help="Disable looking for symbols on the expected map that are missing on the built map file.", action="store_true")
     parser.add_argument("-s", "--section", help="Specify which section should be checked for reordered symbols. Use `all` to check all sections. Defaults to .bss", default=".bss", choices=[".text", ".data", ".rodata", ".bss", "all"])
     args = parser.parse_args()
 
-    mapfilePath = Path("build/mm.map")
+    mapfilePath = Path(f"build/{args.version}/mm-{args.version}.map")
     mapfileExpectedPath = "expected" / mapfilePath
     reverseCheck: bool = not args.no_reverse_check
     section: str = args.section
