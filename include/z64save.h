@@ -557,8 +557,10 @@ typedef enum {
 #define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
 #define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
 
-// Note that the time that each alien spawns is stored as an offset from 2:30 AM.
-// To get the actual time that they spawn, you need to add `CLOCK_TIME(2, 30)` to the value retrieved using this macro.
+// Note that the time that each alien spawns is stored as an offset from 2:30 AM. To get the actual time that they spawn, you need to add
+// `CLOCK_TIME(2, 30)` to the value retrieved using this macro. These spawn time macros are only intended to be used with an `index` value
+// ranging from 0 to 7; using an `index` of 8 or 9 will overwrite data used to track the alien kill count. You can technically supply an
+// `index` value between 10 and 13 and have it work, however, since these indices are unused in the final game.
 #define ALIEN_GET_SPAWN_TIME_OFFSET(index) \
     ((index % 2) == 0) ? ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF)) \
                        : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10)
