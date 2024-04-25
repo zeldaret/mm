@@ -5824,7 +5824,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actionFunc == Boss07_Mask_Beam) {
-        gSPSegment(POLY_XLU_DISP++, 12,
+        gSPSegment(POLY_XLU_DISP++, 0x0C,
                    Gfx_TexScroll(play->state.gfxCtx, 0, (this->actionTimer * -15) % 0x100U, 0x20, 0x40));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
@@ -5927,7 +5927,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     if ((this->dmgFogEffectTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
-    gSPSegment(POLY_OPA_DISP++, 8, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeState]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeState]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, Boss07_Mask_PostLimbDraw,
                       &this->actor);
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
@@ -6907,18 +6907,19 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         if (this->timer_ABC8 < 20) {
-            s32 j;
+            s32 i;
 
-            for (j = 0; j < MAJORA_REMAINS_TYPE_MAX; j++) {
+            for (i = 0; i < MAJORA_REMAINS_TYPE_MAX; i++) {
                 if ((this->timer_ABC8 % 2) != 0) {
-                    sMajoraRemains[j]->actor.world.pos.x += 2.0f;
-                    sMajoraRemains[j]->actor.world.pos.z += 2.0f;
+                    sMajoraRemains[i]->actor.world.pos.x += 2.0f;
+                    sMajoraRemains[i]->actor.world.pos.z += 2.0f;
                 } else {
-                    sMajoraRemains[j]->actor.world.pos.x -= 2.0f;
-                    sMajoraRemains[j]->actor.world.pos.z -= 2.0f;
+                    sMajoraRemains[i]->actor.world.pos.x -= 2.0f;
+                    sMajoraRemains[i]->actor.world.pos.z -= 2.0f;
                 }
             }
         }
+
         ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
@@ -6981,9 +6982,9 @@ void Boss07_BattleHandler_DrawEffects(PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, effect->alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
-            gSPSegment(POLY_XLU_DISP++, 8,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (3 * effect->scroll) % 0x80U,
-                                        (15 * -effect->scroll) % 0x100U, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (3 * effect->scroll) % 128U,
+                                        (15 * -effect->scroll) % 256U, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);

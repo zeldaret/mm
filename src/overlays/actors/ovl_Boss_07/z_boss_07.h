@@ -170,7 +170,6 @@ typedef struct Boss07 {
     /* 0x015C */ s16 invincibilityTimer;
     /* 0x015E */ s16 dmgFogEffectTimer;
     /* 0x0160 */ s16 motionBlurAlpha;
-    /* 0x0162 */ s16 unused_162;
     /* 0x0164 */ Vec3f moveTarget;
     /* 0x0170 */ f32 velocity_170; // move speed for wrath sidestep and spin, turn rate for all others
     /* 0x0174 */ u8 canDodge;
