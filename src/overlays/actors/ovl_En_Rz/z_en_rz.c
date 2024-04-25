@@ -356,7 +356,7 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 }
 
 void func_80BFBDFC(PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE)) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
@@ -505,11 +505,11 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (func_80BFBFAC(this, play)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE)) {
             this->actionFunc = func_80BFC214;
         } else {
             this->actionFunc = func_80BFC2F4;
-            SET_WEEKEVENTREG(WEEKEVENTREG_75_80);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE);
         }
         this->actor.csId = this->csIdList[1];
     }
