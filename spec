@@ -2357,7 +2357,7 @@ beginseg
     name "ovl_Boss_07"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/z_boss_07.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/ovl_Boss_07_reloc.o"
 endseg
 
 beginseg
