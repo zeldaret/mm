@@ -4146,7 +4146,7 @@ void EnInvadepoh_RewardRomani_SetupAfterGivingBottle(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnInvadepoh_Romani_StartTextbox(this, play, 0x3334);
-        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALIENS_BOTTLE);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
         EnInvadepoh_RewardRomani_SetupTalk(this);
