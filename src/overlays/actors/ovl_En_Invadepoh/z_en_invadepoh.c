@@ -4095,7 +4095,7 @@ void EnInvadepoh_RewardRomani_SetupTalk(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE)) {
                 EnInvadepoh_Romani_StartTextbox(this, play, 0x3334);
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS);
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
@@ -4129,7 +4129,7 @@ void EnInvadepoh_RewardRomani_GiveBottle(EnInvadepoh* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MILK_BOTTLE);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE);
         EnInvadepoh_RewardRomani_SetupAfterGivingBottle(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);

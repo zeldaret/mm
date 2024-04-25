@@ -814,7 +814,7 @@ typedef enum {
 #define WEEKEVENTREG_DEFENDED_AGAINST_ALIENS PACK_WEEKEVENTREG_FLAG(22, 0x01)
 
 // Player received the Bottle of Milk from Romani for defending the ranch from the aliens for the first time
-#define WEEKEVENTREG_RECEIVED_MILK_BOTTLE PACK_WEEKEVENTREG_FLAG(22, 0x02)
+#define WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE PACK_WEEKEVENTREG_FLAG(22, 0x02)
 
 // Goron Elder's son has been calmed from Goron's Lullaby.
 #define WEEKEVENTREG_CALMED_GORON_ELDERS_SON PACK_WEEKEVENTREG_FLAG(22, 0x04)
