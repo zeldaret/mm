@@ -1,5 +1,5 @@
-#ifndef Z64KANFONT_H
-#define Z64KANFONT_H
+#ifndef Z64FONT_H
+#define Z64FONT_H
 
 #include "PR/ultratypes.h"
 #include "libc/stdint.h"

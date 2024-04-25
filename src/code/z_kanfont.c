@@ -1,4 +1,4 @@
-#include "z64kanfont.h"
+#include "z64font.h"
 
 #include "segment_symbols.h"
 #include "z64message.h"

@@ -5,7 +5,7 @@
 #include "libc/stdbool.h"
 
 #include "z64bombers_notebook.h"
-#include "z64kanfont.h"
+#include "z64font.h"
 #include "z64view.h"
 #include "unk.h"
 
