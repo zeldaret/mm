@@ -551,7 +551,7 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         }
     } else if (this->curTextId == 0x45C) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -579,8 +579,8 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE);
             }
             EnGinkoMan_SetupIdle(this);
         }
