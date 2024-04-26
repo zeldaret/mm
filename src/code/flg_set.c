@@ -10,7 +10,10 @@
  *  Hold Start and press B: clear all weekEventReg and eventInf flags
  */
 
+#include "flg_set.h"
 #include "global.h"
+
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 typedef struct FlagSetEntry {
     /* 0x0 */ u8* value;
