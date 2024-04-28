@@ -35,9 +35,11 @@
 #define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
 
 #define ROM_FILE(name) \
-    { (uintptr_t)SEGMENT_ROM_START(name), (uintptr_t)SEGMENT_ROM_END(name) }
+    { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }
+#define ROM_FILE_EMPTY(name) \
+    { SEGMENT_ROM_START(name), SEGMENT_ROM_START(name) }
 #define ROM_FILE_UNSET \
-    { 0 }
+    { 0, 0 }
 
 DECLARE_SEGMENT(framebuffer_lo)
 
@@ -84,26 +86,6 @@ DECLARE_SEGMENT(system_heap)
 
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
-
-#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(_name, _enumValue, _allocType, _debugName)
-#define DEFINE_ACTOR_UNSET(_enumValue)
-
-#include "tables/actor_table.h"
-
-#undef DEFINE_ACTOR
-#undef DEFINE_ACTOR_INTERNAL
-#undef DEFINE_ACTOR_UNSET
-
-#define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
-#define DEFINE_OBJECT_UNSET(_enumValue)
-#define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)
-
-#include "tables/object_table.h"
-
-#undef DEFINE_OBJECT
-#undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_SIZE_ZERO
 
 DECLARE_ROM_SEGMENT(scene_texture_01)
 DECLARE_ROM_SEGMENT(scene_texture_02)

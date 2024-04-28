@@ -202,7 +202,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_04)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -213,7 +213,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -1008,7 +1008,7 @@ void func_80B52430(EnGk* this, PlayState* play) {
 void func_80B5253C(EnGk* this, PlayState* play) {
     s32 getItemId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE)) {
         getItemId = GI_GOLD_DUST_2;
     } else {
         getItemId = GI_GOLD_DUST;
@@ -1017,7 +1017,7 @@ void func_80B5253C(EnGk* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (getItemId == GI_GOLD_DUST) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_41_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE);
         }
         this->actionFunc = func_80B525E0;
     } else {

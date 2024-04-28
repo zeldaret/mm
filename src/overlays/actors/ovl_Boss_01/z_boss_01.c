@@ -25,6 +25,7 @@
  * to randomly select; these new wait actions are what allow him to summon a ring of fire, drop falling blocks, etc.
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_01.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"

@@ -49,7 +49,8 @@
  * @remark Name inferred from shared Animal Forest functions, meaning of "su" is unclear.
  */
 
-#include "global.h"
+#include "su_mtx.h"
+#include "z64math.h"
 
 /**
  * Constructs a matrix \$f ST \$f, i.e. a scaling \$f S \$f followed by a translation \$f T \$f.
