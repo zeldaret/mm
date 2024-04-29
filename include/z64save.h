@@ -292,7 +292,7 @@ typedef struct SaveInfo {
     /* 0xE58 */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0xE5C */ u32 unk_E5C;
     /* 0xE60 */ u32 unk_E60;
-    /* 0xE64 */ u32 unk_E64[7];                        // Invadepoh flags
+    /* 0xE64 */ u32 alienInfo[7];                      // Used by EnInvadepoh to hold alien spawn times and how many aliens the player has killed
     /* 0xE80 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
     /* 0xE9C */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
     /* 0xEA0 */ u32 unk_EA0;                           // Gossic stone heart piece flags
@@ -557,6 +557,24 @@ typedef enum {
 #define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
 #define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
 
+// Note that the time that each alien spawns is stored as an offset from 2:30 AM. To get the actual time that they spawn, you need to add
+// `CLOCK_TIME(2, 30)` to the value retrieved using this macro. These spawn time macros are only intended to be used with an `index` value
+// ranging from 0 to 7; using an `index` of 8 or 9 will overwrite data used to track the alien kill count. You can technically supply an
+// `index` value between 10 and 13 and have it work, however, since these indices are unused in the final game.
+#define ALIEN_GET_SPAWN_TIME_OFFSET(index) \
+    (((index % 2) == 0) ? ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF)) \
+                        : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10))
+
+#define ALIEN_SET_SPAWN_TIME_OFFSET(index, spawnTime) \
+    ((index % 2) == 0) ? (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) | (spawnTime & 0xFFFF)) \
+                       : (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF) | ((spawnTime & 0xFFFF) << 0x10))
+
+#define ALIEN_GET_KILL_COUNT() \
+    gSaveContext.save.saveInfo.alienInfo[4] & 0xFF
+
+#define ALIEN_SET_KILL_COUNT(count) \
+    gSaveContext.save.saveInfo.alienInfo[4] = (gSaveContext.save.saveInfo.alienInfo[4] & ~0xFF) | (count & 0xFF)
+
 /**
  * gSaveContext.save.saveInfo.weekEventReg
  */
@@ -785,15 +803,18 @@ typedef enum {
 #define WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON PACK_WEEKEVENTREG_FLAG(21, 0x08)
 
 #define WEEKEVENTREG_21_10 PACK_WEEKEVENTREG_FLAG(21, 0x10)
-#define WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM PACK_WEEKEVENTREG_FLAG(21, 0x20)
+
+// Player talked with Romani before the alien invasion and agreed to help her
+#define WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS PACK_WEEKEVENTREG_FLAG(21, 0x20)
+
 #define WEEKEVENTREG_21_40 PACK_WEEKEVENTREG_FLAG(21, 0x40)
 #define WEEKEVENTREG_21_80 PACK_WEEKEVENTREG_FLAG(21, 0x80)
 
-// Aliens defeated
-// "Winning" the alien invasion
-#define WEEKEVENTREG_DEFENDED_AGAINST_THEM PACK_WEEKEVENTREG_FLAG(22, 0x01)
+// Player successfully defended Romani Ranch from the alien invasion on Night 1
+#define WEEKEVENTREG_DEFENDED_AGAINST_ALIENS PACK_WEEKEVENTREG_FLAG(22, 0x01)
 
-#define WEEKEVENTREG_22_02 PACK_WEEKEVENTREG_FLAG(22, 0x02)
+// Player received the Bottle of Milk from Romani for defending the ranch from the aliens for the first time
+#define WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE PACK_WEEKEVENTREG_FLAG(22, 0x02)
 
 // Goron Elder's son has been calmed from Goron's Lullaby.
 #define WEEKEVENTREG_CALMED_GORON_ELDERS_SON PACK_WEEKEVENTREG_FLAG(22, 0x04)
@@ -1052,7 +1073,7 @@ typedef enum {
 #define WEEKEVENTREG_54_02 PACK_WEEKEVENTREG_FLAG(54, 0x02)
 #define WEEKEVENTREG_54_04 PACK_WEEKEVENTREG_FLAG(54, 0x04)
 #define WEEKEVENTREG_54_08 PACK_WEEKEVENTREG_FLAG(54, 0x08)
-#define WEEKEVENTREG_54_10 PACK_WEEKEVENTREG_FLAG(54, 0x10)
+#define WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1 PACK_WEEKEVENTREG_FLAG(54, 0x10)
 #define WEEKEVENTREG_54_20 PACK_WEEKEVENTREG_FLAG(54, 0x20)
 #define WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE PACK_WEEKEVENTREG_FLAG(54, 0x40)
 #define WEEKEVENTREG_54_80 PACK_WEEKEVENTREG_FLAG(54, 0x80)
@@ -1195,9 +1216,9 @@ typedef enum {
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES    PACK_WEEKEVENTREG_FLAG(69, 0x02)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES   PACK_WEEKEVENTREG_FLAG(69, 0x04)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT          PACK_WEEKEVENTREG_FLAG(69, 0x08)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM      PACK_WEEKEVENTREG_FLAG(69, 0x10)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM           PACK_WEEKEVENTREG_FLAG(69, 0x20)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE            PACK_WEEKEVENTREG_FLAG(69, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_ALIENS    PACK_WEEKEVENTREG_FLAG(69, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS         PACK_WEEKEVENTREG_FLAG(69, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALIENS_BOTTLE            PACK_WEEKEVENTREG_FLAG(69, 0x40)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA                 PACK_WEEKEVENTREG_FLAG(69, 0x80)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK           PACK_WEEKEVENTREG_FLAG(70, 0x01)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KEATON_MASK            PACK_WEEKEVENTREG_FLAG(70, 0x02)
@@ -1401,7 +1422,11 @@ typedef enum {
 // Unconfirmed: "Postman has delivered priority mail"
 #define WEEKEVENTREG_89_08 PACK_WEEKEVENTREG_FLAG(89, 0x08)
 
-#define WEEKEVENTREG_89_10 PACK_WEEKEVENTREG_FLAG(89, 0x10)
+// Player tried but failed to defend Romani Ranch from the alien invasion on Night 1
+// This is only set if the player is actually in the ranch when the aliens reach the barn.
+// If the player isn't in the ranch when this happens, then this weekeventreg will remain unset.
+#define WEEKEVENTREG_FAILED_TO_DEFEND_AGAINST_ALIENS PACK_WEEKEVENTREG_FLAG(89, 0x10)
+
 #define WEEKEVENTREG_89_20 PACK_WEEKEVENTREG_FLAG(89, 0x20)
 
 // Unconfirmed: "Postman is about to flee"

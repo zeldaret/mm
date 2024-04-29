@@ -3754,9 +3754,7 @@ beginseg
     name "ovl_En_Invadepoh"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Invadepoh/z_en_invadepoh.o"
-    include "$(BUILD_DIR)/data/ovl_En_Invadepoh/ovl_En_Invadepoh.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Invadepoh/ovl_En_Invadepoh.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Invadepoh/ovl_En_Invadepoh.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Invadepoh/ovl_En_Invadepoh_reloc.o"
 endseg
 
 beginseg

@@ -251,7 +251,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             this->dList = gRuinFragmentDL;
             this->timer = 150;
         }
-    } else if (TWINMOLD_PROP_GET_TYPE(&this->actor) == TWINMOLD_PROP_TYPE_STATIC) {
+    } else if (TWINMOLD_PROP_GET_TYPE(&this->actor) == TWINMOLD_PROP_TYPE_SPAWN_HANDLER) {
         EnTanron5* child;
         s32 i;
 
