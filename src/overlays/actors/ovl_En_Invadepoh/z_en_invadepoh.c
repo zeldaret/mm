@@ -607,7 +607,7 @@ f32 EnInvadepoh_GetTotalPathDistance(EnInvadepoh* this) {
     for (i = 1; i < pointCount; currentPathPoint++, i++) {
         Math_Vec3f_Copy(&previousPathPointPos, &currentPathPointPos);
         Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
-        totalPathDistance += Math3D_Distance(&previousPathPointPos, &currentPathPointPos);
+        totalPathDistance += Math3D_Vec3f_DistXYZ(&previousPathPointPos, &currentPathPointPos);
     }
 
     return totalPathDistance;
@@ -688,7 +688,7 @@ s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
     // Projects the dog's current position onto the line formed by the current and next path points and checks to see if
     // the projected position lies between the current and next points along the path. In other words, it makes sure the
     // dog is not "behind" the current point or "ahead of" the next point along the axis formed by the two points.
-    pathSegmentDistance = Math3D_XZLength(diffX, diffZ);
+    pathSegmentDistance = Math3D_Dist1D(diffX, diffZ);
     distanceAlongPath = (offsetFromPointZ * cos) + (offsetFromPointX * sin);
     if ((distanceAlongPath < 0.0f) || (pathSegmentDistance < distanceAlongPath)) {
         return false;
@@ -770,7 +770,7 @@ void EnInvadepoh_Alien_SetCheckpoints(EnInvadepoh* this) {
     for (i = 1; i < endPoint; i++, currentPathPoint++, pathCheckpoint++) {
         Math_Vec3f_Copy(&previousPathPointPos, &currentPathPointPos);
         Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
-        pathSegmentDistance += Math3D_Distance(&previousPathPointPos, &currentPathPointPos);
+        pathSegmentDistance += Math3D_Vec3f_DistXYZ(&previousPathPointPos, &currentPathPointPos);
         *pathCheckpoint = pathSegmentDistance * invTotalPathDistance;
 
         if (*pathCheckpoint < 0.0f) {
@@ -1039,7 +1039,7 @@ s32 EnInvadepoh_Dog_MoveAlongPath(EnInvadepoh* this, PlayState* play) {
     worldToCurrent.z = currentPathPointZ - this->actor.world.pos.z;
 
     if (this->actor.speed > 0.0f) {
-        if (Math3D_AngleBetweenVectors(&currentToNext, &worldToNext, &angleToNext)) {
+        if (Math3D_CosOut(&currentToNext, &worldToNext, &angleToNext)) {
             reachedNextPoint = true;
         } else if (angleToNext <= 0.0f) {
             reachedNextPoint = true;
@@ -1129,7 +1129,7 @@ void EnInvadepoh_Alien_DesegmentTexAnims(void) {
 s32 EnInvadepoh_StepToXZ(f32* pValueX, f32* pValueZ, f32 targetX, f32 targetZ, f32 step) {
     f32 diffX = targetX - *pValueX;
     f32 diffZ = targetZ - *pValueZ;
-    f32 distToTarget = Math3D_XZLength(diffX, diffZ);
+    f32 distToTarget = Math3D_Dist1D(diffX, diffZ);
 
     if (step < distToTarget) {
         f32 stepFraction = step / distToTarget;
