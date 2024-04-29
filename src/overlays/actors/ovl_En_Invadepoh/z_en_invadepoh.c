@@ -631,7 +631,7 @@ void EnInvadepoh_SetPosToPathPoint(EnInvadepoh* this, s32 point) {
 
 /**
  * Returns true if the dog is considered sufficiently "close enough" to the path it's running along and false otherwise.
- * Specifically, it checks to see if the dog's position is contained within a parallelogram that looks like this:
+ * Specifically, it checks to see if the dog's position is contained within a rectangle that looks like this:
  *           ____________________________
  *          |                            |
  *  (a - b) |                            |
@@ -642,7 +642,7 @@ void EnInvadepoh_SetPosToPathPoint(EnInvadepoh* this, s32 point) {
  *          |____________________________|
  *
  * Based on the dog's current point along the path (labeled C in the above diagram) and the dog's "next" point (labeled
- * as N), the parallelogram extends `(a - b)` units in both perpendicular directions from the line formed by those two
+ * as N), the rectangle extends `(a - b)` units in both perpendicular directions from the line formed by those two
  * points. Note that this function does not work properly when the dog is running clockwise due to a bug.
  */
 s32 EnInvadepoh_Dog_IsCloseToPath(EnInvadepoh* this, f32 a, f32 b) {
