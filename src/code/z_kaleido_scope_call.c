@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "z64pause_menu.h"
 
 #include "z64.h"

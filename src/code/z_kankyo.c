@@ -3341,7 +3341,7 @@ u32 Environment_GetStormState(PlayState* play) {
     u32 stormState = play->envCtx.stormState;
 
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
-        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))
+        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS))
                          ? STORM_STATE_ON
                          : STORM_STATE_OFF;
     }

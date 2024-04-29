@@ -188,12 +188,12 @@ void EnKitan_OfferPrize(EnKitan* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnKitan_WaitForPrizeTextboxClosed;
-        SET_WEEKEVENTREG(WEEKEVENTREG_79_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KEATON_HEART_PIECE);
         return;
     }
 
     // Reward the player with a heart piece, or a red rupee if the heart piece was already obtained.
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KEATON_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 2000.0f, 1000.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);

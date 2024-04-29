@@ -97,7 +97,7 @@ typedef struct ActorPathing {
     /* 0x68 */ ActorPathingUpdateFunc setNextPointFunc; // Return true if should compute and update again
 } ActorPathing; // size = 0x6C
 
-struct EnDoor* SubS_FindDoor(struct PlayState* play, s32 switchFlag);
+struct EnDoor* SubS_FindScheduleDoor(struct PlayState* play, s32 schType);
 
 Gfx* SubS_DrawTransformFlexLimb(struct PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
 Gfx* SubS_DrawTransformFlex(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx);

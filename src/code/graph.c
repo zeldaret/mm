@@ -1,6 +1,5 @@
 #include "z64.h"
 #include "regs.h"
-#include "functions.h"
 #include "fault.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -10,13 +9,15 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
 
-#include "variables.h"
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 #include "libc64/malloc.h"
+#include "z64DLF.h"
 #include "z64speed_meter.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"

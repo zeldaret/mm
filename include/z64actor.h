@@ -4,13 +4,11 @@
 #include "PR/ultratypes.h"
 #include "color.h"
 #include "padutils.h"
+#include "z64actor_dlftbls.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
 #include "unk.h"
-
-// This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
-#define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -48,24 +46,6 @@ typedef struct ActorInit {
     /* 0x18 */ ActorFunc update;
     /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
-
-typedef enum AllocType {
-    /* 0 */ ALLOCTYPE_NORMAL,
-    /* 1 */ ALLOCTYPE_ABSOLUTE,
-    /* 2 */ ALLOCTYPE_PERMANENT
-} AllocType;
-
-typedef struct ActorOverlay {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
-    /* 0x08 */ void* vramStart;
-    /* 0x0C */ void* vramEnd;
-    /* 0x10 */ void* loadedRamAddr; // original name: "allocp"
-    /* 0x14 */ ActorInit* initInfo;
-    /* 0x18 */ char* name;
-    /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
-    /* 0x1E */ s8 numLoaded; // original name: "clients"
-} ActorOverlay; // size = 0x20
 
 typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
@@ -169,7 +149,7 @@ typedef struct Actor {
     /* 0x134 */ ActorFunc destroy; // Destruction Routine. Called by `Actor_Destroy`
     /* 0x138 */ ActorFunc update; // Update Routine. Called by `Actor_UpdateAll`
     /* 0x13C */ ActorFunc draw; // Draw Routine. Called by `Actor_Draw`
-    /* 0x140 */ ActorOverlay* overlayEntry; // Pointer to the overlay table entry for this actor
+    /* 0x140 */ struct ActorOverlay* overlayEntry; // Pointer to the overlay table entry for this actor
 } Actor; // size = 0x144
 
 typedef enum {
@@ -450,20 +430,7 @@ typedef enum {
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
 
-#define DEFINE_ACTOR(_name, enumValue, _allocType, _debugName) enumValue,
-#define DEFINE_ACTOR_INTERNAL(_name, enumValue, _allocType, _debugName) enumValue,
-#define DEFINE_ACTOR_UNSET(enumValue) enumValue,
-
-typedef enum ActorId {
-    #include "tables/actor_table.h"
-    /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
-} ActorId;
-
-#undef DEFINE_ACTOR
-#undef DEFINE_ACTOR_INTERNAL
-#undef DEFINE_ACTOR_UNSET
-
-typedef enum {
+typedef enum DoorLockType {
     /* 0 */ DOORLOCK_NORMAL,
     /* 1 */ DOORLOCK_BOSS,
     /* 2 */ DOORLOCK_2, // DOORLOCK_NORMAL_SPIRIT on OoT

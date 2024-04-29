@@ -9,7 +9,7 @@ struct EnTanron5;
 #define TWINMOLD_PROP_PARAMS(type) (type)
 
 typedef enum {
-    /*   0 */ TWINMOLD_PROP_TYPE_STATIC,
+    /*   0 */ TWINMOLD_PROP_TYPE_SPAWN_HANDLER,
     /*   1 */ TWINMOLD_PROP_TYPE_RUIN_PILLAR_1,
     /*   2 */ TWINMOLD_PROP_TYPE_RUIN_PILLAR_2,
     /*   3 */ TWINMOLD_PROP_TYPE_RUIN_PILLAR_3,

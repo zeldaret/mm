@@ -3,6 +3,7 @@
 
 #include "message_data_static.h"
 #include "padmgr.h"
+#include "sys_cmpdma.h"
 #include "segment_symbols.h"
 #include "z64actor.h"
 #include "z64horse.h"

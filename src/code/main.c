@@ -32,7 +32,9 @@ PadMgr gPadMgr;
 #include "main.h"
 #include "buffers.h"
 #include "global.h"
+#include "sys_initial_check.h"
 #include "system_heap.h"
+#include "z64nmi_buff.h"
 #include "z64thread.h"
 
 s32 gScreenWidth = SCREEN_WIDTH;

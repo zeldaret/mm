@@ -1372,9 +1372,9 @@ asm/non_matchings/code/z_lib/Lib_VirtualToPhysical.s,Lib_VirtualToPhysical,0x801
 asm/non_matchings/code/z_lib/Lib_PhysicalToVirtual.s,Lib_PhysicalToVirtual,0x801005A0,0x8
 asm/non_matchings/code/z_lifemeter/LifeMeter_Init.s,LifeMeter_Init,0x801005C0,0x37
 asm/non_matchings/code/z_lifemeter/LifeMeter_UpdateColors.s,LifeMeter_UpdateColors,0x8010069C,0xF9
-asm/non_matchings/code/z_lifemeter/func_80100A80.s,func_80100A80,0x80100A80,0x8
-asm/non_matchings/code/z_lifemeter/func_80100AA0.s,func_80100AA0,0x80100AA0,0x14
-asm/non_matchings/code/z_lifemeter/func_80100AF0.s,func_80100AF0,0x80100AF0,0x27
+asm/non_matchings/code/z_lifemeter/LifeMeter_SaveInterfaceHealth.s,LifeMeter_SaveInterfaceHealth,0x80100A80,0x8
+asm/non_matchings/code/z_lifemeter/LifeMeter_IncreaseInterfaceHealth.s,LifeMeter_IncreaseInterfaceHealth,0x80100AA0,0x14
+asm/non_matchings/code/z_lifemeter/LifeMeter_DecreaseInterfaceHealth.s,LifeMeter_DecreaseInterfaceHealth,0x80100AF0,0x27
 asm/non_matchings/code/z_lifemeter/LifeMeter_Draw.s,LifeMeter_Draw,0x80100B8C,0x32E
 asm/non_matchings/code/z_lifemeter/LifeMeter_UpdateSizeAndBeep.s,LifeMeter_UpdateSizeAndBeep,0x80101844,0x3B
 asm/non_matchings/code/z_lifemeter/LifeMeter_IsCritical.s,LifeMeter_IsCritical,0x80101930,0x1C
@@ -2169,7 +2169,7 @@ asm/non_matchings/code/z_snap/func_8013A46C.s,func_8013A46C,0x8013A46C,0x16
 asm/non_matchings/code/z_snap/func_8013A4C4.s,func_8013A4C4,0x8013A4C4,0x10
 asm/non_matchings/code/z_snap/func_8013A504.s,func_8013A504,0x8013A504,0xB
 asm/non_matchings/code/z_snap/func_8013A530.s,func_8013A530,0x8013A530,0xA4
-asm/non_matchings/code/z_sub_s/SubS_FindDoor.s,SubS_FindDoor,0x8013A7C0,0x28
+asm/non_matchings/code/z_sub_s/SubS_FindScheduleDoor.s,SubS_FindScheduleDoor,0x8013A7C0,0x28
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC

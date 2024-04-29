@@ -517,7 +517,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
 void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        SET_WEEKEVENTREG(WEEKEVENTREG_17_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_LAND_TITLE_DEED);
         this->actionFunc = func_80ADBCE4;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
@@ -987,7 +987,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad2;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_LAND_TITLE_DEED) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
         Actor_Kill(&this->actor);
     }
 

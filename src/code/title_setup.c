@@ -1,4 +1,6 @@
 #include "z_title_setup.h"
+#include "sys_flashrom.h"
+
 #include "overlays/gamestates/ovl_title/z_title.h"
 
 void Setup_InitRegs(void) {

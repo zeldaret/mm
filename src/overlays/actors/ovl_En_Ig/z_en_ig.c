@@ -156,26 +156,27 @@ Actor* EnIg_FindActor(EnIg* this, PlayState* play, u8 actorCategory, s16 actorId
     return actorIter;
 }
 
-EnDoor* func_80BF1200(PlayState* play, s32 arg1) {
-    s32 phi_a1;
+EnDoor* EnIg_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
-    switch (arg1) {
+    switch (scheduleOutputResult) {
         case 5:
         case 6:
         case 7:
         case 9:
-            phi_a1 = 11;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE;
             break;
 
         case 8:
-            phi_a1 = 15;
+            schType = ENDOOR_SCH_TYPE_INN_KNIFE_CHAMBER;
             break;
 
         default:
-            phi_a1 = -1;
+            schType = -1;
             break;
     }
-    return SubS_FindDoor(play, phi_a1);
+
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 void EnIg_UpdateSkelAnime(EnIg* this) {
@@ -534,7 +535,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = func_80BF1200(play, scheduleOutput->result);
+    door = EnIg_FindScheduleDoor(play, scheduleOutput->result);
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
@@ -719,7 +720,7 @@ s32 func_80BF2400(EnIg* this, PlayState* play) {
 }
 
 s32 func_80BF2470(EnIg* this, PlayState* play) {
-    EnDoor* door = func_80BF1200(play, this->scheduleResult);
+    EnDoor* door = EnIg_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     f32 temp;
     s32 pad;

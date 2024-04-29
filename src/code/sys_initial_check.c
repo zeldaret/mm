@@ -6,8 +6,14 @@
  * These checks are some of the first functions run in Main, before even setting up the system heap, and any image files
  * are DMA'd directly to fixed RAM addresses.
  */
+
+#include "sys_initial_check.h"
 #include "global.h"
+
+#include "color.h"
 #include "fault.h"
+#include "segment_symbols.h"
+
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
@@ -28,7 +34,7 @@
 
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
     if (value & RGBA16_PIXEL_OPAQUE) {
-        (&buffer[x])[y * SCREEN_WIDTH] = value;
+        buffer[x + y * SCREEN_WIDTH] = value;
     }
 }
 

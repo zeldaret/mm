@@ -222,7 +222,7 @@ void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* knockbackDir) {
 void ObjMine_AirWater_Noop(ObjMine* this) {
 }
 
-void ObjMine_ReplaceTranslation(Vec3f* translation) {
+void ObjMine_SetMatrixTranslation(Vec3f* translation) {
     MtxF* matrix = Matrix_GetCurrent();
 
     matrix->xw = translation->x;
@@ -230,7 +230,7 @@ void ObjMine_ReplaceTranslation(Vec3f* translation) {
     matrix->zw = translation->z;
 }
 
-void ObjMine_SetRotation(ObjMineMtxF3* basis) {
+void ObjMine_SetMatrixRotation(ObjMineMtxF3* basis) {
     MtxF* matrix = Matrix_GetCurrent();
 
     matrix->xx = basis->x.x;
@@ -1150,7 +1150,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
-    ObjMine_SetRotation(&airChain->basis);
+    ObjMine_SetMatrixRotation(&airChain->basis);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (linkCount != 0) {
         // Sets pivot point to be half a chain link length below home
@@ -1165,7 +1165,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
             linkPos.x += linkOffset.x;
             linkPos.y += linkOffset.y;
             linkPos.z += linkOffset.z;
-            ObjMine_ReplaceTranslation(&linkPos);
+            ObjMine_SetMatrixTranslation(&linkPos);
 
             gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gfx++, object_ny_DL_000030);
@@ -1173,7 +1173,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     }
 
     Matrix_RotateXS(0x2000, MTXMODE_APPLY);
-    ObjMine_ReplaceTranslation(&this->actor.world.pos);
+    ObjMine_SetMatrixTranslation(&this->actor.world.pos);
 
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPPipeSync(gfx++);
@@ -1207,20 +1207,20 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
     for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
-        ObjMine_SetRotation(&waterLink->basis);
+        ObjMine_SetMatrixRotation(&waterLink->basis);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         // Consecutive chain links are offset 90 degrees.
         if ((i % 2) == 0) {
             Matrix_RotateYS(0x4000, MTXMODE_APPLY);
         }
-        ObjMine_ReplaceTranslation(&waterLink->pos);
+        ObjMine_SetMatrixTranslation(&waterLink->pos);
 
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, object_ny_DL_000030);
     }
 
     Matrix_RotateXS(0x2000, MTXMODE_APPLY);
-    ObjMine_ReplaceTranslation(&this->actor.world.pos);
+    ObjMine_SetMatrixTranslation(&this->actor.world.pos);
 
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPPipeSync(gfx++);
