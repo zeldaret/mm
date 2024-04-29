@@ -563,7 +563,7 @@ typedef enum {
 // `index` value between 10 and 13 and have it work, however, since these indices are unused in the final game.
 #define ALIEN_GET_SPAWN_TIME_OFFSET(index) \
     (((index % 2) == 0) ? ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF)) \
-                       : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10))
+                        : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10))
 
 #define ALIEN_SET_SPAWN_TIME_OFFSET(index, spawnTime) \
     ((index % 2) == 0) ? (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) | (spawnTime & 0xFFFF)) \
