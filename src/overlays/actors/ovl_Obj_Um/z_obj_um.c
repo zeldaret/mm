@@ -15,7 +15,7 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - WEEKEVENTREG_DEFENDED_AGAINST_THEM: Aliens defeated
+ * - WEEKEVENTREG_DEFENDED_AGAINST_ALIENS: Aliens defeated
  *     If false: The actor doesn't spawn
  * - WEEKEVENTREG_31_40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
@@ -680,7 +680,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }

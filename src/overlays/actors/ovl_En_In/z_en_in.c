@@ -224,7 +224,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS);
 
     return ret;
 }

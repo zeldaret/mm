@@ -26,7 +26,7 @@
         <Array Name="object_syotenVtx_0018C0" Count="81" Offset="0x18C0">
             <Vtx/>
         </Array>
-        <DList Name="object_syoten_DL_001DD0" Offset="0x1DD0" />
+        <DList Name="object_syoten_DL_001DD0" Offset="0x1DD0" /> <!-- Original name is "soul_shoten4" -->
         <DList Name="object_syoten_DL_002018" Offset="0x2018" />
         <DList Name="object_syoten_DL_002880" Offset="0x2880" />
         <DList Name="object_syoten_DL_002A20" Offset="0x2A20" />

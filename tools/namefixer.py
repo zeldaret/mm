@@ -1149,6 +1149,7 @@ wordReplace = {
     "gSaveContext.save.pictoFlags1": "gSaveContext.save.saveInfo.pictoFlags1",
     "gSaveContext.save.unk_E84": "gSaveContext.save.saveInfo.unk_E60",
     "gSaveContext.save.unk_E88": "gSaveContext.save.saveInfo.unk_E64",
+    "gSaveContext.save.unk_E64": "gSaveContext.save.saveInfo.alienInfo",
     "gSaveContext.save.scenesVisible": "gSaveContext.save.saveInfo.scenesVisible",
     "gSaveContext.save.skullTokenCount": "gSaveContext.save.saveInfo.skullTokenCount",
     "gSaveContext.save.unk_EC4": "gSaveContext.save.saveInfo.unk_EA0",
