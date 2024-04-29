@@ -42,9 +42,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {
-    u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(alienIndex);
-
-    return spawnTimeOffset + CLOCK_TIME(2, 30);
+    return CLOCK_TIME(2, 30) + ALIEN_GET_SPAWN_TIME_OFFSET(alienIndex);
 }
 
 s32 func_80C07CD0(void) {

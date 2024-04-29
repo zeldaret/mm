@@ -437,9 +437,7 @@ void EnInvadepoh_Alien_SetSpawnTime(s32 index, s32 spawnTime) {
 }
 
 s32 EnInvadepoh_Alien_GetSpawnTime(s32 index) {
-    u32 spawnTimeOffset = ALIEN_GET_SPAWN_TIME_OFFSET(index);
-
-    return spawnTimeOffset + CLOCK_TIME(2, 30);
+    return CLOCK_TIME(2, 30) + ALIEN_GET_SPAWN_TIME_OFFSET(index);
 }
 
 void EnInvadepoh_Alien_SetKillCount(s32 count) {
@@ -894,7 +892,7 @@ void EnInvadepoh_Alien_PathUpdate(EnInvadepoh* this, PlayState* play) {
         f32 nextWeight = this->pathProgress - currentCheckpoint;
         f32 currentWeight = nextCheckpoint - this->pathProgress;
         f32 invCheckpointDistance = 1.0f / (nextCheckpoint - currentCheckpoint);
-        s32 pad3;
+        s32 pad2;
 
         Math_Vec3s_ToVec3f(&currentPathPointPos, currentPathPoint);
         Math_Vec3s_ToVec3f(&nextPathPointPos, nextPathPoint);
@@ -1370,26 +1368,26 @@ typedef enum RomaniEyeAnimation {
     /* 8 */ ROMANI_EYE_ANIM_MAX
 } RomaniEyeAnimation;
 
-static s8 sRomaniEyeOpenIndices[1] = { ROMANI_EYE_OPEN };
+static s8 sRomaniEyeOpenIndices[] = { ROMANI_EYE_OPEN };
 
-static s8 sRomaniFastBlinkIndices[4] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
+static s8 sRomaniFastBlinkIndices[] = { ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN };
 
-static s8 sRomaniMediumBlinkIndices[5] = {
+static s8 sRomaniMediumBlinkIndices[] = {
     ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
 };
 
-static s8 sRomaniSlowBlinkIndices[6] = {
+static s8 sRomaniSlowBlinkIndices[] = {
     ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF, ROMANI_EYE_OPEN,
 };
 
-static s8 sRomaniDoubleBlinkIndices[8] = {
+static s8 sRomaniDoubleBlinkIndices[] = {
     ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_HALF,
     ROMANI_EYE_OPEN, ROMANI_EYE_HALF, ROMANI_EYE_CLOSED, ROMANI_EYE_OPEN,
 };
 
-static s8 sRomaniEyeHalfIndices[1] = { ROMANI_EYE_HALF };
+static s8 sRomaniEyeHalfIndices[] = { ROMANI_EYE_HALF };
 
-static s8 sRomaniEyeHappyIndices[1] = { ROMANI_EYE_HAPPY };
+static s8 sRomaniEyeHappyIndices[] = { ROMANI_EYE_HAPPY };
 
 static EnInvadepohFaceFrames sRomaniEyeOpenFrames = {
     sRomaniEyeOpenIndices,
@@ -1430,14 +1428,14 @@ static EnInvadepohFaceAnimOnce sRomaniEyeOpenAnim = {
     { FACE_ANIMATION_TYPE_ONCE, &sRomaniEyeOpenFrames },
 };
 
-static EnInvadepohFaceAnimNext sRomaniRandomBlinkNext[4] = {
+static EnInvadepohFaceAnimNext sRomaniRandomBlinkNext[] = {
     { ROMANI_EYE_ANIM_FAST_BLINK, 0.5f },
     { ROMANI_EYE_ANIM_MEDIUM_BLINK, 0.9f },
     { ROMANI_EYE_ANIM_SLOW_BLINK, 0.97f },
     { ROMANI_EYE_ANIM_DOUBLE_BLINK, 1.0f },
 };
 
-static EnInvadepohFaceAnimNext sRomaniEyeOpenNext[1] = { ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
+static EnInvadepohFaceAnimNext sRomaniEyeOpenNext[] = { ROMANI_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
 
 static EnInvadepohFaceAnimChainedDelay sRomaniEyeOpenThenRandomBlinkAnim = {
     { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sRomaniEyeOpenFrames },
@@ -1498,13 +1496,13 @@ typedef enum RomaniMouthAnimation {
     /* 4 */ ROMANI_MOUTH_ANIM_MAX
 } RomaniMouthAnimation;
 
-static s8 sRomaniMouthHappyIndices[1] = { ROMANI_MOUTH_HAPPY };
+static s8 sRomaniMouthHappyIndices[] = { ROMANI_MOUTH_HAPPY };
 
-static s8 sRomaniMouthFrownIndices[1] = { ROMANI_MOUTH_FROWN };
+static s8 sRomaniMouthFrownIndices[] = { ROMANI_MOUTH_FROWN };
 
-static s8 sRomaniMouthHangingOpenIndices[1] = { ROMANI_MOUTH_HANGING_OPEN };
+static s8 sRomaniMouthHangingOpenIndices[] = { ROMANI_MOUTH_HANGING_OPEN };
 
-static s8 sRomaniMouthSmileIndices[1] = { ROMANI_MOUTH_SMILE };
+static s8 sRomaniMouthSmileIndices[] = { ROMANI_MOUTH_SMILE };
 
 static EnInvadepohFaceFrames sRomaniMouthHappyFrames = {
     sRomaniMouthHappyIndices,
@@ -1559,19 +1557,19 @@ typedef enum CremiaEyeAnimation {
     /* 6 */ CREMIA_EYE_ANIM_MAX
 } CremiaEyeAnimation;
 
-static s8 sCremiaEyeOpenIndices[1] = { CREMIA_EYE_OPEN };
+static s8 sCremiaEyeOpenIndices[] = { CREMIA_EYE_OPEN };
 
-static s8 sCremiaFastBlinkIndices[4] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
+static s8 sCremiaFastBlinkIndices[] = { CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN };
 
-static s8 sCremiaMediumBlinkIndices[5] = {
+static s8 sCremiaMediumBlinkIndices[] = {
     CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
 };
 
-static s8 sCremiaSlowBlinkIndices[6] = {
+static s8 sCremiaSlowBlinkIndices[] = {
     CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF, CREMIA_EYE_OPEN,
 };
 
-static s8 sCremiaDoubleBlinkIndices[8] = {
+static s8 sCremiaDoubleBlinkIndices[] = {
     CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_HALF,
     CREMIA_EYE_OPEN, CREMIA_EYE_HALF, CREMIA_EYE_CLOSED, CREMIA_EYE_OPEN,
 };
@@ -1605,14 +1603,14 @@ static EnInvadepohFaceAnimOnce sCremiaEyeOpenAnim = {
     { FACE_ANIMATION_TYPE_ONCE, &sCremiaEyeOpenFrames },
 };
 
-static EnInvadepohFaceAnimNext sCremiaRandomBlinkNext[4] = {
+static EnInvadepohFaceAnimNext sCremiaRandomBlinkNext[] = {
     { CREMIA_EYE_ANIM_FAST_BLINK, 0.5f },
     { CREMIA_EYE_ANIM_MEDIUM_BLINK, 0.9f },
     { CREMIA_EYE_ANIM_SLOW_BLINK, 0.95f },
     { CREMIA_EYE_ANIM_DOUBLE_BLINK, 1.0f },
 };
 
-static EnInvadepohFaceAnimNext sCremiaEyeOpenNext[1] = { CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
+static EnInvadepohFaceAnimNext sCremiaEyeOpenNext[] = { CREMIA_EYE_ANIM_OPEN_THEN_RANDOM_BLINK, 1.0f };
 
 static EnInvadepohFaceAnimChainedDelay sCremiaEyeOpenThenRandomBlinkAnim = {
     { FACE_ANIMATION_TYPE_CHAINED_DELAY, &sCremiaEyeOpenFrames },
@@ -1660,7 +1658,7 @@ typedef enum CremiaMouthAnimation {
     /* 1 */ CREMIA_MOUTH_ANIM_MAX
 } CremiaMouthAnimation;
 
-static s8 sCremiaMouthNormalIndices[1] = { CREMIA_MOUTH_NORMAL };
+static s8 sCremiaMouthNormalIndices[] = { CREMIA_MOUTH_NORMAL };
 
 static EnInvadepohFaceFrames sCremiaMouthNormalFrames = {
     sCremiaMouthNormalIndices,
@@ -2360,7 +2358,7 @@ void EnInvadepoh_InvasionHandler_IntroCutscene(EnInvadepoh* this, PlayState* pla
     };
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sAlienSpawnTimes); i++) {
+    for (i = 0; i < ALIEN_COUNT; i++) {
         if (this->timer == sAlienSpawnTimes[i]) {
             sAlienStateFlags[i] |= ALIEN_STATE_FLAG_ACTIVE;
         }
@@ -2617,7 +2615,7 @@ void EnInvadepoh_Alien_WarpIn(EnInvadepoh* this, PlayState* play) {
     }
 
     if (this->alpha == 255) {
-        if (this->eyeBeamAlpha >= 245) {
+        if (this->eyeBeamAlpha >= (255 - 10)) {
             this->eyeBeamAlpha = 255;
             EnInvadepoh_Alien_SetupFloatForward(this);
         } else {
@@ -3093,7 +3091,7 @@ void EnInvadepoh_AbductedRomani_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnInvadepoh_SilentRomani_SetupWalk(EnInvadepoh* this) {
-    static s16 sHeadRotTargetX[4] = { -0x708, -0x3E8, 0, 0x7D0 };
+    static s16 sHeadRotTargetX[] = { -0x708, -0x3E8, 0, 0x7D0 };
     EnInvadepohModelInfo* modelInfo = &this->modelInfo;
 
     this->timer = Rand_S16Offset(150, 250);
@@ -4167,7 +4165,7 @@ void EnInvadepoh_RewardRomani_SetupFinish(EnInvadepoh* this) {
  */
 void EnInvadepoh_RewardRomani_Finish(EnInvadepoh* this, PlayState* play) {
     if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
-        if (play->msgCtx.msgMode == 0) {
+        if (play->msgCtx.msgMode == MSGMODE_NONE) {
             sRewardFinished = true;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
                    (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT)) {
@@ -4671,10 +4669,10 @@ void EnInvadepoh_Night3Cremia_WaitForObject(Actor* thisx, PlayState* play2) {
             this->distanceToRomani = 40.0f;
         }
 
-        if ((CLOCK_TIME(6, 00) <= currentTime) && (currentTime < CLOCK_TIME(20, 00) + 30)) {
+        if ((currentTime >= CLOCK_TIME(6, 00)) && (currentTime < CLOCK_TIME(20, 00) + 30)) {
             this->actor.update = EnInvadepoh_Night3Cremia_WaitForTime;
             this->actor.draw = NULL;
-        } else if ((CLOCK_TIME(20, 00) + 30 <= currentTime) && (currentTime < CLOCK_TIME(20, 15))) {
+        } else if ((currentTime >= CLOCK_TIME(20, 00) + 30) && (currentTime < CLOCK_TIME(20, 15))) {
             this->actor.update = EnInvadepoh_Night3Cremia_Update;
             this->actor.draw = EnInvadepoh_Cremia_Draw;
             EnInvadepoh_Night3Cremia_SetupWalk(this);
