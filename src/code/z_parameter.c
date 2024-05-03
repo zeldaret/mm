@@ -4055,6 +4055,11 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
         }
 
         gDPPipeSync(OVERLAY_DISP++);
+        // @bug Missing a gDPSetEnvColor here, which means the ammo count will be drawn with the last env color set.
+        // Once you have the magic meter, this becomes a non issue, as the magic meter will set the color to black,
+        // but prior to that, when certain conditions are met, the color will have last been set by the wallet icon
+        // causing the ammo count to be drawn incorrectly. This is most obvious when you get deku nuts early on, and
+        // the ammo count is drawn with a shade of green.
 
         if ((button == EQUIP_SLOT_B) && (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
             ammo = play->interfaceCtx.minigameAmmo;
