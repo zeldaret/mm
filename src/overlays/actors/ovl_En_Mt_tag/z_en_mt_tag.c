@@ -153,7 +153,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     checkpointIterator = sStartingCheckpointPerSceneExitIndex[sceneExitIndex];
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
-    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the `sceneExitIndex + 1` access.
+    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the
+    //! `sceneExitIndex + 1` access.
     do {
         if (Math3D_PointDistToLine2D(
                 actor->world.pos.x, actor->world.pos.z, sCheckpointPositions[checkpointIterator - 1].x,
