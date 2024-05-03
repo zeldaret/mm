@@ -133,7 +133,7 @@ s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, PlayState* play) {
  */
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingCheckpoint, f32* outPerpendicularPointX,
                                  f32* outPerpendicularPointZ) {
-    s32 curentCheckpoint = -1;
+    s32 currentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
     f32 minLineLengthSq = 0.0f;
     s32 sceneExitIndex;
@@ -153,16 +153,17 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     checkpointIterator = sStartingCheckpointPerSceneExitIndex[sceneExitIndex];
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
+    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18
     do {
-        if (Math3D_PointDistToLine2D(
-                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
-                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
+        if (Math3D_PointDistSqToLine2DImpl(
+                actor->world.pos.x, actor->world.pos.z, sCheckpointPositions[checkpointIterator - 1].x,
+                sCheckpointPositions[checkpointIterator - 1].z, sCheckpointPositions[checkpointIterator + 1].x,
+                sCheckpointPositions[checkpointIterator + 1].z, &perpendicularPointX, &perpendicularPointZ,
                 &lineLenSq) &&
-            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
+            (!hasSetCurrentCheckpointOnce || ((currentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
-            curentCheckpoint = checkpointIterator;
+            currentCheckpoint = checkpointIterator;
             *outPerpendicularPointX = perpendicularPointX;
             *outPerpendicularPointZ = perpendicularPointZ;
             hasSetCurrentCheckpointOnce = true;
@@ -170,8 +171,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
         checkpointIterator++;
     } while (checkpointIterator < sStartingCheckpointPerSceneExitIndex[sceneExitIndex + 1]);
 
-    *upcomingCheckpoint = curentCheckpoint + 1;
-    return curentCheckpoint;
+    *upcomingCheckpoint = currentCheckpoint + 1;
+    return currentCheckpoint;
 }
 
 /**
