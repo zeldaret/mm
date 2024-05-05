@@ -131,7 +131,13 @@ typedef enum MajorasIncarnationColliderBodyPart {
     // attached to. However, the developers seemingly accounted for this by offsetting the collider such that
     // it actually appears attached to the mask limb instead.
     /*  1 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK,
-    /*  2 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_2, // TODO: Determine a good name for this one
+    // This collider is positioned at the room origin because it isn't attached to any of Incarnation's limbs
+    // within `sLimbToColliderBodyParts`; since the memory for an actor's instance is zeroed out before it's
+    // used, and since this collider isn't attached to any limbs, its position will remain stuck at (0, 0, 0).
+    // It seems like the developers *tried* to work around this by giving this collider a massive offset within
+    // `sLimbColliderOffsets`, but it doesn't work because the offset is only applied if the collider actually
+    // corresponds to a limb.
+    /*  2 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_ROOM_ORIGIN,
     /*  3 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_UPPER_ARM,
     /*  4 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_FOREARM,
     /*  5 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_UPPER_ARM,
@@ -263,8 +269,8 @@ typedef struct Boss07 {
     /* 0xAB48 */ u8 noShadow;
     /* 0xAB4C */ f32 deathOrbScale;
     /* 0xAB50 */ f32 deathLightScale[30];
-    /* 0xABC8 */ u32 timer_ABC8;
-    /* 0xABCC */ s32 timer_ABCC;
+    /* 0xABC8 */ u32 cutsceneTimer; // used as an animation loop count in `Boss07_Incarnation_Hopak`
+    /* 0xABCC */ s32 sfxTimer; // used as an index in `Boss07_Mask_IntroCutscene`
     /* 0xABD0 */ s16 csState;
     /* 0xABD2 */ s16 subCamId;
     /* 0xABD4 */ Vec3f subCamEye;
