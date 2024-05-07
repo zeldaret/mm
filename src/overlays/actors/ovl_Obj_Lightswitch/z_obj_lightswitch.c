@@ -348,7 +348,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     }
 
     // why wouldn't this be in the action func?
-    if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
+    if ((this->cutsceneTimer > 0) && (this->actionFunc != ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
             CutsceneManager_Stop(this->actor.csId);
