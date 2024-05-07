@@ -957,7 +957,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             this->actor.update = Boss07_Incarnation_Update;
             this->actor.draw = Boss07_Incarnation_Draw;
             Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sIncarnationJntSphInit1,
-                                      this->bodyElements);
+                                      this->bodyColliderElements);
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
             this->subCamId = this->actor.shape.rot.z;
             if (this->subCamId != SUB_CAM_ID_DONE) {
@@ -994,8 +994,8 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasWrathSkel, &gMajorasWrathIdleAnim, this->jointTable,
                        this->morphTable, MAJORAS_WRATH_LIMB_MAX);
-    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sWrathJntSphInit1, this->bodyElements);
-    Collider_InitAndSetJntSph(play, &this->kickCollider, &this->actor, &sWrathJntSphInit2, this->kickElements);
+    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sWrathJntSphInit1, this->bodyColliderElements);
+    Collider_InitAndSetJntSph(play, &this->kickCollider, &this->actor, &sWrathJntSphInit2, this->kickColliderElements);
     Collider_InitAndSetCylinder(play, &this->unusedCollider, &this->actor, &sWrathCylInit);
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
@@ -2320,12 +2320,12 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
         Audio_PlaySfx(NA_SE_IT_HOOKSHOT_STICK_OBJ);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyElements); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
         if (!(this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT)) {
             continue;
         }
 
-        for (j = 0; j < ARRAY_COUNT(this->bodyElements); j++) {
+        for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
             this->bodyCollider.elements[j].info.bumperFlags &= ~BUMP_HIT;
         }
 
@@ -2571,7 +2571,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     Boss07_Wrath_WhipCollisionCheck(this->leftWhip.pos, this->leftWhip.tension, this, play);
 
     if (this->collisionTimer != 0) {
-        for (i = 0; i < ARRAY_COUNT(this->bodyElements); i++) {
+        for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
             this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
         }
     }
@@ -4137,12 +4137,12 @@ void Boss07_Incarnation_CollisionCheck(Boss07* this, PlayState* play) {
         return;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyElements); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
         if (!(this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT)) {
             continue;
         }
 
-        for (j = 0; j < ARRAY_COUNT(this->bodyElements); j++) {
+        for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
             this->bodyCollider.elements[j].info.bumperFlags &= ~BUMP_HIT;
         }
 
@@ -4262,7 +4262,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->collisionTimer != 0) {
-        for (i = 0; i < ARRAY_COUNT(this->bodyElements); i++) {
+        for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
             this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
         }
     }
@@ -6101,8 +6101,8 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
             }
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
             Matrix_MultVecZ(-20.0f, &sp2C);
-            this->xRecoil = sp2C.x;
-            this->zRecoil = sp2C.z;
+            this->knockbackVelocityX = sp2C.x;
+            this->knockbackVelocityZ = sp2C.z;
         }
     }
 }
@@ -6406,11 +6406,11 @@ void Boss07_Remains_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
 
     this->actor.focus.pos = this->actor.world.pos;
-    this->actor.world.pos.x += this->xRecoil;
-    this->actor.world.pos.z += this->zRecoil;
+    this->actor.world.pos.x += this->knockbackVelocityX;
+    this->actor.world.pos.z += this->knockbackVelocityZ;
 
-    Math_ApproachZeroF(&this->xRecoil, 1.0f, 1.0f);
-    Math_ApproachZeroF(&this->zRecoil, 1.0f, 1.0f);
+    Math_ApproachZeroF(&this->knockbackVelocityX, 1.0f, 1.0f);
+    Math_ApproachZeroF(&this->knockbackVelocityZ, 1.0f, 1.0f);
 }
 
 void Boss07_Remains_Draw(Actor* thisx, PlayState* play2) {
@@ -6524,8 +6524,8 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
     Audio_PlaySfx_AtPosWithFreq(&this->actor.projectedPos, NA_SE_EN_LAST3_KOMA_OLD - SFX_FLAG,
                                 this->topSpinRate * 1.1111112f);
     Actor_MoveWithGravity(&this->actor);
-    this->actor.world.pos.x += this->xRecoil;
-    this->actor.world.pos.z += this->zRecoil;
+    this->actor.world.pos.x += this->knockbackVelocityX;
+    this->actor.world.pos.z += this->knockbackVelocityZ;
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 40.0f, 80.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     if ((this->collisionTimer == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
@@ -6566,8 +6566,8 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
                            (sREG(46) * 0.01f) + 0.100000024f + 0.2f);
         }
 
-        Math_ApproachZeroF(&this->xRecoil, 1.0f, 1.0f);
-        Math_ApproachZeroF(&this->zRecoil, 1.0f, 1.0f);
+        Math_ApproachZeroF(&this->knockbackVelocityX, 1.0f, 1.0f);
+        Math_ApproachZeroF(&this->knockbackVelocityZ, 1.0f, 1.0f);
 
         if (this->actor.velocity.y < (sREG(40) + -2.0f)) {
             this->actor.velocity.y *= -(0.5f + (sREG(41) * 0.01f));

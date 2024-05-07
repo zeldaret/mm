@@ -194,9 +194,9 @@ typedef struct Boss07 {
     /* 0x0330 */ f32 unk_330; // shock scale related
     /* 0x0334 */ Vec3f bodyPartsPos[MAJORA_BODYPART_MAX];
     /* 0x03E8 */ ColliderJntSph bodyCollider;
-    /* 0x0408 */ ColliderJntSphElement bodyElements[MAJORA_COLLIDER_BODYPART_MAX];
+    /* 0x0408 */ ColliderJntSphElement bodyColliderElements[MAJORA_COLLIDER_BODYPART_MAX];
     /* 0x06C8 */ ColliderJntSph kickCollider;
-    /* 0x06E8 */ ColliderJntSphElement kickElements[1];
+    /* 0x06E8 */ ColliderJntSphElement kickColliderElements[1];
     /* 0x0728 */ ColliderCylinder unusedCollider;
     /* 0x0774 */ u8 activateRemains;
     /* 0x0778 */ s32 whipTopIndex; // whip top spawn index
@@ -250,8 +250,8 @@ typedef struct Boss07 {
     /* 0x18C4 */ s16 beamTargetPitch;
     /* 0x18C6 */ s16 beamTargetYaw;
     /* 0x18C8 */ s16 remainsOrbRot;
-    /* 0x18CC */ f32 xRecoil;
-    /* 0x18D0 */ f32 zRecoil;
+    /* 0x18CC */ f32 knockbackVelocityX;
+    /* 0x18D0 */ f32 knockbackVelocityZ;
     /* 0x18D4 */ s16 angularVelocity;
     /* 0x18D6 */ s16 timer_18D6;
     /* 0x18D8 */ s16 beamDmgTimer;
