@@ -162,8 +162,8 @@ typedef enum MajorasIncarnationPumpBodyPart {
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ Boss07ActionFunc actionFunc;
-    /* 0x0148 */ u8 startDeath;
-    /* 0x0149 */ u8 updateWhips;
+    /* 0x0148 */ u8 shouldStartDeath;
+    /* 0x0149 */ u8 shouldUpdateTentaclesOrWhips;
     /* 0x014A */ u8 envEffectOn;
     /* 0x014B */ u8 envEffectTimer;
     /* 0x014C */ s16 actionTimer;
@@ -271,12 +271,12 @@ typedef struct Boss07 {
     /* 0xAB50 */ f32 deathLightScale[30];
     /* 0xABC8 */ u32 cutsceneTimer; // used as an animation loop count in `Boss07_Incarnation_Hopak`
     /* 0xABCC */ s32 sfxTimer; // used as an index in `Boss07_Mask_IntroCutscene`
-    /* 0xABD0 */ s16 csState;
+    /* 0xABD0 */ s16 cutsceneState; // TODO: investigate how it's used for something else in `Boss07_Mask_Spin`
     /* 0xABD2 */ s16 subCamId;
     /* 0xABD4 */ Vec3f subCamEye;
     /* 0xABE0 */ Vec3f subCamAt;
-    /* 0xABEC */ Vec3f subCamNextEye;
-    /* 0xABF8 */ Vec3f subCamNextAt;
+    /* 0xABEC */ Vec3f subCamEyeNext;
+    /* 0xABF8 */ Vec3f subCamAtNext;
     /* 0xAC04 */ f32 subCamRotY;
     /* 0xAC08 */ f32 subCamRotVelocity;
     /* 0xAC0C */ f32 subCamSpeedMod;

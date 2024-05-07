@@ -153,12 +153,12 @@ typedef enum MajoraRemainsState {
     /* 20 */ REMAINS_STATE_ACTIVATE = 20
 } MajoraRemainsState;
 
-typedef enum MajoraRemainsCsState {
+typedef enum MajoraRemainscutsceneState {
     /* 0 */ REMAINS_CS_STATE_WAIT,
     /* 1 */ REMAINS_CS_STATE_FLY,
     /* 2 */ REMAINS_CS_STATE_ATTACH_WAIT,
     /* 3 */ REMAINS_CS_STATE_ATTACH
-} MajoraRemainsCsState;
+} MajoraRemainscutsceneState;
 
 typedef enum MajoraTopStates {
     /* 0 */ TOP_STATE_IN_AIR,
@@ -233,7 +233,7 @@ typedef enum MajoraDrawDmgEffState {
     /* 41 */ MAJORA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE
 } MajoraDrawDmgEffState;
 
-typedef enum MajoraBattleHandlerCsState {
+typedef enum MajoraBattleHandlercutsceneState {
     /* 0 */ MAJORA_BATTLE_HANDLER_CS_STATE_0,
     /* 1 */ MAJORA_BATTLE_HANDLER_CS_STATE_1,
     /* 2 */ MAJORA_BATTLE_HANDLER_CS_STATE_2,
@@ -241,7 +241,7 @@ typedef enum MajoraBattleHandlerCsState {
     /* 4 */ MAJORA_BATTLE_HANDLER_CS_STATE_4,
     /* 5 */ MAJORA_BATTLE_HANDLER_CS_STATE_5,
     /* 6 */ MAJORA_BATTLE_HANDLER_CS_STATE_6
-} MajoraBattleHandlerCsState;
+} MajoraBattleHandlercutsceneState;
 
 void Boss07_RandVec3fXZ(Vec3f* dst, f32 length);
 void Boss07_Incarnation_AvoidPlayer(Boss07* this);
@@ -1057,16 +1057,16 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_WRATH_INTRO_STATE_0:
             this->cutsceneTimer = 0;
-            this->csState = MAJORAS_WRATH_INTRO_STATE_1;
-            this->subCamNextAt.z = 0.f;
-            this->subCamNextEye.x = 0.0;
-            this->subCamNextEye.y = KREG(17) + 100.0f - 30.0f + 80.0f;
-            this->subCamNextEye.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
-            this->subCamNextAt.x = 0.0f;
-            this->subCamNextAt.y = 180.0f;
+            this->cutsceneState = MAJORAS_WRATH_INTRO_STATE_1;
+            this->subCamAtNext.z = 0.f;
+            this->subCamEyeNext.x = 0.0;
+            this->subCamEyeNext.y = KREG(17) + 100.0f - 30.0f + 80.0f;
+            this->subCamEyeNext.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
+            this->subCamAtNext.x = 0.0f;
+            this->subCamAtNext.y = 180.0f;
             // fallthrough
         case MAJORAS_WRATH_INTRO_STATE_1:
             if (this->cutsceneTimer < 40) {
@@ -1099,10 +1099,10 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     dataIndex = 4;
                 }
 
-                Math_ApproachF(&this->subCamNextEye.y, sCamPoints[dataIndex].eyeY, 0.075f, this->subCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->subCamNextEye.z, sCamPoints[dataIndex].eyeZ, 0.075f,
+                Math_ApproachF(&this->subCamEyeNext.y, sCamPoints[dataIndex].eyeY, 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamEyeNext.z, sCamPoints[dataIndex].eyeZ, 0.075f,
                                this->subCamSpeedMod * 17.0f);
-                Math_ApproachF(&this->subCamNextAt.y, sCamPoints[dataIndex].atY, 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamAtNext.y, sCamPoints[dataIndex].atY, 0.075f, this->subCamSpeedMod * 7.0f);
                 Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
 
                 if (this->cutsceneTimer == 70) {
@@ -1141,7 +1141,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     s32 i;
                     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                    this->csState = MAJORAS_WRATH_INTRO_STATE_0;
+                    this->cutsceneState = MAJORAS_WRATH_INTRO_STATE_0;
                     Boss07_Wrath_SetupIdle(this, play, 50);
                     mainCam->eye = this->subCamEye;
                     mainCam->eyeNext = this->subCamEye;
@@ -1166,8 +1166,8 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
             break;
     }
 
-    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
-    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+    Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
@@ -1187,7 +1187,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDeathAnim, 0.0f);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->csState = MAJORAS_WRATH_DEATH_STATE_0;
+    this->cutsceneState = MAJORAS_WRATH_DEATH_STATE_0;
     this->cutsceneTimer = 0;
 
     if (sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA] != NULL) {
@@ -1213,7 +1213,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     this->invincibilityTimer = 1000;
     Boss07_SmoothStop(this, 1.0f);
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_WRATH_DEATH_STATE_0:
             if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
@@ -1227,7 +1227,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             // fallthrough
         case MAJORAS_WRATH_DEATH_STATE_1:
             this->cutsceneTimer = 0;
-            this->csState = MAJORAS_WRATH_DEATH_STATE_2;
+            this->cutsceneState = MAJORAS_WRATH_DEATH_STATE_2;
             this->subCamEye.x = mainCam->eye.x;
             this->subCamEye.y = mainCam->eye.y;
             this->subCamEye.z = mainCam->eye.z;
@@ -1264,9 +1264,9 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             spB4.x = 0.0f;
             spB4.y = -90.0f;
             spB4.z = 350.0f;
-            this->subCamNextAt.x = this->actor.focus.pos.x;
-            this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f;
-            this->subCamNextAt.z = this->actor.focus.pos.z;
+            this->subCamAtNext.x = this->actor.focus.pos.x;
+            this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f;
+            this->subCamAtNext.z = this->actor.focus.pos.z;
 
             if ((this->cutsceneTimer >= 50) && (this->cutsceneTimer < 80)) {
                 if (this->cutsceneTimer == 50) {
@@ -1274,7 +1274,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 }
                 spB4.x = 30.0f;
                 spB4.z = 120.0f;
-                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->cutsceneTimer >= 80) && (this->cutsceneTimer < 110)) {
@@ -1284,7 +1284,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 }
                 spB4.x = -10.0f;
                 spB4.z = 150.0f;
-                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f - 60.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->cutsceneTimer >= 110) && (this->cutsceneTimer < 140)) {
@@ -1293,7 +1293,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 }
                 spB4.x = -70.0f;
                 spB4.z = 110.0f;
-                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             }
@@ -1301,7 +1301,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             if (this->cutsceneTimer < (u32)(sREG(15) + 140)) {
                 break;
             }
-            this->csState = MAJORAS_WRATH_DEATH_STATE_4;
+            this->cutsceneState = MAJORAS_WRATH_DEATH_STATE_4;
             this->subCamEyeModY = sREG(16) + 270.0f + 50.0f;
             Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_DEAD_FLOAT);
             // fallthrough
@@ -1313,9 +1313,9 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 spB4.y = this->subCamEyeModY + -190.0f;
                 spB4.z = sREG(17) + 390.0f - 380.0f;
 
-                this->subCamNextAt.x = this->actor.focus.pos.x;
-                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f + sREG(18) + 130.0f;
-                this->subCamNextAt.z = this->actor.focus.pos.z;
+                this->subCamAtNext.x = this->actor.focus.pos.x;
+                this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f - 60.0f + sREG(18) + 130.0f;
+                this->subCamAtNext.z = this->actor.focus.pos.z;
 
                 Math_ApproachF(&this->subCamEyeModY, sREG(19) + 240.0f, 0.05f, 1.0f + (sREG(20) * 0.1f));
                 spA4 = 2000.0f;
@@ -1328,9 +1328,9 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 spB4.x = 0.0f;
                 spB4.y = -190.0f;
                 spB4.z = 390.0f;
-                this->subCamNextAt.x = this->actor.focus.pos.x;
-                this->subCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
-                this->subCamNextAt.z = this->actor.focus.pos.z;
+                this->subCamAtNext.x = this->actor.focus.pos.x;
+                this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->subCamAtNext.z = this->actor.focus.pos.z;
                 this->bodyDecayRate = 0;
                 if (this->cutsceneTimer > 330) {
                     spA4 = 2000.0f;
@@ -1428,18 +1428,18 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     }
 
     Matrix_RotateYF(this->subCamRotY, MTXMODE_NEW);
-    Matrix_MultVec3f(&spB4, &this->subCamNextEye);
-    this->subCamNextEye.x += this->actor.focus.pos.x;
-    this->subCamNextEye.y += this->actor.focus.pos.y;
-    this->subCamNextEye.z += this->actor.focus.pos.z;
+    Matrix_MultVec3f(&spB4, &this->subCamEyeNext);
+    this->subCamEyeNext.x += this->actor.focus.pos.x;
+    this->subCamEyeNext.y += this->actor.focus.pos.y;
+    this->subCamEyeNext.z += this->actor.focus.pos.z;
 
-    Math_ApproachF(&this->subCamEye.x, this->subCamNextEye.x, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->subCamEye.y, this->subCamNextEye.y, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->subCamEye.z, this->subCamNextEye.z, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.x, this->subCamEyeNext.x, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.y, this->subCamEyeNext.y, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->subCamEye.z, this->subCamEyeNext.z, spA0, 40.0f + spA4);
 
-    Math_ApproachF(&this->subCamAt.x, this->subCamNextAt.x, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->subCamAt.y, this->subCamNextAt.y, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->subCamAt.z, this->subCamNextAt.z, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->subCamAt.x, this->subCamAtNext.x, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->subCamAt.y, this->subCamAtNext.y, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->subCamAt.z, this->subCamAtNext.z, spA0, 70.0f + spA4);
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Vec3f subCamAt;
@@ -2171,7 +2171,7 @@ void Boss07_Wrath_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u8 dmgE
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
         }
-        this->startDeath = true;
+        this->shouldStartDeath = true;
         Enemy_StartFinishingBlow(play, &this->actor);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE2_OLD);
@@ -2528,7 +2528,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     play->envCtx.prevLightSetting = 0;
     this->actor.hintId = TATL_HINT_ID_MAJORAS_WRATH;
     Math_ApproachF(&play->envCtx.lightBlend, 0.0f, 1.0f, 0.03f);
-    this->updateWhips = true;
+    this->shouldUpdateTentaclesOrWhips = true;
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
     if (KREG(63) == 0) {
@@ -2616,9 +2616,9 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
 
     Boss07_Wrath_BombWhips(this, play);
 
-    if (KREG(88) || this->startDeath) {
+    if (KREG(88) || this->shouldStartDeath) {
         KREG(88) = false;
-        this->startDeath = false;
+        this->shouldStartDeath = false;
         Boss07_Wrath_SetupDeathCutscene(this, play);
     }
 
@@ -2696,9 +2696,9 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  * with each component's magnitude capped at 200.
  */
 
-void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* velocity,
-                              f32 gravity, f32 mobility, f32 drag, f32 tension, Vec3s* baseRot, s16 grabIndex,
-                              f32 scale, s32 hand) {
+void Boss07_Wrath_shouldUpdateTentaclesOrWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot,
+                                               Vec3f* velocity, f32 gravity, f32 mobility, f32 drag, f32 tension,
+                                               Vec3s* baseRot, s16 grabIndex, f32 scale, s32 hand) {
     s32 i;
     s32 j;
     Vec3f tempPos;
@@ -3223,15 +3223,15 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
                                    Boss07_Wrath_TransformLimbDraw, &this->actor);
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
-    if (((KREG(63) == 0) || (KREG(63) == 2)) && this->updateWhips) {
-        Boss07_Wrath_UpdateWhips(this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
-                                 this->rightWhip.velocity, this->rightWhip.gravity, this->rightWhip.mobility,
-                                 this->rightWhip.drag, this->rightWhip.tension, &this->rightWhip.baseRot,
-                                 this->whipGrabIndex, this->whipScale, MAJORAS_WRATH_RIGHT_HAND);
-        Boss07_Wrath_UpdateWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
-                                 this->leftWhip.velocity, this->leftWhip.gravity, this->leftWhip.mobility,
-                                 this->leftWhip.drag, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
-                                 this->whipScale, MAJORAS_WRATH_LEFT_HAND);
+    if (((KREG(63) == 0) || (KREG(63) == 2)) && this->shouldUpdateTentaclesOrWhips) {
+        Boss07_Wrath_shouldUpdateTentaclesOrWhips(
+            this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot, this->rightWhip.velocity,
+            this->rightWhip.gravity, this->rightWhip.mobility, this->rightWhip.drag, this->rightWhip.tension,
+            &this->rightWhip.baseRot, this->whipGrabIndex, this->whipScale, MAJORAS_WRATH_RIGHT_HAND);
+        Boss07_Wrath_shouldUpdateTentaclesOrWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos,
+                                                  this->leftWhip.rot, this->leftWhip.velocity, this->leftWhip.gravity,
+                                                  this->leftWhip.mobility, this->leftWhip.drag, this->leftWhip.tension,
+                                                  &this->leftWhip.baseRot, 0, this->whipScale, MAJORAS_WRATH_LEFT_HAND);
     }
 
     Boss07_Wrath_DrawWhips(this, play, this->rightWhip.pos, this->rightWhip.rot, this->whipScale,
@@ -3257,7 +3257,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, MAJORAS_WRATH_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
-    this->updateWhips = false;
+    this->shouldUpdateTentaclesOrWhips = false;
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -3474,20 +3474,20 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     sp58 = Math_SinS(this->actionTimer * 0x4500) * 0.3f;
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_INCARNATION_INTRO_STATE_0:
             this->cutsceneTimer = 0;
-            this->csState = MAJORAS_INCARNATION_INTRO_STATE_1;
-            this->subCamNextAt.z = 0.0f;
+            this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_1;
+            this->subCamAtNext.z = 0.0f;
             // fallthrough
         case MAJORAS_INCARNATION_INTRO_STATE_1:
-            this->csState = MAJORAS_INCARNATION_INTRO_STATE_2;
+            this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_2;
             this->cutsceneTimer = 0;
-            this->subCamNextEye.x = 70.0f;
-            this->subCamNextEye.y = 70.0f;
-            this->subCamNextEye.z = 150.0f;
-            this->subCamNextAt.x = 20.0f;
-            this->subCamNextAt.y = 80.0f;
+            this->subCamEyeNext.x = 70.0f;
+            this->subCamEyeNext.y = 70.0f;
+            this->subCamEyeNext.z = 150.0f;
+            this->subCamAtNext.x = 20.0f;
+            this->subCamAtNext.y = 80.0f;
             break;
 
         case MAJORAS_INCARNATION_INTRO_STATE_2:
@@ -3500,17 +3500,17 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                                1.0f + (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58), 1.0f, 0.5f);
             }
             if (this->cutsceneTimer > 40) {
-                this->csState = MAJORAS_INCARNATION_INTRO_STATE_3;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_3;
                 this->cutsceneTimer = 0;
             }
             break;
 
         case MAJORAS_INCARNATION_INTRO_STATE_3:
-            Math_ApproachF(&this->subCamNextEye.x, 0.0f, 0.05f, this->subCamSpeedMod * 40.0f);
-            Math_ApproachF(&this->subCamNextEye.y, 100.0f, 0.05f, this->subCamSpeedMod * 30.0f);
-            Math_ApproachF(&this->subCamNextEye.z, 270.0f, 0.05f, this->subCamSpeedMod * 150.0f);
-            Math_ApproachF(&this->subCamNextAt.x, 0.0f, 0.05f, this->subCamSpeedMod * 20.0f);
-            Math_ApproachF(&this->subCamNextAt.y, 100.0f, 0.05f, this->subCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->subCamEyeNext.x, 0.0f, 0.05f, this->subCamSpeedMod * 40.0f);
+            Math_ApproachF(&this->subCamEyeNext.y, 100.0f, 0.05f, this->subCamSpeedMod * 30.0f);
+            Math_ApproachF(&this->subCamEyeNext.z, 270.0f, 0.05f, this->subCamSpeedMod * 150.0f);
+            Math_ApproachF(&this->subCamAtNext.x, 0.0f, 0.05f, this->subCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->subCamAtNext.y, 100.0f, 0.05f, this->subCamSpeedMod * 20.0f);
             Math_ApproachF(&this->subCamSpeedMod, 0.05f, 1.0f, 0.002f);
 
             if (this->cutsceneTimer >= 20) {
@@ -3541,7 +3541,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 80) {
-                this->csState = MAJORAS_INCARNATION_INTRO_STATE_4;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_4;
                 this->cutsceneTimer = 0;
                 for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
                     this->unk_17B8[i] = 1.0f;
@@ -3550,10 +3550,10 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             break;
 
         case MAJORAS_INCARNATION_INTRO_STATE_4:
-            this->subCamNextEye.x = 0.0f;
-            this->subCamNextEye.y = 120.0f;
-            this->subCamNextEye.z = 140.0f;
-            this->subCamNextAt.y = 170.0f;
+            this->subCamEyeNext.x = 0.0f;
+            this->subCamEyeNext.y = 120.0f;
+            this->subCamEyeNext.z = 140.0f;
+            this->subCamAtNext.y = 170.0f;
             if (this->cutsceneTimer >= 10) {
                 if (this->cutsceneTimer == 10) {
                     this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
@@ -3563,7 +3563,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                                (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58) * 0x6000, 1, 0x4000);
             }
             if (this->cutsceneTimer == 30) {
-                this->csState = MAJORAS_INCARNATION_INTRO_STATE_5;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_5;
                 this->cutsceneTimer = 0;
                 this->subCamSpeedMod = 0.0f;
                 this->animEndFrame = 1000.0f;
@@ -3602,16 +3602,16 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                 play->envCtx.lightBlend = 0.0f;
             }
 
-            Math_ApproachF(&this->subCamNextEye.x, -80.0f, 0.05f, this->subCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->subCamNextEye.y, 20.0f, 0.05f, this->subCamSpeedMod * 60.0f);
-            Math_ApproachF(&this->subCamNextEye.z, 220.0f, 0.05f, this->subCamSpeedMod * 180.0f);
-            Math_ApproachF(&this->subCamNextAt.y, 110.0f, 0.05f, this->subCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->subCamEyeNext.x, -80.0f, 0.05f, this->subCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->subCamEyeNext.y, 20.0f, 0.05f, this->subCamSpeedMod * 60.0f);
+            Math_ApproachF(&this->subCamEyeNext.z, 220.0f, 0.05f, this->subCamSpeedMod * 180.0f);
+            Math_ApproachF(&this->subCamAtNext.y, 110.0f, 0.05f, this->subCamSpeedMod * 80.0f);
             Math_ApproachF(&this->subCamSpeedMod, 0.1f, 1.0f, 0.005f);
 
             if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                this->csState = MAJORAS_INCARNATION_INTRO_STATE_0;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_0;
                 Boss07_Incarnation_SetupTaunt(this, play);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
@@ -3629,8 +3629,8 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
         Math_ApproachZeroF(&this->unk_17C8[i], 0.5f, 0.1f);
     }
 
-    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
-    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+    Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
@@ -3728,7 +3728,7 @@ void Boss07_Incarnation_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u
         this->actor.colChkInfo.health -= damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_DEAD_OLD);
-            this->startDeath = true;
+            this->shouldStartDeath = true;
             this->invincibilityTimer = 100;
             this->collisionTimer = 100;
             Enemy_StartFinishingBlow(play, &this->actor);
@@ -3979,7 +3979,7 @@ void Boss07_Incarnation_SetupDeathCutscene(Boss07* this, PlayState* play) {
     Boss07_MovePlayer(play);
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasIncarnationDamageAnim, -2.0f);
     this->animEndFrame = Animation_GetLastFrame(&gMajorasIncarnationDamageAnim);
-    this->csState = MAJORAS_INCARNATION_DEATH_STATE_0;
+    this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_0;
     this->cutsceneTimer = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->invincibilityTimer = 20;
@@ -3994,7 +3994,7 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 3.0f);
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_INCARNATION_DEATH_STATE_0:
             if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
@@ -4005,38 +4005,38 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->cutsceneTimer = 0;
-            this->csState = MAJORAS_INCARNATION_DEATH_STATE_10;
+            this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_10;
             Play_EnableMotionBlur(150);
             // fallthrough
         case MAJORAS_INCARNATION_DEATH_STATE_10:
             sHeartbeatTimer = 5;
-            this->subCamNextEye.x = 0.0f;
-            this->subCamNextEye.y = 30.0f;
-            this->subCamNextEye.z = 210.0f;
-            this->subCamNextAt.x = 0.0f;
-            this->subCamNextAt.y = 150.0f;
-            this->subCamNextAt.z = 0.0f;
+            this->subCamEyeNext.x = 0.0f;
+            this->subCamEyeNext.y = 30.0f;
+            this->subCamEyeNext.z = 210.0f;
+            this->subCamAtNext.x = 0.0f;
+            this->subCamAtNext.y = 150.0f;
+            this->subCamAtNext.z = 0.0f;
             Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, 0.0f, 0.1f, 5.0f);
             if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_INCARNATION_DEATH_STATE_1;
+                this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_1;
                 Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationFinalHitAnim, -5.0f);
             }
             break;
 
         case MAJORAS_INCARNATION_DEATH_STATE_1:
             sHeartbeatTimer = 5;
-            this->subCamNextAt.y = (Math_SinS(this->cutsceneTimer * 0x700) * 15.0f) + 150.0f;
+            this->subCamAtNext.y = (Math_SinS(this->cutsceneTimer * 0x700) * 15.0f) + 150.0f;
             if (this->cutsceneTimer == 40) {
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_INCARNATION_DEATH_STATE_2;
-                this->subCamNextEye.x = -30.0f;
-                this->subCamNextEye.y = 120.0f;
-                this->subCamNextEye.z = 110.0f;
-                this->subCamNextAt.x = -70.0f;
-                this->subCamNextAt.y = 150.0f;
-                this->subCamNextAt.z = -20.0f;
+                this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_2;
+                this->subCamEyeNext.x = -30.0f;
+                this->subCamEyeNext.y = 120.0f;
+                this->subCamEyeNext.z = 110.0f;
+                this->subCamAtNext.x = -70.0f;
+                this->subCamAtNext.y = 150.0f;
+                this->subCamAtNext.z = -20.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationPumpingUpAnim, -5.0f);
@@ -4056,13 +4056,13 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
             sp4B = 1;
             if (this->cutsceneTimer == 40) {
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_INCARNATION_DEATH_STATE_3;
-                this->subCamNextEye.x = 30.0f;
-                this->subCamNextEye.y = 120.0f;
-                this->subCamNextEye.z = 110.0f;
-                this->subCamNextAt.x = 50.0f;
-                this->subCamNextAt.y = 150.0f;
-                this->subCamNextAt.z = -20.0f;
+                this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_3;
+                this->subCamEyeNext.x = 30.0f;
+                this->subCamEyeNext.y = 120.0f;
+                this->subCamEyeNext.z = 110.0f;
+                this->subCamAtNext.x = 50.0f;
+                this->subCamAtNext.y = 150.0f;
+                this->subCamAtNext.z = -20.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
@@ -4074,13 +4074,13 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
             sp4B = 1;
             if (this->cutsceneTimer == 40) {
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_INCARNATION_DEATH_STATE_4;
-                this->subCamNextEye.x = 0.0f;
-                this->subCamNextEye.y = 90.0f;
-                this->subCamNextEye.z = 110.0f;
-                this->subCamNextAt.x = 0.0f;
-                this->subCamNextAt.y = 90.0f;
-                this->subCamNextAt.z = 0.0f;
+                this->cutsceneState = MAJORAS_INCARNATION_DEATH_STATE_4;
+                this->subCamEyeNext.x = 0.0f;
+                this->subCamEyeNext.y = 90.0f;
+                this->subCamEyeNext.z = 110.0f;
+                this->subCamAtNext.x = 0.0f;
+                this->subCamAtNext.y = 90.0f;
+                this->subCamAtNext.z = 0.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
@@ -4106,8 +4106,8 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
-    Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+    Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
 
     if (sp4B == 1) {
         this->armScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
@@ -4253,9 +4253,9 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 200.0f, 100.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
-        if (this->startDeath || KREG(88)) {
+        if (this->shouldStartDeath || KREG(88)) {
             KREG(88) = false;
-            this->startDeath = false;
+            this->shouldStartDeath = false;
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
             Boss07_Incarnation_SetupDeathCutscene(this, play);
         }
@@ -4581,9 +4581,9 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
     Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x400);
 
-    if (this->startDeath || KREG(88)) {
+    if (this->shouldStartDeath || KREG(88)) {
         KREG(88) = false;
-        this->startDeath = false;
+        this->shouldStartDeath = false;
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
         Boss07_Mask_SetupDeathCutscene(this, play);
     }
@@ -4592,7 +4592,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
 void Boss07_Mask_SetupSpin(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Spin;
     this->actionState = MAJORAS_MASK_SPIN_STATE_START;
-    this->csState = 0;
+    this->cutsceneState = 0;
     this->timers[0] = 30;
     this->angularVelocity = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ATTACK_OLD);
@@ -4648,7 +4648,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->velocity_170, 0xBB8, 1.0f, 0x64);
             Math_ApproachF(&this->actor.speed, 20.0f, 1.0f, 2.0f);
 
-            if (((this->csState == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
+            if (((this->cutsceneState == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
                 if (Rand_ZeroOne() < 0.25f) {
                     this->actionState = MAJORAS_MASK_SPIN_STATE_END;
                     this->timers[0] = 30;
@@ -4658,10 +4658,10 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                     if (Rand_ZeroOne() < 0.3f) {
                         this->timers[1] = 20;
                         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ATTACK_2ND_OLD);
-                        this->csState = 1;
+                        this->cutsceneState = 1;
                     } else {
                         this->timers[1] = 0;
-                        this->csState = 0;
+                        this->cutsceneState = 0;
                     }
                     this->timers[0] = 50;
                     this->velocity_170 = 0.0f;
@@ -4773,7 +4773,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
         Boss07_Mask_SetupIdle(this, play);
 
         if ((s8)this->actor.colChkInfo.health <= 0) {
-            this->startDeath = true;
+            this->shouldStartDeath = true;
             Enemy_StartFinishingBlow(play, &this->actor);
             AudioSfx_StopByPos(&this->actor.projectedPos);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEAD_OLD);
@@ -5148,7 +5148,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
     SREG(90) = this->motionBlurAlpha;
     this->maskEyeState = 1;
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_MASK_INTRO_STATE_0:
             this->actor.world.pos.x = 0.0f;
             this->actor.world.pos.y = 277.0f;
@@ -5164,7 +5164,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->cutsceneTimer = 0;
-            this->csState = MAJORAS_MASK_INTRO_STATE_1;
+            this->cutsceneState = MAJORAS_MASK_INTRO_STATE_1;
             this->motionBlurAlpha = KREG(76) + 150;
             // fallthrough
         case MAJORAS_MASK_INTRO_STATE_1:
@@ -5195,7 +5195,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer == 75) {
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_MASK_INTRO_STATE_2;
+                this->cutsceneState = MAJORAS_MASK_INTRO_STATE_2;
                 this->subCamEye.x = player->actor.world.pos.x;
                 this->subCamEye.y = player->actor.world.pos.y + 20.0f;
                 this->subCamEye.z = player->actor.world.pos.z - 60.0f + 120.0f;
@@ -5262,7 +5262,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 this->subCamAt.z = sIntroCamAts[this->sfxTimer].z;
 
                 if (this->cutsceneTimer == 250) {
-                    this->csState = MAJORAS_MASK_INTRO_STATE_3;
+                    this->cutsceneState = MAJORAS_MASK_INTRO_STATE_3;
                     this->cutsceneTimer = 0;
                     this->subCamEye.x = this->actor.world.pos.x;
                     this->subCamEye.y = this->actor.world.pos.y;
@@ -5322,7 +5322,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 110) {
-                this->csState = MAJORAS_MASK_INTRO_STATE_4;
+                this->cutsceneState = MAJORAS_MASK_INTRO_STATE_4;
                 this->cutsceneTimer = 0;
                 this->subCamEye.x = this->actor.world.pos.x + 200.0f;
                 this->subCamEye.y = this->actor.world.pos.y;
@@ -5368,7 +5368,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 if (this->cutsceneTimer == 175) {
                     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                    this->csState = MAJORAS_MASK_INTRO_STATE_0;
+                    this->cutsceneState = MAJORAS_MASK_INTRO_STATE_0;
                     Boss07_Mask_SetupIdle(this, play);
                     this->timers[0] = 50;
                     this->timers[2] = 200;
@@ -5417,7 +5417,7 @@ void Boss07_Mask_SetupDeathCutscene(Boss07* this, PlayState* play) {
     Animation_MorphToLoop(&this->skelAnime, &gMajorasMaskJerkingAnim, -10.0f);
     this->actor.world.rot.y = this->actor.shape.rot.y =
         Math_Atan2F_XY(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PI);
-    this->csState = MAJORAS_MASK_DEATH_STATE_0;
+    this->cutsceneState = MAJORAS_MASK_DEATH_STATE_0;
     this->cutsceneTimer = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->invincibilityTimer = 20;
@@ -5439,7 +5439,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORAS_MASK_DEATH_STATE_0:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
@@ -5448,17 +5448,17 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->cutsceneTimer = 0;
-                this->csState = MAJORAS_MASK_DEATH_STATE_1;
-                this->subCamNextAt.z = 0.0f;
+                this->cutsceneState = MAJORAS_MASK_DEATH_STATE_1;
+                this->subCamAtNext.z = 0.0f;
                 this->timer_18D6 = 120;
                 Play_EnableMotionBlur(150);
-                this->subCamNextEye.x = 0.0f;
-                this->subCamNextEye.y = -30.0f;
-                this->subCamNextEye.z = 270.0f;
-                this->subCamNextAt.x = 0.0f;
-                this->subCamNextAt.y = -30.0f;
-                Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
-                Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
+                this->subCamEyeNext.x = 0.0f;
+                this->subCamEyeNext.y = -30.0f;
+                this->subCamEyeNext.z = 270.0f;
+                this->subCamAtNext.x = 0.0f;
+                this->subCamAtNext.y = -30.0f;
+                Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
+                Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
             } else {
                 break;
             }
@@ -5481,7 +5481,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer > 130) {
-                this->csState = MAJORAS_MASK_DEATH_STATE_2;
+                this->cutsceneState = MAJORAS_MASK_DEATH_STATE_2;
             } else {
                 break;
             }
@@ -5496,8 +5496,8 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             break;
     }
 
-    Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
-    Matrix_MultVec3f(&this->subCamNextAt, &sp60);
+    Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
+    Matrix_MultVec3f(&this->subCamAtNext, &sp60);
     Math_ApproachF(&this->subCamAt.x, sp60.x, 0.1f, 10.0f);
     Math_ApproachF(&this->subCamAt.y, sp60.y, 0.1f, 10.0f);
     Math_ApproachF(&this->subCamAt.z, sp60.z, 0.1f, 10.0f);
@@ -5571,7 +5571,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
     if ((sMajoraBattleHandler == NULL) || (sMajoraBattleHandler->subCamId == SUB_CAM_ID_DONE)) {
-        this->updateWhips = true;
+        this->shouldUpdateTentaclesOrWhips = true;
         play->envCtx.lightSetting = 2;
         play->envCtx.prevLightSetting = 0;
         Math_ApproachF(&play->envCtx.lightBlend, this->beamXYscale, 1.0f, 0.1f);
@@ -5973,7 +5973,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
 
             temp = (1 - (i * 0.008f)) * this->tentLengthScale;
             Matrix_Pop();
-            if (this->updateWhips) {
+            if (this->shouldUpdateTentaclesOrWhips) {
                 Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
                                             this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, temp, phi_s6,
                                             phi_f24);
@@ -5986,7 +5986,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         }
     }
     Boss07_Mask_DrawBeam(this, play);
-    this->updateWhips = false;
+    this->shouldUpdateTentaclesOrWhips = false;
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -6558,14 +6558,17 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
                 Math_ApproachZeroF(&this->topSpinRate, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
                 Math_ApproachS(&this->unk_180, (sREG(29) * 0x800) - 0x800, 1, (sREG(30) * 16) + 0x340);
             }
+
             this->actor.world.rot.y += this->unk_180;
         } else {
             Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x300);
             Math_ApproachF(&this->actor.speed, (sREG(48) * 0.1f) + 2.0f + 8.0f, 1.0f,
                            (sREG(46) * 0.01f) + 0.100000024f + 0.2f);
         }
+
         Math_ApproachZeroF(&this->xRecoil, 1.0f, 1.0f);
         Math_ApproachZeroF(&this->zRecoil, 1.0f, 1.0f);
+
         if (this->actor.velocity.y < (sREG(40) + -2.0f)) {
             this->actor.velocity.y *= -(0.5f + (sREG(41) * 0.01f));
             Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
@@ -6574,6 +6577,7 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         } else {
             this->actor.velocity.y = -0.5f;
         }
+
         sp4C = this->actor.prevPos.x - this->actor.world.pos.x;
         sp48 = this->actor.prevPos.z - this->actor.world.pos.z;
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->effectIndex), &this->actor.world.pos, 3.0f,
@@ -6803,10 +6807,10 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
 
     this->cutsceneTimer++;
 
-    switch (this->csState) {
+    switch (this->cutsceneState) {
         case MAJORA_BATTLE_HANDLER_CS_STATE_0:
             if ((sMajorasMask != NULL) && sMajorasMask->activateRemains) {
-                this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_1;
+                this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_1;
                 this->cutsceneTimer = 0;
             }
             break;
@@ -6821,7 +6825,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->cutsceneTimer = 0;
-            this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_2;
+            this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_2;
             Play_EnableMotionBlur(150);
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.y * 0.7f;
@@ -6839,7 +6843,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
                 break;
             }
 
-            this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_3;
+            this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_3;
             this->cutsceneTimer = 0;
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.y * 0.7f;
@@ -6857,7 +6861,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
                 break;
             }
 
-            this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_4;
+            this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_4;
             this->cutsceneTimer = 0;
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.y * 0.7f;
@@ -6873,7 +6877,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             if (this->cutsceneTimer != 40) {
                 break;
             }
-            this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_5;
+            this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_5;
             this->cutsceneTimer = 0;
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.y * 0.7f;
@@ -6892,7 +6896,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 s32 i;
 
-                this->csState = MAJORA_BATTLE_HANDLER_CS_STATE_6;
+                this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_6;
                 this->cutsceneTimer = 0;
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
