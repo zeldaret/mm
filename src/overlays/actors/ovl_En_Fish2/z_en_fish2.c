@@ -98,7 +98,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f,  0.019f, 0.033f };
+static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f, 0.019f, 0.033f };
 
 typedef enum {
     /* 0 */ FISH2_ANIM_0,
