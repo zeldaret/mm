@@ -1,8 +1,10 @@
 #include "global.h"
 #include "gfx.h"
+#include "sys_cmpdma.h"
 #include "assets/interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "assets/interface/parameter_static/parameter_static.h"
-#include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void MapDisp_DestroyMapI(PlayState* play);
@@ -646,7 +648,7 @@ s16 MapDisp_GetBossRoomStorey(void) {
 
 // TransitionActor params test
 s32 MapDisp_IsBossDoor(s32 params) {
-    if (ENDOOR_PARAMS_GET_TYPE((u16)params) == ENDOOR_TYPE_5) {
+    if (DOORSHUTTER_PARAMS_GET_TYPE((u16)params) == DOORSHUTTER_TYPE_5) {
         return true;
     }
     return false;
@@ -1598,7 +1600,7 @@ s32 MapDisp_SkipDrawDungeonMap(PlayState* play) {
     if (pauseCtx->pageIndex != PAUSE_MAP) {
         return true;
     }
-    if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER) {
+    if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
         return true;
     }
     if ((pauseCtx->state != PAUSE_STATE_MAIN) || (pauseCtx->mainState != PAUSE_MAIN_STATE_IDLE)) {

@@ -78,7 +78,8 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -173,7 +174,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     } else {
         this->textIdIndex = 0;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {

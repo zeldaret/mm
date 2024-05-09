@@ -658,6 +658,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     if (this->numElements < 2) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 
@@ -678,6 +679,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp5C);
     if (mtx == NULL) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 

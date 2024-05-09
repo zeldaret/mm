@@ -1,6 +1,8 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
+#include "z64lifemeter.h"
 #include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"
@@ -11,7 +13,6 @@
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
 typedef enum {
@@ -3676,10 +3677,9 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_LENS:
             // Slowly consume magic while Lens of Truth is active
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
-                !Play_InCsMode(play)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play)) {
 
                 if ((gSaveContext.save.saveInfo.playerData.magic == 0) ||
                     ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
@@ -3719,9 +3719,9 @@ void Magic_Update(PlayState* play) {
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
         case MAGIC_STATE_CONSUME_GORON_ZORA:
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == 0) &&
-                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
@@ -3741,9 +3741,9 @@ void Magic_Update(PlayState* play) {
             break;
 
         case MAGIC_STATE_CONSUME_GIANTS_MASK:
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
@@ -3933,8 +3933,8 @@ void Interface_DrawItemButtons(PlayState* play) {
                                            D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
                                            240, 0, interfaceCtx->cRightAlpha);
 
-    if (!IS_PAUSE_STATE_GAMEOVER) {
-        if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
+        if (IS_PAUSED(&play->pauseCtx)) {
             OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, 0x88, 0x11, 0x16, 0x16, 0x5B6, 0x5B6, 0xFF, 0x82, 0x3C,
                                                    interfaceCtx->startAlpha);
             // Start Button Texture, Color & Label
@@ -3950,8 +3950,7 @@ void Interface_DrawItemButtons(PlayState* play) {
         }
     }
 
-    if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == CS_STATE_IDLE) &&
+    if (interfaceCtx->tatlCalling && !IS_PAUSED(&play->pauseCtx) && (play->csCtx.state == CS_STATE_IDLE) &&
         (sPictoState == PICTO_BOX_STATE_OFF)) {
         if (sCUpInvisible == 0) {
             // C-Up Button Texture, Color & Label (Tatl Text)
@@ -4056,6 +4055,11 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
         }
 
         gDPPipeSync(OVERLAY_DISP++);
+        // @bug Missing a gDPSetEnvColor here, which means the ammo count will be drawn with the last env color set.
+        // Once you have the magic meter, this becomes a non issue, as the magic meter will set the color to black,
+        // but prior to that, when certain conditions are met, the color will have last been set by the wallet icon
+        // causing the ammo count to be drawn incorrectly. This is most obvious when you get deku nuts early on, and
+        // the ammo count is drawn with a shade of green.
 
         if ((button == EQUIP_SLOT_B) && (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
             ammo = play->interfaceCtx.minigameAmmo;
@@ -4471,7 +4475,7 @@ void Interface_DrawClock(PlayState* play) {
             sClockAlphaTimer1 = 0;
         }
 
-        if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+        if (!IS_PAUSED(&play->pauseCtx)) {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             /**
@@ -5526,8 +5530,7 @@ void Interface_DrawTimers(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     // Not satisfying any of these conditions will pause the timer
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+    if (!IS_PAUSED(&play->pauseCtx) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId >= 0x1BB2) &&
                                                (msgCtx->currentTextId <= 0x1BB6))) &&
         !(player->stateFlags1 & PLAYER_STATE1_200) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
@@ -5976,8 +5979,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
     s32 pad[2];
 
     // Not satisfying any of these conditions will pause the bottle timer
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+    if (!IS_PAUSED(&play->pauseCtx) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
@@ -6049,7 +6051,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
     Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         // Carrots rendering if the action corresponds to riding a horse
         if (interfaceCtx->unk_212 == DO_ACTION_FASTER) {
             // Load Carrot Icon
@@ -6446,7 +6448,7 @@ void Interface_Draw(PlayState* play) {
         Interface_DrawPauseMenuEquippingIcons(play);
 
         // Draw either the minigame countdown or the three-day clock
-        if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+        if (!IS_PAUSED(&play->pauseCtx)) {
             if ((interfaceCtx->minigameState != MINIGAME_STATE_NONE) &&
                 (interfaceCtx->minigameState < MINIGAME_STATE_NO_COUNTDOWN_SETUP)) {
                 // Minigame Countdown
@@ -6648,7 +6650,7 @@ void Interface_Update(PlayState* play) {
     u16 aButtonDoAction;
 
     // Update buttons
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if (play->gameOverCtx.state == GAMEOVER_INACTIVE) {
             Interface_UpdateButtonsPart1(play);
         }
@@ -6827,7 +6829,7 @@ void Interface_Update(PlayState* play) {
     }
 
     // Update perfect letters
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if (interfaceCtx->perfectLettersOn) {
             if (interfaceCtx->perfectLettersType == PERFECT_LETTERS_TYPE_1) {
                 Interface_UpdatePerfectLettersType1(play);
@@ -6840,7 +6842,7 @@ void Interface_Update(PlayState* play) {
     }
 
     // Update minigame State
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if ((u32)interfaceCtx->minigameState != MINIGAME_STATE_NONE) {
             switch (interfaceCtx->minigameState) {
                 case MINIGAME_STATE_COUNTDOWN_SETUP_3:

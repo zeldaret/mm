@@ -116,8 +116,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-        door = (EnDoor*)doorIter;
+        door = (EnDoor*)SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         dist = Actor_WorldDistXYZToActor(actor, &door->knobDoor.dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
@@ -127,6 +126,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
         doorIter = door->knobDoor.dyna.actor.next;
     } while (doorIter != NULL);
 
+    //! FAKE:
     if (1) {}
 
     return nearestDoor;
@@ -191,7 +191,7 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     enHy->skelAnime.prevTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
     enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
-    door->knobDoor.playOpenAnim = true;
+    door->knobDoor.requestOpen = true;
     door->knobDoor.animIndex = animIndex;
 }
 

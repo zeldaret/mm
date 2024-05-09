@@ -71,7 +71,7 @@ typedef enum AnjuScheduleResult {
     /* 20 */ ANJU_SCH_20,
     // 12:00 ~ 12:15, Day 1 and Day 2 (if did had the Midnight meeting). Give lunch to Granny
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANNY,
-    // Day 3, 06:00 ~ 11:00. Sweeping the Suite room. TODO: maybe rename to "cleaning Suite room"?
+    // Day 3, 06:00 ~ 11:00. Sweeping the Large Suite.
     /* 22 */ ANJU_SCH_SWEEPING,
     // Day 1, 00:00 ~ 06:00. Waiting for player at the kitchen to have the Midnight meeting.
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
@@ -158,7 +158,7 @@ typedef enum AnjuScheduleResult {
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
-#include "build/src/overlays/actors/ovl_En_An/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_An/scheduleScripts.schl.inc"
 
 static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_NONE
@@ -392,76 +392,76 @@ s32 EnAn_InitObjectSlots(EnAn* this, PlayState* play) {
 }
 
 Actor* EnAn_FindActor(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 // Name after ENAN_8000
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
-            if (!ENAN_GET_8000(foundActor)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
+            if (!ENAN_GET_8000(actorIter)) {
                 break;
             }
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
-EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
-    s32 switchFlag;
+EnDoor* EnAn_FindScheduleDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
         case ANJU_SCH_DOOR_26:
         case ANJU_SCH_DOOR_27:
-            switchFlag = 0xD;
+            schType = ENDOOR_SCH_TYPE_INN_GRANNYS;
             break;
 
         case ANJU_SCH_DOOR_33:
         case ANJU_SCH_DOOR_34:
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
-            switchFlag = 0xB;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE;
             break;
 
         case ANJU_SCH_DOOR_36:
-            switchFlag = 0x10;
+            schType = ENDOOR_SCH_TYPE_INN_LARGE_SUITE;
             break;
 
         case ANJU_SCH_DOOR_28:
@@ -471,14 +471,14 @@ EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) 
         case ANJU_SCH_DOOR_32:
         case ANJU_SCH_DOOR_35:
         case ANJU_SCH_DOOR_39:
-            switchFlag = 0xE;
+            schType = ENDOOR_SCH_TYPE_INN_STAFF_ROOM;
             break;
 
         default:
             return NULL;
     }
 
-    return SubS_FindDoor(play, switchFlag);
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 /**
@@ -1933,7 +1933,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
     s32 ret = false;
 
     this->timePath = NULL;
-    door = EnAn_FindDoor(play, scheduleOutput->result);
+    door = EnAn_FindScheduleDoor(play, scheduleOutput->result);
 
     limit = sSearchTimePathLimit[scheduleOutput->result];
     if (limit >= 0) {
@@ -2437,7 +2437,7 @@ s32 EnAn_HandleSch_InteractActor(EnAn* this, PlayState* play) {
 }
 
 s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
-    EnDoor* door = EnAn_FindDoor(play, this->scheduleResult);
+    EnDoor* door = EnAn_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     f32 distance;
     s32 pad;

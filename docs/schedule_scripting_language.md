@@ -279,7 +279,7 @@ static ScheduleScript D_80BD3DB0[] = {
 In the actor's C code:
 
 ```c
-#include "build/src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 ```
 
 ## Commands

@@ -142,7 +142,7 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-#include "build/src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
 
 static s32 D_80BAE8F8[] = {
     -1, -1, -1, -1, -1, -1, 1, 2, 0, 3, 1, 2, 0, 0, 3, 0,
@@ -431,9 +431,9 @@ void func_80BAAF1C(EnSuttari* this) {
 
 void func_80BAAFDC(EnSuttari* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
-        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
-        Vec3f effectVel;
+        Vec3f effectVelocity;
 
         Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
@@ -441,11 +441,11 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        effectVelOffset.z = 20.0f;
-        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        effectVelocityOffset.z = 20.0f;
+        Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
         Matrix_Pop();
         if (!this->playerDetected) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50, &this->playerDetected,
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
@@ -464,9 +464,9 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
 
 void func_80BAB1A0(EnSuttari* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
-        Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
+        Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
-        Vec3f effectVel;
+        Vec3f effectVelocity;
 
         Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
@@ -474,11 +474,11 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        effectVelOffset.z = 20.0f;
-        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        effectVelocityOffset.z = 20.0f;
+        Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
         Matrix_Pop();
         if (!this->playerDetected) {
-            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->playerDetected,
+            EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50, &this->playerDetected,
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
@@ -717,7 +717,7 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
 
 s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
-    EnDoor* sp48;
+    EnDoor* door;
     u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 sp44 = SCHEDULE_TIME_NOW;
     Vec3f sp38;
@@ -728,12 +728,12 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     if ((this->unk428 == 10) || (this->unk428 == 11) || (this->unk428 == 2)) {
         return false;
     }
-    sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+    door = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[scheduleOutput->result];
-    if ((sp48 != NULL) && (sp24 >= 0)) {
+    if ((door != NULL) && (sp24 >= 0)) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, sp24);
     }
-    if ((sp48 == NULL) || (this->timePath == NULL)) {
+    if ((door == NULL) || (this->timePath == NULL)) {
         return false;
     }
     sp28 = Lib_SegmentedToVirtual(this->timePath->points);
@@ -742,7 +742,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     this->unk434 = sp44 - scheduleOutput->time0;
     this->unk436 = scheduleOutput->time1 - scheduleOutput->time0;
     if ((scheduleOutput->result != 10) && (scheduleOutput->result != 11)) {
-        sp48->openTimer = 75;
+        door->openTimer = 75;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
     Math_Vec3f_Copy(&this->unk444, &sp2C);

@@ -38,7 +38,7 @@ typedef enum {
     /*   0 */ TWINMOLD_TYPE_RED,
     /*  35 */ TWINMOLD_TYPE_BLUE = 35,
     /* 100 */ TWINMOLD_TYPE_TAIL = 100,
-    /* 200 */ TWINMOLD_TYPE_STATIC = 200
+    /* 200 */ TWINMOLD_TYPE_BATTLE_HANDLER = 200
 } TwinmoldType;
 
 typedef struct Boss02 {

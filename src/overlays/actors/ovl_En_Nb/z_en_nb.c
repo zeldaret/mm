@@ -36,7 +36,7 @@ typedef enum EnNbScheduleResult {
     /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
-#include "build/src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Nb/scheduleScripts.schl.inc"
 
 u8 D_80BC1464[] = {
     0x1B, 0x04, 0x08, 0x00, 0x6A, 0x0A, 0x00, 0x10, 0x00, 0x08, 0x00, 0x10, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x0E,
@@ -103,29 +103,28 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* thisx;
-    Actor* actor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, actor, actorCategory, actorId);
-        if (actor == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        thisx = &this->actor;
-        if ((actor != thisx) && (actor->update != NULL)) {
+        if ((this != (EnNb*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        if (actor->next == NULL) {
-            actor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        actor = actor->next;
+        actorIter = actorIter->next;
     }
 
-    return actor;
+    return actorIter;
 }
 
 void EnNb_UpdateSkelAnime(EnNb* this) {

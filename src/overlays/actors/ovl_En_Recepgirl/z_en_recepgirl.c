@@ -152,7 +152,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
             Flags_SetSwitch(play, ENRECEPGIRL_GET_SWITCH_FLAG(&this->actor));
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING)) {
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)

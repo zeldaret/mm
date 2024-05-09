@@ -151,7 +151,7 @@ bool func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 bool func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         return false;
     }
     return true;
@@ -369,7 +369,7 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
-    gSPDisplayList(POLY_XLU_DISP++, object_posthouse_obj_DL_000A50);
+    gSPDisplayList(POLY_XLU_DISP++, object_kumo30_DL_000A50);
 
     Environment_LerpSandstormColors(D_808B8320, &sp50);
     Environment_LerpSandstormColors(D_808B8340, &sp4C);

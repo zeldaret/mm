@@ -2,8 +2,9 @@
 #define Z64SCENE_H
 
 #include "ultra64.h"
-#include "z64dma.h"
 #include "z64cutscene.h"
+#include "z64dma.h"
+#include "z64path.h"
 #include "unk.h"
 
 struct GameState;
@@ -13,11 +14,6 @@ struct PlayState;
 #define ROOM_TRANSITION_MAX 48 // maximum number of transition actors in a scene
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
-
-typedef struct {
-    /* 0x0 */ uintptr_t vromStart;
-    /* 0x4 */ uintptr_t vromEnd;
-} RomFile; // size = 0x8
 
 #define ROOM_DRAW_OPA (1 << 0)
 #define ROOM_DRAW_XLU (1 << 1)
@@ -479,16 +475,6 @@ typedef struct {
     /* 0x00B */ u8 subKeepSlot; // "gameplay_field_keep" or "gameplay_dangeon_keep" slot
     /* 0x00C */ ObjectEntry slots[35];
 } ObjectContext; // size = 0x958
-
-#define PATH_INDEX_NONE -1
-#define ADDITIONAL_PATH_INDEX_NONE (u8)-1
-
-typedef struct {
-    /* 0x0 */ u8 count; // Number of points in the path
-    /* 0x1 */ u8 additionalPathIndex;
-    /* 0x2 */ s16 customValue; // Path specific to help distinguish different paths
-    /* 0x4 */ Vec3s* points; // Segment Address to the array of points
-} Path; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 mapId;
@@ -992,5 +978,7 @@ s32 Entrance_GetSceneId(u16 entrance);
 s32 Entrance_GetSceneIdAbsolute(u16 entrance);
 s32 Entrance_GetSpawnNum(u16 entrance);
 s32 Entrance_GetTransitionFlags(u16 entrance);
+
+extern SceneTableEntry gSceneTable[SCENE_MAX];
 
 #endif

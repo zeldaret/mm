@@ -82,7 +82,7 @@ void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
 void func_80A40A6C(EnTest3* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Test3/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Test3/scheduleScripts.schl.inc"
 
 ActorInit En_Test3_InitVars = {
     /**/ ACTOR_EN_TEST3,
@@ -518,7 +518,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80A3F2BC(play, this, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
     Vec3f offset;
 
-    if ((door != NULL) && !door->knobDoor.playOpenAnim &&
+    if ((door != NULL) && !door->knobDoor.requestOpen &&
         ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
         Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
         Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
@@ -760,7 +760,8 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         this->player.actor.home.rot.y = -0x2AAB;
         this->player.actor.shape.rot.y = -0x2AAB;
         this->player.currentYaw = -0x2AAB;
-        if (1) {} // macro?
+        //! FAKE:
+        if (1) {}
         return true;
     } else {
         func_80A3F15C(this, play, arg2);

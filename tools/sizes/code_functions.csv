@@ -1372,9 +1372,9 @@ asm/non_matchings/code/z_lib/Lib_VirtualToPhysical.s,Lib_VirtualToPhysical,0x801
 asm/non_matchings/code/z_lib/Lib_PhysicalToVirtual.s,Lib_PhysicalToVirtual,0x801005A0,0x8
 asm/non_matchings/code/z_lifemeter/LifeMeter_Init.s,LifeMeter_Init,0x801005C0,0x37
 asm/non_matchings/code/z_lifemeter/LifeMeter_UpdateColors.s,LifeMeter_UpdateColors,0x8010069C,0xF9
-asm/non_matchings/code/z_lifemeter/func_80100A80.s,func_80100A80,0x80100A80,0x8
-asm/non_matchings/code/z_lifemeter/func_80100AA0.s,func_80100AA0,0x80100AA0,0x14
-asm/non_matchings/code/z_lifemeter/func_80100AF0.s,func_80100AF0,0x80100AF0,0x27
+asm/non_matchings/code/z_lifemeter/LifeMeter_SaveInterfaceHealth.s,LifeMeter_SaveInterfaceHealth,0x80100A80,0x8
+asm/non_matchings/code/z_lifemeter/LifeMeter_IncreaseInterfaceHealth.s,LifeMeter_IncreaseInterfaceHealth,0x80100AA0,0x14
+asm/non_matchings/code/z_lifemeter/LifeMeter_DecreaseInterfaceHealth.s,LifeMeter_DecreaseInterfaceHealth,0x80100AF0,0x27
 asm/non_matchings/code/z_lifemeter/LifeMeter_Draw.s,LifeMeter_Draw,0x80100B8C,0x32E
 asm/non_matchings/code/z_lifemeter/LifeMeter_UpdateSizeAndBeep.s,LifeMeter_UpdateSizeAndBeep,0x80101844,0x3B
 asm/non_matchings/code/z_lifemeter/LifeMeter_IsCritical.s,LifeMeter_IsCritical,0x80101930,0x1C
@@ -2169,7 +2169,7 @@ asm/non_matchings/code/z_snap/func_8013A46C.s,func_8013A46C,0x8013A46C,0x16
 asm/non_matchings/code/z_snap/func_8013A4C4.s,func_8013A4C4,0x8013A4C4,0x10
 asm/non_matchings/code/z_snap/func_8013A504.s,func_8013A504,0x8013A504,0xB
 asm/non_matchings/code/z_snap/func_8013A530.s,func_8013A530,0x8013A530,0xA4
-asm/non_matchings/code/z_sub_s/SubS_FindDoor.s,SubS_FindDoor,0x8013A7C0,0x28
+asm/non_matchings/code/z_sub_s/SubS_FindScheduleDoor.s,SubS_FindScheduleDoor,0x8013A7C0,0x28
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC
@@ -2357,7 +2357,7 @@ asm/non_matchings/code/z_message/Message_HandleOcarina.s,Message_HandleOcarina,0
 asm/non_matchings/code/z_message/Message_DrawTextDefault.s,Message_DrawTextDefault,0x8014ADBC,0x654
 asm/non_matchings/code/z_message/Message_LoadItemIcon.s,Message_LoadItemIcon,0x8014C70C,0x142
 asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
-asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
+asm/non_matchings/code/z_message/Message_LoadRupeesJPN.s,Message_LoadRupeesJPN,0x8014CCB4,0x4F
 asm/non_matchings/code/z_message/Message_GetTimerDigits.s,Message_GetTimerDigits,0x8014CDF0,0x7B
 asm/non_matchings/code/z_message/Message_DecodeHeader.s,Message_DecodeHeader,0x8014CFDC,0xCA
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
@@ -2670,9 +2670,9 @@ asm/non_matchings/code/graph/Graph_UpdateGame.s,Graph_UpdateGame,0x801744AC,0x13
 asm/non_matchings/code/graph/Graph_ExecuteAndDraw.s,Graph_ExecuteAndDraw,0x801744F8,0xDC
 asm/non_matchings/code/graph/Graph_Update.s,Graph_Update,0x80174868,0xE
 asm/non_matchings/code/graph/Graph_ThreadEntry.s,Graph_ThreadEntry,0x801748A0,0x68
-asm/non_matchings/code/graphalloc/Graph_GfxPlusOne.s,Graph_GfxPlusOne,0x80174A40,0x3
-asm/non_matchings/code/graphalloc/Graph_BranchDlist.s,Graph_BranchDlist,0x80174A4C,0x6
-asm/non_matchings/code/graphalloc/Graph_DlistAlloc.s,Graph_DlistAlloc,0x80174A64,0xF
+asm/non_matchings/code/gfxalloc/Gfx_Open.s,Gfx_Open,0x80174A40,0x3
+asm/non_matchings/code/gfxalloc/Gfx_Close.s,Gfx_Close,0x80174A4C,0x6
+asm/non_matchings/code/gfxalloc/Gfx_Alloc.s,Gfx_Alloc,0x80174A64,0xF
 asm/non_matchings/code/listalloc/func_80174AA0.s,func_80174AA0,0x80174AA0,0x5
 asm/non_matchings/code/listalloc/func_80174AB4.s,func_80174AB4,0x80174AB4,0x1B
 asm/non_matchings/code/listalloc/func_80174B20.s,func_80174B20,0x80174B20,0x20

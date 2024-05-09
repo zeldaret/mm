@@ -264,11 +264,11 @@ void func_80BBB354(EnZos* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BBB2C4;
-        SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE);
         this->actor.flags |= ACTOR_FLAG_10000;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE)) {
             getItemId = GI_RUPEE_PURPLE;
         } else {
             getItemId = GI_HEART_PIECE;

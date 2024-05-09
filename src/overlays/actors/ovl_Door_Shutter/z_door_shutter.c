@@ -204,7 +204,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     Actor_ProcessInitChain(&this->slidingDoor.dyna.actor, sInitChain);
-    this->doorType = DOORSHUTTER_GET_380(&this->slidingDoor.dyna.actor);
+    this->doorType = DOORSHUTTER_GET_TYPE(&this->slidingDoor.dyna.actor);
     sp24 = D_808A2240[this->doorType];
 
     if (sp24 < 0) {

@@ -2,6 +2,7 @@
  * File: z_actor.c
  * Description:
  */
+
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
@@ -30,6 +31,7 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 
 #include "z64actor.h"
 
+#include "z64door.h"
 #include "z64circle_tex.h"
 #include "z64horse.h"
 #include "z64malloc.h"
@@ -3428,7 +3430,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
                                                   transitionActorList->pos.x, transitionActorList->pos.y,
                                                   transitionActorList->pos.z, 0, rotY, 0,
-                                                  (i << 0xA) + (transitionActorList->params & 0x3FF),
+                                                  TRANSITION_ACTOR_PARAMS(i, transitionActorList->params),
                                                   transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }

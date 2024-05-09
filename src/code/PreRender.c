@@ -18,6 +18,7 @@
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "sys_ucode.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -404,7 +405,7 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     s32 buffB[3 * 5];
     s32 xi;
     s32 yi;
-    s32 temp;
+    s32 invCvg;
     s32 pmaxR;
     s32 pmaxG;
     s32 pmaxB;
@@ -449,59 +450,58 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     // For each neighbor
     for (i = 1; i < 5 * 3; i += 2) {
         // Only sample fully covered pixels
-        if (buffCvg[i] == 7) {
-            // Determine "Penultimate Maximum" Value
+        if (buffCvg[i] != 7) {
+            continue;
+        }
+        // Determine "Penultimate Maximum" Value
 
-            // If current maximum is less than this neighbor
-            if (pmaxR < buffR[i]) {
-                // For each neighbor (again)
-                for (j = 1; j < 5 * 3; j += 2) {
-                    // If not the neighbor we were at before, and this neighbor has a larger value and this pixel is
-                    // fully covered, that means the neighbor at `i` is the "penultimate maximum"
-                    if ((i != j) && (buffR[j] >= buffR[i]) && (buffCvg[j] == 7)) {
-                        pmaxR = buffR[i];
-                    }
+        // If current maximum is less than this neighbor
+        if (pmaxR < buffR[i]) {
+            // For each neighbor (again)
+            for (j = 1; j < 5 * 3; j += 2) {
+                // If not the neighbor we were at before, and this neighbor has a larger value and this pixel is
+                // fully covered, that means the neighbor at `i` is the "penultimate maximum"
+                if ((i != j) && (buffR[j] >= buffR[i]) && (buffCvg[j] == 7)) {
+                    pmaxR = buffR[i];
                 }
             }
-            if (pmaxG < buffG[i]) {
-                for (j = 1; j < 5 * 3; j += 2) {
-                    if ((i != j) && (buffG[j] >= buffG[i]) && (buffCvg[j] == 7)) {
-                        pmaxG = buffG[i];
-                    }
+        }
+        if (pmaxG < buffG[i]) {
+            for (j = 1; j < 5 * 3; j += 2) {
+                if ((i != j) && (buffG[j] >= buffG[i]) && (buffCvg[j] == 7)) {
+                    pmaxG = buffG[i];
                 }
             }
-            if (pmaxB < buffB[i]) {
-                for (j = 1; j < 5 * 3; j += 2) {
-                    if ((i != j) && (buffB[j] >= buffB[i]) && (buffCvg[j] == 7)) {
-                        pmaxB = buffB[i];
-                    }
+        }
+        if (pmaxB < buffB[i]) {
+            for (j = 1; j < 5 * 3; j += 2) {
+                if ((i != j) && (buffB[j] >= buffB[i]) && (buffCvg[j] == 7)) {
+                    pmaxB = buffB[i];
                 }
             }
+        }
 
-            if (1) {}
+        // Determine "Penultimate Minimum" Value
 
-            // Determine "Penultimate Minimum" Value
-
-            // Same as above with inverted conditions
-            if (pminR > buffR[i]) {
-                for (j = 1; j < 5 * 3; j += 2) {
-                    if ((i != j) && (buffR[j] <= buffR[i]) && (buffCvg[j] == 7)) {
-                        pminR = buffR[i];
-                    }
+        // Same as above with inverted conditions
+        if (pminR > buffR[i]) {
+            for (j = 1; j < 5 * 3; j += 2) {
+                if ((i != j) && (buffR[j] <= buffR[i]) && (buffCvg[j] == 7)) {
+                    pminR = buffR[i];
                 }
             }
-            if (pminG > buffG[i]) {
-                for (j = 1; j < 5 * 3; j += 2) {
-                    if ((i != j) && (buffG[j] <= buffG[i]) && (buffCvg[j] == 7)) {
-                        pminG = buffG[i];
-                    }
+        }
+        if (pminG > buffG[i]) {
+            for (j = 1; j < 5 * 3; j += 2) {
+                if ((i != j) && (buffG[j] <= buffG[i]) && (buffCvg[j] == 7)) {
+                    pminG = buffG[i];
                 }
             }
-            if (pminB > buffB[i]) {
-                for (j = 1; j < 5 * 3; j += 2) {
-                    if ((i != j) && (buffB[j] <= buffB[i]) && (buffCvg[j] == 7)) {
-                        pminB = buffB[i];
-                    }
+        }
+        if (pminB > buffB[i]) {
+            for (j = 1; j < 5 * 3; j += 2) {
+                if ((i != j) && (buffB[j] <= buffB[i]) && (buffCvg[j] == 7)) {
+                    pminB = buffB[i];
                 }
             }
         }
@@ -512,10 +512,10 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     //      BackGround = (pMax + pMin) - (ForeGround) * 2
 
     // OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
-    temp = 7 - buffCvg[7];
-    outR = buffR[7] + ((s32)(temp * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
-    outG = buffG[7] + ((s32)(temp * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
-    outB = buffB[7] + ((s32)(temp * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
+    invCvg = 7 - buffCvg[7];
+    outR = buffR[7] + ((s32)(invCvg * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
+    outG = buffG[7] + ((s32)(invCvg * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
+    outB = buffB[7] + ((s32)(invCvg * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
 
     pxOut.r = outR >> 3;
     pxOut.g = outG >> 3;
@@ -769,7 +769,7 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
     alphaCompare = (bg2D->flags & BG2D_FLAGS_AC_THRESHOLD) ? G_AC_THRESHOLD : G_AC_NONE;
 
     gfxTemp = *gfxp;
-    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    bg = Gfx_Alloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     bg->b.imageX = 0;
