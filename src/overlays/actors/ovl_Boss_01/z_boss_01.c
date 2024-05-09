@@ -3449,10 +3449,10 @@ void Boss01_UpdateEffects(Boss01* this, PlayState* play) {
                         if (player->invincibilityTimer == 0) {
                             if ((temp2 < (KREG(49) + 210.0f)) && ((KREG(49) + 190.0f) < temp2)) {
                                 for (j = 0; j < PLAYER_BODYPART_MAX; j++) {
-                                    player->flameTimers[j] = Rand_S16Offset(0, 200);
+                                    player->bodyFlameTimers[j] = Rand_S16Offset(0, 200);
                                 }
 
-                                player->isBurning = true;
+                                player->bodyIsBurning = true;
                                 temp = Math_Atan2S_XY(diffZ, diffX);
                                 if ((KREG(49) + 100.0f) < temp2) {
                                     temp += 0x8000;

@@ -5627,7 +5627,7 @@ void func_80834140(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     }
 }
 
-s32 func_808341F4(PlayState* play, Player* this) {
+s32 Player_UpdateBodyBurn(PlayState* play, Player* this) {
     f32 temp_fv0;
     f32 flameScale;
     f32 flameIntensity;
@@ -5636,7 +5636,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
     s32 spawnedFlame = false;
     s32 var_v0;
     s32 var_v1;
-    u8* timerPtr = this->flameTimers;
+    u8* timerPtr = this->bodyFlameTimers;
 
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_DEKU)) {
         timerStep = 0;
@@ -5688,7 +5688,7 @@ s32 func_808341F4(PlayState* play, Player* this) {
             Player_InflictDamage(play, -1);
         }
     } else {
-        this->isBurning = false;
+        this->bodyIsBurning = false;
     }
 
     return this->stateFlags1 & PLAYER_STATE1_80;
@@ -5697,13 +5697,13 @@ s32 func_808341F4(PlayState* play, Player* this) {
 s32 func_808344C0(PlayState* play, Player* this) {
     s32 i = 0;
 
-    while (i < ARRAY_COUNT(this->flameTimers)) {
-        this->flameTimers[i] = Rand_S16Offset(0, 200);
+    while (i < ARRAY_COUNT(this->bodyFlameTimers)) {
+        this->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
         i++;
     }
 
-    this->isBurning = true;
-    return func_808341F4(play, this);
+    this->bodyIsBurning = true;
+    return Player_UpdateBodyBurn(play, this);
 }
 
 s32 func_80834534(PlayState* play, Player* this) {
@@ -5762,7 +5762,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
         if (!func_8083456C(play, this)) {
             if (this->unk_B75 == 4) {
-                this->shockTimer = 40;
+                this->bodyShockTimer = 40;
             }
 
             this->actor.colChkInfo.damage += this->unk_B74;
@@ -5818,7 +5818,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             var_a2_2 = 4;
         } else if (this->actor.colChkInfo.acHitEffect == 7) {
             var_a2_2 = 1;
-            this->shockTimer = 40;
+            this->bodyShockTimer = 40;
         } else if (this->actor.colChkInfo.acHitEffect == 9) {
             var_a2_2 = 1;
             if (func_80834534(play, this)) {
@@ -8964,7 +8964,7 @@ s32 Player_ActionChange_3(Player* this, PlayState* play) {
 
                 this->stateFlags1 |= PLAYER_STATE1_800000;
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
-                this->isBurning = false;
+                this->bodyIsBurning = false;
 
                 if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
                     entry = D_8085D224[0];
@@ -11639,9 +11639,9 @@ void func_808442D8(PlayState* play, Player* this) {
     }
 }
 
-void func_808445C4(PlayState* play, Player* this) {
-    this->shockTimer--;
-    this->unk_B66 += this->shockTimer;
+void Player_UpdateBodyShock(PlayState* play, Player* this) {
+    this->bodyShockTimer--;
+    this->unk_B66 += this->bodyShockTimer;
     if (this->unk_B66 > 20) {
         Vec3f pos;
         Vec3f* bodyPartsPos;
@@ -11649,7 +11649,7 @@ void func_808445C4(PlayState* play, Player* this) {
         s32 randIndex;
 
         this->unk_B66 -= 20;
-        scale = this->shockTimer * 2;
+        scale = this->bodyShockTimer * 2;
         if (scale > 40) {
             scale = 40;
         }
@@ -12018,11 +12018,11 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
     }
 
-    if (this->shockTimer != 0) {
-        func_808445C4(play, this);
+    if (this->bodyShockTimer != 0) {
+        Player_UpdateBodyShock(play, this);
     }
-    if (this->isBurning) {
-        func_808341F4(play, this);
+    if (this->bodyIsBurning) {
+        Player_UpdateBodyBurn(play, this);
     }
 
     if (this->stateFlags2 & PLAYER_STATE2_8000) {
@@ -12148,8 +12148,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                         func_80831F34(play, this,
                                       func_801242B4(this)
                                           ? &gPlayerAnim_link_swimer_swim_down
-                                          : ((this->shockTimer != 0) ? &gPlayerAnim_link_normal_electric_shock_end
-                                                                     : &gPlayerAnim_link_derth_rebirth));
+                                          : ((this->bodyShockTimer != 0) ? &gPlayerAnim_link_normal_electric_shock_end
+                                                                         : &gPlayerAnim_link_derth_rebirth));
                     }
                 } else {
                     if ((this->actor.parent == NULL) &&
@@ -17743,7 +17743,7 @@ void Player_Action_83(Player* this, PlayState* play) {
         }
     }
 
-    this->shockTimer = 40;
+    this->bodyShockTimer = 40;
     Actor_PlaySfx_FlaggedCentered1(&this->actor,
                                    this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }

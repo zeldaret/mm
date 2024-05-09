@@ -140,9 +140,9 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
             s16 i;
 
             for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
-                player->flameTimers[i] = Rand_S16Offset(0, 200);
+                player->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
             }
-            player->isBurning = true;
+            player->bodyIsBurning = true;
 
             sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
             sp38 = this->actor.world.pos.z - player->actor.world.pos.z;
