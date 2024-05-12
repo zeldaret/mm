@@ -20,8 +20,7 @@
         { 0, 0 },                                                      \
         SEGMENT_START(ovl_##name),                                     \
         SEGMENT_END(ovl_##name),                                       \
-        SEGMENT_ROM_START(ovl_##name),                                 \
-        SEGMENT_ROM_END(ovl_##name),                                   \
+        ROM_FILE(ovl_##name),                                          \
         &structName##_InitVars,                                        \
         sizeof(structName),                                            \
     },

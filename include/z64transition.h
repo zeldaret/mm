@@ -6,6 +6,8 @@
 #include "libc/stdint.h"
 #include "unk.h"
 
+#include "romfile.h"
+
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
@@ -71,8 +73,7 @@ typedef struct TransitionOverlay {
     } loadInfo;
     /* 0x04 */ void* vramStart;
     /* 0x08 */ void* vramEnd;
-    /* 0x0C */ uintptr_t vromStart;
-    /* 0x10 */ uintptr_t vromEnd;
+    /* 0x0C */ RomFile file;
     /* 0x14 */ TransitionInit* initInfo;
     /* 0x18 */ size_t size;
 } TransitionOverlay;
