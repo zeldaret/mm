@@ -1012,7 +1012,7 @@ void Boss07_Destroy(Actor* thisx, PlayState* play2) {
     Boss07* this = THIS;
 
     switch (this->actor.params) {
-            //! @bug this should be MAJORAS_MASK
+        //! @bug this should be MAJORAS_MASK
         case MAJORA_TYPE_WRATH:
             Collider_DestroyQuad(play, &this->maskFrontCollider);
             Collider_DestroyQuad(play, &this->maskBackCollider);
@@ -2374,7 +2374,7 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
                 Boss07_Wrath_SetupStunned(this, play);
                 this->invincibilityTimer = 6;
             } else {
-                this->dmgFogEffectTimer = 15;
+                this->damagedFlashTimer = 15;
                 this->invincibilityTimer = (this->actor.colChkInfo.damageEffect == MAJORAS_WRATH_DMGEFF_C) ? 15 : 5;
                 Boss07_Wrath_SetupDamaged(this, play, damage, this->actor.colChkInfo.damageEffect);
             }
@@ -2545,7 +2545,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         DECR(this->whipCollisionTimer);
         DECR(this->collisionTimer);
         DECR(this->invincibilityTimer);
-        DECR(this->dmgFogEffectTimer);
+        DECR(this->damagedFlashTimer);
         DECR(this->jumpSfxTimer);
 
         Math_ApproachZeroF(&this->unk_32C, 1.0f, 0.2f);
@@ -3212,7 +3212,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    if ((this->dmgFogEffectTimer % 2) != 0) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
@@ -4184,7 +4184,7 @@ void Boss07_Incarnation_CollisionCheck(Boss07* this, PlayState* play) {
             this->invincibilityTimer = (this->actor.colChkInfo.damageEffect == MAJORAS_INCARNATION_DMGEFF_C) ? 15 : 5;
             damage = this->actor.colChkInfo.damage;
             Boss07_Incarnation_SetupDamaged(this, play, damage, this->actor.colChkInfo.damageEffect);
-            this->dmgFogEffectTimer = 15;
+            this->damagedFlashTimer = 15;
         } else {
             this->invincibilityTimer = 15;
             Boss07_Incarnation_SetupStunned(this, play, 150);
@@ -4241,7 +4241,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         }
 
         DECR(this->invincibilityTimer);
-        DECR(this->dmgFogEffectTimer);
+        DECR(this->damagedFlashTimer);
         DECR(this->collisionTimer);
         DECR(this->timer_18D6);
 
@@ -4500,7 +4500,7 @@ void Boss07_Incarnation_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    if ((this->dmgFogEffectTimer % 2) != 0) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
@@ -4966,10 +4966,10 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 spF0.y = spFC.y * -0.05f;
                                 spF0.z = spFC.z * -0.05f;
                                 Boss07_SpawnEffect(play, &sp108, &spFC, &spF0, Rand_ZeroFloat(10.0f) + 25.0f);
-                                this->dmgFogEffectTimer |= 0xA;
+                                this->damagedFlashTimer |= 0xA;
                             } else {
                                 this->invincibilityTimer = 50;
-                                this->dmgFogEffectTimer = 15;
+                                this->damagedFlashTimer = 15;
                                 AudioSfx_StopByPos(&this->actor.projectedPos);
                                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                                 Boss07_Mask_SetupDamaged(this, play, 2, NULL);
@@ -5031,7 +5031,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     spC8.z = spD4.z * -0.05f;
 
                                     Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
-                                    sMajoraRemains[i]->dmgFogEffectTimer |= 0xA;
+                                    sMajoraRemains[i]->damagedFlashTimer |= 0xA;
                                 } else {
                                     sMajoraRemains[i]->actionState = REMAINS_STATE_DEATH;
                                     sMajoraRemains[i]->timer_18D6 = 60;
@@ -5533,7 +5533,7 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
                 hitbox = this->maskBackCollider.info.acHitInfo;
                 damage = (hitbox->toucher.dmgFlags & 0xF7CFFFFF) ? this->actor.colChkInfo.damage : 0;
                 this->invincibilityTimer = 50;
-                this->dmgFogEffectTimer = 15;
+                this->damagedFlashTimer = 15;
                 AudioSfx_StopByPos(&this->actor.projectedPos);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                 Boss07_Mask_SetupDamaged(this, play, damage, hitActor);
@@ -5590,7 +5590,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
 
             DECR(this->dmgShakeTimer);
             DECR(this->invincibilityTimer);
-            DECR(this->dmgFogEffectTimer);
+            DECR(this->damagedFlashTimer);
             DECR(this->timer_18D6);
             DECR(this->beamDmgTimer);
 
@@ -5932,7 +5932,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     temp_f22 = Math_SinS(this->dmgShakeTimer * 0x3500) * temp_f20 * 0.5f;
     Matrix_RotateYF(Math_SinS(this->dmgShakeTimer * 0x4500) * temp_f20, MTXMODE_APPLY);
     Matrix_RotateXFApply(temp_f22);
-    if ((this->dmgFogEffectTimer % 2) != 0) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeState]));
@@ -6087,7 +6087,7 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
             u8 damage = this->actor.colChkInfo.damage;
 
             this->actor.colChkInfo.health -= damage;
-            this->dmgFogEffectTimer = 15;
+            this->damagedFlashTimer = 15;
             this->actionFunc = Boss07_Remains_Fly;
             if ((s8)this->actor.colChkInfo.health <= 0) {
                 this->actionState = REMAINS_STATE_DEATH;
@@ -6401,7 +6401,7 @@ void Boss07_Remains_Update(Actor* thisx, PlayState* play2) {
 
     DECR(this->timer_18D6);
     DECR(this->invincibilityTimer);
-    DECR(this->dmgFogEffectTimer);
+    DECR(this->damagedFlashTimer);
 
     this->actionFunc(this, play);
 
@@ -6424,7 +6424,7 @@ void Boss07_Remains_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    if ((this->dmgFogEffectTimer % 2) != 0) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
@@ -6598,7 +6598,7 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         }
         Actor_Kill(&this->actor);
     } else if (this->timers[1] == 25) {
-        this->dmgFogEffectTimer = 25;
+        this->damagedFlashTimer = 25;
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_EXPLOSIVES);
     }
 }
@@ -6732,7 +6732,7 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2) {
 
     DECR(this->timers[0]);
     DECR(this->timers[1]);
-    DECR(this->dmgFogEffectTimer);
+    DECR(this->damagedFlashTimer);
     DECR(this->invincibilityTimer);
     DECR(this->collisionTimer);
 
@@ -6767,7 +6767,7 @@ void Boss07_Top_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    if ((this->dmgFogEffectTimer % 2) != 0) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 780, 1099);
     }
 

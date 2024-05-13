@@ -174,7 +174,7 @@ typedef struct Boss07 {
     /* 0x0158 */ s16 collisionTimer; // turns off collision
     /* 0x015A */ s16 whipCollisionTimer;
     /* 0x015C */ s16 invincibilityTimer;
-    /* 0x015E */ s16 dmgFogEffectTimer;
+    /* 0x015E */ s16 damagedFlashTimer;
     /* 0x0160 */ s16 motionBlurAlpha;
     /* 0x0164 */ Vec3f moveTarget;
     /* 0x0170 */ f32 velocity_170; // move speed for wrath sidestep and spin, turn rate for all others
