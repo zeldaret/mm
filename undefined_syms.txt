@@ -457,3 +457,5 @@ D_0E000000 = 0x0E000000;
 // segment 0x0F
 
 D_0F000000 = 0x0F000000;
+
+ENTRY(entrypoint);
