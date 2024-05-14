@@ -1140,7 +1140,7 @@ def getLabelForVaddr(vaddr: int, in_data: bool = False) -> str:
     if vaddr in functions:
         label += f"\nglabel {proper_name(vaddr, in_data=in_data)}\n"
     if vaddr in jtbl_labels:
-        label += f"glabel L{vaddr:08X}\n"
+        label += f"jlabel L{vaddr:08X}\n"
     if vaddr in branch_labels:
         label += f".L{vaddr:08X}:\n"
     return label
@@ -1164,12 +1164,22 @@ def fixup_text_symbols(data, vram, data_regions, info):
 
     delay_slot = False
     disasm_as_data = False
+    prev_func = ""
     for entry in file:
         insn = entry["insn"]
         in_data = entry["data"]
         comment = entry["comment"]
 
-        text.append(getLabelForVaddr(insn.vram, in_data))
+        cur_label = getLabelForVaddr(insn.vram, in_data)
+
+        # Handle adding endlabels to the previous function
+        if "glabel" in cur_label:
+            if prev_func:
+                text.append(f"endlabel {prev_func}\n")
+            prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+
+        text.append(cur_label)
+
         if insn.vram in functions:
             # new function, needs to check this again
             disasm_as_data = False
@@ -1190,6 +1200,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
         text.append(f"{comment}  {disassembled}\n")
 
         delay_slot = insn.hasDelaySlot()
+
+    # Add endlabel to last function
+    text.append(f"endlabel {prev_func}\n")
 
     with open(f"{ASM_OUT}/{segment_dirname}/{info['name']}.text.s", "w") as outfile:
         outfile.write("".join(text))
@@ -1340,7 +1353,7 @@ def disassemble_data(data, vram, end, info):
             if data_offset == len(data):
                 continue
 
-            r = f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\ndlabel {proper_name(symbol, True)}\n"
 
             if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
                 r += (
@@ -1525,7 +1538,7 @@ def disassemble_rodata(data, vram, end, info):
 
             force_ascii_str = symbol in [0x801D0708]
 
-            r = f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\ndlabel {proper_name(symbol, True)}\n"
 
             if symbol in strings:
                 string_data = data[data_offset : data_offset + data_size]
@@ -1695,7 +1708,7 @@ def disassemble_bss(vram, end, info):
             else:
                 next_symbol = end
 
-            result.append(f"\nglabel {proper_name(symbol, True)}\n")
+            result.append(f"\ndlabel {proper_name(symbol, True)}\n")
             result.append(
                 f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
             )
@@ -1857,7 +1870,7 @@ def disassemble_dmadata(section):
     .word 0xFFFFFFFF
 .endm
 
-glabel {variables_ast[0x8009F8B0][0]}
+dlabel {variables_ast[0x8009F8B0][0]}
 """
     filenames = []
     with open("tools/disasm/dma_filenames.txt", "r") as infile:
@@ -1910,7 +1923,7 @@ def disassemble_segment(section):
         segment_dirname = section[-1]["name"]
 
         result = asm_header(".rodata")
-        result += f"\nglabel {section[-1]['name']}_Reloc\n"
+        result += f"\ndlabel {section[-1]['name']}_Reloc\n"
 
         lines = [words[i * 8 : (i + 1) * 8] for i in range(0, (len(words) // 8) + 1)]
         for line in [line for line in lines if len(line) != 0]:
@@ -1982,7 +1995,7 @@ def rodata_syms(rodata):
 
 
 def rodata_blocks(rodata):
-    return ["glabel" + b for b in rodata.split("glabel")[1:]]
+    return ["dlabel" + b for b in rodata.split("dlabel")[1:]]
 
 
 def find_late_rodata_start(rodata):
@@ -2272,7 +2285,7 @@ with multiprocessing.get_context("fork").Pool(jobs) as p:
 print("Splitting text and migrating rodata")
 
 func_regex = re.compile(r"\n\nglabel \S+\n")
-rodata_symbols_regex = re.compile(r"(?<=\n)glabel (.+)(?=\n)")
+rodata_symbols_regex = re.compile(r"(?<=\n)dlabel (.+)(?=\n)")
 asm_symbols_regex = re.compile(r"%(?:lo|hi)\((.+?)\)")
 
 # Split files and migrate rodata that should be migrated
