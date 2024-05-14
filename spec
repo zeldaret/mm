@@ -3,6 +3,7 @@
  */
 
 beginseg
+    address 0x8007F000
     name "makerom"
     include "$(BUILD_DIR)/asm/makerom/rom_header.o"
     include "$(BUILD_DIR)/asm/makerom/ipl3.o"
@@ -18,6 +19,7 @@ endseg
 
 beginseg
     name "boot"
+    address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
     include "$(BUILD_DIR)/data/boot/rspboot.data.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
