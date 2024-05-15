@@ -183,12 +183,12 @@ typedef enum MajorasMaskDeathState {
 } MajorasMaskDeathState;
 
 typedef enum MajorasIncarnationIntroState {
-    /* 0 */ MAJORAS_INCARNATION_INTRO_STATE_0,
-    /* 1 */ MAJORAS_INCARNATION_INTRO_STATE_1,
-    /* 2 */ MAJORAS_INCARNATION_INTRO_STATE_2,
-    /* 3 */ MAJORAS_INCARNATION_INTRO_STATE_3,
-    /* 4 */ MAJORAS_INCARNATION_INTRO_STATE_4,
-    /* 5 */ MAJORAS_INCARNATION_INTRO_STATE_5
+    /* 0 */ MAJORAS_INCARNATION_INTRO_CS_STATE_STARTING_OR_DONE,
+    /* 1 */ MAJORAS_INCARNATION_INTRO_CS_STATE_UPDATE_SUBCAM,
+    /* 2 */ MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_LEFT_LEG,
+    /* 3 */ MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_OTHER_LIMBS,
+    /* 4 */ MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_EYESTALK,
+    /* 5 */ MAJORAS_INCARNATION_INTRO_CS_STATE_DANCE
 } MajorasIncarnationIntroState;
 
 typedef enum MajorasIncarnationDeathState {
@@ -661,7 +661,7 @@ void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterva
     static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
     u8 i;
 
-    if (!(this->actionTimer & spawnInterval) && ((spawnInterval == 0) || (this->actor.speed > 1.0f))) {
+    if (!(this->frameCounter & spawnInterval) && ((spawnInterval == 0) || (this->actor.speed > 1.0f))) {
         for (i = 0; i < 2; i++) {
             Vec3f pos;
             Vec3f velocity;
@@ -965,7 +965,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             } else {
                 Boss07_Incarnation_SetupTaunt(this, play);
                 this->envEffectOn = 1;
-                for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
+                for (i = 0; i < MAJORAS_INCARNATION_GROW_BODYPART_MAX; i++) {
                     this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
                 play->envCtx.lightBlend = 0.0f;
@@ -1030,7 +1030,7 @@ void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasWrathHeavyBreathingAnim, 0.0f);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->csHeadRot.x = 0x7F00;
+    this->cutsceneHeadRot.x = 0x7F00;
     this->invincibilityTimer = 20;
     this->unk_17E8 = 0x1400;
 }
@@ -1077,9 +1077,11 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                 if (this->cutsceneTimer == 21) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_GROW_HEAD_OLD);
                 }
-                Math_ApproachS(&this->csHeadRot.x, 0, 5, 0x1000);
-                this->csHeadRot.y = Math_SinS(this->cutsceneTimer * 0x1000) * this->unk_17E8;
-                this->csHeadRot.z = Math_SinS(this->cutsceneTimer * 0xB00) * this->unk_17E8 * 0.5f;
+
+                Math_ApproachS(&this->cutsceneHeadRot.x, 0, 5, 0x1000);
+                this->cutsceneHeadRot.y = Math_SinS(this->cutsceneTimer * 0x1000) * this->unk_17E8;
+                this->cutsceneHeadRot.z = Math_SinS(this->cutsceneTimer * 0xB00) * this->unk_17E8 * 0.5f;
+
                 if (this->cutsceneTimer > 40) {
                     Math_ApproachZeroF(&this->unk_17E8, 1.0f, 200.0f);
                 }
@@ -1503,7 +1505,7 @@ void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
 void Boss07_Wrath_SetupJump(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_StartJump;
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathBackflipAnim, -5.0f);
-    this->actionTimer = 0;
+    this->frameCounter = 0;
 }
 
 void Boss07_Wrath_StartJump(Boss07* this, PlayState* play) {
@@ -1513,7 +1515,7 @@ void Boss07_Wrath_StartJump(Boss07* this, PlayState* play) {
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
-    if (this->actionTimer == 1) {
+    if (this->frameCounter == 1) {
         this->actor.velocity.y = 35.0f;
         this->actor.world.rot.y = Math_Atan2F_XY(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PI);
         this->actionFunc = Boss07_Wrath_Jump;
@@ -1524,7 +1526,7 @@ void Boss07_Wrath_StartJump(Boss07* this, PlayState* play) {
 void Boss07_Wrath_Jump(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_MIBOSS_JUMP2 - SFX_FLAG);
 
-    if (this->actionTimer == 13) {
+    if (this->frameCounter == 13) {
         Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_LAUGH_OLD);
     }
 
@@ -1564,7 +1566,7 @@ void Boss07_Wrath_SetupFlip(Boss07* this, PlayState* play) {
     dx = sp30.x - this->actor.world.pos.x;
     dz = sp30.z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2F_XY(dz, dx) * (0x8000 / M_PI);
-    this->actionTimer = 0;
+    this->frameCounter = 0;
     this->actor.speed = 17.0f;
 }
 
@@ -1576,7 +1578,7 @@ void Boss07_Wrath_Flip(Boss07* this, PlayState* play) {
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
-    if ((this->actionTimer == 10) && (Rand_ZeroOne() < 0.5f)) {
+    if ((this->frameCounter == 10) && (Rand_ZeroOne() < 0.5f)) {
         Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_LAUGH_OLD);
     }
 
@@ -1625,7 +1627,7 @@ void Boss07_Wrath_SetupSidestep(Boss07* this, PlayState* play) {
 void Boss07_Wrath_Sidestep(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->actionTimer == 20) {
+    if (this->frameCounter == 20) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
     }
 
@@ -1722,7 +1724,7 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
             break;
     }
 
-    this->actionTimer = 0;
+    this->frameCounter = 0;
 }
 
 void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
@@ -1733,44 +1735,44 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->leftWhip.drag = this->rightWhip.drag = 1.0f;
 
-    if (this->actionTimer > 20) {
+    if (this->frameCounter > 20) {
         this->canDodge = true;
     }
 
     switch (this->actionState) {
         case MAJORAS_WRATH_STATE_QUICK_WHIP:
-            if (this->actionTimer == (s16)(KREG(92) + 1)) {
+            if (this->frameCounter == (s16)(KREG(92) + 1)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
 
-            if ((this->actionTimer >= 15) && (this->actionTimer < 18)) {
+            if ((this->frameCounter >= 15) && (this->frameCounter < 18)) {
                 this->rightWhip.tension = 500.0f;
             }
 
-            if (this->actionTimer == 9) {
+            if (this->frameCounter == 9) {
                 this->whipCrackTimer = 11;
             }
 
-            if (this->actionTimer == 1) {
+            if (this->frameCounter == 1) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
 
-            if (this->actionTimer == 10) {
+            if (this->frameCounter == 10) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
 
         case MAJORAS_WRATH_STATE_FLURRY:
-            if (this->actionTimer == (s16)(KREG(91) + 3)) {
+            if (this->frameCounter == (s16)(KREG(91) + 3)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_THROW_OLD);
             }
 
-            if ((this->actionTimer >= 8) && (this->actionTimer <= 55)) {
+            if ((this->frameCounter >= 8) && (this->frameCounter <= 55)) {
                 this->leftWhip.tension = this->rightWhip.tension = 300.0f;
-                if ((((this->actionTimer + 2) % 4) == 0) && (Rand_ZeroOne() < 0.5f)) {
+                if ((((this->frameCounter + 2) % 4) == 0) && (Rand_ZeroOne() < 0.5f)) {
                     Audio_PlaySfx(NA_SE_EN_LAST3_ROD_FLOOR_OLD);
                 }
-                if ((this->actionTimer % 4) == 0) {
+                if ((this->frameCounter % 4) == 0) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
                 }
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
@@ -1778,57 +1780,57 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             break;
 
         case MAJORAS_WRATH_STATE_DOUBLE_WHIP:
-            if (this->actionTimer == (s16)(KREG(84) + 5)) {
+            if (this->frameCounter == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
 
-            if ((this->actionTimer >= 32) && (this->actionTimer <= 38)) {
+            if ((this->frameCounter >= 32) && (this->frameCounter <= 38)) {
                 this->rightWhip.tension = 300.0f;
                 this->leftWhip.tension = 300.0f;
             }
 
-            if (this->actionTimer == 28) {
+            if (this->frameCounter == 28) {
                 this->whipCrackTimer = 11;
             }
 
-            if (this->actionTimer == 10) {
+            if (this->frameCounter == 10) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
 
-            if (this->actionTimer == 32) {
+            if (this->frameCounter == 32) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
 
         case MAJORAS_WRATH_STATE_LONG_WHIP:
-            if (this->actionTimer == (s16)(KREG(84) + 5)) {
+            if (this->frameCounter == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
 
-            if ((this->actionTimer > 30) && (this->actionTimer <= 35)) {
+            if ((this->frameCounter > 30) && (this->frameCounter <= 35)) {
                 this->rightWhip.tension = 1200.0f;
             }
 
-            if (this->actionTimer == 23) {
+            if (this->frameCounter == 23) {
                 this->whipCrackTimer = 11;
             }
 
             Math_ApproachF(&this->unk_184, -0.1f, 0.5f, 0.1f);
             Math_ApproachF(&this->unk_188, 0.3f, 0.5f, 0.1f);
 
-            if (this->actionTimer == 5) {
+            if (this->frameCounter == 5) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
 
-            if (this->actionTimer == 30) {
+            if (this->frameCounter == 30) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
 
         case MAJORAS_WRATH_STATE_SPIN_ATTACK:
-            if ((this->actionTimer > 16) && (this->actionTimer <= 40)) {
+            if ((this->frameCounter > 16) && (this->frameCounter <= 40)) {
                 this->leftWhip.tension = this->rightWhip.tension = 200.0f;
-                if ((this->actionTimer % 8) == 0) {
+                if ((this->frameCounter % 8) == 0) {
                     Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_DANCE_OLD - SFX_FLAG);
@@ -1842,7 +1844,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
 
         case MAJORAS_WRATH_STATE_KICK:
             this->canDodge = false;
-            if (this->actionTimer == 3) {
+            if (this->frameCounter == 3) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
             }
             break;
@@ -1855,29 +1857,29 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             break;
 
         case MAJORAS_WRATH_STATE_THREE_HIT:
-            if (this->actionTimer == (s16)(KREG(85) + 5)) {
+            if (this->frameCounter == (s16)(KREG(85) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if ((this->actionTimer >= 14) && (this->actionTimer < 19)) {
+            if ((this->frameCounter >= 14) && (this->frameCounter < 19)) {
                 this->rightWhip.tension = 150.0f;
             }
-            if ((this->actionTimer >= 23) && (this->actionTimer < 29)) {
+            if ((this->frameCounter >= 23) && (this->frameCounter < 29)) {
                 this->leftWhip.tension = 200.0f;
             }
-            if ((this->actionTimer >= 43) && (this->actionTimer < 49)) {
+            if ((this->frameCounter >= 43) && (this->frameCounter < 49)) {
                 this->rightWhip.tension = 200.0f;
             }
 
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
-            if (this->actionTimer == 20) {
+            if (this->frameCounter == 20) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if (this->actionTimer == 5) {
+            if (this->frameCounter == 5) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP2_OLD);
             }
-            if (this->actionTimer == 41) {
+            if (this->frameCounter == 41) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -1896,7 +1898,7 @@ void Boss07_Wrath_SetupGrab(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_Grab;
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathGrabAnim, -5.0f);
     this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathGrabAnim);
-    this->actionTimer = 0;
+    this->frameCounter = 0;
 }
 
 void Boss07_Wrath_Grab(Boss07* this, PlayState* play) {
@@ -1909,11 +1911,11 @@ void Boss07_Wrath_Grab(Boss07* this, PlayState* play) {
     this->rightWhip.gravity = -5.0f;
     this->leftWhip.gravity = -15.0f;
 
-    if ((this->actionTimer >= 14) && (this->actionTimer <= 18)) {
+    if ((this->frameCounter >= 14) && (this->frameCounter <= 18)) {
         this->rightWhip.tension = 500.0f;
     }
 
-    if (this->actionTimer >= 18) {
+    if (this->frameCounter >= 18) {
         Boss07_Wrath_SetupIdle(this, play, Rand_ZeroFloat(20.0f) + 20.0f);
         Audio_PlaySfx(NA_SE_EN_LAST3_ROD_MID_OLD);
     }
@@ -1930,13 +1932,13 @@ void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play) {
     this->whipCollisionTimer = 20;
     this->whipWrapIndex++;
 
-    if (this->actionTimer > (s16)(46 - this->whipGrabIndex)) {
+    if (this->frameCounter > (s16)(46 - this->whipGrabIndex)) {
         Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_THROW_OLD);
         Audio_PlaySfx(NA_SE_EN_LAST3_COIL_ATTACK_OLD);
         this->actionFunc = Boss07_Wrath_ThrowPlayer;
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathThrowAnim, -5.0f);
         this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathThrowAnim);
-        this->actionTimer = 0;
+        this->frameCounter = 0;
     }
 
     if ((Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
@@ -1954,7 +1956,7 @@ void Boss07_Wrath_ThrowPlayer(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->whipCollisionTimer = 20;
 
-    if (this->actionTimer == 6) {
+    if (this->frameCounter == 6) {
         this->whipGrabIndex = 0;
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
@@ -1977,7 +1979,7 @@ void Boss07_Wrath_ThrowPlayer(Boss07* this, PlayState* play) {
             func_800B8D50(play, NULL, phi_f0, this->actor.yawTowardsPlayer + 0x9000, phi_f2, 0x10);
         }
     }
-    if (this->actionTimer < 7) {
+    if (this->frameCounter < 7) {
         player->actor.world.pos = this->whipGrabPos;
         if ((Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
             (playerImpactType == PLAYER_IMPACT_ZORA_BARRIER)) {
@@ -2002,7 +2004,7 @@ void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play) {
     if (temp_v1 < temp_v0) {
         this->whipShockIndexHigh = this->whipShockIndexLow = temp_v1;
     }
-    this->actionTimer = 0;
+    this->frameCounter = 0;
     Audio_PlaySfx(NA_SE_EV_ELECTRIC_EXPLOSION);
 }
 
@@ -2016,7 +2018,7 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->whipCollisionTimer = 20;
 
-    if (this->actionTimer <= (s16)(46 - this->whipGrabIndex)) {
+    if (this->frameCounter <= (s16)(46 - this->whipGrabIndex)) {
         this->whipWrapIndex++;
     }
 
@@ -2046,7 +2048,7 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
         }
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y - 10.0f,
                     this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
-        this->actionTimer = 0;
+        this->frameCounter = 0;
     }
 }
 
@@ -2060,7 +2062,7 @@ void Boss07_Wrath_ShockStun(Boss07* this, PlayState* play) {
         DECR(this->whipShockIndexHigh);
     }
 
-    if (this->actionTimer < 70) {
+    if (this->frameCounter < 70) {
         Math_ApproachF(&this->unk_32C, 5.0f, 0.5f, 3.0f);
         Math_ApproachF(&this->unk_330, 2.5f, 0.5f, 2.0f);
         Audio_PlaySfx(NA_SE_EN_BIRI_SPARK - SFX_FLAG);
@@ -2086,20 +2088,20 @@ void Boss07_Wrath_SetupSpawnTop(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_SpawnTop;
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathReleaseTopAnim, -5.0f);
     this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathReleaseTopAnim);
-    this->actionTimer = 0;
+    this->frameCounter = 0;
 }
 
 void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
     this->whipCollisionTimer = 20;
 
-    if (this->actionTimer < (s16)(KREG(40) + 14)) {
+    if (this->frameCounter < (s16)(KREG(40) + 14)) {
         this->whipTopIndex += 6;
         if (this->whipTopIndex > 44) {
             this->whipTopIndex = 44;
         }
     }
 
-    if (this->actionTimer == 8) {
+    if (this->frameCounter == 8) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_TOP);
     }
@@ -2107,20 +2109,20 @@ void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
     //! FAKE:
     if (1) {}
 
-    if (this->actionTimer == 10) {
+    if (this->frameCounter == 10) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
     }
 
-    if (this->actionTimer == (s16)(KREG(40) + 18)) {
+    if (this->frameCounter == (s16)(KREG(40) + 18)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
     }
 
-    if ((this->actionTimer < (s16)(KREG(40) + 14)) || (this->actionTimer > (s16)(KREG(41) + 17))) {
+    if ((this->frameCounter < (s16)(KREG(40) + 14)) || (this->frameCounter > (s16)(KREG(41) + 17))) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if ((this->actionTimer >= (s16)(KREG(40) + 14)) &&
-        ((this->actionTimer <= (s16)(KREG(41) + 17)) || (this->actionTimer >= (s16)(KREG(42) + 21)))) {
+    if ((this->frameCounter >= (s16)(KREG(40) + 14)) &&
+        ((this->frameCounter <= (s16)(KREG(41) + 17)) || (this->frameCounter >= (s16)(KREG(42) + 21)))) {
         this->whipTopIndex -= KREG(39) + 5;
         if (this->whipTopIndex < 0) {
             this->whipTopIndex = 0;
@@ -2136,11 +2138,11 @@ void Boss07_Wrath_SpawnTop(Boss07* this, PlayState* play) {
     this->rightWhip.gravity = -5.0f;
     this->leftWhip.gravity = -15.0f;
 
-    if ((this->actionTimer >= (s16)(KREG(43) + 12)) && (this->actionTimer <= (s16)(KREG(44) + 17))) {
+    if ((this->frameCounter >= (s16)(KREG(43) + 12)) && (this->frameCounter <= (s16)(KREG(44) + 17))) {
         this->rightWhip.tension = KREG(6) + 500.0f;
     }
 
-    if (this->actionTimer >= (s16)(KREG(45) + 36)) {
+    if (this->frameCounter >= (s16)(KREG(45) + 36)) {
         Boss07_Wrath_SetupIdle(this, play, Rand_ZeroFloat(20.0f) + 20.0f);
     }
 }
@@ -2274,7 +2276,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                         this->unk_F8C = Math_Atan2F_XY(dz1, dx1);
                         this->unk_F90 = -Math_Atan2F_XY(dxz1, dy1);
                         this->actionFunc = Boss07_Wrath_GrabPlayer;
-                        this->actionTimer = 0;
+                        this->frameCounter = 0;
                         this->rightWhip.tension = 0.0f;
                         Audio_PlaySfx(NA_SE_EN_LAST3_GET_LINK_OLD);
                     }
@@ -2533,7 +2535,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
 
     if (KREG(63) == 0) {
         this->canDodge = false;
-        this->actionTimer++;
+        this->frameCounter++;
         Actor_SetScale(&this->actor, 0.015f);
         Math_ApproachZeroF(&this->unk_184, 1.0f, 0.02f);
         Math_ApproachZeroF(&this->unk_188, 1.0f, 0.02f);
@@ -2586,7 +2588,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
 
     if ((this->actionFunc == Boss07_Wrath_Attack) && (this->actionState == MAJORAS_WRATH_STATE_KICK) &&
-        (this->actionTimer >= 6)) {
+        (this->frameCounter >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->kickCollider.base);
     } else {
         if (this->canDodge && Boss07_IsFacingPlayer(this, play)) {
@@ -2909,9 +2911,9 @@ s32 Boss07_Wrath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     Boss07* this = THIS;
 
     if (limbIndex == MAJORAS_WRATH_LIMB_HEAD) {
-        rot->x += this->csHeadRot.y;
-        rot->y += this->csHeadRot.x;
-        rot->z += this->csHeadRot.z;
+        rot->x += this->cutsceneHeadRot.y;
+        rot->y += this->cutsceneHeadRot.x;
+        rot->z += this->cutsceneHeadRot.z;
     }
     return false;
 }
@@ -3046,6 +3048,8 @@ void Boss07_Wrath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void Boss07_Wrath_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     Boss07* this = THIS;
 
+    // This code allows the `incarnationArmScale` to scale up almost all of Wrath's limbs. However, in the final game,
+    // this variable is always set to 1.0f for Wrath, meaning that this code effectively does nothing.
     if ((limbIndex == MAJORAS_WRATH_LIMB_PELVIS) || (limbIndex == MAJORAS_WRATH_LIMB_LEFT_THIGH) ||
         (limbIndex == MAJORAS_WRATH_LIMB_LEFT_SHIN) || (limbIndex == MAJORAS_WRATH_LIMB_LEFT_FOOT) ||
         (limbIndex == MAJORAS_WRATH_LIMB_RIGHT_THIGH) || (limbIndex == MAJORAS_WRATH_LIMB_RIGHT_SHIN) ||
@@ -3460,28 +3464,28 @@ void Boss07_Incarnation_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Incarnation_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationJerkingAnim, 0.0f);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->csHeadRot.x = 0x6E00;
+    this->cutsceneHeadRot.x = 0x6E00;
 }
 
 void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
     s32 i;
-    f32 sp58;
+    f32 targetFactor;
 
     SkelAnime_Update(&this->skelAnime);
 
     this->cutsceneTimer++;
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-    sp58 = Math_SinS(this->actionTimer * 0x4500) * 0.3f;
+    targetFactor = Math_SinS(this->frameCounter * 0x4500) * 0.3f;
 
     switch (this->cutsceneState) {
-        case MAJORAS_INCARNATION_INTRO_STATE_0:
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_STARTING_OR_DONE:
             this->cutsceneTimer = 0;
-            this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_1;
+            this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_UPDATE_SUBCAM;
             this->subCamAtNext.z = 0.0f;
             // fallthrough
-        case MAJORAS_INCARNATION_INTRO_STATE_1:
-            this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_2;
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_UPDATE_SUBCAM:
+            this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_LEFT_LEG;
             this->cutsceneTimer = 0;
             this->subCamEyeNext.x = 70.0f;
             this->subCamEyeNext.y = 70.0f;
@@ -3490,24 +3494,27 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             this->subCamAtNext.y = 80.0f;
             break;
 
-        case MAJORAS_INCARNATION_INTRO_STATE_2:
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_LEFT_LEG:
             if (this->cutsceneTimer >= 20) {
                 if (this->cutsceneTimer == 20) {
-                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
 
-                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG],
-                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58), 1.0f, 0.5f);
+                Math_ApproachF(
+                    &this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG],
+                    1.0f + (this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG] *
+                            targetFactor),
+                    1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer > 40) {
-                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_3;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_OTHER_LIMBS;
                 this->cutsceneTimer = 0;
             }
             break;
 
-        case MAJORAS_INCARNATION_INTRO_STATE_3:
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_OTHER_LIMBS:
             Math_ApproachF(&this->subCamEyeNext.x, 0.0f, 0.05f, this->subCamSpeedMod * 40.0f);
             Math_ApproachF(&this->subCamEyeNext.y, 100.0f, 0.05f, this->subCamSpeedMod * 30.0f);
             Math_ApproachF(&this->subCamEyeNext.z, 270.0f, 0.05f, this->subCamSpeedMod * 150.0f);
@@ -3517,60 +3524,76 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer >= 20) {
                 if (this->cutsceneTimer == 20) {
-                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
 
-                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG],
-                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] * sp58), 1.0f, 0.5f);
+                Math_ApproachF(
+                    &this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG],
+                    1.0f + (this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG] *
+                            targetFactor),
+                    1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer >= 50) {
                 if (this->cutsceneTimer == 50) {
-                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
 
-                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM],
-                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] * sp58), 1.0f, 0.5f);
+                Math_ApproachF(
+                    &this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM],
+                    1.0f + (this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM] *
+                            targetFactor),
+                    1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer >= 60) {
                 if (this->cutsceneTimer == 60) {
-                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
 
-                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM],
-                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] * sp58), 1.0f, 0.5f);
+                Math_ApproachF(
+                    &this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM],
+                    1.0f + (this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM] *
+                            targetFactor),
+                    1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer == 80) {
-                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_4;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_EYESTALK;
                 this->cutsceneTimer = 0;
-                for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
+                for (i = 0; i < MAJORAS_INCARNATION_GROW_BODYPART_MAX; i++) {
                     this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
             }
             break;
 
-        case MAJORAS_INCARNATION_INTRO_STATE_4:
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_EYESTALK:
             this->subCamEyeNext.x = 0.0f;
             this->subCamEyeNext.y = 120.0f;
             this->subCamEyeNext.z = 140.0f;
             this->subCamAtNext.y = 170.0f;
+
             if (this->cutsceneTimer >= 10) {
+                // This code reuses the scale target for `MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG` to control the
+                // rotation of Incarnation's eyestalk. It doesn't matter which scale target it reused, however, because
+                // none of them are currently being used by their intended limbs.
                 if (this->cutsceneTimer == 10) {
-                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
                 }
 
-                Math_ApproachS(&this->csHeadRot.x,
-                               (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58) * 0x6000, 1, 0x4000);
+                Math_ApproachS(&this->cutsceneHeadRot.x,
+                               (this->incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG] *
+                                targetFactor) *
+                                   0x6000,
+                               1, 0x4000);
             }
 
             if (this->cutsceneTimer == 30) {
-                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_5;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_DANCE;
                 this->cutsceneTimer = 0;
                 this->subCamSpeedMod = 0.0f;
                 this->animEndFrame = 1000.0f;
@@ -3578,7 +3601,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_INCARNATION_INTRO_STATE_5:
+        case MAJORAS_INCARNATION_INTRO_CS_STATE_DANCE:
             if (this->cutsceneTimer == 20) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasIncarnationIntroDanceAnim, 0.0f);
                 this->animEndFrame = Animation_GetLastFrame(&gMajorasIncarnationIntroDanceAnim);
@@ -3620,7 +3643,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_0;
+                this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_STARTING_OR_DONE;
                 Boss07_Incarnation_SetupTaunt(this, play);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
@@ -3634,8 +3657,8 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             break;
     }
 
-    for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
-        Math_ApproachZeroF(&this->incarnationIntroBodyPartsScaleSpeed[i], 0.5f, 0.1f);
+    for (i = 0; i < MAJORAS_INCARNATION_GROW_BODYPART_MAX; i++) {
+        Math_ApproachZeroF(&this->incarnationIntroBodyPartsScaleTarget[i], 0.5f, 0.1f);
     }
 
     Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
@@ -3840,13 +3863,15 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
     Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 3, 0x3000);
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationLeftHandPos.x, this->incarnationLeftHandPos.y,
-                    this->incarnationLeftHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationLeftHandPos.x,
+                    this->incarnationLeftHandPos.y, this->incarnationLeftHandPos.z, 0, 0, 0,
+                    MAJORA_TYPE_INCARNATION_SHOT);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationRightHandPos.x, this->incarnationRightHandPos.y,
-                    this->incarnationRightHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationRightHandPos.x,
+                    this->incarnationRightHandPos.y, this->incarnationRightHandPos.z, 0, 0, 0,
+                    MAJORA_TYPE_INCARNATION_SHOT);
     }
 
     if (this->timers[0] == 0) {
@@ -3884,7 +3909,7 @@ void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, KREG(67) + 10.0f, 1.0f, 3.0f);
 
     if (this->timers[1] == 0) {
-        if ((this->actionTimer == 0) && (Rand_ZeroOne() < 0.7f)) {
+        if ((this->frameCounter == 0) && (Rand_ZeroOne() < 0.7f)) {
             if (Rand_ZeroOne() < 0.75f) {
                 this->unk_180 = Rand_CenteredFloat(0x10000);
             } else {
@@ -3922,7 +3947,7 @@ void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, KREG(69) + -10.0f, 1.0f, 3.0f);
 
     if (this->timers[1] == 0) {
-        if ((this->actionTimer == 0) && (Rand_ZeroOne() < 0.5f)) {
+        if ((this->frameCounter == 0) && (Rand_ZeroOne() < 0.5f)) {
             if (Rand_ZeroOne() < 0.75f) {
                 this->unk_180 = Rand_CenteredFloat(0x10000);
             } else {
@@ -3958,7 +3983,7 @@ void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, KREG(69) + 10.0f, 1.0f, 1.0f);
 
     if (this->timers[1] == 0) {
-        if (((this->actionTimer % 0x40) == 0) && (Rand_ZeroOne() < 0.5f)) {
+        if (((this->frameCounter % 0x40) == 0) && (Rand_ZeroOne() < 0.5f)) {
             if (Rand_ZeroOne() < 0.75f) {
                 this->unk_180 = Rand_CenteredFloat(0x10000);
             } else {
@@ -4220,7 +4245,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     s32 i;
 
     this->actor.hintId = TATL_HINT_ID_MAJORAS_INCARNATION;
-    this->actionTimer++;
+    this->frameCounter++;
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
     if (this->envEffectOn == 1) {
@@ -4284,7 +4309,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x1000);
     }
 
-    if ((this->timer_18D6 != 0) && !(this->actionTimer & 1)) {
+    if ((this->timer_18D6 != 0) && !(this->frameCounter & 1)) {
         Boss07* afterimage = (Boss07*)Actor_SpawnAsChild(
             &play->actorCtx, &this->actor, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
             this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, 7, MAJORA_TYPE_AFTERIMAGE);
@@ -4319,7 +4344,7 @@ s32 Boss07_Incarnation_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     Boss07* this = THIS;
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_EYESTALK) {
-        rot->y += this->csHeadRot.x;
+        rot->y += this->cutsceneHeadRot.x;
     }
     return false;
 }
@@ -4362,22 +4387,22 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_WRAPPER
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_MASK
-        MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG, // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
+        MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG, // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
-        MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
+        MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
-        MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
+        MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_HAND
-        MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG,  // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
+        MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG,  // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
         BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
@@ -4475,7 +4500,8 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
 
     index = sLimbToPumpBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
-        Matrix_Scale(this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index], MTXMODE_APPLY);
+        Matrix_Scale(this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index],
+                     this->incarnationIntroBodyPartsScale[index], MTXMODE_APPLY);
     }
 }
 
@@ -4568,7 +4594,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     sp28 = this->moveTarget.z - this->actor.world.pos.z;
     sp34 = Math_Atan2S(sp30, sp28);
     sp36 = Math_Atan2S(sp2C, sqrtf(SQ(sp30) + SQ(sp28)));
-    sp36 += (s16)(Math_SinS(this->actionTimer * 0x1388) * 0xFA0);
+    sp36 += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
 
     Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->velocity_170);
     Math_ApproachS(&this->actor.world.rot.x, sp36, 5, this->velocity_170);
@@ -4703,14 +4729,14 @@ void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     Boss07_SmoothStop(this, 0.5f);
-    Math_ApproachS(&this->actor.shape.rot.x, -0x1000 + 0x4B0 * Math_SinS(this->actionTimer * 0xBB8), 5, 0x800);
-    Math_ApproachS(&this->actor.shape.rot.z, -0x1000 + 0x3E8 * Math_SinS(this->actionTimer * 0x9C4), 5, 0x800);
+    Math_ApproachS(&this->actor.shape.rot.x, -0x1000 + 0x4B0 * Math_SinS(this->frameCounter * 0xBB8), 5, 0x800);
+    Math_ApproachS(&this->actor.shape.rot.z, -0x1000 + 0x3E8 * Math_SinS(this->frameCounter * 0x9C4), 5, 0x800);
 
     if (this->actor.world.pos.y > 51.0f) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     }
 
-    Math_ApproachF(&this->actor.world.pos.y, 50.0f + 10.0f * Math_SinS(this->actionTimer * 0x5DC), 0.1f,
+    Math_ApproachF(&this->actor.world.pos.y, 50.0f + 10.0f * Math_SinS(this->frameCounter * 0x5DC), 0.1f,
                    this->velocity_170);
     Math_ApproachF(&this->velocity_170, 15.0f, 1.0f, 1.0f);
 
@@ -5584,7 +5610,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         play->envCtx.lightSetting = 2;
         play->envCtx.prevLightSetting = 0;
         Math_ApproachF(&play->envCtx.lightBlend, this->beamXYscale, 1.0f, 0.1f);
-        this->actionTimer++;
+        this->frameCounter++;
 
         if (KREG(63) == 0) {
             this->canDodge = false;
@@ -5737,7 +5763,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
         for (i = 0; i < MAJORA_TENT_LENGTH; i++) {
             Matrix_Push();
             Matrix_RotateZF(arg9, MTXMODE_APPLY);
-            sp98.x = Math_SinS((2 * i + this->actionTimer) * 0x1600) * 10;
+            sp98.x = Math_SinS((2 * i + this->frameCounter) * 0x1600) * 10;
             sp98.y = 10.0f;
             sp98.z = 0.0f;
             Matrix_MultVec3f(&sp98, &sp8C);
@@ -5842,7 +5868,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
     if (this->actionFunc == Boss07_Mask_Beam) {
         gSPSegment(POLY_XLU_DISP++, 0x0C,
-                   Gfx_TexScroll(play->state.gfxCtx, 0, (this->actionTimer * -15) % 0x100U, 0x20, 0x40));
+                   Gfx_TexScroll(play->state.gfxCtx, 0, (this->frameCounter * -15) % 0x100U, 0x20, 0x40));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
@@ -5873,7 +5899,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->beamFocusOrbScale * 40.0f * this->beamXYscale,
                      this->beamFocusOrbScale * 40.0f * this->beamXYscale, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateZS(this->actionTimer * 0x100, MTXMODE_APPLY);
+        Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, sREG(89) + 80);
@@ -5908,7 +5934,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
             Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(this->beamXYscale * 5.0f, this->beamXYscale * 5.0f, 0.0f, MTXMODE_APPLY);
-            Matrix_RotateZS(this->actionTimer * 0x100, MTXMODE_APPLY);
+            Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
@@ -6010,7 +6036,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
     f32 temp;
     Player* player = GET_PLAYER(play);
 
-    this->actionTimer++;
+    this->frameCounter++;
 
     if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_REMAINS_SHOT) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_BEAM - SFX_FLAG);
@@ -6283,7 +6309,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             sp70 = this->moveTarget.z - this->actor.world.pos.z;
             sp7C = Math_Atan2S(sp78, sp70);
             sp7E = Math_Atan2S(sp74, sqrtf(SQ(sp78) + SQ(sp70)));
-            sp7E += (s16)(Math_SinS(this->actionTimer * 0x1388) * 0xFA0);
+            sp7E += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
             Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->velocity_170);
             Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->velocity_170);
             Math_ApproachF(&this->velocity_170, 0x7D0, 1.0f, 0x64);
@@ -6402,7 +6428,7 @@ void Boss07_Remains_Update(Actor* thisx, PlayState* play2) {
     Boss07* this = THIS;
     s32 i;
 
-    this->actionTimer++;
+    this->frameCounter++;
 
     for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
         DECR(this->timers[i]);
@@ -6498,7 +6524,7 @@ void Boss07_Top_Thrown(Boss07* this, PlayState* play) {
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 50.0f, 80.0f, UPDBGCHECKINFO_FLAG_1);
 
-    if ((sMajorasWrath->actionTimer >= (s16)(KREG(50) + 21)) || (sMajorasWrath->invincibilityTimer != 0)) {
+    if ((sMajorasWrath->frameCounter >= (s16)(KREG(50) + 21)) || (sMajorasWrath->invincibilityTimer != 0)) {
         Boss07_Top_SetupGround(this, play);
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         Boss07_Top_SetupGround(this, play);
@@ -6737,7 +6763,7 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
 
-    this->actionTimer++;
+    this->frameCounter++;
 
     DECR(this->timers[0]);
     DECR(this->timers[1]);

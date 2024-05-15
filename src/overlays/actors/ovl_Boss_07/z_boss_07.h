@@ -151,13 +151,13 @@ typedef enum MajorasIncarnationColliderBodyPart {
 
 #define MAJORA_COLLIDER_BODYPART_MAX MAX((s32)MAJORAS_WRATH_COLLIDER_BODYPART_MAX, (s32)MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX)
 
-typedef enum MajorasIncarnationPumpBodyPart {
-    /* 0 */ MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM,
-    /* 1 */ MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM,
-    /* 2 */ MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG,
-    /* 3 */ MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG,
-    /* 4 */ MAJORAS_INCARNATION_PUMP_BODYPART_MAX
-} MajorasIncarnationPumpBodyPart;
+typedef enum MajorasIncarnationGrowBodyPart {
+    /* 0 */ MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM,
+    /* 1 */ MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM,
+    /* 2 */ MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG,
+    /* 3 */ MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG,
+    /* 4 */ MAJORAS_INCARNATION_GROW_BODYPART_MAX
+} MajorasIncarnationGrowBodyPart;
 
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
@@ -166,7 +166,7 @@ typedef struct Boss07 {
     /* 0x0149 */ u8 shouldUpdateTentaclesOrWhips;
     /* 0x014A */ u8 envEffectOn;
     /* 0x014B */ u8 envEffectTimer;
-    /* 0x014C */ s16 actionTimer;
+    /* 0x014C */ s16 frameCounter;
     /* 0x014E */ u8 actionState;
     /* 0x014F */ u8 whipCrackTimer;
     /* 0x0150 */ s16 timers[3];
@@ -213,10 +213,10 @@ typedef struct Boss07 {
     /* 0x1788 */ Vec3f incarnationFeetPos[2];
     /* 0x17A0 */ Vec3f incarnationLeftHandPos;
     /* 0x17AC */ Vec3f incarnationRightHandPos;
-    /* 0x17B8 */ f32 incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_MAX];
-    /* 0x17C8 */ f32 incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_MAX];
-    /* 0x17D8 */ Vec3s csHeadRot;
-    /* 0x17E0 */ f32 incarnationArmScale;
+    /* 0x17B8 */ f32 incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_MAX];
+    /* 0x17C8 */ f32 incarnationIntroBodyPartsScaleTarget[MAJORAS_INCARNATION_GROW_BODYPART_MAX];
+    /* 0x17D8 */ Vec3s cutsceneHeadRot;
+    /* 0x17E0 */ f32 incarnationArmScale; // also has some unused functionality to scale most of Wrath's limbs, see `Boss07_Wrath_TransformLimbDraw`
     /* 0x17E4 */ f32 incarnationLegScale;
     /* 0x17E8 */ f32 unk_17E8; // limb pump average
     /* 0x17E8 */ f32 unk_17EC; // limb pump amplitude
