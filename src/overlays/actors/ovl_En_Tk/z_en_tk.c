@@ -1293,8 +1293,8 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
 
         if (platform != NULL) {
             if (platform->dyna.actor.id == ACTOR_BG_DANPEI_MOVEBG) {
-                platform->flags |= 1;
-                if (platform->flags & 2) {
+                platform->flags |= DANPEI_MOVEBG_FLAG_1;
+                if (platform->flags & DANPEI_MOVEBG_FLAG_2) {
                     this->unk_2CA |= 1;
                 }
             }
