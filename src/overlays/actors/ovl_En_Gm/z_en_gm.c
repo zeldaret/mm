@@ -611,8 +611,8 @@ s32 func_8094E52C(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-s32 func_8094E69C(EnGm* this, PlayState* play) {
-    Camera* subCam;
+s32 func_8094E69C(Actor* thisx, PlayState* play) {
+    EnGm* this = (EnGm*)thisx;
     s16 csId = func_8094E4D0(this, 0);
     s16 sp48;
     Vec3f sp3C;
@@ -654,8 +654,8 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             if (func_8094E454(this, csId)) {
                 case 4:
                 case 6:
-                    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId));
-                    Camera_SetTargetActor(subCam, &this->actor);
+                    sp48 = CutsceneManager_GetCurrentSubCamId(csId);
+                    Camera_SetTargetActor(Play_GetCamera(play, sp48), &this->actor);
                     this->unk_3E0++;
                     ret = true;
             }
@@ -665,8 +665,8 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId));
-                Camera_SetTargetActor(subCam, this->actor.child);
+                sp48 = CutsceneManager_GetCurrentSubCamId(csId);
+                Camera_SetTargetActor(Play_GetCamera(play, sp48), this->actor.child);
             }
             this->unk_3E0++;
             ret = true;
@@ -817,8 +817,7 @@ MsgScript* func_8094EDBC(EnGm* this, PlayState* play) {
             return D_80951AD8;
 
         case 3:
-            // TODO ideally func_8094E69C should take Actor* and cast to EnGm* rather than cast here
-            this->unk_3E4 = (MsgEventCallback)func_8094E69C;
+            this->unk_3E4 = func_8094E69C;
             return D_80951B98;
 
         case 5:
