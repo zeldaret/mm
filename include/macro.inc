@@ -7,7 +7,7 @@
 
 .macro endlabel label
     .end \label
-    .size \label,.-\label
+    .size \label, . - \label
 .endm
 
 .macro dlabel label
