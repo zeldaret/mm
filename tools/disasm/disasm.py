@@ -1226,6 +1226,7 @@ def disassemble_text(data, vram, data_regions, info):
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
     delay_slot = False
+    prev_func = ""
 
     for i, raw_insn in enumerate(raw_insns, 0):
         i *= 4
@@ -1261,7 +1262,19 @@ def disassemble_text(data, vram, data_regions, info):
             )
             continue
 
-        result += getLabelForVaddr(vaddr)
+        cur_label = getLabelForVaddr(vaddr)
+
+        # Handle adding endlabels to the previous function
+        if cur_label and ("glabel" in cur_label or "dlabel" in cur_label):
+            if prev_func:
+                result += f"endlabel {prev_func}\n"
+            if "glabel" in cur_label:
+                prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+            else:
+                prev_func = ""
+
+        result += cur_label
+
 
         comment = f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */"
         extraLJust = 0
@@ -1275,6 +1288,10 @@ def disassemble_text(data, vram, data_regions, info):
         result += f"{comment}  {disassembled}\n"
 
         delay_slot = insn.hasDelaySlot()
+
+    # Add endlabel to last function
+    if prev_func:
+        result += f"endlabel {prev_func}\n"
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
@@ -1850,7 +1867,7 @@ def disassemble_makerom(section):
         with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
             entry_asm = infile.read()
 
-        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+        entry_asm = entry_asm.replace("0x63B0", "%lo(_bootSegmentBssSize)")
         with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
             outfile.write(entry_asm)
 
