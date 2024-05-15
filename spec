@@ -3,18 +3,18 @@
  */
 
 beginseg
+    name "framebuffer_lo"
+    address 0x80000500
+    flags NOLOAD
+    include "$(BUILD_DIR)/src/buffers/framebuffer_lo.o"
+endseg
+
+beginseg
     address 0x8007F000
     name "makerom"
     include "$(BUILD_DIR)/asm/makerom/rom_header.o"
     include "$(BUILD_DIR)/asm/makerom/ipl3.o"
     include "$(BUILD_DIR)/asm/makerom/entry.o"
-endseg
-
-beginseg
-    name "framebuffer_lo"
-    address 0x80000500
-    flags NOLOAD
-    include "$(BUILD_DIR)/src/buffers/framebuffer_lo.o"
 endseg
 
 beginseg
