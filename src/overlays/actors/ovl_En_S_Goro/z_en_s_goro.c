@@ -894,8 +894,9 @@ void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play) {
     this->collider.dim.radius = radius;
     this->collider.dim.height = height;
 
-    //! @bug: It is not clear what this is for.
-    if ((s32)this != -0x190) {
+    //! @bug: The check is useless. If &this->collider somehow was NULL the above code would have already dereferenced
+    //! it.
+    if (&this->collider != NULL) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
