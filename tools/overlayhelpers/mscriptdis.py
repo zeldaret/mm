@@ -3,7 +3,7 @@
 #   Message Event Script Disassembler
 #
 
-import argparse, os, struct
+import argparse, math, os, struct
 from actor_symbols import resolve_symbol
 
 cmd_info = [
@@ -34,9 +34,9 @@ cmd_info = [
     ('MSCRIPT_FOCUS_TO_SELF', 0x01, '', '', ()),
     ('MSCRIPT_JUMP', 0x03, '', '>h', (0,)),
     ('MSCRIPT_BRANCH_ON_QUEST_ITEM', 0x05, '', '>Hh', (1,)),
-    ('MSCRIPT_BRANCH_ON_EVENT_INF', 0x05, '', '>BBh', (2,)),
-    ('MSCRIPT_SET_EVENT_INF', 0x03, '', '>BB', ()),
-    ('MSCRIPT_UNSET_EVENT_INF', 0x03, '', '>BB', ()),
+    ('MSCRIPT_BRANCH_ON_EVENT_INF', 0x05, '', '>Hh', (1,)),
+    ('MSCRIPT_SET_EVENT_INF', 0x03, '', '>H', ()),
+    ('MSCRIPT_UNSET_EVENT_INF', 0x03, '', '>H', ()),
     ('MSCRIPT_BRANCH_ON_ITEMACTION', 0x09, '', '>Hhhh', (1,2,3)),
     ('MSCRIPT_BRANCH_ON_SONG_OBTAINED', 0x05, '', '>Hh', (1,)),
     ('MSCRIPT_BRANCH_ON_WORN_MASK', 0x05, '', '>Hh', (1,)),
@@ -1271,6 +1271,128 @@ notebook_event = (
     "BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK",
 )
 
+mask_names = (
+    "PLAYER_MASK_NONE",
+    "PLAYER_MASK_TRUTH",
+    "PLAYER_MASK_KAFEIS_MASK",
+    "PLAYER_MASK_ALL_NIGHT",
+    "PLAYER_MASK_BUNNY",
+    "PLAYER_MASK_KEATON",
+    "PLAYER_MASK_GARO",
+    "PLAYER_MASK_ROMANI",
+    "PLAYER_MASK_CIRCUS_LEADER",
+    "PLAYER_MASK_POSTMAN",
+    "PLAYER_MASK_COUPLE",
+    "PLAYER_MASK_GREAT_FAIRY",
+    "PLAYER_MASK_GIBDO",
+    "PLAYER_MASK_DON_GERO",
+    "PLAYER_MASK_KAMARO",
+    "PLAYER_MASK_CAPTAIN",
+    "PLAYER_MASK_STONE",
+    "PLAYER_MASK_BREMEN",
+    "PLAYER_MASK_BLAST",
+    "PLAYER_MASK_SCENTS",
+    "PLAYER_MASK_GIANT",
+    "PLAYER_MASK_FIERCE_DEITY",
+    "PLAYER_MASK_GORON",
+    "PLAYER_MASK_ZORA",
+    "PLAYER_MASK_DEKU",
+    "PLAYER_MASK_MAX"
+)
+
+item_action_names = (
+    "PLAYER_IA_NONE",
+    "PLAYER_IA_LAST_USED",
+    "PLAYER_IA_FISHING_ROD",
+    "PLAYER_IA_SWORD_KOKIRI",
+    "PLAYER_IA_SWORD_RAZOR",
+    "PLAYER_IA_SWORD_GILDED",
+    "PLAYER_IA_SWORD_TWO_HANDED",
+    "PLAYER_IA_DEKU_STICK",
+    "PLAYER_IA_ZORA_FINS",
+    "PLAYER_IA_BOW",
+    "PLAYER_IA_BOW_FIRE",
+    "PLAYER_IA_BOW_ICE",
+    "PLAYER_IA_BOW_LIGHT",
+    "PLAYER_IA_HOOKSHOT",
+    "PLAYER_IA_BOMB",
+    "PLAYER_IA_POWDER_KEG",
+    "PLAYER_IA_BOMBCHU",
+    "PLAYER_IA_11",
+    "PLAYER_IA_DEKU_NUT",
+    "PLAYER_IA_PICTOGRAPH_BOX",
+    "PLAYER_IA_OCARINA",
+    "PLAYER_IA_BOTTLE_EMPTY",
+    "PLAYER_IA_BOTTLE_FISH",
+    "PLAYER_IA_BOTTLE_SPRING_WATER",
+    "PLAYER_IA_BOTTLE_HOT_SPRING_WATER",
+    "PLAYER_IA_BOTTLE_ZORA_EGG",
+    "PLAYER_IA_BOTTLE_DEKU_PRINCESS",
+    "PLAYER_IA_BOTTLE_GOLD_DUST",
+    "PLAYER_IA_BOTTLE_1C",
+    "PLAYER_IA_BOTTLE_SEAHORSE",
+    "PLAYER_IA_BOTTLE_MUSHROOM",
+    "PLAYER_IA_BOTTLE_HYLIAN_LOACH",
+    "PLAYER_IA_BOTTLE_BUG",
+    "PLAYER_IA_BOTTLE_POE",
+    "PLAYER_IA_BOTTLE_BIG_POE",
+    "PLAYER_IA_BOTTLE_POTION_RED",
+    "PLAYER_IA_BOTTLE_POTION_BLUE",
+    "PLAYER_IA_BOTTLE_POTION_GREEN",
+    "PLAYER_IA_BOTTLE_MILK",
+    "PLAYER_IA_BOTTLE_MILK_HALF",
+    "PLAYER_IA_BOTTLE_CHATEAU",
+    "PLAYER_IA_BOTTLE_FAIRY",
+    "PLAYER_IA_MOONS_TEAR",
+    "PLAYER_IA_DEED_LAND",
+    "PLAYER_IA_ROOM_KEY",
+    "PLAYER_IA_LETTER_TO_KAFEI",
+    "PLAYER_IA_MAGIC_BEANS",
+    "PLAYER_IA_DEED_SWAMP",
+    "PLAYER_IA_DEED_MOUNTAIN",
+    "PLAYER_IA_DEED_OCEAN",
+    "PLAYER_IA_32",
+    "PLAYER_IA_LETTER_MAMA",
+    "PLAYER_IA_34",
+    "PLAYER_IA_35",
+    "PLAYER_IA_PENDANT_OF_MEMORIES",
+    "PLAYER_IA_37",
+    "PLAYER_IA_38",
+    "PLAYER_IA_39",
+    "PLAYER_IA_MASK_TRUTH",
+    "PLAYER_IA_MASK_KAFEIS_MASK",
+    "PLAYER_IA_MASK_ALL_NIGHT",
+    "PLAYER_IA_MASK_BUNNY",
+    "PLAYER_IA_MASK_KEATON",
+    "PLAYER_IA_MASK_GARO",
+    "PLAYER_IA_MASK_ROMANI",
+    "PLAYER_IA_MASK_CIRCUS_LEADER",
+    "PLAYER_IA_MASK_POSTMAN",
+    "PLAYER_IA_MASK_COUPLE",
+    "PLAYER_IA_MASK_GREAT_FAIRY",
+    "PLAYER_IA_MASK_GIBDO",
+    "PLAYER_IA_MASK_DON_GERO",
+    "PLAYER_IA_MASK_KAMARO",
+    "PLAYER_IA_MASK_CAPTAIN",
+    "PLAYER_IA_MASK_STONE",
+    "PLAYER_IA_MASK_BREMEN",
+    "PLAYER_IA_MASK_BLAST",
+    "PLAYER_IA_MASK_SCENTS",
+    "PLAYER_IA_MASK_GIANT",
+    "PLAYER_IA_MASK_FIERCE_DEITY",
+    "PLAYER_IA_MASK_GORON",
+    "PLAYER_IA_MASK_ZORA",
+    "PLAYER_IA_MASK_DEKU",
+    "PLAYER_IA_MASK_MAX",
+    "PLAYER_IA_LENS_OF_TRUTH",
+    "PLAYER_IA_MAX"
+)
+
+def getFlagMacro(flag) -> str:
+    index = flag >> 8
+    mask = flag & 0xFF
+    return f"EVENTINF_{index}{int(math.log2(mask))}"
+
 def read_bytes(data_file, offset, len):
     with open(data_file,"rb") as infile:
         infile.seek(offset)
@@ -1311,6 +1433,21 @@ def disassemble_msg_script(data_file, script_start, offset, length):
                     assert arg_formatted is not None
                 elif cmd == 17 and i == 0:
                     arg_formatted = week_event_reg[arg_value]
+                    assert arg_formatted is not None
+                elif cmd == 27 and i == 0:
+                    arg_formatted = getFlagMacro(arg_value)
+                    assert arg_formatted is not None
+                elif cmd == 28 and i == 0:
+                    arg_formatted = getFlagMacro(arg_value)
+                    assert arg_formatted is not None
+                elif cmd == 29 and i == 0:
+                    arg_formatted = getFlagMacro(arg_value)
+                    assert arg_formatted is not None
+                elif cmd == 30 and i == 0:
+                    arg_formatted = item_action_names[arg_value]
+                    assert arg_formatted is not None
+                elif cmd == 32 and i == 0:
+                    arg_formatted = mask_names[arg_value]
                     assert arg_formatted is not None
                 elif cmd == 37 and i == 0:
                     arg_formatted = item_names[arg_value]

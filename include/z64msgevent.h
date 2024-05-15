@@ -253,20 +253,20 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 5
  */
-#define MSCRIPT_BRANCH_ON_EVENT_INF(flag, value, skip) \
-    MSCRIPT_CMD_27, MSCRIPT_PACK_8(flag), MSCRIPT_PACK_8(value), MSCRIPT_PACK_16(skip)
+#define MSCRIPT_BRANCH_ON_EVENT_INF(flag, skip) \
+    MSCRIPT_CMD_27, MSCRIPT_PACK_8(((flag) >> 4)), MSCRIPT_PACK_8((1 << ((flag) & 0xF))), MSCRIPT_PACK_16(skip)
 
 /**
  * Size = 3
  */
-#define MSCRIPT_SET_EVENT_INF(flag, value) \
-    MSCRIPT_CMD_28, MSCRIPT_PACK_8(flag), MSCRIPT_PACK_8(value)
+#define MSCRIPT_SET_EVENT_INF(flag) \
+    MSCRIPT_CMD_28, MSCRIPT_PACK_8(((flag) >> 4)), MSCRIPT_PACK_8((1 << ((flag) & 0xF)))
 
 /**
  * Size = 3
  */
-#define MSCRIPT_UNSET_EVENT_INF(flag, value) \
-    MSCRIPT_CMD_29, MSCRIPT_PACK_8(flag), MSCRIPT_PACK_8(value)
+#define MSCRIPT_UNSET_EVENT_INF(flag) \
+    MSCRIPT_CMD_29, MSCRIPT_PACK_8(((flag) >> 4)), MSCRIPT_PACK_8((1 << ((flag) & 0xF)))
 
 /**
  * Size = 9
