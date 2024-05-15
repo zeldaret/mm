@@ -15,10 +15,7 @@ void MapDisp_InitMapI(PlayState* play);
 static UNK_TYPE4 D_801BEB30[2] = { 0, 0 };
 
 static u64 sWhiteSquareTex[] = {
-    0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
-    0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
-    0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
-    0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
+#include "assets/code/z_map_disp/white_square.i4.inc.c"
 };
 static MapDisp sMapDisp = {
     NULL, -1, 210, 140, 0, 0,    NULL, -1, NULL, 0,    0, 0, 0,    NULL, NULL, 0,
@@ -310,8 +307,8 @@ void MapDisp_Minimap_DrawActorIcon(PlayState* play, Actor* actor) {
             gDPPipeSync(OVERLAY_DISP++);
 
             gDPLoadTextureBlock_Runtime(OVERLAY_DISP++, gMapChestIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0,
-                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                     G_TX_NOLOD, G_TX_NOLOD);
+                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                        G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(OVERLAY_DISP++, (posX - 4) << 2, (posY - 4) << 2, (posX + 4) << 2, (posY + 4) << 2,
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
@@ -1406,8 +1403,8 @@ void MapDisp_DrawChests(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s3
     gDPPipeSync(POLY_OPA_DISP++);
 
     gDPLoadTextureBlock_Runtime(POLY_OPA_DISP++, gMapChestIconTex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0,
-                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                             G_TX_NOLOD);
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
 
     for (i = 0; i < sMapDisp.numChests; i++) {
         room = mapDataChests[i].room;
@@ -1546,8 +1543,8 @@ void MapDisp_DrawBossIcon(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, 
 
     if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonIndex)) {
         gDPLoadTextureBlock_Runtime(POLY_OPA_DISP++, gMapBossIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
-                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                 G_TX_NOLOD, G_TX_NOLOD);
+                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                    G_TX_NOLOD, G_TX_NOLOD);
 
         for (i = 0; i < transitionActorList->count; i++) {
             if (!MapDisp_IsBossDoor(sTransitionActors[i].params)) {
