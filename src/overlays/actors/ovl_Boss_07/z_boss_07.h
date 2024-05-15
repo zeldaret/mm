@@ -210,18 +210,18 @@ typedef struct Boss07 {
     /* 0x0F8C */ f32 unk_F8C;
     /* 0x0F90 */ f32 unk_F90;
     /* 0x0F94 */ MajoraWhip leftWhip;
-    /* 0x1788 */ Vec3f incFeetPos[2];
-    /* 0x17A0 */ Vec3f incLeftHandPos;
-    /* 0x17AC */ Vec3f incRightHandPos;
-    /* 0x17B8 */ f32 unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_MAX]; // limb scale stuff in inc intro
-    /* 0x17C8 */ f32 unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_MAX]; // limb scale stuff in inc intro
+    /* 0x1788 */ Vec3f incarnationFeetPos[2];
+    /* 0x17A0 */ Vec3f incarnationLeftHandPos;
+    /* 0x17AC */ Vec3f incarnationRightHandPos;
+    /* 0x17B8 */ f32 incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_MAX];
+    /* 0x17C8 */ f32 incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_MAX];
     /* 0x17D8 */ Vec3s csHeadRot;
-    /* 0x17E0 */ f32 armScale;
-    /* 0x17E4 */ f32 legScale;
+    /* 0x17E0 */ f32 incarnationArmScale;
+    /* 0x17E4 */ f32 incarnationLegScale;
     /* 0x17E8 */ f32 unk_17E8; // limb pump average
     /* 0x17E8 */ f32 unk_17EC; // limb pump amplitude
-    /* 0x17F0 */ f32 chestScaleY;
-    /* 0x17F4 */ f32 chestScaleX; 
+    /* 0x17F0 */ f32 incarnationMaskScaleY;
+    /* 0x17F4 */ f32 incarnationMaskScaleX; 
     /* 0x17F8 */ f32 drawDmgEffScale;
     /* 0x17FC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x1800 */ f32 drawDmgEffAlpha;

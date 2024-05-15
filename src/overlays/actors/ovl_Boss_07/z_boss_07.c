@@ -677,8 +677,8 @@ void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterva
                 pos.x = this->actor.focus.pos.x + Rand_CenteredFloat(150.0f);
                 pos.z = this->actor.focus.pos.z + Rand_CenteredFloat(150.0f);
             } else {
-                pos.z = this->incFeetPos[i].z + Rand_CenteredFloat(20.0f);
-                pos.x = this->incFeetPos[i].x + Rand_CenteredFloat(20.0f);
+                pos.z = this->incarnationFeetPos[i].z + Rand_CenteredFloat(20.0f);
+                pos.x = this->incarnationFeetPos[i].x + Rand_CenteredFloat(20.0f);
             }
             func_800B0EB0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvColor,
                           Rand_ZeroFloat(150.0f) + 350.0f, 10, Rand_ZeroFloat(5.0f) + 14.0f);
@@ -966,14 +966,14 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 Boss07_Incarnation_SetupTaunt(this, play);
                 this->envEffectOn = 1;
                 for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
-                    this->unk_17B8[i] = 1.0f;
+                    this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
                 play->envCtx.lightBlend = 0.0f;
             }
-            this->armScale = 1.0f;
-            this->legScale = 1.0f;
-            this->chestScaleY = 1.0f;
-            this->chestScaleX = 1.0f;
+            this->incarnationArmScale = 1.0f;
+            this->incarnationLegScale = 1.0f;
+            this->incarnationMaskScaleY = 1.0f;
+            this->incarnationMaskScaleX = 1.0f;
         }
         return;
     }
@@ -1004,7 +1004,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
     sWhipSegCount = 44;
-    this->armScale = 1.0f;
+    this->incarnationArmScale = 1.0f;
 }
 
 void Boss07_Destroy(Actor* thisx, PlayState* play2) {
@@ -3053,7 +3053,7 @@ void Boss07_Wrath_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx
         (limbIndex == MAJORAS_WRATH_LIMB_RIGHT_FOREARM) || (limbIndex == MAJORAS_WRATH_LIMB_RIGHT_HAND) ||
         (limbIndex == MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM) || (limbIndex == MAJORAS_WRATH_LIMB_LEFT_FOREARM) ||
         (limbIndex == MAJORAS_WRATH_LIMB_LEFT_HAND) || (limbIndex == MAJORAS_WRATH_LIMB_HEAD)) {
-        Matrix_Scale(1.0f, this->armScale, this->armScale, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, this->incarnationArmScale, this->incarnationArmScale, MTXMODE_APPLY);
     }
 }
 
@@ -3493,12 +3493,14 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
         case MAJORAS_INCARNATION_INTRO_STATE_2:
             if (this->cutsceneTimer >= 20) {
                 if (this->cutsceneTimer == 20) {
-                    this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG],
-                               1.0f + (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58), 1.0f, 0.5f);
+
+                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG],
+                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58), 1.0f, 0.5f);
             }
+
             if (this->cutsceneTimer > 40) {
                 this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_3;
                 this->cutsceneTimer = 0;
@@ -3515,36 +3517,39 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer >= 20) {
                 if (this->cutsceneTimer == 20) {
-                    this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG],
-                               1.0f + (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] * sp58), 1.0f, 0.5f);
+
+                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG],
+                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG] * sp58), 1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer >= 50) {
                 if (this->cutsceneTimer == 50) {
-                    this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM],
-                               1.0f + (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] * sp58), 1.0f, 0.5f);
+
+                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM],
+                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM] * sp58), 1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer >= 60) {
                 if (this->cutsceneTimer == 60) {
-                    this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM],
-                               1.0f + (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] * sp58), 1.0f, 0.5f);
+
+                Math_ApproachF(&this->incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM],
+                               1.0f + (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM] * sp58), 1.0f, 0.5f);
             }
 
             if (this->cutsceneTimer == 80) {
                 this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_4;
                 this->cutsceneTimer = 0;
                 for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
-                    this->unk_17B8[i] = 1.0f;
+                    this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
             }
             break;
@@ -3556,12 +3561,14 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             this->subCamAtNext.y = 170.0f;
             if (this->cutsceneTimer >= 10) {
                 if (this->cutsceneTimer == 10) {
-                    this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
+                    this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] = 1.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
                 }
+
                 Math_ApproachS(&this->csHeadRot.x,
-                               (this->unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58) * 0x6000, 1, 0x4000);
+                               (this->incarnationIntroBodyPartsScaleSpeed[MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG] * sp58) * 0x6000, 1, 0x4000);
             }
+
             if (this->cutsceneTimer == 30) {
                 this->cutsceneState = MAJORAS_INCARNATION_INTRO_STATE_5;
                 this->cutsceneTimer = 0;
@@ -3582,10 +3589,12 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                 if ((this->cutsceneTimer == (u32)(KREG(16) + 28)) || (this->cutsceneTimer == (u32)(KREG(17) + 60))) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_UAUOO2_OLD);
                 }
+
                 if ((this->cutsceneTimer == (u32)(KREG(18) + 38)) || (this->cutsceneTimer == (u32)(KREG(19) + 48)) ||
                     (this->cutsceneTimer == (u32)(KREG(20) + 68)) || (this->cutsceneTimer == (u32)(KREG(21) + 78))) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_GYM_B_OLD);
                 }
+
                 if (this->cutsceneTimer == (u32)(KREG(38) + 93)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_UAUOO_OLD);
                 }
@@ -3626,7 +3635,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
     }
 
     for (i = 0; i < MAJORAS_INCARNATION_PUMP_BODYPART_MAX; i++) {
-        Math_ApproachZeroF(&this->unk_17C8[i], 0.5f, 0.1f);
+        Math_ApproachZeroF(&this->incarnationIntroBodyPartsScaleSpeed[i], 0.5f, 0.1f);
     }
 
     Matrix_MultVec3f(&this->subCamEyeNext, &this->subCamEye);
@@ -3831,13 +3840,13 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
     Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 3, 0x3000);
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incLeftHandPos.x, this->incLeftHandPos.y,
-                    this->incLeftHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationLeftHandPos.x, this->incarnationLeftHandPos.y,
+                    this->incarnationLeftHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incRightHandPos.x, this->incRightHandPos.y,
-                    this->incRightHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationRightHandPos.x, this->incarnationRightHandPos.y,
+                    this->incarnationRightHandPos.z, 0, 0, 0, MAJORA_TYPE_INCARNATION_SHOT);
     }
 
     if (this->timers[0] == 0) {
@@ -4110,17 +4119,17 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
 
     if (sp4B == 1) {
-        this->armScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
+        this->incarnationArmScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
         Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
         Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
     } else if (sp4B == 2) {
-        this->legScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
+        this->incarnationLegScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
         Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
         Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
     }
 
-    this->chestScaleY = (Math_SinS(this->cutsceneTimer * 0x2000) * 0.1f) + 1.0f;
-    this->chestScaleX = (Math_CosS(this->cutsceneTimer * 0x2000) * 0.1f) + 1.0f;
+    this->incarnationMaskScaleY = (Math_SinS(this->cutsceneTimer * 0x2000) * 0.1f) + 1.0f;
+    this->incarnationMaskScaleX = (Math_CosS(this->cutsceneTimer * 0x2000) * 0.1f) + 1.0f;
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
@@ -4449,24 +4458,24 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
     }
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_FOOT) {
-        Matrix_MultZero(&this->incFeetPos[0]);
+        Matrix_MultZero(&this->incarnationFeetPos[0]);
     }
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_FOOT) {
-        Matrix_MultZero(&this->incFeetPos[1]);
+        Matrix_MultZero(&this->incarnationFeetPos[1]);
     }
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_HAND) {
-        Matrix_MultZero(&this->incRightHandPos);
+        Matrix_MultZero(&this->incarnationRightHandPos);
     }
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_HAND) {
-        Matrix_MultZero(&this->incLeftHandPos);
+        Matrix_MultZero(&this->incarnationLeftHandPos);
     }
 
     index = sLimbToPumpBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
-        Matrix_Scale(this->unk_17B8[index], this->unk_17B8[index], this->unk_17B8[index], MTXMODE_APPLY);
+        Matrix_Scale(this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index], MTXMODE_APPLY);
     }
 }
 
@@ -4474,20 +4483,20 @@ void Boss07_Incarnation_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor*
     Boss07* this = THIS;
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_MASK) {
-        Matrix_Scale(this->chestScaleX, this->chestScaleY, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->incarnationMaskScaleX, this->incarnationMaskScaleY, 1.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM) ||
         (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM) || (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_HAND) ||
         (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_FOREARM) || (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_HAND)) {
-        Matrix_Scale(1.0f, this->armScale, this->armScale, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, this->incarnationArmScale, this->incarnationArmScale, MTXMODE_APPLY);
     }
 
     if ((limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_THIGH) || (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_SHIN) ||
         (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_FOOT) || (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_THIGH) ||
         (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_SHIN) || (limbIndex == MAJORAS_INCARNATION_LIMB_LEFT_FOOT)) {
-        Matrix_Scale(1.0f, this->legScale, this->legScale, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, this->incarnationLegScale, this->incarnationLegScale, MTXMODE_APPLY);
     }
 }
 
