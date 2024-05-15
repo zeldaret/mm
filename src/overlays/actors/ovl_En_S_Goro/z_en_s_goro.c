@@ -884,13 +884,13 @@ void EnSGoro_UpdateToIdleAnimation(EnSGoro* this) {
 }
 
 void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play) {
-    Vec3f world_pos = this->actor.world.pos;
+    Vec3f worldPos = this->actor.world.pos;
     f32 radius = 24.0f;
     f32 height = 62.0f;
 
-    this->collider.dim.pos.x = world_pos.x;
-    this->collider.dim.pos.y = world_pos.y;
-    this->collider.dim.pos.z = world_pos.z;
+    this->collider.dim.pos.x = worldPos.x;
+    this->collider.dim.pos.y = worldPos.y;
+    this->collider.dim.pos.z = worldPos.z;
     this->collider.dim.radius = radius;
     this->collider.dim.height = height;
 
