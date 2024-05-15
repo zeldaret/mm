@@ -1138,7 +1138,11 @@ def getImmOverride(insn: rabbitizer.Instruction):
 def getLabelForVaddr(vaddr: int, in_data: bool = False) -> str:
     label = ""
     if vaddr in functions:
-        label += f"\nglabel {proper_name(vaddr, in_data=in_data)}\n"
+        name = proper_name(vaddr, in_data=in_data)
+        if in_data:
+            label += f"\ndlabel {name}\n"
+        else:
+            label += f"\nglabel {name}\n"
     if vaddr in jtbl_labels:
         label += f"jlabel L{vaddr:08X}\n"
     if vaddr in branch_labels:
@@ -1173,10 +1177,13 @@ def fixup_text_symbols(data, vram, data_regions, info):
         cur_label = getLabelForVaddr(insn.vram, in_data)
 
         # Handle adding endlabels to the previous function
-        if "glabel" in cur_label:
+        if cur_label and ("glabel" in cur_label or "dlabel" in cur_label):
             if prev_func:
                 text.append(f"endlabel {prev_func}\n")
-            prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+            if "glabel" in cur_label:
+                prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+            else:
+                prev_func = ""
 
         text.append(cur_label)
 
@@ -1202,7 +1209,8 @@ def fixup_text_symbols(data, vram, data_regions, info):
         delay_slot = insn.hasDelaySlot()
 
     # Add endlabel to last function
-    text.append(f"endlabel {prev_func}\n")
+    if prev_func:
+        text.append(f"endlabel {prev_func}\n")
 
     with open(f"{ASM_OUT}/{segment_dirname}/{info['name']}.text.s", "w") as outfile:
         outfile.write("".join(text))
