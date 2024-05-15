@@ -21,15 +21,15 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 Vec3f D_80947EA0[16];
 
 ActorInit En_Sda_InitVars = {
-    ACTOR_EN_SDA,
-    ACTORCAT_BOSS,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSda),
-    (ActorFunc)EnSda_Init,
-    (ActorFunc)EnSda_Destroy,
-    (ActorFunc)EnSda_Update,
-    (ActorFunc)EnSda_Draw,
+    /**/ ACTOR_EN_SDA,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSda),
+    /**/ EnSda_Init,
+    /**/ EnSda_Destroy,
+    /**/ EnSda_Update,
+    /**/ EnSda_Draw,
 };
 
 Vec3f D_80947A60 = { 0.0f, 0.0f, 0.0f };
@@ -123,6 +123,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
     Vec3f sp7C;
 
     for (i = 0; i < 16; i++) {
+        // TODO: match with a continue
         if ((arg2 == 0.0f) || ((j = D_80947ACC[i]) >= 0)) {
             if (arg2 > 0.0f) {
                 lerp.x = D_80947EA0[i].x + (D_80947EA0[j].x - D_80947EA0[i].x) * arg2;

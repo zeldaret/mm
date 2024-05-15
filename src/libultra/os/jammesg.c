@@ -1,13 +1,11 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag) {
-    register u32 saveMask;
-
-    saveMask = __osDisableInt();
+    register u32 saveMask = __osDisableInt();
 
     while (mq->validCount >= mq->msgCount) {
-        if (flag == 1) {
-            __osRunningThread->state = 8;
+        if (flag == OS_MESG_BLOCK) {
+            __osRunningThread->state = OS_STATE_WAITING;
             __osEnqueueAndYield(&mq->fullQueue);
         } else {
             __osRestoreInt(saveMask);

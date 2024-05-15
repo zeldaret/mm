@@ -22,7 +22,7 @@
         <Limb Name="gFamosSwordLimb" Type="Standard" EnumName="FAMOS_LIMB_SWORD" Offset="0x3D00" />
         <Limb Name="gFamosShieldLimb" Type="Standard" EnumName="FAMOS_LIMB_SHIELD" Offset="0x3D0C" />
         <Limb Name="gFamosHeadLimb" Type="Standard" EnumName="FAMOS_LIMB_HEAD" Offset="0x3D18" />
-        <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" LimbNone="FAMOS_LIMB_NONE" LimbMax="FAMOS_LIMB_MAX" EnumName="FamosLimb" Offset="0x3D38" />
+        <Skeleton Name="gFamosSkel" Type="Normal" LimbType="Standard" LimbNone="FAMOS_LIMB_NONE" LimbMax="FAMOS_LIMB_MAX" EnumName="FamosLimb" Offset="0x3D38" />
 
         <Animation Name="gFamosIdleAnim" Offset="0x3DC8" /> <!-- Original name is "fam_dosun" -->
         <TextureAnimation Name="gFamosNormalGlowingEmblemTexAnim" Offset="0x3E30" />

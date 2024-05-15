@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnFamos*)thisx)
 
@@ -18,9 +18,6 @@ void EnFamos_Destroy(Actor* thisx, PlayState* play);
 void EnFamos_Update(Actor* thisx, PlayState* play);
 void EnFamos_Draw(Actor* thisx, PlayState* play);
 
-void EnFamos_SetupAttackDebris(EnFamos* this);
-void EnFamos_SetupDeathDebris(EnFamos* this);
-s32 EnFamos_IsPlayerSeen(EnFamos* this, PlayState* play);
 void EnFamos_SetupStillIdle(EnFamos* this);
 void EnFamos_StillIdle(EnFamos* this, PlayState* play);
 void EnFamos_SetupPathingIdle(EnFamos* this);
@@ -49,18 +46,17 @@ void EnFamos_SetupDeathExplosion(EnFamos* this);
 void EnFamos_DeathExplosion(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
-void EnFamos_DrawDebris(EnFamos* this, PlayState* play);
 
 ActorInit En_Famos_InitVars = {
-    ACTOR_EN_FAMOS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FAMOS,
-    sizeof(EnFamos),
-    (ActorFunc)EnFamos_Init,
-    (ActorFunc)EnFamos_Destroy,
-    (ActorFunc)EnFamos_Update,
-    (ActorFunc)EnFamos_Draw,
+    /**/ ACTOR_EN_FAMOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FAMOS,
+    /**/ sizeof(EnFamos),
+    /**/ EnFamos_Init,
+    /**/ EnFamos_Destroy,
+    /**/ EnFamos_Update,
+    /**/ EnFamos_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -177,7 +173,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFamosSkeleton, &gFamosIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFamosSkel, &gFamosIdleAnim, this->jointTable, this->morphTable,
                    FAMOS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
@@ -501,7 +497,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
+    if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) &&
         ((surfaceType != FLOOR_PROPERTY_12) && (surfaceType != FLOOR_PROPERTY_13))) {
         EnFamos_SetupAttackAim(this);
 
@@ -710,7 +706,7 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
 
 void EnFamos_SetupDeathFade(EnFamos* this) {
     EnFamos_SetupDeathDebris(this);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.shape.shadowDraw = NULL;
     this->actionFunc = EnFamos_DeathFade;
     this->actor.speed = 0.0f;
@@ -826,18 +822,18 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
     s32 i;
 
     if (this->debrisTimer > 0) {
-        Gfx* dispOpa;
+        Gfx* gfx;
         EnFamosRock* rock;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        dispOpa = POLY_OPA_DISP;
+        gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], gSetupDLs[SETUPDL_25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
-        gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
+        gDPSetPrimColor(&gfx[1], 0, 0x80, 255, 255, 255, 255);
 
-        gDPSetEnvColor(&dispOpa[2], 255, 255, 255, 255);
+        gDPSetEnvColor(&gfx[2], 255, 255, 255, 255);
 
         rock = &this->rocks[0];
         for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
@@ -845,13 +841,12 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
-            gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(&gfx[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(&dispOpa[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
+            gSPDisplayList(&gfx[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
         }
 
-        POLY_OPA_DISP = &dispOpa[3 + (ARRAY_COUNT(this->rocks) * 2)];
+        POLY_OPA_DISP = &gfx[3 + (ARRAY_COUNT(this->rocks) * 2)];
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

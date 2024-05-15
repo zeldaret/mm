@@ -17,15 +17,15 @@ void BgMbarChair_Update(Actor* thisx, PlayState* play);
 void BgMbarChair_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Mbar_Chair_InitVars = {
-    ACTOR_BG_MBAR_CHAIR,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_MBAR_OBJ,
-    sizeof(BgMbarChair),
-    (ActorFunc)BgMbarChair_Init,
-    (ActorFunc)BgMbarChair_Destroy,
-    (ActorFunc)BgMbarChair_Update,
-    (ActorFunc)BgMbarChair_Draw,
+    /**/ ACTOR_BG_MBAR_CHAIR,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_MBAR_OBJ,
+    /**/ sizeof(BgMbarChair),
+    /**/ BgMbarChair_Init,
+    /**/ BgMbarChair_Destroy,
+    /**/ BgMbarChair_Update,
+    /**/ BgMbarChair_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

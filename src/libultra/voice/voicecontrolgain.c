@@ -4,9 +4,9 @@
  * Adjusts the input gain of the Voice Recognition System
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "macros.h"
 
 u8 sDigitalTable[] = { 0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0 };
@@ -21,7 +21,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         cmd = 0x98;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->channel, cmd);
+    errorCode = __osVoiceSetADConverter(hd->__mq, hd->__channel, cmd);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -32,7 +32,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return CONT_ERR_INVALID;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->channel, cmd);
+    errorCode = __osVoiceSetADConverter(hd->__mq, hd->__channel, cmd);
     if (errorCode != 0) {
         return errorCode;
     }

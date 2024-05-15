@@ -6,7 +6,7 @@
 
 #include "z_dm_al.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAl*)thisx)
 
@@ -16,15 +16,15 @@ void DmAl_Update(Actor* thisx, PlayState* play);
 void DmAl_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Al_InitVars = {
-    ACTOR_EN_AL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AL,
-    sizeof(DmAl),
-    (ActorFunc)DmAl_Init,
-    (ActorFunc)DmAl_Destroy,
-    (ActorFunc)DmAl_Update,
-    (ActorFunc)DmAl_Draw,
+    /**/ ACTOR_EN_AL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AL,
+    /**/ sizeof(DmAl),
+    /**/ DmAl_Init,
+    /**/ DmAl_Destroy,
+    /**/ DmAl_Update,
+    /**/ DmAl_Draw,
 };
 
 typedef enum {
@@ -84,7 +84,7 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
                        MADAME_AROMA_LIMB_MAX);
     this->animIndex = MADAME_AROMA_ANIM_NONE;
     DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmAl_HandleCutscene;
 }
@@ -153,7 +153,7 @@ void DmAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 void DmAl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-static Gfx* sDlists[] = {
+static Gfx* sDLists[] = {
     gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
     gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
     gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
@@ -172,7 +172,7 @@ void DmAl_Draw(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->shawlMatrices); i++) {
         Matrix_Put(&this->shawlMatrices[i]);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, sDlists[i]);
+        gSPDisplayList(POLY_OPA_DISP++, sDLists[i]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -26,11 +26,6 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play);
 void func_80AAF884(DmChar08* this, PlayState* play);
 void func_80AAFB04(DmChar08* this, PlayState* play);
 void func_80AAFB94(DmChar08* this, PlayState* play);
-void DmChar08_HandleCutscene(DmChar08* this, PlayState* play);
-void func_80AB023C(DmChar08* this, PlayState* play);
-void DmChar08_UpdateAnim(DmChar08* this, PlayState* play);
-void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play);
-void func_80AAFCCC(DmChar08* this, PlayState* play);
 
 typedef enum {
     /* 0 */ TURTLE_EYEMODE_BLINK_LEFT,
@@ -42,15 +37,15 @@ typedef enum {
 } TurtleEyeMode;
 
 ActorInit Dm_Char08_InitVars = {
-    ACTOR_DM_CHAR08,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAMEJIMA,
-    sizeof(DmChar08),
-    (ActorFunc)DmChar08_Init,
-    (ActorFunc)DmChar08_Destroy,
-    (ActorFunc)DmChar08_Update,
-    (ActorFunc)DmChar08_Draw,
+    /**/ ACTOR_DM_CHAR08,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KAMEJIMA,
+    /**/ sizeof(DmChar08),
+    /**/ DmChar08_Init,
+    /**/ DmChar08_Destroy,
+    /**/ DmChar08_Update,
+    /**/ DmChar08_Draw,
 };
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
@@ -151,7 +146,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DmChar08* this = THIS;
 
-    thisx->targetMode = 5;
+    thisx->targetMode = TARGET_MODE_5;
     this->eyeMode = TURTLE_EYEMODE_CLOSED;
     thisx->targetArrowOffset = 120.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -206,7 +201,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
-                thisx->flags |= ACTOR_FLAG_1;
+                thisx->flags |= ACTOR_FLAG_TARGETABLE;
                 if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
                     this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->actionFunc = func_80AAFAC4;
@@ -225,7 +220,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            thisx->flags |= ACTOR_FLAG_1;
+            thisx->flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = func_80AAFAE4;
             this->unk_1F0 = 1.0f;
             break;
@@ -271,7 +266,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     } else {
         sSuccessSoundAlreadyPlayed = false;
     }
-    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE)) {
         if ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f)) {
             if ((player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f)) {
@@ -305,7 +300,7 @@ void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
-        this->dyna.actor.flags |= ACTOR_FLAG_1;
+        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_80AAF8F4;
     }
 }
@@ -415,6 +410,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             this->unk_206 = 0;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else {
                 switch (this->unk_206) {
@@ -432,6 +430,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             Message_CloseTextbox(play);
                             this->unk_206 = 0;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -453,7 +454,13 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                         this->unk_206 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -1017,7 +1024,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     this->dyna.actor.focus.rot.y = this->dyna.actor.world.rot.y;
     this->dyna.actor.focus.rot.z = this->dyna.actor.world.rot.z;
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->unk_206 = 1;
     }
 

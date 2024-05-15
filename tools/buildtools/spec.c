@@ -76,6 +76,8 @@ static bool parse_flags(char* str, unsigned int* flags) {
             f |= FLAG_RAW;
         else if (strcmp(str, "NOLOAD") == 0)
             f |= FLAG_NOLOAD;
+        else if (strcmp(str, "SYMS") == 0)
+            f |= FLAG_SYMS;
         else
             return false;
 
@@ -150,7 +152,6 @@ bool parse_segment_statement(struct Segment* currSeg, STMTId stmt, char* args, i
         util_fatal_error("line %i: duplicate '%s' statement", lineNum, stmtNames[stmt]);
 
     currSeg->fields |= 1 << stmt;
-    currSeg->compress = false;
 
     // statements valid within a segment definition
     switch (stmt) {

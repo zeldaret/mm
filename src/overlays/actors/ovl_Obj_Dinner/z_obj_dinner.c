@@ -17,22 +17,22 @@ void ObjDinner_Update(Actor* thisx, PlayState* play);
 void ObjDinner_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Dinner_InitVars = {
-    ACTOR_OBJ_DINNER,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_DINNER,
-    sizeof(ObjDinner),
-    (ActorFunc)ObjDinner_Init,
-    (ActorFunc)ObjDinner_Destroy,
-    (ActorFunc)ObjDinner_Update,
-    (ActorFunc)ObjDinner_Draw,
+    /**/ ACTOR_OBJ_DINNER,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_DINNER,
+    /**/ sizeof(ObjDinner),
+    /**/ ObjDinner_Init,
+    /**/ ObjDinner_Destroy,
+    /**/ ObjDinner_Update,
+    /**/ ObjDinner_Draw,
 };
 
 void ObjDinner_Init(Actor* thisx, PlayState* play) {
     ObjDinner* this = THIS;
 
     if ((gSaveContext.save.isNight != true) ||
-        ((CURRENT_DAY == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))) {
+        ((CURRENT_DAY == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS))) {
         Actor_Kill(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.1f);

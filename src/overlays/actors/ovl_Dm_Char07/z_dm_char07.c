@@ -19,15 +19,15 @@ void DmChar07_Draw(Actor* thisx, PlayState* play);
 void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
 ActorInit Dm_Char07_InitVars = {
-    ACTOR_DM_CHAR07,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MILKBAR,
-    sizeof(DmChar07),
-    (ActorFunc)DmChar07_Init,
-    (ActorFunc)DmChar07_Destroy,
-    (ActorFunc)DmChar07_Update,
-    (ActorFunc)DmChar07_Draw,
+    /**/ ACTOR_DM_CHAR07,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MILKBAR,
+    /**/ sizeof(DmChar07),
+    /**/ DmChar07_Init,
+    /**/ DmChar07_Destroy,
+    /**/ DmChar07_Update,
+    /**/ DmChar07_Draw,
 };
 
 void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {

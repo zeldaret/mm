@@ -11,7 +11,7 @@
 #include "objects/object_sekihiz/object_sekihiz.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSekihi*)thisx)
 
@@ -25,15 +25,15 @@ void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
 ActorInit En_Sekihi_InitVars = {
-    ACTOR_EN_SEKIHI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSekihi),
-    (ActorFunc)EnSekihi_Init,
-    (ActorFunc)EnSekihi_Destroy,
-    (ActorFunc)EnSekihi_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_SEKIHI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSekihi),
+    /**/ EnSekihi_Init,
+    /**/ EnSekihi_Destroy,
+    /**/ EnSekihi_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };
@@ -55,7 +55,7 @@ static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
     s32 type = ENSIKIHI_GET_TYPE(thisx);
-    s32 objectIndex;
+    s32 objectSlot;
     s32 pad;
 
     if (((type < SEKIHI_TYPE_0) || (type >= SEKIHI_TYPE_MAX)) || (sOpaDLists[type] == NULL)) {
@@ -69,9 +69,9 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
-    if (objectIndex >= 0) {
-        this->objectIndex = objectIndex;
+    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
     }
     this->actionFunc = func_80A44DE8;
     this->opaDList = sOpaDLists[type];
@@ -96,8 +96,8 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
     };
 
     type = ENSIKIHI_GET_TYPE(&this->dyna.actor);
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->dyna.actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = EnSekihi_Draw;
         if (type == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;
@@ -141,7 +141,7 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
                 break;
             }
             break;
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1018:
@@ -159,9 +159,9 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
 }
 
 void func_80A450B0(EnSekihi* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->actionFunc = func_80A44F40;
-    } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->dyna.actor, 0x2600, play))) {
+    } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->dyna.actor, 0x2600, play)) {
         Actor_OfferTalk(&this->dyna.actor, play, 120.0f);
     }
 }

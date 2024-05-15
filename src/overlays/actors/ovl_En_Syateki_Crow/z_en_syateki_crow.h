@@ -13,9 +13,17 @@ struct EnSyatekiCrow;
 
 typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, PlayState*);
 
+typedef enum EnSyatekiCrowBodyPart {
+    /* 0 */ SG_GUAY_BODYPART_BODY,
+    /* 1 */ SG_GUAY_BODYPART_RIGHT_WING_TIP,
+    /* 2 */ SG_GUAY_BODYPART_LEFT_WING_TIP,
+    /* 3 */ SG_GUAY_BODYPART_TAIL,
+    /* 4 */ SG_GUAY_BODYPART_MAX
+} EnSyatekiCrowBodyPart;
+
 typedef struct EnSyatekiCrow {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Vec3f bodyPartsPos[4];
+    /* 0x144 */ Vec3f bodyPartsPos[SG_GUAY_BODYPART_MAX];
     /* 0x174 */ SkelAnime skelAnime;
     /* 0x1B8 */ EnSyatekiCrowActionFunc actionFunc;
     /* 0x1BC */ s16 waitTimer;

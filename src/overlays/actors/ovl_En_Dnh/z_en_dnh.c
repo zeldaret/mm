@@ -6,7 +6,7 @@
 
 #include "z_en_dnh.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnh*)thisx)
 
@@ -43,19 +43,24 @@ UNK_TYPE D_80A5138C[] = {
 };
 
 ActorInit En_Dnh_InitVars = {
-    ACTOR_EN_DNH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRO,
-    sizeof(EnDnh),
-    (ActorFunc)EnDnh_Init,
-    (ActorFunc)EnDnh_Destroy,
-    (ActorFunc)EnDnh_Update,
-    (ActorFunc)EnDnh_Draw,
+    /**/ ACTOR_EN_DNH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRO,
+    /**/ sizeof(EnDnh),
+    /**/ EnDnh_Init,
+    /**/ EnDnh_Destroy,
+    /**/ EnDnh_Update,
+    /**/ EnDnh_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeKioskHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum {
+    /* 0 */ ENDNH_ANIM_HEAD_MOVING,
+    /* 1 */ ENDNH_ANIM_MAX
+} EnDnhAnimation;
+
+static AnimationInfoS sAnimationInfo[ENDNH_ANIM_MAX] = {
+    { &gKoumeKioskHeadMovingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENDNH_ANIM_HEAD_MOVING
 };
 
 static TexturePtr sEyeTextures[] = {
@@ -66,7 +71,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
-    func_800B7298(play, actor, PLAYER_CSMODE_WAIT);
+    Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_WAIT);
     if (CHECK_EVENTINF(EVENTINF_35)) {
         play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 6);
     } else {
@@ -96,7 +101,7 @@ void* func_80A50DF8(EnDnh* this, PlayState* play) {
 
 s32 func_80A50E40(EnDnh* this, PlayState* play) {
     if (((this->unk18C & SUBS_OFFER_MODE_MASK) == SUBS_OFFER_MODE_NONE) ||
-        !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        !Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         return 0;
     }
     SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
@@ -105,7 +110,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
     return 1;
 }
 
-s32 func_80A50EC0(EnDnh* this) {
+void func_80A50EC0(EnDnh* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {
@@ -131,10 +136,11 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkeleton, NULL, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkel, NULL, this->jointTable, this->morphTable,
                    KOUME_KIOSK_LIMB_MAX);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENDNH_ANIM_HEAD_MOVING);
     this->actor.shape.yOffset = 1100.0f;
+
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
         SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk198 = 0;
@@ -142,9 +148,11 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
         SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
+
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         this->actor.draw = NULL;
     }
+
     this->msgEventCallback = func_80A50D40;
     this->unk194 = 0;
     this->actionFunc = EnDnh_DoNothing;

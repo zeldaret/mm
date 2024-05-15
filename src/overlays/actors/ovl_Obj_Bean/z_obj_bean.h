@@ -8,10 +8,10 @@ struct ObjBean;
 typedef void (*ObjBeanActionFunc)(struct ObjBean*, PlayState*);
 typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
-#define OBJBEAN_GET_7F(thisx, x) (((thisx)->params + (x)) & 0x7F)
+#define OBJBEAN_GET_SWITCH_FLAG_1(thisx, offset) (((thisx)->params + (offset)) & 0x7F)
 #define OBJBEAN_GET_80(thisx) (((thisx)->params >> 7) & 1)
-#define OBJBEAN_GET_3F00(thisx) (((thisx)->params >> 8) & 0x3F)
-#define OBJBEAN_GET_3F80(thisx, x) ((((thisx)->params >> 7) + (x)) & 0x7F)
+#define OBJBEAN_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0x3F)
+#define OBJBEAN_GET_SWITCH_FLAG_2(thisx, offset) ((((thisx)->params >> 7) + (offset)) & 0x7F)
 #define OBJBEAN_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 
 #define OBJBEAN_GET_3(thisx) ((thisx)->home.rot.z & 3)
@@ -36,7 +36,7 @@ typedef struct ObjBean {
     /* 0x1C8 */ f32 unk_1C8;
     /* 0x1CC */ f32 unk_1CC;
     /* 0x1D0 */ f32 unk_1D0;
-    /* 0x1D4 */ Vec3s* unk_1D4;
+    /* 0x1D4 */ Vec3s* pathPoints;
     /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DA */ s16 unk_1DA;
     /* 0x1DC */ s16 unk_1DC;

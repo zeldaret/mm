@@ -7,7 +7,7 @@
 #include "z_en_akindonuts.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAkindonuts*)thisx)
 
@@ -32,15 +32,15 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play);
 void func_80BEFD74(EnAkindonuts* this, PlayState* play);
 
 ActorInit En_Akindonuts_InitVars = {
-    ACTOR_EN_AKINDONUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnAkindonuts),
-    (ActorFunc)EnAkindonuts_Init,
-    (ActorFunc)EnAkindonuts_Destroy,
-    (ActorFunc)EnAkindonuts_Update,
-    (ActorFunc)EnAkindonuts_Draw,
+    /**/ ACTOR_EN_AKINDONUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnAkindonuts),
+    /**/ EnAkindonuts_Init,
+    /**/ EnAkindonuts_Destroy,
+    /**/ EnAkindonuts_Update,
+    /**/ EnAkindonuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -152,7 +152,7 @@ static u16 D_80BF04AC[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -182,47 +182,48 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
     }
 }
 
-s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 idx = arg2;
-    s32 sp50 = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnAkindonuts_HasReachedPoint(EnAkindonuts* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == (sp58 - 1)) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = true;
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return sp50;
+    return reached;
 }
 
 f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
-    Vec3s* temp;
+    Vec3s* points;
     Vec3f sp20;
     Vec3s* point;
 
     if (path != NULL) {
-        temp = Lib_SegmentedToVirtual(path->points);
-        point = &temp[arg1];
+        points = Lib_SegmentedToVirtual(path->points);
+        point = &points[arg1];
 
         sp20.x = point->x;
         sp20.y = point->y;
@@ -236,12 +237,12 @@ f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 }
 
 s16 func_80BECF6C(Path* path) {
-    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
-    Math_Vec3s_ToVec3f(&sp28, &sp34[0]);
-    Math_Vec3s_ToVec3f(&sp1C, &sp34[1]);
+    Math_Vec3s_ToVec3f(&sp28, &points[0]);
+    Math_Vec3s_ToVec3f(&sp1C, &points[1]);
 
     return Math_Vec3f_Yaw(&sp28, &sp1C);
 }
@@ -457,7 +458,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -546,7 +547,7 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -650,7 +651,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -739,7 +740,7 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -838,7 +839,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -922,7 +923,7 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
@@ -1011,7 +1012,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
@@ -1095,7 +1096,7 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -1310,15 +1311,15 @@ void func_80BEEDC0(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
+               this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
@@ -1331,19 +1332,19 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
 void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
                 this->unk_32C &= ~0x20;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_32C &= ~0x4;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->animIndex = ENAKINDONUTS_ANIM_8;
                 this->unk_33C = 0;
@@ -1371,14 +1372,14 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == TEXT_STATE_16) {
+    } else if (talkState == TEXT_STATE_PAUSE_MENU) {
         func_80BEE73C(this, play);
     }
 }
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
@@ -1402,10 +1403,10 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENAKINDONUTS_ANIM_6);
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BEF360;
         } else {
@@ -1440,7 +1441,7 @@ void func_80BEF450(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF4B8(EnAkindonuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else {
@@ -1568,7 +1569,7 @@ void func_80BEF83C(EnAkindonuts* this, PlayState* play) {
         this->actor.shape.yOffset = 1500.0f;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_368, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_368, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (DECR(this->unk_33A) == 0) {
@@ -1629,9 +1630,9 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         }
 
         if (ENAKINDONUTS_GET_3(&this->actor) == ENAKINDONUTS_3_1) {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 1000, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x3E8, 0);
         } else {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 300, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x12C, 0);
         }
 
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1639,7 +1640,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         this->unk_352 += this->unk_362;
         this->actor.world.rot.x = -sp38.x;
 
-        if (func_80BECD10(this, this->path, this->unk_334) && (sp34 < 10.0f)) {
+        if (EnAkindonuts_HasReachedPoint(this, this->path, this->unk_334) && (sp34 < 10.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80BEFD74;

@@ -24,15 +24,15 @@ void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
 ActorInit Obj_Toge_InitVars = {
-    ACTOR_OBJ_TOGE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_TRAP,
-    sizeof(ObjToge),
-    (ActorFunc)ObjToge_Init,
-    (ActorFunc)ObjToge_Destroy,
-    (ActorFunc)ObjToge_Update,
-    (ActorFunc)ObjToge_Draw,
+    /**/ ACTOR_OBJ_TOGE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_TRAP,
+    /**/ sizeof(ObjToge),
+    /**/ ObjToge_Init,
+    /**/ ObjToge_Destroy,
+    /**/ ObjToge_Update,
+    /**/ ObjToge_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -105,7 +105,7 @@ void func_809A43A8(ObjToge* this, PlayState* play) {
     }
 }
 
-s32 func_809A43EC(ObjToge* this, PlayState* play) {
+bool func_809A43EC(ObjToge* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp_fv1 = player->actor.world.pos.x - this->unk_1B8;
     f32 temp_fa0 = player->actor.world.pos.z - this->unk_1BC;
@@ -119,7 +119,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjToge* this = THIS;
     Path* path;
-    Vec3s* sp40;
+    Vec3s* points;
     s16 sp3E;
     s32 sp38 = OBJTOGE_GET_4000(thisx);
 
@@ -142,9 +142,9 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    sp40 = Lib_SegmentedToVirtual(path->points);
-    Math_Vec3s_ToVec3f(&this->unk_198[0], &sp40[0]);
-    Math_Vec3s_ToVec3f(&this->unk_198[1], &sp40[1]);
+    points = Lib_SegmentedToVirtual(path->points);
+    Math_Vec3s_ToVec3f(&this->unk_198[0], &points[0]);
+    Math_Vec3s_ToVec3f(&this->unk_198[1], &points[1]);
     Math_Vec3f_Copy(&thisx->world.pos, &this->unk_198[0]);
     thisx->world.rot.y = Math_Vec3f_Yaw(&this->unk_198[0], &this->unk_198[1]);
     this->unk_194 = 0;

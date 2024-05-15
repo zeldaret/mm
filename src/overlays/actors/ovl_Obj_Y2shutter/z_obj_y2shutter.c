@@ -30,15 +30,15 @@ typedef struct ShutterInfo {
 } ShutterInfo; // size = 0x20
 
 ActorInit Obj_Y2shutter_InitVars = {
-    ACTOR_OBJ_Y2SHUTTER,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAIZOKU_OBJ,
-    sizeof(ObjY2shutter),
-    (ActorFunc)ObjY2shutter_Init,
-    (ActorFunc)ObjY2shutter_Destroy,
-    (ActorFunc)ObjY2shutter_Update,
-    (ActorFunc)ObjY2shutter_Draw,
+    /**/ ACTOR_OBJ_Y2SHUTTER,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KAIZOKU_OBJ,
+    /**/ sizeof(ObjY2shutter),
+    /**/ ObjY2shutter_Init,
+    /**/ ObjY2shutter_Destroy,
+    /**/ ObjY2shutter_Update,
+    /**/ ObjY2shutter_Draw,
 };
 
 ShutterInfo sShutterInfo[] = {
@@ -96,15 +96,15 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             DREG(87) = 0;
         }
 
-        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
-            Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
+        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCH_FLAG(&this->dyna.actor))) {
+            Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCH_FLAG(&this->dyna.actor));
         } else {
-            Flags_SetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJY2SHUTTER_GET_SWITCH_FLAG(&this->dyna.actor));
         }
     }
 
     if (this->settleTimer == 0) {
-        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
+        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCH_FLAG(&this->dyna.actor))) {
             s16 csId = this->dyna.actor.csId;
 
             if (this->openTimer == 0) {
@@ -125,7 +125,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
                 targetVelocityY = info->openVelocity;
                 accelY = info->openAccel;
                 if (this->openTimer < 2) {
-                    Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
+                    Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCH_FLAG(&this->dyna.actor));
                 } else {
                     this->openTimer--;
                 }

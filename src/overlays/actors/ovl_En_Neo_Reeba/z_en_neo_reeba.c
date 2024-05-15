@@ -7,7 +7,7 @@
 #include "z_en_neo_reeba.h"
 #include "objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -37,15 +37,15 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
 ActorInit En_Neo_Reeba_InitVars = {
-    ACTOR_EN_NEO_REEBA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RB,
-    sizeof(EnNeoReeba),
-    (ActorFunc)EnNeoReeba_Init,
-    (ActorFunc)EnNeoReeba_Destroy,
-    (ActorFunc)EnNeoReeba_Update,
-    (ActorFunc)EnNeoReeba_Draw,
+    /**/ ACTOR_EN_NEO_REEBA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RB,
+    /**/ sizeof(EnNeoReeba),
+    /**/ EnNeoReeba_Init,
+    /**/ EnNeoReeba_Destroy,
+    /**/ EnNeoReeba_Update,
+    /**/ EnNeoReeba_Draw,
 };
 
 typedef enum {
@@ -133,7 +133,7 @@ void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 2;
+    this->actor.targetMode = TARGET_MODE_2;
     this->actor.hintId = TATL_HINT_ID_LEEVER;
     this->actor.gravity = -0.5f;
 
@@ -160,7 +160,7 @@ void EnNeoReeba_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.draw = NULL;
     this->actionTimer = 10;
     this->actionFunc = EnNeoReeba_WaitUnderground;
@@ -203,16 +203,14 @@ void EnNeoReeba_ChooseAction(EnNeoReeba* this, PlayState* play) {
 
     if ((distToPlayer > 200.0f) || (fabsf(this->actor.playerHeightRel) > 100.0f)) {
         EnNeoReeba_SetupSink(this);
-    } else {
-        if (this->actionTimer == 0) {
-            if ((distToPlayer < 140.0f) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
-                this->targetPos = player->actor.world.pos;
-                this->targetPos.x += 10.0f * player->actor.speed * Math_SinS(player->actor.world.rot.y);
-                this->targetPos.z += 10.0f * player->actor.speed * Math_CosS(player->actor.world.rot.y);
-                EnNeoReeba_SetupMove(this);
-            } else {
-                EnNeoReeba_SetupReturnHome(this);
-            }
+    } else if (this->actionTimer == 0) {
+        if ((distToPlayer < 140.0f) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
+            this->targetPos = player->actor.world.pos;
+            this->targetPos.x += 10.0f * player->actor.speed * Math_SinS(player->actor.world.rot.y);
+            this->targetPos.z += 10.0f * player->actor.speed * Math_CosS(player->actor.world.rot.y);
+            EnNeoReeba_SetupMove(this);
+        } else {
+            EnNeoReeba_SetupReturnHome(this);
         }
     }
 
@@ -231,9 +229,9 @@ void EnNeoReeba_SetupSink(EnNeoReeba* this) {
 void EnNeoReeba_Sink(EnNeoReeba* this, PlayState* play) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, -2000.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupWaitUnderground(this);
-    } else if (play->gameplayFrames % 4 == 0) {
+    } else if ((play->gameplayFrames % 4) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
-                                 500, 10, 1);
+                                 500, 10, true);
     }
 
     if (this->sinkRiseRate < 300.0f) {
@@ -248,7 +246,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
 
@@ -257,7 +255,7 @@ void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, PlayState* play) {
         EnNeoReeba_SetupChooseAction(this);
     } else if (play->gameplayFrames % 4 == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
-                                 500, 10, 1);
+                                 500, 10, true);
     }
 
     if (this->sinkRiseRate > 20.0f) {
@@ -280,7 +278,7 @@ void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
     f32 remainingDist = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->targetPos, this->actor.speed);
 
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f, 0xFA,
-                             0xA, 1);
+                             10, true);
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
@@ -432,7 +430,7 @@ void EnNeoReeba_DamageAnim(EnNeoReeba* this, PlayState* play) {
         }
 
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
-                                 250, 10, 1);
+                                 250, 10, true);
         this->actionTimer--;
     }
 }
@@ -446,7 +444,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);
     this->actionFunc = EnNeoReeba_PlayDeathEffects;
@@ -516,6 +514,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 case EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN:
                 case EN_NEO_REEBA_DMGEFF_NONE:
                     return;
+
                 default:
                     if (this->stunTimer >= 2) {
                         EnNeoReeba_SpawnIce(this, play);
@@ -542,7 +541,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 }
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 0.0f;
-                /* fallthrough */
+                // fallthrough
             case EN_NEO_REEBA_DMGEFF_NONE:
             case EN_NEO_REEBA_DMGEFF_SHATTER:
                 if ((this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_SHATTER) ||
@@ -570,13 +569,15 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 EnNeoReeba_SetupStun(this);
                 break;
+
+            default:
+                break;
         }
-    } else {
-        if (((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.atFlags & AT_BOUNCED)) &&
-            (this->actionFunc == EnNeoReeba_Move)) {
-            EnNeoReeba_SetupBounce(this);
-        }
+    } else if (((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.atFlags & AT_BOUNCED)) &&
+               (this->actionFunc == EnNeoReeba_Move)) {
+        EnNeoReeba_SetupBounce(this);
     }
+
     if ((this->actionFunc != EnNeoReeba_WaitUnderground) && (this->actionFunc != EnNeoReeba_Sink) &&
         (this->actionFunc != EnNeoReeba_RiseOutOfGround) && (this->actionFunc != EnNeoReeba_DamageAnim) &&
         (this->actionFunc != EnNeoReeba_PlayDeathEffects)) {
@@ -610,29 +611,29 @@ void EnNeoReeba_UpdatePosition(EnNeoReeba* this, PlayState* play) {
 
 void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, PlayState* play) {
     s32 i;
-    f32 limbPosScale = 10.0f;
+    f32 bodyPartPosScaleXZ = 10.0f;
     f32 phi_f2 = 20.0f;
     f32 drawEffectScale = 0.8f;
 
     if (EN_NEO_REEBA_IS_LARGE(&this->actor)) {
-        limbPosScale *= 1.5f;
+        bodyPartPosScaleXZ *= 1.5f;
         phi_f2 *= 1.5f;
         drawEffectScale *= 1.5f;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->limbPos) - 1; i++) {
-        this->limbPos[i] = this->actor.world.pos;
+    for (i = 0; i <= EN_NEO_REEBA_BODYPART_2; i++) {
+        this->bodyPartsPos[i] = this->actor.world.pos;
 
-        this->limbPos[i].x += limbPosScale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-        this->limbPos[i].z += limbPosScale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-        this->limbPos[i].y += 5.0f;
+        this->bodyPartsPos[i].x += bodyPartPosScaleXZ * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+        this->bodyPartsPos[i].z += bodyPartPosScaleXZ * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+        this->bodyPartsPos[i].y += 5.0f;
     }
 
-    this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-    this->limbPos[ARRAY_COUNT(this->limbPos) - 1].y += phi_f2;
+    this->bodyPartsPos[EN_NEO_REEBA_BODYPART_3] = this->actor.world.pos;
+    this->bodyPartsPos[EN_NEO_REEBA_BODYPART_3].y += phi_f2;
 
     this->drawEffectScale = drawEffectScale;
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), drawEffectScale, 0.5f,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_NEO_REEBA_BODYPART_MAX, drawEffectScale, 0.5f,
                             this->drawEffectAlpha, this->drawEffectType);
 }
 
@@ -646,15 +647,15 @@ void EnNeoReeba_DrawEffects(EnNeoReeba* this, PlayState* play) {
 
     if ((this->drawEffectType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawEffectType == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) ||
         (this->drawEffectType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL)) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos) - 1; i++) {
-            this->limbPos[i] = this->actor.world.pos;
-            this->limbPos[i].x += scale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-            this->limbPos[i].z += scale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-            this->limbPos[i].y += -20.0f;
+        for (i = 0; i <= EN_NEO_REEBA_BODYPART_2; i++) {
+            this->bodyPartsPos[i] = this->actor.world.pos;
+            this->bodyPartsPos[i].x += scale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+            this->bodyPartsPos[i].z += scale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+            this->bodyPartsPos[i].y += -20.0f;
         }
 
-        this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-        Actor_DrawDamageEffects(play, NULL, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale, 0.5f,
+        this->bodyPartsPos[EN_NEO_REEBA_BODYPART_3] = this->actor.world.pos;
+        Actor_DrawDamageEffects(play, NULL, this->bodyPartsPos, EN_NEO_REEBA_BODYPART_MAX, this->drawEffectScale, 0.5f,
                                 this->drawEffectAlpha, this->drawEffectType);
     }
 }
@@ -663,25 +664,26 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
     static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
     static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
     static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
-    Vec3f iceVel;
-    f32 xVel;
-    f32 zVel;
+    Vec3f iceVelocity;
+    f32 xVelocity;
+    f32 zVelocity;
     s32 i;
     s16 yaw;
     s32 j;
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->limbPos[i]);
-        xVel = Math_SinS(yaw) * 3.0f;
-        zVel = Math_CosS(yaw) * 3.0f;
+    for (i = 0; i < EN_NEO_REEBA_BODYPART_MAX; i++) {
+        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
+        xVelocity = Math_SinS(yaw) * 3.0f;
+        zVelocity = Math_CosS(yaw) * 3.0f;
 
         for (j = 0; j < 4; j++) {
-            iceVel.x = (Rand_Centered() * 3.0f) + xVel;
-            iceVel.z = (Rand_Centered() * 3.0f) + zVel;
-            iceVel.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
-            EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor, 30);
+            iceVelocity.x = (Rand_Centered() * 3.0f) + xVelocity;
+            iceVelocity.z = (Rand_Centered() * 3.0f) + zVelocity;
+            iceVelocity.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
+            EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.7f, &iceVelocity, &sIceAccel, &sIcePrimColor,
+                                &sIceEnvColor, 30);
         }
     }
 }
@@ -719,8 +721,8 @@ s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     EnNeoReeba* this = THIS;
 
     if ((limbIndex == OBJECT_RB_LIMB_03) && (this->rotationSpeed != 0.0f)) {
-        rot->y += (s16)(this->rotationSpeed * Math_SinS(this->rotationAngle));
-        rot->z += (s16)(this->rotationSpeed * Math_CosS(this->rotationAngle));
+        rot->y += TRUNCF_BINANG(this->rotationSpeed * Math_SinS(this->rotationAngle));
+        rot->z += TRUNCF_BINANG(this->rotationSpeed * Math_CosS(this->rotationAngle));
     }
 
     return false;

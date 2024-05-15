@@ -27,11 +27,16 @@
  * - HandleSchedule: Holds the actual logic of how to actually follow the schedule based on the processed output, called by FollowSchedule
  */
 
-// Macro to convert the time format used in the save struct into the format used in Schedule
-#define SCHEDULE_CONVERT_TIME(time) ((u16)((time) - 0x10000 / 360 * 90))
-#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
+struct PlayState;
 
-typedef enum {
+// Macro to convert the time format used in the save struct into the format used in Schedule
+#define SCHEDULE_CONVERT_TIME(time) ((s32)((time) - 0x10000 / 360 * 90))
+
+#define SCHEDULE_TIME(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
+
+#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(CURRENT_TIME)
+
+typedef enum ScheduleCommandId {
     /* 0x00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch
     /* 0x01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,         // Checks if a weekEventReg flag is set and branches if so, long range branch
     /* 0x02 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S,   // Checks if the current time is within the range of the two provided times and branches if so, short range branch
@@ -252,5 +257,9 @@ typedef struct {
 
 #define SCHEDULE_CMD_BRANCH_L(offset) \
     SCHEDULE_CMD_ID_BRANCH_L, SCHEDULE_PACK_S16(offset)
+
+typedef u8 ScheduleScript;
+
+s32 Schedule_RunScript(struct PlayState* play, ScheduleScript* script, ScheduleOutput* output);
 
 #endif

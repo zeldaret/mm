@@ -19,15 +19,15 @@ void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
 void DmChar06_HandleCutscene(DmChar06* this, PlayState* play);
 
 ActorInit Dm_Char06_InitVars = {
-    ACTOR_DM_CHAR06,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_YUKIYAMA,
-    sizeof(DmChar06),
-    (ActorFunc)DmChar06_Init,
-    (ActorFunc)DmChar06_Destroy,
-    (ActorFunc)DmChar06_Update,
-    (ActorFunc)DmChar06_Draw,
+    /**/ ACTOR_DM_CHAR06,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_YUKIYAMA,
+    /**/ sizeof(DmChar06),
+    /**/ DmChar06_Init,
+    /**/ DmChar06_Destroy,
+    /**/ DmChar06_Update,
+    /**/ DmChar06_Draw,
 };
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {

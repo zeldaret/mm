@@ -28,15 +28,15 @@ void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Lift_InitVars = {
-    ACTOR_OBJ_LIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_D_LIFT,
-    sizeof(ObjLift),
-    (ActorFunc)ObjLift_Init,
-    (ActorFunc)ObjLift_Destroy,
-    (ActorFunc)ObjLift_Update,
-    (ActorFunc)ObjLift_Draw,
+    /**/ ACTOR_OBJ_LIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_D_LIFT,
+    /**/ sizeof(ObjLift),
+    /**/ ObjLift_Init,
+    /**/ ObjLift_Destroy,
+    /**/ ObjLift_Update,
+    /**/ ObjLift_Draw,
 };
 
 static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };
@@ -58,7 +58,7 @@ static f32 yOffsets[] = { -18.0f, -9.0f };
 
 void func_8093D3C0(ObjLift* this, PlayState* play) {
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f* actorPos = &this->dyna.actor.world.pos;
     s32 i;
     s32 rand;
@@ -69,9 +69,9 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
         pos.y = actorPos->y;
         pos.z = (D_8093DD60[i].z * this->dyna.actor.scale.z) + actorPos->z;
 
-        vel.x = D_8093DD60[i].x * this->dyna.actor.scale.x * 0.8f;
-        vel.y = (Rand_ZeroOne() * 10.0f) + 6.0f;
-        vel.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
+        velocity.x = D_8093DD60[i].x * this->dyna.actor.scale.x * 0.8f;
+        velocity.y = (Rand_ZeroOne() * 10.0f) + 6.0f;
+        velocity.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
 
         if ((s32)Rand_Next() > 0) {
             rand = 0x40;
@@ -79,7 +79,7 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
             rand = 0x20;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, rand, 15, 15, 0,
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0x100, rand, 15, 15, 0,
                              ((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x, 0, 32, 50, -1,
                              OBJECT_D_LIFT, gDampeGraveBrownElevatorDL);
     }
@@ -101,7 +101,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
+    if ((this->unk_178 <= 0) && Flags_GetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -196,7 +196,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
             func_8093DB70(this);
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor));
             Actor_Kill(&this->dyna.actor);
         }
     }

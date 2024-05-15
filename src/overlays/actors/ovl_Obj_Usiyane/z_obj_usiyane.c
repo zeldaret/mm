@@ -17,15 +17,15 @@ void ObjUsiyane_Update(Actor* thisx, PlayState* play);
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Usiyane_InitVars = {
-    ACTOR_OBJ_USIYANE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_USIYANE,
-    sizeof(ObjUsiyane),
-    (ActorFunc)ObjUsiyane_Init,
-    (ActorFunc)ObjUsiyane_Destroy,
-    (ActorFunc)ObjUsiyane_Update,
-    (ActorFunc)ObjUsiyane_Draw,
+    /**/ ACTOR_OBJ_USIYANE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_USIYANE,
+    /**/ sizeof(ObjUsiyane),
+    /**/ ObjUsiyane_Init,
+    /**/ ObjUsiyane_Destroy,
+    /**/ ObjUsiyane_Update,
+    /**/ ObjUsiyane_Draw,
 };
 
 PosRot D_80C08660[] = {
@@ -41,24 +41,17 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-s32 func_80C07C80(s32 arg0) {
-    s32 var_v1;
-
-    if (!(arg0 & 1)) {
-        var_v1 = gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF;
-    } else {
-        var_v1 = (gSaveContext.save.saveInfo.unk_E64[arg0 >> 1] & 0xFFFF0000) >> 0x10;
-    }
-    return var_v1 + CLOCK_TIME(2, 30);
+s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {
+    return CLOCK_TIME(2, 30) + ALIEN_GET_SPAWN_TIME_OFFSET(alienIndex);
 }
 
 s32 func_80C07CD0(void) {
-    if (CURRENT_DAY <= 0) {
+    if (CURRENT_DAY < 1) {
         return false;
     }
 
     if (CURRENT_DAY == 1) {
-        s32 time = gSaveContext.save.time;
+        s32 time = CURRENT_TIME;
         s32 i;
 
         if ((time < CLOCK_TIME(2, 30)) || (time >= CLOCK_TIME(6, 0))) {
@@ -66,21 +59,21 @@ s32 func_80C07CD0(void) {
         }
 
         if (time < CLOCK_TIME(5, 15)) {
-            s32 var_s1 = CLOCK_TIME(5, 15);
-            s32 temp_v0_2;
+            s32 firstSpawn = CLOCK_TIME(5, 15);
+            s32 spawnTime;
 
             for (i = 0; i < 8; i++) {
-                temp_v0_2 = func_80C07C80(i);
-                var_s1 = CLAMP_MAX(var_s1, temp_v0_2);
+                spawnTime = ObjUsiyane_GetAlienSpawnTime(i);
+                firstSpawn = CLAMP_MAX(firstSpawn, spawnTime);
             }
 
-            if (time < (var_s1 + 0xE11)) {
+            if (time < (firstSpawn + (80 * CLOCK_TIME_MINUTE) + 1)) {
                 return false;
             }
         }
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         return false;
     }
     return true;
@@ -111,7 +104,7 @@ void func_80C07F30(ObjUsiyane* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_168[0]); i++) {
         for (j = 0; j < ARRAY_COUNT(this->unk_168); j++) {
-            if (i != ARRAY_COUNT(this->unk_168[0]) - 1) {
+            if (i != (ARRAY_COUNT(this->unk_168[0]) - 1)) {
                 func_80C07DFC(&this->unk_710[i], &D_80C08660[i].rot, &this->unk_710[i + 1], &D_80C08660[i + 1].rot, j,
                               10, &this->unk_168[j][i].unk_00, &this->unk_168[j][i].unk_18);
             } else {

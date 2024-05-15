@@ -5,6 +5,8 @@
 
 #define ENTEST5_IS_HOT_SPRING(thisx) ((thisx)->params != 0)
 
+#define ENTEST5_PARAMS(isHotSpringWater) (isHotSpringWater)
+
 struct EnTest5; // SpringWaterModifier
 
 typedef void (*EnTest5ActionFunc)(struct EnTest5*, PlayState*);

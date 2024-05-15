@@ -14,7 +14,7 @@ Remote
 ---o---o---o---o
 
 Local
-             master
+             main
                v
 ---o---o---o---o
             \
@@ -23,7 +23,7 @@ Local
                  A
 ```
 
-Each `o` is a commit. The lines show the commit that each commit was based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `master` and `A`, and they currently both point to the commits furthest along their respective chains.
+Each `o` is a commit. The lines show the commit that each commit was based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `main` and `A`, and they currently both point to the commits furthest along their respective chains.
 
 Throughout this guide, stuff in `SCREAMING_SNAKE_CASE` represents fields for you to fill in with the appropriate text, e.g. FILE should be replaced with a particular filename.
 
@@ -48,7 +48,7 @@ git init
 
 The repository is considered to have the same name as the directory in which it lives.
 
-The default branch is set to be called `master`. If you want to call it something else, do
+The default branch is set to be called `main`. If you want to call it something else, do
 
 ```bash
 git init -b DEFAULT_BRANCH_NAME
@@ -112,7 +112,7 @@ git add git@github.com:yourgithubaccount/mm.git
 
 ## Managing branches
 
-You should always work on a branch, to retain a clean copy of the repository that you know works on the master/main branch, and to enable you to switch between unrelated work easily.
+You should always work on a branch, to retain a clean copy of the repository that you know works on the main/main branch, and to enable you to switch between unrelated work easily.
 
 To list the branches you currently have:
 

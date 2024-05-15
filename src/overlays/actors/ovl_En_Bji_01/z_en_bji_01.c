@@ -6,7 +6,7 @@
 
 #include "z_en_bji_01.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBji01*)thisx)
 
@@ -25,15 +25,15 @@ void func_809CD70C(EnBji01* this, PlayState* play);
 void func_809CD77C(EnBji01* this, PlayState* play);
 
 ActorInit En_Bji_01_InitVars = {
-    ACTOR_EN_BJI_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BJI,
-    sizeof(EnBji01),
-    (ActorFunc)EnBji01_Init,
-    (ActorFunc)EnBji01_Destroy,
-    (ActorFunc)EnBji01_Update,
-    (ActorFunc)EnBji01_Draw,
+    /**/ ACTOR_EN_BJI_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BJI,
+    /**/ sizeof(EnBji01),
+    /**/ EnBji01_Init,
+    /**/ EnBji01_Destroy,
+    /**/ EnBji01_Update,
+    /**/ EnBji01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -100,8 +100,8 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {
@@ -264,7 +264,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
@@ -381,7 +381,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.child = NULL;
     this->animIndex = SHIKASHI_ANIM_NONE;
 
@@ -447,10 +447,12 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         *dList = NULL;
     }
     if (limbIndex == SHIKASHI_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
     }
+
     switch (limbIndex) {
         case SHIKASHI_LIMB_TORSO:
             rot->x += this->torsoXRotStep;

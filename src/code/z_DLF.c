@@ -1,5 +1,7 @@
+#include "z64DLF.h"
 #include "global.h"
-#include "system_malloc.h"
+
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
@@ -8,15 +10,17 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
     if (overlayEntry->loadedRamAddr != NULL) {
         return;
     }
+
     vramStart = overlayEntry->vramStart;
     if (vramStart == NULL) {
         overlayEntry->unk_28 = 0;
         return;
     }
-    overlayEntry->loadedRamAddr = Overlay_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd,
-                                                          (uintptr_t)vramStart, (uintptr_t)overlayEntry->vramEnd);
-    if (overlayEntry->loadedRamAddr != NULL) {
 
+    overlayEntry->loadedRamAddr = Overlay_AllocateAndLoad(overlayEntry->file.vromStart, overlayEntry->file.vromEnd,
+                                                          vramStart, overlayEntry->vramEnd);
+
+    if (overlayEntry->loadedRamAddr != NULL) {
         overlayEntry->unk_14 = (void*)(uintptr_t)((overlayEntry->unk_14 != NULL)
                                                       ? (void*)((uintptr_t)overlayEntry->unk_14 -
                                                                 (intptr_t)((uintptr_t)overlayEntry->vramStart -
@@ -69,11 +73,11 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
                                                                              (uintptr_t)overlayEntry->loadedRamAddr))
                                                         : NULL);
 
-            overlayEntry->destroy = (uintptr_t)((overlayEntry->destroy != NULL)
-                                                    ? (void*)((uintptr_t)overlayEntry->destroy +
-                                                              (intptr_t)((uintptr_t)overlayEntry->vramStart -
-                                                                         (uintptr_t)overlayEntry->loadedRamAddr))
-                                                    : NULL);
+            overlayEntry->destroy = (void*)(uintptr_t)((overlayEntry->destroy != NULL)
+                                                           ? (void*)((uintptr_t)overlayEntry->destroy +
+                                                                     (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                                                (uintptr_t)overlayEntry->loadedRamAddr))
+                                                           : NULL);
 
             overlayEntry->unk_20 = (void*)(uintptr_t)((overlayEntry->unk_20 != NULL)
                                                           ? (void*)((uintptr_t)overlayEntry->unk_20 +
@@ -87,7 +91,7 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
                                                                                (uintptr_t)overlayEntry->loadedRamAddr))
                                                           : NULL);
 
-            SystemArena_Free(overlayEntry->loadedRamAddr);
+            free(overlayEntry->loadedRamAddr);
             overlayEntry->loadedRamAddr = NULL;
         }
     }

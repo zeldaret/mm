@@ -32,15 +32,15 @@ typedef enum {
 } SeagullTimer;
 
 ActorInit En_Tanron4_InitVars = {
-    ACTOR_EN_TANRON4,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_TANRON4,
-    sizeof(EnTanron4),
-    (ActorFunc)EnTanron4_Init,
-    (ActorFunc)EnTanron4_Destroy,
-    (ActorFunc)EnTanron4_Update,
-    (ActorFunc)EnTanron4_Draw,
+    /**/ ACTOR_EN_TANRON4,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_TANRON4,
+    /**/ sizeof(EnTanron4),
+    /**/ EnTanron4_Init,
+    /**/ EnTanron4_Destroy,
+    /**/ EnTanron4_Update,
+    /**/ EnTanron4_Draw,
 };
 
 void EnTanron4_Init(Actor* thisx, PlayState* play2) {
@@ -50,7 +50,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
                        SEAGULL_LIMB_RIGHT_WING_MAX);
 
-    thisx->flags &= ~ACTOR_FLAG_1;
+    thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     thisx->speed = 3.0f + KREG(48);
     thisx->uncullZoneForward = 10000.0f + KREG(70);
     this->randRollTimer = Rand_ZeroFloat(10.0f);
@@ -72,7 +72,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
             }
         }
 
-        if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
+        if ((CURRENT_TIME > CLOCK_TIME(20, 0)) || (CURRENT_TIME < CLOCK_TIME(4, 0))) {
             this->timeInfluence = 1500.0f;
             thisx->world.pos.y += 1500.0f;
         }
@@ -98,7 +98,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
 
     // `timeInfluence` controls both the height of the seagulls and when they are visible.
     // They fly higher in the sky as the night goes on, and they disapear as dawn approaches.
-    if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
+    if ((CURRENT_TIME > CLOCK_TIME(20, 0)) || (CURRENT_TIME < CLOCK_TIME(4, 0))) {
         Math_ApproachF(&this->timeInfluence, 1500.0f, 1.0f, 1.0f);
     } else {
         Math_ApproachZeroF(&this->timeInfluence, 1.0f, 1.0f);

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ELFMSG2_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define ELFMSG2_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 #define ELFMSG2_GET_FF(thisx) ((thisx)->params & 0xFF)
 
 struct ElfMsg2;

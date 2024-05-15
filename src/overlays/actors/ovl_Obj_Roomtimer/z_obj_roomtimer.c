@@ -19,21 +19,21 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play);
 void func_80973DE0(ObjRoomtimer* this, PlayState* play);
 
 ActorInit Obj_Roomtimer_InitVars = {
-    ACTOR_OBJ_ROOMTIMER,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjRoomtimer),
-    (ActorFunc)ObjRoomtimer_Init,
-    (ActorFunc)ObjRoomtimer_Destroy,
-    (ActorFunc)ObjRoomtimer_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_ROOMTIMER,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjRoomtimer),
+    /**/ ObjRoomtimer_Init,
+    /**/ ObjRoomtimer_Destroy,
+    /**/ ObjRoomtimer_Update,
+    /**/ NULL,
 };
 
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
     ObjRoomtimer* this = THIS;
 
-    this->switchFlag = ROOMTIMER_GET_SWITCHFLAG(thisx);
+    this->switchFlag = ROOMTIMER_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {
@@ -55,7 +55,7 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, this->actor.params);
     }
 
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     this->actionFunc = func_80973D3C;
 }
 

@@ -23,18 +23,17 @@ void EnPoFusen_InitFuse(EnPoFusen* this);
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
 void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
-s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Po_Fusen_InitVars = {
-    ACTOR_EN_PO_FUSEN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_PO_FUSEN,
-    sizeof(EnPoFusen),
-    (ActorFunc)EnPoFusen_Init,
-    (ActorFunc)EnPoFusen_Destroy,
-    (ActorFunc)EnPoFusen_Update,
-    (ActorFunc)EnPoFusen_Draw,
+    /**/ ACTOR_EN_PO_FUSEN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_PO_FUSEN,
+    /**/ sizeof(EnPoFusen),
+    /**/ EnPoFusen_Init,
+    /**/ EnPoFusen_Destroy,
+    /**/ EnPoFusen_Update,
+    /**/ EnPoFusen_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -102,7 +101,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     f32 flyingHeightMin;
 
     this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.007f;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     Collider_InitSphere(play, &this->collider);
@@ -302,8 +301,8 @@ s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     } else if (limbIndex == POE_BALLOON_LEFT_HAND) {
         rot->z += this->limbRotLeftHand;
     } else if (limbIndex == POE_BALLOON_LIMB_CHAIN_AND_LANTERN) {
-        rot->y += (s16)(this->limbRotChainAndLantern * Math_SinS(this->randBaseRotChange));
-        rot->z += (s16)(this->limbRotChainAndLantern * Math_CosS(this->randBaseRotChange));
+        rot->y += TRUNCF_BINANG(this->limbRotChainAndLantern * Math_SinS(this->randBaseRotChange));
+        rot->z += TRUNCF_BINANG(this->limbRotChainAndLantern * Math_CosS(this->randBaseRotChange));
     }
     return false;
 }

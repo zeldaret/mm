@@ -17,15 +17,15 @@ void BgOpenSpot_Update(Actor* thisx, PlayState* play);
 void BgOpenSpot_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Open_Spot_InitVars = {
-    ACTOR_BG_OPEN_SPOT,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OPEN_OBJ,
-    sizeof(BgOpenSpot),
-    (ActorFunc)BgOpenSpot_Init,
-    (ActorFunc)BgOpenSpot_Destroy,
-    (ActorFunc)BgOpenSpot_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_OPEN_SPOT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OPEN_OBJ,
+    /**/ sizeof(BgOpenSpot),
+    /**/ BgOpenSpot_Init,
+    /**/ BgOpenSpot_Destroy,
+    /**/ BgOpenSpot_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -6,7 +6,7 @@
 
 #include "z_dm_nb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmNb*)thisx)
 
@@ -16,15 +16,15 @@ void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Nb_InitVars = {
-    ACTOR_DM_NB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_NB,
-    sizeof(DmNb),
-    (ActorFunc)DmNb_Init,
-    (ActorFunc)DmNb_Destroy,
-    (ActorFunc)DmNb_Update,
-    (ActorFunc)DmNb_Draw,
+    /**/ ACTOR_DM_NB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_NB,
+    /**/ sizeof(DmNb),
+    /**/ DmNb_Init,
+    /**/ DmNb_Destroy,
+    /**/ DmNb_Update,
+    /**/ DmNb_Draw,
 };
 
 typedef enum {
@@ -83,7 +83,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
     this->animIndex = DMNB_ANIM_NONE;
     DmNb_ChangeAnim(this, DMNB_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmNb_HandleCutscene;
 }

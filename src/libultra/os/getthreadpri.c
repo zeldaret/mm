@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 OSPri osGetThreadPri(OSThread* t) {
     if (t == NULL) {

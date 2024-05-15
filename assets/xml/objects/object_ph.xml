@@ -1,9 +1,9 @@
 ﻿<Root>
     <File Name="object_ph" Segment="6">
-        <Animation Name="object_ph_Anim_000350" Offset="0x350" />
-        <Animation Name="object_ph_Anim_0005C4" Offset="0x5C4" />
-        <Animation Name="object_ph_Anim_000844" Offset="0x844" />
-        <Animation Name="object_ph_Anim_0009C4" Offset="0x9C4" />
+        <Animation Name="object_ph_Anim_000350" Offset="0x350" /> <!-- Original name is "ph_end" -->
+        <Animation Name="object_ph_Anim_0005C4" Offset="0x5C4" /> <!-- Original name is "ph_fly" -->
+        <Animation Name="object_ph_Anim_000844" Offset="0x844" /> <!-- Original name is "ph_shock" -->
+        <Animation Name="object_ph_Anim_0009C4" Offset="0x9C4" /> <!-- Original name is "ph_start" -->
         <DList Name="object_ph_DL_000ED0" Offset="0xED0" />
         <DList Name="object_ph_DL_000F60" Offset="0xF60" />
         <DList Name="object_ph_DL_000FF0" Offset="0xFF0" />

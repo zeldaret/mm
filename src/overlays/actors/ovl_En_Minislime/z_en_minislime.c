@@ -7,7 +7,7 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnMinislime*)thisx)
 
@@ -42,15 +42,15 @@ void EnMinislime_SetupGekkoThrow(EnMinislime* this);
 void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play);
 
 ActorInit En_Minislime_InitVars = {
-    ACTOR_EN_MINISLIME,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnMinislime),
-    (ActorFunc)EnMinislime_Init,
-    (ActorFunc)EnMinislime_Destroy,
-    (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_MINISLIME,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnMinislime),
+    /**/ EnMinislime_Init,
+    /**/ EnMinislime_Destroy,
+    /**/ EnMinislime_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -121,7 +121,7 @@ static DamageTable sDamageTable = {
 void EnMinislime_Init(Actor* thisx, PlayState* play) {
     EnMinislime* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->id = this->actor.params;
@@ -207,15 +207,15 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
 
 void EnMinislime_AddIceSmokeEffect(EnMinislime* this, PlayState* play) {
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
 
     pos.x = (Rand_CenteredFloat(200.0f) * this->actor.scale.x) + this->actor.world.pos.x;
     pos.y = CLAMP_MIN(this->actor.world.pos.y, GBT_ROOM_5_MIN_Y + 30.0f);
     pos.z = (Rand_CenteredFloat(200.0f) * this->actor.scale.z) + this->actor.world.pos.z;
-    vel.x = Rand_CenteredFloat(1.5f);
-    vel.z = Rand_CenteredFloat(1.5f);
-    vel.y = 2.0f;
-    EffectSsIceSmoke_Spawn(play, &pos, &vel, &gZeroVec3f, 500);
+    velocity.x = Rand_CenteredFloat(1.5f);
+    velocity.z = Rand_CenteredFloat(1.5f);
+    velocity.y = 2.0f;
+    EffectSsIceSmoke_Spawn(play, &pos, &velocity, &gZeroVec3f, 500);
 }
 
 void EnMinislime_SetupDisappear(EnMinislime* this) {
@@ -429,12 +429,10 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
     if (this->idleTimer == 0) {
         if (this->actor.xzDistToPlayer < 300.0f) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+        } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+            this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         } else {
-            if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-                this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
-            } else {
-                this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
-            }
+            this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
         }
         this->idleTimer = 20;
     }

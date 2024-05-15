@@ -17,7 +17,7 @@ typedef struct BgDanpeiMovebg {
     /* 0x1CC */ u16 flags;
     /* 0x1CE */ u16 prevFlags;
     /* 0x1D0 */ Gfx* dList;
-    /* 0x1D4 */ s8 bankIdx;
+    /* 0x1D4 */ s8 bankSlot;
 } BgDanpeiMovebg; // size = 0x1D8
 
 #endif // Z_BG_DANPEI_MOVEBG_H

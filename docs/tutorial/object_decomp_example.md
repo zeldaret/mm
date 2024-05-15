@@ -197,13 +197,13 @@ We can see this is the guard's Deku Flower:
 We can name the display list as such in the XML:
 
 ```xml
-<DList Name="gKingsChamberDekuGuardDekuFlower" Offset="0x2C48" />
+<DList Name="gKingsChamberDekuGuardDekuFlowerDL" Offset="0x2C48" />
 ```
 
 Then, like all steps before, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new name:
 
 ```c
-gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
+gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlowerDL);
 ```
 
 ## Step #5: Naming limb display lists

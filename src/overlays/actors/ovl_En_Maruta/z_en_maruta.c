@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
 #include "objects/object_maruta/object_maruta.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 
 #define THIS ((EnMaruta*)thisx)
 
@@ -37,15 +37,15 @@ void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
 ActorInit En_Maruta_InitVars = {
-    ACTOR_EN_MARUTA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_MARUTA,
-    sizeof(EnMaruta),
-    (ActorFunc)EnMaruta_Init,
-    (ActorFunc)EnMaruta_Destroy,
-    (ActorFunc)EnMaruta_Update,
-    (ActorFunc)EnMaruta_Draw,
+    /**/ ACTOR_EN_MARUTA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_MARUTA,
+    /**/ sizeof(EnMaruta),
+    /**/ EnMaruta_Init,
+    /**/ EnMaruta_Destroy,
+    /**/ EnMaruta_Update,
+    /**/ EnMaruta_Draw,
 };
 
 Gfx* D_80B386A0[] = {
@@ -214,7 +214,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
@@ -285,7 +285,7 @@ void func_80B372CC(EnMaruta* this, PlayState* play) {
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
         EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-        kendoJs->unk_292 = this->actor.isTargeted;
+        kendoJs->unk_292 = this->actor.isLockedOn;
     }
 }
 
@@ -322,7 +322,7 @@ void func_80B37428(EnMaruta* this, PlayState* play) {
 }
 
 void func_80B374B8(EnMaruta* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->actionFunc != func_80B37428) {
         this->unk_21E = 0;
         this->actor.gravity = -2.0f;
@@ -422,7 +422,7 @@ void func_80B37590(EnMaruta* this, PlayState* play) {
         this->unk_21A |= 0xFF;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80B37950;
 }
 
@@ -664,23 +664,23 @@ void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4) {
 }
 
 void func_80B382E4(PlayState* play, Vec3f arg1) {
-    Vec3f sp84 = arg1;
-    Vec3f sp78;
-    Vec3f sp6C;
-    Color_RGBA8 sp68 = { 170, 130, 90, 255 };
-    Color_RGBA8 sp64 = { 100, 60, 20, 255 };
+    Vec3f pos = arg1;
+    Vec3f velocity;
+    Vec3f accel;
+    Color_RGBA8 primColor = { 170, 130, 90, 255 };
+    Color_RGBA8 envColor = { 100, 60, 20, 255 };
     s32 i;
 
-    sp6C.y = 0.0f;
-    sp84.y += 15.0f;
+    accel.y = 0.0f;
+    pos.y += 15.0f;
 
     for (i = 0; i < 10; i++) {
-        sp78.x = Rand_Centered() * 10.0f;
-        sp78.y = 2.0f * Rand_ZeroOne();
-        sp78.z = Rand_Centered() * 10.0f;
-        sp6C.x = -0.2f * sp78.x;
-        sp6C.z = -0.2f * sp78.z;
-        func_800B0EB0(play, &sp84, &sp78, &sp6C, &sp68, &sp64, 60, 20, 10);
+        velocity.x = Rand_Centered() * 10.0f;
+        velocity.y = 2.0f * Rand_ZeroOne();
+        velocity.z = Rand_Centered() * 10.0f;
+        accel.x = -0.2f * velocity.x;
+        accel.z = -0.2f * velocity.z;
+        func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 60, 20, 10);
     }
 }
 

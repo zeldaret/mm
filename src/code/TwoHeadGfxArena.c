@@ -11,7 +11,6 @@
 
 #include "thga.h"
 #include "alignment.h"
-#include "functions.h"
 
 void THGA_Init(TwoHeadGfxArena* thga, void* start, size_t size) {
     THA_Init(&thga->tha, start, size);
@@ -93,7 +92,7 @@ Mtx* THGA_AllocMtx(TwoHeadGfxArena* thga) {
 /**
  * Allocates `num` vertices to the tail end of the Two Head Gfx Arena.
  */
-Vtx* THGA_AllocVtxArray(TwoHeadGfxArena* thga, u32 num) {
+Vtx* THGA_AllocVtxArray(TwoHeadGfxArena* thga, size_t num) {
     return THGA_AllocTail(thga, num * sizeof(Vtx));
 }
 

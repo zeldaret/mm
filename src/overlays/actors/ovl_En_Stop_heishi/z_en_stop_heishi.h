@@ -11,6 +11,8 @@ typedef void (*EnStopheishiActionFunc)(struct EnStopheishi*, PlayState*);
 #define ENSTOPHEISHI_GET_SWITCH_FLAG(thisx) (((thisx)->params) & 0x3F)
 #define ENSTOPHEISHI_GET_F000(thisx) ((((thisx)->params) >> 0xC) & 0xF)
 
+#define ENSTOPHEISHI_SWITCH_FLAG_NONE 0x7F
+
 typedef struct EnStopheishi {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -26,8 +28,8 @@ typedef struct EnStopheishi {
     /* 0x264 */ u8 unk_264; // Locking value at `0` prevents leaving the guard pose, however locking to 1 doesn't prevent guarding.
     /* 0x265 */ u8 unk_265;
     /* 0x266 */ s16 unk_266;
-    /* 0x268 */ s32 currentAnim;
-    /* 0x26C */ f32 currentAnimFrameCount;
+    /* 0x268 */ s32 animIndex;
+    /* 0x26C */ f32 animEndFrame;
     /* 0x270 */ s16 timer;
     /* 0x272 */ s16 headTurnTimer1;
     /* 0x274 */ s16 unk_274;

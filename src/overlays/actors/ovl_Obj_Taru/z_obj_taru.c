@@ -25,15 +25,15 @@ void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
 ActorInit Obj_Taru_InitVars = {
-    ACTOR_OBJ_TARU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_TARU,
-    sizeof(ObjTaru),
-    (ActorFunc)ObjTaru_Init,
-    (ActorFunc)ObjTaru_Destroy,
-    (ActorFunc)ObjTaru_Update,
-    (ActorFunc)ObjTaru_Draw,
+    /**/ ACTOR_OBJ_TARU,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_TARU,
+    /**/ sizeof(ObjTaru),
+    /**/ ObjTaru_Init,
+    /**/ ObjTaru_Destroy,
+    /**/ ObjTaru_Update,
+    /**/ ObjTaru_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -63,7 +63,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-s32 func_80B9B6E0(ObjTaru* this, PlayState* play) {
+bool func_80B9B6E0(ObjTaru* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->dyna.actor) * 4) | 0xFF01;
 
@@ -203,7 +203,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     if (OBJ_TARU_GET_80(thisx)) {
-        if (Flags_GetSwitch(play, OBJ_TARU_GET_7F(thisx))) {
+        if (Flags_GetSwitch(play, OBJ_TARU_GET_SWITCH_FLAG(thisx))) {
             Actor_Kill(&this->dyna.actor);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_001CB0);
@@ -298,7 +298,7 @@ void func_80B9C174(ObjTaru* this, PlayState* play) {
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
+        Flags_SetSwitch(play, OBJ_TARU_GET_SWITCH_FLAG(&this->dyna.actor));
         Actor_Kill(&this->dyna.actor);
         return;
     }

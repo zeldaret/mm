@@ -22,15 +22,15 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play);
 #include "overlays/ovl_Arrow_Fire/ovl_Arrow_Fire.c"
 
 ActorInit Arrow_Fire_InitVars = {
-    ACTOR_ARROW_FIRE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowFire),
-    (ActorFunc)ArrowFire_Init,
-    (ActorFunc)ArrowFire_Destroy,
-    (ActorFunc)ArrowFire_Update,
-    (ActorFunc)ArrowFire_Draw,
+    /**/ ACTOR_ARROW_FIRE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowFire),
+    /**/ ArrowFire_Init,
+    /**/ ArrowFire_Destroy,
+    /**/ ArrowFire_Update,
+    /**/ ArrowFire_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {
@@ -204,7 +204,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
 void ArrowFire_Update(Actor* thisx, PlayState* play) {
     ArrowFire* this = (ArrowFire*)thisx;
 
-    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+    if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
         return;
     }

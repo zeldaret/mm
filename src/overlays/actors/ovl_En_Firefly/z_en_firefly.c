@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -45,15 +45,15 @@ typedef enum {
 } KeeseAuraType;
 
 ActorInit En_Firefly_InitVars = {
-    ACTOR_EN_FIREFLY,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FIREFLY,
-    sizeof(EnFirefly),
-    (ActorFunc)EnFirefly_Init,
-    (ActorFunc)EnFirefly_Destroy,
-    (ActorFunc)EnFirefly_Update,
-    (ActorFunc)EnFirefly_Draw,
+    /**/ ACTOR_EN_FIREFLY,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FIREFLY,
+    /**/ sizeof(EnFirefly),
+    /**/ EnFirefly_Init,
+    /**/ EnFirefly_Destroy,
+    /**/ EnFirefly_Update,
+    /**/ EnFirefly_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -125,7 +125,7 @@ static DamageTable sDamageTable = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 5, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 4000, ICHAIN_STOP),
 };
 
@@ -180,7 +180,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, &this->limbPos[0], 3, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, KEESE_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
@@ -282,7 +282,7 @@ void EnFirefly_SetupFlyIdle(EnFirefly* this) {
 }
 
 void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
-    s32 isSkelAnimeUpdated;
+    s32 onAnimFirstFrame;
     f32 rand;
 
     SkelAnime_Update(&this->skelAnime);
@@ -290,18 +290,18 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
         this->timer--;
     }
 
-    isSkelAnimeUpdated = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 1.5f;
 
     if (!EnFirefly_ReturnToPerch(this, play) && !EnFirefly_SeekTorch(this, play)) {
-        if (isSkelAnimeUpdated) {
+        if (onAnimFirstFrame) {
             rand = Rand_ZeroOne();
 
             if (rand < 0.5f) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y,
                                    Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x300);
             } else if (rand < 0.8f) {
-                this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x600);
+                this->actor.shape.rot.y += TRUNCF_BINANG(Rand_CenteredFloat(0x600));
             }
 
             // Climb if too close to ground
@@ -658,7 +658,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, PlayState* play) {
         } else {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
             // Negate effects of fire on Fire Keese and Ice on Ice Keese
             if (((this->currentType == KEESE_FIRE) && (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_FIRE)) ||
@@ -754,12 +754,12 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static Color_RGBA8 fireAuraPrimColor = { 255, 255, 100, 255 };
-    static Color_RGBA8 fireAuraEnvColor = { 255, 50, 0, 0 };
-    static Color_RGBA8 iceAuraPrimColor = { 100, 200, 255, 255 };
-    static Color_RGBA8 iceAuraEnvColor = { 0, 0, 255, 0 };
-    static Vec3f auraVelocity = { 0.0f, 0.5f, 0.0f };
-    static Vec3f auraAccel = { 0.0f, 0.5f, 0.0f };
+    static Color_RGBA8 sFireAuraPrimColor = { 255, 255, 100, 255 };
+    static Color_RGBA8 sFireAuraEnvColor = { 255, 50, 0, 0 };
+    static Color_RGBA8 sIceAuraPrimColor = { 100, 200, 255, 255 };
+    static Color_RGBA8 sIceAuraEnvColor = { 0, 0, 255, 0 };
+    static Vec3f sAuraVelocity = { 0.0f, 0.5f, 0.0f };
+    static Vec3f sAuraAccel = { 0.0f, 0.5f, 0.0f };
     Vec3f auraPos;
     Color_RGBA8* auraPrimColor;
     Color_RGBA8* auraEnvColor;
@@ -795,23 +795,23 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         }
 
         if (this->auraType == KEESE_AURA_FIRE) {
-            auraPrimColor = &fireAuraPrimColor;
-            auraEnvColor = &fireAuraEnvColor;
+            auraPrimColor = &sFireAuraPrimColor;
+            auraEnvColor = &sFireAuraEnvColor;
         } else {
-            auraPrimColor = &iceAuraPrimColor;
-            auraEnvColor = &iceAuraEnvColor;
+            auraPrimColor = &sIceAuraPrimColor;
+            auraEnvColor = &sIceAuraEnvColor;
         }
 
-        func_800B0F80(play, &auraPos, &auraVelocity, &auraAccel, auraPrimColor, auraEnvColor, 250, auraScaleStep,
+        func_800B0F80(play, &auraPos, &sAuraVelocity, &sAuraAccel, auraPrimColor, auraEnvColor, 250, auraScaleStep,
                       auraLife);
     }
 
     if (limbIndex == FIRE_KEESE_LIMB_LEFT_WING_END) {
-        Matrix_MultZero(&this->limbPos[0]);
+        Matrix_MultZero(&this->bodyPartsPos[KEESE_BODYPART_LEFT_WING_END]);
     } else if (limbIndex == FIRE_KEESE_LIMB_RIGHT_WING_END_ROOT) {
-        Matrix_MultZero(&this->limbPos[1]);
+        Matrix_MultZero(&this->bodyPartsPos[KEESE_BODYPART_RIGHT_WING_END_ROOT]);
     } else if (limbIndex == FIRE_KEESE_LIMB_BODY) {
-        Matrix_MultZero(&this->limbPos[2]);
+        Matrix_MultZero(&this->bodyPartsPos[KEESE_BODYPART_BODY]);
     }
 }
 
@@ -844,7 +844,7 @@ void EnFirefly_Draw(Actor* thisx, PlayState* play) {
         POLY_OPA_DISP = gfx;
     }
 
-    Actor_DrawDamageEffects(play, NULL, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, NULL, this->bodyPartsPos, KEESE_BODYPART_MAX,
                             this->drawDmgEffScale * this->actor.scale.y * 200.0f, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
     this->lastDrawnFrame = play->gameplayFrames;

@@ -15,9 +15,10 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
+ * Finds the first EnDoor instance of type `ENDOOR_TYPE_SCHEDULE` and the specified schType (a value from the
+ * EnDoorScheduleType enum).
  */
-EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
+EnDoor* SubS_FindScheduleDoor(PlayState* play, s32 schType) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -25,11 +26,11 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
         actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
-        if (actor == NULL) {
+        if (door == NULL) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->typeVar.schType == (u8)schType)) {
             break;
         }
 
@@ -108,7 +109,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
     s32 pad;
-    Gfx* newDlist;
+    Gfx* newDList;
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
@@ -121,23 +122,23 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     gSPSegment(gfx++, 0x0D, mtx);
     Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable->x;
-    pos.y = jointTable->y;
-    pos.z = jointTable->z;
-    rot = jointTable[1];
-    newDlist = rootLimb->dList;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
+    newDList = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
         transformLimbDraw(play, 1, actor, &gfx);
 
-        if (newDlist != NULL) {
+        if (newDList != NULL) {
             Matrix_ToMtx(mtx);
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, newDlist);
+            gSPDisplayList(gfx++, newDList);
             mtx++;
         } else if (limbDList != NULL) {
             Matrix_ToMtx(mtx);
@@ -541,7 +542,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
         endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
     startFrame = animationInfo->startFrame;
-    if (startFrame >= endFrame || startFrame < 0) {
+    if ((startFrame >= endFrame) || (startFrame < 0)) {
         return false;
     }
     if (animationInfo->playSpeed < 0.0f) {
@@ -569,7 +570,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     if (index == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
-    } else if (index == count - 1) {
+    } else if (index == (count - 1)) {
         diffX = points[count - 1].x - points[count - 2].x;
         diffZ = points[count - 1].z - points[count - 2].z;
     } else {
@@ -578,6 +579,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -588,9 +590,9 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
 Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
-    s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
-                ((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) / 60) * 60) /
-               30;
+    s16 time1 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s16 time2 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s32 time = ((time1 % 60) + (time2 / 60) * 60) / 30;
     s32 day = CURRENT_DAY;
 
     if (pathIndex == pathIndexNone) {
@@ -826,11 +828,11 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
  */
 s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode) {
     s32 canAccept = false;
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xzDistToPlayerTemp;
 
-    Actor_GetScreenPos(play, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
 
     switch (mode) {
         case SUBS_OFFER_MODE_GET_ITEM:
@@ -847,7 +849,8 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT))) {
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -864,8 +867,9 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
@@ -873,8 +877,9 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
@@ -963,7 +968,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
     }
 }
 
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[],
                        s8 parentBodyParts[]) {
     Vec3f pos;
     Vec3f startVec;
@@ -974,13 +979,13 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     s32 startRow;
 
     for (i = 0; i < bodyPartsNum; i++) {
-        if (parentBodyParts[i] >= 0) {
+        if (parentBodyParts[i] > BODYPART_NONE) {
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
-            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
-            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
-            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * weight + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * weight + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * weight + (bodyPartPos->z - worldPos->z);
         } else {
             bodyPartPos = &bodyPartsPos[i];
 
@@ -1169,12 +1174,12 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
-    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 objectSlot, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, objectSlot) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
-    return Object_GetIndex(&play->objectCtx, id);
+s8 SubS_GetObjectSlot(s16 objectId, PlayState* play) {
+    return Object_GetSlot(&play->objectCtx, objectId);
 }
 
 /**

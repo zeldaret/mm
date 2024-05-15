@@ -1,4 +1,5 @@
 #include "global.h"
+#include "viconfig.h"
 #include "z_prenmi.h"
 
 void PreNMI_Stop(PreNMIState* this) {
@@ -50,5 +51,5 @@ void PreNMI_Init(GameState* thisx) {
     this->timer = 30;
     this->unk_A8 = 10;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
 }

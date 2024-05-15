@@ -30,7 +30,7 @@ typedef struct EnFall {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s16 dayStartTime;
     /* 0x146 */ s16 currentDay;
-    /* 0x148 */ u8 objIndex;
+    /* 0x148 */ u8 objectSlot;
     /* 0x14C */ f32 scale;
     /* 0x150 */ union {
                     f32 eyeGlowIntensity;

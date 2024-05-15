@@ -12,7 +12,7 @@ typedef struct ObjPurify {
     /* 0x15C */ ObjPurifyActionFunc actionFunc;
     /* 0x160 */ s32 gfxIndex;
     /* 0x164 */ s16 timer;
-    /* 0x166 */ s16 objIndex;
+    /* 0x166 */ s16 objectSlot;
     /* 0x168 */ f32 unk168[2];
 } ObjPurify; // size = 0x170
 

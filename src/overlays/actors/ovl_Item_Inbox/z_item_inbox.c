@@ -6,7 +6,7 @@
 
 #include "z_item_inbox.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ItemInbox*)thisx)
 
@@ -18,15 +18,15 @@ void ItemInbox_Draw(Actor* thisx, PlayState* play);
 void ItemInbox_Idle(ItemInbox* this, PlayState* play);
 
 ActorInit Item_Inbox_InitVars = {
-    ACTOR_ITEM_INBOX,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ItemInbox),
-    (ActorFunc)ItemInbox_Init,
-    (ActorFunc)ItemInbox_Destroy,
-    (ActorFunc)ItemInbox_Update,
-    (ActorFunc)ItemInbox_Draw,
+    /**/ ACTOR_ITEM_INBOX,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ItemInbox),
+    /**/ ItemInbox_Init,
+    /**/ ItemInbox_Destroy,
+    /**/ ItemInbox_Update,
+    /**/ ItemInbox_Draw,
 };
 
 void ItemInbox_Init(Actor* thisx, PlayState* play) {

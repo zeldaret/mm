@@ -8,7 +8,7 @@
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -64,15 +64,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit Boss_04_InitVars = {
-    ACTOR_BOSS_04,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(Boss04),
-    (ActorFunc)Boss04_Init,
-    (ActorFunc)Boss04_Destroy,
-    (ActorFunc)Boss04_Update,
-    (ActorFunc)Boss04_Draw,
+    /**/ ACTOR_BOSS_04,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS04,
+    /**/ sizeof(Boss04),
+    /**/ Boss04_Init,
+    /**/ Boss04_Destroy,
+    /**/ Boss04_Update,
+    /**/ Boss04_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
@@ -164,7 +164,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.params = 0x64;
     Actor_SetScale(&this->actor, 0.1f);
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.hintId = TATL_HINT_ID_WART;
     this->actor.colChkInfo.health = 20;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -173,7 +173,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F8 = 1.0f;
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gWartSkel, &gWartIdleAnim, this->jointTable, this->morphtable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWartSkel, &gWartIdleAnim, this->jointTable, this->morphTable,
                        WART_LIMB_MAX);
     spA8.y = this->actor.world.pos.y + 200.0f;
 
@@ -200,7 +200,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->actor.world.pos.z = this->unk_6F0;
     Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART)) {
         func_809ECD00(this, play);
         this->actor.world.pos.y = this->actor.floorHeight + 160.0f;
         phi_f24 = this->actor.floorHeight;
@@ -232,7 +232,7 @@ void Boss04_Destroy(Actor* thisx, PlayState* play) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void func_809EC568(Boss04* this, PlayState* play) {
@@ -264,7 +264,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -314,7 +314,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             if (this->unk_704 == 45) {
                 this->unk_708 = 1;
                 this->unk_704 = 0;
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_21);
                 this->actor.gravity = 0.0f;
                 break;
             }
@@ -391,9 +391,9 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 Play_DisableMotionBlur();
-                SET_EVENTINF(EVENTINF_60);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART);
             }
             break;
     }
@@ -475,7 +475,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
             this->unk_2D0 = 10000.0f;
             this->unk_2C8 = 100;
         } else {
-            this->actor.world.rot.y = BINANG_ROT180((s16)Rand_ZeroFloat(8000.0f) + this->actor.world.rot.y);
+            this->actor.world.rot.y = BINANG_ROT180(TRUNCF_BINANG(Rand_ZeroFloat(8000.0f)) + this->actor.world.rot.y);
         }
 
         this->actor.speed = 0.0f;
@@ -522,7 +522,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
 }
@@ -543,7 +543,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -572,7 +572,7 @@ void func_809ED45C(Boss04* this, PlayState* play) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
+        this->actor.colChkInfo.health -= damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
             func_809ED224(this);
             this->unk_1FE = 100;
@@ -749,9 +749,9 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
         func_809ED45C(this, play);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
@@ -784,15 +784,15 @@ s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     }
 
     if ((limbIndex == WART_LIMB_TOP_EYELID_ROOT) || (limbIndex == WART_LIMB_BOTTOM_EYELID_ROOT)) {
-        rot->y = (rot->y + (s16)this->unk_2CC) - 0x500;
+        rot->y = (rot->y + TRUNCF_BINANG(this->unk_2CC)) - 0x500;
     }
 
     if (limbIndex == WART_LIMB_EYE) {
         rot->y += this->unk_2D8;
         rot->z += this->unk_2D4;
         if (this->unk_2DA != 0) {
-            rot->y = (s16)(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
-            rot->z = (s16)(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
+            rot->y = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
+            rot->z = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
         }
     }
 

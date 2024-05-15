@@ -1,9 +1,9 @@
 ﻿<Root>
     <File Name="object_sb" Segment="6">
-        <Animation Name="object_sb_Anim_00004C" Offset="0x4C" />
-        <Animation Name="object_sb_Anim_0000B4" Offset="0xB4" />
-        <Animation Name="object_sb_Anim_000124" Offset="0x124" />
-        <Animation Name="object_sb_Anim_000194" Offset="0x194" />
+        <Animation Name="object_sb_Anim_00004C" Offset="0x4C" /> <!-- Original name is "sb_close" -->
+        <Animation Name="object_sb_Anim_0000B4" Offset="0xB4" />  <!-- Original name is "sb_jump_end" -->
+        <Animation Name="object_sb_Anim_000124" Offset="0x124" /> <!-- Original name is "sb_jump_start" -->
+        <Animation Name="object_sb_Anim_000194" Offset="0x194" /> <!-- Original name is "sb_open" -->
         <!-- <Blob Name="object_sb_Blob_0001A4" Size="0x49C" Offset="0x1A4" /> -->
         <!-- <Blob Name="object_sb_Blob_000840" Size="0x3C0" Offset="0x840" /> -->
         <DList Name="object_sb_DL_000D80" Offset="0xD80" />
@@ -25,6 +25,6 @@
         <Limb Name="object_sb_Standardlimb_002BB8" Type="Standard" EnumName="OBJECT_SB_LIMB_07" Offset="0x2BB8" />
         <Limb Name="object_sb_Standardlimb_002BC4" Type="Standard" EnumName="OBJECT_SB_LIMB_08" Offset="0x2BC4" />
         <Skeleton Name="object_sb_Skel_002BF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SB_LIMB_NONE" LimbMax="OBJECT_SB_LIMB_MAX" EnumName="ObjectSbLimb" Offset="0x2BF0" />
-        <Animation Name="object_sb_Anim_002C8C" Offset="0x2C8C" />
+        <Animation Name="object_sb_Anim_002C8C" Offset="0x2C8C" /> <!-- Original name is "sb_wait" -->
     </File>
 </Root>

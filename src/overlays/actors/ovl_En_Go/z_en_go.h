@@ -33,8 +33,8 @@ typedef struct EnGoEffect {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 alphaDenom;
     /* 0x02 */ u8 alphaNumer;
-    /* 0x04 */ Vec3s rotVelocity;
-    /* 0x0A */ Vec3s rotAngle;
+    /* 0x04 */ Vec3s angularVelocity;
+    /* 0x0A */ Vec3s rot;
     /* 0x10 */ Vec3f pos;
     /* 0x1C */ Vec3f accel;
     /* 0x28 */ Vec3f velocity;
@@ -93,8 +93,8 @@ typedef struct EnGo {
     /* 0x1E0 */ ColliderCylinder unusedCylinder;
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* gatekeeperPath;
-    /* 0x288 */ s8 taisouObjIndex;
-    /* 0x289 */ s8 hakuginDemoObjIndex;
+    /* 0x288 */ s8 taisouObjectSlot;
+    /* 0x289 */ s8 hakuginDemoObjectSlot;
     /* 0x28C */ s32 msgScriptResumePos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;
@@ -106,7 +106,7 @@ typedef struct EnGo {
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 springArrivalCueId;
-    /* 0x398 */ f32 curAnimPlaySpeed;
+    /* 0x398 */ f32 animPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
     /* 0x3A4 */ f32 scaleFactor;
@@ -132,7 +132,7 @@ typedef struct EnGo {
     /* 0x3CE */ s16 fidgetTableY[ENGO_FIDGET_TABLE_LEN];
     /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ MsgEventFunc msgEventFunc;
-    /* 0x3DC */ s32 curAnimIndex;
+    /* 0x3DC */ s32 animIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 indexEffect;

@@ -17,15 +17,15 @@ void ObjWind_Update(Actor* thisx, PlayState* play);
 void ObjWind_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Wind_InitVars = {
-    ACTOR_OBJ_WIND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjWind),
-    (ActorFunc)ObjWind_Init,
-    (ActorFunc)ObjWind_Destroy,
-    (ActorFunc)ObjWind_Update,
-    (ActorFunc)ObjWind_Draw,
+    /**/ ACTOR_OBJ_WIND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjWind),
+    /**/ ObjWind_Init,
+    /**/ ObjWind_Destroy,
+    /**/ ObjWind_Update,
+    /**/ ObjWind_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -132,7 +132,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 }
                 temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (upXZ / entry->unk_2 * var_fa0);
                 if (upXZ != 0.0f) {
-                    // FAKE:
+                    //! FAKE:
                     if (1) {}
                     upXZ = 1.0f / upXZ;
                 }

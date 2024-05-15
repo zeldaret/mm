@@ -3,13 +3,13 @@
     <File Name="object_dog" Segment="6">
         <!-- Unused Selection Arrow with a Texture Animation -->
         <DList Name="gDogSelectionArrowAnimatedDL" Offset="0x170" /> <!-- Original name is "cursor_00_anim_model" -->
-        <DList Name="gDogSelectionArrowAnimatedEmptyDL" Offset="0x250" /> <!-- Original name is "cursor_00_anim_modelT". Probably meant "transparent" at one point -->
+        <DList Name="gDogSelectionArrowAnimatedEmptyDL" Offset="0x250" /> <!-- Original name is "cursor_00_anim_modelT" -->
         <Texture Name="gDogSelectionArrowAnimatedTex" OutName="dog_selection_arrow_animated" Format="i8" Width="8" Height="32" Offset="0x258" />
         <TextureAnimation Name="gDogSelectionArrowTexAnim" Offset="0x3C4" />
 
         <!-- Selection Arrow DisplayLists and Texture -->
         <DList Name="gDogSelectionArrowDL" Offset="0x550" /> <!-- Original name is "cursor_00_none_model" -->
-        <DList Name="gDogSelectionArrowEmptyDL" Offset="0x618" /> <!-- Original name is "cursor_00_none_modelT". Probably meant "transparent" at one point-->
+        <DList Name="gDogSelectionArrowEmptyDL" Offset="0x618" /> <!-- Original name is "cursor_00_none_modelT" -->
         <Texture Name="gDogSelectionArrowTex" OutName="dog_selection_arrow" Format="i4" Width="16" Height="32" Offset="0x620" />
 
         <!-- Dog Animations -->

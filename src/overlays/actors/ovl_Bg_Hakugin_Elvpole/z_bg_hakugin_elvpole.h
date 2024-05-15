@@ -5,7 +5,7 @@
 
 struct BgHakuginElvpole;
 
-#define BGHAKUGINELVPOLE_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define BGHAKUGINELVPOLE_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef void (*BgHakuginElvpoleActionFunc)(struct BgHakuginElvpole*, PlayState*);
 

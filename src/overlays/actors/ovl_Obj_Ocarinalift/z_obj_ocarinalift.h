@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define OBJOCARINALIFT_GET_C(thisx) (((thisx)->params >> 0xC) & 3)
-#define OBJOCARINALIFT_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJOCARINALIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJOCARINALIFT_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJOCARINALIFT_GET_SWITCH_FLAG(thisx) ((thisx)->home.rot.x & 0x7F)
 
@@ -19,7 +19,7 @@ typedef struct ObjOcarinalift {
     /* 0x164 */ s32 unk164;
     /* 0x168 */ s32 unk168;
     /* 0x16C */ s32 unk16C;
-    /* 0x170 */ Vec3s* unk170;
+    /* 0x170 */ Vec3s* pathPoints;
     /* 0x174 */ s16 timer;
     /* 0x176 */ s16 cutsceneTimer;
 } ObjOcarinalift; // size = 0x178

@@ -33,7 +33,7 @@
         <DList Name="gDekuPalaceGuardHead2DL" Offset="0x2400" />
         <DList Name="gDekuPalaceGuardSnoutDL" Offset="0x2410" />
         <DList Name="gDekuPalaceGuardSnout2DL" Offset="0x2510" />
-        <DList Name="gDekuPalaceGuardFlower" Offset="0x2700" />
+        <DList Name="gDekuPalaceGuardFlowerDL" Offset="0x2700" />
         <Limb Name="gDekuPalaceGuardTorsoLimb" Type="Standard" EnumName="DEKU_PALACE_GUARD_LIMB_TORSO" Offset="0x27A8" />
         <Limb Name="gDekuPalaceGuardHeadLimb" Type="Standard" EnumName="DEKU_PALACE_GUARD_LIMB_HEAD" Offset="0x27B4" />
         <Limb Name="gDekuPalaceGuardLeftLeafLimb" Type="Standard" EnumName="DEKU_PALACE_GUARD_LIMB_LEFT_LEAF" Offset="0x27C0" />

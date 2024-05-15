@@ -17,6 +17,18 @@ typedef enum {
     /* 0xFF */ ENDEKUNUTS_GET_FF00_FF = 0xFF
 } EnDekunutsParam;
 
+typedef enum DekunutsBodyPart {
+    /* 0 */ ENDEKUNUTS_BODYPART_0,
+    /* 1 */ ENDEKUNUTS_BODYPART_1,
+    /* 2 */ ENDEKUNUTS_BODYPART_2,
+    /* 3 */ ENDEKUNUTS_BODYPART_3,
+    /* 4 */ ENDEKUNUTS_BODYPART_4,
+    /* 5 */ ENDEKUNUTS_BODYPART_5,
+    /* 6 */ ENDEKUNUTS_BODYPART_6,
+    /* 7 */ ENDEKUNUTS_BODYPART_7,
+    /* 8 */ ENDEKUNUTS_BODYPART_MAX
+} DekunutsBodyPart;
+
 typedef struct EnDekunuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -32,7 +44,7 @@ typedef struct EnDekunuts {
     /* 0x210 */ f32 drawDmgEffAlpha;
     /* 0x214 */ f32 drawDmgEffScale;
     /* 0x218 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x21C */ Vec3f limbPos[8];
+    /* 0x21C */ Vec3f bodyPartsPos[ENDEKUNUTS_BODYPART_MAX];
     /* 0x27C */ ColliderCylinder collider;
 } EnDekunuts; // size = 0x2C8
 

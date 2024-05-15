@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define SUSCEIL_GET_SWITCHFLAG(thisx) (((thisx)->params) & 0x7F)
+#define SUSCEIL_GET_SWITCH_FLAG(thisx) (((thisx)->params) & 0x7F)
 
 struct BgIkninSusceil;
 

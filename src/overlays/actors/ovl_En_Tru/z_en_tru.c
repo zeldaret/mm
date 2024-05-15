@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -77,15 +77,15 @@ static UNK_TYPE D_80A889A4[] = {
 };
 
 ActorInit En_Tru_InitVars = {
-    ACTOR_EN_TRU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRU,
-    sizeof(EnTru),
-    (ActorFunc)EnTru_Init,
-    (ActorFunc)EnTru_Destroy,
-    (ActorFunc)EnTru_Update,
-    (ActorFunc)EnTru_Draw,
+    /**/ ACTOR_EN_TRU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRU,
+    /**/ sizeof(EnTru),
+    /**/ EnTru_Init,
+    /**/ EnTru_Destroy,
+    /**/ EnTru_Update,
+    /**/ EnTru_Draw,
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"
@@ -686,7 +686,7 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_34E & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->unk_34E &= ~0x80;
         }
@@ -830,12 +830,12 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
         // Fallthrough
-        case TEXT_STATE_16:
+        case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
             if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
@@ -1046,7 +1046,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
         this->unk_378 = NULL;
         this->unk_34E = 0;
@@ -1118,7 +1118,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }
@@ -1144,7 +1144,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
         this->unk_384 = 1;
     }
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 

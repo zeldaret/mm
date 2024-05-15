@@ -13,10 +13,11 @@
  */
 
 #include "z_en_water_effect.h"
+#include "overlays/actors/ovl_Bg_Ikana_Rotaryroom/z_bg_ikana_rotaryroom.h"
 #include "objects/object_water_effect/object_water_effect.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnWaterEffect*)thisx)
 
@@ -31,19 +32,18 @@ void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
 ActorInit En_Water_Effect_InitVars = {
-    ACTOR_EN_WATER_EFFECT,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_WATER_EFFECT,
-    sizeof(EnWaterEffect),
-    (ActorFunc)EnWaterEffect_Init,
-    (ActorFunc)EnWaterEffect_Destroy,
-    (ActorFunc)EnWaterEffect_Update,
-    (ActorFunc)EnWaterEffect_Draw,
+    /**/ ACTOR_EN_WATER_EFFECT,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_WATER_EFFECT,
+    /**/ sizeof(EnWaterEffect),
+    /**/ EnWaterEffect_Init,
+    /**/ EnWaterEffect_Destroy,
+    /**/ EnWaterEffect_Update,
+    /**/ EnWaterEffect_Draw,
 };
 
-static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_80A5AFBC = { 0.0f, -1.0f, 0.0f };
+static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 void func_80A587A0(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
     s16 i;
@@ -53,8 +53,8 @@ void func_80A587A0(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
         if (!ptr->unk_00) {
             ptr->unk_00 = true;
             ptr->unk_04 = *arg1;
-            ptr->unk_10 = D_80A5AFB0;
-            ptr->unk_1C = D_80A5AFB0;
+            ptr->unk_10 = sZeroVec;
+            ptr->unk_1C = sZeroVec;
             ptr->unk_2C.x = 0.1f;
             ptr->unk_2C.y = 0.0f;
             ptr->unk_2C.z = Rand_ZeroFloat(M_PI * 2);
@@ -66,7 +66,7 @@ void func_80A587A0(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
 }
 
 void func_80A58908(EnWaterEffect* this, Vec3f* arg1, Vec3f* arg2, u8 arg3) {
-    Vec3f sp2C = D_80A5AFBC;
+    Vec3f sp2C = { 0.0f, -1.0f, 0.0f };
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     s16 i;
 
@@ -90,7 +90,7 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
     if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {
@@ -217,8 +217,8 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.1f;
                             ptr->unk_2C.y = 0.6f;
-                            ptr->unk_10 = D_80A5AFB0;
-                            ptr->unk_1C = D_80A5AFB0;
+                            ptr->unk_10 = sZeroVec;
+                            ptr->unk_1C = sZeroVec;
                             ptr->unk_3C = 200;
                             ptr->unk_28 = 9;
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
@@ -255,8 +255,8 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.05f;
                             ptr->unk_2C.y = 0.2f;
-                            ptr->unk_10 = D_80A5AFB0;
-                            ptr->unk_1C = D_80A5AFB0;
+                            ptr->unk_10 = sZeroVec;
+                            ptr->unk_1C = sZeroVec;
                             ptr->unk_3C = 150;
                             ptr->unk_28 = Rand_ZeroFloat(5.0f) + 7.0f;
                         } else {
@@ -358,8 +358,8 @@ void func_80A599E8(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
             ptr->unk_00 = 4;
             ptr->unk_04 = *arg1;
 
-            ptr->unk_1C = D_80A5AFB0;
-            ptr->unk_10 = D_80A5AFB0;
+            ptr->unk_1C = sZeroVec;
+            ptr->unk_10 = sZeroVec;
 
             if ((arg2 == 0) || (arg2 == 2)) {
                 ptr->unk_1C.y = -1.0f;
@@ -414,7 +414,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         this->unk_DC6--;
     }
 
-    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, (rotaryRoom->params >> 1) & 0x7F)) {
+    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(rotaryRoom))) {
         this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
     } else if (!Play_InCsMode(play)) {
         this->unk_DC4++;
@@ -437,7 +437,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
             ptr->unk_04.x += ptr->unk_10.x;
             ptr->unk_04.y += ptr->unk_10.y;
             ptr->unk_04.z += ptr->unk_10.z;
-            ptr->unk_10.y = ptr->unk_10.y + ptr->unk_1C.y;
+            ptr->unk_10.y += ptr->unk_1C.y;
 
             if (ptr->unk_00 == 4) {
                 if (ptr->unk_2A > 0) {

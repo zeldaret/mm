@@ -25,7 +25,7 @@ typedef struct EnHeishi {
     /* 0x26C */ s32 shouldSetHeadRotation;
     /* 0x270 */ s16 timer;
     /* 0x272 */ s16 yawTowardsPlayer;
-    /* 0x274 */ f32 frameCount;
+    /* 0x274 */ f32 animEndFrame;
     /* 0x278 */ s16 unk278;    // set and not used
     /* 0x27C */ UNK_TYPE1 unk_27C[0x8];
     /* 0x284 */ ColliderCylinder colliderCylinder;

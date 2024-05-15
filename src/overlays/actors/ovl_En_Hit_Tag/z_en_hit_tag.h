@@ -7,7 +7,7 @@ struct EnHitTag;
 
 typedef void (*EnHitTagActionFunc)(struct EnHitTag*, PlayState*);
 
-#define ENHITTAG_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define ENHITTAG_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef struct EnHitTag {
     /* 0x000 */ Actor actor;

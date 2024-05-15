@@ -1,12 +1,18 @@
 #include "global.h"
+#include "PR/gs2dex.h"
+#include "sys_cfb.h"
+#include "sys_ucode.h"
+#include "z64lifemeter.h"
+#include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "z64voice.h"
+
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
 typedef enum {
@@ -158,16 +164,32 @@ static Gfx sScreenFillSetupDL[] = {
 };
 
 s16 D_801BF9B0 = 0;
-f32 D_801BF9B4[] = { 100.0f, 109.0f };
+f32 D_801BF9B4[] = {
+    100.0f, // LANGUAGE_JPN
+    109.0f, // LANGUAGE_ENG
+    // Data missing for other languages?
+};
 s16 D_801BF9BC[] = {
     0x226, // EQUIP_SLOT_B
     0x2A8, // EQUIP_SLOT_C_LEFT
     0x2A8, // EQUIP_SLOT_C_DOWN
     0x2A8, // EQUIP_SLOT_C_RIGHT
 };
-s16 D_801BF9C4[] = { 0x9E, 0x9B };
-s16 D_801BF9C8[] = { 0x17, 0x16 };
-f32 D_801BF9CC[] = { -380.0f, -350.0f };
+s16 D_801BF9C4[] = {
+    0x9E, // LANGUAGE_JPN
+    0x9B, // LANGUAGE_ENG
+    // Data missing for other languages?
+};
+s16 D_801BF9C8[] = {
+    0x17, // LANGUAGE_JPN
+    0x16, // LANGUAGE_ENG
+    // Data missing for other languages?
+};
+f32 D_801BF9CC[] = {
+    -380.0f, // LANGUAGE_JPN
+    -350.0f, // LANGUAGE_ENG
+    // Data missing for other languages?
+};
 s16 D_801BF9D4[] = {
     0xA7,  // EQUIP_SLOT_B
     0xE3,  // EQUIP_SLOT_C_LEFT
@@ -914,8 +936,8 @@ void Interface_NewDay(PlayState* play, s32 day) {
     }
 
     // Loads day number from week_static for the three-day clock
-    DmaMgr_SendRequest0((u32)play->interfaceCtx.doActionSegment + 0x780,
-                        (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
+    DmaMgr_RequestSync((void*)(play->interfaceCtx.doActionSegment + 0x780),
+                       SEGMENT_ROM_START_OFFSET(week_static, i * 0x510), 0x510);
 
     // i is used to store sceneId
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
@@ -1707,7 +1729,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_41)) {
         // Related to swamp boat (non-minigame)?
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
-            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX) || (msgCtx->msgMode != 0)) {
+            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX) || (msgCtx->msgMode != MSGMODE_NONE)) {
                 if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                     restoreHudVisibility = true;
                 }
@@ -2343,7 +2365,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                           (AudioVoice_GetWord() == VOICE_WORD_ID_CHEESE)) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
@@ -3119,7 +3142,7 @@ void Inventory_UnequipItem(s16 item) {
 s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
             gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
@@ -3654,10 +3677,9 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_LENS:
             // Slowly consume magic while Lens of Truth is active
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
-                !Play_InCsMode(play)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play)) {
 
                 if ((gSaveContext.save.saveInfo.playerData.magic == 0) ||
                     ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
@@ -3697,9 +3719,9 @@ void Magic_Update(PlayState* play) {
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
         case MAGIC_STATE_CONSUME_GORON_ZORA:
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == 0) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
@@ -3719,9 +3741,9 @@ void Magic_Update(PlayState* play) {
             break;
 
         case MAGIC_STATE_CONSUME_GIANTS_MASK:
-            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
+            if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
+                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+                (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
@@ -3855,12 +3877,20 @@ void Interface_SetOrthoView(InterfaceContext* interfaceCtx) {
 }
 
 void Interface_DrawItemButtons(PlayState* play) {
-    static TexturePtr cUpLabelTextures[] = {
-        gTatlCUpENGTex, gTatlCUpENGTex, gTatlCUpGERTex, gTatlCUpFRATex, gTatlCUpESPTex,
+    static TexturePtr sCUpLabelTextures[LANGUAGE_MAX] = {
+        gTatlCUpENGTex, // LANGUAGE_JPN
+        gTatlCUpENGTex, // LANGUAGE_ENG
+        gTatlCUpGERTex, // LANGUAGE_GER
+        gTatlCUpFRATex, // LANGUAGE_FRE
+        gTatlCUpESPTex, // LANGUAGE_SPA
     };
-    static s16 startButtonLeftPos[] = {
+    static s16 sStartButtonLeftPos[LANGUAGE_MAX] = {
         // Remnant of OoT
-        130, 136, 136, 136, 136,
+        130, // LANGUAGE_JPN
+        136, // LANGUAGE_ENG
+        136, // LANGUAGE_GER
+        136, // LANGUAGE_FRE
+        136, // LANGUAGE_SPA
     };
     static s16 D_801BFAF4[] = {
         0x1D, // EQUIP_SLOT_B
@@ -3903,8 +3933,8 @@ void Interface_DrawItemButtons(PlayState* play) {
                                            D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
                                            240, 0, interfaceCtx->cRightAlpha);
 
-    if (!IS_PAUSE_STATE_GAMEOVER) {
-        if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
+        if (IS_PAUSED(&play->pauseCtx)) {
             OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, 0x88, 0x11, 0x16, 0x16, 0x5B6, 0x5B6, 0xFF, 0x82, 0x3C,
                                                    interfaceCtx->startAlpha);
             // Start Button Texture, Color & Label
@@ -3920,8 +3950,7 @@ void Interface_DrawItemButtons(PlayState* play) {
         }
     }
 
-    if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == CS_STATE_IDLE) &&
+    if (interfaceCtx->tatlCalling && !IS_PAUSED(&play->pauseCtx) && (play->csCtx.state == CS_STATE_IDLE) &&
         (sPictoState == PICTO_BOX_STATE_OFF)) {
         if (sCUpInvisible == 0) {
             // C-Up Button Texture, Color & Label (Tatl Text)
@@ -3930,7 +3959,7 @@ void Interface_DrawItemButtons(PlayState* play) {
             if ((gSaveContext.hudVisibility == HUD_VISIBILITY_NONE) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_NONE_ALT) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE) ||
-                (msgCtx->msgMode != 0)) {
+                (msgCtx->msgMode != MSGMODE_NONE)) {
                 temp = 0;
             } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
                 temp = 70;
@@ -3946,9 +3975,9 @@ void Interface_DrawItemButtons(PlayState* play) {
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
             gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                               PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-            gDPLoadTextureBlock_4b(OVERLAY_DISP++, cUpLabelTextures[gSaveContext.options.language], G_IM_FMT_IA, 32, 12,
-                                   0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                   G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, sCUpLabelTextures[gSaveContext.options.language], G_IM_FMT_IA, 32,
+                                   12, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 0x03DC, 0x0048, 0x045C, 0x0078, G_TX_RENDERTILE, 0, 0, 1 << 10,
                                 1 << 10);
         }
@@ -4026,6 +4055,11 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
         }
 
         gDPPipeSync(OVERLAY_DISP++);
+        // @bug Missing a gDPSetEnvColor here, which means the ammo count will be drawn with the last env color set.
+        // Once you have the magic meter, this becomes a non issue, as the magic meter will set the color to black,
+        // but prior to that, when certain conditions are met, the color will have last been set by the wallet icon
+        // causing the ammo count to be drawn incorrectly. This is most obvious when you get deku nuts early on, and
+        // the ammo count is drawn with a shade of green.
 
         if ((button == EQUIP_SLOT_B) && (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
             ammo = play->interfaceCtx.minigameAmmo;
@@ -4342,6 +4376,7 @@ void Interface_DrawClock(PlayState* play) {
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
         CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
         CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+        CLOCK_TIME(0, 0),
     };
     static TexturePtr sThreeDayClockHourTextures[] = {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
@@ -4398,8 +4433,9 @@ void Interface_DrawClock(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((R_TIME_SPEED != 0) &&
-        ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
-         (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+        ((msgCtx->msgMode == MSGMODE_NONE) ||
+         ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && !Play_InCsMode(play)) ||
+         (msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
         /**
@@ -4421,7 +4457,7 @@ void Interface_DrawClock(PlayState* play) {
                     sClockAlphaTimer1 = 0;
                 }
             } else {
-                if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                     sThreeDayClockAlpha = 255;
                 } else {
                     sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -4430,7 +4466,7 @@ void Interface_DrawClock(PlayState* play) {
                 sClockAlphaTimer1 = 0;
             }
         } else {
-            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                 sThreeDayClockAlpha = 255;
             } else {
                 sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -4439,7 +4475,7 @@ void Interface_DrawClock(PlayState* play) {
             sClockAlphaTimer1 = 0;
         }
 
-        if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+        if (!IS_PAUSED(&play->pauseCtx)) {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             /**
@@ -4469,9 +4505,8 @@ void Interface_DrawClock(PlayState* play) {
             OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50, 1, 6,
                                              0, 1 << 10, 1 << 10);
 
-            if (((CURRENT_DAY >= 4) ||
-                 ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
-                  (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
+            if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (CURRENT_TIME >= (CLOCK_TIME(0, 0) + 5)) &&
+                                        (CURRENT_TIME < CLOCK_TIME(6, 0))))) {
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             } else {
@@ -4593,8 +4628,8 @@ void Interface_DrawClock(PlayState* play) {
                     D_801BF974 ^= 1;
                 }
 
-                timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
-                timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+                timeInSeconds = TIME_TO_SECONDS_F(CURRENT_TIME);
+                timeInSeconds -= TRUNCF_BINANG(timeInSeconds / 3600.0f) * 3600.0f;
 
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
@@ -4632,7 +4667,7 @@ void Interface_DrawClock(PlayState* play) {
 
             // determines the current hour
             for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
-                if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
+                if (CURRENT_TIME < sThreeDayClockHours[sp1C6 + 1]) {
                     break;
                 }
             }
@@ -4640,7 +4675,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Section: Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
              */
-            time = gSaveContext.save.time;
+            time = CURRENT_TIME;
             sp1D8 = Math_SinS(time) * -40.0f;
             temp_f14 = Math_CosS(time) * -34.0f;
 
@@ -4683,7 +4718,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Section: Draws Three-Day Clock's Hour Digit Above the Sun
              */
-            sp1CC = gSaveContext.save.time * 0.000096131f; // (2.0f * 3.15f / 0x10000)
+            sp1CC = CURRENT_TIME * 0.000096131f; // (2.0f * 3.15f / 0x10000)
 
             // Rotates Three-Day Clock's Hour Digit To Above the Sun
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
@@ -4733,9 +4768,8 @@ void Interface_DrawClock(PlayState* play) {
 
             // Final Hours
             if ((CURRENT_DAY >= 4) ||
-                ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
-                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
-                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
+                ((CURRENT_DAY == 3) && (CURRENT_TIME >= (CLOCK_TIME(0, 0) + 5)) && (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
+                if (CURRENT_TIME >= CLOCK_TIME(5, 0)) {
                     // The Final Hours clock will flash red
 
                     colorStep = ABS_ALT(sFinalHoursClockDigitsRed -
@@ -5425,12 +5459,12 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 }
 
 void Interface_StartMoonCrash(PlayState* play) {
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         SEQCMD_DISABLE_PLAY_SEQUENCES(false);
     }
 
     gSaveContext.save.day = 4;
-    gSaveContext.save.daysElapsed = 4;
+    gSaveContext.save.eventDayCount = 4;
     gSaveContext.save.time = CLOCK_TIME(6, 0) + 10;
     play->nextEntrance = ENTRANCE(TERMINA_FIELD, 12);
     gSaveContext.nextCutsceneIndex = 0;
@@ -5438,31 +5472,31 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(u64 timer, s16* timerArr) {
-    u64 time = timer;
+void Interface_GetTimerDigits(OSTime time, s16 timerArr[8]) {
+    OSTime t = time;
 
     // 6 minutes
-    timerArr[0] = time / SECONDS_TO_TIMER(360);
-    time -= timerArr[0] * SECONDS_TO_TIMER(360);
+    timerArr[0] = t / SECONDS_TO_TIMER(360);
+    t -= timerArr[0] * SECONDS_TO_TIMER(360);
 
     // minutes
-    timerArr[1] = time / SECONDS_TO_TIMER(60);
-    time -= timerArr[1] * SECONDS_TO_TIMER(60);
+    timerArr[1] = t / SECONDS_TO_TIMER(60);
+    t -= timerArr[1] * SECONDS_TO_TIMER(60);
 
     // 10 seconds
-    timerArr[3] = time / SECONDS_TO_TIMER(10);
-    time -= timerArr[3] * SECONDS_TO_TIMER(10);
+    timerArr[3] = t / SECONDS_TO_TIMER(10);
+    t -= timerArr[3] * SECONDS_TO_TIMER(10);
 
     // seconds
-    timerArr[4] = time / SECONDS_TO_TIMER(1);
-    time -= timerArr[4] * SECONDS_TO_TIMER(1);
+    timerArr[4] = t / SECONDS_TO_TIMER(1);
+    t -= timerArr[4] * SECONDS_TO_TIMER(1);
 
     // 100 milliseconds
-    timerArr[6] = time / SECONDS_TO_TIMER_PRECISE(0, 10);
-    time -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
+    timerArr[6] = t / SECONDS_TO_TIMER_PRECISE(0, 10);
+    t -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
 
     // 10 milliseconds
-    timerArr[7] = time;
+    timerArr[7] = t;
 }
 
 #define IS_POSTMAN_TIMER_DRAWN                                                        \
@@ -5496,10 +5530,9 @@ void Interface_DrawTimers(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     // Not satisfying any of these conditions will pause the timer
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        ((msgCtx->msgMode == 0) ||
-         ((msgCtx->msgMode != 0) && (msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
+    if (!IS_PAUSED(&play->pauseCtx) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+        ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId >= 0x1BB2) &&
+                                               (msgCtx->currentTextId <= 0x1BB6))) &&
         !(player->stateFlags1 & PLAYER_STATE1_200) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
         (play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play)) {
 
@@ -5946,9 +5979,8 @@ void Interface_UpdateBottleTimers(PlayState* play) {
     s32 pad[2];
 
     // Not satisfying any of these conditions will pause the bottle timer
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        ((msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+    if (!IS_PAUSED(&play->pauseCtx) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+        ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
         !Play_InCsMode(play)) {
@@ -6019,7 +6051,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
     Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         // Carrots rendering if the action corresponds to riding a horse
         if (interfaceCtx->unk_212 == DO_ACTION_FASTER) {
             // Load Carrot Icon
@@ -6201,8 +6233,8 @@ void Interface_Draw(PlayState* play) {
             gSPLoadUcodeL(OVERLAY_DISP++, gspS2DEX2_fifo);
             gfx = OVERLAY_DISP;
             Prerender_DrawBackground2D(&gfx, sStoryTextures[interfaceCtx->storyType],
-                                       sStoryTLUTs[interfaceCtx->storyType], SCREEN_WIDTH, SCREEN_HEIGHT, 2, 1, 0x8000,
-                                       0x100, 0.0f, 0.0f, 1.0f, 1.0f, 0);
+                                       sStoryTLUTs[interfaceCtx->storyType], SCREEN_WIDTH, SCREEN_HEIGHT, G_IM_FMT_CI,
+                                       G_IM_SIZ_8b, G_TT_RGBA16, 256, 0.0f, 0.0f, 1.0f, 1.0f, 0);
             OVERLAY_DISP = gfx;
             gSPLoadUcode(OVERLAY_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
 
@@ -6399,7 +6431,7 @@ void Interface_Draw(PlayState* play) {
         Minimap_Draw(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
-            Actor_DrawZTarget(&play->actorCtx.targetContext, play);
+            Target_Draw(&play->actorCtx.targetCtx, play);
         }
 
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
@@ -6416,7 +6448,7 @@ void Interface_Draw(PlayState* play) {
         Interface_DrawPauseMenuEquippingIcons(play);
 
         // Draw either the minigame countdown or the three-day clock
-        if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+        if (!IS_PAUSED(&play->pauseCtx)) {
             if ((interfaceCtx->minigameState != MINIGAME_STATE_NONE) &&
                 (interfaceCtx->minigameState < MINIGAME_STATE_NO_COUNTDOWN_SETUP)) {
                 // Minigame Countdown
@@ -6580,8 +6612,8 @@ void Interface_LoadStory(PlayState* play, s32 osMesgFlag) {
                 break;
             }
             osCreateMesgQueue(&interfaceCtx->storyMsgQueue, &interfaceCtx->storyMsgBuf, 1);
-            DmaMgr_SendRequestImpl(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
-                                   interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
+            DmaMgr_RequestAsync(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
+                                interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
             interfaceCtx->storyDmaStatus = STORY_DMA_LOADING;
             // fallthrough
         case STORY_DMA_LOADING:
@@ -6618,7 +6650,7 @@ void Interface_Update(PlayState* play) {
     u16 aButtonDoAction;
 
     // Update buttons
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if (play->gameOverCtx.state == GAMEOVER_INACTIVE) {
             Interface_UpdateButtonsPart1(play);
         }
@@ -6797,7 +6829,7 @@ void Interface_Update(PlayState* play) {
     }
 
     // Update perfect letters
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if (interfaceCtx->perfectLettersOn) {
             if (interfaceCtx->perfectLettersType == PERFECT_LETTERS_TYPE_1) {
                 Interface_UpdatePerfectLettersType1(play);
@@ -6810,7 +6842,7 @@ void Interface_Update(PlayState* play) {
     }
 
     // Update minigame State
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if (!IS_PAUSED(&play->pauseCtx)) {
         if ((u32)interfaceCtx->minigameState != MINIGAME_STATE_NONE) {
             switch (interfaceCtx->minigameState) {
                 case MINIGAME_STATE_COUNTDOWN_SETUP_3:
@@ -6868,7 +6900,7 @@ void Interface_Update(PlayState* play) {
                 interfaceCtx->aButtonRoll = -15700.0f;
                 interfaceCtx->aButtonState = A_BTN_STATE_2;
 
-                if ((msgCtx->msgMode != 0) && (msgCtx->unk12006 == 0x26)) {
+                if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->textboxYTarget == 38)) {
                     R_A_BTN_Y_OFFSET = -14;
                 } else {
                     R_A_BTN_Y_OFFSET = 0;
@@ -7016,15 +7048,16 @@ void Interface_Update(PlayState* play) {
     // Update Sun Song
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         // exit out of ocarina mode after suns song finishes playing
-        if ((msgCtx->ocarinaAction != 0x39) && (gSaveContext.sunsSongState == SUNSSONG_START)) {
-            play->msgCtx.ocarinaMode = 4;
+        if ((msgCtx->ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) &&
+            (gSaveContext.sunsSongState == SUNSSONG_START)) {
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         }
 
         // handle suns song in areas where time moves
         if (play->envCtx.sceneTimeSpeed != 0) {
             if (gSaveContext.sunsSongState != SUNSSONG_SPEED_TIME) {
                 sIsSunsPlayedAtDay = false;
-                if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+                if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(18, 0))) {
                     sIsSunsPlayedAtDay = true;
                 }
 
@@ -7033,19 +7066,19 @@ void Interface_Update(PlayState* play) {
                 R_TIME_SPEED = 400;
             } else if (!sIsSunsPlayedAtDay) {
                 // Nighttime
-                if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+                if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(18, 0))) {
                     // Daytime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             } else {
                 // Daytime
-                if (gSaveContext.save.time > CLOCK_TIME(18, 0)) {
+                if (CURRENT_TIME > CLOCK_TIME(18, 0)) {
                     // Nighttime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             }
         } else {
@@ -7113,16 +7146,16 @@ void Interface_Init(PlayState* play) {
     interfaceCtx->healthTimer = 200;
 
     parameterStaticSize = SEGMENT_ROM_SIZE(parameter_static);
-    interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.heap, parameterStaticSize);
-    DmaMgr_SendRequest0(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
+    interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.tha, parameterStaticSize);
+    DmaMgr_RequestSync(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
 
-    interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.heap, 0xC90);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START(do_action_static) + 0x480, 0x180);
+    interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.tha, 0xC90);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480), 0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 
-    interfaceCtx->iconItemSegment = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    interfaceCtx->iconItemSegment = THA_AllocTailAlign16(&play->state.tha, 0x4000);
 
     if (CUR_FORM_EQUIP(EQUIP_SLOT_B) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -7187,15 +7220,15 @@ void Interface_Init(PlayState* play) {
         (play->sceneId != SCENE_LAST_GORON) && (play->sceneId != SCENE_LAST_ZORA) &&
         (play->sceneId != SCENE_LAST_LINK)) {
 
-        CLEAR_EVENTINF(EVENTINF_53); // Goht intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_54); // Odolwa intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_55); // Twinmold intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_56); // Gyorg intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_57); // Igos du Ikana intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_60); // Wart intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_61); // Majoras intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_62); //
-        CLEAR_EVENTINF(EVENTINF_63); // Gomess intro cutscene watched
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA);
+        CLEAR_EVENTINF(EVENTINF_ENTR_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOMESS);
     }
 
     sFinalHoursClockDigitsRed = sFinalHoursClockFrameEnvRed = sFinalHoursClockFrameEnvGreen =

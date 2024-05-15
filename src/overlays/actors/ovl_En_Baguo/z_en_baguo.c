@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnBaguo*)thisx)
 
@@ -43,15 +43,15 @@ typedef enum {
 } NejironRollDirection;
 
 ActorInit En_Baguo_InitVars = {
-    ACTOR_EN_BAGUO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_GMO,
-    sizeof(EnBaguo),
-    (ActorFunc)EnBaguo_Init,
-    (ActorFunc)EnBaguo_Destroy,
-    (ActorFunc)EnBaguo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_BAGUO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_GMO,
+    /**/ sizeof(EnBaguo),
+    /**/ EnBaguo_Init,
+    /**/ EnBaguo_Destroy,
+    /**/ EnBaguo_Update,
+    /**/ NULL,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -133,7 +133,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 2;
+    this->actor.targetMode = TARGET_MODE_2;
 
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements[0].dim.modelSphere.radius = 30;
@@ -146,7 +146,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
 }
@@ -165,7 +165,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
         this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -176,7 +176,7 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -195,17 +195,17 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
     if (this->timer != 0) {
         // Depending on how the last roll ended, this actor may be "sitting" on
         // something other than its legs. This slowly corrects that.
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
-        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 0x64, 0x3E8);
+        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 0x64, 0x3E8);
 
         // If this actor isn't mostly facing the player, do a discrete turn towards
         // them. It takes 8 frames to turn, and we must wait 8 frames to do another.
         if ((this->timer & 8) != 0) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
-                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 0x12C, 0x3E8);
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
-                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
@@ -256,13 +256,13 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
         Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 0.5f);
-        this->actor.world.rot.x += (s16)this->currentRotation.x;
+        this->actor.world.rot.x += TRUNCF_BINANG(this->currentRotation.x);
 
         if (this->currentRotation.z != 0.0f) {
             if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
-                this->actor.world.rot.z += (s16)this->currentRotation.z;
+                this->actor.world.rot.z += TRUNCF_BINANG(this->currentRotation.z);
             } else {
-                this->actor.world.rot.z -= (s16)this->currentRotation.z;
+                this->actor.world.rot.z -= TRUNCF_BINANG(this->currentRotation.z);
             }
         }
 
@@ -281,7 +281,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
 
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
@@ -293,7 +293,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
 }
@@ -354,7 +354,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
 
                 this->timer = 30;
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements->dim.scale = 3.0f;
                 this->collider.elements->info.toucher.damage = 8;
@@ -450,9 +450,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rot.x = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.y = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.z = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.x = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.y = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.z = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
             return;
         }
     }

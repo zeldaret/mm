@@ -80,7 +80,7 @@
 
         <!-- Burly Guy Animations -->
         <Animation Name="gBurlyGuyHeadScratchEndAnim" Offset="0xD2F8" /> <!-- Original name is "shn_w02TOw01" ("wait02 to wait01"?) -->
-        <Animation Name="gBurlyGuyEmptyAnim" Offset="0xD3AC" /> <!-- Original name is "shn_wait". Unused and one frame long -->
+        <Animation Name="gBurlyGuyEmptyAnim" Offset="0xD3AC" /> <!-- Unused and one frame long. Original name is "shn_wait" -->
         <Animation Name="gBurlyGuyHandsOnTableAnim" Offset="0xD9D0" /> <!-- Original name is "shn_wait01" -->
         <Animation Name="gBurlyGuyHeadScratchLoopAnim" Offset="0xDFEC" /> <!-- Original name is "shn_wait02" -->
         <Animation Name="gBurlyGuyChinScratchAnim" Offset="0xE6C4" /><!-- Original name is "shn_wait03" -->

@@ -3,6 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
+#include "main.h"
 #include "z64math.h"
 #include "unk.h"
 
@@ -65,6 +66,17 @@ typedef struct View {
     }                                      \
     (void)0
 
+#define SET_FULLSCREEN_VIEWPORT_DYNAMIC(view)   \
+{                                               \
+    Viewport viewport;                          \
+    viewport.bottomY = gScreenHeight;           \
+    viewport.rightX = gScreenWidth;             \
+    viewport.topY = 0;                          \
+    viewport.leftX = 0;                         \
+    View_SetViewport(view, &viewport);          \
+}                                               \
+(void)0
+
 void View_Init(View* view, struct GraphicsContext* gfxCtx);
 void View_LookAt(View* view, Vec3f* eye, Vec3f* at, Vec3f* up);
 void View_SetScale(View* view, f32 scale);
@@ -83,7 +95,7 @@ s32 View_InitDistortion(View* view);
 s32 View_ClearDistortion(View* view);
 s32 View_SetDistortion(View* view, Vec3f orientation, Vec3f scale, f32 speed);
 
-void View_Apply(View* view, s32 mask);
+s32 View_Apply(View* view, s32 mask);
 s32 View_ApplyOrthoToOverlay(View* view);
 s32 View_ApplyPerspectiveToOverlay(View* view);
 s32 View_UpdateViewingMatrix(View* view);

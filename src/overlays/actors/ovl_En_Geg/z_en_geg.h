@@ -2,6 +2,7 @@
 #define Z_EN_GEG_H
 
 #include "global.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
 
 struct EnGeg;
 
@@ -22,9 +23,9 @@ typedef struct EnGeg {
     /* 0x240 */ s16 unk_240;
     /* 0x242 */ s16 unk_242;
     /* 0x244 */ s16 unk_244;
-    /* 0x248 */ s32 unk_248;
-    /* 0x24C */ Vec3s jointTable[18];
-    /* 0x2B8 */ Vec3s morphTable[18];
+    /* 0x248 */ s32 objectSlot;
+    /* 0x24C */ Vec3s jointTable[GORON_LIMB_MAX];
+    /* 0x2B8 */ Vec3s morphTable[GORON_LIMB_MAX];
     /* 0x324 */ UNK_TYPE1 unk324[0x144];
     /* 0x468 */ s16 unk_468;
     /* 0x46A */ s16 unk_46A;
@@ -38,7 +39,7 @@ typedef struct EnGeg {
     /* 0x498 */ s16 csId;
     /* 0x49A */ s16 nextCsId;
     /* 0x49C */ s16 csIdList[8];
-    /* 0x4AC */ s32 unk_4AC;
+    /* 0x4AC */ s32 animIndex;
     /* 0x4B0 */ s16 unk_4B0;
     /* 0x4B4 */ Vec3f unk_4B4;
     /* 0x4C0 */ Vec3f unk_4C0[2];

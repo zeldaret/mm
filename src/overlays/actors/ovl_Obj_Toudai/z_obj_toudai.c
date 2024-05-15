@@ -17,15 +17,15 @@ void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Toudai_InitVars = {
-    ACTOR_OBJ_TOUDAI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_F53_OBJ,
-    sizeof(ObjToudai),
-    (ActorFunc)ObjToudai_Init,
-    (ActorFunc)ObjToudai_Destroy,
-    (ActorFunc)ObjToudai_Update,
-    (ActorFunc)ObjToudai_Draw,
+    /**/ ACTOR_OBJ_TOUDAI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_F53_OBJ,
+    /**/ sizeof(ObjToudai),
+    /**/ ObjToudai_Init,
+    /**/ ObjToudai_Destroy,
+    /**/ ObjToudai_Update,
+    /**/ ObjToudai_Draw,
 };
 
 #include "assets/overlays/ovl_Obj_Toudai/ovl_Obj_Toudai.c"
@@ -81,7 +81,7 @@ void func_80A33BB4(ObjToudai* this, PlayState* play) {
 
 u8 func_80A342F4(s16 arg0) {
     u8 var_v1 = 0;
-    s16 minutes = TIME_TO_MINUTES_F(gSaveContext.save.time);
+    s16 minutes = TIME_TO_MINUTES_F(CURRENT_TIME);
     s32 hours = minutes / 60;
 
     if (hours >= 17) {
@@ -118,7 +118,7 @@ void ObjToudai_Update(Actor* thisx, PlayState* play) {
 
     Math_ApproachF(&this->unk_228, (this->unk_236 == 0) ? 0.0f : 1.0f, 0.01f, 1000.0f);
     this->unk_234 += 100;
-    thisx->shape.rot.y = (s16)(Math_SinS(this->unk_234) * 16000.0f) + thisx->world.rot.y;
+    thisx->shape.rot.y = TRUNCF_BINANG(Math_SinS(this->unk_234) * 16000.0f) + thisx->world.rot.y;
 }
 
 void ObjToudai_Draw(Actor* thisx, PlayState* play) {

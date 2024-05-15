@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 long long __d_to_ll(double d) {
     return d;

@@ -40,15 +40,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Tubo_Trap_InitVars = {
-    ACTOR_EN_TUBO_TRAP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(EnTuboTrap),
-    (ActorFunc)EnTuboTrap_Init,
-    (ActorFunc)EnTuboTrap_Destroy,
-    (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw,
+    /**/ ACTOR_EN_TUBO_TRAP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(EnTuboTrap),
+    /**/ EnTuboTrap_Init,
+    /**/ EnTuboTrap_Destroy,
+    /**/ EnTuboTrap_Update,
+    /**/ EnTuboTrap_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -90,7 +90,7 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
     f32 sin;
     f32 cos;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     s32 arg5;
     s16 var;
     s32 i;
@@ -103,9 +103,9 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
-        vel.x = pos.x * 0.23f;
-        vel.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
-        vel.z = pos.z * 0.23f;
+        velocity.x = pos.x * 0.23f;
+        velocity.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
+        velocity.z = pos.z * 0.23f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
@@ -119,8 +119,9 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
         } else {
             arg5 = 0x20;
         }
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0xF0, arg5, 0x14, 0, 0, ((Rand_ZeroOne() * 85.0f) + 15.0f), 0,
-                             0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, gameplay_dangeon_keep_DL_018090);
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0xF0, arg5, 0x14, 0, 0,
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 
     func_800BBFB0(play, actorPos, 30.0f, 4, 0x14, 0x32, 0);
@@ -131,7 +132,7 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
     f32 sin;
     f32 cos;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     s16 var;
     s32 arg5;
     s32 i;
@@ -149,9 +150,9 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
-        vel.x = pos.x * 0.20f;
-        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
-        vel.z = pos.z * 0.20f;
+        velocity.x = pos.x * 0.20f;
+        velocity.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        velocity.z = pos.z * 0.20f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
@@ -164,8 +165,9 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
             arg5 = 32;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0xAA, arg5, 0x32, 5, 0, ((Rand_ZeroOne() * 85.0f) + 15.0f), 0,
-                             0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, gameplay_dangeon_keep_DL_018090);
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0xAA, arg5, 0x32, 5, 0,
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 }
 
@@ -234,9 +236,9 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10); // always update and can target
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10); // always update and can target
 
             transformationHeight = sTransformationHeight[player->transformation];
 
@@ -253,7 +255,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
 }
 
 void EnTuboTrap_Levitate(EnTuboTrap* this, PlayState* play) {
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
@@ -279,7 +281,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     EnTuboTrap_HandleImpact(this, play);
 }
 

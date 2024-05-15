@@ -19,15 +19,15 @@ void DmSa_Draw(Actor* thisx, PlayState* play);
 void DmSa_DoNothing(DmSa* this, PlayState* play);
 
 ActorInit Dm_Sa_InitVars = {
-    ACTOR_DM_SA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_STK,
-    sizeof(DmSa),
-    (ActorFunc)DmSa_Init,
-    (ActorFunc)DmSa_Destroy,
-    (ActorFunc)DmSa_Update,
-    (ActorFunc)DmSa_Draw,
+    /**/ ACTOR_DM_SA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_STK,
+    /**/ sizeof(DmSa),
+    /**/ DmSa_Init,
+    /**/ DmSa_Destroy,
+    /**/ DmSa_Update,
+    /**/ DmSa_Draw,
 };
 
 typedef enum {

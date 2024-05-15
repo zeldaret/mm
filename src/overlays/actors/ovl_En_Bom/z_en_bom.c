@@ -35,15 +35,15 @@ typedef struct {
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
-    ACTOR_EN_BOM,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBom),
-    (ActorFunc)EnBom_Init,
-    (ActorFunc)EnBom_Destroy,
-    (ActorFunc)EnBom_Update,
-    (ActorFunc)EnBom_Draw,
+    /**/ ACTOR_EN_BOM,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBom),
+    /**/ EnBom_Init,
+    /**/ EnBom_Destroy,
+    /**/ EnBom_Update,
+    /**/ EnBom_Draw,
 };
 
 static f32 enBomScales[] = { 0.01f, 0.03f };
@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.cylHeight = 10;
 
     this->flashSpeedScale = 7;
-    this->isPowderKeg = ENBOM_GETX_1(&this->actor);
+    this->isPowderKeg = ENBOM_GET_1(&this->actor);
     if (this->isPowderKeg) {
         play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
@@ -152,19 +152,19 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
 
     if (!this->isPowderKeg) {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, this->collider2Elements);
         this->collider1.dim.radius = 6;
         this->collider1.dim.height = 11;
     } else {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
         this->collider1.dim.radius = 20;
         this->collider1.dim.height = 36;
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider3.info.toucher.damage += ENBOM_GETZ_FF00(thisx);
+    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
-    if (ENBOM_GETZ_80(&this->actor)) {
+    if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
     }
 
@@ -281,7 +281,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 temp = BINANG_ROT180(temp);
             }
             Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
+            this->unk_1FA += TRUNCF_BINANG(this->actor.speed * 800.0f);
         }
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
@@ -290,7 +290,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
-                    this->actor.velocity.y = this->actor.velocity.y * sp58->z;
+                    this->actor.velocity.y *= sp58->z;
                 }
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }
@@ -320,7 +320,7 @@ void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
             gSaveContext.powderKegTimer = this->timer;
         }
     }
-    Math_ScaledStepToS(&this->unk_1FA, 0, 2000);
+    Math_ScaledStepToS(&this->unk_1FA, 0, 0x7D0);
 }
 
 void EnBom_Explode(EnBom* this, PlayState* play) {
@@ -356,28 +356,28 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[0] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] != 0) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[1] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] != 0) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[2] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] != 0) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[0] != 0) {
-        play->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[0] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[0] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[1] != 0) {
-        play->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[1] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[1] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[2] != 0) {
-        play->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[2] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
@@ -550,10 +550,10 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                             CLEAR_TAG_PARAMS(this->isPowderKeg));
                 Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
                                             sQuakeDurations[this->isPowderKeg]);
-                play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
-                    play->envCtx.lightSettings.diffuseColor1[2] = 250;
-                play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
-                    play->envCtx.lightSettings.ambientColor[2] = 250;
+                play->envCtx.adjLightSettings.light1Color[0] = play->envCtx.adjLightSettings.light1Color[1] =
+                    play->envCtx.adjLightSettings.light1Color[2] = 250;
+                play->envCtx.adjLightSettings.ambientColor[0] = play->envCtx.adjLightSettings.ambientColor[1] =
+                    play->envCtx.adjLightSettings.ambientColor[2] = 250;
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;

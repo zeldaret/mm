@@ -5,7 +5,7 @@
 
 #define OBJLIFT_GET_1(thisx) ((thisx)->params & 1)
 #define OBJLIFT_GET_7(thisx) (((thisx)->params >> 8) & 7)
-#define OBJLIFT_GET_7F(thisx) (((thisx)->params >> 1) & 0x7F)
+#define OBJLIFT_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 1) & 0x7F)
 
 struct ObjLift;
 

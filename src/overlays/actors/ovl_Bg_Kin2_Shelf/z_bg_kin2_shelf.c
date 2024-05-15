@@ -24,15 +24,15 @@ void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
 ActorInit Bg_Kin2_Shelf_InitVars = {
-    ACTOR_BG_KIN2_SHELF,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Shelf),
-    (ActorFunc)BgKin2Shelf_Init,
-    (ActorFunc)BgKin2Shelf_Destroy,
-    (ActorFunc)BgKin2Shelf_Update,
-    (ActorFunc)BgKin2Shelf_Draw,
+    /**/ ACTOR_BG_KIN2_SHELF,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Shelf),
+    /**/ BgKin2Shelf_Init,
+    /**/ BgKin2Shelf_Destroy,
+    /**/ BgKin2Shelf_Update,
+    /**/ BgKin2Shelf_Draw,
 };
 
 f32 D_80B70750[] = { 60.0f, 120.0f };
@@ -185,7 +185,7 @@ s32 func_80B6FEBC(BgKin2Shelf* this, PlayState* play) {
     return false;
 }
 
-s32 func_80B6FF28(BgKin2Shelf* this, PlayState* play) {
+bool func_80B6FF28(BgKin2Shelf* this, PlayState* play) {
     return (this->unk_165 > 8) && func_80B6FE48(this, play) && func_80B6FEBC(this, play) && !func_80B6FE08(this, play);
 }
 

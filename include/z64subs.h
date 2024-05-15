@@ -97,7 +97,7 @@ typedef struct ActorPathing {
     /* 0x68 */ ActorPathingUpdateFunc setNextPointFunc; // Return true if should compute and update again
 } ActorPathing; // size = 0x6C
 
-struct EnDoor* SubS_FindDoor(struct PlayState* play, s32 switchFlag);
+struct EnDoor* SubS_FindScheduleDoor(struct PlayState* play, s32 schType);
 
 Gfx* SubS_DrawTransformFlexLimb(struct PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
 Gfx* SubS_DrawTransformFlex(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx);
@@ -133,7 +133,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 s32 SubS_Offer(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode);
 
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
 s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
@@ -147,8 +147,8 @@ s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);
 s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* distSq);
 
-s8 SubS_IsObjectLoaded(s8 index, struct PlayState* play);
-s8 SubS_GetObjectIndex(s16 id, struct PlayState* play);
+s8 SubS_IsObjectLoaded(s8 objectSlot, struct PlayState* play);
+s8 SubS_GetObjectSlot(s16 objectId, struct PlayState* play);
 
 Actor* SubS_FindActor(struct PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId);
 

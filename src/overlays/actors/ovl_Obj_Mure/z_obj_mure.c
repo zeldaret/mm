@@ -5,6 +5,10 @@
  */
 
 #include "z_obj_mure.h"
+#include "overlays/actors/ovl_En_Butte/z_en_butte.h"
+#include "overlays/actors/ovl_En_Fish/z_en_fish.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
+#include "overlays/actors/ovl_En_Kusa/z_en_kusa.h"
 
 #define FLAGS 0x00000000
 
@@ -21,19 +25,23 @@ void ObjMure_KillActors(ObjMure* this, PlayState* play);
 void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
 ActorInit Obj_Mure_InitVars = {
-    ACTOR_OBJ_MURE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMure),
-    (ActorFunc)ObjMure_Init,
-    (ActorFunc)ObjMure_Destroy,
-    (ActorFunc)ObjMure_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MURE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMure),
+    /**/ ObjMure_Init,
+    /**/ ObjMure_Destroy,
+    /**/ ObjMure_Update,
+    /**/ NULL,
 };
 
-static f32 sZClip[] = {
-    1600.0f, 1600.0f, 1000.0f, 1000.0f, 1000.0f,
+static f32 sZClip[OBJMURE_TYPE_MAX] = {
+    1600.0f, // OBJMURE_TYPE_GRASS
+    1600.0f, // OBJMURE_TYPE_UNDEFINED
+    1000.0f, // OBJMURE_TYPE_FISH
+    1000.0f, // OBJMURE_TYPE_BUGS
+    1000.0f, // OBJMURE_TYPE_BUTTERFLY
 };
 
 static s32 sMaxChildSpawns[] = {
@@ -43,12 +51,20 @@ static s32 sMaxChildSpawns[] = {
     0,
 };
 
-static s16 sSpawnActorIds[] = {
-    ACTOR_EN_KUSA, 0, ACTOR_EN_FISH, ACTOR_EN_INSECT, ACTOR_EN_BUTTE,
+static s16 sSpawnActorIds[OBJMURE_TYPE_MAX] = {
+    ACTOR_EN_KUSA,   // OBJMURE_TYPE_GRASS
+    ACTOR_PLAYER,    // OBJMURE_TYPE_UNDEFINED
+    ACTOR_EN_FISH,   // OBJMURE_TYPE_FISH
+    ACTOR_EN_INSECT, // OBJMURE_TYPE_BUGS
+    ACTOR_EN_BUTTE,  // OBJMURE_TYPE_BUTTERFLY
 };
 
-static s16 sSpawnParams[] = {
-    0, 2, -1, 0, -1,
+static s16 sSpawnParams[OBJMURE_TYPE_MAX] = {
+    KUSA_BUSH_PARAMS(false, 0, false),   // OBJMURE_TYPE_GRASS
+    PLAYER_PARAMS(2, PLAYER_INITMODE_0), // OBJMURE_TYPE_UNDEFINED
+    FISH_PARAMS(ENFISH_MINUS1),          // OBJMURE_TYPE_FISH
+    ENINSECT_PARAMS(false),              // OBJMURE_TYPE_BUGS
+    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),  // OBJMURE_TYPE_BUTTERFLY
 };
 
 static InitChainEntry sInitChain[] = {
@@ -56,15 +72,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1200, ICHAIN_STOP),
 };
-
-typedef enum {
-    /* 0 */ OBJMURE_TYPE_GRASS,
-    /* 1 */ OBJMURE_TYPE_UNDEFINED,
-    /* 2 */ OBJMURE_TYPE_FISH,
-    /* 3 */ OBJMURE_TYPE_BUGS,
-    /* 4 */ OBJMURE_TYPE_BUTTERFLY,
-    /* 5 */ OBJMURE_TYPE_MAX
-} ObjMureType;
 
 typedef enum {
     /* 0 */ OBJMURE_CHILD_STATE_0,
@@ -307,7 +314,7 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
                 i2++;
                 this->children[i]->child = this->children[i];
                 for (j = 0; j < maxChildren; j++) {
-                    if (i != j && this->children[j]->child == this->children[i]) {
+                    if ((i != j) && (this->children[j]->child == this->children[i])) {
                         this->children[j]->child = NULL;
                     }
                 }

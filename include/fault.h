@@ -2,12 +2,14 @@
 #define FAULT_H
 
 #include "ultra64.h"
-#include "unk.h"
+
 #include "libc/stdarg.h"
 #include "libc/stdint.h"
-#include "io/controller.h"
+#include "PR/controller.h"
+
 #include "padmgr.h"
 #include "stack.h"
+#include "unk.h"
 
 // These are the same as the 3-bit ansi color codes
 #define FAULT_COLOR_BLACK      0
@@ -103,7 +105,7 @@ typedef struct FaultMgr {
     /* 0x844 */ void* fb;
 } FaultMgr; // size = 0x848
 
-extern FaultMgr gFaultMgr;
-
+// TODO: Commented out to try to avoid bss reorder in fault.c
+// extern FaultMgr gFaultMgr;
 
 #endif

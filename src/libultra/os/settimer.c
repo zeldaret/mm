@@ -1,17 +1,17 @@
-#include "global.h"
+#include "ultra64.h"
 
-int osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMesg msg) {
-    OSTime tim;
-    OSTimer* spC;
-    u32 sp14;
-    u32 sp10;
+int osSetTimer(OSTimer* t, OSTime countdown, OSTime interval, OSMesgQueue* mq, OSMesg msg) {
+    OSTime time;
+    OSTimer* next;
+    u32 count;
+    u32 value;
     u32 saveMask;
 
     t->next = NULL;
     t->prev = NULL;
     t->interval = interval;
-    if (value != 0) {
-        t->value = value;
+    if (countdown != 0) {
+        t->value = countdown;
     } else {
         t->value = interval;
     }
@@ -20,21 +20,19 @@ int osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMes
 
     saveMask = __osDisableInt();
 
-    if (__osTimerList->next != __osTimerList) {
-        //! FAKE:
-        if (1) {}
-
-        spC = __osTimerList->next;
-        sp14 = osGetCount();
-        sp10 = sp14 - __osTimerCounter;
-        if (sp10 < spC->value) {
-            spC->value -= sp10;
+    if (__osTimerList->next == __osTimerList) {
+    } else {
+        next = __osTimerList->next;
+        count = osGetCount();
+        value = count - __osTimerCounter;
+        if (value < next->value) {
+            next->value -= value;
         } else {
-            spC->value = 1;
+            next->value = 1;
         }
     }
 
-    tim = __osInsertTimer(t);
+    time = __osInsertTimer(t);
     __osSetTimerIntr(__osTimerList->next->value);
 
     __osRestoreInt(saveMask);

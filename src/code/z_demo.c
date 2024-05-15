@@ -1,9 +1,25 @@
 #include "prevent_bss_reordering.h"
-#include "global.h"
+#include "prevent_bss_reordering2.h"
+
+#include "PR/ultratypes.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+struct CutsceneCamera;
+
+s16 sCutsceneQuakeIndex;
+struct CutsceneCamera sCutsceneCameraInfo;
+u16 sCueTypeList[10];
+u8 D_801F4DDC;
+static s16 sBssPad;
+u8 gDisablePlayerCsActionStartPos;
+s16 gDungeonBossWarpSceneId;
+
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 void CutsceneHandler_DoNothing(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StartManual(PlayState* play, CutsceneContext* csCtx);
@@ -13,23 +29,11 @@ void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 
-// Unused
-UNK_TYPE4 D_801BB120 = 0;
+static s32 sPad = 0;
 u16 sCurTextId = 0;
 u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
-
-// bss
-#ifndef NON_MATCHING
-static u16 sSeqId;
-#endif
-s16 sCutsceneQuakeIndex;
-CutsceneCamera sCutsceneCameraInfo;
-u16 sCueTypeList[10];
-UNK_TYPE D_801F4DDC;
-u8 gDisablePlayerCsModeStartPos;
-s16 gDungeonBossWarpSceneId;
 
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
@@ -44,7 +48,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    gDisablePlayerCsModeStartPos = false;
+    gDisablePlayerCsActionStartPos = false;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -151,8 +155,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     switch (cmd->type) {
         case CS_MISC_RAIN:
             if (isFirstFrame) {
-                func_800FD78C(play);
-                play->envCtx.unk_F2[0] = 60;
+                Environment_PlayStormNatureAmbience(play);
+                play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
             }
             break;
 
@@ -160,21 +164,21 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
-                D_801F4E68 = 1;
+                gLightningStrike.state = LIGHTNING_STRIKE_START;
             }
             break;
 
         case CS_MISC_LIFT_FOG:
-            if (play->envCtx.lightSettings.zFar < 12800) {
-                play->envCtx.lightSettings.zFar += 35;
+            if (play->envCtx.adjLightSettings.zFar < 12800) {
+                play->envCtx.adjLightSettings.zFar += 35;
             }
             break;
 
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
-                play->envCtx.changeSkyboxState = 1;
-                play->envCtx.skyboxConfig = 1;
-                play->envCtx.changeSkyboxNextConfig = 0;
+                play->envCtx.changeSkyboxState = CHANGE_SKYBOX_REQUESTED;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_1;
+                play->envCtx.changeSkyboxNextConfig = SKYBOX_CONFIG_0;
                 play->envCtx.changeSkyboxTimer = 60;
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.lightConfig = 0;
@@ -194,7 +198,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(play, loadedScene->titleTextId);
+                    Message_DisplaySceneTitleCard(play, loadedScene->titleTextId);
                 }
             }
             break;
@@ -216,17 +220,17 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_VISMONO_BLACK_AND_WHITE:
-            gVisMonoColor.r = 255;
-            gVisMonoColor.g = 255;
-            gVisMonoColor.b = 255;
-            gVisMonoColor.a = 255 * lerp;
+            gPlayVisMonoColor.r = 255;
+            gPlayVisMonoColor.g = 255;
+            gPlayVisMonoColor.b = 255;
+            gPlayVisMonoColor.a = 255 * lerp;
             break;
 
         case CS_MISC_VISMONO_SEPIA:
-            gVisMonoColor.r = 255;
-            gVisMonoColor.g = 180;
-            gVisMonoColor.b = 100;
-            gVisMonoColor.a = 255 * lerp;
+            gPlayVisMonoColor.r = 255;
+            gPlayVisMonoColor.g = 180;
+            gPlayVisMonoColor.b = 100;
+            gPlayVisMonoColor.a = 255 * lerp;
             break;
 
         case CS_MISC_HIDE_ROOM:
@@ -235,16 +239,16 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_RED_PULSATING_LIGHTS:
             if (play->state.frames & 8) {
-                if (play->envCtx.lightSettings.ambientColor[0] < 40) {
-                    play->envCtx.lightSettings.ambientColor[0] += 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] -= 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] -= 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] < 40) {
+                    play->envCtx.adjLightSettings.ambientColor[0] += 2;
+                    play->envCtx.adjLightSettings.light1Color[1] -= 3;
+                    play->envCtx.adjLightSettings.light1Color[2] -= 3;
                 }
             } else {
-                if (play->envCtx.lightSettings.ambientColor[0] > 2) {
-                    play->envCtx.lightSettings.ambientColor[0] -= 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] += 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] += 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] > 2) {
+                    play->envCtx.adjLightSettings.ambientColor[0] -= 2;
+                    play->envCtx.adjLightSettings.light1Color[1] += 3;
+                    play->envCtx.adjLightSettings.light1Color[2] += 3;
                 }
             }
             break;
@@ -259,7 +263,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_SANDSTORM_FILL:
             if (isFirstFrame) {
-                play->envCtx.sandstormState = 1;
+                play->envCtx.sandstormState = SANDSTORM_FILL;
             }
             Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
@@ -270,9 +274,9 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_FREEZE_TIME:
             if (!gSaveContext.save.isNight) {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)R_TIME_SPEED;
+                gSaveContext.save.time = CURRENT_TIME - (u16)R_TIME_SPEED;
             } else {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * R_TIME_SPEED);
+                gSaveContext.save.time = CURRENT_TIME - (u16)(2 * R_TIME_SPEED);
             }
             break;
 
@@ -328,7 +332,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_MOON_CRASH_SKYBOX:
             if (isFirstFrame) {
-                play->envCtx.skyboxConfig = 0xD;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_13;
             }
             break;
 
@@ -336,12 +340,12 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
 
-        case CS_MISC_DISABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = true;
+        case CS_MISC_DISABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = true;
             break;
 
-        case CS_MISC_ENABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = false;
+        case CS_MISC_ENABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = false;
             break;
 
         case CS_MISC_SAVE_ENTER_CLOCK_TOWN:
@@ -361,9 +365,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
                 D_801BB15C = csCtx->curFrame;
 
                 if (R_TIME_SPEED != 0) {
-                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-                    gSaveContext.save.time =
-                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+                    gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
+                    gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                 }
             }
             break;
@@ -406,7 +409,7 @@ void CutsceneCmd_SetLightSetting(PlayState* play, CutsceneContext* csCtx, CsCmdL
             play->envCtx.lightSettingOverride = cmd->settingPlusOne - 1;
             play->envCtx.lightBlend = 1.0f;
         } else {
-            play->envCtx.lightSettingOverride = 0xFF;
+            play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         }
     }
 }
@@ -453,8 +456,6 @@ void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCm
     }
 }
 
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd) {
     static u16 sSeqId;
     u8 dayMinusOne;
@@ -505,10 +506,6 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
         }
     }
 }
-#else
-void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s")
-#endif
 
 void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdFadeOutAmbience* cmd) {
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
@@ -816,8 +813,9 @@ void CutsceneCmd_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmd
             if (player->tatlActor != NULL) {
                 return;
             }
-            player->tatlActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x,
-                                            player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+            player->tatlActor =
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x, player->actor.world.pos.y,
+                            player->actor.world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
         }
     }
 }
@@ -1045,7 +1043,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         if (sCurOcarinaAction != cmd->textId) {
             sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
             sCurOcarinaAction = cmd->textId;
-            func_80152434(play, cmd->textId);
+            Message_DisplayOcarinaStaff(play, cmd->textId);
             return;
         }
     }
@@ -1055,8 +1053,8 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         // a textbox that is expected to be closed by the user is still open.
         endFrame = csCtx->curFrame;
         talkState = Message_GetState(&play->msgCtx);
-        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
-            (talkState != TEXT_STATE_8)) {
+        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) &&
+            (talkState != TEXT_STATE_SONG_DEMO_DONE) && (talkState != TEXT_STATE_8)) {
             csCtx->curFrame--;
 
             if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
@@ -1099,8 +1097,8 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 }
             }
 
-            if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_80152434(play, cmd->textId);
+            if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
+                Message_DisplayOcarinaStaff(play, cmd->textId);
             }
         }
 
@@ -1129,7 +1127,7 @@ void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {
     *script += sizeof(numCues);
 
     for (i = 0; i < numCues; i++) {
-        CsCmdActorCue* cue = *(CsCmdActorCue**)script;
+        CsCmdActorCue* cue = (CsCmdActorCue*)(*script);
 
         if ((csCtx->curFrame >= cue->startFrame) && (csCtx->curFrame < cue->endFrame)) {
             csCtx->actorCues[cueChannel] = cue;
@@ -1567,7 +1565,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, scene->titleTextId);
+                Message_DisplaySceneTitleCard(play, scene->titleTextId);
             }
         }
 
@@ -1647,7 +1645,7 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueC
 
     VEC3F_LERPIMPDST(&actor->world.pos, &startPos, &endPos, lerp);
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1672,7 +1670,7 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cu
     actor->world.pos.x = startPos.x + (endPos.x - startPos.x) * lerp;
     actor->world.pos.z = startPos.z + (endPos.z - startPos.z) * lerp;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 

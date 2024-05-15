@@ -21,6 +21,13 @@ typedef enum AdsrStatus {
     /* 8 */ ADSR_STATUS_SUSTAIN
 } AdsrStatus;
 
+// Special commands for `delay` in `EnvelopePoint`
+// Any value above 0 is treated as a delay
+#define ADSR_DISABLE 0
+#define ADSR_HANG -1
+#define ADSR_GOTO -2
+#define ADSR_RESTART -3
+
 typedef struct EnvelopePoint {
     /* 0x0 */ s16 delay;
     /* 0x2 */ s16 arg;

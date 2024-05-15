@@ -2,6 +2,7 @@
 #define Z_EN_GM_H
 
 #include "global.h"
+#include "objects/object_in2/object_in2.h"
 
 struct EnGm;
 
@@ -32,7 +33,7 @@ typedef struct EnGm {
     /* 0x25C */ s32 unk_25C;
     /* 0x260 */ s8 unk_260;
     /* 0x261 */ s8 unk_261;
-    /* 0x262 */ s8 unk_262;
+    /* 0x262 */ s8 objectSlot;
     /* 0x264 */ s32* unk_264;
     /* 0x268 */ Actor* unk_268;
     /* 0x26C */ UNK_TYPE1 unk_26C[0xC];
@@ -42,11 +43,11 @@ typedef struct EnGm {
     /* 0x29C */ Vec3f unk_29C;
     /* 0x2A8 */ Vec3s unk_2A8;
     /* 0x2AE */ Vec3s unk_2AE;
-    /* 0x2B4 */ Vec3s jointTable[20];
-    /* 0x32C */ Vec3s morphTable[20];
+    /* 0x2B4 */ Vec3s jointTable[OBJECT_IN2_LIMB_MAX];
+    /* 0x32C */ Vec3s morphTable[OBJECT_IN2_LIMB_MAX];
     /* 0x3A4 */ u16 unk_3A4;
     /* 0x3A6 */ u16 unk_3A6;
-    /* 0x3A8 */ f32 unk_3A8;
+    /* 0x3A8 */ f32 animPlaySpeed;
     /* 0x3AC */ f32 unk_3AC;
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ f32 unk_3B4;
@@ -69,7 +70,7 @@ typedef struct EnGm {
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
     /* 0x3E4 */ EnGmUnkFunc unk_3E4;
-    /* 0x3E8 */ s32 unk_3E8;
+    /* 0x3E8 */ s32 animIndex;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
     /* 0x3F0 */ s32 prevTalkState;
     /* 0x3F4 */ s32 unk_3F4;

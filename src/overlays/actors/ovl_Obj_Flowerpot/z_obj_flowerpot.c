@@ -4,7 +4,6 @@
  * Description: Breakable Pot With Grass
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_flowerpot.h"
 #include "objects/object_flowerpot/object_flowerpot.h"
 
@@ -33,15 +32,15 @@ s16 D_80A1DA3E;
 s16 D_80A1DA40;
 
 ActorInit Obj_Flowerpot_InitVars = {
-    ACTOR_OBJ_FLOWERPOT,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FLOWERPOT,
-    sizeof(ObjFlowerpot),
-    (ActorFunc)ObjFlowerpot_Init,
-    (ActorFunc)ObjFlowerpot_Destroy,
-    (ActorFunc)ObjFlowerpot_Update,
-    (ActorFunc)ObjFlowerpot_Draw,
+    /**/ ACTOR_OBJ_FLOWERPOT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FLOWERPOT,
+    /**/ sizeof(ObjFlowerpot),
+    /**/ ObjFlowerpot_Init,
+    /**/ ObjFlowerpot_Destroy,
+    /**/ ObjFlowerpot_Update,
+    /**/ ObjFlowerpot_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -255,7 +254,7 @@ void func_80A1BA44(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spC4, &spB8, &spC4, -600, phi_s0, 30, 0, 0, (Rand_ZeroOne() * 12.0f) + 16.6f,
-                             phi_s1, 0, 35, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             phi_s1, 0, 35, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spD0.y += 20.0f;
@@ -298,14 +297,14 @@ void func_80A1BD80(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spBC, &spB0, &spBC, -240, phi_s0, 40, 0, 0, (Rand_ZeroOne() * 20.0f) + 10.6f, 0, 0,
-                             42, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             42, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spBC.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (phi_s1 = 0, i = 0; i < 4; i++, phi_s1 += 0x4000) {
-        spBC.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f) + this->actor.world.pos.x;
-        spBC.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f) + this->actor.world.pos.z;
+        spBC.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f);
+        spBC.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f);
         EffectSsGSplash_Spawn(play, &spBC, NULL, NULL, 0, 200);
     }
 
@@ -338,7 +337,7 @@ void func_80A1C0FC(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -100, 64, 40, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 
@@ -365,7 +364,7 @@ void func_80A1C328(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -80, 64, 44, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 
@@ -634,7 +633,7 @@ void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
     Actor_MoveWithGravity(thisx);
 
     if (!(this->unk_1EA & 2)) {
-        D_80A1D3F8 += (s16)(thisx->shape.rot.x * -0.06f);
+        D_80A1D3F8 += TRUNCF_BINANG(thisx->shape.rot.x * -0.06f);
     } else {
         Math_StepToS(&D_80A1D3F8, 0, 80);
         Math_StepToS(&D_80A1D3FC, 0, 20);

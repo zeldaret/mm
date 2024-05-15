@@ -49,25 +49,22 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Col_Man_InitVars = {
-    ACTOR_EN_COL_MAN,
-    ACTORCAT_MISC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnColMan),
-    (ActorFunc)EnColMan_Init,
-    (ActorFunc)EnColMan_Destroy,
-    (ActorFunc)EnColMan_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_COL_MAN,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnColMan),
+    /**/ EnColMan_Init,
+    /**/ EnColMan_Destroy,
+    /**/ EnColMan_Update,
+    /**/ NULL,
 };
-
-static Color_RGBA8 primColor = { 60, 50, 20, 255 };
-static Color_RGBA8 envColor = { 40, 30, 30, 255 };
 
 void EnColMan_Init(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->scale = (BREG(55) / 1000.0f) + 0.01f;
 
     switch (this->actor.params) {
@@ -77,10 +74,12 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDD60(this);
             break;
+
         case EN_COL_MAN_FALLING_ROCK:
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDF60(this);
             break;
+
         case EN_COL_MAN_CUTSCENE_BOMB:
         case EN_COL_MAN_GAMEPLAY_BOMB:
             func_80AFE234(this);
@@ -95,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -124,14 +123,14 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
             this->actor.speed = 0.0f;
         }
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -140,7 +139,7 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_56_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE);
         Actor_Kill(&this->actor);
     }
 }
@@ -156,6 +155,8 @@ void func_80AFDF60(EnColMan* this) {
 }
 
 void func_80AFDFB4(EnColMan* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 60, 50, 20, 255 };
+    static Color_RGBA8 sEnvColor = { 40, 30, 30, 255 };
     s32 i;
     Vec3f velocity;
     Vec3f accel;
@@ -180,7 +181,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
             accel.z = 0.0f;
             accel.x = 0.0f;
 
-            func_800B0EB0(play, &this->actor.world.pos, &velocity, &accel, &primColor, &envColor,
+            func_800B0EB0(play, &this->actor.world.pos, &velocity, &accel, &sPrimColor, &sEnvColor,
                           Rand_ZeroFloat(50.0f) + 60.0f, 30, Rand_ZeroFloat(5.0f) + 20.0f);
         }
 

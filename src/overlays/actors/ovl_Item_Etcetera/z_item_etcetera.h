@@ -32,7 +32,7 @@ typedef struct ItemEtcetera {
     /* 0x144 */ ItemEtceteraActionFunc futureActionFunc;
     /* 0x148 */ s16 getItemDrawId;
     /* 0x14A */ s16 getItemId;
-    /* 0x14C */ u8 objIndex;
+    /* 0x14C */ u8 objectSlot;
     /* 0x150 */ ActorFunc drawFunc;
     /* 0x154 */ ItemEtceteraActionFunc actionFunc;
 } ItemEtcetera; // size = 0x158

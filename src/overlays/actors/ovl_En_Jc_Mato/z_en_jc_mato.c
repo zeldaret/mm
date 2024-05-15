@@ -21,15 +21,15 @@ void EnJcMato_SetupIdle(EnJcMato* this);
 void EnJcMato_Idle(EnJcMato* this, PlayState* play);
 
 ActorInit En_Jc_Mato_InitVars = {
-    ACTOR_EN_JC_MATO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_TRU,
-    sizeof(EnJcMato),
-    (ActorFunc)EnJcMato_Init,
-    (ActorFunc)EnJcMato_Destroy,
-    (ActorFunc)EnJcMato_Update,
-    (ActorFunc)EnJcMato_Draw,
+    /**/ ACTOR_EN_JC_MATO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_TRU,
+    /**/ sizeof(EnJcMato),
+    /**/ EnJcMato_Init,
+    /**/ EnJcMato_Destroy,
+    /**/ EnJcMato_Update,
+    /**/ EnJcMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -122,7 +122,7 @@ void EnJcMato_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
-    this->collider.dim.worldSphere.radius = 0xF;
+    this->collider.dim.worldSphere.radius = 15;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = false;

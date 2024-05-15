@@ -30,15 +30,15 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 #define ENMTHUNDER_TYPE_MAX 4
 
 ActorInit En_M_Thunder_InitVars = {
-    ACTOR_EN_M_THUNDER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMThunder),
-    (ActorFunc)EnMThunder_Init,
-    (ActorFunc)EnMThunder_Destroy,
-    (ActorFunc)EnMThunder_Update,
-    (ActorFunc)EnMThunder_Draw,
+    /**/ ACTOR_EN_M_THUNDER,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMThunder),
+    /**/ EnMThunder_Init,
+    /**/ EnMThunder_Destroy,
+    /**/ EnMThunder_Update,
+    /**/ EnMThunder_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -66,7 +66,15 @@ static u8 sDamages[] = {
     1, 2, 3, 4, // Great Spin
 };
 
-static u16 sChargingSfxIds[] = {
+typedef enum {
+    /* 0 */ ENMTHUNDER_SUBTYPE_SPIN_GREAT,
+    /* 1 */ ENMTHUNDER_SUBTYPE_SPIN_REGULAR,
+    /* 2 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT,
+    /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR,
+    /* 4 */ ENMTHUNDER_SUBTYPE_MAX
+} EnMThunderSubType;
+
+static u16 sChargingSfxIds[ENMTHUNDER_SUBTYPE_MAX] = {
     NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SPIN_GREAT
     NA_SE_IT_ROLLING_CUT_LV1, // ENMTHUNDER_SUBTYPE_SPIN_REGULAR
     NA_SE_IT_ROLLING_CUT_LV2, // ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT
@@ -74,13 +82,6 @@ static u16 sChargingSfxIds[] = {
 };
 
 static f32 sScales[] = { 0.1f, 0.15f, 0.2f, 0.25f, 0.3f, 0.25f, 0.2f, 0.15f, 0.0f };
-
-typedef enum {
-    /* 0 */ ENMTHUNDER_SUBTYPE_SPIN_GREAT,
-    /* 1 */ ENMTHUNDER_SUBTYPE_SPIN_REGULAR,
-    /* 2 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_GREAT,
-    /* 3 */ ENMTHUNDER_SUBTYPE_SWORDBEAM_REGULAR
-} EnMThunderSubType;
 
 void EnMThunder_UnkType_Setup(EnMThunder* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -119,7 +120,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.yShift = -20;
     this->timer = 8;
     this->scroll = 0.0f;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->lightColorFrac = 0.0f;
     this->adjustLightsArg1 = 0.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
@@ -143,7 +144,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
         this->isCharging = false;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK)) {
             player->unk_B08 = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
@@ -203,7 +204,7 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_AdjustLights(PlayState* play, f32 arg1) {
-    func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
+    Environment_AdjustLights(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
 void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
@@ -230,7 +231,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     Actor* child = this->actor.child;
 
     this->unk1B0 = player->unk_B08;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if (!this->isCharging && (player->unk_B08 >= 0.1f)) {
@@ -380,8 +381,8 @@ void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     }
 
     if (this->timer > 0) {
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+        this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
         this->timer--;
     }
 

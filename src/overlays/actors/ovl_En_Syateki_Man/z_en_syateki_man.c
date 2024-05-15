@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -87,24 +87,25 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
 ActorInit En_Syateki_Man_InitVars = {
-    ACTOR_EN_SYATEKI_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SHN,
-    sizeof(EnSyatekiMan),
-    (ActorFunc)EnSyatekiMan_Init,
-    (ActorFunc)EnSyatekiMan_Destroy,
-    (ActorFunc)EnSyatekiMan_Update,
-    (ActorFunc)EnSyatekiMan_Draw,
+    /**/ ACTOR_EN_SYATEKI_MAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SHN,
+    /**/ sizeof(EnSyatekiMan),
+    /**/ EnSyatekiMan_Init,
+    /**/ EnSyatekiMan_Destroy,
+    /**/ EnSyatekiMan_Update,
+    /**/ EnSyatekiMan_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryManAnimation {
     /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
-    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END,
+    /* 3 */ SG_MAN_ANIM_MAX
 } ShootingGalleryManAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_MAN_ANIM_MAX] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
     { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
     { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END
@@ -205,7 +206,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHeadScratchLoopAnim, this->jointTable,
@@ -248,24 +249,25 @@ void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
  * Moves the player to the destination through automated control stick movements.
  * This is used to move the player to the right place to play the shooting game.
  */
-s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f pos) {
+s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f targetPos) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
-    f32 magnitude;
-    s16 yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &pos);
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
 
-    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &pos);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
 
     if (distXZ < 5.0f) {
-        magnitude = 10.0f;
+        controlStickMagnitude = 10.0f;
     } else if (distXZ < 30.0f) {
-        magnitude = 40.0f;
+        controlStickMagnitude = 40.0f;
     } else {
-        magnitude = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = 1;
-    func_800B6F20(play, &play->actorCtx.unk_26C, magnitude, yaw);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
     if (distXZ < 5.0f) {
         return true;
@@ -285,7 +287,7 @@ void EnSyatekiMan_SetupIdle(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HEAD_SCRATCH_END);
@@ -362,7 +364,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 Rupees_ChangeBy(-20);
                 SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                 player->stateFlags1 |= PLAYER_STATE1_20;
@@ -415,7 +417,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
             case 0xA2B: // The rules of the game are a piece of cake!
             case 0xA2C: // I keep saying - you have to aim with [Control Stick]!
             case 0xA35: // You almost had it! Well...just this once...here you go!
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 Interface_InitMinigame(play);
@@ -450,7 +452,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 break;
 
             case 0xA34: // Perfect! Take this!
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
@@ -479,13 +481,13 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Swamp_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Swamp_HandleNormalMessage(this, play);
             break;
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
@@ -496,12 +498,12 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 
@@ -617,7 +619,7 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Town_Idle(EnSyatekiMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         u16 faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_TOWN_SHOOTING_GALLERY_MAN);
 
         if (faceReactionTextId != 0) {
@@ -764,7 +766,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                         this->prevTextId = 0x400;
                     }
                 } else {
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
                     player->actor.freezeTimer = 0;
                     this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
@@ -777,7 +779,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
 
             case 0x3FE: // Our highest score is [score]. If you break the record, you'll win a prize!
             case 0x400: // Our highest score is [score]. Good luck!
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
@@ -827,7 +829,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
             case 0x405: // No way! That was perfect!
             case 0x406: // That was perfect!
             case 0x407: // You got a new record!
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
@@ -855,7 +857,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Town_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Town_HandleNormalMessage(this, play);
             break;
 
@@ -870,12 +872,12 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 }
@@ -915,8 +917,8 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((CURRENT_DAY == 3) && (gSaveContext.save.time > CLOCK_TIME(12, 0))) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        if ((CURRENT_DAY == 3) && (CURRENT_TIME > CLOCK_TIME(12, 0))) {
             // We've been having a lot of earthquakes lately.
             Message_StartTextbox(play, 0xA36, &this->actor);
             this->prevTextId = 0xA36;
@@ -987,7 +989,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             this->actionFunc = EnSyatekiMan_SetupIdle;
         }
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         // This may be our last day in business...
         Message_StartTextbox(play, 0x408, &this->actor);
         this->prevTextId = 0x408;
@@ -1140,8 +1142,8 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
         this->guayFlags = 0;
         this->wolfosFlags = 0;
         if (this->talkWaitTimer <= 0) {
-            if (GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
-                SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
+            if (HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
+                HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
             }
 
             this->talkWaitTimer = 15;
@@ -1409,8 +1411,8 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
         if ((this->talkWaitTimer <= 0) && !play->interfaceCtx.perfectLettersOn) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;
-            if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
-                if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
+            if ((HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
+                if (HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
@@ -1430,7 +1432,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
                     this->prevTextId = 0x406;
                 }
 
-                SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(this->score);
+                HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(this->score);
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else {
                 if (CURRENT_DAY != 3) {

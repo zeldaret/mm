@@ -27,15 +27,15 @@ void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
 ActorInit Obj_Snowball2_InitVars = {
-    ACTOR_OBJ_SNOWBALL2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(ObjSnowball2),
-    (ActorFunc)ObjSnowball2_Init,
-    (ActorFunc)ObjSnowball2_Destroy,
-    (ActorFunc)ObjSnowball2_Update,
-    (ActorFunc)ObjSnowball2_Draw,
+    /**/ ACTOR_OBJ_SNOWBALL2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GOROIWA,
+    /**/ sizeof(ObjSnowball2),
+    /**/ ObjSnowball2_Init,
+    /**/ ObjSnowball2_Destroy,
+    /**/ ObjSnowball2_Update,
+    /**/ ObjSnowball2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -198,8 +198,8 @@ void func_80B39470(Actor* thisx, PlayState* play) {
     sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (phi_s0 = 0, i = 0; i < 5; i++, phi_s0 += (0x10000 / 5)) {
-        sp58.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
-        sp58.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.z;
+        sp58.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f);
+        sp58.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f);
         EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 200);
     }
 
@@ -531,48 +531,48 @@ void func_80B3A498(ObjSnowball2* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.home.pos.y = this->actor.world.pos.y + this->actor.depthInWater;
     this->actor.home.pos.z = this->actor.world.pos.z;
-    this->actor.world.pos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
+    this->actor.world.pos.y += this->actor.shape.yOffset * this->actor.scale.y;
     this->actor.shape.yOffset = 0.0f;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80B3A500;
 }
 
 void func_80B3A500(ObjSnowball2* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     f32 phi_f0;
-    s32 pad;
-    f32 temp_f14 = this->actor.home.pos.y - this->actor.world.pos.y;
-    f32 temp_f12 = this->actor.scale.y * 600.0f;
+    f32 temp_f14 = thisx->home.pos.y - thisx->world.pos.y;
+    f32 temp_f12 = thisx->scale.y * 600.0f;
 
     this->unk_1AC--;
 
-    this->actor.speed *= 0.7f;
+    thisx->speed *= 0.7f;
 
     this->unk_1A8 >>= 1;
     this->unk_1AA >>= 1;
 
-    this->actor.shape.rot.x += this->unk_1A8;
-    this->actor.shape.rot.y += this->unk_1AA;
+    thisx->shape.rot.x += this->unk_1A8;
+    thisx->shape.rot.y += this->unk_1AA;
 
     if (temp_f14 < -temp_f12) {
-        this->actor.gravity = this->actor.scale.y * -40.0f;
+        thisx->gravity = thisx->scale.y * -40.0f;
         phi_f0 = 0.94f;
     } else if (temp_f12 < temp_f14) {
-        this->actor.gravity = this->actor.scale.y * 24.0f;
+        thisx->gravity = thisx->scale.y * 24.0f;
         phi_f0 = 0.8f;
     } else if (temp_f12 > 0.001f) {
-        this->actor.gravity = (((1.6f * temp_f14) / temp_f12) + -1.0f + 0.6f) * 0.5f * 40.0f * this->actor.scale.y;
+        thisx->gravity = (((1.6f * temp_f14) / temp_f12) + -1.0f + 0.6f) * 0.5f * 40.0f * thisx->scale.y;
         phi_f0 = (((-0.13999999f * temp_f14) / temp_f12) + 0.94f + 0.8f) * 0.5f;
     } else {
-        this->actor.gravity = 0.0f;
+        thisx->gravity = 0.0f;
         phi_f0 = 1.0f;
     }
 
-    this->actor.velocity.y *= phi_f0;
-    this->actor.velocity.y += this->actor.gravity;
-    this->actor.world.pos.y += this->actor.velocity.y;
+    thisx->velocity.y *= phi_f0;
+    thisx->velocity.y += thisx->gravity;
+    thisx->world.pos.y += thisx->velocity.y;
 
     if (((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) {
-        func_80B395C4(play, &this->actor.home.pos);
+        func_80B395C4(play, &thisx->home.pos);
     }
 
     if (this->unk_1AC <= 0) {
@@ -581,13 +581,12 @@ void func_80B3A500(ObjSnowball2* this, PlayState* play) {
     }
 
     if (this->unk_1AC < 20) {
-        this->actor.scale.x -= 0.00125f;
-        if (this) {}
-        this->actor.scale.y = this->actor.scale.x;
-        this->actor.scale.z = this->actor.scale.x;
+        thisx->scale.x -= 0.00125f;
+        thisx->scale.y = thisx->scale.x;
+        thisx->scale.z = thisx->scale.x;
 
         if ((this->unk_1AC >= 6) && (temp_f14 < temp_f12)) {
-            func_80B39638(play, &this->actor.home.pos);
+            func_80B39638(play, &thisx->home.pos);
         }
 
         if (this->unk_1AC == 10) {

@@ -37,15 +37,15 @@ static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
 ActorInit Obj_Kibako_InitVars = {
-    ACTOR_OBJ_KIBAKO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjKibako),
-    (ActorFunc)ObjKibako_Init,
-    (ActorFunc)ObjKibako_Destroy,
-    (ActorFunc)ObjKibako_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_KIBAKO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjKibako),
+    /**/ ObjKibako_Init,
+    /**/ ObjKibako_Destroy,
+    /**/ ObjKibako_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
-static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
+static s16 sObjectIds[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
 static Gfx* sKakeraDisplayLists[] = { gameplay_dangeon_keep_DL_007980, gSmallCrateFragmentDL };
 
@@ -135,12 +135,12 @@ void func_80926394(ObjKibako* this, PlayState* play) {
 void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjKibako* this = THIS;
-    s32 whichBankIndex;
+    s32 objectIndex;
 
-    whichBankIndex = KIBAKO_BANK_INDEX(thisx);
+    objectIndex = KIBAKO_BANK_INDEX(thisx);
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
-    if (whichBankIndex == 0) {
+    if (objectIndex == 0) {
         this->actor.uncullZoneForward = 4000.0f;
     } else {
         this->actor.uncullZoneForward = 800.0f;
@@ -149,8 +149,8 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->bankIndex = Object_GetIndex(&play->objectCtx, sObjectIdList[whichBankIndex]);
-    if (this->bankIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[objectIndex]);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -197,7 +197,7 @@ void ObjKibako_AirBreak(ObjKibako* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0, (Rand_ZeroOne() * 38.0f) + 10.0f,
-                             0, 0, 60, -1, sObjectIdList[KIBAKO_BANK_INDEX(&this->actor)],
+                             0, 0, 60, -1, sObjectIds[KIBAKO_BANK_INDEX(&this->actor)],
                              sKakeraDisplayLists[KIBAKO_BANK_INDEX(&this->actor)]);
     }
 
@@ -214,8 +214,8 @@ void ObjKibako_WaterBreak(ObjKibako* this, PlayState* play) {
 
     pos.y = worldPos->y + this->actor.depthInWater;
     for (angle = 0, i = 0; i < 5; i++, angle += 0x3333) {
-        pos.x = (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->x;
-        pos.z = (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->z;
+        pos.x = worldPos->x + (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
+        pos.z = worldPos->z + (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;
@@ -241,7 +241,7 @@ void ObjKibako_WaterBreak(ObjKibako* this, PlayState* play) {
         phi_s0 = (temp_rand < 0.2f) ? 0x40 : 0x20;
 
         EffectSsKakera_Spawn(play, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0, (Rand_ZeroOne() * 35.0f) + 10.0f,
-                             0, 0, 70, -1, sObjectIdList[KIBAKO_BANK_INDEX(&this->actor)],
+                             0, 0, 70, -1, sObjectIds[KIBAKO_BANK_INDEX(&this->actor)],
                              sKakeraDisplayLists[KIBAKO_BANK_INDEX(&this->actor)]);
     }
 }
@@ -254,9 +254,9 @@ void func_80926B54(ObjKibako* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 18.0f, 15.0f, 0.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.draw = ObjKibako_Draw;
-        this->actor.objBankIndex = this->bankIndex;
+        this->actor.objectSlot = this->objectSlot;
         ObjKibako_SetupIdle(this);
     }
 }

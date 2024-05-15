@@ -51,7 +51,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.respawn[RESPAWN_MODE_ZORA].entrance = 0xFF;
     gSaveContext.respawn[RESPAWN_MODE_DEKU].entrance = 0xFF;
     gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
-    gWeatherMode = 0;
+    gWeatherMode = WEATHER_MODE_CLEAR;
 
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
@@ -944,7 +944,7 @@ void MapSelect_PrintCutsceneSetting(MapSelectState* this, GfxPrint* printer, u16
             stage = "???";
             break;
     }
-    gSaveContext.skyboxTime = gSaveContext.save.time;
+    gSaveContext.skyboxTime = CURRENT_TIME;
     GfxPrint_Printf(printer, "Stage:" GFXP_KATAKANA "%s", stage);
 
     GfxPrint_SetPos(printer, 23, 25);
@@ -1084,7 +1084,7 @@ void MapSelect_Init(GameState* thisx) {
         this->pageDownIndex = dREG(82);
     }
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.linkAge = 0;

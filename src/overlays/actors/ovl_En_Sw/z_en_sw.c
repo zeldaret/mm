@@ -6,9 +6,8 @@
 
 #include "z_en_sw.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSw*)thisx)
 
@@ -30,15 +29,15 @@ void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
 ActorInit En_Sw_InitVars = {
-    ACTOR_EN_SW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSw),
-    (ActorFunc)EnSw_Init,
-    (ActorFunc)EnSw_Destroy,
-    (ActorFunc)EnSw_Update,
-    (ActorFunc)EnSw_Draw,
+    /**/ ACTOR_EN_SW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ST,
+    /**/ sizeof(EnSw),
+    /**/ EnSw_Init,
+    /**/ EnSw_Destroy,
+    /**/ EnSw_Update,
+    /**/ EnSw_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -135,16 +134,25 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
-    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
-    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+typedef enum EnSwAnimation {
+    /* -1 */ ENSW_ANIM_NONE = -1,
+    /*  0 */ ENSW_ANIM_0,
+    /*  1 */ ENSW_ANIM_1,
+    /*  2 */ ENSW_ANIM_2,
+    /*  3 */ ENSW_ANIM_3,
+    /*  4 */ ENSW_ANIM_MAX
+} EnSwAnimation;
+
+static AnimationInfoS sAnimationInfo[ENSW_ANIM_MAX] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },  // ENSW_ANIM_0
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 }, // ENSW_ANIM_1
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 }, // ENSW_ANIM_2
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 }, // ENSW_ANIM_3
 };
 
 void func_808D8940(EnSw* this, PlayState* play) {
-    static Color_RGBA8 D_808DBAA4 = { 170, 130, 90, 255 };
-    static Color_RGBA8 D_808DBAA8 = { 100, 60, 20, 0 };
+    static Color_RGBA8 sPrimColor = { 170, 130, 90, 255 };
+    static Color_RGBA8 sEnvColor = { 100, 60, 20, 0 };
     s32 i;
     Vec3f spB8;
     Vec3f spAC;
@@ -168,15 +176,15 @@ void func_808D8940(EnSw* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spB8);
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
-        func_800B0EB0(play, &spA0, &spB8, &spAC, &D_808DBAA4, &D_808DBAA8, 60, 30, temp_f4);
+        func_800B0EB0(play, &spA0, &spB8, &spAC, &sPrimColor, &sEnvColor, 60, 30, temp_f4);
     }
 }
 
 s32 func_808D8B58(EnSw* this) {
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % ARRAY_COUNT(this->unk_464)) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
@@ -186,41 +194,41 @@ s32 func_808D8B58(EnSw* this) {
         this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
+            this->bodyPartsPos[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
-            this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
+            this->bodyPartsPos[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
         }
-        this->unk_380[i].x = Math_SinS(phi_s2) * 10.0f;
-        this->unk_380[i].z = Math_CosS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].x = Math_SinS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].z = Math_CosS(phi_s2) * 10.0f;
     }
     this->unk_462 = 1;
     return 0;
 }
 
-s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
-    s32 ret = false;
+s32 func_808D8D60(EnSw* this, PlayState* play, s32 bodyPartIndex) {
+    s32 ret = 0;
     u8 drawDmgEffType;
-    Vec3f limbPos[1];
+    Vec3f bodyPartsPos[1];
     f32 drawDmgEffAlpha;
 
-    if (arg2 < this->unk_462) {
-        if (this->unk_464[arg2] != 0) {
-            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+    if (bodyPartIndex < this->unk_462) {
+        if (this->unk_464[bodyPartIndex] != 0) {
+            drawDmgEffAlpha = (f32)this->unk_464[bodyPartIndex] / this->unk_47C[bodyPartIndex];
             drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
-            limbPos[0].x += this->unk_380[arg2].x;
-            limbPos[0].y += this->unk_380[arg2].y;
-            limbPos[0].z += this->unk_380[arg2].z;
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[bodyPartIndex], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&bodyPartsPos[0], &this->actor.world.pos);
+            bodyPartsPos[0].x += this->bodyPartsPos[bodyPartIndex].x;
+            bodyPartsPos[0].y += this->bodyPartsPos[bodyPartIndex].y;
+            bodyPartsPos[0].z += this->bodyPartsPos[bodyPartIndex].z;
             if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
+                if ((this->unk_47C[bodyPartIndex] - this->unk_464[bodyPartIndex]) < 20) {
                     drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
                 drawDmgEffAlpha = 1.0f;
             }
-            Actor_DrawDamageEffects(play, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
-                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
-            ret = true;
+            Actor_DrawDamageEffects(play, &this->actor, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), 0.3f,
+                                    this->drawDmgEffFrozenSteamScales[bodyPartIndex], drawDmgEffAlpha, drawDmgEffType);
+            ret = 1;
         }
     }
     return ret;
@@ -230,14 +238,14 @@ void func_808D8ED0(EnSw* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_380); i++) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
-        sp54.x += this->unk_380[i].x;
-        sp54.y += this->unk_380[i].y;
-        sp54.z += this->unk_380[i].z;
-        Math_Vec3f_Copy(&this->unk_380[i], &sp54);
+        sp54.x += this->bodyPartsPos[i].x;
+        sp54.y += this->bodyPartsPos[i].y;
+        sp54.z += this->bodyPartsPos[i].z;
+        Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENSW_BODYPART_MAX, 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, PlayState* play) {
@@ -284,18 +292,19 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
 
-s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
+s32 func_808D91C4(EnSw* this, CollisionPoly* floorPoly) {
     f32 sp4C;
     f32 temp_f12;
     f32 temp_f0;
     Vec3f sp38;
     Vec3f sp2C;
 
-    this->actor.floorPoly = arg1;
-    if (arg1 != 0) {
-        sp38.x = COLPOLY_GET_NORMAL(arg1->normal.x);
-        sp38.y = COLPOLY_GET_NORMAL(arg1->normal.y);
-        sp38.z = COLPOLY_GET_NORMAL(arg1->normal.z);
+    this->actor.floorPoly = floorPoly;
+
+    if (floorPoly != NULL) {
+        sp38.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        sp38.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        sp38.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
     } else {
         return false;
     }
@@ -628,8 +637,8 @@ void func_808D9F08(EnSw* this) {
 }
 
 void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
-    if (arg2 != 0) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+    if (arg2) {
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
     Actor_SetScale(&this->actor, 0.02f);
     func_808D9DA0(this);
@@ -674,9 +683,9 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (!ENSW_GET_3(&this->actor)) {
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -756,7 +765,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
 
     if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
-        temp_s1 = (s16)(80.0f * temp_f16);
+        temp_s1 = TRUNCF_BINANG(80.0f * temp_f16);
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
@@ -1061,7 +1070,7 @@ void func_808DB100(EnSw* this, PlayState* play) {
         this->unk_456 = 0;
         this->unk_454 = 0;
         this->skelAnime.curFrame = 0.0f;
-        func_800BC154(play, &play->actorCtx, &this->actor, 4);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
         this->actionFunc = func_808DB25C;
         return;
     }
@@ -1103,7 +1112,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
     f32 temp_f2;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        func_808D9F78(this, play, 0);
+        func_808D9F78(this, play, false);
         temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
         this->actor.velocity.x *= 0.5f;
         this->actor.velocity.y = temp_f2;
@@ -1113,7 +1122,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
         if ((s32)temp_f2 != 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
-            func_800BC154(play, &play->actorCtx, &this->actor, 5);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->unk_410 &= ~(0x10 | 0x1);
             this->actionFunc = func_808DB100;
@@ -1137,8 +1146,9 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
     if (!func_808D9968(this, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
+                       OBJECT_ST_LIMB_MAX);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -1160,19 +1170,15 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
         switch (ENSW_GET_3(&this->actor)) {
             case 0:
-                func_808D9F78(this, play, 1);
+                func_808D9F78(this, play, true);
                 this->actionFunc = func_808DA350;
                 break;
 
             case 1:
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
-                if (this->actor.world.rot.z < 0) {
-                    this->unk_460 = -thisx->world.rot.z;
-                } else {
-                    this->unk_460 = thisx->world.rot.z;
-                }
+                this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
                 if (this->actor.world.rot.z >= 0) {
                     this->unk_410 |= 8;
@@ -1186,20 +1192,16 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
-                if (this->actor.world.rot.z < 0) {
-                    this->unk_460 = -thisx->world.rot.z;
-                } else {
-                    this->unk_460 = thisx->world.rot.z;
-                }
+                this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
                 if (this->actor.world.rot.z >= 0) {
                     this->unk_410 |= 8;
                 }
 
-                func_808D9F78(this, play, 1);
+                func_808D9F78(this, play, true);
                 if (this->path != NULL) {
                     this->unk_49C = 1;
                     func_808D9F08(this);
@@ -1242,44 +1244,47 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if (ENSW_GET_3(&this->actor)) {
         switch (limbIndex) {
-            case 23:
+            case OBJECT_ST_LIMB_17:
                 *dList = object_st_DL_004788;
                 break;
 
-            case 8:
+            case OBJECT_ST_LIMB_08:
                 *dList = object_st_DL_0046F0;
                 break;
 
-            case 14:
+            case OBJECT_ST_LIMB_0E:
                 *dList = object_st_DL_004658;
                 break;
 
-            case 11:
+            case OBJECT_ST_LIMB_0B:
                 *dList = object_st_DL_0045C0;
                 break;
 
-            case 26:
+            case OBJECT_ST_LIMB_1A:
                 *dList = object_st_DL_004820;
                 break;
 
-            case 20:
+            case OBJECT_ST_LIMB_14:
                 *dList = object_st_DL_0048B8;
                 break;
 
-            case 17:
+            case OBJECT_ST_LIMB_11:
                 *dList = object_st_DL_004950;
                 break;
 
-            case 29:
+            case OBJECT_ST_LIMB_1D:
                 *dList = object_st_DL_0049E8;
                 break;
 
-            case 5:
+            case OBJECT_ST_LIMB_05:
                 *dList = object_st_DL_003FB0;
                 break;
 
-            case 4:
+            case OBJECT_ST_LIMB_04:
                 *dList = object_st_DL_0043D8;
+                break;
+
+            default:
                 break;
         }
     }
@@ -1288,7 +1293,7 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnSw_Draw(Actor* thisx, PlayState* play) {
     EnSw* this = THIS;
-    s32 i;
+    s32 bodyPartIndex;
     s32 count;
 
     if (this->unk_410 & 4) {
@@ -1301,8 +1306,8 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
                           &this->actor);
     }
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
-        count += func_808D8D60(this, play, i);
+    for (bodyPartIndex = 0, count = 0; bodyPartIndex < ENSW_BODYPART_MAX; bodyPartIndex++) {
+        count += func_808D8D60(this, play, bodyPartIndex);
     }
 
     if (count != 0) {

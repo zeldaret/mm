@@ -7,7 +7,7 @@ struct ObjBombiwa;
 
 typedef void (*ObjBombiwaActionFunc)(struct ObjBombiwa*, PlayState*);
 
-#define OBJBOMBIWA_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJBOMBIWA_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJBOMBIWA_GET_100(thisx) (((thisx)->params >> 8) & 1)
 #define OBJBOMBIWA_GET_8000(thisx) (((thisx)->params >> 0xF) & 1)
 

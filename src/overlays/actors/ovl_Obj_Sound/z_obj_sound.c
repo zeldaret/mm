@@ -1,7 +1,7 @@
 /*
  * File: z_obj_sound.c
  * Overlay: ovl_Obj_Sound
- * Description: Plays certain sounds (e.g., swamp waterfall noise)
+ * Description: An invisible point-source to play sounds, including sfx and sequences.
  */
 
 #include "z_obj_sound.h"
@@ -13,26 +13,64 @@
 void ObjSound_Init(Actor* thisx, PlayState* play);
 void ObjSound_Destroy(Actor* thisx, PlayState* play);
 void ObjSound_Update(Actor* thisx, PlayState* play);
+void ObjSound_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 ActorInit Obj_Sound_InitVars = {
-    ACTOR_OBJ_SOUND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjSound),
-    (ActorFunc)ObjSound_Init,
-    (ActorFunc)ObjSound_Destroy,
-    (ActorFunc)ObjSound_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_SOUND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjSound),
+    /**/ ObjSound_Init,
+    /**/ ObjSound_Destroy,
+    /**/ ObjSound_Update,
+    /**/ NULL,
 };
 
-#endif
+void ObjSound_Init(Actor* thisx, PlayState* play) {
+    ObjSound* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Sound/ObjSound_Init.s")
+    this->unk_144 = false;
+    this->soundType = OBJ_SOUND_GET_TYPE(&this->actor);
+    this->sfxType = OBJ_SOUND_GET_SFX_TYPE(&this->actor);
+    this->actor.params &= OBJ_SOUND_ID_MASK;
+    if (this->soundType == OBJ_SOUND_TYPE_FANFARE) {
+        this->actor.draw = ObjSound_Draw;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Sound/ObjSound_Destroy.s")
+void ObjSound_Destroy(Actor* thisx, PlayState* play) {
+    ObjSound* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Sound/ObjSound_Update.s")
+    if (this->soundType == OBJ_SOUND_TYPE_BGM) {
+        Audio_PlayObjSoundBgm(NULL, NA_BGM_GENERAL_SFX);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Sound/func_8099AA84.s")
+void ObjSound_Update(Actor* thisx, PlayState* play) {
+    ObjSound* this = THIS;
+
+    if (this->soundType == OBJ_SOUND_TYPE_SFX) {
+        if (this->sfxType != 0) {
+            Actor_PlaySfx_Flagged(&this->actor, gAudioEnvironmentalSfx[this->actor.params]);
+        } else {
+            Actor_PlaySfx_FlaggedCentered3(&this->actor, gAudioEnvironmentalSfx[this->actor.params]);
+        }
+    } else if (this->unk_144) {
+        if (this->soundType == OBJ_SOUND_TYPE_BGM) {
+            Audio_PlayObjSoundBgm(&this->actor.projectedPos, this->actor.params);
+        } else if (this->soundType == OBJ_SOUND_TYPE_FIXED_SFX) {
+            Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, gAudioEnvironmentalSfx[this->actor.params]);
+        }
+    } else {
+        this->unk_144 = true;
+    }
+}
+
+void ObjSound_Draw(Actor* thisx, PlayState* play) {
+    ObjSound* this = THIS;
+
+    if (CHECK_EVENTINF(EVENTINF_41) || CHECK_EVENTINF(EVENTINF_35)) {
+        Audio_PlayObjSoundFanfare(&this->actor.projectedPos, this->actor.params);
+    }
+}

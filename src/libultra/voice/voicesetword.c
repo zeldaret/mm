@@ -4,10 +4,10 @@
  * Registers words to the Voice Recognition System dictionary
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
-#include "functions.h"
+#include "ultra64.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "macros.h"
 
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
@@ -17,7 +17,7 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
     u8 status;
     u8 data[40];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
+    errorCode = __osVoiceGetStatus(hd->__mq, hd->__channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -42,13 +42,13 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
     data[ARRAY_COUNT(data) - 1 - i - 5] = 3;
 
     if (k >= 15) {
-        errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, &data[0]);
+        errorCode = __osVoiceContWrite20(hd->__mq, hd->__channel, 0, &data[0]);
         if (errorCode != 0) {
             return errorCode;
         }
     }
 
-    errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, &data[20]);
+    errorCode = __osVoiceContWrite20(hd->__mq, hd->__channel, 0, &data[20]);
     if (errorCode != 0) {
         return errorCode;
     }

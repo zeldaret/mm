@@ -19,15 +19,15 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
 ActorInit Bg_Ikninside_InitVars = {
-    ACTOR_BG_IKNINSIDE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNINSIDE_OBJ,
-    sizeof(BgIkninside),
-    (ActorFunc)BgIkninside_Init,
-    (ActorFunc)BgIkninside_Destroy,
-    (ActorFunc)BgIkninside_Update,
-    (ActorFunc)BgIkninside_Draw,
+    /**/ ACTOR_BG_IKNINSIDE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNINSIDE_OBJ,
+    /**/ sizeof(BgIkninside),
+    /**/ BgIkninside_Init,
+    /**/ BgIkninside_Destroy,
+    /**/ BgIkninside_Update,
+    /**/ BgIkninside_Draw,
 };
 
 static Gfx* D_80C076A0[] = { object_ikninside_obj_DL_00A748, object_ikninside_obj_DL_00A5A8 };
@@ -64,7 +64,7 @@ void BgIkninside_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH(thisx))) {
+    if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
     }
 }
@@ -118,7 +118,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
                 EffectSsHahen_Spawn(play, &pos, &velocity, &D_80C076D4, 0, 30, OBJECT_IKNINSIDE_OBJ, 25,
                                     D_80C076A0[i & 1]);
             }
-            Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
+            Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH_FLAG(&this->dyna.actor));
             this->actionFunc = func_80C07230;
             this->dyna.actor.draw = NULL;
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);

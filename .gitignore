@@ -10,6 +10,7 @@ __pycache__/
 CMakeLists.txt
 cmake-build-debug
 venv/
+.venv/
 tags
 
 # Project-specific ignores
@@ -19,12 +20,14 @@ tags
 *.sra
 *.bin
 *.elf
+*.flash
 archive/
 build/
 baserom/
 decomp/
 asm/
 data/
+extracted/
 expected/
 nonmatchings/
 
@@ -39,6 +42,7 @@ graphs/
 tools/**/*dSYM/
 tools/decomp-permuter/
 tools/mips_to_c/
+*.schl.inc
 
 # Assets
 *.png
@@ -54,3 +58,4 @@ docs/doxygen/
 # Per-user configuration
 .python-version
 .make_options
+.*env

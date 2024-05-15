@@ -25,15 +25,15 @@ void func_80AF7354(BgDanpeiMovebg* this, PlayState* play);
 void func_80AF746C(BgDanpeiMovebg* this, PlayState* play);
 
 ActorInit Bg_Danpei_Movebg_InitVars = {
-    ACTOR_BG_DANPEI_MOVEBG,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(BgDanpeiMovebg),
-    (ActorFunc)BgDanpeiMovebg_Init,
-    (ActorFunc)BgDanpeiMovebg_Destroy,
-    (ActorFunc)BgDanpeiMovebg_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_DANPEI_MOVEBG,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(BgDanpeiMovebg),
+    /**/ BgDanpeiMovebg_Init,
+    /**/ BgDanpeiMovebg_Destroy,
+    /**/ BgDanpeiMovebg_Update,
+    /**/ NULL,
 };
 
 static u16 D_80AF7530[] = { OBJECT_D_LIFT, OBJECT_DANPEI_OBJECT };
@@ -67,8 +67,8 @@ s32 func_80AF6DE0(PlayState* this, ActorPathing* actorPathing) {
 void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
     DynaPolyActor_Init(&this->dyna, 1);
-    this->bankIdx = SubS_GetObjectIndex(D_80AF7530[BGDANPEIMOVEBG_GET_TYPE(thisx)], play);
-    if (this->bankIdx < 0) {
+    this->bankSlot = SubS_GetObjectSlot(D_80AF7530[BGDANPEIMOVEBG_GET_TYPE(thisx)], play);
+    if (this->bankSlot < 0) {
         Actor_Kill(&this->dyna.actor);
     }
     this->actionFunc = func_80AF6EA8;
@@ -76,9 +76,9 @@ void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play) {
 
 void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
     Actor* thisx = (Actor*)this;
-    if (SubS_IsObjectLoaded(this->bankIdx, play)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->bankIdx].segment);
-        this->dyna.actor.objBankIndex = this->bankIdx;
+    if (SubS_IsObjectLoaded(this->bankSlot, play)) {
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->bankSlot].segment);
+        this->dyna.actor.objectSlot = this->bankSlot;
         this->dyna.actor.draw = func_80AF74CC;
         Actor_ProcessInitChain(thisx, sInitChain);
         DynaPolyActor_LoadMesh(play, &this->dyna, D_80AF7538[BGDANPEIMOVEBG_GET_TYPE(thisx)]);

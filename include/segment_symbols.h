@@ -4,6 +4,8 @@
 #include "libc/stddef.h"
 #include "PR/ultratypes.h"
 
+#include "romfile.h"
+
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \
     extern u8 _##name##SegmentEnd[];
@@ -24,13 +26,17 @@
 #define SEGMENT_END(segment) (_ ## segment ## SegmentEnd)
 #define SEGMENT_SIZE(segment) ((uintptr_t)SEGMENT_END(segment) - (uintptr_t)SEGMENT_START(segment))
 
-#define SEGMENT_ROM_START(segment) (_ ## segment ## SegmentRomStart)
-#define SEGMENT_ROM_END(segment) (_ ## segment ## SegmentRomEnd)
-#define SEGMENT_ROM_SIZE(segment) ((uintptr_t)SEGMENT_ROM_END(segment) - (uintptr_t)SEGMENT_ROM_START(segment))
+#define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+#define SEGMENT_ROM_START_OFFSET(segment, offset) ((uintptr_t) (( _ ## segment ## SegmentRomStart ) + (offset)))
+#define SEGMENT_ROM_END(segment) ((uintptr_t) _ ## segment ## SegmentRomEnd)
+#define SEGMENT_ROM_SIZE(segment) (SEGMENT_ROM_END(segment) - SEGMENT_ROM_START(segment))
+#define SEGMENT_ROM_SIZE_ALT(segment) ((size_t)( _ ## segment ## SegmentRomEnd - _ ## segment ## SegmentRomStart ))
 
 #define SEGMENT_BSS_START(segment) (_ ## segment ## SegmentBssStart)
 #define SEGMENT_BSS_END(segment) (_ ## segment ## SegmentBssEnd)
 #define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
+
+DECLARE_SEGMENT(framebuffer_lo)
 
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
@@ -71,33 +77,10 @@ DECLARE_SEGMENT(code)
 DECLARE_ROM_SEGMENT(code)
 DECLARE_BSS_SEGMENT(code)
 
-DECLARE_OVERLAY_SEGMENT(title)
-DECLARE_OVERLAY_SEGMENT(select)
-DECLARE_OVERLAY_SEGMENT(opening)
-DECLARE_OVERLAY_SEGMENT(file_choose)
-DECLARE_OVERLAY_SEGMENT(daytelop)
+DECLARE_SEGMENT(system_heap)
+
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
-
-#define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(_name, _enumValue, _allocType, _debugName)
-#define DEFINE_ACTOR_UNSET(_enumValue)
-
-#include "tables/actor_table.h"
-
-#undef DEFINE_ACTOR
-#undef DEFINE_ACTOR_INTERNAL
-#undef DEFINE_ACTOR_UNSET
-
-#define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
-#define DEFINE_OBJECT_UNSET(_enumValue)
-#define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)
-
-#include "tables/object_table.h"
-
-#undef DEFINE_OBJECT
-#undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_SIZE_ZERO
 
 DECLARE_ROM_SEGMENT(scene_texture_01)
 DECLARE_ROM_SEGMENT(scene_texture_02)

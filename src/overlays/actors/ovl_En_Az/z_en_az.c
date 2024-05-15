@@ -4,6 +4,7 @@
  * Description: Beaver Bros
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_az.h"
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
@@ -24,8 +25,8 @@ void EnAz_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A982E0(PlayState* play, ActorPathing* actorPathing);
 void func_80A98414(EnAz* this, PlayState* play);
-s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnAz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 brotherAnimIndex);
 void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp);
 
@@ -77,32 +78,32 @@ typedef enum {
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
-    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },            // BEAVER_ANIM_IDLE
-    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_WALK
-    { &gBeaverSwimWithSpinningTail, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
-    { &gBeaverSwimWithRaisedTail, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
-    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_TALK
-    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_TALK_WAVE_ARMS
-    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_LAUGH_RIGHT
-    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_LAUGH_LEFT
-    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_SWIM
-    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_TALK_TO_LEFT
-    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },      // BEAVER_ANIM_TALK_TO_RIGHT
-    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },              // BEAVER_ANIM_BOW
-    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_IDLE_FACE_LEFT
-    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },    // BEAVER_ANIM_IDLE_FACE_RIGHT
+    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },                // BEAVER_ANIM_IDLE
+    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_WALK
+    { &gBeaverSwimWithSpinningTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
+    { &gBeaverSwimWithRaisedTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
+    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_TALK
+    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_TALK_WAVE_ARMS
+    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_LAUGH_RIGHT
+    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },            // BEAVER_ANIM_LAUGH_LEFT
+    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_SWIM
+    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_TALK_TO_LEFT
+    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },          // BEAVER_ANIM_TALK_TO_RIGHT
+    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },                  // BEAVER_ANIM_BOW
+    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_IDLE_FACE_LEFT
+    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
 ActorInit En_Az_InitVars = {
-    ACTOR_EN_AZ,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AZ,
-    sizeof(EnAz),
-    (ActorFunc)EnAz_Init,
-    (ActorFunc)EnAz_Destroy,
-    (ActorFunc)EnAz_Update,
-    (ActorFunc)EnAz_Draw,
+    /**/ ACTOR_EN_AZ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AZ,
+    /**/ sizeof(EnAz),
+    /**/ EnAz_Init,
+    /**/ EnAz_Destroy,
+    /**/ EnAz_Update,
+    /**/ EnAz_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -205,7 +206,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_374 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
             phi_v1 =
@@ -303,12 +304,12 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                     this->unk_374 |= 0x20;
                 }
             } else {
                 this->unk_2FA = 0;
-                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 this->unk_374 |= 0x20;
             }
             func_80A94B20(play);
@@ -322,7 +323,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         case ENTRANCE(WATERFALL_RAPIDS, 3):
             this->unk_2FA = 0;
             if (!(this->unk_374 & 2)) {
-                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
+                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
             }
             if (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 3)) {
                 this->unk_2FA = 0xA;
@@ -345,8 +346,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->unk_374 & 1) {
-                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
-                                           play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
+                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PATH_INDEX(thisx),
+                                           play->setupPathList[BEAVER_GET_PATH_INDEX(thisx)].count - 1, &D_80A99E80);
             }
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 if (this->unk_374 & 2) {
@@ -378,18 +379,18 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             if (this->unk_2FA == 2) {
                 if (!(this->unk_374 & 2)) {
                     this->unk_374 |= 0x20;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
                     this->actionFunc = func_80A97C24;
                 } else {
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                     func_80A95C5C(this, play);
                 }
             } else {
                 if (this->unk_374 & 2) {
                     this->unk_374 |= 0x20;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
                 } else {
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 }
                 this->actionFunc = func_80A97C24;
             }
@@ -592,7 +593,7 @@ void func_80A95C5C(EnAz* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y + 120.0f;
     this->actor.gravity = -1.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_3C0 = 0;
     this->actionFunc = func_80A95CEC;
@@ -621,13 +622,13 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 1);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speed = 4.0f;
     this->actor.gravity = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     Math_Vec3f_Copy(&this->actor.world.pos, &sp40->curPoint);
@@ -650,7 +651,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
     this->unk_374 &= ~0x2000;
-    if (this->actor.isTargeted) {
+    if (this->actor.isLockedOn) {
         func_80A95F94(this, play);
     }
 }
@@ -700,13 +701,13 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
                 if (SubS_StartCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
                                        SUBS_CUTSCENE_NORMAL)) {
                     brother->unk_374 |= 0x8000;
-                    play->msgCtx.msgMode = 0x44;
+                    play->msgCtx.msgMode = MSGMODE_PAUSED;
                     ret = 0;
                 }
             } else if (Message_ShouldAdvance(play)) {
@@ -831,7 +832,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10DB:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             this->unk_2FA = 1;
                             ret = 0;
                         } else {
@@ -944,7 +945,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10EB:
                         if (play->msgCtx.choiceIndex == 0) {
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             Audio_PlaySfx_MessageDecide();
                             switch (this->unk_2FA) {
                                 case 4:
@@ -1003,11 +1004,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10F1:
                         SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1058,7 +1059,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -1116,7 +1117,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1175,11 +1176,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
 
                     case 0x1105:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1211,9 +1212,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         default:
             break;
     }
@@ -1347,8 +1348,8 @@ s32 func_80A973B4(EnAz* this, PlayState* play) {
 }
 
 void func_80A97410(EnAz* this, PlayState* play) {
-    s16 sp56;
-    s16 sp54;
+    s16 screenPosX;
+    s16 screenPosY;
     s32 temp_a0;
 
     if (this->unk_378 != 0) {
@@ -1430,7 +1431,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
             }
         } else if (((this->unk_378 == 0) || (this->unk_378 == 1)) && (this->unk_374 & 0x20)) {
             if (this->unk_378 == 1) {
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer,
@@ -1450,7 +1451,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                         Math_SmoothStepToS(&this->unk_3D4, 0, 2, 0x71C, 0);
                     }
                     Math_Vec3f_Copy(&sp38, &player->actor.world.pos);
-                    sp38.y = player->bodyPartsPos[7].y + 3.0f;
+                    sp38.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
                     temp_v0_7 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp38);
                     if (ABS(temp_v0_7) < 0x800) {
                         Math_SmoothStepToS(&this->unk_3D6, temp_v0_7, 3, 0x71C, 0);
@@ -1458,15 +1459,16 @@ void func_80A97410(EnAz* this, PlayState* play) {
                         Math_SmoothStepToS(&this->unk_3D6, 0, 3, 0x71C, 0);
                     }
                 }
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                     if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                         this->unk_378 = 9;
                     }
                 } else {
-                    Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
-                    if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
+                    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
+                    if ((screenPosX >= 0) && (screenPosX <= SCREEN_WIDTH) && (screenPosY >= 0) &&
+                        (screenPosY <= SCREEN_HEIGHT) &&
                         Actor_OfferTalkExchange(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
@@ -1496,7 +1498,7 @@ void func_80A97A28(EnAz* this, PlayState* play) {
 
 void func_80A97A40(EnAz* this, PlayState* play) {
     if (SubS_StartCutscene(&this->actor, 0, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80A97A9C(this, play);
     }
@@ -1513,7 +1515,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -1524,8 +1526,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            play->msgCtx.msgMode = 0x44;
-                            func_800FD750(NA_BGM_TIMED_MINI_GAME);
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
+                            Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
@@ -1546,7 +1548,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                 }
             }
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
             break;
@@ -1570,7 +1572,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
-        func_800FD750(NA_BGM_TIMED_MINI_GAME);
+        Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1591,7 +1593,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);
@@ -1612,7 +1614,7 @@ void func_80A97E48(EnAz* this, PlayState* play) {
 
 void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 0);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speed = 8.0f;
     this->actor.gravity = 0.0f;
@@ -1620,7 +1622,7 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     this->unk_3C2 = 0;
@@ -1894,14 +1896,14 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
 
     if (this->unk_374 & 2) {
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80A98DA4, func_80A98E48, &this->actor);
+                              EnAz_OverrideLimbDraw, EnAz_PostLimbDraw, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80A98DA4, func_80A98E48, &this->actor);
+                              EnAz_OverrideLimbDraw, EnAz_PostLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1965,13 +1967,14 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnAz* this = THIS;
 
     if ((limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
     if (limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
@@ -1988,7 +1991,7 @@ s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80A99410 = { 700.0f, 0.0f, 0.0f };
     static Vec3f D_80A9941C = { -500.0f, 0.0f, 0.0f };
     static Vec3f D_80A99428 = { -1200.0f, 0.0f, 1000.0f };

@@ -1,5 +1,5 @@
-#ifndef _MBI_H_
-#define	_MBI_H_
+#ifndef PR_MBI_H
+#define PR_MBI_H
 
 /**************************************************************************
  *									  *
@@ -74,11 +74,14 @@
  *
  **************************************************************************/
 
-#define	M_GFXTASK	1
-#define	M_AUDTASK	2
-#define	M_VIDTASK	3
-#define M_HVQTASK	6
-#define M_HVQMTASK	7
+/* Not original to libultra: Some added task defines */
+#define M_NULTASK   0
+#define M_GFXTASK   1
+#define M_AUDTASK   2
+#define M_VIDTASK   3
+#define M_NJPEGTASK 4
+#define M_HVQTASK   6
+#define M_HVQMTASK  7
 
 /**************************************************************************
  *

@@ -7,7 +7,7 @@
 #include "z_en_ah.h"
 #include "objects/object_ah/object_ah.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAh*)thisx)
 
@@ -16,28 +16,9 @@ void EnAh_Destroy(Actor* thisx, PlayState* play);
 void EnAh_Update(Actor* thisx, PlayState* play);
 void EnAh_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD36B8(EnAh* this, PlayState* play);
 void func_80BD3768(EnAh* this, PlayState* play);
 
-static u8 D_80BD3DB0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x20 - 0x0F),
-    /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 23, 0, 0x1D - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x1C - 0x19),
-    /* 0x19 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(3),
-    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x37 - 0x25),
-    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x36 - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x30 - 0x2F),
-    /* 0x2F */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x30 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
-    /* 0x36 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
 
@@ -48,15 +29,15 @@ s32 D_80BD3DF8[] = { 0x00330100, 0x050E28FE, 0x0C100E28, -0x03F3F000 };
 s32 D_80BD3E08[] = { 0x0E28FD0C, 0x0F29540C, 0x10000000 };
 
 ActorInit En_Ah_InitVars = {
-    ACTOR_EN_AH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AH,
-    sizeof(EnAh),
-    (ActorFunc)EnAh_Init,
-    (ActorFunc)EnAh_Destroy,
-    (ActorFunc)EnAh_Update,
-    (ActorFunc)EnAh_Draw,
+    /**/ ACTOR_EN_AH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AH,
+    /**/ sizeof(EnAh),
+    /**/ EnAh_Init,
+    /**/ EnAh_Destroy,
+    /**/ EnAh_Update,
+    /**/ EnAh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -115,26 +96,28 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+Actor* EnAh_FindActor(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if ((foundActor == NULL) || (((EnAh*)foundActor != this) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnAh*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 void EnAh_UpdateSkelAnime(EnAh* this) {
@@ -172,7 +155,7 @@ s32 func_80BD2BE8(EnAh* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_2D8 |= 8;
@@ -255,7 +238,7 @@ void func_80BD2DC8(EnAh* this) {
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
     if (this->unk_1E4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_1E4)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_1E4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1E4->focus.pos);
     }
@@ -386,10 +369,10 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
     s32 pad;
     s32 ret = false;
-    Actor* temp_v0 = func_80BD2A30(this, play, actorCat, actorId);
+    Actor* temp_v0 = EnAh_FindActor(this, play, actorCategory, actorId);
 
     if (temp_v0 != NULL) {
         this->actor.child = temp_v0;
@@ -499,11 +482,11 @@ void func_80BD36B8(EnAh* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BD3DB0, &sp18) ||
         ((this->unk_1DC != sp18.result) && !func_80BD3548(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_1DC = sp18.result;
     func_80BD3658(this, play);
@@ -533,7 +516,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
 void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
-    if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
+    if (EnAh_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -545,7 +528,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh_ChangeAnim(this, ENAH_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_1DC = 0;
     this->unk_2D8 = 0;

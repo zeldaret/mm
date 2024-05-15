@@ -52,7 +52,7 @@ void TitleSetup_Destroy(GameState* thisx) {
 void TitleSetup_Init(GameState* thisx) {
     TitleSetupState* this = (TitleSetupState*)thisx;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);

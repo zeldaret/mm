@@ -6,7 +6,7 @@
 
 #include "z_en_bee.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnBee*)thisx)
 
@@ -23,15 +23,15 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 s32 sNumLoadedBees = 0;
 
 ActorInit En_Bee_InitVars = {
-    ACTOR_EN_BEE,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BEE,
-    sizeof(EnBee),
-    (ActorFunc)EnBee_Init,
-    (ActorFunc)EnBee_Destroy,
-    (ActorFunc)EnBee_Update,
-    (ActorFunc)EnBee_Draw,
+    /**/ ACTOR_EN_BEE,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BEE,
+    /**/ sizeof(EnBee),
+    /**/ EnBee_Init,
+    /**/ EnBee_Destroy,
+    /**/ EnBee_Update,
+    /**/ EnBee_Draw,
 };
 
 static DamageTable sDamageTable = {
@@ -98,14 +98,14 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
                    OBJECT_BEE_LIMB_MAX);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->instanceId = sNumLoadedBees;
     sNumLoadedBees++;
     this->actor.shape.shadowScale = 12.0f;
 
     if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
     }
 
     this->actor.hintId = TATL_HINT_ID_GIANT_BEE;
@@ -151,7 +151,7 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     s32 pad[2];
 
     if ((this->actor.category != ACTORCAT_ENEMY) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
 
     Math_Vec3f_Copy(&nextPos, &this->targetPos[this->posIndex]);

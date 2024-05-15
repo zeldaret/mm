@@ -7,7 +7,7 @@
 #include "z_en_bombers.h"
 #include "overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBombers*)thisx)
 
@@ -25,15 +25,15 @@ void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
 ActorInit En_Bombers_InitVars = {
-    ACTOR_EN_BOMBERS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBombers),
-    (ActorFunc)EnBombers_Init,
-    (ActorFunc)EnBombers_Destroy,
-    (ActorFunc)EnBombers_Update,
-    (ActorFunc)EnBombers_Draw,
+    /**/ ACTOR_EN_BOMBERS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBombers),
+    /**/ EnBombers_Init,
+    /**/ EnBombers_Destroy,
+    /**/ EnBombers_Update,
+    /**/ EnBombers_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -142,9 +142,9 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -1.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphtable, OBJECT_CS_LIMB_MAX);
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_2BC = ENBOMBERS_GET_F0(&this->actor);
@@ -224,7 +224,7 @@ void func_80C038B4(EnBombers* this) {
 
 void func_80C039A8(EnBombers* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    this->unk_2A6 = TEXT_STATE_5;
+    this->unk_2A6 = TEXT_STATE_EVENT;
 
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
@@ -351,11 +351,11 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
     if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS) == 0) {
         func_80C039A8(this, play);
     } else {
-        this->unk_2A6 = TEXT_STATE_5;
+        this->unk_2A6 = TEXT_STATE_EVENT;
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2A4 = this->actor.yawTowardsPlayer;
         this->collider.dim.radius = 20;
         this->collider.dim.height = 60;
@@ -395,7 +395,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
     if ((this->unk_2A6 == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         sp2A = 0;
         Message_CloseTextbox(play);
-        this->unk_2A6 = TEXT_STATE_5;
+        this->unk_2A6 = TEXT_STATE_EVENT;
 
         if ((this->actor.textId == 0x73D) || (this->actor.textId == 0x73E) || (this->actor.textId == 0x73F)) {
             this->actor.textId = 0x740;
@@ -500,7 +500,7 @@ void func_80C042F8(EnBombers* this) {
 
 void func_80C04354(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_28E = 0;
         this->actionFunc = func_80C043C8;
     } else {
@@ -510,7 +510,7 @@ void func_80C04354(EnBombers* this, PlayState* play) {
 
 void func_80C043C8(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80C042F8(this);
     }
@@ -545,7 +545,7 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
         this->unk_2B8++;
         if (this->unk_2B8 >= 3) {
             this->unk_2B8 = 0;
-            this->unk_2BA = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2BA = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

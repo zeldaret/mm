@@ -1,6 +1,8 @@
 #include "global.h"
+#include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000000
@@ -24,15 +26,15 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
 ActorInit En_Item00_InitVars = {
-    ACTOR_EN_ITEM00,
-    ACTORCAT_MISC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnItem00),
-    (ActorFunc)EnItem00_Init,
-    (ActorFunc)EnItem00_Destroy,
-    (ActorFunc)EnItem00_Update,
-    (ActorFunc)EnItem00_Draw,
+    /**/ ACTOR_EN_ITEM00,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnItem00),
+    /**/ EnItem00_Init,
+    /**/ EnItem00_Destroy,
+    /**/ EnItem00_Update,
+    /**/ EnItem00_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -182,17 +184,17 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ITEM00_SHIELD_HERO:
-            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_SHIELD_2);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_SHIELD_2);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_MAP:
-            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_MAP);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MAP);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_COMPASS:
-            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_COMPASS);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_COMPASS);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
@@ -315,10 +317,10 @@ void EnItem00_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnItem00_WaitForHeartObject(EnItem00* this, PlayState* play) {
-    s32 objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS);
 
-    if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-        this->actor.objBankIndex = objBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+        this->actor.objectSlot = objectSlot;
         this->actionFunc = func_800A640C;
     }
 }
@@ -327,21 +329,21 @@ void func_800A640C(EnItem00* this, PlayState* play) {
     if ((this->actor.params <= ITEM00_RUPEE_RED) ||
         ((this->actor.params == ITEM00_RECOVERY_HEART) && (this->unk152 < 0)) ||
         (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_DEKU_NUTS_10) &&
                (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
-            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
+            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 0xBB8, 0x5DC)) {
                 this->unk152 = -2;
             }
-        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
+        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 0xBB8, 0x5DC)) {
             this->unk152 = -1;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 2500, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 0x9C4, 0x1F4);
     } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     }
 
     if ((this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
@@ -379,7 +381,7 @@ void func_800A6650(EnItem00* this, PlayState* play) {
     Vec3f pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     }
 
     if ((play->gameplayFrames & 1) != 0) {
@@ -393,7 +395,7 @@ void func_800A6650(EnItem00* this, PlayState* play) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
-            this->actor.velocity.y = this->actor.velocity.y * -0.8f;
+            this->actor.velocity.y *= -0.8f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
@@ -413,7 +415,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
             }
-            this->actor.home.rot.z += (s16)((this->actor.velocity.y + 3.0f) * 1000.0f);
+            this->actor.home.rot.z += TRUNCF_BINANG((this->actor.velocity.y + 3.0f) * 1000.0f);
             this->actor.world.pos.x +=
                 (Math_CosS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
             this->actor.world.pos.z +=
@@ -723,10 +725,10 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
             case ITEM00_RECOVERY_HEART:
                 if (this->unk152 < 0) {
                     if (this->unk152 == -1) {
-                        s8 bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_HEART);
+                        s8 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEART);
 
-                        if (Object_IsLoaded(&play->objectCtx, bankIndex)) {
-                            this->actor.objBankIndex = bankIndex;
+                        if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+                            this->actor.objectSlot = objectSlot;
                             Actor_SetObjectDependency(play, &this->actor);
                             this->unk152 = -2;
                         }
@@ -850,7 +852,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
+    if (Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -929,14 +931,14 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
         newParamFF = params & 0xFF;
         if (newParamFF == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
             if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
-            spawnedActor =
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0,
-                            0, STRAY_FAIRY_PARAMS(((param7F00 >> 8) & 0x7F), 0, STRAY_FAIRY_TYPE_COLLECTIBLE));
+            spawnedActor = Actor_Spawn(
+                &play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
+                STRAY_FAIRY_PARAMS((param7F00 >> 8) & 0x7F, STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_COLLECTIBLE));
             if (param20000 == 0) {
                 if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
                     SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
@@ -990,11 +992,11 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
     if ((((params & 0xFF) == ITEM00_FLEXIBLE) || ((params & 0xFF) == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
         if ((params & 0xFF) == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
         } else {
-            spawnedActor =
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0,
-                            0, STRAY_FAIRY_PARAMS(((param7F00 >> 8) & 0x7F), 0, STRAY_FAIRY_TYPE_COLLECTIBLE));
+            spawnedActor = Actor_Spawn(
+                &play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
+                STRAY_FAIRY_PARAMS((param7F00 >> 8) & 0x7F, STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_COLLECTIBLE));
         }
         if (Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F) == 0) {
             SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
@@ -1373,7 +1375,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         if (dropId == ITEM00_FLEXIBLE) {
             if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
-                            2);
+                            FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
@@ -1428,7 +1430,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
-                            spawnedActor->actor.flags = spawnedActor->actor.flags | ACTOR_FLAG_10;
+                            spawnedActor->actor.flags |= ACTOR_FLAG_10;
                             if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_PIECE) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {
@@ -1475,6 +1477,6 @@ s32 func_800A817C(s32 index) {
     return D_801AE214[index];
 }
 
-s32 Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag) {
+bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag) {
     return (func_800A8150(index) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(play, collectibleFlag));
 }

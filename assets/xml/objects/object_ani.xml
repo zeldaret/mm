@@ -8,10 +8,10 @@
         <Animation Name="gAniTreeHangingReachAnim" Offset="0x27A0" /> <!-- Original name is "Ani_ki02" -->
         <Limb Name="gAniPelvisLimb" Type="Standard" EnumName="ANI_LIMB_PELVIS" Offset="0x27B0" />
         <Limb Name="gAniLeftThighLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_THIGH" Offset="0x27BC" />
-        <Limb Name="gAniLeftCalfLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_CALF" Offset="0x27C8" />
+        <Limb Name="gAniLeftShinLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_SHIN" Offset="0x27C8" />
         <Limb Name="gAniLeftFootLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_FOOT" Offset="0x27D4" />
         <Limb Name="gAniRightThighLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_THIGH" Offset="0x27E0" />
-        <Limb Name="gAniRightCalfLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_CALF" Offset="0x27EC" />
+        <Limb Name="gAniRightShinLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_SHIN" Offset="0x27EC" />
         <Limb Name="gAniRightFootLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FOOT" Offset="0x27F8" />
         <Limb Name="gAniTorsoLimb" Type="Standard" EnumName="ANI_LIMB_TORSO" Offset="0x2804" />
         <Limb Name="gAniLeftUpperArmLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_UPPER_ARM" Offset="0x2810" />
@@ -21,7 +21,7 @@
         <Limb Name="gAniRightForearmLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FOREARM" Offset="0x2840" />
         <Limb Name="gAniRightHandLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_HAND" Offset="0x284C" />
         <Limb Name="gAniHeadLimb" Type="Standard" EnumName="ANI_LIMB_HEAD" Offset="0x2858" />
-        <Skeleton Name="gAniSkeleton" Type="Flex" LimbType="Standard" LimbNone="ANI_LIMB_NONE" LimbMax="ANI_LIMB_MAX" EnumName="AniLimb" Offset="0x28A0" />
+        <Skeleton Name="gAniSkel" Type="Flex" LimbType="Standard" LimbNone="ANI_LIMB_NONE" LimbMax="ANI_LIMB_MAX" EnumName="AniLimb" Offset="0x28A0" />
         <DList Name="gAniRightHandDL" Offset="0x4860" />
         <DList Name="gAniRightForearmDL" Offset="0x4A50" />
         <DList Name="gAniRightUpperArmDL" Offset="0x4B38" />
@@ -30,10 +30,10 @@
         <DList Name="gAniLeftUpperArmDL" Offset="0x4F08" />
         <DList Name="gAniTorsoDL" Offset="0x5000" />
         <DList Name="gAniRightFootDL" Offset="0x5270" />
-        <DList Name="gAniRightCalfDL" Offset="0x5420" />
+        <DList Name="gAniRightShinDL" Offset="0x5420" />
         <DList Name="gAniRightThighDL" Offset="0x5668" />
         <DList Name="gAniLeftFootDL" Offset="0x5778" />
-        <DList Name="gAniLeftCalfDL" Offset="0x5928" />
+        <DList Name="gAniLeftShinDL" Offset="0x5928" />
         <DList Name="gAniLeftThighDL" Offset="0x5C50" />
         <DList Name="gAniPelvisDL" Offset="0x5D60" />
         <Texture Name="gAniGeneralTLUT" OutName="ani_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />

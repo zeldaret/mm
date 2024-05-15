@@ -21,15 +21,15 @@ void func_80A538E0(BgKeikokuSaku* this, PlayState* play);
 void func_80A53994(BgKeikokuSaku* this, PlayState* play);
 
 ActorInit Bg_Keikoku_Saku_InitVars = {
-    ACTOR_BG_KEIKOKU_SAKU,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_KEIKOKU_OBJ,
-    sizeof(BgKeikokuSaku),
-    (ActorFunc)BgKeikokuSaku_Init,
-    (ActorFunc)BgKeikokuSaku_Destroy,
-    (ActorFunc)BgKeikokuSaku_Update,
-    (ActorFunc)BgKeikokuSaku_Draw,
+    /**/ ACTOR_BG_KEIKOKU_SAKU,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_KEIKOKU_OBJ,
+    /**/ sizeof(BgKeikokuSaku),
+    /**/ BgKeikokuSaku_Init,
+    /**/ BgKeikokuSaku_Destroy,
+    /**/ BgKeikokuSaku_Update,
+    /**/ BgKeikokuSaku_Draw,
 };
 
 void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {
@@ -40,7 +40,7 @@ void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCH_FLAG(thisx);
     if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.world.pos.z = 2659.0f;
     } else {

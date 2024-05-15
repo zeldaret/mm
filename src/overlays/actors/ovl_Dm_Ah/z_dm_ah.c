@@ -6,7 +6,7 @@
 
 #include "z_dm_ah.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAh*)thisx)
 
@@ -16,22 +16,22 @@ void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Ah_InitVars = {
-    ACTOR_DM_AH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AH,
-    sizeof(DmAh),
-    (ActorFunc)DmAh_Init,
-    (ActorFunc)DmAh_Destroy,
-    (ActorFunc)DmAh_Update,
-    (ActorFunc)DmAh_Draw,
+    /**/ ACTOR_DM_AH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AH,
+    /**/ sizeof(DmAh),
+    /**/ DmAh_Init,
+    /**/ DmAh_Destroy,
+    /**/ DmAh_Update,
+    /**/ DmAh_Draw,
 };
 
 typedef enum {
     /* -1 */ DMAH_ANIM_NONE = -1,
-    /* 0  */ DMAH_ANIM_0,
-    /* 1  */ DMAH_ANIM_1,
-    /* 2  */ DMAH_ANIM_MAX
+    /*  0 */ DMAH_ANIM_0,
+    /*  1 */ DMAH_ANIM_1,
+    /*  2 */ DMAH_ANIM_MAX
 } DmAhAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAH_ANIM_MAX] = {
@@ -76,7 +76,7 @@ s32 func_80C1D4D0(DmAh* this, PlayState* play) {
     this->unk_290 = CLAMP(this->unk_290, -0x1C70, 0x1C70);
 
     if (this->unk_280->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_280)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_280)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_280->focus.pos);
     }
@@ -108,25 +108,27 @@ s32 func_80C1D6E0(DmAh* this, PlayState* play) {
     return true;
 }
 
-Actor* func_80C1D78C(PlayState* play) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+Actor* DmAh_FindAnjuActor(PlayState* play) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, ACTORCAT_NPC, ACTOR_DM_AN);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_DM_AN);
 
-        if ((foundActor == NULL) || (foundActor->update != NULL)) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if ((tempActor == NULL) || false) {
-            foundActor = NULL;
+        if (actorIter->update != NULL) {
             break;
         }
-        foundActor = tempActor;
+
+        if ((actorIter->next == NULL) || false) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 void DmAh_HandleCutscene(DmAh* this, PlayState* play) {
@@ -168,11 +170,11 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
                        OBJECT_AH_LIMB_MAX);
     this->animIndex = DMAH_ANIM_NONE;
     DmAh_ChangeAnim(this, DMAH_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
     if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        this->unk_280 = func_80C1D78C(play);
+        this->unk_280 = DmAh_FindAnjuActor(play);
         DmAh_ChangeAnim(this, DMAH_ANIM_1);
         this->actionFunc = DmAh_DoNothing;
     } else {

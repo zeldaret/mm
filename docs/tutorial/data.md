@@ -27,7 +27,7 @@ Both approaches have their advantages and disadvantages.
 
 ## Data first
 
-This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/master/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
+This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/main/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
 
 ## Extern and data last
 
@@ -44,15 +44,15 @@ Once we have decompiled enough things to know what the data is, we can import it
 ```C
 #if 0
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };
@@ -78,9 +78,9 @@ First, we tell the compiler to ignore the original data file. To do this, open t
 beginseg
     name "ovl_En_Recepgirl"
     compress
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
 endseg
 ```
 
@@ -90,9 +90,9 @@ We will eventually remove both of the bottom two lines and replace them with our
 beginseg
     name "ovl_En_Recepgirl"
     compress
-    include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    //include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
+    //include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
+    include "$(BUILD_DIR)/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
 endseg
 ```
 
@@ -100,15 +100,15 @@ Next remove all the externs, and uncomment their corresponding commented data:
 
 ```C
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };
@@ -131,7 +131,7 @@ The game has a convenient system that allows it to sometimes effectively use off
 There is an obvious problem here, which is that is that these symbols have to be defined *somewhere*, or the linker will complain (indeed, if we change the ones in the array to `D_...`, even if we extern them, we get
 
 ```
-mips-linux-gnu-ld: build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
+mips-linux-gnu-ld: build/n64-us/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(.data+0x20): undefined reference to `D_0600F8F0'
 ```
 
 As we'd expect, of course: we didn't fulfil our promise that they were defined elsewhere.)
@@ -140,10 +140,10 @@ For actors which have yet to be decompiled, this is mitigated by use of the file
 
 ```c
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
 };
 ```
 

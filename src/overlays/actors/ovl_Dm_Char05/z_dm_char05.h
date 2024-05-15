@@ -31,7 +31,7 @@ typedef struct DmChar05 {
     /* 0x188 */ DmChar05ActionFunc actionFunc;
     /* 0x18C */ s16 animIndex;
     /* 0x18E */ u8 unk_18E;
-    /* 0x18F */ u8 unk_18F;
+    /* 0x18F */ u8 objectSlot;
     /* 0x190 */ Vec3f unk_190;
     /* 0x19C */ u32 unk_19C;
     /* 0x1A0 */ u32 unk_1A0;
