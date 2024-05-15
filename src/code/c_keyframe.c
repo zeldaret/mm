@@ -1159,7 +1159,7 @@ s32 Keyframe_UpdateStandard(KFSkelAnime* kfSkelAnime) {
 void Keyframe_DrawStandardLimb(PlayState* play, KFSkelAnime* kfSkelAnime, s32* limbIndex,
                                OverrideKeyframeDraw overrideKeyframeDraw, PostKeyframeDraw postKeyframeDraw, void* arg,
                                Mtx** mtxStack) {
-    KeyFrameStandardLimb* limb = *limbIndex + Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
+    KeyFrameStandardLimb* limb = *limbIndex + (KeyFrameStandardLimb*)Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
     s32 i;
     Gfx* newDList;
     Gfx* limbDList;
