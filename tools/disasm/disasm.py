@@ -79,7 +79,6 @@ def discard_decomped_files(files_spec, include_files):
         seg_start = i
         new_files = {}
         included = False
-        saved_off = 0
         for offset, file in file_list.items():
             if file == "[PADDING]":
                 continue

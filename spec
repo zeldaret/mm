@@ -10,8 +10,8 @@ beginseg
 endseg
 
 beginseg
-    address 0x8007F000
     name "makerom"
+    address 0x8007F000
     include "$(BUILD_DIR)/asm/makerom/rom_header.o"
     include "$(BUILD_DIR)/asm/makerom/ipl3.o"
     include "$(BUILD_DIR)/asm/makerom/entry.o"
