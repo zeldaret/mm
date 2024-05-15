@@ -50,35 +50,35 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80AF6DE0(PlayState* this, ActorPathing* actorPathing) {
-    Actor* actor;
-    s32 res;
+    Actor* actor = actorPathing->actor;
+    s32 ret = false;
 
-    actor = actorPathing->actor;
-    res = 0;
-    if (actorPathing->distSqToCurPoint < actor->speed * actor->speed) {
-        res = 1;
+    if (actorPathing->distSqToCurPoint < SQ(actor->speed)) {
+        ret = true;
     } else {
         actor->world.rot.x = actorPathing->rotToCurPoint.x;
         actor->world.rot.y = actorPathing->rotToCurPoint.y;
     }
-    return res;
+    return ret;
 }
 
 void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
-    DynaPolyActor_Init(&this->dyna, 1);
-    this->bankSlot = SubS_GetObjectSlot(D_80AF7530[BGDANPEIMOVEBG_GET_TYPE(thisx)], play);
-    if (this->bankSlot < 0) {
+
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
+    this->objectSlot = SubS_GetObjectSlot(D_80AF7530[BGDANPEIMOVEBG_GET_TYPE(thisx)], play);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
     }
     this->actionFunc = func_80AF6EA8;
 }
 
 void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
-    Actor* thisx = (Actor*)this;
-    if (SubS_IsObjectLoaded(this->bankSlot, play)) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->bankSlot].segment);
-        this->dyna.actor.objectSlot = this->bankSlot;
+    Actor* thisx = &this->dyna.actor;
+
+    if (SubS_IsObjectLoaded(this->objectSlot, play)) {
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = func_80AF74CC;
         Actor_ProcessInitChain(thisx, sInitChain);
         DynaPolyActor_LoadMesh(play, &this->dyna, D_80AF7538[BGDANPEIMOVEBG_GET_TYPE(thisx)]);
@@ -97,6 +97,7 @@ void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
 
 void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -155,7 +156,7 @@ void func_80AF71FC(BgDanpeiMovebg* this, PlayState* play) {
         this->actionFunc = func_80AF72F8;
     } else {
         this->flags = func_80AF705C(this, this->flags);
-        if ((this->flags & 0x10) || (this->flags & 0xC) == 0xC) {
+        if ((this->flags & 0x10) || ((this->flags & 0xC) == 0xC)) {
             this->actionFunc = func_80AF746C;
         } else if ((this->flags & 0x1C) == 0) {
             this->actorPath.flags |= ACTOR_PATHING_MOVE_BACKWARDS;
@@ -179,9 +180,9 @@ void func_80AF7354(BgDanpeiMovebg* this, PlayState* play) {
     this->flags = func_80AF705C(this, this->flags);
     SubS_ActorPathing_Update(play, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80AF6DE0,
                              SubS_ActorPathing_MoveWithoutGravityReverse, SubS_ActorPathing_SetNextPoint);
-    if ((this->flags & 0x10) || (this->flags & 0xC) == 0xC) {
+    if ((this->flags & 0x10) || ((this->flags & 0xC) == 0xC)) {
         this->actionFunc = func_80AF746C;
-    } else if ((this->flags & 0xC) && (this->flags & 0xC) != 0xC) {
+    } else if ((this->flags & 0xC) && ((this->flags & 0xC) != 0xC)) {
         this->actorPath.flags &= ~ACTOR_PATHING_MOVE_BACKWARDS;
         this->dyna.actor.speed = 1.0f;
         if (this->flags & 4) {
@@ -210,6 +211,7 @@ void func_80AF746C(BgDanpeiMovebg* this, PlayState* arg1) {
 
 void func_80AF74CC(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
+
     if (this->dList != NULL) {
         Gfx_DrawDListOpa(play, this->dList);
     }
