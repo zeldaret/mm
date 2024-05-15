@@ -50,7 +50,7 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
     EffChange_SetColors(this, EFFCHANGE_GET_COLORS(thisx));
     Actor_SetScale(&this->actor, 0.075f);
     this->primColors[3] = 0;
-    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameSkeleton*)&gameplay_keep_Blob_02900C,
+    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&gameplay_keep_Blob_02900C,
                       (KeyFrameAnimation*)&gameplay_keep_Blob_0281DC, this->jointTable, this->morphTable, NULL);
     Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&gameplay_keep_Blob_0281DC);
     this->step = 0;

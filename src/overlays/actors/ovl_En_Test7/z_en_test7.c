@@ -383,7 +383,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     this->playerScaleZ = player->actor.scale.z;
 
     // Keyframe animations
-    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameSkeleton*)&gameplay_keep_Blob_085640,
+    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&gameplay_keep_Blob_085640,
                       (KeyFrameAnimation*)&gameplay_keep_Blob_083534, this->jointTable, this->morphTable, NULL);
     Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&gameplay_keep_Blob_083534);
 

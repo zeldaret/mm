@@ -73,7 +73,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
 
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
         case DEMOSYOTEN_F_0:
-            Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameSkeleton*)&object_syoten_Blob_001328,
+            Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&object_syoten_Blob_001328,
                               (KeyFrameAnimation*)&object_syoten_Blob_00023C, this->jointTable, this->morphTable, NULL);
             Keyframe_FlexPlayLoop(&this->kfSkelAnime, (KeyFrameAnimation*)&object_syoten_Blob_00023C);
             this->actor.draw = NULL;
