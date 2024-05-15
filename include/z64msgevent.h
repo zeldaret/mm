@@ -80,8 +80,8 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
  * 
  * Size = 5
  */ 
-#define MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(flags, test, skip) \
-    MSCRIPT_CMD_00, MSCRIPT_PACK_8(flags), MSCRIPT_PACK_8(test), MSCRIPT_PACK_16(skip)
+#define MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(reg, skip) \
+    MSCRIPT_CMD_00, MSCRIPT_PACK_16(reg), MSCRIPT_PACK_16(skip)
 
 #define MSCRIPT_BRANCH_ON_WEEK_EVENT_REG_LENGTH 5
 
@@ -193,8 +193,8 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_WEEK_EVENT_REG_SET(flags, value) \
-    MSCRIPT_CMD_17, MSCRIPT_PACK_8(flags), MSCRIPT_PACK_8(value)
+#define MSCRIPT_WEEK_EVENT_REG_SET(reg) \
+    MSCRIPT_CMD_17, MSCRIPT_PACK_16(reg)
 
 /**
  * Size = 1
