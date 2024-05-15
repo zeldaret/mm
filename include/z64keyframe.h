@@ -27,9 +27,9 @@ typedef s32 (*KeyframeTransformCallback)(struct PlayState* play, struct KFSkelAn
 #define KEYFRAME_DRAW_XLU (1 << 0)
 
 typedef enum {
-    KEYFRAME_NOT_DONE,
-    KEYFRAME_DONE_ONCE,
-    KEYFRAME_DONE_LOOP
+    /* 0 */ KEYFRAME_NOT_DONE,
+    /* 1 */ KEYFRAME_DONE_ONCE,
+    /* 2 */ KEYFRAME_DONE_LOOP
 } KeyFrameDoneType;
 
 #define KF_CALLBACK_INDEX_NONE 0xFF

@@ -173,8 +173,8 @@ void Keyframe_InitFlex(KFSkelAnimeFlex* kfSkelAnime, KeyFrameFlexSkeleton* skele
                        Vec3s* jointTable, Vec3s* morphTable, KeyframeTransformCallback* transformCallbacks) {
     Keyframe_ResetFlex(kfSkelAnime);
     FrameCtrl_Init(&kfSkelAnime->frameCtrl);
-    kfSkelAnime->skeleton = (KeyFrameFlexSkeleton*)Lib_SegmentedToVirtual(skeleton);
-    kfSkelAnime->animation = (KeyFrameAnimation*)Lib_SegmentedToVirtual(animation);
+    kfSkelAnime->skeleton = Lib_SegmentedToVirtual(skeleton);
+    kfSkelAnime->animation = Lib_SegmentedToVirtual(animation);
     kfSkelAnime->jointTable = jointTable;
     kfSkelAnime->morphTable = morphTable;
     kfSkelAnime->transformCallbacks = transformCallbacks;
@@ -308,9 +308,9 @@ void Keyframe_FlexChangeAnim(KFSkelAnimeFlex* kfSkelAnime, KeyFrameFlexSkeleton*
     kfSkelAnime->morphFrames = morphFrames;
 
     if (kfSkelAnime->skeleton != skeleton) {
-        kfSkelAnime->skeleton = (KeyFrameFlexSkeleton*)Lib_SegmentedToVirtual(skeleton);
+        kfSkelAnime->skeleton = Lib_SegmentedToVirtual(skeleton);
     }
-    kfSkelAnime->animation = (KeyFrameAnimation*)Lib_SegmentedToVirtual(animation);
+    kfSkelAnime->animation = Lib_SegmentedToVirtual(animation);
 
     FrameCtrl_SetProperties(&kfSkelAnime->frameCtrl, startTime, endTime, kfSkelAnime->animation->frameCount, t, speed,
                             animMode);
@@ -324,7 +324,7 @@ void Keyframe_FlexChangeAnim(KFSkelAnimeFlex* kfSkelAnime, KeyFrameFlexSkeleton*
  * @note Original name unknown
  */
 void Keyframe_FlexChangeAnimQuick(KFSkelAnimeFlex* kfSkelAnime, KeyFrameAnimation* animation) {
-    kfSkelAnime->animation = (KeyFrameAnimation*)Lib_SegmentedToVirtual(animation);
+    kfSkelAnime->animation = Lib_SegmentedToVirtual(animation);
     kfSkelAnime->frameCtrl.frameCount = kfSkelAnime->animation->frameCount;
 }
 
@@ -543,13 +543,13 @@ s32 Keyframe_UpdateFlex(KFSkelAnimeFlex* kfSkelAnime) {
     }
 
     // Array of preset values to pull from
-    fixedValues = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
+    fixedValues = Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
 
     // Array of number of keyframes belonging to each limb
-    kfNums = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
+    kfNums = Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
 
     // Array of keyframes, ordered by frame number
-    keyFrames = (KeyFrame*)Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
+    keyFrames = Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
 
     // The bitFlags array indicates whether a transformation on an axis should interpolate a value (if the bit is set)
     // or pull from an array of constant values (if the bit is unset) if the transformation on an axis does not change
@@ -564,7 +564,7 @@ s32 Keyframe_UpdateFlex(KFSkelAnimeFlex* kfSkelAnime) {
     //  [2] : Translate x
     //  [1] : Translate y
     //  [0] : Translate z
-    bitFlags = (u16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.flex);
+    bitFlags = Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.flex);
 
     // For each limb
     for (limbIndex = 0; limbIndex < kfSkelAnime->skeleton->limbCount; limbIndex++) {
@@ -634,7 +634,7 @@ s32 Keyframe_UpdateFlex(KFSkelAnimeFlex* kfSkelAnime) {
 void Keyframe_DrawFlexLimb(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32* limbIndex,
                            OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw,
                            void* arg, Mtx** mtxStack) {
-    KeyFrameFlexLimb* limb = (KeyFrameFlexLimb*)Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
+    KeyFrameFlexLimb* limb = Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
     s32 i;
     Gfx* newDList;
     Gfx* limbDList;
@@ -779,8 +779,8 @@ void Keyframe_InitStandard(KFSkelAnime* kfSkelAnime, KeyFrameSkeleton* skeleton,
                            Vec3s* jointTable, Vec3s* morphTable) {
     Keyframe_ResetStandard(kfSkelAnime);
     FrameCtrl_Init(&kfSkelAnime->frameCtrl);
-    kfSkelAnime->skeleton = (KeyFrameSkeleton*)Lib_SegmentedToVirtual(skeleton);
-    kfSkelAnime->animation = (KeyFrameAnimation*)Lib_SegmentedToVirtual(animation);
+    kfSkelAnime->skeleton = Lib_SegmentedToVirtual(skeleton);
+    kfSkelAnime->animation = Lib_SegmentedToVirtual(animation);
     kfSkelAnime->jointTable = jointTable;
     kfSkelAnime->morphTable = morphTable;
 }
@@ -930,8 +930,8 @@ void Keyframe_StandardChangeAnim(KFSkelAnime* kfSkelAnime, KeyFrameSkeleton* ske
                                  f32 startTime, f32 endTime, f32 t, f32 speed, f32 morphFrames, s32 animMode,
                                  Vec3s* rotOffsetsTable) {
     kfSkelAnime->morphFrames = morphFrames;
-    kfSkelAnime->skeleton = (KeyFrameSkeleton*)Lib_SegmentedToVirtual(skeleton);
-    kfSkelAnime->animation = (KeyFrameAnimation*)Lib_SegmentedToVirtual(animation);
+    kfSkelAnime->skeleton = Lib_SegmentedToVirtual(skeleton);
+    kfSkelAnime->animation = Lib_SegmentedToVirtual(animation);
 
     FrameCtrl_SetProperties(&kfSkelAnime->frameCtrl, startTime, endTime, kfSkelAnime->animation->frameCount, t, speed,
                             animMode);
@@ -1042,9 +1042,9 @@ s32 Keyframe_UpdateStandard(KFSkelAnime* kfSkelAnime) {
         outputValues = (s16*)kfSkelAnime->jointTable;
     }
 
-    fixedValues = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
-    kfNums = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
-    keyFrames = (KeyFrame*)Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
+    fixedValues = Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
+    kfNums = Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
+    keyFrames = Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
 
     // The bitFlags array indicates whether a transformation on an axis should interpolate a value (if the bit is set)
     // or pull from an array of constant values (if the bit is unset) if the transformation on an axis does not change
@@ -1061,7 +1061,7 @@ s32 Keyframe_UpdateStandard(KFSkelAnime* kfSkelAnime) {
     // [2] = rx
     // [1] = ry
     // [0] = rz
-    bitFlags = (u8*)Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.standard);
+    bitFlags = Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.standard);
 
     // Interpolate translation for the root limb
 
@@ -1160,7 +1160,7 @@ void Keyframe_DrawStandardLimb(PlayState* play, KFSkelAnime* kfSkelAnime, s32* l
                                OverrideKeyframeDraw overrideKeyframeDraw, PostKeyframeDraw postKeyframeDraw, void* arg,
                                Mtx** mtxStack) {
     KeyFrameStandardLimb* limb =
-        *limbIndex + (KeyFrameStandardLimb*)Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
+        *limbIndex + Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
     s32 i;
     Gfx* newDList;
     Gfx* limbDList;
@@ -1287,10 +1287,10 @@ void Keyframe_FlexGetScale(KFSkelAnimeFlex* kfSkelAnime, s32 targetLimbIndex, Ve
     KeyFrame* keyFrames;
     s32 limbIndex;
 
-    fixedValues = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
-    kfNums = (s16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
-    keyFrames = (KeyFrame*)Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
-    bitFlags = (u16*)Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.flex);
+    fixedValues = Lib_SegmentedToVirtual(kfSkelAnime->animation->fixedValues);
+    kfNums = Lib_SegmentedToVirtual(kfSkelAnime->animation->kfNums);
+    keyFrames = Lib_SegmentedToVirtual(kfSkelAnime->animation->keyFrames);
+    bitFlags = Lib_SegmentedToVirtual(kfSkelAnime->animation->bitFlags.flex);
 
     for (limbIndex = 0; limbIndex < kfSkelAnime->skeleton->limbCount; limbIndex++) {
         u32 bit = 1 << (3 * 3 - 1);
