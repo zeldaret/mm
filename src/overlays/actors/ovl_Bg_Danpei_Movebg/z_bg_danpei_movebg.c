@@ -150,7 +150,7 @@ void func_80AF71FC(BgDanpeiMovebg* this, PlayState* play) {
     Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
         if (this->flags & 2) {
-            this->flags &= ~0x2;
+            this->flags &= ~2;
         }
         this->actionFunc = func_80AF72F8;
     } else {
