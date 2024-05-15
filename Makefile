@@ -120,7 +120,7 @@ OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
 ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
-ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename --encode-cutscene-data-floats
 
 ifneq ($(ASM_PROC_FORCE), 0)
   ASM_PROC_FLAGS += --force
