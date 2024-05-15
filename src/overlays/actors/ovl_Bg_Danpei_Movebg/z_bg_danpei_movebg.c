@@ -84,7 +84,6 @@ void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
         DynaPolyActor_LoadMesh(play, &this->dyna, D_80AF7538[BGDANPEIMOVEBG_GET_TYPE(thisx)]);
         this->dList = D_80AF7534[BGDANPEIMOVEBG_GET_TYPE(thisx)];
 
-        /* If D_LIFT */
         if (BGDANPEIMOVEBG_GET_TYPE(thisx) == 0) {
             this->dyna.actor.gravity = 0.0f;
             this->dyna.actor.speed = 1.0f;
@@ -198,7 +197,7 @@ void func_80AF7354(BgDanpeiMovebg* this, PlayState* play) {
     }
 }
 
-void func_80AF746C(BgDanpeiMovebg* this, PlayState* arg1) {
+void func_80AF746C(BgDanpeiMovebg* this, PlayState* play) {
     this->flags = func_80AF705C(this, this->flags);
     if (!(this->flags & 0x18)) {
         if (this->actorPath.flags & ACTOR_PATHING_MOVE_BACKWARDS) {

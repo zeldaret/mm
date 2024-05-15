@@ -8,7 +8,7 @@ struct BgDanpeiMovebg;
 typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, PlayState*);
 
 #define BGDANPEIMOVEBG_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
-#define BGDANPEIMOVEBG_GET_TYPE(thisx)      (((thisx)->params >> 0xE) & 3)
+#define BGDANPEIMOVEBG_GET_TYPE(thisx)       (((thisx)->params >> 0xE) & 3)
 
 typedef struct BgDanpeiMovebg {
     /* 0x000 */ DynaPolyActor dyna;
