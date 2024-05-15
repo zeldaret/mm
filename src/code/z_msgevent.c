@@ -657,7 +657,7 @@ s32 MsgEvent_Cmd32(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
     s32 mask = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
 
-    if (mask == Player_GetMask(play)) {
+    if (Player_GetMask(play) == mask) {
         *scriptPtr += skip;
     }
     return MSCRIPT_CONTINUE;
