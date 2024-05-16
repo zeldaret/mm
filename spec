@@ -3445,8 +3445,7 @@ beginseg
     name "ovl_Bg_Danpei_Movebg"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg_reloc.o"
 endseg
 
 beginseg
