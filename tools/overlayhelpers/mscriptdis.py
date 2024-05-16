@@ -1431,8 +1431,17 @@ def disassemble_msg_script(data_file, script_start, offset, length):
                 elif cmd == 6 and i == 0:
                     arg_formatted = gi_names[arg_value]
                     assert arg_formatted is not None
+                elif cmd == 8 and i == 0:
+                    arg_formatted = f'{arg_value}'
+                    assert arg_formatted is not None
                 elif cmd == 17 and i == 0:
                     arg_formatted = week_event_reg[arg_value]
+                    assert arg_formatted is not None
+                elif cmd == 20 and i == 0:
+                    if arg_value & 0x8000: # Value is negative take twos compliment
+                        arg_formatted = f'{arg_value - 0x10000}'
+                    else:
+                        arg_formatted = f'{arg_value}'
                     assert arg_formatted is not None
                 elif cmd == 27 and i == 0:
                     arg_formatted = getFlagMacro(arg_value)
