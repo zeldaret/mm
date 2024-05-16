@@ -672,11 +672,11 @@ void Keyframe_DrawFlexLimb(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32* l
 
     if (overrideKeyframeDraw == NULL ||
         (overrideKeyframeDraw != NULL &&
-         overrideKeyframeDraw(play, kfSkelAnime, *limbIndex, &newDList, &drawFlags, arg, &scale, &rot, &pos) != 0)) {
+         overrideKeyframeDraw(play, kfSkelAnime, *limbIndex, &newDList, &drawFlags, arg, &scale, &rot, &pos))) {
         if ((kfSkelAnime->transformCallbacks == NULL) || (limb->callbackIndex == KF_CALLBACK_INDEX_NONE) ||
             (kfSkelAnime->transformCallbacks[limb->callbackIndex] == NULL) ||
             kfSkelAnime->transformCallbacks[limb->callbackIndex](play, kfSkelAnime, *limbIndex, &newDList, &drawFlags,
-                                                                 arg) != 0) {
+                                                                 arg)) {
 
             Matrix_TranslateRotateZYX(&pos, &rot);
 
@@ -1159,7 +1159,8 @@ s32 Keyframe_UpdateStandard(KFSkelAnime* kfSkelAnime) {
 void Keyframe_DrawStandardLimb(PlayState* play, KFSkelAnime* kfSkelAnime, s32* limbIndex,
                                OverrideKeyframeDraw overrideKeyframeDraw, PostKeyframeDraw postKeyframeDraw, void* arg,
                                Mtx** mtxStack) {
-    KeyFrameStandardLimb* limb = *limbIndex + (KeyFrameStandardLimb*)Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
+    KeyFrameStandardLimb* limb =
+        *limbIndex + (KeyFrameStandardLimb*)Lib_SegmentedToVirtual(kfSkelAnime->skeleton->limbs);
     s32 i;
     Gfx* newDList;
     Gfx* limbDList;
@@ -1193,7 +1194,7 @@ void Keyframe_DrawStandardLimb(PlayState* play, KFSkelAnime* kfSkelAnime, s32* l
 
     if (overrideKeyframeDraw == NULL ||
         (overrideKeyframeDraw != NULL &&
-         overrideKeyframeDraw(play, kfSkelAnime, *limbIndex, &newDList, &drawFlags, arg, &rot, &pos) != 0)) {
+         overrideKeyframeDraw(play, kfSkelAnime, *limbIndex, &newDList, &drawFlags, arg, &rot, &pos))) {
 
         Matrix_TranslateRotateZYX(&pos, &rot);
 
