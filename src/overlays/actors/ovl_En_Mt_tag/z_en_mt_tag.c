@@ -145,6 +145,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     // The Goron Racetrack is configured such that the sceneExitIndex for any given floor polygon
     // gradually increases as you move forward through the racetrack.
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&play->colCtx, actor->floorPoly, actor->floorBgId);
+    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the
+    //! `sceneExitIndex + 1` access.
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         //! @bug - upcomingCheckpoint is not initialized here
         return -1;
@@ -153,8 +155,6 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     checkpointIterator = sStartingCheckpointPerSceneExitIndex[sceneExitIndex];
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
-    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the
-    //! `sceneExitIndex + 1` access.
     do {
         if (Math3D_PointDistToLine2D(
                 actor->world.pos.x, actor->world.pos.z, sCheckpointPositions[checkpointIterator - 1].x,
