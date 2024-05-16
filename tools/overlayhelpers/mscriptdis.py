@@ -1458,8 +1458,14 @@ def disassemble_msg_script(data_file, script_start, offset, length):
                 elif cmd == 32 and i == 0:
                     arg_formatted = mask_names[arg_value]
                     assert arg_formatted is not None
+                elif cmd == 34 and (i == 0 or i == 1):
+                    arg_formatted = f'{arg_value}'
+                    assert arg_formatted is not None
                 elif cmd == 37 and i == 0:
                     arg_formatted = item_names[arg_value]
+                    assert arg_formatted is not None
+                elif cmd == 39 and i == 0:
+                    arg_formatted = f'{arg_value}'
                     assert arg_formatted is not None
                 elif cmd == 42 and i == 0:
                     arg_formatted = item_names[arg_value]
