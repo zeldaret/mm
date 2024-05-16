@@ -14,7 +14,7 @@ typedef struct EnBjt {
     /* 0x188 */ EnBjtActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 scheduleResult;
-    /* 0x1DC */ s32 msgEventArg4;
+    /* 0x1DC */ s32 msgEventScriptPos;
     /* 0x1E0 */ Vec3s jointTable[TOILET_HAND_LIMB_MAX];
     /* 0x20A */ Vec3s morphTable[TOILET_HAND_LIMB_MAX];
     /* 0x234 */ u16 stateFlags;

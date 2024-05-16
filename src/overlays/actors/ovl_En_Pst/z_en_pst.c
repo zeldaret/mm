@@ -629,7 +629,7 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_Talk(EnPst* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:
@@ -650,7 +650,7 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
             }
         }
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->msgEventArg4 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = EnPst_FollowSchedule;
     }
 }

@@ -403,11 +403,11 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    if (MsgEvent_RunScript(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
-        this->msgEventArg4 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = EnBjt_FollowSchedule;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);

@@ -764,7 +764,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 }
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
         if (CHECK_EVENTINF(EVENTINF_43)) {
             CLEAR_EVENTINF(EVENTINF_42);
             CLEAR_EVENTINF(EVENTINF_43);
@@ -778,7 +778,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
         this->actor.child = NULL;
         this->stateFlags |= EN_NB_FLAG_400;
         this->unk_282 = 20;
-        this->msgEventArg4 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = EnNb_FollowSchedule;
     }
 }

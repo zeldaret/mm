@@ -14,7 +14,7 @@ typedef struct DmTag {
     /* 0x18C */ u16 unk_18C;
     /* 0x18E */ u8 unk_18E;
     /* 0x190 */ MsgScript* msgEventScript;
-    /* 0x194 */ s32 msgEventArg4;
+    /* 0x194 */ s32 msgEventScriptPos;
     /* 0x198 */ UNK_TYPE1 pad198[0xC];
     /* 0x1A4 */ s16 unk_1A4;
     /* 0x1A8 */ MsgEventCallback msgEventCallback;

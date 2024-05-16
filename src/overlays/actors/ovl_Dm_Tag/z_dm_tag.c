@@ -259,7 +259,7 @@ void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
         this->actionFunc = func_80C229AC;
     }
 }
