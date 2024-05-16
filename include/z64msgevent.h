@@ -142,7 +142,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(skip) \
+#define MSCRIPT_BRANCH_ON_CALLBACK(skip) \
     MSCRIPT_CMD_09, MSCRIPT_PACK_16(skip)
 
 /**
@@ -331,7 +331,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_BRANCH_ON_CALLBACK_2(skip) \
+#define MSCRIPT_BRANCH_ON_CALLBACK_CONTINUE(skip) \
     MSCRIPT_CMD_40, MSCRIPT_PACK_16(skip)
 
 /**
@@ -349,7 +349,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 7
  */
-#define MSCRIPT_BRANCH_ON_CALLBACK(skip1, skip2, skip3) \
+#define MSCRIPT_BRANCH_ON_CALLBACK_MULTI(skip1, skip2, skip3) \
     MSCRIPT_CMD_43, MSCRIPT_PACK_16(skip1), MSCRIPT_PACK_16(skip2), MSCRIPT_PACK_16(skip3)
 
 /**
