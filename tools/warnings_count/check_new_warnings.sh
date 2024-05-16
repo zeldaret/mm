@@ -40,7 +40,7 @@ Optional arguments:
 jobs=1
 full=
 run="make clean
-    make uncompressed"
+    make rom"
 
 
 
@@ -106,7 +106,7 @@ if [[ $full ]]; then
     make_warnings all build
 else
     make clean
-    make_warnings uncompressed build
+    make_warnings rom build
 fi
 
 
