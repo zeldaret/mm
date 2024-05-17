@@ -1,7 +1,7 @@
 #include "global.h"
 
 #define MSCRIPT_CONTINUE 0
-#define MSCRIPT_STOP     1
+#define MSCRIPT_STOP 1
 
 /**
  * Branch forward if the provided week_event_reg flag is set
@@ -319,7 +319,7 @@ s32 MsgEvent_Cmd12(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * End script when textbox is done?
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
@@ -458,7 +458,7 @@ s32 MsgEvent_Cmd21(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Unsets ACTOR_FLAG_10000 for the actor executing the script
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
@@ -470,7 +470,7 @@ s32 MsgEvent_Cmd22(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Sets player focus & talk actor to the child of the actor executing the script
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
@@ -498,7 +498,7 @@ s32 MsgEvent_Cmd24(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Unconditional branch by `skip`
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  *  1:(s16) skip
@@ -514,7 +514,7 @@ s32 MsgEvent_Cmd25(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Branch forwards if the specified quest item is obtained
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  *  1:(u16) questItem
@@ -848,7 +848,7 @@ s32 MsgEvent_Cmd40(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Skip forward if a powder keg is in inventory or if a powder keg actor exists
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  *  1:(s16) skip
@@ -917,7 +917,7 @@ s32 MsgEvent_Cmd43(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 
 /**
  * Close the current textbox and set the player actor text id
- * 
+ *
  * Command structure:
  *  0:(u8)  cmd
  *  1:(u16) textId
@@ -950,7 +950,7 @@ s32 MsgEvent_Cmd45(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
 }
 
 /**
- * 
+ *
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -1028,69 +1028,112 @@ s32 MsgEvent_Cmd50(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
     return MSCRIPT_CONTINUE;
 }
 
-MsgEventHandler sMsgEventCmdHandlers[51] = {
-    MsgEvent_Cmd00, MsgEvent_Cmd01, MsgEvent_Cmd02, MsgEvent_Cmd03, MsgEvent_Cmd04, MsgEvent_Cmd05, MsgEvent_Cmd06,
-    MsgEvent_Cmd07, MsgEvent_Cmd08, MsgEvent_Cmd09, MsgEvent_Cmd10, MsgEvent_Cmd11, MsgEvent_Cmd12, MsgEvent_Cmd13,
-    MsgEvent_Cmd14, MsgEvent_Cmd15, MsgEvent_Cmd16, MsgEvent_Cmd17, MsgEvent_Cmd18, MsgEvent_Cmd19, MsgEvent_Cmd20,
-    MsgEvent_Cmd21, MsgEvent_Cmd22, MsgEvent_Cmd23, MsgEvent_Cmd24, MsgEvent_Cmd25, MsgEvent_Cmd26, MsgEvent_Cmd27,
-    MsgEvent_Cmd28, MsgEvent_Cmd29, MsgEvent_Cmd30, MsgEvent_Cmd31, MsgEvent_Cmd32, MsgEvent_Cmd33, MsgEvent_Cmd34,
-    MsgEvent_Cmd35, MsgEvent_Cmd36, MsgEvent_Cmd37, MsgEvent_Cmd38, MsgEvent_Cmd39, MsgEvent_Cmd40, MsgEvent_Cmd41,
-    MsgEvent_Cmd42, MsgEvent_Cmd43, MsgEvent_Cmd44, MsgEvent_Cmd45, MsgEvent_Cmd46, MsgEvent_Cmd47, MsgEvent_Cmd48,
-    MsgEvent_Cmd49, MsgEvent_Cmd50,
+MsgEventHandler sMsgEventCmdHandlers[] = {
+    MsgEvent_Cmd00, // MSCRIPT_CMD_BRANCH_ON_WEEK_EVENT_REG
+    MsgEvent_Cmd01, // MSCRIPT_CMD_BRANCH_IF_GORON
+    MsgEvent_Cmd02, // MSCRIPT_CMD_BRANCH_IF_ZORA
+    MsgEvent_Cmd03, // MSCRIPT_CMD_BRANCH_IF_DEKU
+    MsgEvent_Cmd04, // MSCRIPT_CMD_BRANCH_IF_HUMAN
+    MsgEvent_Cmd05, // MSCRIPT_CMD_BRANCH_ON_TEXT_CHOICE
+    MsgEvent_Cmd06, // MSCRIPT_CMD_OFFER_ITEM
+    MsgEvent_Cmd07, // MSCRIPT_CMD_AUTOTALK
+    MsgEvent_Cmd08, // MSCRIPT_CMD_BRANCH_ON_RUPEES
+    MsgEvent_Cmd09, // MSCRIPT_CMD_BRANCH_ON_CALLBACK
+    MsgEvent_Cmd10, // MSCRIPT_CMD_BRANCH_ON_DAY
+    MsgEvent_Cmd11, // MSCRIPT_CMD_AWAIT_TEXT_JUMP
+    MsgEvent_Cmd12, // MSCRIPT_CMD_AWAIT_TEXT
+    MsgEvent_Cmd13, // MSCRIPT_CMD_AWAIT_TEXT_END
+    MsgEvent_Cmd14, // MSCRIPT_CMD_BEGIN_TEXT
+    MsgEvent_Cmd15, // MSCRIPT_CMD_CONTINUE_TEXT
+    MsgEvent_Cmd16, // MSCRIPT_CMD_DONE
+    MsgEvent_Cmd17, // MSCRIPT_CMD_WEEK_EVENT_REG_SET
+    MsgEvent_Cmd18, // MSCRIPT_CMD_CLOSE_TEXT
+    MsgEvent_Cmd19, // MSCRIPT_CMD_COLLECT_SET
+    MsgEvent_Cmd20, // MSCRIPT_CMD_CHANGE_RUPEES
+    MsgEvent_Cmd21, // MSCRIPT_CMD_PAUSE
+    MsgEvent_Cmd22, // MSCRIPT_CMD_UNSET_AUTOTALK
+    MsgEvent_Cmd23, // MSCRIPT_CMD_FOCUS_TO_CHILD
+    MsgEvent_Cmd24, // MSCRIPT_CMD_FOCUS_TO_SELF
+    MsgEvent_Cmd25, // MSCRIPT_CMD_JUMP
+    MsgEvent_Cmd26, // MSCRIPT_CMD_BRANCH_ON_QUEST_ITEM
+    MsgEvent_Cmd27, // MSCRIPT_CMD_BRANCH_ON_EVENT_INF
+    MsgEvent_Cmd28, // MSCRIPT_CMD_SET_EVENT_INF
+    MsgEvent_Cmd29, // MSCRIPT_CMD_UNSET_EVENT_INF
+    MsgEvent_Cmd30, // MSCRIPT_CMD_BRANCH_ON_ITEMACTION
+    MsgEvent_Cmd31, // MSCRIPT_CMD_BRANCH_ON_SONG_OBTAINED
+    MsgEvent_Cmd32, // MSCRIPT_CMD_BRANCH_ON_WORN_MASK
+    MsgEvent_Cmd33, // MSCRIPT_CMD_BRANCH_ON_TIME_GT
+    MsgEvent_Cmd34, // MSCRIPT_CMD_BRANCH_ON_TIME_LEQ
+    MsgEvent_Cmd35, // MSCRIPT_CMD_BRANCH_ON_SWITCH_FLAG
+    MsgEvent_Cmd36, // MSCRIPT_CMD_SET_SWITCH_FLAG
+    MsgEvent_Cmd37, // MSCRIPT_CMD_BRANCH_ON_ITEM
+    MsgEvent_Cmd38, // MSCRIPT_CMD_BRANCH_ON_TIME_INTERVAL
+    MsgEvent_Cmd39, // MSCRIPT_CMD_BRANCH_IF_DAY
+    MsgEvent_Cmd40, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
+    MsgEvent_Cmd41, // MSCRIPT_CMD_HAS_POWDER_KEG
+    MsgEvent_Cmd42, // MSCRIPT_CMD_DEL_ITEM
+    MsgEvent_Cmd43, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
+    MsgEvent_Cmd44, // MSCRIPT_CMD_PLAYER_TALK
+    MsgEvent_Cmd45, // MSCRIPT_CMD_NOTEBOOK_EVENT
+    MsgEvent_Cmd46, // MSCRIPT_CMD_AWAIT_TEXT_DONE
+    MsgEvent_Cmd47, // MSCRIPT_CMD_JUMP_3
+    MsgEvent_Cmd48, // MSCRIPT_CMD_PLAY_DECIDE
+    MsgEvent_Cmd49, // MSCRIPT_CMD_PLAY_CANCEL
+    MsgEvent_Cmd50, // MSCRIPT_CMD_PLAY_ERROR
 };
 
-u8 sMsgEventCmdLengths[51] = {
-    MSCRIPT_BRANCH_ON_WEEK_EVENT_REG_LENGTH,
-    3,
-    3,
-    3,
-    3,
-    7,
-    5,
-    3,
-    5,
-    3,
-    13,
-    3,
-    1,
-    1,
-    3,
-    3,
-    1,
-    3,
-    1,
-    3,
-    3,
-    1,
-    1,
-    1,
-    1,
-    3,
-    5,
-    5,
-    3,
-    3,
-    9,
-    5,
-    5,
-    5,
-    5,
-    5,
-    3,
-    5,
-    7,
-    5,
-    3,
-    3,
-    3,
-    7,
-    3,
-    3,
-    1,
-    3,
-    1,
-    1,
-    1,
+u8 sMsgEventCmdSizes[] = {
+    MSCRIPT_BRANCH_ON_WEEK_EVENT_REG_SIZE,    // MSCRIPT_CMD_BRANCH_ON_WEEK_EVENT_REG
+    MSCRIPT_BRANCH_IF_GORON_SIZE,             // MSCRIPT_CMD_BRANCH_IF_GORON
+    MSCRIPT_BRANCH_IF_ZORA_SIZE,              // MSCRIPT_CMD_BRANCH_IF_ZORA
+    MSCRIPT_BRANCH_IF_DEKU_SIZE,              // MSCRIPT_CMD_BRANCH_IF_DEKU
+    MSCRIPT_BRANCH_IF_HUMAN_SIZE,             // MSCRIPT_CMD_BRANCH_IF_HUMAN
+    MSCRIPT_BRANCH_ON_TEXT_CHOICE_SIZE,       // MSCRIPT_CMD_BRANCH_ON_TEXT_CHOICE
+    MSCRIPT_OFFER_ITEM_SIZE,                  // MSCRIPT_CMD_OFFER_ITEM
+    MSCRIPT_AUTOTALK_SIZE,                    // MSCRIPT_CMD_AUTOTALK
+    MSCRIPT_BRANCH_ON_RUPEES_SIZE,            // MSCRIPT_CMD_BRANCH_ON_RUPEES
+    MSCRIPT_BRANCH_ON_CALLBACK_SIZE,          // MSCRIPT_CMD_BRANCH_ON_CALLBACK
+    MSCRIPT_BRANCH_ON_DAY_SIZE,               // MSCRIPT_CMD_BRANCH_ON_DAY,
+    MSCRIPT_AWAIT_TEXT_JUMP_SIZE,             // MSCRIPT_CMD_AWAIT_TEXT_JUMP
+    MSCRIPT_AWAIT_TEXT_SIZE,                  // MSCRIPT_CMD_AWAIT_TEXT
+    MSCRIPT_AWAIT_TEXT_END_SIZE,              // MSCRIPT_CMD_AWAIT_TEXT_END
+    MSCRIPT_BEGIN_TEXT_SIZE,                  // MSCRIPT_CMD_BEGIN_TEXT
+    MSCRIPT_CONTINUE_TEXT_SIZE,               // MSCRIPT_CMD_CONTINUE_TEXT
+    MSCRIPT_DONE_SIZE,                        // MSCRIPT_CMD_DONE
+    MSCRIPT_WEEK_EVENT_REG_SET_SIZE,          // MSCRIPT_CMD_WEEK_EVENT_REG_SET
+    MSCRIPT_CLOSE_TEXT_SIZE,                  // MSCRIPT_CMD_CLOSE_TEXT
+    MSCRIPT_COLLECT_SET_SIZE,                 // MSCRIPT_CMD_COLLECT_SET
+    MSCRIPT_CHANGE_RUPEES_SIZE,               // MSCRIPT_CMD_CHANGE_RUPEES
+    MSCRIPT_PAUSE_SIZE,                       // MSCRIPT_CMD_PAUSE
+    MSCRIPT_UNSET_AUTOTALK_SIZE,              // MSCRIPT_CMD_UNSET_AUTOTALK
+    MSCRIPT_FOCUS_TO_CHILD_SIZE,              // MSCRIPT_CMD_FOCUS_TO_CHILD
+    MSCRIPT_FOCUS_TO_SELF_SIZE,               // MSCRIPT_CMD_FOCUS_TO_SELF
+    MSCRIPT_JUMP_SIZE,                        // MSCRIPT_CMD_JUMP
+    MSCRIPT_BRANCH_ON_QUEST_ITEM_SIZE,        // MSCRIPT_CMD_BRANCH_ON_QUEST_ITEM
+    MSCRIPT_BRANCH_ON_EVENT_INF_SIZE,         // MSCRIPT_CMD_BRANCH_ON_EVENT_INF
+    MSCRIPT_SET_EVENT_INF_SIZE,               // MSCRIPT_CMD_SET_EVENT_INF
+    MSCRIPT_UNSET_EVENT_INF_SIZE,             // MSCRIPT_CMD_UNSET_EVENT_INF
+    MSCRIPT_BRANCH_ON_ITEMACTION_SIZE,        // MSCRIPT_CMD_BRANCH_ON_ITEMACTION
+    MSCRIPT_BRANCH_ON_SONG_OBTAINED_SIZE,     // MSCRIPT_CMD_BRANCH_ON_SONG_OBTAINED
+    MSCRIPT_BRANCH_ON_WORN_MASK_SIZE,         // MSCRIPT_CMD_BRANCH_ON_WORN_MASK
+    MSCRIPT_BRANCH_ON_TIME_GT_SIZE,           // MSCRIPT_CMD_BRANCH_ON_TIME_GT
+    MSCRIPT_BRANCH_ON_TIME_LEQ_SIZE,          // MSCRIPT_CMD_BRANCH_ON_TIME_LEQ
+    MSCRIPT_BRANCH_ON_SWITCH_FLAG_SIZE,       // MSCRIPT_CMD_BRANCH_ON_SWITCH_FLAG
+    MSCRIPT_SET_SWITCH_FLAG_SIZE,             // MSCRIPT_CMD_SET_SWITCH_FLAG
+    MSCRIPT_BRANCH_ON_ITEM_SIZE,              // MSCRIPT_CMD_BRANCH_ON_ITEM
+    MSCRIPT_BRANCH_ON_TIME_INTERVAL_SIZE,     // MSCRIPT_CMD_BRANCH_ON_TIME_INTERVAL
+    MSCRIPT_BRANCH_IF_DAY_SIZE,               // MSCRIPT_CMD_BRANCH_IF_DAY
+    MSCRIPT_BRANCH_ON_CALLBACK_CONTINUE_SIZE, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
+    MSCRIPT_HAS_POWDER_KEG_SIZE,              // MSCRIPT_CMD_HAS_POWDER_KEG
+    MSCRIPT_DEL_ITEM_SIZE,                    // MSCRIPT_CMD_DEL_ITEM
+    MSCRIPT_BRANCH_ON_CALLBACK_MULTI_SIZE,    // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
+    MSCRIPT_PLAYER_TALK_SIZE,                 // MSCRIPT_CMD_PLAYER_TALK
+    MSCRIPT_NOTEBOOK_EVENT_SIZE,              // MSCRIPT_CMD_NOTEBOOK_EVENT
+    MSCRIPT_AWAIT_TEXT_DONE_SIZE,             // MSCRIPT_CMD_AWAIT_TEXT_DONE
+    MSCRIPT_JUMP_3_SIZE,                      // MSCRIPT_CMD_JUMP_3
+    MSCRIPT_PLAY_DECIDE_SIZE,                 // MSCRIPT_CMD_PLAY_DECIDE
+    MSCRIPT_PLAY_CANCEL_SIZE,                 // MSCRIPT_CMD_PLAY_CANCEL
+    MSCRIPT_PLAY_ERROR_SIZE,                  // MSCRIPT_CMD_PLAY_ERROR
 };
 
 /**
@@ -1126,8 +1169,8 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgEven
         cmdId = *script;
 
         // Get command length
-        if (cmdId < ARRAY_COUNTU(sMsgEventCmdLengths)) {
-            cmdLen = sMsgEventCmdLengths[cmdId];
+        if (cmdId < ARRAY_COUNTU(sMsgEventCmdSizes)) {
+            cmdLen = sMsgEventCmdSizes[cmdId];
         } else {
             cmdLen = -1;
             //! @bug command handler still runs even if cmdId is invalid

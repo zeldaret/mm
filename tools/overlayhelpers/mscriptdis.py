@@ -54,7 +54,7 @@ cmd_info = [
     ('MSCRIPT_PLAYER_TALK', 0x03, '', '>H', ()),
     ('MSCRIPT_NOTEBOOK_EVENT', 0x03, '', '>H', ()),
     ('MSCRIPT_AWAIT_TEXT_DONE', 0x01, '', '', ()),
-    ('MSCRIPT_JUMP', 0x03, '', '>h', (0,)),
+    ('MSCRIPT_JUMP_3', 0x03, '', '>h', (0,)),
     ('MSCRIPT_PLAY_DECIDE', 0x01, '', '', ()),
     ('MSCRIPT_PLAY_CANCEL', 0x01, '', '', ()),
     ('MSCRIPT_PLAY_ERROR', 0x01, '', '', ()),
