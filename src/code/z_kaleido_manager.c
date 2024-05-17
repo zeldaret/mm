@@ -4,11 +4,8 @@
 #include "fault.h"
 #include "loadfragment.h"
 
-#define KALEIDO_OVERLAY(name)                                                                        \
-    {                                                                                                \
-        NULL, SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
-            SEGMENT_END(ovl_##name), 0, #name,                                                       \
-    }
+#define KALEIDO_OVERLAY(name) \
+    { NULL, ROM_FILE(ovl_##name), SEGMENT_START(ovl_##name), SEGMENT_END(ovl_##name), 0, #name }
 
 KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEIDO_OVL_MAX] = {
     KALEIDO_OVERLAY(kaleido_scope),
@@ -43,7 +40,7 @@ uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param) {
 
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = sKaleidoAreaPtr;
-    Overlay_Load(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
+    Overlay_Load(ovl->file.vromStart, ovl->file.vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
     ovl->offset = (uintptr_t)ovl->loadedRamAddr - (uintptr_t)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }

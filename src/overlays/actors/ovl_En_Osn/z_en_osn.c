@@ -1064,7 +1064,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_XLU_DISP);
-
-        CLOSE_DISPS(play->state.gfxCtx);
     }
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
