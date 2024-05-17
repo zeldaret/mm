@@ -376,7 +376,7 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
     this->picto.actor.xzDistToPlayer = Math_Vec3f_DistXZ(&sp28, &sp1C);
 }
 
-MsgScript* func_80A52CF8(EnDnq* this, PlayState* play) {
+MsgScript* EnDnq_GetMsgScript(EnDnq* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return D_80A53438;
     }
@@ -394,7 +394,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
     if (((this->unk_37C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgScript = func_80A52CF8(this, play);
+        this->msgScript = EnDnq_GetMsgScript(this, play);
         this->actionFunc = func_80A52FB8;
         ret = true;
     }

@@ -486,7 +486,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_80BC045C(EnNb* this, PlayState* play) {
+MsgScript* EnNb_GetMsgScript(EnNb* this, PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_43)) {
         this->msgEventCallback = func_80BC01DC;
         return D_80BC1464;
@@ -511,7 +511,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
         this->behaviour = ENNB_BEHAVIOUR_0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_1E8;
-        this->msgScript = func_80BC045C(this, play);
+        this->msgScript = EnNb_GetMsgScript(this, play);
         this->stateFlags |= EN_NB_FLAG_20;
         this->actionFunc = func_80BC0EAC;
         ret = true;

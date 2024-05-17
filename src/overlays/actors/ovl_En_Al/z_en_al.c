@@ -740,7 +740,7 @@ s32 func_80BDEA14(Actor* thisx, PlayState* play) {
     return sp18;
 }
 
-MsgScript* func_80BDEABC(EnAl* this, PlayState* play) {
+MsgScript* EnAl_GetMsgScript(EnAl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_35C == 3) {
@@ -806,7 +806,7 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
         this->unk_4E6 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_368;
-        this->msgScript = func_80BDEABC(this, play);
+        this->msgScript = EnAl_GetMsgScript(this, play);
         this->unk_4C2 |= 0x20;
         this->actionFunc = func_80BDF6C4;
         ret = true;

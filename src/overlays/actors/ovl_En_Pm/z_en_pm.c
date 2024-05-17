@@ -743,7 +743,7 @@ s32 func_80AF8478(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_80AF8540(EnPm* this, PlayState* play) {
+MsgScript* EnPm_GetMsgScript(EnPm* this, PlayState* play) {
     switch (this->unk_258) {
         case 28:
             this->msgEventCallback = func_80AF8348;
@@ -821,7 +821,7 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         this->unk_378 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->msgScript = func_80AF8540(this, play);
+        this->msgScript = EnPm_GetMsgScript(this, play);
         if ((this->unk_258 != 24) && (this->unk_258 != 9) && (this->unk_258 != 20) && (this->unk_258 != 21) &&
             (this->unk_258 != 22)) {
             this->unk_356 |= 0x20;

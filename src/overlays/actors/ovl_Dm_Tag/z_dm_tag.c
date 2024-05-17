@@ -211,7 +211,7 @@ s32 func_80C227E8(Actor* thisx, PlayState* play) {
     return false;
 }
 
-MsgScript* func_80C22880(DmTag* this, PlayState* play) {
+MsgScript* DmTag_GetMsgScript(DmTag* this, PlayState* play) {
     s32 time;
 
     switch (this->unk_18E) {
@@ -243,7 +243,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgScript = func_80C22880(this, play);
+        this->msgScript = DmTag_GetMsgScript(this, play);
         this->actionFunc = func_80C229FC;
         ret = true;
     }

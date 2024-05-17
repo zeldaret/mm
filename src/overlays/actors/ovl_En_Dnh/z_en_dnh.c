@@ -261,7 +261,7 @@ s32 func_80A50D40(Actor* actor, PlayState* play) {
     return 1;
 }
 
-MsgScript* func_80A50DF8(EnDnh* this, PlayState* play) {
+MsgScript* EnDnh_GetMsgScript(EnDnh* this, PlayState* play) {
     switch (this->unk198) {
         case 1:
             return D_80A51384;
@@ -280,7 +280,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
         return 0;
     }
     SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-    this->msgScript = func_80A50DF8(this, play);
+    this->msgScript = EnDnh_GetMsgScript(this, play);
     this->actionFunc = func_80A50F38;
     return 1;
 }

@@ -806,7 +806,7 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_8094EDBC(EnGm* this, PlayState* play) {
+MsgScript* EnGm_GetMsgScript(EnGm* this, PlayState* play) {
     switch (this->unk_258) {
         case 1:
             this->msgEventCallback = func_8094E52C;
@@ -864,7 +864,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
         this->unk_3E0 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->msgScript = func_8094EDBC(this, play);
+        this->msgScript = EnGm_GetMsgScript(this, play);
 
         if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {

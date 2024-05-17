@@ -232,7 +232,7 @@ void func_8092C934(EnDns* this) {
     }
 }
 
-MsgScript* func_8092C9BC(EnDns* this, PlayState* play) {
+MsgScript* EnDns_GetMsgScript(EnDns* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
@@ -295,7 +295,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
             }
             this->unk_2DA = this->actor.world.rot.y;
         }
-        this->msgScript = func_8092C9BC(this, play);
+        this->msgScript = EnDns_GetMsgScript(this, play);
         this->actionFunc = func_8092D4D8;
         ret = true;
     }

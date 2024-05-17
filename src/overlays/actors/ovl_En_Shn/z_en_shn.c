@@ -628,7 +628,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_80AE6880(EnShn* this, PlayState* play) {
+MsgScript* EnShn_GetMsgScript(EnShn* this, PlayState* play) {
     if (this->unk_2BE != 0) {
         return D_80AE70B0;
     }
@@ -658,7 +658,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
             this->unk_2E4 = player->exchangeItemAction;
         }
         SubS_SetOfferMode(&this->unk_1D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgScript = func_80AE6880(this, play);
+        this->msgScript = EnShn_GetMsgScript(this, play);
         this->unk_2C6 = 0;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
             this->unk_1D8 |= 8;

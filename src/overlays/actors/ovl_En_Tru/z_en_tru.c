@@ -715,7 +715,7 @@ s32 func_80A86DB8(EnTru* this) {
     return false;
 }
 
-MsgScript* func_80A871E0(EnTru* this, PlayState* play) {
+MsgScript* EnTru_GetMsgScript(EnTru* this, PlayState* play) {
     if (this->unk_34E & 0x2000) {
         if (this->unk_38C == 35) {
             this->unk_390 = 1;
@@ -766,7 +766,7 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
         this->msgEventCallback = func_80A875AC;
         this->unk_390 = 0;
         this->unk_364 = 0;
-        this->msgScript = func_80A871E0(this, play);
+        this->msgScript = EnTru_GetMsgScript(this, play);
         SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80A881E0;
         ret = true;

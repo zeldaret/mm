@@ -434,7 +434,7 @@ s32 func_80BF17BC(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_80BF1920(EnIg* this, PlayState* play) {
+MsgScript* EnIg_GetMsgScript(EnIg* this, PlayState* play) {
     switch (this->scheduleResult) {
         case 3:
             this->msgEventCallback = func_80BF17BC;
@@ -469,7 +469,7 @@ s32 func_80BF19A0(EnIg* this, PlayState* play) {
         this->unk_3F6 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_2A8;
-        this->msgScript = func_80BF1920(this, play);
+        this->msgScript = EnIg_GetMsgScript(this, play);
         if ((this->scheduleResult != 2) && (this->scheduleResult != 3) && (this->scheduleResult != 4)) {
             this->unk_3D0 |= 0x20;
         }
