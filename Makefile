@@ -153,7 +153,7 @@ CHECKSUMMER   := $(PYTHON) tools/buildtools/checksummer.py
 SHIFTJIS_CONV := $(PYTHON) tools/buildtools/shiftjis_conv.py
 
 ASM_PROC       := $(PYTHON) tools/asm-processor/build.py
-ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename --encode-cutscene-data-floats
 ifneq ($(ASM_PROC_FORCE), 0)
   ASM_PROC_FLAGS += --force
 endif
@@ -328,8 +328,8 @@ $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/dmadata/compress_ranges.txt
 	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-start `tools/buildtools/dmadata_start.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/dmadata/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/linker_scripts/undefined_syms.ld
-	$(LD) -T $(LDSCRIPT) -T $(BUILD_DIR)/linker_scripts/undefined_syms.ld --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/linker_scripts/undefined_syms.ld $(BUILD_DIR)/linker_scripts/extra.ld
+	$(LD) -T $(LDSCRIPT) -T $(BUILD_DIR)/linker_scripts/undefined_syms.ld -T $(BUILD_DIR)/linker_scripts/extra.ld --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
 
 ## Order-only prerequisites 
 # These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
