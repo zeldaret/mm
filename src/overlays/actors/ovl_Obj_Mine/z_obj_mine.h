@@ -12,10 +12,10 @@ typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 #define OBJMINE_GET_PATH_SPEED(thisx) (((thisx)->params >> 8) & 7)
 #define OBJMINE_GET_TYPE(thisx) (((thisx)->params >> 12) & 3)
 
-#define OBJMINE_PARAM(type, linkCount, pathIndex, pathSpeed) (((type) << 0xC) | ((type == OBJMINE_TYPE_PATH) ? ((pathIndex) | ((pathSpeed) << 8)) : (linkCount)))
-#define OBJMINE_PATH_PARAM(pathIndex, pathSpeed) OBJMINE_PARAM(OBJMINE_TYPE_PATH, 0, pathIndex, pathSpeed)
-#define OBJMINE_AIR_PARAM(linkCount) OBJMINE_PARAM(OBJMINE_TYPE_AIR, linkCount, 0, 0)
-#define OBJMINE_WATER_PARAM(linkCount) OBJMINE_PARAM(OBJMINE_TYPE_WATER, linkCount, 0, 0)
+#define OBJMINE_PARAMS(type, linkCount, pathIndex, pathSpeed) (((type) << 0xC) | ((type == OBJMINE_TYPE_PATH) ? ((pathIndex) | ((pathSpeed) << 8)) : (linkCount)))
+#define OBJMINE_PATH_PARAMS(pathIndex, pathSpeed) OBJMINE_PARAMS(OBJMINE_TYPE_PATH, 0, pathIndex, pathSpeed)
+#define OBJMINE_AIR_PARAMS(linkCount) OBJMINE_PARAMS(OBJMINE_TYPE_AIR, linkCount, 0, 0)
+#define OBJMINE_WATER_PARAMS(linkCount) OBJMINE_PARAMS(OBJMINE_TYPE_WATER, linkCount, 0, 0)
 
 #define OBJMINE_CHAIN_MAX 63
 
