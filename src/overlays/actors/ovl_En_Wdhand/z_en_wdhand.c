@@ -239,14 +239,14 @@ void EnWdhand_GetInitVelocity(EnWdhand* this, Vec3f* dst) {
     s32 param;
 
     param = EN_WDHAND_GET_Y_INIT_VELOCITY(&this->actor);
-    if (param == 0x7F) {
-        param = 0x28;
+    if (param == EN_WDHAND_INIT_VELOCITY_MAX) {
+        param = 40;
     }
     dst->y = param * 0.2f;
 
     param = EN_WDHAND_GET_Z_INIT_VELOCITY(&this->actor);
-    if (param == 0x7F) {
-        param = 0x28;
+    if (param == EN_WDHAND_INIT_VELOCITY_MAX) {
+        param = 40;
     }
     dst->z = param * 0.2f;
 
