@@ -1,5 +1,19 @@
 #include "prevent_bss_reordering.h"
 #include "prevent_bss_reordering2.h"
+
+#include "PR/ultratypes.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+struct CutsceneCamera;
+
+s16 sCutsceneQuakeIndex;
+struct CutsceneCamera sCutsceneCameraInfo;
+u16 sCueTypeList[10];
+u8 D_801F4DDC;
+static s16 sBssPad;
+u8 gDisablePlayerCsActionStartPos;
+s16 gDungeonBossWarpSceneId;
+
 // clang-format off
 // Partial structs taken from "prevent_bss_reordering.h"
 struct Dummy200 { int x; };
@@ -16,20 +30,11 @@ struct Dummy210 { int x; };
 struct Dummy211 { int x; };
 struct Dummy212 { int x; };
 struct Dummy213 { int x; };
+struct Dummy214 { int x; };
+struct Dummy215 { int x; };
+struct Dummy216 { int x; };
+struct Dummy217 { int x; };
 // clang-format on
-
-#include "PR/ultratypes.h"
-
-// Variables are put before most headers as a hacky way to bypass bss reordering
-struct CutsceneCamera;
-
-s16 sCutsceneQuakeIndex;
-struct CutsceneCamera sCutsceneCameraInfo;
-u16 sCueTypeList[10];
-u8 D_801F4DDC;
-static s16 sBssPad;
-u8 gDisablePlayerCsActionStartPos;
-s16 gDungeonBossWarpSceneId;
 
 #include "z64quake.h"
 #include "z64rumble.h"

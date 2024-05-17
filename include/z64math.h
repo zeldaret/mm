@@ -165,6 +165,7 @@ extern Vec3s gZeroVec3s;
 #define IS_ZERO(f) (fabsf(f) < 0.008f)
 
 #define SQ(x) ((x) * (x))
+#define CB(x) ((x) * (x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 
