@@ -3,13 +3,6 @@
  */
 
 beginseg
-    name "makerom"
-    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
-    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
-    include "$(BUILD_DIR)/asm/makerom/entry.o"
-endseg
-
-beginseg
     name "framebuffer_lo"
     address 0x80000500
     flags NOLOAD
@@ -17,7 +10,16 @@ beginseg
 endseg
 
 beginseg
+    name "makerom"
+    address 0x8007F000
+    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
+    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
+    include "$(BUILD_DIR)/asm/makerom/entry.o"
+endseg
+
+beginseg
     name "boot"
+    address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
     include "$(BUILD_DIR)/data/boot/rspboot.data.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
@@ -3444,8 +3446,7 @@ beginseg
     name "ovl_Bg_Danpei_Movebg"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg_reloc.o"
 endseg
 
 beginseg

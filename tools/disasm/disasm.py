@@ -79,7 +79,6 @@ def discard_decomped_files(files_spec, include_files):
         seg_start = i
         new_files = {}
         included = False
-        saved_off = 0
         for offset, file in file_list.items():
             if file == "[PADDING]":
                 continue
@@ -1138,9 +1137,13 @@ def getImmOverride(insn: rabbitizer.Instruction):
 def getLabelForVaddr(vaddr: int, in_data: bool = False) -> str:
     label = ""
     if vaddr in functions:
-        label += f"\nglabel {proper_name(vaddr, in_data=in_data)}\n"
+        name = proper_name(vaddr, in_data=in_data)
+        if in_data:
+            label += f"\ndlabel {name}\n"
+        else:
+            label += f"\nglabel {name}\n"
     if vaddr in jtbl_labels:
-        label += f"glabel L{vaddr:08X}\n"
+        label += f"jlabel L{vaddr:08X}\n"
     if vaddr in branch_labels:
         label += f".L{vaddr:08X}:\n"
     return label
@@ -1164,12 +1167,25 @@ def fixup_text_symbols(data, vram, data_regions, info):
 
     delay_slot = False
     disasm_as_data = False
+    prev_func = ""
     for entry in file:
         insn = entry["insn"]
         in_data = entry["data"]
         comment = entry["comment"]
 
-        text.append(getLabelForVaddr(insn.vram, in_data))
+        cur_label = getLabelForVaddr(insn.vram, in_data)
+
+        # Handle adding endlabels to the previous function
+        if cur_label and ("glabel" in cur_label or "dlabel" in cur_label):
+            if prev_func:
+                text.append(f"endlabel {prev_func}\n")
+            if "glabel" in cur_label:
+                prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+            else:
+                prev_func = ""
+
+        text.append(cur_label)
+
         if insn.vram in functions:
             # new function, needs to check this again
             disasm_as_data = False
@@ -1191,6 +1207,10 @@ def fixup_text_symbols(data, vram, data_regions, info):
 
         delay_slot = insn.hasDelaySlot()
 
+    # Add endlabel to last function
+    if prev_func:
+        text.append(f"endlabel {prev_func}\n")
+
     with open(f"{ASM_OUT}/{segment_dirname}/{info['name']}.text.s", "w") as outfile:
         outfile.write("".join(text))
 
@@ -1206,6 +1226,7 @@ def disassemble_text(data, vram, data_regions, info):
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
     delay_slot = False
+    prev_func = ""
 
     for i, raw_insn in enumerate(raw_insns, 0):
         i *= 4
@@ -1241,7 +1262,19 @@ def disassemble_text(data, vram, data_regions, info):
             )
             continue
 
-        result += getLabelForVaddr(vaddr)
+        cur_label = getLabelForVaddr(vaddr)
+
+        # Handle adding endlabels to the previous function
+        if cur_label and ("glabel" in cur_label or "dlabel" in cur_label):
+            if prev_func:
+                result += f"endlabel {prev_func}\n"
+            if "glabel" in cur_label:
+                prev_func = cur_label.replace("glabel", "").strip().split('\n')[0]
+            else:
+                prev_func = ""
+
+        result += cur_label
+
 
         comment = f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */"
         extraLJust = 0
@@ -1255,6 +1288,10 @@ def disassemble_text(data, vram, data_regions, info):
         result += f"{comment}  {disassembled}\n"
 
         delay_slot = insn.hasDelaySlot()
+
+    # Add endlabel to last function
+    if prev_func:
+        result += f"endlabel {prev_func}\n"
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
@@ -1340,7 +1377,7 @@ def disassemble_data(data, vram, end, info):
             if data_offset == len(data):
                 continue
 
-            r = f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\ndlabel {proper_name(symbol, True)}\n"
 
             if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
                 r += (
@@ -1525,7 +1562,7 @@ def disassemble_rodata(data, vram, end, info):
 
             force_ascii_str = symbol in [0x801D0708]
 
-            r = f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\ndlabel {proper_name(symbol, True)}\n"
 
             if symbol in strings:
                 string_data = data[data_offset : data_offset + data_size]
@@ -1695,7 +1732,7 @@ def disassemble_bss(vram, end, info):
             else:
                 next_symbol = end
 
-            result.append(f"\nglabel {proper_name(symbol, True)}\n")
+            result.append(f"\ndlabel {proper_name(symbol, True)}\n")
             result.append(
                 f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
             )
@@ -1756,16 +1793,48 @@ def get_overlay_sections(vram, overlay):
         [bss_end_vram, bss_end_vram, "reloc", None, overlay[header_loc:], None],
     ]
 
+def get_storage_medium(id):
+    if id == 'N':
+        return "CARTRIDGE"
+    elif id == 'C':
+        return "CARTRIDGE_EXPANDABLE"
+    elif id == 'D':
+        return "DISK"
+    elif id == 'E':
+        return "DISK_EXPANSION"
+    else:
+        return "UNKNOWN"
+
+def get_region(id):
+    if id == 'A':
+        return "ALL"
+    elif id == 'J':
+        return "JP"
+    elif id == 'E':
+        return "US"
+    elif id == 'P':
+        return "PAL"
+    elif id == 'G':
+        return "GATEWAY"
+    elif id == 'L':
+        return "LODGENET"
+    else:
+        return "UNKNOWN"
 
 def disassemble_makerom(section):
     os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
 
     if section[2] == "rom_header":
         (
+            endian,
             pi_dom1_reg,
+            pi_dom1_pwd,
+            pi_dom1_lat,
             clockrate,
             entrypoint,
-            revision,
+            pad_ver,
+            hw_ver,
+            os_ver,
             chksum1,
             chksum2,
             pad1,
@@ -1776,26 +1845,28 @@ def disassemble_makerom(section):
             cart_id,
             region,
             version,
-        ) = struct.unpack(">IIIIIIII20sII2s1sB", section[4])
+        ) = struct.unpack(">BBBBIIHBBIIII20sII2s1sB", section[4])
+
 
         out = f"""/*
  * The Legend of Zelda: Majora's Mask ROM header
  */
 
-.word  0x{pi_dom1_reg:08X}             /* PI BSD Domain 1 register */
-.word  0x{clockrate:08X}             /* Clockrate setting */
-.word  0x{entrypoint:08X}             /* Entrypoint function (`entrypoint`) */
-.word  0x{revision:08X}             /* Revision */
-.word  0x{chksum1:08X}             /* Checksum 1 */
-.word  0x{chksum2:08X}             /* Checksum 2 */
-.word  0x{pad1:08X}             /* Unknown */
-.word  0x{pad2:08X}             /* Unknown */
-.ascii "{rom_name.decode('ascii')}" /* Internal ROM name */
-.word  0x{pad3:08X}             /* Unknown */
-.word  0x{cart:08X}             /* Cartridge */
-.ascii "{cart_id.decode('ascii')}"                   /* Cartridge ID */
-.ascii "{region.decode('ascii')}"                    /* Region */
-.byte  0x{version:02X}                   /* Version */
+#include "rom_header.h"
+
+/* 0x00 */ ENDIAN_IDENTIFIER
+/* 0x01 */ PI_DOMAIN_1_CFG({pi_dom1_lat}, {pi_dom1_pwd}, {pi_dom1_reg & 0xF}, {(pi_dom1_reg >> 4) & 3})
+/* 0x04 */ SYSTEM_CLOCK_RATE_SETTING(0x{clockrate:X})
+/* 0x08 */ ENTRYPOINT(entrypoint)
+/* 0x0C */ LIBULTRA_VERSION({hw_ver // 10}, {hw_ver % 10}, {chr(os_ver)})
+/* 0x10 */ CHECKSUM()
+/* 0x18 */ PADDING(8)
+/* 0x20 */ ROM_NAME("{rom_name.decode('ascii').rstrip()}")
+/* 0x34 */ PADDING(7)
+/* 0x3B */ MEDIUM({get_storage_medium(chr(cart))})
+/* 0x3C */ GAME_ID("{cart_id.decode('ascii')}")
+/* 0x3E */ REGION({get_region(region.decode('ascii'))})
+/* 0x3F */ GAME_REVISION({version})
 """
         with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
             outfile.write(out)
@@ -1830,7 +1901,7 @@ def disassemble_makerom(section):
         with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
             entry_asm = infile.read()
 
-        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+        entry_asm = entry_asm.replace("0x63B0", "%lo(_bootSegmentBssSize)")
         with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
             outfile.write(entry_asm)
 
@@ -1857,7 +1928,7 @@ def disassemble_dmadata(section):
     .word 0xFFFFFFFF
 .endm
 
-glabel {variables_ast[0x8009F8B0][0]}
+dlabel {variables_ast[0x8009F8B0][0]}
 """
     filenames = []
     with open("tools/disasm/dma_filenames.txt", "r") as infile:
@@ -1910,7 +1981,7 @@ def disassemble_segment(section):
         segment_dirname = section[-1]["name"]
 
         result = asm_header(".rodata")
-        result += f"\nglabel {section[-1]['name']}_Reloc\n"
+        result += f"\ndlabel {section[-1]['name']}_Reloc\n"
 
         lines = [words[i * 8 : (i + 1) * 8] for i in range(0, (len(words) // 8) + 1)]
         for line in [line for line in lines if len(line) != 0]:
@@ -1982,7 +2053,7 @@ def rodata_syms(rodata):
 
 
 def rodata_blocks(rodata):
-    return ["glabel" + b for b in rodata.split("glabel")[1:]]
+    return ["dlabel" + b for b in rodata.split("dlabel")[1:]]
 
 
 def find_late_rodata_start(rodata):
@@ -2272,7 +2343,7 @@ with multiprocessing.get_context("fork").Pool(jobs) as p:
 print("Splitting text and migrating rodata")
 
 func_regex = re.compile(r"\n\nglabel \S+\n")
-rodata_symbols_regex = re.compile(r"(?<=\n)glabel (.+)(?=\n)")
+rodata_symbols_regex = re.compile(r"(?<=\n)dlabel (.+)(?=\n)")
 asm_symbols_regex = re.compile(r"%(?:lo|hi)\((.+?)\)")
 
 # Split files and migrate rodata that should be migrated

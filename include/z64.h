@@ -71,6 +71,7 @@
 #include "z64transition.h"
 #include "z64view.h"
 #include "z64msgevent.h"
+#include "z64keyframe.h"
 #include "regs.h"
 
 
