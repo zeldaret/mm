@@ -10,7 +10,7 @@
 void MapDisp_DestroyMapI(PlayState* play);
 void MapDisp_InitMapI(PlayState* play);
 
-#include "gDPLoadTextureBlock_Runtime.inc.c"
+#include "gDPLoadTextureBlock_Runtime.c"
 
 static UNK_TYPE4 D_801BEB30[2] = { 0, 0 };
 
@@ -645,7 +645,7 @@ s16 MapDisp_GetBossRoomStorey(void) {
 
 // TransitionActor params test
 s32 MapDisp_IsBossDoor(s32 params) {
-    if (DOORSHUTTER_PARAMS_GET_TYPE((u16)params) == DOORSHUTTER_TYPE_5) {
+    if (DOORSHUTTER_PARAMS_GET_TYPE((u16)params) == DOORSHUTTER_TYPE_BOSS_DOOR) {
         return true;
     }
     return false;
@@ -1149,10 +1149,10 @@ void* MapDisp_AllocDungeonMap(PlayState* play, void* heap) {
         MapDisp_GetMapITexture(sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter], mapCompactId);
         if (dungeonMapRoomIter + 1 < sPauseDungeonMap.textureCount) {
             sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter + 1] =
-                (void*)ALIGN16((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+                (void*)ALIGN16((uintptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
                                MapData_CPID_GetSizeOfMapTex(mapCompactId));
         } else {
-            heapNext = (void*)((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+            heapNext = (void*)((uintptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
                                MapData_CPID_GetSizeOfMapTex(mapCompactId));
         }
     }

@@ -14,7 +14,7 @@ typedef enum DoorShutterType {
     /* 2 */ DOORSHUTTER_TYPE_2,
     /* 3 */ DOORSHUTTER_TYPE_3,
     /* 4 */ DOORSHUTTER_TYPE_4,
-    /* 5 */ DOORSHUTTER_TYPE_5,
+    /* 5 */ DOORSHUTTER_TYPE_BOSS_DOOR,
     /* 6 */ DOORSHUTTER_TYPE_6,
     /* 7 */ DOORSHUTTER_TYPE_7
 } DoorShutterType;

@@ -156,31 +156,31 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
     ShutterObjectInfo* sp24 = &D_808A2180[this->unk_163];
     s32 doorType = this->doorType;
 
-    if (doorType != 4) {
+    if (doorType != DOORSHUTTER_TYPE_4) {
         if (func_808A0900(this, play)) {
-            if ((doorType == 7) || (doorType == 6)) {
-                doorType = 1;
-            } else if (doorType == 5) {
-                doorType = 3;
+            if ((doorType == DOORSHUTTER_TYPE_7) || (doorType == DOORSHUTTER_TYPE_6)) {
+                doorType = DOORSHUTTER_TYPE_1;
+            } else if (doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
+                doorType = DOORSHUTTER_TYPE_3;
             } else {
-                doorType = 0;
+                doorType = DOORSHUTTER_TYPE_0;
             }
         }
     }
 
-    if (doorType == 0) {
+    if (doorType == DOORSHUTTER_TYPE_0) {
         this->unk_164 = sp24->index1;
     } else {
         this->unk_164 = sp24->index2;
     }
 
-    if (doorType == 1) {
+    if (doorType == DOORSHUTTER_TYPE_1) {
         if (!Flags_GetClear(play, this->slidingDoor.dyna.actor.room)) {
             DoorShutter_SetupAction(this, func_808A0F88);
             this->unk_168 = 1.0f;
             return true;
         }
-    } else if ((doorType == 2) || (doorType == 7)) {
+    } else if ((doorType == DOORSHUTTER_TYPE_2) || (doorType == DOORSHUTTER_TYPE_7)) {
         if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             DoorShutter_SetupAction(this, func_808A1548);
             this->unk_168 = 1.0f;
@@ -188,7 +188,7 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
         }
         DoorShutter_SetupAction(this, func_808A1618);
         return false;
-    } else if (doorType == 3) {
+    } else if (doorType == DOORSHUTTER_TYPE_3) {
         DoorShutter_SetupAction(this, func_808A1080);
         this->unk_168 = 1.0f;
         return false;
@@ -242,7 +242,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     DoorShutter_SetupAction(this, DoorShutter_SetupType);
     this->unk_163 = sp24;
 
-    if ((this->doorType == 4) || (this->doorType == 5)) {
+    if ((this->doorType == DOORSHUTTER_TYPE_4) || (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR)) {
         if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             this->unk_166 = 10;
         }
@@ -313,7 +313,7 @@ void func_808A0F88(DoorShutter* this, PlayState* play) {
     if (Flags_GetClear(play, this->slidingDoor.dyna.actor.room) ||
         Flags_GetClearTemp(play, this->slidingDoor.dyna.actor.room)) {
         this->csId = this->slidingDoor.dyna.actor.csId;
-        if (this->doorType == 7) {
+        if (this->doorType == DOORSHUTTER_TYPE_7) {
             if (this->csId != CS_ID_NONE) {
                 this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
@@ -346,7 +346,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         this->slidingDoor.dyna.actor.velocity.y = 0.0f;
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor));
-            if (this->doorType != 5) {
+            if (this->doorType != DOORSHUTTER_TYPE_BOSS_DOOR) {
                 DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
@@ -369,14 +369,14 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
                 player->doorTimer = 0;
             }
 
-            if (this->doorType == 6) {
+            if (this->doorType == DOORSHUTTER_TYPE_6) {
                 if (gSaveContext.save.saveInfo.playerData.healthCapacity <
                     (DOORSHUTTER_GET_1F(&this->slidingDoor.dyna.actor) * 0x10)) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->slidingDoor.dyna.actor.textId = 0x14FC;
                 }
             } else if (this->unk_166 != 0) {
-                if (this->doorType == 5) {
+                if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
                     if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.mapIndex)) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->slidingDoor.dyna.actor.textId = 0x1803;
@@ -506,7 +506,7 @@ void func_808A1684(DoorShutter* this, PlayState* play) {
     f32 phi_f0;
 
     if ((DECR(this->unk_166) == 0) && (play->roomCtx.status == 0) && func_808A1340(this, play)) {
-        if (this->doorType == 5) {
+        if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
             phi_f0 = 20.0f;
         } else {
             phi_f0 = 50.0f;
@@ -540,8 +540,8 @@ void func_808A1784(DoorShutter* this, PlayState* play) {
     } else if (func_808A1478(this, play, 0.0f)) {
         u8 doorType = this->doorType;
 
-        if ((doorType != 0) && (doorType != 1) &&
-            (((doorType != 7) && (doorType != 6)) || !func_808A0900(this, play))) {
+        if ((doorType != DOORSHUTTER_TYPE_0) && (doorType != DOORSHUTTER_TYPE_1) &&
+            (((doorType != DOORSHUTTER_TYPE_7) && (doorType != DOORSHUTTER_TYPE_6)) || !func_808A0900(this, play))) {
             DoorShutter_SetupAction(this, func_808A1618);
         } else {
             DoorShutter_SetupAction(this, func_808A1090);
@@ -712,7 +712,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
             } else if (this->slidingDoor.dyna.actor.room == transitionEntry->sides[0].room) {
                 Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
-        } else if (this->doorType == 5) {
+        } else if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808A22DC[this->slidingDoor.unk_15E]));
         }
 
@@ -728,7 +728,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
 
         if (this->unk_166 != 0) {
             Matrix_Scale(0.01f, 0.01f, 0.025f, MTXMODE_APPLY);
-            Actor_DrawDoorLock(play, this->unk_166, (this->doorType == 5) ? DOORLOCK_BOSS : DOORLOCK_NORMAL);
+            Actor_DrawDoorLock(play, this->unk_166, (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) ? DOORLOCK_BOSS : DOORLOCK_NORMAL);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);
