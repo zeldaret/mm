@@ -5,7 +5,9 @@
  */
 
 #include "z_tg_sw.h"
+
 #include "z64debug_display.h"
+#include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -17,7 +19,7 @@ void TGSw_Destroy(Actor* thisx, PlayState* play);
 void TGSw_Update(Actor* thisx, PlayState* play);
 void TGSw_Draw(Actor* thisx, PlayState* play);
 
-void TGSw_ActionExecuteOneShot(struct TGSw* this, PlayState* play);
+void TGSw_Die(struct TGSw* this, PlayState* play);
 
 ActorInit TG_Sw_InitVars = {
     /**/ ACTOR_TG_SW,
@@ -31,7 +33,7 @@ ActorInit TG_Sw_InitVars = {
     /**/ TGSw_Draw,
 };
 
-void TGSw_ActionDecider(TGSw* this, PlayState* play) {
+void TGSw_Idle(TGSw* this, PlayState* play) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
     PlayerImpactType playerImpactType;
@@ -45,12 +47,12 @@ void TGSw_ActionDecider(TGSw* this, PlayState* play) {
         }
         playerImpactType = play->actorCtx.playerImpact.type;
         if ((playerImpactType == PLAYER_IMPACT_BONK) || (playerImpactType == PLAYER_IMPACT_GORON_GROUND_POUND)) {
-            this->actionFunc = TGSw_ActionExecuteOneShot;
+            this->actionFunc = TGSw_Die;
         }
     }
 }
 
-void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
+void TGSw_Die(TGSw* this, PlayState* play) {
     Actor* actorIter = NULL;
 
     // FAKE:
@@ -61,7 +63,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         if (actorIter == NULL) {
             break;
         }
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorIter->params & 0xFC) >> 2) & 0xFF)) {
+        if (TGSW_GET_FC(&this->actor) == ENSW_GET_FC(actorIter)) {
             actorIter->parent = &this->actor;
             actorIter->speed = ABS_ALT(this->actor.world.rot.x);
             break;
@@ -77,7 +79,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
         if (actorIter == NULL) {
             break;
         }
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorIter->params & 0xFC) >> 2) & 0xFF)) {
+        if (TGSW_GET_FC(&this->actor) == ENSW_GET_FC(actorIter)) {
             actorIter->parent = &this->actor;
             actorIter->speed = ABS_ALT(this->actor.world.rot.x);
             break;
@@ -92,7 +94,7 @@ void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
 
     this->actor.csId = this->actor.world.rot.z;
-    this->actionFunc = TGSw_ActionDecider;
+    this->actionFunc = TGSw_Idle;
 }
 
 void TGSw_Destroy(Actor* thisx, PlayState* play) {
