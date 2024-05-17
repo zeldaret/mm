@@ -15,8 +15,8 @@ typedef struct EnShn {
     /* 0x18C */ UNK_TYPE1 pad_18C[0x4C];
     /* 0x1D8 */ u16 unk_1D8;
     /* 0x1DA */ u16 unk_1DA;
-    /* 0x1DC */ MsgScript* unk_1DC;
-    /* 0x1E0 */ s32 unk_1E0;
+    /* 0x1DC */ MsgScript* msgEventScript;
+    /* 0x1E0 */ s32 msgEventScriptPos;
     /* 0x1E4 */ Player* shnPlayerRef;
     /* 0x1E8 */ Vec3f unk_1E8;
     /* 0x1F4 */ Vec3s unk_1F4;

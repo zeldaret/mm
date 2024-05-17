@@ -27,8 +27,8 @@ typedef struct EnIg {
     /* 0x290 */ s32 timePathWaypoint;
     /* 0x294 */ s32 timePathElapsedTime;
     /* 0x298 */ u8 scheduleResult;
-    /* 0x29C */ MsgScript* unk_29C;
-    /* 0x2A0 */ s32 unk_2A0;
+    /* 0x29C */ MsgScript* msgEventScript;
+    /* 0x2A0 */ s32 msgEventScriptPos;
     /* 0x2A4 */ s8 unk_2A4;
     /* 0x2A8 */ Actor* unk_2A8;
     /* 0x2AC */ UNK_TYPE1 unk2AC[0x4];
@@ -56,7 +56,7 @@ typedef struct EnIg {
     /* 0x3F2 */ s16 unk_3F2;
     /* 0x3F4 */ s16 unk_3F4;
     /* 0x3F6 */ s16 unk_3F6;
-    /* 0x3F8 */ MsgEventCallback unk_3F8;
+    /* 0x3F8 */ MsgEventCallback msgEventCallback;
     /* 0x3FC */ s32 animIndex;
     /* 0x400 */ UNK_TYPE1 unk400[0x8];
     /* 0x408 */ s32 unk_408;

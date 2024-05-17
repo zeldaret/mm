@@ -2770,7 +2770,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     Vec3f thisPos;
 
     if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgEventScript(this, play), this->msgEventCallback,
-                            &this->msgScriptResumePos)) {
+                            &this->msgEventScriptPos)) {
         if ((ENGO_GET_TYPE(&this->actor) != ENGO_ATHLETIC) && !(this->actionFlags & ENGO_FLAG_ROLLED_UP)) {
             Math_Vec3f_Copy(&targetPos, &this->attentionTarget->world.pos);
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
@@ -2789,7 +2789,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 
     this->actionFlags &= ~ENGO_FLAG_ENGAGED;
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->msgScriptResumePos = 0;
+    this->msgEventScriptPos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFunc = this->interruptedActionFunc;
 }

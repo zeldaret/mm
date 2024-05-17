@@ -49,7 +49,7 @@ cmd_info = [
     ('MSCRIPT_BRANCH_IF_DAY', 0x05, '', '>Hh', (1,)),
     ('MSCRIPT_BRANCH_ON_CALLBACK_CONTINUE', 0x03, '', '>h', (0,)),
     ('MSCRIPT_BRANCH_IF_HAS_POWDER_KEG', 0x03, '', '>h', (0,)),
-    ('MSCRIPT_DEL_ITEM', 0x03, '', '>h', ()),
+    ('MSCRIPT_DELETE_ITEM', 0x03, '', '>h', ()),
     ('MSCRIPT_BRANCH_ON_CALLBACK_MULTI', 0x07, '', '>hhh', (0,1,2)),
     ('MSCRIPT_PLAYER_TALK', 0x03, '', '>H', ()),
     ('MSCRIPT_NOTEBOOK_EVENT', 0x03, '', '>H', ()),

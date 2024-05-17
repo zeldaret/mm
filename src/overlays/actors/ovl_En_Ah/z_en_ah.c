@@ -369,7 +369,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     return false;
 }
 
-MsgScript* func_80BD3294(EnAh* this, PlayState* play) {
+MsgScript* EnAh_GetMsgEventScript(EnAh* this, PlayState* play) {
     s32 mask = Player_GetMask(play);
 
     if (PLAYER_MASK_KAFEIS_MASK == mask) {
@@ -520,12 +520,12 @@ void func_80BD3768(EnAh* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (MsgEvent_RunScript(&this->actor, play, func_80BD3294(this, play), NULL, &this->unk_1E0)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnAh_GetMsgEventScript(this, play), NULL, &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2D8 &= ~8;
         this->unk_2D8 |= 0x80;
         this->unk_2F4 = 20;
-        this->unk_1E0 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80BD36B8;
     } else if (this->unk_1DC != 2) {
         if (this->unk_1E4 != NULL) {

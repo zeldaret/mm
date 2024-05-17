@@ -809,19 +809,19 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
 MsgScript* func_8094EDBC(EnGm* this, PlayState* play) {
     switch (this->unk_258) {
         case 1:
-            this->unk_3E4 = func_8094E52C;
+            this->msgEventCallback = func_8094E52C;
             return D_80951A98;
 
         case 2:
-            this->unk_3E4 = func_8094EA34;
+            this->msgEventCallback = func_8094EA34;
             return D_80951AD8;
 
         case 3:
-            this->unk_3E4 = func_8094E69C;
+            this->msgEventCallback = func_8094E69C;
             return D_80951B98;
 
         case 5:
-            this->unk_3E4 = func_8094EB1C;
+            this->msgEventCallback = func_8094EB1C;
             return D_80951BE8;
 
         case 7:
@@ -862,9 +862,9 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3E0 = 0;
-        this->unk_3E4 = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->unk_264 = func_8094EDBC(this, play);
+        this->msgEventScript = func_8094EDBC(this, play);
 
         if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
@@ -1738,7 +1738,8 @@ void func_80950DB8(EnGm* this, PlayState* play) {
     Vec3f sp34;
     Actor* al;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
@@ -1749,7 +1750,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
         }
         this->unk_3A4 |= 0x200;
         this->unk_3C6 = 20;
-        this->unk_25C = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80950CDC;
     } else if ((this->unk_258 != 1) && (this->unk_258 != 2) && (this->unk_258 != 3) && (this->unk_258 != 5) &&
                (this->unk_258 != 7)) {

@@ -899,7 +899,7 @@ s32 MsgEvent_BranchIfHasPowderKeg(Actor* actor, PlayState* play, u8** scriptPtr,
  *  1:(s16) item
  * Command size: 3
  */
-s32 MsgEvent_DelItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 item = MSCRIPT_GET_16(script, 1);
 
@@ -1105,7 +1105,7 @@ MsgEventHandler sMsgEventCmdHandlers[] = {
     MsgEvent_BranchIfDay,              // MSCRIPT_CMD_BRANCH_IF_DAY
     MsgEvent_BranchOnCallbackContinue, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
     MsgEvent_BranchIfHasPowderKeg,     // MSCRIPT_CMD_BRANCH_IF_HAS_POWDER_KEG
-    MsgEvent_DelItem,                  // MSCRIPT_CMD_DEL_ITEM
+    MsgEvent_DeleteItem,               // MSCRIPT_CMD_DELETE_ITEM
     MsgEvent_BranchOnCallbackMulti,    // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
     MsgEvent_PlayerTalk,               // MSCRIPT_CMD_PLAYER_TALK
     MsgEvent_NotebookEvent,            // MSCRIPT_CMD_NOTEBOOK_EVENT
@@ -1159,7 +1159,7 @@ u8 sMsgEventCmdSizes[] = {
     MSCRIPT_BRANCH_IF_DAY_SIZE,               // MSCRIPT_CMD_BRANCH_IF_DAY
     MSCRIPT_BRANCH_ON_CALLBACK_CONTINUE_SIZE, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
     MSCRIPT_BRANCH_IF_HAS_POWDER_KEG_SIZE,    // MSCRIPT_CMD_BRANCH_IF_HAS_POWDER_KEG
-    MSCRIPT_DEL_ITEM_SIZE,                    // MSCRIPT_CMD_DEL_ITEM
+    MSCRIPT_DELETE_ITEM_SIZE,                 // MSCRIPT_CMD_DELETE_ITEM
     MSCRIPT_BRANCH_ON_CALLBACK_MULTI_SIZE,    // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
     MSCRIPT_PLAYER_TALK_SIZE,                 // MSCRIPT_CMD_PLAYER_TALK
     MSCRIPT_NOTEBOOK_EVENT_SIZE,              // MSCRIPT_CMD_NOTEBOOK_EVENT

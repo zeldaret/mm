@@ -174,7 +174,7 @@ static MsgScript D_80AFB658[] = {
     /* 0x003B 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x003C 0x03 */ MSCRIPT_SET_WEEK_EVENT_REG(WEEKEVENTREG_82_80),
     /* 0x003F 0x03 */ MSCRIPT_SET_WEEK_EVENT_REG(WEEKEVENTREG_86_01),
-    /* 0x0042 0x03 */ MSCRIPT_DEL_ITEM(ITEM_LETTER_MAMA),
+    /* 0x0042 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_LETTER_MAMA),
     /* 0x0045 0x01 */ MSCRIPT_CLOSE_TEXT(),
     /* 0x0046 0x01 */ MSCRIPT_DONE(),
 
@@ -279,7 +279,7 @@ static MsgScript D_80AFB74C[] = {
     /* 0x000C 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x000D 0x03 */ MSCRIPT_SET_WEEK_EVENT_REG(WEEKEVENTREG_82_80),
     /* 0x0010 0x03 */ MSCRIPT_SET_WEEK_EVENT_REG(WEEKEVENTREG_86_01),
-    /* 0x0013 0x03 */ MSCRIPT_DEL_ITEM(ITEM_LETTER_MAMA),
+    /* 0x0013 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_LETTER_MAMA),
     /* 0x0016 0x01 */ MSCRIPT_CLOSE_TEXT(),
     /* 0x0017 0x01 */ MSCRIPT_DONE(),
 };
@@ -746,14 +746,14 @@ s32 func_80AF8478(Actor* thisx, PlayState* play) {
 MsgScript* func_80AF8540(EnPm* this, PlayState* play) {
     switch (this->unk_258) {
         case 28:
-            this->unk_37C = func_80AF8348;
+            this->msgEventCallback = func_80AF8348;
             return D_80AFB6BC;
 
         case 29:
             return D_80AFB710;
 
         case 16:
-            this->unk_37C = func_80AF81E8;
+            this->msgEventCallback = func_80AF81E8;
             return D_80AFB5A0;
 
         case 17:
@@ -761,12 +761,12 @@ MsgScript* func_80AF8540(EnPm* this, PlayState* play) {
 
         case 24:
             if (this->unk_356 & 0x2000) {
-                this->unk_37C = func_80AF8478;
+                this->msgEventCallback = func_80AF8478;
                 return D_80AFB74C;
             } else if (this->unk_356 & 0x4000) {
                 return D_80AFB764;
             } else {
-                this->unk_37C = func_80AF8478;
+                this->msgEventCallback = func_80AF8478;
                 return D_80AFB658;
             }
             break;
@@ -819,9 +819,9 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_398 = 0;
         this->unk_378 = 0;
-        this->unk_37C = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->unk_25C = func_80AF8540(this, play);
+        this->msgEventScript = func_80AF8540(this, play);
         if ((this->unk_258 != 24) && (this->unk_258 != 9) && (this->unk_258 != 20) && (this->unk_258 != 21) &&
             (this->unk_258 != 22)) {
             this->unk_356 |= 0x20;
@@ -1839,13 +1839,14 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_25C, this->unk_37C, &this->unk_264)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 &= ~0x20;
         this->unk_356 |= 0x200;
         this->actor.child = NULL;
         this->unk_376 = 20;
-        this->unk_264 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80AFA4D0;
         return;
     }

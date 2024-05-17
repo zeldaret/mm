@@ -214,7 +214,7 @@ MsgScript D_80BDFDF8[] = {
     /* 0x003C 0x03 */ MSCRIPT_CONTINUE_TEXT(0x2B1F),
     /* 0x003F 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x0040 0x01 */ MSCRIPT_CLOSE_TEXT(),
-    /* 0x0041 0x03 */ MSCRIPT_DEL_ITEM(ITEM_LETTER_MAMA),
+    /* 0x0041 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_LETTER_MAMA),
     /* 0x0044 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(WEEKEVENTREG_57_08, 0x005C - 0x0049),
     /* 0x0049 0x05 */ MSCRIPT_OFFER_ITEM(GI_CHATEAU_BOTTLE, 0x0),
     /* 0x004E 0x03 */ MSCRIPT_SET_COLLECTIBLE(0x006F),
@@ -299,7 +299,7 @@ MsgScript D_80BDFED4[] = {
     /* 0x000F 0x03 */ MSCRIPT_CONTINUE_TEXT(0x2B1F),
     /* 0x0012 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x0013 0x01 */ MSCRIPT_CLOSE_TEXT(),
-    /* 0x0014 0x03 */ MSCRIPT_DEL_ITEM(ITEM_LETTER_MAMA),
+    /* 0x0014 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_LETTER_MAMA),
     /* 0x0017 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(WEEKEVENTREG_57_08, 0x002F - 0x001C),
     /* 0x001C 0x05 */ MSCRIPT_OFFER_ITEM(GI_CHATEAU_BOTTLE, 0x0),
     /* 0x0021 0x03 */ MSCRIPT_SET_COLLECTIBLE(0x006F),
@@ -347,7 +347,7 @@ MsgScript D_80BDFF24[] = {
     /* 0x002C 0x03 */ MSCRIPT_CONTINUE_TEXT(0x2B1F),
     /* 0x002F 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x0030 0x01 */ MSCRIPT_CLOSE_TEXT(),
-    /* 0x0031 0x03 */ MSCRIPT_DEL_ITEM(ITEM_LETTER_MAMA),
+    /* 0x0031 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_LETTER_MAMA),
     /* 0x0034 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(WEEKEVENTREG_57_08, 0x004C - 0x0039),
     /* 0x0039 0x05 */ MSCRIPT_OFFER_ITEM(GI_CHATEAU_BOTTLE, 0x0),
     /* 0x003E 0x03 */ MSCRIPT_SET_COLLECTIBLE(0x006F),
@@ -744,7 +744,7 @@ MsgScript* func_80BDEABC(EnAl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_35C == 3) {
-        this->unk_4EC = func_80BDE92C;
+        this->msgEventCallback = func_80BDE92C;
         return D_80BDFD14;
     }
 
@@ -765,11 +765,11 @@ MsgScript* func_80BDEABC(EnAl* this, PlayState* play) {
 
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
-                this->unk_4EC = func_80BDE7FC;
+                this->msgEventCallback = func_80BDE7FC;
                 return D_80BDFCBC;
             }
 
-            this->unk_4EC = func_80BDEA14;
+            this->msgEventCallback = func_80BDEA14;
             if (Player_GetMask(play) != PLAYER_MASK_KAFEIS_MASK) {
                 return D_80BDFDE8;
             }
@@ -804,9 +804,9 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
         }
         SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_4E6 = 0;
-        this->unk_4EC = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = this->unk_368;
-        this->unk_360 = func_80BDEABC(this, play);
+        this->msgEventScript = func_80BDEABC(this, play);
         this->unk_4C2 |= 0x20;
         this->actionFunc = func_80BDF6C4;
         ret = true;
@@ -1089,13 +1089,14 @@ void func_80BDF5E8(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF6C4(EnAl* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_360, this->unk_4EC, &this->unk_364)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_4C2 &= ~0x20;
         this->unk_4C2 |= 0x200;
         this->actor.child = NULL;
         this->unk_4E2 = 20;
-        this->unk_364 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80BDF5E8;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);

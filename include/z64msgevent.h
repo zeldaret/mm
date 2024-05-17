@@ -49,7 +49,7 @@ typedef enum {
     /* 0x27 */ MSCRIPT_CMD_BRANCH_IF_DAY,
     /* 0x28 */ MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE,
     /* 0x29 */ MSCRIPT_CMD_BRANCH_IF_HAS_POWDER_KEG,
-    /* 0x2A */ MSCRIPT_CMD_DEL_ITEM,
+    /* 0x2A */ MSCRIPT_CMD_DELETE_ITEM,
     /* 0x2B */ MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI,
     /* 0x2C */ MSCRIPT_CMD_PLAYER_TALK,
     /* 0x2D */ MSCRIPT_CMD_NOTEBOOK_EVENT,
@@ -426,10 +426,10 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_DEL_ITEM(item) \
-    MSCRIPT_CMD_DEL_ITEM, MSCRIPT_PACK_16(item)
+#define MSCRIPT_DELETE_ITEM(item) \
+    MSCRIPT_CMD_DELETE_ITEM, MSCRIPT_PACK_16(item)
 
-#define MSCRIPT_DEL_ITEM_SIZE 3
+#define MSCRIPT_DELETE_ITEM_SIZE 3
 
 /**
  * Size = 7

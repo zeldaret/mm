@@ -338,7 +338,7 @@ s32 func_80BE06DC(EnTab* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;
-        this->unk_328 = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = &GET_PLAYER(play)->actor;
         this->unk_2FC |= 8;
         this->actionFunc = func_80BE1348;
@@ -480,7 +480,7 @@ s32 func_80BE0D60(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* func_80BE0E04(EnTab* this, PlayState* play) {
+MsgScript* EnTab_GetMsgEventScript(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
@@ -489,7 +489,7 @@ MsgScript* func_80BE0E04(EnTab* this, PlayState* play) {
 
     switch (this->unk_1D8) {
         case 2:
-            this->unk_328 = func_80BE0D38;
+            this->msgEventCallback = func_80BE0D38;
             if (Player_GetMask(play) != PLAYER_MASK_ROMANI) {
                 return D_80BE1998;
             }
@@ -500,7 +500,7 @@ MsgScript* func_80BE0E04(EnTab* this, PlayState* play) {
             return D_80BE19A0;
 
         case 1:
-            this->unk_328 = func_80BE0D60;
+            this->msgEventCallback = func_80BE0D60;
             if (Player_GetMask(play) == PLAYER_MASK_ROMANI) {
                 return D_80BE1940;
             }
@@ -641,12 +641,13 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (MsgEvent_RunScript(&this->actor, play, func_80BE0E04(this, play), this->unk_328, &this->unk_1DC)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgEventScript(this, play), this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;
-        this->unk_1DC = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80BE127C;
     } else if (this->unk_1E0 != 0) {
         Math_Vec3f_Copy(&sp40, &this->unk_1E0->world.pos);
@@ -667,7 +668,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8 = 0;
-    this->unk_328 = NULL;
+    this->msgEventCallback = NULL;
     this->unk_2FC = 0;
     this->unk_2FC |= 0x40;
     this->actor.gravity = -1.0f;

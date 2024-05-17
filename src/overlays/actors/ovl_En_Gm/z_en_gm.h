@@ -29,11 +29,11 @@ typedef struct EnGm {
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
     /* 0x259 */ u8 cueId;
-    /* 0x25C */ s32 unk_25C;
+    /* 0x25C */ s32 msgEventScriptPos;
     /* 0x260 */ s8 unk_260;
     /* 0x261 */ s8 unk_261;
     /* 0x262 */ s8 objectSlot;
-    /* 0x264 */ MsgScript* unk_264;
+    /* 0x264 */ MsgScript* msgEventScript;
     /* 0x268 */ Actor* unk_268;
     /* 0x26C */ UNK_TYPE1 unk_26C[0xC];
     /* 0x278 */ Vec3f unk_278;
@@ -68,7 +68,7 @@ typedef struct EnGm {
     /* 0x3DE */ s16 unk_3DE;
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
-    /* 0x3E4 */ MsgEventCallback unk_3E4;
+    /* 0x3E4 */ MsgEventCallback msgEventCallback;
     /* 0x3E8 */ s32 animIndex;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
     /* 0x3F0 */ s32 prevTalkState;

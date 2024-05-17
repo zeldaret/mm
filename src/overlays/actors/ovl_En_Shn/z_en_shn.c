@@ -658,7 +658,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
             this->unk_2E4 = player->exchangeItemAction;
         }
         SubS_SetOfferMode(&this->unk_1D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->unk_1DC = func_80AE6880(this, play);
+        this->msgEventScript = func_80AE6880(this, play);
         this->unk_2C6 = 0;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
             this->unk_1D8 |= 8;
@@ -683,12 +683,13 @@ void func_80AE6A64(EnShn* this, PlayState* play) {
     Vec3f playerPos;
     Vec3f shnPos;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_1DC, this->msgEventCallback, &this->unk_1E0)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8 &= ~8;
         this->unk_1D8 |= 0x20;
         this->unk_2CA = 20;
-        this->unk_1E0 = 0;
+        this->msgEventScriptPos = 0;
         this->unk_2BE = 0;
         this->actionFunc = func_80AE69E8;
     } else if (this->shnPlayerRef != 0) {

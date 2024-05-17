@@ -437,7 +437,7 @@ s32 func_80BF17BC(Actor* thisx, PlayState* play) {
 MsgScript* func_80BF1920(EnIg* this, PlayState* play) {
     switch (this->scheduleResult) {
         case 3:
-            this->unk_3F8 = func_80BF17BC;
+            this->msgEventCallback = func_80BF17BC;
             return D_80BF335C;
 
         case 4:
@@ -467,9 +467,9 @@ s32 func_80BF19A0(EnIg* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3F6 = 0;
-        this->unk_3F8 = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = this->unk_2A8;
-        this->unk_29C = func_80BF1920(this, play);
+        this->msgEventScript = func_80BF1920(this, play);
         if ((this->scheduleResult != 2) && (this->scheduleResult != 3) && (this->scheduleResult != 4)) {
             this->unk_3D0 |= 0x20;
         }
@@ -955,12 +955,13 @@ void func_80BF2BD4(EnIg* this, PlayState* play) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_29C, this->unk_3F8, &this->unk_2A0)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3D0 &= ~0x20;
         this->unk_3D0 |= 0x200;
         this->unk_3EE = 20;
-        this->unk_2A0 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80BF2AF8;
     } else if (((this->scheduleResult != 2) && (this->scheduleResult != 4)) &&
                ((this->unk_2A8 != NULL) && (this->unk_2A8->update != NULL))) {

@@ -696,7 +696,7 @@ MsgScript sAnjuMsgScript_80B58A44[] = {
     /* 0x0062 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x0063 0x03 */ MSCRIPT_JUMP_3(0x0),
     /* 0x0066 0x01 */ MSCRIPT_AWAIT_TEXT(),
-    /* 0x0067 0x03 */ MSCRIPT_DEL_ITEM(ITEM_PENDANT_OF_MEMORIES),
+    /* 0x0067 0x03 */ MSCRIPT_DELETE_ITEM(ITEM_PENDANT_OF_MEMORIES),
     /* 0x006A 0x03 */ MSCRIPT_CONTINUE_TEXT(0x28E6),
     /* 0x006D 0x03 */ MSCRIPT_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
     /* 0x0070 0x03 */ MSCRIPT_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES),
@@ -1674,19 +1674,19 @@ MsgScript* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     switch (this->scheduleResult) {
         case ANJU_SCH_GIVE_LUNCH_TO_GRANNY:
-            this->msgEventFunc = EnAn_MsgEvent_GiveLunchToGranny;
+            this->msgEventCallback = EnAn_MsgEvent_GiveLunchToGranny;
             return sAnjuMsgScript_SchGiveLunchToGranny;
 
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
-            this->msgEventFunc = EnAn_MsgEvent_ReceiveLetterFromPostman;
+            this->msgEventCallback = EnAn_MsgEvent_ReceiveLetterFromPostman;
             return sAnjuMsgScript_SchReceiveLetterFromPostman;
 
         case ANJU_SCH_ATTEND_GORON:
-            this->msgEventFunc = EnAn_MsgEvent_AttendGoron;
+            this->msgEventCallback = EnAn_MsgEvent_AttendGoron;
             return sAnjuMsgScript_SchAttendGoron;
 
         case ANJU_SCH_COOKING:
-            this->msgEventFunc = EnAn_MsgEvent_Cooking;
+            this->msgEventCallback = EnAn_MsgEvent_Cooking;
             return sAnjuMsgScript_SchCooking;
 
         case ANJU_SCH_RANCH:
@@ -1729,12 +1729,12 @@ MsgScript* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         }
 
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            this->msgEventCallback = EnAn_MsgEvent_MidnightMeeting;
             return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgEventCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolKafeiMask;
         }
 
@@ -1751,12 +1751,12 @@ MsgScript* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            this->msgEventCallback = EnAn_MsgEvent_MidnightMeeting;
             return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgEventCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolDefault;
         }
 
@@ -1779,7 +1779,7 @@ MsgScript* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58980;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgEventCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolDefault;
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
@@ -1827,7 +1827,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3C4 = 0;
         this->msgEventState = 0;
-        this->msgEventFunc = NULL;
+        this->msgEventCallback = NULL;
         this->actor.child = this->lookAtActor;
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
@@ -3297,7 +3297,8 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 }
 
 void EnAn_Talk(EnAn* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         // Message event script is done
 
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -3305,7 +3306,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->loseAttentionTimer = 20;
-        this->msgScriptResumePos = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = EnAn_FollowSchedule;
 
         return;

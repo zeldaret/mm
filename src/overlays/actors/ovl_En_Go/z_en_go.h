@@ -94,7 +94,7 @@ typedef struct EnGo {
     /* 0x284 */ Path* gatekeeperPath;
     /* 0x288 */ s8 taisouObjectSlot;
     /* 0x289 */ s8 hakuginDemoObjectSlot;
-    /* 0x28C */ s32 msgScriptResumePos;
+    /* 0x28C */ s32 msgEventScriptPos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;
     /* 0x2A8 */ Vec3s headRot;

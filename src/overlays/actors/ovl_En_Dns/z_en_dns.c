@@ -295,7 +295,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
             }
             this->unk_2DA = this->actor.world.rot.y;
         }
-        this->unk_1E0 = func_8092C9BC(this, play);
+        this->msgEventScript = func_8092C9BC(this, play);
         this->actionFunc = func_8092D4D8;
         ret = true;
     }
@@ -460,7 +460,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
             SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             Audio_PlaySfx(NA_SE_SY_FOUND);
             SET_EVENTINF(EVENTINF_15);
-            this->unk_2F4 = func_8092CCEC;
+            this->msgEventCallback = func_8092CCEC;
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = EnDns_DoNothing;
         } else if (CHECK_EVENTINF(EVENTINF_16)) {
@@ -509,9 +509,10 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         if (func_8092CE38(this)) {
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
         }
-    } else if (MsgEvent_RunScript(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
+    } else if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                                  &this->msgEventScriptPos)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->unk_2F4 = NULL;
+        this->msgEventCallback = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
             if (!CHECK_EVENTINF(EVENTINF_15)) {
                 this->skelAnime.curFrame = this->animCurFrame;

@@ -763,10 +763,10 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x4000;
         }
 
-        this->unk_378 = func_80A875AC;
+        this->msgEventCallback = func_80A875AC;
         this->unk_390 = 0;
         this->unk_364 = 0;
-        this->unk_354 = func_80A871E0(this, play);
+        this->msgEventScript = func_80A871E0(this, play);
         SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80A881E0;
         ret = true;
@@ -876,9 +876,9 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
     if (ret == true) {
         if (this->unk_390 != 0) {
             this->unk_34E |= 8;
-            this->unk_378 = func_80A87880;
+            this->msgEventCallback = func_80A87880;
         } else {
-            this->unk_378 = func_80A8777C;
+            this->msgEventCallback = func_80A8777C;
         }
         this->unk_364 = 0;
     }
@@ -908,7 +908,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 } else {
                     this->unk_390 = 2;
                 }
-                this->unk_378 = func_80A87880;
+                this->msgEventCallback = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
             } else if (itemAction <= PLAYER_IA_MINUS1) {
@@ -989,7 +989,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87B48;
+        this->msgEventCallback = func_80A87B48;
         this->unk_364 = 0;
     }
 
@@ -1048,7 +1048,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87DC0;
+        this->msgEventCallback = func_80A87DC0;
         this->unk_364 = 0;
     }
 
@@ -1111,7 +1111,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     if (ret == true) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
-        this->unk_378 = NULL;
+        this->msgEventCallback = NULL;
         this->unk_34E = 0;
         this->unk_364 = 0;
     }
@@ -1159,7 +1159,8 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
 void func_80A881E0(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (MsgEvent_RunScript(&this->actor, play, this->unk_354, this->unk_378, &this->unk_1E8)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         if (player->transformation != PLAYER_FORM_HUMAN) {
             this->unk_34E |= 0x80;
         }
@@ -1182,7 +1183,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        this->unk_1E8 = 0;
+        this->msgEventScriptPos = 0;
         this->actionFunc = func_80A87FD0;
     }
 }
