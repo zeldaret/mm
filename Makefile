@@ -426,7 +426,7 @@ $(BUILD_DIR)/src/boot/z_std_dma.o: $(BUILD_DIR)/dmadata/dmadata_table_spec.h
 $(BUILD_DIR)/src/dmadata/dmadata.o: $(BUILD_DIR)/dmadata/dmadata_table_spec.h
 
 $(BUILD_DIR)/%.o: %.s
-	$(AS) $(ASFLAGS) $(IINC) $(ENDIAN) $< -o $@
+	$(CPP) $(CPPFLAGS) $(IINC) $< | $(AS) $(ASFLAGS) $(IINC) $(ENDIAN) -o $@
 
 $(BUILD_DIR)/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
