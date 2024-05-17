@@ -26,7 +26,7 @@ typedef enum {
     /* 0x10 */ MSCRIPT_CMD_DONE,
     /* 0x11 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG,
     /* 0x12 */ MSCRIPT_CMD_CLOSE_TEXT,
-    /* 0x13 */ MSCRIPT_CMD_COLLECT_SET,
+    /* 0x13 */ MSCRIPT_CMD_SET_COLLECTIBLE,
     /* 0x14 */ MSCRIPT_CMD_CHANGE_RUPEES,
     /* 0x15 */ MSCRIPT_CMD_PAUSE,
     /* 0x16 */ MSCRIPT_CMD_UNSET_AUTOTALK,
@@ -242,10 +242,10 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_COLLECT_SET(collectFlag) \
-    MSCRIPT_CMD_COLLECT_SET, MSCRIPT_PACK_16(collectFlag)
+#define MSCRIPT_SET_COLLECTIBLE(collectFlag) \
+    MSCRIPT_CMD_SET_COLLECTIBLE, MSCRIPT_PACK_16(collectFlag)
 
-#define MSCRIPT_COLLECT_SET_SIZE 3
+#define MSCRIPT_SET_COLLECTIBLE_SIZE 3
 
 /**
  * Size = 3

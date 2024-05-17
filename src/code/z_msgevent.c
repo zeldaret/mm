@@ -4,7 +4,7 @@
 #define MSCRIPT_STOP 1
 
 /**
- * Branch forward if the provided week_event_reg flag is set
+ * Branch forward if the provided weekEventReg flag is set
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -119,11 +119,16 @@ s32 MsgEvent_BranchOnTextChoice(Actor* actor, PlayState* play, u8** scriptPtr, M
         case 0:
             skip = MSCRIPT_GET_16(script, 1);
             break;
+
         case 1:
             skip = MSCRIPT_GET_16(script, 3);
             break;
+
         case 2:
             skip = MSCRIPT_GET_16(script, 5);
+            break;
+
+        default:
             break;
     }
     *scriptPtr += skip;
@@ -132,7 +137,7 @@ s32 MsgEvent_BranchOnTextChoice(Actor* actor, PlayState* play, u8** scriptPtr, M
 }
 
 /**
- * Branch forward if the actor has a parent, else get item?
+ * Branch forward if the actor has a parent, else get item
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -157,7 +162,7 @@ s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
 }
 
 /**
- * Branch forward by 1(s16) if there is a talk request, else get item?
+ * Branch forward if there is a talk request, else autotalk
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -185,7 +190,7 @@ s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCal
 }
 
 /**
- * Branch forward if the player currently has more rupees than 1(u16)
+ * Branch forward if the player currently has more rupees
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -217,7 +222,7 @@ s32 MsgEvent_BranchOnCallback(Actor* actor, PlayState* play, u8** scriptPtr, Msg
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
-    if (callback == NULL || callback(actor, play) != 0) {
+    if ((callback == NULL) || (callback(actor, play) != 0)) {
         *scriptPtr += skip;
     } else {
         return MSCRIPT_STOP;
@@ -250,6 +255,7 @@ s32 MsgEvent_BranchOnDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEvent
                 skip = MSCRIPT_GET_16(script, 3);
             }
             break;
+
         case 2:
             if (!gSaveContext.save.isNight) {
                 skip = MSCRIPT_GET_16(script, 5);
@@ -257,12 +263,16 @@ s32 MsgEvent_BranchOnDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEvent
                 skip = MSCRIPT_GET_16(script, 7);
             }
             break;
+
         case 3:
             if (!gSaveContext.save.isNight) {
                 skip = MSCRIPT_GET_16(script, 9);
             } else {
                 skip = MSCRIPT_GET_16(script, 11);
             }
+            break;
+
+        default:
             break;
     }
     *scriptPtr += skip;
@@ -290,6 +300,7 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
         case TEXT_STATE_CLOSING:
             skip = MSCRIPT_GET_16(script, 1);
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -298,7 +309,7 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
 }
 
 /**
- * Stop script if textbox active?
+ * Waits for text to advance
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -312,8 +323,10 @@ s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
                 return MSCRIPT_STOP;
             }
             break;
+
         case TEXT_STATE_CLOSING:
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -321,7 +334,7 @@ s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
 }
 
 /**
- * End script when textbox is done?
+ * Waits for text to end
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -341,6 +354,7 @@ s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
         case TEXT_STATE_CLOSING:
             *endScript = true;
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -388,7 +402,7 @@ s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallbac
 }
 
 /**
- * Sets week_event_reg flags
+ * Sets weekEventReg flags
  *
  * Command structure:
  *  0:(u8)  cmd
@@ -421,7 +435,7 @@ s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  0:(u16) flag
  * Command size: 3
  */
-s32 MsgEvent_CollectSet(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_SetCollectible(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s32 flag = MSCRIPT_GET_16(script, 1);
 
@@ -622,6 +636,7 @@ s32 MsgEvent_BranchOnItemAction(Actor* actor, PlayState* play, u8** scriptPtr, M
                 skip = MSCRIPT_GET_16(script, 5);
             }
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -812,7 +827,7 @@ s32 MsgEvent_BranchOnTimeInterval(Actor* actor, PlayState* play, u8** scriptPtr,
     endTime--;
     now = MSCRIPT_TIME_NOW;
 
-    if (startTime >= now || now >= endTime) {
+    if ((startTime >= now) || (now >= endTime)) {
         *scriptPtr += skip;
     }
     return MSCRIPT_CONTINUE;
@@ -851,7 +866,7 @@ s32 MsgEvent_BranchOnCallbackContinue(Actor* actor, PlayState* play, u8** script
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
-    if (callback != NULL && callback(actor, play) != 0) {
+    if ((callback != NULL) && (callback(actor, play) != 0)) {
         *scriptPtr += skip;
     }
     return MSCRIPT_CONTINUE;
@@ -870,7 +885,7 @@ s32 MsgEvent_BranchIfHasPowderKeg(Actor* actor, PlayState* play, u8** scriptPtr,
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
-    if (AMMO(ITEM_POWDER_KEG) != 0 || (play->actorCtx.flags & ACTORCTX_FLAG_0)) {
+    if ((AMMO(ITEM_POWDER_KEG) != 0) || (play->actorCtx.flags & ACTORCTX_FLAG_0)) {
         *scriptPtr += skip;
     }
     return MSCRIPT_CONTINUE;
@@ -915,12 +930,15 @@ s32 MsgEvent_BranchOnCallbackMulti(Actor* actor, PlayState* play, u8** scriptPtr
         case 3:
             skip = MSCRIPT_GET_16(script, 5);
             break;
+
         case 2:
             skip = MSCRIPT_GET_16(script, 3);
             break;
+
         case 1:
             skip = MSCRIPT_GET_16(script, 1);
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -973,16 +991,19 @@ s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CLOSING:
             break;
+
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 return MSCRIPT_STOP;
             }
+
         case TEXT_STATE_DONE:
             if (!Message_ShouldAdvance(play)) {
                 return MSCRIPT_STOP;
             }
             break;
+
         default:
             return MSCRIPT_STOP;
     }
@@ -1061,7 +1082,7 @@ MsgEventHandler sMsgEventCmdHandlers[] = {
     MsgEvent_Done,                     // MSCRIPT_CMD_DONE
     MsgEvent_SetWeekEventReg,          // MSCRIPT_CMD_SET_WEEK_EVENT_REG
     MsgEvent_CloseText,                // MSCRIPT_CMD_CLOSE_TEXT
-    MsgEvent_CollectSet,               // MSCRIPT_CMD_COLLECT_SET
+    MsgEvent_SetCollectible,           // MSCRIPT_CMD_SET_COLLECTIBLE
     MsgEvent_ChangeRupees,             // MSCRIPT_CMD_CHANGE_RUPEES
     MsgEvent_Pause,                    // MSCRIPT_CMD_PAUSE
     MsgEvent_UnsetAutotalk,            // MSCRIPT_CMD_UNSET_AUTOTALK
@@ -1115,7 +1136,7 @@ u8 sMsgEventCmdSizes[] = {
     MSCRIPT_DONE_SIZE,                        // MSCRIPT_CMD_DONE
     MSCRIPT_SET_WEEK_EVENT_REG_SIZE,          // MSCRIPT_CMD_SET_WEEK_EVENT_REG
     MSCRIPT_CLOSE_TEXT_SIZE,                  // MSCRIPT_CMD_CLOSE_TEXT
-    MSCRIPT_COLLECT_SET_SIZE,                 // MSCRIPT_CMD_COLLECT_SET
+    MSCRIPT_SET_COLLECTIBLE_SIZE,             // MSCRIPT_CMD_SET_COLLECTIBLE
     MSCRIPT_CHANGE_RUPEES_SIZE,               // MSCRIPT_CMD_CHANGE_RUPEES
     MSCRIPT_PAUSE_SIZE,                       // MSCRIPT_CMD_PAUSE
     MSCRIPT_UNSET_AUTOTALK_SIZE,              // MSCRIPT_CMD_UNSET_AUTOTALK

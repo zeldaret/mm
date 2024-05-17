@@ -26,7 +26,7 @@ cmd_info = [
     ('MSCRIPT_DONE',  0x01, '', '', ()),
     ('MSCRIPT_SET_WEEK_EVENT_REG', 0x03, '', '>H', ()),
     ('MSCRIPT_CLOSE_TEXT', 0x01, '', '', ()),
-    ('MSCRIPT_COLLECT_SET', 0x03, '', '>H', ()),
+    ('MSCRIPT_SET_COLLECTIBLE', 0x03, '', '>H', ()),
     ('MSCRIPT_CHANGE_RUPEES', 0x03, '', '>H', ()),
     ('MSCRIPT_PAUSE', 0x01, '', '', ()),
     ('MSCRIPT_UNSET_AUTOTALK', 0x01, '', '', ()),
