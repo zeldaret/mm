@@ -709,8 +709,8 @@ void EnWdhand_Die(EnWdhand* this, PlayState* play) {
                     effPos.x = endPoint->x + Rand_CenteredFloat(12.0f);
                     effPos.y = endPoint->y + Rand_CenteredFloat(12.0f);
                     effPos.z = endPoint->z + Rand_CenteredFloat(12.0f);
-                    EffectSsDtBubble_SpawnColorProfile(play, &effPos, &sEffectVelocity, &sEffectAccel, effectScale, 25, 2,
-                                                       true);
+                    EffectSsDtBubble_SpawnColorProfile(play, &effPos, &sEffectVelocity, &sEffectAccel, effectScale, 25,
+                                                       2, true);
                 }
             }
 
