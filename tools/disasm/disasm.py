@@ -1857,7 +1857,7 @@ def disassemble_makerom(section):
 /* 0x00 */ ENDIAN_IDENTIFIER
 /* 0x01 */ PI_DOMAIN_1_CFG({pi_dom1_lat}, {pi_dom1_pwd}, {pi_dom1_reg & 0xF}, {(pi_dom1_reg >> 4) & 3})
 /* 0x04 */ SYSTEM_CLOCK_RATE_SETTING(0x{clockrate:X})
-/* 0x08 */ ENTRYPOINT(0x{entrypoint:08X})
+/* 0x08 */ ENTRYPOINT(entrypoint)
 /* 0x0C */ LIBULTRA_VERSION({hw_ver // 10}, {hw_ver % 10}, {chr(os_ver)})
 /* 0x10 */ CHECKSUM()
 /* 0x18 */ PADDING(8)
