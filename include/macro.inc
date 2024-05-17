@@ -1,5 +1,22 @@
 .macro glabel label
     .global \label
+    .ent \label
+    .type \label, @function
+    \label:
+.endm
+
+.macro endlabel label
+    .end \label
+    .size \label, . - \label
+.endm
+
+.macro dlabel label
+    .global \label
+    \label:
+.endm
+
+.macro jlabel label
+    .global \label
     \label:
 .endm
 

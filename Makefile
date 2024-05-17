@@ -120,7 +120,7 @@ OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
 ASM_PROC   := $(PYTHON) tools/asm-processor/build.py
-ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename --encode-cutscene-data-floats
 
 ifneq ($(ASM_PROC_FORCE), 0)
   ASM_PROC_FLAGS += --force
@@ -241,7 +241,9 @@ SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),$(BUILD_DIR)
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p $(BUILD_DIR)/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(BUILD_DIR)/$(dir)))
+OTHER_DIRS := baserom linker_scripts
+
+$(shell mkdir -p $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES) $(OTHER_DIRS),$(BUILD_DIR)/$(dir)))
 
 # directory flags
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
@@ -319,8 +321,8 @@ $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/compress_ranges.txt
 	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-start `tools/buildtools/dmadata_start.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/undefined_syms.txt
-	$(LD) -T $(LDSCRIPT) -T $(BUILD_DIR)/undefined_syms.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(BUILD_DIR)/linker_scripts/undefined_syms.ld $(BUILD_DIR)/linker_scripts/extra.ld
+	$(LD) -T $(LDSCRIPT) -T $(BUILD_DIR)/linker_scripts/undefined_syms.ld -T $(BUILD_DIR)/linker_scripts/extra.ld --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
 
 ## Order-only prerequisites 
 # These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
@@ -400,8 +402,8 @@ all: rom compress
 
 #### Various Recipes ####
 
-$(BUILD_DIR)/undefined_syms.txt: undefined_syms.txt
-	$(CPP) $(CPPFLAGS) $< > $(BUILD_DIR)/undefined_syms.txt
+$(BUILD_DIR)/%.ld: %.ld
+	$(CPP) $(CPPFLAGS) $< > $@
 
 $(BUILD_DIR)/$(SPEC): $(SPEC)
 	$(CPP) $(CPPFLAGS) $< | $(SPEC_REPLACE_VARS) > $@
