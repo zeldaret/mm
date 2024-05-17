@@ -22,8 +22,8 @@ typedef struct EnPst {
     /* 0x188 */ EnPstActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 scheduleResult;
-    /* 0x1DC */ MsgScript* msgEventScript;
-    /* 0x1E0 */ s32 msgEventScriptPos;
+    /* 0x1DC */ MsgScript* msgScript;
+    /* 0x1E0 */ s32 msgScriptPos;
     /* 0x1E4 */ Vec3s jointTable[POSTBOX_LIMB_MAX];
     /* 0x1F6 */ Vec3s morphTable[POSTBOX_LIMB_MAX];
     /* 0x208 */ u16 stateFlags;

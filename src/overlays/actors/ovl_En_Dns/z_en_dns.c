@@ -295,7 +295,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
             }
             this->unk_2DA = this->actor.world.rot.y;
         }
-        this->msgEventScript = func_8092C9BC(this, play);
+        this->msgScript = func_8092C9BC(this, play);
         this->actionFunc = func_8092D4D8;
         ret = true;
     }
@@ -509,8 +509,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         if (func_8092CE38(this)) {
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
         }
-    } else if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                                  &this->msgEventScriptPos)) {
+    } else if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->msgEventCallback = NULL;
         if (ENDNS_GET_4000(&this->actor)) {

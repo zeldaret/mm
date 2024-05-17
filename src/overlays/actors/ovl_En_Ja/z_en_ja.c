@@ -387,7 +387,7 @@ void func_80BC21A8(EnJa* this, PlayState* play) {
     func_80BC2150(this, play);
 }
 
-MsgScript* EnJa_GetMsgEventScript(EnJa* this, PlayState* play) {
+MsgScript* EnJa_GetMsgScript(EnJa* this, PlayState* play) {
     switch (this->unk_1D8) {
         case 1:
             if (ENJA_GET_3(&this->actor) == 0) {
@@ -407,11 +407,11 @@ MsgScript* EnJa_GetMsgEventScript(EnJa* this, PlayState* play) {
 }
 
 void func_80BC22F4(EnJa* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, EnJa_GetMsgEventScript(this, play), this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnJa_GetMsgScript(this, play), this->msgEventCallback,
+                           &this->msgScriptPos)) {
         this->unk_340 &= ~8;
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actionFunc = func_80BC21A8;

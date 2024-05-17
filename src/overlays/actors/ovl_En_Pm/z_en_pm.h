@@ -25,9 +25,9 @@ typedef struct EnPm {
     /* 0x250 */ s32 timePathWaypoint;
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
-    /* 0x25C */ MsgScript* msgEventScript;
+    /* 0x25C */ MsgScript* msgScript;
     /* 0x260 */ s8 unk_260;
-    /* 0x264 */ s32 msgEventScriptPos;
+    /* 0x264 */ s32 msgScriptPos;
     /* 0x268 */ Actor* unk_268;
     /* 0x26C */ Vec3f unk_26C;
     /* 0x278 */ Vec3f unk_278;

@@ -22,7 +22,7 @@ typedef struct EnJa {
     /* 0x188 */ EnJaActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 unk_1D8;
-    /* 0x1DC */ s32 msgEventScriptPos;
+    /* 0x1DC */ s32 msgScriptPos;
     /* 0x1E0 */ Actor* unk_1E0;
     /* 0x1E4 */ Vec3s unk_1E4;
     /* 0x1EC */ Vec3f unk_1EC;

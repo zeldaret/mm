@@ -126,7 +126,7 @@ static AnimationInfoS sAnimationInfo[DEKU_PRINCESS_ANIM_MAX] = {
     { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_GLARE_LOOP
 };
 
-static MsgScript sMsgEventScript[] = {
+static MsgScript sMsgScript[] = {
     /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x0012 - 0x0005),
     /* 0x0005 0x03 */ MSCRIPT_BRANCH_IF_HUMAN(0x000D - 0x0008),
     /* 0x0008 0x03 */ MSCRIPT_BEGIN_TEXT(0x0967),
@@ -381,7 +381,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D3F8(EnDnp* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, sMsgEventScript, NULL, &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, NULL, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;

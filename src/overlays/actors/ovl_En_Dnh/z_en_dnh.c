@@ -280,7 +280,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
         return 0;
     }
     SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-    this->msgEventScript = func_80A50DF8(this, play);
+    this->msgScript = func_80A50DF8(this, play);
     this->actionFunc = func_80A50F38;
     return 1;
 }
@@ -296,10 +296,9 @@ void func_80A50EC0(EnDnh* this) {
 }
 
 void func_80A50F38(EnDnh* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->unk198 = 0;
         this->actionFunc = EnDnh_DoNothing;
     }
@@ -330,7 +329,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     }
 
     this->msgEventCallback = func_80A50D40;
-    this->msgEventScriptPos = 0;
+    this->msgScriptPos = 0;
     this->actionFunc = EnDnh_DoNothing;
 }
 

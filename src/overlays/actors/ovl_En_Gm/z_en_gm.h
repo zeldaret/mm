@@ -29,11 +29,11 @@ typedef struct EnGm {
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
     /* 0x259 */ u8 cueId;
-    /* 0x25C */ s32 msgEventScriptPos;
+    /* 0x25C */ s32 msgScriptPos;
     /* 0x260 */ s8 unk_260;
     /* 0x261 */ s8 unk_261;
     /* 0x262 */ s8 objectSlot;
-    /* 0x264 */ MsgScript* msgEventScript;
+    /* 0x264 */ MsgScript* msgScript;
     /* 0x268 */ Actor* unk_268;
     /* 0x26C */ UNK_TYPE1 unk_26C[0xC];
     /* 0x278 */ Vec3f unk_278;

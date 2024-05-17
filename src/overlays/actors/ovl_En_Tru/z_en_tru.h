@@ -29,7 +29,7 @@ typedef struct EnTru {
     /* 0x188 */ EnTruActionFunc actionFunc;
     /* 0x18C */ ColliderSphere collider;
     /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s32 msgEventScriptPos;
+    /* 0x1E8 */ s32 msgScriptPos;
     /* 0x1EC */ Vec3f unk_1EC;
     /* 0x1F8 */ Vec3f unk_1F8;
     /* 0x204 */ Vec3s unk_204;
@@ -37,7 +37,7 @@ typedef struct EnTru {
     /* 0x2AC */ Vec3s morphTable[KOUME_LIMB_MAX];
     /* 0x34E */ u16 unk_34E;
     /* 0x350 */ UNK_TYPE1 unk350[0x4];
-    /* 0x354 */ MsgScript* msgEventScript;
+    /* 0x354 */ MsgScript* msgScript;
     /* 0x358 */ f32 playSpeed;
     /* 0x35C */ f32 unk_35C;
     /* 0x360 */ s16 unk_360;

@@ -31,7 +31,7 @@ typedef enum {
 
 #include "src/overlays/actors/ovl_En_Bjt/scheduleScripts.schl.inc"
 
-static MsgScript sMsgEventScript[] = {
+static MsgScript sMsgScript[] = {
     /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x2948),
     /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x0004 0x03 */ MSCRIPT_BEGIN_TEXT(0x00FF),
@@ -403,11 +403,11 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    if (MsgEvent_RunScript(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, this->msgEventCallback, &this->msgScriptPos)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnBjt_FollowSchedule;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);

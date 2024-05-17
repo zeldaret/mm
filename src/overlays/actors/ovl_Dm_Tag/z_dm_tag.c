@@ -243,7 +243,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgEventScript = func_80C22880(this, play);
+        this->msgScript = func_80C22880(this, play);
         this->actionFunc = func_80C229FC;
         ret = true;
     }
@@ -259,8 +259,7 @@ void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         this->actionFunc = func_80C229AC;
     }
 }

@@ -14,7 +14,7 @@ typedef struct EnTab {
     /* 0x188 */ EnTabActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 unk_1D8;
-    /* 0x1DC */ s32 msgEventScriptPos;
+    /* 0x1DC */ s32 msgScriptPos;
     /* 0x1E0 */ Actor* unk_1E0;
     /* 0x1E4 */ EnGm* unk_1E4;
     /* 0x1E8 */ Vec3f unk_1E8[2];

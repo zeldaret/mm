@@ -1669,7 +1669,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
+MsgScript* EnAn_GetMsgScript(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->scheduleResult) {
@@ -1829,7 +1829,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->msgEventState = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->lookAtActor;
-        this->msgEventScript = EnAn_GetMsgEventScript(this, play);
+        this->msgScript = EnAn_GetMsgScript(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) ||
             (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
@@ -3297,8 +3297,7 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 }
 
 void EnAn_Talk(EnAn* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         // Message event script is done
 
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -3306,7 +3305,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->loseAttentionTimer = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnAn_FollowSchedule;
 
         return;

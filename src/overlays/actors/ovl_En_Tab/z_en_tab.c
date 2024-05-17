@@ -480,7 +480,7 @@ s32 func_80BE0D60(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-MsgScript* EnTab_GetMsgEventScript(EnTab* this, PlayState* play) {
+MsgScript* EnTab_GetMsgScript(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
@@ -641,13 +641,13 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgEventScript(this, play), this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgScript(this, play), this->msgEventCallback,
+                           &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80BE127C;
     } else if (this->unk_1E0 != 0) {
         Math_Vec3f_Copy(&sp40, &this->unk_1E0->world.pos);

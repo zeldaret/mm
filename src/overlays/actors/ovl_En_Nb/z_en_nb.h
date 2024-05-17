@@ -27,8 +27,8 @@ typedef struct EnNb {
     /* 0x18C */ EnNbUnkFunc2 unk_18C;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 scheduleResult;
-    /* 0x1E0 */ MsgScript* msgEventScript;
-    /* 0x1E4 */ s32 msgEventScriptPos;
+    /* 0x1E0 */ MsgScript* msgScript;
+    /* 0x1E4 */ s32 msgScriptPos;
     /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ UNK_TYPE1 unk_1EC[4];
     /* 0x1F0 */ Vec3f headComputedPos;

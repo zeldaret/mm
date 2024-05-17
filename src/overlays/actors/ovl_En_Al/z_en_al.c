@@ -806,7 +806,7 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
         this->unk_4E6 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_368;
-        this->msgEventScript = func_80BDEABC(this, play);
+        this->msgScript = func_80BDEABC(this, play);
         this->unk_4C2 |= 0x20;
         this->actionFunc = func_80BDF6C4;
         ret = true;
@@ -1089,14 +1089,13 @@ void func_80BDF5E8(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF6C4(EnAl* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_4C2 &= ~0x20;
         this->unk_4C2 |= 0x200;
         this->actor.child = NULL;
         this->unk_4E2 = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80BDF5E8;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);

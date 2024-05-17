@@ -821,7 +821,7 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         this->unk_378 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->msgEventScript = func_80AF8540(this, play);
+        this->msgScript = func_80AF8540(this, play);
         if ((this->unk_258 != 24) && (this->unk_258 != 9) && (this->unk_258 != 20) && (this->unk_258 != 21) &&
             (this->unk_258 != 22)) {
             this->unk_356 |= 0x20;
@@ -1839,14 +1839,13 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 &= ~0x20;
         this->unk_356 |= 0x200;
         this->actor.child = NULL;
         this->unk_376 = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80AFA4D0;
         return;
     }

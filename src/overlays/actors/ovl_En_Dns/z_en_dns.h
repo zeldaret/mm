@@ -25,8 +25,8 @@ typedef struct EnDns {
     /* 0x188 */ EnDnsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 cueId;
-    /* 0x1DC */ s32 msgEventScriptPos;
-    /* 0x1E0 */ MsgScript* msgEventScript;
+    /* 0x1DC */ s32 msgScriptPos;
+    /* 0x1E0 */ MsgScript* msgScript;
     /* 0x1E4 */ Gfx* unk_1E4[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
     /* 0x218 */ Vec3f unk_218;
     /* 0x224 */ Vec3s unk_224;

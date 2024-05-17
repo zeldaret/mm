@@ -17,8 +17,8 @@ typedef struct EnAl {
     /* 0x190 */ MtxF unk_190[6];
     /* 0x310 */ ColliderCylinder unk_310;
     /* 0x35C */ u8 unk_35C;
-    /* 0x360 */ MsgScript* msgEventScript;
-    /* 0x364 */ s32 msgEventScriptPos;
+    /* 0x360 */ MsgScript* msgScript;
+    /* 0x364 */ s32 msgScriptPos;
     /* 0x368 */ Actor* unk_368;
     /* 0x36C */ Vec3f unk_36C;
     /* 0x378 */ Vec3s unk_378;

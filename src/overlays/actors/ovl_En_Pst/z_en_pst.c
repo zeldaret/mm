@@ -491,7 +491,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
     return scriptBranch;
 }
 
-MsgScript* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
+MsgScript* EnPst_GetMsgScript(EnPst* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_POSTMAN) {
         return D_80B2C3B8;
     }
@@ -569,7 +569,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
         this->behaviour = 0;
         this->msgEventCallback = NULL;
         this->stateFlags |= 0x40;
-        this->msgEventScript = EnPst_GetMsgEventScript(this, play);
+        this->msgScript = EnPst_GetMsgScript(this, play);
         this->actionFunc = EnPst_Talk;
         ret = true;
     }
@@ -629,8 +629,7 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_Talk(EnPst* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:
@@ -651,7 +650,7 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
             }
         }
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnPst_FollowSchedule;
     }
 }

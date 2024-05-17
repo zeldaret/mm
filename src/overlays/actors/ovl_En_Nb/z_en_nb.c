@@ -511,7 +511,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
         this->behaviour = ENNB_BEHAVIOUR_0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_1E8;
-        this->msgEventScript = func_80BC045C(this, play);
+        this->msgScript = func_80BC045C(this, play);
         this->stateFlags |= EN_NB_FLAG_20;
         this->actionFunc = func_80BC0EAC;
         ret = true;
@@ -765,8 +765,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 }
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         if (CHECK_EVENTINF(EVENTINF_43)) {
             CLEAR_EVENTINF(EVENTINF_42);
             CLEAR_EVENTINF(EVENTINF_43);
@@ -780,7 +779,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
         this->actor.child = NULL;
         this->stateFlags |= EN_NB_FLAG_400;
         this->unk_282 = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnNb_FollowSchedule;
     }
 }

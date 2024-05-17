@@ -2702,7 +2702,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
 /**
  * Return the MsgEvent script appropriate for the actor.
  */
-MsgScript* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
+MsgScript* EnGo_GetMsgScript(EnGo* this, PlayState* play) {
     static MsgScript* sMsgScriptGraveyard[] = {
         sMsgScriptGoronGravemaker,
         sMsgScriptGoronFrozen,
@@ -2769,8 +2769,8 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     Vec3f targetPos;
     Vec3f thisPos;
 
-    if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgEventScript(this, play), this->msgEventCallback,
-                            &this->msgEventScriptPos)) {
+    if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgScript(this, play), this->msgEventCallback,
+                            &this->msgScriptPos)) {
         if ((ENGO_GET_TYPE(&this->actor) != ENGO_ATHLETIC) && !(this->actionFlags & ENGO_FLAG_ROLLED_UP)) {
             Math_Vec3f_Copy(&targetPos, &this->attentionTarget->world.pos);
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
@@ -2789,7 +2789,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 
     this->actionFlags &= ~ENGO_FLAG_ENGAGED;
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->msgEventScriptPos = 0;
+    this->msgScriptPos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFunc = this->interruptedActionFunc;
 }

@@ -864,7 +864,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
         this->unk_3E0 = 0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_268;
-        this->msgEventScript = func_8094EDBC(this, play);
+        this->msgScript = func_8094EDBC(this, play);
 
         if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
@@ -1738,8 +1738,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
     Vec3f sp34;
     Actor* al;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
-                           &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
@@ -1750,7 +1749,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
         }
         this->unk_3A4 |= 0x200;
         this->unk_3C6 = 20;
-        this->msgEventScriptPos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80950CDC;
     } else if ((this->unk_258 != 1) && (this->unk_258 != 2) && (this->unk_258 != 3) && (this->unk_258 != 5) &&
                (this->unk_258 != 7)) {

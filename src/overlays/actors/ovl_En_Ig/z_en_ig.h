@@ -27,8 +27,8 @@ typedef struct EnIg {
     /* 0x290 */ s32 timePathWaypoint;
     /* 0x294 */ s32 timePathElapsedTime;
     /* 0x298 */ u8 scheduleResult;
-    /* 0x29C */ MsgScript* msgEventScript;
-    /* 0x2A0 */ s32 msgEventScriptPos;
+    /* 0x29C */ MsgScript* msgScript;
+    /* 0x2A0 */ s32 msgScriptPos;
     /* 0x2A4 */ s8 unk_2A4;
     /* 0x2A8 */ Actor* unk_2A8;
     /* 0x2AC */ UNK_TYPE1 unk2AC[0x4];
