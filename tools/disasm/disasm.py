@@ -1793,16 +1793,48 @@ def get_overlay_sections(vram, overlay):
         [bss_end_vram, bss_end_vram, "reloc", None, overlay[header_loc:], None],
     ]
 
+def get_storage_medium(id):
+    if id == 'N':
+        return "CARTRIDGE"
+    elif id == 'C':
+        return "CARTRIDGE_EXPANDABLE"
+    elif id == 'D':
+        return "DISK"
+    elif id == 'E':
+        return "DISK_EXPANSION"
+    else:
+        return "UNKNOWN"
+
+def get_region(id):
+    if id == 'A':
+        return "ALL"
+    elif id == 'J':
+        return "JP"
+    elif id == 'E':
+        return "US"
+    elif id == 'P':
+        return "PAL"
+    elif id == 'G':
+        return "GATEWAY"
+    elif id == 'L':
+        return "LODGENET"
+    else:
+        return "UNKNOWN"
 
 def disassemble_makerom(section):
     os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
 
     if section[2] == "rom_header":
         (
+            endian,
             pi_dom1_reg,
+            pi_dom1_pwd,
+            pi_dom1_lat,
             clockrate,
             entrypoint,
-            revision,
+            pad_ver,
+            hw_ver,
+            os_ver,
             chksum1,
             chksum2,
             pad1,
@@ -1813,26 +1845,28 @@ def disassemble_makerom(section):
             cart_id,
             region,
             version,
-        ) = struct.unpack(">IIIIIIII20sII2s1sB", section[4])
+        ) = struct.unpack(">BBBBIIHBBIIII20sII2s1sB", section[4])
+
 
         out = f"""/*
  * The Legend of Zelda: Majora's Mask ROM header
  */
 
-.word  0x{pi_dom1_reg:08X}             /* PI BSD Domain 1 register */
-.word  0x{clockrate:08X}             /* Clockrate setting */
-.word  0x{entrypoint:08X}             /* Entrypoint function (`entrypoint`) */
-.word  0x{revision:08X}             /* Revision */
-.word  0x{chksum1:08X}             /* Checksum 1 */
-.word  0x{chksum2:08X}             /* Checksum 2 */
-.word  0x{pad1:08X}             /* Unknown */
-.word  0x{pad2:08X}             /* Unknown */
-.ascii "{rom_name.decode('ascii')}" /* Internal ROM name */
-.word  0x{pad3:08X}             /* Unknown */
-.word  0x{cart:08X}             /* Cartridge */
-.ascii "{cart_id.decode('ascii')}"                   /* Cartridge ID */
-.ascii "{region.decode('ascii')}"                    /* Region */
-.byte  0x{version:02X}                   /* Version */
+#include "rom_header.h"
+
+/* 0x00 */ ENDIAN_IDENTIFIER
+/* 0x01 */ PI_DOMAIN_1_CFG({pi_dom1_lat}, {pi_dom1_pwd}, {pi_dom1_reg & 0xF}, {(pi_dom1_reg >> 4) & 3})
+/* 0x04 */ SYSTEM_CLOCK_RATE_SETTING(0x{clockrate:X})
+/* 0x08 */ ENTRYPOINT(0x{entrypoint:08X})
+/* 0x0C */ LIBULTRA_VERSION({hw_ver // 10}, {hw_ver % 10}, {chr(os_ver)})
+/* 0x10 */ CHECKSUM()
+/* 0x18 */ PADDING(8)
+/* 0x20 */ ROM_NAME("{rom_name.decode('ascii').rstrip()}")
+/* 0x34 */ PADDING(7)
+/* 0x3B */ MEDIUM({get_storage_medium(chr(cart))})
+/* 0x3C */ GAME_ID("{cart_id.decode('ascii')}")
+/* 0x3E */ REGION({get_region(region.decode('ascii'))})
+/* 0x3F */ GAME_REVISION({version})
 """
         with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
             outfile.write(out)
