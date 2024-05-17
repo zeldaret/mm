@@ -12,7 +12,8 @@
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd00(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                  s32* endScript) {
     u8* script = *scriptPtr;
     u16 flag = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -31,7 +32,7 @@ s32 MsgEvent_Cmd00(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd01(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfGoron(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
@@ -50,7 +51,7 @@ s32 MsgEvent_Cmd01(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd02(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfZora(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
@@ -69,7 +70,7 @@ s32 MsgEvent_Cmd02(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd03(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfDeku(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
@@ -88,7 +89,7 @@ s32 MsgEvent_Cmd03(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd04(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfHuman(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
@@ -109,7 +110,8 @@ s32 MsgEvent_Cmd04(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  5:(s16) skipChoice3
  * Command size: 7
  */
-s32 MsgEvent_Cmd05(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnTextChoice(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = 0;
 
@@ -138,7 +140,7 @@ s32 MsgEvent_Cmd05(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd06(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s32 getItemId = MSCRIPT_GET_16(script, 1);
     f32 xzRange = actor->xzDistToPlayer + 1.0f;
@@ -162,7 +164,7 @@ s32 MsgEvent_Cmd06(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd07(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     f32 xzRange = actor->xzDistToPlayer + 1.0f;
     f32 yRange = fabsf(actor->playerHeightRel) + 1.0f;
@@ -191,7 +193,7 @@ s32 MsgEvent_Cmd07(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd08(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 rupees = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -210,7 +212,8 @@ s32 MsgEvent_Cmd08(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd09(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnCallback(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                              s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
@@ -235,7 +238,7 @@ s32 MsgEvent_Cmd09(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  11:(s16) skipNight3
  * Command size: 13
  */
-s32 MsgEvent_Cmd10(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = 0;
 
@@ -274,7 +277,7 @@ s32 MsgEvent_Cmd10(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd11(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip;
 
@@ -301,7 +304,7 @@ s32 MsgEvent_Cmd11(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd12(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
@@ -324,7 +327,7 @@ s32 MsgEvent_Cmd12(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd13(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     s32 state = Message_GetState(&play->msgCtx);
 
     *endScript = false;
@@ -351,7 +354,7 @@ s32 MsgEvent_Cmd13(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_Cmd14(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BeginText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
 
     Message_StartTextbox(play, MSCRIPT_GET_16(script, 1), NULL);
@@ -365,7 +368,7 @@ s32 MsgEvent_Cmd14(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_Cmd15(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
 
     Message_ContinueTextbox(play, MSCRIPT_GET_16(script, 1));
@@ -379,7 +382,7 @@ s32 MsgEvent_Cmd15(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd16(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     *endScript = true;
     return MSCRIPT_STOP;
 }
@@ -392,7 +395,7 @@ s32 MsgEvent_Cmd16(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) flag
  * Command size: 3
  */
-s32 MsgEvent_Cmd17(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     u16 flag = MSCRIPT_GET_16(script, 1);
 
@@ -406,7 +409,7 @@ s32 MsgEvent_Cmd17(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd18(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Message_CloseTextbox(play);
     return MSCRIPT_CONTINUE;
 }
@@ -418,7 +421,7 @@ s32 MsgEvent_Cmd18(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u16) flag
  * Command size: 3
  */
-s32 MsgEvent_Cmd19(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CollectSet(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s32 flag = MSCRIPT_GET_16(script, 1);
 
@@ -436,7 +439,7 @@ s32 MsgEvent_Cmd19(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(s16) rupees
  * Command size: 3
  */
-s32 MsgEvent_Cmd20(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 rupees = MSCRIPT_GET_16(script, 1);
 
@@ -451,7 +454,7 @@ s32 MsgEvent_Cmd20(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd21(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     play->msgCtx.msgMode = 0x44;
     return MSCRIPT_CONTINUE;
 }
@@ -463,7 +466,7 @@ s32 MsgEvent_Cmd21(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd22(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_UnsetAutotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     actor->flags &= ~ACTOR_FLAG_10000;
     return MSCRIPT_CONTINUE;
 }
@@ -475,7 +478,7 @@ s32 MsgEvent_Cmd22(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd23(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_FocusToChild(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor, play, actor->child);
     }
@@ -489,7 +492,7 @@ s32 MsgEvent_Cmd23(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd24(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_FocusToSelf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor->child, play, actor);
     }
@@ -504,7 +507,7 @@ s32 MsgEvent_Cmd24(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd25(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Jump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
@@ -521,7 +524,8 @@ s32 MsgEvent_Cmd25(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd26(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnQuestItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                               s32* endScript) {
     u8* script = *scriptPtr;
     u16 questItem = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -541,7 +545,8 @@ s32 MsgEvent_Cmd26(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd27(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                              s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 3);
 
@@ -559,7 +564,7 @@ s32 MsgEvent_Cmd27(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) event_inf flag
  * Command size: 3
  */
-s32 MsgEvent_Cmd28(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_SetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
 
     gSaveContext.eventInf[MSCRIPT_GET_8(script, 1)] |= MSCRIPT_GET_8(script, 2);
@@ -574,7 +579,7 @@ s32 MsgEvent_Cmd28(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) event_inf flag
  * Command size: 3
  */
-s32 MsgEvent_Cmd29(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_UnsetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
 
     gSaveContext.eventInf[MSCRIPT_GET_8(script, 1)] &= MSCRIPT_GET_8(script, 2) ^ 0xFF;
@@ -591,7 +596,8 @@ s32 MsgEvent_Cmd29(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  7:(s16) skip if player item-action is negative
  * Command size: 9
  */
-s32 MsgEvent_Cmd30(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnItemAction(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                s32* endScript) {
     u8* script = *scriptPtr;
     PlayerItemAction checkItemAction = MSCRIPT_GET_16(script, 1);
     s16 skip;
@@ -632,7 +638,8 @@ s32 MsgEvent_Cmd30(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 9
  */
-s32 MsgEvent_Cmd31(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnSongObtained(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                  s32* endScript) {
     u8* script = *scriptPtr;
     u16 song = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -652,7 +659,8 @@ s32 MsgEvent_Cmd31(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 9
  */
-s32 MsgEvent_Cmd32(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnWornMask(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                              s32* endScript) {
     u8* script = *scriptPtr;
     s32 mask = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -681,7 +689,7 @@ s32 MsgEvent_Cmd32(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd33(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnTimeGT(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 3);
     f32 f;
@@ -707,7 +715,7 @@ s32 MsgEvent_Cmd33(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd34(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnTimeLEQ(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 3);
     f32 f;
@@ -732,7 +740,8 @@ s32 MsgEvent_Cmd34(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd35(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                s32* endScript) {
     u8* script = *scriptPtr;
     s16 flag = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -751,7 +760,7 @@ s32 MsgEvent_Cmd35(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) flag
  * Command size: 3
  */
-s32 MsgEvent_Cmd36(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_SetSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 flag = MSCRIPT_GET_16(script, 1);
 
@@ -768,7 +777,7 @@ s32 MsgEvent_Cmd36(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd37(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     u16 item = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -789,7 +798,8 @@ s32 MsgEvent_Cmd37(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  5:(s16) skip
  * Command size: 7
  */
-s32 MsgEvent_Cmd38(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnTimeInterval(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                  s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 5);
     f32 f;
@@ -817,7 +827,7 @@ s32 MsgEvent_Cmd38(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_Cmd39(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 day = MSCRIPT_GET_16(script, 1);
     s16 skip = MSCRIPT_GET_16(script, 3);
@@ -836,7 +846,8 @@ s32 MsgEvent_Cmd39(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd40(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnCallbackContinue(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                      s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
@@ -854,7 +865,8 @@ s32 MsgEvent_Cmd40(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd41(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchIfHasPowderKeg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                  s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
@@ -872,7 +884,7 @@ s32 MsgEvent_Cmd41(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) item
  * Command size: 3
  */
-s32 MsgEvent_Cmd42(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_DelItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 item = MSCRIPT_GET_16(script, 1);
 
@@ -890,7 +902,8 @@ s32 MsgEvent_Cmd42(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  5:(s16) skip
  * Command size: 7
  */
-s32 MsgEvent_Cmd43(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_BranchOnCallbackMulti(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+                                   s32* endScript) {
     u8* script = *scriptPtr;
     s32 ret = 1;
     s16 skip;
@@ -923,7 +936,7 @@ s32 MsgEvent_Cmd43(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_Cmd44(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayerTalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
     u8* script = *scriptPtr;
     u16 textId = MSCRIPT_GET_16(script, 1);
@@ -941,7 +954,7 @@ s32 MsgEvent_Cmd44(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(u16) event
  * Command size: 3
  */
-s32 MsgEvent_Cmd45(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_NotebookEvent(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     u16 event = MSCRIPT_GET_16(script, 1);
 
@@ -956,7 +969,7 @@ s32 MsgEvent_Cmd45(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd46(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CLOSING:
             break;
@@ -983,7 +996,7 @@ s32 MsgEvent_Cmd46(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Cmd47(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     u8* script = *scriptPtr;
     s16 skip = MSCRIPT_GET_16(script, 1);
 
@@ -999,7 +1012,7 @@ s32 MsgEvent_Cmd47(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd48(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageDecide();
     return MSCRIPT_CONTINUE;
 }
@@ -1011,7 +1024,7 @@ s32 MsgEvent_Cmd48(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd49(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageCancel();
     return MSCRIPT_CONTINUE;
 }
@@ -1023,63 +1036,63 @@ s32 MsgEvent_Cmd49(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Cmd50(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayError(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx(NA_SE_SY_ERROR);
     return MSCRIPT_CONTINUE;
 }
 
 MsgEventHandler sMsgEventCmdHandlers[] = {
-    MsgEvent_Cmd00, // MSCRIPT_CMD_BRANCH_ON_WEEK_EVENT_REG
-    MsgEvent_Cmd01, // MSCRIPT_CMD_BRANCH_IF_GORON
-    MsgEvent_Cmd02, // MSCRIPT_CMD_BRANCH_IF_ZORA
-    MsgEvent_Cmd03, // MSCRIPT_CMD_BRANCH_IF_DEKU
-    MsgEvent_Cmd04, // MSCRIPT_CMD_BRANCH_IF_HUMAN
-    MsgEvent_Cmd05, // MSCRIPT_CMD_BRANCH_ON_TEXT_CHOICE
-    MsgEvent_Cmd06, // MSCRIPT_CMD_OFFER_ITEM
-    MsgEvent_Cmd07, // MSCRIPT_CMD_AUTOTALK
-    MsgEvent_Cmd08, // MSCRIPT_CMD_BRANCH_ON_RUPEES
-    MsgEvent_Cmd09, // MSCRIPT_CMD_BRANCH_ON_CALLBACK
-    MsgEvent_Cmd10, // MSCRIPT_CMD_BRANCH_ON_DAY
-    MsgEvent_Cmd11, // MSCRIPT_CMD_AWAIT_TEXT_JUMP
-    MsgEvent_Cmd12, // MSCRIPT_CMD_AWAIT_TEXT
-    MsgEvent_Cmd13, // MSCRIPT_CMD_AWAIT_TEXT_END
-    MsgEvent_Cmd14, // MSCRIPT_CMD_BEGIN_TEXT
-    MsgEvent_Cmd15, // MSCRIPT_CMD_CONTINUE_TEXT
-    MsgEvent_Cmd16, // MSCRIPT_CMD_DONE
-    MsgEvent_Cmd17, // MSCRIPT_CMD_WEEK_EVENT_REG_SET
-    MsgEvent_Cmd18, // MSCRIPT_CMD_CLOSE_TEXT
-    MsgEvent_Cmd19, // MSCRIPT_CMD_COLLECT_SET
-    MsgEvent_Cmd20, // MSCRIPT_CMD_CHANGE_RUPEES
-    MsgEvent_Cmd21, // MSCRIPT_CMD_PAUSE
-    MsgEvent_Cmd22, // MSCRIPT_CMD_UNSET_AUTOTALK
-    MsgEvent_Cmd23, // MSCRIPT_CMD_FOCUS_TO_CHILD
-    MsgEvent_Cmd24, // MSCRIPT_CMD_FOCUS_TO_SELF
-    MsgEvent_Cmd25, // MSCRIPT_CMD_JUMP
-    MsgEvent_Cmd26, // MSCRIPT_CMD_BRANCH_ON_QUEST_ITEM
-    MsgEvent_Cmd27, // MSCRIPT_CMD_BRANCH_ON_EVENT_INF
-    MsgEvent_Cmd28, // MSCRIPT_CMD_SET_EVENT_INF
-    MsgEvent_Cmd29, // MSCRIPT_CMD_UNSET_EVENT_INF
-    MsgEvent_Cmd30, // MSCRIPT_CMD_BRANCH_ON_ITEMACTION
-    MsgEvent_Cmd31, // MSCRIPT_CMD_BRANCH_ON_SONG_OBTAINED
-    MsgEvent_Cmd32, // MSCRIPT_CMD_BRANCH_ON_WORN_MASK
-    MsgEvent_Cmd33, // MSCRIPT_CMD_BRANCH_ON_TIME_GT
-    MsgEvent_Cmd34, // MSCRIPT_CMD_BRANCH_ON_TIME_LEQ
-    MsgEvent_Cmd35, // MSCRIPT_CMD_BRANCH_ON_SWITCH_FLAG
-    MsgEvent_Cmd36, // MSCRIPT_CMD_SET_SWITCH_FLAG
-    MsgEvent_Cmd37, // MSCRIPT_CMD_BRANCH_ON_ITEM
-    MsgEvent_Cmd38, // MSCRIPT_CMD_BRANCH_ON_TIME_INTERVAL
-    MsgEvent_Cmd39, // MSCRIPT_CMD_BRANCH_IF_DAY
-    MsgEvent_Cmd40, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
-    MsgEvent_Cmd41, // MSCRIPT_CMD_HAS_POWDER_KEG
-    MsgEvent_Cmd42, // MSCRIPT_CMD_DEL_ITEM
-    MsgEvent_Cmd43, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
-    MsgEvent_Cmd44, // MSCRIPT_CMD_PLAYER_TALK
-    MsgEvent_Cmd45, // MSCRIPT_CMD_NOTEBOOK_EVENT
-    MsgEvent_Cmd46, // MSCRIPT_CMD_AWAIT_TEXT_DONE
-    MsgEvent_Cmd47, // MSCRIPT_CMD_JUMP_3
-    MsgEvent_Cmd48, // MSCRIPT_CMD_PLAY_DECIDE
-    MsgEvent_Cmd49, // MSCRIPT_CMD_PLAY_CANCEL
-    MsgEvent_Cmd50, // MSCRIPT_CMD_PLAY_ERROR
+    MsgEvent_BranchOnWeekEventReg,     // MSCRIPT_CMD_BRANCH_ON_WEEK_EVENT_REG
+    MsgEvent_BranchIfGoron,            // MSCRIPT_CMD_BRANCH_IF_GORON
+    MsgEvent_BranchIfZora,             // MSCRIPT_CMD_BRANCH_IF_ZORA
+    MsgEvent_BranchIfDeku,             // MSCRIPT_CMD_BRANCH_IF_DEKU
+    MsgEvent_BranchIfHuman,            // MSCRIPT_CMD_BRANCH_IF_HUMAN
+    MsgEvent_BranchOnTextChoice,       // MSCRIPT_CMD_BRANCH_ON_TEXT_CHOICE
+    MsgEvent_OfferItem,                // MSCRIPT_CMD_OFFER_ITEM
+    MsgEvent_Autotalk,                 // MSCRIPT_CMD_AUTOTALK
+    MsgEvent_BranchOnRupees,           // MSCRIPT_CMD_BRANCH_ON_RUPEES
+    MsgEvent_BranchOnCallback,         // MSCRIPT_CMD_BRANCH_ON_CALLBACK
+    MsgEvent_BranchOnDay,              // MSCRIPT_CMD_BRANCH_ON_DAY
+    MsgEvent_AwaitTextJump,            // MSCRIPT_CMD_AWAIT_TEXT_JUMP
+    MsgEvent_AwaitText,                // MSCRIPT_CMD_AWAIT_TEXT
+    MsgEvent_AwaitTextEnd,             // MSCRIPT_CMD_AWAIT_TEXT_END
+    MsgEvent_BeginText,                // MSCRIPT_CMD_BEGIN_TEXT
+    MsgEvent_ContinueText,             // MSCRIPT_CMD_CONTINUE_TEXT
+    MsgEvent_Done,                     // MSCRIPT_CMD_DONE
+    MsgEvent_SetWeekEventReg,          // MSCRIPT_CMD_SET_WEEK_EVENT_REG
+    MsgEvent_CloseText,                // MSCRIPT_CMD_CLOSE_TEXT
+    MsgEvent_CollectSet,               // MSCRIPT_CMD_COLLECT_SET
+    MsgEvent_ChangeRupees,             // MSCRIPT_CMD_CHANGE_RUPEES
+    MsgEvent_Pause,                    // MSCRIPT_CMD_PAUSE
+    MsgEvent_UnsetAutotalk,            // MSCRIPT_CMD_UNSET_AUTOTALK
+    MsgEvent_FocusToChild,             // MSCRIPT_CMD_FOCUS_TO_CHILD
+    MsgEvent_FocusToSelf,              // MSCRIPT_CMD_FOCUS_TO_SELF
+    MsgEvent_Jump,                     // MSCRIPT_CMD_JUMP
+    MsgEvent_BranchOnQuestItem,        // MSCRIPT_CMD_BRANCH_ON_QUEST_ITEM
+    MsgEvent_BranchOnEventInf,         // MSCRIPT_CMD_BRANCH_ON_EVENT_INF
+    MsgEvent_SetEventInf,              // MSCRIPT_CMD_SET_EVENT_INF
+    MsgEvent_UnsetEventInf,            // MSCRIPT_CMD_UNSET_EVENT_INF
+    MsgEvent_BranchOnItemAction,       // MSCRIPT_CMD_BRANCH_ON_ITEMACTION
+    MsgEvent_BranchOnSongObtained,     // MSCRIPT_CMD_BRANCH_ON_SONG_OBTAINED
+    MsgEvent_BranchOnWornMask,         // MSCRIPT_CMD_BRANCH_ON_WORN_MASK
+    MsgEvent_BranchOnTimeGT,           // MSCRIPT_CMD_BRANCH_ON_TIME_GT
+    MsgEvent_BranchOnTimeLEQ,          // MSCRIPT_CMD_BRANCH_ON_TIME_LEQ
+    MsgEvent_BranchOnSwitchFlag,       // MSCRIPT_CMD_BRANCH_ON_SWITCH_FLAG
+    MsgEvent_SetSwitchFlag,            // MSCRIPT_CMD_SET_SWITCH_FLAG
+    MsgEvent_BranchOnItem,             // MSCRIPT_CMD_BRANCH_ON_ITEM
+    MsgEvent_BranchOnTimeInterval,     // MSCRIPT_CMD_BRANCH_ON_TIME_INTERVAL
+    MsgEvent_BranchIfDay,              // MSCRIPT_CMD_BRANCH_IF_DAY
+    MsgEvent_BranchOnCallbackContinue, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
+    MsgEvent_BranchIfHasPowderKeg,     // MSCRIPT_CMD_BRANCH_IF_HAS_POWDER_KEG
+    MsgEvent_DelItem,                  // MSCRIPT_CMD_DEL_ITEM
+    MsgEvent_BranchOnCallbackMulti,    // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
+    MsgEvent_PlayerTalk,               // MSCRIPT_CMD_PLAYER_TALK
+    MsgEvent_NotebookEvent,            // MSCRIPT_CMD_NOTEBOOK_EVENT
+    MsgEvent_AwaitTextDone,            // MSCRIPT_CMD_AWAIT_TEXT_DONE
+    MsgEvent_Jump3,                    // MSCRIPT_CMD_JUMP_3
+    MsgEvent_PlayDecide,               // MSCRIPT_CMD_PLAY_DECIDE
+    MsgEvent_PlayCancel,               // MSCRIPT_CMD_PLAY_CANCEL
+    MsgEvent_PlayError,                // MSCRIPT_CMD_PLAY_ERROR
 };
 
 u8 sMsgEventCmdSizes[] = {
@@ -1100,7 +1113,7 @@ u8 sMsgEventCmdSizes[] = {
     MSCRIPT_BEGIN_TEXT_SIZE,                  // MSCRIPT_CMD_BEGIN_TEXT
     MSCRIPT_CONTINUE_TEXT_SIZE,               // MSCRIPT_CMD_CONTINUE_TEXT
     MSCRIPT_DONE_SIZE,                        // MSCRIPT_CMD_DONE
-    MSCRIPT_WEEK_EVENT_REG_SET_SIZE,          // MSCRIPT_CMD_WEEK_EVENT_REG_SET
+    MSCRIPT_SET_WEEK_EVENT_REG_SIZE,          // MSCRIPT_CMD_SET_WEEK_EVENT_REG
     MSCRIPT_CLOSE_TEXT_SIZE,                  // MSCRIPT_CMD_CLOSE_TEXT
     MSCRIPT_COLLECT_SET_SIZE,                 // MSCRIPT_CMD_COLLECT_SET
     MSCRIPT_CHANGE_RUPEES_SIZE,               // MSCRIPT_CMD_CHANGE_RUPEES
@@ -1124,7 +1137,7 @@ u8 sMsgEventCmdSizes[] = {
     MSCRIPT_BRANCH_ON_TIME_INTERVAL_SIZE,     // MSCRIPT_CMD_BRANCH_ON_TIME_INTERVAL
     MSCRIPT_BRANCH_IF_DAY_SIZE,               // MSCRIPT_CMD_BRANCH_IF_DAY
     MSCRIPT_BRANCH_ON_CALLBACK_CONTINUE_SIZE, // MSCRIPT_CMD_BRANCH_ON_CALLBACK_CONTINUE
-    MSCRIPT_HAS_POWDER_KEG_SIZE,              // MSCRIPT_CMD_HAS_POWDER_KEG
+    MSCRIPT_BRANCH_IF_HAS_POWDER_KEG_SIZE,    // MSCRIPT_CMD_BRANCH_IF_HAS_POWDER_KEG
     MSCRIPT_DEL_ITEM_SIZE,                    // MSCRIPT_CMD_DEL_ITEM
     MSCRIPT_BRANCH_ON_CALLBACK_MULTI_SIZE,    // MSCRIPT_CMD_BRANCH_ON_CALLBACK_MULTI
     MSCRIPT_PLAYER_TALK_SIZE,                 // MSCRIPT_CMD_PLAYER_TALK

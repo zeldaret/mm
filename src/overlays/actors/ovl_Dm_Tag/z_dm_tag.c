@@ -58,7 +58,7 @@ MsgScript D_80C22BFC[] = {
     /* 0x0026 0x03 */ MSCRIPT_BEGIN_TEXT(0x28F6),
     /* 0x0029 0x01 */ MSCRIPT_AWAIT_TEXT(),
     /* 0x002A 0x01 */ MSCRIPT_PAUSE(),
-    /* 0x002B 0x03 */ MSCRIPT_WEEK_EVENT_REG_SET(WEEKEVENTREG_85_04),
+    /* 0x002B 0x03 */ MSCRIPT_SET_WEEK_EVENT_REG(WEEKEVENTREG_85_04),
     /* 0x002E 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK(0x0),
     /* 0x0031 0x01 */ MSCRIPT_DONE(),
 };
@@ -259,7 +259,8 @@ void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgEventScript, this->msgEventCallback,
+                           &this->msgEventScriptPos)) {
         this->actionFunc = func_80C229AC;
     }
 }
