@@ -14,6 +14,28 @@ static s16 sBssPad;
 u8 gDisablePlayerCsActionStartPos;
 s16 gDungeonBossWarpSceneId;
 
+// clang-format off
+// Partial structs taken from "prevent_bss_reordering.h"
+struct Dummy200 { int x; };
+struct Dummy201 { int x; };
+struct Dummy202 { int x; };
+struct Dummy203 { int x; };
+struct Dummy204 { int x; };
+struct Dummy205 { int x; };
+struct Dummy206 { int x; };
+struct Dummy207 { int x; };
+struct Dummy208 { int x; };
+struct Dummy209 { int x; };
+struct Dummy210 { int x; };
+struct Dummy211 { int x; };
+struct Dummy212 { int x; };
+struct Dummy213 { int x; };
+struct Dummy214 { int x; };
+struct Dummy215 { int x; };
+struct Dummy216 { int x; };
+struct Dummy217 { int x; };
+// clang-format on
+
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
