@@ -5,7 +5,6 @@
  */
 
 #include "z_en_wdhand.h"
-#include "objects/object_wdhand/object_wdhand.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
@@ -19,14 +18,14 @@ void EnWdhand_Draw(Actor* thisx, PlayState* play);
 void EnWdhand_ReturnToIdle(EnWdhand* this, PlayState* play);
 void EnWdhand_Idle(EnWdhand* this, PlayState* play);
 void EnWdhand_LungeForPlayer(EnWdhand* this, PlayState* play);
-void EnWdhand_FailedGrabPlayer(EnWdhand* this, PlayState* play);
+void EnWdhand_FailedToGrabPlayer(EnWdhand* this, PlayState* play);
 void EnWdhand_GrabbedPlayer(EnWdhand* this, PlayState* play);
 void EnWdhand_Die(EnWdhand* this, PlayState* play);
 
 void EnWdhand_SetupReturnToIdle(EnWdhand* this);
 void EnWdhand_SetupIdle(EnWdhand* this);
 void EnWdhand_SetupLungeForPlayer(EnWdhand* this);
-void EnWdhand_SetupFailedGrabPlayer(EnWdhand* this);
+void EnWdhand_SetupFailedToGrabPlayer(EnWdhand* this);
 void EnWdhand_SetupGrabbedPlayer(EnWdhand* this, PlayState* play);
 void EnWdhand_SetupDie(EnWdhand* this);
 
@@ -239,13 +238,13 @@ void EnWdhand_Destroy(Actor* thisx, PlayState* play) {
 void EnWdhand_GetInitVelocity(EnWdhand* this, Vec3f* dst) {
     s32 param;
 
-    param = this->actor.params & 0x7F;
+    param = EN_WDHAND_GET_Y_INIT_VELOCITY(&this->actor);
     if (param == 0x7F) {
         param = 0x28;
     }
     dst->y = param * 0.2f;
 
-    param = (this->actor.params >> 7) & 0x7F;
+    param = EN_WDHAND_GET_Z_INIT_VELOCITY(&this->actor);
     if (param == 0x7F) {
         param = 0x28;
     }
@@ -276,7 +275,7 @@ void EnWdhand_SetTransform(EnWdhand* this, s32 limbIndex, s32 arg2, Vec3f* trans
         Matrix_RotateYS(-this->limbRotations[limbIndex].y, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 3) {
+    if (limbIndex == DEXIHAND_LIMB_03) {
         if (this->globalLimbScaleFactor > 1.0f) {
             f32 scale = CLAMP_MAX(this->globalLimbScaleFactor, 1.5f);
 
@@ -413,7 +412,7 @@ void EnWdhand_LungeForPlayer(EnWdhand* this, PlayState* play) {
         EnWdhand_SetupGrabbedPlayer(this, play);
     } else if (allStepsDone) {
         // Failed to grab player in time
-        EnWdhand_SetupFailedGrabPlayer(this);
+        EnWdhand_SetupFailedToGrabPlayer(this);
     }
 
     if (this->collider.base.atFlags & AT_HIT) {
@@ -421,15 +420,15 @@ void EnWdhand_LungeForPlayer(EnWdhand* this, PlayState* play) {
     }
 }
 
-void EnWdhand_SetupFailedGrabPlayer(EnWdhand* this) {
+void EnWdhand_SetupFailedToGrabPlayer(EnWdhand* this) {
     Animation_PlayOnce(&this->skelAnime, &gDexihandCloseAnim);
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~AT_HIT;
-    this->actionFunc = EnWdhand_FailedGrabPlayer;
+    this->actionFunc = EnWdhand_FailedToGrabPlayer;
     this->globalLimbScaleFactor = 1.5f;
 }
 
-void EnWdhand_FailedGrabPlayer(EnWdhand* this, PlayState* play) {
+void EnWdhand_FailedToGrabPlayer(EnWdhand* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         EnWdhand_SetupReturnToIdle(this);
     }
@@ -632,8 +631,8 @@ void EnWdhand_SetupDie(EnWdhand* this) {
 }
 
 void EnWdhand_Die(EnWdhand* this, PlayState* play) {
-    static Vec3f effectVelocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f effectAccel = { 0.0f, 0.05f, 0.0f };
+    static Vec3f sEffectVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sEffectAccel = { 0.0f, 0.05f, 0.0f };
     Vec3s* handCollider = &this->collider.elements[6].dim.worldSphere.center;
     Vec3f spA0;
     Vec3f sp94;
@@ -705,12 +704,12 @@ void EnWdhand_Die(EnWdhand* this, PlayState* play) {
                 for (i = 0; i < 5; i++) {
                     endPoint = &this->endPoints[pointIndex];
 
-                    effectVelocity.y = Rand_ZeroOne() + 1.0f;
+                    sEffectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(0x28, 0x28);
                     effPos.x = endPoint->x + Rand_CenteredFloat(12.0f);
                     effPos.y = endPoint->y + Rand_CenteredFloat(12.0f);
                     effPos.z = endPoint->z + Rand_CenteredFloat(12.0f);
-                    EffectSsDtBubble_SpawnColorProfile(play, &effPos, &effectVelocity, &effectAccel, effectScale, 25, 2,
+                    EffectSsDtBubble_SpawnColorProfile(play, &effPos, &sEffectVelocity, &sEffectAccel, effectScale, 25, 2,
                                                        true);
                 }
             }
@@ -722,8 +721,8 @@ void EnWdhand_Die(EnWdhand* this, PlayState* play) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->endPoints); i++) {
-        effectVelocity.y = Rand_ZeroOne() + 1.0f;
-        EffectSsDtBubble_SpawnColorProfile(play, &this->endPoints[i], &effectVelocity, &effectAccel,
+        sEffectVelocity.y = Rand_ZeroOne() + 1.0f;
+        EffectSsDtBubble_SpawnColorProfile(play, &this->endPoints[i], &sEffectVelocity, &sEffectAccel,
                                            Rand_S16Offset(40, 40), 25, 2, true);
     }
 }
@@ -786,28 +785,28 @@ void EnWdhand_UpdateColliderLocationsForLimb(EnWdhand* this, s32 limbIndex, Vec3
 void EnWdhand_Draw(Actor* thisx, PlayState* play) {
     EnWdhand* this = THIS;
     Vec3f limbPos;
-    Gfx* dl;
+    Gfx* gfx;
     s32 limbIndex;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&dl[0], gSetupDLs[25]);
-    gSPMatrix(&dl[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[2], gDexihandBaseDL);
+    gSPDisplayList(&gfx[0], gSetupDLs[25]);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[2], gDexihandBaseDL);
 
     Matrix_MultVecY(300.0f, &limbPos);
 
-    dl = &dl[3];
+    gfx = &gfx[3];
 
     limbIndex = this->limbIndexBeforeCut + 1;
     for (i = 0; i < limbIndex; i++) {
         Matrix_Push();
         EnWdhand_UpdateColliderLocationsForLimb(this, i, &limbPos);
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(dl++, gDexihandArmSegmentDL);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, gDexihandArmSegmentDL);
         Matrix_Pop();
     }
 
@@ -824,8 +823,8 @@ void EnWdhand_Draw(Actor* thisx, PlayState* play) {
     for (i = this->limbIndexAfterCut; i < EN_WDHAND_NUM_SEGMENTS; i++) {
         Matrix_Push();
         EnWdhand_UpdateColliderLocationsForLimb(this, i, &limbPos);
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(dl++, gDexihandArmSegmentDL);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, gDexihandArmSegmentDL);
         Matrix_Pop();
     }
 
@@ -833,9 +832,9 @@ void EnWdhand_Draw(Actor* thisx, PlayState* play) {
 
     if (this->globalLimbScaleFactor > 1.0f) {
         s32 pad;
-        f32 var_fv1 = CLAMP_MAX(this->globalLimbScaleFactor, 1.5f);
+        f32 scale = CLAMP_MAX(this->globalLimbScaleFactor, 1.5f);
 
-        Matrix_RotateZS((var_fv1 - 1.0f) * -32768.0f, MTXMODE_APPLY);
+        Matrix_RotateZS((scale - 1.0f) * -32768.0f, MTXMODE_APPLY);
     }
     if (this->actor.scale.x < 0.01f) {
         Matrix_Translate(0.0f, (10.0f / this->actor.scale.x) - 1000.0f, 0.0f, MTXMODE_APPLY);
@@ -845,7 +844,7 @@ void EnWdhand_Draw(Actor* thisx, PlayState* play) {
     Matrix_MultVecY(1000.0f, &limbPos);
     EnWdhand_Vec3fToVec3s(&this->collider.elements[6].dim.worldSphere.center, &limbPos);
 
-    POLY_OPA_DISP = dl;
+    POLY_OPA_DISP = gfx;
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 

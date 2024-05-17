@@ -14,6 +14,9 @@ typedef void (*EnWdhandActionFunc)(struct EnWdhand*, PlayState*);
 #define EN_WDHAND_CUT_POINT  0
 #define EN_WDHAND_HAND_POINT 1
 
+#define EN_WDHAND_GET_Y_INIT_VELOCITY(thisx) (((thisx)->params >> 0) & 0x7F)
+#define EN_WDHAND_GET_Z_INIT_VELOCITY(thisx) (((thisx)->params >> 7) & 0x7F)
+
 typedef struct EnWdhand {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
