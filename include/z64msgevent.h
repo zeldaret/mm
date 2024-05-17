@@ -130,7 +130,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_CMD07(skip) \
+#define MSCRIPT_AUTOTALK(skip) \
     MSCRIPT_CMD_07, MSCRIPT_PACK_16(skip)
 
 /**
@@ -157,7 +157,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_CMD11(skip) \
+#define MSCRIPT_AWAIT_TEXT_JUMP(skip) \
     MSCRIPT_CMD_11, MSCRIPT_PACK_16(skip)
 
 /**
@@ -169,7 +169,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 1
  */
-#define MSCRIPT_CMD13() \
+#define MSCRIPT_AWAIT_TEXT_END() \
     MSCRIPT_CMD_13
 
 /**
@@ -223,7 +223,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 1
  */
-#define MSCRIPT_CMD22() \
+#define MSCRIPT_UNSET_AUTOTALK() \
     MSCRIPT_CMD_22
 
 /**
@@ -355,7 +355,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 3
  */
-#define MSCRIPT_CMD44(textId) \
+#define MSCRIPT_PLAYER_TALK(textId) \
     MSCRIPT_CMD_44, MSCRIPT_PACK_16(textId)
 
 /**
@@ -367,7 +367,7 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 1
  */
-#define MSCRIPT_CMD46() \
+#define MSCRIPT_AWAIT_TEXT_DONE() \
     MSCRIPT_CMD_46
 
 /**
