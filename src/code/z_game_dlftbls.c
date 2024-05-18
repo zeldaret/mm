@@ -16,22 +16,26 @@
 #undef DEFINE_GAMESTATE_INTERNAL
 
 // Gamestate Overlay Table definition
-#define DEFINE_GAMESTATE_INTERNAL(typeName, _enumName) \
-    { NULL, 0, 0, NULL, NULL, NULL, typeName##_Init, typeName##_Destroy, NULL, NULL, 0, sizeof(typeName##State) },
+#define DEFINE_GAMESTATE_INTERNAL(typeName, _enumName)                                                    \
+    {                                                                                                     \
+        NULL, ROM_FILE_UNSET,          NULL, NULL, NULL, typeName##_Init, typeName##_Destroy, NULL, NULL, \
+        0,    sizeof(typeName##State),                                                                    \
+    },
 
 #define DEFINE_GAMESTATE(typeName, _enumName, segmentName) \
-    { NULL,                                                \
-      (uintptr_t)SEGMENT_ROM_START(ovl_##segmentName),     \
-      (uintptr_t)SEGMENT_ROM_END(ovl_##segmentName),       \
-      SEGMENT_START(ovl_##segmentName),                    \
-      SEGMENT_END(ovl_##segmentName),                      \
-      NULL,                                                \
-      typeName##_Init,                                     \
-      typeName##_Destroy,                                  \
-      NULL,                                                \
-      NULL,                                                \
-      0,                                                   \
-      sizeof(typeName##State) },
+    {                                                      \
+        NULL,                                              \
+        ROM_FILE(ovl_##segmentName),                       \
+        SEGMENT_START(ovl_##segmentName),                  \
+        SEGMENT_END(ovl_##segmentName),                    \
+        NULL,                                              \
+        typeName##_Init,                                   \
+        typeName##_Destroy,                                \
+        NULL,                                              \
+        NULL,                                              \
+        0,                                                 \
+        sizeof(typeName##State),                           \
+    },
 
 GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX] = {
 #include "tables/gamestate_table.h"

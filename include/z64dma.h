@@ -4,6 +4,8 @@
 #include "ultra64.h"
 #include "unk.h"
 
+#include "romfile.h"
+
 typedef struct {
     /* 0x00 */ uintptr_t vromAddr; // VROM address (source)
     /* 0x04 */ void* dramAddr;     // DRAM address (destination)
@@ -15,14 +17,8 @@ typedef struct {
     /* 0x1C */ OSMesg notifyMsg;         // Completion notification message
 } DmaRequest; // size = 0x20
 
-typedef struct RomFile {
-    /* 0x0 */ uintptr_t vromStart;
-    /* 0x4 */ uintptr_t vromEnd;
-} RomFile; // size = 0x8
-
 typedef struct {
-    /* 0x0 */ uintptr_t vromStart;
-    /* 0x4 */ uintptr_t vromEnd;
+    /* 0x0 */ RomFile file;
     /* 0x8 */ uintptr_t romStart;
     /* 0xC */ uintptr_t romEnd;
 } DmaEntry; // size = 0x10

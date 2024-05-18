@@ -1451,7 +1451,7 @@
         <DList Name="gSoaringWarpCsFeatherDL" Offset="0x81628" />
         <Texture Name="gSoaringWarpCsFeatherTex" OutName="soaring_warp_cs_feather" Format="rgba16" Width="16" Height="32" Offset="0x816C0" />
         <Blob Name="gameplay_keep_Blob_081AC0" Size="0x1A74" Offset="0x81AC0" />
-        <Blob Name="gameplay_keep_Blob_083534" Size="0x1C" Offset="0x83534" /> <!-- Is a `SkeletonInfo_1C` struct -->
+        <Blob Name="gameplay_keep_Blob_083534" Size="0x1C" Offset="0x83534" /> <!-- Is a `KeyFrameAnimation` struct -->
         <DList Name="gameplay_keep_DL_084790" Offset="0x84790" />
         <DList Name="gameplay_keep_DL_0847E0" Offset="0x847E0" />
         <DList Name="gameplay_keep_DL_084850" Offset="0x84850" />
@@ -1483,7 +1483,7 @@
         <DList Name="gameplay_keep_DL_085418" Offset="0x85418" />
         <DList Name="gameplay_keep_DL_085490" Offset="0x85490" />
         <Blob Name="gameplay_keep_Blob_085510" Size="0x130" Offset="0x85510" />
-        <Blob Name="gameplay_keep_Blob_085640" Size="0x10" Offset="0x85640" /> <!-- Is a `Struct_801BFA14_Arg1` struct -->
+        <Blob Name="gameplay_keep_Blob_085640" Size="0x10" Offset="0x85640" /> <!-- Is a `KeyFrameSkeleton` struct -->
 
         <!-- Zora Elegy of Emptiness Shell -->
         <DList Name="gElegyShellZoraDL" Offset="0x89070" /> <!-- Original name is "pzs_zo_model" -->

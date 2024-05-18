@@ -2,6 +2,7 @@
 #define Z64PAUSE_MENU_H
 
 #include "ultra64.h"
+#include "romfile.h"
 #include "z64math.h"
 #include "z64view.h"
 #include "unk.h"
@@ -197,8 +198,7 @@ typedef enum KaleidoMgrOverlayType {
 
 typedef struct KaleidoMgrOverlay {
     /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ uintptr_t vromStart;
-    /* 0x08 */ uintptr_t vromEnd;
+    /* 0x04 */ RomFile file;
     /* 0x0C */ void* vramStart;
     /* 0x10 */ void* vramEnd;
     /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
