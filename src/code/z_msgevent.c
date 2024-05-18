@@ -1189,6 +1189,7 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgEven
     s32 cmdLen;
     u8 cmdId;
     s32 pad;
+
     start = script;
     script += *pos;
 
