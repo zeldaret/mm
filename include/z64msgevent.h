@@ -135,8 +135,8 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
  * 
  * Size = 5
  */
-#define MSCRIPT_OFFER_ITEM(unk, skip) \
-    MSCRIPT_CMD_OFFER_ITEM, MSCRIPT_PACK_16(unk), MSCRIPT_PACK_16(skip)
+#define MSCRIPT_OFFER_ITEM(item, skip) \
+    MSCRIPT_CMD_OFFER_ITEM, MSCRIPT_PACK_16(item), MSCRIPT_PACK_16(skip)
 
 #define MSCRIPT_OFFER_ITEM_SIZE 5
 
@@ -330,8 +330,8 @@ s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, 
 /**
  * Size = 9
  */
-#define MSCRIPT_BRANCH_ON_ITEMACTION(unk, skipEqual, skipDefault, skipUnk) \
-    MSCRIPT_CMD_BRANCH_ON_ITEMACTION, MSCRIPT_PACK_16(unk), MSCRIPT_PACK_16(skipEqual), MSCRIPT_PACK_16(skipDefault), MSCRIPT_PACK_16(skipUnk)
+#define MSCRIPT_BRANCH_ON_ITEMACTION(itemAction, skipEqual, skipDefault, skipContinue) \
+    MSCRIPT_CMD_BRANCH_ON_ITEMACTION, MSCRIPT_PACK_16(itemAction), MSCRIPT_PACK_16(skipEqual), MSCRIPT_PACK_16(skipDefault), MSCRIPT_PACK_16(skipContinue)
 
 #define MSCRIPT_BRANCH_ON_ITEMACTION_SIZE 9
 
