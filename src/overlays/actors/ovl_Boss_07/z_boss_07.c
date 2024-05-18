@@ -2698,9 +2698,9 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  * with each component's magnitude capped at 200.
  */
 
-void Boss07_Wrath_shouldUpdateTentaclesOrWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot,
-                                               Vec3f* velocity, f32 gravity, f32 mobility, f32 drag, f32 tension,
-                                               Vec3s* baseRot, s16 grabIndex, f32 scale, s32 hand) {
+void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* velocity,
+                              f32 gravity, f32 mobility, f32 drag, f32 tension, Vec3s* baseRot, s16 grabIndex,
+                              f32 scale, s32 hand) {
     s32 i;
     s32 j;
     Vec3f tempPos;
@@ -3228,14 +3228,14 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (((KREG(63) == 0) || (KREG(63) == 2)) && this->shouldUpdateTentaclesOrWhips) {
-        Boss07_Wrath_shouldUpdateTentaclesOrWhips(
-            this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot, this->rightWhip.velocity,
-            this->rightWhip.gravity, this->rightWhip.mobility, this->rightWhip.drag, this->rightWhip.tension,
-            &this->rightWhip.baseRot, this->whipGrabIndex, this->whipScale, MAJORAS_WRATH_RIGHT_HAND);
-        Boss07_Wrath_shouldUpdateTentaclesOrWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos,
-                                                  this->leftWhip.rot, this->leftWhip.velocity, this->leftWhip.gravity,
-                                                  this->leftWhip.mobility, this->leftWhip.drag, this->leftWhip.tension,
-                                                  &this->leftWhip.baseRot, 0, this->whipScale, MAJORAS_WRATH_LEFT_HAND);
+        Boss07_Wrath_UpdateWhips(this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
+                                 this->rightWhip.velocity, this->rightWhip.gravity, this->rightWhip.mobility,
+                                 this->rightWhip.drag, this->rightWhip.tension, &this->rightWhip.baseRot,
+                                 this->whipGrabIndex, this->whipScale, MAJORAS_WRATH_RIGHT_HAND);
+        Boss07_Wrath_UpdateWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
+                                 this->leftWhip.velocity, this->leftWhip.gravity, this->leftWhip.mobility,
+                                 this->leftWhip.drag, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
+                                 this->whipScale, MAJORAS_WRATH_LEFT_HAND);
     }
 
     Boss07_Wrath_DrawWhips(this, play, this->rightWhip.pos, this->rightWhip.rot, this->whipScale,
