@@ -218,8 +218,8 @@ typedef struct Boss07 {
     /* 0x17D8 */ Vec3s cutsceneHeadRot;
     /* 0x17E0 */ f32 incarnationArmScale; // also has some unused functionality to scale most of Wrath's limbs, see `Boss07_Wrath_TransformLimbDraw`
     /* 0x17E4 */ f32 incarnationLegScale;
-    /* 0x17E8 */ f32 unk_17E8; // limb pump average
-    /* 0x17E8 */ f32 unk_17EC; // limb pump amplitude
+    /* 0x17E8 */ f32 incarnationWrathTransitionScale;
+    /* 0x17E8 */ f32 incarnationWrathTransitionAmplitude;
     /* 0x17F0 */ f32 incarnationMaskScaleY;
     /* 0x17F4 */ f32 incarnationMaskScaleX; 
     /* 0x17F8 */ f32 drawDmgEffScale;

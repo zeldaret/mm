@@ -1032,7 +1032,7 @@ void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->cutsceneHeadRot.x = 0x7F00;
     this->invincibilityTimer = 20;
-    this->unk_17E8 = 0x1400;
+    this->incarnationWrathTransitionScale = 0x1400;
 }
 
 typedef struct {
@@ -1079,11 +1079,13 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                 }
 
                 Math_ApproachS(&this->cutsceneHeadRot.x, 0, 5, 0x1000);
-                this->cutsceneHeadRot.y = Math_SinS(this->cutsceneTimer * 0x1000) * this->unk_17E8;
-                this->cutsceneHeadRot.z = Math_SinS(this->cutsceneTimer * 0xB00) * this->unk_17E8 * 0.5f;
+                this->cutsceneHeadRot.y =
+                    Math_SinS(this->cutsceneTimer * 0x1000) * this->incarnationWrathTransitionScale;
+                this->cutsceneHeadRot.z =
+                    Math_SinS(this->cutsceneTimer * 0xB00) * this->incarnationWrathTransitionScale * 0.5f;
 
                 if (this->cutsceneTimer > 40) {
-                    Math_ApproachZeroF(&this->unk_17E8, 1.0f, 200.0f);
+                    Math_ApproachZeroF(&this->incarnationWrathTransitionScale, 1.0f, 200.0f);
                 }
             }
 
@@ -4071,8 +4073,8 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
                 this->subCamAtNext.x = -70.0f;
                 this->subCamAtNext.y = 150.0f;
                 this->subCamAtNext.z = -20.0f;
-                this->unk_17E8 = 1.0f;
-                this->unk_17EC = 0.4f;
+                this->incarnationWrathTransitionScale = 1.0f;
+                this->incarnationWrathTransitionAmplitude = 0.4f;
                 Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationPumpingUpAnim, -5.0f);
                 this->actor.shape.rot.y = 0;
                 this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4097,8 +4099,8 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
                 this->subCamAtNext.x = 50.0f;
                 this->subCamAtNext.y = 150.0f;
                 this->subCamAtNext.z = -20.0f;
-                this->unk_17E8 = 1.0f;
-                this->unk_17EC = 0.4f;
+                this->incarnationWrathTransitionScale = 1.0f;
+                this->incarnationWrathTransitionAmplitude = 0.4f;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
             }
             break;
@@ -4115,8 +4117,8 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
                 this->subCamAtNext.x = 0.0f;
                 this->subCamAtNext.y = 90.0f;
                 this->subCamAtNext.z = 0.0f;
-                this->unk_17E8 = 1.0f;
-                this->unk_17EC = 0.4f;
+                this->incarnationWrathTransitionScale = 1.0f;
+                this->incarnationWrathTransitionAmplitude = 0.4f;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
             }
             break;
@@ -4144,13 +4146,17 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->subCamAtNext, &this->subCamAt);
 
     if (sp4B == 1) {
-        this->incarnationArmScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
-        Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
-        Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
+        this->incarnationArmScale =
+            (Math_SinS(this->cutsceneTimer * 0x3000) * this->incarnationWrathTransitionAmplitude) +
+            this->incarnationWrathTransitionScale;
+        Math_ApproachF(&this->incarnationWrathTransitionScale, 2.0f, 1.0f, 0.05f);
+        Math_ApproachZeroF(&this->incarnationWrathTransitionAmplitude, 1.0f, 0.01f);
     } else if (sp4B == 2) {
-        this->incarnationLegScale = (Math_SinS(this->cutsceneTimer * 0x3000) * this->unk_17EC) + this->unk_17E8;
-        Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
-        Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
+        this->incarnationLegScale =
+            (Math_SinS(this->cutsceneTimer * 0x3000) * this->incarnationWrathTransitionAmplitude) +
+            this->incarnationWrathTransitionScale;
+        Math_ApproachF(&this->incarnationWrathTransitionScale, 2.0f, 1.0f, 0.05f);
+        Math_ApproachZeroF(&this->incarnationWrathTransitionAmplitude, 1.0f, 0.01f);
     }
 
     this->incarnationMaskScaleY = (Math_SinS(this->cutsceneTimer * 0x2000) * 0.1f) + 1.0f;
