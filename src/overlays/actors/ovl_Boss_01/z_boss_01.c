@@ -3571,7 +3571,7 @@ void Boss01_DrawEffects(PlayState* play) {
                        Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0, 0, 32, 64, 1, 0,
                                         ((effect->timer + (i * 10)) * -20) & 0x1FF, 32, 128));
 
-            Matrix_RotateYF(i * (F_PI / 16.0f), MTXMODE_APPLY);
+            Matrix_RotateYF(i * (F_PI / 16), MTXMODE_APPLY);
             Matrix_Translate(0.0f, 0.0f, KREG(49) + 200.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             if (Boss01_RandZeroOne() < 0.5f) {
