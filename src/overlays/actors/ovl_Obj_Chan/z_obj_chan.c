@@ -121,16 +121,16 @@ u32 func_80BB9A1C(ObjChan* this, f32 arg1) {
     f32 sp20;
 
     sp20 = Math_SinS(this->unk1D4) * this->unk1D0;
-    temp_f6 = (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000) * this->unk1D0) + arg1;
+    temp_f6 = (Math_CosS(this->unk1D4) * (400 * F_PI / 0x8000) * this->unk1D0) + arg1;
     if (temp_f6 != 0.0f) {
-        this->unk1D4 = RAD_TO_BINANG(Math_FAtan2F(sp20 * (400 * M_PI / 0x8000), temp_f6));
+        this->unk1D4 = RAD_TO_BINANG(Math_FAtan2F(sp20 * (400 * F_PI / 0x8000), temp_f6));
     } else if (sp20 >= 0.0f) {
         this->unk1D4 = 0x4000;
     } else {
         this->unk1D4 = -0x4000;
     }
     if (Math_CosS(this->unk1D4) != 0.0f) {
-        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000)));
+        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * (400 * F_PI / 0x8000)));
     } else {
         this->unk1D0 = sp20;
     }

@@ -684,7 +684,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         maxAngle = 0.0f;
     } else {
         // Either the dot product is exactly -1.0f, or a non-unit vector was passed into this function.
-        maxAngle = M_PI;
+        maxAngle = F_PI;
     }
 
     angleStep = CLAMP_MAX(angleStep, maxAngle);
@@ -2390,7 +2390,7 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
     this->actor.shape.rot.y =
-        (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
+        (s32)(Math_SinF(this->timer * (F_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
 
     if (this->timer == 0) {
         if (this->runOffsetRot > 0) {
@@ -2403,10 +2403,10 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
         this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     }
 
-    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
-    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
+    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (F_PI / 9));
+    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (F_PI / 9));
 
-    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->runOffsetRot * 0.3f);
+    this->actor.shape.rot.z = Math_SinF(this->timer * (F_PI / 18)) * -(this->runOffsetRot * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
@@ -2909,7 +2909,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) {
         angleStep =
             BINANG_TO_RAD(Math3D_Vec3fDistSq(firstBallPos, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
-        angleStep = CLAMP_MAX(angleStep, M_PI / 4.0f);
+        angleStep = CLAMP_MAX(angleStep, F_PI / 4.0f);
 
         Math_Vec3f_Diff(&player->actor.world.pos, firstBallPos, &targetRot);
 
