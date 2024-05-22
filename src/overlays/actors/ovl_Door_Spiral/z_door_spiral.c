@@ -176,7 +176,7 @@ f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg
     Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &point);
 
     if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
-        return MAXFLOAT;
+        return FLT_MAX;
     } else {
         return offset.z;
     }

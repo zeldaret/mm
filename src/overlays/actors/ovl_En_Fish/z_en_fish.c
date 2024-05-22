@@ -145,7 +145,7 @@ void func_8091D904(EnFish* this) {
 Actor* func_8091D944(EnFish* this, PlayState* play) {
     f32 distSq;
     Actor* retActor = NULL;
-    f32 minDistSq = MAXFLOAT;
+    f32 minDistSq = FLT_MAX;
     Actor* actorIter = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actorIter != NULL) {

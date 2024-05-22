@@ -1114,7 +1114,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->targetMode = TARGET_MODE_3;
     actor->terminalVelocity = -20.0f;
 
-    actor->xyzDistToPlayerSq = MAXFLOAT;
+    actor->xyzDistToPlayerSq = FLT_MAX;
     actor->uncullZoneForward = 1000.0f;
     actor->uncullZoneScale = 350.0f;
     actor->uncullZoneDownward = 700.0f;
@@ -1856,7 +1856,7 @@ f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
 
     if (player->lockOnActor != NULL) {
         if ((yawDiff > 0x4000) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
-            return MAXFLOAT;
+            return FLT_MAX;
         }
 
         // Linear scaling, yaw being 90 degree means it will return the original distance, 0 degree will adjust to 60%
@@ -1867,7 +1867,7 @@ f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
     }
 
     if (yawDiff > (0x10000 / 6)) {
-        return MAXFLOAT;
+        return FLT_MAX;
     }
     return actor->xyzDistToPlayerSq;
 }
@@ -1915,7 +1915,7 @@ s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
         yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
 
         if ((player->lockOnActor == NULL) && (yawDiff > (0x10000 / 6))) {
-            distSq = MAXFLOAT;
+            distSq = FLT_MAX;
         } else {
             distSq = actor->xyzDistToPlayerSq;
         }
@@ -3640,7 +3640,7 @@ void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targ
     s32 i;
 
     sTargetableNearestActor = sTargetablePrioritizedActor = D_801ED8C0 = D_801ED8C4 = NULL;
-    sTargetableNearestActorDistSq = D_801ED8D0 = sBgmEnemyDistSq = MAXFLOAT;
+    sTargetableNearestActorDistSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
     sTargetablePrioritizedPriority = D_801ED8D8 = INT32_MAX;
 
     actorCtx->targetCtx.bgmEnemy = NULL;

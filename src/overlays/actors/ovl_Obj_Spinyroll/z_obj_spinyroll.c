@@ -296,7 +296,7 @@ s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
     spC8.y = this->dyna.actor.world.pos.y + 10.0f;
     spBC.y = spC8.y;
     sp98 = false;
-    temp_f20 = MAXFLOAT;
+    temp_f20 = FLT_MAX;
     ptr->unk_F0 = NULL;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4.unk_00); i++) {
@@ -383,7 +383,7 @@ s32 func_80A1E3D8(ObjSpinyroll* this, PlayState* play, f32* arg2, s32 arg3) {
 
     sp84 = false;
     sp94.y = this->dyna.actor.world.pos.y + 24.0f;
-    phi_f22 = MAXFLOAT;
+    phi_f22 = FLT_MAX;
     spC8->unk_F0 = NULL;
 
     for (i = 0, temp = D_80A1F1FC; i < ARRAY_COUNT(this->unk_3A4.unk_00); i++, temp++) {

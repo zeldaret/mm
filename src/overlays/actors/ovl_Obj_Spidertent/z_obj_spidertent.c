@@ -630,7 +630,7 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         phi_s1 = 0;
         phi_s4 = -1;
-        phi_f20 = MAXFLOAT;
+        phi_f20 = FLT_MAX;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
             ptr = &this->collider.elements[i];

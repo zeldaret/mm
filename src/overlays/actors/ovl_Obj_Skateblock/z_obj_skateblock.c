@@ -240,7 +240,7 @@ s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     temp_f26 = temp_f2 * spE4;
 
     ret = false;
-    temp_f20 = MAXFLOAT;
+    temp_f20 = FLT_MAX;
 
     for (i = 0; i < ARRAY_COUNT(D_80A22A6C); i++) {
         spBC.x = (D_80A22A6C[i].x * this->dyna.actor.scale.x) + D_80A22A94[i].x;
@@ -313,7 +313,7 @@ s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
     temp_f30 = -temp_f12 * temp_f26;
 
     ret = false;
-    phi_f22 = MAXFLOAT;
+    phi_f22 = FLT_MAX;
 
     for (i = 0; i < ARRAY_COUNT(D_80A22ABC); i++) {
         spD4.x = (D_80A22ABC[i] * this->dyna.actor.scale.x) + D_80A22AC4[i];

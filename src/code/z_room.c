@@ -180,7 +180,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                     insert->entry = roomShapeCullableEntry;
 
                     if (roomShapeCullableEntry->boundsSphereRadius < 0) {
-                        insert->boundsNearZ = MAXFLOAT;
+                        insert->boundsNearZ = FLT_MAX;
                     } else {
                         insert->boundsNearZ = entryBoundsNearZ;
                     }

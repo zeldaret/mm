@@ -283,7 +283,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
     Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
 
     if ((arg3 < fabsf(sp1C.x)) || (arg4 < fabsf(sp1C.y))) {
-        return MAXFLOAT;
+        return FLT_MAX;
     }
     return sp1C.z;
 }
