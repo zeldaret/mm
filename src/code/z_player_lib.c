@@ -1812,7 +1812,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
         sp48 = Math_FAtan2F(temp_f20, sp58);
-        phi_t1 = RAD_TO_BINANG(F_PI - (Math_FAtan2F(sp54, temp_f20) + ((F_PI / 2) - sp48)));
+        phi_t1 = RAD_TO_BINANG(M_PIf - (Math_FAtan2F(sp54, temp_f20) + ((M_PIf / 2) - sp48)));
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
         temp_f8 = RAD_TO_BINANG(sp48 - sp4C);
 

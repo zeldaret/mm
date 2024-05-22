@@ -2,7 +2,7 @@
 #include "math.h"
 
 void guRotateF(float m[4][4], float a, float x, float y, float z) {
-    static float dtor = F_PI / 180.0f;
+    static float dtor = M_PIf / 180.0f;
     float sine;
     float cosine;
     float ab;

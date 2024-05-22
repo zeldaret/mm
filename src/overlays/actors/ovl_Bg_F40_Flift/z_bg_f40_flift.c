@@ -64,10 +64,10 @@ void func_808D75F0(BgF40Flift* this, PlayState* play) {
         }
         this->timer--;
         if (this->dyna.actor.params == 1) {
-            this->dyna.actor.world.pos.y = (Math_SinF(this->timer * (F_PI / 24)) * 5.0f) + this->dyna.actor.home.pos.y;
+            this->dyna.actor.world.pos.y = (Math_SinF(this->timer * (M_PIf / 24)) * 5.0f) + this->dyna.actor.home.pos.y;
         } else {
             this->dyna.actor.world.pos.y =
-                (Math_SinF(this->timer * (F_PI / 24)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
+                (Math_SinF(this->timer * (M_PIf / 24)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
         }
     }
 }
@@ -76,7 +76,7 @@ void func_808D7714(BgF40Flift* this, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
         this->dyna.actor.world.pos.y =
-            (((Math_CosF(this->timer * (F_PI / 96)) * this->dyna.actor.params) + 1.0f) * 463.4f) +
+            (((Math_CosF(this->timer * (M_PIf / 96)) * this->dyna.actor.params) + 1.0f) * 463.4f) +
             this->dyna.actor.home.pos.y;
     } else {
         this->dyna.actor.params = -this->dyna.actor.params;
