@@ -7,7 +7,6 @@
 
 #define FLT_MAX 3.40282347e+38f
 #define SHT_MAX 32767.0f
-#define SHT_MINV (1.0f / SHT_MAX)
 
 float fabsf(float f);
 #pragma intrinsic(fabsf)
