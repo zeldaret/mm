@@ -170,7 +170,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
     Vec3f spC0;
     Vec3f spB4;
     Vec3f spA8;
-    f32 temp_f20 = FLT_MAX;
+    f32 temp_f20 = MAXFLOAT;
     f32 temp_f0;
     s32 sp9C;
 

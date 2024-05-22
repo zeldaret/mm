@@ -441,7 +441,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     temp_f24 = temp_f20 * spF0;
     temp_f26 = temp_f20 * spEC;
     ret = false;
-    phi_f20 = FLT_MAX;
+    phi_f20 = MAXFLOAT;
 
     for (i = 0; i < ARRAY_COUNT(D_80A26EE0); i++) {
         spC4.x = (D_80A26EE0[i].unk_00 * this->dyna.actor.scale.x) + D_80A26F08[i].unk_00;
@@ -518,7 +518,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
     ret = false;
     temp_f28 = temp_f12 * sp100;
     temp_f30 = temp_f12 * spFC;
-    phi_f22 = FLT_MAX;
+    phi_f22 = MAXFLOAT;
 
     for (i = 0; i < ARRAY_COUNT(D_80A26F30); i++) {
         spD4.x = (D_80A26F30[i] * this->dyna.actor.scale.x) + D_80A26F38[i];

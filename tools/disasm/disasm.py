@@ -448,7 +448,7 @@ def format_f32(f_wd):
     if f_wd in [0xB8E4AECD, 0xB8E4C3AA, 0x38D1B718]:
         return f".word 0x{f_wd:08X}"
 
-    if f_wd == 0x7F7FFFFF:  # FLT_MAX
+    if f_wd == 0x7F7FFFFF:  # MAXFLOAT
         return ".float 3.4028235e+38"
 
     f = as_float(struct.pack(">I", f_wd))

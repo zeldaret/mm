@@ -706,7 +706,7 @@ s32 EnInvadepoh_Dog_FindClosestPointToTarget(EnInvadepoh* this, Vec3f* target) {
     s32 endPoint = this->endPoint;
     Vec3s* pathPoint;
     Vec3f pointPos;
-    f32 minDistSqToTarget = FLT_MAX;
+    f32 minDistSqToTarget = MAXFLOAT;
     f32 distSqToTarget;
     s32 closestPoint = 0;
 
@@ -1312,7 +1312,7 @@ s32 EnInvadepoh_LensFlareCheck(PlayState* play, Vec3f* pos) {
  */
 void EnInvadepoh_InvasionHandler_SetClosestAlienThreat(EnInvadepoh* this) {
     s32 i;
-    f32 minDistSqToBarn = FLT_MAX;
+    f32 minDistSqToBarn = MAXFLOAT;
     s32 closestAlienIndex = -1;
 
     for (i = 0; i < this->alienCount; i++) {

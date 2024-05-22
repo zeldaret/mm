@@ -921,7 +921,7 @@ void func_80AEE374(EnTk* this, PlayState* play) {
     EnTkStruct sp30;
 
     sp30.unk_00 = NULL;
-    sp30.unk_04 = FLT_MAX;
+    sp30.unk_04 = MAXFLOAT;
 
     SubS_FindActorCustom(play, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
     if (sp30.unk_00 == 0) {

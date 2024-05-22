@@ -5,7 +5,7 @@
 #define F_SQRT2 1.41421356237309504880f
 #define F_SQRT1_2 0.70710678118654752440f /* 1/sqrt(2) */
 
-#define FLT_MAX 3.40282347e+38f
+#define MAXFLOAT 3.40282347e+38f
 #define SHT_MAX 32767.0f
 #define SHT_MINV (1.0f / SHT_MAX)
 

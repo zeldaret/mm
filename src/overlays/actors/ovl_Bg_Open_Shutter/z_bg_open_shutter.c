@@ -57,7 +57,7 @@ f32 func_80ACAB10(PlayState* play, Actor* actor, f32 arg2, f32 arg3, f32 arg4) {
 
     Actor_OffsetOfPointInActorCoords(actor, &offset, &point);
     if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
-        return FLT_MAX;
+        return MAXFLOAT;
     } else {
         return offset.z;
     }

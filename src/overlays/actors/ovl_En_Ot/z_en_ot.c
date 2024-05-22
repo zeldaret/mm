@@ -119,7 +119,7 @@ void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 pathIndex, Vec3f* vec, s32* 
     f32 dist;
     Vec3f sp58;
     Vec3f sp4C;
-    f32 minDist = FLT_MAX;
+    f32 minDist = MAXFLOAT;
 
     for (i = 0; i < path->count; i++) {
         Math_Vec3s_ToVec3f(&sp58, &((Vec3s*)Lib_SegmentedToVirtual(path->points))[i]);

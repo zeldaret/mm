@@ -12252,11 +12252,11 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         } else {
             this->talkActor = NULL;
             this->exchangeItemAction = PLAYER_IA_NONE;
-            this->talkActorDistance = FLT_MAX;
+            this->talkActorDistance = MAXFLOAT;
         }
         if (!(this->actor.flags & ACTOR_FLAG_20000000) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
             this->unk_A90 = NULL;
-            this->unk_A94 = FLT_MAX;
+            this->unk_A94 = MAXFLOAT;
         }
         if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
             this->interactRangeActor = NULL;
@@ -12268,7 +12268,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         this->tatlTextId = 0;
         this->unk_B2B = -1;
-        this->closestSecretDistSq = FLT_MAX;
+        this->closestSecretDistSq = MAXFLOAT;
         this->doorType = PLAYER_DOORTYPE_NONE;
         this->unk_B75 = 0;
         this->unk_A78 = NULL;
