@@ -7,7 +7,7 @@
 #include "z_select.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
-#include "libc/alloca.h"
+#include "alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
 void MapSelect_LoadConsoleLogo(MapSelectState* this, u32 entrance, s32 spawn) {

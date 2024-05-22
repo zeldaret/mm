@@ -2,7 +2,7 @@
 #define ROMFILE_H
 
 #include "ultra64.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 
 typedef struct {
     /* 0x00 */ uintptr_t vromStart;

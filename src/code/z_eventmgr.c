@@ -6,7 +6,7 @@
 
 #include "global.h"
 #include "z64shrink_window.h"
-#include "libc/string.h"
+#include "string.h"
 
 CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78

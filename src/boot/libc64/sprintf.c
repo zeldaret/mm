@@ -1,6 +1,6 @@
 #include "libc64/sprintf.h"
 
-#include "libc/string.h"
+#include "string.h"
 
 void* proutPrintf(void* dst, const char* fmt, size_t size) {
     return (void*)((uintptr_t)memcpy(dst, fmt, size) + size);

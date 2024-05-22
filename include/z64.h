@@ -3,12 +3,12 @@
 
 #include "ultra64.h"
 
-#include "libc/math.h"
-#include "libc/stdarg.h"
-#include "libc/stdbool.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
-#include "libc/stdlib.h"
+#include "math.h"
+#include "stdarg.h"
+#include "stdbool.h"
+#include "stddef.h"
+#include "stdint.h"
+#include "stdlib.h"
 
 #include "libc64/qrand.h"
 

@@ -6,8 +6,8 @@
 #include "libc64/math64.h"
 
 #include "libc64/fixed_point.h"
-#include "libc/stdbool.h"
-#include "libc/math.h"
+#include "stdbool.h"
+#include "math.h"
 
 s32 gUseAtanContFrac;
 

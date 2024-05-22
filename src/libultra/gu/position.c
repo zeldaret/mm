@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/math.h"
+#include "math.h"
 
 /**
  * guPositionF

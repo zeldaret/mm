@@ -6,7 +6,7 @@
 
 #include "z_en_door.h"
 
-#include "libc/assert.h"
+#include "assert.h"
 
 #include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
