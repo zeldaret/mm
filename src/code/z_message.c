@@ -1266,7 +1266,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -1279,7 +1279,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -1437,7 +1437,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                             Font_LoadMessageBoxEndIcon(font, 0);
                         }
                         if (play->csCtx.state == CS_STATE_IDLE) {
-                            func_8011552C(play, DO_ACTION_RETURN);
+                            Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                         }
                     } else {
                         Audio_PlaySfx(NA_SE_NONE);
@@ -3112,7 +3112,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     if (textId == 0xFF) {
-        func_80115844(play, DO_ACTION_STOP);
+        Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
         play->msgCtx.hudVisibility = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
         gSaveContext.save.unk_06 = 20;
@@ -3343,9 +3343,9 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(play, DO_ACTION_NEXT);
+            Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
@@ -3572,7 +3572,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
 
     if (!noStop) {
-        func_80115844(play, DO_ACTION_STOP);
+        Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
         noStop = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_B_ALT);
         gSaveContext.hudVisibility = noStop;
@@ -5410,9 +5410,9 @@ void Message_Update(PlayState* play) {
             msgCtx->msgMode = MSGMODE_TEXT_NEXT_MSG;
             if (!pauseCtx->itemDescriptionOn) {
                 if (msgCtx->currentTextId == 0xFF) {
-                    func_8011552C(play, DO_ACTION_STOP);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_STOP);
                 } else if (msgCtx->currentTextId != 0xF8) {
-                    func_8011552C(play, DO_ACTION_NEXT);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
                 }
             }
             break;
@@ -5706,7 +5706,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                             gSaveContext.prevHudVisibility = HUD_VISIBILITY_A_B;
-                            func_80115844(play, DO_ACTION_STOP);
+                            Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
                             GameState_SetFramerateDivisor(&play->state, 2);
                             if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                 ShrinkWindow_Letterbox_SetSizeTarget(0);
@@ -5767,7 +5767,7 @@ void Message_Update(PlayState* play) {
             XREG(31) = 0;
 
             if (pauseCtx->itemDescriptionOn) {
-                func_8011552C(play, DO_ACTION_INFO);
+                Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
                 pauseCtx->itemDescriptionOn = false;
             }
 

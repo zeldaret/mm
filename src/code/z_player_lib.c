@@ -1361,7 +1361,7 @@ bool func_80123F14(PlayState* play) {
 }
 
 s32 func_80123F2C(PlayState* play, s32 ammo) {
-    play->unk_1887C = ammo + 1;
+    play->bButtonAmmoPlusOne = ammo + 1;
 
     return 1;
 }

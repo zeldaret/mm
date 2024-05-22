@@ -64,7 +64,10 @@ typedef enum {
     /* 0x27 */ DO_ACTION_POUND,
     /* 0x28 */ DO_ACTION_HOOK,
     /* 0x29 */ DO_ACTION_SHOOT,
-    /* 0x2A */ DO_ACTION_MAX
+    /* 0x2A */ DO_ACTION_MAX,
+    /* 0x2A */ TATL_STATE_2A = DO_ACTION_MAX,
+    /* 0x2B */ TATL_STATE_2B,
+    /* 0x2C */ TATL_STATE_2C
 } DoAction;
 
 typedef enum {
@@ -138,10 +141,10 @@ typedef struct {
     /* 0x1FC */ OSMesg loadMsg;
     /* 0x200 */ Viewport viewport;
     /* 0x210 */ s16 aButtonState;
-    /* 0x212 */ u16 unk_212;
+    /* 0x212 */ u16 aButtonHorseDoAction; // TODO: Confirm. Only seems to be used for Epona and "DO_ACTION_FASTER". Also Kaleido?
     /* 0x214 */ u16 aButtonDoAction;
     /* 0x218 */ f32 aButtonRoll;
-    /* 0x21C */ s16 unk_21C;
+    /* 0x21C */ s16 bButtonDoActionActive;
     /* 0x21E */ s16 bButtonDoAction;
     /* 0x220 */ s16 tatlCalling;
     /* 0x222 */ s16 unk_222;
@@ -249,10 +252,10 @@ s32 Inventory_HasItemInBottle(u8 item);
 void Inventory_UpdateBottleItem(struct PlayState* play, u8 item, u8 btn);
 s32 Inventory_ConsumeFairy(struct PlayState* play);
 void Inventory_UpdateItem(struct PlayState* play, s16 slot, s16 item);
-void func_8011552C(struct PlayState* play, u16 arg1);
-void func_801155B4(struct PlayState* play, s16 arg1);
-void func_80115764(struct PlayState* play, UNK_TYPE arg1);
-void func_80115844(struct PlayState* play, s16 doAction);
+void Interface_SetAButtonDoAction(PlayState* play, u16 aButtonDoAction);
+void Interface_SetBButtonDoAction(PlayState* play, s16 bButtonDoAction);
+void Interface_SetTatlCall(PlayState* play, u16 tatlCallState);
+void Interface_LoadBButtonDoActionLabel(struct PlayState* play, s16 bButtonDoAction);
 s32 Health_ChangeBy(struct PlayState* play, s16 healthChange);
 void Health_GiveHearts(s16 hearts);
 void Rupees_ChangeBy(s16 rupeeChange);
