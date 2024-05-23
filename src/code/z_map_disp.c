@@ -1011,7 +1011,7 @@ s32 MapDisp_IsLocationRomaniRanchAltScene(PlayState* play) {
 
 s32 MapDisp_CanDisplayMinimap(PlayState* play) {
     if ((!MapExp_CurRoomHasMapI(play) && Inventory_IsMapVisible(play->sceneId)) ||
-        (MapExp_CurRoomHasMapI(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex))) {
+        (MapExp_CurRoomHasMapI(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonSceneIndex))) {
         return true;
     }
     return false;
@@ -1070,7 +1070,7 @@ void MapDisp_DrawMinimap(PlayState* play, s32 playerInitX, s32 playerInitZ, s32 
                 }
                 MapDisp_Minimap_DrawDoorActors(play);
             }
-            if ((!MapExp_CurRoomHasMapI(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.mapIndex)) &&
+            if ((!MapExp_CurRoomHasMapI(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonSceneIndex)) &&
                 (MapExp_CurRoomHasMapI(play) || Inventory_IsMapVisible(play->sceneId))) {
                 if (play->interfaceCtx.minigameState == MINIGAME_STATE_NONE) {
                     MapDisp_Minimap_DrawRedCompassIcon(play, playerInitX, playerInitZ, playerInitDir);
@@ -1227,10 +1227,10 @@ s32 MapDisp_ConvertBossSceneToDungeonScene(s32 sceneId) {
  * @param viewWidth width in pixels of the dungeon map view window
  * @param viewHeight height in pixels of the dungeon map view window
  * @param scaleFrac ratio to convert world space coordinates to map coordinates
- * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ * @param dungeonSceneSharedIndex enum DungeonSceneIndex for retrieving map/compass data
  */
 void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
-                       s32 dungeonIndex) {
+                       s32 dungeonSceneSharedIndex) {
     static u16 sUnvisitedRoomPal[16] = {
         0x0000, 0x0000, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
         0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
@@ -1251,7 +1251,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
 
     sCurrentRoomPal[1] = (green << 6) | (blue << 1) | 1;
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonIndex)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonSceneSharedIndex)) {
         s32 requiredScopeTemp;
 
         sUnvisitedRoomPal[15] = 0xAD5F;
@@ -1350,7 +1350,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
             gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 1,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-        } else if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonIndex)) {
+        } else if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonSceneSharedIndex)) {
             gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 0,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
@@ -1376,7 +1376,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
  * @param viewWidth width in pixels of the dungeon map view window
  * @param viewHeight height in pixels of the dungeon map view window
  * @param scaleFrac ratio to convert world space coordinates to map coordinates
- * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ * @param dungeonSceneSharedIndex enum DungeonSceneIndex for retrieving map/compass data
  */
 void MapDisp_DrawChests(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac) {
     s32 pad[23];
@@ -1464,10 +1464,10 @@ void MapDisp_DrawChests(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s3
  * @param viewWidth width in pixels of the dungeon map view window
  * @param viewHeight height in pixels of the dungeon map view window
  * @param scaleFrac ratio to convert world space coordinates to map coordinates
- * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ * @param dungeonSceneSharedIndex enum DungeonSceneIndex for retrieving map/compass data
  */
 void MapDisp_DrawRoomExits(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
-                           s32 dungeonIndex) {
+                           s32 dungeonSceneSharedIndex) {
     PauseContext* pauseCtx = &play->pauseCtx;
     TransitionActorList* transitionActors = &sTransitionActorList;
     s32 texPosX;
@@ -1488,7 +1488,7 @@ void MapDisp_DrawRoomExits(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth,
                     !MapDisp_IsBossDoor(sTransitionActors[i].params)) {
                     roomA = sTransitionActors[i].sides[0].room;
                     roomB = sTransitionActors[i].sides[1].room;
-                    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex) || (roomA < 0) ||
+                    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonSceneIndex) || (roomA < 0) ||
                         GET_ROOM_VISITED(Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)),
                                          roomA) ||
                         (roomB < 0) ||
@@ -1521,10 +1521,10 @@ void MapDisp_DrawRoomExits(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth,
  * @param viewWidth width in pixels of the dungeon map view window
  * @param viewHeight height in pixels of the dungeon map view window
  * @param scaleFrac ratio to convert world space coordinates to map coordinates
- * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ * @param dungeonSceneSharedIndex enum DungeonSceneIndex for retrieving map/compass data
  */
 void MapDisp_DrawBossIcon(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
-                          s32 dungeonIndex) {
+                          s32 dungeonSceneSharedIndex) {
     s32 i;
     TransitionActorList* transitionActorList = &sTransitionActorList;
     s32 offsetX = 4;
@@ -1541,7 +1541,7 @@ void MapDisp_DrawBossIcon(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonIndex)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonSceneSharedIndex)) {
         gDPLoadTextureBlock_Runtime(POLY_OPA_DISP++, gMapBossIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                     G_TX_NOLOD, G_TX_NOLOD);
@@ -1617,32 +1617,32 @@ void MapDisp_DrawDungeonFloorSelect(PlayState* play) {
     s16 texLRX;
     s32 pad;
     s32 storey;
-    s32 dungeonIndex = 0;
+    s32 dungeonSceneSharedIndex = 0;
 
     if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0) && !MapDisp_SkipDrawDungeonMap(play)) {
         if (Map_IsInBossScene(play)) {
             switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
-                    dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
+                    dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE;
                     break;
 
                 case SCENE_HAKUGIN_BS:
-                    dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
+                    dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE;
                     break;
 
                 case SCENE_SEA_BS:
-                    dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
+                    dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE;
                     break;
 
                 case SCENE_INISIE_BS:
-                    dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
+                    dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE;
                     break;
 
                 default:
                     break;
             }
         } else {
-            dungeonIndex = gSaveContext.mapIndex;
+            dungeonSceneSharedIndex = gSaveContext.dungeonSceneIndex;
         }
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -1654,7 +1654,7 @@ void MapDisp_DrawDungeonFloorSelect(PlayState* play) {
         for (storey = 0; storey < sMapDisp.numStoreys; storey++) {
             if (GET_DUNGEON_FLOOR_VISITED(
                     Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)), 4 - storey) ||
-                CHECK_DUNGEON_ITEM_ALT(DUNGEON_MAP, dungeonIndex)) {
+                CHECK_DUNGEON_ITEM_ALT(DUNGEON_MAP, dungeonSceneSharedIndex)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, MapDisp_GetDungeonMapFloorTexture(sMapDisp.bottomStorey + storey),
                                     G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1746,7 +1746,7 @@ void MapDisp_DrawDungeonMap(PlayState* play) {
     f32 scaleFrac;
     s32 scale;
     s32 var_v0;
-    s32 dungeonIndex = 0;
+    s32 dungeonSceneSharedIndex = 0;
     s32 offsetX = 0;
     s32 offsetY = 0;
 
@@ -1757,26 +1757,26 @@ void MapDisp_DrawDungeonMap(PlayState* play) {
     if (Map_IsInBossScene(play)) {
         switch (play->sceneId) {
             case SCENE_MITURIN_BS:
-                dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE;
                 break;
 
             case SCENE_HAKUGIN_BS:
-                dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE;
                 break;
 
             case SCENE_SEA_BS:
-                dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE;
                 break;
 
             case SCENE_INISIE_BS:
-                dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE;
                 break;
 
             default:
                 break;
         }
     } else {
-        dungeonIndex = gSaveContext.mapIndex;
+        dungeonSceneSharedIndex = gSaveContext.dungeonSceneIndex;
     }
 
     mapDataRoom = sMapDisp.mapDataScene->rooms;
@@ -1803,11 +1803,11 @@ void MapDisp_DrawDungeonMap(PlayState* play) {
 
     scaleFrac = 1.0f / scale;
 
-    MapDisp_DrawRooms(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
-    MapDisp_DrawRoomExits(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
-    MapDisp_DrawBossIcon(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
+    MapDisp_DrawRooms(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonSceneSharedIndex);
+    MapDisp_DrawRoomExits(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonSceneSharedIndex);
+    MapDisp_DrawBossIcon(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonSceneSharedIndex);
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonIndex)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonSceneSharedIndex)) {
         MapDisp_DrawChests(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac);
     }
 }

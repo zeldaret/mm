@@ -5,21 +5,21 @@ s16 sPlayerInitPosZ = 0;
 s16 sPlayerInitDir = 0;
 
 /**
- * Gets the mapIndex for the current dungeon or boss scene
- * @return the current scene's mapIndex, or -1 if it isn't a dungeon or boss scene.
+ * Gets the DungeonSceneIndex for the current scene
+ * @return the current scene's DungeonSceneIndex, or -1 if it isn't a dungeon or boss scene.
  */
-s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
+s32 MapExp_TryGetDungeonSceneIndex(PlayState* play) {
     static s32 sDungeonAndBossSceneIds[] = {
-        SCENE_MITURIN,    // DUNGEON_INDEX_WOODFALL_TEMPLE
-        SCENE_HAKUGIN,    // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-        SCENE_SEA,        // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-        SCENE_INISIE_N,   // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_MITURIN,    // DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE
+        SCENE_HAKUGIN,    // DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE
+        SCENE_SEA,        // DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE
+        SCENE_INISIE_N,   // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE
         SCENE_INISIE_R,   // Play_GetOriginalSceneId converts play->sceneId to SCENE_INISIE_N, returning
-                          // DUNGEON_INDEX_STONE_TOWER_TEMPLE
-        SCENE_MITURIN_BS, //
-        SCENE_HAKUGIN_BS, //
-        SCENE_SEA_BS,     //
-        SCENE_INISIE_BS,  //
+                          // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE
+        SCENE_MITURIN_BS, // DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE_BOSS
+        SCENE_HAKUGIN_BS, // DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE_BOSS
+        SCENE_SEA_BS,     // DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE_BOSS
+        SCENE_INISIE_BS,  // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_BOSS
     };
     s32 i;
 
@@ -36,8 +36,8 @@ s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
  * Tests if the current scene is in a dungeon or boss scene.
  * @return true if the current scene is a dungeon or boss scene, false otherwise.
  */
-s32 Map_IsInDungeonOrBossArea(PlayState* play) {
-    if (Map_GetDungeonOrBossAreaIndex(play) == -1) {
+s32 Map_IsInDungeonOrBossScene(PlayState* play) {
+    if (MapExp_TryGetDungeonSceneIndex(play) == -1) {
         return false;
     }
 
@@ -45,7 +45,7 @@ s32 Map_IsInDungeonOrBossArea(PlayState* play) {
 }
 
 s32 MapExp_CurRoomHasMapI(PlayState* play) {
-    if ((Map_GetDungeonOrBossAreaIndex(play) == -1) || !MapDisp_CurRoomHasMapI(play)) {
+    if ((MapExp_TryGetDungeonSceneIndex(play) == -1) || !MapDisp_CurRoomHasMapI(play)) {
         return false;
     }
 
@@ -54,16 +54,16 @@ s32 MapExp_CurRoomHasMapI(PlayState* play) {
 
 /**
  * Tests if the current scene is a dungeon scene, excluding boss scenes.
- * @return -1 if not a dungeon scene, else returns the dungeonIndex of the dungeon scene
+ * @return -1 if not a dungeon scene, else returns the DungeonSceneIndex of the dungeon scene
  */
-s32 Map_GetDungeonAreaIndex(PlayState* play) {
+s32 MapExp_TryGetDungeonSceneIndexForDungeon(PlayState* play) {
     static s32 sDungeonSceneIds[] = {
-        SCENE_MITURIN,  // DUNGEON_INDEX_WOODFALL_TEMPLE
-        SCENE_HAKUGIN,  // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-        SCENE_SEA,      // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-        SCENE_INISIE_N, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_MITURIN,  // DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE
+        SCENE_HAKUGIN,  // DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE
+        SCENE_SEA,      // DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE
+        SCENE_INISIE_N, // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE
         SCENE_INISIE_R, // Play_GetOriginalSceneId converts play->sceneId to SCENE_INISIE_N, returning
-                        // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+                        // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE
     };
     s32 i;
 
@@ -81,7 +81,7 @@ s32 Map_GetDungeonAreaIndex(PlayState* play) {
  * @return true if the current scene is a dungeon scene, false otherwise.
  */
 s32 Map_IsInDungeonScene(PlayState* play) {
-    if (Map_GetDungeonAreaIndex(play) == -1) {
+    if (MapExp_TryGetDungeonSceneIndexForDungeon(play) == -1) {
         return false;
     }
 
@@ -90,14 +90,15 @@ s32 Map_IsInDungeonScene(PlayState* play) {
 
 /**
  * Tests if the current scene is a boss scene.
- * @return -1 if not a boss scene, else returns the dungeonIndex of the boss scene
+ * @return -1 if not a boss scene, else returns the DungeonSceneIndex corresponding to that boss scene's primary dungeon
+ * scene
  */
-s32 Map_GetBossAreaIndex(PlayState* play) {
+s32 MapExp_TryGetDungeonSceneIndexForBoss(PlayState* play) {
     static s32 sBossSceneIds[] = {
-        SCENE_MITURIN_BS, // DUNGEON_INDEX_WOODFALL_TEMPLE
-        SCENE_HAKUGIN_BS, // DUNGEON_INDEX_SNOWHEAD_TEMPLE
-        SCENE_SEA_BS,     // DUNGEON_INDEX_GREAT_BAY_TEMPLE
-        SCENE_INISIE_BS,  // DUNGEON_INDEX_STONE_TOWER_TEMPLE
+        SCENE_MITURIN_BS, // DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE
+        SCENE_HAKUGIN_BS, // DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE
+        SCENE_SEA_BS,     // DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE
+        SCENE_INISIE_BS,  // DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE
     };
     s32 i;
 
@@ -115,7 +116,7 @@ s32 Map_GetBossAreaIndex(PlayState* play) {
  * @return true if the current scene is a boss scene, false otherwise.
  */
 s32 Map_IsInBossScene(PlayState* play) {
-    if (Map_GetBossAreaIndex(play) == -1) {
+    if (MapExp_TryGetDungeonSceneIndexForBoss(play) == -1) {
         return false;
     }
 
@@ -123,19 +124,20 @@ s32 Map_IsInBossScene(PlayState* play) {
 }
 
 /**
- * Test if the current scene is in a set of overworld scenes.
- * @return -1 if not in the set, else returns the mapIndex of the overworld scene
+ * Test if the current scene is in a specific list of scenes.
+ * This function may be incomplete.
+ * @return -1 if not in the list, else returns the DungeonSceneIndex for that scene
  */
-s32 Map_GetUnkOverworldAreaIndex(PlayState* play) {
-    static s32 D_801BF5A4[] = {
+s32 MapExp_TryGetDungeonSceneIndexForUnknownBehavior(PlayState* play) {
+    static s32 sSceneIds[] = {
         SCENE_22DEKUCITY,
         SCENE_KOEPONARACE,
         SCENE_F01,
     };
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(D_801BF5A4); i++) {
-        if (Play_GetOriginalSceneId(play->sceneId) == D_801BF5A4[i]) {
+    for (i = 0; i < ARRAY_COUNT(sSceneIds); i++) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sSceneIds[i]) {
             return i;
         }
     }
@@ -144,11 +146,12 @@ s32 Map_GetUnkOverworldAreaIndex(PlayState* play) {
 }
 
 /**
- * Checks if the current scene is in a set of overworld scenes.
+ * Checks if the current scene is in a specific list of scenes.
+ * The purpose of this grouping of scenes is unknown and is likely incomplete.
  * @return true if the current scene is in the set, false otherwise.
  */
-s32 Map_IsInUnkOverworldArea(PlayState* play) {
-    if (Map_GetUnkOverworldAreaIndex(play) == -1) {
+s32 Map_IsInUnknownBehaviorScene(PlayState* play) {
+    if (MapExp_TryGetDungeonSceneIndexForUnknownBehavior(play) == -1) {
         return false;
     }
 
@@ -168,16 +171,16 @@ void Map_SetAreaEntrypoint(PlayState* play) {
 }
 
 void Map_InitRoomData(PlayState* play, s16 room) {
-    s32 mapIndex = gSaveContext.mapIndex;
+    s32 dungeonSceneIndex = gSaveContext.dungeonSceneIndex;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     MapDisp_SwapRooms(room);
 
     if (room >= 0) {
-        if (Map_IsInDungeonOrBossArea(play)) {
+        if (Map_IsInDungeonOrBossScene(play)) {
             SET_ROOM_VISITED(Play_GetOriginalSceneId(play->sceneId), room);
             interfaceCtx->mapRoomNum = room;
-            interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
+            interfaceCtx->dungeonSceneIndex = dungeonSceneIndex;
         }
     } else {
         interfaceCtx->mapRoomNum = 0;
@@ -194,38 +197,38 @@ void Map_Destroy(PlayState* play) {
 
 void Map_Init(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
-    s32 dungeonIndex;
+    s32 dungeonSceneSharedIndex;
 
     MapDisp_SwapRooms(play->roomCtx.curRoom.num);
     interfaceCtx->unk_278 = -1;
-    interfaceCtx->dungeonOrBossAreaMapIndex = -1;
+    interfaceCtx->dungeonSceneIndex = -1;
     interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.tha, 0x1000);
-    if (Map_IsInUnkOverworldArea(play)) {
-        gSaveContext.mapIndex = Map_GetUnkOverworldAreaIndex(play);
+    if (Map_IsInUnknownBehaviorScene(play)) {
+        gSaveContext.dungeonSceneIndex = MapExp_TryGetDungeonSceneIndexForUnknownBehavior(play);
         return;
     }
 
-    if (Map_IsInDungeonOrBossArea(play)) {
-        gSaveContext.mapIndex = dungeonIndex = Map_GetDungeonOrBossAreaIndex(play);
+    if (Map_IsInDungeonOrBossScene(play)) {
+        gSaveContext.dungeonSceneIndex = dungeonSceneSharedIndex = MapExp_TryGetDungeonSceneIndex(play);
         switch (play->sceneId) {
             case SCENE_MITURIN_BS:
-                dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE;
                 break;
 
             case SCENE_HAKUGIN_BS:
-                dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE;
                 break;
 
             case SCENE_SEA_BS:
-                dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE;
                 break;
 
             case SCENE_INISIE_BS:
-                dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
+                dungeonSceneSharedIndex = DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE;
                 break;
         }
 
-        gSaveContext.dungeonIndex = dungeonIndex;
+        gSaveContext.dungeonSceneSharedIndex = dungeonSceneSharedIndex;
         Map_InitRoomData(play, play->roomCtx.curRoom.num);
     }
 }

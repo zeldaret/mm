@@ -2593,15 +2593,15 @@ u8 Item_Give(PlayState* play, u8 item) {
         return item;
 
     } else if ((item == ITEM_KEY_BOSS) || (item == ITEM_COMPASS) || (item == ITEM_DUNGEON_MAP)) {
-        SET_DUNGEON_ITEM(item - ITEM_KEY_BOSS, gSaveContext.mapIndex);
+        SET_DUNGEON_ITEM(item - ITEM_KEY_BOSS, gSaveContext.dungeonSceneIndex);
         return ITEM_NONE;
 
     } else if (item == ITEM_KEY_SMALL) {
-        if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) < 0) {
-            DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = 1;
+        if (DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) < 0) {
+            DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) = 1;
             return ITEM_NONE;
         } else {
-            DUNGEON_KEY_COUNT(gSaveContext.mapIndex)++;
+            DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex)++;
             return ITEM_NONE;
         }
 
@@ -2983,7 +2983,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         return ITEM_NONE;
 
     } else if ((item == ITEM_KEY_BOSS) || (item == ITEM_COMPASS) || (item == ITEM_DUNGEON_MAP)) {
-        if (!CHECK_DUNGEON_ITEM(item - ITEM_KEY_BOSS, gSaveContext.mapIndex)) {
+        if (!CHECK_DUNGEON_ITEM(item - ITEM_KEY_BOSS, gSaveContext.dungeonSceneIndex)) {
             return ITEM_NONE;
         }
         return item;
@@ -6267,7 +6267,7 @@ void Interface_Draw(PlayState* play) {
             case SCENE_MITURIN:
             case SCENE_HAKUGIN:
             case SCENE_SEA:
-                if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) >= 0) {
+                if (DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) >= 0) {
                     // Small Key Icon
                     gDPPipeSync(OVERLAY_DISP++);
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 230, 255, interfaceCtx->magicAlpha);
@@ -6281,7 +6281,7 @@ void Interface_Draw(PlayState* play) {
                                       TEXEL0, 0, PRIMITIVE, 0);
 
                     counterDigits[2] = 0;
-                    counterDigits[3] = DUNGEON_KEY_COUNT(gSaveContext.mapIndex);
+                    counterDigits[3] = DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex);
 
                     while (counterDigits[3] >= 10) {
                         counterDigits[2]++;

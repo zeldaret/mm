@@ -876,12 +876,12 @@ wordReplace = {
     "func_800E8EA0": "Actor_ContinueText",
     "func_800B90F4": "Actor_DeactivateLens",
 
-    "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
-    "func_8010A074": "Map_IsInDungeonOrBossArea",
-    "func_8010A0F0": "Map_GetDungeonAreaIndex",
+    "func_8010A000": "MapExp_TryGetDungeonSceneIndex",
+    "func_8010A074": "Map_IsInDungeonOrBossScene",
+    "func_8010A0F0": "MapExp_TryGetDungeonSceneIndexForDungeon",
     "func_8010A164": "Map_IsInDungeonArea",
     "Map_IsInDungeonArea": "Map_IsInDungeonScene",
-    "func_8010A194": "Map_GetBossAreaIndex",
+    "func_8010A194": "MapExp_TryGetDungeonSceneIndexForBoss",
     "func_8010A208": "Map_IsInBossArea",
     "Map_IsInBossArea": "Map_IsInBossScene",
     "func_8010A2DC": "Minimap_SavePlayerRoomInitInfo",
@@ -990,7 +990,7 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
-    
+
     "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
     "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 

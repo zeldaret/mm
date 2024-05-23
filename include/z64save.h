@@ -392,7 +392,7 @@ typedef struct SaveContext {
     /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
     /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
     /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
-    /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
+    /* 0x3F36 */ u16 dungeonSceneIndex; // set to enum DungeonSceneIndex when entering a dungeon related scene "scene_ID"
     /* 0x3F38 */ u16 minigameStatus;                    // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
     /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
@@ -417,7 +417,7 @@ typedef struct SaveContext {
     /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
+    /* 0x48C8 */ u16 dungeonSceneSharedIndex; // similar to dungeonSceneIndex, except values correspond to one of the four dungeons "scene_id_mix"
     /* 0x48CA */ u8 masksGivenOnMoon[27];               // bit-packed, masks given away on the Moon. "mask_mask_bit"
 } SaveContext; // size = 0x48C8
 
@@ -497,10 +497,10 @@ typedef enum {
 #define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
 #define RESET_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
 
-#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
-#define CHECK_DUNGEON_ITEM_ALT(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonIndex] & gBitFlags[item])
-#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
-#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonIndex])
+#define CHECK_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] & gBitFlags[item])
+#define CHECK_DUNGEON_ITEM_ALT(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonSceneIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] |= (u8)gBitFlags[item])
+#define DUNGEON_KEY_COUNT(dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonSceneIndex])
 #define GET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 & gBitFlags[floor])
 #define SET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 |= gBitFlags[floor])
 #define GET_ROOM_VISITED(sceneId, room) (((void)0, gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms) & (1 << (room)))
@@ -1680,11 +1680,18 @@ typedef enum {
     gSaveContext.eventInf[7] = (temp)
 
 typedef enum {
-    /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
-    /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
-    /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
-} DungeonIndex;
+    // These first values are also used represent the index of the temple the player is currently in
+    /* 0 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE,
+    /* 1 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE,
+    /* 2 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE,
+    /* 3 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE,
+
+    /* 4 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_INVERTED,
+    /* 5 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE_BOSS,
+    /* 6 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE_BOSS,
+    /* 7 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE_BOSS,
+    /* 8 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_BOSS
+} DungeonSceneIndex;
 
 #define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
 #define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
