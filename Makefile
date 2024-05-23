@@ -87,11 +87,7 @@ BASEROM_DIR   := baseroms/$(VERSION)
 BUILD_DIR     := build/$(VERSION)
 EXTRACTED_DIR := extracted/$(VERSION)
 
-CPPFLAGS += -P
-
-ifeq ($(DETECTED_OS), macos)
-  CPPFLAGS += -xc++
-endif
+CPPFLAGS += -P -xc -fno-dollars-in-identifiers
 
 
 #### Tools ####
@@ -143,7 +139,7 @@ ifeq ($(RUN_CC_CHECK),0)
   CC_CHECK_COMP    := @:
 endif
 
-CPP           := cpp
+CPP           := gcc -E
 MKLDSCRIPT    := tools/buildtools/mkldscript
 MKDMADATA     := tools/buildtools/mkdmadata
 ZAPD          := tools/ZAPD/ZAPD.out
