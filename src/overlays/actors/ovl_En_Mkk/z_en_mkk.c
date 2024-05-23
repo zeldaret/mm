@@ -378,17 +378,17 @@ void func_80A4E84C(EnMkk* this) {
         this->unk_160.y = this->unk_154.y;
         this->unk_154.y = this->actor.world.pos.y;
         this->unk_154.x = this->actor.world.pos.x -
-                          10.0f * Math_SinS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PIf / 5))));
+                          10.0f * Math_SinS(this->actor.shape.rot.y + (s32)(1228.8f * this->actor.speed *
+                                                                            Math_SinF(this->unk_14E * (M_PIf / 5))));
         this->unk_154.z = this->actor.world.pos.z -
-                          10.0f * Math_CosS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PIf / 5))));
+                          10.0f * Math_CosS(this->actor.shape.rot.y + (s32)(1228.8f * this->actor.speed *
+                                                                            Math_SinF(this->unk_14E * (M_PIf / 5))));
         this->unk_160.x = this->unk_154.x -
-                          12.0f * Math_SinS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PIf / 5))));
+                          12.0f * Math_SinS(this->actor.shape.rot.y - (s32)(1228.8f * this->actor.speed *
+                                                                            Math_SinF(this->unk_14E * (M_PIf / 5))));
         this->unk_160.z = this->unk_154.z -
-                          12.0f * Math_CosS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PIf / 5))));
+                          12.0f * Math_CosS(this->actor.shape.rot.y - (s32)(1228.8f * this->actor.speed *
+                                                                            Math_SinF(this->unk_14E * (M_PIf / 5))));
     }
 }
 
