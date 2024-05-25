@@ -139,6 +139,8 @@ ifeq ($(RUN_CC_CHECK),0)
   CC_CHECK_COMP    := @:
 endif
 
+# The `cpp` command behaves differently on macOS (it behaves as if
+# `-traditional-cpp` was passed) so we use `gcc -E` instead.
 CPP           := gcc -E
 MKLDSCRIPT    := tools/buildtools/mkldscript
 MKDMADATA     := tools/buildtools/mkdmadata
