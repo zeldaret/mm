@@ -38,7 +38,7 @@ typedef struct EnOkuta {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnOkutaActionFunc actionFunc;
     /* 0x18C */ u8 drawDmgEffType;
-    /* 0x18E */ s16 unk18E;
+    /* 0x18E */ s16 timer;
     /* 0x190 */ s16 unk190;
     /* 0x192 */ Vec3s jointTable[OCTOROK_LIMB_MAX];
     /* 0x1F2 */ Vec3s morphTable[OCTOROK_LIMB_MAX];
