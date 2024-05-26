@@ -17,17 +17,17 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play);
 
 void func_8086E4FC(EnOkuta* this);
 void func_8086E52C(EnOkuta* this, PlayState* play);
-void func_8086E5E8(EnOkuta* this, PlayState* play);
-void func_8086E658(EnOkuta* this, PlayState* play);
-void func_8086E7A8(EnOkuta* this);
-void func_8086E7E8(EnOkuta* this, PlayState* play);
-void func_8086E8E8(EnOkuta* this);
-void func_8086E948(EnOkuta* this, PlayState* play);
+void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play);
+void EnOkuta_Appear(EnOkuta* this, PlayState* play);
+void EnOkuta_SetupHide(EnOkuta* this);
+void EnOkuta_Hide(EnOkuta* this, PlayState* play);
+void EnOkuta_SetupFloat(EnOkuta* this);
+void EnOkuta_Float(EnOkuta* this, PlayState* play);
 void func_8086EAE0(EnOkuta* this, PlayState* play);
 void func_8086EC00(EnOkuta* this, PlayState* play);
 void func_8086EF14(EnOkuta* this, PlayState* play);
-void func_8086EF90(EnOkuta* this);
-void func_8086EFE8(EnOkuta* this, PlayState* play);
+void EnOkuta_SetupDie(EnOkuta* this);
+void EnOkuta_Die(EnOkuta* this, PlayState* play);
 void func_8086F434(EnOkuta* this, PlayState* play);
 void func_8086F4B0(EnOkuta* this, PlayState* play);
 void func_8086F57C(EnOkuta* this, PlayState* play);
@@ -287,31 +287,31 @@ void func_8086E52C(EnOkuta* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y;
     if (this->actor.xzDistToPlayer < 480.0f && this->actor.xzDistToPlayer > 200.0f) {
         if (this->actor.params == 0) {
-            func_8086E5E8(this, play);
+            EnOkuta_SetupAppear(this, play);
         } else if (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y)) < 0x4000 &&
                    play->unk_1887C == 0) {
-            func_8086E5E8(this, play);
+            EnOkuta_SetupAppear(this, play);
         }
     }
 }
 
-void func_8086E5E8(EnOkuta* this, PlayState* play) {
+void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
     this->actor.draw = EnOkuta_Draw;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.flags |= 1;
     Animation_PlayOnce(&this->skelAnime, &gOctorokAppearAnim);
     func_8086E168(this, play);
-    this->actionFunc = func_8086E658;
+    this->actionFunc = EnOkuta_Appear;
 }
 
-void func_8086E658(EnOkuta* this, PlayState* play) {
+void EnOkuta_Appear(EnOkuta* this, PlayState* play) {
     f32 curFrame;
 
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.params == 0)) {
-            func_8086E7A8(this);
+            EnOkuta_SetupHide(this);
         } else {
-            func_8086E8E8(this);
+            EnOkuta_SetupFloat(this);
         }
     } else {
         curFrame = this->skelAnime.curFrame;
@@ -332,12 +332,12 @@ void func_8086E658(EnOkuta* this, PlayState* play) {
     }
 }
 
-void func_8086E7A8(EnOkuta* this) {
+void EnOkuta_SetupHide(EnOkuta* this) {
     Animation_PlayOnce(&this->skelAnime, &gOctorokHideAnim);
-    this->actionFunc = func_8086E7E8;
+    this->actionFunc = EnOkuta_Hide;
 }
 
-void func_8086E7E8(EnOkuta* this, PlayState* play) {
+void EnOkuta_Hide(EnOkuta* this, PlayState* play) {
     f32 curFrame;
 
     Math_ApproachF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.5f, 30.0f);
@@ -359,17 +359,17 @@ void func_8086E7E8(EnOkuta* this, PlayState* play) {
     }
 }
 
-void func_8086E8E8(EnOkuta* this) {
+void EnOkuta_SetupFloat(EnOkuta* this) {
     Animation_PlayLoop(&this->skelAnime, &gOctorokFloatAnim);
     if (this->actionFunc == func_8086EC00) {
         this->unk18E = 8;
     } else {
         this->unk18E = 0;
     }
-    this->actionFunc = func_8086E948;
+    this->actionFunc = EnOkuta_Float;
 }
 
-void func_8086E948(EnOkuta* this, PlayState* play) {
+void EnOkuta_Float(EnOkuta* this, PlayState* play) {
     s16 var_v1;
 
     if (this->actor.params == 0) {
@@ -387,7 +387,7 @@ void func_8086E948(EnOkuta* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, 0x38C1U);
     }
     if ((this->actor.xzDistToPlayer > 560.0f) || ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.params == 0))) {
-        func_8086E7A8(this);
+        EnOkuta_SetupHide(this);
     } else {
         var_v1 = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         if ((ABS_ALT(var_v1) < 0x38E) &&
@@ -435,7 +435,7 @@ void func_8086EC00(EnOkuta* this, PlayState* play) {
         }
         if (this->unk18E == 0) {
             if ((this->actor.params != 1) || (this->actor.xzDistToPlayer > 150.0f)) {
-                func_8086E8E8(this);
+                EnOkuta_SetupFloat(this);
             } else {
                 func_8086EAE0(this, play);
             }
@@ -468,7 +468,7 @@ void func_8086EC00(EnOkuta* this, PlayState* play) {
         }
     }
     if (this->actor.params == 0 && this->actor.xzDistToPlayer < 160.0f) {
-        func_8086E7A8(this);
+        EnOkuta_SetupHide(this);
     }
 }
 
@@ -484,23 +484,23 @@ void func_8086EE8C(EnOkuta* this) {
 void func_8086EF14(EnOkuta* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->actor.colChkInfo.health == 0) {
-            func_8086EF90(this);
+            EnOkuta_SetupDie(this);
         } else {
             this->unk2E8.base.acFlags |= 1;
-            func_8086E8E8(this);
+            EnOkuta_SetupFloat(this);
         }
     }
     Math_ApproachF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.5f, 5.0f);
 }
 
-void func_8086EF90(EnOkuta* this) {
+void EnOkuta_SetupDie(EnOkuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gOctorokDieAnim, -3.0f);
     this->unk18E = 0;
     this->actor.flags &= ~1;
-    this->actionFunc = func_8086EFE8;
+    this->actionFunc = EnOkuta_Die;
 }
 
-void func_8086EFE8(EnOkuta* this, PlayState* play) {
+void EnOkuta_Die(EnOkuta* this, PlayState* play) {
     Vec3f sp7C;
     Vec3f sp70;
     SkelAnime* temp_s0;
@@ -558,7 +558,7 @@ void func_8086F2FC(EnOkuta* this, PlayState* play) {
     Actor_SetColorFilter(&this->actor, 0x8000U, 0x80FFU, 0U, 0xAU);
     this->actor.child = Actor_SpawnAsChild(
         &play->actorCtx, &this->actor, play, 0x143, this->actor.world.pos.x,
-        this->actor.world.pos.y + this->skelAnime.jointTable->y * this->actor.scale.y + 25.0f * this->unk264.y,
+        this->actor.world.pos.y + this->skelAnime.jointTable->y * this->actor.scale.y + 25.0f * this->headScale.y,
         this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, 3);
     if (this->actor.child != NULL) {
         this->actor.flags &= ~1;
@@ -582,7 +582,7 @@ void func_8086F434(EnOkuta* this, PlayState* play) {
         this->actor.flags |= 1;
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 10.0f) != 0) {
             this->actor.flags &= ~0x10;
-            func_8086E8E8(this);
+            EnOkuta_SetupFloat(this);
         }
     }
 }
@@ -617,7 +617,7 @@ void func_8086F57C(EnOkuta* this, PlayState* play) {
         this->actor.shape.rot.y += 0x2000;
     }
     if (this->unk18E == 0) {
-        func_8086E8E8(this);
+        EnOkuta_SetupFloat(this);
     }
 }
 
@@ -667,50 +667,53 @@ void func_8086F694(EnOkuta* this, PlayState* play) {
     }
 }
 
-void func_8086F8FC(EnOkuta* this) {
+/**
+ * Adjusts the scale of the Octorok's head based on their current action and their current animation frame.
+ */
+void EnOkuta_UpdateHeadScale(EnOkuta* this) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->actionFunc == func_8086E658) {
+    if (this->actionFunc == EnOkuta_Appear) {
         if (curFrame < 8.0f) {
-            this->unk264.x = this->unk264.y = this->unk264.z = 1.0f;
+            this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
         } else if (curFrame < 10.0f) {
-            this->unk264.x = this->unk264.z = 1.0f;
-            this->unk264.y = ((curFrame - 7.0f) * 0.4f) + 1.0f;
+            this->headScale.x = this->headScale.z = 1.0f;
+            this->headScale.y = ((curFrame - 7.0f) * 0.4f) + 1.0f;
         } else if (curFrame < 14.0f) {
-            this->unk264.x = this->unk264.z = ((curFrame - 9.0f) * 0.075f) + 1.0f;
-            this->unk264.y = 1.8f - ((curFrame - 9.0f) * 0.25f);
+            this->headScale.x = this->headScale.z = ((curFrame - 9.0f) * 0.075f) + 1.0f;
+            this->headScale.y = 1.8f - ((curFrame - 9.0f) * 0.25f);
         } else {
-            this->unk264.x = this->unk264.z = 1.3f - ((curFrame - 13.0f) * 0.05f);
-            this->unk264.y = ((curFrame - 13.0f) * 0.0333f) + 0.8f;
+            this->headScale.x = this->headScale.z = 1.3f - ((curFrame - 13.0f) * 0.05f);
+            this->headScale.y = ((curFrame - 13.0f) * 0.0333f) + 0.8f;
         }
-    } else if (this->actionFunc == func_8086E7E8) {
+    } else if (this->actionFunc == EnOkuta_Hide) {
         if (curFrame < 3.0f) {
-            this->unk264.y = 1.0f;
+            this->headScale.y = 1.0f;
         } else {
             if (curFrame < 4.0f) {
-                this->unk264.y = (curFrame - 2.0f) + 1.0f;
+                this->headScale.y = (curFrame - 2.0f) + 1.0f;
             } else {
-                this->unk264.y = 2.0f - ((curFrame - 3.0f) * 0.333f);
+                this->headScale.y = 2.0f - ((curFrame - 3.0f) * 0.333f);
             }
         }
-        this->unk264.x = this->unk264.z = 1.0f;
+        this->headScale.x = this->headScale.z = 1.0f;
     } else if (this->actionFunc == func_8086EC00) {
         if (curFrame < 5.0f) {
-            this->unk264.x = this->unk264.y = this->unk264.z = (curFrame * 0.125f) + 1.0f;
+            this->headScale.x = this->headScale.y = this->headScale.z = (curFrame * 0.125f) + 1.0f;
         } else if (curFrame < 7.0f) {
-            this->unk264.x = this->unk264.y = this->unk264.z = 1.5f - ((curFrame - 4.0f) * 0.35f);
+            this->headScale.x = this->headScale.y = this->headScale.z = 1.5f - ((curFrame - 4.0f) * 0.35f);
         } else if (curFrame < 17.0f) {
-            this->unk264.x = this->unk264.z = ((curFrame - 6.0f) * 0.05f) + 0.8f;
-            this->unk264.y = 0.8f;
+            this->headScale.x = this->headScale.z = ((curFrame - 6.0f) * 0.05f) + 0.8f;
+            this->headScale.y = 0.8f;
         } else {
-            this->unk264.x = this->unk264.z = 1.3f - ((curFrame - 16.0f) * 0.1f);
-            this->unk264.y = ((curFrame - 16.0f) * 0.0666f) + 0.8f;
+            this->headScale.x = this->headScale.z = 1.3f - ((curFrame - 16.0f) * 0.1f);
+            this->headScale.y = ((curFrame - 16.0f) * 0.0666f) + 0.8f;
         }
-    } else if (this->actionFunc == func_8086E948) {
-        this->unk264.x = this->unk264.z = 1.0f;
-        this->unk264.y = Math_SinF(0.19634955f * curFrame) * 0.2f + 1.0f;
+    } else if (this->actionFunc == EnOkuta_Float) {
+        this->headScale.x = this->headScale.z = 1.0f;
+        this->headScale.y = Math_SinF((M_PI / 16) * curFrame) * 0.2f + 1.0f;
     } else {
-        this->unk264.x = this->unk264.y = this->unk264.z = 1.0f;
+        this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
     }
 }
 
@@ -757,11 +760,11 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     if (this->actionFunc != func_8086F434) {
-        func_8086F8FC(this);
+        EnOkuta_UpdateHeadScale(this);
         this->unk2E8.dim.height =
-            (sCylinderInit2.dim.height * this->unk264.y - this->unk2E8.dim.yShift) * this->actor.scale.y * 100.0f;
+            (sCylinderInit2.dim.height * this->headScale.y - this->unk2E8.dim.yShift) * this->actor.scale.y * 100.0f;
         Collider_UpdateCylinder(&this->actor, &this->unk2E8);
-        if (this->actionFunc == func_8086E658 || this->actionFunc == func_8086E7E8) {
+        if (this->actionFunc == EnOkuta_Appear || this->actionFunc == EnOkuta_Hide) {
             this->unk2E8.dim.pos.y = this->actor.world.pos.y + this->skelAnime.jointTable->y * this->actor.scale.y;
             this->unk2E8.dim.radius = sCylinderInit2.dim.radius * this->actor.scale.x * 100.0f;
         }
@@ -823,10 +826,14 @@ void func_808700C0(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80870254(EnOkuta* this, f32 curFrame, Vec3f* scale) {
-    if (this->actionFunc == func_8086E948) {
+/**
+ * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
+ * parameter.
+ */
+s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
+    if (this->actionFunc == EnOkuta_Float) {
         scale->z = scale->y = 1.0f;
-        scale->x = Math_SinF(0.19634955f * curFrame) * 0.4f + 1.0f;
+        scale->x = Math_SinF((M_PI / 16) * curFrame) * 0.4f + 1.0f;
     } else if (this->actionFunc == func_8086EC00) {
         if (curFrame < 5.0f) {
             scale->z = 1.0f;
@@ -838,10 +845,11 @@ s32 func_80870254(EnOkuta* this, f32 curFrame, Vec3f* scale) {
             scale->z = 2.0f - ((curFrame - 6.0f) * 0.0769f);
             scale->x = scale->y = 1.0f;
         }
-    } else if (this->actionFunc == func_8086EFE8) {
+    } else if (this->actionFunc == EnOkuta_Die) {
         if (curFrame >= 35.0f || curFrame < 25.0f) {
-            return 0;
+            return false;
         }
+
         if (curFrame < 27.0f) {
             scale->z = 1.0f;
             scale->x = scale->y = (curFrame - 24.0f) * 0.5f + 1.0f;
@@ -853,9 +861,10 @@ s32 func_80870254(EnOkuta* this, f32 curFrame, Vec3f* scale) {
             scale->x = scale->y = 1.0f;
         }
     } else {
-        return 0;
+        return false;
     }
-    return 1;
+
+    return true;
 }
 
 s32 func_808704DC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -866,16 +875,16 @@ s32 func_808704DC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
     var_v1 = 0;
     curFrame = this->skelAnime.curFrame;
-    if (this->actionFunc == func_8086EFE8) {
+    if (this->actionFunc == EnOkuta_Die) {
         curFrame += this->unk18E;
     }
     if (limbIndex == OCTOROK_LIMB_HEAD) {
-        if (this->unk264.x != 1.0f || this->unk264.y != 1.0f || this->unk264.z != 1.0f) {
-            Math_Vec3f_Copy(&scale, &this->unk264);
+        if (this->headScale.x != 1.0f || this->headScale.y != 1.0f || this->headScale.z != 1.0f) {
+            Math_Vec3f_Copy(&scale, &this->headScale);
             var_v1 = 1;
         }
     } else if (limbIndex == OCTOROK_LIMB_SNOUT) {
-        var_v1 = func_80870254(this, curFrame, &scale);
+        var_v1 = EnOkuta_GetSnoutScale(this, curFrame, &scale);
     }
     if (var_v1) {
         Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);

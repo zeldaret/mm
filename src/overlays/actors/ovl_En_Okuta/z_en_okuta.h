@@ -21,7 +21,7 @@ typedef struct EnOkuta {
     /* 0x258 */ f32 drawDmgEffScale;
     /* 0x25C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x260 */ f32 unk260;
-    /* 0x264 */ Vec3f unk264;
+    /* 0x264 */ Vec3f headScale;
     /* 0x270 */ Vec3f bodyPartsPos[10];
     /* 0x2E8 */ ColliderCylinder unk2E8;
 } EnOkuta; // size = 0x334
