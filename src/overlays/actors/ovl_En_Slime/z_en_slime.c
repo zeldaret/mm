@@ -983,20 +983,20 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
         EnSlime_SetupMoveInDirection(this);
     } else {
         if (this->timer < 12) {
-            rescaleFactor1 = this->timer * 0.0008333333f; // This is about 1/1200, but (1.0f/1200.0f) does not match
+            rescaleFactor1 = this->timer * (0.01f / 12.0f); // This is about 1/1200, but (1.0f/1200.0f) does not match
             this->reviveScale.x = rescaleFactor1;
             this->reviveScale.z = rescaleFactor1;
             this->reviveScale.y = 2.0f * rescaleFactor1;
             this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 20) {
-            rescaleFactor1 = (this->timer - 12) * (1.0f / 1600.0f);
+            rescaleFactor1 = (this->timer - 12) * (0.01f / 16.0f);
             rescaleFactor2 = 0.01f + rescaleFactor1;
             this->reviveScale.x = rescaleFactor2;
             this->reviveScale.z = rescaleFactor2;
             this->reviveScale.y = 2.0f * (0.01f - rescaleFactor1);
             this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 24) {
-            rescaleFactor1 = (this->timer - 20) * 0.0033333332f; // This is about 1/300
+            rescaleFactor1 = (this->timer - 20) * (0.01f / 3.0f); // This is about 1/300
             rescaleFactor2 = 0.015f - rescaleFactor1;
             this->reviveScale.x = rescaleFactor2;
             this->reviveScale.z = rescaleFactor2;
