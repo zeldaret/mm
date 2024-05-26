@@ -8,6 +8,9 @@ struct EnOkuta;
 
 typedef void (*EnOkutaActionFunc)(struct EnOkuta*, PlayState*);
 
+#define EN_OKUTA_GET_UNK190(thisx) (((thisx)->params >> 8) & 0xFF)
+#define EN_OKUTA_GET_TYPE(thisx) ((thisx)->params)
+
 typedef struct EnOkuta {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
