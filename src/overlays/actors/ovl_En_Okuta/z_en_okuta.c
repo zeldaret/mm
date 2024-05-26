@@ -49,7 +49,7 @@ ActorInit En_Okuta_InitVars = {
     /**/ EnOkuta_Draw,
 };
 
-static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit sProjectileCylinderInit = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_ENEMY,
@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 20, 0, { 0, 0, 0 } },
 };
 
-static ColliderCylinderInit sCylinderInit2 = {
+static ColliderCylinderInit sOctorokCylinderInit = {
     {
         COLTYPE_HIT0,
         AT_ON | AT_TYPE_ENEMY,
@@ -146,7 +146,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
         (EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_BLUE_OCTOROK)) {
         SkelAnime_Init(play, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
                        OCTOROK_LIMB_MAX);
-        Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit2);
+        Collider_InitAndSetCylinder(play, &this->collider, thisx, &sOctorokCylinderInit);
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         if (this->unk190 == 0xFF || this->unk190 == 0) {
@@ -175,7 +175,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
         thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         thisx->flags |= ACTOR_FLAG_10;
-        Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
+        Collider_InitAndSetCylinder(play, &this->collider, thisx, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         this->unk18E = 0x16;
         thisx->shape.rot.y = 0;
@@ -828,12 +828,12 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
     if (this->actionFunc != func_8086F434) {
         EnOkuta_UpdateHeadScale(this);
         this->collider.dim.height =
-            (sCylinderInit2.dim.height * this->headScale.y - this->collider.dim.yShift) * this->actor.scale.y * 100.0f;
+            (sOctorokCylinderInit.dim.height * this->headScale.y - this->collider.dim.yShift) * this->actor.scale.y * 100.0f;
         Collider_UpdateCylinder(&this->actor, &this->collider);
 
         if (this->actionFunc == EnOkuta_Appear || this->actionFunc == EnOkuta_Hide) {
             this->collider.dim.pos.y = this->actor.world.pos.y + this->skelAnime.jointTable->y * this->actor.scale.y;
-            this->collider.dim.radius = sCylinderInit2.dim.radius * this->actor.scale.x * 100.0f;
+            this->collider.dim.radius = sOctorokCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
         }
 
         if (this->actor.draw != NULL) {
