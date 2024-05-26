@@ -11,6 +11,14 @@ typedef void (*EnOkutaActionFunc)(struct EnOkuta*, PlayState*);
 #define EN_OKUTA_GET_UNK190(thisx) (((thisx)->params >> 8) & 0xFF)
 #define EN_OKUTA_GET_TYPE(thisx) ((thisx)->params)
 
+typedef enum EnOkutaType {
+    /*  0 */ EN_OKUTA_TYPE_RED_OCTOROK,
+    /*  1 */ EN_OKUTA_TYPE_BLUE_OCTOROK,
+    /* 16 */ EN_OKUTA_TYPE_PROJECTILE_BASE = 16,
+    /* 16 */ EN_OKUTA_TYPE_RED_PROJECTILE = EN_OKUTA_TYPE_RED_OCTOROK + EN_OKUTA_TYPE_PROJECTILE_BASE,
+    /* 17 */ EN_OKUTA_TYPE_BLUE_PROJECTILE = EN_OKUTA_TYPE_BLUE_OCTOROK + EN_OKUTA_TYPE_PROJECTILE_BASE
+} EnOkutaType;
+
 typedef struct EnOkuta {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

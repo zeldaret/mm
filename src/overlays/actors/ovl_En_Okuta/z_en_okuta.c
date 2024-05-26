@@ -142,7 +142,8 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     this->unk190 = EN_OKUTA_GET_UNK190(thisx);
     thisx->params &= 0xFF;
 
-    if (EN_OKUTA_GET_TYPE(thisx) == 0 || EN_OKUTA_GET_TYPE(thisx) == 1) {
+    if ((EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_RED_OCTOROK) ||
+        (EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_BLUE_OCTOROK)) {
         SkelAnime_Init(play, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
                        OCTOROK_LIMB_MAX);
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit2);
@@ -163,7 +164,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
             thisx->home.pos.y = waterSurface;
         }
 
-        if (EN_OKUTA_GET_TYPE(thisx) == 1) {
+        if (EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_BLUE_OCTOROK) {
             this->collider.base.colType = COLTYPE_HARD;
             this->collider.base.acFlags |= AC_HARD;
         }
@@ -270,7 +271,8 @@ void EnOkuta_SpawnProjectile(EnOkuta* this, PlayState* play) {
     pos.z = this->actor.world.pos.z + 25.0f * cos;
 
     if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OKUTA, pos.x, pos.y, pos.z, this->actor.shape.rot.x,
-                    this->actor.shape.rot.y, this->actor.shape.rot.z, EN_OKUTA_GET_TYPE(&this->actor) + 0x10) != NULL) {
+                    this->actor.shape.rot.y, this->actor.shape.rot.z,
+                    EN_OKUTA_GET_TYPE(&this->actor) + EN_OKUTA_TYPE_PROJECTILE_BASE) != NULL) {
         pos.x = this->actor.world.pos.x + (40.0f * sin);
         pos.z = this->actor.world.pos.z + (40.0f * cos);
         pos.y = this->actor.world.pos.y;
@@ -296,7 +298,7 @@ void EnOkuta_WaitToAppear(EnOkuta* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y;
 
     if (this->actor.xzDistToPlayer < 480.0f && this->actor.xzDistToPlayer > 200.0f) {
-        if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+        if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             EnOkuta_SetupAppear(this, play);
         } else if (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y)) < 0x4000 &&
                    play->unk_1887C == 0) {
@@ -316,7 +318,7 @@ void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
 
 void EnOkuta_Appear(EnOkuta* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        if ((this->actor.xzDistToPlayer < 160.0f) && (EN_OKUTA_GET_TYPE(&this->actor) == 0)) {
+        if ((this->actor.xzDistToPlayer < 160.0f) && (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK)) {
             EnOkuta_SetupHide(this);
         } else {
             EnOkuta_SetupFloat(this);
@@ -385,7 +387,7 @@ void EnOkuta_SetupFloat(EnOkuta* this) {
 }
 
 void EnOkuta_Float(EnOkuta* this, PlayState* play) {
-    if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+    if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
         this->actor.world.pos.y = this->actor.home.pos.y;
     } else {
         this->actor.world.pos.y = func_8086E378(this);
@@ -402,14 +404,14 @@ void EnOkuta_Float(EnOkuta* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer > 560.0f) ||
-        ((this->actor.xzDistToPlayer < 160.0f) && (EN_OKUTA_GET_TYPE(&this->actor) == 0))) {
+        ((this->actor.xzDistToPlayer < 160.0f) && (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK))) {
         EnOkuta_SetupHide(this);
     } else {
         s16 var_v1 = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
 
-        if ((ABS_ALT(var_v1) < 0x38E) && ((((EN_OKUTA_GET_TYPE(&this->actor) == 0)) && (this->unk18E == 0) &&
-                                           (this->actor.playerHeightRel < 120.0f)) ||
-                                          ((EN_OKUTA_GET_TYPE(&this->actor) == 1) &&
+        if ((ABS_ALT(var_v1) < 0x38E) && ((((EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK)) &&
+                                           (this->unk18E == 0) && (this->actor.playerHeightRel < 120.0f)) ||
+                                          ((EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_BLUE_OCTOROK) &&
                                            ((this->unk18E == 0) || (this->actor.xzDistToPlayer < 150.0f))))) {
             EnOkuta_SetupShoot(this, play);
         }
@@ -420,14 +422,14 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gOctorokShootAnim);
 
     if (this->actionFunc != EnOkuta_Shoot) {
-        if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+        if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             this->unk18E = this->unk190;
         } else {
             this->unk18E = (560.0f - this->actor.xzDistToPlayer) * 0.005f + 1.0f;
         }
     }
 
-    if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+    if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
         this->unk260 = this->actor.playerHeightRel + 20.0f;
         this->unk260 = CLAMP_MIN(this->unk260, 10.0f);
 
@@ -452,7 +454,8 @@ void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
         DECR(this->unk18E);
 
         if (this->unk18E == 0) {
-            if ((EN_OKUTA_GET_TYPE(&this->actor) != 1) || (this->actor.xzDistToPlayer > 150.0f)) {
+            if ((EN_OKUTA_GET_TYPE(&this->actor) != EN_OKUTA_TYPE_BLUE_OCTOROK) ||
+                (this->actor.xzDistToPlayer > 150.0f)) {
                 EnOkuta_SetupFloat(this);
             } else {
                 EnOkuta_SetupShoot(this, play);
@@ -461,7 +464,7 @@ void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
             EnOkuta_SetupShoot(this, play);
         }
     } else {
-        if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+        if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             if ((curFrame = this->skelAnime.curFrame) < 13.0f) {
                 this->actor.world.pos.y = Math_SinF(0.2617889f * curFrame) * this->unk260 + this->actor.home.pos.y;
             }
@@ -489,7 +492,7 @@ void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
         }
     }
 
-    if ((EN_OKUTA_GET_TYPE(&this->actor) == 0) && (this->actor.xzDistToPlayer < 160.0f)) {
+    if ((EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) && (this->actor.xzDistToPlayer < 160.0f)) {
         EnOkuta_SetupHide(this);
     }
 }
@@ -707,7 +710,8 @@ void func_8086F694(EnOkuta* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
 
         if ((this->collider.base.atFlags & AT_HIT) && (this->collider.base.atFlags & AT_TYPE_ENEMY) &&
-            !(this->collider.base.atFlags & AT_BOUNCED) && (EN_OKUTA_GET_TYPE(&this->actor) == 0x11)) {
+            !(this->collider.base.atFlags & AT_BOUNCED) &&
+            (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_BLUE_PROJECTILE)) {
             func_800B8D98(play, &this->actor, 8.0f, this->actor.world.rot.y, 6.0f);
         }
 
@@ -809,7 +813,7 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
     EnOkuta* this = THIS;
     s32 pad[2];
 
-    if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+    if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
         EnOkuta_UpdateDamage(this, play);
     } else if ((this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT)) {
         if (this->collider.base.atFlags & AT_HIT) {
@@ -833,7 +837,7 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
         }
 
         if (this->actor.draw != NULL) {
-            if (EN_OKUTA_GET_TYPE(&this->actor) == 1) {
+            if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_BLUE_OCTOROK) {
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
             }
 
@@ -1006,8 +1010,8 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
 
     gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
-    if (EN_OKUTA_GET_TYPE(&this->actor) < 0x10) {
-        if (EN_OKUTA_GET_TYPE(&this->actor) == 0) {
+    if (EN_OKUTA_GET_TYPE(&this->actor) < EN_OKUTA_TYPE_PROJECTILE_BASE) {
+        if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             gSPSegment(&gfx[1], 0x08, D_801AEFA0);
         } else {
             gSPSegment(&gfx[1], 0x08, ovl_En_Okuta_DL_2A50);
