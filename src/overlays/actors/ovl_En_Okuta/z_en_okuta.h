@@ -23,7 +23,7 @@ typedef struct EnOkuta {
     /* 0x260 */ f32 unk260;
     /* 0x264 */ Vec3f headScale;
     /* 0x270 */ Vec3f bodyPartsPos[10];
-    /* 0x2E8 */ ColliderCylinder unk2E8;
+    /* 0x2E8 */ ColliderCylinder collider;
 } EnOkuta; // size = 0x334
 
 #endif // Z_EN_OKUTA_H
