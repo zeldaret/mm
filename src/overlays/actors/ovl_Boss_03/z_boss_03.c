@@ -2130,7 +2130,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
         for (j = 0, i = 0; i < 20; j++) {
             Matrix_RotateYF(yRot, MTXMODE_NEW);
-            Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            Matrix_MultVecZ(Rand_ZeroFloat(60000.0f * 0.001f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + Rand_CenteredFloat(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
             dropletPos.z += this->unk_28C + Rand_CenteredFloat(40.0f);

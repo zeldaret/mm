@@ -64,7 +64,7 @@ s32 func_80B83C80(Vec3f* arg0, Vec3f* arg1) {
     f32 temp_f0 = Math3D_LengthSquared(arg0);
     f32 temp_f2;
 
-    if (temp_f0 < 0.0000010000001f) {
+    if (temp_f0 < (0.001f * 0.001f)) {
         return false;
     }
 

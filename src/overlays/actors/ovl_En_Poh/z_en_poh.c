@@ -598,7 +598,7 @@ void func_80B2DDF8(EnPoh* this, s32 arg1) {
 
     if (arg1 < 0) {
         temp_f2 = this->unk_197 * (1.0f / 255.0f);
-        this->actor.scale.x = this->actor.scale.z = (0.0056000003f * temp_f2) + 0.0014000001f;
+        this->actor.scale.x = this->actor.scale.z = ((5.6f * 0.001f) * temp_f2) + (1.4f * 0.001f);
         this->actor.scale.y = (0.007f - (0.007f * temp_f2)) + 0.007f;
     } else {
         temp_f2 = 1.0f;
