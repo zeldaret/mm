@@ -1,0 +1,17 @@
+sSchedule {
+    if_day (1) {
+        if_scene (SCENE_BACKTOWN) {
+            if_time_range (0, 0, 0, 30) {
+                return_time (0, 0, 0, 30, BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH)
+            } else if_since_time (0, 30) {
+                return_l (BOMB_SHOP_LADY_SCH_KNOCKED_OVER)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

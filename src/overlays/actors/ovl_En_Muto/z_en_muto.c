@@ -78,7 +78,8 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -135,17 +136,17 @@ void EnMuto_SetHeadRotation(EnMuto* this) {
 }
 
 void EnMuto_SetupIdle(EnMuto* this) {
-    EnMuto_ChangeAnim(this, 0);
+    EnMuto_ChangeAnim(this, ENMUTO_ANIM_0);
     this->isInDialogue = false;
     this->actionFunc = EnMuto_Idle;
 }
 
 void EnMuto_Idle(EnMuto* this, PlayState* play) {
-    Player* player;
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom) {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08)) {
                 this->actor.textId = 0x62C;
@@ -155,14 +156,11 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     }
 
-    //! FAKE:
-    if (1) {}
-
     if (!this->isInMayorsRoom && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2363;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnMuto_SetupDialogue(this, play);
         return;
     }
@@ -176,7 +174,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     } else {
         this->textIdIndex = 0;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
@@ -210,7 +208,7 @@ void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {
 void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
 
             if (this->actor.textId == 0x62C) {

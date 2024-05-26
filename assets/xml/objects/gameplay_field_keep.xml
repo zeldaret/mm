@@ -40,13 +40,18 @@
         <DList Name="gameplay_field_keep_DL_006760" Offset="0x6760" />
         <Texture Name="gameplay_field_keep_Tex_006810" OutName="tex_006810" Format="rgba16" Width="32" Height="32" Offset="0x6810" />
         <Texture Name="gameplay_field_keep_Tex_007010" OutName="tex_007010" Format="rgba16" Width="32" Height="32" Offset="0x7010" />
+
+        <Array Name="gameplay_field_keepVtx_007810" Count="9" Offset="0x7810">
+            <Vtx/>
+        </Array>
+
         <DList Name="gKusaBushType1DL" Offset="0x78A0" />
         <DList Name="gKusaBushType2DL" Offset="0x7938" />
 
         <Texture Name="gFieldSandstorm1Tex" OutName="sandstorm_1" Format="i8" Width="64" Height="32" Offset="0x79D0" />
         <Texture Name="gFieldSandstorm2Tex" OutName="sandstorm_2" Format="ia8" Width="64" Height="32" Offset="0x81D0" />
         <DList Name="gFieldSandstormDL" Offset="0x89D0" />
-    
+
         <Texture Name="gameplay_field_keep_Tex_008A90" OutName="tex_008A90" Format="rgba16" Width="32" Height="32" Offset="0x8A90" />
     </File>
 </Root>

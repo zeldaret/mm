@@ -132,7 +132,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 
                 switch (this->type) {
                     case ENELFGRP_TYPE_POWER:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK)) {
                             EnElfgrp_SetCutscene(this, 1);
                         } else {
                             this->stateFlags |= ELFGRP_STATE_2;
@@ -487,7 +487,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
         }
 
         if (this->stateFlags & ELFGRP_STATE_2) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK);
         }
 
         if (this->stateFlags & ELFGRP_STATE_4) {
@@ -589,7 +589,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play) {
 void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
     s32 curTotalFairies;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         gSaveContext.save.saveInfo.weekEventReg[9] |= this->talkedOnceFlag;
         this->actionFunc = func_80A3A6F4;
 
@@ -611,7 +611,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         gSaveContext.save.saveInfo.weekEventReg[9] |= this->talkedOnceFlag;
         this->actionFunc = func_80A3A6F4;
         return;

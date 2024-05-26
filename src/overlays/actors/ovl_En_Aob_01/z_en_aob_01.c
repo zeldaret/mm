@@ -124,8 +124,8 @@ void EnAob01_Blink(EnAob01* this, s32 maxEyeIndex) {
  * Called every frame during the race in order to make in-game time pass.
  */
 void EnAob01_AdvanceTime(void) {
-    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+    gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
+    gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
 }
 
 /**
@@ -440,7 +440,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             }
 
             gSaveContext.unk_3F5C = this->rupeesBet;
-            play->msgCtx.bankRupees = this->rupeesBet;
+            play->msgCtx.rupeesTotal = this->rupeesBet;
             this->textId = 0x3529; // Is that bet okay?
             break;
 
@@ -517,7 +517,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
                     break;
             }
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->textId = 0;
@@ -580,7 +580,7 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG;
                 this->actionFunc = EnAob01_BeforeRace_Talk;
             }
-        } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) &&
+        } else if (Actor_TalkOfferAccepted(&this->actor, &play->state) &&
                    (this->stateFlags & ENAOB01_FLAG_PLAYER_CAN_TALK)) {
             this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CAN_TALK;
             this->prevTrackTarget = this->trackTarget;
@@ -604,7 +604,7 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
 void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     //! @bug: This block of code acts as a failsafe for when the player triggered this conversation by
     //! bumping into the racetrack owner while holding the dog and, at the same time, threw or dropped
@@ -634,7 +634,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
     }
 
     if (this->stateFlags & ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_80123E90(play, &this->actor);
             if (this->stateFlags & ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG) {
@@ -667,7 +667,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == TEXT_STATE_5) {
+    } else if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             if (this->stateFlags & ENAOB01_FLAG_CONVERSATION_OVER) {
@@ -679,9 +679,9 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
                 EnAob01_BeforeRace_HandleConversation(this, play);
             }
         }
-    } else if ((talkState == TEXT_STATE_14) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_INPUT_RUPEES) && Message_ShouldAdvance(play)) {
         this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
-        this->rupeesBet = play->msgCtx.bankRupeesSelected;
+        this->rupeesBet = play->msgCtx.rupeesSelected;
         EnAob01_BeforeRace_HandleConversation(this, play);
     }
 }
@@ -844,7 +844,7 @@ void EnAob01_Race_StartCutscene(EnAob01* this, PlayState* play) {
  * receive the same number of rupees they bet.
  */
 void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80123E90(play, &this->actor);
         this->rupeesBet = gSaveContext.unk_3F5C;
@@ -854,7 +854,7 @@ void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_SURPRISE;
                 this->rupeesBet *= 3;
                 Rupees_ChangeBy(this->rupeesBet);
-                play->msgCtx.bankRupees = this->rupeesBet;
+                play->msgCtx.rupeesTotal = this->rupeesBet;
                 break;
 
             case 2:
@@ -862,7 +862,7 @@ void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_SURPRISE;
                 this->rupeesBet *= 2;
                 Rupees_ChangeBy(this->rupeesBet);
-                play->msgCtx.bankRupees = this->rupeesBet;
+                play->msgCtx.rupeesTotal = this->rupeesBet;
                 break;
 
             case 3:
@@ -896,7 +896,7 @@ void EnAob01_AfterRace_GiveReward(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnAob01_ProcessIdleAnim(this)) {
-        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             this->rupeesBet = 0;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
@@ -930,7 +930,7 @@ void EnAob01_AfterRace_GiveReward(EnAob01* this, PlayState* play) {
 void EnAob01_AfterRace_AfterGivingReward(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_EVENT) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         }
@@ -951,7 +951,7 @@ void EnAob01_AfterRace_AfterGivingReward(EnAob01* this, PlayState* play) {
  * the player has won the 150 rupee reward.
  */
 void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->textId = 0x354C; // Want to play again?
         Message_ContinueTextbox(play, this->textId);
         this->actionFunc = EnAob01_BeforeRace_RespondToPlayAgainQuestion;
@@ -971,7 +971,7 @@ void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play) {
 void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     if (this->stateFlags & ENAOB01_FLAG_LAUGH) {
         if (!EnAob01_ProcessLaughAnim(this)) {
@@ -983,7 +983,7 @@ void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play) {
         }
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
         this->stateFlags &= ~ENAOB01_FLAG_SURPRISE;
         if (this->rupeesBet >= 150) {
@@ -1189,8 +1189,8 @@ s32 EnAob01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex])) * 200;
     }
 
     return false;

@@ -44,11 +44,6 @@
 // Assets for other actors
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
-
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
@@ -205,9 +200,9 @@ void func_801229FC(Player* player) {
         s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &player->maskObjectLoadQueue, NULL);
+        DmaMgr_RequestAsync(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
+                            gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                            &player->maskObjectLoadQueue, NULL);
         player->maskObjectLoadState++;
     } else if (player->maskObjectLoadState == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
@@ -289,7 +284,7 @@ void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
+    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++) {
         if ((phi_s2->alpha != 0) && (phi_s2->alpha != 255)) {
             temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
             Matrix_Put(&phi_s2->mf);
@@ -1900,8 +1895,8 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     }
 
     *arg1 = CLAMP(*arg1, -arg4, arg4);
-    *arg0 += (s16)*arg1;
-    if (((arg2 - *arg0) * (s16)*arg1) < 0) {
+    *arg0 += TRUNCF_BINANG(*arg1);
+    if (((arg2 - *arg0) * TRUNCF_BINANG(*arg1)) < 0) {
         *arg0 = arg2;
     }
 }
@@ -1984,7 +1979,7 @@ void func_8012536C(void) {
 void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
-    Gfx* dList;
+    Gfx* gfx;
     f32 scale = player->unk_B62 * (10.0f / 51.0f);
     s32 i;
 
@@ -2005,12 +2000,12 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
         phi_a0++;
     }
 
-    dList = POLY_XLU_DISP;
+    gfx = POLY_XLU_DISP;
 
-    gSPMatrix(&dList[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dList[1], object_link_zora_DL_011760);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[1], object_link_zora_DL_011760);
 
-    POLY_XLU_DISP = &dList[2];
+    POLY_XLU_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2173,7 +2168,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             rotX = player->upperLimbRot.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
-                    rotX += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
+                    rotX += TRUNCF_BINANG(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
                 }
             }
 
@@ -2267,7 +2262,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 if (sPlayerRightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != PLAYER_SHIELD_NONE) {
-                            //! FAKE
+                            //! FAKE:
                             rightHandDLists = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
@@ -2594,7 +2589,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2856,13 +2851,13 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
+    gSegments[0x0A] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
 void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
-    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
     s32 i;
 
@@ -2875,7 +2870,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
-        //! FAKE
+        //! FAKE:
         if (1) {}
 
         D_801F59B0[i].y += -10.0f * scaleY;
@@ -2902,8 +2897,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             s16 phi_s0 = speedXZ * 2000.0f;
             f32 temp_f20;
 
-            bubbleVelocity.y = speedXZ * 0.4f;
-            bubbleAccel.y = -0.3f;
+            sBubbleVelocity.y = speedXZ * 0.4f;
+            sBubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2913,10 +2908,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             temp_f20 = speedXZ * 0.2f;
             temp_f20 = CLAMP_MAX(temp_f20, 4.0f);
 
-            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
-            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
+            sBubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            sBubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 20, 20, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &sBubbleVelocity, &sBubbleAccel, 20, 20, 3, 0);
             D_801F59C8[i] -= 400;
         }
     }
@@ -2944,7 +2939,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
     if (player->blastMaskTimer != 0) {
         s32 alpha;
 
-        gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
+        gSegments[0x0A] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
@@ -3182,7 +3177,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         if (play->actorCtx.flags & ACTORCTX_FLAG_3) {
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
         } else {
-            phi_s1->unk_0C.y = phi_s1->unk_0C.y;
+            phi_s1->unk_0C.y = phi_s1->unk_0C.y; // Set to itself
             f20 = Math_SinS(arg1->unk_1A);
             phi_s1->unk_0C.y += (((f22 * Math_CosS(arg1->unk_1A)) + (f24 * f20)) * 0.2f);
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -2.0f, 4.0f);
@@ -3268,7 +3263,7 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
+s32 func_80128640(PlayState* play, Player* player, Gfx* dList) {
     s32 temp_v1 = player->skelAnime.animation == &gPlayerAnim_cl_maskoff;
     f32 temp_f0;
 
@@ -3339,7 +3334,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Pop();
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
+    } else if (dList == object_link_zora_DL_00E2A0) { // zora guitar
         s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->upperLimbRot.x) * ((f32)(IREG(52) + 20)) / 100.0f);
         s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->upperLimbRot.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
@@ -3612,7 +3607,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        //! FAKE
+        //! FAKE:
         if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
@@ -3707,17 +3702,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         }
 
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             *temp = spF0[0].x;
-                            temp++;
                         }
                     } else {
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             spF0[i].x = *temp;
                             spF0[i].y = *temp;
                             spF0[i].z = *temp;
-                            temp++;
                         }
                     }
 
@@ -3736,7 +3729,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        //! FAKE (yes, all of them are required)
+                        //! FAKE: (yes, all of them are required)
                         // https://decomp.me/scratch/AdU3G
                         if (1) {}
                         if (1) {}

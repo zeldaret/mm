@@ -62,8 +62,8 @@ void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         OPEN_DISPS(gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x06,
-                   play->objectCtx.slots[this->rObjectSlot].segment); // object: OBJECT_ICE_BLOCK
+        // object: OBJECT_ICE_BLOCK
+        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);

@@ -136,7 +136,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     D_809F4970 = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_57)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA)) {
         this->actionFunc = func_809F2E14;
     } else {
         this->actionFunc = func_809F2B64;
@@ -514,7 +514,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    temp_v0 = gSaveContext.save.time;
+    temp_v0 = CURRENT_TIME;
     if (temp_v0 > CLOCK_TIME(12, 0)) {
         temp_v0 = (DAY_LENGTH - 1) - temp_v0;
     }
@@ -527,16 +527,16 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
         temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
 
-        temp_v0_2[0].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[3].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[4].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[7].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
+        temp_v0_2[0].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[3].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[4].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[7].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
 
         temp_v0_2[5].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[5].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[5].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[6].v.ob[0] = temp_s0 - 0x2A3;
-        temp_v0_2[6].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[6].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[9].v.ob[0] = temp_s0 + 0x2A3;
         temp_v0_2[9].v.ob[2] = temp_f10 - 0x1C2;
@@ -578,6 +578,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
 
+        //! FAKE:
         if (1) {}
     }
 

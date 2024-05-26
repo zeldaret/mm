@@ -139,7 +139,7 @@ void func_80A6F270(EnMm3* this) {
 }
 
 void func_80A6F2C8(EnMm3* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x278A, &this->actor);
         this->unk_2B4 = 0x278A;
         func_80A6F9C8(this);
@@ -147,10 +147,10 @@ void func_80A6F2C8(EnMm3* this, PlayState* play) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
-    Math_SmoothStepToS(&this->unk_2A0.x, 0, 5, 0x1000, 0x100);
-    Math_SmoothStepToS(&this->unk_2A0.y, 0, 5, 0x1000, 0x100);
-    Math_SmoothStepToS(&this->unk_2A6.x, 0, 5, 0x1000, 0x100);
-    Math_SmoothStepToS(&this->unk_2A6.y, 0, 5, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->headRot.x, 0, 5, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->headRot.y, 0, 5, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->torsoRot.x, 0, 5, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 5, 0x1000, 0x100);
 }
 
 void func_80A6F3B4(EnMm3* this, PlayState* play) {
@@ -337,11 +337,11 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             this->unk_2B0 |= 2;
             break;
 
@@ -349,7 +349,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
             func_80A6F3B4(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80A6F5E4(this, play);
             break;
 
@@ -418,7 +418,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         AudioSfx_MuteBanks(0);
         Audio_SetMainBgmVolume(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
@@ -445,12 +445,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -464,7 +464,7 @@ void func_80A6FED8(EnMm3* this) {
 void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
@@ -551,7 +551,7 @@ void EnMm3_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_2B0 & 1) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_2A0, &this->unk_2A6, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -562,11 +562,11 @@ s32 EnMm3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnMm3* this = THIS;
 
     if (limbIndex == OBJECT_MM_LIMB_08) {
-        rot->x += this->unk_2A6.y;
-        rot->y -= this->unk_2A6.x;
+        rot->x += this->torsoRot.y;
+        rot->y -= this->torsoRot.x;
     } else if (limbIndex == OBJECT_MM_LIMB_0F) {
-        rot->x += this->unk_2A0.y;
-        rot->z += this->unk_2A0.x;
+        rot->x += this->headRot.y;
+        rot->z += this->headRot.x;
         if ((this->unk_2B0 & 2) && ((play->gameplayFrames % 3) == 0)) {
             Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }

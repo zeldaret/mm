@@ -93,49 +93,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnTotoText D_80BA502C[] = {
-    { 0, 0, 0x2B21 },
-    { 3, 2, 0 },
-};
-
-static EnTotoText D_80BA5034[] = {
-    { 0, 0, 0x2B23 },
-};
-
-static EnTotoText D_80BA5038[] = {
-    { 2, 1, 0x2B24 },
-    { 4, 0, 0x2B25 },
-    { 3, 2, 0 },
-};
-
-static EnTotoText D_80BA5044[] = {
-    { 4, 0, 0x2B25 },
-};
-
-static EnTotoText D_80BA5048[] = {
-    { 16, 0, 0x2A94 }, { 0, 0, 0x2A95 }, { 4, 0, 0x2A96 }, { 4, 0, 0x2A97 },
-    { 0, 0, 0x2A98 },  { 0, 0, 0x2A99 }, { 4, 0, 0x2A9A }, { 4, 0, 0x2A9B },
-};
-
-static EnTotoText D_80BA5068[] = {
-    { 0, 0, 0x2AE1 },
-    { 0, 0, 0x2AE2 },
-    { 4, 0, 0x2AE3 },
-};
-
-static EnTotoText D_80BA5074[] = {
-    { 4, 0, 0x2AE4 },
+    { 0, 0, 0x2B21 }, { 3, 2, 0 },      { 0, 0, 0x2B23 },  { 2, 1, 0x2B24 }, { 4, 0, 0x2B25 },
+    { 3, 2, 0 },      { 4, 0, 0x2B25 }, { 16, 0, 0x2A94 }, { 0, 0, 0x2A95 }, { 4, 0, 0x2A96 },
+    { 4, 0, 0x2A97 }, { 0, 0, 0x2A98 }, { 0, 0, 0x2A99 },  { 4, 0, 0x2A9A }, { 4, 0, 0x2A9B },
+    { 0, 0, 0x2AE1 }, { 0, 0, 0x2AE2 }, { 4, 0, 0x2AE3 },  { 4, 0, 0x2AE4 },
 };
 
 static AnimationHeader* D_80BA5078[] = { &object_zm_Anim_0028B8, &object_zm_Anim_00B894, &object_zm_Anim_002F20,
                                          &object_zm_Anim_00BC08 };
 
 static EnTotoText D_80BA5088[] = {
-    { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 }, { 1, 0, 0 },  { 10, 0, 0 },
-    { 11, 0, 0 }, { 12, 0, 0 }, { 13, 0, 0 }, { 15, 0, 0 }, { 17, 1, 0 }, { 17, 0, 0 },
-};
-
-static EnTotoText D_80BA50BC[] = {
-    { 5, 0, 0 }, { 6, 20, 0 }, { 8, 5, 0 }, { 12, 0, 0 }, { 13, 0, 0 }, { 14, 20, 0x2B22 }, { 1, 0, 0 }, { 17, 0, 0 },
+    { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 },       { 1, 0, 0 },  { 10, 0, 0 },
+    { 11, 0, 0 }, { 12, 0, 0 }, { 13, 0, 0 }, { 15, 0, 0 }, { 17, 1, 0 },       { 17, 0, 0 }, { 5, 0, 0 },
+    { 6, 20, 0 }, { 8, 5, 0 },  { 12, 0, 0 }, { 13, 0, 0 }, { 14, 20, 0x2B22 }, { 1, 0, 0 },  { 17, 0, 0 },
 };
 
 static EnTotoUnkStruct2 D_80BA50DC[] = {
@@ -189,8 +159,8 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
-        (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
+    if ((play->sceneId == SCENE_MILK_BAR) && (CURRENT_TIME >= CLOCK_TIME(6, 0)) &&
+        (CURRENT_TIME < CLOCK_TIME(21, 30))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -245,7 +215,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80BA383C(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
@@ -257,10 +227,10 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     }
 
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= (CLOCK_TIME(22, 13) + 7)))) ||
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
-            this->text = D_80BA5044;
+            this->text = &D_80BA502C[6];
             this->actor.flags |= ACTOR_FLAG_10000;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -269,19 +239,19 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor))) {
-                        this->text = D_80BA5068;
+                        this->text = &D_80BA502C[15];
                     } else {
-                        this->text = D_80BA5074;
+                        this->text = &D_80BA502C[18];
                     }
                 } else {
-                    this->text = D_80BA5048;
+                    this->text = &D_80BA502C[7];
                 }
             } else if (ENTOTO_WEEK_EVENT_FLAGS) {
-                this->text = D_80BA502C;
+                this->text = &D_80BA502C[0];
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
-                this->text = D_80BA5034;
+                this->text = &D_80BA502C[2];
             } else {
-                this->text = D_80BA5038;
+                this->text = &D_80BA502C[3];
             }
         }
 
@@ -302,7 +272,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
 }
 
 void func_80BA3C88(EnToto* this) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 800);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 0x320);
 }
 
 void func_80BA3CC4(EnToto* this, PlayState* play) {
@@ -317,7 +287,7 @@ void func_80BA3CC4(EnToto* this, PlayState* play) {
 
 void func_80BA3D38(EnToto* this, PlayState* play) {
     this->csId = this->actor.csId;
-    this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
+    this->text = ENTOTO_WEEK_EVENT_FLAGS ? &D_80BA5088[13] : &D_80BA5088[0];
     func_80BA4C0C(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
     this->blinkInfo.eyeTexIndex = 0;
@@ -412,7 +382,7 @@ s32 func_80BA407C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA40D4(EnToto* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         return 1;
     }
     return 0;
@@ -457,7 +427,6 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
 
     func_80BA3FB0(this, play);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
-
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
             numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList);
@@ -467,9 +436,7 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
             numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 2;
         }
     }
-
-    Player_InitOverrideInput(play, &this->overrideInputEntry, numPoints, &endPosListPtr[0 - numPoints]);
-
+    Player_InitOverrideInput(play, &this->overrideInputEntry, numPoints, endPosListPtr - numPoints);
     this->spotlights = Actor_Spawn(&play->actorCtx, play, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }

@@ -7,6 +7,7 @@
 #include "z_en_wallmas.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
@@ -161,7 +162,8 @@ void EnWallmas_Init(Actor* thisx, PlayState* play) {
     if (WALLMASTER_IS_FROZEN(&this->actor)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                            this->actor.world.pos.y - 15.0f, this->actor.world.pos.z, this->actor.world.rot.x,
-                           (this->actor.world.rot.y + 0x5900), this->actor.world.rot.z, 0xFF50);
+                           (this->actor.world.rot.y + 0x5900), this->actor.world.rot.z,
+                           OBJICEPOLY_PARAMS(80, OBJICEPOLY_SWITCH_FLAG_NONE));
         this->actor.params &= ~0x80;
         EnWallmas_SetupReturnToCeiling(this);
         return;

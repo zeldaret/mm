@@ -136,7 +136,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnDemoheishi_SetupTalk(this);
     } else if (absYawDiff <= 0x4BB8) {
         Actor_OfferTalk(&this->actor, play, 70.0f);
@@ -149,7 +149,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnDemoheishi_SetupIdle(this);
     }

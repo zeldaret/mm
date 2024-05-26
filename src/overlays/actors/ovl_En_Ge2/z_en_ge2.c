@@ -112,7 +112,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     EnGe2_SetupPath(this, play);
 
     this->picto.actor.flags |= ACTOR_FLAG_10;
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         this->picto.actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     }
 

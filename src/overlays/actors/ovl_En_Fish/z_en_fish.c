@@ -146,20 +146,20 @@ Actor* func_8091D944(EnFish* this, PlayState* play) {
     f32 distSq;
     Actor* retActor = NULL;
     f32 minDistSq = FLT_MAX;
-    Actor* foundActor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
+    Actor* actorIter = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
-    while (foundActor != NULL) {
-        if ((foundActor->id == ACTOR_EN_FISH) && (foundActor->params == ENFISH_2) &&
-            (foundActor->room == this->actor.room)) {
-            distSq = Math3D_Vec3fDistSq(&foundActor->world.pos, &this->actor.world.pos);
+    while (actorIter != NULL) {
+        if ((actorIter->id == ACTOR_EN_FISH) && (actorIter->params == ENFISH_2) &&
+            (actorIter->room == this->actor.room)) {
+            distSq = Math3D_Vec3fDistSq(&actorIter->world.pos, &this->actor.world.pos);
             if (retActor == NULL) {
-                retActor = foundActor;
+                retActor = actorIter;
                 minDistSq = distSq;
             } else if (distSq < minDistSq) {
                 minDistSq = distSq;
             }
         }
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
     return retActor;
@@ -563,7 +563,7 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     s16 phi_v1;
 
     Math_SmoothStepToF(&this->actor.speed, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
-    phi_v1 = (s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f;
+    phi_v1 = TRUNCF_BINANG((s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f);
     if (sp40 & 4) {
         phi_v1 *= -1;
     }
@@ -730,7 +730,7 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     temp_v0_2 = BINANG_SUB(this->unk_268, this->actor.shape.rot.x);
     temp_v0_2 = ABS_ALT(temp_v0_2);
 
-    temp_v0_2 = temp_v0_2 / 11;
+    temp_v0_2 /= 11;
     if (temp_v0_2 > 800) {
         temp_v0_2 = 800;
     } else if (temp_v0_2 < 100) {

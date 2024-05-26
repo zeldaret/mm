@@ -4,18 +4,18 @@
         <DList Name="gSoldierBottleContentsDL" Offset="0x768" />
         <DList Name="gSoldierBottleEmptyContentsDL" Offset="0x800" />
         <Texture Name="gSoldierBottleTex" OutName="soldier_bottle" Format="i4" Width="16" Height="16" Offset="0x808" />
-        <Animation Name="gSoldierStandWithHandOnChestAnim" Offset="0xA54" />
-        <Animation Name="gSoldierDrinkAnim" Offset="0x20D8" />
-        <Animation Name="gSoldierCheerWithSpearAnim" Offset="0x2A84" />
-        <Animation Name="gSoldierSitAndReachAnim" Offset="0x3380" />
-        <Animation Name="gSoldierWaveAnim" Offset="0x3BFC" />
-        <Animation Name="gSoldierStandUpAnim" Offset="0x4770" />
-        <Animation Name="gSoldierLookDownAnim" Offset="0x4AC0" />
-        <Animation Name="gSoldierComeUpHereAnim" Offset="0x5320" />
-        <Animation Name="object_sdn_Anim_0057BC" Offset="0x57BC" /><!-- gSoldierHaltStartAnim? -->
-        <Animation Name="object_sdn_Anim_005D28" Offset="0x5D28" /><!-- gSoldierHaltIdleAnim? -->
-        <Animation Name="object_sdn_Anim_0064C0" Offset="0x64C0" /><!-- gSoldierHaltLoopAnim? -->
-        <Animation Name="gSoldierStandHandOnHipAnim" Offset="0x6C18" />
+        <Animation Name="gSoldierStandWithHandOnChestAnim" Offset="0xA54" /> <!-- Original name is "sdn_lastwait" -->
+        <Animation Name="gSoldierDrinkAnim" Offset="0x20D8" /> <!-- Original name is "sdn_nomu" -->
+        <Animation Name="gSoldierCheerWithSpearAnim" Offset="0x2A84" /> <!-- Original name is "sdn_renshuu" -->
+        <Animation Name="gSoldierSitAndReachAnim" Offset="0x3380" /> <!-- Original name is "sdn_suwaritalk" -->
+        <Animation Name="gSoldierWaveAnim" Offset="0x3BFC" /> <!-- Original name is "sdn_suwariwait" -->
+        <Animation Name="gSoldierStandUpAnim" Offset="0x4770" /> <!-- Original name is "sdn_tatsu" -->
+        <Animation Name="gSoldierLookDownAnim" Offset="0x4AC0" /> <!-- Original name is "sdn_tome01" -->
+        <Animation Name="gSoldierComeUpHereAnim" Offset="0x5320" /> <!-- Original name is "sdn_tome02" -->
+        <Animation Name="object_sdn_Anim_0057BC" Offset="0x57BC" /><!-- gSoldierHaltStartAnim? Original name is "sdn_tome03" -->
+        <Animation Name="object_sdn_Anim_005D28" Offset="0x5D28" /><!-- gSoldierHaltIdleAnim? Original name is "sdn_tome04" -->
+        <Animation Name="object_sdn_Anim_0064C0" Offset="0x64C0" /><!-- gSoldierHaltLoopAnim? Original name is "sdn_tome05" -->
+        <Animation Name="gSoldierStandHandOnHipAnim" Offset="0x6C18" /> <!-- Original name is "sdn_wait01" -->
         <DList Name="gSoldierTorsoDL" Offset="0x9EB0" />
         <DList Name="gSoldierHeadDL" Offset="0xA1A8" />
         <DList Name="gSoldierRightShoulderDL" Offset="0xA678" />
@@ -61,6 +61,6 @@
         <Limb Name="gSoldierRightHandWithSpearLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_HAND_WITH_SPEAR" Offset="0xD5E8" />
         <Limb Name="gSoldierHeadLimb" Type="Standard" EnumName="SOLDIER_LIMB_HEAD" Offset="0xD5F4" />
         <Skeleton Name="gSoldierSkel" Type="Flex" LimbType="Standard" LimbNone="SOLDIER_LIMB_NONE" LimbMax="SOLDIER_LIMB_MAX" EnumName="SoldierLimb" Offset="0xD640" />
-        <Animation Name="gSoldierStandAndLookDownAnim" Offset="0xDC7C" />
+        <Animation Name="gSoldierStandAndLookDownAnim" Offset="0xDC7C" /> <!-- Original name is "sdn_wait02" -->
     </File>
 </Root>

@@ -63,7 +63,7 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     s32 i;
     Vec3f spD4;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
     s16 angle;
 
@@ -84,15 +84,15 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
 
         Matrix_MultVec3f(&spD4, &pos);
 
-        vel.x = (Rand_ZeroOne() - 0.5f) + (pos.x * 0.075f);
-        vel.y = 2.0f * Rand_ZeroOne();
-        vel.z = (Rand_ZeroOne() - 0.5f) + (pos.z * 0.075f);
+        velocity.x = (Rand_ZeroOne() - 0.5f) + (pos.x * 0.075f);
+        velocity.y = 2.0f * Rand_ZeroOne();
+        velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * 0.075f);
 
         pos.x += this->dyna.actor.world.pos.x;
         pos.y += this->dyna.actor.world.pos.y;
         pos.z += this->dyna.actor.world.pos.z;
 
-        EffectSsKakera_Spawn(play, &pos, &vel, &pos, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
                              GAMEPLAY_KEEP, sLeafDlists[(s32)Rand_Next() > 0]);
 
         if ((i > 20) && ((i % 2) != 0)) {

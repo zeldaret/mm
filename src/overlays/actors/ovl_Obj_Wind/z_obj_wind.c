@@ -132,7 +132,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 }
                 temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (upXZ / entry->unk_2 * var_fa0);
                 if (upXZ != 0.0f) {
-                    // FAKE:
+                    //! FAKE:
                     if (1) {}
                     upXZ = 1.0f / upXZ;
                 }

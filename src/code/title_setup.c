@@ -1,11 +1,13 @@
 #include "z_title_setup.h"
+#include "sys_flashrom.h"
+
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void Setup_SetRegs(void) {
+void Setup_InitRegs(void) {
     XREG(2) = 0;
-    XREG(10) = 0x1A;
-    XREG(11) = 0x14;
-    XREG(12) = 0xE;
+    XREG(10) = 26;
+    XREG(11) = 20;
+    XREG(12) = 14;
     XREG(13) = 0;
     R_A_BTN_Y_OFFSET = 0;
     R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
@@ -24,7 +26,7 @@ void Setup_SetRegs(void) {
     XREG(77) = 0x3C;
     XREG(78) = 0x2F;
     XREG(79) = 0x62;
-    R_PAUSE_OWLWARP_ALPHA = 0;
+    R_PAUSE_OWL_WARP_ALPHA = 0;
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
@@ -50,7 +52,7 @@ void Setup_SetRegs(void) {
 void Setup_InitImpl(SetupState* this) {
     SysFlashrom_InitFlash();
     SaveContext_Init();
-    Setup_SetRegs();
+    Setup_InitRegs();
 
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));

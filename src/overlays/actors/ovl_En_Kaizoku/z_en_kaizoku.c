@@ -523,7 +523,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 player->actor.world.pos.z = this->picto.actor.home.pos.z - 30.0f;
             }
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_11);
                 this->unk_598 = 0;
@@ -539,8 +539,8 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
                     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_4);
-                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
-                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, false);
+                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, false);
                     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ONGND);
                 }
 
@@ -572,7 +572,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             break;
 
         case 4:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->unk_598 = 0;
                 this->unk_59C++;
@@ -689,7 +689,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
 void func_80B868B8(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 4000, 1);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     this->subCamEye.x = Math_SinS(this->picto.actor.yawTowardsPlayer) * 155.0f + this->picto.actor.world.pos.x;
     this->subCamEye.y = this->picto.actor.world.pos.y + 10.0f;
     this->subCamEye.z = Math_CosS(this->picto.actor.yawTowardsPlayer) * 115.0f + this->picto.actor.world.pos.z;
@@ -722,7 +722,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
             break;
 
         case 2:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
@@ -796,7 +796,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                 }
             }
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_18);
                 Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_133);
@@ -1357,9 +1357,9 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         temp_v0 = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if (temp_v0 > 0) {
-            var_a2 = (s16)(temp_v0 * 0.25f) + 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) + 0x7D0;
         } else {
-            var_a2 = (s16)(temp_v0 * 0.25f) - 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) - 0x7D0;
         }
         this->picto.actor.shape.rot.y += var_a2;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
@@ -1405,8 +1405,8 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
     if (this->skelAnime.curFrame <= 8.0f) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     } else if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
-        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, false);
+        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, false);
         this->swordState = 1;
         this->picto.actor.speed = 10.0f;
         Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
@@ -1485,7 +1485,7 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
             if (this->picto.actor.speed < -8.0f) {
                 this->picto.actor.speed = -8.0f;
             }
-        } else if (Math_SinS((sp2A - this->picto.actor.shape.rot.y)) < 0.0f) {
+        } else if (Math_SinS(sp2A - this->picto.actor.shape.rot.y) < 0.0f) {
             this->picto.actor.speed += 0.25f;
             if (this->picto.actor.speed > 8.0f) {
                 this->picto.actor.speed = 8.0f;
@@ -1645,7 +1645,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
 void func_80B894C0(EnKaizoku* this, PlayState* play) {
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 4500, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x1194, 0);
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false) && (this->unk_3C4.x < 1.0f) &&
         (this->unk_3C4.z < 1.0f)) {
         temp_v0 = this->picto.actor.wallYaw - this->picto.actor.shape.rot.y;
@@ -2024,7 +2024,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, 0);
+        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, MTXMODE_NEW);
         Matrix_MultVecZ(this->unk_2F0, &sp34);
         this->picto.actor.world.pos.x += this->unk_3C4.x + sp34.x;
         this->picto.actor.world.pos.z += this->unk_3C4.z + sp34.z;

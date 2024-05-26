@@ -64,14 +64,16 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
 
     if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
+            !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -174,8 +176,8 @@ void EnHeishi_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->actor, 60.0f);
-    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
-    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }

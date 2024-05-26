@@ -63,7 +63,7 @@ void func_80C06B5C(ObjMuPict* this) {
 void func_80C06B70(ObjMuPict* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.csId <= CS_ID_NONE) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
@@ -100,13 +100,13 @@ void func_80C06CC4(ObjMuPict* this) {
 void func_80C06CD8(ObjMuPict* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80C06E88(this, play);
             break;
 

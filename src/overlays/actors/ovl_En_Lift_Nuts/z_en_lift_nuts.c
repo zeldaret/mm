@@ -16,7 +16,7 @@ void EnLiftNuts_Destroy(Actor* thisx, PlayState* play);
 void EnLiftNuts_Update(Actor* thisx, PlayState* play);
 void EnLiftNuts_Draw(Actor* thisx, PlayState* play);
 
-void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play);
+void EnLiftNuts_HandleConversationEvent(EnLiftNuts* this, PlayState* play);
 
 void EnLiftNuts_SetupIdleHidden(EnLiftNuts* this);
 void EnLiftNuts_IdleHidden(EnLiftNuts* this, PlayState* play);
@@ -383,13 +383,12 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         EnLiftNuts_SetupBurrow(this);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
                 switch (CURRENT_DAY) {
                     case 1:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1)) {
@@ -402,8 +401,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 2:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else {
@@ -424,8 +422,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 3:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_3)) {
@@ -559,8 +556,7 @@ void EnLiftNuts_HandleConversationChoice(EnLiftNuts* this, PlayState* play) {
     }
 }
 
-// TODO: name based on TEXT_STATE_5
-void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
+void EnLiftNuts_HandleConversationEvent(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Message_ShouldAdvance(play)) {
@@ -700,17 +696,17 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
             EnLiftNuts_HandleConversationChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
-            EnLiftNuts_HandleConversation5(this, play);
+        case TEXT_STATE_EVENT:
+            EnLiftNuts_HandleConversationEvent(this, play);
             break;
 
         case TEXT_STATE_DONE:
@@ -944,7 +940,7 @@ void EnLiftNuts_SetupResumeConversation(EnLiftNuts* this) {
  * Resumes the current conversation after giving player the reward for winning the minigame.
  */
 void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_2) && (CURRENT_DAY == 3)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_END);

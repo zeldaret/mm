@@ -62,13 +62,13 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = BgIknvObj_DoNothing;
     switch (IKNV_OBJ_TYPE(this)) {
         case IKNV_OBJ_WATERWHEEL:
-            this->displayListPtr = object_iknv_obj_DL_013058;
+            this->dList = object_iknv_obj_DL_013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
             this->dyna.actor.flags |= ACTOR_FLAG_100000;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
             break;
         case IKNV_OBJ_RAISED_DOOR:
-            this->displayListPtr = object_iknv_obj_DL_011880;
+            this->dList = object_iknv_obj_DL_011880;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0119D4, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -76,7 +76,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
-            this->displayListPtr = object_iknv_obj_DL_0129C8;
+            this->dList = object_iknv_obj_DL_0129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012CA4, &colHeader);
@@ -141,7 +141,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, PlayState* play) {
     this->dyna.actor.shape.yOffset = 0.0f;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (targetRotation != this->dyna.actor.shape.rot.y) {
-        Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 100, 100);
+        Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 0x64, 0x64);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         if ((play->gameplayFrames % 2) != 0) {
             this->dyna.actor.shape.yOffset = 5.0f;
@@ -162,7 +162,7 @@ void func_80BD7ED8(BgIknvObj* this, PlayState* play) {
 }
 
 void func_80BD7F4C(BgIknvObj* this, PlayState* play) {
-    if (gSaveContext.save.time > CLOCK_TIME(19, 30)) {
+    if (CURRENT_TIME > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
@@ -214,7 +214,7 @@ void BgIknvObj_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);
+    gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

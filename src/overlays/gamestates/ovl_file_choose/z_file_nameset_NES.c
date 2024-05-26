@@ -4,6 +4,7 @@
  * Description: Entering name on a new file, selecting options from the options menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_file_select.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
@@ -508,7 +509,7 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                             if (validName) {
                                 Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                                 gSaveContext.fileNum = this->buttonIndex;
-                                time = ((void)0, gSaveContext.save.time);
+                                time = CURRENT_TIME;
                                 Sram_InitSave(this, sramCtx);
                                 gSaveContext.save.time = time;
 

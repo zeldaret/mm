@@ -3,13 +3,13 @@
     <!-- Joelle is red, Beth is blue, Ami is green, and Meg is purple -->
     <File Name="object_po_sisters" Segment="6">
         <!-- PoSister Animations -->
-        <Animation Name="gPoeSistersAttackAnim" Offset="0x114" />
-        <Animation Name="gPoeSistersMegCryAnim" Offset="0x680" />
-        <Animation Name="gPoeSistersDamagedAnim" Offset="0x8C0" />
-        <Animation Name="gPoeSistersFleeAnim" Offset="0xA54" />
-        <Animation Name="gPoeSistersFloatAnim" Offset="0xD40" />
-        <Animation Name="gPoeSistersAppearDisappearAnim" Offset="0x119C" />
-        <Animation Name="gPoeSistersSwayAnim" Offset="0x14CC" />
+        <Animation Name="gPoeSistersAttackAnim" Offset="0x114" /> <!-- Original name is "pob_atack" -->
+        <Animation Name="gPoeSistersMegCryAnim" Offset="0x680" /> <!-- Original name is "pob_cry" -->
+        <Animation Name="gPoeSistersDamagedAnim" Offset="0x8C0" /> <!-- Original name is "pob_damage" -->
+        <Animation Name="gPoeSistersFleeAnim" Offset="0xA54" /> <!-- Original name is "pob_escape" -->
+        <Animation Name="gPoeSistersFloatAnim" Offset="0xD40" /> <!-- Original name is "pob_fly" -->
+        <Animation Name="gPoeSistersAppearDisappearAnim" Offset="0x119C" /> <!-- Original name is "pob_start" -->
+        <Animation Name="gPoeSistersSwayAnim" Offset="0x14CC" /> <!-- Original name is "pob_wait" -->
 
         <!-- PoSister DisplayLists -->
         <DList Name="gPoeSistersMegFaceDL" Offset="0x1CB0" />

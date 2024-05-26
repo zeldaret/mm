@@ -246,7 +246,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                     this->kbdButton = FS_KBD_BTN_NONE;
                     this->charPage = FS_CHAR_PAGE_HIRA;
-                    if (gSaveContext.options.language != 0) {
+                    if (gSaveContext.options.language != LANGUAGE_JPN) {
                         this->charPage = FS_CHAR_PAGE_ENG;
                     }
                     this->kbdX = 0;
@@ -270,7 +270,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                 this->kbdButton = FS_KBD_BTN_NONE;
                 this->charPage = FS_CHAR_PAGE_HIRA;
-                if (gSaveContext.options.language != 0) {
+                if (gSaveContext.options.language != LANGUAGE_JPN) {
                     this->charPage = FS_CHAR_PAGE_ENG;
                 }
                 this->kbdX = 0;
@@ -1466,7 +1466,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[D_80814654[fileIndex] + 0xCC], 4, 0);
 
         POLY_OPA_DISP = FileSelect_DrawTexQuadIA8(
-            POLY_OPA_DISP, sFileSelHeartPieceTextures[this->heartPieceCount[sp20C]], 0x18, 0x10, (s16)0);
+            POLY_OPA_DISP, sFileSelHeartPieceTextures[this->heartPieceCount[sp20C]], 0x18, 0x10, 0);
 
         if (this->defenseHearts[sp20C] == 0) {
             heartType = 0;
@@ -1660,8 +1660,6 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
     s16 temp;
     s16 i;
     s16 quadVtxIndex;
-
-    if (1) {}
 
     OPEN_DISPS(this->state.gfxCtx);
 
@@ -2489,7 +2487,7 @@ void FileSelect_InitContext(GameState* thisx) {
     envCtx->lightConfig = 0;
     envCtx->changeLightNextConfig = 0;
     envCtx->lightSetting = 0;
-    envCtx->skyboxConfig = 2;
+    envCtx->skyboxConfig = SKYBOX_CONFIG_2;
     envCtx->skyboxDisabled = 0;
     envCtx->skyboxBlend = 0;
     envCtx->glareAlpha = 0.0f;
@@ -2522,15 +2520,15 @@ void FileSelect_Init(GameState* thisx) {
 
     size = SEGMENT_ROM_SIZE(title_static);
     this->staticSegment = THA_AllocTailAlign16(&this->state.tha, size);
-    DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(title_static), size);
+    DmaMgr_RequestSync(this->staticSegment, SEGMENT_ROM_START(title_static), size);
 
     size = SEGMENT_ROM_SIZE(parameter_static);
     this->parameterSegment = THA_AllocTailAlign16(&this->state.tha, size);
-    DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
+    DmaMgr_RequestSync(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
     size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
     this->titleSegment = THA_AllocTailAlign16(&this->state.tha, size);
-    DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
+    DmaMgr_RequestSync(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     Audio_SetSpec(0xA);
     // Setting ioData to 1 and writing it to ioPort 7 will skip the harp intro

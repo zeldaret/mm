@@ -22,8 +22,8 @@ typedef struct EnMm3 {
     /* 0x1DC */ s32 unk_1DC;
     /* 0x1E0 */ Vec3s jointTable[OBJECT_MM_LIMB_MAX];
     /* 0x240 */ Vec3s morphTable[OBJECT_MM_LIMB_MAX];
-    /* 0x2A0 */ Vec3s unk_2A0;
-    /* 0x2A6 */ Vec3s unk_2A6;
+    /* 0x2A0 */ Vec3s headRot;
+    /* 0x2A6 */ Vec3s torsoRot;
     /* 0x2AC */ s16 unk_2AC;
     /* 0x2AE */ s16 unk_2AE;
     /* 0x2B0 */ u16 unk_2B0;

@@ -2,11 +2,11 @@
  * @file system_heap.c
  *
  * @note:
- *  Only SystemHeap_Init() is used, and is essentially just a wrapper for SystemArena_Init().
+ *  Only SystemHeap_Init() is used, and is essentially just a wrapper for MallocInit().
  *
  */
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 typedef void (*BlockFunc)(uintptr_t);
 typedef void (*BlockFunc1)(uintptr_t, u32);
@@ -31,12 +31,12 @@ void* SystemHeap_Malloc(size_t size) {
         size = 1;
     }
 
-    return __osMalloc(&gSystemArena, size);
+    return __osMalloc(&malloc_arena, size);
 }
 
 void SystemHeap_Free(void* ptr) {
     if (ptr != NULL) {
-        __osFree(&gSystemArena, ptr);
+        __osFree(&malloc_arena, ptr);
     }
 }
 
@@ -118,6 +118,6 @@ void SystemHeap_RunInits(void) {
 }
 
 void SystemHeap_Init(void* start, size_t size) {
-    SystemArena_Init(start, size);
+    MallocInit(start, size);
     SystemHeap_RunInits();
 }

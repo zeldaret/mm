@@ -101,7 +101,7 @@ void* func_80A50DF8(EnDnh* this, PlayState* play) {
 
 s32 func_80A50E40(EnDnh* this, PlayState* play) {
     if (((this->unk18C & SUBS_OFFER_MODE_MASK) == SUBS_OFFER_MODE_NONE) ||
-        !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        !Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         return 0;
     }
     SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);

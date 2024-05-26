@@ -12,7 +12,7 @@
 OSMesgQueue sSerialEventQueue;
 OSMesg sSerialMsgBuf[1];
 u32 gSegments[NUM_SEGMENTS];
-SchedContext gSchedContext;
+Scheduler gScheduler;
 IrqMgrClient sIrqClient;
 OSMesgQueue sIrqMgrMsgQueue;
 OSMesg sIrqMgrMsgBuf[60];
@@ -32,7 +32,9 @@ PadMgr gPadMgr;
 #include "main.h"
 #include "buffers.h"
 #include "global.h"
+#include "sys_initial_check.h"
 #include "system_heap.h"
+#include "z64nmi_buff.h"
 #include "z64thread.h"
 
 s32 gScreenWidth = SCREEN_WIDTH;
@@ -53,8 +55,8 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = (intptr_t)gSystemHeap;
-    fb = 0x80780000;
+    sysHeap = (intptr_t)SEGMENT_START(system_heap);
+    fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
     SystemHeap_Init((void*)sysHeap, gSystemHeapSize);
 
@@ -68,15 +70,14 @@ void Main(void* arg) {
     osCreateMesgQueue(&sIrqMgrMsgQueue, sIrqMgrMsgBuf, ARRAY_COUNT(sIrqMgrMsgBuf));
 
     StackCheck_Init(&sSchedStackInfo, sSchedStack, STACK_TOP(sSchedStack), 0, 0x100, "sched");
-    Sched_Init(&gSchedContext, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, gViConfigModeType, 1, &gIrqMgr);
+    Sched_Init(&gScheduler, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, gViConfigModeType, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
 
     IrqMgr_AddClient(&gIrqMgr, &sIrqClient, &sIrqMgrMsgQueue);
 
     StackCheck_Init(&sAudioStackInfo, sAudioStack, STACK_TOP(sAudioStack), 0, 0x100, "audio");
-    AudioMgr_Init(&sAudioMgr, STACK_TOP(sAudioStack), Z_PRIORITY_AUDIOMGR, Z_THREAD_ID_AUDIOMGR, &gSchedContext,
-                  &gIrqMgr);
+    AudioMgr_Init(&sAudioMgr, STACK_TOP(sAudioStack), Z_PRIORITY_AUDIOMGR, Z_THREAD_ID_AUDIOMGR, &gScheduler, &gIrqMgr);
 
     StackCheck_Init(&sPadMgrStackInfo, sPadMgrStack, STACK_TOP(sPadMgrStack), 0, 0x100, "padmgr");
     PadMgr_Init(&sSerialEventQueue, &gIrqMgr, Z_THREAD_ID_PADMGR, Z_PRIORITY_PADMGR, STACK_TOP(sPadMgrStack));

@@ -114,7 +114,8 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
@@ -216,7 +217,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80943BC0(this);
         return;
     }
@@ -278,7 +279,7 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80943820(this);
     }

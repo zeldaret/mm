@@ -1,5 +1,6 @@
 #include "global.h"
 #include "audio/effects.h"
+#include "audio/heap.h"
 
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);
@@ -86,8 +87,8 @@ void AudioHeap_DiscardFont(s32 fontId) {
             }
 
             AudioPlayback_NoteDisable(note);
-            AudioPlayback_AudioListRemove(&note->listItem);
-            AudioScript_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
+            AudioList_Remove(&note->listItem);
+            AudioList_PushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
         }
     }
 }
@@ -1034,7 +1035,7 @@ void AudioHeap_Init(void) {
     // Initialize notes
     gAudioCtx.notes = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.numNotes * sizeof(Note));
     AudioPlayback_NoteInitAll();
-    AudioPlayback_InitNoteFreeList();
+    AudioList_InitNoteFreeList();
     gAudioCtx.sampleStateList =
         AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.audioBufferParameters.updatesPerFrame *
                                                        gAudioCtx.numNotes * sizeof(NoteSampleState));
@@ -1401,8 +1402,8 @@ void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
         uintptr_t startAddr = change->oldAddr;
         uintptr_t endAddr = change->oldAddr + change->size;
 
-        if (startAddr <= (uintptr_t)sample->sampleAddr && (uintptr_t)sample->sampleAddr < endAddr) {
-            sample->sampleAddr = sample->sampleAddr - startAddr + change->newAddr;
+        if (((uintptr_t)sample->sampleAddr >= startAddr) && ((uintptr_t)sample->sampleAddr < endAddr)) {
+            sample->sampleAddr += -startAddr + change->newAddr;
             if (D_801FD120 == 0) {
                 sample->medium = change->newMedium;
             } else {

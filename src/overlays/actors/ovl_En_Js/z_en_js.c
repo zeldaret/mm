@@ -485,19 +485,19 @@ void func_80969400(s32 arg0) {
 void func_80969494(EnJs* this, PlayState* play) {
     func_80968A5C(this);
     Message_CloseTextbox(play);
-    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+    this->actor.flags &= ~ACTOR_FLAG_TALK;
     this->actionFunc = func_80969B5C;
 }
 
 void func_809694E8(EnJs* this, PlayState* play) {
     Message_CloseTextbox(play);
-    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+    this->actor.flags &= ~ACTOR_FLAG_TALK;
     this->actionFunc = func_8096A104;
 }
 
 void func_80969530(EnJs* this, PlayState* play) {
     Message_CloseTextbox(play);
-    this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+    this->actor.flags &= ~ACTOR_FLAG_TALK;
     this->actionFunc = func_8096A6F4;
     if ((this->actor.home.rot.y == this->actor.shape.rot.y) && (this->unk_2B8 & 0x10)) {
         Animation_Change(&this->skelAnime, &gMoonChildGettingUpAnim, -1.0f,
@@ -544,7 +544,7 @@ void func_80969748(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction != PLAYER_IA_NONE) {
@@ -600,7 +600,7 @@ void func_80969898(EnJs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
@@ -686,7 +686,7 @@ void func_80969B5C(EnJs* this, PlayState* play) {
             }
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80969898;
         this->actor.speed = 0.0f;
         this->unk_2B4 = 0.0f;
@@ -704,7 +704,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction != PLAYER_IA_NONE) {
@@ -763,7 +763,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 }
             }
             break;
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
@@ -865,7 +865,7 @@ void func_8096A080(EnJs* this, PlayState* play) {
 
 void func_8096A104(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80969DA4;
         func_8096A080(this, play);
     } else if (func_80968DD0(this, play)) {
@@ -890,7 +890,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, 0.0f);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_8096A38C;
         Message_StartTextbox(play, 0x2208, &this->actor);
@@ -992,7 +992,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x2202:
@@ -1055,7 +1055,7 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
         Animation_MorphToLoop(&this->skelAnime, &gMoonChildSittingAnim, -10.0f);
         this->unk_2B8 &= ~8;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_8096A38C;
         this->unk_2B8 &= ~2;
         func_8096A184(this, play);
@@ -1091,7 +1091,7 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnJs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnJs* this = THIS;
 
@@ -1120,5 +1120,5 @@ void EnJs_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                          func_8096A9F4, &this->actor);
+                          EnJs_PostLimbDraw, &this->actor);
 }

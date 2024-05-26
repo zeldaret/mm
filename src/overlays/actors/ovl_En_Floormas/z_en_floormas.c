@@ -412,7 +412,7 @@ void func_808D1380(EnFloormas* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, 1);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, true);
     Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_ATTACK);
     this->actionFunc = func_808D1458;
 }

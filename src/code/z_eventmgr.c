@@ -8,7 +8,7 @@
 #include "z64shrink_window.h"
 #include "libc/string.h"
 
-ActorCutscene sGlobalCutsceneList[] = {
+CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
     { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
       255 },
@@ -57,7 +57,7 @@ CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
 
-ActorCutscene* sSceneCutsceneList;
+CutsceneEntry* sSceneCutsceneList;
 s16 sSceneCutsceneCount;
 u8 sWaitingCutsceneList[16];
 static s32 sBssPad;
@@ -110,7 +110,7 @@ s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     return hudVisibility;
 }
 
-ActorCutscene* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
+CutsceneEntry* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
     if (csId < CS_ID_GLOBAL_78) {
         return &sSceneCutsceneList[csId];
     } else {
@@ -119,7 +119,7 @@ ActorCutscene* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
     }
 }
 
-void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 numEntries) {
+void CutsceneManager_Init(PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries) {
     s32 i;
 
     sSceneCutsceneList = cutsceneList;
@@ -204,7 +204,7 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
 #define CUR_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.subCamId]
 
 void CutsceneManager_End(void) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
     s16 oldCamId;
     s16 oldStateFlags;
 
@@ -375,7 +375,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
 }
 
 s16 CutsceneManager_Start(s16 csId, Actor* actor) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
     Camera* subCam;
     Camera* retCam;
     s32 csType = 0;
@@ -444,7 +444,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
 }
 
 s16 CutsceneManager_Stop(s16 csId) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
 
     if (csId <= CS_ID_NONE) {
         return csId;
@@ -472,7 +472,7 @@ s16 CutsceneManager_GetCurrentCsId(void) {
     return sCutsceneMgr.csId;
 }
 
-ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
+CutsceneEntry* CutsceneManager_GetCutsceneEntry(s16 csId) {
     return CutsceneManager_GetCutsceneEntryImpl(csId);
 }
 

@@ -1,7 +1,11 @@
-#include "global.h"
-#include "sys_cfb.h"
+#include "z64transition.h"
 
-typedef enum {
+#include "main.h"
+#include "sys_cfb.h"
+#include "z64circle_tex.h"
+#include "z64math.h"
+
+typedef enum TransitionCircleDirection {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
     /* 1 */ TRANS_CIRCLE_DIR_OUT
 } TransitionCircleDirection;
@@ -18,10 +22,18 @@ Gfx sTransCircleSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
-//! @bug: TransitionCircle_Update should take an additional argument `s32 updateRate`
+void TransitionCircle_Start(void* thisx);
+void* TransitionCircle_Init(void* thisx);
+void TransitionCircle_Destroy(void* thisx);
+void TransitionCircle_Update(void* thisx, s32 updateRate);
+void TransitionCircle_SetColor(void* thisx, u32 color);
+void TransitionCircle_SetType(void* thisx, s32 type);
+void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
+s32 TransitionCircle_IsDone(void* thisx);
+
 TransitionInit TransitionCircle_InitVars = {
-    TransitionCircle_Init,   TransitionCircle_Destroy, (void*)TransitionCircle_Update, TransitionCircle_Draw,
-    TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor,      NULL,
+    TransitionCircle_Init,   TransitionCircle_Destroy, TransitionCircle_Update,   TransitionCircle_Draw,
+    TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor, NULL,
     TransitionCircle_IsDone,
 };
 
@@ -56,8 +68,9 @@ void* TransitionCircle_Init(void* thisx) {
 void TransitionCircle_Destroy(void* thisx) {
 }
 
-void TransitionCircle_Update(void* thisx) {
+void TransitionCircle_Update(void* thisx, s32 updateRate) {
     TransitionCircle* this = (TransitionCircle*)thisx;
+    s32 unused = updateRate ? 0 : 0;
 
     this->isDone = Math_StepToF(&this->referenceRadius, this->targetRadius, this->stepValue);
 }
@@ -80,7 +93,7 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     }
 }
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
     Gfx* gfx = *gfxp;
     s32 xh = gCfbWidth;

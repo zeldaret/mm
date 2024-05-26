@@ -137,8 +137,8 @@ void Horse_SpawnOverworld(PlayState* play, Player* player) {
         player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, yIntersect,
                                         player->actor.world.pos.z, player->actor.shape.rot.x, player->actor.shape.rot.y,
                                         player->actor.shape.rot.z, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_11));
-        Actor_MountHorse(play, player, player->rideActor);
-        Actor_SetCameraHorseSetting(play, player);
+        Player_MountHorse(play, player, player->rideActor);
+        Player_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == gSaveContext.save.saveInfo.horseData.sceneId) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         if (Horse_IsValidSpawn(gSaveContext.save.saveInfo.horseData.sceneId)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, gSaveContext.save.saveInfo.horseData.pos.x,
@@ -162,8 +162,8 @@ void Horse_SpawnMinigame(PlayState* play, Player* player) {
         (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_START)) {
         player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
                                         ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
-        Actor_MountHorse(play, player, player->rideActor);
-        Actor_SetCameraHorseSetting(play, player);
+        Player_MountHorse(play, player, player->rideActor);
+        Player_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == SCENE_KOEPONARACE) &&
                ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3) ||
                 (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2))) {
@@ -173,8 +173,8 @@ void Horse_SpawnMinigame(PlayState* play, Player* player) {
                (player->transformation == PLAYER_FORM_HUMAN)) {
         player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0,
                                         ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_7));
-        Actor_MountHorse(play, player, player->rideActor);
-        Actor_SetCameraHorseSetting(play, player);
+        Player_MountHorse(play, player, player->rideActor);
+        Player_SetCameraHorseSetting(play, player);
     }
 }
 

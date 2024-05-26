@@ -5,7 +5,6 @@
  */
 
 #include "z_en_okarina_effect.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -58,6 +57,7 @@ void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
 
 void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
     DECR(this->timer);
+
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->timer == 0)) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);

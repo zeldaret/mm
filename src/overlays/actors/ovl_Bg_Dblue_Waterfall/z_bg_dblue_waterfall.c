@@ -270,12 +270,13 @@ void func_80B84348(BgDblueWaterfall* this, PlayState* play, f32 arg2, f32 arg3, 
 void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     CollisionPoly* sp40;
-    WaterBox* sp3C;
+    WaterBox* waterBox;
     s32 sp38;
     f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
     f32 sp30;
 
-    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp3C)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
+                               &waterBox)) {
         if (sp30 < sp34) {
             this->unk_198 = sp34;
         } else {
@@ -287,9 +288,9 @@ void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
 }
 
 void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
-    s32 pad[2];
-    Vec3f sp34;
+    s32 pad;
     Player* player = GET_PLAYER(play);
+    Vec3f sp34;
 
     if (this->unk_1A7 <= 0) {
         this->unk_1A7 = 16;
@@ -299,18 +300,10 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     if (this->unk_1A7 >= 6) {
         this->unk_1A8 += Rand_ZeroOne() * 0.1f;
-        if (this->unk_1A8 > 0.5f) {
-            this->unk_1A8 = 0.5f;
-        } else {
-            this->unk_1A8 = this->unk_1A8;
-        }
+        this->unk_1A8 = CLAMP_MAX(this->unk_1A8, 0.5f);
     } else {
         this->unk_1A8 -= Rand_ZeroOne() * 0.2f;
-        if (this->unk_1A8 > -0.5f) {
-            this->unk_1A8 = -0.5f;
-        } else {
-            this->unk_1A8 = this->unk_1A8;
-        }
+        this->unk_1A8 = CLAMP_MAX(this->unk_1A8, -0.5f);
     }
 
     Matrix_Push();
@@ -320,10 +313,13 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
-    //! FAKE:
-    if (this && this && this) {}
-    player->pushedSpeed = 8.0f;
-    player->pushedYaw = this->actor.yawTowardsPlayer;
+
+    {
+        s32 requiredScopeTemp;
+
+        player->pushedSpeed = 8.0f;
+        player->pushedYaw = this->actor.yawTowardsPlayer;
+    }
 }
 
 static InitChainEntry sInitChain[] = {

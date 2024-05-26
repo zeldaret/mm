@@ -944,7 +944,7 @@ void MapSelect_PrintCutsceneSetting(MapSelectState* this, GfxPrint* printer, u16
             stage = "???";
             break;
     }
-    gSaveContext.skyboxTime = gSaveContext.save.time;
+    gSaveContext.skyboxTime = CURRENT_TIME;
     GfxPrint_Printf(printer, "Stage:" GFXP_KATAKANA "%s", stage);
 
     GfxPrint_SetPos(printer, 23, 25);

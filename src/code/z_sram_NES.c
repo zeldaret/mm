@@ -1,7 +1,9 @@
+#include "z64save.h"
 #include "global.h"
+
+#include "sys_flashrom.h"
 #include "z64horse.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
@@ -85,7 +87,7 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /*  7 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON),
     /*  8 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE),
     /*  9 */ 0,
-    /* 10 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_10_08),
+    /* 10 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE),
     /* 11 */ 0,
     /* 12 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE),
     /* 13 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE),
@@ -97,11 +99,12 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 19 */ 0,
     /* 20 */ 0,
     /* 21 */ 0,
-    /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_80),
-    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
+    /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE),
+    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE),
     /* 24 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
-    /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_25_01),
+    /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE),
     /* 26 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_26_40),
     /* 27 */ 0,
     /* 28 */ 0,
@@ -113,7 +116,7 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_01) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_02) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_20),
     /* 32 */
-    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_32_01) |
+    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE),
     /* 33 */ 0,
@@ -125,13 +128,13 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_ROMANI_RANCH) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_GREAT_BAY) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_STONE_TOWER) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_80),
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE),
     /* 36 */ 0,
     /* 37 */ 0,
     /* 38 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_38_20),
-    /* 39 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_39_20),
+    /* 39 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE),
     /* 40 */ 0,
-    /* 41 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_41_08),
+    /* 41 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE),
     /* 42 */ 0,
     /* 43 */ 0,
     /* 44 */ 0,
@@ -143,20 +146,21 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 50 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_50_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_50_04),
     /* 51 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_51_04),
     /* 52 */ 0,
-    /* 53 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_53_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_53_40),
-    /* 54 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_54_40),
+    /* 53 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BUSINESS_SCRUB_HEART_PIECE) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_53_40),
+    /* 54 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE),
     /* 55 */ 0,
-    /* 56 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_56_02),
+    /* 56 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE),
     /* 57 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_57_08),
     /* 58 */ 0,
     /* 59 */
-    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_08) |
+    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE),
-    /* 60 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_60_10),
+    /* 60 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MAYOR_HEART_PIECE),
     /* 61 */ 0,
     /* 62 */ 0,
-    /* 63 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_63_20),
+    /* 63 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE),
     /* 64 */ 0,
     /* 65 */ 0,
     /* 66 */
@@ -191,9 +195,9 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_ALIENS) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALIENS_BOTTLE) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA),
     /* 70 */
     PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK) |
@@ -224,14 +228,14 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_72_80),
     /* 73 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_73_08),
     /* 74 */ 0,
-    /* 75 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_75_80),
+    /* 75 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE),
     /* 76 */ 0,
-    /* 77 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_77_01),
+    /* 77 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE),
     /* 78 */ 0,
-    /* 79 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_79_80),
+    /* 79 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KEATON_HEART_PIECE),
     /* 80 */ 0,
     /* 81 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_81_08),
-    /* 82 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_82_10),
+    /* 82 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FISHERMANS_JUMPING_GAME_HEART_PIECE),
     /* 83 */ 0,
     /* 84 */ 0,
     /* 85 */ 0,
@@ -242,7 +246,7 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_87_40) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_87_80),
     /* 88 */ 0,
     /* 89 */ 0,
-    /* 90 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_90_10),
+    /* 90 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE),
     /* 91 */ 0,
     /* 92 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_92_80),
     /* 93 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_93_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_93_08),
@@ -388,12 +392,11 @@ u8 sBitFlags8[] = {
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
-void Sram_ActivateOwl(u8 owlId) {
-    gSaveContext.save.saveInfo.playerData.owlActivationFlags =
-        ((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+void Sram_ActivateOwl(u8 owlWarpId) {
+    SET_OWL_STATUE_ACTIVATED(owlWarpId);
 
-    if (gSaveContext.save.saveInfo.playerData.unk_20 == 0xFF) {
-        gSaveContext.save.saveInfo.playerData.unk_20 = owlId;
+    if (gSaveContext.save.saveInfo.playerData.owlWarpId == OWL_WARP_NONE) {
+        gSaveContext.save.saveInfo.playerData.owlWarpId = owlWarpId;
     }
 }
 
@@ -622,13 +625,13 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.save.saveInfo.skullTokenCount &= ~0x0000FFFF;
     gSaveContext.save.saveInfo.unk_EA0 = 0;
 
-    gSaveContext.save.saveInfo.unk_E64[0] = 0;
-    gSaveContext.save.saveInfo.unk_E64[1] = 0;
-    gSaveContext.save.saveInfo.unk_E64[2] = 0;
-    gSaveContext.save.saveInfo.unk_E64[3] = 0;
-    gSaveContext.save.saveInfo.unk_E64[4] = 0;
-    gSaveContext.save.saveInfo.unk_E64[5] = 0;
-    gSaveContext.save.saveInfo.unk_E64[6] = 0;
+    gSaveContext.save.saveInfo.alienInfo[0] = 0;
+    gSaveContext.save.saveInfo.alienInfo[1] = 0;
+    gSaveContext.save.saveInfo.alienInfo[2] = 0;
+    gSaveContext.save.saveInfo.alienInfo[3] = 0;
+    gSaveContext.save.saveInfo.alienInfo[4] = 0;
+    gSaveContext.save.saveInfo.alienInfo[5] = 0;
+    gSaveContext.save.saveInfo.alienInfo[6] = 0;
 
     Sram_ClearHighscores();
 
@@ -780,8 +783,8 @@ SavePlayerData sSaveDefaultPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
-    0x0000,                                             // owlActivationFlags
+    OWL_WARP_NONE,                                      // owlWarpId
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
 };
@@ -956,7 +959,7 @@ SavePlayerData sSaveDebugPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
+    OWL_WARP_NONE,                                      // owlWarpId
     0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
@@ -1208,12 +1211,17 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
-    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
-    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
-    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+static u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+    ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
+    ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
+    ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
+    ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),  // OWL_WARP_MOUNTAIN_VILLAGE
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9),         // OWL_WARP_CLOCK_TOWN
+    ENTRANCE(MILK_ROAD, 4),                // OWL_WARP_MILK_ROAD
+    ENTRANCE(WOODFALL, 4),                 // OWL_WARP_WOODFALL
+    ENTRANCE(SOUTHERN_SWAMP_POISONED, 10), // OWL_WARP_SOUTHERN_SWAMP
+    ENTRANCE(IKANA_CANYON, 4),             // OWL_WARP_IKANA_CANYON
+    ENTRANCE(STONE_TOWER, 3),              // OWL_WARP_STONE_TOWER
 };
 
 void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
@@ -1288,7 +1296,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        gSaveContext.save.entrance = sOwlWarpEntrances[(void)0, gSaveContext.save.owlWarpId];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
@@ -1309,7 +1317,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
         }
 
         fileNum = gSaveContext.fileNum;
@@ -1389,7 +1397,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     u16 maskCount;
 
     if (gSaveContext.flashSaveAvailable) {
-        D_801F6AF0 = gSaveContext.save.time;
+        D_801F6AF0 = CURRENT_TIME;
         D_801F6AF2 = gSaveContext.flashSaveAvailable;
         sp64 = 0;
 
@@ -1482,7 +1490,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                     fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                     fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                    fileSelect->time[sp76] = gSaveContext.save.time;
+                    fileSelect->time[sp76] = CURRENT_TIME;
                     fileSelect->day[sp76] = gSaveContext.save.day;
                     fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1577,7 +1585,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
 
                     gSaveContext.save.saveInfo.checksum = 0;
-                    // FAKE: [sp64 + 0]?
+                    //! FAKE: [sp64 + 0]?
                     gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 + 0]);
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {
@@ -1596,7 +1604,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                         fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                         fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                        fileSelect->time[sp76] = gSaveContext.save.time;
+                        fileSelect->time[sp76] = CURRENT_TIME;
                         fileSelect->day[sp76] = gSaveContext.save.day;
                         fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1713,7 +1721,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->defenseHearts[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.inventory.defenseHearts;
             fileSelect->questItems[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.inventory.questItems;
-            fileSelect->time[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.time;
+            fileSelect->time[fileSelect->copyDestFileIndex + 2] = CURRENT_TIME;
             fileSelect->day[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.day;
             fileSelect->isOwlSave[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.isOwlSave;
             fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1754,7 +1762,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->copyDestFileIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1818,7 +1826,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->buttonIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->buttonIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1890,7 +1898,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
 void Sram_SaveSpecialNewDay(PlayState* play) {
     s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
     s32 day;
-    u16 time = gSaveContext.save.time;
+    u16 time = CURRENT_TIME;
 
     day = gSaveContext.save.day;
 

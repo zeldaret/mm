@@ -9,8 +9,12 @@
  * @note The only coded effect has a visual effect to blend the tiles to a single point, which looks like the screen
  * gets sucked into.
  */
-#include "global.h"
-#include "system_malloc.h"
+
+#include "z64transition.h"
+
+#include "libc64/sleep.h"
+#include "libc64/malloc.h"
+#include "macros.h"
 
 Gfx sTransTileSetupDL[] = {
     gsDPPipeSync(),
@@ -22,6 +26,22 @@ Gfx sTransTileSetupDL[] = {
                      G_AC_NONE | G_ZS_PIXEL | G_RM_AA_OPA_SURF | G_RM_AA_OPA_SURF2),
     gsSPEndDisplayList(),
 };
+
+#define SET_VERTEX(vtx, x, y, z, f, s, t, nx, ny, nz, alpha) \
+    {                                                        \
+        Vtx_tn* vtxn = &(vtx)->n;                            \
+        vtxn->ob[0] = (x);                                   \
+        vtxn->ob[1] = (y);                                   \
+        vtxn->ob[2] = (z);                                   \
+        vtxn->flag = 0;                                      \
+        vtxn->tc[0] = (s);                                   \
+        vtxn->tc[1] = (t);                                   \
+        vtxn->n[0] = (nx);                                   \
+        vtxn->n[1] = (ny);                                   \
+        vtxn->n[2] = (nz);                                   \
+        vtxn->a = (alpha);                                   \
+    }                                                        \
+    (void)0
 
 void TransitionTile_InitGraphics(TransitionTile* this) {
     s32 frame;
@@ -40,24 +60,14 @@ void TransitionTile_InitGraphics(TransitionTile* this) {
     for (frame = 0; frame < 2; frame++) {
         this->frame = frame;
         vtx = (this->frame == 0) ? this->vtxFrame1 : this->vtxFrame2;
-        for (rowTex = 0, row = 0; row < (this->rows + 1); row++, rowTex += 0x20) {
-            for (colTex = 0, col = 0; col < (this->cols + 1); col++, colTex += 0x20) {
-                Vtx_tn* vtxn = &vtx->n;
-
-                // clang-format off
-                vtx++; \
-                vtxn->tc[0] = colTex << 6; \
-                vtxn->ob[0] = col * 0x20; \
-                vtxn->ob[1] = row * 0x20; \
-                vtxn->ob[2] = -5; \
-                vtxn->flag = 0; \
-                vtxn->tc[1] = rowTex << 6; \
-                vtxn->n[0] = 0; \
-                vtxn->n[1] = 0; \
-                vtxn->n[2] = 120; \
-                vtxn->a = 255;
-                // clang-format on
+        rowTex = 0;
+        for (row = 0; row < (this->rows + 1); row++) {
+            colTex = 0;
+            for (col = 0; col < (this->cols + 1); col++) {
+                SET_VERTEX(vtx++, col * 0x20, row * 0x20, -5, 0, colTex << 6, rowTex << 6, 0, 0, 120, 255);
+                colTex += 0x20;
             }
+            rowTex += 0x20;
         }
     }
 
@@ -100,22 +110,22 @@ void TransitionTile_InitVtxData(TransitionTile* this) {
 }
 
 void TransitionTile_Destroy(TransitionTile* this) {
-    Sleep_Msec(100);
+    msleep(100);
 
     if (this->vtxData != NULL) {
-        SystemArena_Free(this->vtxData);
+        free(this->vtxData);
         this->vtxData = NULL;
     }
     if (this->vtxFrame1 != NULL) {
-        SystemArena_Free(this->vtxFrame1);
+        free(this->vtxFrame1);
         this->vtxFrame1 = NULL;
     }
     if (this->vtxFrame2 != NULL) {
-        SystemArena_Free(this->vtxFrame2);
+        free(this->vtxFrame2);
         this->vtxFrame2 = NULL;
     }
     if (this->gfx != NULL) {
-        SystemArena_Free(this->gfx);
+        free(this->gfx);
         this->gfx = NULL;
     }
 }
@@ -128,26 +138,26 @@ TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows) {
     this->cols = cols;
     this->rows = rows;
     gridSize = (cols + 1) * (rows + 1);
-    this->vtxData = SystemArena_Malloc(gridSize * sizeof(TransitionTileVtxData));
-    this->vtxFrame1 = SystemArena_Malloc(gridSize * sizeof(Vtx));
-    this->vtxFrame2 = SystemArena_Malloc(gridSize * sizeof(Vtx));
-    this->gfx = SystemArena_Malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
+    this->vtxData = malloc(gridSize * sizeof(TransitionTileVtxData));
+    this->vtxFrame1 = malloc(gridSize * sizeof(Vtx));
+    this->vtxFrame2 = malloc(gridSize * sizeof(Vtx));
+    this->gfx = malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
 
     if ((this->vtxData == NULL) || (this->vtxFrame1 == NULL) || (this->vtxFrame2 == NULL) || (this->gfx == NULL)) {
         if (this->vtxData != NULL) {
-            SystemArena_Free(this->vtxData);
+            free(this->vtxData);
             this->vtxData = NULL;
         }
         if (this->vtxFrame1 != NULL) {
-            SystemArena_Free(this->vtxFrame1);
+            free(this->vtxFrame1);
             this->vtxFrame1 = NULL;
         }
         if (this->vtxFrame2 != NULL) {
-            SystemArena_Free(this->vtxFrame2);
+            free(this->vtxFrame2);
             this->vtxFrame2 = NULL;
         }
         if (this->gfx != NULL) {
-            SystemArena_Free(this->gfx);
+            free(this->gfx);
             this->gfx = NULL;
         }
         return NULL;
@@ -183,8 +193,8 @@ void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP) {
     TransitionTile_SetVtx(this);
     gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &this->modelView, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(gfx++, 0xA, this->frame == 0 ? this->vtxFrame1 : this->vtxFrame2);
-    gSPSegment(gfx++, 0xB, this->zBuffer);
+    gSPSegment(gfx++, 0x0A, this->frame == 0 ? this->vtxFrame1 : this->vtxFrame2);
+    gSPSegment(gfx++, 0x0B, this->zBuffer);
     gSPDisplayList(gfx++, sTransTileSetupDL);
     gSPDisplayList(gfx++, this->gfx);
     gDPPipeSync(gfx++);

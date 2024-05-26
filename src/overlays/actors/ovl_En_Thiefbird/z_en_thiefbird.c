@@ -4,10 +4,8 @@
  * Description: Takkuri
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define FLAGS \
     (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
@@ -334,6 +332,7 @@ s32 func_80C10E98(PlayState* play) {
     if (AMMO(ITEM_BOMB) >= 5) {
         spB0 = 1;
         dropItem00Ids[1] = ITEM00_BOMBS_B;
+        //! FAKE:
         if (1) {}
     } else {
         spB0 = 0;
@@ -362,7 +361,10 @@ s32 func_80C10E98(PlayState* play) {
     }
 
     i = sp5C - phi_s0_2;
+
+    //! FAKE:
     if (i) {}
+
     sp5C = phi_s0_2 * 50;
     sp98 -= sp5C;
 
@@ -582,7 +584,7 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
             this->collider.base.atFlags &= ~AT_HIT;
             Actor_PlaySfx(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
-                if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
+                if ((D_80C1392C != 0) && (CUR_UPG_VALUE(UPG_QUIVER) != 0) &&
                     ((STOLEN_ITEM_1 == STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 == STOLEN_ITEM_NONE)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, play)) {
                     func_80C1242C(this);
@@ -1005,7 +1007,7 @@ void func_80C12D00(EnThiefbird* this) {
             }
 
             ptr->unk_20 = Math_SinS(ptr->unk_1C * 0x7D0) * 0x2000;
-            ptr->unk_1E += (s16)(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
+            ptr->unk_1E += TRUNCF_BINANG(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
         }
     }
 }

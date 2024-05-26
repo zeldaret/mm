@@ -98,13 +98,14 @@ ActorInit En_Syateki_Man_InitVars = {
     /**/ EnSyatekiMan_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryManAnimation {
     /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
-    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END,
+    /* 3 */ SG_MAN_ANIM_MAX
 } ShootingGalleryManAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_MAN_ANIM_MAX] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
     { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
     { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END
@@ -286,7 +287,7 @@ void EnSyatekiMan_SetupIdle(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HEAD_SCRATCH_END);
@@ -480,7 +481,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Swamp_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Swamp_HandleNormalMessage(this, play);
             break;
 
@@ -497,12 +498,12 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 
@@ -618,7 +619,7 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Town_Idle(EnSyatekiMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         u16 faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_TOWN_SHOOTING_GALLERY_MAN);
 
         if (faceReactionTextId != 0) {
@@ -856,7 +857,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Town_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Town_HandleNormalMessage(this, play);
             break;
 
@@ -871,12 +872,12 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 }
@@ -916,8 +917,8 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((CURRENT_DAY == 3) && (gSaveContext.save.time > CLOCK_TIME(12, 0))) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        if ((CURRENT_DAY == 3) && (CURRENT_TIME > CLOCK_TIME(12, 0))) {
             // We've been having a lot of earthquakes lately.
             Message_StartTextbox(play, 0xA36, &this->actor);
             this->prevTextId = 0xA36;
@@ -988,7 +989,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             this->actionFunc = EnSyatekiMan_SetupIdle;
         }
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         // This may be our last day in business...
         Message_StartTextbox(play, 0x408, &this->actor);
         this->prevTextId = 0x408;

@@ -173,11 +173,11 @@ s32 func_80B82454(BgDblueBalance* this, PlayState* play) {
 
 void func_80B8259C(BgDblueBalance* this, PlayState* play) {
     s32 pad;
-    WaterBox* sp30;
+    WaterBox* waterBox;
     f32 sp2C;
 
     if (WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &sp2C,
-                               &sp30)) {
+                               &waterBox)) {
         this->dyna.actor.depthInWater = sp2C - this->dyna.actor.world.pos.y;
         this->unk_228 = sp2C;
         if ((this->dyna.actor.depthInWater < 150.0f) && (this->dyna.actor.depthInWater > -150.0f)) {

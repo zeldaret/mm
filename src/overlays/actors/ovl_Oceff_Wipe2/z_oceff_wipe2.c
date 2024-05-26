@@ -29,7 +29,7 @@ ActorInit Oceff_Wipe2_InitVars = {
 
 #include "assets/overlays/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2.c"
 
-s32 D_809879D0;
+static s32 sBssPad;
 
 void OceffWipe2_Init(Actor* thisx, PlayState* play) {
     OceffWipe2* this = THIS;

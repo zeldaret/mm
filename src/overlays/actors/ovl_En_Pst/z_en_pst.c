@@ -15,7 +15,6 @@ void EnPst_Destroy(Actor* thisx, PlayState* play);
 void EnPst_Update(Actor* thisx, PlayState* play);
 void EnPst_Draw(Actor* thisx, PlayState* play);
 
-void EnPst_FollowSchedule(EnPst* this, PlayState* play);
 void EnPst_Talk(EnPst* this, PlayState* play);
 
 typedef enum {
@@ -29,35 +28,7 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
-static u8 D_80B2C200[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C20C[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 3, 10, 7, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C218[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 35, 10, 39, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C224[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 53, 10, 57, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C230[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
+#include "src/overlays/actors/ovl_En_Pst/scheduleScripts.schl.inc"
 
 s32 D_80B2C23C[] = {
     0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
@@ -152,7 +123,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = { { &gPostboxOpenSlotAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 } };
+typedef enum PostboxAnimation {
+    /* 0 */ POSTBOX_ANIM_IDLE,
+    /* 1 */ POSTBOX_ANIM_MAX
+} PostboxAnimation;
+
+static AnimationInfoS sAnimationInfo[POSTBOX_ANIM_MAX] = {
+    { &gPostboxIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // POSTBOX_ANIM_IDLE
+};
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -163,14 +141,19 @@ s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
+
         case POSTBOX_NORTH_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
+
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
+
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
+
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
+
         default:
             return false;
     }
@@ -180,14 +163,19 @@ s32 EnPst_HandleLetterDay2(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40);
+
         case POSTBOX_NORTH_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80);
+
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01);
+
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02);
+
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04);
+
         default:
             return false;
     }
@@ -202,9 +190,9 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
         case POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM:
             switch (Message_GetState(&play->msgCtx)) {
                 case TEXT_STATE_CHOICE:
-                case TEXT_STATE_5:
+                case TEXT_STATE_EVENT:
                     if (Message_ShouldAdvance(play)) {
-                        case TEXT_STATE_16:
+                        case TEXT_STATE_PAUSE_MENU:
                             itemAction = func_80123810(play);
                             scriptBranch = 0;
                             if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) || (itemAction == PLAYER_IA_LETTER_MAMA)) {
@@ -220,12 +208,19 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                             }
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
+
         case POSTBOX_BEHAVIOUR_TAKE_ITEM:
             if (this->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
+            break;
+
+        default:
             break;
     }
     return scriptBranch;
@@ -240,39 +235,52 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
         switch (this->actor.params) {
             case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
                 return D_80B2C3E8;
+
             case POSTBOX_NORTH_CLOCKTOWN:
                 return D_80B2C408;
+
             case POSTBOX_EAST_UPPER_CLOCKTOWN:
                 return D_80B2C428;
+
             case POSTBOX_EAST_LOWER_CLOCKTOWN:
                 return D_80B2C448;
+
             case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
                 return D_80B2C468;
+
             default:
                 return NULL;
         }
-    } else if (this->stateFlags & 0x20) {
+    }
+
+    if (this->stateFlags & 0x20) {
         if (this->exchangeItemAction == PLAYER_IA_LETTER_MAMA) {
             return D_80B2C488;
         } else {
             return D_80B2C490;
         }
-    } else {
-        this->msgEventCallback = EnPst_ChooseBehaviour;
-        switch (this->actor.params) {
-            case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-                return D_80B2C23C;
-            case POSTBOX_NORTH_CLOCKTOWN:
-                return D_80B2C288;
-            case POSTBOX_EAST_UPPER_CLOCKTOWN:
-                return D_80B2C2D4;
-            case POSTBOX_EAST_LOWER_CLOCKTOWN:
-                return D_80B2C320;
-            case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-                return D_80B2C36C;
-            default:
-                return NULL;
-        }
+    }
+
+    this->msgEventCallback = EnPst_ChooseBehaviour;
+
+    switch (this->actor.params) {
+        case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
+            return D_80B2C23C;
+
+        case POSTBOX_NORTH_CLOCKTOWN:
+            return D_80B2C288;
+
+        case POSTBOX_EAST_UPPER_CLOCKTOWN:
+            return D_80B2C2D4;
+
+        case POSTBOX_EAST_LOWER_CLOCKTOWN:
+            return D_80B2C320;
+
+        case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
+            return D_80B2C36C;
+
+        default:
+            return NULL;
     }
 }
 
@@ -281,7 +289,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags &= ~0x30;
         if (player->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
             this->stateFlags |= 0x10;
@@ -321,6 +329,9 @@ s32 EnPst_ProcessScheduleOutput(EnPst* this, PlayState* play, ScheduleOutput* sc
         case POSTBOX_SCH_CHECKED_BY_POSTMAN:
             ret = true;
             break;
+
+        default:
+            break;
     }
     return ret;
 }
@@ -332,7 +343,7 @@ void EnPst_HandleSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
-    static u8* sScheduleScripts[] = {
+    static ScheduleScript* sScheduleScripts[] = {
         D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230,
     };
     s16 params = this->actor.params;
@@ -389,7 +400,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, POSTBOX_ANIM_IDLE);
     this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;

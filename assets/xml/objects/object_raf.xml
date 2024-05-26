@@ -2,7 +2,7 @@
     <!-- Assets for the Carnivorous Lily Pad-->
     <File Name="object_raf" Segment="6">
         <!-- Carnivorous Lily Pad Collision -->
-        <Collision Name="gCarnivorousLilyPadCol" Offset="0x108" />
+        <Collision Name="gCarnivorousLilyPadCol" Offset="0x108" /> <!-- Original name is "raf_atari_bgdatainfo" -->
 
         <!-- Unused Textureless Platform DisplayList. Maybe used for testing collision? -->
         <DList Name="gCarnivorousLilyPadTexturelessPlatformDL" Offset="0x1C0" />

@@ -2,6 +2,7 @@
 #define Z_EN_PR2_H
 
 #include "global.h"
+#include "objects/object_pr/object_pr.h"
 
 struct EnPr2;
 
@@ -16,8 +17,8 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 typedef struct EnPr2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[5];
-    /* 0x1A6 */ Vec3s morphTable[5];
+    /* 0x188 */ Vec3s jointTable[OBJECT_PR_2_LIMB_MAX];
+    /* 0x1A6 */ Vec3s morphTable[OBJECT_PR_2_LIMB_MAX];
     /* 0x1C4 */ EnPr2ActionFunc actionFunc;
     /* 0x1C8 */ s16 pathIndex;
     /* 0x1CC */ Path* path;
@@ -38,13 +39,13 @@ typedef struct EnPr2 {
     /* 0x1F0 */ s16 unk_1F0;
     /* 0x1F2 */ s16 unk_1F2;
     /* 0x1F4 */ s16 unk_1F4;
-    /* 0x1F8 */ f32 unk_1F8;
+    /* 0x1F8 */ f32 animEndFrame;
     /* 0x1FC */ f32 unk_1FC;
     /* 0x200 */ f32 unk_200;
     /* 0x204 */ f32 unk_204;
     /* 0x208 */ f32 unk_208;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ s32 unk_210;
+    /* 0x210 */ s32 animIndex;
     /* 0x214 */ UNK_TYPE1 unk214[4];
     /* 0x218 */ s32 unk_218;
     /* 0x21C */ Vec3f unk_21C;

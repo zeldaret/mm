@@ -20,23 +20,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play);
 void func_80BE127C(EnTab* this, PlayState* play);
 void func_80BE1348(EnTab* this, PlayState* play);
 
-static u8 D_80BE18D0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x24 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x23 - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 18, 1, 0x1D - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x17 - 0x14),
-    /* 0x14 */ SCHEDULE_CMD_RET_VAL_L(0),
-    /* 0x17 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
-    /* 0x1D */ SCHEDULE_CMD_RET_TIME(9, 50, 18, 1, 1),
-    /* 0x23 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x24 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x41 - 0x28),
-    /* 0x28 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 21, 5, 0x3B - 0x2E),
-    /* 0x2E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 55, 5, 5, 0x35 - 0x34),
-    /* 0x34 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x35 */ SCHEDULE_CMD_RET_TIME(21, 55, 5, 5, 2),
-    /* 0x3B */ SCHEDULE_CMD_RET_TIME(9, 50, 21, 5, 1),
-    /* 0x41 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Tab/scheduleScripts.schl.inc"
 
 s32 D_80BE1914[] = {
     0x003A0200, 0x080E2AF9, 0x0C113A02, 0x100E2AFA, 0x0C150900, 0x000E2AFB,
@@ -122,25 +106,28 @@ TexturePtr D_80BE1B24[] = {
     object_tab_Tex_006928,
 };
 
-EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
-        if ((foundActor == NULL) || (((EnTab*)foundActor != this) && (foundActor->update != NULL))) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnTab*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     };
 
-    return (EnGm*)foundActor;
+    return actorIter;
 }
 
 void func_80BE0590(EnTab* this) {
@@ -184,7 +171,8 @@ void func_80BE0664(EnTab* this) {
 s32 func_80BE06DC(EnTab* this, PlayState* play) {
     s32 ret = false;
 
-    if (((this->unk_2FC & 7) != SUBS_OFFER_MODE_NONE) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->unk_2FC & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;
@@ -267,8 +255,8 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->talkActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;
@@ -366,7 +354,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
 
 s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
-    EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    EnGm* sp28 = (EnGm*)EnTab_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
     if (sp28) {
         Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1AF0);

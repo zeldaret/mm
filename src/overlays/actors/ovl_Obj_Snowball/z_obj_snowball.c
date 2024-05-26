@@ -760,7 +760,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10;
                 this->unk_211 = 0;
             }
-        } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->unk_211 = 1;
         } else if (this->actor.isLockedOn) {

@@ -128,7 +128,7 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
 }
 
 void func_8096EF98(ElfMsg2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         ElfMsg2_SetupAction(this, func_8096EE64);
     }
 }

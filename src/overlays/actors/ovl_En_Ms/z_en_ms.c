@@ -88,7 +88,7 @@ void EnMs_Wait(EnMs* this, PlayState* play) {
         this->actor.textId = 0x932;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnMs_Talk;
     } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
         Actor_OfferTalk(&this->actor, play, 90.0f);
@@ -103,7 +103,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
@@ -157,7 +157,7 @@ void EnMs_Sell(EnMs* this, PlayState* play) {
 }
 
 void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x936);
         this->actionFunc = EnMs_Talk;
     } else {

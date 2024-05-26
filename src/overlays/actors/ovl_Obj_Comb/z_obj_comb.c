@@ -252,8 +252,8 @@ void func_8098D6E0(ObjComb* this, PlayState* play) {
     for (temp = 0, i = 0; i < 8; i++, temp += 0x2000) {
         temp_f0 = Rand_ZeroOne();
         temp_f20 = ((1.0f - SQ(temp_f0)) * 14.0f) + 4.0f;
-        sp70.x = (Math_SinS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.x;
-        sp70.z = (Math_CosS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.z;
+        sp70.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20);
+        sp70.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20);
         EffectSsGSplash_Spawn(play, &sp70, NULL, NULL, 0, 200);
     }
 
