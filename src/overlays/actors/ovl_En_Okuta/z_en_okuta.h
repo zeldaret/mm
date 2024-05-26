@@ -45,7 +45,7 @@ typedef struct EnOkuta {
     /* 0x254 */ f32 drawDmgEffAlpha;
     /* 0x258 */ f32 drawDmgEffScale;
     /* 0x25C */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x260 */ f32 unk260;
+    /* 0x260 */ f32 jumpHeight;
     /* 0x264 */ Vec3f headScale;
     /* 0x270 */ Vec3f bodyPartsPos[10];
     /* 0x2E8 */ ColliderCylinder collider;

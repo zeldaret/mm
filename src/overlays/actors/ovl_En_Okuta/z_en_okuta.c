@@ -430,10 +430,10 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
     }
 
     if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
-        this->unk260 = this->actor.playerHeightRel + 20.0f;
-        this->unk260 = CLAMP_MIN(this->unk260, 10.0f);
+        this->jumpHeight = this->actor.playerHeightRel + 20.0f;
+        this->jumpHeight = CLAMP_MIN(this->jumpHeight, 10.0f);
 
-        if (this->unk260 > 50.0f) {
+        if (this->jumpHeight > 50.0f) {
             EnOkuta_SpawnSplash(this, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
@@ -463,10 +463,10 @@ void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
     } else {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             if ((curFrame = this->skelAnime.curFrame) < 13.0f) {
-                this->actor.world.pos.y = Math_SinF(0.2617889f * curFrame) * this->unk260 + this->actor.home.pos.y;
+                this->actor.world.pos.y = Math_SinF(0.2617889f * curFrame) * this->jumpHeight + this->actor.home.pos.y;
             }
 
-            if (this->unk260 > 50.0f && Animation_OnFrame(&this->skelAnime, 13.0f)) {
+            if ((this->jumpHeight > 50.0f) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
                 EnOkuta_SpawnSplash(this, play);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_LAND);
             }
