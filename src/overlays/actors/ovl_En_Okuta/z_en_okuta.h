@@ -19,6 +19,20 @@ typedef enum EnOkutaType {
     /* 17 */ EN_OKUTA_TYPE_BLUE_PROJECTILE = EN_OKUTA_TYPE_BLUE_OCTOROK + EN_OKUTA_TYPE_PROJECTILE_BASE
 } EnOkutaType;
 
+typedef enum EnOkutaBodyPart {
+    /*  0 */ EN_OKUTA_BODYPART_BODY,
+    /*  1 */ EN_OKUTA_BODYPART_FRONT_LEFT_ARM_END,
+    /*  2 */ EN_OKUTA_BODYPART_FRONT_RIGHT_ARM_END,
+    /*  3 */ EN_OKUTA_BODYPART_BACK_LEFT_ARM_END,
+    /*  4 */ EN_OKUTA_BODYPART_BACK_RIGHT_ARM_END,
+    /*  5 */ EN_OKUTA_BODYPART_SNOUT,
+    /*  6 */ EN_OKUTA_BODYPART_HEAD,
+    /*  7 */ EN_OKUTA_BODYPART_EFFECTS_1,
+    /*  8 */ EN_OKUTA_BODYPART_EFFECTS_2,
+    /*  9 */ EN_OKUTA_BODYPART_EFFECTS_3,
+    /* 10 */ EN_OKUTA_BODYPART_MAX
+} EnOkutaBodyPart;
+
 typedef struct EnOkuta {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

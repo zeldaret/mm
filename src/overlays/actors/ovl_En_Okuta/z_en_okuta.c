@@ -206,7 +206,7 @@ void func_8086E0F0(EnOkuta* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 0xA, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_OKUTA_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->collider.base.colType = COLTYPE_HIT0;
     }
 }
@@ -827,8 +827,8 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
 
     if (this->actionFunc != func_8086F434) {
         EnOkuta_UpdateHeadScale(this);
-        this->collider.dim.height =
-            (sOctorokCylinderInit.dim.height * this->headScale.y - this->collider.dim.yShift) * this->actor.scale.y * 100.0f;
+        this->collider.dim.height = (sOctorokCylinderInit.dim.height * this->headScale.y - this->collider.dim.yShift) *
+                                    this->actor.scale.y * 100.0f;
         Collider_UpdateCylinder(&this->actor, &this->collider);
 
         if (this->actionFunc == EnOkuta_Appear || this->actionFunc == EnOkuta_Hide) {
@@ -948,32 +948,54 @@ s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
 
 s32 EnOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnOkuta* this = THIS;
-    f32 curFrame;
+    s32 var_v1 = false;
     Vec3f scale;
-    s32 var_v1;
+    f32 curFrame = this->skelAnime.curFrame;
 
-    var_v1 = 0;
-    curFrame = this->skelAnime.curFrame;
     if (this->actionFunc == EnOkuta_Die) {
         curFrame += this->unk18E;
     }
+
     if (limbIndex == OCTOROK_LIMB_HEAD) {
         if (this->headScale.x != 1.0f || this->headScale.y != 1.0f || this->headScale.z != 1.0f) {
             Math_Vec3f_Copy(&scale, &this->headScale);
-            var_v1 = 1;
+            var_v1 = true;
         }
     } else if (limbIndex == OCTOROK_LIMB_SNOUT) {
         var_v1 = EnOkuta_GetSnoutScale(this, curFrame, &scale);
     }
+
     if (var_v1) {
         Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
     }
-    return 0;
+
+    return false;
 }
 
-static s8 D_80870944[16] = { -1, 0, -1, -1, 1, -1, -1, 2, -1, -1, 3, -1, -1, 4, 6, 5 };
+static s8 sLimbToBodyParts[OCTOROK_LIMB_MAX] = {
+    BODYPART_NONE,                         // OCTOROK_LIMB_NONE
+    EN_OKUTA_BODYPART_BODY,                // OCTOROK_LIMB_BODY
+    BODYPART_NONE,                         // OCTOROK_LIMB_FRONT_LEFT_ARM_BASE
+    BODYPART_NONE,                         // OCTOROK_LIMB_FRONT_LEFT_ARM_MIDDLE
+    EN_OKUTA_BODYPART_FRONT_LEFT_ARM_END,  // OCTOROK_LIMB_FRONT_LEFT_ARM_END
+    BODYPART_NONE,                         // OCTOROK_LIMB_FRONT_RIGHT_ARM_BASE
+    BODYPART_NONE,                         // OCTOROK_LIMB_FRONT_RIGHT_ARM_MIDDLE
+    EN_OKUTA_BODYPART_FRONT_RIGHT_ARM_END, // OCTOROK_LIMB_FRONT_RIGHT_ARM_END
+    BODYPART_NONE,                         // OCTOROK_LIMB_BACK_LEFT_ARM_BASE
+    BODYPART_NONE,                         // OCTOROK_LIMB_BACK_LEFT_ARM_MIDDLE
+    EN_OKUTA_BODYPART_BACK_LEFT_ARM_END,   // OCTOROK_LIMB_BACK_LEFT_ARM_END
+    BODYPART_NONE,                         // OCTOROK_LIMB_BACK_RIGHT_ARM_BASE
+    BODYPART_NONE,                         // OCTOROK_LIMB_BACK_RIGHT_ARM_MIDDLE
+    EN_OKUTA_BODYPART_BACK_RIGHT_ARM_END,  // OCTOROK_LIMB_BACK_RIGHT_ARM_END
+    EN_OKUTA_BODYPART_HEAD,                // OCTOROK_LIMB_HEAD
+    EN_OKUTA_BODYPART_SNOUT,               // OCTOROK_LIMB_SNOUT
+};
 
-static Vec3f D_80870954[3] = {
+/**
+ * The last three elements of `bodyPartsPos` are not tied to any particular limb and are instead used to control the
+ * placement of effects. The positions of these effects are offset by a certain amount from the Octorok's head limb.
+ */
+static Vec3f sEffectsBodyPartOffsets[3] = {
     { 1500.0f, 1000.0f, 0.0f },
     { -1500.0f, 1000.0f, 0.0f },
     { 0.0f, 1500.0f, -2000.0f },
@@ -981,20 +1003,21 @@ static Vec3f D_80870954[3] = {
 
 void EnOkuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnOkuta* this = THIS;
-    s32 limb = D_80870944[limbIndex];
+    s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     s32 i;
 
-    if (limb != -1) {
-        if (limb == 5) {
-            Matrix_MultVecX(1500.0f, &this->bodyPartsPos[limb]);
-        } else if (limb == 6) {
-            Matrix_MultVecY(2800.0f, &this->bodyPartsPos[limb]);
-            limb++;
-            for (i = 0; i < ARRAY_COUNT(D_80870954); i++) {
-                Matrix_MultVec3f(&D_80870954[i], &this->bodyPartsPos[limb + i]);
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex == EN_OKUTA_BODYPART_SNOUT) {
+            Matrix_MultVecX(1500.0f, &this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == EN_OKUTA_BODYPART_HEAD) {
+            Matrix_MultVecY(2800.0f, &this->bodyPartsPos[bodyPartIndex]);
+            bodyPartIndex++;
+
+            for (i = 0; i < ARRAY_COUNT(sEffectsBodyPartOffsets); i++) {
+                Matrix_MultVec3f(&sEffectsBodyPartOffsets[i], &this->bodyPartsPos[bodyPartIndex + i]);
             }
         } else {
-            Matrix_MultZero(&this->bodyPartsPos[limb]);
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
         }
     }
 }
@@ -1030,7 +1053,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, 10,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_OKUTA_BODYPART_MAX,
                             this->drawDmgEffScale * this->actor.scale.y * 100.0f, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 }
