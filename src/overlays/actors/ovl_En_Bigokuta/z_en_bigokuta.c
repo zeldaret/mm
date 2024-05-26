@@ -551,7 +551,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 30.0f * 0.001f)) {
             Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }

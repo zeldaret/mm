@@ -194,7 +194,7 @@ void EnOkuta_Destroy(Actor* thisx, PlayState* play) {
 void func_8086E084(EnOkuta* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.6f;
-    this->drawDmgEffFrozenSteamScale = 0.90000004f;
+    this->drawDmgEffFrozenSteamScale = 9.0f * 0.1f;
     this->drawDmgEffAlpha = 1.0f;
     this->unk18E = 0x50;
     this->collider.base.colType = COLTYPE_HIT3;
@@ -853,7 +853,7 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
                 return;
             }
 
-            if (Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.6f, 0.015000001f) == 0) {
+            if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.6f, 15.0f * 0.001f)) {
                 Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
