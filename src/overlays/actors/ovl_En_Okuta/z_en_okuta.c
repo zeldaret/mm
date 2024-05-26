@@ -36,7 +36,7 @@ void func_8086F57C(EnOkuta* this, PlayState* play);
 void func_8086F694(EnOkuta* this, PlayState* play);
 void func_808700C0(Actor* thisx, PlayState* play);
 
-static Gfx D_80870870[2] = { { { 0xFA000000, 0xC89BFF } }, { { 0xDF000000, 0 } } };
+#include "assets/overlays/ovl_En_Okuta/ovl_En_Okuta.c"
 
 ActorInit En_Okuta_InitVars = {
     /**/ ACTOR_EN_OKUTA,
@@ -928,7 +928,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
         if (this->actor.params == 0) {
             gSPSegment(&gfx[1], 0x08, D_801AEFA0);
         } else {
-            gSPSegment(&gfx[1], 0x08, D_80870870);
+            gSPSegment(&gfx[1], 0x08, ovl_En_Okuta_DL_2A50);
         }
         POLY_OPA_DISP = &gfx[2];
         SkelAnime_DrawOpa(play, this->unk144.skeleton, this->unk144.jointTable, func_808704DC, func_808705C8,
