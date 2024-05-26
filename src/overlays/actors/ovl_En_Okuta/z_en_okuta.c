@@ -768,7 +768,7 @@ void EnOkuta_UpdateHeadScale(EnOkuta* this) {
     }
 }
 
-void func_8086FCA4(EnOkuta* this, PlayState* play) {
+void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
     if (!(this->collider.base.acFlags & AC_HIT)) {
         return;
     }
@@ -808,7 +808,7 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
     s32 pad[2];
 
     if (this->actor.params == 0) {
-        func_8086FCA4(this, play);
+        EnOkuta_UpdateDamage(this, play);
     } else if ((this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT)) {
         if (this->collider.base.atFlags & AT_HIT) {
             func_800B8D98(play, &this->actor, 8.0f, this->actor.world.rot.y, 6.0f);

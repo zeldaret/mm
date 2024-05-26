@@ -5089,7 +5089,7 @@
     0x8086F57C:("func_8086F57C",),
     0x8086F694:("func_8086F694",),
     0x8086F8FC:("EnOkuta_UpdateHeadScale",),
-    0x8086FCA4:("func_8086FCA4",),
+    0x8086FCA4:("EnOkuta_UpdateDamage",),
     0x8086FDE0:("EnOkuta_Update",),
     0x808700C0:("func_808700C0",),
     0x80870254:("EnOkuta_GetSnoutScale",),
