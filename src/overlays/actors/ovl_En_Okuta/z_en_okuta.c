@@ -91,39 +91,45 @@ static ColliderCylinderInit sOctorokCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 15, 60, 100 };
 
+typedef enum EnOkutaDamageEffect {
+    /* 0x0 */ EN_OKUTA_DMGEFF_NONE,
+    /* 0x3 */ EN_OKUTA_DMGEFF_FREEZE = 0x3,
+    /* 0x4 */ EN_OKUTA_DMGEFF_LIGHT_ORB
+} EnOkutaDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0x0),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(0, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_OKUTA_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_OKUTA_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_OKUTA_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_OKUTA_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_OKUTA_DMGEFF_NONE),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -788,12 +794,12 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         EnOkuta_Thaw(this, play);
 
-        if (this->actor.colChkInfo.damageEffect == 3) {
+        if (this->actor.colChkInfo.damageEffect == EN_OKUTA_DMGEFF_FREEZE) {
             EnOkuta_SetupFrozen(this, play);
             return;
         }
 
-        if (this->actor.colChkInfo.damageEffect == 4) {
+        if (this->actor.colChkInfo.damageEffect == EN_OKUTA_DMGEFF_LIGHT_ORB) {
             this->drawDmgEffAlpha = 4.0f;
             this->drawDmgEffScale = 0.6f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
