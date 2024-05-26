@@ -939,7 +939,7 @@ void EnPametfrog_SetupDefeatSnapper(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_DefeatSnapper(EnPametfrog* this, PlayState* play) {
     this->timer--;
-    Actor_SetScale(&this->actor, this->timer * 0.00035000002f);
+    Actor_SetScale(&this->actor, this->timer * (0.35f * 0.001f));
     this->actor.colorFilterTimer = 16;
     EnPametfrog_ShakeCamera(this, play, (this->timer * 3.75f) + 75.0f, (this->timer * 0.5f) + 10.0f);
     if (this->timer == 0) {
