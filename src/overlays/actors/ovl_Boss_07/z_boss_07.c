@@ -880,7 +880,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.colChkInfo.damageTable = &sTopDamageTable;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 9.0f + KREG(55));
         this->actor.shape.shadowAlpha = 180;
-        Collider_InitAndSetCylinder(play, &this->spawnCollider, &this->actor, &sTopCylInit);
+        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sTopCylInit);
         Effect_Add(play, &this->effectIndex, EFFECT_TIRE_MARK, 0, 0, &sTopTireMarkInit);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         return;
@@ -891,7 +891,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.update = Boss07_Projectile_Update;
         this->actor.draw = Boss07_Projectile_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        Collider_InitAndSetCylinder(play, &this->spawnCollider, &this->actor, &sShotCylInit);
+        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sShotCylInit);
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         this->shotColorIndex = Rand_ZeroFloat(ARRAY_COUNT(sShotEnvColors) - 0.01f);
         return;
@@ -4560,7 +4560,7 @@ void Boss07_Mask_SetupIdle(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Idle;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasMaskFloatingAnim, -20.0f);
     this->timers[2] = Rand_ZeroFloat(150.0f) + 60.0f;
-    this->tentLengthScale = 1.0f;
+    this->tentacleLengthScale = 1.0f;
 }
 
 void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
@@ -4881,7 +4881,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.x, -Math_Atan2S(temp_f12, sqrtf(SQ(temp_f20) + SQ(temp_f22))), phi_s0,
                    this->velocity_170);
     Math_ApproachF(&this->velocity_170, 0xFA0, 1.0f, 0xC8);
-    this->unk_1874 = 1;
+    this->tentacleState = 1;
 
     switch (this->actionState) {
         case MAJORAS_MASK_BEAM_STATE_CHARGE:
@@ -5383,7 +5383,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 }
                 SkelAnime_Update(&this->skelAnime);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_FLOAT_OLD - SFX_FLAG);
-                Math_ApproachF(&this->tentLengthScale, 1.0f, 1.0f, 0.02f);
+                Math_ApproachF(&this->tentacleLengthScale, 1.0f, 1.0f, 0.02f);
                 Math_ApproachF(&this->actor.world.pos.z, -642.5f, 0.05f, 30.0f);
                 Math_ApproachF(&this->actor.world.pos.y, 350.0f, 0.03f, 2.0f);
 
@@ -5509,16 +5509,16 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             player->actor.world.pos.z = BREG(87) + 250.0f;
             player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
 
-            this->unk_1874 = 2;
+            this->tentacleState = 2;
 
             if (this->cutsceneTimer > 60) {
                 Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
                 Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x200);
-                Math_ApproachZeroF(&this->tentLengthScale, 1.0f, 0.01f);
+                Math_ApproachZeroF(&this->tentacleLengthScale, 1.0f, 0.01f);
             } else {
                 this->actor.shape.rot.x += 0x1000;
                 this->actor.shape.rot.z += 0x1200;
-                Math_ApproachZeroF(&this->tentLengthScale, 1.0f, 0.005f);
+                Math_ApproachZeroF(&this->tentacleLengthScale, 1.0f, 0.005f);
             }
 
             if (this->cutsceneTimer > 130) {
@@ -5621,7 +5621,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         if (KREG(63) == 0) {
             this->canDodge = false;
             this->maskEyeState = 0;
-            this->unk_1874 = 0;
+            this->tentacleState = 0;
             Actor_SetScale(&this->actor, 0.1f);
             this->actor.focus.pos = this->actor.world.pos;
 
@@ -5765,8 +5765,8 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
     Vec3f sp80;
     Vec3f* sp7C = velocity;
 
-    if (this->unk_1874 != 0) {
-        for (i = 0; i < MAJORA_TENT_LENGTH; i++) {
+    if (this->tentacleState != 0) {
+        for (i = 0; i < MAJORA_TENTACLE_LENGTH; i++) {
             Matrix_Push();
             Matrix_RotateZF(arg9, MTXMODE_APPLY);
             sp98.x = Math_SinS((2 * i + this->frameCounter) * 0x1600) * 10;
@@ -5780,7 +5780,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
         }
     }
 
-    for (i = 0; i < MAJORA_TENT_LENGTH; i++, velocity++) {
+    for (i = 0; i < MAJORA_TENTACLE_LENGTH; i++, velocity++) {
         if (i == 0) {
             pos[0] = *base;
             continue;
@@ -5797,18 +5797,18 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
     sp98.x = sp98.y = 0.0f;
     sp98.z = arg7 * 23.0f;
 
-    for (i = 1; i < MAJORA_TENT_LENGTH; i++, velocity++, pos++, rot++) {
-        if (i < MAJORA_TENT_LENGTH / 2) {
-            sp80.x = arg6->x * (MAJORA_TENT_LENGTH / 2 - i) * 0.2f;
-            sp80.y = arg6->y * (MAJORA_TENT_LENGTH / 2 - i) * 0.2f;
-            sp80.z = arg6->z * (MAJORA_TENT_LENGTH / 2 - i) * 0.2f;
+    for (i = 1; i < MAJORA_TENTACLE_LENGTH; i++, velocity++, pos++, rot++) {
+        if (i < MAJORA_TENTACLE_LENGTH / 2) {
+            sp80.x = arg6->x * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
+            sp80.y = arg6->y * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
+            sp80.z = arg6->z * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
         } else {
             sp80 = gZeroVec3f;
         }
 
         temp_f24 = pos->x + velocity->x - (pos - 1)->x + sp80.x;
 
-        if (this->unk_1874 != 0) {
+        if (this->tentacleState != 0) {
             phi_f0 = 0.0f;
         } else if (arg8 && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
             phi_f0 = -30.0f;
@@ -5849,15 +5849,15 @@ void Boss07_Mask_DrawTentacles(Boss07* this, PlayState* play, Vec3f* arg2, Vec3f
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i < MAJORA_TENT_LENGTH - 1; i++, arg2++, arg3++) {
+    for (i = 0; i < MAJORA_TENTACLE_LENGTH - 1; i++, arg2++, arg3++) {
         Matrix_Translate(arg2->x, arg2->y, arg2->z, MTXMODE_NEW);
         Matrix_RotateYF(arg3->y, MTXMODE_APPLY);
         Matrix_RotateXFApply(arg3->x);
         Matrix_RotateZF(arg5, MTXMODE_APPLY);
-        if (i <= (MAJORA_TENT_LENGTH - 1) / 2) {
+        if (i <= (MAJORA_TENTACLE_LENGTH - 1) / 2) {
             phi_f12 = 0.035f;
         } else {
-            phi_f12 = 0.035f - (i - (MAJORA_TENT_LENGTH - 1) / 2) * 60.0f * 0.0001f;
+            phi_f12 = 0.035f - (i - (MAJORA_TENTACLE_LENGTH - 1) / 2) * 60.0f * 0.0001f;
         }
         Matrix_Scale(phi_f12, phi_f12, arg4 * 0.01f * 2.3f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -5954,7 +5954,7 @@ void Boss07_Mask_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     Boss07* this = THIS;
 
     if (limbIndex == MAJORAS_MASK_LIMB_FACE) {
-        Matrix_MultVecX(500.0f, &this->tentAttachPos);
+        Matrix_MultVecX(500.0f, &this->tentacleAttachPos);
     }
 }
 
@@ -6003,16 +6003,16 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         spA8.y = 20.0f;
         spA8.z = -2.0f;
         phi_f24 = 0.0f;
-        for (i = 0; i < MAJORA_TENT_COUNT; i++) {
+        for (i = 0; i < MAJORA_TENTACLE_COUNT; i++) {
             Matrix_Push();
             Matrix_Push();
             Matrix_RotateZF(phi_f24, MTXMODE_APPLY);
             Matrix_MultVec3f(&spA8, &sp9C);
-            this->tentacles[i].base.x = this->tentAttachPos.x + sp9C.x;
-            this->tentacles[i].base.y = this->tentAttachPos.y + sp9C.y;
-            this->tentacles[i].base.z = this->tentAttachPos.z + sp9C.z;
+            this->tentacles[i].base.x = this->tentacleAttachPos.x + sp9C.x;
+            this->tentacles[i].base.y = this->tentacleAttachPos.y + sp9C.y;
+            this->tentacles[i].base.z = this->tentacleAttachPos.z + sp9C.z;
 
-            temp = (1 - (i * 0.008f)) * this->tentLengthScale;
+            temp = (1 - (i * 0.008f)) * this->tentacleLengthScale;
             Matrix_Pop();
             if (this->shouldUpdateTentaclesOrWhips) {
                 Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
@@ -6078,16 +6078,16 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
         this->actor.shape.rot.z += 0x1200;
 
         if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) ||
-            (this->spawnCollider.base.atFlags & AT_HIT) || (this->spawnCollider.base.atFlags & AT_HIT) ||
+            (this->generalCollider.base.atFlags & AT_HIT) || (this->generalCollider.base.atFlags & AT_HIT) ||
             sKillProjectiles) {
             Actor_Kill(&this->actor);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, this->shotColorIndex,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
         }
-        Collider_UpdateCylinder(&this->actor, &this->spawnCollider);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->spawnCollider.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->spawnCollider.base);
+        Collider_UpdateCylinder(&this->actor, &this->generalCollider);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
     }
 }
 
@@ -6118,10 +6118,10 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
     Vec3f sp2C;
     ColliderInfo* hitbox;
 
-    if ((this->invincibilityTimer == 0) && (this->spawnCollider.base.acFlags & AC_HIT)) {
-        this->spawnCollider.base.acFlags &= ~AC_HIT;
+    if ((this->invincibilityTimer == 0) && (this->generalCollider.base.acFlags & AC_HIT)) {
+        this->generalCollider.base.acFlags &= ~AC_HIT;
         this->invincibilityTimer = 15;
-        hitbox = this->spawnCollider.info.acHitInfo;
+        hitbox = this->generalCollider.info.acHitInfo;
         if (hitbox->toucher.dmgFlags & DMG_HOOKSHOT) {
             Boss07_Remains_SetupStunned(this, play);
         } else {
@@ -6258,7 +6258,7 @@ void Boss07_Remains_SetupFly(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Remains_Fly;
     this->actor.gravity = -0.75f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
-    Collider_InitAndSetCylinder(play, &this->spawnCollider, &this->actor, &sRemainsCylInit);
+    Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sRemainsCylInit);
     this->actor.colChkInfo.health = 5;
     this->actionState = REMAINS_STATE_WAIT;
 }
@@ -6285,7 +6285,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
             this->actionState = REMAINS_STATE_FLY;
             this->noclipTimer = 100;
-            this->spawnCollider.base.colType = COLTYPE_HIT3;
+            this->generalCollider.base.colType = COLTYPE_HIT3;
             this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_TARGETABLE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
@@ -6376,9 +6376,9 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
     }
 
     if (this->actionState <= REMAINS_STATE_FLY) {
-        Collider_UpdateCylinder(&this->actor, &this->spawnCollider);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->spawnCollider.base);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->spawnCollider.base);
+        Collider_UpdateCylinder(&this->actor, &this->generalCollider);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
     }
 
     if (this->readyShot) {
@@ -6420,9 +6420,9 @@ void Boss07_Remains_SetupStunned(Boss07* this, PlayState* play) {
 
 void Boss07_Remains_Stunned(Boss07* this, PlayState* play) {
     Boss07_Remains_CollisionCheck(this, play);
-    Collider_UpdateCylinder(&this->actor, &this->spawnCollider);
-    CollisionCheck_SetAC(play, &play->colChkCtx, &this->spawnCollider.base);
-    CollisionCheck_SetOC(play, &play->colChkCtx, &this->spawnCollider.base);
+    Collider_UpdateCylinder(&this->actor, &this->generalCollider);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->generalCollider.base);
     if (this->timers[0] == 0) {
         this->actionFunc = Boss07_Remains_Fly;
         this->actionState = REMAINS_STATE_FLY;
@@ -6711,8 +6711,8 @@ void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad[3];
 
-    if (this->spawnCollider.base.acFlags & AC_HIT) {
-        this->spawnCollider.base.acFlags &= ~AC_HIT;
+    if (this->generalCollider.base.acFlags & AC_HIT) {
+        this->generalCollider.base.acFlags &= ~AC_HIT;
         if (this->invincibilityTimer == 0) {
             this->invincibilityTimer = 5;
             if ((this->actor.colChkInfo.damageEffect == TOP_DMGEFF_D) ||
@@ -6742,8 +6742,8 @@ void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
                 sp38 = true;
             } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_B) {
                 this->actor.world.rot.y =
-                    Math_Atan2S(this->spawnCollider.base.ac->world.pos.x - this->actor.world.pos.x,
-                                this->spawnCollider.base.ac->world.pos.z - this->actor.world.pos.z);
+                    Math_Atan2S(this->generalCollider.base.ac->world.pos.x - this->actor.world.pos.x,
+                                this->generalCollider.base.ac->world.pos.z - this->actor.world.pos.z);
                 this->actor.speed = -20.0f;
                 this->actor.velocity.y = sREG(55) + 15.0f;
                 sp38 = true;
@@ -6782,9 +6782,9 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2) {
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
     this->actor.focus.pos.y += 25.0f;
     Boss07_Top_CollisionCheck(this, play);
-    Collider_UpdateCylinder(&this->actor, &this->spawnCollider);
-    CollisionCheck_SetAC(play, &play->colChkCtx, &this->spawnCollider.base);
-    CollisionCheck_SetAT(play, &play->colChkCtx, &this->spawnCollider.base);
+    Collider_UpdateCylinder(&this->actor, &this->generalCollider);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
     Boss07_Top_Collide(this, play);
 
     this->topSpinAngle -= this->topSpinRate;

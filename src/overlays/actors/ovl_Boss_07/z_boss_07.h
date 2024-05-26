@@ -6,9 +6,9 @@
 
 struct Boss07;
 
-#define MAJORA_TENT_LENGTH 10
-#define MAJORA_TENT_COUNT 25
-#define MAJORA_TENT_MAX 100
+#define MAJORA_TENTACLE_LENGTH 10
+#define MAJORA_TENTACLE_COUNT 25
+#define MAJORA_TENTACLE_MAX 100
 #define MAJORA_WHIP_MAX_LENGTH 50
 
 #define MAJORA_LIMB_COUNT MAX((s32)MAJORAS_MASK_LIMB_MAX, MAX((s32)MAJORAS_INCARNATION_LIMB_MAX, (s32)MAJORAS_WRATH_LIMB_MAX))
@@ -45,9 +45,9 @@ typedef enum MajoraRemainsType {
 
 typedef struct MajoraTentacle {
     /* 0x00 */ Vec3f base;
-    /* 0x0C */ Vec3f pos[MAJORA_TENT_LENGTH];
-    /* 0x84 */ Vec3f rot[MAJORA_TENT_LENGTH];
-    /* 0xFC */ Vec3f velocity[MAJORA_TENT_LENGTH];
+    /* 0x0C */ Vec3f pos[MAJORA_TENTACLE_LENGTH];
+    /* 0x84 */ Vec3f rot[MAJORA_TENTACLE_LENGTH];
+    /* 0xFC */ Vec3f velocity[MAJORA_TENTACLE_LENGTH];
 } MajoraTentacle; // size = 0x174
 
 typedef struct MajoraWhip {
@@ -232,11 +232,11 @@ typedef struct Boss07 {
     /* 0x180c */ f32 lensFlareScale;
     /* 0x1810 */ Vec3f lensFlarePos;
     /* 0x181C */ s16 shotColorIndex;
-    /* 0x1820 */ ColliderCylinder spawnCollider;
+    /* 0x1820 */ ColliderCylinder generalCollider;
     /* 0x186C */ s16 dmgShakeTimer;
-    /* 0x1870 */ f32 tentLengthScale;
-    /* 0x1874 */ u8 unk_1874; // wavy tentacles
-    /* 0x1878 */ Vec3f tentAttachPos;
+    /* 0x1870 */ f32 tentacleLengthScale;
+    /* 0x1874 */ u8 tentacleState; // wavy tentacles
+    /* 0x1878 */ Vec3f tentacleAttachPos;
     /* 0x1884 */ s32 maskEyeState;
     /* 0x1888 */ u8 noclipTimer;
     /* 0x188C */ f32 eyeBeamsZscale;
@@ -263,7 +263,7 @@ typedef struct Boss07 {
     /* 0x18ED */ u8 beamOnLastFrame;
     /* 0x18F0 */ ColliderQuad maskFrontCollider;
     /* 0x1970 */ ColliderQuad maskBackCollider;
-    /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENT_MAX];
+    /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_MAX];
     /* 0xAB40 */ s16 timer_AB40;
     /* 0xAB44 */ f32 introOrbScale;
     /* 0xAB48 */ u8 noShadow;
