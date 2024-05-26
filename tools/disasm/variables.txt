@@ -5454,7 +5454,7 @@
     0x8086DA98:("D_8086DA98","f32","",0x4),
     0x8086DA9C:("D_8086DA9C","f32","",0x4),
     0x80870870:("D_80870870","UNK_TYPE1","",0x1),
-    0x80870880:("En_Okuta_InitVars","UNK_TYPE1","",0x1),
+    #0x80870880:("En_Okuta_InitVars","UNK_TYPE1","",0x1),
     0x808708A0:("D_808708A0","UNK_TYPE1","",0x1),
     0x808708CC:("D_808708CC","UNK_TYPE1","",0x1),
     0x808708EC:("D_808708EC","UNK_TYPE2","",0x2),

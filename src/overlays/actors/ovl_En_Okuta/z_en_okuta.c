@@ -29,7 +29,8 @@ void func_8086F4B0(EnOkuta* this, PlayState* play);
 void func_8086F57C(EnOkuta* this, PlayState* play);
 void func_8086F694(EnOkuta* this, PlayState* play);
 
-#if 0
+static Gfx D_80870870[2] = { { { 0xFA000000, 0xC89BFF } }, { { 0xDF000000, 0 } } };
+
 ActorInit En_Okuta_InitVars = {
     /**/ ACTOR_EN_OKUTA,
     /**/ ACTORCAT_ENEMY,
@@ -42,25 +43,49 @@ ActorInit En_Okuta_InitVars = {
     /**/ EnOkuta_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_808708A0 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK4, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK4,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 13, 20, 0, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_808708CC = {
-    { COLTYPE_HIT0, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit2 = {
+    {
+        COLTYPE_HIT0,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808708F8 = { 4, 15, 60, 100 };
+static CollisionCheckInfoInit sColChkInfoInit = { 4, 15, 60, 100 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80870900 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -95,31 +120,33 @@ static DamageTable D_80870900 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80870920[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-#endif
+static Color_RGBA8 D_80870928 = { 255, 255, 255, 255 };
 
-extern ColliderCylinderInit D_808708A0;
-extern ColliderCylinderInit D_808708CC;
-extern CollisionCheckInfoInit D_808708F8;
-extern DamageTable D_80870900;
-extern InitChainEntry D_80870920[];
+static Color_RGBA8 D_8087092C = { 150, 150, 150, 255 };
 
-extern UNK_TYPE D_0600044C;
-extern UNK_TYPE D_06003250;
-extern UNK_TYPE D_06003958;
-extern UNK_TYPE D_06003B24;
-extern UNK_TYPE D_06003EE4;
-extern UNK_TYPE D_06004204;
-extern UNK_TYPE D_0600466C;
+static Vec3f D_80870930 = { 0.0f, -0.5f, 0.0f };
+
+static Color_RGBA8 D_8087093C = { 255, 255, 255, 255 };
+
+static Color_RGBA8 D_80870940 = { 150, 150, 150, 0 };
+
+static s8 D_80870944[16] = { -1, 0, -1, -1, 1, -1, -1, 2, -1, -1, 3, -1, -1, 4, 6, 5 };
+
+static Vec3f D_80870954[3] = {
+    { 1500.0f, 1000.0f, 0.0f },
+    { -1500.0f, 1000.0f, 0.0f },
+    { 0.0f, 1500.0f, -2000.0f },
+};
+
+static s32 D_80870978[] = { 0, 0 };
 
 void func_8086E4FC(EnOkuta *this);                         /* extern */
 void func_808700C0(Actor *thisx, PlayState *play);   /* extern */
-extern SkeletonHeader D_060033D0;
 
 void EnOkuta_Init(Actor *thisx, PlayState *play2) {
     PlayState* play = play2;
@@ -128,13 +155,13 @@ void EnOkuta_Init(Actor *thisx, PlayState *play2) {
     f32 sp38;
     s32 sp34;
 
-    Actor_ProcessInitChain(thisx, D_80870920);
+    Actor_ProcessInitChain(thisx, sInitChain);
     this->unk190 = (thisx->params >> 8) & 0xFF;
     thisx->params &= 0xFF;
     if (thisx->params == 0 || thisx->params == 1) {
-        SkelAnime_Init(play, &this->unk144, &D_060033D0, (AnimationHeader *) &D_0600466C, &this->unk192, &this->unk1F2, 0x10);
-        Collider_InitAndSetCylinder(play, &this->unk2E8, thisx, &D_808708CC);
-        CollisionCheck_SetInfo(&thisx->colChkInfo, &D_80870900, &D_808708F8);
+        SkelAnime_Init(play, &this->unk144, &gOctorokSkel, &gOctorokAppearAnim, &this->unk192, &this->unk1F2, 0x10);
+        Collider_InitAndSetCylinder(play, &this->unk2E8, thisx, &sCylinderInit2);
+        CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (this->unk190 == 0xFF || this->unk190 == 0) {
             this->unk190 = 1;
         }
@@ -154,8 +181,8 @@ void EnOkuta_Init(Actor *thisx, PlayState *play2) {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
         thisx->flags &= ~1;
         thisx->flags |= 0x10;
-        Collider_InitAndSetCylinder(play, &this->unk2E8, thisx, &D_808708A0);
-        func_800BC154(play, &play->actorCtx, thisx, 6);
+        Collider_InitAndSetCylinder(play, &this->unk2E8, thisx, &sCylinderInit);
+        Actor_ChangeCategory(play, &play->actorCtx, thisx, 6);
         this->unk18E = 0x16;
         thisx->shape.rot.y = 0;
         thisx->world.rot.x = -thisx->shape.rot.x;
@@ -197,9 +224,6 @@ void func_8086E168(EnOkuta *this, PlayState *play) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, -10.0f, 10.0f, 30.0f, 0.25f);
     }
 }
-
-extern Color_RGBA8 D_80870928;
-extern Color_RGBA8 D_8087092C;
 
 void func_8086E214(Vec3f *pos, Vec3f *velocity, s32 arg2, PlayState *play) {
     func_800B0DE0(play, pos, velocity, &gZeroVec3f, &D_80870928, &D_8087092C, 0x190, (s16) (s32) (s16) arg2);
@@ -282,7 +306,7 @@ void func_8086E5E8(EnOkuta *this, PlayState *play) {
     this->actor.draw = EnOkuta_Draw;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.flags |= 1;
-    Animation_PlayOnce(&this->unk144, (AnimationHeader *) &D_0600466C);
+    Animation_PlayOnce(&this->unk144, &gOctorokAppearAnim);
     func_8086E168(this, play);
     this->actionFunc = func_8086E658;
 }
@@ -320,7 +344,7 @@ void func_8086E658(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086E7A8(EnOkuta *this) {
-    Animation_PlayOnce(&this->unk144, (AnimationHeader *) &D_06003B24);
+    Animation_PlayOnce(&this->unk144, &gOctorokHideAnim);
     this->actionFunc = func_8086E7E8;
 }
 
@@ -347,7 +371,7 @@ void func_8086E7E8(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086E8E8(EnOkuta *this) {
-    Animation_PlayLoop(&this->unk144, (AnimationHeader *) &D_06003EE4);
+    Animation_PlayLoop(&this->unk144, &gOctorokFloatAnim);
     if (this->actionFunc == func_8086EC00) {
         this->unk18E = 8;
     } else {
@@ -387,7 +411,7 @@ void func_8086E948(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086EAE0(EnOkuta *this, PlayState *play) {
-    Animation_PlayOnce(&this->unk144, (AnimationHeader *) &D_0600044C);
+    Animation_PlayOnce(&this->unk144, &gOctorokShootAnim);
     if (this->actionFunc != func_8086EC00) {
         if (this->actor.params == 0) {
             this->unk18E = this->unk190;
@@ -463,7 +487,7 @@ void func_8086EC00(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086EE8C(EnOkuta *this) {
-    Animation_MorphToPlayOnce(&this->unk144, (AnimationHeader *) &D_06004204, -5.0f);
+    Animation_MorphToPlayOnce(&this->unk144, &gOctorokHitAnim, -5.0f);
     Actor_SetColorFilter(&this->actor, 0x4000U, 0xFFU, 0U, 0xBU);
     this->unk2E8.base.acFlags &= ~1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -486,15 +510,11 @@ void func_8086EF14(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086EF90(EnOkuta *this) {
-    Animation_MorphToPlayOnce(&this->unk144, (AnimationHeader *) &D_06003958, -3.0f);
+    Animation_MorphToPlayOnce(&this->unk144, &gOctorokDieAnim, -3.0f);
     this->unk18E = 0;
     this->actor.flags &= ~1;
     this->actionFunc = func_8086EFE8;
 }
-
-extern Vec3f D_80870930;
-extern Color_RGBA8 D_8087093C;
-extern Color_RGBA8 D_80870940;
 
 void func_8086EFE8(EnOkuta *this, PlayState *play) {
     Vec3f sp7C;
@@ -595,7 +615,7 @@ void func_8086F4B0(EnOkuta *this, PlayState *play) {
 }
 
 void func_8086F4F4(EnOkuta *this) {
-    Animation_Change(&this->unk144, (AnimationHeader *) &D_06004204, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_06004204) - 3.0f, 2U, -3.0f);
+    Animation_Change(&this->unk144, &gOctorokHitAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gOctorokHitAnim) - 3.0f, 2U, -3.0f);
     this->unk18E = 0x14;
     this->actionFunc = func_8086F57C;
 }
@@ -604,7 +624,7 @@ void func_8086F57C(EnOkuta *this, PlayState *play) {
     this->unk18E -= 1;
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x400);
     if (SkelAnime_Update(&this->unk144) != 0) {
-        Animation_Change(&this->unk144, (AnimationHeader *) &D_06004204, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004204) - 3.0f, 2U, -3.0f);
+        Animation_Change(&this->unk144, &gOctorokHitAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gOctorokHitAnim) - 3.0f, 2U, -3.0f);
     }
     if (this->unk18E < 0xA) {
         this->actor.shape.rot.y += (s16) (8192.0f * Math_SinF(this->unk18E * 0.15707964f));
@@ -645,7 +665,7 @@ void func_8086F694(EnOkuta *this, PlayState *play) {
         sp54.x = this->actor.world.pos.x;
         sp54.y = this->actor.world.pos.y + 11.0f;
         sp54.z = this->actor.world.pos.z;
-        EffectSsHahen_SpawnBurst(play, &sp54, 6.0f, 0, 1, 2, 0xF, 5, 0xA, (Gfx *) &D_06003250);
+        EffectSsHahen_SpawnBurst(play, &sp54, 6.0f, 0, 1, 2, 0xF, 5, 0xA, gOctorokProjectileDL);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x14U, 0x38C0U);
         if ((this->unk2E8.base.atFlags & 2) && (this->unk2E8.base.atFlags & 0x10) && !(this->unk2E8.base.atFlags & 4) && (this->actor.params == 0x11)) {
             func_800B8D98(play, &this->actor, 8.0f, this->actor.world.rot.y, 6.0f);
@@ -737,8 +757,6 @@ void func_8086E2C0(EnOkuta *this, PlayState *play);    /* extern */
 void func_8086F4F4(EnOkuta *this);                     /* extern */
 void func_8086F8FC(EnOkuta *this);                     /* extern */
 void func_8086FCA4(EnOkuta *this, PlayState *play);    /* extern */
-extern s16 D_808708EC;
-extern s16 D_808708EE;
 
 void EnOkuta_Update(Actor *thisx, PlayState *play2) {
     PlayState *play = play2;
@@ -757,11 +775,11 @@ void EnOkuta_Update(Actor *thisx, PlayState *play2) {
     this->actionFunc(this, play);
     if (this->actionFunc != func_8086F434) {
         func_8086F8FC(this);
-        this->unk2E8.dim.height = (D_808708EE * this->unk264.y - this->unk2E8.dim.yShift) * this->actor.scale.y * 100.0f;
+        this->unk2E8.dim.height = (sCylinderInit2.dim.height * this->unk264.y - this->unk2E8.dim.yShift) * this->actor.scale.y * 100.0f;
         Collider_UpdateCylinder(&this->actor, &this->unk2E8);
         if (this->actionFunc == func_8086E658 || this->actionFunc == func_8086E7E8) {
             this->unk2E8.dim.pos.y = this->actor.world.pos.y + this->unk144.jointTable->y * this->actor.scale.y;
-            this->unk2E8.dim.radius = D_808708EC * this->actor.scale.x * 100.0f;
+            this->unk2E8.dim.radius = sCylinderInit2.dim.radius * this->actor.scale.x * 100.0f;
         }
         if (this->actor.draw != NULL) {
             if (this->actor.params == 1) {
@@ -880,9 +898,6 @@ s32 func_808704DC(PlayState *play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s
     }
     return 0;
 }
-
-extern s8 D_80870944[16];
-extern Vec3f D_80870954[3];
 
 void func_808705C8(PlayState *play, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
     EnOkuta *this = THIS;
