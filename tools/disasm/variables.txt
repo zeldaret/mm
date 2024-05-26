@@ -5453,7 +5453,7 @@
     0x8086DA94:("D_8086DA94","f32","",0x4),
     0x8086DA98:("D_8086DA98","f32","",0x4),
     0x8086DA9C:("D_8086DA9C","f32","",0x4),
-    0x80870870:("ovl_En_Okuta_DL_2A50","Gfx","[2]",0x10),
+    0x80870870:("gOctorokBlueMaterialDL","Gfx","[2]",0x10),
     0x80870880:("En_Okuta_InitVars","ActorInit","",0x20),
     0x808708A0:("sProjectileCylinderInit","ColliderCylinderInit","",0x2C),
     0x808708CC:("sOctorokCylinderInit","ColliderCylinderInit","",0x2C),

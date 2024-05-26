@@ -1045,7 +1045,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             gSPSegment(&gfx[1], 0x08, D_801AEFA0);
         } else {
-            gSPSegment(&gfx[1], 0x08, ovl_En_Okuta_DL_2A50);
+            gSPSegment(&gfx[1], 0x08, gOctorokBlueMaterialDL);
         }
 
         POLY_OPA_DISP = &gfx[2];

@@ -1,5 +1,5 @@
 <Root>
     <File Name="ovl_En_Okuta" BaseAddress="0x8086DE20" RangeStart="0x2A50" RangeEnd="0x2A60">
-        <DList Name="ovl_En_Okuta_DL_2A50" Offset="0x2A50"/>
+        <DList Name="gOctorokBlueMaterialDL" Offset="0x2A50"/>
     </File>
 </Root>
