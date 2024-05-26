@@ -5,6 +5,7 @@
  */
 
 #include "z_en_okuta.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
@@ -143,34 +144,41 @@ static Color_RGBA8 D_80870940 = { 150, 150, 150, 0 };
 void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnOkuta* this = THIS;
-    WaterBox* sp3C;
-    f32 sp38;
-    s32 sp34;
+    WaterBox* waterBox;
+    f32 waterSurface;
+    s32 bgId;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     this->unk190 = (thisx->params >> 8) & 0xFF;
     thisx->params &= 0xFF;
+
     if (thisx->params == 0 || thisx->params == 1) {
         SkelAnime_Init(play, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
                        OCTOROK_LIMB_MAX);
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit2);
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
+
         if (this->unk190 == 0xFF || this->unk190 == 0) {
             this->unk190 = 1;
         }
+
         thisx->floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &sp34, thisx, &thisx->world.pos);
-        if (!WaterBox_GetSurface1_2(play, &play->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp38, &sp3C) ||
-            sp38 <= thisx->floorHeight) {
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId, thisx, &thisx->world.pos);
+
+        if (!WaterBox_GetSurface1_2(play, &play->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
+                                    &waterBox) ||
+            waterSurface <= thisx->floorHeight) {
             Actor_Kill(thisx);
         } else {
-            thisx->home.pos.y = sp38;
+            thisx->home.pos.y = waterSurface;
         }
+
         if (thisx->params == 1) {
             this->collider.base.colType = COLTYPE_HARD;
             this->collider.base.acFlags |= AC_HARD;
         }
-        thisx->targetMode = 5;
+
+        thisx->targetMode = TARGET_MODE_5;
         func_8086E4FC(this);
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
@@ -208,7 +216,7 @@ void func_8086E0F0(EnOkuta* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 0xA, 2, 0.3f, 0.2f);
-        this->collider.base.colType = 0;
+        this->collider.base.colType = COLTYPE_HIT0;
     }
 }
 
@@ -221,11 +229,11 @@ void func_8086E168(EnOkuta* this, PlayState* play) {
 }
 
 void func_8086E214(Vec3f* pos, Vec3f* velocity, s32 arg2, PlayState* play) {
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &D_80870928, &D_8087092C, 0x190, (s16)(s32)(s16)arg2);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &D_80870928, &D_8087092C, 400, (s16)(s32)(s16)arg2);
 }
 
 void func_8086E27C(EnOkuta* this, PlayState* play) {
-    EffectSsGSplash_Spawn(play, &this->actor.home.pos, NULL, NULL, 0, 0x514);
+    EffectSsGSplash_Spawn(play, &this->actor.home.pos, NULL, NULL, 0, 1300);
 }
 
 void func_8086E2C0(EnOkuta* this, PlayState* play) {
@@ -234,11 +242,10 @@ void func_8086E2C0(EnOkuta* this, PlayState* play) {
 
     temp = this->actor.world.pos.y - this->actor.home.pos.y;
     if (((play->gameplayFrames % 7) == 0) && (temp < 50.0f) && (temp >= -20.0f)) {
-
         sp28.x = this->actor.world.pos.x;
         sp28.y = this->actor.home.pos.y;
         sp28.z = this->actor.world.pos.z;
-        EffectSsGRipple_Spawn(play, &sp28, 0xFA, 0x28A, 0);
+        EffectSsGRipple_Spawn(play, &sp28, 250, 650, 0);
     }
 }
 
@@ -248,6 +255,7 @@ f32 func_8086E378(EnOkuta* this) {
     if (this->actor.home.pos.y < height) {
         return this->actor.home.pos.y;
     }
+
     return height;
 }
 
@@ -262,8 +270,9 @@ void func_8086E3B8(EnOkuta* this, PlayState* play) {
     sp4C.x = this->actor.world.pos.x + 25.0f * s;
     sp4C.y = this->actor.world.pos.y - 6.0f;
     sp4C.z = this->actor.world.pos.z + 25.0f * c;
-    if (Actor_Spawn(&play->actorCtx, play, 8, sp4C.x, sp4C.y, sp4C.z, this->actor.shape.rot.x, this->actor.shape.rot.y,
-                    this->actor.shape.rot.z, this->actor.params + 0x10) != NULL) {
+
+    if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OKUTA, sp4C.x, sp4C.y, sp4C.z, this->actor.shape.rot.x,
+                    this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params + 0x10) != NULL) {
         sp4C.x = this->actor.world.pos.x + (40.0f * s);
         sp4C.z = this->actor.world.pos.z + (40.0f * c);
         sp4C.y = this->actor.world.pos.y;
@@ -271,8 +280,10 @@ void func_8086E3B8(EnOkuta* this, PlayState* play) {
         sp40.x = 1.5f * s;
         sp40.y = 0.0f;
         sp40.z = 1.5f * c;
+
         func_8086E214(&sp4C, &sp40, 0x14, play);
     }
+
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_THROW);
 }
 
@@ -758,7 +769,7 @@ void EnOkuta_UpdateHeadScale(EnOkuta* this) {
 }
 
 void func_8086FCA4(EnOkuta* this, PlayState* play) {
-    if ((this->collider.base.acFlags & AC_HIT) == 0) {
+    if (!(this->collider.base.acFlags & AC_HIT)) {
         return;
     }
 
@@ -779,7 +790,8 @@ void func_8086FCA4(EnOkuta* this, PlayState* play) {
             this->drawDmgEffScale = 0.6f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 4);
+                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -928,7 +940,7 @@ s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
     return true;
 }
 
-s32 func_808704DC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnOkuta* this = THIS;
     f32 curFrame;
     Vec3f scale;
@@ -961,7 +973,7 @@ static Vec3f D_80870954[3] = {
     { 0.0f, 1500.0f, -2000.0f },
 };
 
-void func_808705C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnOkuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnOkuta* this = THIS;
     s32 limb = D_80870944[limbIndex];
     s32 i;
@@ -998,9 +1010,10 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
         } else {
             gSPSegment(&gfx[1], 0x08, ovl_En_Okuta_DL_2A50);
         }
+
         POLY_OPA_DISP = &gfx[2];
-        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808704DC, func_808705C8,
-                          &this->actor);
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnOkuta_OverrideLimbDraw,
+                          EnOkuta_PostLimbDraw, &this->actor);
     } else {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
