@@ -3322,7 +3322,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     s32 objectSlot;
     ActorOverlay* overlayEntry;
 
-    if (actorCtx->totalLoadedActors >= 0xFF) {
+    if (actorCtx->totalLoadedActors >= 255) {
         return NULL;
     }
 
