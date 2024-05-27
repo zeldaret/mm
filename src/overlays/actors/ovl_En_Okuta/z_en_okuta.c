@@ -145,7 +145,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     s32 bgId;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    this->unk190 = EN_OKUTA_GET_UNK190(thisx);
+    this->numConsecutiveProjectiles = EN_OKUTA_GET_NUM_CONSECUTIVE_PROJECTILES(thisx);
     thisx->params &= 0xFF;
 
     if ((EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_RED_OCTOROK) ||
@@ -155,8 +155,8 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sOctorokCylinderInit);
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-        if (this->unk190 == 0xFF || this->unk190 == 0) {
-            this->unk190 = 1;
+        if (this->numConsecutiveProjectiles == 0xFF || this->numConsecutiveProjectiles == 0) {
+            this->numConsecutiveProjectiles = 1;
         }
 
         thisx->floorHeight =
@@ -267,11 +267,9 @@ f32 EnOkuta_GetFloatHeight(EnOkuta* this) {
 void EnOkuta_SpawnProjectile(EnOkuta* this, PlayState* play) {
     Vec3f pos;
     Vec3f velocity;
-    f32 sin;
-    f32 cos;
+    f32 sin = Math_SinS(this->actor.shape.rot.y);
+    f32 cos = Math_CosS(this->actor.shape.rot.y);
 
-    sin = Math_SinS(this->actor.shape.rot.y);
-    cos = Math_CosS(this->actor.shape.rot.y);
     pos.x = this->actor.world.pos.x + 25.0f * sin;
     pos.y = this->actor.world.pos.y - 6.0f;
     pos.z = this->actor.world.pos.z + 25.0f * cos;
@@ -429,7 +427,7 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
 
     if (this->actionFunc != EnOkuta_Shoot) {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
-            this->timer = this->unk190;
+            this->timer = this->numConsecutiveProjectiles;
         } else {
             this->timer = (560.0f - this->actor.xzDistToPlayer) * 0.005f + 1.0f;
         }
