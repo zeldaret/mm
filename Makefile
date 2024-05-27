@@ -87,12 +87,6 @@ BASEROM_DIR   := baseroms/$(VERSION)
 BUILD_DIR     := build/$(VERSION)
 EXTRACTED_DIR := extracted/$(VERSION)
 
-CPPFLAGS += -P
-
-ifeq ($(DETECTED_OS), macos)
-  CPPFLAGS += -xc++
-endif
-
 
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -143,7 +137,11 @@ ifeq ($(RUN_CC_CHECK),0)
   CC_CHECK_COMP    := @:
 endif
 
-CPP           := cpp
+# The `cpp` command behaves differently on macOS (it behaves as if
+# `-traditional-cpp` was passed) so we use `gcc -E` instead.
+CPP           := gcc -E
+CPPFLAGS      += -P -xc -fno-dollars-in-identifiers
+
 MKLDSCRIPT    := tools/buildtools/mkldscript
 MKDMADATA     := tools/buildtools/mkdmadata
 ZAPD          := tools/ZAPD/ZAPD.out
