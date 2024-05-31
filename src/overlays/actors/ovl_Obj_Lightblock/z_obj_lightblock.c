@@ -74,7 +74,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-
 void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
 
