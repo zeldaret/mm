@@ -1,7 +1,7 @@
 #ifndef Z64SCHEDULE_H
 #define Z64SCHEDULE_H
 
-#include "ultra64.h"
+#include "z64scripts.h"
 
 /**
  *   Schedule is a subsystem that acts as a way to make decisions based on the
@@ -191,23 +191,20 @@ typedef struct {
     /* 0x2 */ u8 offsetL;
 } ScheduleCmdBranchL; // size = 0x3
 
-#define SCHEDULE_PACK_S16(val) \
-    ((val) >> 8) & 0xFF, (val) & 0xFF
-
 #define SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_S(flag, offset) \
-    SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_S, SCHEDULE_PACK_S16(flag), (offset)
+    SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_S, SCRIPT_UNPACK_16(flag), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_L(flag, offset) \
-    SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_L, SCHEDULE_PACK_S16(flag), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_L, SCRIPT_UNPACK_16(flag), SCRIPT_UNPACK_16(offset)
 
 #define SCHEDULE_CMD_CHECK_TIME_RANGE_S(startHr, startMin, endHr, endMin, offset) \
-    SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S, (startHr), (startMin), (endHr), (endMin), (offset)
+    SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S, SCRIPT_UNPACK_8(startHr), SCRIPT_UNPACK_8(startMin), SCRIPT_UNPACK_8(endHr), SCRIPT_UNPACK_8(endMin), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_CHECK_TIME_RANGE_L(startHr, startMin, endHr, endMin, offset) \
-    SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L, (startHr), (startMin), (endHr), (endMin), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L, SCRIPT_UNPACK_8(startHr), SCRIPT_UNPACK_8(startMin), SCRIPT_UNPACK_8(endHr), SCRIPT_UNPACK_8(endMin), SCRIPT_UNPACK_16(offset)
 
 #define SCHEDULE_CMD_RET_VAL_L(result) \
-    SCHEDULE_CMD_ID_RET_VAL_L, SCHEDULE_PACK_S16(result)
+    SCHEDULE_CMD_ID_RET_VAL_L, SCRIPT_UNPACK_16(result)
 
 #define SCHEDULE_CMD_RET_NONE() \
     SCHEDULE_CMD_ID_RET_NONE
@@ -216,40 +213,40 @@ typedef struct {
     SCHEDULE_CMD_ID_RET_EMPTY,
 
 #define SCHEDULE_CMD_NOP(unk0, unk1, unk2) \
-    SCHEDULE_CMD_ID_NOP, (unk0), (unk1), (unk2)
+    SCHEDULE_CMD_ID_NOP, SCRIPT_UNPACK_8(unk0), SCRIPT_UNPACK_8(unk1), SCRIPT_UNPACK_8(unk2)
 
 #define SCHEDULE_CMD_CHECK_MISC_S(which, offset) \
-    SCHEDULE_CMD_ID_CHECK_MISC_S, (which), (offset)
+    SCHEDULE_CMD_ID_CHECK_MISC_S, SCRIPT_UNPACK_8(which), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_RET_VAL_S(result) \
-    SCHEDULE_CMD_ID_RET_VAL_S, (result)
+    SCHEDULE_CMD_ID_RET_VAL_S, SCRIPT_UNPACK_8(result)
 
 #define SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(scene, offset) \
-    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, SCHEDULE_PACK_S16(scene), (offset)
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, SCRIPT_UNPACK_16(scene), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(scene, offset) \
-    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, SCHEDULE_PACK_S16(scene), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, SCRIPT_UNPACK_16(scene), SCRIPT_UNPACK_16(offset)
 
 #define SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(day, offset) \
-    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S, SCHEDULE_PACK_S16(day), (offset)
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S, SCRIPT_UNPACK_16(day), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(day, offset) \
-    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L, SCRIPT_UNPACK_16(day), SCRIPT_UNPACK_16(offset)
 
 #define SCHEDULE_CMD_RET_TIME(time0Hr, time0Min, time1Hr, time1Min, result) \
-    SCHEDULE_CMD_ID_RET_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (result)
+    SCHEDULE_CMD_ID_RET_TIME, SCRIPT_UNPACK_8(time0Hr), SCRIPT_UNPACK_8(time0Min), SCRIPT_UNPACK_8(time1Hr), SCRIPT_UNPACK_8(time1Min), SCRIPT_UNPACK_8(result)
 
 #define SCHEDULE_CMD_CHECK_BEFORE_TIME_S(timeHr, timeMin, offset) \
-    SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S, (timeHr), (timeMin), (offset)
+    SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S, SCRIPT_UNPACK_8(timeHr), SCRIPT_UNPACK_8(timeMin), SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_CHECK_BEFORE_TIME_L(timeHr, timeMin, offset) \
-    SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L, (timeHr), (timeMin), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L, SCRIPT_UNPACK_8(timeHr), SCRIPT_UNPACK_8(timeMin), SCRIPT_UNPACK_16(offset)
 
 #define SCHEDULE_CMD_BRANCH_S(offset) \
-    SCHEDULE_CMD_ID_BRANCH_S, (offset)
+    SCHEDULE_CMD_ID_BRANCH_S, SCRIPT_UNPACK_8(offset)
 
 #define SCHEDULE_CMD_BRANCH_L(offset) \
-    SCHEDULE_CMD_ID_BRANCH_L, SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_BRANCH_L, SCRIPT_UNPACK_16(offset)
 
 typedef u8 ScheduleScript;
 
