@@ -228,7 +228,8 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
 };
 
 MsgScript sAnjuMsgScript_SchReceiveLetterFromPostman[] = {
-    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION, 0x0049 - 0x0005),
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION,
+                                                       0x0049 - 0x0005),
     /* 0x0005 0x03 */ MSCRIPT_CHECK_CALLBACK(0x0),
     /* 0x0008 0x03 */ MSCRIPT_BEGIN_TEXT(0x28BA),
     /* 0x000B 0x01 */ MSCRIPT_AWAIT_TEXT(),
