@@ -6,7 +6,8 @@
  * In addition to the standard red Octorok that appears in the final game, this actor is also responsible for an unused
  * blue Octorok variant. This blue Octorok is invulnerable to every attack (it simply spins whenever the player hits it
  * with something), cannot be frozen with Ice Arrows, and can follow the player underwater if the player dives below the
- * surface. This actor also handles the projectiles that the Octoroks shoot.
+ * surface. Note that this blue Octorok is separate from the one that is used in the Town Shooting Gallery; that Octorok
+ * is handled by EnSyatekiOkuta. This actor also handles the projectiles that the Octoroks shoot.
  */
 
 #include "z_en_okuta.h"
