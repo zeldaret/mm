@@ -124,11 +124,11 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
 /**
  * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
  */
-void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
-    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+void EnSyatekiOkuta_SpawnSmoke(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sSmokePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sSmokeEnvColor = { 150, 150, 150, 255 };
 
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sSmokePrimColor, &sSmokeEnvColor, 400, scaleStep);
 }
 
 /**
@@ -308,7 +308,7 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
             velocity.x = 0.0f;
             velocity.y = -0.5f;
             velocity.z = 0.0f;
-            EnSyatekiOkuta_SpawnDust(&pos, &velocity, -20, play);
+            EnSyatekiOkuta_SpawnSmoke(&pos, &velocity, -20, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 

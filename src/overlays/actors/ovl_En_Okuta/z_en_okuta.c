@@ -1,7 +1,12 @@
 /*
  * File: z_en_okuta.c
  * Overlay: ovl_En_Okuta
- * Description: Octorok
+ * Description: Octorok and its projectiles
+ *
+ * In addition to the standard red Octorok that appears in the final game, this actor is also responsible for an unused
+ * blue Octorok variant. This blue Octorok is invulnerable to every attack (it simply spins whenever the player hits it
+ * with something), cannot be frozen with Ice Arrows, and can follow the player underwater if the player dives below the
+ * surface. This actor also handles the projectiles that the Octoroks shoot.
  */
 
 #include "z_en_okuta.h"
@@ -198,6 +203,10 @@ void EnOkuta_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
+/**
+ * Covers the Octorok's body parts with ice and turns the Octorok red. Note that this is different from being frozen
+ * inside a block of ice; see `EnOkuta_FrozenInIceBlock` for how that is handled.
+ */
 void EnOkuta_Freeze(EnOkuta* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.6f;
@@ -208,6 +217,10 @@ void EnOkuta_Freeze(EnOkuta* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
+/**
+ * Spawns ice shards on all of the Octorok's body parts that fly off in random directions. Note that this only occurs
+ * when the Octorok is frozen *without* encasing it in a block of ice.
+ */
 void EnOkuta_Thaw(EnOkuta* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -228,11 +241,11 @@ void EnOkuta_SpawnBubbles(EnOkuta* this, PlayState* play) {
 /**
  * Spawns the puff of smoke that appears at the Octorok's snout.
  */
-void EnOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
-    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+void EnOkuta_SpawnSmoke(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sSmokePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sSmokeEnvColor = { 150, 150, 150, 255 };
 
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sSmokePrimColor, &sSmokeEnvColor, 400, scaleStep);
 }
 
 /**
@@ -254,9 +267,16 @@ void EnOkuta_SpawnRipple(EnOkuta* this, PlayState* play) {
     }
 }
 
+/**
+ * This function is only called by the unused blue Octorok variant. The blue Octorok can follow the player if they dive
+ * underwater, and this function is used to determine at what height the Octorok should float while it is either idle or
+ * while it is shooting at the player.
+ */
 f32 EnOkuta_GetFloatHeight(EnOkuta* this) {
     f32 height = this->actor.world.pos.y + this->actor.playerHeightRel + 60.0f;
 
+    // `EnOkuta_Init` sets the Octorok's home y-position to be the water's surface, so this ensures that the Octorok
+    // will always be either at the water's surface or below it.
     if (this->actor.home.pos.y < height) {
         return this->actor.home.pos.y;
     }
@@ -285,7 +305,7 @@ void EnOkuta_SpawnProjectile(EnOkuta* this, PlayState* play) {
         velocity.y = 0.0f;
         velocity.z = 1.5f * cos;
 
-        EnOkuta_SpawnDust(&pos, &velocity, 20, play);
+        EnOkuta_SpawnSmoke(&pos, &velocity, 20, play);
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_THROW);
@@ -298,6 +318,9 @@ void EnOkuta_SetupWaitToAppear(EnOkuta* this) {
     this->actionFunc = EnOkuta_WaitToAppear;
 }
 
+/**
+ * Waits until the player gets close, but not *too* close, then makes the Octorok appear at the water's surface.
+ */
 void EnOkuta_WaitToAppear(EnOkuta* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y;
 
@@ -320,6 +343,11 @@ void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
     this->actionFunc = EnOkuta_Appear;
 }
 
+/**
+ * Plays the appear animation to completion while scaling the Octorok to its full size, then transitions the the idle
+ * floating state. If the Octorok is a red Octorok, and the player is too close to the Octorok when its appear animation
+ * is complete, then the Octorok will instead hide underwater.
+ */
 void EnOkuta_Appear(EnOkuta* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if ((this->actor.xzDistToPlayer < 160.0f) && (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK)) {
@@ -355,6 +383,9 @@ void EnOkuta_SetupHide(EnOkuta* this) {
     this->actionFunc = EnOkuta_Hide;
 }
 
+/**
+ * Retreats underwater while scaling the Octorok down, then makes the Octorok wait to appear again.
+ */
 void EnOkuta_Hide(EnOkuta* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.5f, 30.0f);
 
@@ -381,6 +412,10 @@ void EnOkuta_Hide(EnOkuta* this, PlayState* play) {
 
 void EnOkuta_SetupFloat(EnOkuta* this) {
     Animation_PlayLoop(&this->skelAnime, &gOctorokFloatAnim);
+
+    // `EnOkuta_Float` uses the `timer` variable in an unconventional way. It is used to track how many times the
+    // Octorok's float animation needs to loop before the Octorok can start shooting at the player. Note that the unused
+    // blue Octorok variant can ignore this variable and start shooting the player anyway if the player gets too close.
     if (this->actionFunc == EnOkuta_Shoot) {
         this->timer = 8;
     } else {
@@ -390,6 +425,11 @@ void EnOkuta_SetupFloat(EnOkuta* this) {
     this->actionFunc = EnOkuta_Float;
 }
 
+/**
+ * Floats in place while slowly turning to face the player. If the player is too far from the Octorok, it will hide
+ * underwater (the red Octoroks will also do this if the player is too close). Otherwise, it will start shooting
+ * projectiles at the player after a short time, so long as the Octorok is roughly facing the player.
+ */
 void EnOkuta_Float(EnOkuta* this, PlayState* play) {
     if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
         this->actor.world.pos.y = this->actor.home.pos.y;
@@ -426,6 +466,9 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gOctorokShootAnim);
 
     if (this->actionFunc != EnOkuta_Shoot) {
+        // `EnOkuta_Shoot` uses the `timer` variable in an unconventional way. It is used to track how many projectiles
+        // are remaining in the current "volley". The Octorok will shoot at the player repeatedly, decrementing the
+        // `timer` variable after each shot, until it reaches 0.
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             this->timer = this->numConsecutiveProjectiles;
         } else {
@@ -446,6 +489,12 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
     this->actionFunc = EnOkuta_Shoot;
 }
 
+/**
+ * Repeatedly fires projectiles at the player based on the value of the `numConsecutiveProjectiles` variable (for the
+ * red Octorok) or based on the distance between the Octorok and the player (for the blue Octorok). Once it's done
+ * shooting projectiles, the Octorok will go back to floating. If it's a red Octorok, then it will stop shooting and
+ * hide underwater if the player gets too close.
+ */
 void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
     f32 curFrame;
 
@@ -466,7 +515,9 @@ void EnOkuta_Shoot(EnOkuta* this, PlayState* play) {
         }
     } else {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
-            if ((curFrame = this->skelAnime.curFrame) < 13.0f) {
+            curFrame = this->skelAnime.curFrame;
+
+            if (curFrame < 13.0f) {
                 this->actor.world.pos.y = Math_SinF(0.2617889f * curFrame) * this->jumpHeight + this->actor.home.pos.y;
             }
 
@@ -555,7 +606,7 @@ void EnOkuta_Die(EnOkuta* this, PlayState* play) {
         velocity.y = -0.5f;
         velocity.z = 0.0f;
 
-        EnOkuta_SpawnDust(&pos, &velocity, -20, play);
+        EnOkuta_SpawnSmoke(&pos, &velocity, -20, play);
         Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
     }
 
@@ -615,6 +666,9 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
         return;
     }
 
+    // The only way to reach this code is if our attempt to spawn the ObjIceblock actor failed for some reason. In the
+    // final game, this basically never happens during normal play, so the below code is effectively unused and never
+    // seen by most players, even if it *can* be run under certain extreme circumstances.
     EnOkuta_Freeze(this);
 
     if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -626,6 +680,10 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
     this->actionFunc = EnOkuta_Frozen;
 }
 
+/**
+ * Stops all movement and animation for the Octorok and waits until the ice block actor is killed. Afterwards, the
+ * Octorok will sink back to the water's surface and then start floating again.
+ */
 void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
     this->actor.colorFilterTimer = 10;
 
@@ -639,6 +697,13 @@ void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
     }
 }
 
+/**
+ * Stops all movement and animation for the Octorok and waits 80 frames (or 3 frames if the attack that froze the
+ * Octorok also killed it). Afterwards, ice pieces will fly off the Octorok, and it will play its damaged animation.
+ * Note that this function is *not* responsible for handling the Octorok being encased in an ice block; that's handled
+ * by `EnOkuta_FrozenInIceBlock`. This behavior is incredibly difficult to trigger in-game and is unlikely to be seen by
+ * most players; see `EnOkuta_SetupFrozen` for more information.
+ */
 void EnOkuta_Frozen(EnOkuta* this, PlayState* play) {
     DECR(this->timer);
 
@@ -655,6 +720,11 @@ void EnOkuta_SetupSpin(EnOkuta* this) {
     this->actionFunc = EnOkuta_Spin;
 }
 
+/**
+ * Spins in place for 20 frames while playing its hit animation, then makes the Octorok go back to floating. This
+ * function is only ever used by the unused blue Octorok variant; this is what the blue Octorok does instead of taking
+ * damage from the player's attacks.
+ */
 void EnOkuta_Spin(EnOkuta* this, PlayState* play) {
     this->timer--;
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x400);
@@ -675,6 +745,10 @@ void EnOkuta_Spin(EnOkuta* this, PlayState* play) {
     }
 }
 
+/**
+ * Handles all the behavior of the Octorok's projectile, including spinning the projectile around constantly and
+ * reflecting the projectile when it bounces off the player's shield .
+ */
 void EnOkuta_Projectile_Fly(EnOkuta* this, PlayState* play) {
     Vec3f fragmentPos;
     Player* player = GET_PLAYER(play);

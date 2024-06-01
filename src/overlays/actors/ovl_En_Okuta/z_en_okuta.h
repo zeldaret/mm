@@ -13,7 +13,7 @@ typedef void (*EnOkutaActionFunc)(struct EnOkuta*, PlayState*);
 
 typedef enum EnOkutaType {
     /*  0 */ EN_OKUTA_TYPE_RED_OCTOROK,
-    /*  1 */ EN_OKUTA_TYPE_BLUE_OCTOROK,
+    /*  1 */ EN_OKUTA_TYPE_BLUE_OCTOROK, // Unused in the final game. This variant is invincible to all attacks and can chase the player underwater if they dive.
     /* 16 */ EN_OKUTA_TYPE_PROJECTILE_BASE = 16,
     /* 16 */ EN_OKUTA_TYPE_RED_PROJECTILE = EN_OKUTA_TYPE_RED_OCTOROK + EN_OKUTA_TYPE_PROJECTILE_BASE,
     /* 17 */ EN_OKUTA_TYPE_BLUE_PROJECTILE = EN_OKUTA_TYPE_BLUE_OCTOROK + EN_OKUTA_TYPE_PROJECTILE_BASE
