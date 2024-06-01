@@ -12,14 +12,13 @@
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
-                               s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 flag = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckWeekEventReg(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckWeekEventReg* cmd = (MsgScriptCmdCheckWeekEventReg*)*script;
+    u16 flag = SCRIPT_PACK_16(cmd->flagByte, cmd->flagMask);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (CHECK_WEEKEVENTREG(flag)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -32,13 +31,13 @@ s32 MsgEvent_CheckWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, Ms
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckGoron(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CheckGoron(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdCheckGoron* cmd = (MsgScriptCmdCheckGoron*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (player->transformation == PLAYER_FORM_GORON) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -51,13 +50,13 @@ s32 MsgEvent_CheckGoron(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckZora(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CheckZora(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdCheckZora* cmd = (MsgScriptCmdCheckZora*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (player->transformation == PLAYER_FORM_ZORA) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -70,13 +69,13 @@ s32 MsgEvent_CheckZora(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckDeku(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CheckDeku(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdCheckDeku* cmd = (MsgScriptCmdCheckDeku*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -89,13 +88,13 @@ s32 MsgEvent_CheckDeku(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckHuman(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CheckHuman(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdCheckHuman* cmd = (MsgScriptCmdCheckHuman*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -110,27 +109,27 @@ s32 MsgEvent_CheckHuman(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  5:(s16) skipChoice3
  * Command size: 7
  */
-s32 MsgEvent_CheckTextChoice(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_CheckTextChoice(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckTextChoice* cmd = (MsgScriptCmdCheckTextChoice*)*script;
     s16 skip = 0;
 
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            skip = MSCRIPT_GET_16(script, 1);
+            skip = SCRIPT_PACK_16(cmd->offset0H, cmd->offset0L);
             break;
 
         case 1:
-            skip = MSCRIPT_GET_16(script, 3);
+            skip = SCRIPT_PACK_16(cmd->offset1H, cmd->offset1L);
             break;
 
         case 2:
-            skip = MSCRIPT_GET_16(script, 5);
+            skip = SCRIPT_PACK_16(cmd->offset2H, cmd->offset2L);
             break;
 
         default:
             break;
     }
-    *scriptPtr += skip;
+    *script += skip;
 
     return MSCRIPT_CONTINUE;
 }
@@ -144,15 +143,15 @@ s32 MsgEvent_CheckTextChoice(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s32 getItemId = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdOfferItem* cmd = (MsgScriptCmdOfferItem*)*script;
+    s32 getItemId = SCRIPT_PACK_16(cmd->itemIdH, cmd->itemIdL);
     f32 xzRange = actor->xzDistToPlayer + 1.0f;
     f32 yRange = fabsf(actor->playerHeightRel) + 1.0f;
-    s16 skip = MSCRIPT_GET_16(script, 3);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (Actor_HasParent(actor, play)) {
-        *scriptPtr += skip;
+        *script += skip;
     } else {
         Actor_OfferGetItem(actor, play, getItemId, xzRange, yRange);
         return MSCRIPT_STOP;
@@ -168,15 +167,15 @@ s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdAutotalk* cmd = (MsgScriptCmdAutotalk*)*script;
     f32 xzRange = actor->xzDistToPlayer + 1.0f;
     f32 yRange = fabsf(actor->playerHeightRel) + 1.0f;
     f32 xzDist;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (Actor_TalkOfferAccepted(actor, &play->state)) {
-        *scriptPtr += skip;
+        *script += skip;
     } else {
         actor->flags |= ACTOR_FLAG_10000;
         xzDist = actor->xzDistToPlayer;
@@ -197,13 +196,13 @@ s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCal
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 rupees = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckRupees(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckRupees* cmd = (MsgScriptCmdCheckRupees*)*script;
+    s16 rupees = SCRIPT_PACK_16(cmd->rupeesH, cmd->rupeesL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (gSaveContext.save.saveInfo.playerData.rupees >= rupees) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -216,12 +215,12 @@ s32 MsgEvent_CheckRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEvent
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckCallback(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_CheckCallback(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckCallback* cmd = (MsgScriptCmdCheckCallback*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if ((callback == NULL) || (callback(actor, play) != 0)) {
-        *scriptPtr += skip;
+        *script += skip;
     } else {
         return MSCRIPT_STOP;
     }
@@ -241,39 +240,39 @@ s32 MsgEvent_CheckCallback(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  11:(s16) skipNight3
  * Command size: 13
  */
-s32 MsgEvent_CheckDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_CheckDay(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckDay* cmd = (MsgScriptCmdCheckDay*)*script;
     s16 skip = 0;
 
     switch (gSaveContext.save.day) {
         case 1:
             if (!gSaveContext.save.isNight) {
-                skip = MSCRIPT_GET_16(script, 1);
+                skip = SCRIPT_PACK_16(cmd->offsetDay1H, cmd->offsetDay1L);
             } else {
-                skip = MSCRIPT_GET_16(script, 3);
+                skip = SCRIPT_PACK_16(cmd->offsetNight1H, cmd->offsetNight1L);
             }
             break;
 
         case 2:
             if (!gSaveContext.save.isNight) {
-                skip = MSCRIPT_GET_16(script, 5);
+                skip = SCRIPT_PACK_16(cmd->offsetDay2H, cmd->offsetDay2L);
             } else {
-                skip = MSCRIPT_GET_16(script, 7);
+                skip = SCRIPT_PACK_16(cmd->offsetNight2H, cmd->offsetNight2L);
             }
             break;
 
         case 3:
             if (!gSaveContext.save.isNight) {
-                skip = MSCRIPT_GET_16(script, 9);
+                skip = SCRIPT_PACK_16(cmd->offsetDay3H, cmd->offsetDay3L);
             } else {
-                skip = MSCRIPT_GET_16(script, 11);
+                skip = SCRIPT_PACK_16(cmd->offsetNight3H, cmd->offsetNight3L);
             }
             break;
 
         default:
             break;
     }
-    *scriptPtr += skip;
+    *script += skip;
     return MSCRIPT_CONTINUE;
 }
 
@@ -285,8 +284,8 @@ s32 MsgEvent_CheckDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCal
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdAwaitTextJump* cmd = (MsgScriptCmdAwaitTextJump*)*script;
     s16 skip;
 
     switch (Message_GetState(&play->msgCtx)) {
@@ -296,13 +295,13 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
                 return MSCRIPT_STOP;
             }
         case TEXT_STATE_CLOSING:
-            skip = MSCRIPT_GET_16(script, 1);
+            skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
             break;
 
         default:
             return MSCRIPT_STOP;
     }
-    *scriptPtr += skip;
+    *script += skip;
     return MSCRIPT_CONTINUE;
 }
 
@@ -313,7 +312,7 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
@@ -338,7 +337,7 @@ s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     s32 state = Message_GetState(&play->msgCtx);
 
     *endScript = false;
@@ -366,10 +365,10 @@ s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_BeginText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_BeginText(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdBeginText* cmd = (MsgScriptCmdBeginText*)*script;
 
-    Message_StartTextbox(play, MSCRIPT_GET_16(script, 1), NULL);
+    Message_StartTextbox(play, SCRIPT_PACK_16(cmd->textIdH, cmd->textIdL), NULL);
     return MSCRIPT_CONTINUE;
 }
 
@@ -380,10 +379,10 @@ s32 MsgEvent_BeginText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdContinueText* cmd = (MsgScriptCmdContinueText*)*script;
 
-    Message_ContinueTextbox(play, MSCRIPT_GET_16(script, 1));
+    Message_ContinueTextbox(play, SCRIPT_PACK_16(cmd->textIdH, cmd->textIdL));
     return MSCRIPT_CONTINUE;
 }
 
@@ -394,7 +393,7 @@ s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     *endScript = true;
     return MSCRIPT_STOP;
 }
@@ -407,9 +406,9 @@ s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallbac
  *  1:(u16) flag
  * Command size: 3
  */
-s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 flag = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdSetWeekEventReg* cmd = (MsgScriptCmdSetWeekEventReg*)*script;
+    u16 flag = SCRIPT_PACK_16(cmd->flagByte, cmd->flagMask);
 
     SET_WEEKEVENTREG(flag);
     return MSCRIPT_CONTINUE;
@@ -421,7 +420,7 @@ s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Message_CloseTextbox(play);
     return MSCRIPT_CONTINUE;
 }
@@ -433,9 +432,9 @@ s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  0:(u16) flag
  * Command size: 3
  */
-s32 MsgEvent_SetCollectible(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s32 flag = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_SetCollectible(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdSetCollectible* cmd = (MsgScriptCmdSetCollectible*)*script;
+    s32 flag = SCRIPT_PACK_16(cmd->flagH, cmd->flagL);
 
     if (!Flags_GetCollectible(play, flag)) {
         Flags_SetCollectible(play, flag);
@@ -451,9 +450,9 @@ s32 MsgEvent_SetCollectible(Actor* actor, PlayState* play, u8** scriptPtr, MsgEv
  *  0:(s16) rupees
  * Command size: 3
  */
-s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 rupees = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdChangeRupees* cmd = (MsgScriptCmdChangeRupees*)*script;
+    s16 rupees = SCRIPT_PACK_16(cmd->rupeesH, cmd->rupeesL);
 
     Rupees_ChangeBy(rupees);
     return MSCRIPT_CONTINUE;
@@ -466,31 +465,31 @@ s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     play->msgCtx.msgMode = MSGMODE_PAUSED;
     return MSCRIPT_CONTINUE;
 }
 
 /**
- * Unsets ACTOR_FLAG_10000 for the actor executing the script
+ * Unsets ACTOR_FLAG_10000 for the actor executing the cmd
  *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_UnsetAutotalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_UnsetAutotalk(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     actor->flags &= ~ACTOR_FLAG_10000;
     return MSCRIPT_CONTINUE;
 }
 
 /**
- * Sets player focus & talk actor to the child of the actor executing the script
+ * Sets player focus & talk actor to the child of the actor executing the cmd
  *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_FocusToChild(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_FocusToChild(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor, play, actor->child);
     }
@@ -498,13 +497,13 @@ s32 MsgEvent_FocusToChild(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
 }
 
 /**
- * Sets player focus & talk actor to the actor executing the script
+ * Sets player focus & talk actor to the actor executing the cmd
  *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_FocusToSelf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_FocusToSelf(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor->child, play, actor);
     }
@@ -519,11 +518,11 @@ s32 MsgEvent_FocusToSelf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEvent
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Jump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_Jump(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdJump* cmd = (MsgScriptCmdJump*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
-    *scriptPtr += skip;
+    *script += skip;
     return MSCRIPT_CONTINUE;
 }
 
@@ -536,13 +535,13 @@ s32 MsgEvent_Jump(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallbac
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckQuestItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 questItem = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckQuestItem(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckQuestItem* cmd = (MsgScriptCmdCheckQuestItem*)*script;
+    u16 questItem = SCRIPT_PACK_16(cmd->questItemH, cmd->questItemL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (CHECK_QUEST_ITEM(questItem)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -556,12 +555,12 @@ s32 MsgEvent_CheckQuestItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEv
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckEventInf(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckEventInf* cmd = (MsgScriptCmdCheckEventInf*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
-    if (MSCRIPT_GET_8(script, 2) & gSaveContext.eventInf[MSCRIPT_GET_8(script, 1)]) {
-        *scriptPtr += skip;
+    if (gSaveContext.eventInf[cmd->flagByte] & cmd->flagMask) {
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -574,10 +573,10 @@ s32 MsgEvent_CheckEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  1:(u16) event_inf flag
  * Command size: 3
  */
-s32 MsgEvent_SetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_SetEventInf(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdSetEventInf* cmd = (MsgScriptCmdSetEventInf*)*script;
 
-    gSaveContext.eventInf[MSCRIPT_GET_8(script, 1)] |= MSCRIPT_GET_8(script, 2);
+    gSaveContext.eventInf[cmd->flagByte] |= cmd->flagMask;
     return MSCRIPT_CONTINUE;
 }
 
@@ -589,10 +588,10 @@ s32 MsgEvent_SetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEvent
  *  1:(u16) event_inf flag
  * Command size: 3
  */
-s32 MsgEvent_UnsetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_UnsetEventInf(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdUnsetEventInf* cmd = (MsgScriptCmdUnsetEventInf*)*script;
 
-    gSaveContext.eventInf[MSCRIPT_GET_8(script, 1)] &= MSCRIPT_GET_8(script, 2) ^ 0xFF;
+    gSaveContext.eventInf[cmd->flagByte] &= cmd->flagMask ^ 0xFF;
     return MSCRIPT_CONTINUE;
 }
 
@@ -606,9 +605,9 @@ s32 MsgEvent_UnsetEventInf(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  7:(s16) skip if player item-action is negative
  * Command size: 9
  */
-s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    PlayerItemAction checkItemAction = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckItemAction* cmd = (MsgScriptCmdCheckItemAction*)*script;
+    PlayerItemAction checkItemAction = SCRIPT_PACK_16(cmd->itemActionH, cmd->itemActionL);
     s16 skip;
     PlayerItemAction curItemAction;
 
@@ -624,18 +623,18 @@ s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
             if (curItemAction == PLAYER_IA_NONE) {
                 return MSCRIPT_STOP;
             } else if (curItemAction < 0) {
-                skip = MSCRIPT_GET_16(script, 7);
+                skip = SCRIPT_PACK_16(cmd->offsetContinueH, cmd->offsetContinueL);
             } else if (curItemAction == checkItemAction) {
-                skip = MSCRIPT_GET_16(script, 3);
+                skip = SCRIPT_PACK_16(cmd->offsetEqualH, cmd->offsetEqualL);
             } else {
-                skip = MSCRIPT_GET_16(script, 5);
+                skip = SCRIPT_PACK_16(cmd->offsetDefaultH, cmd->offsetDefaultL);
             }
             break;
 
         default:
             return MSCRIPT_STOP;
     }
-    *scriptPtr += skip;
+    *script += skip;
     return MSCRIPT_CONTINUE;
 }
 
@@ -646,15 +645,15 @@ s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
  *  0:(u8)  cmd
  *  1:(u16) song
  *  3:(s16) skip
- * Command size: 9
+ * Command size: 5
  */
-s32 MsgEvent_CheckHasSong(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 song = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckHasSong(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckHasSong* cmd = (MsgScriptCmdCheckHasSong*)*script;
+    u16 song = SCRIPT_PACK_16(cmd->songH, cmd->songL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA + song)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -666,15 +665,15 @@ s32 MsgEvent_CheckHasSong(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
  *  0:(u8)  cmd
  *  1:(s16) mask
  *  3:(s16) skip
- * Command size: 9
+ * Command size: 5
  */
-s32 MsgEvent_CheckWornMask(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s32 mask = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckWornMask(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckWornMask* cmd = (MsgScriptCmdCheckWornMask*)*script;
+    s32 mask = SCRIPT_PACK_16(cmd->maskH, cmd->maskL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (Player_GetMask(play) == mask) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -689,18 +688,18 @@ s32 MsgEvent_CheckWornMask(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckAfterTime(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckAfterTime(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckAfterTime* cmd = (MsgScriptCmdCheckAfterTime*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     f32 f;
     u16 time;
     u16 now;
 
-    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
+    SCRIPT_CALC_TIME(cmd->hr, cmd->min, time, f);
     now = SCRIPT_TIME_NOW;
 
     if (time < now) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -715,18 +714,18 @@ s32 MsgEvent_CheckAfterTime(Actor* actor, PlayState* play, u8** scriptPtr, MsgEv
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckBeforeTime(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckBeforeTime(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckBeforeTime* cmd = (MsgScriptCmdCheckBeforeTime*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     f32 f;
     u16 time;
     u16 now;
 
-    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
+    SCRIPT_CALC_TIME(cmd->hr, cmd->min, time, f);
     now = SCRIPT_TIME_NOW;
 
     if (time >= now) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -740,13 +739,13 @@ s32 MsgEvent_CheckBeforeTime(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 flag = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckSwitchFlag(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckSwitchFlag* cmd = (MsgScriptCmdCheckSwitchFlag*)*script;
+    s16 flag = SCRIPT_PACK_16(cmd->flagH, cmd->flagL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (Flags_GetSwitch(play, flag)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -759,9 +758,9 @@ s32 MsgEvent_CheckSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
  *  1:(s16) flag
  * Command size: 3
  */
-s32 MsgEvent_SetSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 flag = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_SetSwitchFlag(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdSetSwitchFlag* cmd = (MsgScriptCmdSetSwitchFlag*)*script;
+    s16 flag = SCRIPT_PACK_16(cmd->flagH, cmd->flagL);
 
     Flags_SetSwitch(play, flag);
     return MSCRIPT_CONTINUE;
@@ -776,13 +775,13 @@ s32 MsgEvent_SetSwitchFlag(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 item = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckItem(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckItem* cmd = (MsgScriptCmdCheckItem*)*script;
+    u16 item = SCRIPT_PACK_16(cmd->itemH, cmd->itemL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (INV_CONTENT(item) == item) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -797,22 +796,21 @@ s32 MsgEvent_CheckItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCa
  *  5:(s16) skip
  * Command size: 7
  */
-s32 MsgEvent_CheckBetweenTime(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
-                              s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 5);
+s32 MsgEvent_CheckBetweenTime(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckBetweenTime* cmd = (MsgScriptCmdCheckBetweenTime*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     f32 f;
     u16 startTime;
     u16 endTime;
     u16 now;
 
-    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), startTime, f);
-    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 3), MSCRIPT_GET_8(script, 4), endTime, f);
+    SCRIPT_CALC_TIME(cmd->startHr, cmd->startMin, startTime, f);
+    SCRIPT_CALC_TIME(cmd->endHr, cmd->endMin, endTime, f);
     endTime--;
     now = SCRIPT_TIME_NOW;
 
     if ((startTime >= now) || (now >= endTime)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -826,13 +824,13 @@ s32 MsgEvent_CheckBetweenTime(Actor* actor, PlayState* play, u8** scriptPtr, Msg
  *  3:(s16) skip
  * Command size: 5
  */
-s32 MsgEvent_CheckOnDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 day = MSCRIPT_GET_16(script, 1);
-    s16 skip = MSCRIPT_GET_16(script, 3);
+s32 MsgEvent_CheckOnDay(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckOnDay* cmd = (MsgScriptCmdCheckOnDay*)*script;
+    s16 day = SCRIPT_PACK_16(cmd->dayH, cmd->dayL);
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if (gSaveContext.save.day == day) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -845,13 +843,13 @@ s32 MsgEvent_CheckOnDay(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckCallbackContinue(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
+s32 MsgEvent_CheckCallbackContinue(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback,
                                    s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdCheckCallbackContinue* cmd = (MsgScriptCmdCheckCallbackContinue*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if ((callback != NULL) && (callback(actor, play) != 0)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -864,13 +862,12 @@ s32 MsgEvent_CheckCallbackContinue(Actor* actor, PlayState* play, u8** scriptPtr
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_CheckHasPowderKeg(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
-                               s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_CheckHasPowderKeg(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckHasPowderKeg* cmd = (MsgScriptCmdCheckHasPowderKeg*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     if ((AMMO(ITEM_POWDER_KEG) != 0) || (play->actorCtx.flags & ACTORCTX_FLAG_0)) {
-        *scriptPtr += skip;
+        *script += skip;
     }
     return MSCRIPT_CONTINUE;
 }
@@ -883,9 +880,9 @@ s32 MsgEvent_CheckHasPowderKeg(Actor* actor, PlayState* play, u8** scriptPtr, Ms
  *  1:(s16) item
  * Command size: 3
  */
-s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 item = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdDeleteItem* cmd = (MsgScriptCmdDeleteItem*)*script;
+    s16 item = SCRIPT_PACK_16(cmd->itemH, cmd->itemL);
 
     Inventory_DeleteItem(item, SLOT(item));
     return MSCRIPT_CONTINUE;
@@ -901,9 +898,8 @@ s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  5:(s16) skip
  * Command size: 7
  */
-s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback,
-                                s32* endScript) {
-    u8* script = *scriptPtr;
+s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdCheckCallbackMulti* cmd = (MsgScriptCmdCheckCallbackMulti*)*script;
     s32 ret = 1;
     s16 skip;
 
@@ -912,21 +908,21 @@ s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** scriptPtr, M
     }
     switch (ret) {
         case 3:
-            skip = MSCRIPT_GET_16(script, 5);
+            skip = SCRIPT_PACK_16(cmd->offset3H, cmd->offset3L);
             break;
 
         case 2:
-            skip = MSCRIPT_GET_16(script, 3);
+            skip = SCRIPT_PACK_16(cmd->offset2H, cmd->offset2L);
             break;
 
         case 1:
-            skip = MSCRIPT_GET_16(script, 1);
+            skip = SCRIPT_PACK_16(cmd->offset1H, cmd->offset1L);
             break;
 
         default:
             return MSCRIPT_STOP;
     }
-    *scriptPtr += skip;
+    *script += skip;
     return MSCRIPT_CONTINUE;
 }
 
@@ -938,10 +934,10 @@ s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** scriptPtr, M
  *  1:(u16) textId
  * Command size: 3
  */
-s32 MsgEvent_PlayerTalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayerTalk(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Player* player = GET_PLAYER(play);
-    u8* script = *scriptPtr;
-    u16 textId = MSCRIPT_GET_16(script, 1);
+    MsgScriptCmdPlayerTalk* cmd = (MsgScriptCmdPlayerTalk*)*script;
+    u16 textId = SCRIPT_PACK_16(cmd->textIdH, cmd->textIdL);
 
     player->actor.textId = textId;
     Message_CloseTextbox(play);
@@ -956,9 +952,9 @@ s32 MsgEvent_PlayerTalk(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  1:(u16) event
  * Command size: 3
  */
-s32 MsgEvent_NotebookEvent(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    u16 event = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_NotebookEvent(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdBombersNotebook* cmd = (MsgScriptCmdBombersNotebook*)*script;
+    u16 event = SCRIPT_PACK_16(cmd->eventH, cmd->eventL);
 
     Message_BombersNotebookQueueEvent(play, event);
     return MSCRIPT_CONTINUE;
@@ -971,7 +967,7 @@ s32 MsgEvent_NotebookEvent(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CLOSING:
             break;
@@ -1001,12 +997,12 @@ s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** scriptPtr, MsgEve
  *  1:(s16) skip
  * Command size: 3
  */
-s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    u8* script = *scriptPtr;
-    s16 skip = MSCRIPT_GET_16(script, 1);
+s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
+    MsgScriptCmdJump3* cmd = (MsgScriptCmdJump3*)*script;
+    s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
-    *scriptPtr += skip;
-    *scriptPtr += 3;
+    *script += skip;
+    *script += 3;
     return MSCRIPT_STOP;
 }
 
@@ -1017,7 +1013,7 @@ s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallba
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageDecide();
     return MSCRIPT_CONTINUE;
 }
@@ -1029,7 +1025,7 @@ s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageCancel();
     return MSCRIPT_CONTINUE;
 }
@@ -1041,7 +1037,7 @@ s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventC
  *  0:(u8)  cmd
  * Command size: 1
  */
-s32 MsgEvent_PlayError(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
+s32 MsgEvent_PlayError(Actor* actor, PlayState* play, u8** script, MsgEventCallback callback, s32* endScript) {
     Audio_PlaySfx(NA_SE_SY_ERROR);
     return MSCRIPT_CONTINUE;
 }
@@ -1101,71 +1097,71 @@ MsgEventHandler sMsgEventCmdHandlers[] = {
 };
 
 u8 sMsgEventCmdSizes[] = {
-    MSCRIPT_CMD_CHECK_WEEK_EVENT_REG_SIZE,    // MSCRIPT_CMD_ID_CHECK_WEEK_EVENT_REG
-    MSCRIPT_CMD_CHECK_GORON_SIZE,             // MSCRIPT_CMD_ID_CHECK_GORON
-    MSCRIPT_CMD_CHECK_ZORA_SIZE,              // MSCRIPT_CMD_ID_CHECK_ZORA
-    MSCRIPT_CMD_CHECK_DEKU_SIZE,              // MSCRIPT_CMD_ID_CHECK_DEKU
-    MSCRIPT_CMD_CHECK_HUMAN_SIZE,             // MSCRIPT_CMD_ID_CHECK_HUMAN
-    MSCRIPT_CMD_CHECK_TEXT_CHOICE_SIZE,       // MSCRIPT_CMD_ID_CHECK_TEXT_CHOICE
-    MSCRIPT_CMD_OFFER_ITEM_SIZE,              // MSCRIPT_CMD_ID_OFFER_ITEM
-    MSCRIPT_CMD_AUTOTALK_SIZE,                // MSCRIPT_CMD_ID_AUTOTALK
-    MSCRIPT_CMD_CHECK_RUPEES_SIZE,            // MSCRIPT_CMD_ID_CHECK_RUPEES
-    MSCRIPT_CMD_CHECK_CALLBACK_SIZE,          // MSCRIPT_CMD_ID_CHECK_CALLBACK
-    MSCRIPT_CMD_CHECK_DAY_SIZE,               // MSCRIPT_CMD_ID_CHECK_DAY,
-    MSCRIPT_CMD_AWAIT_TEXT_JUMP_SIZE,         // MSCRIPT_CMD_ID_AWAIT_TEXT_JUMP
-    MSCRIPT_CMD_AWAIT_TEXT_SIZE,              // MSCRIPT_CMD_ID_AWAIT_TEXT
-    MSCRIPT_CMD_AWAIT_TEXT_END_SIZE,          // MSCRIPT_CMD_ID_AWAIT_TEXT_END
-    MSCRIPT_CMD_BEGIN_TEXT_SIZE,              // MSCRIPT_CMD_ID_BEGIN_TEXT
-    MSCRIPT_CMD_CONTINUE_TEXT_SIZE,           // MSCRIPT_CMD_ID_CONTINUE_TEXT
-    MSCRIPT_CMD_DONE_SIZE,                    // MSCRIPT_CMD_ID_DONE
-    MSCRIPT_CMD_SET_WEEK_EVENT_REG_SIZE,      // MSCRIPT_CMD_ID_SET_WEEK_EVENT_REG
-    MSCRIPT_CMD_CLOSE_TEXT_SIZE,              // MSCRIPT_CMD_ID_CLOSE_TEXT
-    MSCRIPT_CMD_SET_COLLECTIBLE_SIZE,         // MSCRIPT_CMD_ID_SET_COLLECTIBLE
-    MSCRIPT_CMD_CHANGE_RUPEES_SIZE,           // MSCRIPT_CMD_ID_CHANGE_RUPEES
-    MSCRIPT_CMD_PAUSE_SIZE,                   // MSCRIPT_CMD_ID_PAUSE
-    MSCRIPT_CMD_UNSET_AUTOTALK_SIZE,          // MSCRIPT_CMD_ID_UNSET_AUTOTALK
-    MSCRIPT_CMD_FOCUS_TO_CHILD_SIZE,          // MSCRIPT_CMD_ID_FOCUS_TO_CHILD
-    MSCRIPT_CMD_FOCUS_TO_SELF_SIZE,           // MSCRIPT_CMD_ID_FOCUS_TO_SELF
-    MSCRIPT_CMD_JUMP_SIZE,                    // MSCRIPT_CMD_ID_JUMP
-    MSCRIPT_CMD_CHECK_QUEST_ITEM_SIZE,        // MSCRIPT_CMD_ID_CHECK_QUEST_ITEM
-    MSCRIPT_CMD_CHECK_EVENT_INF_SIZE,         // MSCRIPT_CMD_ID_CHECK_EVENT_INF
-    MSCRIPT_CMD_SET_EVENT_INF_SIZE,           // MSCRIPT_CMD_ID_SET_EVENT_INF
-    MSCRIPT_CMD_EVENT_INF_SIZE,               // MSCRIPT_CMD_ID_UNSET_EVENT_INF
-    MSCRIPT_CMD_CHECK_ITEM_ACTION_SIZE,       // MSCRIPT_CMD_ID_CHECK_ITEM_ACTION
-    MSCRIPT_CMD_CHECK_HAS_SONG_SIZE,          // MSCRIPT_CMD_ID_CHECK_HAS_SONG
-    MSCRIPT_CMD_CHECK_WORN_MASK_SIZE,         // MSCRIPT_CMD_ID_CHECK_WORN_MASK
-    MSCRIPT_CMD_CHECK_AFTER_TIME_SIZE,        // MSCRIPT_CMD_ID_CHECK_AFTER_TIME
-    MSCRIPT_CMD_CHECK_BEFORE_TIME_SIZE,       // MSCRIPT_CMD_ID_CHECK_BEFORE_TIME
-    MSCRIPT_CMD_CHECK_SWITCH_FLAG_SIZE,       // MSCRIPT_CMD_ID_CHECK_SWITCH_FLAG
-    MSCRIPT_CMD_SET_SWITCH_FLAG_SIZE,         // MSCRIPT_CMD_ID_SET_SWITCH_FLAG
-    MSCRIPT_CMD_CHECK_ITEM_SIZE,              // MSCRIPT_CMD_ID_CHECK_ITEM
-    MSCRIPT_CMD_BETWEEN_TIME_SIZE,            // MSCRIPT_CMD_ID_CHECK_BETWEEN_TIME
-    MSCRIPT_CMD_CHECK_IN_DAY_SIZE,            // MSCRIPT_CMD_ID_CHECK_ON_DAY
-    MSCRIPT_CMD_CHECK_CALLBACK_CONTINUE_SIZE, // MSCRIPT_CMD_ID_CHECK_CALLBACK_CONTINUE
-    MSCRIPT_CMD_CHECK_HAS_POWDER_KEG_SIZE,    // MSCRIPT_CMD_ID_CHECK_HAS_POWDER_KEG
-    MSCRIPT_CMD_DELETE_ITEM_SIZE,             // MSCRIPT_CMD_ID_DELETE_ITEM
-    MSCRIPT_CMD_CHECK_CALLBACK_MULTI_SIZE,    // MSCRIPT_CMD_ID_CHECK_CALLBACK_MULTI
-    MSCRIPT_CMD_PLAYER_TALK_SIZE,             // MSCRIPT_CMD_ID_PLAYER_TALK
-    MSCRIPT_CMD_NOTEBOOK_EVENT_SIZE,          // MSCRIPT_CMD_ID_NOTEBOOK_EVENT
-    MSCRIPT_CMD_AWAIT_TEXT_DONE_SIZE,         // MSCRIPT_CMD_ID_AWAIT_TEXT_DONE
-    MSCRIPT_CMD_JUMP_3_SIZE,                  // MSCRIPT_CMD_ID_JUMP_3
-    MSCRIPT_CMD_PLAY_DECIDE_SIZE,             // MSCRIPT_CMD_ID_PLAY_DECIDE
-    MSCRIPT_CMD_PLAY_CANCEL_SIZE,             // MSCRIPT_CMD_ID_PLAY_CANCEL
-    MSCRIPT_CMD_PLAY_ERROR_SIZE,              // MSCRIPT_CMD_ID_PLAY_ERROR
+    sizeof(MsgScriptCmdCheckWeekEventReg),     // MSCRIPT_CMD_ID_CHECK_WEEK_EVENT_REG
+    sizeof(MsgScriptCmdCheckGoron),            // MSCRIPT_CMD_ID_CHECK_GORON
+    sizeof(MsgScriptCmdCheckZora),             // MSCRIPT_CMD_ID_CHECK_ZORA
+    sizeof(MsgScriptCmdCheckDeku),             // MSCRIPT_CMD_ID_CHECK_DEKU
+    sizeof(MsgScriptCmdCheckHuman),            // MSCRIPT_CMD_ID_CHECK_HUMAN
+    sizeof(MsgScriptCmdCheckTextChoice),       // MSCRIPT_CMD_ID_CHECK_TEXT_CHOICE
+    sizeof(MsgScriptCmdOfferItem),             // MSCRIPT_CMD_ID_OFFER_ITEM
+    sizeof(MsgScriptCmdAutotalk),              // MSCRIPT_CMD_ID_AUTOTALK
+    sizeof(MsgScriptCmdCheckRupees),           // MSCRIPT_CMD_ID_CHECK_RUPEES
+    sizeof(MsgScriptCmdCheckCallback),         // MSCRIPT_CMD_ID_CHECK_CALLBACK
+    sizeof(MsgScriptCmdCheckDay),              // MSCRIPT_CMD_ID_CHECK_DAY,
+    sizeof(MsgScriptCmdAwaitTextJump),         // MSCRIPT_CMD_ID_AWAIT_TEXT_JUMP
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_AWAIT_TEXT
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_AWAIT_TEXT_END
+    sizeof(MsgScriptCmdBeginText),             // MSCRIPT_CMD_ID_BEGIN_TEXT
+    sizeof(MsgScriptCmdContinueText),          // MSCRIPT_CMD_ID_CONTINUE_TEXT
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_DONE
+    sizeof(MsgScriptCmdSetWeekEventReg),       // MSCRIPT_CMD_ID_SET_WEEK_EVENT_REG
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_CLOSE_TEXT
+    sizeof(MsgScriptCmdSetCollectible),        // MSCRIPT_CMD_ID_SET_COLLECTIBLE
+    sizeof(MsgScriptCmdChangeRupees),          // MSCRIPT_CMD_ID_CHANGE_RUPEES
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_PAUSE
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_UNSET_AUTOTALK
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_FOCUS_TO_CHILD
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_FOCUS_TO_SELF
+    sizeof(MsgScriptCmdJump),                  // MSCRIPT_CMD_ID_JUMP
+    sizeof(MsgScriptCmdCheckQuestItem),        // MSCRIPT_CMD_ID_CHECK_QUEST_ITEM
+    sizeof(MsgScriptCmdCheckEventInf),         // MSCRIPT_CMD_ID_CHECK_EVENT_INF
+    sizeof(MsgScriptCmdSetEventInf),           // MSCRIPT_CMD_ID_SET_EVENT_INF
+    sizeof(MsgScriptCmdUnsetEventInf),         // MSCRIPT_CMD_ID_UNSET_EVENT_INF
+    sizeof(MsgScriptCmdCheckItemAction),       // MSCRIPT_CMD_ID_CHECK_ITEM_ACTION
+    sizeof(MsgScriptCmdCheckHasSong),          // MSCRIPT_CMD_ID_CHECK_HAS_SONG
+    sizeof(MsgScriptCmdCheckWornMask),         // MSCRIPT_CMD_ID_CHECK_WORN_MASK
+    sizeof(MsgScriptCmdCheckAfterTime),        // MSCRIPT_CMD_ID_CHECK_AFTER_TIME
+    sizeof(MsgScriptCmdCheckBeforeTime),       // MSCRIPT_CMD_ID_CHECK_BEFORE_TIME
+    sizeof(MsgScriptCmdCheckSwitchFlag),       // MSCRIPT_CMD_ID_CHECK_SWITCH_FLAG
+    sizeof(MsgScriptCmdSetSwitchFlag),         // MSCRIPT_CMD_ID_SET_SWITCH_FLAG
+    sizeof(MsgScriptCmdCheckItem),             // MSCRIPT_CMD_ID_CHECK_ITEM
+    sizeof(MsgScriptCmdCheckBetweenTime),      // MSCRIPT_CMD_ID_CHECK_BETWEEN_TIME
+    sizeof(MsgScriptCmdCheckOnDay),            // MSCRIPT_CMD_ID_CHECK_ON_DAY
+    sizeof(MsgScriptCmdCheckCallbackContinue), // MSCRIPT_CMD_ID_CHECK_CALLBACK_CONTINUE
+    sizeof(MsgScriptCmdCheckHasPowderKeg),     // MSCRIPT_CMD_ID_CHECK_HAS_POWDER_KEG
+    sizeof(MsgScriptCmdDeleteItem),            // MSCRIPT_CMD_ID_DELETE_ITEM
+    sizeof(MsgScriptCmdCheckCallbackMulti),    // MSCRIPT_CMD_ID_CHECK_CALLBACK_MULTI
+    sizeof(MsgScriptCmdPlayerTalk),            // MSCRIPT_CMD_ID_PLAYER_TALK
+    sizeof(MsgScriptCmdBombersNotebook),       // MSCRIPT_CMD_ID_NOTEBOOK_EVENT
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_AWAIT_TEXT_DONE
+    sizeof(MsgScriptCmdJump3),                 // MSCRIPT_CMD_ID_JUMP_3
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_PLAY_DECIDE
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_PLAY_CANCEL
+    sizeof(MsgScriptCmdBase),                  // MSCRIPT_CMD_ID_PLAY_ERROR
 };
 
 /**
- * Runs a message event script
+ * Runs a message event cmd
  *
- * @param actor         The actor associated with the script
+ * @param actor         The actor associated with the cmd
  * @param play          Play game state
- * @param script        The script to run
+ * @param cmd        The cmd to run
  * @param callback      Callback function used by various commands for different purposes
- * @param[in,out] pos   Position to resume the script from, the point at which the script stops executing is also
+ * @param[in,out] pos   Position to resume the cmd from, the point at which the cmd stops executing is also
  *                       written out here
- * @return s32  Whether the script has reached an endpoint
+ * @return s32  Whether the cmd has reached an endpoint
  */
-s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgEventCallback callback, s32* pos) {
+s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgEventCallback callback, s32* pos) {
     u8* start;
     u8* cur;
     s32 scriptDone = false;
@@ -1174,18 +1170,18 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgEven
     u8 cmdId;
     s32 pad;
 
-    start = script;
-    script += *pos;
+    start = cmd;
+    cmd += *pos;
 
     if (sREG(95) != 0) {}
 
     cmdLen = 0;
     do {
         // Skip data from previous command
-        script += cmdLen;
+        cmd += cmdLen;
 
         // Get command id
-        cmdId = *script;
+        cmdId = *cmd;
 
         // Get command length
         if (cmdId < ARRAY_COUNTU(sMsgEventCmdSizes)) {
@@ -1201,9 +1197,9 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgEven
         }
 
         // Run command handler
-    } while (sMsgEventCmdHandlers[cmdId](actor, play, &script, callback, &scriptDone) == MSCRIPT_CONTINUE);
+    } while (sMsgEventCmdHandlers[cmdId](actor, play, &cmd, callback, &scriptDone) == MSCRIPT_CONTINUE);
 
-    cur = script;
+    cur = cmd;
     if (!scriptDone) {
         *pos = cur - start;
     } else {

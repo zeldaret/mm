@@ -23,7 +23,7 @@
  *             Front
  *
  */
-#include "prevent_bss_reordering.h"
+
 #include "z_obj_takaraya_wall.h"
 #include "objects/object_takaraya_objects/object_takaraya_objects.h"
 

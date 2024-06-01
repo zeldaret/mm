@@ -55,6 +55,8 @@
 
 #define SCRIPT_TIME_NOW SCRIPT_CONVERT_TIME(CURRENT_TIME)
 
+#define SCRIPT_PACK_16(h, l) (((h) << 8) | (l))
+
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 

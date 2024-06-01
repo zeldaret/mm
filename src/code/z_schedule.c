@@ -2,7 +2,7 @@
 
 s32 Schedule_CheckWeekEventRegS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckWeekEventRegS* cmd = (ScheduleCmdCheckWeekEventRegS*)*script;
-    u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
+    u16 flag = SCRIPT_PACK_16(cmd->flagByte, cmd->flagMask);
 
     if (CHECK_WEEKEVENTREG(flag)) {
         *script += cmd->offset;
@@ -13,10 +13,10 @@ s32 Schedule_CheckWeekEventRegS(PlayState* play, u8** script, ScheduleOutput* ou
 
 s32 Schedule_CheckWeekEventRegL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckWeekEventRegL* cmd = (ScheduleCmdCheckWeekEventRegL*)*script;
-    u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
+    u16 flag = SCRIPT_PACK_16(cmd->flagByte, cmd->flagMask);
 
     if (CHECK_WEEKEVENTREG(flag)) {
-        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     }
 
     return false;
@@ -68,7 +68,7 @@ s32 Schedule_CheckTimeRangeL(PlayState* play, u8** script, ScheduleOutput* outpu
     }
 
     if (inRange == true) {
-        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     }
 
     return false;
@@ -78,7 +78,7 @@ s32 Schedule_ReturnValueL(PlayState* play, u8** script, ScheduleOutput* output) 
     ScheduleCmdReturnValueL* cmd = (ScheduleCmdReturnValueL*)*script;
 
     //! @bug result is a u8, value is truncated
-    output->result = (cmd->retH << 8) | cmd->retL;
+    output->result = SCRIPT_PACK_16(cmd->retH, cmd->retL);
     output->hasResult = true;
 
     return true;
@@ -124,7 +124,7 @@ s32 Schedule_ReturnValueS(PlayState* play, u8** script, ScheduleOutput* output) 
 
 s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneS* cmd = (ScheduleCmdCheckNotInSceneS*)*script;
-    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
+    s16 sceneId = SCRIPT_PACK_16(cmd->sceneIdH, cmd->sceneIdL);
 
     if (sceneId != play->sceneId) {
         *script += cmd->offset;
@@ -135,10 +135,10 @@ s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* outp
 
 s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneL* cmd = (ScheduleCmdCheckNotInSceneL*)*script;
-    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
+    s16 sceneId = SCRIPT_PACK_16(cmd->sceneIdH, cmd->sceneIdL);
 
     if (sceneId != play->sceneId) {
-        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     }
 
     return false;
@@ -146,7 +146,7 @@ s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleOutput* outp
 
 s32 Schedule_CheckNotInDayS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInDayS* cmd = (ScheduleCmdCheckNotInDayS*)*script;
-    s16 day = (cmd->dayH << 8) | cmd->dayL;
+    s16 day = SCRIPT_PACK_16(cmd->dayH, cmd->dayL);
 
     if (day != (s16)gSaveContext.save.day) {
         *script += cmd->offset;
@@ -157,10 +157,10 @@ s32 Schedule_CheckNotInDayS(PlayState* play, u8** script, ScheduleOutput* output
 
 s32 Schedule_CheckNotInDayL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInDayL* cmd = (ScheduleCmdCheckNotInDayL*)*script;
-    s16 day = (cmd->dayH << 8) | cmd->dayL;
+    s16 day = SCRIPT_PACK_16(cmd->dayH, cmd->dayL);
 
     if (day != (s16)gSaveContext.save.day) {
-        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     }
 
     return false;
@@ -213,7 +213,7 @@ s32 Schedule_CheckBeforeTimeL(PlayState* play, u8** script, ScheduleOutput* outp
     now = SCRIPT_TIME_NOW;
 
     if (now < testTime) {
-        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     }
 
     return false;
@@ -229,7 +229,7 @@ s32 Schedule_BranchS(PlayState* play, u8** script, ScheduleOutput* output) {
 s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdBranchL* cmd = (ScheduleCmdBranchL*)*script;
 
-    *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    *script += (s16)SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
     return false;
 }
 
