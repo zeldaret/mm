@@ -898,7 +898,8 @@ s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** script, MsgScriptCal
  *  5:(s16) skip
  * Command size: 7
  */
-s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
+s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback,
+                                s32* endScript) {
     MsgScriptCmdCheckCallbackMulti* cmd = (MsgScriptCmdCheckCallbackMulti*)*script;
     s32 ret = 1;
     s16 skip;
