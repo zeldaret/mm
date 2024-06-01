@@ -1,8 +1,5 @@
 #include "global.h"
 
-#define MSCRIPT_CONTINUE 0
-#define MSCRIPT_STOP 1
-
 /**
  * Branch forward if the provided weekEventReg flag is set
  *
@@ -20,7 +17,7 @@ s32 MsgEvent_CheckWeekEventReg(Actor* actor, PlayState* play, u8** script, MsgSc
     if (CHECK_WEEKEVENTREG(flag)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -39,7 +36,7 @@ s32 MsgEvent_CheckGoron(Actor* actor, PlayState* play, u8** script, MsgScriptCal
     if (player->transformation == PLAYER_FORM_GORON) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -58,7 +55,7 @@ s32 MsgEvent_CheckZora(Actor* actor, PlayState* play, u8** script, MsgScriptCall
     if (player->transformation == PLAYER_FORM_ZORA) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -77,7 +74,7 @@ s32 MsgEvent_CheckDeku(Actor* actor, PlayState* play, u8** script, MsgScriptCall
     if (player->transformation == PLAYER_FORM_DEKU) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -96,7 +93,7 @@ s32 MsgEvent_CheckHuman(Actor* actor, PlayState* play, u8** script, MsgScriptCal
     if (player->transformation == PLAYER_FORM_HUMAN) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -131,7 +128,7 @@ s32 MsgEvent_CheckTextChoice(Actor* actor, PlayState* play, u8** script, MsgScri
     }
     *script += skip;
 
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -154,9 +151,9 @@ s32 MsgEvent_OfferItem(Actor* actor, PlayState* play, u8** script, MsgScriptCall
         *script += skip;
     } else {
         Actor_OfferGetItem(actor, play, getItemId, xzRange, yRange);
-        return MSCRIPT_STOP;
+        return true;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -182,9 +179,9 @@ s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** script, MsgScriptCallb
         actor->xzDistToPlayer = 0.0f;
         Actor_OfferTalkExchange(actor, play, xzRange, yRange, PLAYER_IA_NONE);
         actor->xzDistToPlayer = xzDist;
-        return MSCRIPT_STOP;
+        return true;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -204,7 +201,7 @@ s32 MsgEvent_CheckRupees(Actor* actor, PlayState* play, u8** script, MsgScriptCa
     if (gSaveContext.save.saveInfo.playerData.rupees >= rupees) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -222,9 +219,9 @@ s32 MsgEvent_CheckCallback(Actor* actor, PlayState* play, u8** script, MsgScript
     if ((callback == NULL) || (callback(actor, play) != 0)) {
         *script += skip;
     } else {
-        return MSCRIPT_STOP;
+        return true;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -273,7 +270,7 @@ s32 MsgEvent_CheckDay(Actor* actor, PlayState* play, u8** script, MsgScriptCallb
             break;
     }
     *script += skip;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -292,17 +289,17 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** script, MsgScript
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
-                return MSCRIPT_STOP;
+                return true;
             }
         case TEXT_STATE_CLOSING:
             skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
     *script += skip;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -317,7 +314,7 @@ s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** script, MsgScriptCall
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
-                return MSCRIPT_STOP;
+                return true;
             }
             break;
 
@@ -325,9 +322,9 @@ s32 MsgEvent_AwaitText(Actor* actor, PlayState* play, u8** script, MsgScriptCall
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -353,9 +350,9 @@ s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** script, MsgScriptC
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
-    return MSCRIPT_STOP;
+    return true;
 }
 
 /**
@@ -369,7 +366,7 @@ s32 MsgEvent_BeginText(Actor* actor, PlayState* play, u8** script, MsgScriptCall
     MsgScriptCmdBeginText* cmd = (MsgScriptCmdBeginText*)*script;
 
     Message_StartTextbox(play, SCRIPT_PACK_16(cmd->textIdH, cmd->textIdL), NULL);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -383,7 +380,7 @@ s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** script, MsgScriptC
     MsgScriptCmdContinueText* cmd = (MsgScriptCmdContinueText*)*script;
 
     Message_ContinueTextbox(play, SCRIPT_PACK_16(cmd->textIdH, cmd->textIdL));
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -395,7 +392,7 @@ s32 MsgEvent_ContinueText(Actor* actor, PlayState* play, u8** script, MsgScriptC
  */
 s32 MsgEvent_Done(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     *endScript = true;
-    return MSCRIPT_STOP;
+    return true;
 }
 
 /**
@@ -411,7 +408,7 @@ s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** script, MsgScri
     u16 flag = SCRIPT_PACK_16(cmd->flagByte, cmd->flagMask);
 
     SET_WEEKEVENTREG(flag);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -422,7 +419,7 @@ s32 MsgEvent_SetWeekEventReg(Actor* actor, PlayState* play, u8** script, MsgScri
  */
 s32 MsgEvent_CloseText(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     Message_CloseTextbox(play);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -440,7 +437,7 @@ s32 MsgEvent_SetCollectible(Actor* actor, PlayState* play, u8** script, MsgScrip
         Flags_SetCollectible(play, flag);
     }
     actor->parent = NULL;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -455,7 +452,7 @@ s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** script, MsgScriptC
     s16 rupees = SCRIPT_PACK_16(cmd->rupeesH, cmd->rupeesL);
 
     Rupees_ChangeBy(rupees);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -467,7 +464,7 @@ s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** script, MsgScriptC
  */
 s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     play->msgCtx.msgMode = MSGMODE_PAUSED;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -479,7 +476,7 @@ s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** script, MsgScriptCallback
  */
 s32 MsgEvent_UnsetAutotalk(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     actor->flags &= ~ACTOR_FLAG_10000;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -493,7 +490,7 @@ s32 MsgEvent_FocusToChild(Actor* actor, PlayState* play, u8** script, MsgScriptC
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor, play, actor->child);
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -507,7 +504,7 @@ s32 MsgEvent_FocusToSelf(Actor* actor, PlayState* play, u8** script, MsgScriptCa
     if (actor->child != NULL) {
         Actor_ChangeFocus(actor->child, play, actor);
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -523,7 +520,7 @@ s32 MsgEvent_Jump(Actor* actor, PlayState* play, u8** script, MsgScriptCallback 
     s16 skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
 
     *script += skip;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -543,7 +540,7 @@ s32 MsgEvent_CheckQuestItem(Actor* actor, PlayState* play, u8** script, MsgScrip
     if (CHECK_QUEST_ITEM(questItem)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -562,7 +559,7 @@ s32 MsgEvent_CheckEventInf(Actor* actor, PlayState* play, u8** script, MsgScript
     if (gSaveContext.eventInf[cmd->flagByte] & cmd->flagMask) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -577,7 +574,7 @@ s32 MsgEvent_SetEventInf(Actor* actor, PlayState* play, u8** script, MsgScriptCa
     MsgScriptCmdSetEventInf* cmd = (MsgScriptCmdSetEventInf*)*script;
 
     gSaveContext.eventInf[cmd->flagByte] |= cmd->flagMask;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -592,7 +589,7 @@ s32 MsgEvent_UnsetEventInf(Actor* actor, PlayState* play, u8** script, MsgScript
     MsgScriptCmdUnsetEventInf* cmd = (MsgScriptCmdUnsetEventInf*)*script;
 
     gSaveContext.eventInf[cmd->flagByte] &= cmd->flagMask ^ 0xFF;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -615,13 +612,13 @@ s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** script, MsgScri
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
-                return MSCRIPT_STOP;
+                return true;
             }
         case TEXT_STATE_PAUSE_MENU:
             curItemAction = func_80123810(play);
 
             if (curItemAction == PLAYER_IA_NONE) {
-                return MSCRIPT_STOP;
+                return true;
             } else if (curItemAction < 0) {
                 skip = SCRIPT_PACK_16(cmd->offsetContinueH, cmd->offsetContinueL);
             } else if (curItemAction == checkItemAction) {
@@ -632,10 +629,10 @@ s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** script, MsgScri
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
     *script += skip;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -655,7 +652,7 @@ s32 MsgEvent_CheckHasSong(Actor* actor, PlayState* play, u8** script, MsgScriptC
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA + song)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -675,7 +672,7 @@ s32 MsgEvent_CheckWornMask(Actor* actor, PlayState* play, u8** script, MsgScript
     if (Player_GetMask(play) == mask) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -701,7 +698,7 @@ s32 MsgEvent_CheckAfterTime(Actor* actor, PlayState* play, u8** script, MsgScrip
     if (time < now) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -727,7 +724,7 @@ s32 MsgEvent_CheckBeforeTime(Actor* actor, PlayState* play, u8** script, MsgScri
     if (time >= now) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -747,7 +744,7 @@ s32 MsgEvent_CheckSwitchFlag(Actor* actor, PlayState* play, u8** script, MsgScri
     if (Flags_GetSwitch(play, flag)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -763,7 +760,7 @@ s32 MsgEvent_SetSwitchFlag(Actor* actor, PlayState* play, u8** script, MsgScript
     s16 flag = SCRIPT_PACK_16(cmd->flagH, cmd->flagL);
 
     Flags_SetSwitch(play, flag);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -783,7 +780,7 @@ s32 MsgEvent_CheckItem(Actor* actor, PlayState* play, u8** script, MsgScriptCall
     if (INV_CONTENT(item) == item) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -812,7 +809,7 @@ s32 MsgEvent_CheckBetweenTime(Actor* actor, PlayState* play, u8** script, MsgScr
     if ((startTime >= now) || (now >= endTime)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -832,7 +829,7 @@ s32 MsgEvent_CheckOnDay(Actor* actor, PlayState* play, u8** script, MsgScriptCal
     if (gSaveContext.save.day == day) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -851,7 +848,7 @@ s32 MsgEvent_CheckCallbackContinue(Actor* actor, PlayState* play, u8** script, M
     if ((callback != NULL) && (callback(actor, play) != 0)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -869,7 +866,7 @@ s32 MsgEvent_CheckHasPowderKeg(Actor* actor, PlayState* play, u8** script, MsgSc
     if ((AMMO(ITEM_POWDER_KEG) != 0) || (play->actorCtx.flags & ACTORCTX_FLAG_0)) {
         *script += skip;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -885,7 +882,7 @@ s32 MsgEvent_DeleteItem(Actor* actor, PlayState* play, u8** script, MsgScriptCal
     s16 item = SCRIPT_PACK_16(cmd->itemH, cmd->itemL);
 
     Inventory_DeleteItem(item, SLOT(item));
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -921,10 +918,10 @@ s32 MsgEvent_CheckCallbackMulti(Actor* actor, PlayState* play, u8** script, MsgS
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
     *script += skip;
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -942,7 +939,7 @@ s32 MsgEvent_PlayerTalk(Actor* actor, PlayState* play, u8** script, MsgScriptCal
 
     player->actor.textId = textId;
     Message_CloseTextbox(play);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -958,7 +955,7 @@ s32 MsgEvent_NotebookEvent(Actor* actor, PlayState* play, u8** script, MsgScript
     u16 event = SCRIPT_PACK_16(cmd->eventH, cmd->eventL);
 
     Message_BombersNotebookQueueEvent(play, event);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -976,19 +973,19 @@ s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** script, MsgScript
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
-                return MSCRIPT_STOP;
+                return true;
             }
 
         case TEXT_STATE_DONE:
             if (!Message_ShouldAdvance(play)) {
-                return MSCRIPT_STOP;
+                return true;
             }
             break;
 
         default:
-            return MSCRIPT_STOP;
+            return true;
     }
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -1004,7 +1001,7 @@ s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** script, MsgScriptCallback
 
     *script += skip;
     *script += 3;
-    return MSCRIPT_STOP;
+    return true;
 }
 
 /**
@@ -1016,7 +1013,7 @@ s32 MsgEvent_Jump3(Actor* actor, PlayState* play, u8** script, MsgScriptCallback
  */
 s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageDecide();
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -1028,7 +1025,7 @@ s32 MsgEvent_PlayDecide(Actor* actor, PlayState* play, u8** script, MsgScriptCal
  */
 s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     Audio_PlaySfx_MessageCancel();
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 /**
@@ -1040,7 +1037,7 @@ s32 MsgEvent_PlayCancel(Actor* actor, PlayState* play, u8** script, MsgScriptCal
  */
 s32 MsgEvent_PlayError(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
     Audio_PlaySfx(NA_SE_SY_ERROR);
-    return MSCRIPT_CONTINUE;
+    return false;
 }
 
 typedef s32 (*MsgScriptCmdHandler)(struct Actor*, struct PlayState*, u8**, MsgScriptCallback, s32*);
@@ -1171,7 +1168,7 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptC
     s32 i;
     s32 cmdLen;
     u8 cmdId;
-    s32 pad;
+    s32 stop;
 
     start = cmd;
     cmd += *pos;
@@ -1199,8 +1196,10 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptC
             for (i = 0; i < cmdLen; i++) {}
         }
 
+        stop = sMsgScriptCmdHandlers[cmdId](actor, play, &cmd, callback, &scriptDone);
+
         // Run command handler
-    } while (sMsgScriptCmdHandlers[cmdId](actor, play, &cmd, callback, &scriptDone) == MSCRIPT_CONTINUE);
+    } while (!stop);
 
     cur = cmd;
     if (!scriptDone) {
