@@ -2470,10 +2470,11 @@ void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play)
     BossHakugin_RunUpdateCommon(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
-        ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
+        ((this->distToRightWall <= (189000.0f * 0.001f)) || (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         BossHakugin_SetupDeathCutsceneCrushedByRocks(this);
-    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
-               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
+    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= (189000.0f * 0.001f))) ||
+               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) &&
+                (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         absTargetRotY = ABS_ALT(this->targetRotY);
         if (absTargetRotY < 0x2000) {
             this->actor.world.pos.z = -1389.0f;

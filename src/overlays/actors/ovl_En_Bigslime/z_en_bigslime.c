@@ -2405,7 +2405,7 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, PlayState* play) {
     Camera* subCam;
 
     this->despawnTimer--;
-    this->gekkoScale = this->despawnTimer * 0.00035000002f;
+    this->gekkoScale = this->despawnTimer * (0.35f * 0.001f);
     if (this->despawnTimer == 0) {
         EnBigslime_SetupFrogSpawn(this, play);
     } else {
