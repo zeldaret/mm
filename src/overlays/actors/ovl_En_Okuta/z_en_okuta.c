@@ -234,7 +234,7 @@ void EnOkuta_Thaw(EnOkuta* this, PlayState* play) {
 void EnOkuta_SpawnBubbles(EnOkuta* this, PlayState* play) {
     s32 i;
 
-    for (i = 0; i != 10; i++) {
+    for (i = 0; i < 10; i++) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, -10.0f, 10.0f, 30.0f, 0.25f);
     }
 }
@@ -345,7 +345,7 @@ void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
 }
 
 /**
- * Plays the appear animation to completion while scaling the Octorok to its full size, then transitions the the idle
+ * Plays the appear animation to completion while scaling the Octorok to its full size, then transitions to the idle
  * floating state. If the Octorok is a red Octorok, and the player is too close to the Octorok when its appear animation
  * is complete, then the Octorok will instead hide underwater.
  */
@@ -635,7 +635,7 @@ void EnOkuta_Die(EnOkuta* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_COMMON_WATER_MID);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
 
-        for (i = 0; i != 20; i++) {
+        for (i = 0; i < 20; i++) {
             velocity.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
@@ -774,7 +774,7 @@ void EnOkuta_Projectile_Fly(EnOkuta* this, PlayState* play) {
                 if (this->collider.base.atFlags & AT_BOUNCED) {
                     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED | AT_TYPE_ENEMY);
                     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-                    this->collider.info.toucher.dmgFlags = 0x400000;
+                    this->collider.info.toucher.dmgFlags = DMG_THROWN_OBJECT;
                     this->collider.info.toucher.damage = 2;
                     Matrix_MtxFToYXZRot(&player->shieldMf, &shieldRot, false);
                     this->actor.world.rot.y = shieldRot.y + 0x8000;
