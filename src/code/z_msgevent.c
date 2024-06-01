@@ -469,7 +469,7 @@ s32 MsgEvent_ChangeRupees(Actor* actor, PlayState* play, u8** scriptPtr, MsgEven
  * Command size: 1
  */
 s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32* endScript) {
-    play->msgCtx.msgMode = 0x44;
+    play->msgCtx.msgMode = MSGMODE_PAUSED;
     return MSCRIPT_CONTINUE;
 }
 
