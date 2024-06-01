@@ -1,7 +1,7 @@
 #include "global.h"
 
-s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
-    ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
+s32 Schedule_CheckWeekEventRegS(PlayState* play, u8** script, ScheduleOutput* output) {
+    ScheduleCmdCheckWeekEventRegS* cmd = (ScheduleCmdCheckWeekEventRegS*)*script;
     u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
 
     if (CHECK_WEEKEVENTREG(flag)) {
@@ -11,8 +11,8 @@ s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     return false;
 }
 
-s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleOutput* output) {
-    ScheduleCmdCheckFlagL* cmd = (ScheduleCmdCheckFlagL*)*script;
+s32 Schedule_CheckWeekEventRegL(PlayState* play, u8** script, ScheduleOutput* output) {
+    ScheduleCmdCheckWeekEventRegL* cmd = (ScheduleCmdCheckWeekEventRegL*)*script;
     u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
 
     if (CHECK_WEEKEVENTREG(flag)) {
@@ -236,47 +236,47 @@ s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
 typedef s32 (*ScheduleCmdFunc)(PlayState*, u8**, ScheduleOutput*);
 
 static ScheduleCmdFunc sScheduleCmdFuncs[] = {
-    Schedule_CheckFlagS,       // SCHEDULE_CMD_ID_CHECK_FLAG_S
-    Schedule_CheckFlagL,       // SCHEDULE_CMD_ID_CHECK_FLAG_L
-    Schedule_CheckTimeRangeS,  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
-    Schedule_CheckTimeRangeL,  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
-    Schedule_ReturnValueL,     // SCHEDULE_CMD_ID_RET_VAL_L
-    Schedule_ReturnNone,       // SCHEDULE_CMD_ID_RET_NONE
-    Schedule_ReturnEmpty,      // SCHEDULE_CMD_ID_RET_EMPTY
-    Schedule_Nop,              // SCHEDULE_CMD_ID_NOP
-    Schedule_CheckMiscS,       // SCHEDULE_CMD_ID_CHECK_MISC_S
-    Schedule_ReturnValueS,     // SCHEDULE_CMD_ID_RET_VAL_S
-    Schedule_CheckNotInSceneS, // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
-    Schedule_CheckNotInSceneL, // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
-    Schedule_CheckNotInDayS,   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
-    Schedule_CheckNotInDayL,   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
-    Schedule_ReturnTime,       // SCHEDULE_CMD_ID_RET_TIME
-    Schedule_CheckBeforeTimeS, // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
-    Schedule_CheckBeforeTimeL, // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
-    Schedule_BranchS,          // SCHEDULE_CMD_ID_BRANCH_S
-    Schedule_BranchL,          // SCHEDULE_CMD_ID_BRANCH_L
+    Schedule_CheckWeekEventRegS, // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_S
+    Schedule_CheckWeekEventRegL, // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_L
+    Schedule_CheckTimeRangeS,    // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
+    Schedule_CheckTimeRangeL,    // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
+    Schedule_ReturnValueL,       // SCHEDULE_CMD_ID_RET_VAL_L
+    Schedule_ReturnNone,         // SCHEDULE_CMD_ID_RET_NONE
+    Schedule_ReturnEmpty,        // SCHEDULE_CMD_ID_RET_EMPTY
+    Schedule_Nop,                // SCHEDULE_CMD_ID_NOP
+    Schedule_CheckMiscS,         // SCHEDULE_CMD_ID_CHECK_MISC_S
+    Schedule_ReturnValueS,       // SCHEDULE_CMD_ID_RET_VAL_S
+    Schedule_CheckNotInSceneS,   // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
+    Schedule_CheckNotInSceneL,   // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
+    Schedule_CheckNotInDayS,     // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
+    Schedule_CheckNotInDayL,     // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
+    Schedule_ReturnTime,         // SCHEDULE_CMD_ID_RET_TIME
+    Schedule_CheckBeforeTimeS,   // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
+    Schedule_CheckBeforeTimeL,   // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
+    Schedule_BranchS,            // SCHEDULE_CMD_ID_BRANCH_S
+    Schedule_BranchL,            // SCHEDULE_CMD_ID_BRANCH_L
 };
 
 static u8 sScheduleCmdSizes[] = {
-    sizeof(ScheduleCmdCheckFlagS),       // SCHEDULE_CMD_ID_CHECK_FLAG_S
-    sizeof(ScheduleCmdCheckFlagL),       // SCHEDULE_CMD_ID_CHECK_FLAG_L
-    sizeof(ScheduleCmdCheckTimeRangeS),  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
-    sizeof(ScheduleCmdCheckTimeRangeL),  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
-    sizeof(ScheduleCmdReturnValueL),     // SCHEDULE_CMD_ID_RET_VAL_L
-    sizeof(ScheduleCmdBase),             // SCHEDULE_CMD_ID_RET_NONE
-    sizeof(ScheduleCmdBase),             // SCHEDULE_CMD_ID_RET_EMPTY
-    sizeof(ScheduleCmdNop),              // SCHEDULE_CMD_ID_NOP
-    sizeof(ScheduleCmdCheckMiscS),       // SCHEDULE_CMD_ID_CHECK_MISC_S
-    sizeof(ScheduleCmdReturnValueS),     // SCHEDULE_CMD_ID_RET_VAL_S
-    sizeof(ScheduleCmdCheckNotInSceneS), // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
-    sizeof(ScheduleCmdCheckNotInSceneL), // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
-    sizeof(ScheduleCmdCheckNotInDayS),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
-    sizeof(ScheduleCmdCheckNotInDayL),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
-    sizeof(ScheduleCmdReturnTime),       // SCHEDULE_CMD_ID_RET_TIME
-    sizeof(ScheduleCmdCheckBeforeTimeS), // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
-    sizeof(ScheduleCmdCheckBeforeTimeL), // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
-    sizeof(ScheduleCmdBranchS),          // SCHEDULE_CMD_ID_BRANCH_S
-    sizeof(ScheduleCmdBranchL),          // SCHEDULE_CMD_ID_BRANCH_L
+    sizeof(ScheduleCmdCheckWeekEventRegS), // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_S
+    sizeof(ScheduleCmdCheckWeekEventRegL), // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_L
+    sizeof(ScheduleCmdCheckTimeRangeS),    // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
+    sizeof(ScheduleCmdCheckTimeRangeL),    // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
+    sizeof(ScheduleCmdReturnValueL),       // SCHEDULE_CMD_ID_RET_VAL_L
+    sizeof(ScheduleCmdBase),               // SCHEDULE_CMD_ID_RET_NONE
+    sizeof(ScheduleCmdBase),               // SCHEDULE_CMD_ID_RET_EMPTY
+    sizeof(ScheduleCmdNop),                // SCHEDULE_CMD_ID_NOP
+    sizeof(ScheduleCmdCheckMiscS),         // SCHEDULE_CMD_ID_CHECK_MISC_S
+    sizeof(ScheduleCmdReturnValueS),       // SCHEDULE_CMD_ID_RET_VAL_S
+    sizeof(ScheduleCmdCheckNotInSceneS),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
+    sizeof(ScheduleCmdCheckNotInSceneL),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
+    sizeof(ScheduleCmdCheckNotInDayS),     // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
+    sizeof(ScheduleCmdCheckNotInDayL),     // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
+    sizeof(ScheduleCmdReturnTime),         // SCHEDULE_CMD_ID_RET_TIME
+    sizeof(ScheduleCmdCheckBeforeTimeS),   // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
+    sizeof(ScheduleCmdCheckBeforeTimeL),   // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
+    sizeof(ScheduleCmdBranchS),            // SCHEDULE_CMD_ID_BRANCH_S
+    sizeof(ScheduleCmdBranchL),            // SCHEDULE_CMD_ID_BRANCH_L
 };
 
 s32 Schedule_RunScript(PlayState* play, ScheduleScript* script, ScheduleOutput* output) {
