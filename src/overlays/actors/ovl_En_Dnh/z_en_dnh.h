@@ -19,7 +19,7 @@ typedef struct EnDnh {
     /* 0x19A */ UNK_TYPE1 pad19A[0x2];
     /* 0x19C */ s16 blinkTimer;
     /* 0x19E */ s16 eyeTexIndex;
-    /* 0x1A0 */ MsgEventCallback msgEventCallback;
+    /* 0x1A0 */ MsgScriptCallback msgScriptCallback;
     /* 0x1A4 */ Vec3s jointTable[KOUME_KIOSK_LIMB_MAX];
     /* 0x1B0 */ Vec3s morphTable[KOUME_KIOSK_LIMB_MAX];
 } EnDnh; // size = 0x1BC

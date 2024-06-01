@@ -363,7 +363,7 @@ s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= TOILET_HAND_STATE_TALKING;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgEventCallback = EnBjt_ChooseBehaviour;
+        this->msgScriptCallback = EnBjt_ChooseBehaviour;
         this->behaviour = 0;
         this->actionFunc = EnBjt_Talk;
         ret = true;
@@ -403,7 +403,7 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
@@ -450,7 +450,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         Actor_SetScale(&this->actor, 0.0f);
         this->stateFlags = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->scheduleResult = TOILET_HAND_SCH_NONE;
     }
 }

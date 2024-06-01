@@ -49,7 +49,7 @@ typedef struct EnNb {
     /* 0x284 */ s16 unk_284; // storyState?
     /* 0x286 */ s16 storyTimer;
     /* 0x288 */ s16 behaviour;
-    /* 0x28C */ MsgEventCallback msgEventCallback;
+    /* 0x28C */ MsgScriptCallback msgScriptCallback;
     /* 0x290 */ EnNbAnimation animIndex;
     /* 0x294 */ UNK_TYPE1 unk_294[4];
     /* 0x294 */ TextState prevTalkState;

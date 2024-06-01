@@ -407,7 +407,7 @@ MsgScript* EnJa_GetMsgScript(EnJa* this, PlayState* play) {
 }
 
 void func_80BC22F4(EnJa* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, EnJa_GetMsgScript(this, play), this->msgEventCallback,
+    if (MsgEvent_RunScript(&this->actor, play, EnJa_GetMsgScript(this, play), this->msgScriptCallback,
                            &this->msgScriptPos)) {
         this->unk_340 &= ~8;
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -435,7 +435,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
     this->unk_1D8 = 0;
-    this->msgEventCallback = NULL;
+    this->msgScriptCallback = NULL;
     this->actionFunc = func_80BC21A8;
 }
 

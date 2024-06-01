@@ -50,7 +50,7 @@ typedef struct EnDns {
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x4];
     /* 0x2EC */ f32 unk_2EC;
     /* 0x2F0 */ f32 animCurFrame;
-    /* 0x2F4 */ MsgEventCallback msgEventCallback;
+    /* 0x2F4 */ MsgScriptCallback msgScriptCallback;
     /* 0x2F8 */ s32 animIndex;
     /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300

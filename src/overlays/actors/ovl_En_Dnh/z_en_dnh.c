@@ -296,7 +296,7 @@ void func_80A50EC0(EnDnh* this) {
 }
 
 void func_80A50F38(EnDnh* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->msgScriptPos = 0;
         this->unk198 = 0;
@@ -328,7 +328,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    this->msgEventCallback = func_80A50D40;
+    this->msgScriptCallback = func_80A50D40;
     this->msgScriptPos = 0;
     this->actionFunc = EnDnh_DoNothing;
 }

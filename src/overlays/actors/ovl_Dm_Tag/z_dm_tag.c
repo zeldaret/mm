@@ -219,14 +219,14 @@ MsgScript* DmTag_GetMsgScript(DmTag* this, PlayState* play) {
             time = SCRIPT_TIME_NOW;
             if ((time >= SCRIPT_TIME(21, 30)) && (time < SCRIPT_TIME(23, 0))) {
                 if (gSaveContext.save.day == 2) {
-                    this->msgEventCallback = func_80C227E8;
+                    this->msgScriptCallback = func_80C227E8;
                     return D_80C22BF0;
                 }
             }
             return D_80C22C30;
 
         case 2:
-            this->msgEventCallback = func_80C224D8;
+            this->msgScriptCallback = func_80C224D8;
             return D_80C22BFC;
 
         default:
@@ -259,7 +259,7 @@ void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         this->actionFunc = func_80C229AC;
     }
 }

@@ -87,7 +87,7 @@ typedef struct EnAn {
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 msgEventState;
     /* 0x396 */ s16 dialogueFuncState;
-    /* 0x398 */ MsgEventFunc msgEventCallback;
+    /* 0x398 */ MsgEventFunc msgScriptCallback;
     /* 0x39C */ s32 animIndex; // EnAnAnimation enum
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
     /* 0x3A8 */ u32 trayTexScrollTimer1; // TwoTexScroll

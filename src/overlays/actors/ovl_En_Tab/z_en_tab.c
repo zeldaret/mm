@@ -338,7 +338,7 @@ s32 func_80BE06DC(EnTab* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = &GET_PLAYER(play)->actor;
         this->unk_2FC |= 8;
         this->actionFunc = func_80BE1348;
@@ -489,7 +489,7 @@ MsgScript* EnTab_GetMsgScript(EnTab* this, PlayState* play) {
 
     switch (this->unk_1D8) {
         case 2:
-            this->msgEventCallback = func_80BE0D38;
+            this->msgScriptCallback = func_80BE0D38;
             if (Player_GetMask(play) != PLAYER_MASK_ROMANI) {
                 return D_80BE1998;
             }
@@ -500,7 +500,7 @@ MsgScript* EnTab_GetMsgScript(EnTab* this, PlayState* play) {
             return D_80BE19A0;
 
         case 1:
-            this->msgEventCallback = func_80BE0D60;
+            this->msgScriptCallback = func_80BE0D60;
             if (Player_GetMask(play) == PLAYER_MASK_ROMANI) {
                 return D_80BE1940;
             }
@@ -641,7 +641,7 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgScript(this, play), this->msgEventCallback,
+    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgScript(this, play), this->msgScriptCallback,
                            &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
@@ -668,7 +668,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8 = 0;
-    this->msgEventCallback = NULL;
+    this->msgScriptCallback = NULL;
     this->unk_2FC = 0;
     this->unk_2FC |= 0x40;
     this->actor.gravity = -1.0f;

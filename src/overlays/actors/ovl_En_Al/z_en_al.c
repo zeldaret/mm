@@ -744,7 +744,7 @@ MsgScript* EnAl_GetMsgScript(EnAl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_35C == 3) {
-        this->msgEventCallback = func_80BDE92C;
+        this->msgScriptCallback = func_80BDE92C;
         return D_80BDFD14;
     }
 
@@ -765,11 +765,11 @@ MsgScript* EnAl_GetMsgScript(EnAl* this, PlayState* play) {
 
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
-                this->msgEventCallback = func_80BDE7FC;
+                this->msgScriptCallback = func_80BDE7FC;
                 return D_80BDFCBC;
             }
 
-            this->msgEventCallback = func_80BDEA14;
+            this->msgScriptCallback = func_80BDEA14;
             if (Player_GetMask(play) != PLAYER_MASK_KAFEIS_MASK) {
                 return D_80BDFDE8;
             }
@@ -804,7 +804,7 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
         }
         SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_4E6 = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = this->unk_368;
         this->msgScript = EnAl_GetMsgScript(this, play);
         this->unk_4C2 |= 0x20;
@@ -1089,7 +1089,7 @@ void func_80BDF5E8(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF6C4(EnAl* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_4C2 &= ~0x20;
         this->unk_4C2 |= 0x200;

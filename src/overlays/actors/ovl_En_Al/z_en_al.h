@@ -38,7 +38,7 @@ typedef struct EnAl {
     /* 0x4E6 */ s16 unk_4E6;
     /* 0x4E8 */ s16 unk_4E8;
     /* 0x4EA */ s16 unk_4EA;
-    /* 0x4EC */ MsgEventCallback msgEventCallback;
+    /* 0x4EC */ MsgScriptCallback msgScriptCallback;
     /* 0x4F0 */ s32 unk_4F0;
     /* 0x4F4 */ s32 unk_4F4;
     /* 0x4F8 */ s32 animIndex;

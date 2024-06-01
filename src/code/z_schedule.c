@@ -233,9 +233,9 @@ s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
     return false;
 }
 
-typedef s32 (*ScheduleCmdFunc)(PlayState*, u8**, ScheduleOutput*);
+typedef s32 (*ScheduleCmdHandler)(PlayState*, u8**, ScheduleOutput*);
 
-static ScheduleCmdFunc sScheduleCmdFuncs[] = {
+static ScheduleCmdHandler sScheduleCmdHandlers[] = {
     Schedule_CheckWeekEventRegS, // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_S
     Schedule_CheckWeekEventRegL, // SCHEDULE_CMD_ID_CHECK_WEEK_EVENT_REG_L
     Schedule_CheckTimeRangeS,    // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
@@ -285,7 +285,7 @@ s32 Schedule_RunScript(PlayState* play, ScheduleScript* script, ScheduleOutput* 
 
     do {
         size = sScheduleCmdSizes[*script];
-        stop = sScheduleCmdFuncs[*script](play, &script, output);
+        stop = sScheduleCmdHandlers[*script](play, &script, output);
         script += size;
     } while (!stop);
 

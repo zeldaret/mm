@@ -746,14 +746,14 @@ s32 func_80AF8478(Actor* thisx, PlayState* play) {
 MsgScript* EnPm_GetMsgScript(EnPm* this, PlayState* play) {
     switch (this->unk_258) {
         case 28:
-            this->msgEventCallback = func_80AF8348;
+            this->msgScriptCallback = func_80AF8348;
             return D_80AFB6BC;
 
         case 29:
             return D_80AFB710;
 
         case 16:
-            this->msgEventCallback = func_80AF81E8;
+            this->msgScriptCallback = func_80AF81E8;
             return D_80AFB5A0;
 
         case 17:
@@ -761,12 +761,12 @@ MsgScript* EnPm_GetMsgScript(EnPm* this, PlayState* play) {
 
         case 24:
             if (this->unk_356 & 0x2000) {
-                this->msgEventCallback = func_80AF8478;
+                this->msgScriptCallback = func_80AF8478;
                 return D_80AFB74C;
             } else if (this->unk_356 & 0x4000) {
                 return D_80AFB764;
             } else {
-                this->msgEventCallback = func_80AF8478;
+                this->msgScriptCallback = func_80AF8478;
                 return D_80AFB658;
             }
             break;
@@ -819,7 +819,7 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_398 = 0;
         this->unk_378 = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = this->unk_268;
         this->msgScript = EnPm_GetMsgScript(this, play);
         if ((this->unk_258 != 24) && (this->unk_258 != 9) && (this->unk_258 != 20) && (this->unk_258 != 21) &&
@@ -1839,7 +1839,7 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 &= ~0x20;
         this->unk_356 |= 0x200;

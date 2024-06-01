@@ -17,7 +17,7 @@ typedef struct DmTag {
     /* 0x194 */ s32 msgScriptPos;
     /* 0x198 */ UNK_TYPE1 pad198[0xC];
     /* 0x1A4 */ s16 unk_1A4;
-    /* 0x1A8 */ MsgEventCallback msgEventCallback;
+    /* 0x1A8 */ MsgScriptCallback msgScriptCallback;
 } DmTag; // size = 0x1AC
 
 #endif // Z_DM_TAG_H

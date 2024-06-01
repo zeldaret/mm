@@ -763,7 +763,7 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x4000;
         }
 
-        this->msgEventCallback = func_80A875AC;
+        this->msgScriptCallback = func_80A875AC;
         this->unk_390 = 0;
         this->unk_364 = 0;
         this->msgScript = EnTru_GetMsgScript(this, play);
@@ -876,9 +876,9 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
     if (ret == true) {
         if (this->unk_390 != 0) {
             this->unk_34E |= 8;
-            this->msgEventCallback = func_80A87880;
+            this->msgScriptCallback = func_80A87880;
         } else {
-            this->msgEventCallback = func_80A8777C;
+            this->msgScriptCallback = func_80A8777C;
         }
         this->unk_364 = 0;
     }
@@ -908,7 +908,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 } else {
                     this->unk_390 = 2;
                 }
-                this->msgEventCallback = func_80A87880;
+                this->msgScriptCallback = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
             } else if (itemAction <= PLAYER_IA_MINUS1) {
@@ -989,7 +989,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->msgEventCallback = func_80A87B48;
+        this->msgScriptCallback = func_80A87B48;
         this->unk_364 = 0;
     }
 
@@ -1048,7 +1048,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->msgEventCallback = func_80A87DC0;
+        this->msgScriptCallback = func_80A87DC0;
         this->unk_364 = 0;
     }
 
@@ -1111,7 +1111,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     if (ret == true) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->unk_34E = 0;
         this->unk_364 = 0;
     }
@@ -1159,7 +1159,7 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
 void func_80A881E0(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         if (player->transformation != PLAYER_FORM_HUMAN) {
             this->unk_34E |= 0x80;
         }

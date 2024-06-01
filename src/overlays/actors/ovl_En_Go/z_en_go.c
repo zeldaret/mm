@@ -2207,11 +2207,11 @@ void EnGo_SetupGatekeeper(EnGo* this, PlayState* play) {
         }
         EnGo_ChangeToSnowballAnimation(this, play);
         this->actionFunc = EnGo_Snowball;
-        this->msgEventCallback = EnGo_HandleOpenShrineCutscene;
+        this->msgScriptCallback = EnGo_HandleOpenShrineCutscene;
     } else {
         EnGo_ChangeToShiveringAnimation(this, play);
         this->actionFunc = EnGo_Idle;
-        this->msgEventCallback = EnGo_HandleOpenShrineCutscene;
+        this->msgScriptCallback = EnGo_HandleOpenShrineCutscene;
     }
 }
 
@@ -2268,7 +2268,7 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
-    this->msgEventCallback = EnGo_HandleGivePowderKegCutscene;
+    this->msgScriptCallback = EnGo_HandleGivePowderKegCutscene;
     this->actionFunc = EnGo_Idle;
 }
 
@@ -2295,7 +2295,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
 
         this->actor.targetMode = TARGET_MODE_1;
         this->scaleFactor = ENGO_NORMAL_SCALE;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
 
         switch (ENGO_GET_TYPE(&this->actor)) {
             case ENGO_ATHLETIC:
@@ -2769,7 +2769,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     Vec3f targetPos;
     Vec3f thisPos;
 
-    if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgScript(this, play), this->msgEventCallback,
+    if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgScript(this, play), this->msgScriptCallback,
                             &this->msgScriptPos)) {
         if ((ENGO_GET_TYPE(&this->actor) != ENGO_ATHLETIC) && !(this->actionFlags & ENGO_FLAG_ROLLED_UP)) {
             Math_Vec3f_Copy(&targetPos, &this->attentionTarget->world.pos);

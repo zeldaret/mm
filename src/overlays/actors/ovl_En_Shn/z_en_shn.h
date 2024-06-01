@@ -34,7 +34,7 @@ typedef struct EnShn {
     /* 0x2CC */ f32 animPlaySpeed;
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
-    /* 0x2D8 */ MsgEventCallback msgEventCallback;
+    /* 0x2D8 */ MsgScriptCallback msgScriptCallback;
     /* 0x2DC */ s32 prevTalkState;
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;

@@ -29,7 +29,7 @@ typedef struct EnPst {
     /* 0x208 */ u16 stateFlags;
     /* 0x20A */ UNK_TYPE1 pad20A[4];
     /* 0x20E */ s16 behaviour;
-    /* 0x210 */ MsgEventCallback msgEventCallback;
+    /* 0x210 */ MsgScriptCallback msgScriptCallback;
     /* 0x214 */ s32 unk214; // Set and not used
     /* 0x218 */ s32 exchangeItemAction;
     /* 0x21C */ s32 isLetterToKafeiDeposited;

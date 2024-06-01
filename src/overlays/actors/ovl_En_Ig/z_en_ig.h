@@ -56,7 +56,7 @@ typedef struct EnIg {
     /* 0x3F2 */ s16 unk_3F2;
     /* 0x3F4 */ s16 unk_3F4;
     /* 0x3F6 */ s16 unk_3F6;
-    /* 0x3F8 */ MsgEventCallback msgEventCallback;
+    /* 0x3F8 */ MsgScriptCallback msgScriptCallback;
     /* 0x3FC */ s32 animIndex;
     /* 0x400 */ UNK_TYPE1 unk400[0x8];
     /* 0x408 */ s32 unk_408;

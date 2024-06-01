@@ -526,7 +526,7 @@ MsgScript* EnPst_GetMsgScript(EnPst* this, PlayState* play) {
         }
     }
 
-    this->msgEventCallback = EnPst_ChooseBehaviour;
+    this->msgScriptCallback = EnPst_ChooseBehaviour;
 
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
@@ -567,7 +567,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
         this->isLetterToKafeiDeposited = EnPst_HandleLetterDay1(this);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->stateFlags |= 0x40;
         this->msgScript = EnPst_GetMsgScript(this, play);
         this->actionFunc = EnPst_Talk;
@@ -629,7 +629,7 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_Talk(EnPst* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:

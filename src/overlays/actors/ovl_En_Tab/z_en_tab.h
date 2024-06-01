@@ -37,7 +37,7 @@ typedef struct EnTab {
     /* 0x320 */ s16 unk_320;
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
-    /* 0x328 */ MsgEventCallback msgEventCallback;
+    /* 0x328 */ MsgScriptCallback msgScriptCallback;
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk330[4];
     /* 0x334 */ s32 prevTalkState;

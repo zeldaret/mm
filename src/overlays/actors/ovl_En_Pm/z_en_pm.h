@@ -48,7 +48,7 @@ typedef struct EnPm {
     /* 0x374 */ s16 timePathTimeSpeed;
     /* 0x376 */ s16 unk_376;
     /* 0x378 */ s16 unk_378;
-    /* 0x37C */ MsgEventCallback msgEventCallback;
+    /* 0x37C */ MsgScriptCallback msgScriptCallback;
     /* 0x380 */ s32 unk_380;
     /* 0x384 */ s32 unk_384;
     /* 0x388 */ s32 prevTalkState;

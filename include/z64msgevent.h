@@ -509,10 +509,8 @@ typedef struct {
 
 typedef u8 MsgScript;
 
-typedef s32 (*MsgEventCallback)(struct Actor* thisx, struct PlayState* play);
+typedef s32 (*MsgScriptCallback)(struct Actor* thisx, struct PlayState* play);
 
-typedef s32 (*MsgEventHandler)(struct Actor* actor, struct PlayState* play, u8** scriptPtr, MsgEventCallback callback, s32*);
-
-s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* cmd, MsgEventCallback callback, s32* pos);
+s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* cmd, MsgScriptCallback callback, s32* pos);
 
 #endif

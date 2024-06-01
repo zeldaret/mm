@@ -488,15 +488,15 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
 MsgScript* EnNb_GetMsgScript(EnNb* this, PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_43)) {
-        this->msgEventCallback = func_80BC01DC;
+        this->msgScriptCallback = func_80BC01DC;
         return D_80BC1464;
     } else if (this->scheduleResult == EN_NB_SCH_2) {
-        this->msgEventCallback = func_80BC00AC;
+        this->msgScriptCallback = func_80BC00AC;
         return D_80BC1574;
     } else if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         return D_80BC15C8;
     } else {
-        this->msgEventCallback = func_80BC01DC;
+        this->msgScriptCallback = func_80BC01DC;
         return D_80BC1464;
     }
 }
@@ -509,7 +509,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
         this->stateFlags |= EN_NB_FLAG_20;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = ENNB_BEHAVIOUR_0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = this->unk_1E8;
         this->msgScript = EnNb_GetMsgScript(this, play);
         this->stateFlags |= EN_NB_FLAG_20;
@@ -765,7 +765,7 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
 }
 
 void func_80BC0EAC(EnNb* this, PlayState* play) {
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         if (CHECK_EVENTINF(EVENTINF_43)) {
             CLEAR_EVENTINF(EVENTINF_42);
             CLEAR_EVENTINF(EVENTINF_43);

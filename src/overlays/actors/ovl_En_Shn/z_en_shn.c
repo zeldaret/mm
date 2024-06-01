@@ -633,13 +633,13 @@ MsgScript* EnShn_GetMsgScript(EnShn* this, PlayState* play) {
         return D_80AE70B0;
     }
     if (this->unk_1D8 & 0x80) {
-        this->msgEventCallback = func_80AE6704;
+        this->msgScriptCallback = func_80AE6704;
         return D_80AE70B8;
     }
     if (this->unk_1D8 & 0x100) {
         return D_80AE71C4;
     }
-    this->msgEventCallback = func_80AE6704;
+    this->msgScriptCallback = func_80AE6704;
     return D_80AE6F00;
 }
 
@@ -683,7 +683,7 @@ void func_80AE6A64(EnShn* this, PlayState* play) {
     Vec3f playerPos;
     Vec3f shnPos;
 
-    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgEventCallback, &this->msgScriptPos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8 &= ~8;
         this->unk_1D8 |= 0x20;
@@ -716,7 +716,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_2E0 = 0;
-    this->msgEventCallback = NULL;
+    this->msgScriptCallback = NULL;
     this->unk_1D8 = 0;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2)) {
         SubS_SetOfferMode(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);

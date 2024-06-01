@@ -68,7 +68,7 @@ typedef struct EnGm {
     /* 0x3DE */ s16 unk_3DE;
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
-    /* 0x3E4 */ MsgEventCallback msgEventCallback;
+    /* 0x3E4 */ MsgScriptCallback msgScriptCallback;
     /* 0x3E8 */ s32 animIndex;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
     /* 0x3F0 */ s32 prevTalkState;
