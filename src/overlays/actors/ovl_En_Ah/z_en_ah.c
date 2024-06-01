@@ -370,9 +370,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
 }
 
 MsgScript* EnAh_GetMsgScript(EnAh* this, PlayState* play) {
-    s32 mask = Player_GetMask(play);
-
-    if (PLAYER_MASK_KAFEIS_MASK == mask) {
+    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         return D_80BD3E08;
     }
 
