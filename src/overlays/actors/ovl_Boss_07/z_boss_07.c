@@ -6381,20 +6381,32 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     static void* D_80A082E0[] = { gMajorasMaskWithNormalEyesTex, gMajorasMaskWithDullEyesTex };
     PlayState* play = play2;
     Boss07* this = THIS;
-    f32 temp_f20;
-    f32 temp_f22;
+    f32 shakeScale;
+    f32 rotX;
+    f32 rotY;
+    f32 rotZ;
+    f32 temp;
+    s32 i;
+    s32 phi_s6;
+    Vec3f spA8;
+    Vec3f sp9C;
+    Vec3f sp90;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    temp_f20 = this->dmgShakeTimer * (M_PI / 4.0f) * 0.06666667f;
-    temp_f22 = Math_SinS(this->dmgShakeTimer * 0x3500) * temp_f20 * 0.5f;
-    Matrix_RotateYF(Math_SinS(this->dmgShakeTimer * 0x4500) * temp_f20, MTXMODE_APPLY);
-    Matrix_RotateXFApply(temp_f22);
+
+    shakeScale = this->dmgShakeTimer * (M_PI / 4.0f) * 0.06666667f;
+    rotX = Math_SinS(this->dmgShakeTimer * 0x3500) * shakeScale * 0.5f;
+    rotY = Math_SinS(this->dmgShakeTimer * 0x4500) * shakeScale;
+    Matrix_RotateYF(rotY, MTXMODE_APPLY);
+    Matrix_RotateXFApply(rotX);
+
     if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
+
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeState]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, Boss07_Mask_PostLimbDraw,
                       &this->actor);
@@ -6402,49 +6414,46 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     gSPDisplayList(POLY_OPA_DISP++, gMajorasMaskTentacleMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
 
-    {
-        Vec3f spA8;
-        Vec3f sp9C;
-        Vec3f sp90;
-        f32 phi_f24;
-        f32 temp;
-        s32 i;
-        s32 phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
-                      (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
-                         ? true
-                         : false;
+    phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
+              (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
+                 ? true
+                 : false;
 
-        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-        Matrix_MultVecZ(-3.0f, &sp90);
-        spA8.x = 0.0f;
-        spA8.y = 20.0f;
-        spA8.z = -2.0f;
-        phi_f24 = 0.0f;
-        for (i = 0; i < MAJORA_TENTACLE_COUNT; i++) {
-            Matrix_Push();
-            Matrix_Push();
-            Matrix_RotateZF(phi_f24, MTXMODE_APPLY);
-            Matrix_MultVec3f(&spA8, &sp9C);
-            this->tentacles[i].base.x = this->tentacleAttachPos.x + sp9C.x;
-            this->tentacles[i].base.y = this->tentacleAttachPos.y + sp9C.y;
-            this->tentacles[i].base.z = this->tentacleAttachPos.z + sp9C.z;
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVecZ(-3.0f, &sp90);
 
-            temp = (1 - (i * 0.008f)) * this->tentacleLengthScale;
-            Matrix_Pop();
-            if (this->shouldUpdateTentaclesOrWhips) {
-                Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
-                                            this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, temp, phi_s6,
-                                            phi_f24);
-            }
-            Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, temp, i * 0.9f);
-            phi_f24 += 0.5f;
-            spA8.y += 1.0f;
+    spA8.x = 0.0f;
+    spA8.y = 20.0f;
+    spA8.z = -2.0f;
+    rotZ = 0.0f;
 
-            Matrix_Pop();
+    for (i = 0; i < MAJORA_TENTACLE_COUNT; i++) {
+        Matrix_Push();
+        Matrix_Push();
+        Matrix_RotateZF(rotZ, MTXMODE_APPLY);
+        Matrix_MultVec3f(&spA8, &sp9C);
+
+        this->tentacles[i].base.x = this->tentacleAttachPos.x + sp9C.x;
+        this->tentacles[i].base.y = this->tentacleAttachPos.y + sp9C.y;
+        this->tentacles[i].base.z = this->tentacleAttachPos.z + sp9C.z;
+        temp = (1 - (i * 0.008f)) * this->tentacleLengthScale;
+
+        Matrix_Pop();
+
+        if (this->shouldUpdateTentaclesOrWhips) {
+            Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
+                                        this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, temp, phi_s6, rotZ);
         }
+
+        Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, temp, i * 0.9f);
+        rotZ += 0.5f;
+        spA8.y += 1.0f;
+
+        Matrix_Pop();
     }
+
     Boss07_Mask_DrawBeam(this, play);
     this->shouldUpdateTentaclesOrWhips = false;
 
