@@ -42,6 +42,19 @@
 #define CLOCK_TIME_ALT2_F(hr, min) ((((hr) + (min) / 60.0f) * 60.0f) / (24.0f * 60.0f / 0x10000))
 #define CLOCK_TIME_HOUR_F (CLOCK_TIME_F(1, 0))
 
+// Macro to convert the time format used in the save struct into the format used in scripts (Schedule or Message)
+#define SCRIPT_CONVERT_TIME(time) ((s32)((time) - 0x10000 / 360 * 90))
+
+#define SCRIPT_CALC_TIME(hour, minute, dest, temp) \
+    (temp) = (hour)*60.0f;                         \
+    (temp) += (minute);                            \
+    (dest) = (temp) * (0x10000 / 60 / 24.0f);      \
+    (dest) = SCRIPT_CONVERT_TIME(dest)
+
+#define SCRIPT_TIME(hour, minute) SCRIPT_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
+
+#define SCRIPT_TIME_NOW SCRIPT_CONVERT_TIME(CURRENT_TIME)
+
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 

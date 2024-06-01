@@ -1742,7 +1742,7 @@ MsgScript* EnAn_GetMsgScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58A44;
         }
 
-        if (SCHEDULE_TIME_NOW < SCHEDULE_TIME(14, 18)) {
+        if (SCRIPT_TIME_NOW < SCRIPT_TIME(14, 18)) {
             return sAnjuMsgScript_80B58ABC;
         }
 
@@ -2434,7 +2434,7 @@ s32 EnAn_ProcessSchedule_GiveLunchToGranny(EnAn* this, PlayState* play, Schedule
 }
 
 s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 now = SCHEDULE_TIME_NOW;
+    u16 now = SCRIPT_TIME_NOW;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* points;
@@ -2520,7 +2520,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
 }
 
 s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 now = SCHEDULE_TIME_NOW;
+    u16 now = SCRIPT_TIME_NOW;
     u16 startTime;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     s32 pad;

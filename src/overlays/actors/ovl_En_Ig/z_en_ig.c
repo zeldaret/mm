@@ -588,7 +588,7 @@ s32 func_80BF1D78(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp56 = SCHEDULE_TIME_NOW;
+    u16 sp56 = SCRIPT_TIME_NOW;
     u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
@@ -633,7 +633,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80BF1FA8(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp2E = SCHEDULE_TIME_NOW;
+    u16 sp2E = SCRIPT_TIME_NOW;
     u16 phi_v1;
     u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     u16 tmp;

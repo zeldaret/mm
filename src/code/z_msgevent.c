@@ -686,14 +686,6 @@ s32 MsgEvent_BranchOnWornMask(Actor* actor, PlayState* play, u8** scriptPtr, Msg
     return MSCRIPT_CONTINUE;
 }
 
-#define MSCRIPT_GET_TIME(hour, minute, dest, temp) \
-    (temp) = (hour)*60.0f;                         \
-    (temp) += (minute);                            \
-    (dest) = (temp) * (0x10000 / 60 / 24.0f);      \
-    (dest) = ((dest)-0x10000 / 360 * 90)
-
-#define MSCRIPT_TIME_NOW ((gSaveContext.save.time) - 0x10000 / 360 * 90)
-
 /**
  * Branches forward if the current time is greater than the provided time
  *
@@ -711,8 +703,8 @@ s32 MsgEvent_BranchOnTimeGT(Actor* actor, PlayState* play, u8** scriptPtr, MsgEv
     u16 time;
     u16 now;
 
-    MSCRIPT_GET_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
-    now = MSCRIPT_TIME_NOW;
+    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
+    now = SCRIPT_TIME_NOW;
 
     if (time < now) {
         *scriptPtr += skip;
@@ -737,8 +729,8 @@ s32 MsgEvent_BranchOnTimeLEQ(Actor* actor, PlayState* play, u8** scriptPtr, MsgE
     u16 time;
     u16 now;
 
-    MSCRIPT_GET_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
-    now = MSCRIPT_TIME_NOW;
+    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), time, f);
+    now = SCRIPT_TIME_NOW;
 
     if (time >= now) {
         *scriptPtr += skip;
@@ -822,10 +814,10 @@ s32 MsgEvent_BranchOnTimeInterval(Actor* actor, PlayState* play, u8** scriptPtr,
     u16 endTime;
     u16 now;
 
-    MSCRIPT_GET_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), startTime, f);
-    MSCRIPT_GET_TIME(MSCRIPT_GET_8(script, 3), MSCRIPT_GET_8(script, 4), endTime, f);
+    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 1), MSCRIPT_GET_8(script, 2), startTime, f);
+    SCRIPT_CALC_TIME(MSCRIPT_GET_8(script, 3), MSCRIPT_GET_8(script, 4), endTime, f);
     endTime--;
-    now = MSCRIPT_TIME_NOW;
+    now = SCRIPT_TIME_NOW;
 
     if ((startTime >= now) || (now >= endTime)) {
         *scriptPtr += skip;

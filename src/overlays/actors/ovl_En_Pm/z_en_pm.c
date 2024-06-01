@@ -1047,7 +1047,7 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
 }
 
 s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp56 = SCHEDULE_TIME_NOW;
+    u16 sp56 = SCRIPT_TIME_NOW;
     u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
@@ -1095,7 +1095,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp2E = SCHEDULE_TIME_NOW;
+    u16 sp2E = SCRIPT_TIME_NOW;
     u16 phi_v1;
     u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     u16 tmp;

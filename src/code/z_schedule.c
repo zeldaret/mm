@@ -1,11 +1,5 @@
 #include "global.h"
 
-#define SCHEDULE_CALC_TIME(hour, minute, dest, temp) \
-    (temp) = (hour)*60.0f;                           \
-    (temp) += (minute);                              \
-    (dest) = (temp) * (0x10000 / 60 / 24.0f);        \
-    (dest) = SCHEDULE_CONVERT_TIME(dest)
-
 s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
     u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
@@ -36,12 +30,12 @@ s32 Schedule_CheckTimeRangeS(PlayState* play, u8** script, ScheduleOutput* outpu
     u16 end;
     u16 now;
 
-    SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
+    SCRIPT_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
-    SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
+    SCRIPT_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
     end--;
 
-    now = SCHEDULE_TIME_NOW;
+    now = SCRIPT_TIME_NOW;
 
     if ((start <= now) && (now <= end)) {
         inRange = true;
@@ -62,12 +56,12 @@ s32 Schedule_CheckTimeRangeL(PlayState* play, u8** script, ScheduleOutput* outpu
     u16 end;
     u16 now;
 
-    SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
+    SCRIPT_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
-    SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
+    SCRIPT_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
     end--;
 
-    now = SCHEDULE_TIME_NOW;
+    now = SCRIPT_TIME_NOW;
 
     if ((start <= now) && (now <= end)) {
         inRange = true;
@@ -178,9 +172,9 @@ s32 Schedule_ReturnTime(PlayState* play, u8** script, ScheduleOutput* output) {
     u16 time0;
     u16 time1;
 
-    SCHEDULE_CALC_TIME(cmd->time0Hr, cmd->time0Min, time0, f);
+    SCRIPT_CALC_TIME(cmd->time0Hr, cmd->time0Min, time0, f);
 
-    SCHEDULE_CALC_TIME(cmd->time1Hr, cmd->time1Min, time1, f);
+    SCRIPT_CALC_TIME(cmd->time1Hr, cmd->time1Min, time1, f);
     time1--;
 
     output->result = cmd->result;
@@ -197,9 +191,9 @@ s32 Schedule_CheckBeforeTimeS(PlayState* play, u8** script, ScheduleOutput* outp
     u16 testTime;
     u16 now;
 
-    SCHEDULE_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
+    SCRIPT_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
 
-    now = SCHEDULE_TIME_NOW;
+    now = SCRIPT_TIME_NOW;
 
     if (now < testTime) {
         *script += cmd->offset;
@@ -214,9 +208,9 @@ s32 Schedule_CheckBeforeTimeL(PlayState* play, u8** script, ScheduleOutput* outp
     u16 testTime;
     u16 now;
 
-    SCHEDULE_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
+    SCRIPT_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
 
-    now = SCHEDULE_TIME_NOW;
+    now = SCRIPT_TIME_NOW;
 
     if (now < testTime) {
         *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
