@@ -28,8 +28,8 @@ typedef enum MajoraType {
     /*  20 */ MAJORA_TYPE_INCARNATION = 20,
     /*  21 */ MAJORA_TYPE_AFTERIMAGE,
     /*  30 */ MAJORA_TYPE_WRATH = 30,
-    /* 100 */ MAJORA_TYPE_REMAINS_SHOT = 100,
-    /* 101 */ MAJORA_TYPE_INCARNATION_SHOT,
+    /* 100 */ MAJORA_TYPE_REMAINS_PROJECTILE = 100,
+    /* 101 */ MAJORA_TYPE_INCARNATION_PROJECTILE,
     /* 150 */ MAJORA_TYPE_BATTLE_HANDLER = 150,
     /* 180 */ MAJORA_TYPE_TOP = 180,
     /* 200 */ MAJORA_TYPE_REMAINS = 200
@@ -231,7 +231,7 @@ typedef struct Boss07 {
     /* 0x1808 */ u8 lensFlareOn;
     /* 0x180c */ f32 lensFlareScale;
     /* 0x1810 */ Vec3f lensFlarePos;
-    /* 0x181C */ s16 shotColorIndex;
+    /* 0x181C */ s16 projectileColorIndex;
     /* 0x1820 */ ColliderCylinder generalCollider;
     /* 0x186C */ s16 dmgShakeTimer;
     /* 0x1870 */ f32 tentacleLengthScale;
@@ -256,7 +256,7 @@ typedef struct Boss07 {
     /* 0x18D6 */ s16 timer_18D6;
     /* 0x18D8 */ s16 beamDmgTimer;
     /* 0x18DA */ u8 readyDeath;
-    /* 0x18DB */ u8 readyShot;
+    /* 0x18DB */ u8 readyProjectile;
     /* 0x18DC */ s32 effectIndex;
     /* 0x18E0 */ Vec3f beamMarkLastPos;
     /* 0x18EC */ u8 beamOn;

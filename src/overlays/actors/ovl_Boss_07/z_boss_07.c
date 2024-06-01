@@ -354,14 +354,14 @@ void Boss07_Top_SetupGround(Boss07* this, PlayState* play);
 void Boss07_BattleHandler_UpdateEffects(PlayState* play);
 void Boss07_BattleHandler_DrawEffects(PlayState* play);
 
-static s16 sShotEnvColors[4][3] = {
+static s16 sProjectileEnvColors[4][3] = {
     { 255, 255, 100 }, // light yellow
     { 255, 100, 100 }, // light red
     { 100, 255, 100 }, // light green
     { 100, 100, 255 }, // light blue
 };
 
-static s16 sShotPrimColors[4][3] = {
+static s16 sProjectilePrimColors[4][3] = {
     { 255, 255, 255 }, // white
     { 255, 255, 255 }, // white
     { 255, 255, 255 }, // white
@@ -555,7 +555,426 @@ ActorInit Boss_07_InitVars = {
     /**/ Boss07_Wrath_Draw,
 };
 
-#include "z_boss_07_colchk.inc"
+static ColliderJntSphElementInit sWrathJntSphElementsInit1[11] = {
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 0, { { 0, 0, 0 }, 20 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 30 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 25 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+};
+
+static ColliderJntSphInit sWrathJntSphInit1 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sWrathJntSphElementsInit1),
+    sWrathJntSphElementsInit1,
+};
+
+static ColliderCylinderInit sWrathCylinderInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x00, 0x10 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 80, 200, 0, { 0, 0, 0 } },
+};
+
+static ColliderJntSphElementInit sWrathJntSphElementsInit2[1] = {
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x04, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 0, { { 0, 0, 0 }, 36 }, 200 },
+    },
+};
+
+static ColliderJntSphInit sWrathJntSphInit2 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sWrathJntSphElementsInit2),
+    sWrathJntSphElementsInit2,
+};
+
+static ColliderQuadInit sMaskQuadInit1 = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x04, 0x00 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
+};
+
+static ColliderQuadInit sMaskQuadInit2 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
+};
+
+static ColliderJntSphElementInit sIncarnationJntSphElementsInit[11] = {
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 0, { { 0, 0, 0 }, 25 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 40 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 0 }, 0 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+    {
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
+        { 1, { { 0, 0, 0 }, 15 }, 150 },
+    },
+};
+
+static ColliderJntSphInit sIncarnationJntSphInit1 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sIncarnationJntSphElementsInit),
+    sIncarnationJntSphElementsInit,
+};
+
+static ColliderCylinderInit sProjectileCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0x00300000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 15, 30, -15, { 0, 0, 0 } },
+};
+
+static ColliderCylinderInit sRemainsCylinderInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
+    { 50, 100, -50, { 0, 0, 0 } },
+};
+
+static ColliderCylinderInit sTopCylinderInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7FFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
+    { 40, 20, 15, { 0, 0, 0 } },
+};
 
 Vec3f sMajoraSfxPos;
 
@@ -880,20 +1299,20 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.colChkInfo.damageTable = &sTopDamageTable;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 9.0f + KREG(55));
         this->actor.shape.shadowAlpha = 180;
-        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sTopCylInit);
+        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sTopCylinderInit);
         Effect_Add(play, &this->effectIndex, EFFECT_TIRE_MARK, 0, 0, &sTopTireMarkInit);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         return;
     }
 
-    if ((MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_REMAINS_SHOT) ||
-        (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_INCARNATION_SHOT)) {
+    if ((MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_REMAINS_PROJECTILE) ||
+        (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_INCARNATION_PROJECTILE)) {
         this->actor.update = Boss07_Projectile_Update;
         this->actor.draw = Boss07_Projectile_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sShotCylInit);
+        Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
-        this->shotColorIndex = Rand_ZeroFloat(ARRAY_COUNT(sShotEnvColors) - 0.01f);
+        this->projectileColorIndex = Rand_ZeroFloat(ARRAY_COUNT(sProjectileEnvColors) - 0.01f);
         return;
     }
 
@@ -996,7 +1415,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                        this->morphTable, MAJORAS_WRATH_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sWrathJntSphInit1, this->bodyColliderElements);
     Collider_InitAndSetJntSph(play, &this->kickCollider, &this->actor, &sWrathJntSphInit2, this->kickColliderElements);
-    Collider_InitAndSetCylinder(play, &this->unusedCollider, &this->actor, &sWrathCylInit);
+    Collider_InitAndSetCylinder(play, &this->unusedCollider, &this->actor, &sWrathCylinderInit);
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.drag = this->rightWhip.drag = 2.0f;
@@ -3131,7 +3550,7 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
         gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
 
         for (i = 0; i < ARRAY_COUNT(this->deathLightScale); i++) {
-            color = sShotEnvColors[0];
+            color = sProjectileEnvColors[0];
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color[0], color[1], color[2], 40);
             yPosOffset = (Boss07_RandZeroOne() * 40.0f) - 30.0f;
             Matrix_Translate(this->bodyPartsPos[MAJORAS_WRATH_BODYPART_PELVIS].x,
@@ -3867,13 +4286,13 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationLeftHandPos.x,
                     this->incarnationLeftHandPos.y, this->incarnationLeftHandPos.z, 0, 0, 0,
-                    MAJORA_TYPE_INCARNATION_SHOT);
+                    MAJORA_TYPE_INCARNATION_PROJECTILE);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationRightHandPos.x,
                     this->incarnationRightHandPos.y, this->incarnationRightHandPos.z, 0, 0, 0,
-                    MAJORA_TYPE_INCARNATION_SHOT);
+                    MAJORA_TYPE_INCARNATION_PROJECTILE);
     }
 
     if (this->timers[0] == 0) {
@@ -6044,7 +6463,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
 
     this->frameCounter++;
 
-    if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_REMAINS_SHOT) {
+    if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_REMAINS_PROJECTILE) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_BEAM - SFX_FLAG);
     }
 
@@ -6062,7 +6481,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             this->actionState = MAJORA_PROJECTILE_STATE_1;
             this->actor.speed = 30.0f;
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
-            if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_INCARNATION_SHOT) {
+            if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_INCARNATION_PROJECTILE) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_FIRE_OLD);
             }
         }
@@ -6082,7 +6501,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             sKillProjectiles) {
             Actor_Kill(&this->actor);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, this->shotColorIndex,
+                        this->actor.world.pos.z, 0, 0, this->projectileColorIndex,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
         }
         Collider_UpdateCylinder(&this->actor, &this->generalCollider);
@@ -6099,10 +6518,12 @@ void Boss07_Projectile_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sShotPrimColors[this->shotColorIndex][0],
-                    sShotPrimColors[this->shotColorIndex][1], sShotPrimColors[this->shotColorIndex][2], 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, sShotEnvColors[this->shotColorIndex][0], sShotEnvColors[this->shotColorIndex][1],
-                   sShotEnvColors[this->shotColorIndex][2], 128);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sProjectilePrimColors[this->projectileColorIndex][0],
+                    sProjectilePrimColors[this->projectileColorIndex][1],
+                    sProjectilePrimColors[this->projectileColorIndex][2], 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sProjectileEnvColors[this->projectileColorIndex][0],
+                   sProjectileEnvColors[this->projectileColorIndex][1],
+                   sProjectileEnvColors[this->projectileColorIndex][2], 128);
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -6258,7 +6679,7 @@ void Boss07_Remains_SetupFly(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Remains_Fly;
     this->actor.gravity = -0.75f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
-    Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sRemainsCylInit);
+    Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sRemainsCylinderInit);
     this->actor.colChkInfo.health = 5;
     this->actionState = REMAINS_STATE_WAIT;
 }
@@ -6293,7 +6714,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         case REMAINS_STATE_FLY:
             Actor_PlaySfx(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             if (this->timers[2] == 0) {
-                this->readyShot = true;
+                this->readyProjectile = true;
                 this->timers[2] = Rand_ZeroFloat(200.0f) + 100.0f;
             }
 
@@ -6381,11 +6802,11 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
     }
 
-    if (this->readyShot) {
-        this->readyShot = false;
+    if (this->readyProjectile) {
+        this->readyProjectile = false;
         if (Boss07_IsFacingPlayer(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_REMAINS_SHOT);
+                        this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_REMAINS_PROJECTILE);
         }
     }
 
