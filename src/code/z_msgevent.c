@@ -1151,17 +1151,17 @@ u8 sMsgScriptCmdSizes[] = {
 };
 
 /**
- * Runs a message event cmd
+ * Runs a message event script
  *
  * @param actor         The actor associated with the cmd
  * @param play          Play game state
- * @param cmd        The cmd to run
+ * @param script        The script to run
  * @param callback      Callback function used by various commands for different purposes
  * @param[in,out] pos   Position to resume the cmd from, the point at which the cmd stops executing is also
- *                       written out here
+ *                      written out here
  * @return s32  Whether the cmd has reached an endpoint
  */
-s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptCallback callback, s32* pos) {
+s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgScriptCallback callback, s32* pos) {
     u8* start;
     u8* cur;
     s32 scriptDone = false;
@@ -1170,18 +1170,18 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptC
     u8 cmdId;
     s32 stop;
 
-    start = cmd;
-    cmd += *pos;
+    start = script;
+    script += *pos;
 
     if (sREG(95) != 0) {}
 
     cmdLen = 0;
     do {
         // Skip data from previous command
-        cmd += cmdLen;
+        script += cmdLen;
 
         // Get command id
-        cmdId = *cmd;
+        cmdId = *script;
 
         // Get command length
         if (cmdId < ARRAY_COUNTU(sMsgScriptCmdSizes)) {
@@ -1196,10 +1196,10 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptC
             for (i = 0; i < cmdLen; i++) {}
         }
 
-        stop = sMsgScriptCmdHandlers[cmdId](actor, play, &cmd, callback, &scriptDone);
+        stop = sMsgScriptCmdHandlers[cmdId](actor, play, &script, callback, &scriptDone);
     } while (!stop);
 
-    cur = cmd;
+    cur = script;
     if (!scriptDone) {
         *pos = cur - start;
     } else {

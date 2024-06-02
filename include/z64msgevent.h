@@ -511,6 +511,6 @@ typedef u8 MsgScript;
 
 typedef s32 (*MsgScriptCallback)(struct Actor* thisx, struct PlayState* play);
 
-s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* cmd, MsgScriptCallback callback, s32* pos);
+s32 MsgEvent_RunScript(Actor* actor, struct PlayState* play, MsgScript* script, MsgScriptCallback callback, s32* pos);
 
 #endif
