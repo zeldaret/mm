@@ -99,7 +99,7 @@ Vec3s D_80BE1B10 = { 0, 0xC000, 0 };
 
 Vec3f D_80BE1B18 = { 800.0f, 0.0f, 0.0f };
 
-TexturePtr D_80BE1B24[] = {
+static TexturePtr sEyeTextures[] = {
     gBartenEyeOpenTex,
     gBartenEyeHalfOpenTex,
     gBartenEyeClosedTex,
@@ -605,7 +605,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BE1B24[this->unk_31E]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_31E]));
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnTab_OverrideLimbDraw, EnTab_PostLimbDraw,
