@@ -1197,8 +1197,6 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* cmd, MsgScriptC
         }
 
         stop = sMsgScriptCmdHandlers[cmdId](actor, play, &cmd, callback, &scriptDone);
-
-        // Run command handler
     } while (!stop);
 
     cur = cmd;
