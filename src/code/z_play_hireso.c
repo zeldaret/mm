@@ -1,6 +1,9 @@
 #include "global.h"
 #include "sys_cfb.h"
+#include "sys_cmpdma.h"
 #include "z64bombers_notebook.h"
+#include "z64malloc.h"
+
 #include "interface/schedule_static/schedule_static.h"
 #include "archives/schedule_dma_static/schedule_dma_static_yar.h"
 
@@ -95,11 +98,12 @@ u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_PERSON_MAX][BOMBERS_NOTEBOOK_ENTRY_
     },
     {
         /* Romani */
-        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_CENTER, 1, BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM,
-                               CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)),
-        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE, 1, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM,
+        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_CENTER, 1,
+                               BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_ALIENS, CLOCK_TIME(6, 0),
+                               CLOCK_TIME(18, 0)),
+        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_ABOVE, 1, BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS,
                                CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
-        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_BELOW, 1, BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE,
+        BOMBERS_NOTEBOOK_ENTRY(BOMBERS_NOTEBOOK_ENTRY_POS_BELOW, 1, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALIENS_BOTTLE,
                                CLOCK_TIME(2, 30), CLOCK_TIME(5, 15)),
         BOMBERS_NOTEBOOK_ENTRY_END,
     },
@@ -258,23 +262,27 @@ TexturePtr sBombersNotebookDayTextures[] = {
     gBombersNotebookDayFinalENGTex,
 };
 
+#define DEFINE_PERSON(_enum, _photo, _description, metEnum, _metMessage, _metFlag)
 #define DEFINE_EVENT(_enum, icon, _colorFlag, _description, _completedMessage, _completedFlag) icon,
 
 s32 sBombersNotebookEventIcons[] = {
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
+#undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
 s32 sBombersNotebookEventIconWidths[] = { 16, 24, 32 };
 s32 sBombersNotebookEventIconHeights[] = { 16, 28, 28 };
 
+#define DEFINE_PERSON(_enum, _photo, _description, metEnum, _metMessage, _metFlag)
 #define DEFINE_EVENT(_enum, _icon, colorFlag, _description, _completedMessage, _completedFlag) colorFlag,
 
 u16 sBombersNotebookEventColorWeekEventFlags[] = {
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
+#undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
 void BombersNotebook_DrawScisTexRect(Gfx** gfxP, s32 rxl, s32 ryl, s32 rxh, s32 ryh, s32 tile, s32 s, s32 t, s32 dsdx,
@@ -552,12 +560,14 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
 }
 
 #define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) photo,
+#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage, _completedFlag)
 
 TexturePtr sBombersNotebookPhotoTextures[] = {
-#include "tables/bombers_notebook/person_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON
+#undef DEFINE_EVENT
 
 void BombersNotebook_DrawRows(BombersNotebook* this, Gfx** gfxP) {
     static s16 sBarColorR = 0;
@@ -696,13 +706,12 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     s32 tensDigit;
     s32 hours;
 
-    time = (((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+    time = CURRENT_TIME - CLOCK_TIME(6, 0);
     if (CURRENT_DAY == 0) {
         time = 0;
     }
     timeOfDayRectLeft = sBombersNotebookDayRectRectLeft[CURRENT_DAY] + (time / CLOCK_TIME(0, 10));
-    if ((CURRENT_DAY_CLAMP_MIN_1 == 1) ||
-        ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
+    if ((CURRENT_DAY_CLAMP_MIN_1 == 1) || ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (CURRENT_TIME < CLOCK_TIME(12, 0)))) {
         timeOfDayRectLeft -= 32;
         lineRectLeft = timeOfDayRectLeft + 32;
     } else if ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (time >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
@@ -770,7 +779,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
     tensDigit = 0;
-    onesDigit = ((void)0, gSaveContext.save.time) / CLOCK_TIME_HOUR;
+    onesDigit = CURRENT_TIME / CLOCK_TIME_HOUR;
     if (CURRENT_DAY == 0) {
         onesDigit = 6;
     }
@@ -807,7 +816,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     if (CURRENT_DAY == 0) {
         onesDigit = TIME_TO_MINUTES_ALT_F((CLOCK_TIME_F(6, 0) - (hours * CLOCK_TIME_HOUR_F)));
     } else {
-        onesDigit = TIME_TO_MINUTES_ALT_F(((void)0, gSaveContext.save.time) - (hours * CLOCK_TIME_HOUR_F));
+        onesDigit = TIME_TO_MINUTES_ALT_F(CURRENT_TIME - (hours * CLOCK_TIME_HOUR_F));
     }
     do {
         if (onesDigit >= 10) {
@@ -1105,8 +1114,8 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             }
             CmpDma_LoadAllFiles(this->scheduleDmaSegmentStart, this->scheduleDmaSegment, this->scheduleDmaSegmentSize);
             osCreateMesgQueue(&this->loadQueue, this->loadMsg, ARRAY_COUNT(this->loadMsg));
-            DmaMgr_SendRequestImpl(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
-                                   this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
+            DmaMgr_RequestAsync(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
+                                this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
             this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_STARTED;
             // fallthrough
         case BOMBERS_NOTEBOOK_LOAD_STATE_STARTED:
@@ -1124,8 +1133,7 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, description, _completedMessage, _completedFlag) description,
 
 u16 sBombersNotebookTextIds[] = {
-#include "tables/bombers_notebook/person_table.h"
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON

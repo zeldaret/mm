@@ -465,7 +465,7 @@ void func_80933014(EnFz* this) {
             }
         }
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, temp_a1, 10, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, temp_a1, 10, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
@@ -656,7 +656,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
     this->actionFunc = func_80933760;
 }

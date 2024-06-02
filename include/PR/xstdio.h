@@ -31,7 +31,7 @@ typedef void* (*PrintCallback)(void*, const char*, size_t);
 #define FLAGS_HASH 8
 #define FLAGS_ZERO 16
 
-s32 _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
+int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
 void _Litob(_Pft* args, u8 type);
 void _Ldtob(_Pft* args, u8 type);
 

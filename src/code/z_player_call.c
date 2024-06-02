@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "z64pause_menu.h"
 
 #define FLAGS                                                                                          \
     (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
@@ -9,11 +10,6 @@ ActorFunc sPlayerCallInitFunc;
 ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
-
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Player_InitVars = {
     /**/ ACTOR_PLAYER,

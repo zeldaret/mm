@@ -384,7 +384,7 @@ void EnBal_Fall(EnBal* this, PlayState* play) {
         } else if (this->timer == 30) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_LAND);
             this->picto.actor.shape.rot = this->picto.actor.world.rot;
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, false);
             this->timer++;
         } else {
             if ((play->gameplayFrames % 2) != 0) {
@@ -507,7 +507,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
         this->timer++;
     }
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->forceEyesShut = false;
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TINGLE)) {
@@ -573,7 +573,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             } else {
                 this->idleAnimStage++;
             }
-        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
+        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
             this->forceEyesShut = true;
         }
     }
@@ -592,13 +592,13 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
             break;
 
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if (this->textId != 0x1D10) {
                 this->isTalking = true;
             }
@@ -608,7 +608,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             EnBal_TryPurchaseMap(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnBal_HandleConversation(this, play);
             break;
 
@@ -618,7 +618,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             if (Message_ShouldAdvance(play) && (this->textId == 0x1D08)) {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
@@ -986,7 +986,7 @@ void EnBal_SetupOfferGetItem(EnBal* this) {
 void EnBal_OfferGetItem(EnBal* this, PlayState* play) {
     GetItemId mapGetItemId;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         sGetItemPending = true;
     }
@@ -1036,7 +1036,7 @@ void EnBal_SetupThankYou(EnBal* this) {
 void EnBal_ThankYou(EnBal* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TWIST);
         this->forceEyesShut = false;
@@ -1166,7 +1166,7 @@ void EnBal_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 8, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBal_OverrideLimbDraw, EnBal_PostLimbDraw, &this->picto.actor);
 

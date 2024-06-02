@@ -27,7 +27,7 @@ ActorInit Oceff_Wipe5_InitVars = {
     /**/ OceffWipe5_Draw,
 };
 
-UNK_TYPE4 D_80BC9260;
+static s32 sBssPad;
 
 void OceffWipe5_Init(Actor* thisx, PlayState* play) {
     OceffWipe5* this = THIS;
@@ -88,7 +88,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
         colorIndex = 0;
     }
 
-    Camera_GetQuakeOffset(&quakeOffset, activeCam);
+    quakeOffset = Camera_GetQuakeOffset(activeCam);
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * phi_fv1;

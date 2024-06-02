@@ -83,7 +83,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play) {
     Vec3f eye = activeCam->eye;
     Vec3f quakeOffset;
 
-    Camera_GetQuakeOffset(&quakeOffset, activeCam);
+    quakeOffset = Camera_GetQuakeOffset(activeCam);
 
     OPEN_DISPS(play->state.gfxCtx);
 

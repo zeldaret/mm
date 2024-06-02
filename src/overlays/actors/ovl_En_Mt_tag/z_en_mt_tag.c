@@ -133,7 +133,7 @@ s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, PlayState* play) {
  */
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingCheckpoint, f32* outPerpendicularPointX,
                                  f32* outPerpendicularPointZ) {
-    s32 curentCheckpoint = -1;
+    s32 currentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
     f32 minLineLengthSq = 0.0f;
     s32 sceneExitIndex;
@@ -145,6 +145,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     // The Goron Racetrack is configured such that the sceneExitIndex for any given floor polygon
     // gradually increases as you move forward through the racetrack.
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&play->colCtx, actor->floorPoly, actor->floorBgId);
+    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the
+    //! `sceneExitIndex + 1` access.
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         //! @bug - upcomingCheckpoint is not initialized here
         return -1;
@@ -154,15 +156,15 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
     do {
-        if ((Math3D_PointDistToLine2D(
-                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
-                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
-                &lineLenSq)) &&
-            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
+        if (Math3D_PointDistToLine2D(
+                actor->world.pos.x, actor->world.pos.z, sCheckpointPositions[checkpointIterator - 1].x,
+                sCheckpointPositions[checkpointIterator - 1].z, sCheckpointPositions[checkpointIterator + 1].x,
+                sCheckpointPositions[checkpointIterator + 1].z, &perpendicularPointX, &perpendicularPointZ,
+                &lineLenSq) &&
+            (!hasSetCurrentCheckpointOnce || ((currentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
-            curentCheckpoint = checkpointIterator;
+            currentCheckpoint = checkpointIterator;
             *outPerpendicularPointX = perpendicularPointX;
             *outPerpendicularPointZ = perpendicularPointZ;
             hasSetCurrentCheckpointOnce = true;
@@ -170,8 +172,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
         checkpointIterator++;
     } while (checkpointIterator < sStartingCheckpointPerSceneExitIndex[sceneExitIndex + 1]);
 
-    *upcomingCheckpoint = curentCheckpoint + 1;
-    return curentCheckpoint;
+    *upcomingCheckpoint = currentCheckpoint + 1;
+    return currentCheckpoint;
 }
 
 /**
@@ -256,7 +258,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
 void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
@@ -267,7 +269,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
     Message_StartTextbox(play, 0xE97, NULL); // You can't win now...
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
@@ -313,23 +315,19 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
 
             EnMttag_ShowFalseStartMessage(this, play);
             SET_EVENTINF(EVENTINF_13);
-        } else {
-            if (DECR(this->timer) == 60) {
-                Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
-                play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
-                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
-                play->envCtx.timeSeqState = TIMESEQ_REQUEST;
-                player->stateFlags1 &= ~PLAYER_STATE1_20;
-            } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
-                this->timer = 0;
-                SET_EVENTINF(EVENTINF_10);
-                this->actionFunc = EnMttag_Race;
-            }
+        } else if (DECR(this->timer) == 60) {
+            Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
+            play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
+            play->envCtx.timeSeqState = TIMESEQ_REQUEST;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
+        } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
+            this->timer = 0;
+            SET_EVENTINF(EVENTINF_10);
+            this->actionFunc = EnMttag_Race;
         }
-    } else {
-        if (EnMttag_AreFourRaceGoronsPresent(this, play)) {
-            this->raceInitialized = true;
-        }
+    } else if (EnMttag_AreFourRaceGoronsPresent(this, play)) {
+        this->raceInitialized = true;
     }
 }
 
@@ -341,7 +339,7 @@ s32 EnMttag_IsAnyRaceGoronOverFinishLine(EnMttag* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->raceGorons); i++) {
-        if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
+        if (EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos) &&
             (this->raceGorons[i]->actor.update != NULL)) {
             isAnyRaceGoronOverFinishLine = true;
             break;
@@ -417,7 +415,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) || talkState == TEXT_STATE_CLOSING)) {
+    if (((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) || (talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
             play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 
@@ -433,7 +431,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             Message_CloseTextbox(play);
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             CLEAR_EVENTINF(EVENTINF_10);
@@ -468,7 +466,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
         // Keep racing
         Audio_PlaySfx_MessageDecide();
         Message_CloseTextbox(play);
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
         CLEAR_EVENTINF(EVENTINF_13);
         this->timer = 100;
         this->actionFunc = EnMttag_Race;

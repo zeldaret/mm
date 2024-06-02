@@ -226,7 +226,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
-        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
+        this->cymbalRotVels[i] -= TRUNCF_BINANG(this->cymbalRots[i] * 0.1f);
 
         if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
             this->cymbalRotVels[i] *= 0.9f;
@@ -327,7 +327,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x121A:
@@ -376,7 +376,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
 
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
@@ -418,7 +418,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     talkState = Message_GetState(&play->msgCtx);
     if (talkState != TEXT_STATE_CLOSING) {
-        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80BAFB84;
             EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
@@ -432,7 +432,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 void func_80BAFB84(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
@@ -464,7 +464,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
 
 void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = EnZod_Rehearse;
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, PLAYER_CSACTION_68);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {

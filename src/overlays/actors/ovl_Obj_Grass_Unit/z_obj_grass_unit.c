@@ -148,9 +148,9 @@ void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
         grassElem = &grassGroup->elements[grassGroup->count];
         grassPos = &grassPattern->positions[i];
 
-        grassElem->pos.x = (Math_CosS((this->home.rot.y + grassPos->angle)) * grassPos->distance) + this->home.pos.x;
+        grassElem->pos.x = this->home.pos.x + (Math_CosS(this->home.rot.y + grassPos->angle) * grassPos->distance);
         grassElem->pos.y = this->home.pos.y + 100.0f;
-        grassElem->pos.z = (Math_SinS((this->home.rot.y + grassPos->angle)) * grassPos->distance) + this->home.pos.z;
+        grassElem->pos.z = this->home.pos.z + (Math_SinS(this->home.rot.y + grassPos->angle) * grassPos->distance);
 
         grassElem->pos.y = BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, this, &grassElem->pos);
         tmp = grassElem->pos.y - this->home.pos.y;

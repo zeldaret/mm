@@ -50,7 +50,7 @@ static InitChainEntry sInitChain[] = {
 static CollisionHeader* sColHeaders[] = { &object_raillift_Colheader_004FF8, &object_raillift_Colheader_0048D0 };
 
 void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[index]);
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->pathPoints[index]);
 }
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play) {
@@ -90,7 +90,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
-        this->points = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
         if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
@@ -130,7 +130,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         }
     }
 
-    Math_Vec3s_ToVec3f(&nextPoint, this->points + this->curPoint + this->direction);
+    Math_Vec3s_ToVec3f(&nextPoint, this->pathPoints + this->curPoint + this->direction);
     Math_Vec3f_Diff(&nextPoint, &thisx->world.pos, &thisx->velocity);
     speed = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -159,10 +159,10 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
                 this->waitTimer = 10;
                 this->actionFunc = ObjRaillift_Wait;
             } else {
-                endPoint = &this->points[this->endPoint];
+                endPoint = &this->pathPoints[this->endPoint];
                 this->curPoint = this->direction > 0 ? 0 : this->endPoint;
-                if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
-                    (this->points[0].z != endPoint->z)) {
+                if ((this->pathPoints[0].x != endPoint->x) || (this->pathPoints[0].y != endPoint->y) ||
+                    (this->pathPoints[0].z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;

@@ -230,7 +230,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2C6 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_2C6 &= ~0x10;
         if (ENDNS_GET_4000(&this->actor)) {
@@ -308,7 +308,7 @@ s32 func_8092CCEC(EnDns* this, PlayState* play) {
 
 s32 func_8092CE38(EnDns* this) {
     static s32 D_8092DE00[] = { EN_DNS_ANIM_DANCE, EN_DNS_ANIM_DANCE, EN_DNS_ANIM_FLIP };
-    s16 rotVelocity;
+    s16 angularVelocity;
     s32 pad;
     Vec3f sp2C;
     s32 ret = false;
@@ -333,10 +333,10 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
-                rotVelocity = this->skelAnime.curFrame;
+                angularVelocity = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                rotVelocity *= 0x9D8;
-                this->actor.shape.rot.y += rotVelocity;
+                angularVelocity *= 0x9D8;
+                this->actor.shape.rot.y += angularVelocity;
                 this->unk_2E4 -= -(40.0f / 13.0f);
             }
         } else {
@@ -570,8 +570,8 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
 
-    if (arg4 == 0) {
-        if (arg5 != 0) {
+    if (!arg4) {
+        if (arg5) {
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
@@ -602,14 +602,14 @@ void EnDns_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     s32 phi_v0;
 
     if (this->unk_2C6 & 0x10) {
-        phi_v1 = 1;
-        phi_v0 = 0;
+        phi_v1 = true;
+        phi_v0 = false;
     } else {
-        phi_v1 = 0;
+        phi_v1 = false;
         if (this->unk_2C6 & 0x20) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
     }
 

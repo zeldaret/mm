@@ -1,0 +1,447 @@
+/**
+ * Schedules for EnDoor
+ *
+ * EnDoor uses the schedule system to determine if it should be open or closed
+ * (and prompt a message) when the Player tries to open it.
+ *
+ * If a schedule returns `none` it means the door should be openable by Player.
+ * A non-`none` value means the door should be closed and prompt a message.
+ * Which message is used is determined by using the returned value from the
+ * schedule as an offset into text id 0x1800.
+ */
+
+// Swordsman's School
+sDoorSch_SwordsmansSchool {
+    // The Swordsman's School is closed between 23:00 ~ 00:00 and says
+    // the teacher is "focusing his spirit"
+    if_day (3) {
+        not if_time_range (6, 0, 23, 0) {
+            not if_time_range (0, 0, 6, 0) {
+                return_s (0x7)
+            }
+        }
+    }
+    return_none
+}
+
+// Post Office
+sDoorSch_PostOffice {
+    if_before_time (9, 0) {
+        // Closed between 00:00 ~ 09:00
+        return_s (0x9)
+    } else if_before_time (12, 0) {
+        // Delivering mail between 09:00 ~ 12:00
+        branch (delivering_mail_msg)
+    } else {
+        if_day (1) {
+            branch (label_0x0E)
+
+            label_0x0E:
+            if_before_time (13, 0) {
+                // Open between 12:00 ~ 13:00
+                branch (open_post_office)
+            } else if_before_time (15, 0) {
+                // Delivering mail between 13:00 ~ 15:00
+                branch (delivering_mail_msg)
+            } else if_since_time (0, 0) {
+                // Closed between 00:00 ~ 09:00
+                return_s (0x9)
+            }
+            // Open between 15:00 ~ 00:00
+
+        open_post_office:
+            return_none
+
+        delivering_mail_msg:
+            // "Out delivering mail"
+            return_s (0x8)
+        } else if_day (2) {
+            if_week_event_reg (WEEKEVENTREG_28_08) {
+                // Related to letter to Kafei
+
+                if_before_time (13, 0) {
+                    // Open between 12:00 ~ 13:00
+                    branch (open_post_office)
+                } else if_before_time (17, 0) {
+                    // Delivering mail between 13:00 ~ 17:00
+                    branch (delivering_mail_msg)
+                } else if_since_time (0, 0) {
+                    // Closed between 00:00 ~ 09:00
+                    return_s (0x9)
+                } else {
+                    // Open between 15:00 ~ 00:00
+                    branch (open_post_office)
+                }
+            } else {
+                if_since_time (13, 0) {
+                    //! @bug The in-game message expliclty says the office should be open up to 15:00 (3 p.m.)
+                    //! Maybe it was a typo between 3 (p.m.) and 13?
+                    // Closed between 13:00 ~ 09:00
+                    return_s (0x9)
+                } else {
+                    // Open between 12:00 ~ 13:00
+                    return_none
+                }
+            }
+        } else { // day 3
+            if_before_time (13, 0) {
+                // Open between 12:00 ~ 13:00
+                branch (open_post_office)
+            } else if_before_time (13, 0) {
+                //! @bug? unreachable code
+                branch (delivering_mail_msg)
+            } else if_before_time (18, 0) {
+                // Closed between 13:00 ~ 18:00
+                return_s (0x9)
+            } else {
+                // Open since 18:00
+                return_none
+            }
+        }
+    }
+}
+
+// Lottery Shop
+sDoorSch_LotteryShop {
+    // Open between 06:00 ~ 23:00
+    if_time_range (6, 0, 23, 0) {
+        return_none
+    } else {
+        return_s (0x1C)
+    }
+}
+
+// Trading Post
+sDoorSch_TradingPost {
+    if_time_range (21, 0, 22, 0) {
+        return_s (0xB)
+    } else {
+        return_none
+    }
+}
+
+// Curiosity Shop
+sDoorSch_CuriosityShop {
+    not if_time_range (22, 0, 5, 0) {
+        return_s (0xA)
+    } else {
+        return_none
+    }
+}
+
+// Laundry Pool
+sDoorSch_LaundryPool {
+    if_day (2) {
+        not if_week_event_reg (WEEKEVENTREG_28_08) {
+            return_s (0xC)
+        } else if_time_range (15, 10, 22, 0) {
+            return_none
+        } else {
+            return_s (0xC)
+        }
+    }
+    if_day (3) {
+        if_since_time (13, 0) {
+            not if_week_event_reg (WEEKEVENTREG_51_08) {
+                return_s (0xC)
+            } else if_since_time (22, 0) {
+                return_s (0xC)
+            } else {
+                return_none
+            }
+        }
+    }
+
+    // Day 1
+    return_s (0xC)
+}
+
+// Bomb Shop
+sDoorSch_BombShop {
+    return_none
+}
+
+// Town Shooting Gallery
+sDoorSch_TownShootingGallery {
+    if_since_time (22, 0) {
+        return_s (0xF)
+    } else {
+        return_none
+    }
+}
+
+// Treasure Chest Shop
+sDoorSch_TreasureChestShop {
+    if_since_time (22, 0) {
+        return_s (0x10)
+    } else {
+        return_none
+    }
+}
+
+// Honey & Darling's Shop
+sDoorSch_HoneyDarlingShop {
+    if_since_time (22, 0) {
+        return_s (0x11)
+    } else {
+        return_none
+    }
+}
+
+// Milk Bar
+sDoorSch_MilkBar {
+    if_time_range (10, 0, 21, 0) {
+        // Open without requirements between 10:00 ~ 21:00
+        return_none
+    } else if_time_range (22, 0, 5, 0) {
+        if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
+            // Player is a member of the Milk bar and can enter
+            return_s (0x21)
+        } else {
+            // "Show you are a member"
+            return_s (0x22)
+        }
+    } else {
+        // Closed between 21:00 ~ 22:00 and 05:00 ~ 10:00
+
+        // Message saying when the Bar opens
+        return_s (0x12)
+    }
+}
+
+// Stock Pot Inn: Main door
+sDoorSch_InnMainEntrance {
+    not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+        if_day (3) {
+            // Door is unlocked at night 3
+
+            if_before_time (8, 0) {
+                return_s (0x13)
+            } else {
+                return_none
+            }
+        } else {
+            not if_time_range (8, 0, 20, 30) {
+                return_s (0x13)
+            } else {
+                return_none
+            }
+        }
+    } else {
+        // If player has the Room Key then they can enter the Inn at any time
+        return_none
+    }
+}
+
+// Stock Pot Inn: Entrance at the second floor
+sDoorSch_InnUpperEntrance {
+    return_none
+}
+
+// Stock Pot Inn: Granny's door
+sDoorSch_InnGrannys {
+    return_none
+}
+
+// Stock Pot Inn: Staff room door
+sDoorSch_InnStaffRoom {
+    // It is open at night 3
+
+    if_day (3) {
+        if_since_time (18, 0) {
+            return_none
+        }
+    }
+
+    // "Only employees can enter"
+    return_s (0x14)
+}
+
+// Stock Pot Inn: Knife Chamber door
+sDoorSch_InnKnifeChamber {
+    not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+        return_s (0x16)
+    } else {
+        return_none
+    }
+}
+
+// Stock Pot Inn: Large Suite door
+sDoorSch_InnLargeSuite {
+    return_none
+}
+
+// The Mayor's Residence: Main entrance
+sDoorSch_MayorsResidenceMainEntrance {
+    // Day 1 and 2: Open between 10:00 ~ 20:00
+    // Day 3: Open since 10:00
+
+    if_day (3) {
+        if_since_time (10, 0) {
+        open_residence:
+            return_none
+        } else {
+            branch (closed_residence)
+        }
+    } else {
+        if_time_range (10, 0, 20, 0) {
+            branch (open_residence)
+        } else {
+        closed_residence:
+            return_s (0x15)
+        }
+    }
+}
+
+// The Mayor's Residence: Mayor Dotour
+sDoorSch_MayorsResidenceMayorDotour {
+    return_none
+}
+
+// The Mayor's Residence: Madame Aroma
+sDoorSch_MayorsResidenceMadameAroma {
+    return_none
+}
+
+// The Mayor's Residence: Bedroom
+sDoorSch_MayorsResidenceBedroom {
+    return_none
+}
+
+D_80867710 {
+    return_none
+}
+
+// Romani Ranch: Mama's House
+sDoorSch_RomaniRanchMamasHouse {
+    if_since_time (20, 0) {
+        return_s (0x17)
+    } else {
+        return_none
+    }
+}
+
+// Romani Ranch: Barn
+sDoorSch_RomaniRanchBarn {
+    if_day (1) {
+        if_since_time (2, 30) {
+            // Cremia is in the Barn during the Alien invasion
+
+            // "locked from inside" message
+            return_s (0x18)
+        } else {
+        open_barn:
+            return_none
+        }
+    } else if_day (3) {
+        if_since_time (20, 0) {
+            // Cremia and Romani left the Barn locked on night 3.
+            // Them leaving the Barn at night 3 only happens if the
+            // aliens were defeated on night 1, so if player did not
+            // do that then the door would be mysteriously locked
+
+            // "locked door" message
+            return_s (0xC)
+        } else {
+            branch (open_barn)
+        }
+    } else { // day 2
+        branch (open_barn)
+    }
+}
+
+// Romani Ranch: Cucco Shack
+sDoorSch_RomaniRanchCuccoShack {
+    // Closed between 20:00 ~ 06:00
+    if_since_time (20, 0) {
+        return_s (0x19)
+    } else {
+        return_none
+    }
+}
+
+// Romani Ranch: Doggy Racetrack
+sDoorSch_RomaniRanchDoggyRacetrack {
+    // Closed between 20:00 ~ 06:00
+    if_since_time (20, 0) {
+        return_s (0x1A)
+    } else {
+        return_none
+    }
+}
+
+// Romani Ranch: Bedroom
+sDoorSch_RomaniRanchBedroom {
+    //! @bug? All the codepaths that lead to a non none return are unreachable
+    //! in the base game, since nothing sets WEEKEVENTREG_99_80 and the player
+    //! is kicked out at 20:00
+
+    not if_day (2) {
+        branch (label_0x08)
+    } else {
+        if_week_event_reg (WEEKEVENTREG_99_80) {
+            branch (label_0x0E)
+        } else {
+            label_0x08:
+            if_before_time (20, 0) {
+                branch (label_0x14)
+            } else {
+                return_s (0x1B)
+            }
+        }
+    }
+
+    label_0x0E:
+    if_before_time (18, 0) {
+        branch (label_0x14)
+    } else {
+        return_s (0x1B)
+    }
+
+    label_0x14:
+    return_none
+}
+
+// Ikana Canyom: Music Box House
+sDoorSch_IkanaCanyonMusicBoxHouse {
+    not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
+        not if_week_event_reg (WEEKEVENTREG_75_20) {
+            not if_week_event_reg (WEEKEVENTREG_14_04) {
+                return_s (0x1D)
+            } else not if_week_event_reg (WEEKEVENTREG_59_01) {
+                if_week_event_reg (WEEKEVENTREG_61_02) {
+                    return_s (0x1F)
+                } else {
+                    return_s (0x1E)
+                }
+            } else {
+                return_none
+            }
+        }
+    }
+
+    return_none
+}
+
+// Ikana Graveyard: Dampé's House
+sDoorSch_DampesHouse {
+    return_s (0x20)
+}
+
+// Magic Hags' Potion Shop
+sDoorSch_MagicHagsPotionShop{
+    return_none
+}
+
+D_80867780 {
+    return_none
+}
+
+// Swamp Shooting Gallery
+sDoorSch_SwampShootingGallery {
+    if_since_time (22, 0) {
+        return_s (0x23)
+    } else {
+        return_none
+    }
+}

@@ -88,7 +88,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, PlayState* play) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (HS_GET_BANK_RUPEES() == 0) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
             Message_StartTextbox(play, 0x44C, &this->actor);
@@ -118,7 +118,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
     switch (this->curTextId) {
         case 0x44C:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
                 Message_StartTextbox(play, 0x44E, &this->actor);
                 this->curTextId = 0x44E;
             } else {
@@ -154,7 +154,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                 }
 
-                play->msgCtx.bankRupees = HS_GET_BANK_RUPEES();
+                play->msgCtx.rupeesTotal = HS_GET_BANK_RUPEES();
                 Message_StartTextbox(play, 0x45A, &this->actor);
                 this->curTextId = 0x45A;
             }
@@ -229,7 +229,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
 
         case 0x465:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
-            play->msgCtx.bankRupees = HS_GET_BANK_RUPEES();
+            play->msgCtx.rupeesTotal = HS_GET_BANK_RUPEES();
             Message_StartTextbox(play, 0x45A, &this->actor);
             this->curTextId = 0x45A;
             break;
@@ -305,7 +305,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                 Message_StartTextbox(play, 0x478, &this->actor);
                 this->curTextId = 0x478;
             } else {
-                play->msgCtx.bankRupees = HS_GET_BANK_RUPEES();
+                play->msgCtx.rupeesTotal = HS_GET_BANK_RUPEES();
                 Message_StartTextbox(play, 0x45A, &this->actor);
                 this->curTextId = 0x45A;
             }
@@ -359,17 +359,17 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
 
         case 0x452:
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-                if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.bankRupeesSelected) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.rupeesSelected) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x459, &this->actor);
                     this->curTextId = 0x459;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    if (play->msgCtx.bankRupeesSelected >= 100) {
+                    if (play->msgCtx.rupeesSelected >= 100) {
                         Message_StartTextbox(play, 0x455, &this->actor);
                         this->curTextId = 0x455;
-                    } else if (play->msgCtx.bankRupeesSelected >= 10) {
+                    } else if (play->msgCtx.rupeesSelected >= 10) {
                         Message_StartTextbox(play, 0x454, &this->actor);
                         this->curTextId = 0x454;
                     } else {
@@ -382,9 +382,9 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         this->isNewAccount = true;
                     }
 
-                    Rupees_ChangeBy(-play->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(-play->msgCtx.rupeesSelected);
                     this->previousBankValue = HS_GET_BANK_RUPEES();
-                    HS_SET_BANK_RUPEES(HS_GET_BANK_RUPEES() + play->msgCtx.bankRupeesSelected);
+                    HS_SET_BANK_RUPEES(HS_GET_BANK_RUPEES() + play->msgCtx.rupeesSelected);
                 }
             } else { // GINKOMAN_CHOICE_NO
                 Audio_PlaySfx_MessageCancel();
@@ -420,23 +420,23 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
 
         case 0x471:
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-                if ((s32)HS_GET_BANK_RUPEES() < (play->msgCtx.bankRupeesSelected + this->serviceFee)) {
+                if ((s32)HS_GET_BANK_RUPEES() < (play->msgCtx.rupeesSelected + this->serviceFee)) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                     Message_StartTextbox(play, 0x476, &this->actor);
                     this->curTextId = 0x476;
                 } else if (CUR_CAPACITY(UPG_WALLET) <
-                           (play->msgCtx.bankRupeesSelected + gSaveContext.save.saveInfo.playerData.rupees)) {
+                           (play->msgCtx.rupeesSelected + gSaveContext.save.saveInfo.playerData.rupees)) {
                     // check if wallet is big enough
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x475, &this->actor);
                     this->curTextId = 0x475;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    if (play->msgCtx.bankRupeesSelected >= 100) {
+                    if (play->msgCtx.rupeesSelected >= 100) {
                         Message_StartTextbox(play, 0x474, &this->actor);
                         this->curTextId = 0x474;
-                    } else if (play->msgCtx.bankRupeesSelected >= 10) {
+                    } else if (play->msgCtx.rupeesSelected >= 10) {
                         Message_StartTextbox(play, 0x473, &this->actor);
                         this->curTextId = 0x473;
                     } else {
@@ -445,8 +445,8 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                     }
 
                     this->previousBankValue = HS_GET_BANK_RUPEES();
-                    HS_SET_BANK_RUPEES(HS_GET_BANK_RUPEES() - play->msgCtx.bankRupeesSelected - this->serviceFee);
-                    Rupees_ChangeBy(play->msgCtx.bankRupeesSelected);
+                    HS_SET_BANK_RUPEES(HS_GET_BANK_RUPEES() - play->msgCtx.rupeesSelected - this->serviceFee);
+                    Rupees_ChangeBy(play->msgCtx.rupeesSelected);
                 }
             } else {
                 Audio_PlaySfx_MessageCancel();
@@ -464,7 +464,7 @@ void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         switch (this->curTextId) {
             case 0x450:
-                if (play->msgCtx.bankRupeesSelected == 0) {
+                if (play->msgCtx.rupeesSelected == 0) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x457, &this->actor);
                     this->curTextId = 0x457;
@@ -475,7 +475,7 @@ void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, PlayState* play) {
                 break;
 
             case 0x46E:
-                if (play->msgCtx.bankRupeesSelected == 0) {
+                if (play->msgCtx.rupeesSelected == 0) {
                     Message_StartTextbox(play, 0x46F, &this->actor);
                     this->curTextId = 0x46F;
                 } else if (gSaveContext.save.isNight == true) {
@@ -508,7 +508,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_WaitForDialogueInput(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnGinkoMan_DepositDialogue(this, play);
             break;
 
@@ -519,7 +519,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_14:
+        case TEXT_STATE_INPUT_RUPEES:
             EnGinkoMan_WaitForRupeeCount(this, play);
             break;
 
@@ -544,14 +544,14 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
             Actor_OfferGetItem(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -565,9 +565,9 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE) && (this->curTextId == 0x45B)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE);
             Message_StartTextbox(play, 0x47A, &this->actor);
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
@@ -579,8 +579,8 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE);
             }
             EnGinkoMan_SetupIdle(this);
         }
@@ -609,7 +609,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play) {
 
             case 0x469:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-                play->msgCtx.bankRupees = HS_GET_BANK_RUPEES();
+                play->msgCtx.rupeesTotal = HS_GET_BANK_RUPEES();
                 if ((CURRENT_DAY == 3) && (gSaveContext.save.isNight == true)) {
                     Message_StartTextbox(play, 0x46C, &this->actor);
                     this->curTextId = 0x46C;
@@ -646,9 +646,9 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play) {
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
-        Actor_TrackPlayer(play, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Actor_TrackNone(&this->limb15Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
     }
 }
 
@@ -670,12 +670,12 @@ s32 EnGinkoMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateXS(this->limb15Rot.y, MTXMODE_APPLY);
-        Matrix_RotateZS(this->limb15Rot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == OBJECT_BOJ_LIMB_08) {
-        Matrix_RotateXS(-this->limb8Rot.y, MTXMODE_APPLY);
-        Matrix_RotateZS(-this->limb8Rot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
 
     return false;

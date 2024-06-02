@@ -1,9 +1,8 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "carthandle.h"
+#include "CIC6105.h"
 #include "idle.h"
 #include "stack.h"
 #include "stackcheck.h"
-#include "CIC6105.h"
 #include "z64thread.h"
 
 StackEntry sBootStackInfo;

@@ -140,7 +140,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     this->actor.scale.x = (scale * 0.42f) * temp;
 
     this->actor.world.pos = player->actor.world.pos;
-    this->actor.world.pos.y = this->actor.world.pos.y + 5.0f;
+    this->actor.world.pos.y += 5.0f;
 
     temp = (2.0f - this->unk16C) * this->unk16C;
 

@@ -36,7 +36,7 @@ EffectSsInit Effect_Ss_Lightning_InitVars = {
     EffectSsLightning_Init,
 };
 
-static s32 sIsDesegmented = false;
+static s32 sTexturesDesegmented = false;
 
 u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsLightningInitParams* initParams = PARAMS;
@@ -60,11 +60,11 @@ u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* ini
     this->rYaw = initParams->yaw;
     this->rLifespan = initParams->life;
 
-    if (!sIsDesegmented) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sLightningTextures); i++) {
             sLightningTextures[i] = Lib_SegmentedToVirtual(sLightningTextures[i]);
         }
-        sIsDesegmented = true;
+        sTexturesDesegmented = true;
     }
 
     return 1;

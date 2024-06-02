@@ -486,10 +486,10 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
 
 void func_80B417B8(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         this->actionFunc = func_80B419B0;
         func_80B40E18(this, 7);
     }
@@ -510,14 +510,14 @@ void func_80B41858(EnKgy* this, PlayState* play) {
 void func_80B418C4(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play) &&
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play) &&
         ((play->msgCtx.currentTextId == 0xC4E) || (play->msgCtx.currentTextId == 0xC4F))) {
         Message_CloseTextbox(play);
         this->actor.textId = 0xC4F;
         func_80B413C8(this);
         CutsceneManager_Queue(this->csIdList[5]);
         this->actionFunc = func_80B41858;
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
     }
     func_80B40EE8(this, play);
 }
@@ -527,7 +527,7 @@ void func_80B419B0(EnKgy* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80B4163C(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
         func_80B411DC(this, play, 4);
         func_80B40E18(this, this->actor.textId);
         if (this->actor.textId == 0xC37) {
@@ -553,7 +553,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
         if (itemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80B41E18;
@@ -604,14 +604,14 @@ void func_80B41C54(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actionFunc = func_80B41C30;
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
     }
     func_80B40EE8(this, play);
 }
 
 void func_80B41CBC(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80B40E18(this, this->actor.textId);
         this->actionFunc = func_80B41E18;
@@ -695,7 +695,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                 }
                 break;
 
-            case TEXT_STATE_5:
+            case TEXT_STATE_EVENT:
                 if (Message_ShouldAdvance(play)) {
                     textId = play->msgCtx.currentTextId;
 
@@ -877,7 +877,7 @@ void func_80B42508(EnKgy* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, play, 4);
         func_80B40E18(this, this->actor.textId);
@@ -887,7 +887,7 @@ void func_80B42508(EnKgy* this, PlayState* play) {
 void func_80B425A0(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B41E18;
         EnKgy_ChangeAnimLoopMorph(this, ENKGY_ANIM_1);
         func_80B411DC(this, play, 0);
@@ -900,10 +900,10 @@ void func_80B425A0(EnKgy* this, PlayState* play) {
 void func_80B42660(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B413C8(this);
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         this->actionFunc = func_80B42714;
         func_80B40E18(this, 7);
     }
@@ -916,7 +916,7 @@ void func_80B42714(EnKgy* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state) || (&this->actor == player->talkActor)) {
         func_80B411DC(this, play, 4);
         func_80B40E18(this, this->actor.textId);
         if (this->actor.textId == 0xC37) {
@@ -941,7 +941,7 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         textId = play->msgCtx.currentTextId;
 
         switch (textId) {
@@ -985,7 +985,7 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
     }
 
     this->actor.focus.pos = this->unk_2A8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B427C8;
         if (this->animIndex == ENKGY_ANIM_4) {
             EnKgy_ChangeAnimLoopMorph(this, ENKGY_ANIM_7);
@@ -1016,7 +1016,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         textId = play->msgCtx.currentTextId;
         switch (textId) {
             case 0xC1D:
@@ -1100,7 +1100,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
     }
 
     this->actor.focus.pos = this->unk_2A8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B42A8C;
         if (this->actor.textId == 0xC2D) {
             EnKgy_ChangeAnimLoopMorph(this, ENKGY_ANIM_1);
@@ -1133,17 +1133,17 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
 void EnKgy_Update(Actor* thisx, PlayState* play) {
     EnKgy* this = THIS;
     s32 pad;
-    Vec3s sp30;
+    Vec3s torsoRot;
 
     this->actionFunc(this, play);
     if (this->animIndex == ENKGY_ANIM_2) {
-        sp30.z = 0;
-        sp30.y = 0;
-        sp30.x = 0;
-        Actor_TrackPlayer(play, &this->actor, &this->unk_2CC, &sp30, this->actor.focus.pos);
+        torsoRot.z = 0;
+        torsoRot.y = 0;
+        torsoRot.x = 0;
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_2CC.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2CC.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
@@ -1159,7 +1159,7 @@ s32 EnKgy_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     }
 
     if (limbIndex == OBJECT_KGY_LIMB_0B) {
-        rot->x += this->unk_2CC.y;
+        rot->x += this->headRot.y;
     }
 
     return false;

@@ -18,15 +18,16 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
     objectCtx->slots[objectCtx->numEntries].id = id;
     size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
+    //! FAKE:
     if (1) {}
 
     if (size != 0) {
-        DmaMgr_SendRequest0(objectCtx->slots[objectCtx->numEntries].segment, gObjectTable[id].vromStart, size);
+        DmaMgr_RequestSync(objectCtx->slots[objectCtx->numEntries].segment, gObjectTable[id].vromStart, size);
     }
 
     if (objectCtx->numEntries < ARRAY_COUNT(objectCtx->slots) - 1) {
         objectCtx->slots[objectCtx->numEntries + 1].segment =
-            ALIGN16((u32)objectCtx->slots[objectCtx->numEntries].segment + size);
+            (void*)ALIGN16((uintptr_t)objectCtx->slots[objectCtx->numEntries].segment + size);
     }
 
     objectCtx->numEntries++;
@@ -65,7 +66,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepSlot = Object_SpawnPersistent(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
 }
 
 void Object_UpdateEntries(ObjectContext* objectCtx) {
@@ -86,8 +87,8 @@ void Object_UpdateEntries(ObjectContext* objectCtx) {
                     entry->id = 0;
                 } else {
                     osCreateMesgQueue(&entry->loadQueue, &entry->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
-                                           &entry->loadQueue, NULL);
+                    DmaMgr_RequestAsync(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
+                                        &entry->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&entry->loadQueue, NULL, OS_MESG_NOBLOCK)) {
                 entry->id = id;
@@ -107,7 +108,7 @@ s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId) {
         }
     }
 
-    return -1;
+    return OBJECT_SLOT_NONE;
 }
 
 s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot) {
@@ -131,7 +132,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
             continue;
         }
 
-        DmaMgr_SendRequest0(objectCtx->slots[i].segment, gObjectTable[id].vromStart, vromSize);
+        DmaMgr_RequestSync(objectCtx->slots[i].segment, gObjectTable[id].vromStart, vromSize);
     }
 }
 
@@ -232,9 +233,9 @@ void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd) {
 void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
-    static RomFile naviQuestHintFiles[2] = {
-        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
-        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
+    static RomFile sNaviQuestHintFiles[2] = {
+        ROM_FILE(elf_message_field),
+        ROM_FILE(elf_message_ydan),
     };
 
     if (cmd->specialFiles.subKeepId != 0) {
@@ -244,7 +245,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &sNaviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -355,23 +356,23 @@ void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
  * These later are stored in segment 0x06, and used in maps.
  */
 void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
-    static RomFile sceneTextureFiles[9] = {
-        { 0, 0 }, // Default
-        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
-        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
-        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
-        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
-        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
-        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
-        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
-        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
+    static RomFile sSceneTextureFiles[9] = {
+        ROM_FILE_UNSET, // Default
+        ROM_FILE(scene_texture_01),
+        ROM_FILE(scene_texture_02),
+        ROM_FILE(scene_texture_03),
+        ROM_FILE(scene_texture_04),
+        ROM_FILE(scene_texture_05),
+        ROM_FILE(scene_texture_06),
+        ROM_FILE(scene_texture_07),
+        ROM_FILE(scene_texture_08),
     };
-    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
-    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    uintptr_t vromStart = sSceneTextureFiles[fileIndex].vromStart;
+    size_t size = sSceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
-        DmaMgr_SendRequest0(play->roomCtx.unk74, vromStart, size);
+        DmaMgr_RequestSync(play->roomCtx.unk74, vromStart, size);
     }
 }
 
@@ -411,12 +412,12 @@ void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd) {
         R_TIME_SPEED = play->envCtx.sceneTimeSpeed;
     }
 
-    play->envCtx.sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    play->envCtx.sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    play->envCtx.sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
+    play->envCtx.sunPos.x = -(Math_SinS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.y = (Math_CosS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.z = (Math_CosS(CURRENT_TIME - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
     if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutsceneIndex < 0xFFF0)) {
-        gSaveContext.skyboxTime = gSaveContext.save.time;
+        gSaveContext.skyboxTime = CURRENT_TIME;
 
         if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
             gSaveContext.skyboxTime = CLOCK_TIME(5, 0);
@@ -451,7 +452,7 @@ void Scene_CommandExitList(PlayState* play, SceneCmd* cmd) {
 void Scene_Command09(PlayState* play, SceneCmd* cmd) {
 }
 
-// SceneTableEntry Header Command 0x15: Sound Settings=
+// SceneTableEntry Header Command 0x15: Sound Settings
 void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd) {
     play->sequenceCtx.seqId = cmd->soundSettings.seqId;
     play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
@@ -467,7 +468,7 @@ void Scene_CommandEchoSetting(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
-// SceneTableEntry Header Command 0x18: Alternate Header List=
+// SceneTableEntry Header Command 0x18: Alternate Header List
 void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;

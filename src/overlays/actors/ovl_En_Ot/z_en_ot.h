@@ -2,6 +2,7 @@
 #define Z_EN_OT_H
 
 #include "global.h"
+#include "objects/object_ot/object_ot.h"
 
 struct EnOt;
 
@@ -42,8 +43,8 @@ typedef struct EnOt {
     /* 0x144 */ EnOtActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[19];
-    /* 0x24A */ Vec3s morphTable[19];
+    /* 0x1D8 */ Vec3s jointTable[OBJECT_OT_LIMB_MAX];
+    /* 0x24A */ Vec3s morphTable[OBJECT_OT_LIMB_MAX];
     /* 0x2BC */ s32 animIndex;
     /* 0x2C0 */ ActorPathing actorPath;
     /* 0x32C */ u16 unk_32C;

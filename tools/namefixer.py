@@ -18,6 +18,28 @@ simpleReplace = {
 # explanation in replace_single below)
 wordReplace = {
     # Functions
+    "SystemArena_Malloc": "malloc",
+    "SystemArena_MallocR": "malloc_r",
+    "SystemArena_Realloc": "realloc",
+    "SystemArena_Free": "free",
+    "SystemArena_Calloc": "calloc",
+    "SystemArena_GetSizes": "GetFreeArena",
+    "SystemArena_CheckArena": "CheckArena",
+    "SystemArena_Init": "MallocInit",
+    "SystemArena_Cleanup": "MallocCleanup",
+    "SystemArena_IsInitialized": "MallocIsInitialized",
+
+    "proutSprintf": "proutPrintf",
+
+    "PrintUtils_VPrintf": "vaprintf",
+    "PrintUtils_Printf": "aprintf",
+
+    "Sleep_Cycles": "csleep",
+    "Sleep_Nsec": "nsleep",
+    "Sleep_Usec": "usleep",
+    "Sleep_Msec": "msleep",
+    "Sleep_Sec": "sleep",
+
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
@@ -114,6 +136,8 @@ wordReplace = {
     "func_8012405C": "Player_HasMirrorShieldEquipped",
     "func_80124088": "Player_IsHoldingMirrorShield",
     "func_8012697C": "Player_DrawGetItem",
+    "func_800B724C": "Player_SetCsAction",
+    "func_800B7298": "Player_SetCsActionWithHaltedActors",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
     "Actor_IsLinkFacingActor": "Player_IsFacingActor",
@@ -123,7 +147,9 @@ wordReplace = {
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
     "Actor_MarkForDeath": "Actor_Kill",
-    "func_800B84D0": "Actor_ProcessTalkRequest",
+    "func_800B84D0": "Actor_TalkOfferAccepted",
+    "Actor_ProcessTalkRequest": "Actor_TalkOfferAccepted",
+    "func_800BC154": "Actor_ChangeCategory",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
     "THGA_GetSize": "THGA_GetRemaining",
@@ -772,7 +798,8 @@ wordReplace = {
     "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
     "func_8013D9C8": "SubS_UpdateFidgetTables",
     "SubS_FillLimbRotTables": "SubS_UpdateFidgetTables",
-    "func_8013A7C0": "SubS_FindDoor",
+    "func_8013A7C0": "SubS_FindScheduleDoor",
+    "SubS_FindDoor": "SubS_FindScheduleDoor",
     "func_8013E640": "SubS_FindActorCustom",
     "func_ActorCategoryIterateById": "SubS_FindActor",
     "func_8013BB7C": "SubS_FindNearestActor",
@@ -960,6 +987,9 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+    
+    "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
+    "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -985,7 +1015,7 @@ wordReplace = {
     "skelAnime.transitionStep": "skelAnime.morphRate",
     "skelAnime.animUpdate": "skelAnime.update",
     "skelAnime.flags": "skelAnime.moveFlags",
-    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFrameRot": "skelAnime.prevYaw",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.unk20": "actor.halfDaysBits",
@@ -1059,6 +1089,7 @@ wordReplace = {
     "gSaveContext.save.pictoFlags1": "gSaveContext.save.saveInfo.pictoFlags1",
     "gSaveContext.save.unk_E84": "gSaveContext.save.saveInfo.unk_E60",
     "gSaveContext.save.unk_E88": "gSaveContext.save.saveInfo.unk_E64",
+    "gSaveContext.save.unk_E64": "gSaveContext.save.saveInfo.alienInfo",
     "gSaveContext.save.scenesVisible": "gSaveContext.save.saveInfo.scenesVisible",
     "gSaveContext.save.skullTokenCount": "gSaveContext.save.saveInfo.skullTokenCount",
     "gSaveContext.save.unk_EC4": "gSaveContext.save.saveInfo.unk_EA0",
@@ -1288,12 +1319,14 @@ wordReplace = {
     "RADF_TO_DEGF": "RAD_TO_DEG",
     "DEGF_TO_RADF": "DEG_TO_RAD",
 
+    "ACTORCTX_FLAG_1": "ACTORCTX_FLAG_TELESCOPE_ON",
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
     "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
     "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
-    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
+    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK",
+    "ACTOR_FLAG_TALK_REQUESTED": "ACTOR_FLAG_TALK",
     "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
@@ -1360,6 +1393,16 @@ wordReplace = {
     "COLPOLY_SURFACE_SAND": "SURFACE_MATERIAL_SAND",
     "COLPOLY_SURFACE_SNOW": "SURFACE_MATERIAL_SNOW",
     "CS_STATE_0": "CS_STATE_IDLE",
+
+    "TEXT_STATE_1": "TEXT_STATE_NEXT",
+    "TEXT_STATE_3": "TEXT_STATE_FADING",
+    "TEXT_STATE_5": "TEXT_STATE_EVENT",
+    "TEXT_STATE_7": "TEXT_STATE_SONG_DEMO_DONE",
+    "TEXT_STATE_10": "TEXT_STATE_AWAITING_NEXT",
+    "TEXT_STATE_14": "TEXT_STATE_INPUT_RUPEES",
+    "TEXT_STATE_15": "TEXT_STATE_INPUT_BOMBER_CODE",
+    "TEXT_STATE_16": "TEXT_STATE_PAUSE_MENU",
+    "TEXT_STATE_17": "TEXT_STATE_INPUT_LOTTERY_CODE",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames

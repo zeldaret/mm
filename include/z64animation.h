@@ -12,6 +12,10 @@ struct Actor;
 struct SkelAnime;
 struct PlayerAnimationFrame;
 
+// for indexing `jointTable[]` and `morphTable[]`
+#define LIMB_ROOT_POS 0 // Translation/Offset of the root limb
+#define LIMB_ROOT_ROT 1 // Rotation of the root limb
+
 #define LIMB_DONE 0xFF
 #define BODYPART_NONE -1
 
@@ -186,7 +190,7 @@ typedef struct SkelAnime {
                 } update;
     /* 0x34 */ s8 initFlags;      // Flags used when initializing Player's skeleton
     /* 0x35 */ u8 moveFlags;      // Flags used for animations that move the actor in worldspace.
-    /* 0x36 */ s16 prevRot;       // Previous rotation in worldspace.
+    /* 0x36 */ s16 prevYaw;       // Previous rotation in worldspace.
     /* 0x38 */ Vec3s prevTransl;  // Previous modelspace translation.
     /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
 } SkelAnime; // size = 0x44
@@ -239,75 +243,6 @@ typedef struct AnimationSpeedInfo {
     /* 0x8 */ u8 mode;
     /* 0xC */ f32 morphFrames;
 } AnimationSpeedInfo; // size = 0x10
-
-struct SkeletonInfo;
-
-typedef s32 (*UnkKeyframeCallback)(struct PlayState* play, struct SkeletonInfo* skeletonInfo, s32* arg2, Gfx** dList,
-                                   u8* arg4, void* arg5);
-
-// Keyframe limb?
-typedef struct {
-    /* 0x0 */ Gfx* dList;
-    /* 0x4 */ u8 unk_4;
-    /* 0x5 */ u8 flags;
-    /* 0x6 */ Vec3s root;
-} Struct_801BFA14_Arg1_Field4; // size = 0xC
-
-// Other limb type?
-typedef struct {
-    /* 0x0 */ Gfx* dList;
-    /* 0x4 */ u8 unk_4;
-    /* 0x5 */ u8 flags;
-    /* 0x6 */ u8 unk_6;         // transform limb draw index
-} Struct_801BFA14_Arg1_Field4_2; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ u8 limbCount;
-    /* 0x01 */ u8 unk_1; // non-zero in object files, number of non-null-dlist limbs?
-    /* 0x04 */ union {
-        Struct_801BFA14_Arg1_Field4* unk_4; // arrays
-        Struct_801BFA14_Arg1_Field4_2* unk_4_2;
-    };
-    /* 0x08 */ s16* unk_8;
-    /* 0x0C */ s16* unk_C;
-    /* 0x10 */ char unk_10[0x2];
-    /* 0x12 */ s16 unk_12;
-} Struct_801BFA14_Arg1; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ u16* unk_0;
-    /* 0x04 */ s16* unk_4;
-    /* 0x08 */ s16* unk_8;
-    /* 0x0C */ s16* unk_C;
-    /* 0x10 */ char unk_10[0x2];
-    /* 0x12 */ s16 unk_12;
-} SkeletonInfo_1C; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ f32 unk_0;
-    /* 0x04 */ f32 unk_4;
-    /* 0x08 */ f32 unk_8;
-    /* 0x0C */ f32 unk_C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s32 unk_14;
-} FrameControl; // size = 0x18
-
-// FlexKeyframeSkeleton ?
-typedef struct SkeletonInfo {
-    /* 0x00 */ FrameControl frameCtrl;
-    /* 0x18 */ Struct_801BFA14_Arg1* unk_18;    // array
-    /* 0x1C */ SkeletonInfo_1C* unk_1C;
-    /* 0x20 */ UnkKeyframeCallback* unk_20;     // pointer to array of functions
-    /* 0x24 */ f32 unk_24;                      // duration? current time?
-    /* 0x28 */ Vec3s* frameData;                // array of 3 Vec3s
-    /* 0x2C */ s16* unk_2C;
-} SkeletonInfo; // size = 0x30
-
-typedef s32 (*OverrideKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
-                                          u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
-
-typedef s32 (*PostKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
-                                       u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
 
 void SkelAnime_DrawLod(struct PlayState* play, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, struct Actor* actor, s32 lod);
 void SkelAnime_DrawFlexLod(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, struct Actor* actor, s32 lod);

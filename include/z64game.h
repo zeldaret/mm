@@ -2,11 +2,14 @@
 #define Z64GAME_H
 
 #include "ultra64.h"
+
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "padutils.h"
-#include "tha.h"
+#include "gamealloc.h"
 #include "padmgr.h"
+#include "padutils.h"
+#include "romfile.h"
+#include "tha.h"
 #include "unk.h"
 
 struct GraphicsContext;
@@ -27,10 +30,9 @@ typedef enum GameStateId {
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
-typedef struct {
+typedef struct GameStateOverlay {
     /* 0x00 */ void*         loadedRamAddr;
-    /* 0x04 */ uintptr_t     vromStart; // if applicable
-    /* 0x08 */ uintptr_t     vromEnd;   // if applicable
+    /* 0x04 */ RomFile       file;      // if applicable
     /* 0x0C */ void*         vramStart; // if applicable
     /* 0x10 */ void*         vramEnd;   // if applicable
     /* 0x14 */ UNK_PTR       unk_14;
@@ -41,18 +43,6 @@ typedef struct {
     /* 0x28 */ UNK_TYPE      unk_28;
     /* 0x2C */ size_t        instanceSize;
 } GameStateOverlay; // size = 0x30
-
-typedef struct GameAllocEntry {
-    /* 0x0 */ struct GameAllocEntry* next;
-    /* 0x4 */ struct GameAllocEntry* prev;
-    /* 0x8 */ size_t size;
-    /* 0xC */ u32 unk_0C;
-} GameAllocEntry; // size = 0x10
-
-typedef struct GameAlloc {
-    /* 0x00 */ GameAllocEntry base;
-    /* 0x10 */ GameAllocEntry* head;
-} GameAlloc; // size = 0x14
 
 typedef struct GameState {
     /* 0x00 */ struct GraphicsContext* gfxCtx;

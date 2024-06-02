@@ -8,6 +8,10 @@ struct ObjIcePoly;
 typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly*, PlayState*);
 
 #define OBJICEPOLY_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define OBJICEPOLY_GET_SCALE(thisx) (((thisx)->params) & 0xFF)
+
+#define OBJICEPOLY_PARAMS(scale, switchFlag) (((scale) & 0xFF) | (((switchFlag) & 0xFF) << 8))
+#define OBJICEPOLY_PARAMS_ALT(scale, switchFlag) ((scale) | (((switchFlag) & 0xFF) << 8))
 
 #define OBJICEPOLY_SWITCH_FLAG_NONE 0xFF
 

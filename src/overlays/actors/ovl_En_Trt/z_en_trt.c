@@ -123,10 +123,11 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
                      frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-s32 EnTrt_TestItemSelected(PlayState* play) {
+bool EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
+        (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -157,14 +158,14 @@ void EnTrt_UpdateCollider(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_UpdateCursorPos(PlayState* play, EnTrt* this) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &x, &y);
-    this->cursorPos.x = x + xOffset;
-    this->cursorPos.y = y + yOffset;
+    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &screenPosX, &screenPosY);
+    this->cursorPos.x = screenPosX + xOffset;
+    this->cursorPos.y = screenPosY + yOffset;
     this->cursorPos.z = 1.2f;
 }
 
@@ -216,7 +217,7 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
         CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    Actor_ProcessTalkRequest(&this->actor, &play->state);
+    Actor_TalkOfferAccepted(&this->actor, &play->state);
     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -325,7 +326,7 @@ void EnTrt_Hello(EnTrt* this, PlayState* play) {
             CutsceneManager_Queue(this->csId);
         }
     }
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             EnTrt_StartShopping(play, this);
@@ -343,7 +344,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
             player->stateFlags2 &= ~PLAYER_STATE2_20000000;
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x883:
                 this->textId = 0x884;
@@ -386,7 +387,7 @@ void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x886:
                 this->textId = 0x887;
@@ -405,7 +406,7 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x88F) {
             if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -494,7 +495,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
 void EnTrt_EndConversation(EnTrt* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             EnTrt_EndInteraction(play, this);
         }
@@ -643,7 +644,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickLeftPrompt.isEnabled = true;
         EnTrt_UpdateCursorPos(play, this);
-        if (talkState == TEXT_STATE_5) {
+        if (talkState == TEXT_STATE_EVENT) {
             func_8011552C(play, DO_ACTION_DECIDE);
             if (!EnTrt_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 EnTrt_CursorLeftRight(play, this);
@@ -754,7 +755,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
                         break;
                 }
             }
-        } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             if (!Inventory_HasEmptyBottle()) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(play, this, 0x846);
@@ -800,7 +801,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_SCENTS) {
         this->textId = 0x890;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_TALKED;
         }
@@ -844,7 +845,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     } else {
         this->textId = 0x850;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -878,7 +879,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
 
 void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / TRUNCF_BINANG(this->skelAnime.playSpeed);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (CutsceneManager_IsNext(this->csId)) {
@@ -992,7 +993,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x83C) {
             if (Inventory_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -1033,7 +1034,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
             CutsceneManager_Queue(this->csId);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->textId) {
             case 0x889:
                 this->textId = 0x88A;
@@ -1063,7 +1064,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_SetupEndInteraction(EnTrt* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         EnTrt_EndInteraction(play, this);
     }
 }
@@ -1072,7 +1073,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 50.0f) &&
@@ -1093,7 +1094,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_CannotBuy(EnTrt* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actionFunc = this->prevActionFunc;
         Message_ContinueTextbox(play, EnTrt_GetItemTextId(this));
     }
@@ -1102,7 +1103,7 @@ void EnTrt_CannotBuy(EnTrt* this, PlayState* play) {
 void EnTrt_CanBuy(EnTrt* this, PlayState* play) {
     EnGirlA* item;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->shopItemSelectedTween = 0.0f;
         EnTrt_ResetItemPosition(this);
         item = this->items[this->cursorIndex];
@@ -1165,7 +1166,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                 }
             }
         }
-    } else if (talkState == TEXT_STATE_5) {
+    } else if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIndex];
@@ -1406,11 +1407,11 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 }
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
-    u8 talkState = talkState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
     PlayerItemAction itemAction;
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if ((this->talkOptionTextId == 0x845) || (this->talkOptionTextId == 0x882)) {
                 Message_ContinueTextbox(play, 0xFF);
@@ -1418,7 +1419,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 EnTrt_StartShopping(play, this);
             }
         }
-    } else if (talkState == TEXT_STATE_16) {
+    } else if (talkState == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
         if (itemAction > PLAYER_IA_NONE) {
             if (itemAction == PLAYER_IA_BOTTLE_MUSHROOM) {

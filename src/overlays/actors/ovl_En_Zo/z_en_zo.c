@@ -247,14 +247,14 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->upperBodyRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 0x3E8, 1);
 
-        Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
 
-        Math_SmoothStepToS(&this->upperBodyRot.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->upperBodyRot.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->upperBodyRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->upperBodyRot.y, 0, 4, 0x3E8, 1);
     }
 
     EnZo_Blink(this, 3);
@@ -361,8 +361,8 @@ s32 EnZo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == ZORA_LIMB_TORSO) || (limbIndex == ZORA_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == ZORA_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     return false;
 }

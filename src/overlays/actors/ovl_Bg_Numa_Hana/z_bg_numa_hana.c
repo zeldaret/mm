@@ -133,7 +133,7 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
 void BgNumaHana_UpdateSettleRotation(s16* settleRotZ, s16* settleAngle, f32* settleScale, f32 scaleStep) {
     *settleAngle += 0x32C8;
     Math_StepToF(settleScale, 0.0f, scaleStep);
-    *settleRotZ += (s16)(Math_SinS(*settleAngle) * *settleScale);
+    *settleRotZ += TRUNCF_BINANG(Math_SinS(*settleAngle) * *settleScale);
 }
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play) {
@@ -405,7 +405,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     }
 
     objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_SYOKUDAI);
-    if ((objectSlot > OBJECT_SLOT_NONE) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
+    if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);

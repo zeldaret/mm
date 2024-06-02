@@ -148,10 +148,10 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
 void BgLotus_Update(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
     s32 pad;
-    WaterBox* sp2C;
+    WaterBox* waterBox;
 
     WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                           &this->unk160, &sp2C);
+                           &this->unk160, &waterBox);
     this->actionFunc(this, play);
 }
 

@@ -1,5 +1,5 @@
 #include "listalloc.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 ListAlloc* ListAlloc_Init(ListAlloc* this) {
     this->prev = NULL;
@@ -8,7 +8,7 @@ ListAlloc* ListAlloc_Init(ListAlloc* this) {
 }
 
 void* ListAlloc_Alloc(ListAlloc* this, size_t size) {
-    ListAlloc* ptr = SystemArena_Malloc(size + sizeof(ListAlloc));
+    ListAlloc* ptr = malloc(size + sizeof(ListAlloc));
     ListAlloc* next;
 
     if (ptr == NULL) {
@@ -50,7 +50,7 @@ void ListAlloc_Free(ListAlloc* this, void* data) {
         this->next = ptr->prev;
     }
 
-    SystemArena_Free(ptr);
+    free(ptr);
 }
 
 void ListAlloc_FreeAll(ListAlloc* this) {

@@ -79,7 +79,7 @@
         <Texture Name="object_zog_Tex_025750" OutName="tex_025750" Format="rgba16" Width="32" Height="32" Offset="0x25750" />
         <Texture Name="object_zog_Tex_025F50" OutName="tex_025F50" Format="rgba16" Width="32" Height="32" Offset="0x25F50" />
         <Texture Name="object_zog_Tex_026750" OutName="tex_026750" Format="rgba16" Width="32" Height="32" Offset="0x26750" />
-        <Blob Name="object_zog_Blob_026F50" Size="0x1150" Offset="0x26F50" />
+
         <DList Name="object_zog_DL_0280A0" Offset="0x280A0" />
         <DList Name="object_zog_DL_0280A8" Offset="0x280A8" />
         <Texture Name="object_zog_Tex_028610" OutName="tex_028610" Format="rgba16" Width="16" Height="16" Offset="0x28610" />

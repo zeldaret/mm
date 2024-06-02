@@ -1,8 +1,50 @@
+#include "z64effect.h"
 #include "global.h"
+
+#define SPARK_COUNT 3
+#define BLURE_COUNT 25
+#define SHIELD_PARTICLE_COUNT 3
+#define TIRE_MARK_COUNT 15
+
+#define TOTAL_EFFECT_COUNT SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT + TIRE_MARK_COUNT
+
+typedef struct EffectStatus {
+    /* 0x0 */ u8 active;
+    /* 0x1 */ u8 unk1;
+    /* 0x2 */ u8 unk2;
+} EffectStatus; // size = 0x3
+
+typedef struct EffectContext {
+    /* 0x0000 */ struct PlayState* play;
+    struct {
+        EffectStatus status;
+        EffectSpark effect;
+    } /* 0x0004 */ sparks[SPARK_COUNT];
+    struct {
+        EffectStatus status;
+        EffectBlure effect;
+    } /* 0x0E5C */ blures[BLURE_COUNT];
+    struct {
+        EffectStatus status;
+        EffectShieldParticle effect;
+    } /* 0x388C */ shieldParticles[SHIELD_PARTICLE_COUNT];
+    struct {
+        EffectStatus status;
+        EffectTireMark effect;
+    } /* 0x3DF0 */ tireMarks[TIRE_MARK_COUNT];
+} EffectContext; // size = 0x98E0
 
 EffectContext sEffectContext;
 
-EffectInfo sEffectInfoTable[] = {
+typedef struct EffectInfo {
+    /* 0x00 */ u32 size;
+    /* 0x04 */ void (*init)(void* effect, void* initParams);
+    /* 0x08 */ void (*destroy)(void* effect);
+    /* 0x0C */ s32 (*update)(void* effect);
+    /* 0x10 */ void (*draw)(void* effect, struct GraphicsContext* gfxCtx);
+} EffectInfo; // size = 0x14
+
+EffectInfo sEffectInfoTable[EFFECT_MAX] = {
     {
         sizeof(EffectSpark),
         EffectSpark_Init,
@@ -116,7 +158,7 @@ void Effect_Init(PlayState* play) {
     sEffectContext.play = play;
 }
 
-void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* initParams) {
+void Effect_Add(PlayState* play, s32* pIndex, EffectType type, u8 arg3, u8 arg4, void* initParams) {
     u32 slotFound;
     s32 i;
     void* effect = NULL;
@@ -138,6 +180,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_BLURE1:
             case EFFECT_BLURE2:
                 for (i = 0; i < BLURE_COUNT; i++) {
@@ -150,6 +193,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_SHIELD_PARTICLE:
                 for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
                     if (sEffectContext.shieldParticles[i].status.active == false) {
@@ -161,6 +205,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_TIRE_MARK:
                 for (i = 0; i < TIRE_MARK_COUNT; i++) {
                     if (sEffectContext.tireMarks[i].status.active == false) {
@@ -171,6 +216,9 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                         break;
                     }
                 }
+                break;
+
+            default:
                 break;
         }
 

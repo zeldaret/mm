@@ -15,7 +15,7 @@ typedef void (*EnJsoActionFunc)(struct EnJso*, PlayState*);
 // For the four `VARIABLE` hint types, the former hint is used if the player hasn't restored the river in
 // Ikana Canyon yet, and the latter hint is used if the player has. If the player has the Elegy of Emptiness,
 // then all hints will be replaced with a hint telling the player to use the song to climb Stone Tower.
-typedef enum {
+typedef enum EnJsoHintType {
     /* 0 */ EN_JSO_HINT_FREEZE_OCTOROKS,
     /* 1 */ EN_JSO_HINT_FLATS_LOCATION,
     /* 2 */ EN_JSO_HINT_VARIABLE_1, // Hints that Pamela's family is in the house or that the Song of Healing can heal Pamela's father
@@ -28,7 +28,7 @@ typedef enum {
     /* 9 */ EN_JSO_HINT_KING_WEAK_TO_MIRROR_SHIELD
 } EnJsoHintType;
 
-typedef enum {
+typedef enum EnJsoBodyPart {
     /*  0 */ EN_JSO_BODYPART_LEFT_SWORD,
     /*  1 */ EN_JSO_BODYPART_RIGHT_SWORD,
     /*  2 */ EN_JSO_BODYPART_ROBE_TOP,
@@ -44,7 +44,6 @@ typedef enum {
     /* 12 */ EN_JSO_BODYPART_MAX
 } EnJsoBodyPart;
 
-
 typedef struct EnJso {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -54,9 +53,9 @@ typedef struct EnJso {
     /* 0x27C */ s16 action;
     /* 0x27E */ s16 circlingAngle;
     /* 0x280 */ s16 circlingAngularVelocity;
-    /* 0x282 */ s16 dashAttackTimer;
+    /* 0x282 */ s16 attackMovementTimer;
     /* 0x284 */ UNK_TYPE1 unk_284[0x2];
-    /* 0x286 */ s16 attackWaitTimer; // while bouncing, the Garo cannot start an attack until this reaches 0
+    /* 0x286 */ s16 attackTimer; // while bouncing, the Garo cannot start an attack until this reaches 0
     /* 0x288 */ s16 timer;
     /* 0x28A */ s16 isGuarding; // Set to false when the guard animation ends, never checked or set otherwise. Name is inferred based on how it's being set.
     /* 0x28C */ s16 isPlayerLockedOn;
@@ -76,7 +75,7 @@ typedef struct EnJso {
     /* 0x34A */ s16 hintType;
     /* 0x34C */ u8 disableBlure;
     /* 0x34D */ u8 swordState;
-    /* 0x34E */ u8 swordHitSomething;
+    /* 0x34E */ u8 slashHitSomething;
     /* 0x350 */ f32 animEndFrame;
     /* 0x354 */ f32 scale;
     /* 0x358 */ UNK_TYPE1 unk_358[0x4];
@@ -88,8 +87,8 @@ typedef struct EnJso {
     /* 0x4B0 */ s16 afterimageIndex;
     /* 0x4B4 */ s32 afterimageCount;
     /* 0x4B8 */ s16 csId;
-    /* 0x4BC */ u32 introCsTimer;
-    /* 0x4C0 */ s16 introCsState;
+    /* 0x4BC */ u32 cutsceneTimer;
+    /* 0x4C0 */ s16 cutsceneState;
     /* 0x4C2 */ s16 subCamId;
     /* 0x4C4 */ UNK_TYPE1 unk_4C4[0x4];
     /* 0x4C8 */ Vec3f subCamEye;

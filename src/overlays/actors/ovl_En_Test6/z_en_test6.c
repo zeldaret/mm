@@ -5,9 +5,12 @@
  */
 
 #include "z_en_test6.h"
-#include "z64quake.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+
 #include "z64cutscene_commands.h"
+#include "z64malloc.h"
+#include "z64quake.h"
+
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
@@ -68,34 +71,34 @@ CutsceneData sDoubleSoTCsCamData[] = {
     CS_CAM_SPLINE(13, 424, 0, 100),
 
     // Camera At Data
-    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -26, -5, -32, CS_CAM_REL_0),
-    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, 18, -32, CS_CAM_REL_0),
-    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, 1, 22, -27, CS_CAM_REL_0),
-    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, 0, 1, -5, CS_CAM_REL_0),
-    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 29, -77, CS_CAM_REL_0),
-    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, 1, 19, 111, CS_CAM_REL_0),
-    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -59, 21, 91, CS_CAM_REL_0),
-    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -19, 59, 84, CS_CAM_REL_0),
-    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -19, 59, 84, CS_CAM_REL_0),
-    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -17, 57, 82, CS_CAM_REL_0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 13, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 18, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 16, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 17, -26, -5, -32, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 15, 0, 18, -32, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 14, 1, 22, -27, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 12, 0, 1, -5, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 7, 16, 29, -77, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, 1, 19, 111, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -59, 21, 91, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 136, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 108, -17, 57, 82, CS_CAM_REL_0),
 
     // Camera Eye Data
-    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -104, 375, 345, CS_CAM_REL_0),
-    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, -62, 289, CS_CAM_REL_0),
-    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, -47, 125, 205, CS_CAM_REL_0),
-    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, -58, -17, 199, CS_CAM_REL_0),
-    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 53, 211, CS_CAM_REL_0),
-    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -31, 63, 623, CS_CAM_REL_0),
-    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -339, 462, 540, CS_CAM_REL_0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 13, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 18, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 16, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 17, -104, 375, 345, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 15, 0, -62, 289, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 14, -47, 125, 205, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 12, -58, -17, 199, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 7, 16, 53, 211, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -31, 63, 623, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 136, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 108, -339, 462, 540, CS_CAM_REL_0),
 
     // Camera Roll and Fov Data
     /* 0x0 */ CS_CAM_MISC(15, 0xA, 70, 0),
@@ -451,7 +454,7 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSACTION_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -615,30 +618,30 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     // Update Player Cutscene Animation
     if (this->screenFillAlpha != 0) {
-        func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     } else {
         if (this->timer == 90) {
             // Look side-to-side but downwards, with chin down
             // gPlayerAnim_al_elf_tobidasi
-            func_800B7298(play, NULL, PLAYER_CSACTION_66);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_66);
         }
 
         if (this->timer == 70) {
             // close eyes and sway body in circles
             // gPlayerAnim_alink_yurayura
-            func_800B7298(play, NULL, PLAYER_CSACTION_82);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_82);
         }
 
         if (this->timer == 30) {
             // Look side-to-side but upwards, with chin up
             // gPlayerAnim_alink_kyoro
-            func_800B7298(play, NULL, PLAYER_CSACTION_81);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_81);
         }
 
         if (this->timer == 5) {
             // Give a big nod of approval
             // gPlayerAnim_al_yes
-            func_800B7298(play, NULL, PLAYER_CSACTION_74);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_74);
         }
     }
 
@@ -705,7 +708,7 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSACTION_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -819,7 +822,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
         case 1:
             EnTest6_DisableMotionBlur();
-            if (CHECK_EVENTINF(EVENTINF_52)) {
+            if (CHECK_EVENTINF(EVENTINF_HAS_DAYTIME_TRANSITION_CS)) {
                 this->cueId = SOTCS_CUEID_DOUBLE_END;
             }
             break;
@@ -864,23 +867,23 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             break;
 
         case 98:
-            func_800B7298(play, NULL, PLAYER_CSACTION_64);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_64);
             break;
 
         case 68:
-            func_800B7298(play, NULL, PLAYER_CSACTION_65);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_65);
             break;
 
         case 52:
-            func_800B7298(play, NULL, PLAYER_CSACTION_88);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_88);
             break;
 
         case 43:
-            func_800B7298(play, NULL, PLAYER_CSACTION_114);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_114);
             break;
 
         case 38:
-            func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
             break;
 
         case 14:
@@ -1085,7 +1088,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                 play->transitionType = TRANS_TYPE_FADE_BLACK;
-                if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+                if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
@@ -1159,7 +1162,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 return;
 
             case SOTCS_CUEID_DOUBLE_END:
-                if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
+                if (CURRENT_TIME > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, ((void)0, gSaveContext.save.entrance),
                                         player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
                                         player->unk_3CC);
@@ -1216,8 +1219,8 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     // The `& 0x3C` ensures the angle only updates once every 4 frames
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
-    this->clockAngle += (s16)this->clockSpeed;
-    this->clockRingRotZ = (s16)((this->clockSpeed / 200.0f) * 256.0f);
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
+    this->clockRingRotZ = TRUNCF_BINANG((this->clockSpeed / 200.0f) * 256.0f);
 
     // Draw 2 clocks per loop
     for (i = 0; i < (SOTCS_RESET_NUM_CLOCKS / 2); i++) {
@@ -1281,7 +1284,7 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     this->gfx = POLY_OPA_DISP;
-    this->clockAngle += (s16)this->clockSpeed;
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
     this->clockRingRotZ = this->clockAngle * 2;
 
     // The `& 0x3C` ensures the clock only turns once every 4 frames.

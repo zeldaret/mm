@@ -1,4 +1,7 @@
-#include "global.h"
+#include "z64transition.h"
+
+#include "segment_symbols.h"
+#include "z64lib.h"
 
 // InitVars and Linker symbol declarations (used in the table below)
 #define DEFINE_TRANSITION(_enumValue, structName, _instanceName, name) \
@@ -17,8 +20,7 @@
         { 0, 0 },                                                      \
         SEGMENT_START(ovl_##name),                                     \
         SEGMENT_END(ovl_##name),                                       \
-        SEGMENT_ROM_START(ovl_##name),                                 \
-        SEGMENT_ROM_END(ovl_##name),                                   \
+        ROM_FILE(ovl_##name),                                          \
         &structName##_InitVars,                                        \
         sizeof(structName),                                            \
     },

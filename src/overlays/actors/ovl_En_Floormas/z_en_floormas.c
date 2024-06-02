@@ -238,7 +238,7 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
         this->collider.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
-                              this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
+                              this->actor.scale.x * (30000.0f * 0.001f), this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= ACTOR_FLAG_400;
         } else {
@@ -412,7 +412,7 @@ void func_808D1380(EnFloormas* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, 1);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, true);
     Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_ATTACK);
     this->actionFunc = func_808D1458;
 }

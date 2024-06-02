@@ -576,7 +576,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.shape.yOffset = 1500.0f;
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
-    func_800BC154(play, &play->actorCtx, &this->actor, 8);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     this->actionFunc = func_80B2DD2C;
 }
@@ -598,7 +598,7 @@ void func_80B2DDF8(EnPoh* this, s32 arg1) {
 
     if (arg1 < 0) {
         temp_f2 = this->unk_197 * (1.0f / 255.0f);
-        this->actor.scale.x = this->actor.scale.z = (0.0056000003f * temp_f2) + 0.0014000001f;
+        this->actor.scale.x = this->actor.scale.z = ((5.6f * 0.001f) * temp_f2) + (1.4f * 0.001f);
         this->actor.scale.y = (0.007f - (0.007f * temp_f2)) + 0.007f;
     } else {
         temp_f2 = 1.0f;
@@ -850,11 +850,12 @@ s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                            Gfx** gfx) {
     EnPoh* this = THIS;
 
-    if ((this->unk_197 == 0) || (limbIndex == 18) || ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2))) {
+    if ((this->unk_197 == 0) || (limbIndex == POE_LIMB_LANTERN) ||
+        ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2))) {
         *dList = NULL;
     }
 
-    if (limbIndex == 19) {
+    if (limbIndex == POE_LIMB_RIGHT_FOREARM) {
         gDPPipeSync((*gfx)++);
         gDPSetEnvColor((*gfx)++, this->unk_194, this->unk_195, this->unk_196, this->unk_197);
     }
@@ -899,12 +900,13 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     s32 pad;
 
     Collider_UpdateSpheres(limbIndex, &this->colliderSph);
-    if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2) && (limbIndex == 5)) {
+
+    if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2) && (limbIndex == POE_LIMB_TOP_CLOAK)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList((*gfx)++, gPoeBurnDL);
     }
 
-    if (limbIndex == 18) {
+    if (limbIndex == POE_LIMB_LANTERN) {
         if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 19) && (this->actor.scale.x != 0.0f)) {
             Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x,
                          MTXMODE_APPLY);

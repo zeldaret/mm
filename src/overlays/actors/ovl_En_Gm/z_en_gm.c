@@ -19,103 +19,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play);
 void func_80950CDC(EnGm* this, PlayState* play);
 void func_80950DB8(EnGm* this, PlayState* play);
 
-static u8 D_80951820[] = {
-    /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0x13B - 0x005),
-    /* 0x005 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x02E - 0x009),
-    /* 0x009 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 9, 0, 0x028 - 0x00F),
-    /* 0x00F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 0, 9, 10, 0x022 - 0x015),
-    /* 0x015 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 10, 9, 15, 0x01C - 0x01B),
-    /* 0x01B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x01C */ SCHEDULE_CMD_RET_TIME(9, 10, 9, 15, 15),
-    /* 0x022 */ SCHEDULE_CMD_RET_TIME(9, 0, 9, 10, 24),
-    /* 0x028 */ SCHEDULE_CMD_RET_TIME(6, 0, 9, 0, 6),
-    /* 0x02E */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x07B - 0x032),
-    /* 0x032 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 10, 9, 15, 0x075 - 0x038),
-    /* 0x038 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 15, 10, 0, 0x06F - 0x03E),
-    /* 0x03E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 10, 5, 0x069 - 0x044),
-    /* 0x044 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 12, 20, 0x063 - 0x04A),
-    /* 0x04A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 20, 12, 50, 0x05D - 0x050),
-    /* 0x050 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 50, 12, 55, 0x057 - 0x056),
-    /* 0x056 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x057 */ SCHEDULE_CMD_RET_TIME(12, 50, 12, 55, 12),
-    /* 0x05D */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 50, 22),
-    /* 0x063 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, 11),
-    /* 0x069 */ SCHEDULE_CMD_RET_TIME(10, 0, 10, 5, 10),
-    /* 0x06F */ SCHEDULE_CMD_RET_TIME(9, 15, 10, 0, 21),
-    /* 0x075 */ SCHEDULE_CMD_RET_TIME(9, 10, 9, 15, 9),
-    /* 0x07B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_SONCHONOIE, 0x105 - 0x080),
-    /* 0x080 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 10, 5, 0x0FF - 0x086),
-    /* 0x086 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 5, 10, 10, 0x0F9 - 0x08C),
-    /* 0x08C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 10, 10, 30, 0x0F3 - 0x092),
-    /* 0x092 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 30, 10, 40, 0x0ED - 0x098),
-    /* 0x098 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 40, 10, 45, 0x0E7 - 0x09E),
-    /* 0x09E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 45, 10, 55, 0x0E1 - 0x0A4),
-    /* 0x0A4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 55, 11, 45, 0x0DB - 0x0AA),
-    /* 0x0AA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 45, 11, 55, 0x0D5 - 0x0B0),
-    /* 0x0B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 55, 12, 0, 0x0CF - 0x0B6),
-    /* 0x0B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 12, 15, 0x0C9 - 0x0BC),
-    /* 0x0BC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 15, 12, 20, 0x0C3 - 0x0C2),
-    /* 0x0C2 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0C3 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, 17),
-    /* 0x0C9 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, 29),
-    /* 0x0CF */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, 19),
-    /* 0x0D5 */ SCHEDULE_CMD_RET_TIME(11, 45, 11, 55, 28),
-    /* 0x0DB */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 45, 2),
-    /* 0x0E1 */ SCHEDULE_CMD_RET_TIME(10, 45, 10, 55, 27),
-    /* 0x0E7 */ SCHEDULE_CMD_RET_TIME(10, 40, 10, 45, 18),
-    /* 0x0ED */ SCHEDULE_CMD_RET_TIME(10, 30, 10, 40, 26),
-    /* 0x0F3 */ SCHEDULE_CMD_RET_TIME(10, 10, 10, 30, 1),
-    /* 0x0F9 */ SCHEDULE_CMD_RET_TIME(10, 5, 10, 10, 25),
-    /* 0x0FF */ SCHEDULE_CMD_RET_TIME(10, 0, 10, 5, 16),
-    /* 0x105 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x13A - 0x109),
-    /* 0x109 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 55, 13, 0, 0x134 - 0x10F),
-    /* 0x10F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 0, 13, 25, 0x12E - 0x115),
-    /* 0x115 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 25, 21, 5, 0x128 - 0x11B),
-    /* 0x11B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 55, 5, 5, 0x122 - 0x121),
-    /* 0x121 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x122 */ SCHEDULE_CMD_RET_TIME(21, 55, 5, 5, 5),
-    /* 0x128 */ SCHEDULE_CMD_RET_TIME(13, 25, 21, 5, 3),
-    /* 0x12E */ SCHEDULE_CMD_RET_TIME(13, 0, 13, 25, 30),
-    /* 0x134 */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, 20),
-    /* 0x13A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x13B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x1EB - 0x140),
-    /* 0x140 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_50_01, 0x1CD - 0x145),
-    /* 0x145 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x17A - 0x149),
-    /* 0x149 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x174 - 0x14F),
-    /* 0x14F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 21, 0, 0x16E - 0x155),
-    /* 0x155 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 21, 10, 0x168 - 0x15B),
-    /* 0x15B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 10, 21, 15, 0x162 - 0x161),
-    /* 0x161 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x162 */ SCHEDULE_CMD_RET_TIME(21, 10, 21, 15, 15),
-    /* 0x168 */ SCHEDULE_CMD_RET_TIME(21, 0, 21, 10, 24),
-    /* 0x16E */ SCHEDULE_CMD_RET_TIME(18, 0, 21, 0, 6),
-    /* 0x174 */ SCHEDULE_CMD_RET_TIME(6, 0, 18, 0, 7),
-    /* 0x17A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x1A3 - 0x17E),
-    /* 0x17E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 10, 21, 15, 0x19D - 0x184),
-    /* 0x184 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 15, 21, 25, 0x197 - 0x18A),
-    /* 0x18A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 25, 21, 30, 0x191 - 0x190),
-    /* 0x190 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x191 */ SCHEDULE_CMD_RET_TIME(21, 25, 21, 30, 14),
-    /* 0x197 */ SCHEDULE_CMD_RET_TIME(21, 15, 21, 25, 23),
-    /* 0x19D */ SCHEDULE_CMD_RET_TIME(21, 10, 21, 15, 13),
-    /* 0x1A3 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x1CC - 0x1A7),
-    /* 0x1A7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 21, 45, 0x1C6 - 0x1AD),
-    /* 0x1AD */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 45, 22, 10, 0x1C0 - 0x1B3),
-    /* 0x1B3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(22, 10, 6, 0, 0x1BA - 0x1B9),
-    /* 0x1B9 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1BA */ SCHEDULE_CMD_RET_TIME(22, 10, 6, 0, 5),
-    /* 0x1C0 */ SCHEDULE_CMD_RET_TIME(21, 45, 22, 10, 30),
-    /* 0x1C6 */ SCHEDULE_CMD_RET_TIME(21, 30, 21, 45, 20),
-    /* 0x1CC */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1CD */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x1EA - 0x1D1),
-    /* 0x1D1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x1E4 - 0x1D7),
-    /* 0x1D7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x1DE - 0x1DD),
-    /* 0x1DD */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1DE */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 0, 8),
-    /* 0x1E4 */ SCHEDULE_CMD_RET_TIME(6, 0, 18, 0, 7),
-    /* 0x1EA */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1EB */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Gm/scheduleScripts.schl.inc"
 
 static s32 D_80951A0C[] = {
     -1, 1, 4, 1, -1, 1, -1, -1, -1, 0, 2, 3, 5, 6, 8, 1, 0, 8, 3, 6, 0, 1, 4, 7, 0, 1, 2, 4, 5, 7, 1,
@@ -242,65 +146,65 @@ static AnimationInfoS sAnimationInfo[ENGM_ANIM_MAX] = {
     { &object_in2_Anim_00B990, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_12
 };
 
-Actor* func_8094DEE0(EnGm* this, PlayState* play, u8 arg2, s16 arg3) {
-    Actor* foundActor = NULL;
-    Actor* actor;
+Actor* EnGm_FindActor(EnGm* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, foundActor, arg2, arg3);
-        foundActor = actor;
-        if (actor == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnGm*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnGm*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        actor = actor->next;
-        if (actor == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
-        foundActor = actor;
+
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
-EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
-    s32 phi_a1;
+EnDoor* EnGm_FindScheduleDoor(PlayState* play, s32 scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
-    switch (arg1) {
+    switch (scheduleOutputResult) {
         case 9:
         case 13:
         case 15:
-            phi_a1 = 11;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE;
             break;
 
         case 10:
         case 11:
         case 16:
         case 17:
-            phi_a1 = 17;
+            schType = ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MAIN_ENTRANCE;
             break;
 
         case 12:
         case 14:
         case 20:
-            phi_a1 = 10;
+            schType = ENDOOR_SCH_TYPE_MILK_BAR;
             break;
 
         case 18:
         case 19:
-            phi_a1 = 19;
+            schType = ENDOOR_SCH_TYPE_MAYORS_RESIDENCE_MADAME_AROMA;
             break;
 
         default:
-            phi_a1 = -1;
+            schType = -1;
+            break;
     }
 
-    return SubS_FindDoor(play, phi_a1);
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
@@ -605,8 +509,8 @@ s32 func_8094EA34(EnGm* this, PlayState* play) {
     Actor* al;
     Actor* toto;
 
-    al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-    toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
     if ((al == NULL) || (al->update == NULL) || (toto == NULL) || (toto->update == NULL)) {
         this->unk_3E0++;
         return true;
@@ -757,7 +661,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_3A4 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3E0 = 0;
         this->unk_3E4 = NULL;
@@ -808,7 +712,7 @@ Actor* func_8094F074(EnGm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 1:
-            actor = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL);
+            actor = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL);
             break;
 
         case 2:
@@ -816,7 +720,7 @@ Actor* func_8094F074(EnGm* this, PlayState* play) {
             break;
 
         case 3:
-            actor = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TAB);
+            actor = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TAB);
             break;
 
         default:
@@ -884,8 +788,8 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     s32 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_3AC == 120.0f) {
                 this->unk_3AC = 0.0f;
@@ -913,8 +817,8 @@ s32 func_8094F4EC(EnGm* this, PlayState* play) {
 s32 func_8094F53C(EnGm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 sp32 = play->msgCtx.currentTextId;
-    Actor* al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-    Actor* toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    Actor* al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    Actor* toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
     if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_3A4 |= 0x400;
@@ -998,7 +902,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
     return false;
 }
 
-s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 arg3, s16 arg4) {
+s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
     u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -1008,7 +912,7 @@ s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     s32 ret = false;
 
     this->timePath = NULL;
-    actor = func_8094DEE0(this, play, arg3, arg4);
+    actor = EnGm_FindActor(this, play, actorCategory, actorId);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
@@ -1039,7 +943,7 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     this->timePath = NULL;
-    door = func_8094DF90(play, scheduleOutput->result);
+    door = EnGm_FindScheduleDoor(play, scheduleOutput->result);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
@@ -1158,7 +1062,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     Actor* al;
 
-    al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
         EnGm_ChangeAnim(this, play, ENGM_ANIM_11);
@@ -1437,8 +1341,8 @@ s32 func_80950690(EnGm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 2:
-            al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-            toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+            al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+            toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
             if ((al != NULL) && (al->update != NULL) && (toto != NULL) && (toto->update != NULL) &&
                 !(player->stateFlags1 & PLAYER_STATE1_40)) {
                 if (DECR(this->unk_3B8) == 0) {
@@ -1476,13 +1380,13 @@ s32 func_80950804(EnGm* this, PlayState* play) {
     s32 pad;
     f32 temp_f0;
 
-    door = func_8094DF90(play, this->unk_258);
+    door = EnGm_FindScheduleDoor(play, this->unk_258);
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
-                door->unk_1A7 = this->unk_261;
+                door->openTimer = this->unk_261;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
 
@@ -1638,7 +1542,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
 
     if (func_8010BF58(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+        al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;
             this->unk_3B8 = Rand_S16Offset(60, 60);
@@ -1696,7 +1600,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
 void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
-    if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
+    if (EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1782,8 +1686,8 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

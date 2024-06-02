@@ -2,6 +2,7 @@
 #define Z_EN_SELLNUTS_H
 
 #include "global.h"
+#include "objects/object_dnt/object_dnt.h"
 
 struct EnSellnuts;
 
@@ -15,8 +16,8 @@ typedef void (*EnSellnutsActionFunc)(struct EnSellnuts*, PlayState*);
 typedef struct EnSellnuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[28];
-    /* 0x230 */ Vec3s morphTable[28];
+    /* 0x188 */ Vec3s jointTable[BUSINESS_SCRUB_LIMB_MAX];
+    /* 0x230 */ Vec3s morphTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x2D8 */ EnSellnutsActionFunc actionFunc;
     /* 0x2DC */ ColliderCylinder collider;
     /* 0x328 */ s16 unk_328;
@@ -32,7 +33,7 @@ typedef struct EnSellnuts {
     /* 0x344 */ s16 unk_344;
     /* 0x346 */ UNK_TYPE1 unk346[0x4];
     /* 0x34A */ s16 unk_34A;
-    /* 0x34C */ s16 unk_34C;
+    /* 0x34C */ s16 animIndex;
     /* 0x34E */ s16 unk_34E;
     /* 0x350 */ s16 unk_350;
     /* 0x354 */ f32 unk_354;

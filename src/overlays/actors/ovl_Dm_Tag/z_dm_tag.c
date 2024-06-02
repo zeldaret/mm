@@ -46,23 +46,27 @@ s32 D_80C22C30[] = {
     0x10000000,
 };
 
-Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
+Actor* DmTag_FindActor(DmTag* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if ((foundActor == NULL) || (((this != (DmTag*)foundActor)) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if ((this != (DmTag*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = foundActor->next;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 s32 func_80C22400(DmTag* this, s16 csId) {
@@ -98,8 +102,8 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
     s16 csId = this->actor.csId;
     s32 ret = false;
 
-    sp30 = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
-    sp2C = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
+    sp30 = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+    sp2C = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
 
     switch (this->unk_1A4) {
         case 0:
@@ -154,7 +158,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 6:
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -171,7 +175,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -211,7 +215,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->msgEventScript = func_80C22880(this, play);

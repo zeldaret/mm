@@ -2,6 +2,7 @@
 #define Z_EN_MUSHI2_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnMushi2;
 
@@ -25,8 +26,8 @@ typedef struct {
 typedef struct EnMushi2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[24];
-    /* 0x218 */ Vec3s morphTable[24];
+    /* 0x188 */ Vec3s jointTable[BUG_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[BUG_LIMB_MAX];
     /* 0x2A8 */ ColliderJntSph collider;
     /* 0x2C8 */ ColliderJntSphElement colliderElements[1];
     /* 0x308 */ EnMushi2ActionFunc actionFunc;

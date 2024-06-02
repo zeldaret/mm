@@ -1043,7 +1043,7 @@ void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.shape.shadowScale = 3.0f;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~ACTOR_FLAG_20;
     this->timer = 200;
     this->drawDmgEffAlpha = 0.0f;
@@ -1085,7 +1085,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 (!(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)))) {
+                 !(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 

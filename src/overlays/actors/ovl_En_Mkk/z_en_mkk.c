@@ -67,13 +67,6 @@ static ColliderSphereInit sSphereInit = {
     { 1, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-typedef struct EnMkkDlists {
-    /* 0x00 */ Gfx* unk0;
-    /* 0x04 */ Gfx* unk4;
-    /* 0x08 */ Gfx* unk8;
-    /* 0x0C */ Gfx* unkC;
-} EnMkkDlists; // size = 0x10
-
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
 static DamageTable sDamageTable = {
@@ -127,7 +120,14 @@ static Color_RGBA8 sEffPrimColors[] = { { 50, 50, 50, 255 }, { 255, 255, 255, 25
 
 static Color_RGBA8 sEffEnvColors[] = { { 200, 200, 200, 255 }, { 255, 255, 255, 255 } };
 
-static EnMkkDlists sBoeDLists[] = {
+typedef struct EnMkkModelInfo {
+    /* 0x0 */ Gfx* materialDL;
+    /* 0x4 */ Gfx* modelDL;
+    /* 0x8 */ Gfx* endDL;
+    /* 0xC */ Gfx* eyesDL;
+} EnMkkModelInfo; // size = 0x10
+
+static EnMkkModelInfo sBoeModelInfo[] = {
     { gBlackBoeBodyMaterialDL, gBlackBoeBodyModelDL, gBlackBoeEndDL, gBlackBoeEyesDL },
     { gWhiteBoeBodyMaterialDL, gWhiteBoeBodyModelDL, gWhiteBoeEndDL, gWhiteBoeEyesDL },
 };
@@ -168,9 +168,9 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     this->actor.params &= 1;
 
     if (this->actor.params == 1) {
-        this->actor.hintId = 0x3C;
+        this->actor.hintId = TATL_HINT_ID_WHITE_BOE;
     } else {
-        this->actor.hintId = 0x2C;
+        this->actor.hintId = TATL_HINT_ID_BLACK_BOE;
     }
 
     if ((paramsFF00 == 0) || (paramsFF00 == 255)) {
@@ -279,9 +279,9 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     if (sp20) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
-    } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & PLAYER_STATE3_100)) &&
+    } else if ((this->unk_149 == 0) && !(player->stateFlags3 & PLAYER_STATE3_100) &&
                (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-               (Actor_IsFacingPlayer(&this->actor, 0x1800)) && (this->actor.xzDistToPlayer < 120.0f) &&
+               Actor_IsFacingPlayer(&this->actor, 0x1800) && (this->actor.xzDistToPlayer < 120.0f) &&
                (fabsf(this->actor.playerHeightRel) < 100.0f)) {
         func_80A4E58C(this);
     }
@@ -511,7 +511,7 @@ void func_80A4F16C(Actor* thisx, PlayState* play) {
 }
 
 void EnMkk_Draw(Actor* thisx, PlayState* play) {
-    EnMkkDlists* dLists = &sBoeDLists[thisx->params];
+    EnMkkModelInfo* modelInfo = &sBoeModelInfo[thisx->params];
     Gfx* gfx;
     Color_RGBA8* primColors;
     EnMkk* this = THIS;
@@ -528,16 +528,16 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(&gfx[1], 0, 0xFF, primColors->r, primColors->g, primColors->b, primColors->a);
             gSPSegment(&gfx[2], 0x08, D_801AEFA0);
             gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[4], dLists->unkC);
+            gSPDisplayList(&gfx[4], modelInfo->eyesDL);
             POLY_OPA_DISP = &gfx[5];
         }
         gfx = POLY_XLU_DISP;
         gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
-        gSPDisplayList(&gfx[2], dLists->unk0);
+        gSPDisplayList(&gfx[2], modelInfo->materialDL);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[4], dLists->unk4);
+        gSPDisplayList(&gfx[4], modelInfo->modelDL);
         if (thisx->params == 0) {
             matrix = Matrix_GetCurrent();
             matrix->mf[3][0] = this->unk_154.x;
@@ -546,7 +546,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
             gSPMatrix(&gfx[5], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[6], dLists->unk4);
+            gSPDisplayList(&gfx[6], modelInfo->modelDL);
 
             matrix->mf[3][0] = this->unk_160.x;
             matrix->mf[3][1] = this->unk_160.y + 7.2250004f;
@@ -554,12 +554,12 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
             gSPMatrix(&gfx[7], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[8], dLists->unk4);
-            gSPDisplayList(&gfx[9], dLists->unk8);
+            gSPDisplayList(&gfx[8], modelInfo->modelDL);
+            gSPDisplayList(&gfx[9], modelInfo->endDL);
 
             POLY_XLU_DISP = &gfx[10];
         } else {
-            gSPDisplayList(&gfx[5], dLists->unk8);
+            gSPDisplayList(&gfx[5], modelInfo->endDL);
             POLY_XLU_DISP = &gfx[6];
         }
     }
@@ -570,7 +570,7 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     s32 pad;
     Gfx* gfx;
     MtxF* matrix;
-    EnMkkDlists* dLists = &sBoeDLists[thisx->params];
+    EnMkkModelInfo* modelInfo = &sBoeModelInfo[thisx->params];
     EnMkk* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -578,10 +578,10 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
-    gSPDisplayList(&gfx[2], dLists->unk0);
+    gSPDisplayList(&gfx[2], modelInfo->materialDL);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[4], dLists->unk4);
+    gSPDisplayList(&gfx[4], modelInfo->modelDL);
 
     matrix = Matrix_GetCurrent();
     matrix->mf[3][0] = this->unk_154.x;
@@ -589,22 +589,22 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     matrix->mf[3][2] = this->unk_154.z;
 
     gSPMatrix(&gfx[5], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[6], dLists->unk4);
+    gSPDisplayList(&gfx[6], modelInfo->modelDL);
 
     matrix->mf[3][0] = this->unk_160.x;
     matrix->mf[3][1] = this->unk_160.y + 5.0f;
     matrix->mf[3][2] = this->unk_160.z;
 
     gSPMatrix(&gfx[7], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[8], dLists->unk4);
+    gSPDisplayList(&gfx[8], modelInfo->modelDL);
 
     matrix->mf[3][0] = this->unk_16C.x;
     matrix->mf[3][1] = this->unk_16C.y + 5.0f;
     matrix->mf[3][2] = this->unk_16C.z;
 
     gSPMatrix(&gfx[9], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[10], dLists->unk4);
-    gSPDisplayList(&gfx[11], dLists->unk8);
+    gSPDisplayList(&gfx[10], modelInfo->modelDL);
+    gSPDisplayList(&gfx[11], modelInfo->endDL);
     POLY_XLU_DISP = &gfx[12];
 
     CLOSE_DISPS(play->state.gfxCtx);

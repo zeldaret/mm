@@ -87,7 +87,7 @@ void func_80952734(EnMs* this, PlayState* play) {
         this->actor.textId = 0x932;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state) != 0) {
         this->actionFunc = func_809527F8;
         return;
     }
@@ -112,7 +112,7 @@ void func_809529AC(EnMs* this, PlayState* play) {
 }
 
 void func_80952A1C(EnMs* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x936U);
         this->actionFunc = func_809527F8;
     } else {

@@ -7,8 +7,8 @@
         <DList Name="gMoonChildGyorgsMaskDL" Offset="0x1D80" />
         <DList Name="gMoonChildGohtsMaskDL" Offset="0x3AD0" />
         <DList Name="gMoonChildTwinmoldsMaskDL" Offset="0x5020" />
-        <DList Name="gMoonChildMajorasMaskDL" Offset="0x6380" />
-        <DList Name="gMoonChildMajorasMaskEyesDL" Offset="0x6730" />
+        <DList Name="gMoonChildMajorasMaskDL" Offset="0x6380" /> <!-- Original name is "mjk_evilmask_model" -->
+        <DList Name="gMoonChildMajorasMaskEyesDL" Offset="0x6730" /> <!-- Original name is "mjk_evLIGHTeye_model" -->
 
         <!-- Moonchild Mask Textures -->
         <Texture Name="gMoonChildMajorasMaskTex" OutName="moonchild_majoras_mask" Format="rgba16" Width="32" Height="64" Offset="0x67E0" />
@@ -40,8 +40,8 @@
         <Texture Name="gMoonChildTwinmoldsMaskSnoutTex" OutName="moonchild_twinmolds_mask_snout" Format="ci4" Width="64" Height="64" Offset="0xFB40" />
 
         <!-- Moonchild Moving Animations -->
-        <Animation Name="gMoonChildWalkingAnim" Offset="0x10880" />
-        <Animation Name="gMoonChildRunningAnim" Offset="0x10CD8" />
+        <Animation Name="gMoonChildWalkingAnim" Offset="0x10880" /> <!-- Original name is "mjk_run" -->
+        <Animation Name="gMoonChildRunningAnim" Offset="0x10CD8" /> <!-- Original name is "mjk_run2" -->
 
         <!-- Moonchild DisplayLists -->
         <DList Name="gMoonChildPelvisDL" Offset="0x14190" />
@@ -94,8 +94,8 @@
         <Skeleton Name="gMoonChildSkel" Type="Flex" LimbType="Standard" LimbNone="MOONCHILD_LIMB_NONE" LimbMax="MOONCHILD_LIMB_MAX" EnumName="MoonchildLimb" Offset="0x164B8" />
 
         <!-- Moonchild Mask Still Animations -->
-        <Animation Name="gMoonChildGettingUpAnim" Offset="0x16F58" />
-        <Animation Name="gMoonChildSittingAnim" Offset="0x1764C" />
-        <Animation Name="gMoonChildStandingAnim" Offset="0x17E98" />
+        <Animation Name="gMoonChildGettingUpAnim" Offset="0x16F58" /> <!-- Original name is "mjk_suwari2wait" -->
+        <Animation Name="gMoonChildSittingAnim" Offset="0x1764C" /> <!-- Original name is "mjk_suwariloop" -->
+        <Animation Name="gMoonChildStandingAnim" Offset="0x17E98" /> <!-- Original name is "mjk_wait" -->
     </File>
 </Root>

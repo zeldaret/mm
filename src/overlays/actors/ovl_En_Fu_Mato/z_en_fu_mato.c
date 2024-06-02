@@ -102,7 +102,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.radius = 30;
     } else {
         this->collider.dim.worldSphere.radius = 17;
-        this->unk_2F8 = fu->unk_538;
+        this->unk_2F8 = fu->pathPoints;
         this->unk_2F4 = fu->unk_520;
         this->unk_2F0 = ENFUMATO_GET(&this->dyna.actor);
     }
@@ -312,11 +312,7 @@ void func_80ACECFC(EnFuMato* this, PlayState* play) {
         ptr->unk_24.z += ptr->unk_2A.z;
 
         if ((this->unk_302 == 2) && (ptr->unk_30 == 1) && (ptr->unk_00.y < (this->dyna.actor.floorHeight + 10.0f))) {
-            if (ptr->unk_0C.y < 0.0f) {
-                ptr->unk_0C.y = -ptr->unk_0C.y;
-            } else {
-                ptr->unk_0C.y = ptr->unk_0C.y;
-            }
+            ptr->unk_0C.y = ABS_ALT(ptr->unk_0C.y);
             ptr->unk_0C.y *= 0.5f;
             ptr->unk_0C.x *= (Rand_Centered() * 1.5f) + 2.0f;
             ptr->unk_0C.z *= (Rand_Centered() * 1.5f) + 2.0f;

@@ -3,7 +3,7 @@
         <DList Name="object_ssh_DL_0000D0" Offset="0xD0" />
         <DList Name="object_ssh_DL_0000D8" Offset="0xD8" />
         <Texture Name="object_ssh_Tex_000190" OutName="tex_000190" Format="rgba16" Width="32" Height="64" Offset="0x190" />
-        <Animation Name="object_ssh_Anim_001494" Offset="0x1494" />
+        <Animation Name="object_ssh_Anim_001494" Offset="0x1494" /> <!-- Original name is "st_matsu" -->
         <Texture Name="object_ssh_TLUT_0014B0" OutName="tlut_0014B0" Format="rgba16" Width="16" Height="16" Offset="0x14B0" />
         <Texture Name="object_ssh_Tex_0016B0" OutName="tex_0016B0" Format="ci8" Width="8" Height="8" Offset="0x16B0" />
         <Texture Name="object_ssh_Tex_0016F0" OutName="tex_0016F0" Format="ci8" Width="16" Height="8" Offset="0x16F0" />
@@ -15,7 +15,6 @@
         <Texture Name="object_ssh_Tex_001D70" OutName="tex_001D70" Format="ci8" Width="8" Height="16" Offset="0x1D70" />
         <Texture Name="object_ssh_Tex_001DF0" OutName="tex_001DF0" Format="ci8" Width="32" Height="32" Offset="0x1DF0" />
         <Texture Name="object_ssh_Tex_0021F0" OutName="tex_0021F0" Format="ci8" Width="32" Height="32" Offset="0x21F0" />
-        <Blob Name="object_ssh_Blob_0025F0" Size="0x2870" Offset="0x25F0" />
         <DList Name="object_ssh_DL_004E60" Offset="0x4E60" />
         <DList Name="object_ssh_DL_005210" Offset="0x5210" />
         <DList Name="object_ssh_DL_0056A0" Offset="0x56A0" />
@@ -59,7 +58,7 @@
         <Limb Name="object_ssh_Standardlimb_0063E4" Type="Standard" EnumName="OBJECT_SSH_LIMB_1C" Offset="0x63E4" />
         <Limb Name="object_ssh_Standardlimb_0063F0" Type="Standard" EnumName="OBJECT_SSH_LIMB_1D" Offset="0x63F0" />
         <Skeleton Name="object_ssh_Skel_006470" Type="Normal" LimbType="Standard" LimbNone="OBJECT_SSH_LIMB_NONE" LimbMax="OBJECT_SSH_LIMB_MAX" EnumName="ObjectSshLimb" Offset="0x6470" />
-        <Animation Name="object_ssh_Anim_006788" Offset="0x6788" />
-        <Animation Name="object_ssh_Anim_006D78" Offset="0x6D78" />
+        <Animation Name="object_ssh_Anim_006788" Offset="0x6788" /> <!-- Original name is "st_otchiru" -->
+        <Animation Name="object_ssh_Anim_006D78" Offset="0x6D78" /> <!-- Original name is "st_yarare" -->
     </File>
 </Root>

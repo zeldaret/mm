@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_pr" Segment="6">
-        <Animation Name="object_pr_Anim_000268" Offset="0x268" />
-        <Animation Name="object_pr_Anim_000740" Offset="0x740" />
+        <Animation Name="object_pr_Anim_000268" Offset="0x268" /> <!-- Original name is "pr_damage" -->
+        <Animation Name="object_pr_Anim_000740" Offset="0x740" /> <!-- Original name is "pr_gattuku" -->
         <DList Name="object_pr_DL_000F30" Offset="0xF30" />
         <DList Name="object_pr_DL_001130" Offset="0x1130" />
         <DList Name="object_pr_DL_0011C8" Offset="0x11C8" />
@@ -16,8 +16,8 @@
         <Texture Name="object_pr_Tex_001B08" OutName="tex_001B08" Format="rgba16" Width="16" Height="16" Offset="0x1B08" />
         <Texture Name="object_pr_Tex_001D08" OutName="tex_001D08" Format="rgba16" Width="8" Height="8" Offset="0x1D08" />
         <TextureAnimation Name="object_pr_Matanimheader_001DB0" Offset="0x1DB0" />
-        <Animation Name="object_pr_Anim_001E10" Offset="0x1E10" />
-        <Animation Name="object_pr_Anim_0021E8" Offset="0x21E8" />
+        <Animation Name="object_pr_Anim_001E10" Offset="0x1E10" /> <!-- Original name is "pr_stop" -->
+        <Animation Name="object_pr_Anim_0021E8" Offset="0x21E8" /> <!-- Original name is "pr_swim" -->
         <DList Name="object_pr_DL_0029E0" Offset="0x29E0" />
         <DList Name="object_pr_DL_002BD0" Offset="0x2BD0" />
         <DList Name="object_pr_DL_002C68" Offset="0x2C68" />
@@ -41,7 +41,7 @@
         <Limb Name="object_pr_Standardlimb_00387C" Type="Standard" EnumName="OBJECT_PR_1_LIMB_08" Offset="0x387C" />
         <Limb Name="object_pr_Standardlimb_003888" Type="Standard" EnumName="OBJECT_PR_1_LIMB_09" Offset="0x3888" />
         <Skeleton Name="object_pr_Skel_0038B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PR_1_LIMB_NONE" LimbMax="OBJECT_PR_1_LIMB_MAX" EnumName="ObjectPr1Limb" Offset="0x38B8" />
-        <Animation Name="object_pr_Anim_003904" Offset="0x3904" />
+        <Animation Name="object_pr_Anim_003904" Offset="0x3904" /> <!-- Original name might be "prz_dead" -->
         <DList Name="object_pr_DL_003AB0" Offset="0x3AB0" />
         <DList Name="object_pr_DL_003B50" Offset="0x3B50" />
         <DList Name="object_pr_DL_003C08" Offset="0x3C08" />
@@ -56,7 +56,7 @@
         <Limb Name="object_pr_Standardlimb_004160" Type="Standard" EnumName="OBJECT_PR_2_LIMB_03" Offset="0x4160" />
         <Limb Name="object_pr_Standardlimb_00416C" Type="Standard" EnumName="OBJECT_PR_2_LIMB_04" Offset="0x416C" />
         <Skeleton Name="object_pr_Skel_004188" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PR_2_LIMB_NONE" LimbMax="OBJECT_PR_2_LIMB_MAX" EnumName="ObjectPr2Limb" Offset="0x4188" />
-        <Animation Name="object_pr_Anim_004274" Offset="0x4274" />
-        <Animation Name="object_pr_Anim_004340" Offset="0x4340" />
+        <Animation Name="object_pr_Anim_004274" Offset="0x4274" /> <!-- Original name is "prz_gattuku" -->
+        <Animation Name="object_pr_Anim_004340" Offset="0x4340" /> <!-- Original name is "prz_swim" -->
     </File>
 </Root>

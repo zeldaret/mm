@@ -147,14 +147,14 @@ void EnTimeTag_SoaringEngraving_StartCutscene(EnTimeTag* this, PlayState* play) 
 }
 
 void EnTimeTag_SoaringEngraving_SubsequentInteraction(EnTimeTag* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->actionFunc = EnTimeTag_SoaringEngraving_Wait;
     }
 }
 
 void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.textId == 0) {
             this->actionFunc = EnTimeTag_SoaringEngraving_StartCutscene;
         } else {
@@ -196,7 +196,7 @@ void EnTimeTag_Diary_TeachEvanSongSnippets(EnTimeTag* this, PlayState* play) {
 
 void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x101C: // Lulu diary part 1
@@ -255,7 +255,7 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (TIMETAG_DIARY_GET_TYPE(&this->actor) == TIMETAG_DIARY_LULU) {
                 Message_StartTextbox(play, 0x101C, &this->actor);
@@ -285,7 +285,7 @@ void EnTimeTag_KickOut_DoNothing(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) {
         play->nextEntrance = play->setupExitList[TIMETAG_KICKOUT_GET_EXIT_INDEX(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
         if (TIMETAG_GET_TYPE(&this->actor) == TIMETAG_KICKOUT_DOOR) {
@@ -301,7 +301,7 @@ void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play) {
  */
 void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0x1883 + TIMETAG_KICKOUT_GET_TEXT(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
     }
@@ -323,8 +323,8 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
         return;
     }
 
-    hour = TIME_TO_HOURS_F(gSaveContext.save.time);
-    minute = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
+    hour = TIME_TO_HOURS_F(CURRENT_TIME);
+    minute = (s32)TIME_TO_MINUTES_F(CURRENT_TIME) % 60;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
@@ -334,7 +334,7 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
         }
     } else if ((hour == TIMETAG_KICKOUT_HOUR(&this->actor)) && (minute == TIMETAG_KICKOUT_MINUTE(&this->actor)) &&
                !Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0x1883 + TIMETAG_KICKOUT_GET_TEXT(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
     }

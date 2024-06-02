@@ -74,6 +74,7 @@ void BgSpoutFire_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->collider.dim.pos.y = this->actor.world.pos.y;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+
     if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sFlameTextures); i++) {
             sFlameTextures[i] = Lib_SegmentedToVirtual(sFlameTextures[i]);

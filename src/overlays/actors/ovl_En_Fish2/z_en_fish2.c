@@ -98,8 +98,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f };
-static f32 D_80B2B380[] = { 0.019f, 0.033f };
+static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f, 0.019f, 0.033f };
 
 typedef enum {
     /* 0 */ FISH2_ANIM_0,
@@ -253,10 +252,10 @@ void func_80B287F4(EnFish2* this, s32 arg1) {
             this->unk_2C4++;
         }
         this->unk_338 = 440.0f - this->unk_2C4;
-        if (arg1 == 0) {
+        if (!arg1) {
             this->unk_338 = 410.0f - this->unk_2C4;
         }
-        Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+        Math_ApproachF(&this->unk_350->speed, (D_80B2B370[4] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     }
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -270,7 +269,7 @@ s32 func_80B288E8(EnFish2* this, Vec3f vec, s32 arg2) {
     f32 dist = sqrtf(SQ(temp_f2) + SQ(temp_f12) + SQ(temp_f14));
     f32 phi_f2;
 
-    if (arg2 == 0) {
+    if (!arg2) {
         phi_f2 = 40.0f;
     } else {
         phi_f2 = this->unk_330 * 2000.0f;
@@ -295,7 +294,7 @@ s32 func_80B2899C(EnFish2* this, PlayState* play) {
 }
 
 void func_80B289DC(EnFish2* this, PlayState* play) {
-    WaterBox* sp2C;
+    WaterBox* waterBox;
 
     if (this->unk_2B4 != 0) {
         this->unk_348 = 0;
@@ -314,7 +313,7 @@ void func_80B289DC(EnFish2* this, PlayState* play) {
                 this->actor.gravity = 0.0f;
             }
         } else if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                        &this->unk_334, &sp2C)) {
+                                        &this->unk_334, &waterBox)) {
             if ((this->unk_334 != BGCHECK_Y_MIN) && (this->actor.world.pos.y < (this->unk_334 - this->unk_2D8))) {
                 this->actor.velocity.y = this->actor.world.rot.x * 0.001f * -0.1f;
                 if (this->actionFunc == func_80B297FC) {
@@ -350,7 +349,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80B29128(this);
         return;
     }
@@ -398,7 +397,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     }
 
     if (this->unk_2B4 == 0) {
-        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 400.0f, 0.3f, 0.3f);
         if (this->actor.speed > 3.0f) {
             this->actor.speed = 3.0f;
         } else if (this->actor.speed < 1.5f) {
@@ -456,7 +455,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B28B5C(this);
     }
@@ -484,7 +483,7 @@ void func_80B29194(EnFish2* this) {
 
 void func_80B29250(EnFish2* this, PlayState* play) {
     if (!func_80B28478(this)) {
-        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
         if (this->actor.speed > 4.0f) {
             this->actor.speed = 4.0f;
@@ -492,9 +491,9 @@ void func_80B29250(EnFish2* this, PlayState* play) {
             this->actor.speed = 2.0f;
         }
 
-        func_80B287F4(this, 0);
+        func_80B287F4(this, false);
         func_80B289DC(this, play);
-        if (func_80B288E8(this, this->unk_300, 0) &&
+        if (func_80B288E8(this, this->unk_300, false) &&
             (((this->unk_2C8 == 0) && (D_80B2B2E4 == 1)) || (this->unk_2C8 != 0))) {
             Math_Vec3f_Copy(&this->unk_30C, &this->unk_350->world.pos);
             func_80B2938C(this);
@@ -512,8 +511,8 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (!func_80B28478(this)) {
-        func_80B287F4(this, 1);
-        Math_ApproachF(&this->actor.speed, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        func_80B287F4(this, true);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
         if (this->actor.speed > 3.0f) {
             this->actor.speed = 3.0f;
@@ -530,7 +529,7 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
             }
         } else {
             func_80B289DC(this, play);
-            if (func_80B288E8(this, this->unk_318, 1)) {
+            if (func_80B288E8(this, this->unk_318, true)) {
                 func_80B2951C(this);
             }
         }
@@ -792,12 +791,12 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
     }
     this->unk_338 = 410.0f - this->unk_2C4;
     Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.3f);
-    Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+    Math_ApproachF(&this->unk_350->speed, (D_80B2B370[4] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     func_80B289DC(this, play);
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
     this->unk_348 = Math_Vec3f_Pitch(&this->actor.world.pos, &sp2C);
-    if (func_80B288E8(this, this->unk_300, 0)) {
+    if (func_80B288E8(this, this->unk_300, false)) {
         Math_Vec3f_Copy(&this->unk_30C, &this->unk_350->world.pos);
         func_80B2938C(this);
     }
@@ -922,10 +921,10 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
 
     if ((this->animIndex == FISH2_ANIM_4) &&
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
-        WaterBox* sp78;
+        WaterBox* waterBox;
 
         if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_334,
-                                 &sp78)) {
+                                 &waterBox)) {
             Vec3f sp6C;
             s32 i;
 
@@ -983,7 +982,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         Vec3f sp5C;
 
         if (this->actor.params == 0) {
-            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 200, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 0xC8, 0);
             if (this->actionFunc != func_80B297FC) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_34A, 1, 0xBB8, 0);
             }
@@ -1112,15 +1111,15 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            TexturePtr phi_v0;
+            TexturePtr texture;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = gEffBubble2Tex;
+                texture = gEffBubble2Tex;
             } else {
-                phi_v0 = gEffBubble1Tex;
+                texture = gEffBubble1Tex;
             }
 
-            ptr->unk_20 = OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(phi_v0));
+            ptr->unk_20 = (TexturePtr)OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(texture));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));
@@ -1136,7 +1135,7 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
 void func_80B2AF80(EnFish2* this, PlayState* play) {
     EnFish2UnkStruct* ptr = &this->unk_3F8[0];
-    WaterBox* sp90;
+    WaterBox* waterBox;
     f32 sp8C;
     s32 i;
 
@@ -1154,7 +1153,7 @@ void func_80B2AF80(EnFish2* this, PlayState* play) {
                 ptr->unk_04.y += 1.0f + ((Rand_ZeroOne() - 0.3f) * 1.2f);
                 ptr->unk_04.z += (0.3f + (Rand_ZeroOne() * 0.5f)) - 0.55f;
                 sp8C = ptr->unk_04.y;
-                if (!WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &sp90)) {
+                if (!WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &waterBox)) {
                     ptr->unk_00 = 0;
                 } else if (sp8C < ptr->unk_04.y) {
                     Vec3f sp7C;

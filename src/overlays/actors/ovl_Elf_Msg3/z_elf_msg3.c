@@ -133,7 +133,7 @@ void ElfMsg3_Update(Actor* thisx, PlayState* play) {
     ElfMsg3* this = THIS;
 
     if (!func_80A2CD1C(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             if (ELFMSG3_GET_SWITCH_FLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG3_GET_SWITCH_FLAG(thisx));
             }

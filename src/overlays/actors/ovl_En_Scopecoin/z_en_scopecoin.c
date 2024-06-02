@@ -50,7 +50,7 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
         this->rupeeIndex = 0;
     }
 
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
             if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);

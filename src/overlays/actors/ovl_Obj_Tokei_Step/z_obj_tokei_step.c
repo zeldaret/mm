@@ -53,7 +53,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
+void ObjTokeiStep_SetMatrixTranslation(ObjTokeiStepPanel* panel) {
     MtxF* mtx = Matrix_GetCurrent();
 
     mtx->xw = panel->pos.x;
@@ -199,7 +199,7 @@ void ObjTokeiStep_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (gSaveContext.save.day >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (gSaveContext.save.day >= 4)) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);
@@ -285,7 +285,7 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
-        ObjTokeiStep_SetSysMatrix(panel);
+        ObjTokeiStep_SetMatrixTranslation(panel);
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, gClocktowerPanelDL);
     }

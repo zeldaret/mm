@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-typedef enum {
+typedef enum ShootingGalleryOctorokAnimation {
     /* 0 */ SG_OCTO_ANIM_SHOOT, // unused
     /* 1 */ SG_OCTO_ANIM_DIE,
     /* 2 */ SG_OCTO_ANIM_HIDE,
@@ -70,7 +70,7 @@ typedef enum {
     /* 6 */ SG_OCTO_ANIM_MAX
 } ShootingGalleryOctorokAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_OCTO_ANIM_MAX] = {
     { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },  // SG_OCTO_ANIM_SHOOT
     { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },    // SG_OCTO_ANIM_DIE
     { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // SG_OCTO_ANIM_HIDE
@@ -102,8 +102,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     this->actor.floorHeight =
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
 
-    if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                                 &waterbox)) ||
+    if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterbox) ||
         (ySurface <= this->actor.floorHeight)) {
         Actor_Kill(&this->actor);
     } else {
@@ -370,7 +370,7 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
     }
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
-    // jointTable->y is the y-translation of the skeleton root
+    // jointTable->y is the y-translation of the skeleton root, see `LIMB_ROOT_POS`
     this->collider.dim.pos.y = this->actor.world.pos.y + (this->skelAnime.jointTable->y * this->actor.scale.y);
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

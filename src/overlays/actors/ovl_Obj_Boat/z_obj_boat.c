@@ -46,7 +46,7 @@ static InitChainEntry sInitChain[] = {
  */
 s16 ObjBoat_GetNextPoint(ObjBoat* this, Vec3f* nextPoint) {
     s16 yaw;
-    Vec3s* curPoint = &this->points[(s32)this->curPointIndex];
+    Vec3s* curPoint = &this->pathPoints[(s32)this->curPointIndex];
 
     Math_Vec3s_ToVec3f(nextPoint, &curPoint[this->direction]);
     yaw = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, nextPoint);
@@ -68,10 +68,10 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
     } else {
         path = &play->setupPathList[OBJBOAT_GET_PATH_INDEX(thisx)];
         this->maxPointIndex = path->count - 1;
-        this->points = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->direction = 1;
-        this->dyna.actor.world.pos.x = this->points[this->curPointIndex].x;
-        this->dyna.actor.world.pos.z = this->points[this->curPointIndex].z;
+        this->dyna.actor.world.pos.x = this->pathPoints[this->curPointIndex].x;
+        this->dyna.actor.world.pos.z = this->pathPoints[this->curPointIndex].z;
         this->dyna.actor.shape.rot.y = ObjBoat_GetNextPoint(this, &sp24);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         this->direction = -this->direction;
@@ -164,10 +164,10 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 }
 
                 this->maxPointIndex = path->count;
-                this->points = Lib_SegmentedToVirtual(path->points);
-                Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->points);
+                this->pathPoints = Lib_SegmentedToVirtual(path->points);
+                Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->pathPoints);
                 this->dyna.actor.speed = cue->rot.z * (45.0f / 0x2000);
-                this->points++;
+                this->pathPoints++;
                 this->curPointIndex = 1;
             }
 
@@ -177,10 +177,10 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
                 Vec3f posTarget;
                 f32 distRemaining;
 
-                Math_Vec3s_ToVec3f(&posTarget, this->points);
+                Math_Vec3s_ToVec3f(&posTarget, this->pathPoints);
                 distRemaining = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &posTarget, this->dyna.actor.speed);
                 if ((this->curPointIndex < this->maxPointIndex) && (distRemaining < this->dyna.actor.speed)) {
-                    this->points++;
+                    this->pathPoints++;
                     this->curPointIndex++;
                 }
             }

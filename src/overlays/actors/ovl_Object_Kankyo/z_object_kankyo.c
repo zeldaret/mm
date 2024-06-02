@@ -511,7 +511,8 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || ((u8)play->envCtx.stormState == 0)) {
+    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) ||
+        ((u8)play->envCtx.stormState == STORM_STATE_OFF)) {
         return;
     }
 
@@ -677,8 +678,8 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
 
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            Matrix_RotateYS((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
-            Matrix_RotateXS((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
+            Matrix_RotateYS(TRUNCF_BINANG(this->unk_14C[2].unk_04) + (s16)(i << 5), MTXMODE_APPLY);
+            Matrix_RotateXS(TRUNCF_BINANG(this->unk_14C[2].unk_00) + (s16)(i << 5), MTXMODE_APPLY);
 
             if (this->unk_114C == 0) {
                 Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
@@ -687,7 +688,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0706E0);
+            gSPDisplayList(POLY_XLU_DISP++, gFallingRainDropDL);
         }
     }
 

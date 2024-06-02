@@ -29,7 +29,7 @@ ActorInit Oceff_Wipe7_InitVars = {
 
 #include "assets/overlays/ovl_Oceff_Wipe7/ovl_Oceff_Wipe7.c"
 
-s32 D_80BCEB10;
+static s32 sBssPad;
 
 void OceffWipe7_Init(Actor* thisx, PlayState* play) {
     OceffWipe7* this = THIS;
@@ -65,10 +65,8 @@ void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
     s32 counter;
     Vec3f activeCamEye = GET_ACTIVE_CAM(play)->eye;
     s32 pad;
-    Vec3f quakeOffset;
+    Vec3f quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
     s32 pad2;
-
-    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter * 0x200) * 1220.0f;

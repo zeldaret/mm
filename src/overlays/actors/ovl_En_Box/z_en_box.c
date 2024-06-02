@@ -107,7 +107,7 @@ void func_80867C14(struct_80867BDC_a0* arg0, PlayState* play) {
 void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
     s32 temp_s6 = arg0->unk_18 - arg0->unk_1C;
     s32 i;
-    f32 pad;
+    s32 pad;
 
     if (temp_s6 > 0) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -425,9 +425,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->unk_1A0++;
         if ((this->csId1 != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId1)) {
             if (this->unk_1A0 == 2) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_4);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_4);
             } else if (this->unk_1A0 == 22) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_1);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_1);
             }
         }
     } else if (this->unk_1A0 < 60) {
