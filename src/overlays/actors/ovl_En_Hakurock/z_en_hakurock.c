@@ -325,7 +325,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if ((this->timer % 2) == 0) {
-            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PIf / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }

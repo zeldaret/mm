@@ -1,6 +1,6 @@
 #include "z64eff_blure.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "gfx.h"
 #include "macros.h"
 #include "sys_matrix.h"

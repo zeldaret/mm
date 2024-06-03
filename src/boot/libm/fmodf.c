@@ -1,4 +1,4 @@
-#include "libc/math.h"
+#include "math.h"
 
 float fmodf(float dividend, float divisor) {
     int quotient;

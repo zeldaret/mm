@@ -469,7 +469,7 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
         }
     } else if (this->actionFunc == EnSyatekiOkuta_Float) {
         this->headScale.x = this->headScale.z = 1.0f;
-        this->headScale.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->headScale.y = (Math_SinF((M_PIf / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Hide) {
         if (curFrame < 3.0f) {
             this->headScale.y = 1.0f;
@@ -509,7 +509,7 @@ s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scal
     if (this->actionFunc == EnSyatekiOkuta_Appear) {
         scale->y = 1.0f;
         scale->z = 1.0f;
-        scale->x = (Math_SinF((M_PI / 16) * curFrame) * 0.4f) + 1.0f;
+        scale->x = (Math_SinF((M_PIf / 16) * curFrame) * 0.4f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Die) {
         if ((curFrame >= 35.0f) || (curFrame < 25.0f)) {
             return false;

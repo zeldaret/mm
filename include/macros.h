@@ -1,7 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "PR/os_convert.h"
 
 #define SCREEN_WIDTH  320

@@ -2,7 +2,7 @@
 #define PR_OS_INTERNAL_SI_H
 
 #include "ultratypes.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 
 
 s32 __osSiRawWriteIo(uintptr_t devAddr, u32 data);

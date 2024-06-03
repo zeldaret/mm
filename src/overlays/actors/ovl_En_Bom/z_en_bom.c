@@ -386,10 +386,10 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     }
 
     if ((this->timer & 1) == 0) {
-        spCC = Rand_ZeroFloat(M_PI);
+        spCC = Rand_ZeroFloat(M_PIf);
 
         for (i = 0; i < 15; i++) {
-            Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
+            Matrix_RotateYF(((2.0f * (i * M_PIf)) / 15.0f) + spCC, MTXMODE_NEW);
             Matrix_MultVecZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;

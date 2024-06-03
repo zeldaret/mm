@@ -16,6 +16,8 @@
     \label:
 .endm
 
+.macro endlabel label
+.endm
 
 # Float register aliases (o32 ABI, odd ones are rarely used)
 

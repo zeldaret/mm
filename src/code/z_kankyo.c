@@ -62,7 +62,7 @@ Gfx* sSkyboxStarsDList;
 #include "z64environment.h"
 
 #include "global.h"
-#include "libc/string.h"
+#include "string.h"
 #include "sys_cfb.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"

@@ -1,6 +1,6 @@
 #include "z64voice.h"
-#include "libc/stdbool.h"
-#include "libc/string.h"
+#include "stdbool.h"
+#include "string.h"
 #include "padmgr.h"
 
 // internal voice functions

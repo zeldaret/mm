@@ -699,8 +699,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
         if (sp48 == 0.0f) {
-            this->unk_1DC = 2.0f * M_PI / 9.0000002;
-            this->unk_1E0 = M_PI / 9.0000002;
+            this->unk_1DC = 2.0f * (f32)(M_PI / 9);
+            this->unk_1E0 = (f32)(M_PI / 9);
             this->unk_19D = 4;
         }
     }

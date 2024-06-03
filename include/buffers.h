@@ -1,7 +1,7 @@
 #ifndef BUFFERS_H
 #define BUFFERS_H
 
-#include "libc/assert.h"
+#include "assert.h"
 #include "gfx.h"
 #include "macros.h"
 #include "stack.h"

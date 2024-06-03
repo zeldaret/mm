@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 OSTimer __osBaseTimer;
 OSTime __osCurrentTime;

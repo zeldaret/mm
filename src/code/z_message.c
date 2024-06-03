@@ -36,8 +36,7 @@ u8 gPageSwitchNextButtonStatus[][5] = {
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, completedMessage, _completedFlag) completedMessage,
 
 u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
-#include "tables/bombers_notebook/person_table.h"
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON
@@ -47,8 +46,7 @@ u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, _completedMessage, completedFlag) completedFlag,
 
 u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
-#include "tables/bombers_notebook/person_table.h"
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON

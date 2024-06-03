@@ -324,7 +324,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     }
 
     this->dyna.actor.world.pos.y =
-        (Math_SinF(this->unk_162 * (M_PI / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
+        (Math_SinF(this->unk_162 * (M_PIf / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {

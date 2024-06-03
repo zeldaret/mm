@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 
 uintptr_t osVirtualToPhysical(void* addr) {
     if (IS_KSEG0(addr)) {
