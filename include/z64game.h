@@ -3,8 +3,8 @@
 
 #include "ultra64.h"
 
-#include "libc/stdbool.h"
-#include "libc/stdint.h"
+#include "stdbool.h"
+#include "stdint.h"
 #include "gamealloc.h"
 #include "padmgr.h"
 #include "padutils.h"

@@ -708,10 +708,10 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
                           Math_Vec3f_Yaw(&play->view.eye, &this->slidingDoor.dyna.actor.world.pos);
 
                 if (ABS_ALT(yaw) < 0x4000) {
-                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                 }
             } else if (this->slidingDoor.dyna.actor.room == transitionEntry->sides[0].room) {
-                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
         } else if (this->doorType == 5) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808A22DC[this->slidingDoor.unk_15E]));

@@ -189,7 +189,7 @@ void EnLight_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y), MTXMODE_APPLY);
 
     if (ENLIGHT_GET_1(&this->actor)) {
-        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
     }
 
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);

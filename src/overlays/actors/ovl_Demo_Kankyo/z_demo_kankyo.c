@@ -97,7 +97,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
                 this->effects[i].scale = 0.1f;
 
                 // speedClock is angles in radians,
-                // should have used Rand_ZeroOne() * 2 * M_PI
+                // should have used Rand_ZeroOne() * 2 * M_PIf
                 // however, due to properties of sine waves, this is effectively still random
                 this->effects[i].speedClock.x = Rand_ZeroOne() * 360.0f;
                 this->effects[i].speedClock.y = Rand_ZeroOne() * 360.0f;
@@ -335,7 +335,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
                 this->effects[i].scale = 0.2f;
 
                 // speedClock is angles in radians,
-                // should have used Rand_ZeroOne() * 2 * M_PI
+                // should have used Rand_ZeroOne() * 2 * M_PIf
                 // however, due to properties of sine waves, this is effectively still random
                 this->effects[i].speedClock.x = Rand_ZeroOne() * 360.0f;
                 this->effects[i].speedClock.y = Rand_ZeroOne() * 360.0f;

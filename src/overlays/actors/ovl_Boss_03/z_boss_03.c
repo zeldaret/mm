@@ -161,7 +161,7 @@ void Boss03_SpawnEffectDroplet(PlayState* play, Vec3f* pos) {
             eff->accel.y = -2.0f;
             eff->unk_34.x = 0.1f;
             eff->unk_34.y = 0.0f;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             eff->velocity.x = Rand_CenteredFloat(25.0f);
             eff->velocity.z = Rand_CenteredFloat(25.0f);
@@ -187,7 +187,7 @@ void Boss03_SpawnEffectSplash(PlayState* play, Vec3f* pos, Vec3f* velocity) {
             temp_f2 = Rand_ZeroFloat(0.02f) + 0.02f;
             eff->unk_34.y = temp_f2;
             eff->unk_34.x = temp_f2;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             return;
         }
@@ -489,7 +489,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         f32 rand;
 
         rand = Boss03_RandZeroOne();
-        Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+        Matrix_RotateYF((rand * M_PIf * 0.2f) + ((2 * M_PIf / 5) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
         Matrix_MultVecZ((rand * 800.0f) + 400.0f, &sp70);
@@ -584,7 +584,7 @@ void func_809E34B8(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         Matrix_MultVecZ(-500.0f, &this->unk_268);
@@ -672,7 +672,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
@@ -769,7 +769,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
@@ -873,7 +873,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
                        -0.5f,
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
         case 0:
@@ -1037,7 +1037,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
     this->actor.shape.rot = this->actor.world.rot;
 
     Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 3.0f);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speed >= 20.0f) {
@@ -2140,7 +2140,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
                 i++;
             }
 
-            yRot += ((2.0f * M_PI) / 50.0f);
+            yRot += ((2.0f * M_PIf) / 50.0f);
             if (j >= 50) {
                 break;
             }
@@ -2360,7 +2360,7 @@ void Boss03_UpdateEffects(PlayState* play) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, MTXMODE_NEW);
+                    Matrix_RotateYF((2.0f * (j * M_PIf)) / 6.0f, MTXMODE_NEW);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;

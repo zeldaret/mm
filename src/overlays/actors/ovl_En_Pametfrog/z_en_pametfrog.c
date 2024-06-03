@@ -524,7 +524,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, PlayState* play) {
         this->timer--;
     }
 
-    sin = Math_SinF(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = Math_SinF(this->timer * (M_PIf / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnPametfrog_StopCutscene(this, play);
@@ -663,10 +663,10 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 1.5f;
     if (this->timer != 0) {
-        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
+        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PIf / 30) : (-M_PIf / 30);
     } else {
         randFloat = Rand_ZeroFloat(0x2000);
-        this->wallRotation = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
+        this->wallRotation = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * (0x1000 + randFloat) * (M_PIf / (15 * 0x8000));
     }
     this->timer = 15;
     Actor_PlaySfx(&this->actor, NA_SE_EN_FROG_RUNAWAY2);
@@ -982,7 +982,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     f32 magShake;
 
     this->timer--;
-    magShake = (Math_SinF(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (Math_SinF(this->timer * (M_PIf / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);

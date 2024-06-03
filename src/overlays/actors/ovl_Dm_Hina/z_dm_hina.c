@@ -150,7 +150,7 @@ void func_80A1F9AC(DmHina* this, PlayState* play) {
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->unk14C * 20.0f, this->unk14C * 20.0f, this->unk14C * 20.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+        Matrix_RotateZF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);

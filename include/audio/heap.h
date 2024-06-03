@@ -2,7 +2,7 @@
 #define AUDIO_HEAP_H
 
 #include "PR/ultratypes.h"
-#include "libc/stddef.h"
+#include "stddef.h"
 #include "unk.h"
 
 typedef struct AudioHeapInitSizes {

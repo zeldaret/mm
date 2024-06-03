@@ -34,7 +34,7 @@
  */
 #include "irqmgr.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 #include "macros.h"
 #include "scheduler.h"

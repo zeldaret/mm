@@ -47,6 +47,7 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
             "intelliSenseMode": "${default}", // Shouldn't matter
             "includePath": [ // Matches makefile's includes
                 "include",
+                "include/libc",
                 "src",
                 "assets",
                 "build/n64-us/",

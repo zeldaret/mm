@@ -4,7 +4,7 @@
 #include "PR/ultratypes.h"
 #include "PR/os_voice.h"
 #include "audiothread_cmd.h"
-#include "libc/stddef.h"
+#include "stddef.h"
 #include "unk.h"
 
 #include "audio/heap.h"

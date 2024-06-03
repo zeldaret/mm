@@ -474,7 +474,7 @@ void func_80B300F4(ObjSpidertent* thisx, PlayState* play, TriNorm* triNorm, Vec3
 
     if (func_80B2FB10(&sp88, &spA0)) {
         phi_f22 = 0.0f;
-        temp_f24 = (2 * M_PI) / sp80->unk_0F;
+        temp_f24 = (2 * M_PIf) / sp80->unk_0F;
 
         for (i = 0; i < sp80->unk_0F; i++) {
             temp_f2 = (Rand_ZeroOne() * temp_f24) + phi_f22;

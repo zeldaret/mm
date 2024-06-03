@@ -301,7 +301,7 @@ void EnWdhand_Vec3fToVec3s(Vec3s* dst, Vec3f* src) {
 }
 
 s16 EnWdhand_GetLimbXRotation(EnWdhand* this, s32 limbIndex) {
-    return this->limbRotations[limbIndex].z * Math_SinF((this->timer - limbIndex * 20) * (M_PI / 40));
+    return this->limbRotations[limbIndex].z * Math_SinF((this->timer - limbIndex * 20) * (M_PIf / 40));
 }
 
 void EnWdhand_SetupIdle(EnWdhand* this) {
@@ -510,9 +510,9 @@ void EnWdhand_GrabbedPlayer(EnWdhand* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->limbRotations); i++) {
         if (this->timer < 76) {
-            this->limbRotations[i].x = this->limbRotations[i].z * Math_SinF(t * (M_PI / 8));
+            this->limbRotations[i].x = this->limbRotations[i].z * Math_SinF(t * (M_PIf / 8));
         } else {
-            Math_ScaledStepToS(&this->limbRotations[i].x, this->limbRotations[i].z * Math_SinF(t * (M_PI / 8)), 0x400);
+            Math_ScaledStepToS(&this->limbRotations[i].x, this->limbRotations[i].z * Math_SinF(t * (M_PIf / 8)), 0x400);
         }
         if (t % 16 == 0) {
             if (t == 16) {
@@ -682,10 +682,10 @@ void EnWdhand_Die(EnWdhand* this, PlayState* play) {
     t = this->timer;
     for (i = 0; i < limbIndex; i++) {
         if (this->timer > 0) {
-            Math_ScaledStepToS(&this->limbRotations[i].x, this->limbRotations[i].z * Math_SinF(t * (2 * M_PI / 7)),
+            Math_ScaledStepToS(&this->limbRotations[i].x, this->limbRotations[i].z * Math_SinF(t * (2 * M_PIf / 7)),
                                0x200);
         } else if (Rand_ZeroOne() < 0.65f) {
-            this->limbRotations[i].x = this->limbRotations[i].z * Math_SinF(t * (2 * M_PI / 7));
+            this->limbRotations[i].x = this->limbRotations[i].z * Math_SinF(t * (2 * M_PIf / 7));
         }
         if (t % 7 == 0) {
             if (i != 0) {

@@ -1,7 +1,7 @@
 #ifndef PADMGR_H
 #define PADMGR_H
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "ultra64.h"
 #include "irqmgr.h"
 #include "padutils.h"

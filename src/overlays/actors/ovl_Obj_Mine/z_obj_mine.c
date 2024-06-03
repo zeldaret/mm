@@ -624,7 +624,7 @@ void ObjMine_Water_UpdateLinks(ObjMine* this) {
 
         if (ObjMine_GetUnitVec3fNorm(&tempVec, &diffDir, &diffNorm, &invNorm) && (diffNorm > LINK_SIZE / 3.0f)) {
             Math_Vec3f_Copy(&newBasis.y, &waterLink->basis.y);
-            ObjMine_StepUntilParallel(&newBasis.y, &diffDir, M_PI / 30);
+            ObjMine_StepUntilParallel(&newBasis.y, &diffDir, M_PIf / 30);
 
             tempBasisX = (prevBasisX == NULL) ? &sStandardBasis.x : prevBasisX;
 

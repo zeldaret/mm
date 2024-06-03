@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "alignment.h"
 
 OSPiHandle __CartRomHandle ALIGNED(8);

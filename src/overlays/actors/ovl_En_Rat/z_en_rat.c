@@ -948,14 +948,14 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
-            redModifier = fabsf(Math_CosF(this->timer * (M_PI / 30.f)));
+            redModifier = fabsf(Math_CosF(this->timer * (M_PIf / 30)));
         } else {
             if (this->timer >= 120) {
-                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PI / 30.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PIf / 30)));
             } else if (this->timer >= 30) {
-                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PI / 6.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PIf / 6)));
             } else {
-                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PI / 3.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PIf / 3)));
             }
         }
 

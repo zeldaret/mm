@@ -2,8 +2,8 @@
 #define LOADFRAGMENT_H
 
 #include "PR/ultratypes.h"
-#include "libc/stdint.h"
-#include "libc/stddef.h"
+#include "stdint.h"
+#include "stddef.h"
 
 extern s32 gOverlayLogSeverity;
 
