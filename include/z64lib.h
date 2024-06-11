@@ -3,6 +3,8 @@
 
 #include "ultra64.h"
 
+#include "stdint.h"
+
 #include "color.h"
 #include "z64math.h"
 
