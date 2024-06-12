@@ -604,7 +604,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +613,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {

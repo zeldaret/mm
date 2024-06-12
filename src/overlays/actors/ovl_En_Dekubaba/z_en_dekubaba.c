@@ -385,7 +385,7 @@ void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
         this->size * 0.01f * (0.5f + (15 - this->timer) * 0.5f / 15.0f);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0x1800, 0x800);
 
-    headDistVertical = Math_SinF(CLAMP_MAX((15 - this->timer) * (1.0f / 15), 0.7f) * M_PI) * 32.0f + 14.0f;
+    headDistVertical = Math_SinF(CLAMP_MAX((15 - this->timer) * (1.0f / 15), 0.7f) * M_PIf) * 32.0f + 14.0f;
 
     if (this->actor.shape.rot.x < -0x38E3) {
         headDistHorizontal = 0.0f;
@@ -469,7 +469,7 @@ void EnDekubaba_Retract(EnDekubaba* this, PlayState* play) {
         this->size * 0.01f * (0.5f + this->timer * (1.0f / 30));
     Math_ScaledStepToS(&this->actor.shape.rot.x, -0x4000, 0x300);
 
-    headDistVertical = (Math_SinF(CLAMP_MAX(this->timer * 0.033f, 0.7f) * M_PI) * 32.0f) + 14.0f;
+    headDistVertical = (Math_SinF(CLAMP_MAX(this->timer * 0.033f, 0.7f) * M_PIf) * 32.0f) + 14.0f;
 
     if (this->actor.shape.rot.x < -0x38E3) {
         headDistHorizontal = 0.0f;

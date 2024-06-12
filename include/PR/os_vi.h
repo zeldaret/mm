@@ -103,8 +103,6 @@ typedef struct {
 #define OS_VI_FPAL_HPN2     54
 #define OS_VI_FPAL_HPF2     55
 
-#define OS_VI_UNK28         28
-
 extern OSViMode osViModeNtscHpf1;
 extern OSViMode osViModePalLan1;
 extern OSViMode osViModeNtscHpn1;

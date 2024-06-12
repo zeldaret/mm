@@ -1,11 +1,16 @@
 #include "scheduler.h"
+
+#include "libc64/sleep.h"
+
 #include "fault.h"
 #include "idle.h"
-#include "libc64/sleep.h"
 #include "macros.h"
+#include "regs.h"
+#include "stackcheck.h"
 #include "viconfig.h"
+#include "z64speed_meter.h"
+#include "z64thread.h"
 
-// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sSchedFaultClient;
 
 OSTime sRSPGFXStartTime;
@@ -16,16 +21,23 @@ OSTime sRDPStartTime;
 u64* gAudioSPDataPtr;
 u32 gAudioSPDataSize;
 
-#include "functions.h"
-#include "stackcheck.h"
-#include "z64speed_meter.h"
-#include "z64thread.h"
-
 #define RSP_DONE_MSG 667
 #define RDP_DONE_MSG 668
 #define NOTIFY_MSG 670
 #define RDP_AUDIO_CANCEL_MSG 671
 #define RSP_GFX_CANCEL_MSG 672
+
+#define OS_SC_DP 0x0001
+#define OS_SC_SP 0x0002
+#define OS_SC_YIELD 0x0010
+#define OS_SC_YIELDED 0x0020
+
+#define OS_SC_XBUS (OS_SC_SP | OS_SC_DP)
+#define OS_SC_DRAM (OS_SC_SP | OS_SC_DP | OS_SC_DRAM_DLIST)
+#define OS_SC_DP_XBUS (OS_SC_SP)
+#define OS_SC_DP_DRAM (OS_SC_SP | OS_SC_DRAM_DLIST)
+#define OS_SC_SP_XBUS (OS_SC_DP)
+#define OS_SC_SP_DRAM (OS_SC_DP | OS_SC_DRAM_DLIST)
 
 /**
  * Set the current framebuffer to the swapbuffer pointed to by the provided cfb
@@ -193,7 +205,7 @@ halt_rdp:
         if (dpTask->type == M_GFXTASK) {
             // Try to stop DP
             osSyncPrintf("DP止めようとします\n");
-            bzero(dpTask->outputBuff, (uintptr_t)dpTask->outputBuffSize - (uintptr_t)dpTask->outputBuff);
+            bzero(dpTask->output_buff, (uintptr_t)dpTask->output_buff_size - (uintptr_t)dpTask->output_buff);
             osSendMesg(&sched->interruptQueue, (OSMesg)RDP_DONE_MSG, OS_MESG_NOBLOCK);
         }
     }
@@ -376,8 +388,8 @@ void Sched_RunTask(Scheduler* sched, OSScTask* spTask, OSScTask* dpTask) {
 
         if (spTask->list.t.type == M_AUDTASK) {
             // Set global pointers to audio task data for use in audio processing
-            gAudioSPDataPtr = spTask->list.t.dataPtr;
-            gAudioSPDataSize = spTask->list.t.dataSize;
+            gAudioSPDataPtr = spTask->list.t.data_ptr;
+            gAudioSPDataSize = spTask->list.t.data_size;
         }
 
         // Begin task execution
@@ -584,7 +596,7 @@ void Sched_FaultClient(void* arg0, void* arg1) {
     spTask = sched->curRSPTask;
     if (spTask != NULL) {
         FaultDrawer_Printf("RSPTask %08x %08x %02x %02x\n%01x %08x %08x\n", spTask, spTask->next, spTask->state,
-                           spTask->flags, spTask->list.t.type, spTask->list.t.dataPtr, spTask->list.t.dataSize);
+                           spTask->flags, spTask->list.t.type, spTask->list.t.data_ptr, spTask->list.t.data_size);
     }
 
     dpTask = sched->curRDPTask;

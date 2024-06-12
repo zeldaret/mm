@@ -95,24 +95,22 @@ void func_80B0F5E0(EnGb2* this, PlayState* play) {
 }
 
 s32 func_80B0F660(EnGb2* this, PlayState* play) {
-    Actor* temp_v0;
-    Actor* phi_s0 = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        temp_v0 = SubS_FindActor(play, phi_s0, ACTORCAT_NPC, ACTOR_EN_GB2);
-        if (temp_v0 == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_EN_GB2);
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((EnGb2*)temp_v0 != this) {
+        if ((EnGb2*)actorIter != this) {
             return true;
         }
 
-        temp_v0 = temp_v0->next;
-        if (temp_v0 == NULL) {
+        if (actorIter->next == NULL) {
             break;
         }
-        phi_s0 = temp_v0;
+        actorIter = actorIter->next;
     };
 
     return false;
@@ -635,7 +633,7 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 void func_80B10924(EnGb2* this, PlayState* play) {
     s32 getItemId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE)) {
         getItemId = GI_RUPEE_PURPLE;
     } else {
         getItemId = GI_HEART_PIECE;
@@ -644,7 +642,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (getItemId == GI_HEART_PIECE) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE);
         } else {
             Rupees_ChangeBy(50);
         }

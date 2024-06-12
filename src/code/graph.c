@@ -1,6 +1,5 @@
 #include "z64.h"
 #include "regs.h"
-#include "functions.h"
 #include "fault.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -10,13 +9,15 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
 
-#include "variables.h"
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 #include "libc64/malloc.h"
+#include "z64DLF.h"
 #include "z64speed_meter.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -170,20 +171,20 @@ retry:
 
     task->type = M_GFXTASK;
     task->flags = OS_SC_DRAM_DLIST;
-    task->ucodeBoot = SysUcode_GetUCodeBoot();
-    task->ucodeBootSize = SysUcode_GetUCodeBootSize();
+    task->ucode_boot = SysUcode_GetUCodeBoot();
+    task->ucode_boot_size = SysUcode_GetUCodeBootSize();
     task->ucode = SysUcode_GetUCode();
-    task->ucodeData = SysUcode_GetUCodeData();
-    task->ucodeSize = SP_UCODE_SIZE;
-    task->ucodeDataSize = SP_UCODE_DATA_SIZE;
-    task->dramStack = (u64*)gGfxSPTaskStack;
-    task->dramStackSize = sizeof(gGfxSPTaskStack);
-    task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferEnd;
-    task->dataPtr = (u64*)gGfxMasterDL;
-    task->dataSize = 0;
-    task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
-    task->yieldDataSize = sizeof(gGfxSPTaskYieldBuffer);
+    task->ucode_data = SysUcode_GetUCodeData();
+    task->ucode_size = SP_UCODE_SIZE;
+    task->ucode_data_size = SP_UCODE_DATA_SIZE;
+    task->dram_stack = (u64*)gGfxSPTaskStack;
+    task->dram_stack_size = sizeof(gGfxSPTaskStack);
+    task->output_buff = gGfxSPTaskOutputBufferPtr;
+    task->output_buff_size = (void*)gGfxSPTaskOutputBufferEnd;
+    task->data_ptr = (u64*)gGfxMasterDL;
+    task->data_size = 0;
+    task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
+    task->yield_data_size = sizeof(gGfxSPTaskYieldBuffer);
 
     scTask->next = NULL;
     scTask->flags = OS_SC_RCP_MASK | OS_SC_SWAPBUFFER | OS_SC_LAST_TASK;
@@ -361,7 +362,7 @@ void Graph_ThreadEntry(void* arg) {
 
         size = ovl->instanceSize;
 
-        func_800809F4(ovl->vromStart);
+        func_800809F4(ovl->file.vromStart);
 
         gameState = malloc(size);
 

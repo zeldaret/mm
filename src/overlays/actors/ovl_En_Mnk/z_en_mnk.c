@@ -2203,17 +2203,17 @@ void EnMnk_Monkey_DrawFace(EnMnk* this, PlayState* play) {
             } else {
                 gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sMonkeyFaceTextures[this->blinkFrame]));
             }
-            return;
+            break;
 
         case 2:
         case 3:
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sMonkeyFaceTextures[this->unk_3E0]));
-            return;
+            break;
 
         default:
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sMonkeyFaceTextures[this->blinkFrame]));
             break;
     }
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sMonkeyFaceTextures[this->blinkFrame]));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

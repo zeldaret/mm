@@ -97,12 +97,12 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32 set) {
-    if (this) {}
+    Actor* thisx = &this->actor;
 
     if (set) {
-        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     } else {
-        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     }
 }
 
@@ -348,7 +348,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     }
 
     // why wouldn't this be in the action func?
-    if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
+    if ((this->cutsceneTimer > 0) && (this->actionFunc != ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
             CutsceneManager_Stop(this->actor.csId);

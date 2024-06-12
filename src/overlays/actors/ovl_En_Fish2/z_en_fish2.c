@@ -98,8 +98,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f };
-static f32 D_80B2B380[] = { 0.019f, 0.033f };
+static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f, 0.019f, 0.033f };
 
 typedef enum {
     /* 0 */ FISH2_ANIM_0,
@@ -253,10 +252,10 @@ void func_80B287F4(EnFish2* this, s32 arg1) {
             this->unk_2C4++;
         }
         this->unk_338 = 440.0f - this->unk_2C4;
-        if (arg1 == 0) {
+        if (!arg1) {
             this->unk_338 = 410.0f - this->unk_2C4;
         }
-        Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+        Math_ApproachF(&this->unk_350->speed, (D_80B2B370[4] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     }
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
@@ -270,7 +269,7 @@ s32 func_80B288E8(EnFish2* this, Vec3f vec, s32 arg2) {
     f32 dist = sqrtf(SQ(temp_f2) + SQ(temp_f12) + SQ(temp_f14));
     f32 phi_f2;
 
-    if (arg2 == 0) {
+    if (!arg2) {
         phi_f2 = 40.0f;
     } else {
         phi_f2 = this->unk_330 * 2000.0f;
@@ -398,7 +397,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     }
 
     if (this->unk_2B4 == 0) {
-        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 400.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 400.0f, 0.3f, 0.3f);
         if (this->actor.speed > 3.0f) {
             this->actor.speed = 3.0f;
         } else if (this->actor.speed < 1.5f) {
@@ -484,7 +483,7 @@ void func_80B29194(EnFish2* this) {
 
 void func_80B29250(EnFish2* this, PlayState* play) {
     if (!func_80B28478(this)) {
-        Math_ApproachF(&this->actor.speed, (D_80B2B380[0] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
         if (this->actor.speed > 4.0f) {
             this->actor.speed = 4.0f;
@@ -492,9 +491,9 @@ void func_80B29250(EnFish2* this, PlayState* play) {
             this->actor.speed = 2.0f;
         }
 
-        func_80B287F4(this, 0);
+        func_80B287F4(this, false);
         func_80B289DC(this, play);
-        if (func_80B288E8(this, this->unk_300, 0) &&
+        if (func_80B288E8(this, this->unk_300, false) &&
             (((this->unk_2C8 == 0) && (D_80B2B2E4 == 1)) || (this->unk_2C8 != 0))) {
             Math_Vec3f_Copy(&this->unk_30C, &this->unk_350->world.pos);
             func_80B2938C(this);
@@ -512,8 +511,8 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (!func_80B28478(this)) {
-        func_80B287F4(this, 1);
-        Math_ApproachF(&this->actor.speed, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
+        func_80B287F4(this, true);
+        Math_ApproachF(&this->actor.speed, (D_80B2B370[4] - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
         if (this->actor.speed > 3.0f) {
             this->actor.speed = 3.0f;
@@ -530,7 +529,7 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
             }
         } else {
             func_80B289DC(this, play);
-            if (func_80B288E8(this, this->unk_318, 1)) {
+            if (func_80B288E8(this, this->unk_318, true)) {
                 func_80B2951C(this);
             }
         }
@@ -792,12 +791,12 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
     }
     this->unk_338 = 410.0f - this->unk_2C4;
     Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.3f);
-    Math_ApproachF(&this->unk_350->speed, (D_80B2B380[0] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
+    Math_ApproachF(&this->unk_350->speed, (D_80B2B370[4] - this->unk_330) * this->unk_338, 0.1f, 0.4f);
     func_80B289DC(this, play);
     Math_Vec3f_Copy(&sp2C, &this->unk_350->world.pos);
     this->unk_34A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
     this->unk_348 = Math_Vec3f_Pitch(&this->actor.world.pos, &sp2C);
-    if (func_80B288E8(this, this->unk_300, 0)) {
+    if (func_80B288E8(this, this->unk_300, false)) {
         Math_Vec3f_Copy(&this->unk_30C, &this->unk_350->world.pos);
         func_80B2938C(this);
     }

@@ -43,8 +43,9 @@
  *
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
-#include "libc/string.h"
+#include "string.h"
 #include "z64malloc.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -1075,7 +1076,7 @@ Vec3f Camera_CalcUpVec(s16 pitch, s16 yaw, s16 roll) {
     Vec3f rollMtxRow1;
     Vec3f rollMtxRow2;
     Vec3f rollMtxRow3;
-    f32 pad;
+    s32 pad;
 
     // Axis to roll around
     u.x = cosP * sinY;
@@ -1391,7 +1392,7 @@ s32 Camera_CalcAtForNormal1(Camera* camera, VecGeo* arg1, f32 yOffset, f32 forwa
  */
 s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
                              s16 flags) {
-    f32 pad;
+    s32 pad;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
     f32 fovHeight;
@@ -1535,10 +1536,10 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
             temp_f0_6 = Math_FAtan2F(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
 
-            if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
-                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - 0.34906584f);
-            } else if (temp_f0_6 < -0.17453292f) { // (M_PI / 18)
-                phi_f16 = 1.0f - Math_SinF(-0.17453292f - temp_f0_6);
+            if (temp_f0_6 > (f32)(M_PI / 9)) {
+                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - (f32)(M_PI / 9));
+            } else if (temp_f0_6 < -(f32)(M_PI / 18)) {
+                phi_f16 = 1.0f - Math_SinF(-(f32)(M_PI / 18) - temp_f0_6);
             } else {
                 phi_f16 = 1.0f;
             }
@@ -1615,10 +1616,10 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
 
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
-            if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
-                temp = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
-            } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
-                temp = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
+            if (temp_f0_3 > (f32)(M_PI / 9)) {
+                temp = 1.0f - Math_SinF(temp_f0_3 - (f32)(M_PI / 9));
+            } else if (temp_f0_3 < -(f32)(M_PI / 18)) {
+                temp = 1.0f - Math_SinF(-(f32)(M_PI / 18) - temp_f0_3);
             } else {
                 temp = 1.0f;
             }
@@ -2477,9 +2478,7 @@ s32 Camera_Normal3(Camera* camera) {
         sp62 = BINANG_SUB(focalActorPosRot->rot.y, BINANG_ROT180(sp68.yaw));
         sp78 = OLib_Vec3fToVecGeo(&camera->unk_0F0);
         phi_v1_2 = focalActorPosRot->rot.y - sp78.yaw;
-        if (phi_v1_2 < 0) {
-            phi_v1_2 *= -1;
-        }
+        phi_v1_2 = ABS_ALT(phi_v1_2);
 
         if (phi_v1_2 < 0x555A) {
             temp_f2 = 1.0f;
@@ -3299,7 +3298,7 @@ s32 Camera_Jump3(Camera* camera) {
     f32 phi_f2_2;
     f32 temp_f0;
     f32 temp1;
-    f32 pad;
+    s32 pad;
     Jump3ReadOnlyData* roData = &camera->paramData.jump3.roData;
     Jump3ReadWriteData* rwData = &camera->paramData.jump3.rwData;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "debug.h"
+#include "sys_ucode.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
@@ -575,7 +576,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
         if (osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
             roomCtx->status = 0;
             roomCtx->curRoom.segment = roomCtx->activeRoomVram;
-            gSegments[3] = OS_K0_TO_PHYSICAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = OS_K0_TO_PHYSICAL(roomCtx->activeRoomVram);
 
             Scene_ExecuteCommands(play, roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
@@ -606,7 +607,7 @@ RoomDrawHandler sRoomDrawHandlers[] = {
 
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        gSegments[3] = OS_K0_TO_PHYSICAL(room->segment);
+        gSegments[0x03] = OS_K0_TO_PHYSICAL(room->segment);
         sRoomDrawHandlers[room->roomShape->base.type](play, room, flags);
     }
     return;

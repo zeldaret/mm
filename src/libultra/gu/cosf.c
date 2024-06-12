@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/math.h"
+#include "math.h"
 #include "macros.h"
 
 #pragma weak cosf = __cosf
@@ -14,7 +14,7 @@ static const du P[] = {
     { 0.000002605780637968037 },
 };
 
-static const du rpi = { 1 / 3.14159265358979323846 }; // 1/M_PI, "reciprocal of pi"
+static const du rpi = { 1 / M_PI }; // "reciprocal of pi"
 
 // pihi + pilo is the closest double to pi, this representation allows more precise calculations since pi itself is not
 // an exact float

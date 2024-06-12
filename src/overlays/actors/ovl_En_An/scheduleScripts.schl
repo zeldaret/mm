@@ -1,0 +1,233 @@
+sScheduleScript {
+    if_day (1) {
+        if_scene (SCENE_YADOYA) {
+            if_time_range (6, 0, 10, 55) {
+                return_time (6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE)
+            } else if_time_range (10, 55, 11, 10) {
+                return_time (10, 55, 11, 10, ANJU_SCH_WALKING_40)
+            } else if_time_range (11, 10, 11, 30) {
+                return_time (11, 10, 11, 30, ANJU_SCH_COOKING)
+            } else if_time_range (11, 30, 11, 50) {
+                return_time (11, 30, 11, 50, ANJU_SCH_WALKING_42)
+            } else if_time_range (11, 50, 11, 55) {
+                return_time (11, 50, 11, 55, ANJU_SCH_DOOR_26)
+            } else if_time_range (11, 55, 12, 0) {
+                return_time (11, 55, 12, 0, ANJU_SCH_WALKING_43)
+            } else if_time_range (12, 0, 12, 15) {
+                return_time (12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANNY)
+            } else if_time_range (12, 15, 12, 20) {
+                return_time (12, 15, 12, 20, ANJU_SCH_WALKING_44)
+            } else if_time_range (12, 20, 12, 25) {
+                return_time (12, 20, 12, 25, ANJU_SCH_DOOR_27)
+            } else if_time_range (12, 25, 12, 55) {
+                return_time (12, 25, 12, 55, ANJU_SCH_WALKING_45)
+            } else if_time_range (12, 55, 13, 0) {
+                return_time (12, 55, 13, 0, ANJU_SCH_DOOR_28)
+            } else if_time_range (13, 15, 13, 20) {
+                return_time (13, 15, 13, 20, ANJU_SCH_DOOR_29)
+            } else if_time_range (13, 20, 13, 50) {
+                return_time (13, 20, 13, 50, ANJU_SCH_WALKING_46)
+            } else if_time_range (13, 50, 14, 8) {
+                return_time (13, 50, 14, 8, ANJU_SCH_RECEPTIONIST_IDLE)
+            } else if_time_range (14, 8, 14, 18) {
+                return_time (14, 8, 14, 18, ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN)
+            } else if_time_range (14, 18, 16, 10) {
+                return_time (14, 18, 16, 10, ANJU_SCH_RECEPTIONIST_IDLE)
+            } else if_time_range (16, 10, 16, 30) {
+                return_time (16, 10, 16, 30, ANJU_SCH_ATTEND_GORON)
+            } else if_time_range (16, 30, 19, 50) {
+                return_time (16, 30, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE)
+            } else if_time_range (19, 50, 20, 20) {
+                return_time (19, 50, 20, 20, ANJU_SCH_WALKING_47)
+            } else if_time_range (20, 20, 20, 30) {
+                return_time (20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME)
+            } else if_time_range (20, 30, 21, 5) {
+                return_time (20, 30, 21, 5, ANJU_SCH_WALKING_48)
+            } else if_time_range (21, 5, 21, 10) {
+                return_time (21, 5, 21, 10, ANJU_SCH_DOOR_30)
+            } else if_week_event_reg (WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING) {
+                if_time_range (23, 10, 23, 15) {
+                    return_time (23, 10, 23, 15, ANJU_SCH_DOOR_31)
+                } else if_time_range (23, 15, 0, 0) {
+                    return_time (23, 15, 0, 0, ANJU_SCH_WALKING_49)
+                } else if_time_range (0, 0, 6, 0) {
+                    if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+                        return_none
+                    } else {
+                        return_time (0, 0, 6, 0, ANJU_SCH_MIDNIGHT_MEETING)
+                    }
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (2) {
+        if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+            if_scene (SCENE_YADOYA) {
+                if_time_range (6, 0, 10, 55) {
+                    return_time (6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE)
+                } else if_time_range (10, 55, 11, 10) {
+                    return_time (10, 55, 11, 10, ANJU_SCH_WALKING_40)
+                } else if_time_range (11, 10, 11, 30) {
+                    return_time (11, 10, 11, 30, ANJU_SCH_COOKING)
+                } else if_time_range (11, 30, 11, 50) {
+                    return_time (11, 30, 11, 50, ANJU_SCH_WALKING_42)
+                } else if_time_range (11, 50, 11, 55) {
+                    return_time (11, 50, 11, 55, ANJU_SCH_DOOR_26)
+                } else if_time_range (11, 55, 12, 0) {
+                    return_time (11, 55, 12, 0, ANJU_SCH_WALKING_43)
+                } else if_time_range (12, 0, 12, 15) {
+                    return_time (12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANNY)
+                } else if_time_range (12, 15, 12, 20) {
+                    return_time (12, 15, 12, 20, ANJU_SCH_WALKING_44)
+                } else if_time_range (12, 20, 12, 25) {
+                    return_time (12, 20, 12, 25, ANJU_SCH_DOOR_27)
+                } else if_time_range (12, 25, 12, 55) {
+                    return_time (12, 25, 12, 55, ANJU_SCH_WALKING_45)
+                } else if_time_range (12, 55, 13, 0) {
+                    return_time (12, 55, 13, 0, ANJU_SCH_DOOR_28)
+                } else if_time_range (13, 15, 13, 20) {
+                    return_time (13, 15, 13, 20, ANJU_SCH_DOOR_29)
+                } else if_time_range (13, 20, 13, 50) {
+                    return_time (13, 20, 13, 50, ANJU_SCH_WALKING_46)
+                } else if_time_range (13, 50, 19, 50) {
+                    return_time (13, 50, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE)
+                } else if_time_range (19, 50, 20, 20) {
+                    return_time (19, 50, 20, 20, ANJU_SCH_WALKING_47)
+                } else if_time_range (20, 20, 20, 30) {
+                    return_time (20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME)
+                } else if_time_range (20, 30, 21, 5) {
+                    return_time (20, 30, 21, 5, ANJU_SCH_WALKING_48)
+                } else if_time_range (21, 5, 21, 10) {
+                    return_time (21, 5, 21, 10, ANJU_SCH_DOOR_30)
+                } else if_time_range (21, 30, 23, 0) {
+                    return_time (21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_YADOYA) {
+            if_time_range (11, 3, 11, 9) {
+                return_time (11, 3, 11, 9, ANJU_SCH_DOOR_32)
+            } else if_time_range (11, 9, 11, 29) {
+                return_time (11, 9, 11, 29, ANJU_SCH_WALKING_50)
+            } else if_time_range (11, 29, 11, 39) {
+                return_time (11, 29, 11, 39, ANJU_SCH_DOOR_33)
+            } else if_time_range (17, 24, 17, 30) {
+                return_time (17, 24, 17, 30, ANJU_SCH_DOOR_34)
+            } else if_time_range (17, 30, 17, 55) {
+                return_time (17, 30, 17, 55, ANJU_SCH_WALKING_51)
+            } else if_time_range (17, 55, 18, 0) {
+                return_time (17, 55, 18, 0, ANJU_SCH_DOOR_35)
+            } else if_time_range (18, 0, 19, 50) {
+                return_time (18, 0, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE)
+            } else if_time_range (19, 50, 20, 20) {
+                return_time (19, 50, 20, 20, ANJU_SCH_WALKING_47)
+            } else if_time_range (20, 20, 20, 30) {
+                return_time (20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME)
+            } else if_time_range (20, 30, 21, 0) {
+                return_time (20, 30, 21, 0, ANJU_SCH_WALKING_48)
+            } else if_time_range (21, 0, 21, 5) {
+                return_time (21, 0, 21, 5, ANJU_SCH_DOOR_30)
+            } else if_time_range (21, 30, 23, 0) {
+                return_time (21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_TOWN) {
+            if_time_range (11, 29, 11, 39) {
+                return_time (11, 29, 11, 39, ANJU_SCH_DOOR_37)
+            } else if_time_range (11, 39, 12, 25) {
+                return_time (11, 39, 12, 25, ANJU_SCH_WALKING_54)
+            } else if_time_range (12, 25, 13, 15) {
+                return_time (12, 25, 13, 15, ANJU_SCH_WALKING_55)
+            } else if_time_range (15, 55, 16, 45) {
+                return_time (15, 55, 16, 45, ANJU_SCH_WALKING_58)
+            } else if_time_range (16, 45, 17, 24) {
+                return_time (16, 45, 17, 24, ANJU_SCH_WALKING_59)
+            } else if_time_range (17, 24, 17, 30) {
+                return_time (17, 24, 17, 30, ANJU_SCH_DOOR_38)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_CLOCKTOWER) {
+            if_time_range (11, 39, 12, 25) {
+                return_time (11, 39, 12, 25, ANJU_SCH_WALKING_60)
+            } else if_time_range (12, 25, 13, 15) {
+                return_time (12, 25, 13, 15, ANJU_SCH_WALKING_61)
+            } else if_time_range (15, 55, 16, 45) {
+                return_time (15, 55, 16, 45, ANJU_SCH_WALKING_62)
+            } else if_time_range (16, 45, 17, 24) {
+                return_time (16, 45, 17, 24, ANJU_SCH_WALKING_63)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_ALLEY) {
+            if_time_range (13, 15, 13, 45) {
+                return_time (13, 15, 13, 45, ANJU_SCH_WALKING_56)
+            } else if_time_range (13, 45, 15, 25) {
+                return_time (13, 45, 15, 25, ANJU_SCH_LAUNDRY_POOL_SIT)
+            } else if_time_range (15, 25, 15, 55) {
+                return_time (15, 25, 15, 55, ANJU_SCH_WALKING_57)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (3) {
+        if_week_event_reg (WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES) {
+            if_scene (SCENE_YADOYA) {
+                if_time_range (6, 0, 11, 0) {
+                    return_time (6, 0, 11, 0, ANJU_SCH_SWEEPING)
+                } else if_time_range (11, 0, 11, 25) {
+                    return_time (11, 0, 11, 25, ANJU_SCH_WALKING_52)
+                } else if_time_range (11, 25, 11, 30) {
+                    return_time (11, 25, 11, 30, ANJU_SCH_DOOR_36)
+                } else if_time_range (11, 30, 11, 50) {
+                    return_time (11, 30, 11, 50, ANJU_SCH_WALKING_53)
+                } else if_time_range (11, 50, 12, 0) {
+                    return_time (11, 50, 12, 0, ANJU_SCH_DOOR_39)
+                } else if_time_range (18, 0, 5, 0) {
+                    return_time (18, 0, 5, 0, ANJU_SCH_WAITING_FOR_KAFEI)
+                } else if_time_range (5, 0, 6, 0) {
+                    return_time (5, 0, 6, 0, ANJU_SCH_WAITING_FOR_KAFEI)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_YADOYA) {
+            if_time_range (6, 0, 11, 0) {
+                return_time (6, 0, 11, 0, ANJU_SCH_SWEEPING)
+            } else if_time_range (11, 0, 11, 25) {
+                return_time (11, 0, 11, 25, ANJU_SCH_WALKING_52)
+            } else if_time_range (11, 25, 11, 30) {
+                return_time (11, 25, 11, 30, ANJU_SCH_DOOR_36)
+            } else if_time_range (11, 30, 11, 50) {
+                return_time (11, 30, 11, 50, ANJU_SCH_WALKING_53)
+            } else if_time_range (11, 50, 12, 0) {
+                return_time (11, 50, 12, 0, ANJU_SCH_DOOR_39)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_OMOYA) {
+            if_time_range (18, 0, 6, 0) {
+                return_time (18, 0, 6, 0, ANJU_SCH_RANCH)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

@@ -66,7 +66,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepSlot = Object_SpawnPersistent(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[4] = OS_K0_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
 }
 
 void Object_UpdateEntries(ObjectContext* objectCtx) {
@@ -108,7 +108,7 @@ s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId) {
         }
     }
 
-    return -1;
+    return OBJECT_SLOT_NONE;
 }
 
 s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot) {
@@ -233,9 +233,9 @@ void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd) {
 void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
-    static RomFile naviQuestHintFiles[2] = {
-        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
-        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
+    static RomFile sNaviQuestHintFiles[2] = {
+        ROM_FILE(elf_message_field),
+        ROM_FILE(elf_message_ydan),
     };
 
     if (cmd->specialFiles.subKeepId != 0) {
@@ -245,7 +245,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &sNaviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -356,19 +356,19 @@ void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
  * These later are stored in segment 0x06, and used in maps.
  */
 void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
-    static RomFile sceneTextureFiles[9] = {
-        { 0, 0 }, // Default
-        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
-        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
-        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
-        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
-        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
-        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
-        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
-        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
+    static RomFile sSceneTextureFiles[9] = {
+        ROM_FILE_UNSET, // Default
+        ROM_FILE(scene_texture_01),
+        ROM_FILE(scene_texture_02),
+        ROM_FILE(scene_texture_03),
+        ROM_FILE(scene_texture_04),
+        ROM_FILE(scene_texture_05),
+        ROM_FILE(scene_texture_06),
+        ROM_FILE(scene_texture_07),
+        ROM_FILE(scene_texture_08),
     };
-    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
-    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    uintptr_t vromStart = sSceneTextureFiles[fileIndex].vromStart;
+    size_t size = sSceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);

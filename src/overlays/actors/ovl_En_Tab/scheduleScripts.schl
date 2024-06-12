@@ -1,0 +1,27 @@
+D_80BE18D0 {
+    if_day (3) {
+        if_scene (SCENE_MILK_BAR) {
+            if_time_range (9, 50, 18, 1) {
+                return_time (9, 50, 18, 1, 1)
+            } else if_time_range (18, 0, 6, 0) {
+                return_time (18, 0, 6, 0, 2)
+            } else {
+                return_l (0)
+            }
+        } else {
+            return_none
+        }
+    } else {
+        if_scene (SCENE_MILK_BAR) {
+            if_time_range (9, 50, 21, 5) {
+                return_time (9, 50, 21, 5, 1)
+            } else if_time_range (21, 55, 5, 5) {
+                return_time (21, 55, 5, 5, 2)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    }
+}

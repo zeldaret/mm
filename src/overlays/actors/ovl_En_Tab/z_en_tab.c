@@ -20,23 +20,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play);
 void func_80BE127C(EnTab* this, PlayState* play);
 void func_80BE1348(EnTab* this, PlayState* play);
 
-static u8 D_80BE18D0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x24 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x23 - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 18, 1, 0x1D - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x17 - 0x14),
-    /* 0x14 */ SCHEDULE_CMD_RET_VAL_L(0),
-    /* 0x17 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
-    /* 0x1D */ SCHEDULE_CMD_RET_TIME(9, 50, 18, 1, 1),
-    /* 0x23 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x24 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x41 - 0x28),
-    /* 0x28 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 21, 5, 0x3B - 0x2E),
-    /* 0x2E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 55, 5, 5, 0x35 - 0x34),
-    /* 0x34 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x35 */ SCHEDULE_CMD_RET_TIME(21, 55, 5, 5, 2),
-    /* 0x3B */ SCHEDULE_CMD_RET_TIME(9, 50, 21, 5, 1),
-    /* 0x41 */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Tab/scheduleScripts.schl.inc"
 
 s32 D_80BE1914[] = {
     0x003A0200, 0x080E2AF9, 0x0C113A02, 0x100E2AFA, 0x0C150900, 0x000E2AFB,
@@ -101,8 +85,8 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 AnimationInfoS D_80BE1AD0[] = {
-    { &object_tab_Anim_000758, 1.0f, 0, -1, 0, 0 },
-    { &object_tab_Anim_0086AC, 1.0f, 0, -1, 0, 0 },
+    { &gBartenIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
@@ -115,32 +99,35 @@ Vec3s D_80BE1B10 = { 0, 0xC000, 0 };
 
 Vec3f D_80BE1B18 = { 800.0f, 0.0f, 0.0f };
 
-TexturePtr D_80BE1B24[] = {
-    object_tab_Tex_006428,
-    object_tab_Tex_006928,
-    object_tab_Tex_006D28,
-    object_tab_Tex_006928,
+static TexturePtr sEyeTextures[] = {
+    gBartenEyeOpenTex,
+    gBartenEyeHalfOpenTex,
+    gBartenEyeClosedTex,
+    gBartenEyeHalfOpenTex,
 };
 
-EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
-        if ((foundActor == NULL) || (((EnTab*)foundActor != this) && (foundActor->update != NULL))) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnTab*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     };
 
-    return (EnGm*)foundActor;
+    return actorIter;
 }
 
 void func_80BE0590(EnTab* this) {
@@ -367,7 +354,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
 
 s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
-    EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    EnGm* sp28 = (EnGm*)EnTab_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
     if (sp28) {
         Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1AF0);
@@ -510,7 +497,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     EnTab* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_tab_Skel_007F78, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBartenSkel, NULL, this->jointTable, this->morphTable, BARTEN_LIMB_MAX);
     this->unk_32C = -1;
     func_80BE05BC(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -618,7 +605,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BE1B24[this->unk_31E]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_31E]));
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnTab_OverrideLimbDraw, EnTab_PostLimbDraw,

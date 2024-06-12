@@ -105,7 +105,7 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
         }
         this->timer--;
         this->dyna.actor.world.pos.y =
-            sHeights[this->dyna.actor.params] + (Math_SinF(this->timer * (M_PI / 24.0f)) * 5.0f);
+            sHeights[this->dyna.actor.params] + (Math_SinF(this->timer * (M_PIf / 24)) * 5.0f);
     }
 }
 

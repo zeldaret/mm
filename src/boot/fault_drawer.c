@@ -7,7 +7,8 @@
 
 #include "fault.h"
 #include "fault_internal.h"
-#include "global.h"
+
+#include "macros.h"
 #include "vt.h"
 
 typedef struct {
@@ -94,11 +95,11 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
     s32 ySize = yEnd - yStart + 1;
 
     if ((xDiff > 0) && (yDiff > 0)) {
-        if (xDiff < xSize) {
+        if (xSize > xDiff) {
             xSize = xDiff;
         }
 
-        if (yDiff < ySize) {
+        if (ySize > yDiff) {
             ySize = yDiff;
         }
 
@@ -219,7 +220,7 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     for (; count > 0; count--, str++) {
         if (sFaultDrawerInstance->escCode) {
             sFaultDrawerInstance->escCode = false;
-            if (*str >= '1' && *str <= '9') {
+            if ((*str >= '1') && (*str <= '9')) {
                 FaultDrawer_SetForeColor(sFaultDrawerInstance->printColors[*str - '0']);
             }
         } else {

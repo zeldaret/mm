@@ -20,7 +20,7 @@
  */
 
 #include "z64frameadvance.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "padutils.h"
 #include "macros.h"
 

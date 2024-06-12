@@ -768,7 +768,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
             if (this->objectSlot > OBJECT_SLOT_NONE) {
-                gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+                gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
                 this->animIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 return true;
@@ -777,7 +777,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     } else if ((this->animIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->objectSlot > OBJECT_SLOT_NONE) {
-            gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+            gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
             this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -884,18 +884,19 @@ void EnSGoro_UpdateToIdleAnimation(EnSGoro* this) {
 }
 
 void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play) {
-    Vec3f world_pos = this->actor.world.pos;
+    Vec3f worldPos = this->actor.world.pos;
     f32 radius = 24.0f;
     f32 height = 62.0f;
 
-    this->collider.dim.pos.x = world_pos.x;
-    this->collider.dim.pos.y = world_pos.y;
-    this->collider.dim.pos.z = world_pos.z;
+    this->collider.dim.pos.x = worldPos.x;
+    this->collider.dim.pos.y = worldPos.y;
+    this->collider.dim.pos.z = worldPos.z;
     this->collider.dim.radius = radius;
     this->collider.dim.height = height;
 
-    //! @bug: It is not clear what this is for.
-    if ((s32)this != -0x190) {
+    //! @bug: The check is useless. If &this->collider somehow was NULL the above code would have already dereferenced
+    //! it.
+    if (&this->collider != NULL) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
@@ -1309,7 +1310,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);

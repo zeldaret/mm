@@ -2,7 +2,7 @@
 #define Z64MATH_H
 
 #include "ultra64.h"
-#include "libc/math.h"
+#include "math.h"
 
 #include "libc64/math64.h"
 
@@ -168,21 +168,21 @@ typedef union {
 #define TRUNCF_BINANG(f) (s16)(s32)(f)
 
 // Angle conversion macros
-#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
+#define DEG_TO_RAD(degrees) ((degrees) * (M_PIf / 180.0f))
 #define DEG_TO_BINANG(degrees) TRUNCF_BINANG((degrees) * (0x8000 / 180.0f))
 #define DEG_TO_BINANG_ALT(degrees) TRUNCF_BINANG(((degrees) / 180.0f) * 0x8000)
 #define DEG_TO_BINANG_ALT2(degrees) TRUNCF_BINANG(((degrees) * 0x10000) / 360.0f)
 #define DEG_TO_BINANG_ALT3(degrees) ((degrees) * (0x8000 / 180.0f))
 
-#define RAD_TO_DEG(radians) ((radians) * (180.0f / M_PI))
-#define RAD_TO_BINANG(radians) TRUNCF_BINANG((radians) * (0x8000 / M_PI))
-#define RAD_TO_BINANG_ALT(radians) TRUNCF_BINANG(((radians) / M_PI) * 0x8000)
-#define RAD_TO_BINANG_ALT2(radians) TRUNCF_BINANG(((radians) * 0x8000) / M_PI)
+#define RAD_TO_DEG(radians) ((radians) * (180.0f / M_PIf))
+#define RAD_TO_BINANG(radians) TRUNCF_BINANG((radians) * (0x8000 / M_PIf))
+#define RAD_TO_BINANG_ALT(radians) TRUNCF_BINANG(((radians) / M_PIf) * 0x8000)
+#define RAD_TO_BINANG_ALT2(radians) TRUNCF_BINANG(((radians) * 0x8000) / M_PIf)
 
 #define BINANG_TO_DEG(binang) ((f32)(binang) * (180.0f / 0x8000))
-#define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PI / 0x8000))
-#define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / 0x8000) * M_PI)
-#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PI) / 0x8000)
+#define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PIf / 0x8000))
+#define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / 0x8000) * M_PIf)
+#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PIf) / 0x8000)
 
 // Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))

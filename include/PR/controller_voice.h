@@ -4,7 +4,7 @@
 #include "ultratypes.h"
 #include "os_voice.h"
 #include "os_message.h"
-#include "libc/stddef.h"
+#include "stddef.h"
 
 typedef struct {
     /* 0x0 */ u8 dummy;

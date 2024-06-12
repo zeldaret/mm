@@ -1004,11 +1004,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10F1:
                         SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1059,7 +1059,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -1117,7 +1117,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1176,11 +1176,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
 
                     case 0x1105:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1593,7 +1593,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);

@@ -28,35 +28,7 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
-static u8 D_80B2C200[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C20C[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 3, 10, 7, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C218[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 35, 10, 39, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C224[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 53, 10, 57, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
-
-static u8 D_80B2C230[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_AVAILABLE),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(POSTBOX_SCH_CHECKED_BY_POSTMAN),
-};
+#include "src/overlays/actors/ovl_En_Pst/scheduleScripts.schl.inc"
 
 s32 D_80B2C23C[] = {
     0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,
@@ -371,7 +343,7 @@ void EnPst_HandleSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
-    static u8* sScheduleScripts[] = {
+    static ScheduleScript* sScheduleScripts[] = {
         D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230,
     };
     s16 params = this->actor.params;

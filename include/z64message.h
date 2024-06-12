@@ -2,6 +2,10 @@
 #define Z64MESSAGE_H
 
 #include "PR/ultratypes.h"
+#include "stdbool.h"
+
+#include "z64bombers_notebook.h"
+#include "z64font.h"
 #include "z64view.h"
 #include "unk.h"
 
@@ -174,36 +178,6 @@ typedef enum TextState {
     /* 18 */ TEXT_STATE_18
 } TextState;
 
-#define FONT_CHAR_TEX_WIDTH 16
-#define FONT_CHAR_TEX_HEIGHT 16
-//! TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
-
-// TODO: should Font be in its own header or is it fine to have it here?
-// Font textures are loaded into here
-typedef struct {
-    /* 0x00000 */ union {
-        u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
-        u64 force_structure_alignment_charTex;
-    };
-    /* 0x07800 */ union {
-        u8 iconBuf[FONT_CHAR_TEX_SIZE];
-        u64 force_structure_alignment_icon;
-    };
-    /* 0x07880 */ union {
-        u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
-        u64 force_structure_alignment_font;
-    };
-    /* 0x11880 */ union {
-        char schar[1280]; // msgBuf
-        u16 wchar[640];   // msgBufWide
-        u64 force_structure_alignment_msg;
-    } msgBuf;
-    /* 0x11D80 */ uintptr_t messageStart;
-    /* 0x11D84 */ uintptr_t messageEnd;
-    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
-} Font; // size = 0x11D90
-
 typedef struct MessageContext {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
@@ -328,7 +302,7 @@ void Message_HandleOcarina(struct PlayState* play);
 void Message_LoadItemIcon(struct PlayState* play, u16 itemId, s16 arg2);
 void Message_DecodeHeader(struct PlayState* play);
 void func_801514B0(struct PlayState* play, u16 arg1, u8 arg2);
-void Message_StartTextbox(struct PlayState* play, u16 textId, Actor* actor);
+void Message_StartTextbox(struct PlayState* play, u16 textId, struct Actor* actor);
 void Message_ContinueTextbox(struct PlayState* play, u16 textId);
 void Message_DisplaySceneTitleCard(struct PlayState* play, u16 textId);
 void Message_BombersNotebookQueueEvent(struct PlayState* play, u8 event);

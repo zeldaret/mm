@@ -922,9 +922,9 @@
         <DList Name="gBoulderFragmentsDL" Offset="0x1FA40" />
         <Texture Name="gBoulderFragmentsTex" OutName="boulder_fragments" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
 
-        <Animation Name="gameplay_keep_Anim_0204B4" Offset="0x204B4" />
-        <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
-        <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
+        <Animation Name="gDoorHumanOpenLeftAnim" Offset="0x204B4" />
+        <Animation Name="gDoorHumanOpenRightAnim" Offset="0x205A0" />
+        <Animation Name="gDoorFierceDeityZoraOpenLeftAnim" Offset="0x20658" />
         <DList Name="gameplay_keep_DL_020B30" Offset="0x20B30" />
         <DList Name="gDoorLeftDL" Offset="0x20BB8" />
         <DList Name="gDoorRightDL" Offset="0x20D00" />
@@ -937,13 +937,13 @@
         <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" EnumName="DOOR_LIMB_3" Offset="0x22B00" />
         <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" EnumName="DOOR_LIMB_4" Offset="0x22B0C" />
         <Skeleton Name="gDoorSkel" Type="Normal" LimbType="Standard" LimbNone="DOOR_LIMB_NONE" LimbMax="DOOR_LIMB_MAX" EnumName="DoorLimb" Offset="0x22B28" />
-        <Animation Name="gameplay_keep_Anim_022BE8" Offset="0x22BE8" />
-        <Animation Name="gameplay_keep_Anim_022CA8" Offset="0x22CA8" />
-        <Animation Name="gameplay_keep_Anim_022D90" Offset="0x22D90" />
-        <Animation Name="gameplay_keep_Anim_022E68" Offset="0x22E68" />
+        <Animation Name="gDoorFierceDeityZoraOpenRightAnim" Offset="0x22BE8" />
+        <Animation Name="gDoorGoronOpenLeftAnim" Offset="0x22CA8" />
+        <Animation Name="gDoorGoronOpenRightAnim" Offset="0x22D90" />
+        <Animation Name="gDoorDekuOpenLeftAnim" Offset="0x22E68" />
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
-        <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
-        <Collision Name="gDoorCol" Offset="0x23100" />
+        <Animation Name="gDoorDekuOpenRightAnim" Offset="0x22FF0" />
+        <Collision Name="gFramedDoorCol" Offset="0x23100" />
         <DList Name="gEffDustDL" Offset="0x23130" />
         <DList Name="gEffFlash1DL" Offset="0x23210" />
         <DList Name="gEffFlash2DL" Offset="0x23288" />
@@ -1451,7 +1451,7 @@
         <DList Name="gSoaringWarpCsFeatherDL" Offset="0x81628" />
         <Texture Name="gSoaringWarpCsFeatherTex" OutName="soaring_warp_cs_feather" Format="rgba16" Width="16" Height="32" Offset="0x816C0" />
         <Blob Name="gameplay_keep_Blob_081AC0" Size="0x1A74" Offset="0x81AC0" />
-        <Blob Name="gameplay_keep_Blob_083534" Size="0x1C" Offset="0x83534" /> <!-- Is a `SkeletonInfo_1C` struct -->
+        <Blob Name="gameplay_keep_Blob_083534" Size="0x1C" Offset="0x83534" /> <!-- Is a `KeyFrameAnimation` struct -->
         <DList Name="gameplay_keep_DL_084790" Offset="0x84790" />
         <DList Name="gameplay_keep_DL_0847E0" Offset="0x847E0" />
         <DList Name="gameplay_keep_DL_084850" Offset="0x84850" />
@@ -1483,7 +1483,7 @@
         <DList Name="gameplay_keep_DL_085418" Offset="0x85418" />
         <DList Name="gameplay_keep_DL_085490" Offset="0x85490" />
         <Blob Name="gameplay_keep_Blob_085510" Size="0x130" Offset="0x85510" />
-        <Blob Name="gameplay_keep_Blob_085640" Size="0x10" Offset="0x85640" /> <!-- Is a `Struct_801BFA14_Arg1` struct -->
+        <Blob Name="gameplay_keep_Blob_085640" Size="0x10" Offset="0x85640" /> <!-- Is a `KeyFrameSkeleton` struct -->
 
         <!-- Zora Elegy of Emptiness Shell -->
         <DList Name="gElegyShellZoraDL" Offset="0x89070" /> <!-- Original name is "pzs_zo_model" -->

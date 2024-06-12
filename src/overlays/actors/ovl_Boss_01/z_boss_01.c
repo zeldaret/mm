@@ -25,6 +25,7 @@
  * to randomly select; these new wait actions are what allow him to summon a ring of fire, drop falling blocks, etc.
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_01.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -204,7 +205,7 @@ static Vec3f sFallingBlockSfxPos = { 0.0f, 1000.0f, 0.0f };
 /**
  * Odolwa's sword trail is a circular arc, and this variable is used to determine the angular range of this arc (and
  * thus the total size of the trail). The trail consists of 10 segments in an arc, and the angle of each of those
- * segments is M_PI / sSwordTrailAngularRangeDivisor; in other words, as this variable decreases, Odolwa's sword trail
+ * segments is M_PIf / sSwordTrailAngularRangeDivisor; in other words, as this variable decreases, Odolwa's sword trail
  * covers a larger angular range, and as it increaes, the sword trail covers a smaller angular range.
  */
 static f32 sSwordTrailAngularRangeDivisor = 10.0f;
@@ -934,7 +935,7 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gOdolwaSkel, &gOdolwaReadyAnim, this->jointTable, this->morphTable,
                            ODOLWA_LIMB_MAX);
 
-        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_54)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA)) {
             Boss01_SetupWait(this, play, ODOLWA_WAIT_READY);
             this->actor.gravity = -2.5f;
             sOdolwaMusicStartTimer = KREG(15) + 20;
@@ -1138,7 +1139,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-                SET_EVENTINF(EVENTINF_54);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
             }
             break;
 
@@ -1722,7 +1723,7 @@ void Boss01_VerticalSlash(Boss01* this, PlayState* play) {
     sOdolwaSwordTrailPosY = 90.0f;
     sOdolwaSwordTrailPosZ = -70.0f;
     sOdolwaSwordTrailRotX = 0.4712388f;
-    sOdolwaSwordTrailRotY = M_PI;
+    sOdolwaSwordTrailRotY = M_PIf;
     sOdolwaSwordTrailRotZ = 1.7278761f;
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
@@ -2613,13 +2614,13 @@ void Boss01_DrawSwordTrail(Boss01* this, PlayState* play) {
     vtx = Lib_SegmentedToVirtual(&gOdolwaSwordTrailVtx);
 
     for (i = 0; i < ARRAY_COUNT(sSwordTrailOuterVertexIndices); i++) {
-        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[0] = cosf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 200.0f;
+        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[0] = cosf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 200.0f;
         vtx[sSwordTrailOuterVertexIndices[i]].v.ob[1] = 0;
-        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[2] = sinf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 200.0f;
+        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[2] = sinf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 200.0f;
 
-        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[0] = cosf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 100.0f;
+        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[0] = cosf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 100.0f;
         vtx[sSwordTrailInnerVertexIndices[i]].v.ob[1] = 0;
-        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[2] = sinf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 100.0f;
+        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[2] = sinf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 100.0f;
     }
 
     gSPSegment(
@@ -3017,6 +3018,7 @@ void Boss01_FillShadowTex(Boss01* this, u8* tex, f32 weight) {
     Vec3f startVec;
 
     for (i = 0; i < ODOLWA_BODYPART_MAX; i++) {
+        // TODO: match with a continue
         if ((weight == 0.0f) || (y = sParentShadowBodyParts[i]) > BODYPART_NONE) {
             if (weight > 0.0f) {
                 VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[y], weight);
@@ -3569,11 +3571,11 @@ void Boss01_DrawEffects(PlayState* play) {
                        Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0, 0, 32, 64, 1, 0,
                                         ((effect->timer + (i * 10)) * -20) & 0x1FF, 32, 128));
 
-            Matrix_RotateYF(i * (M_PI / 16.0f), MTXMODE_APPLY);
+            Matrix_RotateYF(i * (M_PIf / 16), MTXMODE_APPLY);
             Matrix_Translate(0.0f, 0.0f, KREG(49) + 200.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             if (Boss01_RandZeroOne() < 0.5f) {
-                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
 
             Matrix_Scale(KREG(48) * 0.0001f + 0.018f,

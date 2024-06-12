@@ -499,7 +499,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
             if (this->drawArmorFlags != 0) {
-                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
+                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PIf / 20)) * 10.0f;
             }
         } else {
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -562,7 +562,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
             } else {
                 phi_f2 = this->skelAnime.curFrame - 1.0f;
             }
-            this->actor.speed = Math_SinF((M_PI / 8) * phi_f2) * 4.5f;
+            this->actor.speed = Math_SinF((M_PIf / 8) * phi_f2) * 4.5f;
         }
         this->colliderQuad.base.atFlags |= AT_ON;
     } else {
@@ -850,8 +850,8 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
         ikEffect = &this->effects[i];
 
         if (ikEffect->enabled) {
-            Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->vel, &ikEffect->pos);
-            ikEffect->vel.y += -1.5f;
+            Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->velocity, &ikEffect->pos);
+            ikEffect->velocity.y += -1.5f;
             if (ikEffect->pos.y < this->actor.floorHeight) {
                 ikEffect->enabled = false;
                 ikEffect->pos.y = this->actor.floorHeight;
@@ -1038,9 +1038,9 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             ikEffect->enabled = true;
             sp76 =
                 sIronKnuckleArmorMarkings[armorBodyPart].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
-            ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
-            ikEffect->vel.y = 6.0f;
-            ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
+            ikEffect->velocity.x = Math_SinS(sp76) * 5.0f;
+            ikEffect->velocity.y = 6.0f;
+            ikEffect->velocity.z = Math_CosS(sp76) * 5.0f;
             ikEffect->dList = *dList;
         }
         if (limbIndex == IRON_KNUCKLE_LIMB_WAIST) {

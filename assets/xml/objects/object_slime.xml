@@ -4,7 +4,7 @@
         <DList Name="gChuchuBodyDL" Offset="0x4C0" />
         <DList Name="gChuchuEyesDL" Offset="0x650" />
         <TextureAnimation Name="gChuchuSlimeFlowTexAnim" Offset="0x828" />
-        <DList Name="gChuchuPuddleDL" Offset="0xA10" />
+        <DList Name="gChuchuPuddleDL" Offset="0xA10" /> <!-- Original name is "chuchu_dodai" -->
         <DList Name="gChuchuEmptyDL" Offset="0xB68" />
         <Texture Name="gChuchuMouthTex" OutName="chuchu_mouth" Format="rgba16" Width="16" Height="16" Offset="0xB70" />
         <Texture Name="gChuchuEyeSocketTex" OutName="chuchu_eye_socket" Format="rgba16" Width="16" Height="16" Offset="0xD70" />

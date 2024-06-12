@@ -3,32 +3,12 @@
 
 #include "z64.h"
 
-// void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
-// void EnItem00_Init(Actor* thisx, PlayState* play);
-// void EnItem00_Destroy(Actor* thisx, PlayState* play);
-// void EnItem00_WaitForHeartObject(EnItem00* this, PlayState* play);
-// void func_800A640C(EnItem00* this, PlayState* play);
-// void func_800A6650(EnItem00* this, PlayState* play);
-// void func_800A6780(EnItem00* this, PlayState* play);
-// void func_800A6A40(EnItem00* this, PlayState* play);
-// void EnItem00_Update(Actor* thisx, PlayState* play);
-// void EnItem00_Draw(Actor* thisx, PlayState* play);
-// void EnItem00_DrawRupee(EnItem00* this, PlayState* play);
-// void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
-// void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
-// void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
-// s16 func_800A7650(s16 dropId);
 Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params);
 Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params);
 void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnPos, s16 params);
 s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
-
-void FlagSet_Update(GameState* gameState);
-void FlagSet_Draw(GameState* gameState);
-void Overlay_LoadGameState(GameStateOverlay* overlayEntry);
-void Overlay_FreeGameState(GameStateOverlay* overlayEntry);
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
 void ActorShadow_DrawCircle(Actor* actor, Lights* lights, PlayState* play);
@@ -211,11 +191,6 @@ s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
 void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount, s32 effectsPerBodyPart, f32 scale, f32 scaleRange);
 
-void ActorOverlayTable_FaultClient(void* arg0, void* arg1);
-uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param);
-void ActorOverlayTable_Init(void);
-void ActorOverlayTable_Cleanup(void);
-
 void DynaPolyActor_UpdateCarriedActorPos(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
 void DynaPolyActor_UpdateCarriedActorRotY(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
 void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedActor, s32 bgId);
@@ -237,49 +212,6 @@ s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsHeavySwitchPressed(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_ValidateMove(PlayState* play, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius, s16 startHeight);
 
-Camera* Camera_Create(View* view, CollisionContext* colCtx, PlayState* play);
-void Camera_Destroy(Camera* camera);
-void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState* play);
-void func_800DDFE0(Camera* camera);
-void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor);
-s32 Camera_ChangeStatus(Camera* camera, s16 status);
-s32 Camera_UpdateWater(Camera* camera);
-void Camera_EarthquakeDay3(Camera* camera);
-s32 Camera_UpdateHotRoom(Camera* camera);
-s32 Camera_SetSwordDistortion(Camera* camera);
-s32 Camera_RequestGiantsMaskSetting(Camera* camera);
-Vec3s Camera_Update(Camera* camera);
-s32 func_800DF498(Camera* camera);
-s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange);
-s32 Camera_ChangeMode(Camera* camera, s16 mode);
-s32 Camera_CheckValidMode(Camera* camera, s16 mode);
-s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
-s32 Camera_ChangeSetting(Camera* camera, s16 setting);
-s32 Camera_ChangeActorCsCamIndex(Camera* camera, s32 bgCamIndex);
-Vec3s Camera_GetInputDir(Camera* camera);
-s16 Camera_GetInputDirPitch(Camera* camera);
-s16 Camera_GetInputDirYaw(Camera* camera);
-Vec3s Camera_GetCamDir(Camera* camera);
-s16 Camera_GetCamDirPitch(Camera* camera);
-s16 Camera_GetCamDirYaw(Camera* camera);
-s32 Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown);
-s32 Camera_SetViewParam(Camera* camera, s32 viewFlag, void* param);
-s32 Camera_UnsetViewFlag(Camera* camera, s16 viewFlag);
-s32 Camera_OverwriteStateFlags(Camera* camera, s16 stateFlags);
-s16 Camera_SetStateFlag(Camera* camera, s16 flags);
-s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
-s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamIndex, f32 arg3, s16 timer1, s16 timer2, s16 timer3);
-s32 Camera_Copy(Camera* dstCam, Camera* srcCam);
-s32 Camera_IsDbgCamEnabled(void);
-Vec3f Camera_GetQuakeOffset(Camera* camera);
-void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3);
-s32 Camera_GetNegOne(void);
-s16 func_800E0238(Camera* camera);
-void Camera_SetFocalActor(Camera* camera, Actor* actor);
-void Camera_SetTargetActor(Camera* camera, Actor* actor);
-f32 Camera_GetWaterYPos(Camera* camera);
-void func_800E0348(Camera* camera);
-
 void Actor_ContinueText(PlayState* play, Actor* actor, u16 textId);
 s32 Flags_GetEventChkInf(s32 flag);
 void Flags_SetEventChkInf(s32 flag);
@@ -293,25 +225,6 @@ s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* tors
 void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
-
-void func_800F4A10(PlayState* play);
-void KaleidoSetup_Update(PlayState* play);
-void KaleidoSetup_Init(PlayState* play);
-void KaleidoSetup_Destroy(PlayState* play);
-
-void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset);
-void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
-void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
-void Font_LoadOrderedFont(Font* font);
-
-void LifeMeter_Init(PlayState* play);
-void LifeMeter_UpdateColors(PlayState* play);
-s32 LifeMeter_SaveInterfaceHealth(PlayState* play);
-s32 LifeMeter_IncreaseInterfaceHealth(PlayState* play);
-s32 LifeMeter_DecreaseInterfaceHealth(PlayState* play);
-void LifeMeter_Draw(PlayState* play);
-void LifeMeter_UpdateSizeAndBeep(PlayState* play);
-u32 LifeMeter_IsCritical(void);
 
 // void func_80102E40(void);
 // void func_80102E90(void);
@@ -473,9 +386,7 @@ void Map_Update(PlayState* play);
 // void func_8010BEF0(void);
 // void func_8010BF24(void);
 s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4, s32* param_5);
-void Nmi_Init(void);
-void Nmi_SetPrenmiStart(void);
-// s32 Nmi_GetPrenmiHasStarted(void);
+
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
@@ -495,10 +406,6 @@ Vec3s OLib_Vec3fDiffBinAng(Vec3f* a, Vec3f* b);
 void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 void OLib_Vec3fAdd(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 
-Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone);
-f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
-void Path_CopyLastPoint(Path* path, Vec3f* dest);
-
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
 size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
@@ -517,20 +424,6 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId);
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
-
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
-
-uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(PlayState* play);
-void KaleidoScopeCall_Destroy(PlayState* play);
-void KaleidoScopeCall_Update(PlayState* play);
-void KaleidoScopeCall_Draw(PlayState* play);
 
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
@@ -595,24 +488,9 @@ void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);
-Gfx* Graph_GfxPlusOne(Gfx* gfx);
-Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
-void* Graph_DlistAlloc(Gfx** gfx, size_t size);
-
-void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
-void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
-void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
-
-void CmpDma_LoadFile(uintptr_t segmentVrom, s32 id, void* dst, size_t size);
-void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size);
-// void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value);
-// void Check_WriteI4Pixel(u16* buffer, u32 x, u32 y, u32 value);
-// void Check_DrawI4Texture(u16* buffer, u32 x, u32 y, u32 width, u32 height, u8* texture);
-// void Check_ClearRGBA16(u16* buffer);
-// void Check_DrawExpansionPakErrorMessage(void);
-// void Check_DrawRegionLockErrorMessage(void);
-void Check_ExpansionPak(void);
-void Check_RegionIsSupported(void);
+Gfx* Gfx_Open(Gfx* gfx);
+Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
+void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
@@ -709,62 +587,7 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 // void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
 
-u64* SysUcode_GetUCodeBoot(void);
-size_t SysUcode_GetUCodeBootSize(void);
-u64* SysUcode_GetUCode(void);
-u64* SysUcode_GetUCodeData(void);
-
 void func_80183070(void);
-// void func_801830A0(void);
-// void func_801830C8(void);
-// void func_801830E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_80183148(void);
-// void func_80183224(void);
-// void func_801832B0(void);
-// void func_8018332C(void);
-// void func_8018340C(void);
-void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, Vec3s* arg4, UnkKeyframeCallback* callbacks);
-void func_8018349C(UNK_PTR arg0);
-void func_801834A8(SkeletonInfo* skeletonInfo, void* arg1);
-// void func_80183510(void);
-// void func_80183580(void);
-void func_801835EC(UNK_PTR arg0, UNK_PTR arg1);
-// void func_80183658(void);
-// void func_801836CC(void);
-// void func_8018373C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-// void func_801837CC(void);
-// void func_80183808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80183880(void);
-// void func_80183A3C(void);
-// void func_80183B08(void);
-// void func_80183B68(void);
-s32 func_80183DE0(SkeletonInfo* skeletonInfo);
-// void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_8018450C(PlayState* play, SkeletonInfo* skeleton, Mtx* mtx, OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw, Actor* actor);
-// void func_801845A4(void);
-// void func_801845C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_80184638(void);
-// void func_801846AC(void);
-// void func_80184728(void);
-// void func_801847A0(void);
-// void func_80184818(void);
-// void func_80184898(void);
-// void func_80184914(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-// void func_801849A0(void);
-// void func_801849DC(void);
-// void func_80184C48(void);
-// void func_801850A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_801853C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80185460(void);
-
-s32 SysFlashrom_InitFlash(void);
-s32 SysFlashrom_ReadData(void* addr, u32 pageNum, u32 pageCount);
-void SysFlashrom_WriteDataAsync(u8* addr, u32 pageNum, u32 pageCount);
-s32 SysFlashrom_IsBusy(void);
-s32 SysFlashrom_AwaitResult(void);
-void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
-
-Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);
@@ -783,35 +606,6 @@ void AudioThread_InitMesgQueues(void);
 
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
-
-void AudioPlayback_NoteDisable(Note* note);
-void AudioPlayback_ProcessNotes(void);
-TunedSample* AudioPlayback_GetInstrumentTunedSample(Instrument* instrument, s32 semitone);
-Instrument* AudioPlayback_GetInstrumentInner(s32 fontId, s32 instId);
-Drum* AudioPlayback_GetDrum(s32 fontId, s32 drumId);
-SoundEffect* AudioPlayback_GetSoundEffect(s32 fontId, s32 sfxId);
-s32 AudioPlayback_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
-void AudioPlayback_SeqLayerNoteDecay(SequenceLayer* layer);
-void AudioPlayback_SeqLayerNoteRelease(SequenceLayer* layer);
-void AudioPlayback_InitSyntheticWave(Note* note, SequenceLayer* layer);
-void AudioPlayback_InitNoteLists(NotePool* pool);
-void AudioPlayback_InitNoteFreeList(void);
-void AudioPlayback_NotePoolClear(NotePool* pool);
-void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
-void AudioPlayback_AudioListRemove(AudioListItem* item);
-Note* AudioPlayback_AllocNote(SequenceLayer* layer);
-void AudioPlayback_NoteInitAll(void);
-
-void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
-void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
-void AudioScript_SequencePlayerDisable(SequencePlayer* seqPlayer);
-void AudioScript_AudioListPushBack(AudioListItem* list, AudioListItem* item);
-void* AudioScript_AudioListPopBack(AudioListItem* list);
-void AudioScript_ProcessSequences(s32 arg0);
-void AudioScript_SkipForwardSequence(SequencePlayer* seqPlayer);
-void AudioScript_ResetSequencePlayer(SequencePlayer* seqPlayer);
-void AudioScript_InitSequencePlayerChannels(s32 seqPlayerIndex);
-void AudioScript_InitSequencePlayers(void);
 
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);

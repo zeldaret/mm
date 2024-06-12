@@ -1,0 +1,39 @@
+D_80B2C200 {
+    if_time_range (9, 31, 9, 35) {
+        return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
+    } else {
+        return_l (POSTBOX_SCH_AVAILABLE)
+    }
+}
+
+D_80B2C20C {
+    if_time_range (10, 3, 10, 7) {
+        return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
+    } else {
+        return_l (POSTBOX_SCH_AVAILABLE)
+    }
+}
+
+D_80B2C218 {
+    if_time_range (10, 35, 10, 39) {
+        return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
+    } else {
+        return_l (POSTBOX_SCH_AVAILABLE)
+    }
+}
+
+D_80B2C224 {
+    if_time_range (10, 53, 10, 57) {
+        return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
+    } else {
+        return_l (POSTBOX_SCH_AVAILABLE)
+    }
+}
+
+D_80B2C230 {
+    if_time_range (11, 25, 11, 29) {
+        return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
+    } else {
+        return_l (POSTBOX_SCH_AVAILABLE)
+    }
+}

@@ -3,7 +3,7 @@
 
 #include "ultratypes.h"
 #include "os_pi.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 
 #define LEO_BASE_REG 0x05000000
 

@@ -3,34 +3,20 @@
  * Description:
  */
 
-#include "z64actor.h"
-
-#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
-#include "z64horse.h"
-#include "z64malloc.h"
-#include "z64quake.h"
-#include "z64rumble.h"
 
-#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
-#include "overlays/actors/ovl_En_Part/z_en_part.h"
-#include "overlays/actors/ovl_En_Box/z_en_box.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
-
-// bss
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sActorFaultClient; // 2 funcs
 
-CollisionPoly* D_801ED8B0; // 1 func
-s32 D_801ED8B4;            // 2 funcs
+struct CollisionPoly* D_801ED8B0; // 1 func
+s32 D_801ED8B4;                   // 2 funcs
 
-Actor* sTargetableNearestActor;
-Actor* sTargetablePrioritizedActor;
-Actor* D_801ED8C0;
-Actor* D_801ED8C4;
+struct Actor* sTargetableNearestActor;
+struct Actor* sTargetablePrioritizedActor;
+struct Actor* D_801ED8C0;
+struct Actor* D_801ED8C4;
 
 f32 sTargetableNearestActorDistSq;
 f32 sBgmEnemyDistSq;
@@ -41,7 +27,24 @@ s16 sTargetPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
-Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+
+#include "z64actor.h"
+
+#include "z64door.h"
+#include "z64circle_tex.h"
+#include "z64horse.h"
+#include "z64malloc.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
+
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_bdoor/object_bdoor.h"
 
 #define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS (1 << 0)
 #define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 1)
@@ -2820,7 +2823,7 @@ s32 Actor_AddToLensActors(PlayState* play, Actor* actor) {
 }
 
 void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
-    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, 4, 0, 6, 6,
+    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, G_IM_FMT_I, 0, 6, 6,
                                        ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
@@ -2871,7 +2874,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
 
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
-        if (play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) {
+        if (play->roomCtx.curRoom.lensMode == LENS_MODE_SHOW_ACTORS) {
             gDPSetCombineLERP(gfx++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
                               TEXEL0, PRIMITIVE, 0);
         } else {
@@ -2901,7 +2904,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
             gDPSetBlendColor(gfx++, 255, 255, 255, 0);
             gDPSetPrimColor(gfx++, 0, 0xFF, 0, 0, 0, 32);
 
-            if (play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) {
+            if (play->roomCtx.curRoom.lensMode == LENS_MODE_SHOW_ACTORS) {
                 gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             } else {
                 gDPSetCombineLERP(gfx++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
@@ -3024,7 +3027,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
             actor->isDrawn = false;
             if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
                 if ((actor->flags & ACTOR_FLAG_REACT_TO_LENS) &&
-                    ((play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) ||
+                    ((play->roomCtx.curRoom.lensMode == LENS_MODE_SHOW_ACTORS) ||
                      (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
                      (actor->room != play->roomCtx.curRoom.num))) {
                     if (Actor_AddToLensActors(play, actor)) {}
@@ -3296,8 +3299,8 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
-                         overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->file.vromStart, overlayEntry->file.vromEnd, overlayEntry->vramStart,
+                         overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
@@ -3319,7 +3322,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     s32 objectSlot;
     ActorOverlay* overlayEntry;
 
-    if (actorCtx->totalLoadedActors >= 0xFF) {
+    if (actorCtx->totalLoadedActors >= 255) {
         return NULL;
     }
 
@@ -3394,10 +3397,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     Actor_AddToCategory(actorCtx, actor, actorInit->type);
 
     {
-        u32 sp20 = gSegments[6];
+        uintptr_t prevSeg = gSegments[0x06];
 
         Actor_Init(actor, play);
-        gSegments[6] = sp20;
+        gSegments[0x06] = prevSeg;
     }
 
     return actor;
@@ -3427,7 +3430,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
                                                   transitionActorList->pos.x, transitionActorList->pos.y,
                                                   transitionActorList->pos.z, 0, rotY, 0,
-                                                  (i << 0xA) + (transitionActorList->params & 0x3FF),
+                                                  TRANSITION_ACTOR_PARAMS(i, transitionActorList->params),
                                                   transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }
@@ -4061,7 +4064,7 @@ void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type) {
         if ((i % 2) != 0) {
             rotZStep = 2.0f * entry->chainAngle;
         } else {
-            rotZStep = M_PI - (2.0f * entry->chainAngle);
+            rotZStep = M_PIf - (2.0f * entry->chainAngle);
         }
 
         chainRotZ += rotZStep;
@@ -4899,11 +4902,11 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
 
                     if (bodyPartIndex & 1) {
-                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                     }
 
                     if (bodyPartIndex & 2) {
-                        Matrix_RotateZF(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateZF(M_PIf, MTXMODE_APPLY);
                     }
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
@@ -4981,7 +4984,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                                 ((bodyPartIndex * 10 + gameplayFrames) * -20) & 0x1FF, 32, 128));
 
-                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = bodyPartsPos->x;
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
@@ -5023,7 +5026,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
 
                 // Apply and draw a light orb over each body part of frozen actor
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
-                    Matrix_RotateZF(Rand_CenteredFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateZF(Rand_CenteredFloat(2 * M_PIf), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = bodyPartsPos->x;
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
@@ -5062,8 +5065,8 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                 // Every body part draws two electric sparks at random orientations
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     // first electric spark
-                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PIf));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->x;
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
@@ -5074,8 +5077,8 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
                     // second electric spark
-                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PIf));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->x;
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
