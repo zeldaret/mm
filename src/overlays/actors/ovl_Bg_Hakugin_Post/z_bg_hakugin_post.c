@@ -4,7 +4,6 @@
  * Description: Snowhead Temple Central Pillar
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
 #include "z64quake.h"
 #include "z64rumble.h"
