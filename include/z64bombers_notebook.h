@@ -34,7 +34,7 @@ typedef enum BombersNotebookEvent {
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-typedef struct {
+typedef struct BombersNotebook {
     /* 0x00 */ u8 loadState;
     /* 0x01 */ UNK_TYPE1 pad01[0x3F];
     /* 0x40 */ void* scheduleDmaSegment;

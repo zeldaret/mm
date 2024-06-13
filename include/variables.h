@@ -23,8 +23,6 @@ extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
 
-extern s32 gDbgCamEnabled;
-
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
 
@@ -64,9 +62,6 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
-
-extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gPlayVisMonoColor;
 
 extern GfxMasterList* gGfxMasterDL;
 

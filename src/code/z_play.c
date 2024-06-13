@@ -1,32 +1,34 @@
-#include "z64.h"
-#include "regs.h"
-#include "z64malloc.h"
-#include "z64vis.h"
-#include "z64visfbuf.h"
+#include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
-Input D_801F6C18;
-TransitionTile sTransitionTile;
+struct Input D_801F6C18;
+struct TransitionTile sTransitionTile;
 s32 gTransitionTileState;
-VisMono sPlayVisMono;
-Color_RGBA8_u32 gPlayVisMonoColor;
-VisFbuf sPlayVisFbuf;
-VisFbuf* sPlayVisFbufInstance;
-BombersNotebook sBombersNotebook;
+struct VisMono sPlayVisMono;
+union Color_RGBA8_u32 gPlayVisMonoColor;
+struct VisFbuf sPlayVisFbuf;
+struct VisFbuf* sPlayVisFbufInstance;
+struct BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
 
-#include "macros.h"
+#include "z64play.h"
+
 #include "buffers.h"
 #include "idle.h"
+#include "regs.h"
 #include "sys_cfb.h"
+
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
+#include "z64malloc.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "z64vis.h"
+#include "z64visfbuf.h"
 
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
