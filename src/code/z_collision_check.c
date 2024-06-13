@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering2.h"
 #include "z64collision_check.h"
 
 #include "z64actor.h"
