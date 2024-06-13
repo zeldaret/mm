@@ -183,7 +183,6 @@ void func_80169EFC(GameState* thisx);
 void func_80169F78(GameState* thisx);
 void func_80169FDC(GameState* thisx);
 s32 Play_CamIsNotFixed(GameState* thisx);
-s32 FrameAdvance_IsEnabled(GameState* thisx);
 s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(PlayState* this, Vec3f* pos);
 s32 Play_IsDebugCamEnabled(void);

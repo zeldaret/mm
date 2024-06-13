@@ -1,9 +1,14 @@
 #include "prevent_bss_reordering.h"
 #include "z64collision_check.h"
 
+#include "macros.h"
+#include "sfx.h"
+
 #include "z64actor.h"
 #include "z64effect.h"
+#include "z64frameadvance.h"
 #include "z64malloc.h"
+#include "z64math.h"
 #include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
@@ -1161,7 +1166,7 @@ ColChkResetFunc sATResetFuncs[] = {
 s32 CollisionCheck_SetAT(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sATResetFuncs[collider->shape](play, collider);
@@ -1187,7 +1192,7 @@ s32 CollisionCheck_SetAT(PlayState* play, CollisionCheckContext* colCtxt, Collid
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetAT_SAC(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sATResetFuncs[collider->shape](play, collider);
@@ -1221,7 +1226,7 @@ ColChkResetFunc sACResetFuncs[] = {
 s32 CollisionCheck_SetAC(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sACResetFuncs[collider->shape](play, collider);
@@ -1247,7 +1252,7 @@ s32 CollisionCheck_SetAC(PlayState* play, CollisionCheckContext* colCtxt, Collid
  * will be inserted into the next slot
  */
 s32 CollisionCheck_SetAC_SAC(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sACResetFuncs[collider->shape](play, collider);
@@ -1281,7 +1286,7 @@ ColChkResetFunc sOCResetFuncs[] = {
 s32 CollisionCheck_SetOC(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](play, collider);
@@ -1307,7 +1312,7 @@ s32 CollisionCheck_SetOC(PlayState* play, CollisionCheckContext* colCtxt, Collid
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetOC_SAC(PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](play, collider);
@@ -1339,7 +1344,7 @@ s32 CollisionCheck_SetOC_SAC(PlayState* play, CollisionCheckContext* colCtxt, Co
 s32 CollisionCheck_SetOCLine(PlayState* play, CollisionCheckContext* colCtxt, OcLine* line) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state)) {
+    if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
 

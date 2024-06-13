@@ -4437,7 +4437,7 @@ void Interface_DrawClock(PlayState* play) {
          ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && !Play_InCsMode(play)) ||
          (msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
-        !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
+        !FrameAdvance_IsEnabled(play) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
         /**
          * Section: Changes Clock's transparancy depending if Player is moving or not and possibly other things
          */

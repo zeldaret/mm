@@ -1953,9 +1953,7 @@ s32 Play_CamIsNotFixed(GameState* thisx) {
     return this->roomCtx.curRoom.roomShape->base.type != ROOM_SHAPE_TYPE_IMAGE;
 }
 
-s32 FrameAdvance_IsEnabled(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+s32 FrameAdvance_IsEnabled(PlayState* this) {
     return this->frameAdvCtx.enabled != 0;
 }
 

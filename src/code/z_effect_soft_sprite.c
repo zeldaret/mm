@@ -159,7 +159,7 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
 void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state) != true) {
+    if (FrameAdvance_IsEnabled(play) != true) {
         if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
             sEffectSsInfo.searchIndex = index + 1;
             sEffectSsInfo.dataTable[index] = *effectsSs;

@@ -166,7 +166,7 @@ void Effect_Add(PlayState* play, s32* pIndex, EffectType type, u8 arg3, u8 arg4,
 
     *pIndex = TOTAL_EFFECT_COUNT;
 
-    if (FrameAdvance_IsEnabled(&play->state) != true) {
+    if (FrameAdvance_IsEnabled(play) != true) {
         slotFound = false;
         switch (type) {
             case EFFECT_SPARK:
