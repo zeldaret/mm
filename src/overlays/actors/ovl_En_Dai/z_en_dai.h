@@ -30,7 +30,7 @@ typedef struct EnDai {
     /* 0x1CC */ u8 cueId;
     /* 0x1CD */ u8 unk_1CD;
     /* 0x1CE */ u16 unk_1CE;
-    /* 0x1D0 */ s32 unk_1D0;
+    /* 0x1D0 */ s32 msgScriptPos;
     /* 0x1D4 */ s16 unk_1D4;
     /* 0x1D6 */ s16 unk_1D6;
     /* 0x1D8 */ s16 unk_1D8;

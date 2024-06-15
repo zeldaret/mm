@@ -7,8 +7,8 @@ import argparse, os, struct, math
 from actor_symbols import resolve_symbol
 
 cmd_info = [
-    ('SCHEDULE_CMD_CHECK_FLAG_S',         0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_CHECK_FLAG_L',         0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_S',         0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_L',         0x05, '>Hh',    (1, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',   0x06, '>BBBBb', (4, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',   0x07, '>BBBBh', (4, )),
     ('SCHEDULE_CMD_RET_VAL_L',            0x03, '>H',     (   )),

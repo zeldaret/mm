@@ -498,7 +498,7 @@ s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp1E = SCHEDULE_TIME_NOW;
+    u16 sp1E = SCRIPT_TIME_NOW;
     u8 pathIndex = ENTK_GET_PATH_INDEX(&this->actor);
     u16 phi_a1;
     s32 index = scheduleOutput->result - 1;

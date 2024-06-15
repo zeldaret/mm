@@ -4,6 +4,7 @@
  * Description: Switch-Activated Geyser
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_hunsui.h"
 #include "objects/object_hunsui/object_hunsui.h"
 
