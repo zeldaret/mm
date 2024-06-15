@@ -7,7 +7,6 @@
 struct EnNb;
 
 typedef void (*EnNbActionFunc)(struct EnNb*, PlayState*);
-typedef s32 (*EnNbUnkFunc)(Actor*, PlayState*);
 typedef void (*EnNbUnkFunc2)(struct EnNb*, PlayState*);
 
 typedef enum EnNbAnimation {
@@ -28,8 +27,8 @@ typedef struct EnNb {
     /* 0x18C */ EnNbUnkFunc2 unk_18C;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 scheduleResult;
-    /* 0x1E0 */ u8* msgEventScript;
-    /* 0x1E4 */ s32 msgEventArg4;
+    /* 0x1E0 */ MsgScript* msgScript;
+    /* 0x1E4 */ s32 msgScriptPos;
     /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ UNK_TYPE1 unk_1EC[4];
     /* 0x1F0 */ Vec3f headComputedPos;
@@ -50,7 +49,7 @@ typedef struct EnNb {
     /* 0x284 */ s16 unk_284; // storyState?
     /* 0x286 */ s16 storyTimer;
     /* 0x288 */ s16 behaviour;
-    /* 0x28C */ EnNbUnkFunc msgEventCallback;
+    /* 0x28C */ MsgScriptCallback msgScriptCallback;
     /* 0x290 */ EnNbAnimation animIndex;
     /* 0x294 */ UNK_TYPE1 unk_294[4];
     /* 0x294 */ TextState prevTalkState;

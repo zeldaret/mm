@@ -22,32 +22,194 @@ void func_80BE1348(EnTab* this, PlayState* play);
 
 #include "src/overlays/actors/ovl_En_Tab/scheduleScripts.schl.inc"
 
-s32 D_80BE1914[] = {
-    0x003A0200, 0x080E2AF9, 0x0C113A02, 0x100E2AFA, 0x0C150900, 0x000E2AFB,
-    0x0C003401, 0x00090F2A, 0xFD0C0F2A, 0xFE0C100F, 0x2AFC0C10,
+MsgScript D_80BE1914[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_58_02, 0x000D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2AF9),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_58_02),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2AFA),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0015 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2AFB),
+    /* 0x0018 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0019 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_ESCORTED_CREMIA, 0x0027 - 0x001E),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFD),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFE),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0026 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0027 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFC),
+    /* 0x002A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BE1940[] = {
-    0x003F0400, 0x080E2B3D, 0x0C113F04, 0x100E2B3E, 0x0C0F2AFA, 0x0C150900,
-    0x000E2AFB, 0x0C003401, 0x00090F2A, 0xFD0C0F2A, 0xFE0C100F, 0x2AFC0C10,
+MsgScript D_80BE1940[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_63_04, 0x000D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B3D),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_63_04),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B3E),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFA),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0019 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2AFB),
+    /* 0x001C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001D 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_ESCORTED_CREMIA, 0x002B - 0x0022),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFD),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0026 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFE),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x002B 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2AFC),
+    /* 0x002E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BE1970[] = { 0x003A0100, 0x080E2AFF, 0x0C113A01, 0x100E2B00, 0x0C100000 };
+MsgScript D_80BE1970[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_58_01, 0x000D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2AFF),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_58_01),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
 
-s32 D_80BE1984[] = { 0x00500100, 0x080E2B3F, 0x0C115001, 0x100E2B40, 0x0C100000 };
-
-s32 D_80BE1998[] = { 0x0E2B090C, 0x10000000 };
-
-s32 D_80BE19A0[] = {
-    0x0E2B0A0C, 0x05004E00, 0x00004E30, 0x2800050E, 0x2B0E0C10, 0x0E2B0B0C, 0x05000000, 0x08001008, 0x00140026,
-    0x19000E08, 0x00C8000F, 0x19000631, 0x0E2B0D0C, 0x10320E2B, 0x0C0C1030, 0x1214FF38, 0x06009100, 0x00130091,
-    0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B0F0C10, 0x0E2B110C, 0x10000000,
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B00),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BE1A0C[] = {
-    0x0E2B0A0C, 0x05004E00, 0x00004E30, 0x2800050E, 0x2B0E0C10, 0x0E2B0B0C, 0x05000000, 0x08001008, 0x00140026,
-    0x19000E08, 0x00C8000F, 0x19000631, 0x0E2B0D0C, 0x10320E2B, 0x0C0C1030, 0x1214FF38, 0x06009100, 0x00130091,
-    0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B100C10, 0x0E2B110C, 0x10000000,
+MsgScript D_80BE1984[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_80_01, 0x000D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B3F),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_80_01),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B40),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript D_80BE1998[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B09),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript D_80BE19A0[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0A),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0059 - 0x000B, 0x0, 0x0059 - 0x000B),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK_CONTINUE(0x0014 - 0x000F),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0E),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0014 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0B),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x0027 - 0x001F, 0x002F - 0x001F),
+    /* 0x001F 0x05 */ MSCRIPT_CMD_CHECK_RUPEES(20, 0x004A - 0x0024),
+    /* 0x0024 0x03 */ MSCRIPT_CMD_JUMP(0x0035 - 0x0027),
+    /* 0x0027 0x05 */ MSCRIPT_CMD_CHECK_RUPEES(200, 0x003B - 0x002C),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_JUMP(0x0035 - 0x002F),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0D),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0035 0x01 */ MSCRIPT_CMD_PLAY_ERROR(),
+    /* 0x0036 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0C),
+    /* 0x0039 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x003B 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_CHANGE_RUPEES(-200),
+    /* 0x0040 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_CHATEAU, 0x0),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0091),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0049 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x004A 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x004B 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_CHANGE_RUPEES(-20),
+    /* 0x004F 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_MILK, 0x0),
+    /* 0x0054 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0092),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0058 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0059 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x005A 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_ESCORTED_CREMIA, 0x0064 - 0x005F),
+    /* 0x005F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0F),
+    /* 0x0062 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0063 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0064 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B11),
+    /* 0x0067 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0068 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript D_80BE1A0C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0A),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0059 - 0x000B, 0x0, 0x0059 - 0x000B),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK_CONTINUE(0x0014 - 0x000F),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0E),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0014 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0B),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x0027 - 0x001F, 0x002F - 0x001F),
+    /* 0x001F 0x05 */ MSCRIPT_CMD_CHECK_RUPEES(20, 0x004A - 0x0024),
+    /* 0x0024 0x03 */ MSCRIPT_CMD_JUMP(0x0035 - 0x0027),
+    /* 0x0027 0x05 */ MSCRIPT_CMD_CHECK_RUPEES(200, 0x003B - 0x002C),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_JUMP(0x0035 - 0x002F),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0D),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0035 0x01 */ MSCRIPT_CMD_PLAY_ERROR(),
+    /* 0x0036 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B0C),
+    /* 0x0039 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x003B 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_CHANGE_RUPEES(-200),
+    /* 0x0040 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_CHATEAU, 0x0),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0091),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0049 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x004A 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x004B 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_CHANGE_RUPEES(-20),
+    /* 0x004F 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_MILK, 0x0),
+    /* 0x0054 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0092),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0058 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0059 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x005A 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_ESCORTED_CREMIA, 0x0064 - 0x005F),
+    /* 0x005F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B10),
+    /* 0x0062 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0063 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0064 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B11),
+    /* 0x0067 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0068 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 ActorInit En_Tab_InitVars = {
@@ -176,7 +338,7 @@ s32 func_80BE06DC(EnTab* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;
-        this->unk_328 = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = &GET_PLAYER(play)->actor;
         this->unk_2FC |= 8;
         this->actionFunc = func_80BE1348;
@@ -299,12 +461,12 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
     return ret;
 }
 
-s32 func_80BE0D38(EnTab* this, PlayState* play) {
+s32 func_80BE0D38(Actor* thisx, PlayState* play) {
     return Inventory_HasEmptyBottle();
 }
 
-s32 func_80BE0D60(EnTab* this, PlayState* play) {
-    s32 pad;
+s32 func_80BE0D60(Actor* thisx, PlayState* play) {
+    EnTab* this = THIS;
     s32 ret = false;
 
     this->unk_320++;
@@ -318,7 +480,7 @@ s32 func_80BE0D60(EnTab* this, PlayState* play) {
     return ret;
 }
 
-s32* func_80BE0E04(EnTab* this, PlayState* play) {
+MsgScript* EnTab_GetMsgScript(EnTab* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
@@ -327,7 +489,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
 
     switch (this->unk_1D8) {
         case 2:
-            this->unk_328 = func_80BE0D38;
+            this->msgScriptCallback = func_80BE0D38;
             if (Player_GetMask(play) != PLAYER_MASK_ROMANI) {
                 return D_80BE1998;
             }
@@ -338,7 +500,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
             return D_80BE19A0;
 
         case 1:
-            this->unk_328 = func_80BE0D60;
+            this->msgScriptCallback = func_80BE0D60;
             if (Player_GetMask(play) == PLAYER_MASK_ROMANI) {
                 return D_80BE1940;
             }
@@ -479,12 +641,13 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (func_8010BF58(&this->actor, play, func_80BE0E04(this, play), this->unk_328, &this->unk_1DC)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnTab_GetMsgScript(this, play), this->msgScriptCallback,
+                           &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;
-        this->unk_1DC = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80BE127C;
     } else if (this->unk_1E0 != 0) {
         Math_Vec3f_Copy(&sp40, &this->unk_1E0->world.pos);
@@ -505,7 +668,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8 = 0;
-    this->unk_328 = NULL;
+    this->msgScriptCallback = NULL;
     this->unk_2FC = 0;
     this->unk_2FC |= 0x40;
     this->actor.gravity = -1.0f;

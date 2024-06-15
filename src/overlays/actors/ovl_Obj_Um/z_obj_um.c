@@ -298,14 +298,12 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
     s32 phi_s2 = 0;
     f32 phi_f20 = 0.0f;
     s32 i;
-    s32 mask;
 
     for (i = 0; i < ARRAY_COUNT(D_80B7C164); i++) {
         if (bandit1->unk_550 == D_80B7C164[i].unk_00) {
             if (bandit2->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if ((D_80B7C164[i].unk_04 != 3) ||
-                        ((mask = Player_GetMask(play)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
+                    if ((D_80B7C164[i].unk_04 != 3) || (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
                         phi_f20 = D_80B7C164[i].unk_0C;

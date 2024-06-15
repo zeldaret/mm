@@ -16,7 +16,7 @@ typedef struct EnAh {
     /* 0x18C */ EnAhUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 unk_1DC;
-    /* 0x1E0 */ s32 unk_1E0;
+    /* 0x1E0 */ s32 msgScriptPos;
     /* 0x1E4 */ Actor* unk_1E4;
     /* 0x1E8 */ Vec3f unk_1E8[2];
     /* 0x200 */ Vec3s unk_200[2];

@@ -697,9 +697,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10B5C(EnGb2* this, PlayState* play) {
-    s32 mask = Player_GetMask(play);
-
-    if (this->unk_28C != mask) {
+    if (Player_GetMask(play) != this->unk_28C) {
         this->unk_28C = Player_GetMask(play);
         this->unk_26C &= ~0x80;
         this->unk_26C &= ~0x20;
