@@ -5,7 +5,6 @@
 
 #include "stdarg.h"
 #include "stdint.h"
-#include "PR/controller.h"
 
 #include "padmgr.h"
 #include "stack.h"

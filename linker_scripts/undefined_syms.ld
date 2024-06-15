@@ -129,8 +129,7 @@ gFramebufferHiRes0 = gHiBuffer;
 
 // Ucode symbols
 
-rspbootTextSize = 0x160;
-rspbootTextEnd = rspbootTextStart + rspbootTextSize;
+rspbootTextEnd = rspbootTextStart + 0x160;
 aspMainTextEnd = aspMainTextStart + 0x1000;
 aspMainDataEnd = aspMainDataStart + 0x2E0;
 
@@ -156,7 +155,6 @@ D_04023428 = 0x04023428;
 D_04051180 = 0x04051180;
 D_04051238 = 0x04051238;
 D_0406AB30 = 0x0406AB30;
-D_0407AB70 = 0x0407AB70;
 D_0407D590 = 0x0407D590;
 
 // segment 0x05

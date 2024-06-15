@@ -43,13 +43,13 @@ typedef struct EnAn {
     /* 0x1F8 */ s32 timePathWaypoint;
     /* 0x1FC */ s32 timePathElapsedTime;
     /* 0x200 */ u8 scheduleResult;
-    /* 0x204 */ s32* msgEventScript;
+    /* 0x204 */ MsgScript* msgScript;
     /* 0x208 */ s8 an2ObjectSlot;
     /* 0x209 */ s8 an3ObjectSlot;
     /* 0x20A */ s8 maskKerfayObjectSlot;
     /* 0x20B */ s8 an4ObjectSlot;
     /* 0x20C */ s8 msmoObjectSlot;
-    /* 0x210 */ s32 msgScriptResumePos;
+    /* 0x210 */ s32 msgScriptPos;
     /* 0x214 */ s8 roomNum;
     /* 0x215 */ s8 doorOpenTimer;
     /* 0x218 */ Actor* lookAtActor; // interactActor
@@ -87,7 +87,7 @@ typedef struct EnAn {
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 msgEventState;
     /* 0x396 */ s16 dialogueFuncState;
-    /* 0x398 */ MsgEventFunc msgEventFunc;
+    /* 0x398 */ MsgEventFunc msgScriptCallback;
     /* 0x39C */ s32 animIndex; // EnAnAnimation enum
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
     /* 0x3A8 */ u32 trayTexScrollTimer1; // TwoTexScroll

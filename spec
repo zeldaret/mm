@@ -500,7 +500,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"
-    include "$(BUILD_DIR)/data/code/z_msgevent.data.o"
     include "$(BUILD_DIR)/src/code/z_nmi_buff.o"
     include "$(BUILD_DIR)/src/code/z_nulltask.o"
     include "$(BUILD_DIR)/src/code/z_olib.o"

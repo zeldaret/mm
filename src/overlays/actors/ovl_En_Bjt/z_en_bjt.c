@@ -31,13 +31,58 @@ typedef enum {
 
 #include "src/overlays/actors/ovl_En_Bjt/scheduleScripts.schl.inc"
 
-static u8 sMsgEventScript[] = {
-    0x0E, 0x29, 0x48, 0x0C, 0x0E, 0x00, 0xFF, 0x2B, 0x00, 0x00, 0x00, 0x52, 0x00, 0x5F, 0x2C, 0x29, 0x4A, 0x0C, 0x2F,
-    0x00, 0x00, 0x0C, 0x15, 0x09, 0x00, 0x00, 0x0E, 0x29, 0x4B, 0x0C, 0x15, 0x09, 0x00, 0x00, 0x0E, 0x29, 0x4C, 0x0C,
-    0x12, 0x00, 0x49, 0x08, 0x00, 0x1D, 0x09, 0x00, 0x00, 0x06, 0x00, 0x0C, 0x00, 0x00, 0x13, 0x00, 0x0C, 0x2F, 0x00,
-    0x00, 0x2E, 0x2D, 0x00, 0x28, 0x2D, 0x00, 0x0D, 0x0C, 0x11, 0x49, 0x08, 0x11, 0x5A, 0x80, 0x10, 0x09, 0x00, 0x00,
-    0x06, 0x00, 0x02, 0x00, 0x00, 0x13, 0x00, 0x02, 0x2F, 0x00, 0x00, 0x2E, 0x2D, 0x00, 0x0D, 0x0C, 0x11, 0x5A, 0x80,
-    0x10, 0x2C, 0x29, 0x49, 0x0C, 0x2F, 0x00, 0x00, 0x0C, 0x2D, 0x00, 0x0D, 0x12, 0x10, 0x2D, 0x00, 0x0D, 0x12, 0x10,
+static MsgScript sMsgScript[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2948),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x00FF),
+    /* 0x0007 0x07 */ MSCRIPT_CMD_CHECK_CALLBACK_MULTI(0x0, 0x0060 - 0x000E, 0x006D - 0x000E),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x294A),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x294B),
+    /* 0x001D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x001F 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x294C),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0026 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0027 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_73_08, 0x0049 - 0x002C),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x002F 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_HEART_PIECE, 0x0),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x000C),
+    /* 0x0037 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT_DONE(),
+    /* 0x003B 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_RECEIVED_TOILET_HAND_HP),
+    /* 0x003E 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_TOLIET_HAND),
+    /* 0x0041 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0042 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_73_08),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_90_80),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0049 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x004C 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_RUPEE_BLUE, 0x0),
+    /* 0x0051 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0002),
+    /* 0x0054 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_AWAIT_TEXT_DONE(),
+    /* 0x0058 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_TOLIET_HAND),
+    /* 0x005B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005C 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_90_80),
+    /* 0x005F 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0060 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x2949),
+    /* 0x0063 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0064 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0067 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0068 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_TOLIET_HAND),
+    /* 0x006B 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x006C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x006D 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_TOLIET_HAND),
+    /* 0x0070 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0071 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 ActorInit En_Bjt_InitVars = {
@@ -318,7 +363,7 @@ s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= TOILET_HAND_STATE_TALKING;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgEventCallback = EnBjt_ChooseBehaviour;
+        this->msgScriptCallback = EnBjt_ChooseBehaviour;
         this->behaviour = 0;
         this->actionFunc = EnBjt_Talk;
         ret = true;
@@ -358,11 +403,11 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
-        this->msgEventArg4 = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnBjt_FollowSchedule;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);
@@ -405,7 +450,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         Actor_SetScale(&this->actor, 0.0f);
         this->stateFlags = 0;
-        this->msgEventCallback = NULL;
+        this->msgScriptCallback = NULL;
         this->scheduleResult = TOILET_HAND_SCH_NONE;
     }
 }

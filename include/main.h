@@ -2,6 +2,9 @@
 #define MAIN_H
 
 #include "ultra64.h"
+
+#include "stdint.h"
+
 #include "scheduler.h"
 #include "padmgr.h"
 

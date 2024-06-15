@@ -31,11 +31,15 @@
  * done while waiting for this operation to complete.
  */
 
-#include "global.h"
-#include "PR/controller.h"
-#include "PR/os_motor.h"
+#include "padmgr.h"
+
 #include "libc64/sprintf.h"
+#include "PR/os_motor.h"
+
 #include "fault.h"
+#include "macros.h"
+#include "main.h"
+#include "z64math.h"
 #include "z64voice.h"
 
 extern FaultMgr gFaultMgr;

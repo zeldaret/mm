@@ -2,9 +2,11 @@
 #define Z64DMA_H
 
 #include "ultra64.h"
-#include "unk.h"
+
+#include "stdint.h"
 
 #include "romfile.h"
+#include "unk.h"
 
 typedef struct {
     /* 0x00 */ uintptr_t vromAddr; // VROM address (source)
