@@ -43,7 +43,6 @@
  *
  */
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "string.h"
 #include "z64malloc.h"

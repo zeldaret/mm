@@ -1,9 +1,9 @@
 #include "z64bgcheck.h"
-#include "global.h"
 
 #include "libc64/fixed_point.h"
 #include "libc64/sprintf.h"
 
+#include "global.h"
 #include "fault.h"
 #include "vt.h"
 #include "z64actor.h"

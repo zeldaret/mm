@@ -1,5 +1,7 @@
 #include "padutils.h"
 
+#include "PR/os_libc.h"
+
 void PadUtils_Init(Input* input) {
     bzero(input, sizeof(Input));
 }
