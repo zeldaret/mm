@@ -573,8 +573,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_initial_check.o"
     include "$(BUILD_DIR)/src/code/sys_math.o"
     include "$(BUILD_DIR)/src/code/sys_math3d.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.data.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.bss.o"
     include "$(BUILD_DIR)/src/code/sys_math_atan.o"
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"

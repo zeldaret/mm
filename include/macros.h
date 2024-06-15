@@ -64,10 +64,6 @@
     (flag & 0x1) ? 0 : \
     0)
 
-#define SQ(x) ((x) * (x))
-#define CB(x) ((x) * (x) * (x))
-#define ABS(x) ((x) >= 0 ? (x) : -(x))
-#define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
 
 //! checks min first

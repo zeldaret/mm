@@ -896,7 +896,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
-    temp = Math3D_Parallel(&sp50, &sp44);
+    temp = Math3D_Cos(&sp50, &sp44);
     if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
