@@ -211,11 +211,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, entrance,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, entrance,
                                     play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
                                     DEG_TO_BINANG_ALT((playerActorEntry->rot.y >> 7) & 0x1FF));
 
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
                 gSaveContext.respawnFlag = -5;
                 Play_DisableMotionBlur();
             }

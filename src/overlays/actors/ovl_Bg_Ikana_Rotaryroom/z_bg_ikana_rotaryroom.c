@@ -649,7 +649,7 @@ void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
     if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         if (player->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) {
             Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
-            func_80169EFC(&play->state);
+            func_80169EFC(play);
             Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
             play->haltAllActors = true;
             Audio_PlaySfx(NA_SE_OC_ABYSS);

@@ -2600,7 +2600,7 @@ void Environment_FadeInGameOverLights(PlayState* play) {
         sGameOverLightsIntensity += 2;
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             if (play->envCtx.adjLightSettings.ambientColor[i] > -255) {
                 play->envCtx.adjLightSettings.ambientColor[i] -= 12;
@@ -2647,7 +2647,7 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
                                   sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.ambientColor[i], 0, 5, 12, 1);
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.light1Color[i], 0, 5, 12, 1);
@@ -2944,7 +2944,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
         return 0;
     }
 
-    if (!Play_CamIsNotFixed(&play->state)) {
+    if (!Play_CamIsNotFixed(play)) {
         return 0;
     }
     if (play->unk_18880) {

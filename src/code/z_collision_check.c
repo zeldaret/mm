@@ -1406,8 +1406,8 @@ void CollisionCheck_BlueBlood(struct PlayState* play, Collider* collider, Vec3f*
     s32 effectIndex;
 
     D_801EEC00.position.x = v->x;
-    D_801EEC00.position.x = v->y;
-    D_801EEC00.position.x = v->z;
+    D_801EEC00.position.y = v->y;
+    D_801EEC00.position.z = v->z;
     D_801EEC00.uDiv = 5;
     D_801EEC00.vDiv = 5;
     D_801EEC00.colorStart[0].r = 10;
@@ -1464,8 +1464,8 @@ void CollisionCheck_GreenBlood(struct PlayState* play, Collider* collider, Vec3f
     s32 effectIndex;
 
     D_801EF0C8.position.x = v->x;
-    D_801EF0C8.position.x = v->y;
-    D_801EF0C8.position.x = v->z;
+    D_801EF0C8.position.y = v->y;
+    D_801EF0C8.position.z = v->z;
     D_801EF0C8.uDiv = 5;
     D_801EF0C8.vDiv = 5;
     D_801EF0C8.colorStart[0].r = 10;
@@ -3737,8 +3737,8 @@ void CollisionCheck_SpawnRedBlood(struct PlayState* play, Vec3f* v) {
     s32 effectIndex;
 
     D_801EE200.position.x = v->x;
-    D_801EE200.position.x = v->y;
-    D_801EE200.position.x = v->z;
+    D_801EE200.position.y = v->y;
+    D_801EE200.position.z = v->z;
     D_801EE200.uDiv = 5;
     D_801EE200.vDiv = 5;
     D_801EE200.colorStart[0].r = 128;

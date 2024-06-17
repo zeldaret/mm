@@ -1865,8 +1865,7 @@ s16 Play_GetOriginalSceneId(s16 sceneId) {
  * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags, usually using the original scene
  * number. Exception for Inverted Stone Tower Temple, which uses its own.
  */
-void Play_SaveCycleSceneFlags(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
+void Play_SaveCycleSceneFlags(PlayState* this) {
     CycleSceneFlags* cycleSceneFlags;
 
     cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(this->sceneId)];
@@ -1882,9 +1881,8 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     cycleSceneFlags->clearedRoom = this->actorCtx.sceneFlags.clearedRoom;
 }
 
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
+void Play_SetRespawnData(PlayState* this, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
                          s16 yaw) {
-    PlayState* this = (PlayState*)thisx;
 
     gSaveContext.respawn[respawnMode].entrance = Entrance_Create(entrance >> 9, 0, entrance & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
@@ -1896,12 +1894,11 @@ void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 ro
     gSaveContext.respawn[respawnMode].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
 }
 
-void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams) {
-    PlayState* this = (PlayState*)thisx;
+void Play_SetupRespawnPoint(PlayState* this, s32 respawnMode, s32 playerParams) {
     Player* player = GET_PLAYER(this);
 
     if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, ((void)0, gSaveContext.save.entrance), this->roomCtx.curRoom.num,
+        Play_SetRespawnData(this, respawnMode, ((void)0, gSaveContext.save.entrance), this->roomCtx.curRoom.num,
                             playerParams, &player->actor.world.pos, player->actor.shape.rot.y);
     }
 }
@@ -1916,9 +1913,7 @@ void func_80169ECC(PlayState* this) {
 
 // Gameplay_TriggerVoidOut ?
 // Used by Player, Ikana_Rotaryroom, Bji01, Kakasi, LiftNuts, Test4, Warptag, WarpUzu, Roomtimer
-void func_80169EFC(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+void func_80169EFC(PlayState* this) {
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.sceneFlags.collectible[1];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
@@ -1931,9 +1926,7 @@ void func_80169EFC(GameState* thisx) {
 
 // Gameplay_LoadToLastEntrance ?
 // Used by game_over and Test7
-void func_80169F78(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+void func_80169F78(PlayState* this) {
     this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
@@ -1943,13 +1936,11 @@ void func_80169F78(GameState* thisx) {
 
 // Gameplay_TriggerRespawn ?
 // Used for void by Wallmaster, Deku Shrine doors. Also used by Player, Kaleido, DoorWarp1
-void func_80169FDC(GameState* thisx) {
-    func_80169F78(thisx);
+void func_80169FDC(PlayState* this) {
+    func_80169F78(this);
 }
 
-s32 Play_CamIsNotFixed(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+s32 Play_CamIsNotFixed(PlayState* this) {
     return this->roomCtx.curRoom.roomShape->base.type != ROOM_SHAPE_TYPE_IMAGE;
 }
 
@@ -1966,8 +1957,7 @@ s32 FrameAdvance_IsEnabled(PlayState* this) {
  * @param[out] yaw Facing angle of the actor, or reverse if in the back room.
  * @return true if \p actor is a door and the sides are in different rooms, false otherwise
  */
-s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
-    PlayState* this = (PlayState*)thisx;
+s32 func_8016A02C(PlayState* this, Actor* actor, s16* yaw) {
     TransitionActorEntry* transitionActor;
     s8 frontRoom;
 
@@ -2041,8 +2031,7 @@ s16 sPlayerCsIdToCsCamId[] = {
  * Otherwise, if there is an CutsceneEntry where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
  * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
-void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
-    PlayState* this = (PlayState*)thisx;
+void Play_AssignPlayerCsIdsFromScene(PlayState* this, s32 spawnCsId) {
     s32 i;
     s16* curPlayerCsId = this->playerCsIds;
     s16* csCamId = sPlayerCsIdToCsCamId;
@@ -2068,7 +2057,7 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
 }
 
 // Set values to fill screen
-void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
+void Play_FillScreen(PlayState* this, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
     R_PLAY_FILL_SCREEN_ON = fillScreenOn;
     R_PLAY_FILL_SCREEN_R = red;
     R_PLAY_FILL_SCREEN_G = green;
