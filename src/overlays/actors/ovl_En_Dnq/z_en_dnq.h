@@ -15,13 +15,13 @@ typedef struct EnDnq {
     /* 0x18C */ EnDnqActionFunc actionFunc;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 cueId;
-    /* 0x1E0 */ s32 unk_1E0;
+    /* 0x1E0 */ s32 msgScriptPos;
     /* 0x1E4 */ Vec3s jointTable[DEKU_KING_LIMB_MAX];
     /* 0x2AA */ Vec3s morphTable[DEKU_KING_LIMB_MAX];
     /* 0x370 */ Vec3f unk_370;
     /* 0x37C */ u16 unk_37C;
     /* 0x37E */ s16 unk_37E;
-    /* 0x380 */ s32* unk_380;
+    /* 0x380 */ MsgScript* msgScript;
     /* 0x384 */ s16 unk_384;
     /* 0x386 */ s16 unk_386;
     /* 0x388 */ s16 unk_388;

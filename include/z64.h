@@ -55,6 +55,7 @@
 #include "z64map.h"
 #include "z64math.h"
 #include "z64message.h"
+#include "z64msgevent.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64pause_menu.h"

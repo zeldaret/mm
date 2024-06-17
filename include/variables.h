@@ -23,9 +23,6 @@ extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
 
-extern Vec3f gZeroVec3f;
-extern Vec3s gZeroVec3s;
-
 extern s16 gLowPassFilterData[];
 extern s16 gHighPassFilterData[];
 extern s16 gBandStopFilterData[];

@@ -447,7 +447,7 @@ void EnBigslime_UpdateSurfaceNorm(EnBigslime* this) {
         vecTriEdge2.y = dynamicVtx12->n.ob[1] - dynamicVtx0->n.ob[1];
         vecTriEdge2.z = dynamicVtx12->n.ob[2] - dynamicVtx0->n.ob[2];
 
-        Math3D_CrossProduct(&vecTriEdge1, &vecTriEdge2, &vecTriNorm);
+        Math3D_Vec3f_Cross(&vecTriEdge1, &vecTriEdge2, &vecTriNorm);
         EnBigslime_Vec3fNormalize(&vecTriNorm);
 
         Math_Vec3f_Sum(&vtxNorm[sBigslimeTri[i].v[0]], &vecTriNorm, &vtxNorm[sBigslimeTri[i].v[0]]);

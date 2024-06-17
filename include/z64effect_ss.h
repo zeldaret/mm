@@ -3,11 +3,12 @@
 
 #include "ultra64.h"
 
-#include "color.h"
-#include "z64math.h"
+#include "stdint.h"
 
+#include "color.h"
 #include "z64dma.h"
 #include "z64eff_ss_dead.h"
+#include "z64math.h"
 
 struct Actor;
 struct PlayState;

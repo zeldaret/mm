@@ -258,7 +258,7 @@ s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
     Vec3f perpVec;
     Vec3f prevValue;
     Vec3f perpNormal;
-    f32 cosAngle = Math3D_Parallel(value, target);
+    f32 cosAngle = Math3D_Cos(value, target);
 
     if (Math_CosF(angleStep) <= cosAngle) {
         Math_Vec3f_Copy(value, target);
@@ -267,7 +267,7 @@ s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
 
     Matrix_Push();
     Math_Vec3f_Copy(&prevValue, value);
-    Math3D_CrossProduct(value, target, &perpVec);
+    Math3D_Vec3f_Cross(value, target, &perpVec);
     if (ObjMine_GetUnitVec3f(&perpVec, &perpNormal)) {
         Matrix_RotateAxisS(RAD_TO_BINANG(angleStep), &perpNormal, MTXMODE_NEW);
         Matrix_MultVec3f(&prevValue, value);
@@ -337,10 +337,10 @@ void ObjMine_Air_SetBasis(ObjMine* this) {
 
     ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.y);
 
-    Math3D_CrossProduct(&sStandardBasis.x, &airChain->basis.y, &tempVec);
+    Math3D_Vec3f_Cross(&sStandardBasis.x, &airChain->basis.y, &tempVec);
     ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.z);
 
-    Math3D_CrossProduct(&airChain->basis.y, &airChain->basis.z, &tempVec);
+    Math3D_Vec3f_Cross(&airChain->basis.y, &airChain->basis.z, &tempVec);
     ObjMine_GetUnitVec3f(&tempVec, &airChain->basis.x);
 }
 
@@ -441,8 +441,8 @@ void ObjMine_Water_WallCheck(ObjMine* this, PlayState* play) {
     waterChain->touchWall = false;
     if (waterChain->wallCheckDistSq > -1e-6f) {
         //  Checks for walls if mine is sufficiently far from home. If found, sets ejection force towards home.
-        if (waterChain->wallCheckDistSq <= Math3D_XZDistanceSquared(this->actor.home.pos.x, this->actor.home.pos.z,
-                                                                    this->actor.world.pos.x, this->actor.world.pos.z)) {
+        if (waterChain->wallCheckDistSq <= Math3D_Dist2DSq(this->actor.home.pos.x, this->actor.home.pos.z,
+                                                           this->actor.world.pos.x, this->actor.world.pos.z)) {
             Vec3f centerPos;
             Vec3f offsetPos;
             Vec3f result; // not used
@@ -628,11 +628,11 @@ void ObjMine_Water_UpdateLinks(ObjMine* this) {
 
             tempBasisX = (prevBasisX == NULL) ? &sStandardBasis.x : prevBasisX;
 
-            Math3D_CrossProduct(tempBasisX, &newBasis.y, &tempVec);
+            Math3D_Vec3f_Cross(tempBasisX, &newBasis.y, &tempVec);
 
             // Skips change of basis if any of the basis vectors would be zero.
             if (ObjMine_GetUnitVec3f(&tempVec, &newBasis.z)) {
-                Math3D_CrossProduct(&newBasis.y, &newBasis.z, &tempVec);
+                Math3D_Vec3f_Cross(&newBasis.y, &newBasis.z, &tempVec);
                 if (ObjMine_GetUnitVec3f(&tempVec, &newBasis.x)) {
                     changeBasis = true;
                 }
@@ -807,7 +807,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         MtxF rotMtxF;
 
         // Makes mines appear to roll while traversing the path
-        Math3D_CrossProduct(&sStandardBasis.y, &thisx->velocity, &yhatCrossV);
+        Math3D_Vec3f_Cross(&sStandardBasis.y, &thisx->velocity, &yhatCrossV);
         if (ObjMine_GetUnitVec3f(&yhatCrossV, &rotAxis)) {
             Matrix_RotateAxisF(thisx->speed / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
             Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
@@ -924,8 +924,8 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
     // Checks for wall collisions if sufficiently far from home. If collision detected, bounce off the wall at half
     // speed. If speed is close to zero when hitting wall, weakly eject it instead.
     if (airChain->wallCheckDistSq > -1e-6f) {
-        if (airChain->wallCheckDistSq <= Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z,
-                                                                  this->actor.home.pos.x, this->actor.home.pos.z)) {
+        if (airChain->wallCheckDistSq <= Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z,
+                                                         this->actor.home.pos.x, this->actor.home.pos.z)) {
 
             Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, AIR_RADIUS, 0.0f, UPDBGCHECKINFO_FLAG_1);
 
@@ -946,7 +946,7 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
                     wallNormal.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
                     wallNormal.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
 
-                    func_80179F64(&xzDir, &wallNormal, &reflectedDir);
+                    Math3D_Vec3fReflect(&xzDir, &wallNormal, &reflectedDir);
 
                     xzSpeed /= 2.0f;
                     airChain->velocity.x = reflectedDir.x * xzSpeed;

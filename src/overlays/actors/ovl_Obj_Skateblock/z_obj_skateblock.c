@@ -234,7 +234,7 @@ s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     spE8 = Math_SinS(sp96);
     spE4 = Math_CosS(sp96);
 
-    temp_f2 = Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f2 = Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
               (300.0f * this->dyna.actor.scale.z) + arg2;
     temp_f24 = temp_f2 * spE8;
     temp_f26 = temp_f2 * spE4;
@@ -306,9 +306,9 @@ s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
     sp100 = Math_SinS(phi_s6);
     temp_f26 = Math_CosS(phi_s6);
 
-    temp_f12 =
-        (300.0f * this->dyna.actor.scale.z + Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos)) +
-        2.0f;
+    temp_f12 = (300.0f * this->dyna.actor.scale.z +
+                Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos)) +
+               2.0f;
     temp_f28 = -temp_f12 * sp100;
     temp_f30 = -temp_f12 * temp_f26;
 

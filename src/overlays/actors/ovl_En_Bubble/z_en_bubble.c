@@ -170,7 +170,7 @@ s32 func_8089F908(EnBubble* this) {
 void EnBubble_Vec3fNormalizedReflect(Vec3f* vec1, Vec3f* vec2, Vec3f* dest) {
     f32 norm;
 
-    func_80179F64(vec1, vec2, dest);
+    Math3D_Vec3fReflect(vec1, vec2, dest);
     norm = sqrtf(SQ(dest->x) + SQ(dest->y) + SQ(dest->z));
     if (norm != 0.0f) {
         dest->x /= norm;

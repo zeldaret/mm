@@ -591,7 +591,7 @@ s32 EnSuttari_HasReachedPointForward(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -625,7 +625,7 @@ s32 EnSuttari_HasReachedPointReverse(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index - 1].z - points[index + 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -685,7 +685,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 }
 
 s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp26 = SCHEDULE_TIME_NOW;
+    u16 sp26 = SCRIPT_TIME_NOW;
     u16 phi_a0;
     u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 tmp;
@@ -719,7 +719,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     s32 pad;
     EnDoor* door;
     u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
-    u16 sp44 = SCHEDULE_TIME_NOW;
+    u16 sp44 = SCRIPT_TIME_NOW;
     Vec3f sp38;
     Vec3f sp2C;
     Vec3s* sp28;
