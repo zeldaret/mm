@@ -12,31 +12,31 @@
 
 #define THIS ((EnMinideath*)thisx)
 
-void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnMinideath_Init(Actor* thisx, PlayState* play);
+void EnMinideath_Destroy(Actor* thisx, PlayState* play);
+void EnMinideath_Update(Actor* thisx, PlayState* play);
 
-void func_808CA860(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CA8F4(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAAEC(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CABB0(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CACD8(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAE18(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAF68(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB094(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB22C(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB454(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB59C(EnMinideath* this, GlobalContext* globalCtx);
-void EnMinideath_Die(EnMinideath* this, GlobalContext* globalCtx);
-void EnMinideath_Dead(EnMinideath* this, GlobalContext* globalCtx);
+void EnMinideath_PreBattle(EnMinideath* this, PlayState* play);
+void EnMinideath_Intro1(EnMinideath* this, PlayState* play);
+void EnMinideath_Intro2(EnMinideath* this, PlayState* play);
+void EnMinideath_CrowdParent(EnMinideath* this, PlayState* play);
+void EnMinideath_Scatter(EnMinideath* this, PlayState* play);
+void EnMinideath_Return(EnMinideath* this, PlayState* play);
+void EnMinideath_Intro3(EnMinideath* this, PlayState* play);
+void EnMinideath_StartSwarm(EnMinideath* this, PlayState* play);
+void EnMinideath_SwarmFollower(EnMinideath* this, PlayState* play);
+void EnMinideath_SwarmLeader(EnMinideath* this, PlayState* play);
+void EnMinideath_Death1(EnMinideath* this, PlayState* play);
+void EnMinideath_Die(EnMinideath* this, PlayState* play);
+void EnMinideath_Dead(EnMinideath* this, PlayState* play);
 
-void func_808CA34C(EnMinideath* this);
-void func_808CA7D4(EnMinideath* this);
-void func_808CA8E0(EnMinideath* this);
-void func_808CAAC8(EnMinideath* this);
-void func_808CAB90(EnMinideath* this);
-void func_808CAE00(EnMinideath* this);
-void func_808CAF08(EnMinideath* this);
+void EnMinideath_RandomizeEffects(EnMinideath* this);
+void EnMinideath_SetupPreBattle(EnMinideath* this);
+void EnMinideath_SetupIntro1(EnMinideath* this);
+void EnMinideath_SetupIntro2(EnMinideath* this);
+void EnMinideath_SetupCrowdParent(EnMinideath* this);
+void EnMinideath_SetupReturn(EnMinideath* this);
+void EnMinideath_SetupIntro3(EnMinideath* this);
 void EnMinideath_SetupDead(EnMinideath* this);
 
 const ActorInit En_Minideath_InitVars = {
@@ -51,8 +51,7 @@ const ActorInit En_Minideath_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[3] = {
-static ColliderJntSphElementInit D_808CBF50[3] = {
+static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -88,8 +87,7 @@ static ColliderJntSphElementInit D_808CBF50[3] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_808CBFBC = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_NONE,
         AT_NONE | AT_TYPE_ENEMY,
@@ -98,8 +96,8 @@ static ColliderJntSphInit D_808CBFBC = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(D_808CBF50),
-    D_808CBF50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
 typedef enum {
@@ -111,8 +109,7 @@ typedef enum {
     DMGEFF_ZORA_BARRIER = 5
 } EnMinideathDamageEffect;
 
-// static DamageTable sDamageTable = {
-static DamageTable D_808CBFCC = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, DMGEFF_STUN),
     /* Deku Stick     */ DMG_ENTRY(1, DMGEFF_NONE),
     /* Horse trample  */ DMG_ENTRY(1, DMGEFF_NONE),
@@ -147,84 +144,84 @@ static DamageTable D_808CBFCC = {
     /* Powder Keg     */ DMG_ENTRY(1, DMGEFF_NONE),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808CBFEC = { 1, 15, 30, 10 };
+static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808CBFF4[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
 static s32 sItemDropTimer;
-s32 D_808CC254;
-s32 D_808CC258;
-s32 D_808CC25C;
+static s32 sNumSwarmHits;
+static s32 sScatterTimer;
+static s32 sPlayedDeathSfx;
 
-void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMinideath_Init(Actor* thisx, PlayState* play) {
     EnMinideath* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(thisx, D_808CBFF4);
+    Actor_ProcessInitChain(thisx, sInitChain);
 
-    this->unk_158 = thisx->world.pos.y - thisx->parent->world.pos.y;
-    this->spawnShapeRot = thisx->shape.rot.y;
+    this->initialHeightDiffFromParent = thisx->world.pos.y - thisx->parent->world.pos.y;
+    this->spawnShapeYaw = thisx->shape.rot.y;
 
     thisx->shape.rot.y = thisx->parent->shape.rot.y;
     thisx->world.rot.y = thisx->parent->shape.rot.y;
-    thisx->flags &= ~ACTOR_FLAG_1;
+    thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
 
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, thisx, &D_808CBFBC, this->colliderElements);
-    CollisionCheck_SetInfo(&thisx->colChkInfo, &D_808CBFCC, &D_808CBFEC);
+    Collider_InitAndSetJntSph(play, &this->collider, thisx, &sJntSphInit, this->colliderElements);
+    CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+    for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
         this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
     }
 
-    func_808CA34C(this);
+    EnMinideath_RandomizeEffects(this);
 
     this->number = thisx->params;
-    thisx->params = 0;
-    this->unk_149 = false;
+    thisx->params = MINIDEATH_ACTION_CONTINUE;
+    this->crowdState = false;
 
-    if (gSaveContext.eventInf[6] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOMESS)) {
         this->collider.base.atFlags |= AT_ON;
-        this->unk_149 = true;
+        this->crowdState = true;
 
-        func_808CABB0(this, globalCtx);
+        EnMinideath_CrowdParent(this, play);
 
-        for (i = 0; i < ARRAY_COUNT(this->unk_160); i++) {
-            Math_Vec3f_Sum(&thisx->world.pos, &this->unk_160[i].unk_10, &this->unk_160[i].unk_4);
+        for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
+            Math_Vec3f_Sum(&thisx->world.pos, &this->effects[i].vel, &this->effects[i].pos);
         }
 
-        func_808CAB90(this);
+        EnMinideath_SetupCrowdParent(this);
     } else {
-        func_808CA7D4(this);
+        EnMinideath_SetupPreBattle(this);
     }
 }
 
-void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMinideath_Destroy(Actor* thisx, PlayState* play) {
     EnMinideath* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
-void EnMinideath_DropCollectible(Vec3f* spawnPos, GlobalContext* globalCtx) {
+void EnMinideath_DropCollectible(Vec3f* spawnPos, PlayState* play) {
     if (sItemDropTimer == 0 && Rand_ZeroOne() < 0.3f) {
         if (Rand_ZeroOne() < 0.5f) {
-            Item_DropCollectible(globalCtx, spawnPos, ITEM00_ARROWS_10);
+            Item_DropCollectible(play, spawnPos, ITEM00_ARROWS_10);
         } else {
-            Item_DropCollectible(globalCtx, spawnPos, ITEM00_MAGIC_LARGE);
+            Item_DropCollectible(play, spawnPos, ITEM00_MAGIC_JAR_BIG);
         }
         sItemDropTimer = 800; // wait 40 seconds before next drop
     }
 }
 
-void func_808CA308(EnMinideath* this, s32 arg1) {
-    if (this->unk_149 != arg1) {
-        this->unk_149 = arg1;
+void EnMinideath_UpdateCrowdState(EnMinideath* this, s32 crowdParent) {
+    // If the state is changed to the same as before, don't update the count
+    if (this->crowdState != crowdParent) {
+        this->crowdState = crowdParent;
 
-        if (arg1 == true) {
+        // Gomess params stores the number of crowding bats
+        if (crowdParent == true) {
             this->actor.parent->params++;
         } else {
             this->actor.parent->params--;
@@ -232,25 +229,25 @@ void func_808CA308(EnMinideath* this, s32 arg1) {
     }
 }
 
-void func_808CA34C(EnMinideath* this) {
-    MiniDeathStruct* phi_s0;
+void EnMinideath_RandomizeEffects(EnMinideath* this) {
+    MiniDeathEffect* effect;
     s32 i;
 
-    for (phi_s0 = this->unk_160, i = 0; i < ARRAY_COUNT(this->unk_160); i++, phi_s0++) {
-        phi_s0->unk_10.x = randPlusMinusPoint5Scaled(80.0f);
-        phi_s0->unk_10.y = Rand_ZeroFloat(40.0f);
-        phi_s0->unk_10.z = randPlusMinusPoint5Scaled(80.0f);
-        phi_s0->animFrame = (s32)Rand_ZeroFloat(9.0f) % MINIDEATH_ANIM_LENGTH;
-        phi_s0->unk_1C = (Rand_Next() >> 17);
-        phi_s0->unk_1E = (Rand_Next() >> 16);
-        phi_s0->unk_1 = 0;
-        phi_s0->unk_22 = 0;
+    for (effect = this->effects, i = 0; i < MINIDEATH_NUM_EFFECTS; i++, effect++) {
+        effect->vel.x = Rand_CenteredFloat(80.0f);
+        effect->vel.y = Rand_ZeroFloat(40.0f);
+        effect->vel.z = Rand_CenteredFloat(80.0f);
+        effect->animFrame = (s32)Rand_ZeroFloat(9.0f) % MINIDEATH_ANIM_LENGTH;
+        effect->angle.x = (s32)Rand_Next() >> 17;
+        effect->angle.y = (s32)Rand_Next() >> 16;
+        effect->state = 0;
+        effect->timer = 0;
     }
 }
 
-void func_808CA458(EnMinideath* this, GlobalContext* globalCtx) {
-    s16 temp_s1;
-    MiniDeathStruct* phi_s0;
+void EnMinideath_UpdateEffects(EnMinideath* this, PlayState* play) {
+    s16 angle;
+    MiniDeathEffect* effect;
     f32 phi_fv0;
     f32 phi_fa0;
     s32 i;
@@ -260,17 +257,17 @@ void func_808CA458(EnMinideath* this, GlobalContext* globalCtx) {
     phi_s3 = 0;
     phi_s7 = 0;
 
-    phi_s0 = this->unk_160;
-    for (i = 0; i < ARRAY_COUNT(this->unk_160); i++, phi_s0++) {
-        if (phi_s0->unk_1 == 0) {
-            phi_s0->unk_10.x += 3.0f * Math_CosS(phi_s0->unk_1C) * Math_SinS(phi_s0->unk_1E);
-            phi_s0->unk_10.y += 3.0f * Math_SinS(phi_s0->unk_1C);
-            phi_s0->unk_10.z += 3.0f * Math_CosS(phi_s0->unk_1C) * Math_CosS(phi_s0->unk_1E);
+    effect = this->effects;
+    for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++, effect++) {
+        if (effect->state == 0) {
+            effect->vel.x += 3.0f * Math_CosS(effect->angle.x) * Math_SinS(effect->angle.y);
+            effect->vel.y += 3.0f * Math_SinS(effect->angle.x);
+            effect->vel.z += 3.0f * Math_CosS(effect->angle.x) * Math_CosS(effect->angle.y);
 
-            if (this->actionFunc == func_808CA860) {
+            if (this->actionFunc == EnMinideath_PreBattle) {
                 phi_fv0 = 100.0f;
                 phi_fa0 = SQ(phi_fv0);
-            } else if (this->actionFunc == func_808CB094 || this->actionFunc == func_808CB454) {
+            } else if (this->actionFunc == EnMinideath_StartSwarm || this->actionFunc == EnMinideath_SwarmLeader) {
                 phi_fv0 = 20.0f;
                 phi_fa0 = SQ(20.0f);
             } else {
@@ -278,33 +275,32 @@ void func_808CA458(EnMinideath* this, GlobalContext* globalCtx) {
                 phi_fa0 = SQ(40.0f);
             }
 
-            if (phi_s0->unk_10.y < 0.0f || phi_fv0 < phi_s0->unk_10.y ||
-                phi_fa0 < SQ(phi_s0->unk_10.x) + SQ(phi_s0->unk_10.z)) {
-                temp_s1 = Math_FAtan2F(sqrtf(SQ(phi_s0->unk_10.x) + SQ(phi_s0->unk_10.z)), phi_s0->unk_10.y);
-                phi_s0->unk_1C = -1 * temp_s1 + (Rand_Next() >> 19);
-                temp_s1 = Math_FAtan2F(phi_s0->unk_10.z, phi_s0->unk_10.x);
-                phi_s0->unk_1E = temp_s1 + (Rand_Next() >> 19) + 0x8000;
+            if (effect->vel.y < 0.0f || phi_fv0 < effect->vel.y || phi_fa0 < SQ(effect->vel.x) + SQ(effect->vel.z)) {
+                angle = Math_Atan2S_XY(sqrtf(SQ(effect->vel.x) + SQ(effect->vel.z)), effect->vel.y);
+                effect->angle.x = -1 * angle + ((s32)Rand_Next() >> 19);
+                angle = Math_Atan2S_XY(effect->vel.z, effect->vel.x);
+                effect->angle.y = 0x8000 + angle + ((s32)Rand_Next() >> 19);
             }
 
             phi_s3++;
-        } else if (phi_s0->unk_1 == 1) {
-            phi_s0->unk_4.y += phi_s0->unk_10.y;
-            phi_s0->unk_1E += 0x1800;
-            phi_s0->unk_10.y -= 1.0f;
+        } else if (effect->state == 1) {
+            effect->pos.y += effect->vel.y;
+            effect->angle.y += 0x1800;
+            effect->vel.y -= 1.0f;
 
-            if (phi_s0->unk_4.y < this->actor.parent->home.pos.y) {
-                phi_s0->unk_4.y = this->actor.parent->home.pos.y;
-                func_800B3030(globalCtx, &phi_s0->unk_4, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
-                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &phi_s0->unk_4, 11, NA_SE_EN_EXTINCT);
-                EnMinideath_DropCollectible(&phi_s0->unk_4, globalCtx);
-                phi_s0->unk_1 = 2;
+            if (effect->pos.y < this->actor.parent->home.pos.y) {
+                effect->pos.y = this->actor.parent->home.pos.y;
+                func_800B3030(play, &effect->pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
+                SoundSource_PlaySfxAtFixedWorldPos(play, &effect->pos, 11, NA_SE_EN_EXTINCT);
+                EnMinideath_DropCollectible(&effect->pos, play);
+                effect->state = 2;
             }
-        } else if (phi_s0->unk_1 == 2) {
-            if (phi_s0->unk_22 > 0) {
-                phi_s0->unk_22--;
-            } else if (this->actionFunc == func_808CABB0) {
-                Math_Vec3f_Diff(&this->actor.parent->focus.pos, &this->actor.world.pos, &phi_s0->unk_10);
-                phi_s0->unk_1 = 0;
+        } else if (effect->state == 2) {
+            if (effect->timer > 0) {
+                effect->timer--;
+            } else if (this->actionFunc == EnMinideath_CrowdParent) {
+                Math_Vec3f_Diff(&this->actor.parent->focus.pos, &this->actor.world.pos, &effect->vel);
+                effect->state = 0;
                 this->collider.elements[i].info.bumperFlags |= BUMP_ON;
                 this->collider.elements[i].info.toucherFlags |= TOUCH_ON;
                 phi_s7 = 1;
@@ -314,41 +310,41 @@ void func_808CA458(EnMinideath* this, GlobalContext* globalCtx) {
     }
 
     if (phi_s7 && phi_s3 > 1) {
-        func_808CA308(this, true);
+        EnMinideath_UpdateCrowdState(this, true);
     }
 }
 
-void func_808CA7D4(EnMinideath* this) {
-    this->actor.speedXZ = 6.0f;
-    this->actor.world.pos.x = randPlusMinusPoint5Scaled(600.0f) + this->actor.parent->world.pos.x;
-    this->actor.world.pos.z = randPlusMinusPoint5Scaled(600.0f) + this->actor.parent->world.pos.z;
-    this->actor.shape.rot.y = Rand_Next() >> 16;
+void EnMinideath_SetupPreBattle(EnMinideath* this) {
+    this->actor.speed = 6.0f;
+    this->actor.world.pos.x = Rand_CenteredFloat(600.0f) + this->actor.parent->world.pos.x;
+    this->actor.world.pos.z = Rand_CenteredFloat(600.0f) + this->actor.parent->world.pos.z;
+    this->actor.shape.rot.y = (s32)Rand_Next() >> 16;
     this->actor.shape.rot.x = 0;
-    this->unk_150.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808CA860;
+    this->moveDirection.y = this->actor.shape.rot.y;
+    this->actionFunc = EnMinideath_PreBattle;
 }
 
-void func_808CA860(EnMinideath* this, GlobalContext* globalCtx) {
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_150.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+void EnMinideath_PreBattle(EnMinideath* this, PlayState* play) {
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
         // Fly away from walls
-        this->unk_150.y = (Rand_Next() >> 18) + this->actor.wallYaw;
+        this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
-    if (this->actor.params == MINIDEATH_ACTION_7) {
-        func_808CA8E0(this);
+    if (this->actor.params == MINIDEATH_ACTION_INTRO_1) {
+        EnMinideath_SetupIntro1(this);
     }
 }
 
-void func_808CA8E0(EnMinideath* this) {
-    this->actionFunc = func_808CA8F4;
+void EnMinideath_SetupIntro1(EnMinideath* this) {
+    this->actionFunc = EnMinideath_Intro1;
 }
 
-void func_808CA8F4(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_Intro1(EnMinideath* this, PlayState* play) {
     EnDeath* parent;
     Vec3f sp38;
     s32 phi_v0;
     s16 angle;
 
-    Math_StepToF(&this->actor.speedXZ, 15.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 15.0f, 0.5f);
 
     if (this->actor.child == NULL) {
         phi_v0 = 0;
@@ -375,159 +371,162 @@ void func_808CA8F4(EnMinideath* this, GlobalContext* globalCtx) {
         sp38.z = this->actor.parent->world.pos.z + Math_CosS(angle) * parent->coreVelocity;
         sp38.y = this->actor.parent->world.pos.y + phi_v0 * 20;
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &sp38), 2, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &sp38), 2, 0x1000, 0x100);
     if (this->actor.parent->scale.z > 0.0f) {
-        sp38.y = this->actor.parent->world.pos.y + this->unk_158;
+        sp38.y = this->actor.parent->world.pos.y + this->initialHeightDiffFromParent;
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &sp38), 2, 0x1000, 0x100);
-    if (this->actor.params == MINIDEATH_ACTION_8) {
-        func_808CAAC8(this);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_WorldPitchTowardPoint(&this->actor, &sp38), 2, 0x1000, 0x100);
+    if (this->actor.params == MINIDEATH_ACTION_INTRO_2) {
+        EnMinideath_SetupIntro2(this);
     }
 }
 
-void func_808CAAC8(EnMinideath* this) {
+void EnMinideath_SetupIntro2(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->actionFunc = func_808CAAEC;
-    this->actor.speedXZ = 5.0f;
+    this->actionFunc = EnMinideath_Intro2;
+    this->actor.speed = 5.0f;
 }
 
-void func_808CAAEC(EnMinideath* this, GlobalContext* globalCtx) {
-    Actor_DistanceToPoint(&this->actor, &this->actor.parent->focus.pos);
-    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &this->actor.parent->focus.pos),
-                       0x800);
-    if (this->actor.params == MINIDEATH_ACTION_9) {
+void EnMinideath_Intro2(EnMinideath* this, PlayState* play) {
+    Actor_WorldDistXYZToPoint(&this->actor, &this->actor.parent->focus.pos);
+    Math_ScaledStepToS(&this->actor.shape.rot.y,
+                       Actor_WorldYawTowardPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
+    Math_ScaledStepToS(&this->actor.shape.rot.x,
+                       Actor_WorldPitchTowardPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
+    if (this->actor.params == MINIDEATH_ACTION_INTRO_3) {
         this->collider.base.atFlags |= AT_ON;
-        func_808CAF08(this);
+        EnMinideath_SetupIntro3(this);
     }
 }
 
-void func_808CAB90(EnMinideath* this) {
+void EnMinideath_SetupCrowdParent(EnMinideath* this) {
     this->actor.shape.rot.x = 0;
-    this->actionFunc = func_808CABB0;
-    this->actor.speedXZ = 0.0f;
+    this->actionFunc = EnMinideath_CrowdParent;
+    this->actor.speed = 0.0f;
 }
 
-void func_808CABB0(EnMinideath* this, GlobalContext* globalCtx) {
-    s16 sp1E = this->spawnShapeRot + this->actor.parent->shape.rot.y;
+void EnMinideath_CrowdParent(EnMinideath* this, PlayState* play) {
+    s16 yaw = this->spawnShapeYaw + this->actor.parent->shape.rot.y;
 
-    this->actor.world.pos.x = this->actor.parent->world.pos.x + Math_SinS(sp1E) * 60.0f;
-    this->actor.world.pos.z = this->actor.parent->world.pos.z + Math_CosS(sp1E) * 60.0f;
-    this->actor.world.pos.y = this->actor.parent->world.pos.y + this->unk_158;
+    this->actor.world.pos.x = this->actor.parent->world.pos.x + Math_SinS(yaw) * 60.0f;
+    this->actor.world.pos.z = this->actor.parent->world.pos.z + Math_CosS(yaw) * 60.0f;
+    this->actor.world.pos.y = this->actor.parent->world.pos.y + this->initialHeightDiffFromParent;
     this->actor.shape.rot.y = this->actor.parent->shape.rot.y;
 }
 
-void func_808CAC54(EnMinideath* this) {
+void EnMinideath_SetupScatter(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->actor.speedXZ = 8.0f;
-    func_800BE33C(&this->actor.parent->world.pos, &this->actor.world.pos, &this->unk_150, false);
-    if (D_808CC258 != 0) {
-        this->timer = D_808CC258;
+    this->actor.speed = 8.0f;
+    func_800BE33C(&this->actor.parent->world.pos, &this->actor.world.pos, &this->moveDirection, false);
+    if (sScatterTimer != 0) {
+        this->timer = sScatterTimer;
     } else {
         this->timer = 200;
     }
-    func_808CA308(this, false);
-    this->actionFunc = func_808CACD8;
+    EnMinideath_UpdateCrowdState(this, false);
+    this->actionFunc = EnMinideath_Scatter;
 }
 
-void func_808CACD8(EnMinideath* this, GlobalContext* globalCtx) {
-    f32 temp_fv0;
-    f32 temp_fv1;
+void EnMinideath_Scatter(EnMinideath* this, PlayState* play) {
+    f32 y;
+    f32 parentY;
 
-    Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_150.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
         // Fly away from walls
-        this->unk_150.y = (Rand_Next() >> 18) + this->actor.wallYaw;
+        this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
 
-    if (Math_ScaledStepToS(&this->actor.shape.rot.x, this->unk_150.x, 0x480)) {
-        temp_fv0 = this->actor.world.pos.y;
-        temp_fv1 = this->actor.parent->home.pos.y;
+    if (Math_ScaledStepToS(&this->actor.shape.rot.x, this->moveDirection.x, 0x480)) {
+        y = this->actor.world.pos.y;
+        parentY = this->actor.parent->home.pos.y;
 
-        if (temp_fv0 < temp_fv1 + 50.0f) {
-            this->unk_150.x = -0x800 - ((u32)Rand_Next() >> 20);
-        } else if (temp_fv0 > temp_fv1 + 200.0f) {
-            this->unk_150.x = ((u32)Rand_Next() >> 20) + 0x800;
+        if (y < parentY + 50.0f) {
+            this->moveDirection.x = -0x800 - (Rand_Next() >> 20);
+        } else if (y > parentY + 200.0f) {
+            this->moveDirection.x = 0x800 + (Rand_Next() >> 20);
         }
     }
 
     if (this->timer == 0) {
-        func_808CAE00(this);
+        EnMinideath_SetupReturn(this);
     } else {
         this->timer--;
     }
 }
 
-void func_808CAE00(EnMinideath* this) {
+void EnMinideath_SetupReturn(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->actionFunc = func_808CAE18;
+    this->actionFunc = EnMinideath_Return;
 }
 
-void func_808CAE18(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_Return(EnMinideath* this, PlayState* play) {
     s32 pad;
-    f32 temp_fv0 = Actor_DistanceToPoint(&this->actor, &this->actor.parent->focus.pos);
-    f32 phi_fa0 = temp_fv0 * 0.016666668f;
+    f32 distToParent = Actor_WorldDistXYZToPoint(&this->actor, &this->actor.parent->focus.pos);
+    f32 velocityFactor = distToParent * 0.016666668f;
 
-    if (phi_fa0 > 1.0f) {
-        phi_fa0 = 1.0f;
+    if (velocityFactor > 1.0f) {
+        velocityFactor = 1.0f;
     }
-    Math_StepToF(&this->actor.speedXZ, 6.0f * phi_fa0, 0.5f);
-    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &this->actor.parent->focus.pos),
-                       0x800);
-    if (temp_fv0 < 30.0f) {
-        func_808CAF08(this);
+    Math_StepToF(&this->actor.speed, 6.0f * velocityFactor, 0.5f);
+    Math_ScaledStepToS(&this->actor.shape.rot.y,
+                       Actor_WorldYawTowardPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
+    Math_ScaledStepToS(&this->actor.shape.rot.x,
+                       Actor_WorldPitchTowardPoint(&this->actor, &this->actor.parent->focus.pos), 0x800);
+    if (distToParent < 30.0f) {
+        EnMinideath_SetupIntro3(this);
     }
 }
 
-void func_808CAF08(EnMinideath* this) {
-    s32 phi_v0;
+void EnMinideath_SetupIntro3(EnMinideath* this) {
+    s32 i;
 
-    this->actor.speedXZ = 0.0f;
-    func_808CA308(this, true);
+    this->actor.speed = 0.0f;
+    EnMinideath_UpdateCrowdState(this, true);
 
-    for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(this->unk_160); phi_v0++) {
-        this->unk_160[phi_v0].unk_22 = 0;
+    for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
+        this->effects[i].timer = 0;
     }
-    this->actionFunc = func_808CAF68;
+    this->actionFunc = EnMinideath_Intro3;
 }
 
-void func_808CAF68(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_Intro3(EnMinideath* this, PlayState* play) {
     Vec3f target;
     f32 dist;
     s16 sp26;
-    s32 done;
+    s32 stepDone;
 
-    done = Math_ScaledStepToS(&this->actor.shape.rot.y, this->spawnShapeRot + this->actor.parent->shape.rot.y, 0x800);
+    stepDone =
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->spawnShapeYaw + this->actor.parent->shape.rot.y, 0x800);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x800);
-    sp26 = this->spawnShapeRot + this->actor.parent->shape.rot.y;
+    sp26 = this->spawnShapeYaw + this->actor.parent->shape.rot.y;
     target.x = this->actor.parent->world.pos.x + Math_SinS(sp26) * 60.0f;
     target.z = this->actor.parent->world.pos.z + Math_CosS(sp26) * 60.0f;
-    target.y = this->actor.parent->world.pos.y + this->unk_158;
+    target.y = this->actor.parent->world.pos.y + this->initialHeightDiffFromParent;
 
     dist = Math_Vec3f_StepTo(&this->actor.world.pos, &target, 10.0f);
-    if (done && dist < 20.0f) {
-        func_808CAB90(this);
+    if (stepDone && dist < 20.0f) {
+        EnMinideath_SetupCrowdParent(this);
     }
 }
 
-void func_808CB07C(EnMinideath* this) {
+void EnMinideath_SetupStartSwarm(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->actionFunc = func_808CB094;
+    this->actionFunc = EnMinideath_StartSwarm;
 }
 
-void func_808CB094(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_StartSwarm(EnMinideath* this, PlayState* play) {
     Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.parent->focus.pos, 5.0f);
 }
 
-void func_808CB0C8(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_SetupSwarmFollower(EnMinideath* this, PlayState* play) {
     s32 phi_a2;
     s32 phi_v1;
     s32 phi_a1;
 
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->actor.speedXZ = 8.0f;
+    this->actor.speed = 8.0f;
 
     if (this->number >= 10) {
         phi_v1 = 19 - this->number;
@@ -538,72 +537,76 @@ void func_808CB0C8(EnMinideath* this, GlobalContext* globalCtx) {
         phi_a1 = -1;
         phi_a2 = 0x200;
     }
-    this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (phi_a1 * 0x4000) + ((phi_v1 * 0x2000) * phi_a1);
-    this->actor.shape.rot.x = (phi_a2 - phi_v1 * 0x400) + 0xC00;
+    this->actor.shape.rot.y = this->actor.parent->shape.rot.y + 0x4000 * phi_a1 + 0x2000 * phi_v1 * phi_a1;
+    this->actor.shape.rot.x = 0xC00 + phi_a2 - 0x400 * phi_v1;
 
     this->actor.world.pos.x = this->actor.parent->focus.pos.x + Math_SinS(this->actor.shape.rot.y) * 60.0f;
     this->actor.world.pos.z = this->actor.parent->focus.pos.z + Math_CosS(this->actor.shape.rot.y) * 60.0f;
     this->actor.world.pos.y = this->actor.parent->focus.pos.y - Math_SinS(this->actor.shape.rot.x) * 60.0f;
 
-    func_808CA34C(this);
+    EnMinideath_RandomizeEffects(this);
     this->timer = 100;
-    func_808CA308(this, false);
+    EnMinideath_UpdateCrowdState(this, false);
 
-    D_808CC254 = 0;
+    sNumSwarmHits = 0;
 
     if (this->actor.child == NULL || this->number == 9) {
-        this->unk_15C = &GET_PLAYER(globalCtx)->actor;
+        this->targetActor = &GET_PLAYER(play)->actor;
     } else {
-        this->unk_15C = this->actor.child;
+        this->targetActor = this->actor.child;
     }
-    this->actionFunc = func_808CB22C;
+    this->actionFunc = EnMinideath_SwarmFollower;
 }
 
-void func_808CB22C(EnMinideath* this, GlobalContext* globalCtx) {
-    Vec3f sp34;
-    s16 sp32 = 0;
+void EnMinideath_SwarmFollower(EnMinideath* this, PlayState* play) {
+    Vec3f targetFocus;
+    s16 yawOffset = 0;
 
-    Math_StepToF(&this->actor.speedXZ, 6.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 6.0f, 0.2f);
     if (this->timer > 0) {
         this->timer--;
     }
 
-    if (this->unk_15C->id != ACTOR_EN_MINIDEATH) {
+    if (this->targetActor->id != ACTOR_EN_MINIDEATH) {
         if (this->timer == 0) {
-            this->unk_15C = this->actor.parent;
+            this->targetActor = this->actor.parent;
         }
-        Math_Vec3f_Copy(&sp34, &this->unk_15C->focus.pos);
-        if (Actor_DistanceToPoint(&this->actor, &sp34) > 200.0f) {
+        Math_Vec3f_Copy(&targetFocus, &this->targetActor->focus.pos);
+        if (Actor_WorldDistXYZToPoint(&this->actor, &targetFocus) > 200.0f) {
             if (this->number < 10) {
-                sp32 = -0x1C00;
+                yawOffset = -0x1C00;
             } else {
-                sp32 = 0x1C00;
+                yawOffset = 0x1C00;
             }
-            sp34.y += 50.0f;
+            targetFocus.y += 50.0f;
         }
-    } else if (((EnMinideath*)this->unk_15C)->actionFunc != func_808CB22C) {
-        Math_Vec3f_Copy(&sp34, &this->actor.parent->focus.pos);
     } else {
-        Math_Vec3f_Copy(&sp34, &this->unk_15C->focus.pos);
+        if (((EnMinideath*)this->targetActor)->actionFunc != EnMinideath_SwarmFollower) {
+            Math_Vec3f_Copy(&targetFocus, &this->actor.parent->focus.pos);
+        } else {
+            Math_Vec3f_Copy(&targetFocus, &this->targetActor->focus.pos);
+        }
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &sp34) + sp32, 5, 0xC00, 0x80);
-    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &sp34), 5, 0xC00, 0x80);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &targetFocus) + yawOffset, 5,
+                       0xC00, 0x80);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_WorldPitchTowardPoint(&this->actor, &targetFocus), 5, 0xC00,
+                       0x80);
     if ((this->collider.base.atFlags & AT_HIT) && this->timer > 0) {
-        D_808CC254 += 1;
+        sNumSwarmHits++;
     }
-    if (this->timer == 0 && Actor_DistanceToPoint(&this->actor, &this->actor.parent->focus.pos) < 50.0f) {
-        func_808CAF08(this);
+    if (this->timer == 0 && Actor_WorldDistXYZToPoint(&this->actor, &this->actor.parent->focus.pos) < 50.0f) {
+        EnMinideath_SetupIntro3(this);
     }
 }
 
-void func_808CB418(EnMinideath* this) {
+void EnMinideath_SetupSwarmLeader(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
     this->timer = 10;
-    func_808CA34C(this);
-    this->actionFunc = func_808CB454;
+    EnMinideath_RandomizeEffects(this);
+    this->actionFunc = EnMinideath_SwarmLeader;
 }
 
-void func_808CB454(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_SwarmLeader(EnMinideath* this, PlayState* play) {
     Vec3f target;
 
     if (this->timer > 0) {
@@ -613,73 +616,73 @@ void func_808CB454(EnMinideath* this, GlobalContext* globalCtx) {
     target.z = (Math_CosS(this->actor.parent->shape.rot.y) * 20.0f) + this->actor.parent->focus.pos.z;
     target.y = this->actor.parent->focus.pos.y;
     Math_Vec3f_StepTo(&this->actor.world.pos, &target, 5.0f);
-    if (this->timer == 0 && ((EnMinideath*)this->actor.child)->actionFunc != func_808CB22C) {
-        func_808CAB90(this);
+    if (this->timer == 0 && ((EnMinideath*)this->actor.child)->actionFunc != EnMinideath_SwarmFollower) {
+        EnMinideath_SetupCrowdParent(this);
     }
 }
 
-void func_808CB524(EnMinideath* this) {
+void EnMinideath_SetupDeath1(EnMinideath* this) {
     s32 i;
 
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    func_808CA308(this, false);
+    EnMinideath_UpdateCrowdState(this, false);
     this->collider.base.atFlags &= ~AT_ON;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_160); i++) {
-        this->unk_160[i].unk_1 = 0;
+    for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
+        this->effects[i].state = 0;
     }
 
-    this->unk_150.y = this->actor.shape.rot.y;
-    this->unk_150.x = this->actor.shape.rot.x;
-    this->actionFunc = func_808CB59C;
+    this->moveDirection.y = this->actor.shape.rot.y;
+    this->moveDirection.x = this->actor.shape.rot.x;
+    this->actionFunc = EnMinideath_Death1;
 }
 
-void func_808CB59C(EnMinideath* this, GlobalContext* globalCtx) {
-    f32 temp_fv0;
-    f32 temp_fv1;
+void EnMinideath_Death1(EnMinideath* this, PlayState* play) {
+    f32 y;
+    f32 parentY;
 
-    Math_StepToF(&this->actor.speedXZ, 5.0f, 0.2f);
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_150.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+    Math_StepToF(&this->actor.speed, 5.0f, 0.2f);
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
         // Fly away from walls
-        this->unk_150.y = (Rand_Next() >> 0x12) + this->actor.wallYaw;
+        this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
-    if (Math_ScaledStepToS(&this->actor.shape.rot.x, this->unk_150.x, 0x480)) {
-        temp_fv0 = this->actor.world.pos.y;
-        temp_fv1 = this->actor.parent->home.pos.y;
-        if (temp_fv0 < (temp_fv1 + 50.0f)) {
-            this->unk_150.x = -0x800 - ((u32)Rand_Next() >> 20);
-        } else if (temp_fv0 > (temp_fv1 + 200.0f)) {
-            this->unk_150.x = ((u32)Rand_Next() >> 20) + 0x800;
+
+    if (Math_ScaledStepToS(&this->actor.shape.rot.x, this->moveDirection.x, 0x480)) {
+        y = this->actor.world.pos.y;
+        parentY = this->actor.parent->home.pos.y;
+        if (y < parentY + 50.0f) {
+            this->moveDirection.x = -0x800 - (Rand_Next() >> 20);
+        } else if (y > parentY + 200.0f) {
+            this->moveDirection.x = 0x800 + (Rand_Next() >> 20);
         }
     }
 }
 
 void EnMinideath_SetupDie(EnMinideath* this) {
     this->actor.params = MINIDEATH_ACTION_CONTINUE;
-    this->unk_150.x = 0x4000;
+    this->moveDirection.x = 0x4000;
     this->actionFunc = EnMinideath_Die;
     this->actor.gravity = -0.5f;
 }
 
-void EnMinideath_Die(EnMinideath* this, GlobalContext* globalCtx) {
-    MiniDeathStruct* phi_s0;
+void EnMinideath_Die(EnMinideath* this, PlayState* play) {
+    MiniDeathEffect* effect;
     s32 i;
-    s32 phi_s2 = 0;
+    s32 stepsComplete = 0;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
-    Math_ScaledStepToS(&this->actor.shape.rot.x, this->unk_150.x, 0x480);
-    func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
+    Math_ScaledStepToS(&this->actor.shape.rot.x, this->moveDirection.x, 0x480);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
 
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
 
-        for (phi_s0 = this->unk_160, i = 0; i < ARRAY_COUNT(this->unk_160); i++, phi_s0++) {
-            if (Math_StepToF(&phi_s0->unk_10.y, 0.0f, 7.0f)) {
-                phi_s2++;
+        for (effect = this->effects, i = 0; i < MINIDEATH_NUM_EFFECTS; i++, effect++) {
+            if (Math_StepToF(&effect->vel.y, 0.0f, 7.0f)) {
+                stepsComplete++;
             }
         }
-
-        if (phi_s2 == ARRAY_COUNT(this->unk_160)) {
+        if (stepsComplete == MINIDEATH_NUM_EFFECTS) {
             EnMinideath_SetupDead(this);
         }
     }
@@ -689,126 +692,126 @@ void EnMinideath_SetupDead(EnMinideath* this) {
     this->actionFunc = EnMinideath_Dead;
 }
 
-void EnMinideath_Dead(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_Dead(EnMinideath* this, PlayState* play) {
     if (this->actor.parent->update == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
 }
 
-void EnMinideath_SetNextAction(EnMinideath* this, GlobalContext* globalCtx) {
+void EnMinideath_SetNextAction(EnMinideath* this, PlayState* play) {
     s16 action = this->actor.params;
 
-    if (action == MINIDEATH_ACTION_6) {
-        func_808CB524(this);
-    } else if (action == MINIDEATH_ACTION_2) {
-        func_808CAE00(this);
-    } else if (action == MINIDEATH_ACTION_3) {
-        func_808CB07C(this);
-    } else if (action == MINIDEATH_ACTION_4) {
+    if (action == MINIDEATH_ACTION_DEATH_1) {
+        EnMinideath_SetupDeath1(this);
+    } else if (action == MINIDEATH_ACTION_RETURN) {
+        EnMinideath_SetupReturn(this);
+    } else if (action == MINIDEATH_ACTION_START_SWARM) {
+        EnMinideath_SetupStartSwarm(this);
+    } else if (action == MINIDEATH_ACTION_SWARM) {
         if (this->number == 0 || this->number == 10) {
-            func_808CB418(this);
+            // Bats 0 and 10 set the general motion trajectory
+            EnMinideath_SetupSwarmLeader(this);
         } else {
-            func_808CB0C8(this, globalCtx);
+            // These ones follow around 0 and 10
+            EnMinideath_SetupSwarmFollower(this, play);
         }
-    } else if (action == MINIDEATH_ACTION_1) {
-        func_808CAC54(this);
-    } else if (action == MINIDEATH_ACTION_DIE) {
+    } else if (action == MINIDEATH_ACTION_SCATTER) {
+        EnMinideath_SetupScatter(this);
+    } else if (action == MINIDEATH_ACTION_DEATH_2) {
         EnMinideath_SetupDie(this);
     }
 }
 
-void func_808CB8F4(EnMinideath* this, GlobalContext* globalCtx) {
-    s32 temp_a0_2;
-    EnMinideath* temp_a0_3;
-    s32 phi_a2;
-    s32 phi_v0_2;
-    s32 phi_a0;
-
+void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         if (this->actor.colChkInfo.damageEffect == DMGEFF_STUN) {
-            if (this->actionFunc == func_808CABB0 || this->actionFunc == func_808CAF68) {
-                D_808CC258 = 5;
-            } else if (this->actionFunc == func_808CB22C) {
+            if (this->actionFunc == EnMinideath_CrowdParent || this->actionFunc == EnMinideath_Intro3) {
+                sScatterTimer = 5;
+            } else if (this->actionFunc == EnMinideath_SwarmFollower) {
                 EnMinideath** miniDeaths = (EnMinideath**)((EnDeath*)this->actor.parent)->miniDeaths;
+                s32 i;
 
-                for (temp_a0_2 = this->number - 1; temp_a0_2 >= 0; temp_a0_2--) {
-                    temp_a0_3 = miniDeaths[temp_a0_2];
+                for (i = this->number - 1; i >= 0; i--) {
+                    EnMinideath* other = miniDeaths[i];
 
-                    if (temp_a0_3->unk_15C == &this->actor) {
-                        temp_a0_3->unk_15C = this->unk_15C;
+                    if (other->targetActor == &this->actor) {
+                        other->targetActor = this->targetActor;
                         break;
                     }
                 }
 
                 this->timer = 0;
-                this->unk_15C = &GET_PLAYER(globalCtx)->actor;
+                this->targetActor = &GET_PLAYER(play)->actor;
             }
         } else {
-            for (phi_a2 = 0; phi_a2 < ARRAY_COUNT(this->colliderElements); phi_a2++) {
-                if (this->collider.elements[phi_a2].info.bumperFlags & BUMP_HIT) {
-                    this->collider.elements[phi_a2].info.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
-                    this->collider.elements[phi_a2].info.toucherFlags &= ~(TOUCH_ON | TOUCH_HIT);
-                    this->unk_160[phi_a2].unk_10.y = -1.0f;
-                    this->unk_160[phi_a2].unk_1 = 1;
-                    this->unk_160[phi_a2].unk_1E = this->actor.shape.rot.y;
-                    this->unk_160[phi_a2].unk_22 = 60;
+            s32 i;
+            s32 j;
+            s32 phi_a0;
 
-                    if ((this->actionFunc == func_808CABB0 || this->actionFunc == func_808CAF68) &&
+            for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
+                if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+                    this->collider.elements[i].info.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
+                    this->collider.elements[i].info.toucherFlags &= ~(TOUCH_ON | TOUCH_HIT);
+                    this->effects[i].vel.y = -1.0f;
+                    this->effects[i].state = 1;
+                    this->effects[i].angle.y = this->actor.shape.rot.y;
+                    this->effects[i].timer = 60;
+
+                    if ((this->actionFunc == EnMinideath_CrowdParent || this->actionFunc == EnMinideath_Intro3) &&
                         this->actor.colChkInfo.damageEffect == DMGEFF_LIGHT_ARROW) {
-                        D_808CC258 = 200;
+                        sScatterTimer = 200;
                     }
                 }
             }
 
             phi_a0 = 0;
-            for (phi_v0_2 = 0; phi_v0_2 < ARRAY_COUNT(this->unk_160); phi_v0_2++) {
-                if (this->unk_160[phi_v0_2].unk_1 != 0) {
+            for (j = 0; j < MINIDEATH_NUM_EFFECTS; j++) {
+                if (this->effects[j].state != 0) {
                     phi_a0++;
                 }
             }
 
             if (phi_a0 > 1) {
-                func_808CA308(this, false);
+                EnMinideath_UpdateCrowdState(this, false);
             }
 
-            if (D_808CC25C == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
-                D_808CC25C = 1;
+            if (!sPlayedDeathSfx) {
+                Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_DEAD);
+                sPlayedDeathSfx = true;
             }
         }
     }
 }
 
-void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMinideath_Update(Actor* thisx, PlayState* play) {
     EnMinideath* this = THIS;
     s32 pad;
     ColliderJntSphElement* elem;
     s32 temp;
     s32 i;
-    MiniDeathStruct* phi_s0;
-    EnMinideath* phi_s0_3;
+    MiniDeathEffect* effect;
 
     if (sItemDropTimer > 0) {
         sItemDropTimer--;
     }
 
     if (this->actionFunc != EnMinideath_Dead) {
-        for (i = 0; i < ARRAY_COUNT(this->unk_160); i++) {
-            if (this->unk_160[i].unk_1 == 0) {
-                func_800B9010(&this->actor, NA_SE_EV_BAT_FLY - SFX_FLAG);
+        for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
+            if (this->effects[i].state == 0) {
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BAT_FLY - SFX_FLAG);
                 break;
             }
         }
     }
 
-    func_808CB8F4(this, globalCtx);
+    EnMinideath_UpdateDamage(this, play);
 
-    EnMinideath_SetNextAction(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    EnMinideath_SetNextAction(this, play);
+    this->actionFunc(this, play);
 
     if (this->actionFunc != EnMinideath_Dead) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -820,51 +823,51 @@ void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_MoveWithoutGravity(&this->actor);
         }
 
-        if (this->actionFunc != func_808CABB0 && this->actionFunc != func_808CAF68) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 50.0f, 80.0f, 7);
+        if (this->actionFunc != EnMinideath_CrowdParent && this->actionFunc != EnMinideath_Intro3) {
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 50.0f, 80.0f, 7);
         }
 
         if (this->actionFunc != EnMinideath_Die) {
-            func_808CA458(this, globalCtx);
+            EnMinideath_UpdateEffects(this, play);
         }
 
         Actor_SetFocus(&this->actor, 0.0f);
 
-        phi_s0 = this->unk_160;
+        effect = this->effects;
         elem = this->collider.elements;
-        for (i = 0; i != ARRAY_COUNT(this->colliderElements); i++) {
-            if (phi_s0->unk_1 == 0) {
-                Math_Vec3f_Sum(&this->actor.world.pos, &phi_s0->unk_10, &phi_s0->unk_4);
+        for (i = 0; i != MINIDEATH_NUM_EFFECTS; i++) {
+            if (effect->state == 0) {
+                Math_Vec3f_Sum(&this->actor.world.pos, &effect->vel, &effect->pos);
 
                 if (this->actionFunc != EnMinideath_Die) {
-                    phi_s0->animFrame++;
-                    if (phi_s0->animFrame == MINIDEATH_ANIM_LENGTH) {
-                        phi_s0->animFrame = 0;
+                    effect->animFrame++;
+                    if (effect->animFrame == MINIDEATH_ANIM_LENGTH) {
+                        effect->animFrame = 0;
                     }
                 }
 
-                elem->dim.worldSphere.center.x = phi_s0->unk_4.x;
-                elem->dim.worldSphere.center.y = phi_s0->unk_4.y;
-                elem->dim.worldSphere.center.z = phi_s0->unk_4.z;
+                elem->dim.worldSphere.center.x = effect->pos.x;
+                elem->dim.worldSphere.center.y = effect->pos.y;
+                elem->dim.worldSphere.center.z = effect->pos.z;
             }
-            phi_s0++;
+            effect++;
             elem++;
         }
 
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             this->attackTimer = 40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_ATTACK);
         }
         if (this->collider.base.atFlags & AT_ON) {
-            temp = (this->actionFunc == func_808CABB0) ? (globalCtx->gameplayFrames % 4) : 4;
+            temp = (this->actionFunc == EnMinideath_CrowdParent) ? (play->gameplayFrames % 4) : 4;
 
             if (temp == 4 || temp == (this->number & 3)) {
                 if (this->attackTimer == 0 && this->actor.parent->shape.rot.x == 0) {
-                    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
                 }
-                if (this->actionFunc != func_808CB094) {
-                    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                if (this->actionFunc != EnMinideath_StartSwarm) {
+                    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
                 }
             }
         }
@@ -872,37 +875,35 @@ void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->attackTimer--;
         }
         if (this->number == 19) {
-            phi_s0_3 = NULL;
-            D_808CC25C = 0;
+            EnMinideath* other = NULL;
+            sPlayedDeathSfx = false;
 
-            if (D_808CC258 != 0) {
+            if (sScatterTimer != 0) {
                 do {
-                    phi_s0_3 =
-                        (EnMinideath*)SubS_FindActor(globalCtx, &phi_s0_3->actor, ACTORCAT_ENEMY, ACTOR_EN_MINIDEATH);
-                    if (phi_s0_3 != NULL) {
-                        func_808CAC54(phi_s0_3);
-                        phi_s0_3 = (EnMinideath*)phi_s0_3->actor.next;
+                    other = (EnMinideath*)SubS_FindActor(play, &other->actor, ACTORCAT_ENEMY, ACTOR_EN_MINIDEATH);
+                    if (other != NULL) {
+                        EnMinideath_SetupScatter(other);
+                        other = (EnMinideath*)other->actor.next;
                     }
-                } while (phi_s0_3 != NULL);
+                } while (other != NULL);
 
-                globalCtx->envCtx.lightSettingOverride = 28;
+                play->envCtx.lightSettingOverride = 28;
 
-                if (D_808CC258 == 5) {
-                    ((EnDeath*)this->actor.parent)->unk_2FC = 5;
+                if (sScatterTimer == 5) {
+                    ((EnDeath*)this->actor.parent)->lightArrowDamageTimer = 5;
                 } else {
-                    ((EnDeath*)this->actor.parent)->unk_2FC = 20;
+                    ((EnDeath*)this->actor.parent)->lightArrowDamageTimer = 20;
                 }
-                D_808CC258 = 0;
-            } else if (D_808CC254 >= 5) {
+                sScatterTimer = 0;
+            } else if (sNumSwarmHits >= 5) {
                 do {
-                    phi_s0_3 =
-                        (EnMinideath*)SubS_FindActor(globalCtx, &phi_s0_3->actor, ACTORCAT_ENEMY, ACTOR_EN_MINIDEATH);
-                    if (phi_s0_3 != NULL) {
-                        phi_s0_3->timer = 0;
-                        phi_s0_3 = (EnMinideath*)phi_s0_3->actor.next;
+                    other = (EnMinideath*)SubS_FindActor(play, &other->actor, ACTORCAT_ENEMY, ACTOR_EN_MINIDEATH);
+                    if (other != NULL) {
+                        other->timer = 0;
+                        other = (EnMinideath*)other->actor.next;
                     }
-                } while (phi_s0_3 != NULL);
-                D_808CC254 = 0;
+                } while (other != NULL);
+                sNumSwarmHits = 0;
             }
         }
     }

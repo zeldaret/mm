@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_death" Segment="6">
         <Animation Name="gGomessScytheSwingAnim" Offset="0xE64" />
-        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" />   <!-- Start bats attack    -->
-        <Animation Name="object_death_Anim_001834" Offset="0x1834" />   <!-- Continue bats attack -->
+        <Animation Name="gGomessBatSwarmStartAnim" Offset="0x15B4" />
+        <Animation Name="gGomessBatSwarmAnim" Offset="0x1834" />
         <Animation Name="gGomessDamagedAnim" Offset="0x1F80" />
         <Animation Name="gGomessBeginDeathAnim" Offset="0x2DE8" />
         <Animation Name="gGomessDeathAnim" Offset="0x352C" />
@@ -61,7 +61,7 @@
         <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" EnumName="GOMESS_LIMB_COLLAR" Offset="0xABE8" />
         <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" EnumName="GOMESS_LIMB_HEAD_LOWER" Offset="0xABF4" />
         <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" EnumName="GOMESS_LIMB_HEAD_UPPER" Offset="0xAC00" />
-        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="GOMESS_LIMB_8" Offset="0xAC0C" />  <!-- Antenna thing, 4 parts -->
+        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="GOMESS_LIMB_8" Offset="0xAC0C" />
         <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" EnumName="GOMESS_LIMB_9" Offset="0xAC18" />
         <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" EnumName="GOMESS_LIMB_10" Offset="0xAC24" />
         <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" EnumName="GOMESS_LIMB_11" Offset="0xAC30" />
