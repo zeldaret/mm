@@ -433,7 +433,7 @@ f32 func_80A954AC(EnAz* this) {
     sp1C.x = pathing->curPoint.x - pathing->prevPoint.x;
     sp1C.y = pathing->curPoint.y - pathing->prevPoint.y;
     sp1C.z = pathing->curPoint.z - pathing->prevPoint.z;
-    return Math3D_Parallel(&sp28, &sp1C);
+    return Math3D_Cos(&sp28, &sp1C);
 }
 
 s32 func_80A95534(PlayState* play, ActorPathing* actorPathing) {
@@ -1633,10 +1633,8 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
 void func_80A97F9C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    D_80A99E8C =
-        Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
-    if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >=
-        SQ(1000.0f)) {
+    D_80A99E8C = Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
+    if (Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >= SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.flags & ACTOR_PATHING_REACHED_END_PERMANENT)) {
@@ -1704,8 +1702,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.x = actorPathing->curPoint.x - actorPathing->worldPos->x;
     sp28.y = actorPathing->curPoint.y - actorPathing->worldPos->y;
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
-    actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
-    actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
+    actorPathing->distSqToCurPointXZ = Math3D_Dist1DSq(sp28.x, sp28.z);
+    actorPathing->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&sp28);
     actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
     actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;

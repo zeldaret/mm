@@ -1,6 +1,6 @@
 #include "ultra64.h"
-#include "libc/stdlib.h"
-#include "libc/string.h"
+#include "stdlib.h"
+#include "string.h"
 
 const char* strchr(const char* s, int c) {
     const unsigned char ch = c;

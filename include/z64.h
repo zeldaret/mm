@@ -1,35 +1,35 @@
 #ifndef Z64_H
 #define Z64_H
 
-#include "libc/math.h"
-#include "libc/stdarg.h"
-#include "libc/stdbool.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
-#include "libc/stdlib.h"
-
 #include "ultra64.h"
 
-#include "irqmgr.h"
-#include "padmgr.h"
-#include "scheduler.h"
+#include "math.h"
+#include "stdarg.h"
+#include "stdbool.h"
+#include "stddef.h"
+#include "stdint.h"
+#include "stdlib.h"
+
+#include "libc64/qrand.h"
 
 #include "color.h"
+#include "gfx.h"
+#include "gfxprint.h"
 #include "ichain.h"
+#include "irqmgr.h"
+#include "main.h"
+#include "message_data_static.h"
+#include "padmgr.h"
+#include "padutils.h"
+#include "regs.h"
+#include "scheduler.h"
 #include "sequence.h"
 #include "seqcmd.h"
 #include "sfx.h"
-#include "message_data_static.h"
-
-#include "main.h"
-
-#include "gfx.h"
-#include "gfxprint.h"
-#include "padutils.h"
-#include "libc64/qrand.h"
 #include "sys_matrix.h"
 #include "tha.h"
 #include "thga.h"
+
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64animation_legacy.h"
@@ -49,11 +49,13 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "z64keyframe.h"
 #include "z64lib.h"
 #include "z64light.h"
 #include "z64map.h"
 #include "z64math.h"
 #include "z64message.h"
+#include "z64msgevent.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64pause_menu.h"
@@ -70,8 +72,6 @@
 #include "z64rumble.h"
 #include "z64transition.h"
 #include "z64view.h"
-#include "z64keyframe.h"
-#include "regs.h"
 
 
 typedef struct {

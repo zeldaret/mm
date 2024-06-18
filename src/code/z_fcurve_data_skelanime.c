@@ -27,7 +27,7 @@
 
 #include "z64curve.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64curve.h"

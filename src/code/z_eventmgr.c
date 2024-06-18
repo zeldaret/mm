@@ -6,7 +6,7 @@
 
 #include "global.h"
 #include "z64shrink_window.h"
-#include "libc/string.h"
+#include "string.h"
 
 CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
@@ -173,7 +173,7 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
     s32 j;
     s32 count = 0;
     s16 csIdMax = CS_ID_NONE;
-    s16 priorityMax = SHT_MAX; // lower number means higher priority
+    s16 priorityMax = SHRT_MAX; // lower number means higher priority
     s16 csId;
     s16 priority;
 

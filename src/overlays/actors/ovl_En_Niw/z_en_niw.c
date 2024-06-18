@@ -976,7 +976,7 @@ void EnNiw_UpdateFeather(EnNiw* this, PlayState* play) {
                     feather->velocity.y = -0.5f;
                 }
 
-                feather->zRot = Math_SinS(feather->zRotStart * 0xBB8) * M_PI * 0.2f;
+                feather->zRot = Math_SinS(feather->zRotStart * 0xBB8) * M_PIf * 0.2f;
 
                 if (feather->life < feather->timer) {
                     feather->isEnabled = false;

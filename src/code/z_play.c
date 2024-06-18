@@ -1681,7 +1681,7 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     successfullySet <<= 1;
     successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
 
-    camera->dist = Math3D_Distance(at, eye);
+    camera->dist = Math3D_Vec3f_DistXYZ(at, eye);
 
     if (camera->focalActor != NULL) {
         camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
@@ -1710,7 +1710,7 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     successfullySet <<= 1;
     successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
 
-    camera->dist = Math3D_Distance(at, eye);
+    camera->dist = Math3D_Vec3f_DistXYZ(at, eye);
 
     if (camera->focalActor != NULL) {
         camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;

@@ -34,7 +34,7 @@
 #include "z64vis.h"
 #include "global.h"
 #include "sys_cfb.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 // Height of the fragments the z-buffer is split into.
 // It is the maximum amount of lines such that all rgba16 SCREEN_WIDTH-long lines fit into TMEM.

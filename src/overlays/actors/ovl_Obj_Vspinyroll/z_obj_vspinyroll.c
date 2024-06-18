@@ -130,7 +130,7 @@ s32 func_80A3C700(ObjVspinyroll* this) {
     this->dyna.actor.world.pos.z += this->dyna.actor.speed * this->unk_3B4.z;
 
     Math_Vec3f_Diff(&this->unk_39C[sp30], &this->dyna.actor.world.pos, &sp24);
-    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
+    return Math3D_Vec3fMagnitudeSq(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
 }
 
 void func_80A3C7E8(ObjVspinyroll* this) {

@@ -498,7 +498,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"
-    include "$(BUILD_DIR)/data/code/z_msgevent.data.o"
     include "$(BUILD_DIR)/src/code/z_nmi_buff.o"
     include "$(BUILD_DIR)/src/code/z_nulltask.o"
     include "$(BUILD_DIR)/src/code/z_olib.o"
@@ -572,8 +571,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_initial_check.o"
     include "$(BUILD_DIR)/src/code/sys_math.o"
     include "$(BUILD_DIR)/src/code/sys_math3d.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.data.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.bss.o"
     include "$(BUILD_DIR)/src/code/sys_math_atan.o"
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
@@ -3430,8 +3427,7 @@ beginseg
     name "ovl_En_Wdhand"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/z_en_wdhand.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/ovl_En_Wdhand_reloc.o"
 endseg
 
 beginseg

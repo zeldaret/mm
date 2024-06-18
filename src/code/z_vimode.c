@@ -1,7 +1,13 @@
-#include "global.h"
-#include "debug.h"
 #include "z64vimode.h"
+
+#include "stdbool.h"
 #include "PR/viint.h"
+
+#include "debug.h"
+#include "macros.h"
+#include "main.h"
+#include "padutils.h"
+#include "regs.h"
 
 typedef struct {
     /* 0x00 */ u32 burst;

@@ -2,7 +2,7 @@
 #include "PR/osint.h"
 #include "stack.h"
 #include "PR/osint.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "macros.h"
 #include "alignment.h"
 

@@ -1,7 +1,7 @@
 #ifndef LIBC_STRING_H
 #define LIBC_STRING_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
 
 const char* strchr(const char* s, int c);
 size_t strlen(const char* s);

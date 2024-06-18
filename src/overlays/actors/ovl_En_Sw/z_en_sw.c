@@ -289,7 +289,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
     Matrix_RotateAxisF(BINANG_TO_RAD_ALT(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
-    Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
+    Math3D_Vec3f_Cross(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
 
 s32 func_808D91C4(EnSw* this, CollisionPoly* floorPoly) {
@@ -319,7 +319,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    Math3D_CrossProduct(&this->unk_368, &sp38, &sp2C);
+    Math3D_Vec3f_Cross(&this->unk_368, &sp38, &sp2C);
     temp_f0 = Math3D_Vec3fMagnitude(&sp2C);
     if (temp_f0 < 0.001f) {
         return false;
@@ -329,7 +329,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* floorPoly) {
     Matrix_RotateAxisF(sp4C, &sp2C, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_35C, &sp2C);
     Math_Vec3f_Copy(&this->unk_35C, &sp2C);
-    Math3D_CrossProduct(&this->unk_35C, &sp38, &this->unk_350);
+    Math3D_Vec3f_Cross(&this->unk_35C, &sp38, &this->unk_350);
 
     temp_f0 = Math3D_Vec3fMagnitude(&this->unk_350);
     if (temp_f0 < 0.001f) {

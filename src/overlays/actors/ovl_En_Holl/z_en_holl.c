@@ -334,7 +334,7 @@ void EnHoll_Draw(Actor* thisx, PlayState* play) {
         }
         gfx = Gfx_SetupDL(gfx, setupDListIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
-            Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+            Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
         }
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, this->alpha);
