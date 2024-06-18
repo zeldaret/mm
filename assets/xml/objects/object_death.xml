@@ -1,17 +1,17 @@
 ﻿<Root>
     <File Name="object_death" Segment="6">
-        <Animation Name="gGomessScytheSwingAnim" Offset="0xE64" />
-        <Animation Name="gGomessBatSwarmStartAnim" Offset="0x15B4" />
-        <Animation Name="gGomessBatSwarmAnim" Offset="0x1834" />
-        <Animation Name="gGomessDamagedAnim" Offset="0x1F80" />
-        <Animation Name="gGomessBeginDeathAnim" Offset="0x2DE8" />
-        <Animation Name="gGomessDeathAnim" Offset="0x352C" />
-        <Animation Name="gGomessFloatAnim" Offset="0x3CAC" />
+        <Animation Name="gGomessScytheSwingAnim" Offset="0xE64" /> <!-- Original name is "d13_atack" -->
+        <Animation Name="gGomessBatSwarmStartAnim" Offset="0x15B4" /> <!-- Original name is "d13_callenemy" -->
+        <Animation Name="gGomessBatSwarmAnim" Offset="0x1834" /> <!-- Original name is "d13_callingenemy" -->
+        <Animation Name="gGomessDamagedAnim" Offset="0x1F80" /> <!-- Original name is "d13_damage" -->
+        <Animation Name="gGomessBeginDeathAnim" Offset="0x2DE8" /> <!-- Original name is "d13_deadhit" -->
+        <Animation Name="gGomessDeathAnim" Offset="0x352C" /> <!-- Original name is "d13_deadwait" -->
+        <Animation Name="gGomessFloatAnim" Offset="0x3CAC" /> <!-- Original name is "d13_fly" -->
         <DList Name="object_death_DL_006B80" Offset="0x6B80" />
         <DList Name="object_death_DL_006D18" Offset="0x6D18" />
         <DList Name="object_death_DL_006E08" Offset="0x6E08" />
-        <DList Name="object_death_DL_006F88" Offset="0x6F88" /> <!-- Original name is "d13_kama_model" ("sickle​") -->
-        <DList Name="object_death_DL_0073D0" Offset="0x73D0" /> <!-- Original name is "d13_kamahaA_model" -->
+        <DList Name="gGomessScytheHandleDL" Offset="0x6F88" /> <!-- Original name is "d13_kama_model" ("sickle​") -->
+        <DList Name="gGomessScytheBladeDL" Offset="0x73D0" /> <!-- Original name is "d13_kamahaA_model" -->
         <DList Name="object_death_DL_0074B8" Offset="0x74B8" />
         <DList Name="object_death_DL_007560" Offset="0x7560" />
         <DList Name="object_death_DL_007638" Offset="0x7638" />
@@ -41,7 +41,7 @@
         <Texture Name="object_death_Tex_009808" OutName="tex_009808" Format="i4" Width="16" Height="16" Offset="0x9808" />
         <DList Name="gGomessCoreDL" Offset="0x9988" />
         <Texture Name="gGomessCoreTex" OutName="gomess_core" Format="i4" Width="16" Height="16" Offset="0x9AA0" />
-        <DList Name="gGomessBatsGuardingCoreDL" Offset="0x9BA0" />
+        <DList Name="gGomessBatsGuardingCoreDL" Offset="0x9BA0" /> <!-- Original name is "d13_cover_model" -->
         <Texture Name="gGomessBatsGuardingCoreTex" OutName="gomess_bats_guarding_core" Format="rgba16" Width="16" Height="16" Offset="0x9C40" />
         <DList Name="gGomessBatMaterialDL" Offset="0x9F10" />
         <DList Name="gGomessBatFrame1DL" Offset="0x9F88" />
@@ -76,9 +76,9 @@
         <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_HANDLE" Offset="0xAC9C" />
         <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_BLADE" Offset="0xACA8" />
         <Skeleton Name="gGomessSkel" Type="Flex" LimbType="Standard" LimbNone="GOMESS_LIMB_NONE" LimbMax="GOMESS_LIMB_MAX" EnumName="GomessSkelLimbs" Offset="0xAD08" />
-        <Animation Name="object_death_Anim_00B284" Offset="0xB284" />   <!-- Intro anim 1 -->
-        <Animation Name="gGomessScytheSpinAnim" Offset="0xB508" />
-        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />   <!-- Intro anim 2 -->
+        <Animation Name="object_death_Anim_00B284" Offset="0xB284" /> <!-- Original name is "d13_gahaha" -->    <!-- Intro anim 1 -->
+        <Animation Name="gGomessScytheSpinAnim" Offset="0xB508" /> <!-- Original name is "d13_guard" -->
+        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" /> <!-- Original name is "d13_jakin" -->     <!-- Intro anim 2 -->
         <TextureAnimation Name="gGomessCoreMatAnim" Offset="0xCB84" />
         <TextureAnimation Name="gGomessBodyMatAnim" Offset="0xCBC0" />
     </File>

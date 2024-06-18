@@ -13,7 +13,7 @@
 
 #define THIS ((EnDeath*)thisx)
 
-void EnDeath_Init(Actor* thisx, PlayState* play);
+void EnDeath_Init(Actor* thisx, PlayState* play2);
 void EnDeath_Destroy(Actor* thisx, PlayState* play);
 void EnDeath_Update(Actor* thisx, PlayState* play);
 void EnDeath_Draw(Actor* thisx, PlayState* play);
@@ -168,11 +168,11 @@ static ColliderQuadInit sQuadInit = {
 };
 
 typedef enum {
-    DMGEFF_NONE = 0,
-    DMGEFF_FIRE_ARROW = 2,
-    DMGEFF_ICE_ARROW = 3,
-    DMGEFF_LIGHT_ARROW = 4,
-    DMGEFF_EXPLOSIVES = 15
+    /* 0x0 */ DMGEFF_NONE = 0,
+    /* 0x2 */ DMGEFF_FIRE_ARROW = 2,
+    /* 0x3 */ DMGEFF_ICE_ARROW,
+    /* 0x4 */ DMGEFF_LIGHT_ARROW,
+    /* 0xF */ DMGEFF_EXPLOSIVES = 15
 } EnDeathDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -224,9 +224,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
-void EnDeath_Init(Actor* thisx, PlayState* play) {
+void EnDeath_Init(Actor* thisx, PlayState* play2) {
     EnDeath* this = THIS;
-    PlayState* play2 = play;
+    PlayState* play = play2;
     f32 yOffset = 15.0f;
     s16 yRot = 0;
     s32 i;
@@ -234,20 +234,20 @@ void EnDeath_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 5500.0f, ActorShadow_DrawCircle, 80.0f);
 
-    SkelAnime_InitFlex(play2, &this->skelAnime, &gGomessSkel, &gGomessFloatAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGomessSkel, &gGomessFloatAnim, this->jointTable, this->morphTable,
                        GOMESS_LIMB_MAX);
 
-    Collider_InitAndSetSphere(play2, &this->coreCollider, &this->actor, &sSphereInit);
-    Collider_InitAndSetCylinder(play2, &this->bodyCollider, &this->actor, &sCylinderInit);
-    Collider_InitAndSetQuad(play2, &this->weaponCollider, &this->actor, &sQuadInit);
-    Collider_InitAndSetTris(play2, &this->weaponSpinningCollider, &this->actor, &sTrisInit,
+    Collider_InitAndSetSphere(play, &this->coreCollider, &this->actor, &sSphereInit);
+    Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetQuad(play, &this->weaponCollider, &this->actor, &sQuadInit);
+    Collider_InitAndSetTris(play, &this->weaponSpinningCollider, &this->actor, &sTrisInit,
                             this->weaponSpinningColliderElements);
 
     this->coreCollider.dim.worldSphere.radius = this->coreCollider.dim.modelSphere.radius;
 
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    Effect_Add(play2, &this->effectIndex, EFFECT_BLURE2, 0, 0, &sBlureInit);
+    Effect_Add(play, &this->effectIndex, EFFECT_BLURE2, 0, 0, &sBlureInit);
 
     if (!CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOMESS)) {
         this->actor.world.pos.y += 400.0f;
@@ -256,7 +256,7 @@ void EnDeath_Init(Actor* thisx, PlayState* play) {
     // Spawn each bat as a child
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
         this->miniDeaths[i] = (EnMinideath*)Actor_SpawnAsChild(
-            &play2->actorCtx, &this->actor, play2, ACTOR_EN_MINIDEATH, this->actor.world.pos.x,
+            &play->actorCtx, &this->actor, play, ACTOR_EN_MINIDEATH, this->actor.world.pos.x,
             this->actor.world.pos.y + yOffset, this->actor.world.pos.z, 0, yRot, 0, i);
         if (this->miniDeaths[i] == NULL) {
             Actor_Kill(&this->actor);
@@ -310,7 +310,7 @@ void EnDeath_DimLights(PlayState* play) {
     play->envCtx.lightBlend = 1.0f;
     lightSettings = &play->envCtx.lightSettingsList[20];
 
-    for (i = 0; i != 3; i++) {
+    for (i = 0; i < 3; i++) {
         lightSettings->light1Dir[i] = play->envCtx.lightSettings.light1Dir[i];
         lightSettings->light2Dir[i] = play->envCtx.lightSettings.light2Dir[i];
     }
@@ -329,14 +329,18 @@ void EnDeath_Float(EnDeath* this) {
 s32 EnDeath_ProjectileApproaching(EnDeath* this, PlayState* play) {
     Actor* projectileActor =
         func_800BC270(play, &this->actor, 80.0f, 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x80 | 0x20 | 0x10);
-    s16 ret;
+    s16 angle;
 
-    if (projectileActor != NULL &&
-        (ret = Actor_WorldYawTowardActor(&this->actor, projectileActor) - this->actor.shape.rot.y,
-         ABS_ALT(ret) < 0x2000) &&
-        (ret = Actor_WorldPitchTowardPoint(projectileActor, &this->actor.focus.pos) - projectileActor->world.rot.x,
-         ABS_ALT(ret) < 0x3000)) {
-        return true;
+    if (projectileActor != NULL) {
+        angle = Actor_WorldYawTowardActor(&this->actor, projectileActor) - this->actor.shape.rot.y;
+
+        if (ABS_ALT(angle) < 0x2000) {
+            angle = Actor_WorldPitchTowardPoint(projectileActor, &this->actor.focus.pos) - projectileActor->world.rot.x;
+
+            if (ABS_ALT(angle) < 0x3000) {
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -380,7 +384,7 @@ f32 EnDeath_UpdateCoreVelocityAndRotation(EnDeath* this) {
     this->coreVelocity = SQ(this->coreVelocity) * 3.0f + 80.0f;
 
     tmp = 22.5f / (this->coreVelocity * (2 * M_PIf));
-    this->coreRotation += (s16)(65536.0f * tmp);
+    this->coreRotation += TRUNCF_BINANG(0x10000 * tmp);
 }
 
 void EnDeath_SetupIntroCutscenePart1(EnDeath* this, PlayState* play) {
@@ -496,7 +500,7 @@ void EnDeath_IntroCutscenePart3(EnDeath* this, PlayState* play) {
     if (temp > 0.0025f) {
         temp = 0.0025f;
     }
-    this->actor.shape.rot.y += (s16)(temp * 4505600.0f);
+    this->actor.shape.rot.y += TRUNCF_BINANG(temp * 0x44C000);
     if (stepDone) {
         this->inEarlyIntro = false;
         EnDeath_SetupIntroCutscenePart4(this, play);
@@ -552,8 +556,8 @@ void EnDeath_SetupIntroCutscenePart5(EnDeath* this, PlayState* play) {
     this->camEyeTarget.z = Math_CosS(this->actor.home.rot.y) * 230.0f + this->actor.world.pos.z;
     this->camEyeTarget.y = this->actor.home.pos.y + 40.0f;
     this->camAtTarget.y = this->actor.world.pos.y + 85.0f;
-    this->camEyeSpeed = Math_Vec3f_DistXYZ(&camera->eye, &this->camEyeTarget) * 0.14285715f;
-    this->camAtSpeed = Math_Vec3f_DistXYZ(&camera->at, &this->camAtTarget) * 0.14285715f;
+    this->camEyeSpeed = Math_Vec3f_DistXYZ(&camera->eye, &this->camEyeTarget) * (1.0f / 7.0f);
+    this->camAtSpeed = Math_Vec3f_DistXYZ(&camera->at, &this->camAtTarget) * (1.0f / 7.0f);
     Audio_PlaySfx_AtPos(&this->scytheScreenPos, NA_SE_EN_DEATH_VOICE);
     this->actionFunc = EnDeath_IntroCutscenePart5;
 }
@@ -655,7 +659,7 @@ void EnDeath_SetupSwingAttack(EnDeath* this) {
 void EnDeath_SwingAttack(EnDeath* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x1000, 0x200);
     Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 3.0f);
-    this->actor.shape.rot.x = (s16)((100.0f - this->actor.xzDistToPlayer) * 0.01f * 0x400);
+    this->actor.shape.rot.x = TRUNCF_BINANG((100.0f - this->actor.xzDistToPlayer) * 0.01f * 0x400);
     this->actor.shape.rot.x = CLAMP_MIN(this->actor.shape.rot.x, 0);
 
     if (this->actionTimer > 0) {
@@ -769,7 +773,7 @@ void EnDeath_SpinAttack(EnDeath* this, PlayState* play) {
     Math_ScaledStepToS(&this->cloakLowerRotationModifier, (s32)(Math_SinS(this->actionTimer * 0x2000 - 0x8000) * 0x800),
                        0x1000);
 
-    if ((this->actor.bgCheckFlags & 8) || (this->weaponCollider.base.atFlags & AT_HIT) ||
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->weaponCollider.base.atFlags & AT_HIT) ||
         (this->weaponSpinningCollider.base.atFlags & AT_HIT)) {
         this->unk_18C = false;
         this->weaponCollider.base.atFlags &= ~(AT_ON | AT_HIT);
@@ -782,7 +786,7 @@ void EnDeath_SetupDamaged(EnDeath* this) {
     Animation_PlayOnce(&this->skelAnime, &gGomessDamagedAnim);
     this->actor.speed = 10.0f;
     func_800BE568(&this->actor, &this->coreCollider);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 15);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEATH_DAMAGE);
     this->actionFunc = EnDeath_Damaged;
 }
@@ -952,8 +956,9 @@ void EnDeath_DeathCutscenePart3(EnDeath* this, PlayState* play) {
     static Vec3f sSparkleAccel = { 0.0f, -0.2f, 0.0f };
     static Color_RGBA8 sSparklePrimColor = { 0, 0, 0, 0 };
     static Color_RGBA8 sSparkleEnvColor = { 40, 40, 40, 0 };
-    static s16 sDeleteLimbFrameNumbers[GOMESS_LIMB_MAX] = { 30, 30, 10, 2,  12, 17, 17, 17, 17, 17, 17,
-                                                            17, 14, 10, 12, 9,  9,  12, 9,  9,  30, 30 };
+    static s16 sDeleteLimbFrameNumbers[GOMESS_LIMB_MAX] = {
+        30, 30, 10, 2, 12, 17, 17, 17, 17, 17, 17, 17, 14, 10, 12, 9, 9, 12, 9, 9, 30, 30,
+    };
     s32 i;
     s32 j;
     u8* flameAlpha;
@@ -967,7 +972,7 @@ void EnDeath_DeathCutscenePart3(EnDeath* this, PlayState* play) {
 
     sparklePos = this->sparklePositions;
     flameAlpha = this->flameAlphas;
-    for (i = 0; (i ^ 0) < ARRAY_COUNT(this->sparklePositions); i++) {
+    for (i = 0; (i ^ 0) < ARRAY_COUNT(this->sparklePositions); i++) { //! FAKE
         sparklePos->y += 1.7f;
         alpha = *flameAlpha - 30;
         *flameAlpha = CLAMP_MIN(alpha, 0);
@@ -1020,7 +1025,7 @@ void EnDeath_SetupDeathCutscenePart4(EnDeath* this) {
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.focus.pos);
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actionTimer = 0;
     this->actionFunc = EnDeath_DeathCutscenePart4;
     this->actor.gravity = -1.0f;
@@ -1035,7 +1040,7 @@ void EnDeath_DeathCutscenePart4(EnDeath* this, PlayState* play) {
     s32 i;
 
     if (this->actionTimer == 0) {
-        if ((this->actor.bgCheckFlags & 1) || this->actor.floorHeight == -32000.0f) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || this->actor.floorHeight == BGCHECK_Y_MIN) {
             Actor_SetScale(&this->actor, 0.0f);
             this->actionTimer++;
 
@@ -1271,7 +1276,7 @@ void EnDeath_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, (this->actionFunc == EnDeath_SpinAttack) ? 50.0f : 100.0f, 40.0f,
-                            4 | 2 | 1);
+                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_1);
 
     this->bodyCollider.dim.pos.x = this->actor.world.pos.x + Math_SinS(this->actor.shape.rot.y) * 3.0f;
     this->bodyCollider.dim.pos.z = this->actor.world.pos.z + Math_CosS(this->actor.shape.rot.y) * 3.0f;
@@ -1311,38 +1316,38 @@ void EnDeath_Update(Actor* thisx, PlayState* play) {
 
 void EnDeath_DrawScytheSpinning(EnDeath* this, PlayState* play) {
     s32 i;
-    Gfx* dl;
+    Gfx* gfx;
     s32 pad;
 
     func_800B8118(&this->actor, play, 0);
     Scene_SetRenderModeXlu(play, 1, 2);
 
     OPEN_DISPS(play->state.gfxCtx);
-    dl = POLY_XLU_DISP;
+    gfx = POLY_XLU_DISP;
 
     for (i = 1; i < this->numScytheAfterImages; i++) {
-        gDPPipeSync(dl++);
-        gDPSetEnvColor(dl++, 30, 30, 0, 255 - i * 35);
+        gDPPipeSync(gfx++);
+        gDPSetEnvColor(gfx++, 30, 30, 0, 255 - i * 35);
 
         Matrix_Put(&this->scytheMtxF);
         Matrix_RotateXS(i * 0x2100, MTXMODE_APPLY);
 
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(dl++, object_death_DL_006F88); // scythe handle
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, gGomessScytheHandleDL);
 
         Matrix_Translate(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
         Matrix_RotateZYX(-0x4000, 0, -0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(dl++, object_death_DL_0073D0); // scythe blade
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, gGomessScytheBladeDL);
     }
 
-    POLY_XLU_DISP = dl;
+    POLY_XLU_DISP = gfx;
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void EnDeath_DrawScythe(EnDeath* this, PlayState* play) {
-    Gfx* dl;
+    Gfx* gfx;
     s32 pad;
 
     if (this->actionFunc == EnDeath_Dead) {
@@ -1353,32 +1358,32 @@ void EnDeath_DrawScythe(EnDeath* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actionFunc == EnDeath_Dead) {
-        dl = POLY_XLU_DISP;
+        gfx = POLY_XLU_DISP;
 
-        gDPPipeSync(dl++);
-        gDPSetEnvColor(dl++, 30, 30, 0, this->actionTimer);
+        gDPPipeSync(gfx++);
+        gDPSetEnvColor(gfx++, 30, 30, 0, this->actionTimer);
     } else {
-        dl = POLY_OPA_DISP;
+        gfx = POLY_OPA_DISP;
     }
 
     Matrix_Put(&this->scytheMtxF);
     Matrix_Scale(this->scytheScale, this->scytheScale, this->scytheScale, MTXMODE_APPLY);
 
-    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[1], object_death_DL_006F88); // scythe handle
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[1], gGomessScytheHandleDL);
 
     Matrix_Translate(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
     Matrix_RotateZYX(-0x4000, 0, -0x4000, MTXMODE_APPLY);
 
-    gSPMatrix(&dl[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[3], object_death_DL_0073D0); // scythe blade
+    gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[3], gGomessScytheBladeDL);
 
     Matrix_MultZero(&this->scytheWorldPos);
 
     if (this->actionFunc == EnDeath_Dead) {
-        POLY_XLU_DISP = &dl[4];
+        POLY_XLU_DISP = &gfx[4];
     } else {
-        POLY_OPA_DISP = &dl[4];
+        POLY_OPA_DISP = &gfx[4];
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1396,15 +1401,15 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
     MiniDeathEffect* effect;
     s32 j;
     f32 scale;
-    Gfx* dl;
+    Gfx* gfx;
     s32 i;
     Vec3f quakeOffset;
 
     OPEN_DISPS(play->state.gfxCtx);
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(dl++, gSetupDLs[SETUPDL_25]);
-    gSPDisplayList(dl++, gGomessBatMaterialDL);
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
+    gSPDisplayList(gfx++, gGomessBatMaterialDL);
 
     cmf = Matrix_GetCurrent();
 
@@ -1428,7 +1433,7 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
         if (this->actionFunc == EnDeath_BeginWithoutCutscene ||
-            (this->miniDeaths[i]->actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40) {
+            CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
             miniDeath = this->miniDeaths[i];
 
             Matrix_RotateZYX(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
@@ -1440,8 +1445,8 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
                     cmf->mf[3][1] = effect->pos.y + quakeOffset.y;
                     cmf->mf[3][2] = effect->pos.z + quakeOffset.z;
 
-                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(dl++, sMinideathDLs[effect->animFrame]);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPDisplayList(gfx++, sMinideathDLs[effect->animFrame]);
                 }
             }
 
@@ -1453,8 +1458,8 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
                     cmf->mf[3][1] = effect->pos.y + quakeOffset.y;
                     cmf->mf[3][2] = effect->pos.z + quakeOffset.z;
 
-                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(dl++, sMinideathDLs[effect->animFrame]);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPDisplayList(gfx++, sMinideathDLs[effect->animFrame]);
                 }
             }
         }
@@ -1472,8 +1477,8 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
                 cmf->mf[3][1] = miniDeath->actor.world.pos.y + (20.0f - effect->vel.y);
                 cmf->mf[3][2] = miniDeath->actor.world.pos.z - effect->vel.z;
 
-                gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(dl++, sMinideathDLs[effect->animFrame]);
+                gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(gfx++, sMinideathDLs[effect->animFrame]);
             }
         }
     }
@@ -1485,11 +1490,11 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
         cmf->mf[3][1] = this->corePos.y + quakeOffset.y;
         cmf->mf[3][2] = this->corePos.z + quakeOffset.z;
 
-        gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(dl++, sMinideathDLs[0]);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, sMinideathDLs[0]);
     }
 
-    POLY_OPA_DISP = dl;
+    POLY_OPA_DISP = gfx;
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -1549,7 +1554,7 @@ void EnDeath_DrawFlames(EnDeath* this, PlayState* play2) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
-        if ((this->miniDeaths[i]->actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40) {
+        if (CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
             for (effect = this->miniDeaths[i]->effects, j = 0; j < MINIDEATH_NUM_EFFECTS; j++, effect++) {
                 cmf->mf[3][0] = effect->pos.x;
                 cmf->mf[3][1] = effect->pos.y - 12.0f;
@@ -1571,22 +1576,22 @@ void EnDeath_DrawFlames(EnDeath* this, PlayState* play2) {
 
 void EnDeath_DrawCore(EnDeath* this, PlayState* play) {
     s32 pad;
-    Gfx* dl;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
-    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[1], gGomessCoreDL);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[1], gGomessCoreDL);
 
     if (this->actor.params >= 5) {
         // bats in front of the core
-        gSPDisplayList(&dl[2], gGomessBatsGuardingCoreDL);
-        POLY_OPA_DISP = &dl[3];
+        gSPDisplayList(&gfx[2], gGomessBatsGuardingCoreDL);
+        POLY_OPA_DISP = &gfx[3];
     } else {
-        POLY_OPA_DISP = &dl[2];
+        POLY_OPA_DISP = &gfx[2];
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1600,6 +1605,7 @@ s32 EnDeath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     } else if (limbIndex == GOMESS_LIMB_CLOAK_LOWER && this->actionFunc == EnDeath_DeathCutscenePart3) {
         if (this->actionTimer - 5 > 0) {
             f32 scale = 1.0f - 0.1f * (this->actionTimer - 5);
+
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         }
     }
@@ -1623,8 +1629,9 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         { 1000.0f, 2000.0f, 0.0f },    { 1500.0f, 1000.0f, 4000.0f },  { 1500.0f, 1000.0f, -4000.0f },
         { 4000.0f, 4000.0f, 2000.0f }, { 4000.0f, 4000.0f, -2000.0f },
     };
-    static s8 sDamageEffectPosMap[GOMESS_LIMB_MAX] = { -1, -1, -1, 12, -1, 0, -1, -1, -1, -1, -1,
-                                                       -1, -1, 7,  1,  2,  3, 4,  5,  6,  -1, -1 };
+    static s8 sDamageEffectPosMap[GOMESS_LIMB_MAX] = {
+        -1, -1, -1, 12, -1, 0, -1, -1, -1, -1, -1, -1, -1, 7, 1, 2, 3, 4, 5, 6, -1, -1,
+    };
     EnDeath* this = THIS;
     s8 index;
 

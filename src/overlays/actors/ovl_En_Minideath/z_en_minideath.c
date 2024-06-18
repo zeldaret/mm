@@ -39,16 +39,16 @@ void EnMinideath_SetupReturn(EnMinideath* this);
 void EnMinideath_SetupIntro3(EnMinideath* this);
 void EnMinideath_SetupDead(EnMinideath* this);
 
-const ActorInit En_Minideath_InitVars = {
-    ACTOR_EN_MINIDEATH,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEATH,
-    sizeof(EnMinideath),
-    (ActorFunc)EnMinideath_Init,
-    (ActorFunc)EnMinideath_Destroy,
-    (ActorFunc)EnMinideath_Update,
-    (ActorFunc)NULL,
+ActorInit En_Minideath_InitVars = {
+    /**/ ACTOR_EN_MINIDEATH,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEATH,
+    /**/ sizeof(EnMinideath),
+    /**/ EnMinideath_Init,
+    /**/ EnMinideath_Destroy,
+    /**/ EnMinideath_Update,
+    /**/ NULL,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {
@@ -101,12 +101,12 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 typedef enum {
-    DMGEFF_NONE = 0,
-    DMGEFF_STUN = 1,
-    DMGEFF_FIRE_ARROW = 2,
-    DMGEFF_ICE_ARROW = 3,
-    DMGEFF_LIGHT_ARROW = 4,
-    DMGEFF_ZORA_BARRIER = 5
+    /* 0 */ DMGEFF_NONE,
+    /* 1 */ DMGEFF_STUN,
+    /* 2 */ DMGEFF_FIRE_ARROW,
+    /* 3 */ DMGEFF_ICE_ARROW,
+    /* 4 */ DMGEFF_LIGHT_ARROW,
+    /* 5 */ DMGEFF_ZORA_BARRIER
 } EnMinideathDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -325,7 +325,8 @@ void EnMinideath_SetupPreBattle(EnMinideath* this) {
 }
 
 void EnMinideath_PreBattle(EnMinideath* this, PlayState* play) {
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) &&
+        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         // Fly away from walls
         this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
@@ -349,18 +350,16 @@ void EnMinideath_Intro1(EnMinideath* this, PlayState* play) {
     if (this->actor.child == NULL) {
         phi_v0 = 0;
         angle = 0;
-    } else {
+    } else if (this->number == 6) {
+        phi_v0 = 1;
         angle = 0x5555;
-        if (this->number == 6) {
-            phi_v0 = 1;
-        } else if (this->number == 12) {
-            phi_v0 = 2;
-            angle = -0x5556;
-        } else {
-            phi_v0 = -1;
-            Math_Vec3f_Copy(&sp38, &this->actor.child->world.pos);
-            angle = 0;
-        }
+    } else if (this->number == 12) {
+        phi_v0 = 2;
+        angle = -0x5556;
+    } else {
+        phi_v0 = -1;
+        Math_Vec3f_Copy(&sp38, &this->actor.child->world.pos);
+        angle = 0;
     }
 
     if (phi_v0 != -1) {
@@ -433,7 +432,8 @@ void EnMinideath_Scatter(EnMinideath* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) &&
+        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         // Fly away from walls
         this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
@@ -464,7 +464,7 @@ void EnMinideath_SetupReturn(EnMinideath* this) {
 void EnMinideath_Return(EnMinideath* this, PlayState* play) {
     s32 pad;
     f32 distToParent = Actor_WorldDistXYZToPoint(&this->actor, &this->actor.parent->focus.pos);
-    f32 velocityFactor = distToParent * 0.016666668f;
+    f32 velocityFactor = distToParent * (1.0f / 60.0f);
 
     if (velocityFactor > 1.0f) {
         velocityFactor = 1.0f;
@@ -642,7 +642,8 @@ void EnMinideath_Death1(EnMinideath* this, PlayState* play) {
     f32 parentY;
 
     Math_StepToF(&this->actor.speed, 5.0f, 0.2f);
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) && (this->actor.bgCheckFlags & 8)) {
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->moveDirection.y, 0x480) &&
+        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         // Fly away from walls
         this->moveDirection.y = ((s32)Rand_Next() >> 18) + this->actor.wallYaw;
     }
@@ -674,7 +675,7 @@ void EnMinideath_Die(EnMinideath* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, this->moveDirection.x, 0x480);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = 0.0f;
 
         for (effect = this->effects, i = 0; i < MINIDEATH_NUM_EFFECTS; i++, effect++) {
@@ -732,7 +733,7 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
             if (this->actionFunc == EnMinideath_CrowdParent || this->actionFunc == EnMinideath_Intro3) {
                 sScatterTimer = 5;
             } else if (this->actionFunc == EnMinideath_SwarmFollower) {
-                EnMinideath** miniDeaths = (EnMinideath**)((EnDeath*)this->actor.parent)->miniDeaths;
+                EnMinideath** miniDeaths = ((EnDeath*)this->actor.parent)->miniDeaths;
                 s32 i;
 
                 for (i = this->number - 1; i >= 0; i--) {
