@@ -93,7 +93,7 @@ s32 Map_IsInDungeonScene(PlayState* play) {
  * @return -1 if not a boss scene, else returns the DungeonSceneIndex corresponding to that boss scene's primary dungeon
  * scene
  */
-s32 Map_TryGetDungeonSceneIndexForBoss(PlayState* play) {
+s32 Map_GetDungeonSceneIndexForBoss(PlayState* play) {
     static s32 sBossSceneIds[] = {
         SCENE_MITURIN_BS, // DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE
         SCENE_HAKUGIN_BS, // DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE
@@ -116,7 +116,7 @@ s32 Map_TryGetDungeonSceneIndexForBoss(PlayState* play) {
  * @return true if the current scene is a boss scene, false otherwise.
  */
 s32 Map_IsInBossScene(PlayState* play) {
-    if (Map_TryGetDungeonSceneIndexForBoss(play) == -1) {
+    if (Map_GetDungeonSceneIndexForBoss(play) == -1) {
         return false;
     }
 

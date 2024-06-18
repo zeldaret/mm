@@ -1513,7 +1513,7 @@ asm/non_matchings/code/z_map_exp/Map_IsInDungeonOrBossScene.s,Map_IsInDungeonOrB
 asm/non_matchings/code/z_map_exp/Map_CurRoomHasMapI.s,Map_CurRoomHasMapI,0x8010A0A4,0x13
 asm/non_matchings/code/z_map_exp/Map_GetDungeonSceneIndexForDungeon.s,Map_GetDungeonSceneIndexForDungeon,0x8010A0F0,0x1D
 asm/non_matchings/code/z_map_exp/Map_IsInDungeonScene.s,Map_IsInDungeonScene,0x8010A164,0xC
-asm/non_matchings/code/z_map_exp/Map_TryGetDungeonSceneIndexForBoss.s,Map_TryGetDungeonSceneIndexForBoss,0x8010A194,0x1D
+asm/non_matchings/code/z_map_exp/Map_GetDungeonSceneIndexForBoss.s,Map_GetDungeonSceneIndexForBoss,0x8010A194,0x1D
 asm/non_matchings/code/z_map_exp/Map_IsInBossScene.s,Map_IsInBossScene,0x8010A208,0xC
 asm/non_matchings/code/z_map_exp/Map_GetMapIndexForOverworld.s,Map_GetMapIndexForOverworld,0x8010A238,0x1D
 asm/non_matchings/code/z_map_exp/Map_IsInOverworldSceneWithMapIndex.s,Map_IsInOverworldSceneWithMapIndex,0x8010A2AC,0xC

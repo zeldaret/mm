@@ -1999,7 +1999,7 @@
     0x8010A0A4:("Map_CurRoomHasMapI",),
     0x8010A0F0:("Map_GetDungeonSceneIndexForDungeon",),
     0x8010A164:("Map_IsInDungeonScene",),
-    0x8010A194:("Map_TryGetDungeonSceneIndexForBoss",),
+    0x8010A194:("Map_GetDungeonSceneIndexForBoss",),
     0x8010A208:("Map_IsInBossScene",),
     0x8010A238:("Map_GetMapIndexForOverworld",),
     0x8010A2AC:("Map_IsInOverworldSceneWithMapIndex",),
