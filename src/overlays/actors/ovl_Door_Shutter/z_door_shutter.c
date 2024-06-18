@@ -347,8 +347,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor));
             if (this->doorType != DOORSHUTTER_TYPE_BOSS_DOOR) {
-                DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) =
-                    DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) - 1;
+                DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
@@ -378,12 +377,12 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
                 }
             } else if (this->unk_166 != 0) {
                 if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
-                    if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.dungeonSceneIndex)) {
+                    if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.mapIndex)) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->slidingDoor.dyna.actor.textId = 0x1803;
                     }
                     player->doorTimer += 10;
-                } else if (DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) <= 0) {
+                } else if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->slidingDoor.dyna.actor.textId = 0x1802;
                 } else {

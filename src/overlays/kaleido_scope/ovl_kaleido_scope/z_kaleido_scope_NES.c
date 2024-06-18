@@ -2881,7 +2881,7 @@ void KaleidoScope_Update(PlayState* play) {
             CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
-            if (MapExp_CurRoomHasMapI(play)) {
+            if (Map_CurRoomHasMapI(play)) {
                 size_t size = SEGMENT_ROM_SIZE(icon_item_dungeon_static);
 
                 DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);

@@ -1010,8 +1010,8 @@ s32 MapDisp_IsLocationRomaniRanchAltScene(PlayState* play) {
 }
 
 s32 MapDisp_CanDisplayMinimap(PlayState* play) {
-    if ((!MapExp_CurRoomHasMapI(play) && Inventory_IsMapVisible(play->sceneId)) ||
-        (MapExp_CurRoomHasMapI(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonSceneIndex))) {
+    if ((!Map_CurRoomHasMapI(play) && Inventory_IsMapVisible(play->sceneId)) ||
+        (Map_CurRoomHasMapI(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex))) {
         return true;
     }
     return false;
@@ -1070,8 +1070,8 @@ void MapDisp_DrawMinimap(PlayState* play, s32 playerInitX, s32 playerInitZ, s32 
                 }
                 MapDisp_Minimap_DrawDoorActors(play);
             }
-            if ((!MapExp_CurRoomHasMapI(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonSceneIndex)) &&
-                (MapExp_CurRoomHasMapI(play) || Inventory_IsMapVisible(play->sceneId))) {
+            if ((!Map_CurRoomHasMapI(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.mapIndex)) &&
+                (Map_CurRoomHasMapI(play) || Inventory_IsMapVisible(play->sceneId))) {
                 if (play->interfaceCtx.minigameState == MINIGAME_STATE_NONE) {
                     MapDisp_Minimap_DrawRedCompassIcon(play, playerInitX, playerInitZ, playerInitDir);
                 }
@@ -1488,7 +1488,7 @@ void MapDisp_DrawRoomExits(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth,
                     !MapDisp_IsBossDoor(sTransitionActors[i].params)) {
                     roomA = sTransitionActors[i].sides[0].room;
                     roomB = sTransitionActors[i].sides[1].room;
-                    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonSceneIndex) || (roomA < 0) ||
+                    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex) || (roomA < 0) ||
                         GET_ROOM_VISITED(Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)),
                                          roomA) ||
                         (roomB < 0) ||
@@ -1642,7 +1642,7 @@ void MapDisp_DrawDungeonFloorSelect(PlayState* play) {
                     break;
             }
         } else {
-            dungeonSceneSharedIndex = gSaveContext.dungeonSceneIndex;
+            dungeonSceneSharedIndex = gSaveContext.mapIndex;
         }
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -1776,7 +1776,7 @@ void MapDisp_DrawDungeonMap(PlayState* play) {
                 break;
         }
     } else {
-        dungeonSceneSharedIndex = gSaveContext.dungeonSceneIndex;
+        dungeonSceneSharedIndex = gSaveContext.mapIndex;
     }
 
     mapDataRoom = sMapDisp.mapDataScene->rooms;

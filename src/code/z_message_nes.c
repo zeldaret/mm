@@ -280,7 +280,7 @@ void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* de
     s16 owlWarpId;
     s16 stringLimit;
 
-    if (MapExp_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
+    if (Map_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
         owlWarpId = OWL_WARP_ENTRANCE;
     } else {
         owlWarpId = play->pauseCtx.cursorPoint[PAUSE_WORLD_MAP];

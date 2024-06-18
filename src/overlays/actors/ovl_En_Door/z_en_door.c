@@ -471,7 +471,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
 
         // If this is a locked door then handle small key counts, sfx and switch flag
         if (this->lockTimer != 0) {
-            DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) = DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) - 1;
+            DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
             Flags_SetSwitch(play, this->typeVar.switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
@@ -499,7 +499,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 player->doorActor = &this->knobDoor.dyna.actor;
 
                 if (this->lockTimer != 0) {
-                    if (DUNGEON_KEY_COUNT(gSaveContext.dungeonSceneIndex) <= 0) {
+                    if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         // 0x1802: "Missing small key"
                         this->knobDoor.dyna.actor.textId = 0x1802;
