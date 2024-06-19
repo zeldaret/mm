@@ -47,7 +47,7 @@ typedef struct EnDeath {
     /* 0x338 */ Vec3f scytheScreenPos;
     /* 0x344 */ Vec3f camEyeTarget;
     /* 0x350 */ Vec3f camAtTarget;
-    /* 0x35C */ Vec3f dmgEffectPositions[14];
+    /* 0x35C */ Vec3f bodyPartsPos[14];
     /* 0x404 */ Vec3f sparklePositions[56];
     /* 0x6A4 */ MtxF scytheMtxF;
     /* 0x6E4 */ EnMinideath* miniDeaths[20];

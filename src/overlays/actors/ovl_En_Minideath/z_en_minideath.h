@@ -35,19 +35,19 @@ typedef struct {
 } MiniDeathEffect; // size = 0x24
 
 typedef struct EnMinideath {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnMinideathActionFunc actionFunc;
-    /* 0x0148 */ u8 number;
-    /* 0x0149 */ u8 crowdState;
-    /* 0x014A */ s16 timer;
-    /* 0x014C */ s16 spawnShapeYaw;
-    /* 0x014E */ s16 attackTimer;
-    /* 0x0150 */ Vec3s moveDirection;
-    /* 0x0158 */ f32 initialHeightDiffFromParent;
-    /* 0x015C */ Actor* targetActor;
-    /* 0x0160 */ MiniDeathEffect effects[MINIDEATH_NUM_EFFECTS];
-    /* 0x01CC */ ColliderJntSph collider;
-    /* 0x01EC */ ColliderJntSphElement colliderElements[MINIDEATH_NUM_EFFECTS];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnMinideathActionFunc actionFunc;
+    /* 0x148 */ u8 number;
+    /* 0x149 */ u8 crowdState;
+    /* 0x14A */ s16 timer;
+    /* 0x14C */ s16 spawnShapeYaw;
+    /* 0x14E */ s16 attackTimer;
+    /* 0x150 */ Vec3s moveDirection;
+    /* 0x158 */ f32 initialHeightDiffFromParent;
+    /* 0x15C */ Actor* targetActor;
+    /* 0x160 */ MiniDeathEffect effects[MINIDEATH_NUM_EFFECTS];
+    /* 0x1CC */ ColliderJntSph collider;
+    /* 0x1EC */ ColliderJntSphElement colliderElements[MINIDEATH_NUM_EFFECTS];
 } EnMinideath; // size = 0x2AC
 
 #endif // Z_EN_MINIDEATH_H

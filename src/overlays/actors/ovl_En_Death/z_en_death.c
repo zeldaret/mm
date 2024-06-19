@@ -1629,7 +1629,7 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         { 1000.0f, 2000.0f, 0.0f },    { 1500.0f, 1000.0f, 4000.0f },  { 1500.0f, 1000.0f, -4000.0f },
         { 4000.0f, 4000.0f, 2000.0f }, { 4000.0f, 4000.0f, -2000.0f },
     };
-    static s8 sDamageEffectPosMap[GOMESS_LIMB_MAX] = {
+    static s8 sLimbToBodyParts[GOMESS_LIMB_MAX] = {
         -1, -1, -1, 12, -1, 0, -1, -1, -1, -1, -1, -1, -1, 7, 1, 2, 3, 4, 5, 6, -1, -1,
     };
     EnDeath* this = THIS;
@@ -1692,25 +1692,25 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         }
     }
 
-    index = sDamageEffectPosMap[limbIndex];
+    index = sLimbToBodyParts[limbIndex];
     if (index != -1) {
         if (index < 7) {
             // get matrix translation as-is, occupies slots 0, 1, 2, 3, 4, 5, 6
-            Matrix_MultZero(&this->dmgEffectPositions[index]);
+            Matrix_MultZero(&this->bodyPartsPos[index]);
         } else if (index == 7) {
             // 5 points using 5 offsets, occupies slots 7, 8, 9, 10, 11
             s32 i;
             Vec3f* offset;
             Vec3f* effPos;
 
-            for (effPos = &this->dmgEffectPositions[index], offset = &sDamageEffectOffsets[0], i = 0;
+            for (effPos = &this->bodyPartsPos[index], offset = &sDamageEffectOffsets[0], i = 0;
                  i != ARRAY_COUNT(sDamageEffectOffsets); i++, offset++, effPos++) {
                 Matrix_MultVec3f(offset, effPos);
             }
         } else if (index == 12) {
             // get matrix translation as-is and a point offset by -2000 from it, occupies slots 12, 13
-            Matrix_MultZero(&this->dmgEffectPositions[index]);
-            Matrix_MultVecY(-2000.0f, &this->dmgEffectPositions[index + 1]);
+            Matrix_MultZero(&this->bodyPartsPos[index]);
+            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[index + 1]);
         }
     }
 }
@@ -1742,7 +1742,7 @@ void EnDeath_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(play);
     }
-    Actor_DrawDamageEffects(play, &this->actor, this->dmgEffectPositions, ARRAY_COUNT(this->dmgEffectPositions),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                             this->dmgEffectScale, this->dmgEffectSteamScale, this->dmgEffectAlpha, this->dmgEffect);
     if (this->actionFunc == EnDeath_SpinAttack || this->actionFunc == EnDeath_BlockProjectile) {
         EnDeath_DrawScytheSpinning(this, play);

@@ -75,7 +75,7 @@
         <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="GOMESS_LIMB_HAND_RIGHT" Offset="0xAC90" />
         <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_HANDLE" Offset="0xAC9C" />
         <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_BLADE" Offset="0xACA8" />
-        <Skeleton Name="gGomessSkel" Type="Flex" LimbType="Standard" LimbNone="GOMESS_LIMB_NONE" LimbMax="GOMESS_LIMB_MAX" EnumName="GomessSkelLimbs" Offset="0xAD08" />
+        <Skeleton Name="gGomessSkel" Type="Flex" LimbType="Standard" LimbNone="GOMESS_LIMB_NONE" LimbMax="GOMESS_LIMB_MAX" EnumName="GomessSkelLimb" Offset="0xAD08" />
         <Animation Name="object_death_Anim_00B284" Offset="0xB284" /> <!-- Original name is "d13_gahaha" -->    <!-- Intro anim 1 -->
         <Animation Name="gGomessScytheSpinAnim" Offset="0xB508" /> <!-- Original name is "d13_guard" -->
         <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" /> <!-- Original name is "d13_jakin" -->     <!-- Intro anim 2 -->
