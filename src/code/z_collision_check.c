@@ -3795,8 +3795,8 @@ void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v) {
     s32 effectIndex;
 
     D_801EE738.position.x = v->x;
-    D_801EE738.position.x = v->y;
-    D_801EE738.position.x = v->z;
+    D_801EE738.position.y = v->y;
+    D_801EE738.position.z = v->z;
     D_801EE738.uDiv = 5;
     D_801EE738.vDiv = 5;
     D_801EE738.colorStart[0].r = 255;
