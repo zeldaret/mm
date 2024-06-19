@@ -1945,7 +1945,7 @@ s32 Play_CamIsNotFixed(PlayState* this) {
 }
 
 s32 FrameAdvance_IsEnabled(PlayState* this) {
-    return this->frameAdvCtx.enabled != 0;
+    return this->frameAdvCtx.enabled != false;
 }
 
 // Unused, unchanged from OoT, which uses it only in one Camera function.
