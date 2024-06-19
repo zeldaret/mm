@@ -13,16 +13,16 @@ typedef void (*EnMinideathActionFunc)(struct EnMinideath*, PlayState*);
 #define MINIDEATH_ANIM_LENGTH 9
 
 typedef enum {
-    MINIDEATH_ACTION_CONTINUE,  // continue with current action until it is changed
-    MINIDEATH_ACTION_SCATTER,   // scatter after light arrows?
-    MINIDEATH_ACTION_RETURN,   // gomess damaged
-    MINIDEATH_ACTION_START_SWARM,
-    MINIDEATH_ACTION_SWARM,     // chase player?
-    MINIDEATH_ACTION_DEATH_2,   // death cs part 3
-    MINIDEATH_ACTION_DEATH_1,   // death cs part 1
-    MINIDEATH_ACTION_INTRO_1,   // intro cs part 2
-    MINIDEATH_ACTION_INTRO_2,   // intro cs part 5 (1)
-    MINIDEATH_ACTION_INTRO_3    // intro cs part 5 (2)
+    /* 0 */ MINIDEATH_ACTION_CONTINUE,  // continue with current action until it is changed
+    /* 1 */ MINIDEATH_ACTION_SCATTER,   // scatter after light arrows?
+    /* 2 */ MINIDEATH_ACTION_RETURN,   // gomess damaged
+    /* 3 */ MINIDEATH_ACTION_START_SWARM,
+    /* 4 */ MINIDEATH_ACTION_SWARM,     // chase player?
+    /* 5 */ MINIDEATH_ACTION_DEATH_2,   // death cs part 3
+    /* 6 */ MINIDEATH_ACTION_DEATH_1,   // death cs part 1
+    /* 7 */ MINIDEATH_ACTION_INTRO_1,   // intro cs part 2
+    /* 8 */ MINIDEATH_ACTION_INTRO_2,   // intro cs part 5 (1)
+    /* 9 */ MINIDEATH_ACTION_INTRO_3    // intro cs part 5 (2)
 } MinideathAction;
 
 typedef struct {
