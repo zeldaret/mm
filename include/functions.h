@@ -327,9 +327,6 @@ void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);
-Gfx* Gfx_Open(Gfx* gfx);
-Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
-void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 void func_80183070(void);
 

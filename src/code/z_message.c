@@ -1,10 +1,12 @@
 #include "z64message.h"
 #include "global.h"
 
+#include "gfxalloc.h"
 #include "message_data_static.h"
 #include "padmgr.h"
 #include "sys_cmpdma.h"
 #include "segment_symbols.h"
+
 #include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
