@@ -1,7 +1,6 @@
-#ifndef GDP_LOADTEXTUREBLOCK_RUNTIME_C
-#define GDP_LOADTEXTUREBLOCK_RUNTIME_C
+#ifndef GDP_LOADTEXTUREBLOCK_RUNTIME_INC_C
+#define GDP_LOADTEXTUREBLOCK_RUNTIME_INC_C
 
-#include "global.h"
 #include "gfx.h"
 
 static u32 sLoadTextureBlock_siz[] = {

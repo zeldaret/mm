@@ -1680,7 +1680,7 @@ typedef enum {
     gSaveContext.eventInf[7] = (temp)
 
 typedef enum {
-    // These first values are also used represent the index of the temple the player is currently in
+    // These first 4 values are also used represent the index of the temple the player is currently in
     /* 0 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE,
     /* 1 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE,
     /* 2 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE,
