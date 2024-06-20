@@ -174,9 +174,6 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
-
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
 u8 Actor_ApplyDamage(Actor* actor);

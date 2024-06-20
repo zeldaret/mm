@@ -8,6 +8,7 @@
 #include "unk.h"
 
 struct GameState;
+struct PlayState;
 
 #define TMEM_SIZE 0x1000
 
@@ -235,6 +236,9 @@ Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s3
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b);
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
+
+void Gfx_DrawDListOpa(struct PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(struct PlayState* play, Gfx* dList);
 
 extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];
