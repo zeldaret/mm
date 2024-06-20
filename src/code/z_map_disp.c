@@ -10,7 +10,7 @@
 void MapDisp_DestroyMapI(PlayState* play);
 void MapDisp_InitMapI(PlayState* play);
 
-#include "gDPLoadTextureBlock_Runtime.c"
+#include "gDPLoadTextureBlock_Runtime.inc.c"
 
 static UNK_TYPE4 D_801BEB30[2] = { 0, 0 };
 
