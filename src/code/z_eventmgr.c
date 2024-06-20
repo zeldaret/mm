@@ -4,9 +4,13 @@
  * Manages all cutscenes except for manual
  */
 
-#include "global.h"
-#include "z64shrink_window.h"
+#include "z64cutscene.h"
+
 #include "string.h"
+
+#include "global.h"
+#include "z64olib.h"
+#include "z64shrink_window.h"
 
 CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78

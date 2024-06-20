@@ -43,12 +43,17 @@
  *
  */
 
+#include "z64camera.h"
+
 #include "global.h"
 #include "string.h"
+
 #include "z64malloc.h"
+#include "z64olib.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 void func_800DDFE0(Camera* camera);
