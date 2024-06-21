@@ -302,19 +302,6 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId);
 void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha);
 void Play_Init(GameState* thisx);
 
-void Graph_FaultClient(void);
-void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size);
-void Graph_SetNextGfxPool(GraphicsContext* gfxCtx);
-GameStateOverlay* Graph_GetNextGameState(GameState* gameState);
-uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param);
-void Graph_Init(GraphicsContext* gfxCtx);
-void Graph_Destroy(GraphicsContext* gfxCtx);
-void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_UpdateGame(GameState* gameState);
-void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_ThreadEntry(void* arg);
-
 void func_80183070(void);
 
 AudioTask* AudioThread_Update(void);

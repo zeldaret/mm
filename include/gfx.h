@@ -89,7 +89,7 @@ typedef enum SetupDL {
     /* 0x49 */ SETUPDL_MAX
 } SetupDL;
 
-typedef struct {
+typedef struct GfxMasterList {
     /* 0x000 */ Gfx taskStart[9];
     /* 0x048 */ Gfx clearZBuffer[8];     // original name: clear_zb_dl
     /* 0x088 */ Gfx clearFrameBuffer[5]; // original name: clear_fb_dl

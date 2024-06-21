@@ -49,8 +49,6 @@ extern u8 gSampleBankTable[];
 extern s32 gTransitionTileState;
 extern Color_RGBA8_u32 gPlayVisMonoColor;
 
-extern GfxMasterList* gGfxMasterDL;
-
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 

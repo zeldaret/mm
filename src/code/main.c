@@ -32,6 +32,7 @@ PadMgr gPadMgr;
 #include "main.h"
 #include "buffers.h"
 #include "global.h"
+#include "graph.h"
 #include "sys_initial_check.h"
 #include "system_heap.h"
 #include "z64nmi_buff.h"
