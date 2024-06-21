@@ -4387,7 +4387,7 @@ void Interface_DrawClock(PlayState* play) {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
         gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
         gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
-#ifdef PRESERVE_UB
+#ifdef AVOID_UB
         (TexturePtr)0x0000009B,  (TexturePtr)0x00FF0000,
 #endif
     };

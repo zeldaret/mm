@@ -6411,7 +6411,7 @@ u32 Audio_SetAmbienceRandomBend(u8 seqScriptValIn, SequenceChannel* channel) {
         return seqScriptValOut;
     }
 
-#ifdef PRESERVE_UB
+#ifdef AVOID_UB
     return seqScriptValOut;
 #endif
 }

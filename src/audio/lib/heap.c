@@ -1111,7 +1111,7 @@ void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size) {
     gAudioCtx.permanentEntries[index].size = size;
     //! @bug UB: missing return. "addr" is in v0 at this point, but doing an
     // explicit return uses an additional register.
-#ifdef PRESERVE_UB
+#ifdef AVOID_UB
     return addr;
 #endif
 }
