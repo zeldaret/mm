@@ -7,22 +7,6 @@
 
 // data
 
-extern u32 gBitFlags[32];
-extern u16 gEquipMasks[];
-extern u16 gEquipNegMasks[];
-extern u32 gUpgradeMasks[8];
-extern u32 gUpgradeNegMasks[];
-extern u8 gEquipShifts[];
-extern u8 gUpgradeShifts[8];
-extern u16 gUpgradeCapacities[][4];
-extern u32 gGsFlagsMask[];
-extern u32 gGsFlagsShift[];
-extern TexturePtr gItemIcons[];
-extern u8 gItemSlots[];
-extern s16 gItemPrices[];
-extern u16 gSceneIdsPerRegion[11][27];
-extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
-
 extern s32 gDbgCamEnabled;
 
 extern s16 gLowPassFilterData[];

@@ -253,16 +253,6 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx);
 void Room_Draw(PlayState* play, Room* room, u32 flags);
 
 void func_8012EBF8(PlayState* play, RoomContext* roomCtx);
-s32 Inventory_GetBtnBItem(PlayState* play);
-void Inventory_ChangeEquipment(s16 value);
-u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment);
-void Inventory_ChangeUpgrade(s16 upgrade, u32 value);
-s32 Inventory_IsMapVisible(s16 sceneId);
-void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex);
-void Inventory_SaveDekuPlaygroundHighScore(s16 timerId);
-void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
-s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
-void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
