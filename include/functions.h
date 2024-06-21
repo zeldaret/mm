@@ -362,6 +362,4 @@ void Audio_ResetForAudioHeapStep2(void);
 void Audio_ResetForAudioHeapStep1(s32 specId);
 void Audio_PreNMI(void);
 
-void Regs_InitData(PlayState* play);
-
 #endif
