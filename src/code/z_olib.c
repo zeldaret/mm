@@ -2,7 +2,6 @@
 
 #include "macros.h"
 #include "z64camera.h"
-#include "z64actor.h"
 
 /**
  * Calculates the distances between `a` and `b`

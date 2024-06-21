@@ -62,6 +62,11 @@ typedef struct {
     /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
+typedef struct PosRot {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+} PosRot; // size = 0x14
+
 /*
 The plane paramaters are of form `ax + by + cz + d = 0`
 where `(a,b,c)` is the plane's normal vector and d is the originDist
