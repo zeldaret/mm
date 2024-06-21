@@ -48,7 +48,6 @@
 #include "z64game_over.h"
 #include "z64game.h"
 #include "z64interface.h"
-#include "z64inventory.h"
 #include "z64item.h"
 #include "z64keyframe.h"
 #include "z64lib.h"
