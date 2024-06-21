@@ -5,7 +5,11 @@
         <Texture Name="gDoorLockTex" OutName="door_lock" Format="rgba16" Width="32" Height="32" Offset="0x2C0" />
         <Texture Name="gBossDoorLockTex" OutName="boss_door_lock" Format="rgba16" Width="32" Height="32" Offset="0xAC0" />
         <Texture Name="gDoorChainTex" OutName="door_chain" Format="rgba16" Width="16" Height="128" Offset="0x12C0" />
-        <Blob Name="gameplay_dangeon_keep_Blob_0022C0" Size="0x5000" Offset="0x22C0" />
+        <Texture Name="gameplay_dangeon_keep_Tex_0022C8" OutName="tex_0022C8" Format="i4" Width="96" Height="85" Offset="0x22C8" />
+        <Texture Name="gameplay_dangeon_keep_Tex_0032C8" OutName="tex_0032C8" Format="i4" Width="96" Height="85" Offset="0x32C8" />
+        <Texture Name="gameplay_dangeon_keep_Tex_0042C8" OutName="tex_0042C8" Format="i4" Width="96" Height="85" Offset="0x42C8" />
+        <Texture Name="gameplay_dangeon_keep_Tex_0052C8" OutName="tex_0052C8" Format="i4" Width="96" Height="85" Offset="0x52C8" />
+        <Texture Name="gameplay_dangeon_keep_Tex_0062C8" OutName="tex_0062C8" Format="i4" Width="96" Height="85" Offset="0x62C8" />
         <DList Name="gameplay_dangeon_keep_DL_007300" Offset="0x7300" />
         <Collision Name="gameplay_dangeon_keep_Colheader_007498" Offset="0x7498" />
         <DList Name="gameplay_dangeon_keep_DL_007650" Offset="0x7650" />

@@ -495,8 +495,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_lights.o"
     include "$(BUILD_DIR)/src/code/z_malloc.o"
     include "$(BUILD_DIR)/src/code/z_map_disp.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.data.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.bss.o"
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"

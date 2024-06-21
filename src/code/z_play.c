@@ -1575,7 +1575,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->numSetupActors = 0;
     Object_InitContext(&this->state, &this->objectCtx);
     LightContext_Init(this, &this->lightCtx);
-    Door_InitContext(&this->state, &this->doorCtx);
+    Scene_ResetTransitionActorList(&this->state, &this->transitionActors);
     Room_Init(this, &this->roomCtx);
     gSaveContext.worldMapArea = 0;
     Scene_ExecuteCommands(this, this->sceneSegment);
@@ -1975,7 +1975,7 @@ s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
         return false;
     }
 
-    transitionActor = &this->doorCtx.transitionActorList[(u16)actor->params >> 10];
+    transitionActor = &this->transitionActors.list[(u16)actor->params >> 10];
     frontRoom = transitionActor->sides[0].room;
     if (frontRoom == transitionActor->sides[1].room) {
         return false;

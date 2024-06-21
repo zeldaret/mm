@@ -3,6 +3,7 @@
  * Overlay: ovl_En_Kusa
  * Description: Grass / Bush
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
