@@ -1046,17 +1046,14 @@ beginseg
     name "ovl_En_Death"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/z_en_death.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/ovl_En_Death_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Minideath"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/z_en_minideath.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/ovl_En_Minideath_reloc.o"
 endseg
 
 beginseg
