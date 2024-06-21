@@ -221,8 +221,6 @@ s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* tors
 
 void GetItem_Draw(PlayState* play, s16 drawId);
 
-u16 QuestHint_GetTatlTextId(PlayState* play);
-
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
 size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
