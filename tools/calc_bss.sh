@@ -34,7 +34,7 @@ echo "char measurement;" >> $TEMPC
 
 $(pwd)/tools/ido_recomp/linux/7.1/cc -G 0 -non_shared \
     -Xfullwarn -Xcpluscomm -O2 -g3 -Xcpluscomm -mips2 \
-    -D_LANGUAGE_C -DF3DEX_GBI_2 -DF3DEX_GBI_PL \
+    -D_LANGUAGE_C -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE \
     -I $(pwd)/ -I $(pwd)/include/ -I $(pwd)/include/libc/ -I $(pwd)/src/ -I $(pwd)/assets/ -I $(pwd)/build/n64-us/ \
     -Wab,-r4300_mul -woff 624,649,838,712 -c $TEMPC -o $TEMPO
 
