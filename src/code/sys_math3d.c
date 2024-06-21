@@ -15,8 +15,7 @@ struct Dummy210 { int x; };
 struct Dummy211 { int x; };
 struct Dummy212 { int x; };
 struct Dummy213 { int x; };
-struct Dummy214 { int x; };
-struct Dummy215 { int x; };
+typedef int Dummy214;
 // clang-format on
 
 #include "z64math.h"
