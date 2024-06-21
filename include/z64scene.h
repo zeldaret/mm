@@ -10,6 +10,9 @@
 struct GameState;
 struct PlayState;
 
+#define ROOM_MAX 32 // maximum number of rooms in a scene
+#define ROOM_TRANSITION_MAX 48 // maximum number of transition actors in a scene
+
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 #define ROOM_DRAW_OPA (1 << 0)
@@ -107,7 +110,7 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdTransiActorList; // size = 0x8
+} SCmdTransitionActorList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -207,13 +210,13 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
     /* 0x4 */ void* segment;
-} SCmdMinimapSettings; // size = 0x8
+} SCmdMapData; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdMinimapChests; // size = 0x8
+} SCmdMapDataChests; // size = 0x8
 
 typedef enum {
     /* 0 */ ROOM_SHAPE_TYPE_NORMAL,
@@ -373,9 +376,9 @@ typedef struct TransitionActorEntry {
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ u8 numTransitionActors;
-    /* 0x4 */ TransitionActorEntry* transitionActorList;
-} DoorContext; // size = 0x8
+    /* 0x0 */ u8 count;
+    /* 0x4 */ TransitionActorEntry* list;
+} TransitionActorList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ s16 id;
@@ -474,25 +477,38 @@ typedef struct {
 } ObjectContext; // size = 0x958
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE2 unk0;
-    /* 0x2 */ UNK_TYPE2 unk2;
-    /* 0x4 */ UNK_TYPE2 unk4;
-    /* 0x6 */ UNK_TYPE2 unk6;
-    /* 0x8 */ UNK_TYPE2 unk8;
-} MinimapEntry; // size = 0xA
+    /* 0x0 */ u16 mapId;
+    /* 0x2 */ s16 centerX;
+    /* 0x4 */ s16 floorY;
+    /* 0x6 */ s16 centerZ;
+    /* 0x8 */ u16 flags;
+} MapDataRoom; // size = 0xA
+
+#define MAP_DATA_NO_MAP 0xFFFF
+#define MAP_DATA_ROOM_FLIP_X 1
+#define MAP_DATA_ROOM_FLIP_Y 2
+#define MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom) ((((mapDataRoom)->flags) >> 2) & 7)
 
 typedef struct {
-    /* 0x0 */ MinimapEntry* entry;
-    /* 0x4 */ s16 unk4;
-} MinimapList; // size  = 0x8
+    /* 0x0 */ MapDataRoom* rooms;
+    /* 0x4 */ s16 scale;
+} MapDataScene; // size  = 0x8
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE2 unk0;
-    /* 0x2 */ UNK_TYPE2 unk2;
-    /* 0x4 */ UNK_TYPE2 unk4;
-    /* 0x6 */ UNK_TYPE2 unk6;
-    /* 0x8 */ UNK_TYPE2 unk8;
-} MinimapChest; // size = 0xA
+    /* 0x0 */ s16 room;
+    /* 0x2 */ s16 chestFlagId;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ s16 z;
+} MapDataChest; // size = 0xA
+
+// TODO: ZAPD updates
+typedef SCmdMapData SCmdMinimapSettings;
+typedef SCmdMapDataChests SCmdMinimapChests;
+typedef MapDataRoom MinimapEntry;
+typedef MapDataScene MinimapList;
+typedef MapDataChest MinimapChest;
+typedef SCmdTransitionActorList SCmdTransiActorList;
 
 // TODO: consider merging with bgCamInfo?
 typedef struct {
@@ -502,38 +518,38 @@ typedef struct {
 } ActorCsCamInfo; // size = 0x8
 
 typedef union {
-    /* Command: N/A  */ SCmdBase              base;
-    /* Command: 0x00 */ SCmdSpawnList         spawnList;
-    /* Command: 0x01 */ SCmdActorList         actorList;
-    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList;
-    /* Command: 0x03 */ SCmdColHeader         colHeader;
-    /* Command: 0x04 */ SCmdRoomList          roomList;
-    /* Command: 0x05 */ SCmdWindSettings      windSettings;
-    /* Command: 0x06 */ SCmdEntranceList      entranceList;
-    /* Command: 0x07 */ SCmdSpecialFiles      specialFiles;
-    /* Command: 0x08 */ SCmdRoomBehavior      roomBehavior;
+    /* Command: N/A  */ SCmdBase                base;
+    /* Command: 0x00 */ SCmdSpawnList           spawnList;
+    /* Command: 0x01 */ SCmdActorList           actorList;
+    /* Command: 0x02 */ SCmdCsCameraList        actorCsCamList;
+    /* Command: 0x03 */ SCmdColHeader           colHeader;
+    /* Command: 0x04 */ SCmdRoomList            roomList;
+    /* Command: 0x05 */ SCmdWindSettings        windSettings;
+    /* Command: 0x06 */ SCmdEntranceList        entranceList;
+    /* Command: 0x07 */ SCmdSpecialFiles        specialFiles;
+    /* Command: 0x08 */ SCmdRoomBehavior        roomBehavior;
     /* Command: 0x09 */ // Unused
-    /* Command: 0x0A */ SCmdMesh              mesh;
-    /* Command: 0x0B */ SCmdObjectList        objectList;
-    /* Command: 0x0C */ SCmdLightList         lightList;
-    /* Command: 0x0D */ SCmdPathList          pathList;
-    /* Command: 0x0E */ SCmdTransiActorList   transiActorList;
-    /* Command: 0x0F */ SCmdLightSettingList  lightSettingList;
-    /* Command: 0x10 */ SCmdTimeSettings      timeSettings;
-    /* Command: 0x11 */ SCmdSkyboxSettings    skyboxSettings;
-    /* Command: 0x12 */ SCmdSkyboxDisables    skyboxDisables;
-    /* Command: 0x13 */ SCmdExitList          exitList;
-    /* Command: 0x14 */ SCmdEndMarker         endMarker;
-    /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
-    /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCsScriptList      scriptList;
-    /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
-    /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
-    /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
-    /* Command: 0x1B */ SCmdCutsceneList      cutsceneList;
-    /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
+    /* Command: 0x0A */ SCmdMesh                mesh;
+    /* Command: 0x0B */ SCmdObjectList          objectList;
+    /* Command: 0x0C */ SCmdLightList           lightList;
+    /* Command: 0x0D */ SCmdPathList            pathList;
+    /* Command: 0x0E */ SCmdTransitionActorList transitionActorList;
+    /* Command: 0x0F */ SCmdLightSettingList    lightSettingList;
+    /* Command: 0x10 */ SCmdTimeSettings        timeSettings;
+    /* Command: 0x11 */ SCmdSkyboxSettings      skyboxSettings;
+    /* Command: 0x12 */ SCmdSkyboxDisables      skyboxDisables;
+    /* Command: 0x13 */ SCmdExitList            exitList;
+    /* Command: 0x14 */ SCmdEndMarker           endMarker;
+    /* Command: 0x15 */ SCmdSoundSettings       soundSettings;
+    /* Command: 0x16 */ SCmdEchoSettings        echoSettings;
+    /* Command: 0x17 */ SCmdCsScriptList        scriptList;
+    /* Command: 0x18 */ SCmdAltHeaders          altHeaders;
+    /* Command: 0x19 */ SCmdRegionVisited       regionVisited;
+    /* Command: 0x1A */ SCmdTextureAnimations   textureAnimations;
+    /* Command: 0x1B */ SCmdCutsceneList        cutsceneList;
+    /* Command: 0x1C */ SCmdMapData             mapData;
     /* Command: 0x1D */ // Unused
-    /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
+    /* Command: 0x1E */ SCmdMapDataChests       mapDataChests;
 } SceneCmd; // size = 0x8
 
 // Sets cursor point options on the world map
@@ -774,9 +790,9 @@ typedef enum {
     /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
-    /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
+    /* 0x1C */ SCENE_CMD_ID_MAP_DATA,
     /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
-    /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
+    /* 0x1E */ SCENE_CMD_ID_MAP_DATA_CHESTS,
     /* 0x1F */ SCENE_CMD_MAX
 } SceneCommandTypeId;
 
@@ -822,13 +838,13 @@ typedef enum {
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
 
 #define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
-    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) }
 
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
 
 #define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, actorList) \
-    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) } 
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) }
 
 #define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
     { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
@@ -869,12 +885,14 @@ typedef enum {
 #define SCENE_CMD_ACTOR_CUTSCENE_LIST(numEntries, actorCutsceneList) \
     { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, numEntries, CMD_PTR(actorCutsceneList) }
 
-#define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
-    { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
+#define SCENE_CMD_MAP_DATA(mapData) \
+    { SCENE_CMD_ID_MAP_DATA, 0, CMD_PTR(mapData) }
 
-#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
-    { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+#define SCENE_CMD_MAP_DATA_CHESTS(chestCount, chestInfo) \
+    { SCENE_CMD_ID_MAP_DATA_CHESTS, chestCount, CMD_PTR(chestInfo) }
 
+#define SCENE_CMD_MINIMAP_INFO SCENE_CMD_MAP_DATA
+#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO SCENE_CMD_MAP_DATA_CHESTS
 
 s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id);
 void Object_InitContext(struct GameState* gameState, ObjectContext* objectCtx);
@@ -895,8 +913,8 @@ void Scene_CommandMesh(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandObjectList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandLightList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandPathList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandTransiActorList(struct PlayState* play, SceneCmd* cmd);
-void Door_InitContext(struct GameState* gameState, DoorContext* doorCtx);
+void Scene_CommandTransitionActorList(struct PlayState* play, SceneCmd* cmd);
+void Scene_ResetTransitionActorList(GameState* gameState, TransitionActorList* transitionActors);
 void Scene_CommandEnvLightSettings(struct PlayState* play, SceneCmd* cmd);
 void Scene_LoadAreaTextures(struct PlayState* play, s32 fileIndex);
 void Scene_CommandSkyboxSettings(struct PlayState* play, SceneCmd* cmd);
@@ -910,9 +928,9 @@ void Scene_CommandEchoSetting(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandAltHeaderList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandCutsceneScriptList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandCutsceneList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMiniMap(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMapData(struct PlayState* play, SceneCmd* cmd);
 void Scene_Command1D(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMiniMapCompassInfo(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMapDataChests(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandSetRegionVisitedFlag(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandAnimatedMaterials(struct PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(struct PlayState* play);

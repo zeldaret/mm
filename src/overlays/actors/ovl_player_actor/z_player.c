@@ -6336,7 +6336,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
 
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_SCENE0);
     this->cv.doorBgCamIndex =
-        play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamIndex;
+        play->transitionActors.list[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamIndex;
     Actor_DeactivateLens(play);
     this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
 }
@@ -6382,7 +6382,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     }
 
     if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
-        this->cv.doorBgCamIndex = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
+        this->cv.doorBgCamIndex = play->transitionActors.list[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                                       .sides[this->doorDirection > 0 ? 0 : 1]
                                       .bgCamIndex;
         Actor_DeactivateLens(play);
@@ -6481,7 +6481,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
                 Camera_ChangeDoorCam(mainCam, &knobDoor->dyna.actor,
-                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
+                                     play->transitionActors.list[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamIndex,
                                      0.0f, this->av1.actionVar1, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
@@ -6529,7 +6529,7 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
                 if ((this->doorType < PLAYER_DOORTYPE_FAKE) && (doorActor->category == ACTORCAT_DOOR) &&
                     ((this->doorType != PLAYER_DOORTYPE_HANDLE) ||
                      (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_FRAMED))) {
-                    s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
+                    s8 roomNum = play->transitionActors.list[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
 
@@ -10904,7 +10904,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Minimap_SavePlayerRoomInitInfo(play);
+    Map_SetAreaEntrypoint(play);
     func_80841A50(play, this);
     this->unk_3CF = 0;
     R_PLAY_FILL_SCREEN_ON = 0;
@@ -13747,7 +13747,7 @@ void Player_Action_1(Player* this, PlayState* play) {
     } else if (this->av2.actionVar2 < 0) {
         if (Room_StartRoomTransition(play, &play->roomCtx, this->av1.actionVar1)) {
             Map_InitRoomData(play, play->roomCtx.curRoom.num);
-            Minimap_SavePlayerRoomInitInfo(play);
+            Map_SetAreaEntrypoint(play);
             this->av2.actionVar2 = 5;
         }
     } else if (this->av2.actionVar2 > 0) {
@@ -15211,7 +15211,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                             TransitionActorEntry* temp_v1_4; // sp50
                             s32 roomNum;
 
-                            temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
+                            temp_v1_4 = &play->transitionActors.list[this->doorNext];
                             roomNum = temp_v1_4->sides[0].room;
                             R_PLAY_FILL_SCREEN_ALPHA = 255;
 
@@ -15279,7 +15279,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                                                 (Play_GetCamera(play, CAM_ID_MAIN)->stateFlags & CAM_STATE_4))) {
                 if (this->unk_397 == 4) {
                     Map_InitRoomData(play, play->roomCtx.curRoom.num);
-                    Minimap_SavePlayerRoomInitInfo(play);
+                    Map_SetAreaEntrypoint(play);
                 }
 
                 R_PLAY_FILL_SCREEN_ON = 0;
