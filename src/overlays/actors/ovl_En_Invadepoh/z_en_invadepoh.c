@@ -5267,7 +5267,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         gfx = POLY_XLU_DISP;
         gfx = Gfx_SetupDL20_NoCD(gfx);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
