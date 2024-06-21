@@ -115,7 +115,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     f32 temp;
     OceffSpot* this = THIS;
 
-    temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
+    temp = (1.0f - cosf(this->unk16C * M_PIf)) * 0.5f;
     this->actionFunc(this, play);
 
     switch (GET_PLAYER_FORM) {

@@ -1,7 +1,8 @@
 #ifndef SEGMENT_SYMBOLS_H
 #define SEGMENT_SYMBOLS_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
+#include "stdint.h"
 #include "PR/ultratypes.h"
 
 #include "romfile.h"

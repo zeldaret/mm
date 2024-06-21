@@ -29,7 +29,7 @@ typedef struct EnDnp {
     /* 0x286 */ Vec3s morphTable[DEKU_PRINCESS_LIMB_MAX];
     /* 0x322 */ u16 unk_322;
     /* 0x324 */ u8 cueId;
-    /* 0x328 */ s32 unk_328;
+    /* 0x328 */ s32 msgScriptPos;
     /* 0x32C */ UNK_TYPE1 unk_32C[0x2];
     /* 0x32E */ s16 unk_32E;
     /* 0x330 */ s16 unk_330;

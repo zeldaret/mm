@@ -545,7 +545,8 @@
             0x801BE960 : "z_lib",
             0x801BE990 : "z_lifemeter",
             0x801BEAB0 : "z_lights",
-            0x801BEAD0 : "z_map_disp", # z_map_data is somewhere in here
+            0x801BEAD0 : "z_map_disp",
+            0x801BED40 : "z_map_data",
             0x801BF550 : "z_map_exp",
             0x801BF5C0 : "z_msgevent",
             0x801BF6C0 : "z_parameter",

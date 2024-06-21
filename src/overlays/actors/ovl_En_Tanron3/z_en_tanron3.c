@@ -98,7 +98,7 @@ void EnTanron3_CreateEffect(PlayState* play, Vec3f* effectPos) {
             effectPtr->accel.y = -2.0f;
             effectPtr->unk_34.x = 0.1f;
             effectPtr->unk_34.y = 0.0f;
-            effectPtr->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            effectPtr->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             effectPtr->unk_02 = Rand_ZeroFloat(100.0f);
             effectPtr->velocity.x = Rand_CenteredFloat(25.0f);
             effectPtr->velocity.z = Rand_CenteredFloat(25.0f);
@@ -135,8 +135,8 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, PlayState* play) {
     Vec3f acceleration;
 
     for (i = 0; i < 20; i++) {
-        Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-        Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+        Matrix_RotateYF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_NEW);
+        Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PIf));
         Matrix_MultVecZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
         acceleration.x = velocity.x * -0.05f;
         acceleration.y = velocity.y * -0.05f;

@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "unk.h"
 
 #include "romfile.h"

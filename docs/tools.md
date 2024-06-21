@@ -6,8 +6,8 @@
     - [`diff.py`](#diffpy)
     - [`tools/m2ctx.py`](#toolsm2ctxpy)
     - [`tools/overlayhelpers/actor_symbols.py`](#toolsoverlayhelpersactor_symbolspy)
-    - [`first_diff.py`](#first_diffpy)
-    - [`sym_info.py`](#sym_infopy)
+    - [`tools/first_diff.py`](#first_diffpy)
+    - [`tools/sym_info.py`](#sym_infopy)
     - [`extract_assets.py`](#extract_assetspy)
     - [`tools/assist.py`](#toolsassistpy)
     - [`tools/get_actor_sizes.py`](#toolsget_actor_sizespy)
@@ -22,8 +22,8 @@
     - [`tools/graphovl.py`](#toolsgraphovlpy)
     - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
     - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
-    - [`fixle.sh`](#fixlesh)
-    - [`format.py`](#formatpy)
+    - [`tools/fixle.sh`](#fixlesh)
+    - [`tools/format.py`](#formatpy)
   - [External tools](#external-tools)
     - [mips_to_c](#mips_to_c)
     - [Permuter](#permuter)
@@ -108,16 +108,16 @@ Pass it the path to a C file to generate the context for that C file, to help [m
 
 Takes a VRAM or VROM address to get overlay file and offset for an Actor.
 
-### `first_diff.py`
+### `tools/first_diff.py`
 
 Gives you the addresses of first difference in the ROM, the difference, and a count of how many bytes differ, or if the whole ROM is shifted.
 
-### `sym_info.py`
+### `tools/sym_info.py`
 
 Can be given a symbol (function or variable name, for example), and will find its ROM, VRAM, and file using the map file. E.g.
 
 ```bash
-$ ./sym_info.py ObjTree_Init
+$ ./tools/sym_info.py ObjTree_Init
 Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/n64-us/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
 ```
 
@@ -208,11 +208,11 @@ Run `check_new_warnings.sh -h` for more information.
 
 If you have to add new warnings, **and have permission from the leads**, run this to update the file used for warnings comparison.
 
-### `fixle.sh`
+### `tools/fixle.sh`
 
 Fixes line endings in the repo to Linux style (LF), which is required for the build process to work. (You may be better off creating a new clone directly in Linux/WSL, though)
 
-### `format.py`
+### `tools/format.py`
 
 Formats all C files in the repo using `clang-format-14`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
 

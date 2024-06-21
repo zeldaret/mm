@@ -133,7 +133,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
     s8 objectSlot;
 
-    if (this->actor.room != play->doorCtx.transitionActorList[transitionId].sides[0].room) {
+    if (this->actor.room != play->transitionActors.list[transitionId].sides[0].room) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -154,7 +154,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
     s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
 
-    play->doorCtx.transitionActorList[transitionId].id = -play->doorCtx.transitionActorList[transitionId].id;
+    play->transitionActors.list[transitionId].id = -play->transitionActors.list[transitionId].id;
 }
 
 void func_809A2DB0(DoorSpiral* this, PlayState* play) {
@@ -215,7 +215,7 @@ void func_809A2FF8(DoorSpiral* this, PlayState* play) {
         player->doorDirection = this->direction;
         player->doorActor = &this->actor;
         transitionId = DOOR_GET_TRANSITION_ID(&this->actor);
-        player->doorNext = (play->doorCtx.transitionActorList[transitionId].params >> 0xA);
+        player->doorNext = (play->transitionActors.list[transitionId].params >> 0xA);
         func_80122F28(player);
     }
 }

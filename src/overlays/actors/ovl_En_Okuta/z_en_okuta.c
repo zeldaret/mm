@@ -736,7 +736,7 @@ void EnOkuta_Spin(EnOkuta* this, PlayState* play) {
     }
 
     if (this->timer < 10) {
-        this->actor.shape.rot.y += (s16)(0x2000 * Math_SinF(this->timer * (M_PI / 20.0f)));
+        this->actor.shape.rot.y += (s16)(0x2000 * Math_SinF(this->timer * (M_PIf / 20.0f)));
     } else {
         this->actor.shape.rot.y += 0x2000;
     }
@@ -849,7 +849,7 @@ void EnOkuta_UpdateHeadScale(EnOkuta* this) {
         }
     } else if (this->actionFunc == EnOkuta_Float) {
         this->headScale.x = this->headScale.z = 1.0f;
-        this->headScale.y = Math_SinF((M_PI / 16) * curFrame) * 0.2f + 1.0f;
+        this->headScale.y = Math_SinF((M_PIf / 16) * curFrame) * 0.2f + 1.0f;
     } else {
         this->headScale.x = this->headScale.y = this->headScale.z = 1.0f;
     }
@@ -993,7 +993,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
 s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnOkuta_Float) {
         scale->z = scale->y = 1.0f;
-        scale->x = Math_SinF((M_PI / 16) * curFrame) * 0.4f + 1.0f;
+        scale->x = Math_SinF((M_PIf / 16) * curFrame) * 0.4f + 1.0f;
     } else if (this->actionFunc == EnOkuta_Shoot) {
         if (curFrame < 5.0f) {
             scale->z = 1.0f;

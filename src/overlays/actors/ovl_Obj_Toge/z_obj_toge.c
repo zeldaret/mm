@@ -161,7 +161,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
         this->unk_1C8 = Math_CosS(sp36);
         this->unk_1CC = Math_SinS(sp36);
         this->unk_1C0 = sp3E * 7.5f;
-        this->unk_1C4 = Math3D_Distance(&this->unk_198[0], &this->unk_198[1]) * 0.5f;
+        this->unk_1C4 = Math3D_Vec3f_DistXYZ(&this->unk_198[0], &this->unk_198[1]) * 0.5f;
     } else {
         this->unk_1B4 = false;
     }

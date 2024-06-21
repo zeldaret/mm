@@ -7,8 +7,8 @@
  */
 #include "z64prerender.h"
 
-#include "libc/alloca.h"
-#include "libc/stdbool.h"
+#include "alloca.h"
+#include "stdbool.h"
 #include "PR/gs2dex.h"
 
 #include "global.h"

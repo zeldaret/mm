@@ -267,6 +267,9 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
 
             case PLAYER_MASK_KAFEIS_MASK:
                 return 0x68A;
+
+            default:
+                break;
         }
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {

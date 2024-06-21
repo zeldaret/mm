@@ -3,12 +3,12 @@
 
 #include "ultra64.h"
 
-#include "libc/math.h"
-#include "libc/stdarg.h"
-#include "libc/stdbool.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
-#include "libc/stdlib.h"
+#include "math.h"
+#include "stdarg.h"
+#include "stdbool.h"
+#include "stddef.h"
+#include "stdint.h"
+#include "stdlib.h"
 
 #include "libc64/qrand.h"
 
@@ -55,6 +55,7 @@
 #include "z64map.h"
 #include "z64math.h"
 #include "z64message.h"
+#include "z64msgevent.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64pause_menu.h"
@@ -109,7 +110,7 @@ typedef struct PlayState {
     /* 0x17104 */ AnimationContext animationCtx;
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
-    /* 0x18760 */ DoorContext doorCtx;
+    /* 0x18760 */ TransitionActorList transitionActors;
     /* 0x18768 */ void (*playerInit)(Player* player, struct PlayState* play, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct PlayState* play, Input* input);
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);

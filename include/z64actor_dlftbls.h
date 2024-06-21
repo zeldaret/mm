@@ -2,7 +2,7 @@
 #define Z64ACTOR_DLFTBLS_H
 
 #include "PR/ultratypes.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "segment_symbols.h"
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.

@@ -2,8 +2,10 @@
 #define Z64VOICE_H
 
 #include "PR/ultratypes.h"
-#include "unk.h"
+#include "PR/os_message.h"
 #include "PR/os_voice.h"
+
+#include "unk.h"
 
 typedef struct {
     /* 0x000 */ u16 words[20][15]; // 20 words, each with up to 15 syllables

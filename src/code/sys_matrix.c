@@ -448,8 +448,8 @@ void Matrix_RotateXFApply(f32 x) {
     if (x != 0.0f) {
         cmf = sCurrentMatrix;
 
-        sin = sins(RAD_TO_BINANG(x)) * SHT_MINV;
-        cos = coss(RAD_TO_BINANG(x)) * SHT_MINV;
+        sin = sins(RAD_TO_BINANG(x)) * (1.0f / SHRT_MAX);
+        cos = coss(RAD_TO_BINANG(x)) * (1.0f / SHRT_MAX);
 
         tempY = cmf->xy;
         tempZ = cmf->xz;

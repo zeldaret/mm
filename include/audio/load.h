@@ -5,8 +5,8 @@
 #include "PR/os.h"
 #include "PR/os_message.h"
 #include "PR/ultratypes.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
+#include "stddef.h"
+#include "stdint.h"
 #include "unk.h"
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);

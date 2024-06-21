@@ -702,7 +702,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp50.y = pointy - vecA->y;
         sp50.z = pointz - vecA->z;
 
-        if (Math3D_Parallel(&sp5C, &sp50) < 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp50) < 0.0f) {
             return false;
         }
 
@@ -710,7 +710,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp44.y = pointy - vecB->y;
         sp44.z = pointz - vecB->z;
 
-        if (Math3D_Parallel(&sp5C, &sp44) > 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp44) > 0.0f) {
             return false;
         }
         return true;

@@ -1,6 +1,6 @@
 #include "z64jpeg.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "main.h"
 #include "sys_ucode.h"
 #include "macros.h"

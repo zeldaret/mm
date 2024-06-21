@@ -3,8 +3,8 @@
 
 #include "ultratypes.h"
 #include "os_message.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
+#include "stddef.h"
+#include "stdint.h"
 
 
 typedef struct {

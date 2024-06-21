@@ -1,7 +1,7 @@
 #ifndef ICHAIN_H
 #define ICHAIN_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
 
 typedef struct InitChainEntry {
     u32 cont:   1;

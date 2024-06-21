@@ -1044,11 +1044,11 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f,
                                     UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                         UPDBGCHECKINFO_FLAG_10);
-            if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
+            if ((this->actor.floorPoly != NULL) && (COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
-                    this->snowPileTargetRotY = Math_Atan2S_XY(this->actor.floorPoly->normal.z * SHT_MINV,
-                                                              this->actor.floorPoly->normal.x * SHT_MINV);
+                    this->snowPileTargetRotY = Math_Atan2S_XY(COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z),
+                                                              COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.x));
                     this->turningOnSteepSlope = true;
                 }
             } else {

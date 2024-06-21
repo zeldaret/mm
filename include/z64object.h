@@ -1,7 +1,7 @@
 #ifndef Z64OBJECT_H
 #define Z64OBJECT_H
 
-#include "libc/stdint.h"
+#include "stdint.h"
 
 #define DEFINE_OBJECT(_name, enumValue) enumValue,
 #define DEFINE_OBJECT_UNSET(enumValue) enumValue,
