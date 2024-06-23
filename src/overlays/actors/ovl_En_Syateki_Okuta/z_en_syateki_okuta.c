@@ -502,8 +502,9 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
- * parameter.
+ * Gets the scaling factor for animating the snout limb. If the limb is not being transformed, no scale value is
+ * returned. Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the
+ * `scale` parameter.
  */
 s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnSyatekiOkuta_Appear) {

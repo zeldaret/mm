@@ -269,9 +269,8 @@ void EnOkuta_SpawnRipple(EnOkuta* this, PlayState* play) {
 }
 
 /**
- * This function is only called by the unused blue Octorok variant. The blue Octorok can follow the player if they dive
- * underwater, and this function is used to determine at what height the Octorok should float while it is either idle or
- * while it is shooting at the player.
+ * Returns the height at which the unused blue Octorok variant should float at within the water. This allows for the
+ * Octorok to follow the player underwater, but it does not take collision into account.
  */
 f32 EnOkuta_GetFloatHeight(EnOkuta* this) {
     f32 height = this->actor.world.pos.y + this->actor.playerHeightRel + 60.0f;
@@ -414,9 +413,7 @@ void EnOkuta_Hide(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupFloat(EnOkuta* this) {
     Animation_PlayLoop(&this->skelAnime, &gOctorokFloatAnim);
 
-    // `EnOkuta_Float` uses the `timer` variable in an unconventional way. It is used to track how many times the
-    // Octorok's float animation needs to loop before the Octorok can start shooting at the player. Note that the unused
-    // blue Octorok variant can ignore this variable and start shooting the player anyway if the player gets too close.
+    // `EnOkuta_Float` uses `timer` to track how many times the float animation loops before shooting at the player.
     if (this->actionFunc == EnOkuta_Shoot) {
         this->timer = 8;
     } else {
@@ -467,9 +464,8 @@ void EnOkuta_SetupShoot(EnOkuta* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gOctorokShootAnim);
 
     if (this->actionFunc != EnOkuta_Shoot) {
-        // `EnOkuta_Shoot` uses the `timer` variable in an unconventional way. It is used to track how many projectiles
-        // are remaining in the current "volley". The Octorok will shoot at the player repeatedly, decrementing the
-        // `timer` variable after each shot, until it reaches 0.
+        // `EnOkuta_Shoot` uses `timer` to track how many projectiles are remaining in the current "volley". The Octorok
+        // will shoot at the player repeatedly, decrementing the `timer` variable after each shot, until it reaches 0.
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             this->timer = this->numConsecutiveProjectiles;
         } else {
@@ -664,21 +660,17 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.child->csId = this->actor.csId;
         this->actionFunc = EnOkuta_FrozenInIceBlock;
-        return;
+    } else {
+        EnOkuta_Freeze(this);
+
+        if (Actor_ApplyDamage(&this->actor) == 0) {
+            Enemy_StartFinishingBlow(play, &this->actor);
+            this->collider.base.acFlags &= ~AC_ON;
+            this->timer = 3;
+        }
+
+        this->actionFunc = EnOkuta_Frozen;
     }
-
-    // The only way to reach this code is if our attempt to spawn the ObjIceblock actor failed for some reason. In the
-    // final game, this basically never happens during normal play, so the below code is effectively unused and never
-    // seen by most players, even if it *can* be run under certain extreme circumstances.
-    EnOkuta_Freeze(this);
-
-    if (Actor_ApplyDamage(&this->actor) == 0) {
-        Enemy_StartFinishingBlow(play, &this->actor);
-        this->collider.base.acFlags &= ~AC_ON;
-        this->timer = 3;
-    }
-
-    this->actionFunc = EnOkuta_Frozen;
 }
 
 /**
@@ -987,8 +979,9 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
- * parameter.
+ * Gets the scaling factor for animating the snout limb. If the limb is not being transformed, no scale value is
+ * returned. Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the
+ * `scale` parameter.
  */
 s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnOkuta_Float) {
