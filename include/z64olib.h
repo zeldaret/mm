@@ -5,8 +5,6 @@
 
 #include "z64math.h"
 
-struct PosRot;
-
 // To be used with OLib_Vec3fAdd()
 typedef enum {
     /* 0 */ OLIB_ADD_COPY, // Copy `b` to dest
@@ -36,7 +34,7 @@ Vec3f OLib_AddVecGeoToVec3f(Vec3f* a, VecGeo* geo);
 Vec3f OLib_Vec3fDiffRad(Vec3f* a, Vec3f* b);
 Vec3f OLib_Vec3fDiffDegF(Vec3f* a, Vec3f* b);
 Vec3s OLib_Vec3fDiffBinAng(Vec3f* a, Vec3f* b);
-void OLib_Vec3fDiff(struct PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
-void OLib_Vec3fAdd(struct PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
+void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
+void OLib_Vec3fAdd(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 
 #endif
