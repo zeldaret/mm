@@ -23,26 +23,6 @@ s32 func_80A87B48(Actor* thisx, PlayState* play);
 s32 func_80A87DC0(Actor* thisx, PlayState* play);
 void func_80A881E0(EnTru* this, PlayState* play);
 
-typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_ANIM_DRINK,
-    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_ANIM_HEALED,
-    /* 0x0C */ KOUME_ANIM_HOVER1,
-    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_ANIM_FLY,
-    /* 0x0F */ KOUME_ANIM_HOVER2,
-    /* 0x10 */ KOUME_ANIM_MAX
-} KoumeAnimation;
-
 static MsgScript D_80A88910[] = {
     /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0852),
     /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
