@@ -1,5 +1,9 @@
-#include "global.h"
+#include "sys_cmpdma.h"
+
 #include "libc64/malloc.h"
+#include "color.h"
+#include "yaz0.h"
+#include "z64dma.h"
 
 typedef struct {
     /* 0x0 */ union {

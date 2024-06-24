@@ -5,7 +5,6 @@
  */
 
 #include "z_en_sb.h"
-#include "objects/object_sb/object_sb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
@@ -113,7 +112,7 @@ void EnSb_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 10;
     this->actor.colChkInfo.health = 2;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_sb_Skel_002BF0, &object_sb_Anim_000194, this->jointTable,
-                       this->morphTable, 9);
+                       this->morphTable, OBJECT_SB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -394,11 +393,11 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnSb* this = THIS;
 
     if (this->isDrawn) {
-        if (limbIndex < 7) {
+        if (limbIndex <= OBJECT_SB_LIMB_06) {
             partParams = (this->actor.depthInWater > 0) ? ENPART_PARAMS(ENPART_TYPE_4) : ENPART_PARAMS(ENPART_TYPE_1);
             Actor_SpawnBodyParts(thisx, play, partParams, dList);
         }
-        if (limbIndex == 6) {
+        if (limbIndex == OBJECT_SB_LIMB_06) {
             this->isDrawn = false;
             this->actor.draw = NULL;
         }

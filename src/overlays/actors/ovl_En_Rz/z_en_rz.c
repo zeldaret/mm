@@ -356,7 +356,7 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 }
 
 void func_80BFBDFC(PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE)) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
@@ -434,7 +434,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
 
     EnRz_UpdateSkelAnime(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x2927:
             case 0x2928:
@@ -505,11 +505,11 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (func_80BFBFAC(this, play)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE)) {
             this->actionFunc = func_80BFC214;
         } else {
             this->actionFunc = func_80BFC2F4;
-            SET_WEEKEVENTREG(WEEKEVENTREG_75_80);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE);
         }
         this->actor.csId = this->csIdList[1];
     }
@@ -568,7 +568,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 void func_80BFC608(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->actionFunc = func_80BFC674;
     }
@@ -592,7 +592,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 void func_80BFC728(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->actionFunc = func_80BFC7E0;
         this->actor.textId++;

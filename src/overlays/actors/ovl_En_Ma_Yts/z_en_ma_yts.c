@@ -171,7 +171,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
         case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = TARGET_MODE_6;
             // Day 1 or "Winning" the alien invasion
-            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 EnMaYts_ChangeAnim(this, ENMATYS_ANIM_14);
             } else {
                 EnMaYts_ChangeAnim(this, ENMATYS_ANIM_18);
@@ -204,14 +204,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                         return false;
                     }
                     break;
@@ -223,7 +223,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             } else if ((CURRENT_TIME >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
@@ -232,7 +232,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             }
             break;
@@ -281,7 +281,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -300,7 +300,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
     } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) &&
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -355,7 +355,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 this->textId = 0x3366;
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;
@@ -386,7 +386,7 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 
 void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5: // End message block
+        case TEXT_STATE_EVENT: // End message block
             EnMaYts_ChooseNextDialogue(this, play);
             break;
 
@@ -397,9 +397,9 @@ void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
         default:
             break;

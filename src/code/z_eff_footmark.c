@@ -1,7 +1,7 @@
 #include "z64eff_footmark.h"
+
 #include "z64.h"
 #include "macros.h"
-#include "functions.h"
 
 #include "assets/code/eff_footmark/eff_footmark.c"
 

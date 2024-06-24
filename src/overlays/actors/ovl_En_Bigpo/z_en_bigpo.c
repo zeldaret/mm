@@ -562,7 +562,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     // flight position calculations
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
-    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
+    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PIf / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -834,7 +834,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
-        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PIf / 20)) * 5.0f) + this->savedHeight;
     }
 }
 
@@ -1261,7 +1261,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer > 18)) {
             if (this->actor.scale.x != 0.0f) {
                 Matrix_Scale(0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x,
-                             1);
+                             MTXMODE_APPLY);
             }
         }
         Matrix_Get(&this->drawMtxF);
@@ -1293,30 +1293,30 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
 void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
     EnBigpo* this = THIS;
-    Gfx* dispHead;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         // fully visible OR fully transparent
-        dispHead = POLY_OPA_DISP;
-        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0); // empty display list for no transparency
-        gSPSegment(&dispHead[2], 0x08,
+        gfx = POLY_OPA_DISP;
+        gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
+        gSPSegment(&gfx[1], 0x0C, D_801AEFA0); // empty display list for no transparency
+        gSPSegment(&gfx[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_OPA_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &dispHead[3]);
+                                       EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &gfx[3]);
 
     } else {
-        dispHead = POLY_XLU_DISP;
-        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88); // transparency display list
-        gSPSegment(&dispHead[2], 0x08,
+        gfx = POLY_XLU_DISP;
+        gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
+        gSPSegment(&gfx[1], 0x0C, D_801AEF88); // transparency display list
+        gSPSegment(&gfx[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &dispHead[3]);
+                                       EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &gfx[3]);
     }
 
     // 71.428566f might be 500/7 context unknown
@@ -1366,7 +1366,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
     EnBigpo* this = THIS;
     f32 magnitude;
     f32 magnitude2;
-    Gfx* dispHead;
+    Gfx* gfx;
     Vec3f vec1;
     Vec3f vec2;
     Camera* cam = GET_ACTIVE_CAM(play);
@@ -1385,33 +1385,33 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
     // fully visible OR fully transparent
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         Scene_SetRenderModeXlu(play, 0, 1);
-        dispHead = POLY_OPA_DISP;
+        gfx = POLY_OPA_DISP;
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
-        dispHead = POLY_XLU_DISP;
+        gfx = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(&dispHead[0], gSetupDLs[SETUPDL_25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
-    gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(play->state.gfxCtx, 160, 0, 255, this->mainColor.a));
+    gSPSegment(&gfx[1], 0x0A, Gfx_EnvColor(play->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
     Matrix_MultVecY(1400.0f, &vec2);
     Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
                             this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
 
-    gDPSetEnvColor(&dispHead[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->mainColor.a);
+    gDPSetEnvColor(&gfx[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->mainColor.a);
 
-    gSPMatrix(&dispHead[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(&dispHead[4], &gBigPoeLanternMainDL);
+    gSPDisplayList(&gfx[4], &gBigPoeLanternMainDL);
 
-    gSPDisplayList(&dispHead[5], &gBigPoeLanternPurpleTopDL);
+    gSPDisplayList(&gfx[5], &gBigPoeLanternPurpleTopDL);
 
     // fully transparent OR fully invisible
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
-        POLY_OPA_DISP = &dispHead[6];
+        POLY_OPA_DISP = &gfx[6];
     } else {
-        POLY_XLU_DISP = &dispHead[6];
+        POLY_XLU_DISP = &gfx[6];
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1435,7 +1435,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
         fireRadius = 500;
     } else {
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        fireRadius = (s16)(thisx->scale.x * 500.0f * 100.0f);
+        fireRadius = TRUNCF_BINANG(thisx->scale.x * 500.0f * 100.0f);
     }
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -20) % 512, 0x20,

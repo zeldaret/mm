@@ -1,7 +1,7 @@
 #include "global.h"
-#include "libc/string.h"
+#include "string.h"
 
-static CutsceneCamera* sCurCsCamera;
+CutsceneCamera* sCurCsCamera;
 
 typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
 
@@ -401,9 +401,9 @@ s16 CutsceneCamera_Interp_Linear(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll = (s16)interpState->initRoll + (s16)(rollDiffToTarget * lerp);
+        *camRoll = TRUNCF_BINANG(interpState->initRoll) + TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -467,9 +467,9 @@ s16 CutsceneCamera_Interp_Scale(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdC
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll += (s16)(rollDiffToTarget * lerp);
+        *camRoll += TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -532,9 +532,9 @@ s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCam
 
         targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - TRUNCF_BINANG(interpState->initRoll));
 
-        *camRoll += (s16)(rollDiffToTarget * lerp);
+        *camRoll += TRUNCF_BINANG(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -789,16 +789,16 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
     return 0;
 }
 
-static f32 sKnots[38];
+f32 sCsCamKnots[38];
 
 // Only used by unused CutsceneCamera_Interp_Unused
 void func_80162FF8(s16 arg0) {
     f32 val = 0.0f;
     s32 i;
 
-    sKnots[0] = 0.0f;
-    sKnots[1] = 0.0f;
-    sKnots[2] = 0.0f;
+    sCsCamKnots[0] = 0.0f;
+    sCsCamKnots[1] = 0.0f;
+    sCsCamKnots[2] = 0.0f;
 
     for (i = 3; i < arg0; i++) {
         if (i == 3) {
@@ -809,13 +809,13 @@ void func_80162FF8(s16 arg0) {
             val += 0.3f;
         }
 
-        sKnots[i] = val;
+        sCsCamKnots[i] = val;
     }
 
     val += 0.9f;
-    sKnots[i++] = val;
-    sKnots[i++] = val;
-    sKnots[i++] = val;
+    sCsCamKnots[i++] = val;
+    sCsCamKnots[i++] = val;
+    sCsCamKnots[i++] = val;
 }
 
 #define FUNC_801631DC_ORDER 3
@@ -837,15 +837,17 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
 
     for (i = 1; i < FUNC_801631DC_ORDER; i++) {
         for (j = arg2 - i, k = (FUNC_801631DC_ORDER - 1) - i; j <= arg2; j++, k++) {
-            if (sKnots[j + i] != sKnots[j]) {
-                coeffTemp[i][k] = ((progress - sKnots[j]) / (sKnots[j + i] - sKnots[j])) * coeffTemp[i - 1][k];
+            if (sCsCamKnots[j + i] != sCsCamKnots[j]) {
+                coeffTemp[i][k] =
+                    ((progress - sCsCamKnots[j]) / (sCsCamKnots[j + i] - sCsCamKnots[j])) * coeffTemp[i - 1][k];
             } else {
                 coeffTemp[i][k] = 0.0f;
             }
 
-            if (sKnots[j + i + 1] != sKnots[j + 1]) {
+            if (sCsCamKnots[j + i + 1] != sCsCamKnots[j + 1]) {
                 coeffTemp[i][k] +=
-                    ((sKnots[j + i + 1] - progress) / (sKnots[j + i + 1] - sKnots[j + 1])) * coeffTemp[i - 1][k + 1];
+                    ((sCsCamKnots[j + i + 1] - progress) / (sCsCamKnots[j + i + 1] - sCsCamKnots[j + 1])) *
+                    coeffTemp[i - 1][k + 1];
             }
         }
     }
@@ -869,7 +871,7 @@ s16 CutsceneCamera_Interp_Unused(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
     }
 
     index = interpState->waypoint + 2;
-    func_801631DC(F32_LERPIMP(sKnots[index], sKnots[index + 1],
+    func_801631DC(F32_LERPIMP(sCsCamKnots[index], sCsCamKnots[index + 1],
                               (f32)interpState->curFrame / miscCmd[interpState->waypoint].unused0),
                   index, coeff);
 

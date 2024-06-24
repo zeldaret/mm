@@ -155,7 +155,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     uintptr_t segmentSize = SEGMENT_ROM_SIZE(nintendo_rogo_static);
 
     this->staticSegment = THA_AllocTailAlign16(&this->state.tha, segmentSize);
-    DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
+    DmaMgr_RequestSync(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
     GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);

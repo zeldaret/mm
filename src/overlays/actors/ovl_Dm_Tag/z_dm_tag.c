@@ -30,39 +30,66 @@ ActorInit Dm_Tag_InitVars = {
     /**/ NULL,
 };
 
-s32 D_80C22BF0[] = {
-    0x0E28F00C,
-    0x15090000,
-    0x10000000,
+MsgScript D_80C22BF0[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F0),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80C22BFC[] = {
-    0x0900000E, 0x28F10C09, 0x00000E28, 0xF20C0900, 0x000E28F3, 0x0C090000, 0x0E28F40C,
-    0x0900000E, 0x28F50C09, 0x00000E28, 0xF60C1511, 0x55040900, 0x00100000,
+MsgScript D_80C22BFC[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F1),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F2),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0011 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F3),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0015 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F4),
+    /* 0x001B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F5),
+    /* 0x0022 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0023 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0026 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F6),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x002B 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_85_04),
+    /* 0x002E 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0031 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80C22C30[] = {
-    0x0E28EF0C,
-    0x10000000,
+MsgScript D_80C22C30[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EF),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
+Actor* DmTag_FindActor(DmTag* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if ((foundActor == NULL) || (((this != (DmTag*)foundActor)) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if ((this != (DmTag*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = foundActor->next;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 s32 func_80C22400(DmTag* this, s16 csId) {
@@ -91,15 +118,15 @@ s16 func_80C2247C(DmTag* this, s32 numCutscenes) {
     return csId;
 }
 
-s32 func_80C224D8(DmTag* this, PlayState* play) {
-    s32 pad;
+s32 func_80C224D8(Actor* thisx, PlayState* play) {
+    DmTag* this = THIS;
     Actor* sp30;
     Actor* sp2C;
     s16 csId = this->actor.csId;
     s32 ret = false;
 
-    sp30 = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
-    sp2C = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
+    sp30 = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+    sp2C = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
 
     switch (this->unk_1A4) {
         case 0:
@@ -169,7 +196,9 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
     return ret;
 }
 
-s32 func_80C227E8(DmTag* this, PlayState* play) {
+s32 func_80C227E8(Actor* thisx, PlayState* play) {
+    DmTag* this = THIS;
+
     if (this->unk_1A4 == 0) {
         Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
@@ -182,22 +211,22 @@ s32 func_80C227E8(DmTag* this, PlayState* play) {
     return false;
 }
 
-s32* func_80C22880(DmTag* this, PlayState* play) {
+MsgScript* DmTag_GetMsgScript(DmTag* this, PlayState* play) {
     s32 time;
 
     switch (this->unk_18E) {
         case 1:
-            time = SCHEDULE_TIME_NOW;
-            if ((time >= SCHEDULE_TIME(21, 30)) && (time < SCHEDULE_TIME(23, 0))) {
+            time = SCRIPT_TIME_NOW;
+            if ((time >= SCRIPT_TIME(21, 30)) && (time < SCRIPT_TIME(23, 0))) {
                 if (gSaveContext.save.day == 2) {
-                    this->msgEventCallback = func_80C227E8;
+                    this->msgScriptCallback = func_80C227E8;
                     return D_80C22BF0;
                 }
             }
             return D_80C22C30;
 
         case 2:
-            this->msgEventCallback = func_80C224D8;
+            this->msgScriptCallback = func_80C224D8;
             return D_80C22BFC;
 
         default:
@@ -214,7 +243,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
         Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->msgEventScript = func_80C22880(this, play);
+        this->msgScript = DmTag_GetMsgScript(this, play);
         this->actionFunc = func_80C229FC;
         ret = true;
     }
@@ -230,7 +259,7 @@ void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         this->actionFunc = func_80C229AC;
     }
 }

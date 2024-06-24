@@ -295,7 +295,7 @@ void func_8088A894(EnArrow* this, PlayState* play) {
         return;
     }
 
-    temp_f0 = Math3D_LengthSquared(&sp68);
+    temp_f0 = Math3D_Vec3fMagnitudeSq(&sp68);
     if (temp_f0 < 1.0f) {
         return;
     }
@@ -383,7 +383,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
-                    this->actor.world.rot.y += BINANG_ROT180((s16)(s32)Rand_CenteredFloat(0x1F40));
+                    this->actor.world.rot.y += BINANG_ROT180(TRUNCF_BINANG(Rand_CenteredFloat(0x1F40)));
                     this->actor.velocity.y = -this->actor.velocity.y;
                     this->bubble.unk_149 = -1;
                     return;
@@ -485,12 +485,12 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             if (Math_StepToF(&this->bubble.unk_144, 1.0f, 0.4f)) {
                 this->unk_260 = 0;
             } else {
-                this->bubble.unk_14A += (s16)(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
-                this->actor.world.rot.x += (s16)(500.0f * Math_SinS(this->bubble.unk_14A));
+                this->bubble.unk_14A += TRUNCF_BINANG(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
+                this->actor.world.rot.x += TRUNCF_BINANG(500.0f * Math_SinS(this->bubble.unk_14A));
                 this->actor.shape.rot.x = this->actor.world.rot.x;
 
-                this->bubble.unk_14C += (s16)(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
-                this->actor.world.rot.y += (s16)(500.0f * Math_SinS(this->bubble.unk_14C));
+                this->bubble.unk_14C += TRUNCF_BINANG(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
+                this->actor.world.rot.y += TRUNCF_BINANG(500.0f * Math_SinS(this->bubble.unk_14C));
 
                 this->actor.shape.rot.y = this->actor.world.rot.y;
 
@@ -579,10 +579,10 @@ void func_8088B6B0(EnArrow* this, PlayState* play) {
 }
 
 void EnArrow_Update(Actor* thisx, PlayState* play) {
-    static Vec3f D_8088C2CC = { 0.0f, 0.5f, 0.0f };
-    static Vec3f D_8088C2D8 = { 0.0f, 0.5f, 0.0f };
-    static Color_RGBA8 D_8088C2E4 = { 255, 255, 100, 255 };
-    static Color_RGBA8 D_8088C2E8 = { 255, 50, 0, 0 };
+    static Vec3f sVelocity = { 0.0f, 0.5f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.5f, 0.0f };
+    static Color_RGBA8 sPrimColor = { 255, 255, 100, 255 };
+    static Color_RGBA8 sEnvColor = { 255, 50, 0, 0 };
     s32 pad;
     EnArrow* this = THIS;
     Player* player = GET_PLAYER(play);
@@ -606,7 +606,7 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
                                this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
         }
     } else if (this->actor.params == ARROW_TYPE_NORMAL_LIT) {
-        func_800B0EB0(play, &this->unk_234, &D_8088C2CC, &D_8088C2D8, &D_8088C2E4, &D_8088C2E8, 100, 0, 8);
+        func_800B0EB0(play, &this->unk_234, &sVelocity, &sAccel, &sPrimColor, &sEnvColor, 100, 0, 8);
     }
 
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.prevPos);

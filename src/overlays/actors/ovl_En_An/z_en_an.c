@@ -71,7 +71,7 @@ typedef enum AnjuScheduleResult {
     /* 20 */ ANJU_SCH_20,
     // 12:00 ~ 12:15, Day 1 and Day 2 (if did had the Midnight meeting). Give lunch to Granny
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANNY,
-    // Day 3, 06:00 ~ 11:00. Sweeping the Suite room. TODO: maybe rename to "cleaning Suite room"?
+    // Day 3, 06:00 ~ 11:00. Sweeping the Large Suite.
     /* 22 */ ANJU_SCH_SWEEPING,
     // Day 1, 00:00 ~ 06:00. Waiting for player at the kitchen to have the Midnight meeting.
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
@@ -158,442 +158,7 @@ typedef enum AnjuScheduleResult {
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
-static u8 sScheduleScript[] = {
-    /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0x151 - 0x005),
-    /* 0x005 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x150 - 0x00A),
-    /* 0x00A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 10, 55, 0x14A - 0x011),
-    /* 0x011 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(10, 55, 11, 10, 0x144 - 0x018),
-    /* 0x018 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 10, 11, 30, 0x13E - 0x01F),
-    /* 0x01F */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 30, 11, 50, 0x138 - 0x026),
-    /* 0x026 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 50, 11, 55, 0x132 - 0x02D),
-    /* 0x02D */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 55, 12, 0, 0x12C - 0x034),
-    /* 0x034 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 12, 15, 0x126 - 0x03B),
-    /* 0x03B */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 15, 12, 20, 0x120 - 0x042),
-    /* 0x042 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 20, 12, 25, 0x11A - 0x049),
-    /* 0x049 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 25, 12, 55, 0x114 - 0x050),
-    /* 0x050 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 55, 13, 0, 0x10E - 0x057),
-    /* 0x057 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(13, 15, 13, 20, 0x108 - 0x05E),
-    /* 0x05E */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(13, 20, 13, 50, 0x102 - 0x065),
-    /* 0x065 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(13, 50, 14, 8, 0x0FC - 0x06C),
-    /* 0x06C */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(14, 8, 14, 18, 0x0F6 - 0x073),
-    /* 0x073 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 18, 16, 10, 0x0F0 - 0x079),
-    /* 0x079 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 10, 16, 30, 0x0EA - 0x07F),
-    /* 0x07F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 30, 19, 50, 0x0E4 - 0x085),
-    /* 0x085 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(19, 50, 20, 20, 0x0DE - 0x08B),
-    /* 0x08B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 20, 20, 30, 0x0D8 - 0x091),
-    /* 0x091 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 30, 21, 5, 0x0D2 - 0x097),
-    /* 0x097 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 5, 21, 10, 0x0CC - 0x09D),
-    /* 0x09D */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING, 0x0A2 - 0x0A1),
-    /* 0x0A1 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0A2 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(23, 10, 23, 15, 0x0C6 - 0x0A8),
-    /* 0x0A8 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(23, 15, 0, 0, 0x0C0 - 0x0AE),
-    /* 0x0AE */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x0B5 - 0x0B4),
-    /* 0x0B4 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0B5 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x0BF - 0x0B9),
-    /* 0x0B9 */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, ANJU_SCH_MIDNIGHT_MEETING),
-    /* 0x0BF */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15, 0, 0, ANJU_SCH_WALKING_49),
-    /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_DOOR_31),
-    /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
-    /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_WALKING_48),
-    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
-    /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
-    /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_ATTEND_GORON),
-    /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN),
-    /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14, 8, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_WALKING_46),
-    /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_DOOR_29),
-    /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_DOOR_28),
-    /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_WALKING_45),
-    /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_DOOR_27),
-    /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_WALKING_44),
-    /* 0x126 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANNY),
-    /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_WALKING_43),
-    /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_DOOR_26),
-    /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_WALKING_42),
-    /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
-    /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_WALKING_40),
-    /* 0x14A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x150 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x151 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x391 - 0x156),
-    /* 0x156 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x29E - 0x15B),
-    /* 0x15B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x1F2 - 0x160),
-    /* 0x160 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 3, 11, 9, 0x1EC - 0x167),
-    /* 0x167 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 9, 11, 29, 0x1E6 - 0x16D),
-    /* 0x16D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 39, 0x1E0 - 0x173),
-    /* 0x173 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 24, 17, 30, 0x1DA - 0x179),
-    /* 0x179 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 30, 17, 55, 0x1D4 - 0x17F),
-    /* 0x17F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 55, 18, 0, 0x1CE - 0x185),
-    /* 0x185 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 19, 50, 0x1C8 - 0x18B),
-    /* 0x18B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(19, 50, 20, 20, 0x1C2 - 0x191),
-    /* 0x191 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 20, 20, 30, 0x1BC - 0x197),
-    /* 0x197 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 30, 21, 0, 0x1B6 - 0x19D),
-    /* 0x19D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 21, 5, 0x1B0 - 0x1A3),
-    /* 0x1A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23, 0, 0x1AA - 0x1A9),
-    /* 0x1A9 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM),
-    /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21, 0, 21, 5, ANJU_SCH_DOOR_30),
-    /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 0, ANJU_SCH_WALKING_48),
-    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
-    /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
-    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18, 0, ANJU_SCH_DOOR_35),
-    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, ANJU_SCH_WALKING_51),
-    /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_DOOR_34),
-    /* 0x1E0 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_DOOR_33),
-    /* 0x1E6 */ SCHEDULE_CMD_RET_TIME(11, 9, 11, 29, ANJU_SCH_WALKING_50),
-    /* 0x1EC */ SCHEDULE_CMD_RET_TIME(11, 3, 11, 9, ANJU_SCH_DOOR_32),
-    /* 0x1F2 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x23F - 0x1F6),
-    /* 0x1F6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 39, 0x239 - 0x1FC),
-    /* 0x1FC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x233 - 0x202),
-    /* 0x202 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 25, 13, 15, 0x22D - 0x208),
-    /* 0x208 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 55, 16, 45, 0x227 - 0x20E),
-    /* 0x20E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x221 - 0x214),
-    /* 0x214 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 24, 17, 30, 0x21B - 0x21A),
-    /* 0x21A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21B */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_DOOR_38),
-    /* 0x221 */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_WALKING_59),
-    /* 0x227 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_WALKING_58),
-    /* 0x22D */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_WALKING_55),
-    /* 0x233 */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_WALKING_54),
-    /* 0x239 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_DOOR_37),
-    /* 0x23F */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x274 - 0x243),
-    /* 0x243 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x26E - 0x249),
-    /* 0x249 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 25, 13, 15, 0x268 - 0x24F),
-    /* 0x24F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 55, 16, 45, 0x262 - 0x255),
-    /* 0x255 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x25C - 0x25B),
-    /* 0x25B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x25C */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_WALKING_63),
-    /* 0x262 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_WALKING_62),
-    /* 0x268 */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_WALKING_61),
-    /* 0x26E */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_WALKING_60),
-    /* 0x274 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ALLEY, 0x29D - 0x278),
-    /* 0x278 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 45, 0x297 - 0x27E),
-    /* 0x27E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 45, 15, 25, 0x291 - 0x284),
-    /* 0x284 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 55, 0x28B - 0x28A),
-    /* 0x28A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x28B */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 55, ANJU_SCH_WALKING_57),
-    /* 0x291 */ SCHEDULE_CMD_RET_TIME(13, 45, 15, 25, ANJU_SCH_LAUNDRY_POOL_SIT),
-    /* 0x297 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 45, ANJU_SCH_WALKING_56),
-    /* 0x29D */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x29E */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x390 - 0x2A3),
-    /* 0x2A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 10, 55, 0x38A - 0x2AA),
-    /* 0x2AA */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(10, 55, 11, 10, 0x384 - 0x2B1),
-    /* 0x2B1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 10, 11, 30, 0x37E - 0x2B8),
-    /* 0x2B8 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 30, 11, 50, 0x378 - 0x2BF),
-    /* 0x2BF */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 50, 11, 55, 0x372 - 0x2C6),
-    /* 0x2C6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(11, 55, 12, 0, 0x36C - 0x2CD),
-    /* 0x2CD */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 12, 15, 0x366 - 0x2D4),
-    /* 0x2D4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 15, 12, 20, 0x360 - 0x2DB),
-    /* 0x2DB */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 20, 12, 25, 0x35A - 0x2E1),
-    /* 0x2E1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 25, 12, 55, 0x354 - 0x2E7),
-    /* 0x2E7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 55, 13, 0, 0x34E - 0x2ED),
-    /* 0x2ED */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 20, 0x348 - 0x2F3),
-    /* 0x2F3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 20, 13, 50, 0x342 - 0x2F9),
-    /* 0x2F9 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 50, 19, 50, 0x33C - 0x2FF),
-    /* 0x2FF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(19, 50, 20, 20, 0x336 - 0x305),
-    /* 0x305 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 20, 20, 30, 0x330 - 0x30B),
-    /* 0x30B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(20, 30, 21, 5, 0x32A - 0x311),
-    /* 0x311 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 5, 21, 10, 0x324 - 0x317),
-    /* 0x317 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23, 0, 0x31E - 0x31D),
-    /* 0x31D */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM),
-    /* 0x324 */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
-    /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_WALKING_48),
-    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
-    /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
-    /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_WALKING_46),
-    /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_DOOR_29),
-    /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_DOOR_28),
-    /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_WALKING_45),
-    /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_DOOR_27),
-    /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_WALKING_44),
-    /* 0x366 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANNY),
-    /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_WALKING_43),
-    /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_DOOR_26),
-    /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_WALKING_42),
-    /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
-    /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_WALKING_40),
-    /* 0x38A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x390 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x391 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x447 - 0x396),
-    /* 0x396 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x3ED - 0x39A),
-    /* 0x39A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x3DB - 0x39E),
-    /* 0x39E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 11, 0, 0x3D5 - 0x3A4),
-    /* 0x3A4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 0, 11, 25, 0x3CF - 0x3AA),
-    /* 0x3AA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 30, 0x3C9 - 0x3B0),
-    /* 0x3B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 30, 11, 50, 0x3C3 - 0x3B6),
-    /* 0x3B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 50, 12, 0, 0x3BD - 0x3BC),
-    /* 0x3BC */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3BD */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_DOOR_39),
-    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_WALKING_53),
-    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_DOOR_36),
-    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_WALKING_52),
-    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
-    /* 0x3DB */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x3EC - 0x3DF),
-    /* 0x3DF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x3E6 - 0x3E5),
-    /* 0x3E5 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3E6 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, ANJU_SCH_RANCH),
-    /* 0x3EC */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3ED */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x446 - 0x3F1),
-    /* 0x3F1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 11, 0, 0x440 - 0x3F7),
-    /* 0x3F7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 0, 11, 25, 0x43A - 0x3FD),
-    /* 0x3FD */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 30, 0x434 - 0x403),
-    /* 0x403 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 30, 11, 50, 0x42E - 0x409),
-    /* 0x409 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 50, 12, 0, 0x428 - 0x40F),
-    /* 0x40F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 5, 0, 0x422 - 0x415),
-    /* 0x415 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(5, 0, 6, 0, 0x41C - 0x41B),
-    /* 0x41B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x41C */ SCHEDULE_CMD_RET_TIME(5, 0, 6, 0, ANJU_SCH_WAITING_FOR_KAFEI),
-    /* 0x422 */ SCHEDULE_CMD_RET_TIME(18, 0, 5, 0, ANJU_SCH_WAITING_FOR_KAFEI),
-    /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_DOOR_39),
-    /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_WALKING_53),
-    /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_DOOR_36),
-    /* 0x43A */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_WALKING_52),
-    /* 0x440 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
-    /* 0x446 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x447 */ SCHEDULE_CMD_RET_NONE(),
-};
-
-/**
- * The schedule script is roughly equivalent to the following pseudo-code:
-
-s32 scheduleScript(PlayState* play) {
-    if (gSaveContext.save.day == 1) {
-        if (play->sceneId == SCENE_YADOYA) {
-            if ((6, 0) <= NOW <= (10, 55)) {
-                return ANJU_SCH_RECEPTIONIST_IDLE;
-            } else if ((10, 55) <= NOW <= (11, 10)) {
-                return ANJU_SCH_WALKING_40;
-            } else if ((11, 10) <= NOW <= (11, 30)) {
-                return ANJU_SCH_COOKING;
-            } else if ((11, 30) <= NOW <= (11, 50)) {
-                return ANJU_SCH_WALKING_42;
-            } else if ((11, 50) <= NOW <= (11, 55)) {
-                return ANJU_SCH_DOOR_26;
-            } else if ((11, 55) <= NOW <= (12, 0)) {
-                return ANJU_SCH_WALKING_43;
-            } else if ((12, 0) <= NOW <= (12, 15)) {
-                return ANJU_SCH_GIVE_LUNCH_TO_GRANNY;
-            } else if ((12, 15) <= NOW <= (12, 20)) {
-                return ANJU_SCH_WALKING_44;
-            } else if ((12, 20) <= NOW <= (12, 25)) {
-                return ANJU_SCH_DOOR_27;
-            } else if ((12, 25) <= NOW <= (12, 55)) {
-                return ANJU_SCH_WALKING_45;
-            } else if ((12, 55) <= NOW <= (13, 0)) {
-                return ANJU_SCH_DOOR_28;
-            } else if ((13, 15) <= NOW <= (13, 20)) {
-                return ANJU_SCH_DOOR_29;
-            } else if ((13, 20) <= NOW <= (13, 50)) {
-                return ANJU_SCH_WALKING_46;
-            } else if ((13, 50) <= NOW <= (14, 8)) {
-                return ANJU_SCH_RECEPTIONIST_IDLE;
-            } else if ((14, 8) <= NOW <= (14, 18)) {
-                return ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN;
-            } else if ((14, 18) <= NOW <= (16, 10)) {
-                return ANJU_SCH_RECEPTIONIST_IDLE;
-            } else if ((16, 10) <= NOW <= (16, 30)) {
-                return ANJU_SCH_ATTEND_GORON;
-            } else if ((16, 30) <= NOW <= (19, 50)) {
-                return ANJU_SCH_RECEPTIONIST_IDLE;
-            } else if ((19, 50) <= NOW <= (20, 20)) {
-                return ANJU_SCH_WALKING_47;
-            } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_WAITING_CLOSING_TIME;
-            } else if ((20, 30) <= NOW <= (21, 5)) {
-                return ANJU_SCH_WALKING_48;
-            } else if ((21, 5) <= NOW <= (21, 10)) {
-                return ANJU_SCH_DOOR_30;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-                if ((23, 10) <= NOW <= (23, 15)) {
-                    return ANJU_SCH_DOOR_31;
-                } else if ((23, 15) <= NOW <= (0, 0)) {
-                    return ANJU_SCH_WALKING_49;
-                } else if ((0, 0) <= NOW <= (6, 0)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
-                        return None;
-                    }
-                    return ANJU_SCH_MIDNIGHT_MEETING;
-                } else {
-                    return None;
-                }
-            } else {
-                return None;
-            }
-        } else {
-            return None;
-        }
-    } else if (gSaveContext.save.day == 2) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
-            if (play->sceneId == SCENE_YADOYA) {
-                if ((6, 0) <= NOW <= (10, 55)) {
-                    return ANJU_SCH_RECEPTIONIST_IDLE;
-                } else if ((10, 55) <= NOW <= (11, 10)) {
-                    return ANJU_SCH_WALKING_40;
-                } else if ((11, 10) <= NOW <= (11, 30)) {
-                    return ANJU_SCH_COOKING;
-                } else if ((11, 30) <= NOW <= (11, 50)) {
-                    return ANJU_SCH_WALKING_42;
-                } else if ((11, 50) <= NOW <= (11, 55)) {
-                    return ANJU_SCH_DOOR_26;
-                } else if ((11, 55) <= NOW <= (12, 0)) {
-                    return ANJU_SCH_WALKING_43;
-                } else if ((12, 0) <= NOW <= (12, 15)) {
-                    return ANJU_SCH_GIVE_LUNCH_TO_GRANNY;
-                } else if ((12, 15) <= NOW <= (12, 20)) {
-                    return ANJU_SCH_WALKING_44;
-                } else if ((12, 20) <= NOW <= (12, 25)) {
-                    return ANJU_SCH_DOOR_27;
-                } else if ((12, 25) <= NOW <= (12, 55)) {
-                    return ANJU_SCH_WALKING_45;
-                } else if ((12, 55) <= NOW <= (13, 0)) {
-                    return ANJU_SCH_DOOR_28;
-                } else if ((13, 15) <= NOW <= (13, 20)) {
-                    return ANJU_SCH_DOOR_29;
-                } else if ((13, 20) <= NOW <= (13, 50)) {
-                    return ANJU_SCH_WALKING_46;
-                } else if ((13, 50) <= NOW <= (19, 50)) {
-                    return ANJU_SCH_RECEPTIONIST_IDLE;
-                } else if ((19, 50) <= NOW <= (20, 20)) {
-                    return ANJU_SCH_WALKING_47;
-                } else if ((20, 20) <= NOW <= (20, 30)) {
-                    return ANJU_SCH_WAITING_CLOSING_TIME;
-                } else if ((20, 30) <= NOW <= (21, 5)) {
-                    return ANJU_SCH_WALKING_48;
-                } else if ((21, 5) <= NOW <= (21, 10)) {
-                    return ANJU_SCH_DOOR_30;
-                } else if ((21, 30) <= NOW <= (23, 0)) {
-                    return ANJU_SCH_TALKING_WITH_MOM;
-                } else {
-                    return None;
-                }
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_YADOYA) {
-            if ((11, 3) <= NOW <= (11, 9)) {
-                return ANJU_SCH_DOOR_32;
-            } else if ((11, 9) <= NOW <= (11, 29)) {
-                return ANJU_SCH_WALKING_50;
-            } else if ((11, 29) <= NOW <= (11, 39)) {
-                return ANJU_SCH_DOOR_33;
-            } else if ((17, 24) <= NOW <= (17, 30)) {
-                return ANJU_SCH_DOOR_34;
-            } else if ((17, 30) <= NOW <= (17, 55)) {
-                return ANJU_SCH_WALKING_51;
-            } else if ((17, 55) <= NOW <= (18, 0)) {
-                return ANJU_SCH_DOOR_35;
-            } else if ((18, 0) <= NOW <= (19, 50)) {
-                return ANJU_SCH_RECEPTIONIST_IDLE;
-            } else if ((19, 50) <= NOW <= (20, 20)) {
-                return ANJU_SCH_WALKING_47;
-            } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_WAITING_CLOSING_TIME;
-            } else if ((20, 30) <= NOW <= (21, 0)) {
-                return ANJU_SCH_WALKING_48;
-            } else if ((21, 0) <= NOW <= (21, 5)) {
-                return ANJU_SCH_DOOR_30;
-            } else if ((21, 30) <= NOW <= (23, 0)) {
-                return ANJU_SCH_TALKING_WITH_MOM;
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_TOWN) {
-            if ((11, 29) <= NOW <= (11, 39)) {
-                return ANJU_SCH_DOOR_37;
-            } else if ((11, 39) <= NOW <= (12, 25)) {
-                return ANJU_SCH_WALKING_54;
-            } else if ((12, 25) <= NOW <= (13, 15)) {
-                return ANJU_SCH_WALKING_55;
-            } else if ((15, 55) <= NOW <= (16, 45)) {
-                return ANJU_SCH_WALKING_58;
-            } else if ((16, 45) <= NOW <= (17, 24)) {
-                return ANJU_SCH_WALKING_59;
-            } else if ((17, 24) <= NOW <= (17, 30)) {
-                return ANJU_SCH_DOOR_38;
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_CLOCKTOWER) {
-            if ((11, 39) <= NOW <= (12, 25)) {
-                return ANJU_SCH_WALKING_60;
-            } else if ((12, 25) <= NOW <= (13, 15)) {
-                return ANJU_SCH_WALKING_61;
-            } else if ((15, 55) <= NOW <= (16, 45)) {
-                return ANJU_SCH_WALKING_62;
-            } else if ((16, 45) <= NOW <= (17, 24)) {
-                return ANJU_SCH_WALKING_63;
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_ALLEY) {
-            if ((13, 15) <= NOW <= (13, 45)) {
-                return ANJU_SCH_WALKING_56;
-            } else if ((13, 45) <= NOW <= (15, 25)) {
-                return ANJU_SCH_LAUNDRY_POOL_SIT;
-            } else if ((15, 25) <= NOW <= (15, 55)) {
-                return ANJU_SCH_WALKING_57;
-            } else {
-                return None;
-            }
-        } else {
-            return None;
-        }
-    } else if (gSaveContext.save.day == 3) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES)) {
-            if (play->sceneId == SCENE_YADOYA) {
-                if ((6, 0) <= NOW <= (11, 0)) {
-                    return ANJU_SCH_SWEEPING;
-                } else if ((11, 0) <= NOW <= (11, 25)) {
-                    return ANJU_SCH_WALKING_52;
-                } else if ((11, 25) <= NOW <= (11, 30)) {
-                    return ANJU_SCH_DOOR_36;
-                } else if ((11, 30) <= NOW <= (11, 50)) {
-                    return ANJU_SCH_WALKING_53;
-                } else if ((11, 50) <= NOW <= (12, 0)) {
-                    return ANJU_SCH_DOOR_39;
-                } else if ((18, 0) <= NOW <= (5, 0)) {
-                    return ANJU_SCH_WAITING_FOR_KAFEI;
-                } else if ((5, 0) <= NOW <= (6, 0)) {
-                    return ANJU_SCH_WAITING_FOR_KAFEI;
-                } else {
-                    return None;
-                }
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_YADOYA) {
-            if ((6, 0) <= NOW <= (11, 0)) {
-                return ANJU_SCH_SWEEPING;
-            } else if ((11, 0) <= NOW <= (11, 25)) {
-                return ANJU_SCH_WALKING_52;
-            } else if ((11, 25) <= NOW <= (11, 30)) {
-                return ANJU_SCH_DOOR_36;
-            } else if ((11, 30) <= NOW <= (11, 50)) {
-                return ANJU_SCH_WALKING_53;
-            } else if ((11, 50) <= NOW <= (12, 0)) {
-                return ANJU_SCH_DOOR_39;
-            } else {
-                return None;
-            }
-        } else if (play->sceneId == SCENE_OMOYA) {
-            if ((18, 0) <= NOW <= (6, 0)) {
-                return ANJU_SCH_RANCH;
-            } else {
-                return None;
-            }
-        } else {
-            return None;
-        }
-    } else {
-        return None;
-    }
-}
- */
+#include "src/overlays/actors/ovl_En_An/scheduleScripts.schl.inc"
 
 static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_NONE
@@ -662,103 +227,614 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     3,  // ANJU_SCH_WALKING_63
 };
 
-s32 sAnjuMsgScript_SchReceiveLetterFromPostman[0x1B] = {
-    0x00560800, 0x44090000, 0x0E28BA0C, 0x09000017, 0x0E28BB0C, 0x09000018, 0x0E28BC0C, 0x09000017, 0x0E28BD0C,
-    0x09000018, 0x0E28BE0C, 0x09000017, 0x0E28BF0C, 0x09000018, 0x0E28C02D, 0x00012D00, 0x0B0C0900, 0x00115608,
-    0x10090000, 0x0E295C0C, 0x09000017, 0x0E295D0C, 0x09000018, 0x0E295E2D, 0x00012D00, 0x0B0C0900, 0x00100000,
+MsgScript sAnjuMsgScript_SchReceiveLetterFromPostman[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION,
+                                                       0x0049 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BA),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BB),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BC),
+    /* 0x001B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0020 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BD),
+    /* 0x0023 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0024 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0027 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0028 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BE),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28BF),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C0),
+    /* 0x003B 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x003E 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN),
+    /* 0x0041 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0042 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0049 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x295C),
+    /* 0x004F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0050 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0053 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0054 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x295D),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0058 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x005B 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x005C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x295E),
+    /* 0x005F 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0062 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN),
+    /* 0x0065 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0066 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0069 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_SchAttendGoron[0x21] = {
-    0x09000000, 0x4B10001E, 0x0E28B10C, 0x09000017, 0x0E28B20C, 0x09000018, 0x0E28B32D, 0x00011137, 0x020C0900,
-    0x00100056, 0x10002E0E, 0x28B10C09, 0x0000170E, 0x28B50C09, 0x0000180E, 0x28B60C09, 0x0000170E, 0x28B70C09,
-    0x0000180E, 0x28B82D00, 0x010C0900, 0x00115610, 0x10090000, 0x170E2956, 0x0C090000, 0x180E2957, 0x0C090000,
-    0x170E2958, 0x0C090000, 0x180E2959, 0x2D00010C, 0x09000012, 0x10000000,
+MsgScript sAnjuMsgScript_SchAttendGoron[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x0026 - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B1),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B2),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B3),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_55_02),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0026 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_86_10, 0x0059 - 0x002B),
+    /* 0x002B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B1),
+    /* 0x002E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002F 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0032 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0033 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B5),
+    /* 0x0036 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0037 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x003B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B6),
+    /* 0x003E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003F 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0042 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0043 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B7),
+    /* 0x0046 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0047 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x004A 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x004B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28B8),
+    /* 0x004E 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0051 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0052 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0055 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_86_10),
+    /* 0x0058 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0059 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x005C 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x005D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2956),
+    /* 0x0060 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0061 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0064 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0065 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2957),
+    /* 0x0068 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0069 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x006C 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x006D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2958),
+    /* 0x0070 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0071 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0074 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0075 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2959),
+    /* 0x0078 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x007B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x007C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x007F 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0080 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_SchGiveLunchToGranny[0x15] = {
-    0x09000017, 0x0E28C70C, 0x09000018, 0x0E28C80C, 0x09000017, 0x0E28C90C, 0x09000018,
-    0x0E28CA0C, 0x09000017, 0x0E28CB0C, 0x09000018, 0x0E28CC0C, 0x09000017, 0x0E28CD0C,
-    0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
+MsgScript sAnjuMsgScript_SchGiveLunchToGranny[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C7),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C8),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C9),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001B 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x001C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CA),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0020 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0023 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0024 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CB),
+    /* 0x0027 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0028 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CC),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CD),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x003C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CE),
+    /* 0x003F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0040 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0044 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28CF),
+    /* 0x0047 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x004A 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJUS_GRANDMOTHER),
+    /* 0x004D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004E 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0051 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_ReceptionistDay1[0x37] = {
-    0x220B0000, 0x69002020, 0x64004B,   0x1000B700, 0x370100AA, 0x370200,   0x550E28A0, 0x0C090000,
-    0x0F28A80C, 0x05000000, 0x30000030, 0x0E28A90C, 0x0F28AA0C, 0x0F28AB0C, 0x120600A0, 0x1300,
-    0xA02F0000, 0x2E2D0014, 0x0C114B10, 0x0700000E, 0x28AD2D00, 0x010C2400, 0x41161031, 0x0E28A30C,
-    0x0900000F, 0x28A52D00, 0x010C1137, 0x01100020, 0x2000340E, 0x28A00C09, 0xF28,      0xA10C0500,
-    0xF00,      0x300E28,   0xA20C0900, 0xF28A3,    0x0C190008, 0x310E28A4, 0x0C090000, 0x0F28A52D,
-    0x10C11,    0x20201023, 0x400012,   0x0E28A00C, 0x0900000F, 0x28A62D00, 0x010C2400, 0x40100E28,
-    0xA72D0001, 0x0C102300, 0x41000B0E, 0x28AC2D00, 0x010C2400, 0x41100E28, 0xAD0C1000,
+MsgScript sAnjuMsgScript_ReceptionistDay1[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_BEFORE_TIME(11, 0, 0x006E - 0x0005),
+    /* 0x0005 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_32_20, 0x006E - 0x000A),
+    /* 0x000A 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_RECEIVED_ROOM_KEY, 0x00C6 - 0x000F),
+    /* 0x000F 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_55_01, 0x00BE - 0x0014),
+    /* 0x0014 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_55_02, 0x006E - 0x0019),
+    /* 0x0019 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A0),
+    /* 0x001C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001D 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0020 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A8),
+    /* 0x0023 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0024 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x005B - 0x002B, 0x0),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A9),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28AA),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28AB),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0038 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0039 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_ROOM_KEY, 0x0),
+    /* 0x003E 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x00A0),
+    /* 0x0041 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0044 0x01 */ MSCRIPT_CMD_AWAIT_TEXT_DONE(),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROOM_KEY),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0049 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_RECEIVED_ROOM_KEY),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_AUTOTALK(0x0),
+    /* 0x004F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28AD),
+    /* 0x0052 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0055 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0056 0x03 */ MSCRIPT_CMD_SET_SWITCH_FLAG(0x0041),
+    /* 0x0059 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x005A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x005B 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x005C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A3),
+    /* 0x005F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0060 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0063 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A5),
+    /* 0x0066 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0069 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x006A 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_55_01),
+    /* 0x006D 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x006E 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_32_20, 0x00A7 - 0x0073),
+    /* 0x0073 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A0),
+    /* 0x0076 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0077 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x007A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A1),
+    /* 0x007D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x007E 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x0094 - 0x0085, 0x0),
+    /* 0x0085 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x0086 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A2),
+    /* 0x0089 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x008A 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x008D 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A3),
+    /* 0x0090 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0091 0x03 */ MSCRIPT_CMD_JUMP(0x009C - 0x0094),
+    /* 0x0094 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x0095 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A4),
+    /* 0x0098 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0099 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x009C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A5),
+    /* 0x009F 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x00A2 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00A3 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_32_20),
+    /* 0x00A6 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00A7 0x05 */ MSCRIPT_CMD_CHECK_SWITCH_FLAG(0x0040, 0x00BE - 0x00AC),
+    /* 0x00AC 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A0),
+    /* 0x00AF 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00B0 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x00B3 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28A6),
+    /* 0x00B6 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x00B9 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00BA 0x03 */ MSCRIPT_CMD_SET_SWITCH_FLAG(0x0040),
+    /* 0x00BD 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00BE 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28A7),
+    /* 0x00C1 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x00C4 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00C5 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00C6 0x05 */ MSCRIPT_CMD_CHECK_SWITCH_FLAG(0x0041, 0x00D6 - 0x00CB),
+    /* 0x00CB 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28AC),
+    /* 0x00CE 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x00D1 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00D2 0x03 */ MSCRIPT_CMD_SET_SWITCH_FLAG(0x0041),
+    /* 0x00D5 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00D6 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28AD),
+    /* 0x00D9 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00DA 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_InnCloseTime[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
-
-s32 sAnjuMsgScript_80B58944[2] = { 0x0E28AF2D, 0x10C10 };
-
-s32 sAnjuMsgScript_80B5894C[2] = { 0x0E28C12D, 0x10C10 };
-
-s32 sAnjuMsgScript_SchCooking[0xB] = {
-    0x350100,   0x1C0E28C3, 0x0C0F28C4, 0x0C150900, 0xE28C5,    0x2D00010C,
-    0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
+MsgScript sAnjuMsgScript_InnCloseTime[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x1885),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_80B58980[2] = { 0x0E28C62D, 0x10C10 };
-
-s32 sAnjuMsgScript_SchSweeping[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
-
-s32 sAnjuMsgScript_80B58994[2] = { 0x0E28F82D, 0x10C10 };
-
-s32 sAnjuMsgScript_SchRanch[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
-
-s32 sAnjuMsgScript_SchMidnightMeeting[0x14] = {
-    0x0E28D70C, 0x0F28D80C, 0x0F28D90C, 0x0F28DA0C, 0x0F28DB0C, 0x05000700, 0x731,
-    0x0E28D919, -0x16CFF2,  0x28DC0C11, 0x32201132, 0x10120600, 0xAA000013, 0xAA2F00,
-    0x2E2D00,   0x012D0017, 0x2D00160C, 0x0700000E, 0x28DE0C15, 0x09000010,
+MsgScript sAnjuMsgScript_80B58944[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28AF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-// Surprised: nevermind
-s32 sAnjuMsgScript_80B589FC[2] = { 0x0E28D62D, 0x10C10 };
-
-s32 sAnjuMsgScript_DekuDefault[8] = {
-    0x522000, 0x100E294F, 0x0C0F2950, 0x2D00010C, 0x12115220, 0x100E2951, 0x2D00010C, 0x12100000,
+MsgScript sAnjuMsgScript_80B5894C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C1),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_SchLaundryPoolDeku[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
+MsgScript sAnjuMsgScript_SchCooking[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_53_01, 0x0021 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C3),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28C4),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0011 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C5),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0019 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001C 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_53_01),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0020 0x01 */ MSCRIPT_CMD_DONE(),
 
-s32 sAnjuMsgScript_Receptionist[2] = { 0x0E28E02D, 0x10C10 };
-
-s32 sAnjuMsgScript_80B58A44[0x1E] = {
-    0x320800,   0x080E28D5, 0x2D00010C, 0x10003220,  0x80E28,    -0x2BD2FFFF, 0x0C100033, 0x01001A25,
-    0x30001D,   0x27000300, 0x080E28E3, 0x2D00010C,  0x100E28E2, 0x2D00010C,  0x100E28E1, 0x2D00010C,
-    0x100E28E4, 0x0C0E00FF, 0x1E003600, 0x0E000000,  0x0C2C28E7, 0x0C2F0000,  0x2D00010C, 0x1012102C,
-    0x28E50C2F, 0xC2A,      0x300F28,   -0x19D2FFFF, 0x2D001A0C, 0x11330110,
+    /* 0x0021 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C2),
+    /* 0x0024 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0027 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0028 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
-
-s32 sAnjuMsgScript_80B58AC4[9] = {
-    0x320800, 0x160E28D1, 0x0C0F28D2, 0x0C0F28D3, 0x2D00152D, 0x10C11, 0x3208100E, 0x28D32D00, 0x010C1000,
+MsgScript sAnjuMsgScript_80B58980[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28C6),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_SchWaitingForKafei[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
-
-s32 sAnjuMsgScript_SchLaundryPoolDefault[0x12] = {
-    0x372000,    0x29003208, 0x2A0E28,   -0x17F3EAF7, 0xE28,      -0x16F3F0D8, -0x15F3EAF7, 0xE28,   -0x14F3F0D8,
-    -0x13D2FFFF, 0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C, 0x0F28EB0C,  0x0F28EC2D,  0x10C12, 0x11372010,
+MsgScript sAnjuMsgScript_SchSweeping[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F7),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28F8),
+    /* 0x0007 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 sAnjuMsgScript_SchLaundryPoolKafeiMask[0x10] = {
-    0x372000,   0x21003208, 0x220E28,    -0x17F3F0D8, -0x12F3EAF7, 0xE28,      -0x14F3F0D8, -0x13D2FFFF,
-    0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C,  0x0F28EB0C,  0x0F28EC2D, 0x10C12,     0x11372010,
+MsgScript sAnjuMsgScript_80B58994[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F8),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-// Anju says the Inn is full and tell the player to tell that to his mother
-s32 sAnjuMsgScript_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
+MsgScript sAnjuMsgScript_SchRanch[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28F9),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28FA),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28FB),
+    /* 0x000B 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
-// Tells player that they should talk in the kitchen instead
-s32 sAnjuMsgScript_80B58B88[2] = { 0x0E29612D, 0x10C10 };
+MsgScript sAnjuMsgScript_SchMidnightMeeting[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D7),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28D8),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28D9),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28DA),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28DB),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0022 - 0x001B, 0x0, 0x0022 - 0x001B),
+    /* 0x001B 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x001C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D9),
+    /* 0x001F 0x03 */ MSCRIPT_CMD_JUMP(0x000B - 0x0022),
 
-s32 sAnjuMsgScript_SchWithKafei[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
+    /* 0x0022 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x0023 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28DC),
+    /* 0x0026 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0027 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING),
+    /* 0x002A 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_50_10),
+    /* 0x002D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x002E 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_LETTER_TO_KAFEI, 0x0),
+    /* 0x0033 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x00AA),
+    /* 0x0036 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0039 0x01 */ MSCRIPT_CMD_AWAIT_TEXT_DONE(),
+    /* 0x003A 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_RECEIVED_LETTER_TO_KAFEI),
+    /* 0x0040 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_MEET_KAFEI),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0044 0x03 */ MSCRIPT_CMD_AUTOTALK(0x0),
+    /* 0x0047 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28DE),
+    /* 0x004A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004B 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x004F 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B589FC[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D6),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_DekuDefault[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_82_20, 0x0015 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x294F),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2950),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0011 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_82_20),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0015 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2951),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x001B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001C 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x001D 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_SchLaundryPoolDeku[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_82_40, 0x0010 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2952),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_82_40),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2953),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_Receptionist[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B58A44[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING, 0x000D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D5),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000D 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x001A - 0x0012),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D4),
+    /* 0x0015 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0018 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x001A 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x0039 - 0x001F),
+    /* 0x001F 0x05 */ MSCRIPT_CMD_CHECK_ITEM(ITEM_PENDANT_OF_MEMORIES, 0x0041 - 0x0024),
+    /* 0x0024 0x05 */ MSCRIPT_CMD_CHECK_IN_DAY(3, 0x0031 - 0x0029),
+    /* 0x0029 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E3),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0031 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E2),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0038 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0039 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E1),
+    /* 0x003C 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x003F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0040 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0041 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E4),
+    /* 0x0044 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x00FF),
+    /* 0x0048 0x09 */
+    MSCRIPT_CMD_CHECK_ITEM_ACTION(PLAYER_IA_PENDANT_OF_MEMORIES, 0x005F - 0x0051, 0x0, 0x005D - 0x0051),
+    /* 0x0051 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x28E7),
+    /* 0x0054 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0055 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0058 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x005B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x005D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x005E 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x005F 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x28E5),
+    /* 0x0062 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0063 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0066 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0067 0x03 */ MSCRIPT_CMD_DELETE_ITEM(ITEM_PENDANT_OF_MEMORIES),
+    /* 0x006A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28E6),
+    /* 0x006D 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0070 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES),
+    /* 0x0073 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0074 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES),
+    /* 0x0077 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B58ABC[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B58AC4[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING, 0x001B - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D1),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28D2),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28D3),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_PROMISED_MIDNIGHT_MEETING),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x001B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28D3),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0022 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_SchWaitingForKafei[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28DF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_SchLaundryPoolDefault[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL, 0x002E - 0x0005),
+    /* 0x0005 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING, 0x0034 - 0x000A),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E8),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E9),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EA),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EB),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EC),
+    /* 0x0025 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0028 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x002A 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL),
+    /* 0x002D 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x002E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EC),
+    /* 0x0031 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0032 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0034 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EE),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EB),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EC),
+    /* 0x003F 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0042 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0044 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL),
+    /* 0x0047 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_SchLaundryPoolKafeiMask[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL, 0x0026 - 0x0005),
+    /* 0x0005 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING, 0x002C - 0x000A),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28E8),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28ED),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EB),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EC),
+    /* 0x001D 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0020 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0026 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EC),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002A 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x002C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28EE),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EB),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x28EC),
+    /* 0x0037 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x003C 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL),
+    /* 0x003F 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B58B7C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2951),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_80B58B88[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2961),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript sAnjuMsgScript_SchWithKafei[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x291B),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_ANJU),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 ActorInit En_An_InitVars = {
     /**/ ACTOR_EN_AN,
@@ -827,76 +903,76 @@ s32 EnAn_InitObjectSlots(EnAn* this, PlayState* play) {
 }
 
 Actor* EnAn_FindActor(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 // Name after ENAN_8000
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
-            if (!ENAN_GET_8000(foundActor)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
+            if (!ENAN_GET_8000(actorIter)) {
                 break;
             }
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
-EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
-    s32 switchFlag;
+EnDoor* EnAn_FindScheduleDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
+    EnDoorScheduleType schType;
 
     switch (scheduleOutputResult) {
         case ANJU_SCH_DOOR_26:
         case ANJU_SCH_DOOR_27:
-            switchFlag = 0xD;
+            schType = ENDOOR_SCH_TYPE_INN_GRANNYS;
             break;
 
         case ANJU_SCH_DOOR_33:
         case ANJU_SCH_DOOR_34:
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
-            switchFlag = 0xB;
+            schType = ENDOOR_SCH_TYPE_INN_MAIN_ENTRANCE;
             break;
 
         case ANJU_SCH_DOOR_36:
-            switchFlag = 0x10;
+            schType = ENDOOR_SCH_TYPE_INN_LARGE_SUITE;
             break;
 
         case ANJU_SCH_DOOR_28:
@@ -906,14 +982,14 @@ EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) 
         case ANJU_SCH_DOOR_32:
         case ANJU_SCH_DOOR_35:
         case ANJU_SCH_DOOR_39:
-            switchFlag = 0xE;
+            schType = ENDOOR_SCH_TYPE_INN_STAFF_ROOM;
             break;
 
         default:
             return NULL;
     }
 
-    return SubS_FindDoor(play, switchFlag);
+    return SubS_FindScheduleDoor(play, schType);
 }
 
 /**
@@ -1037,10 +1113,10 @@ s32 EnAn_UpdateSkelAnime(EnAn* this, PlayState* play) {
     }
 
     if (otherObjectSlot > OBJECT_SLOT_NONE) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return ret;
@@ -1096,11 +1172,11 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     }
 
     if (changeAnim && (otherObjectSlot > OBJECT_SLOT_NONE)) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return didAnimChange;
@@ -1593,24 +1669,24 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
+MsgScript* EnAn_GetMsgScript(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->scheduleResult) {
         case ANJU_SCH_GIVE_LUNCH_TO_GRANNY:
-            this->msgEventFunc = EnAn_MsgEvent_GiveLunchToGranny;
+            this->msgScriptCallback = EnAn_MsgEvent_GiveLunchToGranny;
             return sAnjuMsgScript_SchGiveLunchToGranny;
 
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
-            this->msgEventFunc = EnAn_MsgEvent_ReceiveLetterFromPostman;
+            this->msgScriptCallback = EnAn_MsgEvent_ReceiveLetterFromPostman;
             return sAnjuMsgScript_SchReceiveLetterFromPostman;
 
         case ANJU_SCH_ATTEND_GORON:
-            this->msgEventFunc = EnAn_MsgEvent_AttendGoron;
+            this->msgScriptCallback = EnAn_MsgEvent_AttendGoron;
             return sAnjuMsgScript_SchAttendGoron;
 
         case ANJU_SCH_COOKING:
-            this->msgEventFunc = EnAn_MsgEvent_Cooking;
+            this->msgScriptCallback = EnAn_MsgEvent_Cooking;
             return sAnjuMsgScript_SchCooking;
 
         case ANJU_SCH_RANCH:
@@ -1653,12 +1729,12 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         }
 
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            this->msgScriptCallback = EnAn_MsgEvent_MidnightMeeting;
             return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgScriptCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolKafeiMask;
         }
 
@@ -1666,7 +1742,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58A44;
         }
 
-        if (SCHEDULE_TIME_NOW < SCHEDULE_TIME(14, 18)) {
+        if (SCRIPT_TIME_NOW < SCRIPT_TIME(14, 18)) {
             return sAnjuMsgScript_80B58ABC;
         }
 
@@ -1675,12 +1751,12 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            this->msgScriptCallback = EnAn_MsgEvent_MidnightMeeting;
             return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgScriptCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolDefault;
         }
 
@@ -1703,7 +1779,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58980;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
-            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            this->msgScriptCallback = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolDefault;
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
@@ -1751,9 +1827,9 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3C4 = 0;
         this->msgEventState = 0;
-        this->msgEventFunc = NULL;
+        this->msgScriptCallback = NULL;
         this->actor.child = this->lookAtActor;
-        this->msgEventScript = EnAn_GetMsgEventScript(this, play);
+        this->msgScript = EnAn_GetMsgScript(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) ||
             (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
@@ -2358,7 +2434,7 @@ s32 EnAn_ProcessSchedule_GiveLunchToGranny(EnAn* this, PlayState* play, Schedule
 }
 
 s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 now = SCHEDULE_TIME_NOW;
+    u16 now = SCRIPT_TIME_NOW;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* points;
@@ -2368,7 +2444,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
     s32 ret = false;
 
     this->timePath = NULL;
-    door = EnAn_FindDoor(play, scheduleOutput->result);
+    door = EnAn_FindScheduleDoor(play, scheduleOutput->result);
 
     limit = sSearchTimePathLimit[scheduleOutput->result];
     if (limit >= 0) {
@@ -2444,7 +2520,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
 }
 
 s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 now = SCHEDULE_TIME_NOW;
+    u16 now = SCRIPT_TIME_NOW;
     u16 startTime;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     s32 pad;
@@ -2872,7 +2948,7 @@ s32 EnAn_HandleSch_InteractActor(EnAn* this, PlayState* play) {
 }
 
 s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
-    EnDoor* door = EnAn_FindDoor(play, this->scheduleResult);
+    EnDoor* door = EnAn_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     f32 distance;
     s32 pad;
@@ -3221,7 +3297,7 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 }
 
 void EnAn_Talk(EnAn* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         // Message event script is done
 
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -3229,7 +3305,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->loseAttentionTimer = 20;
-        this->msgScriptResumePos = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = EnAn_FollowSchedule;
 
         return;

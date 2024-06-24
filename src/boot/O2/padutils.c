@@ -1,10 +1,12 @@
 #include "padutils.h"
 
+#include "PR/os_libc.h"
+
 void PadUtils_Init(Input* input) {
     bzero(input, sizeof(Input));
 }
 
-void func_80085150(void) {
+void PadUtils_Destroy(void) {
 }
 
 void PadUtils_ResetPressRel(Input* input) {

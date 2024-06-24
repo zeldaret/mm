@@ -1,7 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "PR/os_convert.h"
 
 #define SCREEN_WIDTH  320
@@ -64,9 +64,6 @@
     (flag & 0x1) ? 0 : \
     0)
 
-#define SQ(x) ((x) * (x))
-#define ABS(x) ((x) >= 0 ? (x) : -(x))
-#define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
 
 //! checks min first

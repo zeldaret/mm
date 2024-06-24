@@ -32,11 +32,11 @@ void* Lib_MemSet(void* buffer, s32 value, size_t size) {
 }
 
 f32 Math_CosS(s16 angle) {
-    return coss(angle) * SHT_MINV;
+    return coss(angle) * (1.0f / SHRT_MAX);
 }
 
 f32 Math_SinS(s16 angle) {
-    return sins(angle) * SHT_MINV;
+    return sins(angle) * (1.0f / SHRT_MAX);
 }
 
 s32 Math_StepToIImpl(s32 start, s32 target, s32 step) {
@@ -76,7 +76,7 @@ s32 Math_ScaledStepToS(s16* pValue, s16 target, s16 step) {
             step = -step;
         }
 
-        *pValue += (s16)(step * f0);
+        *pValue += TRUNCF_BINANG(step * f0);
 
         if (((s16)(*pValue - target) * step) >= 0) {
             *pValue = target;

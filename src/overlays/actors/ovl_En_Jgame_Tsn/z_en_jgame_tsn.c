@@ -260,16 +260,16 @@ void func_80C14030(EnJgameTsn* this) {
 void func_80C14044(EnJgameTsn* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
             func_80C14684(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80C147B4(this, play);
             break;
 
@@ -391,11 +391,11 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_82_10);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FISHERMANS_JUMPING_GAME_HEART_PIECE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FISHERMANS_JUMPING_GAME_HEART_PIECE);
         }
         func_80C145FC(this);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FISHERMANS_JUMPING_GAME_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);

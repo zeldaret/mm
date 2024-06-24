@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-typedef enum {
+typedef enum ShootingGalleryOctorokAnimation {
     /* 0 */ SG_OCTO_ANIM_SHOOT, // unused
     /* 1 */ SG_OCTO_ANIM_DIE,
     /* 2 */ SG_OCTO_ANIM_HIDE,
@@ -70,7 +70,7 @@ typedef enum {
     /* 6 */ SG_OCTO_ANIM_MAX
 } ShootingGalleryOctorokAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_OCTO_ANIM_MAX] = {
     { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },  // SG_OCTO_ANIM_SHOOT
     { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },    // SG_OCTO_ANIM_DIE
     { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // SG_OCTO_ANIM_HIDE
@@ -124,11 +124,11 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
 /**
  * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
  */
-void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
-    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+void EnSyatekiOkuta_SpawnSmoke(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sSmokePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sSmokeEnvColor = { 150, 150, 150, 255 };
 
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sSmokePrimColor, &sSmokeEnvColor, 400, scaleStep);
 }
 
 /**
@@ -308,7 +308,7 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
             velocity.x = 0.0f;
             velocity.y = -0.5f;
             velocity.z = 0.0f;
-            EnSyatekiOkuta_SpawnDust(&pos, &velocity, -20, play);
+            EnSyatekiOkuta_SpawnSmoke(&pos, &velocity, -20, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
@@ -469,7 +469,7 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
         }
     } else if (this->actionFunc == EnSyatekiOkuta_Float) {
         this->headScale.x = this->headScale.z = 1.0f;
-        this->headScale.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->headScale.y = (Math_SinF((M_PIf / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Hide) {
         if (curFrame < 3.0f) {
             this->headScale.y = 1.0f;
@@ -502,14 +502,15 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
- * parameter.
+ * Gets the scaling factor for animating the snout limb. If the limb is not being transformed, no scale value is
+ * returned. Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the
+ * `scale` parameter.
  */
 s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnSyatekiOkuta_Appear) {
         scale->y = 1.0f;
         scale->z = 1.0f;
-        scale->x = (Math_SinF((M_PI / 16) * curFrame) * 0.4f) + 1.0f;
+        scale->x = (Math_SinF((M_PIf / 16) * curFrame) * 0.4f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Die) {
         if ((curFrame >= 35.0f) || (curFrame < 25.0f)) {
             return false;

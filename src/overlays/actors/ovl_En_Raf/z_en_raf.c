@@ -820,7 +820,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < ARRAY_COUNT(sGrabAnimationCheckFrames); i++) {
-                    if ((s16)this->skelAnime.curFrame == sGrabAnimationCheckFrames[i]) {
+                    if (TRUNCF_BINANG(this->skelAnime.curFrame) == sGrabAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringGrab[i]);
                     }
                 }
@@ -830,7 +830,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < ARRAY_COUNT(sGrabAnimationCheckFrames); i++) {
-                    if ((s16)this->skelAnime.curFrame == sGrabAnimationCheckFrames[i]) {
+                    if (TRUNCF_BINANG(this->skelAnime.curFrame) == sGrabAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[i]);
                     }
                 }
@@ -866,7 +866,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < ARRAY_COUNT(sSpitAnimationCheckFrames); i++) {
-                    if ((s16)this->skelAnime.curFrame == sSpitAnimationCheckFrames[i]) {
+                    if (TRUNCF_BINANG(this->skelAnime.curFrame) == sSpitAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringSpit[i]);
                     }
                 }
@@ -876,7 +876,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 4; i++) {
-                    if ((s16)this->skelAnime.curFrame == sSpitAnimationCheckFrames[i]) {
+                    if (TRUNCF_BINANG(this->skelAnime.curFrame) == sSpitAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringSpit[i]);
                     }
                 }

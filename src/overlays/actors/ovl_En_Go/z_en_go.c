@@ -124,70 +124,455 @@ void EnGo_Snowball(EnGo* this, PlayState* play);
 void EnGo_Talk(EnGo* this, PlayState* play);
 
 // MsgEvent script for the Goron who made Darmani's grave in the mountain village.
-static s32 sMsgScriptGoronGravemaker[] = {
-    0x00150800, 0x40010022, 0x00150200, 0x180E0E10, 0x0C0F0E11, 0x0C0F0E12, 0x0C0F0E13, 0x0C0F0E14, 0x0C111502,
-    0x100E0E15, 0x0C100015, 0x0400110E, 0x0E160C0F, 0x0E170C0F, 0x0E180C11, 0x15041610, 0x0E0E190C, 0x10001504,
-    0x000D0100, 0x050E0E31, 0x0C100E0E, 0x2F0C1001, 0x00050E0E, 0x2D0C100E, 0x0E2B0C10,
+static MsgScript sMsgScriptGoronGravemaker[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON, 0x0045 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x002A - 0x0008),
+    /* 0x0008 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_21_02, 0x0025 - 0x000D),
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E10),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E11),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0015 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E12),
+    /* 0x0018 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0019 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E13),
+    /* 0x001C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001D 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E14),
+    /* 0x0020 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0021 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_21_02),
+    /* 0x0024 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0025 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E15),
+    /* 0x0028 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x002A 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON, 0x0040 - 0x002F),
+    /* 0x002F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E16),
+    /* 0x0032 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0033 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E17),
+    /* 0x0036 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0037 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E18),
+    /* 0x003A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003B 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON),
+    /* 0x003E 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x003F 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0040 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E19),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0044 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0045 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON, 0x0057 - 0x004A),
+    /* 0x004A 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0052 - 0x004D),
+    /* 0x004D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E31),
+    /* 0x0050 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0051 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0052 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E2F),
+    /* 0x0055 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0056 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0057 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x005F - 0x005A),
+    /* 0x005A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E2D),
+    /* 0x005D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005E 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x005F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E2B),
+    /* 0x0062 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0063 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 // MsgEvent script for the frozen Goron aside the gravemaker in the mountain village.
-static s32 sMsgScriptGoronFrozen[] = {
-    0x00150800, 0x7E01004D, 0x00150400, 0x180E0E1A, 0x0C170F0E, 0x230C180F, 0x0E240C0F, 0x0E250C12, 0x16111508,
-    0x100E0E1A, 0x0C170F0E, 0x230C180F, 0x0E240C0F, 0x0E250C17, 0x0F0E260C, 0x180F0E27, 0x0C170F0E, 0x280C180F,
-    0x0E290C17, 0x0F0E2A0C, 0x16111508, 0x100E0E1A, 0x0C170F0E, 0x1B0C180F, 0x0E1C0C0F, 0x0E1D0C0F, 0x0E1E0C17,
-    0x0F0E1F0C, 0x180F0E20, 0x0C170F0E, 0x210C0F0E, 0x220C1611, 0x15081000, 0x1504000D, 0x0100050E, 0x0E320C10,
-    0x0E0E300C, 0x10010005, 0x0E0E2E0C, 0x100E0E2C, 0x0C100000,
+static MsgScript sMsgScriptGoronFrozen[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON, 0x0083 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0055 - 0x0008),
+    /* 0x0008 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON, 0x0025 - 0x000D),
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E1A),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E23),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E24),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E25),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0020 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0021 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON),
+    /* 0x0024 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0025 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E1A),
+    /* 0x0028 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0029 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x002A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E23),
+    /* 0x002D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002E 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x002F 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E24),
+    /* 0x0032 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0033 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E25),
+    /* 0x0036 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E26),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E27),
+    /* 0x0040 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0041 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0042 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E28),
+    /* 0x0045 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0046 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0047 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E29),
+    /* 0x004A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004B 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x004C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E2A),
+    /* 0x004F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0050 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0051 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON),
+    /* 0x0054 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0055 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E1A),
+    /* 0x0058 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0059 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x005A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E1B),
+    /* 0x005D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005E 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x005F 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E1C),
+    /* 0x0062 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0063 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E1D),
+    /* 0x0066 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0067 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E1E),
+    /* 0x006A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x006B 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x006C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E1F),
+    /* 0x006F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0070 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0071 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E20),
+    /* 0x0074 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0075 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0076 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E21),
+    /* 0x0079 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x007A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E22),
+    /* 0x007D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x007E 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x007F 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON),
+    /* 0x0082 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0083 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON, 0x0095 - 0x0088),
+    /* 0x0088 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0090 - 0x008B),
+    /* 0x008B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E32),
+    /* 0x008E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x008F 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0090 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E30),
+    /* 0x0093 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0094 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0095 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x009D - 0x0098),
+    /* 0x0098 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E2E),
+    /* 0x009B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x009C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x009D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E2C),
+    /* 0x00A0 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00A1 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 // MsgEvent script for the shrine Goron standing aside the store.
-static s32 sMsgScriptGoronAsideStore[] = { 0xE0E520C, 0x10000000 };
+static MsgScript sMsgScriptGoronAsideStore[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E52),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for the shrine Goron standing aside the Elder's son.
-static s32 sMsgScriptGoronAsideEldersSon[] = {
-    0x160400,  0x38010010, 0xE0E430C, 0xF0E440C, 0xF0E450C,  0x11188010, 0x160800,   0x1B0E0E46, 0xC0F0E47,
-    0xC0F0E48, 0xC0F0E49,  0xC0F0E4A, 0xC111608, 0x11188010, 0xE0E4B0C,  0x100E0E42, 0xC100000,
+static MsgScript sMsgScriptGoronAsideEldersSon[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON, 0x003D - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0018 - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E43),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E44),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E45),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_24_80),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0018 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_22_08, 0x0038 - 0x001D),
+    /* 0x001D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E46),
+    /* 0x0020 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0021 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E47),
+    /* 0x0024 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0025 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E48),
+    /* 0x0028 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0029 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E49),
+    /* 0x002C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002D 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E4A),
+    /* 0x0030 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0031 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_22_08),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_24_80),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0038 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E4B),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x003D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E42),
+    /* 0x0040 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0041 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 // MsgEvent script for the shrine Goron standing aside the Elder's room.
-static s32 sMsgScriptGoronAsideEldersRoom[] = {
-    0x160400,   0x22010009, 0xE0E4D0C, 0xF0E4E0C,  0x10001701, 0xC0E0E,
-    0x4F0C0F0E, 0x500C1117, 0x1100E0E, 0x510C100E, 0xE4C0C10,
+static MsgScript sMsgScriptGoronAsideEldersRoom[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON, 0x0027 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0011 - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E4D),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E4E),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0011 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_01, 0x0022 - 0x0016),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E4F),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0E50),
+    /* 0x001D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_23_01),
+    /* 0x0021 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0022 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E51),
+    /* 0x0025 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0026 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0027 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E4C),
+    /* 0x002A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x002B 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 // MsgEvent script for the Goron in Goron Village who sells Powder Kegs.
-static s32 sMsgScriptGoronMedigoron[] = {
-    0x1001200,  0x12200008, 0xE0C8E0C,  0x11122010, 0xE0C8F0C,  0x10001240, 0x1D0E0C,   0x800C1112, 0x40001280,
-    0x742500,   0xC006F00,  0x13010045, 0xF0C810C,  0x19001300, 0x1280005E, 0x25000C00, 0x59001301, 0x2F0E0C,
-    0x810C0F0C, 0x820C0500, 0x1A00,     0x1A300E0C, 0x830C1209, 0x700,      0xE0C84,    0x160C1113, 0x1100E0C,
-    0x840C1031, 0xE0C850C,  0x1029FFF2, 0x130200,   0xF0E0C88,  0xC0F0C89,  0xC05000A,  0xFFE3FFE3, 0xE0C860C,
-    0x11128019, 0x213019,   0xFFC02900, 0x2C0E0C8C, 0xC050000,  0x50000,    0x8006400,  0x6320E0C,  0x8D0C1030,
-    0x14FF9C12, 0x6003400,  0x130034,   0x700000E,  0xC870C16,  0x100E0C8B, 0xC100000,
+static MsgScript sMsgScriptGoronMedigoron[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0015 - 0x0003),
+    /* 0x0003 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_18_20, 0x0010 - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C8E),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_18_20),
+    /* 0x000F 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C8F),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0015 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_18_40, 0x0037 - 0x001A),
+    /* 0x001A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C80),
+    /* 0x001D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001E 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_18_40),
+    /* 0x0021 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_HAS_POWDERKEG_PRIVILEGES, 0x009A - 0x0026),
+    /* 0x0026 0x05 */ MSCRIPT_CMD_CHECK_ITEM(ITEM_POWDER_KEG, 0x009A - 0x002B),
+    /* 0x002B 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_19_01, 0x0075 - 0x0030),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0C81),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x03 */ MSCRIPT_CMD_JUMP(0x004A - 0x0037),
+    /* 0x0037 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_HAS_POWDERKEG_PRIVILEGES, 0x009A - 0x003C),
+    /* 0x003C 0x05 */ MSCRIPT_CMD_CHECK_ITEM(ITEM_POWDER_KEG, 0x009A - 0x0041),
+    /* 0x0041 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_19_01, 0x0075 - 0x0046),
+    /* 0x0046 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C81),
+    /* 0x0049 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0C82),
+    /* 0x004D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004E 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x006F - 0x0055, 0x006F - 0x0055),
+    /* 0x0055 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x0056 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C83),
+    /* 0x0059 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005A 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x005B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x005E 0x03 */ MSCRIPT_CMD_AUTOTALK(0x0),
+    /* 0x0061 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C84),
+    /* 0x0064 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0065 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0066 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_19_01),
+    /* 0x0069 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x006A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C84),
+    /* 0x006D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x006E 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x006F 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x0070 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C85),
+    /* 0x0073 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0074 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0075 0x03 */ MSCRIPT_CMD_CHECK_HAS_POWDER_KEG(0x006A - 0x0078),
+
+    /* 0x0078 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_19_02, 0x008C - 0x007D),
+    /* 0x007D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C88),
+    /* 0x0080 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0081 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0C89),
+    /* 0x0084 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0085 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0096 - 0x008C, 0x006F - 0x008C, 0x006F - 0x008C),
+
+    /* 0x008C 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C86),
+    /* 0x008F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0090 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_HAS_POWDERKEG_PRIVILEGES),
+    /* 0x0093 0x03 */ MSCRIPT_CMD_JUMP(0x00B7 - 0x0096),
+    /* 0x0096 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x0097 0x03 */ MSCRIPT_CMD_JUMP(0x005A - 0x009A),
+
+    /* 0x009A 0x03 */ MSCRIPT_CMD_CHECK_HAS_POWDER_KEG(0x00C9 - 0x009D),
+    /* 0x009D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C8C),
+    /* 0x00A0 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00A1 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x00AD - 0x00A8, 0x0),
+    /* 0x00A8 0x05 */ MSCRIPT_CMD_CHECK_RUPEES(100, 0x00B3 - 0x00AD),
+    /* 0x00AD 0x01 */ MSCRIPT_CMD_PLAY_ERROR(),
+    /* 0x00AE 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C8D),
+    /* 0x00B1 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00B2 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00B3 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x00B4 0x03 */ MSCRIPT_CMD_CHANGE_RUPEES(-100),
+    /* 0x00B7 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x00B8 0x05 */ MSCRIPT_CMD_OFFER_ITEM(GI_POWDER_KEG, 0x0),
+    /* 0x00BD 0x03 */ MSCRIPT_CMD_SET_COLLECTIBLE(0x0034),
+    /* 0x00C0 0x03 */ MSCRIPT_CMD_AUTOTALK(0x0),
+    /* 0x00C3 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C87),
+    /* 0x00C6 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00C7 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x00C8 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x00C9 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C8B),
+    /* 0x00CC 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x00CD 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 // MsgEvent script for the gatekeeper Goron in Goron Village who opens the shrine gate.
-static s32 sMsgScriptGoronGatekeeper[] = {
-    0x584000,  0x2903000E, 0x2001301, 0x180058,   0x80005119, 0x1E0059,   0x1004919, 0x160059,  0x2004119,
-    0xE0059,   0x4003919,  0x2F0E0D,  0x4D0C1210, 0xE0D480C,  0xF0D490C,  0xF0D4A0C, 0x5000000, 0xF000F30,
-    0xE0D4B0C, 0x15090000, 0xE0D4D0C, 0x1210310E, 0xD4C0C12,  0x100E0D4E, 0xC19FFD8, 0xE0D4F0C, 0x19FFD500,
+static MsgScript sMsgScriptGoronGatekeeper[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE, 0x002E - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_DEKU(0x0016 - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_CHECK_ZORA(0x001E - 0x000B),
+    /* 0x000B 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0026 - 0x000E),
+    /* 0x000E 0x05 */
+    MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_HUMAN, 0x0064 - 0x0013),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_JUMP(0x0034 - 0x0016),
+    /* 0x0016 0x05 */
+    MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_DEKU, 0x0064 - 0x001B),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_JUMP(0x0034 - 0x001E),
+    /* 0x001E 0x05 */
+    MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_ZORA, 0x0064 - 0x0023),
+    /* 0x0023 0x03 */ MSCRIPT_CMD_JUMP(0x0034 - 0x0026),
+    /* 0x0026 0x05 */
+    MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_GORON, 0x0064 - 0x002B),
+    /* 0x002B 0x03 */ MSCRIPT_CMD_JUMP(0x005D - 0x002E),
+    /* 0x002E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4D),
+    /* 0x0031 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0032 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0034 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D48),
+    /* 0x0037 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0D49),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0D4A),
+    /* 0x003F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0040 0x07 */ MSCRIPT_CMD_CHECK_TEXT_CHOICE(0x0, 0x0056 - 0x0047, 0x0056 - 0x0047),
+    /* 0x0047 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
+    /* 0x0048 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4B),
+    /* 0x004B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004C 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x004D 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0050 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4D),
+    /* 0x0053 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0054 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0055 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0056 0x01 */ MSCRIPT_CMD_PLAY_CANCEL(),
+    /* 0x0057 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4C),
+    /* 0x005A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x005B 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x005C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x005D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4E),
+    /* 0x0060 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0061 0x03 */ MSCRIPT_CMD_JUMP(0x003C - 0x0064),
+
+    /* 0x0064 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0D4F),
+    /* 0x0067 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0068 0x03 */ MSCRIPT_CMD_JUMP(0x0040 - 0x006B),
 };
 
 // MsgEvent script for one of the Goron stretchers at the racetrack (Initially stretching side to side while squatting).
-static s32 sMsgScriptGoronAthleticA[] = { 0x100060E, 0xDFE0C12, 0x100E0DFF, 0xC121000 };
+static MsgScript sMsgScriptGoronAthleticA[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0DFE),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0DFF),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for one of the Goron stretchers at the racetrack (Initially doing sidebend stretches with one arm).
-static s32 sMsgScriptGoronAthleticB[] = { 0x100060E, 0xE000C12, 0x100E0E01, 0xC121000 };
+static MsgScript sMsgScriptGoronAthleticB[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E00),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E01),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for one of the Goron stretchers at the racetrack (Initially shaking out their limbs).
-static s32 sMsgScriptGoronAthleticC[] = { 0x100060E, 0xE020C12, 0x100E0E03, 0xC121000 };
+static MsgScript sMsgScriptGoronAthleticC[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E02),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E03),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for one of the Goron stretchers (Initially doing sidebend stretches with both arms).
-static s32 sMsgScriptGoronAthleticD[] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
+static MsgScript sMsgScriptGoronAthleticD[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E04),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E05),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for the pair of Gorons stretching one Goron's hamstrings.
-static s32 sMsgScriptGoronAthleticHamstring[] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
+static MsgScript sMsgScriptGoronAthleticHamstring[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E06),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0E07),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 // MsgEvent script for any sleeping Goron.
-static s32 sMsgScriptGoronSleeping[] = { 0xE023A0C, 0x12100000 };
+static MsgScript sMsgScriptGoronSleeping[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x023A),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0005 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 ActorInit En_Go_InitVars = {
     /**/ ACTOR_EN_GO,
@@ -436,7 +821,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  * @param parentEffectType Type of the parent effect, determines which of the possible dust effects correspond
  */
-void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale,
+void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale,
                    f32 deltaScale, s32 maxFrames, EnGoEffectType parentEffectType) {
     s32 i;
 
@@ -451,7 +836,7 @@ void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f 
         effect->alphaNumer = effect->alphaDenom;
         effect->pos = pos;
         effect->accel = accel;
-        effect->velocity = vel;
+        effect->velocity = velocity;
         effect->scaleXY = scale;
         effect->scaleXYDelta = deltaScale;
         break;
@@ -793,7 +1178,7 @@ void EnGo_UpdateSnowballCollider(EnGo* this, PlayState* play) {
 
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
 
     this->colliderSphere.dim.modelSphere.radius = 48;
@@ -826,7 +1211,7 @@ void EnGo_UpdateRolledUpCollider(EnGo* this, PlayState* play) {
     Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
     this->colliderSphere.dim.modelSphere.radius = 20;
     this->colliderSphere.dim.worldSphere.radius =
@@ -991,10 +1376,10 @@ s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
@@ -1051,11 +1436,11 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;
@@ -1339,7 +1724,7 @@ s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxD
         if (velocity > 0.0f) {
             // PHASE 1: Goron is rising
             rotAndDistortFactor = velocity / initialVelocity;
-            this->actor.shape.rot.x += (s16)(0x238C * rotAndDistortFactor);
+            this->actor.shape.rot.x += TRUNCF_BINANG(0x238C * rotAndDistortFactor);
             this->elapsedHangtime = 0;
         } else if ((s32)this->actor.velocity.y == 0) {
             if (maxHangtime >= this->elapsedHangtime) {
@@ -1822,11 +2207,11 @@ void EnGo_SetupGatekeeper(EnGo* this, PlayState* play) {
         }
         EnGo_ChangeToSnowballAnimation(this, play);
         this->actionFunc = EnGo_Snowball;
-        this->msgEventFunc = EnGo_HandleOpenShrineCutscene;
+        this->msgScriptCallback = EnGo_HandleOpenShrineCutscene;
     } else {
         EnGo_ChangeToShiveringAnimation(this, play);
         this->actionFunc = EnGo_Idle;
-        this->msgEventFunc = EnGo_HandleOpenShrineCutscene;
+        this->msgScriptCallback = EnGo_HandleOpenShrineCutscene;
     }
 }
 
@@ -1883,7 +2268,7 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
-    this->msgEventFunc = EnGo_HandleGivePowderKegCutscene;
+    this->msgScriptCallback = EnGo_HandleGivePowderKegCutscene;
     this->actionFunc = EnGo_Idle;
 }
 
@@ -1910,7 +2295,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
 
         this->actor.targetMode = TARGET_MODE_1;
         this->scaleFactor = ENGO_NORMAL_SCALE;
-        this->msgEventFunc = NULL;
+        this->msgScriptCallback = NULL;
 
         switch (ENGO_GET_TYPE(&this->actor)) {
             case ENGO_ATHLETIC:
@@ -2309,7 +2694,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
         }
 
         this->actor.speed = 4.0f;
-        this->actor.shape.rot.x += (s16)(this->actor.speed * 546.0f);
+        this->actor.shape.rot.x += TRUNCF_BINANG(this->actor.speed * 546.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 }
@@ -2317,8 +2702,8 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
 /**
  * Return the MsgEvent script appropriate for the actor.
  */
-s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
-    static s32* sMsgScriptGraveyard[] = {
+MsgScript* EnGo_GetMsgScript(EnGo* this, PlayState* play) {
+    static MsgScript* sMsgScriptGraveyard[] = {
         sMsgScriptGoronGravemaker,
         sMsgScriptGoronFrozen,
     };
@@ -2384,8 +2769,8 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     Vec3f targetPos;
     Vec3f thisPos;
 
-    if (!func_8010BF58(&this->actor, play, EnGo_GetMsgEventScript(this, play), this->msgEventFunc,
-                       &this->msgScriptResumePos)) {
+    if (!MsgEvent_RunScript(&this->actor, play, EnGo_GetMsgScript(this, play), this->msgScriptCallback,
+                            &this->msgScriptPos)) {
         if ((ENGO_GET_TYPE(&this->actor) != ENGO_ATHLETIC) && !(this->actionFlags & ENGO_FLAG_ROLLED_UP)) {
             Math_Vec3f_Copy(&targetPos, &this->attentionTarget->world.pos);
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
@@ -2404,7 +2789,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 
     this->actionFlags &= ~ENGO_FLAG_ENGAGED;
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->msgScriptResumePos = 0;
+    this->msgScriptPos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFunc = this->interruptedActionFunc;
 }
@@ -2528,8 +2913,8 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }

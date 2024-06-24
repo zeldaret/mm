@@ -1083,7 +1083,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
 
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.r, (u8)(s8)this->unk_250.g, (u8)(s8)this->unk_250.b,
                    (u8)(s8)((f32)phi_a0 * 1));
-    gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
+    gDPSetDither(POLY_XLU_DISP++, G_AD_PATTERN | G_CD_BAYER);
 
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    DmChar00_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);

@@ -3,7 +3,7 @@
  * Overlay: ovl_Eff_Kamejima_Wave
  * Description: Wave Created by Turtle Awakening
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_eff_kamejima_wave.h"
 #include "objects/object_kamejima/object_kamejima.h"
 

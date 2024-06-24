@@ -23,36 +23,119 @@ s32 func_80A87B48(Actor* thisx, PlayState* play);
 s32 func_80A87DC0(Actor* thisx, PlayState* play);
 void func_80A881E0(EnTru* this, PlayState* play);
 
-static UNK_TYPE D_80A88910[] = {
-    0x0E08520C,
-    0x16100000,
+typedef enum {
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_ANIM_TAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
+    /* 0x09 */ KOUME_ANIM_DRINK,
+    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_ANIM_HEALED,
+    /* 0x0C */ KOUME_ANIM_HOVER1,
+    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_ANIM_FLY,
+    /* 0x0F */ KOUME_ANIM_HOVER2,
+    /* 0x10 */ KOUME_ANIM_MAX
+} KoumeAnimation;
+
+static MsgScript D_80A88910[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0852),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0005 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88918[] = {
-    0x0900000E,
-    0x08630C12,
-    0x16100000,
+static MsgScript D_80A88918[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0863),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88924[] = {
-    0x0E08660C,
-    0x10000000,
+static MsgScript D_80A88924[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0866),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A8892C[] = {
-    0x09000004, 0x00050E08, 0x650C1000, 0x1010000B, 0x0E08530C, 0x0F08540C, 0x1900040E, 0x08560C11,
-    0x10100E00, 0xFF2B0000, 0x001E0027, 0x2C08640C, 0x2F00000C, 0x15090000, 0x0E08570C, 0x15090000,
-    0x0E08580C, 0x15090000, 0x12102C08, 0x550C2F00, 0x000C100E, 0x08550C10,
+static MsgScript D_80A8892C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_HUMAN(0x000B - 0x0006),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0865),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000B 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_KOUME_INJURED, 0x001B - 0x0010),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0853),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0854),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_JUMP(0x001F - 0x001B),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0856),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001F 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_KOUME_INJURED),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x00FF),
+    /* 0x0025 0x07 */ MSCRIPT_CMD_CHECK_CALLBACK_MULTI(0x0, 0x004A - 0x002C, 0x0053 - 0x002C),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x0864),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0035 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0857),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0040 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0858),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0044 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0049 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x004A 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x0855),
+    /* 0x004D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004E 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0051 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0052 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0053 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0855),
+    /* 0x0056 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88984[] = {
-    0x2CFFFF09, 0x00000E08, 0x640C1509, 0x00000E08, 0x570C1509, 0x00000E08, 0x580C1509, 0x00001210,
+static MsgScript D_80A88984[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0xFFFF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0864),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x000B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0857),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0858),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A889A4[] = {
-    0x2CFFFF09,
-    0x00000E08,
-    0x550C1000,
+static MsgScript D_80A889A4[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0xFFFF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0855),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 ActorInit En_Tru_InitVars = {
@@ -649,7 +732,7 @@ s32 func_80A86DB8(EnTru* this) {
     return false;
 }
 
-UNK_TYPE* func_80A871E0(EnTru* this, PlayState* play) {
+MsgScript* EnTru_GetMsgScript(EnTru* this, PlayState* play) {
     if (this->unk_34E & 0x2000) {
         if (this->unk_38C == 35) {
             this->unk_390 = 1;
@@ -697,10 +780,10 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x4000;
         }
 
-        this->unk_378 = func_80A875AC;
+        this->msgScriptCallback = func_80A875AC;
         this->unk_390 = 0;
         this->unk_364 = 0;
-        this->unk_354 = func_80A871E0(this, play);
+        this->msgScript = EnTru_GetMsgScript(this, play);
         SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80A881E0;
         ret = true;
@@ -810,9 +893,9 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
     if (ret == true) {
         if (this->unk_390 != 0) {
             this->unk_34E |= 8;
-            this->unk_378 = func_80A87880;
+            this->msgScriptCallback = func_80A87880;
         } else {
-            this->unk_378 = func_80A8777C;
+            this->msgScriptCallback = func_80A8777C;
         }
         this->unk_364 = 0;
     }
@@ -827,12 +910,12 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
         // Fallthrough
-        case TEXT_STATE_16:
+        case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
             if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
@@ -842,7 +925,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 } else {
                     this->unk_390 = 2;
                 }
-                this->unk_378 = func_80A87880;
+                this->msgScriptCallback = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
             } else if (itemAction <= PLAYER_IA_MINUS1) {
@@ -923,7 +1006,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87B48;
+        this->msgScriptCallback = func_80A87B48;
         this->unk_364 = 0;
     }
 
@@ -982,7 +1065,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87DC0;
+        this->msgScriptCallback = func_80A87DC0;
         this->unk_364 = 0;
     }
 
@@ -1045,7 +1128,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     if (ret == true) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
-        this->unk_378 = NULL;
+        this->msgScriptCallback = NULL;
         this->unk_34E = 0;
         this->unk_364 = 0;
     }
@@ -1093,7 +1176,7 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
 void func_80A881E0(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (func_8010BF58(&this->actor, play, this->unk_354, this->unk_378, &this->unk_1E8)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         if (player->transformation != PLAYER_FORM_HUMAN) {
             this->unk_34E |= 0x80;
         }
@@ -1116,7 +1199,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        this->unk_1E8 = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80A87FD0;
     }
 }

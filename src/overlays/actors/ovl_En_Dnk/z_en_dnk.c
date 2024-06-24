@@ -175,8 +175,8 @@ s32 EnDnk_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 endFrame;
     s32 didAnimChange = false;
 
-    if (animIndex >= 0) {
-        if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
+    if (animIndex > ENDNK_ANIM_NONE) {
+        if (animIndex < ENDNK_ANIM_MAX) {
             didAnimChange = true;
             endFrame = sAnimationInfo[animIndex].frameCount;
             if (endFrame < 0) {

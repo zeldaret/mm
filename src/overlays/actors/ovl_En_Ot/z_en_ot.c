@@ -201,7 +201,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                             this->unk_394.y = this->actor.world.pos.y;
                             this->unk_394.z = (this->actor.world.pos.z + this->unk_360->actor.world.pos.z) * 0.5f;
                             Math_Vec3f_Copy(&this->unk_360->unk_394, &this->unk_394);
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE)) {
                                 func_80B5C244(this, play);
                             } else {
                                 func_80B5C684(this, play);
@@ -260,7 +260,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                 case 1:
                     Actor_SetScale(&this->actor, 1.3f * 0.01f);
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) {
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE)) {
                             func_80B5C244(this, play);
                         } else {
                             func_80B5C684(this, play);
@@ -394,12 +394,13 @@ void func_80B5BFB8(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C154(EnOt* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE)) {
         this->getItemId = GI_RUPEE_RED;
     } else {
         this->getItemId = GI_HEART_PIECE;
-        SET_WEEKEVENTREG(WEEKEVENTREG_32_01);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE);
     }
+
     Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_80B5C1CC;
 }
@@ -683,13 +684,13 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
@@ -814,13 +815,13 @@ void func_80B5D160(EnOt* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -895,7 +896,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
-    temp = Math3D_Parallel(&sp50, &sp44);
+    temp = Math3D_Cos(&sp50, &sp44);
     if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
@@ -1085,7 +1086,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-    gDPSetDither(&gfx[0], G_CD_NOISE);
+    gDPSetDither(&gfx[0], G_AD_PATTERN | G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);

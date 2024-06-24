@@ -551,7 +551,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 30.0f * 0.001f)) {
             Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -575,7 +575,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         gDPSetEnvColor((*gfx)++, envColor, envColor, envColor, envColor);
 
         if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            rotX = (s16)(this->timer * 6144.0f * (1 / 9.0f));
+            rotX = TRUNCF_BINANG(this->timer * 6144.0f * (1 / 9.0f));
             rot->x -= rotX;
         } else if (this->actionFunc == EnBigokuta_HoldPlayer) {
             if (this->timer == 1) {
@@ -604,7 +604,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +613,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {

@@ -98,7 +98,7 @@ void EffectSsDeadDs_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_RotateZYX(this->rRoll, this->rPitch, this->rYaw, MTXMODE_APPLY);
-    Matrix_RotateXFApply(1.57f); // (M_PI / 2)
+    Matrix_RotateXFApply(1.57f); // (M_PIf / 2)
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,

@@ -498,7 +498,7 @@ void EnPoSisters_SetupAttackConnect(EnPoSisters* this) {
 
 void EnPoSisters_AttackConnectDrift(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    this->actor.shape.rot.y -= (s16)(this->actor.speed * 10.0f * 128.0f);
+    this->actor.shape.rot.y -= TRUNCF_BINANG(this->actor.speed * 10.0f * 128.0f);
 
     if (Math_StepToF(&this->actor.speed, 0.0f, 0.1f)) { // wait to stop moving
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -823,8 +823,8 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
         if (this->megCloneId == POE_SISTERS_MEG_REAL) {
             if (ABS_ALT(16 - this->floatingBobbingTimer) < 14) {
                 // Every N frames rotate around player. The fewer Meg clones remaining the faster they spin.
-                this->actor.shape.rot.y += (s16)((0x580 - (this->megClonesRemaining * 0x180)) *
-                                                 fabsf(Math_SinS(this->floatingBobbingTimer * 0x800)));
+                this->actor.shape.rot.y += TRUNCF_BINANG((0x580 - (this->megClonesRemaining * 0x180)) *
+                                                         fabsf(Math_SinS(this->floatingBobbingTimer * 0x800)));
             }
 
             // Twirl the real Meg backwards for a bit for a visual tell to player.

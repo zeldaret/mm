@@ -700,8 +700,8 @@ void EnRailgibud_SpawnDust(PlayState* play, Vec3f* basePos, f32 randomnessScale,
 
         dustVelocity.x *= 0.5f;
         dustVelocity.z *= 0.5f;
-        func_800B1210(play, &dustPos, &dustVelocity, &dustAccel, (s16)(Rand_ZeroOne() * dustScale * 0.2f) + dustScale,
-                      scaleStep);
+        func_800B1210(play, &dustPos, &dustVelocity, &dustAccel,
+                      TRUNCF_BINANG(Rand_ZeroOne() * dustScale * 0.2f) + dustScale, scaleStep);
     }
 }
 
@@ -975,7 +975,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
         }
     } else {
         switch (Message_GetState(&play->msgCtx)) {
-            case TEXT_STATE_5:
+            case TEXT_STATE_EVENT:
                 if (Message_ShouldAdvance(play)) {
                     Message_StartTextbox(play, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
@@ -991,9 +991,9 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
                 break;
 
             case TEXT_STATE_NONE:
-            case TEXT_STATE_1:
+            case TEXT_STATE_NEXT:
             case TEXT_STATE_CLOSING:
-            case TEXT_STATE_3:
+            case TEXT_STATE_FADING:
             case TEXT_STATE_CHOICE:
             default:
                 break;

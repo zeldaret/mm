@@ -1391,7 +1391,7 @@ void func_80123E90(struct PlayState* play, Actor* actor);
 s32 func_80123F2C(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
-u8 Player_GetMask(struct PlayState* play);
+PlayerMask Player_GetMask(struct PlayState* play);
 void Player_RemoveMask(struct PlayState* play);
 bool Player_HasMirrorShieldEquipped(struct PlayState* play);
 bool Player_IsHoldingMirrorShield(struct PlayState* play);
@@ -1422,8 +1422,18 @@ s32 func_80126440(struct PlayState* play, ColliderQuad* collider, WeaponInfo* we
 void Player_DrawGetItem(struct PlayState* play, Player* player);
 void func_80126B8C(struct PlayState* play, Player* player);
 s32 func_80127438(struct PlayState* play, Player* player, s32 currentMask);
-s32 func_80128640(struct PlayState* play, Player* player, Gfx* dlist);
+s32 func_80128640(struct PlayState* play, Player* player, Gfx* dList);
 void Player_SetFeetPos(struct PlayState* play, Player* player, s32 limbIndex);
 void Player_PostLimbDrawGameplay(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
+
+extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
+extern PlayerModelIndices gPlayerModelTypes[];
+extern struct_80124618 D_801C03A0[];
+extern struct_80124618 D_801C0490[];
+extern Gfx gCullBackDList[];
+extern Gfx gCullFrontDList[];
+
+// object_table.c
+extern s16 gPlayerFormObjectIds[PLAYER_FORM_MAX];
 
 #endif

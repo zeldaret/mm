@@ -884,7 +884,7 @@ void EnOsn_HandleCutscene(EnOsn* this, PlayState* play) {
 void EnOsn_Talk(EnOsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_EVENT)) && Message_ShouldAdvance(play)) {
         if (this->stateFlags & OSN_STATE_END_CONVERSATION) {
             this->stateFlags &= ~OSN_STATE_END_CONVERSATION;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -1064,7 +1064,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_XLU_DISP);
-
-        CLOSE_DISPS(play->state.gfxCtx);
     }
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }

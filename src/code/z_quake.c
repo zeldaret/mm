@@ -1,7 +1,8 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
-#include "libc/string.h"
 #include "z64quake.h"
+
+#include "string.h"
+
+#include "global.h"
 #include "z64view.h"
 
 typedef struct {
@@ -184,7 +185,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
 
     // Add a unique random identifier to the upper bits of the index
     // The `~3` assumes there are only 4 requests
-    req->index = index + ((s16)(Rand_ZeroOne() * 0x10000) & ~3);
+    req->index = index + (TRUNCF_BINANG(Rand_ZeroOne() * 0x10000) & ~3);
 
     sQuakeRequestCount++;
 

@@ -15,9 +15,10 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
+ * Finds the first EnDoor instance of type `ENDOOR_TYPE_SCHEDULE` and the specified schType (a value from the
+ * EnDoorScheduleType enum).
  */
-EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
+EnDoor* SubS_FindScheduleDoor(PlayState* play, s32 schType) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -25,11 +26,11 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
         actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
-        if (actor == NULL) {
+        if (door == NULL) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->typeVar.schType == (u8)schType)) {
             break;
         }
 
@@ -108,7 +109,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
     s32 pad;
-    Gfx* newDlist;
+    Gfx* newDList;
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
@@ -125,19 +126,19 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     pos.y = jointTable[LIMB_ROOT_POS].y;
     pos.z = jointTable[LIMB_ROOT_POS].z;
     rot = jointTable[LIMB_ROOT_ROT];
-    newDlist = rootLimb->dList;
+    newDList = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
         transformLimbDraw(play, 1, actor, &gfx);
 
-        if (newDlist != NULL) {
+        if (newDList != NULL) {
             Matrix_ToMtx(mtx);
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, newDlist);
+            gSPDisplayList(gfx++, newDList);
             mtx++;
         } else if (limbDList != NULL) {
             Matrix_ToMtx(mtx);
@@ -541,7 +542,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
         endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
     startFrame = animationInfo->startFrame;
-    if (startFrame >= endFrame || startFrame < 0) {
+    if ((startFrame >= endFrame) || (startFrame < 0)) {
         return false;
     }
     if (animationInfo->playSpeed < 0.0f) {
@@ -577,7 +578,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -589,8 +590,8 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
 Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
-    s16 time1 = TIME_TO_MINUTES_F(CURRENT_TIME);
-    s16 time2 = TIME_TO_MINUTES_F(CURRENT_TIME);
+    s16 time1 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s16 time2 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
     s32 time = ((time1 % 60) + (time2 / 60) * 60) / 30;
     s32 day = CURRENT_DAY;
 
@@ -967,7 +968,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
     }
 }
 
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[],
                        s8 parentBodyParts[]) {
     Vec3f pos;
     Vec3f startVec;
@@ -982,9 +983,9 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
-            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
-            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
-            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * weight + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * weight + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * weight + (bodyPartPos->z - worldPos->z);
         } else {
             bodyPartPos = &bodyPartsPos[i];
 
@@ -1327,8 +1328,8 @@ void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath
     diff.x = actorPath->curPoint.x - actorPath->worldPos->x;
     diff.y = actorPath->curPoint.y - actorPath->worldPos->y;
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
-    actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
-    actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
+    actorPath->distSqToCurPointXZ = Math3D_Dist1DSq(diff.x, diff.z);
+    actorPath->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&diff);
     actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
     actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;

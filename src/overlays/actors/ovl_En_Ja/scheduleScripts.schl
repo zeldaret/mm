@@ -1,0 +1,17 @@
+D_80BC35F0 {
+    if_day (3) {
+        return_none
+    } else if_time_range (6, 0, 18, 0) {
+        if_scene (SCENE_TOWN) {
+            return_l (1)
+        } else {
+            return_none
+        }
+    } else {
+        if_scene (SCENE_YADOYA) {
+            return_l (2)
+        } else {
+            return_none
+        }
+    }
+}

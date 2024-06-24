@@ -109,7 +109,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
 
-        if (play->roomCtx.curRoom.lensMode != LENS_MODE_HIDE_ACTORS) {
+        if (play->roomCtx.curRoom.lensMode != LENS_MODE_SHOW_ACTORS) {
             this->actor.update = EnTest2_UpdateForLens;
         } else {
             this->actor.update = Actor_Noop;

@@ -136,7 +136,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     D_809F4970 = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_57)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA)) {
         this->actionFunc = func_809F2E14;
     } else {
         this->actionFunc = func_809F2B64;
@@ -465,10 +465,10 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
             temp_f22 = (((sinf(phi_f24) * this->unk_1D4) + 1.0f) * ((sinf(phi_f26) * this->unk_1D0) + this->unk_1D0)) +
                        this->unk_1CC;
 
-            phi_f26 += (M_PI / 64);
+            phi_f26 += (M_PIf / 64);
             phi_f24 += 0.030679617f;
 
-            Matrix_RotateZF(i * (M_PI / 512), MTXMODE_NEW);
+            Matrix_RotateZF(i * (M_PIf / 512), MTXMODE_NEW);
             Matrix_MultVecY(temp_f22, &sp7C);
 
             sp7C.x += 32.0f + this->unk_1BC;
@@ -527,16 +527,16 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
         temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
 
-        temp_v0_2[0].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[3].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[4].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
-        temp_v0_2[7].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
+        temp_v0_2[0].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[3].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[4].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        temp_v0_2[7].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
 
         temp_v0_2[5].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[5].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[5].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[6].v.ob[0] = temp_s0 - 0x2A3;
-        temp_v0_2[6].v.ob[2] = (temp_f10 + (s16)this->unk_1A4) - 0x708;
+        temp_v0_2[6].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
 
         temp_v0_2[9].v.ob[0] = temp_s0 + 0x2A3;
         temp_v0_2[9].v.ob[2] = temp_f10 - 0x1C2;
@@ -578,6 +578,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
 
+        //! FAKE:
         if (1) {}
     }
 
@@ -611,10 +612,10 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     Matrix_Translate((D_809F4370[i].x - 32.0f) * -2.4f, (D_809F4370[i].y - 32.0f) * -2.4f, 0.0f,
                                      MTXMODE_APPLY);
-                    Matrix_RotateZF(i * (M_PI / 64), MTXMODE_APPLY);
+                    Matrix_RotateZF(i * (M_PIf / 64), MTXMODE_APPLY);
 
                     if (func_809F2140() < 0.5f) {
-                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                     }
 
                     Matrix_Scale(-0.02f / 10.0f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);

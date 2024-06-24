@@ -11,7 +11,6 @@
 
 #include "thga.h"
 #include "alignment.h"
-#include "functions.h"
 
 void THGA_Init(TwoHeadGfxArena* thga, void* start, size_t size) {
     THA_Init(&thga->tha, start, size);

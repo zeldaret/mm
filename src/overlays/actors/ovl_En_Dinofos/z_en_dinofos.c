@@ -1109,7 +1109,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 
     for (i = 6; i < end; i++) {
         dim = &this->colliderJntSph.elements[i].dim;
-        temp_s3 = (s32)(Math_CosF((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
+        temp_s3 = (s32)(Math_CosF((this->unk_290 + ((i - 5) << 1)) * (M_PIf / 20)) * 0x2C00) + this->actor.shape.rot.y;
 
         dim->worldSphere.center.x =
             (s32)this->bodyPartsPos[DINOFOS_BODYPART_JAW].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
@@ -1245,9 +1245,9 @@ void func_8089D42C(EnDinofos* this, PlayState* play) {
     if ((this->actionFunc == func_8089B834) && (this->unk_290 != 0)) {
         Math_ScaledStepToS(&this->unk_28E, Math_SinS(this->unk_290 * 1400) * 0x2C00, 0x300);
     } else if (this->actionFunc == func_8089CA74) {
-        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PI) * 0x2C00, 0x2C00 / 20);
+        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PIf) * 0x2C00, 0x2C00 / 20);
     } else if (this->actionFunc == func_8089CBEC) {
-        this->unk_28E = Math_CosF(this->unk_290 * (M_PI / 20)) * 0x2C00;
+        this->unk_28E = Math_CosF(this->unk_290 * (M_PIf / 20)) * 0x2C00;
     } else if (!Play_InCsMode(play)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
         temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);

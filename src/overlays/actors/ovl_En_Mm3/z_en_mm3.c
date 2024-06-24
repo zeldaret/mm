@@ -337,11 +337,11 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             this->unk_2B0 |= 2;
             break;
 
@@ -349,7 +349,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
             func_80A6F3B4(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80A6F5E4(this, play);
             break;
 
@@ -445,12 +445,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);

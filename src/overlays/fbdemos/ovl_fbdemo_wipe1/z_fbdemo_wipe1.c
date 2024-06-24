@@ -90,7 +90,7 @@ void TransitionWipe1_Draw(void* thisx, Gfx** gfxP) {
     guTranslate(&modelView[2], 0.0f, 0.0f, 0.0f);
     gDPPipeSync(gfx++);
     texScroll = Gfx_BranchTexScroll(&gfx, this->texX, this->texY, 0, 0);
-    gSPSegment(gfx++, 8, texScroll);
+    gSPSegment(gfx++, 0x08, texScroll);
     gDPSetPrimColor(gfx++, 0, 0x80, this->primColor.r, this->primColor.g, this->primColor.b, 255);
     gSPMatrix(gfx++, &this->projection, G_MTX_LOAD | G_MTX_PROJECTION);
     gSPPerspNormalize(gfx++, this->normal);

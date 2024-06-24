@@ -297,7 +297,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
             sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);
         }
 
-        this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
+        this->actor.home.rot.y += TRUNCF_BINANG((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
         this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
         Actor_PlaySfx(&this->actor, NA_SE_OC_FIREWORKS);
         func_80B235CC(this, &sp34, sp28);

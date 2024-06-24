@@ -60,12 +60,13 @@ u8 sGameOverLightsIntensity;
 Gfx* sSkyboxStarsDList;
 
 #include "z64environment.h"
+
 #include "global.h"
+#include "string.h"
 #include "sys_cfb.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "libc/string.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -1084,8 +1085,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
             size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
-                                   sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox1Index = skybox1Index;
         }
 
@@ -1093,8 +1094,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
             size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
-                                   sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox2Index = skybox2Index;
         }
 
@@ -1168,8 +1169,7 @@ void Environment_WipeRumbleRequests(void) {
 }
 
 void Environment_UpdateSkyboxRotY(PlayState* play) {
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
+    if (!IS_PAUSED(&play->pauseCtx) && ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
         play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
 }
@@ -1674,27 +1674,27 @@ void func_800F88C4(u16 weekEventFlag) {
 }
 
 void func_800F8970(void) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(9, 31))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(9, 31))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 3))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 3))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 35))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 35))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 53))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 53))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(11, 25))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(11, 25))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
     }
@@ -1729,7 +1729,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_04);
     }
 
-    if ((SCHEDULE_TIME_NOW < SCHEDULE_TIME(9, 0)) || (SCHEDULE_TIME_NOW > SCHEDULE_TIME(12, 0))) {
+    if ((SCRIPT_TIME_NOW < SCRIPT_TIME(9, 0)) || (SCRIPT_TIME_NOW > SCRIPT_TIME(12, 0))) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_08);
     }
 
@@ -1738,14 +1738,14 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) {
         if (((void)0, gSaveContext.save.day) >= 2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
-        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(16, 30))) {
+        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(16, 30))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
         }
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = CURRENT_TIME - D_801F4E78;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (u16)SCHEDULE_TIME(5, 0))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCRIPT_TIME_NOW >= (u16)SCRIPT_TIME(5, 0))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
@@ -1880,7 +1880,7 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
 
     OPEN_DISPS(gfxCtx);
 
-    dist = Math3D_Distance(&pos, &view->eye) / 12.0f;
+    dist = Math3D_Vec3f_DistXYZ(&pos, &view->eye) / 12.0f;
 
     // compute a unit vector in the look direction
     tempX = view->at.x - view->eye.x;
@@ -3301,24 +3301,24 @@ void Environment_Draw(PlayState* play) {
 }
 
 void Environment_DrawSkyboxStars(PlayState* play) {
-    Gfx* nextOpa;
-    Gfx* opa;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
     if (sSkyboxStarsDList != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Gfx_Open(gfxHead);
 
-        gSPDisplayList(sSkyboxStarsDList, nextOpa);
+        gSPDisplayList(sSkyboxStarsDList, gfx);
 
-        Environment_DrawSkyboxStarsImpl(play, &nextOpa);
+        Environment_DrawSkyboxStarsImpl(play, &gfx);
 
-        gSPEndDisplayList(nextOpa++);
+        gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(opa, nextOpa);
+        Gfx_Close(gfxHead, gfx);
 
-        POLY_OPA_DISP = nextOpa;
+        POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -3341,7 +3341,7 @@ u32 Environment_GetStormState(PlayState* play) {
     u32 stormState = play->envCtx.stormState;
 
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
-        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))
+        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS))
                          ? STORM_STATE_ON
                          : STORM_STATE_OFF;
     }

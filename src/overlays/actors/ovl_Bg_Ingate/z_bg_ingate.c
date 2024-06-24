@@ -16,7 +16,7 @@ void BgIngate_Destroy(Actor* thisx, PlayState* play);
 void BgIngate_Update(Actor* thisx, PlayState* play);
 void BgIngate_Draw(Actor* thisx, PlayState* play);
 
-Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId);
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCategory, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
 void func_80953F8C(BgIngate* this, PlayState* play);
@@ -43,30 +43,32 @@ ActorInit Bg_Ingate_InitVars = {
  *
  * @param this
  * @param play
- * @param actorCat - Category of Actor
+ * @param actorCategory - Category of Actor
  * @param actorId - ID of actor to search for
  * @return Actor*
  */
-Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if ((foundActor == NULL) || (((this != (BgIngate*)foundActor)) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (BgIngate*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 void func_80953B40(BgIngate* this) {
@@ -272,7 +274,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
 void func_809543D4(BgIngate* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_EVENT)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;

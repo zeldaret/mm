@@ -26,8 +26,8 @@ void func_809DAA98(Boss02* this, PlayState* play);
 void func_809DAAA8(Boss02* this, PlayState* play);
 void func_809DAB78(Boss02* this, PlayState* play);
 void Boss02_Tail_Update(Actor* thisx, PlayState* play);
-void Boss02_Static_Update(Actor* thisx, PlayState* play);
-void Boss02_Static_Draw(Actor* thisx, PlayState* play);
+void Boss02_BattleHandler_Update(Actor* thisx, PlayState* play);
+void Boss02_BattleHandler_Draw(Actor* thisx, PlayState* play);
 void Boss02_UpdateEffects(PlayState* play);
 void Boss02_DrawEffects(PlayState* play);
 void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play);
@@ -68,7 +68,7 @@ u8 sIsInGiantMode;
 
 Boss02* sRedTwinmold;
 Boss02* sBlueTwinmold;
-Boss02* sTwinmoldStatic;
+Boss02* sTwinmoldBattleHandler;
 u8 sTwinmoldMusicStartTimer;
 DoorWarp1* sBlueWarp;
 TwinmoldEffect sTwinmoldEffects[TWINMOLD_EFFECT_COUNT];
@@ -595,14 +595,14 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_10;
     this->subCamUp.z = this->subCamUp.x = 0.0f;
     this->subCamUp.y = 1.0f;
-    if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_STATIC) {
-        sTwinmoldStatic = this;
+    if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_BATTLE_HANDLER) {
+        sTwinmoldBattleHandler = this;
         play->specialEffects = (void*)sTwinmoldEffects;
-        this->actor.update = Boss02_Static_Update;
-        this->actor.draw = Boss02_Static_Draw;
+        this->actor.update = Boss02_BattleHandler_Update;
+        this->actor.draw = Boss02_BattleHandler_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->playerScale = 0.01f;
-        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sTwinmoldMusicStartTimer = KREG(15) + 20;
         } else {
@@ -611,7 +611,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         R_MAGIC_CONSUME_TIMER_GIANTS_MASK = KREG(14) + 20;
         this->giantModeScaleFactor = 1.0f;
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0, 0,
-                           TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_STATIC));
+                           TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_SPAWN_HANDLER));
     } else if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_TAIL) {
         this->actor.update = Boss02_Tail_Update;
         this->actor.draw = NULL;
@@ -619,7 +619,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     } else {
         if (TWINMOLD_GET_TYPE(&this->actor) != TWINMOLD_TYPE_BLUE) {
             this->actor.params = TWINMOLD_TYPE_RED;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_02, 0.0f, 0.0f, 0.0f, 0, 0, 0, TWINMOLD_TYPE_STATIC);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_02, 0.0f, 0.0f, 0.0f, 0, 0, 0, TWINMOLD_TYPE_BATTLE_HANDLER);
             sRedTwinmold = this;
             sBlueTwinmold =
                 (Boss02*)Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_02, this->actor.world.pos.x,
@@ -675,12 +675,12 @@ void func_809DAA98(Boss02* this, PlayState* play) {
 void func_809DAAA8(Boss02* this, PlayState* play) {
     this->actionFunc = func_809DAB78;
     Animation_MorphToLoop(&this->skelAnime, &gTwinmoldHeadFlyAnim, 0.0f);
-    if (sTwinmoldStatic->unk_1D20 != 0) {
+    if (sTwinmoldBattleHandler->unk_1D20 != 0) {
         this->unk_0144 = 10;
     } else {
         this->unk_0144 = 100;
         this->unk_01A8 = 25.0f;
-        sTwinmoldStatic->unk_1D7E = 100;
+        sTwinmoldBattleHandler->unk_1D7E = 100;
         this->actor.world.pos.x = 0.0f;
         if (sRedTwinmold == this) {
             this->actor.world.pos.z = -1000.0f;
@@ -733,7 +733,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         this->unk_01A4 = Math_SinS(this->unk_0196) * this->unk_019C;
         this->actor.world.rot.x = this->actor.shape.rot.x + this->unk_01A4;
 
-        if (!(this->unk_014C & 0x1F) && (sTwinmoldStatic->unk_1D20 == 0)) {
+        if (!(this->unk_014C & 0x1F) && (sTwinmoldBattleHandler->unk_1D20 == 0)) {
             this->unk_01A0 = Rand_ZeroFloat(0x1000) + 0x800;
             this->unk_019A = Rand_ZeroFloat(0x400) + 0x200;
         }
@@ -975,8 +975,8 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 this->unk_0144 = 21;
                 this->unk_0146[0] = 20;
                 this->unk_0152 = 0;
-                sTwinmoldStatic->unk_1D20 = 102;
-                sTwinmoldStatic->subCamAtVel = 0.0f;
+                sTwinmoldBattleHandler->unk_1D20 = 102;
+                sTwinmoldBattleHandler->subCamAtVel = 0.0f;
                 Audio_PlaySfx(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
@@ -1030,7 +1030,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 
             Math_Vec3f_Copy(&this->unk_01BC[i], &this->actor.world.pos);
             this->unk_0B1C[i].y += this->unk_0164;
-            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
+            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PIf / 2), 0.1f, 0.07f);
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
 
@@ -1040,10 +1040,10 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 this->unk_0170 = this->unk_017C;
                 this->unk_016C = 30;
                 this->unk_0170.y = this->actor.floorHeight;
-                sTwinmoldStatic->unk_1D20 = 103;
-                sTwinmoldStatic->unk_1D1C = 0;
-                sTwinmoldStatic->unk_0146[0] = 15;
-                sTwinmoldStatic->unk_0150 = 0;
+                sTwinmoldBattleHandler->unk_1D20 = 103;
+                sTwinmoldBattleHandler->unk_1D1C = 0;
+                sTwinmoldBattleHandler->unk_0146[0] = 15;
+                sTwinmoldBattleHandler->unk_0150 = 0;
                 Audio_PlaySfx(NA_SE_EV_LIGHTNING);
 
                 for (i = 0; i < 30; i++) {
@@ -1057,13 +1057,13 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         case 23:
             i = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
             Math_Vec3f_Copy(&this->unk_01BC[i], &this->actor.world.pos);
-            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.05f, 0.07f);
+            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PIf / 2), 0.05f, 0.07f);
 
             if (this->unk_0146[0] & 1) {
-                sp9C = Rand_ZeroFloat(M_PI);
+                sp9C = Rand_ZeroFloat(M_PIf);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
+                    Matrix_RotateYF(((2.0f * (i * M_PIf)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_MultVecZ((10 - this->unk_0146[0]) * (sGiantModeScaleFactor * 300.0f) * 0.1f, &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * sGiantModeScaleFactor);
@@ -1160,12 +1160,12 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                             this->actor.world.pos.y = 3130.0f;
                         }
 
-                        sTwinmoldStatic->unk_1D20 = 100;
+                        sTwinmoldBattleHandler->unk_1D20 = 100;
 
                         if (this == sRedTwinmold) {
-                            sTwinmoldStatic->unk_0194 = 0;
+                            sTwinmoldBattleHandler->unk_0194 = 0;
                         } else {
-                            sTwinmoldStatic->unk_0194 = 1;
+                            sTwinmoldBattleHandler->unk_0194 = 1;
                         }
                     }
                 }
@@ -1210,7 +1210,7 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.060000001f);
     }
 
-    if (sTwinmoldStatic->giantsMaskCsState == GIANTS_MASK_CS_STATE_WAITING_FOR_MASK) {
+    if (sTwinmoldBattleHandler->giantsMaskCsState == GIANTS_MASK_CS_STATE_WAITING_FOR_MASK) {
         for (i = 0; i < ARRAY_COUNT(this->unk_0146); i++) {
             if (this->unk_0146[i] != 0) {
                 this->unk_0146[i]--;
@@ -1316,7 +1316,7 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void Boss02_Static_Update(Actor* thisx, PlayState* play) {
+void Boss02_BattleHandler_Update(Actor* thisx, PlayState* play) {
     Boss02* this = THIS;
 
     this->giantModeScaleFactor = sGiantModeScaleFactor;
@@ -1404,7 +1404,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         sp98 = 3100.0f;
     }
 
-    sp9C = this->unk_0152 * (M_PI / 4) * (1.0f / 15);
+    sp9C = this->unk_0152 * (M_PIf / 4) * (1.0f / 15);
     if (this->unk_0144 < 20) {
         spAC = Math_SinS(this->unk_014C * 0x2200) * sp9C * 0.5f;
         spA8 = Math_CosS(this->unk_014C * 0x3200) * sp9C;
@@ -1450,8 +1450,8 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateXFApply(spA4 - this->unk_0B1C[phi_v0].x);
         Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
-        Matrix_RotateXFApply(-(M_PI / 2));
+        Matrix_RotateYF(M_PIf / 2, MTXMODE_APPLY);
+        Matrix_RotateXFApply(-(M_PIf / 2));
         Matrix_ToMtx(mtx);
 
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1501,7 +1501,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     }
 }
 
-void Boss02_Static_Draw(Actor* thisx, PlayState* play) {
+void Boss02_BattleHandler_Draw(Actor* thisx, PlayState* play) {
     Boss02_DrawEffects(play);
 }
 
@@ -2230,7 +2230,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
-                SET_EVENTINF(EVENTINF_55);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD);
             }
             break;
 

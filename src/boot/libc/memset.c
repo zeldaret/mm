@@ -1,4 +1,4 @@
-#include "libc/string.h"
+#include "string.h"
 
 void* memset(void* ptr, int val, size_t size) {
     unsigned char* dst = ptr;

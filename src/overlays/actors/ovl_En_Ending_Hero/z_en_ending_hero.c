@@ -37,7 +37,7 @@ void EnEndingHero_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_000BE0, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &gDotourUprightAnim, this->jointTable,
                        this->morphTable, OBJECT_DT_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero1_SetupIdle(this);
@@ -62,7 +62,7 @@ void EnEndingHero_Update(Actor* thisx, PlayState* play) {
         this->unk242++;
         if (this->unk242 > 2) {
             this->unk242 = 0;
-            this->unk240 = (s16)Rand_ZeroFloat(60.0f) + 0x14;
+            this->unk240 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 0x14;
         }
     }
     this->actionFunc(this, play);

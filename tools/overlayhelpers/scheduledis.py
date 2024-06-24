@@ -7,8 +7,8 @@ import argparse, os, struct, math
 from actor_symbols import resolve_symbol
 
 cmd_info = [
-    ('SCHEDULE_CMD_CHECK_FLAG_S',         0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_CHECK_FLAG_L',         0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_S',         0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_L',         0x05, '>Hh',    (1, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',   0x06, '>BBBBb', (4, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',   0x07, '>BBBBh', (4, )),
     ('SCHEDULE_CMD_RET_VAL_L',            0x03, '>H',     (   )),
@@ -176,7 +176,7 @@ def disassemble_unk_script(data_file, offset):
     script_len = calc_length(data_file, offset);
     script_len_num_digits = 0 if script_len == 1 else int(math.ceil(math.log(script_len - 1, 16)))
 
-    out = "static u8 sScheduleScript[] = {\n"
+    out = "static ScheduleScript sScheduleScript[] = {\n"
 
     # Keep trying to disassemble until it hits a terminator and no commands branch past it
     while any([branch >= off for branch in branch_targets]) or cmd not in [0x04, 0x05, 0x06, 0x09]:

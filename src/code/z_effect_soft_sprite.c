@@ -191,8 +191,8 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                 return;
             }
 
-            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
-                         overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->file.vromStart, overlayEntry->file.vromEnd, overlayEntry->vramStart,
+                         overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
         }
 
         initInfo = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)

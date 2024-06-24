@@ -433,7 +433,7 @@ f32 func_80A954AC(EnAz* this) {
     sp1C.x = pathing->curPoint.x - pathing->prevPoint.x;
     sp1C.y = pathing->curPoint.y - pathing->prevPoint.y;
     sp1C.z = pathing->curPoint.z - pathing->prevPoint.z;
-    return Math3D_Parallel(&sp28, &sp1C);
+    return Math3D_Cos(&sp28, &sp1C);
 }
 
 s32 func_80A95534(PlayState* play, ActorPathing* actorPathing) {
@@ -701,7 +701,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
                 if (SubS_StartCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
@@ -1004,11 +1004,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10F1:
                         SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1059,7 +1059,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -1117,7 +1117,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1176,11 +1176,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
 
                     case 0x1105:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1212,9 +1212,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         default:
             break;
     }
@@ -1515,7 +1515,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -1548,7 +1548,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                 }
             }
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
             break;
@@ -1593,7 +1593,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);
@@ -1633,10 +1633,8 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
 void func_80A97F9C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    D_80A99E8C =
-        Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
-    if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >=
-        SQ(1000.0f)) {
+    D_80A99E8C = Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
+    if (Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >= SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.flags & ACTOR_PATHING_REACHED_END_PERMANENT)) {
@@ -1704,8 +1702,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.x = actorPathing->curPoint.x - actorPathing->worldPos->x;
     sp28.y = actorPathing->curPoint.y - actorPathing->worldPos->y;
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
-    actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
-    actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
+    actorPathing->distSqToCurPointXZ = Math3D_Dist1DSq(sp28.x, sp28.z);
+    actorPathing->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&sp28);
     actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
     actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;

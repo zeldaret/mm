@@ -2,10 +2,11 @@
  * File: z_shrink_window.c
  * Description: Draws black top/bottom/side borders on the viewing window (e.g. Z-targeting, talking to NPC)
  */
-
-#include "prevent_bss_reordering.h"
-#include "global.h"
 #include "z64shrink_window.h"
+
+#include "gfx.h"
+#include "main.h"
+#include "z64math.h"
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;

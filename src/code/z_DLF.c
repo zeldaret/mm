@@ -1,4 +1,6 @@
+#include "z64DLF.h"
 #include "global.h"
+
 #include "libc64/malloc.h"
 #include "loadfragment.h"
 
@@ -15,8 +17,8 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
         return;
     }
 
-    overlayEntry->loadedRamAddr =
-        Overlay_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd, vramStart, overlayEntry->vramEnd);
+    overlayEntry->loadedRamAddr = Overlay_AllocateAndLoad(overlayEntry->file.vromStart, overlayEntry->file.vromEnd,
+                                                          vramStart, overlayEntry->vramEnd);
 
     if (overlayEntry->loadedRamAddr != NULL) {
         overlayEntry->unk_14 = (void*)(uintptr_t)((overlayEntry->unk_14 != NULL)

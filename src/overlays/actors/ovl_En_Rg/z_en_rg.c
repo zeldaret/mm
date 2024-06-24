@@ -3,7 +3,7 @@
  * Overlay: ovl_En_Rg
  * Description: Racing Goron
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_rg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -347,7 +347,7 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
 
     this->actor.shape.yOffset = this->actor.scale.y * 100.0f * 14.0f;
     if (!(this->unk_310 & 0x1000)) {
-        this->actor.shape.rot.x += (s16)(13650.0f * sp2C);
+        this->actor.shape.rot.x += TRUNCF_BINANG(0x3552 * sp2C);
     }
 
     this->actor.world.rot.x = this->actor.shape.rot.x;
@@ -370,8 +370,8 @@ s32 func_80BF43FC(EnRg* this) {
     do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
-        if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
-                                     &sp8C, &sp88, &sp84) &&
+        if (Math3D_PointDistSqToLine2DImpl(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x,
+                                           sp90.z, &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
@@ -534,25 +534,24 @@ void func_80BF4964(EnRg* this) {
 
 void func_80BF4AB8(EnRg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Actor* phi_s0;
+    Actor* actorIter = NULL;
 
-    phi_s0 = NULL;
     if (!(this->unk_310 & 0x800)) {
         if (this->unk_320 == 0) {
             do {
-                phi_s0 = SubS_FindActor(play, phi_s0, 6, ACTOR_OBJ_TSUBO);
-                if (phi_s0 != NULL) {
-                    if (func_80BF4220(this, play, phi_s0) && (phi_s0->update != NULL)) {
-                        this->unk_18C = phi_s0;
+                actorIter = SubS_FindActor(play, actorIter, ACTORCAT_PROP, ACTOR_OBJ_TSUBO);
+                if (actorIter != NULL) {
+                    if (func_80BF4220(this, play, actorIter) && (actorIter->update != NULL)) {
+                        this->unk_18C = actorIter;
                         this->unk_310 |= 0x800;
                         break;
                     }
-                    phi_s0 = phi_s0->next;
+                    actorIter = actorIter->next;
                 }
-            } while (phi_s0 != NULL);
+            } while (actorIter != NULL);
         }
 
-        if ((phi_s0 == NULL) && !D_80BF5C10 && (this->unk_326 == 0) && (player->stateFlags3 & PLAYER_STATE3_80000) &&
+        if ((actorIter == NULL) && !D_80BF5C10 && (this->unk_326 == 0) && (player->stateFlags3 & PLAYER_STATE3_80000) &&
             (player->invincibilityTimer == 0) && func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
             this->unk_310 |= 0x800;
@@ -605,7 +604,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
  * The range extends a little bit beyond the finish line's in-game visual.
  */
 s32 EnRg_IsInFinishLine(Vec3f* pos) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
 Vec3f D_80BF596C[] = {
@@ -851,8 +850,8 @@ s32 EnRg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_310 & 8) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

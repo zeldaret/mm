@@ -61,12 +61,7 @@ void func_80AEF5F4(Actor* thisx, PlayState* play);
 
 static s32 D_80AF0050;
 
-static u8 D_80AEF800[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 18, 0, 0x8 - 0x7),
-    /* 0x7 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x8 */ SCHEDULE_CMD_RET_TIME(6, 0, 18, 0, 1),
-    /* 0xE */ SCHEDULE_CMD_RET_NONE(),
-};
+#include "src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
 
 ActorInit En_Tk_InitVars = {
     /**/ ACTOR_EN_TK,
@@ -392,6 +387,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
 void func_80AECE0C(EnTk* this, PlayState* play) {
     if (this->scheduleResult != 0) {
+        //! FAKE:
         if (1) {}
         func_80AECE60(this, play);
     }
@@ -519,7 +515,7 @@ s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp1E = SCHEDULE_TIME_NOW;
+    u16 sp1E = SCRIPT_TIME_NOW;
     u8 pathIndex = ENTK_GET_PATH_INDEX(&this->actor);
     u16 phi_a1;
     s32 index = scheduleOutput->result - 1;
@@ -590,13 +586,13 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 break;
             }
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -858,14 +854,14 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         default:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -1340,8 +1336,8 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
 
         if (platform != NULL) {
             if (platform->dyna.actor.id == ACTOR_BG_DANPEI_MOVEBG) {
-                platform->unk_1CC |= 1;
-                if (platform->unk_1CC & 2) {
+                platform->flags |= DANPEI_MOVEBG_FLAG_1;
+                if (platform->flags & DANPEI_MOVEBG_FLAG_2) {
                     this->unk_2CA |= 1;
                 }
             }

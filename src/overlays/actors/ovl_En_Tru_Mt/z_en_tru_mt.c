@@ -218,25 +218,23 @@ s32 func_80B76368(EnTruMt* this, PlayState* play) {
 }
 
 s32 func_80B763C4(EnTruMt* this, PlayState* play) {
-    Actor* foundActor;
-    Actor* actor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((EnTruMt*)foundActor != this) {
+        if ((EnTruMt*)actorIter != this) {
             return true;
         }
 
-        foundActor = foundActor->next;
-        if (foundActor == NULL) {
+        if (actorIter->next == NULL) {
             break;
         }
-        actor = foundActor;
+        actorIter = actorIter->next;
     };
 
     return false;
@@ -301,7 +299,7 @@ s32 EnTruMt_HasReachedPoint(EnTruMt* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -389,7 +387,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76BB8(EnTruMt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
             play->transitionType = TRANS_TYPE_FADE_WHITE;
@@ -478,7 +476,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 
     *arg2 = sp7C;
 
-    if (arg4 != 0) {
+    if (arg4) {
         sp68.x += arg0;
         sp68.y += arg1;
         Math_SmoothStepToS(&arg3->x, sp68.x, 4, 0x1FFE, 1);
@@ -512,9 +510,9 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     if (limbIndex == KOUME_LIMB_HEAD) {
         if (this->unk_328 & 0x10) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
         func_80B76ED4(this->unk_348, this->unk_34A, &this->unk_33C, &this->unk_336, phi_v0);
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);

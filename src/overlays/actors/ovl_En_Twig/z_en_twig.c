@@ -186,7 +186,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                        0.01f);
     Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[PLAYER_BODYPART_WAIST].z, 0.5f, 100.0f,
                        0.01f);
-    this->dyna.actor.shape.rot.z += (s16)this->unk_170;
+    this->dyna.actor.shape.rot.z += TRUNCF_BINANG(this->unk_170);
     this->dyna.actor.scale.x -= this->unk_174;
     if (this->dyna.actor.scale.x < 0.0f) {
         Actor_SetScale(&this->dyna.actor, 0.0f);
