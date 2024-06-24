@@ -822,8 +822,8 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         this->msgScriptCallback = NULL;
         this->actor.child = this->unk_268;
         this->msgScript = EnPm_GetMsgScript(this, play);
-        if ((this->scheduleResult != 24) && (this->scheduleResult != 9) && (this->scheduleResult != 20) && (this->scheduleResult != 21) &&
-            (this->scheduleResult != 22)) {
+        if ((this->scheduleResult != 24) && (this->scheduleResult != 9) && (this->scheduleResult != 20) &&
+            (this->scheduleResult != 21) && (this->scheduleResult != 22)) {
             this->unk_356 |= 0x20;
         }
         this->actionFunc = func_80AFA5FC;
