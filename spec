@@ -758,8 +758,7 @@ beginseg
     name "ovl_En_Okuta"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/z_en_okuta.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/ovl_En_Okuta_reloc.o"
 endseg
 
 beginseg
