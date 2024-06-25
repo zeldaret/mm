@@ -41,10 +41,10 @@ typedef int Dummy229;
 #include "PR/gu.h"
 // The bss index at this point should be 184
 
+#include "macros.h"
+
 Vec3f gZeroVec3f = { 0.0f, 0.0f, 0.0f };
 Vec3s gZeroVec3s = { 0, 0, 0 };
-
-#define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);

@@ -649,7 +649,7 @@ void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
     if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         if (player->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) {
             Player_PlaySfx(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
-            func_80169EFC(&play->state);
+            func_80169EFC(play);
             Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
             play->haltAllActors = true;
             Audio_PlaySfx(NA_SE_OC_ABYSS);
@@ -793,7 +793,7 @@ void func_80B819F0(Actor* thisx, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         }
         func_80B81A64(this);

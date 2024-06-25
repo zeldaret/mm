@@ -747,9 +747,6 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
     }
 }
 
-// TODO: less dumb name
-#define SFX_VOICE_BANK_SIZE 0x20
-
 PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
     {
         // ceilingCheckHeight
@@ -5745,11 +5742,11 @@ s32 func_80834600(Player* this, PlayState* play) {
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
 
         if (var_v0) {
-            func_80169FDC(&play->state);
+            func_80169FDC(play);
             func_808345C8();
             Scene_SetExitFade(play);
         } else {
-            func_80169EFC(&play->state);
+            func_80169EFC(play);
             func_808345C8();
         }
 
@@ -6077,7 +6074,7 @@ void func_808354A4(PlayState* play, s32 exitIndex, s32 arg2) {
     } else {
         if (arg2) {
             gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
-            func_80169EFC(&play->state);
+            func_80169EFC(play);
             gSaveContext.respawnFlag = -2;
         }
 
@@ -6128,7 +6125,7 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
             }
 
             if (exitIndexPlusOne == 0) {
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
                 Scene_SetExitFade(play);
             } else {
                 func_808354A4(play, exitIndexPlusOne - 1,
@@ -6176,7 +6173,7 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
             BgCheck_EntityRaycastFloor7(&play->colCtx, &this->actor.floorPoly, &sp30, &this->actor,
                                         &this->actor.world.pos);
             if (this->actor.floorPoly == NULL) {
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
                 return false;
             }
             //! FAKE
@@ -6190,10 +6187,10 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
                   ((sPlayerYDistToFloor < 100.0f) || (this->fallDistance > 400))))) {
                 if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     if (this->floorProperty == FLOOR_PROPERTY_5) {
-                        func_80169FDC(&play->state);
+                        func_80169FDC(play);
                         func_808345C8();
                     } else {
-                        func_80169EFC(&play->state);
+                        func_80169EFC(play);
                     }
                     if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
                         gSaveContext.respawnFlag = -5;
@@ -8266,7 +8263,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
                 gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = entrance;
             }
 
-            func_80169EFC(&play->state);
+            func_80169EFC(play);
             gSaveContext.respawnFlag = -2;
             play->transitionType = TRANS_TYPE_CIRCLE;
         }
@@ -8616,7 +8613,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                     } else if ((this->unk_3CF == 0) &&
                                ((play->sceneId == SCENE_30GYOSON) || (play->sceneId == SCENE_31MISAKI) ||
                                 (play->sceneId == SCENE_TORIDE))) {
-                        func_80169EFC(&play->state);
+                        func_80169EFC(play);
                         func_808345C8();
                     } else {
                         Player_SetAction(play, this, Player_Action_1, 0);
@@ -10820,7 +10817,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, 255, 128, 0, -1);
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
-    Play_AssignPlayerCsIdsFromScene(&play->state, this->actor.csId);
+    Play_AssignPlayerCsIdsFromScene(play, this->actor.csId);
 
     respawnFlag = gSaveContext.respawnFlag;
     if (respawnFlag != 0) {
@@ -13284,7 +13281,7 @@ void func_80848640(PlayState* play, Player* this) {
 
     if (torch2 != NULL) {
         play->actorCtx.elegyShells[this->transformation] = torch2;
-        Play_SetupRespawnPoint(&play->state, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+        Play_SetupRespawnPoint(play, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
     }
 
     effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -15340,7 +15337,7 @@ void Player_Action_36(Player* this, PlayState* play) {
                 }
 
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
-                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+                Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
             }
         }
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
@@ -17611,9 +17608,9 @@ void Player_Action_77(Player* this, PlayState* play) {
     if ((this->av2.actionVar2++ >= 9) && !func_8082DA90(play)) {
         if (this->av1.actionVar1 != 0) {
             if (this->av1.actionVar1 < 0) {
-                func_80169FDC(&play->state);
+                func_80169FDC(play);
             } else {
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
             }
             if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
                 gSaveContext.respawnFlag = -5;

@@ -95,10 +95,10 @@ Vec3f D_80971E38[] = {
 };
 
 Vec3f D_80971EEC[] = {
-    { 12.0f, 1.0f, 2.0f },    { 12.0f, 1.0f, 2.0f },  { 2.0f, -6.0f, 0.0f },  { 12.0f, -6.0f, -10.0f },
-    { -88.0f, 14.0, -10.0f }, { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },   { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
+    { 12.0f, 1.0f, 2.0f },     { 12.0f, 1.0f, 2.0f },  { 2.0f, -6.0f, 0.0f },  { 12.0f, -6.0f, -10.0f },
+    { -88.0f, 14.0f, -10.0f }, { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },    { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },    { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
 };
 
 Vec3f D_80971FA0[] = {
@@ -952,9 +952,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
 
                 if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
@@ -1047,7 +1047,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
-    this->picto.actor.shape.yOffset = -7000.0;
+    this->picto.actor.shape.yOffset = -7000.0f;
     this->picto.actor.draw = NULL;
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;

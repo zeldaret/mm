@@ -55,4 +55,8 @@ typedef enum {
 #define ICHAIN_CONTINUE 1
 #define ICHAIN_STOP     0
 
+struct Actor;
+
+void Actor_ProcessInitChain(struct Actor* actor, struct InitChainEntry* ichain);
+
 #endif

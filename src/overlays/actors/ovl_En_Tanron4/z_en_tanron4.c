@@ -21,12 +21,12 @@ void EnTanron4_SetupFlyNearActor(EnTanron4* this);
 void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play);
 void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play);
 
-typedef enum {
+typedef enum SeagullFlyState {
     /* 0 */ SEAGULL_FLY_FLAP,
     /* 1 */ SEAGULL_FLY_GLIDE
 } SeagullFlyState;
 
-typedef enum {
+typedef enum SeagullTimer {
     /* 0 */ SEAGULL_TIMER_FLY_STATE,
     /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET
 } SeagullTimer;
@@ -105,7 +105,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
     }
 
     xDiff = this->targetPos.x - this->actor.world.pos.x;
-    yDiff = (this->targetPos.y + this->timeInfluence) - this->actor.world.pos.y;
+    yDiff = this->targetPos.y + this->timeInfluence - this->actor.world.pos.y;
     zDiff = this->targetPos.z - this->actor.world.pos.z;
 
     distToTarget = sqrtf(SQ(xDiff) + SQ(zDiff));
@@ -158,6 +158,9 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
                 Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, -10.0f + KREG(43));
                 this->skelAnime.curFrame = 2.0f + KREG(42);
             }
+            break;
+
+        default:
             break;
     }
 
@@ -236,6 +239,9 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
                 Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, -10.0f + KREG(43));
                 this->skelAnime.curFrame = 2.0f + KREG(42);
             }
+            break;
+
+        default:
             break;
     }
 

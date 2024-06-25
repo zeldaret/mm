@@ -7,8 +7,6 @@
 
 // data
 
-extern s32 gDbgCamEnabled;
-
 extern s16 gLowPassFilterData[];
 extern s16 gHighPassFilterData[];
 extern s16 gBandStopFilterData[];
@@ -45,9 +43,6 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
-
-extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gPlayVisMonoColor;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;

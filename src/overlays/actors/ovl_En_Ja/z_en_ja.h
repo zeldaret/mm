@@ -11,9 +11,9 @@ typedef void (*EnJaActionFunc)(struct EnJa*, PlayState*);
 #define ENJA_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0 */ Vec3f unk_00;
+    /* 0xC */ s16 unk_0C;
+    /* 0xE */ s16 unk_0E;
 } EnJaStruct; // size = 0x10
 
 typedef struct EnJa {
@@ -21,7 +21,7 @@ typedef struct EnJa {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnJaActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ u8 unk_1D8;
+    /* 0x1D8 */ u8 scheduleResult;
     /* 0x1DC */ s32 msgScriptPos;
     /* 0x1E0 */ Actor* unk_1E0;
     /* 0x1E4 */ Vec3s unk_1E4;
