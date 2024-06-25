@@ -6,6 +6,8 @@
 
 #include "z_en_elf.h"
 
+#include "z64elf_message.h"
+
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnElf*)thisx)

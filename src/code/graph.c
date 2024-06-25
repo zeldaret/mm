@@ -1,13 +1,18 @@
-#include "z64.h"
-#include "regs.h"
-#include "fault.h"
+#include "ultra64.h"
+
+#include "scheduler.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
-FaultAddrConvClient sGraphFaultAddrConvClient;
-FaultClient sGraphFaultClient;
-GfxMasterList* gGfxMasterDL;
+struct FaultAddrConvClient sGraphFaultAddrConvClient;
+struct FaultClient sGraphFaultClient;
+struct GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
+
+#include "graph.h"
+
+#include "regs.h"
+#include "fault.h"
 
 #include "macros.h"
 #include "buffers.h"

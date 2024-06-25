@@ -5,6 +5,9 @@
  */
 
 #include "z_en_mag.h"
+
+#include "gfxalloc.h"
+
 #include "objects/object_mag/object_mag.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)

@@ -15,6 +15,7 @@
 #include "color.h"
 #include "macros.h"
 #include "gfx.h"
+#include "gfxalloc.h"
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"

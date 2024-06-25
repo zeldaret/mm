@@ -1,5 +1,8 @@
 #include "global.h"
+
 #include "string.h"
+
+#include "z64olib.h"
 
 CutsceneCamera* sCurCsCamera;
 

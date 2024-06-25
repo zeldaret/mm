@@ -1,6 +1,6 @@
 #include "prevent_bss_reordering2.h" // bumps the bss index by 65
 // clang-format off
-// Partial structs taken from "prevent_bss_reordering.h", bumps the bss index by 56
+// Partial structs taken from "prevent_bss_reordering.h", bumps the bss index by 59
 struct Dummy200 { int x; };
 struct Dummy201 { int x; };
 struct Dummy202 { int x; };
@@ -29,12 +29,15 @@ struct Dummy224 { int x; };
 struct Dummy225 { int x; };
 struct Dummy226 { int x; };
 struct Dummy227 { int x; };
+struct Dummy228 { int x; };
+typedef int Dummy229;
+
 // clang-format on
 
-// Headers are currently valued at 63 mod 256 (./tools/calc_bss.sh <headers>)
+// Headers are currently valued at 60 mod 256 (./tools/calc_bss.sh <headers>)
 #include "z64math.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "PR/gu.h"
 // The bss index at this point should be 184
 

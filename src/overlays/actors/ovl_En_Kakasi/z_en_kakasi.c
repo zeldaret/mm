@@ -6,6 +6,9 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_kakasi.h"
+
+#include "z64olib.h"
+
 #include "objects/object_ka/object_ka.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)

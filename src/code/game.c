@@ -1,14 +1,21 @@
+#include "z64game.h"
+
 #include "global.h"
 #include "audiomgr.h"
+#include "debug.h"
+#include "gfx.h"
+#include "gfxalloc.h"
 #include "idle.h"
+#include "regs.h"
 #include "sys_cfb.h"
 #include "libc64/malloc.h"
+
 #include "z64debug_text.h"
+#include "z64pause_menu.h"
 #include "z64rumble.h"
 #include "z64speed_meter.h"
 #include "z64vimode.h"
 #include "z64vis.h"
-#include "debug.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;

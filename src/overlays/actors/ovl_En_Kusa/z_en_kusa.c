@@ -4,7 +4,6 @@
  * Description: Grass / Bush
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"

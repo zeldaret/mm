@@ -62,6 +62,11 @@ typedef struct {
     /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
+typedef struct PosRot {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+} PosRot; // size = 0x14
+
 /*
 The plane paramaters are of form `ax + by + cz + d = 0`
 where `(a,b,c)` is the plane's normal vector and d is the originDist
@@ -113,19 +118,6 @@ typedef VecSphGeo VecSph;
 // Defines a point in the geographic coordinate system.
 // Pitch is 0 along the xz-plane (horizon)
 typedef VecSphGeo VecGeo;
-
-// To be used with OLib_Vec3fAdd()
-typedef enum {
-    /* 0 */ OLIB_ADD_COPY, // Copy `b` to dest
-    /* 1 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
-    /* 2 */ OLIB_ADD // Add `a` and `b` to dest
-} OlibVec3fAdd;
-
-typedef enum {
-    /* 0 */ OLIB_DIFF_COPY, // Copy `b` to dest
-    /* 1 */ OLIB_DIFF_OFFSET, // Sub `a` and `b` to dest, and also subs the yaw of `a` to the dest
-    /* 2 */ OLIB_DIFF // Sub `a` and `b` to dest
-} OlibVec3fDiff;
 
 typedef float MtxF_t[4][4];
 typedef union {

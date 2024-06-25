@@ -16,6 +16,7 @@ u8 sMotionBlurStatus;
 #include "z64play.h"
 
 #include "buffers.h"
+#include "gfxalloc.h"
 #include "idle.h"
 #include "regs.h"
 #include "sys_cfb.h"

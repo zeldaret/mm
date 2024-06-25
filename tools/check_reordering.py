@@ -18,7 +18,7 @@ def mapPathToSource(origName: Path) -> Path:
     # Try to map built path to the source path
     parts = origName.parts
     if parts[0] == "build":
-        parts = parts[1:]
+        parts = parts[2:]
 
     path = Path(*parts)
     # Assume every file in the asm folder has .s extension, while everything else has .c extension

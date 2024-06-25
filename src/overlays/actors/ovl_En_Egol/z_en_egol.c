@@ -5,6 +5,9 @@
  */
 
 #include "z_en_egol.h"
+
+#include "z64olib.h"
+
 #include "objects/object_eg/object_eg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"

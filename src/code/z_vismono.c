@@ -7,7 +7,10 @@
  * color palette that converts each color into the desaturated equivalent. More precise details can be found in inline
  * comments.
  */
+
 #include "z64vis.h"
+
+#include "gfxalloc.h"
 #include "global.h"
 #include "libc64/malloc.h"
 

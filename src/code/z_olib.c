@@ -1,4 +1,7 @@
-#include "global.h"
+#include "z64olib.h"
+
+#include "macros.h"
+#include "z64camera.h"
 
 /**
  * Calculates the distances between `a` and `b`

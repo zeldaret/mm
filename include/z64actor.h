@@ -25,11 +25,6 @@ typedef void (*ActorFunc)(struct Actor* this, struct PlayState* play);
 typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
 typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
-typedef struct PosRot {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3s rot;
-} PosRot; // size = 0x14
-
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
     /* 0x2 */ Vec3s unk_2; // scale

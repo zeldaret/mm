@@ -174,9 +174,6 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
-
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
 u8 Actor_ApplyDamage(Actor* actor);
@@ -224,27 +221,6 @@ s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* tors
 
 void GetItem_Draw(PlayState* play, s16 drawId);
 
-u16 QuestHint_GetTatlTextId(PlayState* play);
-
-f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
-f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
-f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
-f32 OLib_ClampMinDist(f32 val, f32 min);
-f32 OLib_ClampMaxDist(f32 val, f32 max);
-Vec3f OLib_Vec3fDistNormalize(Vec3f* a, Vec3f* b);
-Vec3f OLib_VecSphToVec3f(VecSph* sph);
-Vec3f OLib_VecGeoToVec3f(VecGeo* geo);
-VecSph OLib_Vec3fToVecSph(Vec3f* vec);
-VecGeo OLib_Vec3fToVecGeo(Vec3f* vec);
-VecSph OLib_Vec3fDiffToVecSph(Vec3f* a, Vec3f* b);
-VecGeo OLib_Vec3fDiffToVecGeo(Vec3f* a, Vec3f* b);
-Vec3f OLib_AddVecGeoToVec3f(Vec3f* a, VecGeo* geo);
-Vec3f OLib_Vec3fDiffRad(Vec3f* a, Vec3f* b);
-Vec3f OLib_Vec3fDiffDegF(Vec3f* a, Vec3f* b);
-Vec3s OLib_Vec3fDiffBinAng(Vec3f* a, Vec3f* b);
-void OLib_Vec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
-void OLib_Vec3fAdd(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
-
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
 size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
@@ -253,32 +229,6 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx);
 void Room_Draw(PlayState* play, Room* room, u32 flags);
 
 void func_8012EBF8(PlayState* play, RoomContext* roomCtx);
-s32 Inventory_GetBtnBItem(PlayState* play);
-void Inventory_ChangeEquipment(s16 value);
-u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment);
-void Inventory_ChangeUpgrade(s16 upgrade, u32 value);
-s32 Inventory_IsMapVisible(s16 sceneId);
-void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex);
-void Inventory_SaveDekuPlaygroundHighScore(s16 timerId);
-void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
-s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
-void Inventory_SaveLotteryCodeGuess(PlayState* play);
-
-void Graph_FaultClient(void);
-void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size);
-void Graph_SetNextGfxPool(GraphicsContext* gfxCtx);
-GameStateOverlay* Graph_GetNextGameState(GameState* gameState);
-uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param);
-void Graph_Init(GraphicsContext* gfxCtx);
-void Graph_Destroy(GraphicsContext* gfxCtx);
-void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_UpdateGame(GameState* gameState);
-void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_ThreadEntry(void* arg);
-Gfx* Gfx_Open(Gfx* gfx);
-Gfx* Gfx_Close(Gfx* gfx, Gfx* dst);
-void* Gfx_Alloc(Gfx** gfxP, size_t size);
 
 void func_80183070(void);
 
@@ -310,7 +260,5 @@ void Audio_ResetForAudioHeapStep3(void);
 void Audio_ResetForAudioHeapStep2(void);
 void Audio_ResetForAudioHeapStep1(s32 specId);
 void Audio_PreNMI(void);
-
-void Regs_InitData(PlayState* play);
 
 #endif

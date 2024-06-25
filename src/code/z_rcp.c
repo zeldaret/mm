@@ -1,5 +1,12 @@
+#include "gfx.h"
+
 #include "global.h"
+#include "gfxalloc.h"
+#include "graph.h"
+#include "regs.h"
 #include "sys_cfb.h"
+
+#include "z64pause_menu.h"
 
 Gfx gSetupDLs[SETUPDL_MAX][6] = {
     {

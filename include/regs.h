@@ -7,6 +7,7 @@
 #include "ultra64.h"
 #include "unk.h"
 
+struct PlayState;
 
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
@@ -181,5 +182,7 @@ extern RegEditor* gRegEditor;
 
 // Name inferred from OoT. Set to true to manually set play->csCtx.script
 #define R_USE_DEBUG_CUTSCENE              dREG(95)
+
+void Regs_InitData(struct PlayState* play);
 
 #endif

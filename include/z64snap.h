@@ -4,6 +4,8 @@
 #include "PR/ultratypes.h"
 #include "z64actor.h"
 
+struct PlayState;
+
 typedef s32 (*PictoValidationFunc)(struct PlayState*, Actor*);
 
 typedef struct {
@@ -42,11 +44,11 @@ typedef enum {
 #define PICTO_VALID_TOPLEFT_X ((SCREEN_WIDTH - PICTO_VALID_WIDTH) / 2)
 #define PICTO_VALID_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_VALID_HEIGHT) / 2)
 
-s32 Snap_RecordPictographedActors(PlayState* play);
+s32 Snap_RecordPictographedActors(struct PlayState* play);
 void Snap_SetFlag(s32 flag);
 void Snap_UnsetFlag(s32 flag);
 u32 Snap_CheckFlag(s32 flag);
 s16 Snap_AbsS(s16 val);
-s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleRange);
+s32 Snap_ValidatePictograph(struct PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleRange);
 
 #endif

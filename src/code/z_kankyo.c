@@ -61,6 +61,7 @@ Gfx* sSkyboxStarsDList;
 
 #include "z64environment.h"
 
+#include "gfxalloc.h"
 #include "global.h"
 #include "string.h"
 #include "sys_cfb.h"

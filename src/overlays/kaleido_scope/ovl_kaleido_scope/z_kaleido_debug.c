@@ -5,6 +5,9 @@
  */
 
 #include "z_kaleido_scope.h"
+
+#include "gfxalloc.h"
+
 #include "interface/parameter_static/parameter_static.h"
 
 s16 sCurSection = 0;
