@@ -20,6 +20,9 @@ CPP_FLAGS = [
     "-Ibuild",
     "-I.",
 
+    "-DF3DEX_GBI_2",
+    "-DF3DEX_GBI_PL",
+    "-DGBI_DOWHILE",
     "-D__sgi",
     "-D_LANGUAGE_C",
     "-DNON_MATCHING",
