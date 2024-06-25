@@ -289,7 +289,7 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
         sp20 = 1;
     }
 
-    this->unk_244 = thisx->home.rot.z * 45.511112f;
+    this->unk_244 = thisx->home.rot.z * (0x8000 / 720.0f);
 
     transformFlags = 0;
     if (sp20 == 0) {
