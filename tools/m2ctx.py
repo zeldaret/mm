@@ -17,7 +17,7 @@ CPP_FLAGS = [
     "-Iinclude/libc",
     "-Isrc",
     "-Iassets",
-    "-Ibuild",
+    "-Ibuild/n64-us",
     "-I.",
 
     "-DF3DEX_GBI_2",
