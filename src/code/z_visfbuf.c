@@ -13,6 +13,7 @@
 #include "global.h"
 #include "z64visfbuf.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 
 #define SCALE_MIN 0.032f
 #define SCALE_MAX 1.0f //!< also unchanged scale
@@ -84,7 +85,7 @@ void VisFbuf_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
 
     // Allocate for BG
     gfxTemp = gfx;
-    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    bg = Gfx_Alloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     // Set up BG

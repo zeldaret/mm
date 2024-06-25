@@ -436,7 +436,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
 
     spF0 = Math_SinS(sp9E);
     spEC = Math_CosS(sp9E);
-    temp_f20 = Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f20 = Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                (300.0f * this->dyna.actor.scale.z) + arg2;
     temp_f24 = temp_f20 * spF0;
     temp_f26 = temp_f20 * spEC;
@@ -511,7 +511,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
     sp100 = Math_SinS(temp_s6);
     spFC = Math_CosS(temp_s6);
 
-    temp_f0 = ((Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f0 = ((Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                 (300.0f * this->dyna.actor.scale.z)) +
                2.0f);
     temp_f12 = -temp_f0;
@@ -1194,7 +1194,6 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
     s32 pad;
     s32 sp30;
     s32 sp2C;
-    Vec3f sp20;
 
     func_80A23690(this);
     func_80A23F90(this, play);
@@ -1204,16 +1203,18 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 
     if (sp2C == -1) {
         sp30 = false;
-    } else if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, play, 2.0f, &sp20) &&
-               !Player_InCsMode(play)) {
-        func_80A23370(this, sp2C);
-        func_80A260E8(this);
-        sp30 = false;
-        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
-        this->unk_1B0 |= 1;
-    }
+    } else {
+        Vec3f sp20;
 
-    if (this) {}
+        if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, play, 2.0f, &sp20) &&
+            !Player_InCsMode(play)) {
+            func_80A23370(this, sp2C);
+            func_80A260E8(this);
+            sp30 = false;
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
+            this->unk_1B0 |= 1;
+        }
+    }
 
     if (sp30) {
         func_80A2541C(this, play);
@@ -1222,7 +1223,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 }
 
 void func_80A260E8(ObjIceblock* this) {
-    static f32 D_80A26FC0[] = { 14.0, -14.0, 14.0, -14.0 };
+    static f32 D_80A26FC0[] = { 14.0f, -14.0f, 14.0f, -14.0f };
 
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;

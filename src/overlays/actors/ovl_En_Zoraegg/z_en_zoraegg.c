@@ -686,6 +686,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     sp78 = -(15.0f * Math_SinS(sp60));
     sp7C = -((15.0f * Math_CosS(sp62)) * Math_CosS(sp60));
 
+    //! FAKE: temp_f2 =
     Matrix_Translate(this->actor.world.pos.x + sp74, this->actor.world.pos.y + sp78 + 6.0f,
                      temp_f2 = this->actor.world.pos.z + sp7C, MTXMODE_NEW);
 
@@ -700,7 +701,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gDPSetDither(gfx++, G_CD_NOISE);
+    gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 

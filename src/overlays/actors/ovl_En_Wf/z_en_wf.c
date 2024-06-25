@@ -446,7 +446,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
         return true;
     }
 
-    if (arg2 != 0) {
+    if (arg2) {
         if (!Actor_IsFacingPlayer(&this->actor, 7000)) {
             func_80992A74(this, play);
             return true;
@@ -615,7 +615,7 @@ void func_80991280(EnWf* this, PlayState* play) {
         this->unk_298 = 0;
     }
 
-    if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
+    if (!func_8099408C(play, this) && !func_80990948(play, this, false)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
         if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
             (phi_v1 >= 0x1F40)) {
@@ -679,7 +679,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
         }
 
         SkelAnime_Update(&this->skelAnime);
-        if (!func_80990948(play, this, 0)) {
+        if (!func_80990948(play, this, false)) {
             if (!Actor_IsFacingPlayer(&this->actor, 0x11C7)) {
                 if (Rand_ZeroOne() > 0.5f) {
                     func_80991948(this);
@@ -717,7 +717,7 @@ void func_8099177C(EnWf* this, PlayState* play) {
     f32 phi_f2;
     f32 phi_f12;
 
-    if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
+    if (!func_8099408C(play, this) && !func_80990948(play, this, false)) {
         temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (temp_v0 > 0) {
             phi_v1 = (temp_v0 * 0.25f) + 2000.0f;
@@ -777,7 +777,8 @@ void func_809919F4(EnWf* this, PlayState* play) {
     s16 temp_v0;
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 0x9C4);
-    if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
+
+    if (!func_8099408C(play, this) && !func_80990948(play, this, false)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         sp26 = BINANG_ROT180(player->actor.shape.rot.y + this->unk_29A);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
@@ -825,7 +826,7 @@ void func_80991C04(EnWf* this) {
 void func_80991C80(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 sp30;
-    s32 sp2C;
+    s32 onAnim15thFrame;
     s16 sp2A;
 
     sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
@@ -842,15 +843,16 @@ void func_80991C80(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
     }
 
-    sp2C = Animation_OnFrame(&this->skelAnime, 15.0f);
-    if (((sp2C != 0) && !Actor_IsTargeted(play, &this->actor) &&
+    onAnim15thFrame = Animation_OnFrame(&this->skelAnime, 15.0f);
+
+    if ((onAnim15thFrame && !Actor_IsTargeted(play, &this->actor) &&
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
-        if ((sp2C == 0) && (this->unk_2A0 != 0)) {
+        if (!onAnim15thFrame && (this->unk_2A0 != 0)) {
             this->actor.shape.rot.y += TRUNCF_BINANG(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, play, 1);
             this->unk_2A0--;
-        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && (sp2C == 0)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && !onAnim15thFrame) {
             func_80991200(this);
             this->unk_2A0 = (s32)Rand_ZeroFloat(5.0f) + 5;
             if (sp30 >= 0x32C9) {
@@ -868,7 +870,7 @@ void func_80991C80(EnWf* this, PlayState* play) {
                     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                     func_80991948(this);
                 } else {
-                    func_80990948(play, this, 1);
+                    func_80990948(play, this, true);
                 }
             } else {
                 func_80991948(this);
@@ -916,7 +918,7 @@ void func_80992068(EnWf* this, PlayState* play) {
                     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                     func_80991948(this);
                 } else {
-                    func_80990948(play, this, 1);
+                    func_80990948(play, this, true);
                 }
             } else {
                 func_80991948(this);
@@ -970,7 +972,7 @@ void func_809923E4(EnWf* this, PlayState* play) {
         if (this->actor.colChkInfo.health == 0) {
             func_80992D6C(this);
         } else {
-            func_80990948(play, this, 1);
+            func_80990948(play, this, true);
         }
     }
 }
@@ -1002,7 +1004,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         sp26 = this->actor.wallYaw - this->actor.shape.rot.y;
 
-        if (func_80990948(play, this, 0)) {
+        if (func_80990948(play, this, false)) {
             return;
         }
 
@@ -1131,7 +1133,7 @@ void func_80992B8C(EnWf* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
-    if (!func_80990948(play, this, 0)) {
+    if (!func_80990948(play, this, false)) {
         this->unk_2A0--;
         if (this->unk_2A0 == 0) {
             sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.yawTowardsPlayer));

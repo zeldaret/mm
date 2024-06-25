@@ -1,7 +1,7 @@
 #ifndef Z64CURVE_H
 #define Z64CURVE_H
 
-#include "PR/ultratypes.h"
+#include "ultra64.h"
 #include "z64math.h"
 
 struct Actor;
@@ -58,12 +58,5 @@ void SkelCurve_Destroy(struct PlayState* play, SkelCurve* skelCurve);
 void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* animation, f32 arg2, f32 endFrame, f32 curFrame, f32 playSpeed);
 s32 SkelCurve_Update(struct PlayState* play, SkelCurve* skelCurve);
 void SkelCurve_Draw(struct Actor* actor, struct PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, struct Actor* thisx);
-
-
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-typedef CurveInterpKnot TransformData;
-typedef CurveAnimationHeader TransformUpdateIndex;
-typedef CurveSkeletonHeader SkelCurveLimbList;
 
 #endif // Z64_CURVE_H

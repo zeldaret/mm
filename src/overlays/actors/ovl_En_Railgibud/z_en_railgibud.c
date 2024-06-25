@@ -750,7 +750,7 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play
         return false;
     }
 
-    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 100.0f &&
+    if ((Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 100.0f) &&
         !(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                  PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
         !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
@@ -975,7 +975,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
         }
     } else {
         switch (Message_GetState(&play->msgCtx)) {
-            case TEXT_STATE_5:
+            case TEXT_STATE_EVENT:
                 if (Message_ShouldAdvance(play)) {
                     Message_StartTextbox(play, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
@@ -991,9 +991,9 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
                 break;
 
             case TEXT_STATE_NONE:
-            case TEXT_STATE_1:
+            case TEXT_STATE_NEXT:
             case TEXT_STATE_CLOSING:
-            case TEXT_STATE_3:
+            case TEXT_STATE_FADING:
             case TEXT_STATE_CHOICE:
             default:
                 break;

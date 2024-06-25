@@ -75,7 +75,7 @@ static PlayerAnimationHeader* gPlayerAnimations[] = {
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
-static Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f };
+static Vec3f D_80BFB2F4 = { 500.0f, -500.0f, 0.0f };
 
 static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 
@@ -292,7 +292,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnYb_UpdateAnimation(this, play);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
                 Message_CloseTextbox(play);

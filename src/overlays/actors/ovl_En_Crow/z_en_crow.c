@@ -489,7 +489,7 @@ void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_Update(Actor* thisx, PlayState* play) {
-    f32 pad;
+    s32 pad;
     EnCrow* this = THIS;
     f32 height;
     f32 scale;
@@ -549,9 +549,9 @@ s32 EnCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if (this->actor.colChkInfo.health != 0) {
         if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-            rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PIf / 4)));
         } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-            rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PIf / 4)));
         }
     }
     return false;

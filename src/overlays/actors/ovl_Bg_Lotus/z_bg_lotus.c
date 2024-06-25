@@ -55,7 +55,7 @@ void func_80AD6830(BgLotus* this) {
     f32 temp_fv1;
 
     if (this->dyna.actor.params == 0) {
-        temp_fv1 = Math_SinF(this->unk166 * (M_PI / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
+        temp_fv1 = Math_SinF(this->unk166 * (M_PIf / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
         this->dyna.actor.scale.x = (1.0f + temp_fv1) * 0.1f;
         this->dyna.actor.scale.z = (1.0f - temp_fv1) * 0.1f;
     }
@@ -65,7 +65,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
     f32 sp34;
 
     this->unk168--;
-    sp34 = Math_SinF(this->unk168 * (M_PI / 48)) * 6.0f;
+    sp34 = Math_SinF(this->unk168 * (M_PIf / 48)) * 6.0f;
 
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;

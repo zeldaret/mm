@@ -11,6 +11,7 @@
  */
 
 #include "global.h"
+#include "audio/load.h"
 #include "buffers.h"
 
 /**
@@ -138,7 +139,7 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
     s32 bufferPos;
     u32 i;
 
-    if ((arg2 != 0) || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
+    if (arg2 || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
         for (i = gAudioCtx.sampleDmaListSize1; i < gAudioCtx.sampleDmaCount; i++) {
             dma = &gAudioCtx.sampleDmas[i];
             bufferPos = devAddr - dma->devAddr;
@@ -161,11 +162,11 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
             }
         }
 
-        if (arg2 == 0) {
+        if (!arg2) {
             goto search_short_lived;
         }
 
-        if (gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos && arg2 != 0) {
+        if ((gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos) && arg2) {
             // Allocate a DMA from reuse queue 2, unless full.
             dmaIndex = gAudioCtx.sampleDmaReuseQueue2[gAudioCtx.sampleDmaReuseQueue2RdPos];
             gAudioCtx.sampleDmaReuseQueue2RdPos++;
@@ -1072,7 +1073,7 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
     s32 loadStatus;
     SoundFont* soundFont;
     u32 realId = AudioLoad_GetRealTableIndex(tableType, id);
-    u32 pad;
+    s32 pad;
 
     switch (tableType) {
         case SEQUENCE_TABLE:
@@ -1263,8 +1264,8 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     gAudioCtx.curAiBufferIndex = 0;
     gAudioCtx.soundMode = SOUNDMODE_STEREO;
     gAudioCtx.curTask = NULL;
-    gAudioCtx.rspTask[0].task.t.dataSize = 0;
-    gAudioCtx.rspTask[1].task.t.dataSize = 0;
+    gAudioCtx.rspTask[0].task.t.data_size = 0;
+    gAudioCtx.rspTask[1].task.t.data_size = 0;
 
     osCreateMesgQueue(&gAudioCtx.syncDmaQueue, &gAudioCtx.syncDmaMesg, 1);
     osCreateMesgQueue(&gAudioCtx.curAudioFrameDmaQueue, gAudioCtx.currAudioFrameDmaMesgBuf,
@@ -1637,7 +1638,7 @@ void AudioLoad_ProcessAsyncLoadUnkMedium(AudioAsyncLoad* asyncLoad, s32 resetSta
 void AudioLoad_FinishAsyncLoad(AudioAsyncLoad* asyncLoad) {
     u32 retMsg = asyncLoad->retMsg;
     u32 fontId;
-    u32 pad;
+    s32 pad;
     OSMesg doneMsg;
     u32 sampleBankId1;
     u32 sampleBankId2;

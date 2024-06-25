@@ -26,30 +26,31 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
-typedef enum {
-    /* 0 */ TRT2_ANIM_IDLE,
-    /* 1 */ TRT2_ANIM_HALF_AWAKE,
-    /* 2 */ TRT2_ANIM_SLEEPING,
-    /* 3 */ TRT2_ANIM_WAKE_UP,
-    /* 4 */ TRT2_ANIM_SURPRISED,
-    /* 5 */ TRT2_ANIM_HANDS_ON_COUNTER,
-    /* 6 */ TRT2_ANIM_HOVER,
-    /* 7 */ TRT2_ANIM_FLY_LOOK_AROUND,
-    /* 8 */ TRT2_ANIM_FLY_DOWN,
-    /* 9 */ TRT2_ANIM_FLY
+typedef enum Trt2Animation {
+    /*  0 */ TRT2_ANIM_IDLE,
+    /*  1 */ TRT2_ANIM_HALF_AWAKE,
+    /*  2 */ TRT2_ANIM_SLEEPING,
+    /*  3 */ TRT2_ANIM_WAKE_UP,
+    /*  4 */ TRT2_ANIM_SURPRISED,
+    /*  5 */ TRT2_ANIM_HANDS_ON_COUNTER,
+    /*  6 */ TRT2_ANIM_HOVER,
+    /*  7 */ TRT2_ANIM_FLY_LOOK_AROUND,
+    /*  8 */ TRT2_ANIM_FLY_DOWN,
+    /*  9 */ TRT2_ANIM_FLY,
+    /* 10 */ TRT2_ANIM_MAX
 } Trt2Animation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[TRT2_ANIM_MAX] = {
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // TRT2_ANIM_IDLE
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_HALF_AWAKE
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // TRT2_ANIM_SLEEPING
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // TRT2_ANIM_WAKE_UP
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_SURPRISED
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // TRT2_ANIM_HANDS_ON_COUNTER
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // TRT2_ANIM_HOVER
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // TRT2_ANIM_FLY_LOOK_AROUND
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // TRT2_ANIM_FLY_DOWN
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT2_ANIM_FLY
 };
 
 ActorInit En_Trt2_InitVars = {
@@ -346,7 +347,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     if (this->unk_3D8) {
         Message_StartTextbox(play, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -373,7 +374,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
@@ -402,7 +403,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
                 this->unk_3B2 = 10;
             }
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
@@ -442,7 +443,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD417C(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, play);
@@ -528,7 +529,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
         this->unk_3B2 = 17;
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
     }
@@ -590,7 +591,7 @@ s32 EnTrt2_HasReachedPoint(EnTrt2* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -716,7 +717,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD4DB4(EnTrt2* this, PlayState* play) {
-    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0 };
+    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0f };
 
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);

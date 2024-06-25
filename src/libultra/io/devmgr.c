@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 void __osDevMgrMain(void* arg) {
     OSIoMesg* ioMesg;

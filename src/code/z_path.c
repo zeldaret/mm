@@ -1,4 +1,7 @@
+#include "z64path.h"
 #include "global.h"
+
+#include "z64lib.h"
 
 Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone) {
     Path* path;
@@ -18,7 +21,7 @@ f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw) {
     Vec3s* pointPos;
 
     if (path == NULL) {
-        return -1.0;
+        return -1.0f;
     }
 
     pointPos = Lib_SegmentedToVirtual(path->points);

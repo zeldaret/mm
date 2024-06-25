@@ -908,14 +908,14 @@ static Gfx* sDisplayLists[] = {
 #include "z_en_kanban_gfx.c"
 
 static f32 sCutAngles[] = {
-    /* CUT_POST   */ 0.50f * M_PI,
-    /* CUT_VERT_L */ 0.00f * M_PI,
-    /* CUT_HORIZ  */ 0.50f * M_PI,
-    /* CUT_DIAG_L */ 0.66f * M_PI,
-    /* CUT_DIAG_R */ 0.34f * M_PI,
-    /* CUT_VERT_R */ 0.00f * M_PI,
-    /*            */ 0.00f * M_PI,
-    /*            */ 0.00f * M_PI,
+    /* CUT_POST   */ 0.50f * M_PIf,
+    /* CUT_VERT_L */ 0.00f * M_PIf,
+    /* CUT_HORIZ  */ 0.50f * M_PIf,
+    /* CUT_DIAG_L */ 0.66f * M_PIf,
+    /* CUT_DIAG_R */ 0.34f * M_PIf,
+    /* CUT_VERT_R */ 0.00f * M_PIf,
+    /*            */ 0.00f * M_PIf,
+    /*            */ 0.00f * M_PIf,
 };
 
 #include "overlays/ovl_En_Kanban/ovl_En_Kanban.c"
@@ -1025,7 +1025,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->actionState == ENKANBAN_SIGN) {
-            Matrix_RotateXFApply(-M_PI / 5);
+            Matrix_RotateXFApply(-M_PIf / 5);
         }
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);

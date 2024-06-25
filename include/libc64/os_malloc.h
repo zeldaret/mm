@@ -2,7 +2,7 @@
 #define LIBC64_OS_MALLOC_H
 
 #include "ultra64.h"
-#include "libc/stddef.h"
+#include "stddef.h"
 
 typedef struct ArenaNode {
     /* 0x0 */ s16 magic; // Should always be 0x7373

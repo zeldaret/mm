@@ -1,9 +1,9 @@
 #include "libc64/os_malloc.h"
 
 #include "alignment.h"
-#include "libc/stdbool.h"
-#include "libc/stdint.h"
-#include "libc/string.h"
+#include "stdbool.h"
+#include "stdint.h"
+#include "string.h"
 #include "macros.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)

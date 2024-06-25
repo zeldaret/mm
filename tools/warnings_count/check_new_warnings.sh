@@ -40,7 +40,7 @@ Optional arguments:
 jobs=1
 full=
 run="make clean
-    make uncompressed"
+    make rom"
 
 
 
@@ -53,8 +53,10 @@ do
     f)  full="true"
         run="make distclean
     make setup
+    make assets
     make disasm
-    make all"
+    make rom
+    make compress"
         ;;
     j)  j_option_arg="$OPTARG"
         if [[ ! "${j_option_arg}" =~ ^[0-9]*$ ]]
@@ -102,17 +104,23 @@ make_warnings () {
 if [[ $full ]]; then
     make distclean
     make_warnings setup setup
+    make_warnings assets assets
     make_warnings disasm disasm
-    make_warnings all build
+    make_warnings rom build
+    make_warnings compress compress
 else
     make clean
-    make_warnings uncompressed build
+    make_warnings rom build
 fi
 
 
 if [[ $full ]]; then
     $COMPARE_WARNINGS setup
+    $COMPARE_WARNINGS assets
     $COMPARE_WARNINGS disasm
+    $COMPARE_WARNINGS build
+    $COMPARE_WARNINGS compress
+else
+    $COMPARE_WARNINGS build
 fi
-$COMPARE_WARNINGS build
 

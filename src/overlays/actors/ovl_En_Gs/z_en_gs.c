@@ -212,13 +212,13 @@ void func_80997E4C(EnGs* this, PlayState* play) {
             Message_StartTextbox(play, this->unk_210, &this->actor);
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -504,8 +504,8 @@ void func_8099874C(EnGs* this, PlayState* play) {
                         break;
                 }
 
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE);
                     this->getItemId = GI_HEART_PIECE;
                 }
 
@@ -699,8 +699,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
         if (sp48 == 0.0f) {
-            this->unk_1DC = 2.0f * M_PI / 9.0000002;
-            this->unk_1E0 = M_PI / 9.0000002;
+            this->unk_1DC = 2.0f * (f32)(M_PI / 9);
+            this->unk_1E0 = (f32)(M_PI / 9);
             this->unk_19D = 4;
         }
     }

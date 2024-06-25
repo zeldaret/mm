@@ -1,6 +1,6 @@
 #include "z64eff_blure.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "gfx.h"
 #include "macros.h"
 #include "sys_matrix.h"
@@ -286,8 +286,8 @@ void EffectBlure_UpdateFlags(EffectBlureElement* elem) {
         Math_Vec3s_DiffToVec3f(&sp4C, &next->p1, &elem->p1);
         Math_Vec3s_DiffToVec3f(&sp40, &next->p2, &elem->p2);
 
-        if (Math3D_AngleBetweenVectors(&sp64, &sp4C, &sp34) || Math3D_AngleBetweenVectors(&sp58, &sp40, &sp30) ||
-            Math3D_AngleBetweenVectors(&sp4C, &sp40, &sp2C)) {
+        if (Math3D_CosOut(&sp64, &sp4C, &sp34) || Math3D_CosOut(&sp58, &sp40, &sp30) ||
+            Math3D_CosOut(&sp4C, &sp40, &sp2C)) {
             elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
             elem->flags |= 0;
         } else if ((sp34 <= -0.5f) || (sp30 <= -0.5f) || (sp2C <= 0.7071f)) {
@@ -658,6 +658,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     if (this->numElements < 2) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 
@@ -678,6 +679,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp5C);
     if (mtx == NULL) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 

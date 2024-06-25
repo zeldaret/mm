@@ -238,7 +238,7 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
         this->collider.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
-                              this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
+                              this->actor.scale.x * (30000.0f * 0.001f), this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= ACTOR_FLAG_400;
         } else {
@@ -1198,8 +1198,8 @@ void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_Push();
         Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
-        Matrix_RotateYF(M_PI / 3, MTXMODE_APPLY);
-        Matrix_RotateZF(M_PI / 12, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PIf / 3, MTXMODE_APPLY);
+        Matrix_RotateZF(M_PIf / 12, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

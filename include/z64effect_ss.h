@@ -3,10 +3,12 @@
 
 #include "ultra64.h"
 
-#include "color.h"
-#include "z64math.h"
+#include "stdint.h"
 
+#include "color.h"
+#include "z64dma.h"
 #include "z64eff_ss_dead.h"
+#include "z64math.h"
 
 struct Actor;
 struct PlayState;
@@ -37,8 +39,7 @@ typedef struct EffectSsInit {
 } EffectSsInit; // size = 0x8
 
 typedef struct EffectSsOverlay {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
+    /* 0x00 */ RomFile file;
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;

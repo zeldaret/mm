@@ -224,7 +224,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS);
 
     return ret;
 }
@@ -631,13 +631,13 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
         if (gSaveContext.save.saveInfo.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
-                if (arg4 != 0) {
+                if (arg4) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
                 } else {
                     func_808F4108(this, play, 0x3474);
                 }
             } else {
-                if (arg4 != 0) {
+                if (arg4) {
                     Actor_ContinueText(play, &this->actor, 0x3475);
                 } else {
                     func_808F4108(this, play, 0x3475);
@@ -645,7 +645,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
             }
         } else {
             Audio_PlaySfx(NA_SE_SY_ERROR);
-            if (arg4 != 0) {
+            if (arg4) {
                 Actor_ContinueText(play, &this->actor, 0x3473);
             } else {
                 func_808F4108(this, play, 0x3473);
@@ -1248,7 +1248,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x349B:
                     if (msgCtx->choiceIndex == 0) {
-                        func_808F4270(play, this, arg2, msgCtx, 1);
+                        func_808F4270(play, this, arg2, msgCtx, true);
                         ret = false;
                     } else {
                         Audio_PlaySfx_MessageCancel();
@@ -1283,7 +1283,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x3471:
-                    func_808F4270(play, this, arg2, msgCtx, 0);
+                    func_808F4270(play, this, arg2, msgCtx, false);
                     ret = false;
                     break;
 
@@ -1322,7 +1322,7 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
                 Message_CloseTextbox(play);
                 ret = true;
@@ -1620,8 +1620,8 @@ void func_808F6334(EnIn* this, PlayState* play) {
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->talkActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = (this->unk4C0 != 0.0f) ? 0.0f : 1.0f;
         }

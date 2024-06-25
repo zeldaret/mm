@@ -248,8 +248,8 @@ void BgCraceMovebg_ClosingDoor_CheckIfPlayerIsBeyondDoor(BgCraceMovebg* this, Pl
         Math_Vec3f_Diff(&player->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->dyna.actor.home.pos, &posDiff);
         Matrix_MultVec3f(&posDiff, &this->intersectionOffsetFromHome);
 
-        if (fabsf(this->intersectionOffsetFromHome.x) < 100.0f && this->intersectionOffsetFromHome.y >= -10.0f &&
-            this->intersectionOffsetFromHome.y <= 180.0f) {
+        if ((fabsf(this->intersectionOffsetFromHome.x) < 100.0f) && (this->intersectionOffsetFromHome.y >= -10.0f) &&
+            (this->intersectionOffsetFromHome.y <= 180.0f)) {
             if (this->intersectionOffsetFromHome.z < 0.0f) {
                 Flags_SetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(&this->dyna.actor) + 1);
                 this->stateFlags |= BG_CRACE_MOVEBG_FLAG_PLAYER_IS_BEYOND_DOOR;

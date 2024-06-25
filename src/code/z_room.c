@@ -1,6 +1,7 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "debug.h"
+#include "sys_ucode.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
@@ -70,7 +71,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
     RoomShapeCullableEntryLinked* iter;
-    Gfx* displayList;
+    Gfx* dList;
     RoomShapeCullableEntryLinked* insert;
     f32 entryBoundsNearZ;
     s32 i;
@@ -119,31 +120,31 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                      (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
                     ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) && (i == R_ROOM_CULL_DEBUG_TARGET))) {
                     if (flags & ROOM_DRAW_OPA) {
-                        displayList = roomShapeCullableEntry->opa;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        dList = roomShapeCullableEntry->opa;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, dList);
                         }
                     }
 
                     if (flags & ROOM_DRAW_XLU) {
-                        displayList = roomShapeCullableEntry->xlu;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        dList = roomShapeCullableEntry->xlu;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_XLU_DISP++, dList);
                         }
                     }
                 }
             } else {
                 if (flags & ROOM_DRAW_OPA) {
-                    displayList = roomShapeCullableEntry->opa;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    dList = roomShapeCullableEntry->opa;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, dList);
                     }
                 }
 
                 if (flags & ROOM_DRAW_XLU) {
-                    displayList = roomShapeCullableEntry->xlu;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                    dList = roomShapeCullableEntry->xlu;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_XLU_DISP++, dList);
                     }
                 }
             }
@@ -240,15 +241,15 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                         ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) &&
                          (i == R_ROOM_CULL_DEBUG_TARGET))) {
 
-                        displayList = roomShapeCullableEntry->opa;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        dList = roomShapeCullableEntry->opa;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, dList);
                         }
                     }
                 } else {
-                    displayList = roomShapeCullableEntry->opa;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    dList = roomShapeCullableEntry->opa;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, dList);
                     }
                 }
             }
@@ -260,9 +261,9 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                 f32 temp_fv1;
 
                 roomShapeCullableEntry = tail->entry;
-                displayList = roomShapeCullableEntry->xlu;
+                dList = roomShapeCullableEntry->xlu;
 
-                if (displayList != NULL) {
+                if (dList != NULL) {
                     if (roomShapeCullableEntry->boundsSphereRadius & 1) {
 
                         temp_fv0 = tail->boundsNearZ - (f32)(iREG(93) + 0xBB8);
@@ -275,10 +276,10 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                                 var_a1 = 255 - (s32)((temp_fv0 / temp_fv1) * 255.0f);
                             }
                             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, var_a1);
-                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                            gSPDisplayList(POLY_XLU_DISP++, dList);
                         }
                     } else {
-                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        gSPDisplayList(POLY_XLU_DISP++, dList);
                     }
                 }
             }
@@ -501,11 +502,11 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    if ((u32)play->doorCtx.numTransitionActors != 0) {
+    if ((u32)play->transitionActors.count != 0) {
         RomFile* roomList = play->roomList;
-        TransitionActorEntry* transitionActor = &play->doorCtx.transitionActorList[0];
+        TransitionActorEntry* transitionActor = &play->transitionActors.list[0];
 
-        for (j = 0; j < play->doorCtx.numTransitionActors; j++) {
+        for (j = 0; j < play->transitionActors.count; j++) {
             frontRoom = transitionActor->sides[0].room;
             backRoom = transitionActor->sides[1].room;
             frontRoomSize = (frontRoom < 0) ? 0 : roomList[frontRoom].vromEnd - roomList[frontRoom].vromStart;
@@ -560,8 +561,8 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
                                                   (size + 8) * roomCtx->activeMemPage - 7));
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, ARRAY_COUNT(roomCtx->loadMsg));
-        DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
-                               &roomCtx->loadQueue, NULL);
+        DmaMgr_RequestAsync(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
+                            &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
 
         return 1;
@@ -575,7 +576,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
         if (osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
             roomCtx->status = 0;
             roomCtx->curRoom.segment = roomCtx->activeRoomVram;
-            gSegments[3] = OS_K0_TO_PHYSICAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = OS_K0_TO_PHYSICAL(roomCtx->activeRoomVram);
 
             Scene_ExecuteCommands(play, roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
@@ -606,7 +607,7 @@ RoomDrawHandler sRoomDrawHandlers[] = {
 
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        gSegments[3] = OS_K0_TO_PHYSICAL(room->segment);
+        gSegments[0x03] = OS_K0_TO_PHYSICAL(room->segment);
         sRoomDrawHandlers[room->roomShape->base.type](play, room, flags);
     }
     return;
@@ -619,7 +620,7 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     Actor_SpawnTransitionActors(play, &play->actorCtx);
     if (roomCtx->curRoom.num > -1) {
         Map_InitRoomData(play, roomCtx->curRoom.num);
-        Minimap_SavePlayerRoomInitInfo(play);
+        Map_SetAreaEntrypoint(play);
     }
     Audio_SetEnvReverb(play->roomCtx.curRoom.echo);
 }

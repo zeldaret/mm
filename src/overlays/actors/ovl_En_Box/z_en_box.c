@@ -107,7 +107,7 @@ void func_80867C14(struct_80867BDC_a0* arg0, PlayState* play) {
 void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
     s32 temp_s6 = arg0->unk_18 - arg0->unk_1C;
     s32 i;
-    f32 pad;
+    s32 pad;
 
     if (temp_s6 > 0) {
         OPEN_DISPS(play->state.gfxCtx);

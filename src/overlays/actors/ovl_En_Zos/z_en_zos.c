@@ -264,11 +264,11 @@ void func_80BBB354(EnZos* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BBB2C4;
-        SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE);
         this->actor.flags |= ACTOR_FLAG_10000;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE)) {
             getItemId = GI_RUPEE_PURPLE;
         } else {
             getItemId = GI_HEART_PIECE;
@@ -328,7 +328,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->animIndex == EN_ZOS_ANIM_INSPIRED) {
@@ -366,7 +366,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
@@ -414,7 +414,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_5) || !Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_EVENT) || !Message_ShouldAdvance(play)) {
         return;
     }
 
@@ -610,7 +610,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 Message_CloseTextbox(play);

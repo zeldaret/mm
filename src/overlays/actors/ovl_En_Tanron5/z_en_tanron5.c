@@ -37,7 +37,7 @@ void EnTanron5_Draw(Actor* thisx, PlayState* play);
 void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_ItemDrop_Draw(Actor* thisx, PlayState* play);
 
-typedef enum {
+typedef enum TwinmoldPropItemDropType {
     /* 0 */ TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS,
     /* 1 */ TWINMOLD_PROP_ITEM_DROP_TYPE_MAGIC_JAR_BIG
 } TwinmoldPropItemDropType;
@@ -251,7 +251,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             this->dList = gRuinFragmentDL;
             this->timer = 150;
         }
-    } else if (TWINMOLD_PROP_GET_TYPE(&this->actor) == TWINMOLD_PROP_TYPE_STATIC) {
+    } else if (TWINMOLD_PROP_GET_TYPE(&this->actor) == TWINMOLD_PROP_TYPE_SPAWN_HANDLER) {
         EnTanron5* child;
         s32 i;
 

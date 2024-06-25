@@ -1,6 +1,6 @@
 #include "z64transition.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "gfx.h"
 #include "regs.h"
 #include "z64math.h"

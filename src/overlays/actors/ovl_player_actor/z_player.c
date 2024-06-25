@@ -6,6 +6,7 @@
 
 #include "global.h"
 #include "z64horse.h"
+#include "z64lifemeter.h"
 #include "z64malloc.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -745,9 +746,6 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
         Rumble_Request(distSq, sourceIntensity, decayTimer, decayStep);
     }
 }
-
-// TODO: less dumb name
-#define SFX_VOICE_BANK_SIZE 0x20
 
 PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
     {
@@ -6335,7 +6333,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
 
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_SCENE0);
     this->cv.doorBgCamIndex =
-        play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamIndex;
+        play->transitionActors.list[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamIndex;
     Actor_DeactivateLens(play);
     this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
 }
@@ -6381,7 +6379,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     }
 
     if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
-        this->cv.doorBgCamIndex = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
+        this->cv.doorBgCamIndex = play->transitionActors.list[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                                       .sides[this->doorDirection > 0 ? 0 : 1]
                                       .bgCamIndex;
         Actor_DeactivateLens(play);
@@ -6456,12 +6454,12 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     func_8082DAD4(this);
     Player_AnimReplace_Setup(
         play, this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_80 | ANIM_FLAG_200);
-    knobDoor->playOpenAnim = true;
+    knobDoor->requestOpen = true;
     if (this->doorType != PLAYER_DOORTYPE_FAKE) {
         CollisionPoly* poly;
         s32 bgId;
         Vec3f pos;
-        s32 enDoorType = ENDOOR_GET_TYPE(&knobDoor->dyna.actor);
+        EnDoorType enDoorType = ENDOOR_GET_TYPE(&knobDoor->dyna.actor);
 
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
@@ -6473,14 +6471,14 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
 
             if (Player_HandleExitsAndVoids(play, this, poly, BGCHECK_SCENE)) {
                 gSaveContext.entranceSpeed = 2.0f;
-            } else if (enDoorType != ENDOOR_TYPE_7) {
+            } else if (enDoorType != ENDOOR_TYPE_FRAMED) {
                 Camera* mainCam;
 
                 this->av1.actionVar1 = 38.0f * D_8085C3E8;
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
                 Camera_ChangeDoorCam(mainCam, &knobDoor->dyna.actor,
-                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
+                                     play->transitionActors.list[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamIndex,
                                      0.0f, this->av1.actionVar1, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
@@ -6526,8 +6524,9 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
 
             if (this->actor.category == ACTORCAT_PLAYER) {
                 if ((this->doorType < PLAYER_DOORTYPE_FAKE) && (doorActor->category == ACTORCAT_DOOR) &&
-                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) || (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_7))) {
-                    s8 roomNum = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(doorActor)]
+                    ((this->doorType != PLAYER_DOORTYPE_HANDLE) ||
+                     (ENDOOR_GET_TYPE(doorActor) != ENDOOR_TYPE_FRAMED))) {
+                    s8 roomNum = play->transitionActors.list[DOOR_GET_TRANSITION_ID(doorActor)]
                                      .sides[(this->doorDirection > 0) ? 0 : 1]
                                      .room;
 
@@ -7316,9 +7315,9 @@ void func_80838830(Player* this, s16 objectId) {
     if (objectId != OBJECT_UNSET_0) {
         this->giObjectLoading = true;
         osCreateMesgQueue(&this->giObjectLoadQueue, &this->giObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &this->giObjectLoadQueue, NULL);
+        DmaMgr_RequestAsync(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
+                            gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                            &this->giObjectLoadQueue, NULL);
     }
 }
 
@@ -9800,7 +9799,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
 
     Math_ScaledStepToS(&this->unk_B70, var_a1, 0x190);
     if ((this->modelAnimType == PLAYER_ANIMTYPE_3) || ((this->unk_B70 == 0) && (this->unk_AB8 <= 0.0f))) {
-        if (arg1 == 0) {
+        if (!arg1) {
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
                                         this->unk_B38);
         } else {
@@ -9828,7 +9827,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
         climbAnim = &gPlayerAnim_link_normal_climb_up;
     }
 
-    if (arg1 == 0) {
+    if (!arg1) {
         PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
                                      this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
     } else {
@@ -9860,7 +9859,7 @@ void func_8083F57C(Player* this, PlayState* play) {
         if (temp_fv0 < 0.0f) {
             var_fs0 = 1.0f;
             func_8083EA44(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->linearVelocity));
-            func_8083F358(this, 0, play);
+            func_8083F358(this, false, play);
         } else {
             var_fs0 = (REG(37) / 1000.0f) * temp_fv0;
             if (var_fs0 < 1.0f) {
@@ -9869,7 +9868,7 @@ void func_8083F57C(Player* this, PlayState* play) {
                 var_fs0 = 1.0f;
                 func_8083EA44(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
             }
-            func_8083F358(this, 1, play);
+            func_8083F358(this, true, play);
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, func_8082EEE0(this), this->unk_B38 * (20.0f / 29.0f));
         }
     }
@@ -10389,7 +10388,7 @@ void func_80840EC0(Player* this, PlayState* play) {
 
 // Spin attack size
 void func_80840F34(Player* this) {
-    Math_StepToF(&this->unk_B08, CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) ? 1.0f : 0.5f, 0.02f);
+    Math_StepToF(&this->unk_B08, CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK) ? 1.0f : 0.5f, 0.02f);
 }
 
 s32 func_80840F90(PlayState* play, Player* this, CsCmdActorCue* cue, f32 arg3, s16 arg4, s32 arg5) {
@@ -10902,7 +10901,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Minimap_SavePlayerRoomInitInfo(play);
+    Map_SetAreaEntrypoint(play);
     func_80841A50(play, this);
     this->unk_3CF = 0;
     R_PLAY_FILL_SCREEN_ON = 0;
@@ -13745,7 +13744,7 @@ void Player_Action_1(Player* this, PlayState* play) {
     } else if (this->av2.actionVar2 < 0) {
         if (Room_StartRoomTransition(play, &play->roomCtx, this->av1.actionVar1)) {
             Map_InitRoomData(play, play->roomCtx.curRoom.num);
-            Minimap_SavePlayerRoomInitInfo(play);
+            Map_SetAreaEntrypoint(play);
             this->av2.actionVar2 = 5;
         }
     } else if (this->av2.actionVar2 > 0) {
@@ -15209,7 +15208,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                             TransitionActorEntry* temp_v1_4; // sp50
                             s32 roomNum;
 
-                            temp_v1_4 = &play->doorCtx.transitionActorList[this->doorNext];
+                            temp_v1_4 = &play->transitionActors.list[this->doorNext];
                             roomNum = temp_v1_4->sides[0].room;
                             R_PLAY_FILL_SCREEN_ALPHA = 255;
 
@@ -15277,7 +15276,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                                                 (Play_GetCamera(play, CAM_ID_MAIN)->stateFlags & CAM_STATE_4))) {
                 if (this->unk_397 == 4) {
                     Map_InitRoomData(play, play->roomCtx.curRoom.num);
-                    Minimap_SavePlayerRoomInitInfo(play);
+                    Map_SetAreaEntrypoint(play);
                 }
 
                 R_PLAY_FILL_SCREEN_ON = 0;
@@ -15308,7 +15307,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 // door stuff
 void Player_Action_36(Player* this, PlayState* play) {
     EnDoor* doorActor = (EnDoor*)this->doorActor;
-    s32 sp38 = (doorActor != NULL) && (doorActor->doorType == ENDOOR_TYPE_7);
+    s32 framedDoor = (doorActor != NULL) && (doorActor->doorType == ENDOOR_TYPE_FRAMED);
     s32 animFinished;
     CollisionPoly* poly;
     s32 bgId;
@@ -15332,7 +15331,7 @@ void Player_Action_36(Player* this, PlayState* play) {
             Player_StopCutscene(this);
             func_80839E74(this, play);
 
-            if ((this->actor.category == ACTORCAT_PLAYER) && !sp38) {
+            if ((this->actor.category == ACTORCAT_PLAYER) && !framedDoor) {
                 if (play->roomCtx.prevRoom.num >= 0) {
                     func_8012EBF8(play, &play->roomCtx);
                 }
@@ -15344,7 +15343,7 @@ void Player_Action_36(Player* this, PlayState* play) {
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
         Player_StopCutscene(this);
         play->func_18780(this, play);
-    } else if (sp38 && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
+    } else if (framedDoor && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
         s16 exitIndexPlusOne = (this->doorDirection < 0) ? doorActor->knobDoor.dyna.actor.world.rot.x
                                                          : doorActor->knobDoor.dyna.actor.world.rot.z;
 
@@ -19106,7 +19105,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                 }
 
                 if (spB8 != 0.0f) {
-                    f32 pad;
+                    s32 pad;
                     f32 sp54 = spB8 - 0.3f;
 
                     sp54 = CLAMP_MIN(sp54, 0.0f);
@@ -20678,6 +20677,9 @@ s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMod
         return false;
     }
 
+    //! @bug When func_8082ED20 is used to get a wait animation, NULL is still passed to Animation_GetLastFrame,
+    // causing it to read the frame count from address 0x80000000 casted to AnimationHeaderCommon via
+    // Lib_SegmentedToVirtual operating on NULL, which ends up returning 15385 as the last frame
     PlayerAnimation_Change(play, &player->skelAnime, (talkAnim == NULL) ? func_8082ED20(player) : talkAnim,
                            PLAYER_ANIM_ADJUSTED_SPEED, 0.0f, Animation_GetLastFrame(talkAnim), animMode, -6.0f);
     return true;

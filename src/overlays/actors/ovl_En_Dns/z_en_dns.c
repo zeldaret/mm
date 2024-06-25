@@ -19,10 +19,64 @@ void func_8092D330(EnDns* this, PlayState* play);
 void EnDns_DoNothing(EnDns* this, PlayState* play);
 void func_8092D4D8(EnDns* this, PlayState* play);
 
-static s32 D_8092DCB0[] = {
-    0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
-    0x00172000, 0x050E0831, 0x0C100E08, 0x220C1000, 0x00172000, 0x050E0832, 0x0C100E08, 0x230C1000,
-    0x0E08330C, 0x09000015, 0x1C014016, 0x10000000, 0x0E082E0C, 0x10000000,
+static MsgScript D_8092DCB0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x082F),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0820),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_8092DCC0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0830),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0821),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_8092DCD0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0831),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0822),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_8092DCE0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0832),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0823),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_8092DCF0[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0833),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_SET_EVENT_INF(EVENTINF_16),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_8092DD00[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x082E),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 ActorInit En_Dns_InitVars = {
@@ -178,29 +232,29 @@ void func_8092C934(EnDns* this) {
     }
 }
 
-s32* func_8092C9BC(EnDns* this, PlayState* play) {
+MsgScript* EnDns_GetMsgScript(EnDns* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
-            return &D_8092DCB0[16];
+            return D_8092DCF0;
         } else if (this->unk_2FC != 0) {
-            return &D_8092DCB0[20];
+            return D_8092DD00;
         }
     }
 
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return &D_8092DCB0[0];
+            return D_8092DCB0;
 
         case ENDNS_GET_7_1:
-            return &D_8092DCB0[4];
+            return D_8092DCC0;
 
         case ENDNS_GET_7_2:
-            return &D_8092DCB0[8];
+            return D_8092DCD0;
 
         case ENDNS_GET_7_3:
-            return &D_8092DCB0[12];
+            return D_8092DCE0;
 
         default:
             return NULL;
@@ -241,7 +295,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
             }
             this->unk_2DA = this->actor.world.rot.y;
         }
-        this->unk_1E0 = func_8092C9BC(this, play);
+        this->msgScript = EnDns_GetMsgScript(this, play);
         this->actionFunc = func_8092D4D8;
         ret = true;
     }
@@ -285,9 +339,9 @@ s32 func_8092CC68(PlayState* play) {
     return ret;
 }
 
-s32 func_8092CCEC(EnDns* this, PlayState* play) {
+s32 func_8092CCEC(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 pad;
+    EnDns* this = THIS;
     Vec3f sp3C = player->actor.world.pos;
     Vec3f sp30 = this->actor.world.pos;
     s16 sp2E;
@@ -406,11 +460,11 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
             SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             Audio_PlaySfx(NA_SE_SY_FOUND);
             SET_EVENTINF(EVENTINF_15);
-            this->unk_2F4 = func_8092CCEC;
+            this->msgScriptCallback = func_8092CCEC;
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = EnDns_DoNothing;
         } else if (CHECK_EVENTINF(EVENTINF_16)) {
-            func_8092CCEC(this, play);
+            func_8092CCEC(&this->actor, play);
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = func_8092D330;
         }
@@ -455,9 +509,9 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         if (func_8092CE38(this)) {
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
         }
-    } else if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
+    } else if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->unk_2F4 = NULL;
+        this->msgScriptCallback = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
             if (!CHECK_EVENTINF(EVENTINF_15)) {
                 this->skelAnime.curFrame = this->animCurFrame;
@@ -570,8 +624,8 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
 
-    if (arg4 == 0) {
-        if (arg5 != 0) {
+    if (!arg4) {
+        if (arg5) {
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
@@ -602,14 +656,14 @@ void EnDns_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     s32 phi_v0;
 
     if (this->unk_2C6 & 0x10) {
-        phi_v1 = 1;
-        phi_v0 = 0;
+        phi_v1 = true;
+        phi_v0 = false;
     } else {
-        phi_v1 = 0;
+        phi_v1 = false;
         if (this->unk_2C6 & 0x20) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
     }
 

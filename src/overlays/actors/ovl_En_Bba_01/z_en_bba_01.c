@@ -187,7 +187,7 @@ void EnBba01_Talk(EnHy* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     talkState = Message_GetState(&play->msgCtx);
-    this->inMsgState3 = (talkState == TEXT_STATE_3) ? true : false;
+    this->msgFading = (talkState == TEXT_STATE_FADING) ? true : false;
 
     switch (talkState) {
         case TEXT_STATE_NONE:
@@ -266,8 +266,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -284,7 +284,7 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 && ((play->state.frames % 2) == 0)) {
+    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.msgFading && ((play->state.frames % 2) == 0)) {
         Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 

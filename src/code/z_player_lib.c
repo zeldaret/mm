@@ -200,9 +200,9 @@ void func_801229FC(Player* player) {
         s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &player->maskObjectLoadQueue, NULL);
+        DmaMgr_RequestAsync(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
+                            gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                            &player->maskObjectLoadQueue, NULL);
         player->maskObjectLoadState++;
     } else if (player->maskObjectLoadState == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
@@ -1383,7 +1383,7 @@ u8 Player_GetStrength(void) {
     return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
-u8 Player_GetMask(PlayState* play) {
+PlayerMask Player_GetMask(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->currentMask;
@@ -1812,9 +1812,9 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
         sp48 = Math_FAtan2F(temp_f20, sp58);
-        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        phi_t1 = RAD_TO_BINANG(M_PIf - (Math_FAtan2F(sp54, temp_f20) + ((M_PIf / 2) - sp48)));
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
-        temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
+        temp_f8 = RAD_TO_BINANG(sp48 - sp4C);
 
         if ((s16)(ABS_ALT(skelAnime->jointTable[shinLimbIndex].x) + ABS_ALT(skelAnime->jointTable[shinLimbIndex].y)) <
             0) {
@@ -1979,7 +1979,7 @@ void func_8012536C(void) {
 void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
-    Gfx* dList;
+    Gfx* gfx;
     f32 scale = player->unk_B62 * (10.0f / 51.0f);
     s32 i;
 
@@ -2000,12 +2000,12 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
         phi_a0++;
     }
 
-    dList = POLY_XLU_DISP;
+    gfx = POLY_XLU_DISP;
 
-    gSPMatrix(&dList[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dList[1], object_link_zora_DL_011760);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[1], object_link_zora_DL_011760);
 
-    POLY_XLU_DISP = &dList[2];
+    POLY_XLU_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2262,7 +2262,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 if (sPlayerRightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != PLAYER_SHIELD_NONE) {
-                            //! FAKE
+                            //! FAKE:
                             rightHandDLists = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
@@ -2589,7 +2589,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2851,7 +2851,7 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
+    gSegments[0x0A] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
@@ -2870,7 +2870,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
-        //! FAKE
+        //! FAKE:
         if (1) {}
 
         D_801F59B0[i].y += -10.0f * scaleY;
@@ -2939,7 +2939,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
     if (player->blastMaskTimer != 0) {
         s32 alpha;
 
-        gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
+        gSegments[0x0A] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
@@ -3263,7 +3263,7 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
+s32 func_80128640(PlayState* play, Player* player, Gfx* dList) {
     s32 temp_v1 = player->skelAnime.animation == &gPlayerAnim_cl_maskoff;
     f32 temp_f0;
 
@@ -3334,7 +3334,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Pop();
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
+    } else if (dList == object_link_zora_DL_00E2A0) { // zora guitar
         s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->upperLimbRot.x) * ((f32)(IREG(52) + 20)) / 100.0f);
         s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->upperLimbRot.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
@@ -3607,7 +3607,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        //! FAKE
+        //! FAKE:
         if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
@@ -3702,17 +3702,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         }
 
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             *temp = spF0[0].x;
-                            temp++;
                         }
                     } else {
                         temp = &player->arr_AF0[1];
-                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++, temp++) {
                             spF0[i].x = *temp;
                             spF0[i].y = *temp;
                             spF0[i].z = *temp;
-                            temp++;
                         }
                     }
 
@@ -3731,7 +3729,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        //! FAKE (yes, all of them are required)
+                        //! FAKE: (yes, all of them are required)
                         // https://decomp.me/scratch/AdU3G
                         if (1) {}
                         if (1) {}

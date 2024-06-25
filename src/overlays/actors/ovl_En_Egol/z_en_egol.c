@@ -788,8 +788,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
 
                 /*! @bug The following is supposed to calculate the rotation from vertical to the collision poly normal.
                  * However, the calculation is performed incorrectly. The correct calculation is
-                 * rotToNorm.x = Math_FAtan2F(nz, ny) * 0x8000 / M_PI;
-                 * rotToNorm.z = Math_FAtan2F(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
+                 * rotToNorm.x = RAD_TO_BINANG(Math_FAtan2F(nz, ny));
+                 * rotToNorm.z = RAD_TO_BINANG(Math_FAtan2F(-nx, sqrtf(1.0f - SQ(nx))));
                  */
                 rotToNorm.x = RAD_TO_BINANG_ALT2(-Math_FAtan2F(-nz * ny, 1.0f));
                 rotToNorm.z = RAD_TO_BINANG_ALT2(Math_FAtan2F(-nx * ny, 1.0f));

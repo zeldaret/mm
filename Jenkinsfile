@@ -22,14 +22,14 @@ pipeline {
         }
         stage('Install Python dependencies') {
             steps {
-                echo 'Installing Python dependencies'
-                sh 'python3 -m pip install -r requirements.txt'
+                sh 'bash -c "make -j venv"'
+                sh '.venv/bin/python3 -m pip install GitPython' // Progress script from jenkins requires GitPython
             }
         }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
-                sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 baserom.mm.us.rev1.z64'
+                sh 'cp /usr/local/etc/roms/mm.us.rev1.z64 baseroms/n64-us/baserom.z64'
             }
         }
         stage('Setup') {
@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'bash -c "make -j uncompressed 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
+                sh 'bash -c "make -j rom 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
@@ -74,7 +74,7 @@ pipeline {
         }
         stage('Compress') {
             steps {
-                sh 'bash -c "make -j compressed 2> >(tee tools/warnings_count/warnings_compress_new.txt)"'
+                sh 'bash -c "make -j compress 2> >(tee tools/warnings_count/warnings_compress_new.txt)"'
             }
         }
         stage('Check compress warnings') {
@@ -88,9 +88,9 @@ pipeline {
             }
             steps {
                 sh 'mkdir reports'
-                sh 'python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
-                sh 'python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
-                sh 'python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
+                sh '.venv/bin/python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
+                sh '.venv/bin/python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
+                sh '.venv/bin/python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
                 stash includes: 'reports/*', name: 'reports'
             }
         }
