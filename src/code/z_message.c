@@ -5966,7 +5966,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_OWL_SAVE_0:
             play->state.unk_A3 = 1;
             gSaveContext.save.isOwlSave = true;
-            Play_SaveCycleSceneFlags(&play->state);
+            Play_SaveCycleSceneFlags(play);
             func_8014546C(&play->sramCtx);
 
             if (gSaveContext.fileNum != 0xFF) {

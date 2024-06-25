@@ -428,7 +428,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_1:
             // Setup a black fill-screen, although initialize to 0 alpha
-            Play_FillScreen(&play->state, true, 0, 0, 0, 0);
+            Play_FillScreen(play, true, 0, 0, 0, 0);
             this->storyTimer = 40;
             this->behaviour = (u16)(this->behaviour + 1);
             break;

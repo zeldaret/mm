@@ -1015,7 +1015,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
                 func_80A85620(this->unk_394, &sp40, 2.0f, 0.08f, 60.0f);
-                Play_FillScreen(&play->state, true, 160, 160, 160, 0);
+                Play_FillScreen(play, true, 160, 160, 160, 0);
                 this->unk_370 = 20;
                 this->unk_372 = 10;
                 this->unk_364++;

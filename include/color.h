@@ -26,7 +26,7 @@ typedef struct {
 } Color_RGB16; // size = 0x6
 
 // only use when necessary for alignment purposes
-typedef union {
+typedef union Color_RGBA8_u32 {
     struct {
         u8 r, g, b, a;
     };
