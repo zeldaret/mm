@@ -36,7 +36,6 @@ typedef struct {
     /* 0x4 */ EnTest3ActionFunc actionFunc;
 } struct_80A4168C; // size = 0x8
 
-// Main functions
 void EnTest3_Init(Actor* thisx, PlayState* play2);
 void EnTest3_Destroy(Actor* thisx, PlayState* play2);
 void EnTest3_Update(Actor* thisx, PlayState* play2);
@@ -112,41 +111,85 @@ static EnTest3UnkFunc D_80A416C0[] = {
 };
 
 static PlayerAgeProperties sAgeProperties = {
+    // ceilingCheckHeight
     40.0f,
+    // shadowScale
     60.0f,
+    // unk_08
     11.0f / 17.0f,
+    // unk_0C
     71.0f,
+    // unk_10
     50.0f,
+    // unk_14
     49.0f,
+    // unk_18
     39.0f,
+    // unk_1C
     27.0f,
+    // unk_20
     19.0f,
+    // unk_24
     22.0f,
+    // unk_28
     32.4f,
+    // unk_2C
     32.0f,
+    // unk_30
     48.0f,
+    // unk_34
     11.0f / 17.0f * 70.0f,
+    // wallCheckRadius
     14.0f,
+    // unk_3C
     12.0f,
+    // unk_40
     55.0f,
+    // unk_44
     { 0xFFE8, 0x0DED, 0x036C },
     { { 0xFFE8, 0x0D92, 0x035E }, { 0xFFE8, 0x1371, 0x03A9 }, { 0x0008, 0x1256, 0x017C }, { 0x0009, 0x17EA, 0x0167 } },
     { { 0xFFE8, 0x1371, 0x03A9 }, { 0xFFE8, 0x195F, 0x03A9 }, { 0x0009, 0x17EA, 0x0167 }, { 0x0009, 0x1E0D, 0x017C } },
     { { 0x0008, 0x1256, 0x017C }, { 0x0009, 0x17EA, 0x0167 }, { 0xF9C8, 0x1256, 0x017C }, { 0xF9C9, 0x17EA, 0x0167 } },
-    0x0020,
-    0x0000,
+    // voiceSfxIdOffset
+    SFX_VOICE_BANK_SIZE * 1,
+    // surfaceSfxIdOffset
+    0,
+    // unk_98
     22.0f,
+    // unk_9C
     29.4343f,
+    // openChestAnim
     &gPlayerAnim_clink_demo_Tbox_open,
+    // unk_A4
     &gPlayerAnim_clink_demo_goto_future,
+    // unk_A8
     &gPlayerAnim_clink_demo_return_to_future,
+    // unk_AC
     &gPlayerAnim_clink_normal_climb_startA,
+    // unk_B0
     &gPlayerAnim_clink_normal_climb_startB,
-    { &gPlayerAnim_clink_normal_climb_upL, &gPlayerAnim_clink_normal_climb_upR, &gPlayerAnim_link_normal_Fclimb_upL,
-      &gPlayerAnim_link_normal_Fclimb_upR },
-    { &gPlayerAnim_link_normal_Fclimb_sideL, &gPlayerAnim_link_normal_Fclimb_sideR },
-    { &gPlayerAnim_clink_normal_climb_endAL, &gPlayerAnim_clink_normal_climb_endAR },
-    { &gPlayerAnim_clink_normal_climb_endBR, &gPlayerAnim_clink_normal_climb_endBL },
+    // unk_B4
+    {
+        &gPlayerAnim_clink_normal_climb_upL,
+        &gPlayerAnim_clink_normal_climb_upR,
+        &gPlayerAnim_link_normal_Fclimb_upL,
+        &gPlayerAnim_link_normal_Fclimb_upR,
+    },
+    // unk_C4
+    {
+        &gPlayerAnim_link_normal_Fclimb_sideL,
+        &gPlayerAnim_link_normal_Fclimb_sideR,
+    },
+    // unk_CC
+    {
+        &gPlayerAnim_clink_normal_climb_endAL,
+        &gPlayerAnim_clink_normal_climb_endAR,
+    },
+    // unk_D4
+    {
+        &gPlayerAnim_clink_normal_climb_endBR,
+        &gPlayerAnim_clink_normal_climb_endBL,
+    },
 };
 
 static EffectBlureInit2 sBlureInit = {
@@ -209,7 +252,7 @@ s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     } else {
         this->unk_D94 = actionFunc;
         this->unk_D8A = 0;
-        this->unk_D88 = 0;
+        this->scheduleResult = 0;
         return true;
     }
 }
@@ -218,6 +261,7 @@ s32 func_80A3E80C(EnTest3* this, PlayState* play, s32 arg2) {
     s32 pad;
 
     D_80A4168C[arg2].unk_0(this, play);
+
     if (D_80A4168C[arg2].actionFunc == NULL) {
         // D_80A4168C[arg2].actionFunc is always NULL
         return false;
@@ -243,7 +287,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
     }
     if (textId == 0xFFFF) {
         Message_CloseTextbox(play);
-    } else if (textId) { // != 0
+    } else if ((u32)textId != 0) {
         Message_ContinueTextbox(play, textId);
     }
     if (textId == 0x296B) {
@@ -386,7 +430,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.heldItemAction = PLAYER_IA_NONE;
     this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
-    Player_SetModelGroup(&this->player, 3);
+    Player_SetModelGroup(&this->player, PLAYER_MODELGROUP_DEFAULT);
     play->playerInit(&this->player, play, &gKafeiSkel);
 
     Effect_Add(play, &this->player.meleeWeaponEffectIndex[0], EFFECT_BLURE2, 0, 0, &sBlureInit);
@@ -398,6 +442,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->unk_D90 = GET_PLAYER(play);
     this->player.giObjectSegment = this->unk_D90->giObjectSegment;
     this->player.tatlActor = this->unk_D90->tatlActor;
+
     if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) ||
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
         this->player.currentMask = PLAYER_MASK_KEATON;
@@ -565,7 +610,8 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         &D_80A41854[0], &D_80A41854[1], &D_80A41854[11], &D_80A41854[12], &D_80A41854[19],
     };
 
-    if (((func_80A3F15C(this, play, arg2) || (this->unk_D88 >= 8)) && ((arg2->unk_1_4 == 1) || (arg2->unk_1_4 == 2))) ||
+    if (((func_80A3F15C(this, play, arg2) || (this->scheduleResult >= 8)) &&
+         ((arg2->unk_1_4 == 1) || (arg2->unk_1_4 == 2))) ||
         (arg2->unk_1_4 == 4)) {
         if (arg2->unk_1_4 == 4) {
             this->player.actor.home.rot.y = 0x7FFF;
@@ -599,9 +645,9 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_WAIT);
         }
         Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
-        if (this->unk_D88 == 3) {
+        if (this->scheduleResult == 3) {
             func_80A3F534(this, play);
-        } else if (this->unk_D88 == 5) {
+        } else if (this->scheduleResult == 5) {
             func_80A3F5A4(this, play);
         }
         this->player.actor.textId = this->unk_D78->textId;
@@ -671,7 +717,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
         this->unk_D8A++;
         if (this->unk_D8A == 0) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_04);
-            this->unk_D88 = 0;
+            this->scheduleResult = 0;
         }
     }
     return false;
@@ -690,7 +736,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             this->player.actor.textId = this->unk_D78->textId;
         }
     } else if (D_80A41D20 == 1) {
-        if (this->csId >= 0) {
+        if (this->csId > CS_ID_NONE) {
             if (func_80A3E9DC(this, play)) {
                 this->csId = CS_ID_NONE;
                 Environment_StopTime();
@@ -798,7 +844,7 @@ s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 
     func_80A3F15C(this, play, arg2);
     this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
-    if ((this->unk_D88 < 7) && (this->unk_D88 != 0) && (this->unk_D80 >= 0)) {
+    if ((this->scheduleResult < 7) && (this->scheduleResult != 0) && (this->unk_D80 >= 0)) {
         startTime = now;
     } else {
         startTime = scheduleOutput->time0;
@@ -852,10 +898,10 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     this->unk_D98 = gZeroVec3f;
     if (SubS_TimePathing_Update(this->unk_D7C, &this->unk_DA4, &this->unk_DB4, this->unk_DAC, this->unk_DA8,
                                 &this->unk_DB0, knots, &this->unk_D98, this->unk_D80)) {
-        if (this->unk_D88 == 0x14) {
+        if (this->scheduleResult == 0x14) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_58_80);
             this->player.actor.draw = NULL;
-        } else if (this->unk_D88 == 9) {
+        } else if (this->scheduleResult == 9) {
             D_80A41D64 = 2;
         }
         ret = true;
@@ -895,12 +941,12 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     struct_80A41828* sp3C;
     ScheduleOutput scheduleOutput;
 
-    this->unk_D80 = ((this->unk_D88 == 20) || (this->unk_D88 == 10) || (this->unk_D88 == 9)) ? 3
-                    : Play_InCsMode(play)                                                    ? 0
+    this->unk_D80 = ((this->scheduleResult == 20) || (this->scheduleResult == 10) || (this->scheduleResult == 9)) ? 3
+                    : Play_InCsMode(play)                                                                         ? 0
                                           : R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
-        if (this->unk_D88 != scheduleOutput.result) {
+        if (this->scheduleResult != scheduleOutput.result) {
             sp3C = &D_80A41828[scheduleOutput.result];
             func_80A3F114(this, play);
             if (sp3C->unk_0 != 4) {
@@ -918,8 +964,8 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     } else {
         scheduleOutput.result = 0;
     }
-    this->unk_D88 = scheduleOutput.result;
-    sp3C = &D_80A41828[this->unk_D88];
+    this->scheduleResult = scheduleOutput.result;
+    sp3C = &D_80A41828[this->scheduleResult];
     D_80A417E8[sp3C->unk_0].unk_4(this, play);
 }
 
@@ -996,7 +1042,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
     } else if (play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_NONE)) {
-        if (this->unk_D88 >= 7) {
+        if (this->scheduleResult >= 7) {
             Vec3f worldPos;
 
             Math_Vec3f_Copy(&worldPos, &this->player.actor.world.pos);
@@ -1131,8 +1177,8 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     } else if (limbIndex == KAFEI_LIMB_HEAD) {
         Actor* actor730 = this->player.lockOnActor;
 
-        if ((*dList1 != NULL) && this->player.currentMask && !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
-            // this->player.currentMask != PLAYER_MASK_NONE
+        if ((*dList1 != NULL) && ((u32)this->player.currentMask != PLAYER_MASK_NONE) &&
+            !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
             if ((this->player.skelAnime.animation != &gPlayerAnim_cl_maskoff) &&
                 ((this->player.skelAnime.animation != &gPlayerAnim_cl_setmask) ||
                  (this->player.skelAnime.curFrame >= 12.0f))) {

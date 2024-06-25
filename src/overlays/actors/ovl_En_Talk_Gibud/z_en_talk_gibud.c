@@ -74,23 +74,6 @@ typedef enum EnTalkGibudRequestedItemIndex {
     /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK
 } EnTalkGibudRequestedItemIndex;
 
-typedef enum EnTalkGibudAnimation {
-    /*  0 */ EN_TALK_GIBUD_ANIM_GRAB_ATTACK,
-    /*  1 */ EN_TALK_GIBUD_ANIM_GRAB_END,
-    /*  2 */ EN_TALK_GIBUD_ANIM_GRAB_START,
-    /*  3 */ EN_TALK_GIBUD_ANIM_LOOK_BACK,
-    /*  4 */ EN_TALK_GIBUD_ANIM_CROUCH_WIPING_TEARS,
-    /*  5 */ EN_TALK_GIBUD_ANIM_CROUCH_CRYING,
-    /*  6 */ EN_TALK_GIBUD_ANIM_DEATH,
-    /*  7 */ EN_TALK_GIBUD_ANIM_DAMAGE,
-    /*  8 */ EN_TALK_GIBUD_ANIM_CROUCH_END,
-    /*  9 */ EN_TALK_GIBUD_ANIM_IDLE,
-    /* 10 */ EN_TALK_GIBUD_ANIM_WALK,
-    /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
-    /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
-    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP
-} EnTalkGibudAnimation;
-
 typedef enum EnTalkGibudType {
     /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
     /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
@@ -114,21 +97,39 @@ ActorInit En_Talk_Gibud_InitVars = {
     /**/ EnTalkGibud_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
-    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },
-    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+typedef enum EnTalkGibudAnimation {
+    /*  0 */ EN_TALK_GIBUD_ANIM_GRAB_ATTACK,
+    /*  1 */ EN_TALK_GIBUD_ANIM_GRAB_END,
+    /*  2 */ EN_TALK_GIBUD_ANIM_GRAB_START,
+    /*  3 */ EN_TALK_GIBUD_ANIM_LOOK_BACK,
+    /*  4 */ EN_TALK_GIBUD_ANIM_CROUCH_WIPING_TEARS,
+    /*  5 */ EN_TALK_GIBUD_ANIM_CROUCH_CRYING,
+    /*  6 */ EN_TALK_GIBUD_ANIM_DEATH,
+    /*  7 */ EN_TALK_GIBUD_ANIM_DAMAGE,
+    /*  8 */ EN_TALK_GIBUD_ANIM_CROUCH_END,
+    /*  9 */ EN_TALK_GIBUD_ANIM_IDLE,
+    /* 10 */ EN_TALK_GIBUD_ANIM_WALK,
+    /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
+    /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
+    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP,
+    /* 14 */ EN_TALK_GIBUD_ANIM_MAX
+} EnTalkGibudAnimation;
+
+static AnimationInfo sAnimationInfo[EN_TALK_GIBUD_ANIM_MAX] = {
+    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // EN_TALK_GIBUD_ANIM_GRAB_ATTACK
+    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f }, // EN_TALK_GIBUD_ANIM_GRAB_END
+    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_TALK_GIBUD_ANIM_GRAB_START
+    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // EN_TALK_GIBUD_ANIM_LOOK_BACK
+    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // EN_TALK_GIBUD_ANIM_CROUCH_WIPING_TEARS
+    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // EN_TALK_GIBUD_ANIM_CROUCH_CRYING
+    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // EN_TALK_GIBUD_ANIM_DEATH
+    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // EN_TALK_GIBUD_ANIM_DAMAGE
+    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_TALK_GIBUD_ANIM_CROUCH_END
+    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },        // EN_TALK_GIBUD_ANIM_IDLE
+    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f }, // EN_TALK_GIBUD_ANIM_WALK
+    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // EN_TALK_GIBUD_ANIM_DANCE_SQUAT
+    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },      // EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE
+    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // EN_TALK_GIBUD_ANIM_DANCE_CLAP
 };
 
 static ColliderCylinderInit sCylinderInit = {

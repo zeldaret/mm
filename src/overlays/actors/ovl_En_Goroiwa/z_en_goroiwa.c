@@ -126,7 +126,7 @@ void func_8093E8A0(EnGoroiwa* this) {
     } else if (params == ENGOROIWA_3000_1) {
         phi_f2 = 0.05f;
     } else {
-        phi_f2 = (Rand_ZeroOne() * (f32)0.04) + 0.04f;
+        phi_f2 = (Rand_ZeroOne() * .04f) + 0.04f;
     }
 
     Actor_SetScale(&this->actor, phi_f2);

@@ -64,8 +64,8 @@ static s16 sObjectIds[] = {
  * When these small oscillations happen, the game determines how to scale the appropriate
  * axes by using this table.
  */
-static f32 oscillationTable[] = {
-    -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7,
+static f32 sOscillationTable[] = {
+    -1.0f, -1.0f, -1.0f, -0.7f, 0.0f, 0.7f, 1.0f, 0.7f, 0.0f, -0.7f, -1.0f, -0.7f, 0.0f, 0.7f, 1.0f, 0.7f, 0.0f, -0.7f,
 };
 
 void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
@@ -115,7 +115,7 @@ void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, PlayState* play) {
         s32 requiredScopeTemp;
 
         Actor_SetScale(&this->dyna.actor,
-                       (oscillationTable[play->gameplayFrames % 18] * (0.0001f * this->oscillationTimer)) + 0.01f);
+                       (sOscillationTable[play->gameplayFrames % 18] * (0.0001f * this->oscillationTimer)) + 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->oscillationTimer--;
     } else {

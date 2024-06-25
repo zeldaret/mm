@@ -109,7 +109,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
 
     if ((fire->flags & FIRE_FLAG_WATER_EXTINGUISHABLE) && (fire->state != FIRE_STATE_NOT_LIT) &&
         WaterBox_GetSurface1_2(play, &play->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
-        (waterY - fire->position.y > 6500.0f * fire->yScale)) {
+        ((waterY - fire->position.y) > (6500.0f * fire->yScale))) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_DEKU_STICK)) {

@@ -75,7 +75,7 @@ static PlayerAnimationHeader* gPlayerAnimations[] = {
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
-static Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f };
+static Vec3f D_80BFB2F4 = { 500.0f, -500.0f, 0.0f };
 
 static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 

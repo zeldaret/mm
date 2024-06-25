@@ -1660,7 +1660,7 @@ s32 CollisionCheck_SetATvsAC(PlayState* play, Collider* at, ColliderInfo* atInfo
             if (effect == 0) {
                 return 0;
             }
-        } else if (CollisionCheck_ApplyBumperDefense(damage, acInfo) < 1.0f && effect == 0) {
+        } else if ((CollisionCheck_ApplyBumperDefense(damage, acInfo) < 1.0f) && (effect == 0)) {
             return 0;
         }
     }
@@ -3374,7 +3374,7 @@ void CollisionCheck_ApplyDamage(PlayState* play, CollisionCheckContext* colCtxt,
                 }
             } else {
                 finalDamage = CollisionCheck_ApplyBumperDefense(damage, info);
-                if (finalDamage < 1.0f && effect == 0) {
+                if ((finalDamage < 1.0f) && (effect == 0)) {
                     return;
                 }
             }

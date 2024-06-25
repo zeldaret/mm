@@ -1930,8 +1930,8 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
             if (sSunDepthTestY < 0) {
                 sSunDepthTestY = 0;
             }
-            if (sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0) || screenPos.x < 0.0f || screenPos.y < 0.0f ||
-                screenPos.x > SCREEN_WIDTH || screenPos.y > SCREEN_HEIGHT) {
+            if ((sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0)) || (screenPos.x < 0.0f) || (screenPos.y < 0.0f) ||
+                (screenPos.x > SCREEN_WIDTH) || (screenPos.y > SCREEN_HEIGHT)) {
                 isOffScreen = true;
             }
         }

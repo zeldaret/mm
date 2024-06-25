@@ -284,7 +284,7 @@ s32 DemoEffect_OverrideLimbDrawTimewarp(PlayState* play, SkelCurve* skelCurve, s
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (limbIndex == 0) {
+    if (limbIndex == TIMEWARP_LIMB_NONE) {
         s16* transform = skelCurve->jointTable[LIMB_ROOT_POS];
 
         transform[2] = transform[0] = 1024;
