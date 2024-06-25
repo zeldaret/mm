@@ -139,7 +139,7 @@ typedef struct PauseContext {
     /* 0x238 */ s16 cursorPoint[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x242 */ s16 cursorXIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x24C */ s16 cursorYIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
-    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
+    /* 0x256 */ s16 cursorMapDungeonItem; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;

@@ -428,7 +428,7 @@ void Lights_DrawGlow(PlayState* play) {
 
         gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
 
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);

@@ -295,7 +295,7 @@ void func_8088A894(EnArrow* this, PlayState* play) {
         return;
     }
 
-    temp_f0 = Math3D_LengthSquared(&sp68);
+    temp_f0 = Math3D_Vec3fMagnitudeSq(&sp68);
     if (temp_f0 < 1.0f) {
         return;
     }

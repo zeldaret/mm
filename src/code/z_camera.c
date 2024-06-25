@@ -1240,7 +1240,7 @@ s32 func_800CD44C(Camera* camera, VecGeo* diffGeo, CameraCollision* camEyeCollis
             // different bgIds for at->eye[Next] and eye[Next]->at
             ret = 3;
         } else {
-            cosEyeAt = Math3D_Parallel(&camEyeCollision->norm, &camAtCollision->norm);
+            cosEyeAt = Math3D_Cos(&camEyeCollision->norm, &camAtCollision->norm);
             if (cosEyeAt < -0.5f) {
                 ret = 6;
             } else if ((cosEyeAt > 0.5f) || (checkEye & 2)) {
@@ -1822,20 +1822,18 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
     if (swing->unk_64 == 1) {
         if (arg3 < (sp88 = OLib_Vec3fDist(at, &swing->collisionClosePoint))) {
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
-                                                          swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist,
-                                                          at)) > 0.0f) {
+        } else if ((sp88 = Math3D_PlaneF(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
+                                         swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist, at)) > 0.0f) {
             swing->unk_64 = 0;
         } else if ((sp88 = OLib_Vec3fDist(eye, &swing->eyeAtColChk.pos)) < 10.0f) {
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
-                                                          swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist,
-                                                          eye)) > 0.0f) {
+        } else if ((sp88 = Math3D_PlaneF(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
+                                         swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist, eye)) > 0.0f) {
             swing->unk_64 = 0;
         } else if (swing->atEyeColChk.norm.y > 0.50f) {
             swing->unk_64 = 0;
         } else {
-            Math3D_AngleBetweenVectors(&camera->unk_0F0, &swing->eyeAtColChk.norm, &sp88);
+            Math3D_CosOut(&camera->unk_0F0, &swing->eyeAtColChk.norm, &sp88);
             if (sp88 > 0.0f) {
                 swing->unk_64 = 0;
             }
@@ -5415,8 +5413,8 @@ s32 Camera_Unique0(Camera* camera) {
     switch (camera->animState) {
         case 0:
             bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-            rwData->unk_1C = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
-            camera->eye = camera->eyeNext = rwData->unk_1C;
+            rwData->unk_1C.point = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
+            camera->eye = camera->eyeNext = rwData->unk_1C.point;
             rwData->unk_34 = bgCamFuncData->rot;
 
             temp_v1 = bgCamFuncData->fov;
@@ -5447,7 +5445,7 @@ s32 Camera_Unique0(Camera* camera) {
             }
             rwData->unk_3A = camera->focalActor->world.rot.y;
             rwData->unk_3E = 0;
-            camera->eye = camera->eyeNext = rwData->unk_1C;
+            camera->eye = camera->eyeNext = rwData->unk_1C.point;
             Camera_UnsetStateFlag(camera, CAM_STATE_2);
             camera->animState++;
             // fallthrough
@@ -5455,8 +5453,8 @@ s32 Camera_Unique0(Camera* camera) {
             sp84.r = OLib_Vec3fDist(&sp8C, &camera->eye);
             sp84.yaw = rwData->unk_34.y;
             sp84.pitch = -rwData->unk_34.x;
-            rwData->unk_28 = OLib_VecGeoToVec3f(&sp84);
-            func_80179A44(&rwData->unk_1C, focalActorPosRot, &rwData->unk_0C);
+            rwData->unk_1C.dir = OLib_VecGeoToVec3f(&sp84);
+            Math3D_LineClosestToPoint(&rwData->unk_1C, &focalActorPosRot->pos, &rwData->unk_0C);
             camera->at = rwData->unk_0C;
 
             if (player->stateFlags1 & PLAYER_STATE1_20000000) {

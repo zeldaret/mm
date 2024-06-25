@@ -312,12 +312,12 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
+    Math3D_Vec3f_Cross(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
     Matrix_RotateAxisF(rotation, &vec2, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
-    Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
+    Math3D_Vec3f_Cross(&this->unk_2E8, &floorNorm, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
     Math_Vec3f_Copy(&this->unk_2DC, &floorNorm);
     return true;
@@ -569,9 +569,9 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->unk_2DC.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
         this->unk_2DC.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
         this->unk_2DC.z = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
-        Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
+        Math3D_Vec3f_Cross(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         EnPametfrog_Vec3fNormalize(&this->unk_2E8);
-        Math3D_CrossProduct(&this->unk_2E8, &this->unk_2DC, &this->unk_2D0);
+        Math3D_Vec3f_Cross(&this->unk_2E8, &this->unk_2DC, &this->unk_2D0);
         EnPametfrog_Vec3fNormalize(&this->unk_2D0);
         func_8086A238(this);
         this->actor.floorPoly = this->actor.wallPoly;
@@ -684,7 +684,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, PlayState* play) {
         Matrix_RotateAxisF(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
         Matrix_MultVec3f(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
-        Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
+        Math3D_Vec3f_Cross(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
         if (((play->gameplayFrames % 60) == 0) && (Rand_ZeroOne() < 0.8f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_FROG_REAL);
@@ -1064,7 +1064,7 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, PlayState* play) {
 
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) &&
         Actor_IsFacingPlayer(&this->actor, 0x3000) &&
-        (this->skelAnime.curFrame <= 2.0f || this->skelAnime.curFrame >= 11.0f)) {
+        ((this->skelAnime.curFrame <= 2.0f) || (this->skelAnime.curFrame >= 11.0f))) {
         EnPametfrog_SetupMeleeAttack(this);
     }
 }

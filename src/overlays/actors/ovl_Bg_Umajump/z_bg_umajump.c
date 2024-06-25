@@ -72,8 +72,8 @@ void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->horse != NULL) && (player != NULL) &&
-        (Math3D_XZDistance(this->horse->world.pos.x, this->horse->world.pos.z, player->actor.world.pos.x,
-                           player->actor.world.pos.z) < 1400.0f)) {
+        (Math3D_Dist2D(this->horse->world.pos.x, this->horse->world.pos.z, player->actor.world.pos.x,
+                       player->actor.world.pos.z) < 1400.0f)) {
         this->actionFunc = BgUmajump_PlayCutscene;
     }
 }

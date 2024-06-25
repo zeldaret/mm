@@ -552,6 +552,9 @@ typedef enum PlayerLedgeClimbType {
 
 #define LEDGE_DIST_MAX 399.96002f
 
+// TODO: less dumb name
+#define SFX_VOICE_BANK_SIZE 0x20
+
 typedef struct PlayerAgeProperties {
     /* 0x00 */ f32 ceilingCheckHeight;
     /* 0x04 */ f32 shadowScale;

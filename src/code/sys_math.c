@@ -2,6 +2,7 @@
  * Maths library: two factorials, integer power, wrappers for libultra's sins and coss (the main ones used), and some
  * random functions moved from OoT's z_actor
  */
+
 #include "global.h"
 
 static f32 sFactorialTbl[] = {

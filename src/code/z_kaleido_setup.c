@@ -160,18 +160,18 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->roll = -314.0f;
 
-    pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorPoint[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     pauseCtx->pageSwitchInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
-    pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorItem[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
     pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
     pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
-    pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorSlot[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
     pauseCtx->ocarinaSongIndex = -1;

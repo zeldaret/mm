@@ -355,7 +355,7 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
             CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_Kill(&this->dyna.actor);
         }
-    } else if (this->dyna.actor.csId >= 0) {
+    } else if (this->dyna.actor.csId > CS_ID_NONE) {
         if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
             Actor_Kill(&this->dyna.actor);
         }

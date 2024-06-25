@@ -259,22 +259,22 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     }
 
     if (!(this->unk_164 & 0x1000)) {
-        if (Math3D_XZBoundCheck(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
-                                this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
+                                   this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
             this->unk_164 |= 0x1000;
         }
     }
 
     if (!(this->unk_164 & 0x2000) && (this->unk_164 & 0x1000)) {
-        if (Math3D_XZBoundCheck(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3],
-                                this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3],
+                                   this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
             this->unk_164 |= 0x2000;
         }
     }
 
     if (!(this->unk_164 & 0x4000) && (this->unk_164 & 0x2000)) {
-        if (Math3D_XZBoundCheck(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3],
-                                this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3],
+                                   this->horse1->actor.world.pos.x, this->horse1->actor.world.pos.z)) {
             this->unk_164 |= 0x4000;
         }
     }
@@ -292,22 +292,22 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     }
 
     if (!(this->unk_164 & 0x80000)) {
-        if (Math3D_XZBoundCheck(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
-                                this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
+                                   this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
             this->unk_164 |= 0x80000;
         }
     }
 
     if (!(this->unk_164 & 0x100000) && (this->unk_164 & 0x80000)) {
-        if (Math3D_XZBoundCheck(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3],
-                                this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3],
+                                   this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
             this->unk_164 |= 0x100000;
         }
     }
 
     if (!(this->unk_164 & 0x200000) && (this->unk_164 & 0x100000)) {
-        if (Math3D_XZBoundCheck(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3],
-                                this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
+        if (Math3D_PointInSquare2D(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3],
+                                   this->horse2->actor.world.pos.x, this->horse2->actor.world.pos.z)) {
             this->unk_164 |= 0x200000;
         }
     }
@@ -324,20 +324,20 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         this->unk_174 = 60;
     }
 
-    if (!(this->unk_164 & 0x20) && Math3D_XZBoundCheck(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
-                                                       horse->actor.world.pos.x, horse->actor.world.pos.z)) {
+    if (!(this->unk_164 & 0x20) && Math3D_PointInSquare2D(D_808F9BAC[0], D_808F9BAC[1], D_808F9BAC[2], D_808F9BAC[3],
+                                                          horse->actor.world.pos.x, horse->actor.world.pos.z)) {
         this->unk_164 |= 0x20;
     }
 
     if (!(this->unk_164 & 0x40) && (this->unk_164 & 0x20) &&
-        Math3D_XZBoundCheck(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3], horse->actor.world.pos.x,
-                            horse->actor.world.pos.z)) {
+        Math3D_PointInSquare2D(D_808F9BBC[0], D_808F9BBC[1], D_808F9BBC[2], D_808F9BBC[3], horse->actor.world.pos.x,
+                               horse->actor.world.pos.z)) {
         this->unk_164 |= 0x40;
     }
 
     if (!(this->unk_164 & 0x80) && (this->unk_164 & 0x40) &&
-        Math3D_XZBoundCheck(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3], horse->actor.world.pos.x,
-                            horse->actor.world.pos.z)) {
+        Math3D_PointInSquare2D(D_808F9BCC[0], D_808F9BCC[1], D_808F9BCC[2], D_808F9BCC[3], horse->actor.world.pos.x,
+                               horse->actor.world.pos.z)) {
         this->unk_164 |= 0x80;
     }
 

@@ -3184,7 +3184,7 @@ void Actor_CleanupContext(ActorContext* actorCtx, PlayState* play) {
         actorCtx->absoluteSpace = NULL;
     }
 
-    Play_SaveCycleSceneFlags(&play->state);
+    Play_SaveCycleSceneFlags(play);
     ActorOverlayTable_Cleanup();
 }
 
@@ -3413,9 +3413,9 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play
 }
 
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
-    TransitionActorEntry* transitionActorList = play->doorCtx.transitionActorList;
+    TransitionActorEntry* transitionActorList = play->transitionActors.list;
     s32 i;
-    s16 numTransitionActors = play->doorCtx.numTransitionActors;
+    s16 numTransitionActors = play->transitionActors.count;
 
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
@@ -3434,7 +3434,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                                                   transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }
-                numTransitionActors = play->doorCtx.numTransitionActors;
+                numTransitionActors = play->transitionActors.count;
             }
         }
     }
@@ -4023,7 +4023,7 @@ typedef struct {
 } DoorLockInfo; // size = 0x1C
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
-    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0f, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
     /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, gBossDoorChainDL, gBossDoorLockDL },
     /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainDL, gDoorLockDL },
 };
@@ -4141,7 +4141,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
 
     // Find the point closest to srcPos
     for (pointIndex = 0; pointIndex < numPoints; pointIndex++) {
-        distSq = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, points[pointIndex].x, points[pointIndex].z);
+        distSq = Math3D_Dist2DSq(srcPos->x, srcPos->z, points[pointIndex].x, points[pointIndex].z);
         if (distSq < closestPointDistSq) {
             closestPointDistSq = distSq;
             closestPointIndex = pointIndex;
@@ -4166,8 +4166,8 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
     if ((closestPointIndex != 0) || isPathLoop) {
         // Use the adjacent line
         useAdjacentLines[0] =
-            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
-                                     closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
+            Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
+                                           closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
     }
 
     // Analyze point on path immediately next to the closest point
@@ -4183,8 +4183,8 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
     }
     if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
         useAdjacentLines[1] =
-            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
-                                     closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
+            Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
+                                           closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
     }
 
     /**
@@ -4202,7 +4202,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
             if (useAdjacentLines[i]) {
                 // Get distSq from srcPos to closestPos
-                loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
+                loopDistSq[i] = Math3D_Dist2DSq(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
                 // The closest Pos is not contained within the line-segment
                 loopDistSq[i] = SQ(40000.0f);
@@ -4221,9 +4221,9 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         // srcPos is somewhere withing the bend of the path
         if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
             // srcPos is not inside a loop
-            if (!Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
-                                          closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
-                // The dstPos calculated in Math3D_PointDistToLine2D was not valid.
+            if (!Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
+                                                closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
+                // The dstPos calculated in Math3D_PointDistSqToLine2DImpl was not valid.
                 // Take the midpoint of the two closest ponits instead
                 dstPos->x = (closestPos[1].x + closestPos[0].x) * 0.5f;
                 dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
@@ -4968,7 +4968,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     alpha = bodyPartIndex & 3;
                     alpha = effectAlphaScaled - 30.0f * alpha;
-                    if (effectAlphaScaled < 30.0f * (bodyPartIndex & 3)) {
+                    if (effectAlphaScaled < (30.0f * (bodyPartIndex & 3))) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {

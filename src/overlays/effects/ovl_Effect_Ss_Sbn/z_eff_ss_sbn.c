@@ -107,7 +107,7 @@ u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParam
         bubbleVec.x = -mtx.mf[2][0] * 10.0f;
         bubbleVec.y = -mtx.mf[2][1] * 10.0f;
         bubbleVec.z = -mtx.mf[2][2] * 10.0f;
-        Math3D_AngleBetweenVectors(&colPolyVec, &bubbleVec, &angle);
+        Math3D_CosOut(&colPolyVec, &bubbleVec, &angle);
 
         opposite = (SQ(angle) >= 1.0f) ? 0.0f : sqrtf(1.0f - SQ(angle));
         if (((mtx.mf[0][0] * colPolyVec.x) + (mtx.mf[0][1] * colPolyVec.y) + (mtx.mf[0][2] * colPolyVec.z)) < 0.0f) {

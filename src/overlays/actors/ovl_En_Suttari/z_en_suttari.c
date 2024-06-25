@@ -591,7 +591,7 @@ s32 EnSuttari_HasReachedPointForward(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -625,7 +625,7 @@ s32 EnSuttari_HasReachedPointReverse(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index - 1].z - points[index + 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -696,7 +696,7 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     if (this->timePath == NULL) {
         return 0;
     }
-    if ((this->unk428 != 0) && (this->unk428 < 0xC) && (this->timePathTimeSpeed >= 0)) {
+    if ((this->scheduleResult != 0) && (this->scheduleResult < 0xC) && (this->timePathTimeSpeed >= 0)) {
         phi_a0 = sp26;
     } else {
         phi_a0 = scheduleOutput->time0;
@@ -725,7 +725,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     Vec3s* sp28;
     s32 sp24;
 
-    if ((this->unk428 == 10) || (this->unk428 == 11) || (this->unk428 == 2)) {
+    if ((this->scheduleResult == 10) || (this->scheduleResult == 11) || (this->scheduleResult == 2)) {
         return false;
     }
     door = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
@@ -858,7 +858,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    switch (this->unk428) {
+    switch (this->scheduleResult) {
         case 12:
         case 13:
             this->flags1 |= 0x80;
@@ -1130,16 +1130,16 @@ void func_80BACEE0(EnSuttari* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk428 = scheduleOutput.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
     func_80BAB434(this);
-    if (this->unk428 == 5) {
+    if (this->scheduleResult == 5) {
         SET_WEEKEVENTREG(WEEKEVENTREG_58_80);
         this->actionFunc = func_80BADDB4;
         this->actor.speed = 0.0f;
@@ -1154,20 +1154,23 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk428 = scheduleOutput.result;
+
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
+
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
+
     Actor_MoveWithGravity(&this->actor);
 }
 
@@ -1281,13 +1284,13 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     }
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk428 = scheduleOutput.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
     if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
         Actor_Kill(&this->actor);
@@ -1319,13 +1322,13 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
         }
         this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
         if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-            ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+            ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             scheduleOutput.result = 0;
         } else {
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         }
-        this->unk428 = scheduleOutput.result;
+        this->scheduleResult = scheduleOutput.result;
         func_80BAC2FC(this, play);
         if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
             Actor_Kill(&this->actor);
@@ -1513,7 +1516,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
     if (this->flags2 & 2) {
         EnSuttari_AdvanceTime();
     }
-    if (this->unk428 != 0) {
+    if (this->scheduleResult != 0) {
         if ((this->animIndex == SUTTARI_ANIM_2) || (this->animIndex == SUTTARI_ANIM_6)) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);
