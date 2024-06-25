@@ -29,11 +29,10 @@
 #include "z64transition.h"
 #include "z64view.h"
 
-// TODO: Move to its own header?
-typedef struct SequenceContext {
+typedef struct SceneSequences {
     /* 0x0 */ u8 seqId;
     /* 0x1 */ u8 ambienceId;
-} SequenceContext; // size = 0x2
+} SceneSequences; // size = 0x2
 
 typedef struct PlayState {
     /* 0x00000 */ GameState state;
@@ -47,7 +46,7 @@ typedef struct PlayState {
     /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
     /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
-    /* 0x00814 */ SequenceContext sequenceCtx;
+    /* 0x00814 */ SceneSequences sceneSequences;
     /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;

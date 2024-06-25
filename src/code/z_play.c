@@ -2329,8 +2329,8 @@ void Play_Init(GameState* thisx) {
     CutsceneManager_StoreCamera(&this->mainCamera);
     Interface_SetSceneRestrictions(this);
     Environment_PlaySceneSequence(this);
-    gSaveContext.seqId = this->sequenceCtx.seqId;
-    gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
+    gSaveContext.seqId = this->sceneSequences.seqId;
+    gSaveContext.ambienceId = this->sceneSequences.ambienceId;
     AnimationContext_Update(this, &this->animationCtx);
     Cutscene_HandleEntranceTriggers(this);
     gSaveContext.respawnFlag = 0;
