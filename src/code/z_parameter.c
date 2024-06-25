@@ -2370,7 +2370,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
-                        SREG(89) = 1;
+                        R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_SETUP;
                         play->haltAllActors = true;
                         sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
                         sPictoPhotoBeingTaken = true;

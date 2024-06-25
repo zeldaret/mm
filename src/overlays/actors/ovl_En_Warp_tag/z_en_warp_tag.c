@@ -86,7 +86,7 @@ void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
 void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObjectSlot)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
-        DynaPolyActor_Init(&this->dyna, 0x1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
         this->dyna.actor.objectSlot = this->dangeonKeepObjectSlot;
         this->dyna.actor.draw = EnWarpTag_Draw;

@@ -11,9 +11,8 @@ struct DynaPolyActor;
 
 #define SS_NULL 0xFFFF
 
-#define COLPOLY_NORMAL_FRAC (1.0f / SHRT_MAX)
 #define COLPOLY_SNORMAL(x) ((s16)((x) * SHRT_MAX))
-#define COLPOLY_GET_NORMAL(n) ((n)*COLPOLY_NORMAL_FRAC)
+#define COLPOLY_GET_NORMAL(n) ((n) * (1.0f / SHRT_MAX))
 #define COLPOLY_VIA_FLAG_TEST(vIA, flags) ((vIA) & (((flags)&7) << 13))
 #define COLPOLY_VTX_INDEX(vI) ((vI)&0x1FFF)
 

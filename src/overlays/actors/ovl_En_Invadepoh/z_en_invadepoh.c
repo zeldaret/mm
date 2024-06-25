@@ -29,9 +29,9 @@
  * system is mainly used to manage their blinking.
  */
 
-#include "prevent_bss_reordering.h"
-#include "sys_cfb.h"
 #include "z_en_invadepoh.h"
+
+#include "sys_cfb.h"
 #include "z64horse.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"

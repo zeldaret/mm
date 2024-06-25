@@ -268,7 +268,7 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
     f32* sp2C = D_80A67620[OBJDRIFTICE_GET_3(&this->dyna.actor)];
     Path* path;
-    s32 phi_a1;
+    s32 transformFlags;
     s32 sp20;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -289,18 +289,18 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
         sp20 = 1;
     }
 
-    this->unk_244 = thisx->home.rot.z * 45.511112f;
+    this->unk_244 = thisx->home.rot.z * (0x8000 / 720.0f);
 
-    phi_a1 = 0;
+    transformFlags = 0;
     if (sp20 == 0) {
-        phi_a1 = 1;
+        transformFlags = DYNA_TRANSFORM_POS;
     }
 
     if (thisx->home.rot.z != 0) {
-        phi_a1 |= 3;
+        transformFlags |= DYNA_TRANSFORM_ROT_Y | DYNA_TRANSFORM_POS;
     }
 
-    DynaPolyActor_Init(&this->dyna, phi_a1);
+    DynaPolyActor_Init(&this->dyna, transformFlags);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_driftice_Colheader_001AA8);
 
     if (sp20 != 0) {
