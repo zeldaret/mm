@@ -16,6 +16,66 @@ typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Colli
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
+#include "prevent_bss_reordering2.h"
+// clang-format off
+// Partial structs taken from "prevent_bss_reordering.h"
+struct Dummy200 { int x; };
+struct Dummy201 { int x; };
+struct Dummy202 { int x; };
+struct Dummy203 { int x; };
+struct Dummy204 { int x; };
+struct Dummy205 { int x; };
+struct Dummy206 { int x; };
+struct Dummy207 { int x; };
+struct Dummy208 { int x; };
+struct Dummy209 { int x; };
+struct Dummy210 { int x; };
+struct Dummy211 { int x; };
+struct Dummy212 { int x; };
+struct Dummy213 { int x; };
+struct Dummy214 { int x; };
+struct Dummy215 { int x; };
+struct Dummy216 { int x; };
+struct Dummy217 { int x; };
+struct Dummy218 { int x; };
+struct Dummy219 { int x; };
+struct Dummy220 { int x; };
+struct Dummy221 { int x; };
+struct Dummy222 { int x; };
+struct Dummy223 { int x; };
+struct Dummy224 { int x; };
+struct Dummy225 { int x; };
+struct Dummy226 { int x; };
+struct Dummy227 { int x; };
+struct Dummy228 { int x; };
+struct Dummy229 { int x; };
+struct Dummy230 { int x; };
+struct Dummy231 { int x; };
+struct Dummy232 { int x; };
+struct Dummy233 { int x; };
+struct Dummy234 { int x; };
+struct Dummy235 { int x; };
+struct Dummy236 { int x; };
+struct Dummy237 { int x; };
+struct Dummy238 { int x; };
+struct Dummy239 { int x; };
+struct Dummy240 { int x; };
+struct Dummy241 { int x; };
+struct Dummy242 { int x; };
+struct Dummy243 { int x; };
+struct Dummy244 { int x; };
+struct Dummy245 { int x; };
+struct Dummy246 { int x; };
+struct Dummy247 { int x; };
+struct Dummy248 { int x; };
+struct Dummy249 { int x; };
+struct Dummy250 { int x; };
+struct Dummy251 { int x; };
+struct Dummy252 { int x; };
+struct Dummy253 { int x; };
+struct Dummy254 { int x; };
+// clang-format on
+
 Vec3f D_801EDE00;
 Vec3f D_801EDE10;
 Vec3f D_801EDE20;
@@ -40,27 +100,7 @@ TriNorm D_801EE0E8[2];
 TriNorm D_801EE150;
 TriNorm D_801EE188;
 
-#ifndef NON_MATCHING
-Vec3f D_801EE1C0;
-Vec3f D_801EE1D0;
-Vec3f D_801EE1E0;
-Vec3f D_801EE1F0;
-EffectSparkInit D_801EE200;
-#endif
-
-TriNorm D_801EE6C8;
-TriNorm D_801EE700;
-
-#ifndef NON_MATCHING
-EffectSparkInit D_801EE738;
-EffectSparkInit D_801EEC00;
-EffectSparkInit D_801EF0C8;
-#endif
-
-TriNorm D_801EF590;
-TriNorm D_801EF5C8;
-TriNorm D_801EF600;
-TriNorm D_801EF638;
+#include "prevent_bss_reordering.h"
 
 /**
  * Gets the damage and effect that should be applied for the collision between
@@ -1281,6 +1321,9 @@ ColChkResetFunc sOCResetFuncs[] = {
     Collider_ResetQuadOC,   Collider_ResetSphereOC,
 };
 
+TriNorm D_801EE6C8;
+TriNorm D_801EE700;
+
 /**
  * Sets collider as an OC (object collider) for the current frame, allowing it to detect other OCs.
  */
@@ -1401,8 +1444,6 @@ void CollisionCheck_NoBlood(struct PlayState* play, Collider* collider, Vec3f* v
  * Spawns blue blood drops.
  * Used by collider types HIT0 and HIT8.
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CollisionCheck_BlueBlood(struct PlayState* play, Collider* collider, Vec3f* v) {
     static EffectSparkInit D_801EEC00;
     s32 effectIndex;
@@ -1451,16 +1492,11 @@ void CollisionCheck_BlueBlood(struct PlayState* play, Collider* collider, Vec3f*
 
     Effect_Add(play, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EEC00);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.s")
-#endif
 
 /**
  * Spawns green blood drops.
  * Used by collider types HIT2 and HIT6. No actor has type HIT2.
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CollisionCheck_GreenBlood(struct PlayState* play, Collider* collider, Vec3f* v) {
     static EffectSparkInit D_801EF0C8;
     s32 effectIndex;
@@ -1508,9 +1544,9 @@ void CollisionCheck_GreenBlood(struct PlayState* play, Collider* collider, Vec3f
     D_801EF0C8.gravity = -1.0f;
     Effect_Add(play, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EF0C8);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.s")
-#endif
+
+TriNorm D_801EF590;
+TriNorm D_801EF5C8;
 
 /**
  * Spawns a burst of water.
@@ -1725,6 +1761,9 @@ void CollisionCheck_QuadAvgPoint(ColliderQuad* quad, Vec3f* avg) {
     avg->y = (quad->dim.quad[0].y + (quad->dim.quad[1].y + (quad->dim.quad[3].y + quad->dim.quad[2].y))) / 4.0f;
     avg->z = (quad->dim.quad[0].z + (quad->dim.quad[1].z + (quad->dim.quad[3].z + quad->dim.quad[2].z))) / 4.0f;
 }
+
+TriNorm D_801EF600;
+TriNorm D_801EF638;
 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
@@ -3687,8 +3726,6 @@ void Collider_SetTrisDim(struct PlayState* play, ColliderTris* collider, s32 ind
 /**
  * Updates the world spheres for all of the collider's JntSph elements attached to the specified limb
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
     static Vec3f D_801EE1C0;
     static Vec3f D_801EE1D0;
@@ -3708,9 +3745,6 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/Collider_UpdateSpheres.s")
-#endif
 
 /**
  * Updates the world spheres for the specified ColliderJntSph element
@@ -3731,8 +3765,6 @@ void Collider_UpdateSpheresElement(ColliderJntSph* collider, s32 index, Actor* a
 /**
  * Updates the world sphere for the ColliderSphere if it is attached to the specified limb
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
     static Vec3f D_801EE1E0;
     static Vec3f D_801EE1F0;
@@ -3748,16 +3780,11 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
         collider->dim.worldSphere.radius = collider->dim.modelSphere.radius * collider->dim.scale;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/Collider_UpdateSphere.s")
-#endif
 
 /**
  * Spawns red blood droplets.
  * No actor has a collision type that spawns red blood.
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CollisionCheck_SpawnRedBlood(struct PlayState* play, Vec3f* v) {
     static EffectSparkInit D_801EE200;
     s32 effectIndex;
@@ -3806,16 +3833,11 @@ void CollisionCheck_SpawnRedBlood(struct PlayState* play, Vec3f* v) {
 
     Effect_Add(play, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE200);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.s")
-#endif
 
 /**
  * Spawns water droplets.
  * No actor has a collision type that spawns water droplets.
  */
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v) {
     static EffectSparkInit D_801EE738;
     s32 effectIndex;
@@ -3864,9 +3886,6 @@ void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v) {
 
     Effect_Add(play, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE738);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
-#endif
 
 /**
  * Spawns streaks of light from hits against solid objects
