@@ -4,7 +4,7 @@
  * Description: Great Bay Temple - Elevator
  */
 
-#include "z_bg_dblue_elevator.h"
+#include "z_bg_dblue_elevator.h" 
 
 #define FLAGS (ACTOR_FLAG_10)
 
