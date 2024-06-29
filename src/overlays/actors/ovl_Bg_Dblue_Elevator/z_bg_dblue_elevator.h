@@ -26,13 +26,13 @@ typedef struct BgDblueElevator {
     /* 0x16C */ f32 waterSurfaceYPos;
 } BgDblueElevator; // size = 0x170
 
-struct BgDBlueElevatorStruct1;
+struct BgDblueElevatorStruct1;
 
-typedef s32 (*BgDBlueElevatorStruct1Func)(struct BgDblueElevator*, PlayState*);
+typedef s32 (*BgDblueElevatorStruct1Func)(struct BgDblueElevator*, PlayState*);
 
-typedef struct BgDBlueElevatorStruct1 {
+typedef struct BgDblueElevatorStruct1 {
     /* 0x000 */ s32 isHorizontal;
-    /* 0x004 */ BgDBlueElevatorStruct1Func getWaterFlow;
+    /* 0x004 */ BgDblueElevatorStruct1Func getWaterFlow;
     /* 0x008 */ f32 targetPosOffset;
     /* 0x00C */ s8 pauseDuration;
     /* 0x00D */ s8 initialDirection;
@@ -40,6 +40,6 @@ typedef struct BgDBlueElevatorStruct1 {
     /* 0x010 */ f32 accelerationStep;
     /* 0x014 */ f32 decelerationStep;
     /* 0x018 */ f32 targetPosStep;
-} BgDBlueElevatorStruct1; // size = 0x1C
+} BgDblueElevatorStruct1; // size = 0x1C
 
 #endif // Z_BG_DBLUE_ELEVATOR_H

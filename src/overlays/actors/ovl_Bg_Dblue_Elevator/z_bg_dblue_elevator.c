@@ -40,7 +40,7 @@ ActorInit Bg_Dblue_Elevator_InitVars = {
     (ActorFunc)BgDblueElevator_Draw,
 };
 
-static BgDBlueElevatorStruct1 D_80B92960[4] = {
+static BgDblueElevatorStruct1 D_80B92960[4] = {
     {
         0,
         ((s32(*)(BgDblueElevator*, PlayState*))BgDblueElevator_GetWaterFlowFromCeiling),
@@ -89,7 +89,7 @@ static BgDBlueElevatorStruct1 D_80B92960[4] = {
 
 static s16 D_80B929D0[4] = { -90, -90, 90, 90 };   // Related to splash x pos
 static s16 D_80B929D8[4] = { -100, 90, 90, -100 }; // Related to splash z pos
-static s8 sLargeRipplesLives[4] = { 0, 2, 4, 0 };
+static s8 sLargeRipplesLives[3] = { 0, 2, 4 };
 static s8 sSmallRipplesLives[6] = { 0, 1, 2, 3, 4, 5 };
 
 static InitChainEntry sInitChain[] = {
@@ -124,7 +124,7 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
     Matrix_Push();
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_80B929D0) - 1; i++) {
         v1 = D_80B929D0[i];
         v2 = D_80B929D8[i];
         d1 = D_80B929D0[i + 1] - D_80B929D0[i];
@@ -144,14 +144,14 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
         }
     }
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(sLargeRipplesLives); i++) {
         ripplePos.x = ((Rand_ZeroOne() - 0.5f) * 60.0f) + this->dyna.actor.world.pos.x;
         ripplePos.y = this->waterSurfaceYPos;
         ripplePos.z = ((Rand_ZeroOne() - 0.5f) * 60.0f) + this->dyna.actor.world.pos.z;
         EffectSsGRipple_Spawn(play, &ripplePos, 1000, 3000, sLargeRipplesLives[i]);
     }
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(sSmallRipplesLives); i++) {
         var_fs0 = Rand_ZeroOne();
         var_fs0 = 1.0f - (var_fs0 * var_fs0);
         rn = Rand_Next();
@@ -163,7 +163,7 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
         var_fs0 = Rand_ZeroOne();
         var_fs0 = 1.0f - (var_fs0 * var_fs0);
         rn = Rand_Next();
-        if (rn > 0) { 
+        if (rn > 0) {
             var_fs0 = -var_fs0;
         }
         ripplePos.z = (var_fs0 * 100.0f) + this->dyna.actor.world.pos.z;
@@ -185,7 +185,7 @@ s32 BgDblueElevator_GetWaterFlowFromPipes(Actor* thisx, PlayState* play) {
     BgDblueElevator* this = THIS;
     s32 var_s0 = 0;
 
-    // This checks if first the yellow tank turnkey is open.
+    // This checks if the first the yellow tank turnkey is open.
     if (!Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_7F(&this->dyna.actor, 0))) {
         var_s0 = 1;
     }
@@ -202,14 +202,12 @@ s32 BgDblueElevator_GetWaterFlowFromPipes(Actor* thisx, PlayState* play) {
 void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
     BgDblueElevator* this = THIS;
     PlayState* play = play2;
-    s32 index;
-    BgDBlueElevatorStruct1* ptr;
+    s32 index = BG_DBLUE_ELEVATOR_GET_INDEX(&this->dyna.actor);
+    BgDblueElevatorStruct1* ptr = &D_80B92960[index];
     s32 waterFlow;
-    index = BG_DBLUE_ELEVATOR_GET_INDEX(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    ptr = &D_80B92960[index];
     DynaPolyActor_LoadMesh(play, &this->dyna, &gGreatBayTempleObjectElevatorCol);
     waterFlow = ptr->getWaterFlow(this, play);
 
@@ -218,7 +216,9 @@ void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
     } else {
         this->direction = ptr->initialDirection;
     }
+
     BgDblueElevator_CheckWaterBoxInfo(this, play);
+
     if ((waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED) ||
         (waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS)) {
         BgDblueElevator_SetupWaitForMove(this);
@@ -290,9 +290,9 @@ void BgDblueElevator_SetupMove(BgDblueElevator* this) {
 }
 
 void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
-    BgDBlueElevatorStruct1* ptr;
-    s32 index;
-    s32 waterFlow;
+    s32 index = BG_DBLUE_ELEVATOR_GET_INDEX(&(this->dyna.actor));
+    BgDblueElevatorStruct1* ptr = &D_80B92960[index];
+    s32 waterFlow = (ptr)->getWaterFlow(this, play);
 
     f32 targetPosOffset;
     s32 hasReachedEnd;
@@ -304,11 +304,9 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
     f32 nearWaterSurfaceCheck;
 
     s32 pad;
-    index = BG_DBLUE_ELEVATOR_GET_INDEX(&(this->dyna.actor));
-    ptr = &D_80B92960[index];
-    waterFlow = (ptr)->getWaterFlow(this, play); // flag stuff
+
     if ((waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED) ||
-        (waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS)) { // related to stopping
+        (waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS)) {
         isDeactivated = Math_StepToF(&this->posStep, 0.0f, ptr->decelerationStep);
     } else {
         isDeactivated = 0;
@@ -335,7 +333,7 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
 
     if (!ptr->isHorizontal) {
         this->dyna.actor.world.pos.y = this->posOffset + this->dyna.actor.home.pos.y;
-        if (((this->dyna.actor.flags & 0x40) == 0x40) && (this->isWithinWaterBoxXZ)) { // macro to write
+        if (((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40) && (this->isWithinWaterBoxXZ)) {
             if (this->direction > 0) {
                 nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + (-10.0f)) - this->waterSurfaceYPos) *
                                         ((this->dyna.actor.prevPos.y + (-10.0f)) - this->waterSurfaceYPos);
@@ -355,6 +353,7 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
         Matrix_MultVec3f(&basePosOffset, &posOffset);
         Math_Vec3f_Sum(&this->dyna.actor.home.pos, &posOffset, &this->dyna.actor.world.pos);
     }
+
     if (isDeactivated) {
         BgDblueElevator_SetupWaitForMove(this);
     } else {
@@ -368,7 +367,7 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
 void BgDblueElevator_Update(Actor* thisx, PlayState* play) {
     BgDblueElevator* this = THIS;
 
-    this->actionFunc(this, play); 
+    this->actionFunc(this, play);
 }
 
 void BgDblueElevator_Draw(Actor* thisx, PlayState* play) {
