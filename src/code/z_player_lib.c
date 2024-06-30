@@ -581,15 +581,18 @@ ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_EXPLODE)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_EXPLODE)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_MARCH)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_MARCH)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_DANCE)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_DANCE)) {
             return ITEM_F2;
         }
 
@@ -623,8 +626,8 @@ PlayerItemAction func_80123810(PlayState* play) {
 
     if (gSaveContext.save.unk_06 == 0) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
-            play->interfaceCtx.unk_222 = 0;
-            play->interfaceCtx.unk_224 = 0;
+            play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+            play->interfaceCtx.bButtonInterfaceDoAction = 0;
             Interface_SetHudVisibility(play->msgCtx.hudVisibility);
             return PLAYER_IA_MINUS1;
         }
@@ -637,8 +640,8 @@ PlayerItemAction func_80123810(PlayState* play) {
             i++;
             itemId = Player_GetItemOnButton(play, player, i);
 
-            play->interfaceCtx.unk_222 = 0;
-            play->interfaceCtx.unk_224 = 0;
+            play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+            play->interfaceCtx.bButtonInterfaceDoAction = 0;
             Interface_SetHudVisibility(play->msgCtx.hudVisibility);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {

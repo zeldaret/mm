@@ -3112,7 +3112,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     if (textId == 0xFF) {
-        Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
+        Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
         play->msgCtx.hudVisibility = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
         gSaveContext.save.unk_06 = 20;
@@ -3341,7 +3341,7 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
     msgCtx->stateTimer = 8;
     msgCtx->textDelayTimer = 0;
 
-    if (interfaceCtx->unk_222 == 0) {
+    if (!interfaceCtx->bButtonInterfaceDoActionActive) {
         if (textId != 0x1B93) {
             Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
@@ -3572,7 +3572,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
 
     if (!noStop) {
-        Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
+        Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
         noStop = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_B_ALT);
         gSaveContext.hudVisibility = noStop;
@@ -5706,7 +5706,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                             gSaveContext.prevHudVisibility = HUD_VISIBILITY_A_B;
-                            Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
+                            Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
                             GameState_SetFramerateDivisor(&play->state, 2);
                             if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                 ShrinkWindow_Letterbox_SetSizeTarget(0);

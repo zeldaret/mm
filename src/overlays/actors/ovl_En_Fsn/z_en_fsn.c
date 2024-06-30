@@ -417,8 +417,8 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
-    play->interfaceCtx.unk_222 = 0;
-    play->interfaceCtx.unk_224 = 0;
+    play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+    play->interfaceCtx.bButtonInterfaceDoAction = 0;
     this->actor.textId = 0;
     this->actionFunc = EnFsn_Idle;
 }

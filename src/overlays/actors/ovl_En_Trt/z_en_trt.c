@@ -228,8 +228,8 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
-    play->interfaceCtx.unk_222 = 0;
-    play->interfaceCtx.unk_224 = 0;
+    play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+    play->interfaceCtx.bButtonInterfaceDoAction = 0;
     this->textId = 0x834;
     this->timer = 80;
     this->flags |= ENTRT_FULLY_AWAKE;

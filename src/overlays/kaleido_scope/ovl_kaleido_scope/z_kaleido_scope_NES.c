@@ -357,7 +357,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
         // Switch the page to the right regardless of where the cursor is
-        if (interfaceCtx->aButtonHorseDoAction == DO_ACTION_DECIDE) {
+        if (interfaceCtx->aButtonDoActionDelayed == DO_ACTION_DECIDE) {
             Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
@@ -366,7 +366,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
         // Switch the page to the left regardless of where the cursor is
-        if (interfaceCtx->aButtonHorseDoAction == DO_ACTION_DECIDE) {
+        if (interfaceCtx->aButtonDoActionDelayed == DO_ACTION_DECIDE) {
             Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
@@ -2797,7 +2797,7 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
         pauseCtx->state++; // PAUSE_STATE_MAIN
         pauseCtx->alpha = 255;
-        Interface_LoadBButtonDoActionLabel(play, DO_ACTION_RETURN);
+        Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_RETURN);
     } else if (pauseCtx->switchPageTimer == 64) {
         pauseCtx->pageIndex = sPageSwitchNextPageIndex[pauseCtx->nextPageMode];
         pauseCtx->nextPageMode = (pauseCtx->pageIndex * 2) + 1;
@@ -2871,7 +2871,8 @@ void KaleidoScope_Update(PlayState* play) {
 
             for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {
-                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]), 0x400);
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]),
+                                                      ICON_ITEM_TEX_WIDTH * ICON_ITEM_TEX_HEIGHT);
                 }
             }
 
@@ -3609,11 +3610,11 @@ void KaleidoScope_Update(PlayState* play) {
             Skybox_Reload(play, &play->skyboxCtx, play->skyboxId);
 
             if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
-                Interface_LoadBButtonDoActionLabel(play, DO_ACTION_STOP);
+                Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
                 Interface_SetAButtonDoAction(play, DO_ACTION_STOP);
                 Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
             } else {
-                interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
+                interfaceCtx->bButtonInterfaceDoActionActive = interfaceCtx->bButtonInterfaceDoAction = 0;
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
