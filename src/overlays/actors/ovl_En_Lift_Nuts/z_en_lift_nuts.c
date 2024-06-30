@@ -904,7 +904,7 @@ void EnLiftNuts_EndGame(EnLiftNuts* this, PlayState* play) {
         CLEAR_EVENTINF(EVENTINF_34);
         gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(DEKU_SCRUB_PLAYGROUND, 1);
         gSaveContext.nextCutsceneIndex = 0;
-        func_80169EFC(&play->state);
+        func_80169EFC(play);
         gSaveContext.respawnFlag = -2;
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;

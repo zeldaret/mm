@@ -1,12 +1,11 @@
 #include "z64lib.h"
+#include "ichain.h"
+
+#include "libc64/qrand.h"
 
 #include "main.h"
-#include "ichain.h"
 #include "sfx.h"
-#include "z64actor.h"
 #include "z64game.h"
-#include "functions.h"
-#include "macros.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {
     bcopy(src, dest, size);
@@ -453,7 +452,7 @@ void (*sInitChainHandlers[])(u8* ptr, InitChainEntry* ichain) = {
     IChain_Apply_Vec3f, IChain_Apply_Vec3fdiv1000, IChain_Apply_Vec3s,
 };
 
-void Actor_ProcessInitChain(Actor* actor, InitChainEntry* ichain) {
+void Actor_ProcessInitChain(struct Actor* actor, InitChainEntry* ichain) {
     do {
         sInitChainHandlers[ichain->type]((u8*)actor, ichain);
     } while ((ichain++)->cont);

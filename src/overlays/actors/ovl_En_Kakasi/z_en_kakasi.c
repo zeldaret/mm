@@ -949,9 +949,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
 
                 if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
