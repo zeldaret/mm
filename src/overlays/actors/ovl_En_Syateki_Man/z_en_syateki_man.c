@@ -422,7 +422,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 player->actor.freezeTimer = 0;
                 Interface_InitMinigame(play);
                 play->interfaceCtx.minigameAmmo = 80;
-                func_80123F2C(play, 80);
+                Player_SetBButtonAmmo(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
@@ -784,7 +784,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
                 Interface_InitMinigame(play);
-                func_80123F2C(play, 0x63);
+                Player_SetBButtonAmmo(play, 99);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;

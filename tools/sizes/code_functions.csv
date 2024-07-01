@@ -1726,7 +1726,7 @@ asm/non_matchings/code/z_player_lib/Player_Untarget.s,Player_Untarget,0x80123DA4
 asm/non_matchings/code/z_player_lib/func_80123DC0.s,func_80123DC0,0x80123DC0,0x34
 asm/non_matchings/code/z_player_lib/func_80123E90.s,func_80123E90,0x80123E90,0x21
 asm/non_matchings/code/z_player_lib/func_80123F14.s,func_80123F14,0x80123F14,0x6
-asm/non_matchings/code/z_player_lib/func_80123F2C.s,func_80123F2C,0x80123F2C,0x7
+asm/non_matchings/code/z_player_lib/Player_SetBButtonAmmo.s,Player_SetBButtonAmmo,0x80123F2C,0x7
 asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s,Player_IsBurningStickInRange,0x80123F48,0x36
 asm/non_matchings/code/z_player_lib/Player_GetStrength.s,Player_GetStrength,0x80124020,0x7
 asm/non_matchings/code/z_player_lib/Player_GetMask.s,Player_GetMask,0x8012403C,0x4

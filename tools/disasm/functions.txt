@@ -2212,7 +2212,7 @@
     0x80123DC0:("func_80123DC0",),
     0x80123E90:("func_80123E90",),
     0x80123F14:("func_80123F14",),
-    0x80123F2C:("func_80123F2C",),
+    0x80123F2C:("Player_SetBButtonAmmo",),
     0x80123F48:("Player_IsBurningStickInRange",),
     0x80124020:("Player_GetStrength",),
     0x8012403C:("Player_GetMask",),
