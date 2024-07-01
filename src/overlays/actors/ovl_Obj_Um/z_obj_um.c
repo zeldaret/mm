@@ -1722,10 +1722,10 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->flags & OBJ_UM_FLAG_0010) {
-        func_80123F2C(play, 0x63);
+        Player_SetBButtonAmmo(play, 99);
         this->flags &= ~OBJ_UM_FLAG_0010;
     } else if (this->flags & OBJ_UM_FLAG_0004) {
-        func_80123F2C(play, -3);
+        Player_SetBButtonAmmo(play, -3);
         this->flags &= ~OBJ_UM_FLAG_0004;
     }
 

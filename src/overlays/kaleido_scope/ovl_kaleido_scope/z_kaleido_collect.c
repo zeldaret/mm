@@ -624,8 +624,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                 if (nextCursorPoint == CURSOR_TO_LEFT) {
                     KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                     pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
-                    if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
-                        func_8011552C(play, DO_ACTION_INFO);
+                    if (interfaceCtx->aButtonDoActionDelayed == DO_ACTION_DECIDE) {
+                        Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
                     }
                     return;
                 } else {
@@ -808,8 +808,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
 
                         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG;
 
-                        if (interfaceCtx->unk_212 != DO_ACTION_DECIDE) {
-                            func_8011552C(play, DO_ACTION_DECIDE);
+                        if (interfaceCtx->aButtonDoActionDelayed != DO_ACTION_DECIDE) {
+                            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                         }
 
                         // Stop receiving input to play a song as mentioned above
@@ -821,8 +821,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                         }
                     } else {
-                        if (interfaceCtx->unk_212 != DO_ACTION_DECIDE) {
-                            func_8011552C(play, DO_ACTION_DECIDE);
+                        if (interfaceCtx->aButtonDoActionDelayed != DO_ACTION_DECIDE) {
+                            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                         }
                         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
                             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
@@ -832,12 +832,12 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     }
                 } else {
                     if ((cursor == QUEST_BOMBERS_NOTEBOOK) && (pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE)) {
-                        if (interfaceCtx->unk_212 != DO_ACTION_DECIDE) {
-                            func_8011552C(play, DO_ACTION_DECIDE);
+                        if (interfaceCtx->aButtonDoActionDelayed != DO_ACTION_DECIDE) {
+                            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                         }
                         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
-                    } else if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
-                        func_8011552C(play, DO_ACTION_INFO);
+                    } else if (interfaceCtx->aButtonDoActionDelayed == DO_ACTION_DECIDE) {
+                        Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
                     }
 
                     if ((pauseCtx->cursorItem[PAUSE_QUEST] != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {

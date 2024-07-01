@@ -4796,7 +4796,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
 
-                play->interfaceCtx.unk_27E = 1;
+                play->interfaceCtx.fishingHUDControl = 1;
                 play->startPlayerFishing(play);
                 D_809171FC = 1;
                 D_8090CD04 = 20;
@@ -5022,7 +5022,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     D_8090CD0C = false;
                 }
                 D_809171FC = 0;
-                play->interfaceCtx.unk_27E = 0;
+                play->interfaceCtx.fishingHUDControl = 0;
             }
             break;
 
