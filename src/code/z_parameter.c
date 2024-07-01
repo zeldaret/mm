@@ -167,10 +167,10 @@ f32 sBButtonDoActionTextureScales[] = {
     // Data missing for other languages?
 };
 s16 sItemIconTextureScales[] = {
-    (s16)(1.074219 * (1 << 10)) >> 1, // EQUIP_SLOT_B
-    (s16)(1.328125 * (1 << 10)) >> 1, // EQUIP_SLOT_C_LEFT
-    (s16)(1.328125 * (1 << 10)) >> 1, // EQUIP_SLOT_C_DOWN
-    (s16)(1.328125 * (1 << 10)) >> 1, // EQUIP_SLOT_C_RIGHT
+    (s16)(1.074219f * (1 << 10)) >> 1, // EQUIP_SLOT_B
+    (s16)(1.328125f * (1 << 10)) >> 1, // EQUIP_SLOT_C_LEFT
+    (s16)(1.328125f * (1 << 10)) >> 1, // EQUIP_SLOT_C_DOWN
+    (s16)(1.328125f * (1 << 10)) >> 1, // EQUIP_SLOT_C_RIGHT
 };
 s16 sBButtonDoActionXPositions[] = {
     158, // LANGUAGE_JPN
@@ -201,10 +201,10 @@ s16 sBCButtonYPositions[] = {
 };
 
 s16 sBCButtonScales[] = {
-    (s32)(1.1230469 * (1 << 10)) >> 1, // EQUIP_SLOT_B
-    (s32)(1.2109375 * (1 << 10)) >> 1, // EQUIP_SLOT_C_LEFT
-    (s32)(1.2109375 * (1 << 10)) >> 1, // EQUIP_SLOT_C_DOWN
-    (s32)(1.2109375 * (1 << 10)) >> 1, // EQUIP_SLOT_C_RIGHT
+    (s32)(1.1230469f * (1 << 10)) >> 1, // EQUIP_SLOT_B
+    (s32)(1.2109375f * (1 << 10)) >> 1, // EQUIP_SLOT_C_LEFT
+    (s32)(1.2109375f * (1 << 10)) >> 1, // EQUIP_SLOT_C_DOWN
+    (s32)(1.2109375f * (1 << 10)) >> 1, // EQUIP_SLOT_C_RIGHT
 };
 
 s16 sFinalHoursClockDigitsRed = 0;
@@ -6275,7 +6275,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
                 if ((sMinigameScoreDigits[i] != 0) || (numDigitsDrawn != 0) || (i >= 3)) {
                     OVERLAY_DISP = Gfx_DrawTexRectI8(
                         OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sMinigameScoreDigits[i])), 8, 16, rectX,
-                        rectY - 2, 9, 250, (s32)(0.859375 * (1 << 10)), (s32)(0.859375 * (1 << 10)));
+                        rectY - 2, 9, 250, (s32)(0.859375f * (1 << 10)), (s32)(0.859375f * (1 << 10)));
                     rectX += 9;
                     numDigitsDrawn++;
                 }
