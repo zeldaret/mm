@@ -23,7 +23,8 @@
         <Texture Name="gTwinmoldTailGemTex" OutName="twinmold_tail_gem" Format="rgba16" Width="32" Height="32" Offset="0x39A0" />
         <Texture Name="gTwinmoldBlueSkinTex" OutName="twinmold_blue_skin" Format="ci4" Width="64" Height="64" Offset="0x41A0" TlutOffset="0x300"/>
 
-        <TextureAnimation Name="gTwinmoldEmptyTexAnim" Offset="0x49A0" />
+        <!-- Unused Empty Texture Animation -->
+        <TextureAnimation Name="gTwinmoldEmptyTex1Anim" Offset="0x49A0" />
 
         <!-- Unused, completely motionless Twinmold Head animation -->
         <Animation Name="gTwinmoldHeadStationaryAnim" Offset="0x4A1C" />
@@ -70,7 +71,7 @@
         <Animation Name="gTwinmoldHeadFlyAnim" Offset="0x9C78" />
 
         <!-- Unused Empty Texture Animation -->
-        <TextureAnimation Name="gTwinmoldUnusedTexAnim" Offset="0x9C90" />
+        <TextureAnimation Name="gTwinmoldEmpty2TexAnim" Offset="0x9C90" />
 
         <!-- Twinmold Body Limb DisplayLists -->
         <DList Name="gTwinmoldBodySegment1DL" Offset="0xECF0" />
