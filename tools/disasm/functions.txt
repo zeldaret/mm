@@ -2124,7 +2124,7 @@
     0x80114FD0:("Inventory_UpdateBottleItem",),
     0x80115130:("Inventory_ConsumeFairy",),
     0x801152B8:("Inventory_UpdateItem",),
-    0x801153C8:("Interface_MemSetZeroed",),
+    0x801153C8:("Interface_ClearBuffer",),
     0x80115428:("Interface_LoadAButtonDoActionLabel",),
     0x8011552C:("Interface_SetAButtonDoAction",),
     0x801155B4:("Interface_SetBButtonPlayerDoAction",),

@@ -133,7 +133,7 @@ s32 func_80953DA8(BgIngate* this, PlayState* play) {
         SET_EVENTINF(EVENTINF_41);
     }
     Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
-    play->bButtonAmmoPlusOne = 0x63;
+    play->bButtonAmmoPlusOne = 99;
 
     return false;
 }

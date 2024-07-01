@@ -3268,7 +3268,7 @@ void Inventory_UpdateItem(PlayState* play, s16 slot, s16 item) {
     }
 }
 
-void Interface_MemSetZeroed(u32* buf, s32 count) {
+void Interface_ClearBuffer(u32* buf, s32 count) {
     s32 i;
 
     for (i = 0; i != count; i++) {
@@ -3300,7 +3300,7 @@ void Interface_LoadAButtonDoActionLabel(InterfaceContext* interfaceCtx, u16 doAc
         osRecvMesg(&interfaceCtx->loadQueue, NULL, OS_MESG_BLOCK);
     } else {
         gSegments[0x09] = OS_K0_TO_PHYSICAL(interfaceCtx->doActionSegment);
-        Interface_MemSetZeroed(Lib_SegmentedToVirtual(sDoActionTextures[slot]), DO_ACTION_TEX_SIZE / sizeof(u32));
+        Interface_ClearBuffer(Lib_SegmentedToVirtual(sDoActionTextures[slot]), DO_ACTION_TEX_SIZE / sizeof(u32));
     }
 }
 
