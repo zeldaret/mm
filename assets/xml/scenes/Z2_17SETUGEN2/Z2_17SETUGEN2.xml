@@ -5,5 +5,7 @@
     </File>
     <File Name="Z2_17SETUGEN2_room_00" Segment="3" Game="MM">
         <Room Name="Z2_17SETUGEN2_room_00" Offset="0x0"/>
+        <DList Name="Z2_17SETUGEN2_room_00DL_006D08" Offset="0x6D08"/>
+        <DList Name="Z2_17SETUGEN2_room_00DL_0071B0" Offset="0x71B0"/>
     </File>
 </Root>
