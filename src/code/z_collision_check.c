@@ -68,7 +68,7 @@ TriNorm D_801EF638;
  */
 f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo,
                                               u32* effect) {
-    static f32 damageMultipliers[] = {
+    static f32 sDamageMultipliers[] = {
         0.0f, 1.0f, 2.0f, 0.5f, 0.25f, 3.0f, 4.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
     };
     u32 dmgFlags;
@@ -88,7 +88,7 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo
             dmgFlags >>= 1;
         }
 
-        damage *= damageMultipliers[ac->actor->colChkInfo.damageTable->attack[i] & 0xF];
+        damage *= sDamageMultipliers[ac->actor->colChkInfo.damageTable->attack[i] & 0xF];
         *effect = (ac->actor->colChkInfo.damageTable->attack[i] >> 4) & 0xF;
     }
     return damage;
@@ -116,11 +116,11 @@ s32 CollisionCheck_GetToucherDamage(Collider* at, ColliderInfo* atInfo, Collider
 }
 
 s32 Collider_InitBase(struct PlayState* play, Collider* collider) {
-    static Collider defaultCollider = {
+    static Collider sDefaultCollider = {
         NULL, NULL, NULL, NULL, AT_NONE, AC_NONE, OC1_NONE, OC2_NONE, COLTYPE_HIT3, COLSHAPE_MAX,
     };
 
-    *collider = defaultCollider;
+    *collider = sDefaultCollider;
     return 1;
 }
 
@@ -183,9 +183,9 @@ void Collider_ResetOCBase(struct PlayState* play, Collider* collider) {
 }
 
 s32 Collider_InitTouch(struct PlayState* play, ColliderTouch* touch) {
-    static ColliderTouch defaultColliderTouch = { 0x00000000, 0, 0 };
+    static ColliderTouch sDefaultColliderTouch = { 0x00000000, 0, 0 };
 
-    *touch = defaultColliderTouch;
+    *touch = sDefaultColliderTouch;
     return 1;
 }
 
@@ -204,9 +204,9 @@ void Collider_ResetATInfoUnk(struct PlayState* play, ColliderInfo* info) {
 }
 
 s32 Collider_InitBump(struct PlayState* play, ColliderBump* bump) {
-    static ColliderBump defaultColliderBump = { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } };
+    static ColliderBump sDefaultColliderBump = { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } };
 
-    *bump = defaultColliderBump;
+    *bump = sDefaultColliderBump;
     return 1;
 }
 
@@ -222,7 +222,7 @@ s32 Collider_SetBump(struct PlayState* play, ColliderBump* bump, ColliderBumpIni
 }
 
 s32 Collider_InitInfo(struct PlayState* play, ColliderInfo* info) {
-    static ColliderInfo defaultColliderInfo = {
+    static ColliderInfo sDefaultColliderInfo = {
         { 0, 0, 0 },   { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
         ELEMTYPE_UNK0, TOUCH_NONE,
         BUMP_NONE,     OCELEM_NONE,
@@ -230,7 +230,7 @@ s32 Collider_InitInfo(struct PlayState* play, ColliderInfo* info) {
         NULL,          NULL,
     };
 
-    *info = defaultColliderInfo;
+    *info = sDefaultColliderInfo;
     Collider_InitTouch(play, &info->toucher);
     Collider_InitBump(play, &info->bumper);
     return 1;
@@ -273,14 +273,14 @@ void Collider_ResetOCInfo(struct PlayState* play, ColliderInfo* info) {
 }
 
 s32 Collider_InitJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dim) {
-    static ColliderJntSphElementDim defaultColliderJntSphElementDim = {
+    static ColliderJntSphElementDim sDefaultColliderJntSphElementDim = {
         { { 0, 0, 0 }, 0 },
         { { 0, 0, 0 }, 0 },
         0.0f,
         0,
     };
 
-    *dim = defaultColliderJntSphElementDim;
+    *dim = sDefaultColliderJntSphElementDim;
     return 1;
 }
 
@@ -502,9 +502,9 @@ s32 Collider_ResetJntSphOC(struct PlayState* play, Collider* collider) {
 }
 
 s32 Collider_InitCylinderDim(struct PlayState* play, Cylinder16* dim) {
-    static Cylinder16 defaultColliderCylinderDim = { 0, 0, 0, { 0, 0, 0 } };
+    static Cylinder16 sDefaultColliderCylinderDim = { 0, 0, 0, { 0, 0, 0 } };
 
-    *dim = defaultColliderCylinderDim;
+    *dim = sDefaultColliderCylinderDim;
     return 1;
 }
 
@@ -613,12 +613,12 @@ s32 Collider_ResetCylinderOC(struct PlayState* play, Collider* collider) {
 }
 
 s32 Collider_InitTrisElementDim(struct PlayState* play, TriNorm* dim) {
-    static TriNorm defaultColliderTrisElementDim = {
+    static TriNorm sDefaultColliderTrisElementDim = {
         { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
         { { 0.0f, 0.0f, 0.0f }, 0.0f },
     };
 
-    *dim = defaultColliderTrisElementDim;
+    *dim = sDefaultColliderTrisElementDim;
     return 1;
 }
 
@@ -830,14 +830,14 @@ s32 Collider_ResetTrisOC(struct PlayState* play, Collider* collider) {
 }
 
 s32 Collider_InitQuadDim(struct PlayState* play, ColliderQuadDim* dim) {
-    static ColliderQuadDim defaultColliderQuadDim = {
+    static ColliderQuadDim sDefaultColliderQuadDim = {
         { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
         { 0, 0, 0 },
         { 0, 0, 0 },
         1.0E38f,
     };
 
-    *dim = defaultColliderQuadDim;
+    *dim = sDefaultColliderQuadDim;
     return 1;
 }
 
@@ -3313,11 +3313,11 @@ void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colCtxt) {
  * Initializes CollisionCheckInfo to default values
  */
 void CollisionCheck_InitInfo(CollisionCheckInfo* info) {
-    static CollisionCheckInfo defaultColChkInfo = {
+    static CollisionCheckInfo sDefaultColChkInfo = {
         NULL, { 0.0f, 0.0f, 0.0f }, 10, 10, 0, MASS_IMMOVABLE, 8, 0, 0, 0, 0,
     };
 
-    *info = defaultColChkInfo;
+    *info = sDefaultColChkInfo;
 }
 
 /**
@@ -3872,7 +3872,7 @@ void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v) {
  * Spawns streaks of light from hits against solid objects
  */
 void CollisionCheck_SpawnShieldParticles(struct PlayState* play, Vec3f* v) {
-    static EffectShieldParticleInit shieldParticleInitMetal = {
+    static EffectShieldParticleInit sShieldParticleInitMetal = {
         16,
         { 0, 0, 0 },
         { 0, 200, 255, 255 },
@@ -3890,14 +3890,14 @@ void CollisionCheck_SpawnShieldParticles(struct PlayState* play, Vec3f* v) {
     };
     s32 effectIndex;
 
-    shieldParticleInitMetal.position.x = v->x;
-    shieldParticleInitMetal.position.y = v->y;
-    shieldParticleInitMetal.position.z = v->z;
-    shieldParticleInitMetal.lightPoint.x = shieldParticleInitMetal.position.x;
-    shieldParticleInitMetal.lightPoint.y = shieldParticleInitMetal.position.y;
-    shieldParticleInitMetal.lightPoint.z = shieldParticleInitMetal.position.z;
+    sShieldParticleInitMetal.position.x = v->x;
+    sShieldParticleInitMetal.position.y = v->y;
+    sShieldParticleInitMetal.position.z = v->z;
+    sShieldParticleInitMetal.lightPoint.x = sShieldParticleInitMetal.position.x;
+    sShieldParticleInitMetal.lightPoint.y = sShieldParticleInitMetal.position.y;
+    sShieldParticleInitMetal.lightPoint.z = sShieldParticleInitMetal.position.z;
 
-    Effect_Add(play, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitMetal);
+    Effect_Add(play, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &sShieldParticleInitMetal);
 }
 
 /**
@@ -3927,7 +3927,7 @@ void CollisionCheck_SpawnShieldParticlesMetal2(struct PlayState* play, Vec3f* v)
  * Spawns streaks of light and makes a wooden sound
  */
 void CollisionCheck_SpawnShieldParticlesWood(struct PlayState* play, Vec3f* v, Vec3f* pos) {
-    static EffectShieldParticleInit shieldParticleInitWood = {
+    static EffectShieldParticleInit sShieldParticleInitWood = {
         16,
         { 0, 0, 0 },
         { 0, 200, 255, 255 },
@@ -3945,14 +3945,14 @@ void CollisionCheck_SpawnShieldParticlesWood(struct PlayState* play, Vec3f* v, V
     };
     s32 effectIndex;
 
-    shieldParticleInitWood.position.x = v->x;
-    shieldParticleInitWood.position.y = v->y;
-    shieldParticleInitWood.position.z = v->z;
-    shieldParticleInitWood.lightPoint.x = shieldParticleInitWood.position.x;
-    shieldParticleInitWood.lightPoint.y = shieldParticleInitWood.position.y;
-    shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
+    sShieldParticleInitWood.position.x = v->x;
+    sShieldParticleInitWood.position.y = v->y;
+    sShieldParticleInitWood.position.z = v->z;
+    sShieldParticleInitWood.lightPoint.x = sShieldParticleInitWood.position.x;
+    sShieldParticleInitWood.lightPoint.y = sShieldParticleInitWood.position.y;
+    sShieldParticleInitWood.lightPoint.z = sShieldParticleInitWood.position.z;
 
-    Effect_Add(play, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitWood);
+    Effect_Add(play, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &sShieldParticleInitWood);
     Audio_PlaySfx_AtPos(pos, NA_SE_IT_REFLECTION_WOOD);
 }
 
