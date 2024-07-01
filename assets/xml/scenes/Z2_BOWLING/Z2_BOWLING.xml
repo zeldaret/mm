@@ -4,5 +4,6 @@
     </File>
     <File Name="Z2_BOWLING_room_00" Segment="3" Game="MM">
         <Room Name="Z2_BOWLING_room_00" Offset="0x0"/>
+        <DList Name="Z2_BOWLING_room_00DL_004CF0" Offset="0x4CF0"/>
     </File>
 </Root>

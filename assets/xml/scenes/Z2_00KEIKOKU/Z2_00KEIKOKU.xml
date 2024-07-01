@@ -29,5 +29,8 @@
     </File>
     <File Name="Z2_00KEIKOKU_room_00" Segment="3" Game="MM">
         <Room Name="Z2_00KEIKOKU_room_00" Offset="0x0"/>
+        <DList Name="Z2_00KEIKOKU_room_00DL_026C10" Offset="0x26C10"/>
+        <DList Name="Z2_00KEIKOKU_room_00DL_026A58" Offset="0x26A58"/>
+        <DList Name="Z2_00KEIKOKU_room_00DL_0287F8" Offset="0x287F8"/>
     </File>
 </Root>

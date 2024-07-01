@@ -6,5 +6,7 @@
     </File>
     <File Name="Z2_KONPEKI_ENT_room_00" Segment="3" Game="MM">
         <Room Name="Z2_KONPEKI_ENT_room_00" Offset="0x0"/>
+        <DList Name="Z2_KONPEKI_ENT_room_00DL_006210" Offset="0x6210"/>
+        <DList Name="Z2_KONPEKI_ENT_room_00DL_006390" Offset="0x6390"/>
     </File>
 </Root>

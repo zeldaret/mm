@@ -6,8 +6,11 @@
     </File>
     <File Name="Z2_SECOM_room_00" Segment="3" Game="MM">
         <Room Name="Z2_SECOM_room_00" Offset="0x0"/>
+        <DList Name="Z2_SECOM_room_00DL_0026A0" Offset="0x26A0"/>
     </File>
     <File Name="Z2_SECOM_room_01" Segment="3" Game="MM">
         <Room Name="Z2_SECOM_room_01" Offset="0x0"/>
+        <DList Name="Z2_SECOM_room_01DL_00BCE8" Offset="0xBCE8"/>
+        <DList Name="Z2_SECOM_room_01DL_00F360" Offset="0xF360"/>
     </File>
 </Root>

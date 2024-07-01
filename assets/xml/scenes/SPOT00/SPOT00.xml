@@ -4,5 +4,6 @@
     </File>
     <File Name="SPOT00_room_00" Segment="3" Game="MM">
         <Room Name="SPOT00_room_00" Offset="0x0"/>
+        <DList Name="SPOT00_room_00DL_000900" Offset="0x900"/>
     </File>
 </Root>
