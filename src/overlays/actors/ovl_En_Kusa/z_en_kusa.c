@@ -24,7 +24,7 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play);
 void EnKusa_UpdateVelY(EnKusa* this);
 void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor);
 void EnKusa_SetScaleSmall(EnKusa* this);
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play);
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play);
 void EnKusa_SetupWaitObject(EnKusa* this);
 void EnKusa_WaitObject(EnKusa* this, PlayState* play);
 void EnKusa_WaitForInteract(EnKusa* this, PlayState* play);
@@ -338,7 +338,7 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     }
 }
 
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play) {
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
     f32 ySurface;
@@ -390,7 +390,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (EnKusa_GetWaterBox(this, play)) {
+    if (EnKusa_IsUnderwater(this, play)) {
         this->isInWater |= 1;
     }
 

@@ -7260,7 +7260,7 @@
     0x8093517C:("EnKusa_SetScaleSmall",),
     0x809351A0:("EnKusa_SpawnFragments",),
     0x809354F8:("EnKusa_SpawnBugs",),
-    0x809355A4:("EnKusa_GetWaterBox",),
+    0x809355A4:("EnKusa_IsUnderwater",),
     0x8093561C:("EnKusa_InitCollider",),
     0x80935674:("EnKusa_Init",),
     0x80935898:("EnKusa_Destroy",),
