@@ -895,8 +895,8 @@ void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play) {
     this->collider.dim.height = height;
 
     //! @bug: The check is useless. If &this->collider somehow was NULL the above code would have already dereferenced
-    //! it.
-    if (&this->collider != NULL) {
+    //! it. Cast to `intptr_t` to suppress address comparision to NULL warning.
+    if ((intptr_t)&this->collider != (intptr_t)NULL) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
