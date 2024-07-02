@@ -3976,8 +3976,7 @@ beginseg
     name "ovl_Bg_Dblue_Elevator"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/z_bg_dblue_elevator.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator_reloc.o"
 endseg
 
 beginseg
