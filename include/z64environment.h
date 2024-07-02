@@ -272,7 +272,7 @@ typedef struct EnvironmentContext {
     /* 0xED */ u8 customSkyboxFilter;
     /* 0xEE */ u8 skyboxFilterColor[4];
     /* 0xF2 */ u8 precipitation[PRECIP_MAX];
-    /* 0xF7 */ UNK_TYPE1 unk_FA[9];
+    /* 0xF7 */ UNK_TYPE1 unk_F7[9];
 } EnvironmentContext; // size = 0x100
 
 s32 Environment_ZBufValToFixedPoint(s32 zBufferVal);
