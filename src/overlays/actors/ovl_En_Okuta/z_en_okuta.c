@@ -328,7 +328,7 @@ void EnOkuta_WaitToAppear(EnOkuta* this, PlayState* play) {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
             EnOkuta_SetupAppear(this, play);
         } else if (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y)) < 0x4000 &&
-                   play->unk_1887C == 0) {
+                   play->bButtonAmmoPlusOne == 0) {
             EnOkuta_SetupAppear(this, play);
         }
     }

@@ -106,7 +106,7 @@ void KaleidoSetup_Update(PlayState* play) {
     }
 
     if (!Play_InCsMode(play) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF))) {
-        if (play->unk_1887C >= 2) {
+        if (play->bButtonAmmoPlusOne >= 2) {
             return;
         }
 
