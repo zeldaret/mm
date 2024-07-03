@@ -47,8 +47,8 @@ static BgDblueElevatorStruct1 D_80B92960[] = {
     { false, BgDblueElevator_GetWaterFlowFromPipes, 280.0f, 30, -1, 1.0f, 0.1f, 6.0f },
 };
 
-static s16 D_80B929D0[] = { -90, -90, 90, 90 };   // Related to splash x pos
-static s16 D_80B929D8[] = { -100, 90, 90, -100 }; // Related to splash z pos
+static s16 D_80B929D0[] = { -90, -90, 90, 90 };
+static s16 D_80B929D8[] = { -100, 90, 90, -100 };
 static s8 sLargeRipplesLives[] = { 0, 2, 4 };
 static s8 sSmallRipplesLives[] = { 0, 1, 2, 3, 4, 5 };
 
@@ -136,27 +136,27 @@ s32 BgDblueElevator_GetWaterFlowFromCeiling(BgDblueElevator* this, PlayState* pl
     Actor* thisx = &this->dyna.actor;
 
     if (Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, 0))) {
-        return 0;
+        return BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED;
     }
-    return 1;
+    return BG_DBLUE_ELEVATOR_WATER_FLOW_FORWARD;
 }
 
 s32 BgDblueElevator_GetWaterFlowFromPipes(BgDblueElevator* this, PlayState* play) {
     Actor* thisx = &this->dyna.actor;
-    s32 var_s0 = 0;
+    s32 waterFlow = BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED;
 
     // This checks if the first the yellow tank turnkey is open.
     if (!Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, 0))) {
-        var_s0 = 1;
+        waterFlow = BG_DBLUE_ELEVATOR_WATER_FLOW_FORWARD;
     }
 
     // This checks if water is flowing from the red pipes.
     if (Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, 1)) &&
         Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, 2)) &&
         Flags_GetSwitch(play, BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, 3))) {
-        var_s0 += 2;
+        waterFlow += BG_DBLUE_ELEVATOR_WATER_FLOW_REVERSED;
     }
-    return var_s0;
+    return waterFlow;
 }
 
 void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
@@ -219,8 +219,9 @@ void BgDblueElevator_WaitActivation(BgDblueElevator* this, PlayState* play) {
 
 void BgDblueElevator_SetupPause(BgDblueElevator* this) {
     s32 index = BG_DBLUE_ELEVATOR_GET_INDEX(&this->dyna.actor);
+    BgDblueElevatorStruct1* ptr = &D_80B92960[index];
 
-    this->pauseTimer = D_80B92960[index].pauseDuration;
+    this->pauseTimer = ptr->pauseDuration;
     this->actionFunc = BgDblueElevator_Pause;
 }
 
@@ -269,7 +270,7 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
         (waterFlow == BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS)) {
         isDeactivated = Math_StepToF(&this->posStep, 0.0f, ptr->decelerationStep);
     } else {
-        isDeactivated = 0;
+        isDeactivated = false;
         Math_StepToF(&this->posStep, ptr->targetPosStep, ptr->accelerationStep);
     }
 
@@ -295,11 +296,11 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
         this->dyna.actor.world.pos.y = this->posOffset + this->dyna.actor.home.pos.y;
         if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (this->isWithinWaterBoxXZ)) {
             if (this->direction > 0) {
-                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + (-10.0f)) - this->waterSurfaceYPos) *
-                                        ((this->dyna.actor.prevPos.y + (-10.0f)) - this->waterSurfaceYPos);
+                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -10.0f) - this->waterSurfaceYPos) *
+                                        ((this->dyna.actor.prevPos.y + -10.0f) - this->waterSurfaceYPos);
             } else {
-                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + (-30.0f)) - this->waterSurfaceYPos) *
-                                        ((this->dyna.actor.prevPos.y + (-30.0f)) - this->waterSurfaceYPos);
+                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -30.0f) - this->waterSurfaceYPos) *
+                                        ((this->dyna.actor.prevPos.y + -30.0f) - this->waterSurfaceYPos);
             }
             if (nearWaterSurfaceCheck <= 0.0f) {
                 BgDblueElevator_SpawnRipplesAndSplashes(this, play);
