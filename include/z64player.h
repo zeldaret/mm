@@ -1388,7 +1388,7 @@ void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId item
 void Player_Untarget(Player* player);
 void func_80123DC0(Player* player);
 void func_80123E90(struct PlayState* play, Actor* actor);
-s32 func_80123F2C(struct PlayState* play, s32 ammo);
+s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
 PlayerMask Player_GetMask(struct PlayState* play);

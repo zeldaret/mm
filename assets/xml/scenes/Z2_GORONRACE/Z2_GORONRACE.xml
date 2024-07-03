@@ -4,5 +4,7 @@
     </File>
     <File Name="Z2_GORONRACE_room_00" Segment="3" Game="MM">
         <Room Name="Z2_GORONRACE_room_00" Offset="0x0"/>
+        <DList Name="Z2_GORONRACE_room_00DL_00D8A0" Offset="0xD8A0"/>
+        <DList Name="Z2_GORONRACE_room_00DL_00DB50" Offset="0xDB50"/>
     </File>
 </Root>
