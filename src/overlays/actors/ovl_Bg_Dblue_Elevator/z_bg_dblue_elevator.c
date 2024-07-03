@@ -66,7 +66,7 @@ void BgDblueElevator_CheckWaterBoxInfo(BgDblueElevator* this, PlayState* play2) 
 
     this->isWithinWaterBoxXZ =
         WaterBox_GetSurfaceImpl(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                                &this->waterSurfaceYPos, &waterBox, &bgId);
+                                &this->waterSurfacePosY, &waterBox, &bgId);
 }
 
 void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* play) {
@@ -92,7 +92,7 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
 
         for (j = 0; j < 7; j++) {
             ripplePos.x = ((d1 * j) * (1.0f / 7.0f)) + v1;
-            ripplePos.y = this->waterSurfaceYPos;
+            ripplePos.y = this->waterSurfacePosY;
             ripplePos.z = ((d2 * j) * (1.0f / 7.0f)) + v2;
 
             ripplePos.x += (Rand_ZeroOne() - 0.5f) * 20.0f;
@@ -106,7 +106,7 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
 
     for (i = 0; i < ARRAY_COUNT(sLargeRipplesLives); i++) {
         ripplePos.x = ((Rand_ZeroOne() - 0.5f) * 60.0f) + this->dyna.actor.world.pos.x;
-        ripplePos.y = this->waterSurfaceYPos;
+        ripplePos.y = this->waterSurfacePosY;
         ripplePos.z = ((Rand_ZeroOne() - 0.5f) * 60.0f) + this->dyna.actor.world.pos.z;
         EffectSsGRipple_Spawn(play, &ripplePos, 1000, 3000, sLargeRipplesLives[i]);
     }
@@ -119,7 +119,7 @@ void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* p
             var_fs0 = -var_fs0;
         }
         ripplePos.x = (var_fs0 * 100.0f) + this->dyna.actor.world.pos.x;
-        ripplePos.y = this->waterSurfaceYPos;
+        ripplePos.y = this->waterSurfacePosY;
         var_fs0 = Rand_ZeroOne();
         var_fs0 = 1.0f - (var_fs0 * var_fs0);
         rand = Rand_Next();
@@ -296,11 +296,11 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
         this->dyna.actor.world.pos.y = this->posOffset + this->dyna.actor.home.pos.y;
         if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (this->isWithinWaterBoxXZ)) {
             if (this->direction > 0) {
-                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -10.0f) - this->waterSurfaceYPos) *
-                                        ((this->dyna.actor.prevPos.y + -10.0f) - this->waterSurfaceYPos);
+                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -10.0f) - this->waterSurfacePosY) *
+                                        ((this->dyna.actor.prevPos.y + -10.0f) - this->waterSurfacePosY);
             } else {
-                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -30.0f) - this->waterSurfaceYPos) *
-                                        ((this->dyna.actor.prevPos.y + -30.0f) - this->waterSurfaceYPos);
+                nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -30.0f) - this->waterSurfacePosY) *
+                                        ((this->dyna.actor.prevPos.y + -30.0f) - this->waterSurfacePosY);
             }
             if (nearWaterSurfaceCheck <= 0.0f) {
                 BgDblueElevator_SpawnRipplesAndSplashes(this, play);

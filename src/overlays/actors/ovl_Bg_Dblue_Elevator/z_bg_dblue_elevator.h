@@ -1,15 +1,17 @@
 #ifndef Z_BG_DBLUE_ELEVATOR_H
 #define Z_BG_DBLUE_ELEVATOR_H
 
+#include "global.h"
+
 #define BG_DBLUE_ELEVATOR_GET_INDEX(thisx) (((thisx)->params >> 8) & 0x3)
 #define BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, x) (((thisx)->params + (x)) & 0x7F)
 
-#define BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED 0
-#define BG_DBLUE_ELEVATOR_WATER_FLOW_FORWARD 1
-#define BG_DBLUE_ELEVATOR_WATER_FLOW_REVERSED 2
-#define BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS 3
-
-#include "global.h"
+typedef enum {
+    /* 0 */ BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED,
+    /* 1 */ BG_DBLUE_ELEVATOR_WATER_FLOW_FORWARD,
+    /* 2 */ BG_DBLUE_ELEVATOR_WATER_FLOW_REVERSED,
+    /* 3 */ BG_DBLUE_ELEVATOR_WATER_FLOW_BOTH_DIRECTIONS
+} BgDblueElevatorWaterFlow;
 
 struct BgDblueElevator;
 
@@ -24,7 +26,7 @@ typedef struct BgDblueElevator {
     /* 0x169 */ s8 activationTimer;
     /* 0x16A */ s8 pauseTimer;
     /* 0x16B */ s8 isWithinWaterBoxXZ;
-    /* 0x16C */ f32 waterSurfaceYPos;
+    /* 0x16C */ f32 waterSurfacePosY;
 } BgDblueElevator; // size = 0x170
 
 struct BgDblueElevatorStruct1;
