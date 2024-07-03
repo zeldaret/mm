@@ -2,7 +2,7 @@
 #define Z_BG_DBLUE_ELEVATOR_H
 
 #define BG_DBLUE_ELEVATOR_GET_INDEX(thisx) (((thisx)->params >> 8) & 0x3)
-#define BG_DBLUE_ELEVATOR_GET_7F(thisx, x) (((thisx)->params + (x)) & 0x7F) // GET_7F or GET_SWITCH_FLAG?
+#define BG_DBLUE_ELEVATOR_GET_SWITCH_FLAG(thisx, x) (((thisx)->params + (x)) & 0x7F)
 
 #define BG_DBLUE_ELEVATOR_WATER_FLOW_STOPPED 0
 #define BG_DBLUE_ELEVATOR_WATER_FLOW_REVERSED 2
@@ -31,15 +31,14 @@ struct BgDblueElevatorStruct1;
 typedef s32 (*BgDblueElevatorStruct1Func)(struct BgDblueElevator*, PlayState*);
 
 typedef struct BgDblueElevatorStruct1 {
-    /* 0x000 */ s32 isHorizontal;
-    /* 0x004 */ BgDblueElevatorStruct1Func getWaterFlow;
-    /* 0x008 */ f32 targetPosOffset;
-    /* 0x00C */ s8 pauseDuration;
-    /* 0x00D */ s8 initialDirection;
-    /* 0x00E */ s8 pad_E[2];
-    /* 0x010 */ f32 accelerationStep;
-    /* 0x014 */ f32 decelerationStep;
-    /* 0x018 */ f32 targetPosStep;
+    /* 0x00 */ s32 isHorizontal;
+    /* 0x04 */ BgDblueElevatorStruct1Func getWaterFlow;
+    /* 0x08 */ f32 targetPosOffset;
+    /* 0x0C */ s8 pauseDuration;
+    /* 0x0D */ s8 initialDirection;
+    /* 0x10 */ f32 accelerationStep;
+    /* 0x14 */ f32 decelerationStep;
+    /* 0x18 */ f32 targetPosStep;
 } BgDblueElevatorStruct1; // size = 0x1C
 
 #endif // Z_BG_DBLUE_ELEVATOR_H
