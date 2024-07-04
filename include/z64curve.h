@@ -1,7 +1,7 @@
 #ifndef Z64CURVE_H
 #define Z64CURVE_H
 
-#include "PR/ultratypes.h"
+#include "ultra64.h"
 #include "z64math.h"
 
 struct Actor;

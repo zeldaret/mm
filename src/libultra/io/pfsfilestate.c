@@ -1,6 +1,6 @@
 #include "ultra64.h"
 #include "PR/controller.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {
     s32 ret;

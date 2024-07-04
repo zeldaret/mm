@@ -306,17 +306,17 @@ class Section:
 
         assert hdrr_magic == 0x7009, "Invalid magic value for .mdebug symbolic header"
 
-        hdrr_cbLineOffset += shift_by
-        hdrr_cbDnOffset += shift_by
-        hdrr_cbPdOffset += shift_by
-        hdrr_cbSymOffset += shift_by
-        hdrr_cbOptOffset += shift_by
-        hdrr_cbAuxOffset += shift_by
-        hdrr_cbSsOffset += shift_by
-        hdrr_cbSsExtOffset += shift_by
-        hdrr_cbFdOffset += shift_by
-        hdrr_cbRfdOffset += shift_by
-        hdrr_cbExtOffset += shift_by
+        if hdrr_cbLine: hdrr_cbLineOffset += shift_by
+        if hdrr_idnMax: hdrr_cbDnOffset += shift_by
+        if hdrr_ipdMax: hdrr_cbPdOffset += shift_by
+        if hdrr_isymMax: hdrr_cbSymOffset += shift_by
+        if hdrr_ioptMax: hdrr_cbOptOffset += shift_by
+        if hdrr_iauxMax: hdrr_cbAuxOffset += shift_by
+        if hdrr_issMax: hdrr_cbSsOffset += shift_by
+        if hdrr_issExtMax: hdrr_cbSsExtOffset += shift_by
+        if hdrr_ifdMax: hdrr_cbFdOffset += shift_by
+        if hdrr_crfd: hdrr_cbRfdOffset += shift_by
+        if hdrr_iextMax: hdrr_cbExtOffset += shift_by
 
         new_data[0:0x60] = self.fmt.pack("HHIIIIIIIIIIIIIIIIIIIIIII", hdrr_magic, hdrr_vstamp, hdrr_ilineMax, hdrr_cbLine, \
             hdrr_cbLineOffset, hdrr_idnMax, hdrr_cbDnOffset, hdrr_ipdMax, \
@@ -883,7 +883,7 @@ float_regexpr = re.compile(r"[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?f")
 def repl_float_hex(m):
     return str(struct.unpack(">I", struct.pack(">f", float(m.group(0).strip().rstrip("f"))))[0])
 
-Opts = namedtuple('Opts', ['opt', 'framepointer', 'mips1', 'kpic', 'pascal', 'input_enc', 'output_enc'])
+Opts = namedtuple('Opts', ['opt', 'framepointer', 'mips1', 'kpic', 'pascal', 'input_enc', 'output_enc', 'enable_cutscene_data_float_encoding'])
 
 def parse_source(f, opts, out_dependencies, print_source=None):
     if opts.opt in ['O1', 'O2']:
@@ -996,14 +996,15 @@ def parse_source(f, opts, out_dependencies, print_source=None):
             output_lines[-1] = include_src.getvalue()
             include_src.close()
         else:
-            # This is a hack to replace all floating-point numbers in an array of a particular type
-            # (in this case CutsceneData) with their corresponding IEEE-754 hexadecimal representation
-            if cutscene_data_regexpr.search(line) is not None:
-                is_cutscene_data = True
-            elif line.endswith("};"):
-                is_cutscene_data = False
-            if is_cutscene_data:
-                raw_line = re.sub(float_regexpr, repl_float_hex, raw_line)
+            if opts.enable_cutscene_data_float_encoding:
+                # This is a hack to replace all floating-point numbers in an array of a particular type
+                # (in this case CutsceneData) with their corresponding IEEE-754 hexadecimal representation
+                if cutscene_data_regexpr.search(line) is not None:
+                    is_cutscene_data = True
+                elif line.endswith("};"):
+                    is_cutscene_data = False
+                if is_cutscene_data:
+                    raw_line = re.sub(float_regexpr, repl_float_hex, raw_line)
             output_lines[-1] = raw_line
 
     if print_source:
@@ -1365,7 +1366,9 @@ def fixup_objfile(objfile_name, functions, asm_prelude, assembler, output_enc, d
                 if not existing:
                     name_to_sym[s.name] = s
                     newer_syms.append(s)
-                elif s.st_shndx != SHN_UNDEF:
+                elif s.st_shndx != SHN_UNDEF and not (
+                    existing.st_shndx == s.st_shndx and existing.st_value == s.st_value
+                ):
                     raise Failure("symbol \"" + s.name + "\" defined twice")
                 else:
                     s.replace_by = existing
@@ -1455,6 +1458,7 @@ def run_wrapped(argv, outfile, functions):
     parser.add_argument('--drop-mdebug-gptab', dest='drop_mdebug_gptab', action='store_true', help="drop mdebug and gptab sections")
     parser.add_argument('--convert-statics', dest='convert_statics', choices=["no", "local", "global", "global-with-filename"], default="local", help="change static symbol visibility (default: %(default)s)")
     parser.add_argument('--force', dest='force', action='store_true', help="force processing of files without GLOBAL_ASM blocks")
+    parser.add_argument('--encode-cutscene-data-floats', dest='enable_cutscene_data_float_encoding', action='store_true', default=False, help="Replace floats with their encoded hexadecimal representation in CutsceneData data")
     parser.add_argument('-framepointer', dest='framepointer', action='store_true')
     parser.add_argument('-mips1', dest='mips1', action='store_true')
     parser.add_argument('-g3', dest='g3', action='store_true')
@@ -1475,7 +1479,7 @@ def run_wrapped(argv, outfile, functions):
         raise Failure("-mips1 is only supported together with -O1 or -O2")
     if pascal and opt not in ('O1', 'O2', 'g3'):
         raise Failure("Pascal is only supported together with -O1, -O2 or -O2 -g3")
-    opts = Opts(opt, args.framepointer, args.mips1, args.kpic, pascal, args.input_enc, args.output_enc)
+    opts = Opts(opt, args.framepointer, args.mips1, args.kpic, pascal, args.input_enc, args.output_enc, args.enable_cutscene_data_float_encoding)
 
     if args.objfile is None:
         with open(args.filename, encoding=args.input_enc) as f:

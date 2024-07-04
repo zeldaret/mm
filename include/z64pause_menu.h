@@ -2,6 +2,7 @@
 #define Z64PAUSE_MENU_H
 
 #include "ultra64.h"
+#include "romfile.h"
 #include "z64math.h"
 #include "z64view.h"
 #include "unk.h"
@@ -138,7 +139,7 @@ typedef struct PauseContext {
     /* 0x238 */ s16 cursorPoint[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x242 */ s16 cursorXIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x24C */ s16 cursorYIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
-    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
+    /* 0x256 */ s16 cursorMapDungeonItem; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
@@ -197,8 +198,7 @@ typedef enum KaleidoMgrOverlayType {
 
 typedef struct KaleidoMgrOverlay {
     /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ uintptr_t vromStart;
-    /* 0x08 */ uintptr_t vromEnd;
+    /* 0x04 */ RomFile file;
     /* 0x0C */ void* vramStart;
     /* 0x10 */ void* vramEnd;
     /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart

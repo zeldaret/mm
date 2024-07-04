@@ -2,6 +2,7 @@
  * Maths library: two factorials, integer power, wrappers for libultra's sins and coss (the main ones used), and some
  * random functions moved from OoT's z_actor
  */
+
 #include "global.h"
 
 static f32 sFactorialTbl[] = {
@@ -71,7 +72,7 @@ f32 Math_PowF(f32 base, s32 exp) {
  * @remark original name: "sinf_table"
  */
 f32 Math_SinF(f32 rad) {
-    return sins(RAD_TO_BINANG(rad)) * SHT_MINV;
+    return sins(RAD_TO_BINANG(rad)) * (1.0f / SHRT_MAX);
 }
 
 /**
@@ -80,7 +81,7 @@ f32 Math_SinF(f32 rad) {
  * @remark original name: "cosf_table"
  */
 f32 Math_CosF(f32 rad) {
-    return coss(RAD_TO_BINANG(rad)) * SHT_MINV;
+    return coss(RAD_TO_BINANG(rad)) * (1.0f / SHRT_MAX);
 }
 
 /**

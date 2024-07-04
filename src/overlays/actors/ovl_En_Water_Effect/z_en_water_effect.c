@@ -57,7 +57,7 @@ void func_80A587A0(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
             ptr->unk_1C = sZeroVec;
             ptr->unk_2C.x = 0.1f;
             ptr->unk_2C.y = 0.0f;
-            ptr->unk_2C.z = Rand_ZeroFloat(M_PI * 2);
+            ptr->unk_2C.z = Rand_ZeroFloat(M_PIf * 2);
             ptr->unk_01 = Rand_ZeroFloat(100.0f);
             ptr->unk_2A = arg2;
             break;
@@ -78,7 +78,7 @@ void func_80A58908(EnWaterEffect* this, Vec3f* arg1, Vec3f* arg2, u8 arg3) {
             ptr->unk_1C = sp2C;
             ptr->unk_2C.y = Rand_ZeroFloat(0.02f) + 0.02f;
             ptr->unk_2C.x = ptr->unk_2C.y;
-            ptr->unk_2C.z = Rand_ZeroFloat(M_PI * 2);
+            ptr->unk_2C.z = Rand_ZeroFloat(M_PIf * 2);
             ptr->unk_01 = Rand_ZeroFloat(100.0f);
             ptr->unk_2A = arg3;
             break;
@@ -236,7 +236,7 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
                     }
 
                     for (j = 0; j < 12; j++) {
-                        Matrix_RotateYF((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
+                        Matrix_RotateYF((2.0f * (j * M_PIf)) / 5.5f, MTXMODE_NEW);
                         Matrix_MultVecZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
                         spA4.y = Rand_ZeroFloat(4.0f) + 2.0f;
                         func_80A58908(this, &ptr->unk_04, &spA4, ptr->unk_2A);
@@ -552,7 +552,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
 
             if ((i & 1) != 0) {
-                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

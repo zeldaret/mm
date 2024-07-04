@@ -280,7 +280,7 @@ void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* de
     s16 owlWarpId;
     s16 stringLimit;
 
-    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+    if (Map_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
         owlWarpId = OWL_WARP_ENTRANCE;
     } else {
         owlWarpId = play->pauseCtx.cursorPoint[PAUSE_WORLD_MAP];
@@ -632,7 +632,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = stateTimerHi;
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -647,7 +647,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = stateTimerHi;
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -827,7 +827,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                             Font_LoadMessageBoxEndIcon(font, 0);
                         }
                         if (play->csCtx.state == CS_STATE_IDLE) {
-                            func_8011552C(play, DO_ACTION_RETURN);
+                            Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                         }
                     } else {
                         Audio_PlaySfx(NA_SE_NONE);
@@ -1310,7 +1310,8 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadTimeNES(play, curChar, &charTexIndex, &spA4, &decodedBufPos);
         } else if (curChar == MESSAGE_STRAY_FAIRIES) {
             digits[0] = digits[1] = 0;
-            digits[2] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+            digits[2] =
+                gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex];
 
             while (digits[2] >= 100) {
                 digits[0]++;
@@ -1332,18 +1333,24 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
 
-            if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 1) ||
-                (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 21)) {
+            if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] ==
+                 1) ||
+                (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] ==
+                 21)) {
                 Message_LoadCharNES(play, 's', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 't', &charTexIndex, &spA4, decodedBufPos);
-            } else if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 2) ||
-                       (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 22)) {
+            } else if ((gSaveContext.save.saveInfo.inventory
+                            .strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] == 2) ||
+                       (gSaveContext.save.saveInfo.inventory
+                            .strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] == 22)) {
                 Message_LoadCharNES(play, 'n', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'd', &charTexIndex, &spA4, decodedBufPos);
-            } else if ((gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 3) ||
-                       (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] == 23)) {
+            } else if ((gSaveContext.save.saveInfo.inventory
+                            .strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] == 3) ||
+                       (gSaveContext.save.saveInfo.inventory
+                            .strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] == 23)) {
                 Message_LoadCharNES(play, 'r', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'd', &charTexIndex, &spA4, decodedBufPos);

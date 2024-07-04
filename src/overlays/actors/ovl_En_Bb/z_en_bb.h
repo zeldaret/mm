@@ -11,10 +11,10 @@ struct EnBb;
 typedef void (*EnBbActionFunc)(struct EnBb*, PlayState*);
 
 typedef enum BubbleBodyPart {
-    /* 0 */ BUBBLE_BODYPART_0,
-    /* 1 */ BUBBLE_BODYPART_1,
-    /* 2 */ BUBBLE_BODYPART_2,
-    /* 3 */ BUBBLE_BODYPART_3,
+    /* 0 */ BUBBLE_BODYPART_JAW,
+    /* 1 */ BUBBLE_BODYPART_LEFT_WING_WEBBING,
+    /* 2 */ BUBBLE_BODYPART_RIGHT_WING_WEBBING,
+    /* 3 */ BUBBLE_BODYPART_CRANIUM,
     /* 4 */ BUBBLE_BODYPART_EFFECTS,
     /* 5 */ BUBBLE_BODYPART_MAX
 } BubbleBodyPart;

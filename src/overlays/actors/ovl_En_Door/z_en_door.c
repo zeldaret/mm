@@ -6,7 +6,7 @@
 
 #include "z_en_door.h"
 
-#include "libc/assert.h"
+#include "assert.h"
 
 #include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
@@ -397,7 +397,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 
     if (this->doorType != ENDOOR_TYPE_FRAMED) {
         TransitionActorEntry* transitionEntry =
-            &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
 
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
@@ -622,7 +622,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play) {
             if (this->knobDoor.skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
-                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0, 100.0f, 50.0f, 0.15f);
+                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0f, 100.0f, 50.0f, 0.15f);
                 }
             }
         } else if (Animation_OnFrame(&this->knobDoor.skelAnime, sAnimCloseFrames[this->knobDoor.animIndex])) {
@@ -646,7 +646,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
         transitionEntry = NULL;
         if (this->doorType != ENDOOR_TYPE_FRAMED) {
-            transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            transitionEntry = &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         }
 
         rot->z += this->knobDoor.dyna.actor.world.rot.y;

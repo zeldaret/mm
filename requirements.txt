@@ -12,7 +12,7 @@ pyelftools>=0.26
 # diff
 watchdog>=0.10.2
 argcomplete
-python-Levenshtein
+Levenshtein
 cxxfilt
 
 # permuter
@@ -20,4 +20,4 @@ pycparser
 toml
 
 # map parsing
-mapfile-parser>=1.2.1,<2.0.0
+mapfile-parser>=2.3.5,<3.0.0

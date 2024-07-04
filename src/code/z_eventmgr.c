@@ -6,7 +6,7 @@
 
 #include "global.h"
 #include "z64shrink_window.h"
-#include "libc/string.h"
+#include "string.h"
 
 CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
@@ -173,7 +173,7 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
     s32 j;
     s32 count = 0;
     s16 csIdMax = CS_ID_NONE;
-    s16 priorityMax = SHT_MAX; // lower number means higher priority
+    s16 priorityMax = SHRT_MAX; // lower number means higher priority
     s16 csId;
     s16 priority;
 
@@ -318,7 +318,7 @@ s16 CutsceneManager_Update(void) {
 }
 
 void CutsceneManager_Queue(s16 csId) {
-    if (csId >= 0) {
+    if (csId > CS_ID_NONE) {
         sWaitingCutsceneList[csId >> 3] |= 1 << (csId & 7);
     }
 }
@@ -343,7 +343,7 @@ s16 CutsceneManager_IsNext(s16 csId) {
 s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
-    if (startCsId >= 0) {
+    if (startCsId > CS_ID_NONE) {
         Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
@@ -359,7 +359,7 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
 s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
-    if (startCsId >= 0) {
+    if (startCsId > CS_ID_NONE) {
         Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);

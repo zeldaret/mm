@@ -2,7 +2,7 @@
 #define Z64ACTOR_DLFTBLS_H
 
 #include "PR/ultratypes.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "segment_symbols.h"
 
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
@@ -31,8 +31,7 @@ typedef enum AllocType {
 } AllocType;
 
 typedef struct ActorOverlay {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
+    /* 0x00 */ RomFile file;
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr; // original name: "allocp"

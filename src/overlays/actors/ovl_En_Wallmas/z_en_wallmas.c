@@ -499,7 +499,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
     if (this->timer == 30) {
         Audio_PlaySfx(NA_SE_OC_ABYSS);
-        func_80169FDC(&play->state);
+        func_80169FDC(play);
     }
 }
 

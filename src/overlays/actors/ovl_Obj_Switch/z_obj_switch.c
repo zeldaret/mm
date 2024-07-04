@@ -652,7 +652,7 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_MultVecZ(1.0f, &sp20);
             Matrix_Pop();
-            if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
+            if ((Math3D_Cos(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
                 return true;
             }
         }
@@ -866,7 +866,7 @@ void ObjSwitch_LargeFloorSwitchPushDownInit(ObjSwitch* this) {
 
 void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.074250005f;
-    if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
+    if (this->dyna.actor.scale.y <= (33.0f / 2000.0f)) {
         ObjSwitch_PlayFootSwitchSfx(this);
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);

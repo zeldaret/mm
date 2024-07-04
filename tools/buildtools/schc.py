@@ -147,8 +147,8 @@ class TokenProperties:
 
 tokenPropertiesDict: dict[TokenType, TokenProperties] = {
     # Schedule commands
-    TokenType.IF_WEEKEVENTREG_S:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_S",         cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
-    TokenType.IF_WEEKEVENTREG_L:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_L",         cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_WEEKEVENTREG_S:    TokenProperties(macro="SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_S",         cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_WEEKEVENTREG_L:    TokenProperties(macro="SCHEDULE_CMD_CHECK_WEEK_EVENT_REG_L",         cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
     TokenType.IF_TIMERANGE_S:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_S",   cmdLength=0x06, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_TIMERANGE_S, longVersion=TokenType.IF_TIMERANGE_L),
     TokenType.IF_TIMERANGE_L:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_L",   cmdLength=0x07, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_TIMERANGE_S, longVersion=TokenType.IF_TIMERANGE_L),
     TokenType.RETURN_S:             TokenProperties(macro="SCHEDULE_CMD_RET_VAL_S",            cmdLength=0x02, hasArguments=True, isShort=True),

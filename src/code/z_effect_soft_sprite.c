@@ -159,7 +159,7 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
 void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state) != true) {
+    if (FrameAdvance_IsEnabled(play) != true) {
         if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
             sEffectSsInfo.searchIndex = index + 1;
             sEffectSsInfo.dataTable[index] = *effectsSs;
@@ -191,8 +191,8 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                 return;
             }
 
-            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
-                         overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->file.vromStart, overlayEntry->file.vromEnd, overlayEntry->vramStart,
+                         overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
         }
 
         initInfo = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)

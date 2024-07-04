@@ -1,7 +1,7 @@
 #ifndef SYSTEM_HEAP_H
 #define SYSTEM_HEAP_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
 #include "PR/ultratypes.h"
 
 void* SystemHeap_Malloc(size_t size);

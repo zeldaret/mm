@@ -3,13 +3,6 @@
  */
 
 beginseg
-    name "makerom"
-    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
-    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
-    include "$(BUILD_DIR)/asm/makerom/entry.o"
-endseg
-
-beginseg
     name "framebuffer_lo"
     address 0x80000500
     flags NOLOAD
@@ -17,7 +10,16 @@ beginseg
 endseg
 
 beginseg
+    name "makerom"
+    address 0x8007F000
+    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
+    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
+    include "$(BUILD_DIR)/asm/makerom/entry.o"
+endseg
+
+beginseg
     name "boot"
+    address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
     include "$(BUILD_DIR)/data/boot/rspboot.data.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
@@ -493,12 +495,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_lights.o"
     include "$(BUILD_DIR)/src/code/z_malloc.o"
     include "$(BUILD_DIR)/src/code/z_map_disp.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.data.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.bss.o"
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"
-    include "$(BUILD_DIR)/data/code/z_msgevent.data.o"
     include "$(BUILD_DIR)/src/code/z_nmi_buff.o"
     include "$(BUILD_DIR)/src/code/z_nulltask.o"
     include "$(BUILD_DIR)/src/code/z_olib.o"
@@ -572,8 +571,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_initial_check.o"
     include "$(BUILD_DIR)/src/code/sys_math.o"
     include "$(BUILD_DIR)/src/code/sys_math3d.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.data.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.bss.o"
     include "$(BUILD_DIR)/src/code/sys_math_atan.o"
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
@@ -761,8 +758,7 @@ beginseg
     name "ovl_En_Okuta"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/z_en_okuta.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/ovl_En_Okuta_reloc.o"
 endseg
 
 beginseg
@@ -1049,17 +1045,14 @@ beginseg
     name "ovl_En_Death"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/z_en_death.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/ovl_En_Death_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Minideath"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/z_en_minideath.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/ovl_En_Minideath_reloc.o"
 endseg
 
 beginseg
@@ -3428,8 +3421,7 @@ beginseg
     name "ovl_En_Wdhand"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/z_en_wdhand.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/ovl_En_Wdhand_reloc.o"
 endseg
 
 beginseg
@@ -3443,8 +3435,7 @@ beginseg
     name "ovl_Bg_Danpei_Movebg"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg_reloc.o"
 endseg
 
 beginseg
@@ -3983,8 +3974,7 @@ beginseg
     name "ovl_Bg_Dblue_Elevator"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/z_bg_dblue_elevator.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator_reloc.o"
 endseg
 
 beginseg

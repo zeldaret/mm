@@ -20,13 +20,36 @@ void func_80BD3768(EnAh* this, PlayState* play);
 
 #include "src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 
-s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
+MsgScript D_80BD3DE8[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28FF),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
-s32 D_80BD3DF0[] = { 0x0E29000C, 0x10000000 };
+MsgScript D_80BD3DF0[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2900),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
-s32 D_80BD3DF8[] = { 0x00330100, 0x050E28FE, 0x0C100E28, -0x03F3F000 };
+MsgScript D_80BD3DF8[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28FE),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
 
-s32 D_80BD3E08[] = { 0x0E28FD0C, 0x0F29540C, 0x10000000 };
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28FC),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+MsgScript D_80BD3E08[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x28FD),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x2954),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+};
 
 ActorInit En_Ah_InitVars = {
     /**/ ACTOR_EN_AH,
@@ -210,7 +233,7 @@ void func_80BD2C6C(EnAh* this) {
 Actor* func_80BD2DA0(EnAh* this, PlayState* play) {
     Actor* actor;
 
-    if (this->unk_1DC == 3) {
+    if (this->scheduleResult == 3) {
         actor = this->actor.child;
     } else {
         actor = &GET_PLAYER(play)->actor;
@@ -277,7 +300,7 @@ void func_80BD2FD0(EnAh* this, PlayState* play) {
 }
 
 s32 func_80BD30C0(EnAh* this, PlayState* play) {
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         case 1:
             EnAh_ChangeAnim(this, ENAH_ANIM_0);
             break;
@@ -346,14 +369,12 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     return false;
 }
 
-s32* func_80BD3294(EnAh* this, PlayState* play) {
-    s32 mask = Player_GetMask(play);
-
-    if (PLAYER_MASK_KAFEIS_MASK == mask) {
+MsgScript* EnAh_GetMsgScript(EnAh* this, PlayState* play) {
+    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         return D_80BD3E08;
     }
 
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         case 1:
             if (gSaveContext.save.day == 2) {
                 return D_80BD3DF0;
@@ -454,7 +475,7 @@ s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BD35BC(EnAh* this, PlayState* play) {
     s16 temp;
 
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         default:
             return false;
 
@@ -470,25 +491,25 @@ s32 func_80BD35BC(EnAh* this, PlayState* play) {
 }
 
 void func_80BD3658(EnAh* this, PlayState* play) {
-    if ((this->unk_1DC == 1) || (this->unk_1DC == 2) || (this->unk_1DC == 3)) {
+    if ((this->scheduleResult == 1) || (this->scheduleResult == 2) || (this->scheduleResult == 3)) {
         func_80BD35BC(this, play);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
 void func_80BD36B8(EnAh* this, PlayState* play) {
-    ScheduleOutput sp18;
+    ScheduleOutput scheduleOutput;
 
-    if (!Schedule_RunScript(play, D_80BD3DB0, &sp18) ||
-        ((this->unk_1DC != sp18.result) && !func_80BD3548(this, play, &sp18))) {
+    if (!Schedule_RunScript(play, D_80BD3DB0, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BD3548(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp18.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk_1DC = sp18.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BD3658(this, play);
 }
 
@@ -497,14 +518,14 @@ void func_80BD3768(EnAh* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    if (func_8010BF58(&this->actor, play, func_80BD3294(this, play), NULL, &this->unk_1E0)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnAh_GetMsgScript(this, play), NULL, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2D8 &= ~8;
         this->unk_2D8 |= 0x80;
         this->unk_2F4 = 20;
-        this->unk_1E0 = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80BD36B8;
-    } else if (this->unk_1DC != 2) {
+    } else if (this->scheduleResult != 2) {
         if (this->unk_1E4 != NULL) {
             Math_Vec3f_Copy(&sp40, &this->unk_1E4->world.pos);
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -530,7 +551,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_1DC = 0;
+    this->scheduleResult = 0;
     this->unk_2D8 = 0;
 
     this->actionFunc = func_80BD36B8;
@@ -552,7 +573,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->unk_1DC != 0) {
+    if (this->scheduleResult != 0) {
         func_80BD3198(this, play);
         EnAh_UpdateSkelAnime(this);
         func_80BD2C6C(this);
@@ -622,7 +643,7 @@ void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnAh_Draw(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
-    if (this->unk_1DC != 0) {
+    if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

@@ -361,7 +361,7 @@ void EnBaba_UpdateModel(EnBaba* this, PlayState* play) {
 }
 
 s32 EnBaba_InitTimePath(EnBaba* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 now = SCHEDULE_TIME_NOW;
+    u16 now = SCRIPT_TIME_NOW;
     u16 startTime;
     u8 pathIndex = BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor);
     u16 numWaypoints;

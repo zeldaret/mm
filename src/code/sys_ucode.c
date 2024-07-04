@@ -5,6 +5,8 @@
 
 #include "sys_ucode.h"
 
+#include "stdint.h"
+
 u64* initialgspUcodeText = gspF3DZEX2_NoN_PosLight_fifoTextStart;
 u64* initialgspUcodeData = gspF3DZEX2_NoN_PosLight_fifoDataStart;
 
