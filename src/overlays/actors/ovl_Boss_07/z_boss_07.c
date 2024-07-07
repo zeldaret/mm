@@ -5982,12 +5982,12 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
     if (this->invincibilityTimer == 0) {
         if (this->maskFrontCollider.base.acFlags & AC_HIT) {
             this->maskFrontCollider.base.acFlags &= ~AC_HIT;
-            this->dmgShakeTimer = 7;
+            this->maskShakeTimer = 7;
         }
 
         if (this->maskBackCollider.base.acFlags & AC_HIT) {
             this->maskBackCollider.base.acFlags &= ~AC_HIT;
-            this->dmgShakeTimer = 15;
+            this->maskShakeTimer = 15;
             if ((this->actionFunc == Boss07_Mask_Stunned) || (player->stateFlags3 & PLAYER_STATE3_200)) {
                 hitActor = this->maskBackCollider.base.ac;
                 hitbox = this->maskBackCollider.info.acHitInfo;
@@ -6048,7 +6048,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
                 DECR(this->timers[i]);
             }
 
-            DECR(this->dmgShakeTimer);
+            DECR(this->maskShakeTimer);
             DECR(this->invincibilityTimer);
             DECR(this->damagedFlashTimer);
             DECR(this->timer_18D6);
@@ -6397,9 +6397,9 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    shakeScale = this->dmgShakeTimer * (M_PIf / 4.0f) * 0.06666667f;
-    rotX = Math_SinS(this->dmgShakeTimer * 0x3500) * shakeScale * 0.5f;
-    rotY = Math_SinS(this->dmgShakeTimer * 0x4500) * shakeScale;
+    shakeScale = this->maskShakeTimer * (M_PIf / 4.0f) * 0.06666667f;
+    rotX = Math_SinS(this->maskShakeTimer * 0x3500) * shakeScale * 0.5f;
+    rotY = Math_SinS(this->maskShakeTimer * 0x4500) * shakeScale;
     Matrix_RotateYF(rotY, MTXMODE_APPLY);
     Matrix_RotateXFApply(rotX);
 

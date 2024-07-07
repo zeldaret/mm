@@ -233,7 +233,7 @@ typedef struct Boss07 {
     /* 0x1810 */ Vec3f lensFlarePos;
     /* 0x181C */ s16 projectileColorIndex;
     /* 0x1820 */ ColliderCylinder generalCollider;
-    /* 0x186C */ s16 dmgShakeTimer;
+    /* 0x186C */ s16 maskShakeTimer;
     /* 0x1870 */ f32 tentacleLengthScale;
     /* 0x1874 */ u8 tentacleState; // wavy tentacles
     /* 0x1878 */ Vec3f tentacleAttachPos;
