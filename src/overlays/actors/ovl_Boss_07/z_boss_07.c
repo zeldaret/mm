@@ -1341,7 +1341,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 this->velocity_170 = 0.0f;
                 this->timers[0] = 50;
                 this->timers[2] = 200;
-                this->noclipTimer = 50;
+                this->bgCheckTimer = 50;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 sMusicStartTimer = 20;
             } else {
@@ -5166,7 +5166,7 @@ void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->velocity_170, 15.0f, 1.0f, 1.0f);
 
     if ((this->timers[0] > 30) || ((this->timers[0] & 2) != 0)) {
-        this->maskEyeState = 1;
+        this->maskEyeTexIndex = 1;
     }
 
     if (this->timers[0] == 0) {
@@ -5222,7 +5222,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
     this->actor.shape.rot.z += this->angularVelocity;
 
     if ((this->timers[0] > 30) || ((this->timers[0] & 2) != 0)) {
-        this->maskEyeState = 1;
+        this->maskEyeTexIndex = 1;
     }
 
     if ((this->timers[0] == 15) && ((s8)this->actor.colChkInfo.health < 10)) {
@@ -5606,7 +5606,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
     this->cutsceneTimer++;
     SREG(90) = this->motionBlurAlpha;
-    this->maskEyeState = 1;
+    this->maskEyeTexIndex = 1;
 
     switch (this->cutsceneState) {
         case MAJORAS_MASK_INTRO_STATE_0:
@@ -5752,7 +5752,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 if (this->cutsceneTimer == 55) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_B_PAMET_BREAK);
                 }
-                this->maskEyeState = 0;
+                this->maskEyeTexIndex = 0;
             }
 
             if (this->cutsceneTimer >= 75) {
@@ -5794,7 +5794,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             break;
 
         case MAJORAS_MASK_INTRO_STATE_4:
-            this->maskEyeState = 0;
+            this->maskEyeTexIndex = 0;
             if (this->cutsceneTimer >= 10) {
                 Math_ApproachS(&this->motionBlurAlpha, KREG(72), 1, KREG(73) + 2);
                 if (this->cutsceneTimer == 10) {
@@ -5832,7 +5832,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     Boss07_Mask_SetupIdle(this, play);
                     this->timers[0] = 50;
                     this->timers[2] = 200;
-                    this->noclipTimer = 50;
+                    this->bgCheckTimer = 50;
                     this->moveTarget.x = 0.0f;
                     this->moveTarget.y = 200.0f;
                     this->moveTarget.z = 0.0f;
@@ -5890,7 +5890,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
 
     this->cutsceneTimer++;
     this->invincibilityTimer = 20;
-    this->maskEyeState = 1;
+    this->maskEyeTexIndex = 1;
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 0.5f);
     Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.05f, 5.0f);
@@ -6039,7 +6039,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
 
         if (KREG(63) == 0) {
             this->canDodge = false;
-            this->maskEyeState = 0;
+            this->maskEyeTexIndex = 0;
             this->tentacleState = 0;
             Actor_SetScale(&this->actor, 0.1f);
             this->actor.focus.pos = this->actor.world.pos;
@@ -6074,11 +6074,11 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
                     }
                     Actor_MoveWithGravity(&this->actor);
                 }
-                if (this->noclipTimer == 0) {
+                if (this->bgCheckTimer == 0) {
                     Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 60.0f, 100.0f,
                                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
                 } else {
-                    this->noclipTimer--;
+                    this->bgCheckTimer--;
                 }
             }
         } else {
@@ -6373,12 +6373,12 @@ void Boss07_Mask_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     Boss07* this = THIS;
 
     if (limbIndex == MAJORAS_MASK_LIMB_FACE) {
-        Matrix_MultVecX(500.0f, &this->tentacleAttachPos);
+        Matrix_MultVecX(500.0f, &this->tentacleBasePos);
     }
 }
 
 void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
-    static void* D_80A082E0[] = { gMajorasMaskWithNormalEyesTex, gMajorasMaskWithDullEyesTex };
+    static TexturePtr D_80A082E0[] = { gMajorasMaskWithNormalEyesTex, gMajorasMaskWithDullEyesTex };
     PlayState* play = play2;
     Boss07* this = THIS;
     f32 shakeScale;
@@ -6407,7 +6407,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeState]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeTexIndex]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, Boss07_Mask_PostLimbDraw,
                       &this->actor);
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
@@ -6435,9 +6435,9 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZF(rotZ, MTXMODE_APPLY);
         Matrix_MultVec3f(&spA8, &sp9C);
 
-        this->tentacles[i].base.x = this->tentacleAttachPos.x + sp9C.x;
-        this->tentacles[i].base.y = this->tentacleAttachPos.y + sp9C.y;
-        this->tentacles[i].base.z = this->tentacleAttachPos.z + sp9C.z;
+        this->tentacles[i].base.x = this->tentacleBasePos.x + sp9C.x;
+        this->tentacles[i].base.y = this->tentacleBasePos.y + sp9C.y;
+        this->tentacles[i].base.z = this->tentacleBasePos.z + sp9C.z;
         temp = (1 - (i * 0.008f)) * this->tentacleLengthScale;
 
         Matrix_Pop();
@@ -6714,7 +6714,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             this->moveTarget = gZeroVec3f;
             this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
             this->actionState = REMAINS_STATE_FLY;
-            this->noclipTimer = 100;
+            this->bgCheckTimer = 100;
             this->generalCollider.base.colType = COLTYPE_HIT3;
             this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_TARGETABLE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
@@ -6757,11 +6757,11 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             }
             Actor_UpdateVelocityWithoutGravity(&this->actor);
             Actor_UpdatePos(&this->actor);
-            if (this->noclipTimer == 0) {
+            if (this->bgCheckTimer == 0) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 100.0f, 100,
                                         UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             } else {
-                this->noclipTimer--;
+                this->bgCheckTimer--;
             }
             Boss07_Remains_CollisionCheck(this, play);
             break;

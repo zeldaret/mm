@@ -236,9 +236,9 @@ typedef struct Boss07 {
     /* 0x186C */ s16 maskShakeTimer;
     /* 0x1870 */ f32 tentacleLengthScale;
     /* 0x1874 */ u8 tentacleState; // wavy tentacles
-    /* 0x1878 */ Vec3f tentacleAttachPos;
-    /* 0x1884 */ s32 maskEyeState;
-    /* 0x1888 */ u8 noclipTimer;
+    /* 0x1878 */ Vec3f tentacleBasePos;
+    /* 0x1884 */ s32 maskEyeTexIndex;
+    /* 0x1888 */ u8 bgCheckTimer;
     /* 0x188C */ f32 eyeBeamsZscale;
     /* 0x1890 */ f32 beamFocusOrbScale;
     /* 0x1894 */ f32 unk_1894;
