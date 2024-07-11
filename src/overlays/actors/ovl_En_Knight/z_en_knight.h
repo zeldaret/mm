@@ -1,114 +1,136 @@
 #ifndef Z_EN_KNIGHT_H
 #define Z_EN_KNIGHT_H
 
+#include "assert.h"
 #include "global.h"
+#include "objects/object_knight/object_knight.h"
+
+static_assert((u32)IGOS_LIMB_MAX == (u32)KNIGHT_LIMB_MAX,
+              "The skeletons for Igos du Ikana and his aides must match in structure");
 
 struct EnKnight;
 
 typedef void (*EnKnightActionFunc)(struct EnKnight*, PlayState*);
 
+typedef enum {
+    /*   0 */ EN_KNIGHT_PARAM_IGOS_MAIN = 0,
+    /*  35 */ EN_KNIGHT_PARAM_OTHERS = 35,
+    /* 100 */ EN_KNIGHT_PARAM_IGOS_HEAD = 100,
+    /* 200 */ EN_KNIGHT_PARAM_KNIGHT_BODY_AFTERIMAGE = 200,
+    /* 201 */ EN_KNIGHT_PARAM_IGOS_BODY_AFTERIMAGE = 201,
+    /* 202 */ EN_KNIGHT_PARAM_IGOS_HEAD_AFTERIMAGE = 202
+} EnKnightParam;
+
+typedef enum {
+    /* 0 */ KNIGHT_SUB_ACTION_CURTAIN_REACT_WAIT,
+    /* 1 */ KNIGHT_SUB_ACTION_CURTAIN_REACT_BEGIN,
+    /* 2 */ KNIGHT_SUB_ACTION_CURTAIN_REACT_PERFORM
+} EnKnightSubActionCurtainReact;
+
+typedef enum {
+    /* 0 */ KNIGHT_CLOSE_CURTAIN_ACTION_0,
+    /* 1 */ KNIGHT_CLOSE_CURTAIN_ACTION_1,
+    /* 2 */ KNIGHT_CLOSE_CURTAIN_ACTION_2
+} EnKnightCloseCurtainAction;
+
 typedef struct EnKnight {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ u16 unk_144;
-    /* 0x146 */ s16 unk146;
-    /* 0x148 */ u8 unk_148;
-    /* 0x14A */ s16 unk14A[3];
-    /* 0x150 */ char pad150[1];
-    /* 0x151 */ u8 unk_151;
-    /* 0x152 */ u8 unk152;
-    /* 0x153 */ u8 unk_153;
-    /* 0x154 */ u8 unk_154;
-    /* 0x156 */ s16 unk156;
-    /* 0x158 */ s16 unk158;
-    /* 0x15A */ s16 unk15A;
-    /* 0x15C */ s16 unk15C;
-    /* 0x15E */ s16 unk15E;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ u8 unk162;
-    /* 0x164 */ Vec3f unk164;
-    /* 0x170 */ s16 unk170;
-    /* 0x172 */ s16 unk172;
-    /* 0x174 */ s16 unk174;
-    /* 0x176 */ s16 unk176;
-    /* 0x178 */ s16 unk178;
-    /* 0x17A */ s16 unk17A;
-    /* 0x17C */ f32 unk17C;
-    /* 0x180 */ f32 unk180;
-    /* 0x184 */ s16 unk184;
-    /* 0x186 */ s16 unk186;
-    /* 0x188 */ s16 unk188;
-    /* 0x18A */ s16 unk18A;
-    /* 0x18C */ s16 unk18C;
-    /* 0x18E */ s16 unk18E;
-    /* 0x190 */ u8 unk190;
-    /* 0x191 */ u8 unk191;
-    /* 0x192 */ u8 unk192;
-    /* 0x193 */ u8 unk193;
-    /* 0x194 */ SkelAnime unk194;
-    /* 0x1D8 */ f32 unk1D8;
-    /* 0x1DC */ Vec3f unk1DC[15];
-    /* 0x290 */ u8 unk290;
-    /* 0x291 */ u8 unk291;
-    /* 0x292 */ u8 unk292;
-    /* 0x294 */ f32 unk294;
-    /* 0x298 */ f32 unk298;
-    /* 0x29C */ f32 unk29C;
-    /* 0x2A0 */ u8 unk2A0;
-    /* 0x2A1 */ u8 unk2A1;
-    /* 0x2A2 */ s16 unk2A2;
-    /* 0x2A4 */ f32 unk2A4;
-    /* 0x2A8 */ f32 unk2A8;
-    /* 0x2AC */ Vec3f unk2AC[2];
-    /* 0x2C4 */ Vec3s unk2C4[29];
-    /* 0x372 */ Vec3s unk372[29];
+    /* 0x144 */ u16 curtainsLightRayAngle;
+    /* 0x146 */ s16 randTimer;
+    /* 0x148 */ u8 subAction;
+    /* 0x14A */ s16 actionTimers[3];
+    /* 0x150 */ UNK_TYPE1 unk_150;
+    /* 0x151 */ u8 inCurtainCutscene;
+    /* 0x152 */ u8 doBgChecks;
+    /* 0x153 */ u8 closeCurtainAction;
+    /* 0x154 */ u8 roomIsLit;
+    /* 0x156 */ s16 invincibilityTimer;
+    /* 0x158 */ s16 damageFlashTimer;
+    /* 0x15A */ s16 strafeTarget;
+    /* 0x15C */ s16 strafeMaxStep;
+    /* 0x15E */ s16 effectTimer;
+    /* 0x160 */ s16 breathAlpha;
+    /* 0x162 */ u8 isHeadless;
+    /* 0x164 */ Vec3f afterImageOffset;
+    /* 0x170 */ s16 pitchToPlayer;
+    /* 0x172 */ s16 yawToPlayer;
+    /* 0x174 */ s16 leftLegUpperRotation;
+    /* 0x176 */ s16 rightLegUpperRotation;
+    /* 0x178 */ s16 leftLegLowerRotation;
+    /* 0x17A */ s16 rightLegLowerRotation;
+    /* 0x17C */ f32 bodyAlpha;
+    /* 0x180 */ f32 shadowAlphaFactor;
+    /* 0x184 */ s16 neckPitch;
+    /* 0x186 */ s16 neckPitchTarget;
+    /* 0x188 */ s16 neckRoll;
+    /* 0x18A */ s16 neckRollTarget;
+    /* 0x18C */ s16 neckRotationMaxStep;
+    /* 0x18E */ s16 neckRotationStepScale;
+    /* 0x190 */ u8 swordColliderActive;
+    /* 0x191 */ u8 shieldColliderActive;
+    /* 0x192 */ u8 canRetreat;
+    /* 0x193 */ u8 shieldingInvulnerabilityTimer;
+    /* 0x194 */ SkelAnime skelAnime;
+    /* 0x1D8 */ f32 animLastFrame;
+    /* 0x1DC */ Vec3f bodyPartsPos[15];
+    /* 0x290 */ u8 igosCurtainReaction;
+    /* 0x291 */ u8 lightRayDamageTimer;
+    /* 0x292 */ u8 retreatWhileShielding;
+    /* 0x294 */ f32 dmgEffectScale;
+    /* 0x298 */ f32 dmgEffectIceMeltingScale;
+    /* 0x29C */ f32 dmgEffectAlpha;
+    /* 0x2A0 */ u8 dmgEffectType;
+    /* 0x2A1 */ u8 dmgEffectState;
+    /* 0x2A2 */ s16 dmgEffectDuration;
+    /* 0x2A4 */ f32 animTranslationX;
+    /* 0x2A8 */ f32 animTranslationZ;
+    /* 0x2AC */ Vec3f feetPositions[2];
+    /* 0x2C4 */ Vec3s jointTable[KNIGHT_LIMB_MAX];
+    /* 0x372 */ Vec3s morphTable[KNIGHT_LIMB_MAX];
     /* 0x420 */ EnKnightActionFunc actionFunc;
-    /* 0x424 */ EnKnightActionFunc unk424;
-    /* 0x428 */ s16 unk428;
-    /* 0x42C */ f32 unk42C;
-    /* 0x430 */ f32 unk430;
-    /* 0x434 */ Vec3f unk434;
-    /* 0x440 */ Vec3f unk440;
-    /* 0x44C */ u8 unk44C;
-    /* 0x450 */ f32 unk450;
-    /* 0x454 */ f32 unk454;
-    /* 0x458 */ f32 unk458;
-    /* 0x45C */ f32 unk45C;
-    /* 0x460 */ f32 unk460;
-    /* 0x464 */ f32 unk464;
-    /* 0x468 */ f32 unk468;
-    /* 0x46C */ f32 unk46C;
-    /* 0x470 */ f32 unk470;
-    /* 0x474 */ f32 unk474;
-    /* 0x478 */ s16 unk478;
-    /* 0x47C */ Vec3f unk47C;
-    /* 0x488 */ ColliderCylinder unk488;
-    /* 0x4D4 */ ColliderJntSph unk4D4;
-    /* 0x4F4 */ ColliderJntSphElement unk4F4[1];
-    /* 0x534 */ ColliderJntSph unk534;
-    /* 0x554 */ ColliderJntSphElement unk554[1];
-    /* 0x594 */ ColliderJntSph unk594;
-    /* 0x5B4 */ ColliderJntSphElement unk5B4[2];
-    /* 0x634 */ ColliderCylinder unk634;
-    /* 0x680 */ u8 unk_680;
-    /* 0x684 */ u32 unk684;
-    /* 0x688 */ s16 unk688;
-    /* 0x68A */ s16 unk_68A;
-    /* 0x68C */ Vec3f unk68C;
-    /* 0x698 */ Vec3f unk698;
-    /* 0x6A4 */ f32 unk6A4;
-    /* 0x6A8 */ char pad6A8[4];
-    /* 0x6AC */ s16 unk6AC;
-    /* 0x6B0 */ f32 unk6B0;
-    /* 0x6B4 */ u16 unk6B4;
-    /* 0x6B6 */ u16 unk6B6;
-    /* 0x6B8 */ u16 unk6B8;
-    /* 0x6BA */ char pad6BA[2];
-    /* 0x6BC */ u16 unk6BC;
-    /* 0x6BE */ u16 unk6BE;
-    /* 0x6C0 */ u16 unk6C0;
-    /* 0x6C2 */ u16 unk6C2;
-    /* 0x6C4 */ u8 unk6C4;
-    /* 0x6C8 */ Vec3f unk6C8;
+    /* 0x424 */ EnKnightActionFunc prevActionFunc;
+    /* 0x428 */ s16 jawRotation;
+    /* 0x42C */ f32 jawRotationAmplitude;
+    /* 0x430 */ f32 jawRotationAmplitudeTarget;
+    /* 0x434 */ Vec3f breathBasePos;
+    /* 0x440 */ Vec3f retreatTowards;
+    /* 0x44C */ u8 blureState;
+    /* 0x450 */ f32 blureAlpha;
+    /* 0x454 */ Vec3f blureTranslation;
+    /* 0x460 */ Vec3f blureRotation;
+    /* 0x46C */ f32 swordScale;
+    /* 0x470 */ f32 shieldScale;
+    /* 0x474 */ f32 shieldLightReflectionScale;
+    /* 0x478 */ s16 shieldHitTimer;
+    /* 0x47C */ Vec3f shieldParticlesPos;
+    /* 0x488 */ ColliderCylinder headAttackCollider;
+    /* 0x4D4 */ ColliderJntSph swordCollider;
+    /* 0x4F4 */ ColliderJntSphElement swordColliderElements[1];
+    /* 0x534 */ ColliderJntSph shieldCollider;
+    /* 0x554 */ ColliderJntSphElement shieldColliderElements[1];
+    /* 0x594 */ ColliderJntSph bodyCollider;
+    /* 0x5B4 */ ColliderJntSphElement bodyColliderElements[2];
+    /* 0x634 */ ColliderCylinder headCollider;
+    /* 0x680 */ u8 inCurtainReaction;
+    /* 0x684 */ u32 csTimer;
+    /* 0x688 */ s16 csState;
+    /* 0x68A */ s16 csCamId;
+    /* 0x68C */ Vec3f csCamEye;
+    /* 0x698 */ Vec3f csCamAt;
+    /* 0x6A4 */ f32 csStepValue;
+    /* 0x6A8 */ UNK_TYPE4 unk_6A8;
+    /* 0x6AC */ s16 csPlayerYaw;
+    /* 0x6B0 */ f32 csCamFov;
+    /* 0x6B4 */ u16 walkSfx;
+    /* 0x6B6 */ u16 pauseSfx;
+    /* 0x6B8 */ u16 laughSfx;
+    /* 0x6BA */ UNK_TYPE2 unk_6BA; // unused sfx id space?
+    /* 0x6BC */ u16 attackSfx;
+    /* 0x6BE */ u16 damagedSfx;
+    /* 0x6C0 */ u16 defeatedSfx;
+    /* 0x6C2 */ u16 voiceSfx;
+    /* 0x6C4 */ u8 seenCaptainsHat;
+    /* 0x6C8 */ Vec3f projectedPos;
 } EnKnight; // size = 0x6D4
 
 #endif // Z_EN_KNIGHT_H
