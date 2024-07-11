@@ -66,7 +66,7 @@
         <Texture Name="gKotakeJewelTex" OutName="kotake_jewel" Format="rgba16" Width="8" Height="8" Offset="0xC8B8" />
 
         <!-- Unused Eye TexAnim-->
-        <TextureAnimation Name="gKotakeEyesTexAnim" Offset="0xC988" />
+        <TextureAnimation Name="gKotakeEyeTexAnim" Offset="0xC988" />
 
         <!-- Animations -->
         <Animation Name="gKotakeHandsOnCounterAnim" Offset="0xD52C" /> <!-- Original name is "trT_talk" -->

@@ -71,7 +71,7 @@
         <Texture Name="gAnju1Steam1Tex" OutName="tray_steam_1" Format="i4" Width="16" Height="16" Offset="0x12228" />
         <Texture Name="gAnju1Steam2Tex" OutName="tray_steam_2" Format="i8" Width="16" Height="16" Offset="0x122A8" />
 
-        <!-- <Blob Name="object_an1_Blob_0123A8" Size="0x10" Offset="0x123A8" /> -->
+        <TextureAnimation Name="gAnju1UnusedTexAnim" Offset="0x123B0" />
 
         <!-- Chopsticks used for cooking -->
         <DList Name="gAnju1ChopsticksDL" Offset="0x12478" /> <!-- Original name is "an_hashi_model" ("chopsticks​") -->

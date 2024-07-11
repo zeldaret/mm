@@ -97,9 +97,9 @@
         <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" /> <!-- Original name is "bsl_bable_model" -->
         <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" /> <!-- Original name is "bsl_coolwave_modelT" -->
         <Texture Name="gBigslimeShockwave1Tex" OutName="bigslime_shockwave_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
-        <Blob Name="object_bigslime_zeroes_Blob_010028" Size="0x400" Offset="0x10028" />
+        <Blob Name="gBigslimeEmpty1Blob" Size="0x400" Offset="0x10028" />
         <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shockwave_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
-        <Blob Name="object_bigslime_zeroes_Blob_0104A8" Size="0x88" Offset="0x104A8" />
+        <Blob Name="gBigslimeEmpty2Blob" Size="0x88" Offset="0x104A8" />
         
         <DList Name="gBigslimeNormalMaterialDL" Offset="0x10530" />
 

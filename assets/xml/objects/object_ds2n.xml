@@ -46,7 +46,7 @@
 
         <Texture Name="gDs2nMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="16" Offset="0x6218" TlutOffset="0x3CD8" />
 
-        <!-- 6418 -> 6450: unknown small data -->
+        <TextureAnimation Name="gDs2nEyeTexAnim" Offset="0x6444" /> <!-- Unused -->
 
         <!-- Unused and unreferenced. Exact copies of the above used textures. -->
         <Texture Name="gDs2nMain2TLUT" OutName="main2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6450" />
@@ -87,7 +87,5 @@
         <Limb Name="gDs2nRightHandLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_HAND" Offset="0x8110" />
         <Limb Name="gDs2nHeadLimb" Type="Standard" EnumName="DS2N_LIMB_HEAD" Offset="0x811C" />
         <Skeleton Name="gDs2nSkel" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimb" Offset="0x8170" />
-
-        <!-- 8 bytes: 0x11 followed by zeros  <Blob Name="gDs2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>
 </Root>
