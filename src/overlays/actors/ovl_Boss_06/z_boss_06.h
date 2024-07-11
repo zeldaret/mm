@@ -11,6 +11,7 @@ typedef void (*Boss06ActionFunc)(struct Boss06*, PlayState*);
 
 #define BOSS06_CURTAIN_TEX_WIDTH  64
 #define BOSS06_CURTAIN_TEX_HEIGHT 64
+#define BOSS06_CURTAIN_TEX_SIZE ((BOSS06_CURTAIN_TEX_WIDTH * BOSS06_CURTAIN_TEX_HEIGHT) / 2) // 64x64 CI4
 
 typedef struct Boss06 {
     /* 0x000 */ Actor actor;
@@ -41,7 +42,7 @@ typedef struct Boss06 {
                 // alignment since the zelda arena allocator assumes 0x10 alignment is sufficient for any allocation.
     /* 0x1E8 */ UNK_TYPE1 unk_1E8[0x18];
     union {
-    /* 0x200 */ u8 curtainTexture[(64 * 64) / 2]; // 64x64 CI4
+    /* 0x200 */ u8 curtainTexture[BOSS06_CURTAIN_TEX_SIZE];
                 u64 force_structure_alignment; // This buffer is used as a texture so requires 64-bit memory alignment
     };
     /* 0xA00 */ s16 subCamId;

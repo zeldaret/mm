@@ -254,7 +254,7 @@ void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
                 this->fireEffectScale = 0.0f;
 
                 if (this->csFrameCount == 60) {
-                    sIgosInstance->roomIsLit++;
+                    sIgosInstance->roomLightingState++;
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
@@ -370,7 +370,7 @@ void Boss06_SetupCloseCurtain(Boss06* this, PlayState* play) {
     this->lightRayBrightness = 1.0f;
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_MIR_RAY2, this->actor.world.pos.x,
                        this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
-    sIgosInstance->roomIsLit++;
+    sIgosInstance->roomLightingState++;
 }
 
 void Boss06_CloseCurtain(Boss06* this, PlayState* play) {
@@ -472,7 +472,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
         Audio_PlaySfx(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
         this->fireEffectDistanceAdd += 0.6f;
         this->fireEffectDistanceScale2 += 0.1f;
-        this->fireEffectDistanceScale1 += 0.0200000014156f;
+        this->fireEffectDistanceScale1 += 20.0f * 0.001f;
         this->fireEffectScale += 0.00016f;
         this->lightOrbScale += 0.4f;
         Math_ApproachZeroF(&this->arrowHitPos.x, 1.0f, 0.7f);

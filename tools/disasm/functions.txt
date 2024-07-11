@@ -8897,7 +8897,7 @@
     0x809B22CC:("EnKnight_SpawnDustAtFeet",),
     0x809B2510:("EnKnight_Init",),
     0x809B2DC0:("EnKnight_Destroy",),
-    0x809B2DD0:("EnKnight_CheckRetreatFromExplosiveOrLight",),
+    0x809B2DD0:("EnKnight_CheckRetreat",),
     0x809B2F54:("EnKnight_SelectAttack",),
     0x809B316C:("EnKnight_IsFacingPlayer",),
     0x809B31E8:("EnKnight_IsFacingPlayerFocus",),

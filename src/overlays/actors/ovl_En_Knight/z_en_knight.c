@@ -4,12 +4,12 @@
  * Description: Igos du Ikana and his lackeys
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_Mir_Ray3/z_mir_ray3.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -380,13 +380,13 @@ const ActorInit En_Knight_InitVars = {
     /**/ EnKnight_Draw,
 };
 
-u16 sKnightWalkSfx[4] = { NA_SE_EN_BOSU_WALK, NA_SE_EN_YASE_WALK, NA_SE_EN_DEBU_WALK, 0 };
-u16 sKnightPauseSfx[4] = { NA_SE_EN_BOSU_LAUGH_K, NA_SE_EN_YASE_PAUSE_K, NA_SE_EN_DEBU_PAUSE_K, 0 };
-u16 sKnightLaughSfx[4] = { NA_SE_EN_BOSU_LAUGH_K, NA_SE_EN_YASE_LAUGH_K, NA_SE_EN_DEBU_LAUGH_K, 0 };
-u16 sKnightAttackSfx[4] = { NA_SE_EN_BOSU_ATTACK_W, NA_SE_EN_YASE_ATTACK_W, NA_SE_EN_DEBU_ATTACK_W, 0 };
-u16 sKnightDamagedSfx[4] = { NA_SE_EN_BOSU_DAMAGE, NA_SE_EN_YASE_DAMAGE, NA_SE_EN_DEBU_DAMAGE, 0 };
-u16 sKnightDefeatedSfx[4] = { NA_SE_EN_BOSU_DEAD, NA_SE_EN_YASE_DEAD, NA_SE_EN_DEBU_DEAD, 0 };
-u16 sKnightVoiceSfx[4] = { NA_SE_EN_BOSU_DEAD_VOICE, NA_SE_EN_YASE_DEAD_VOICE, NA_SE_EN_DEBU_DEAD_VOICE, 0 };
+u16 sKnightWalkSfx[3] = { NA_SE_EN_BOSU_WALK, NA_SE_EN_YASE_WALK, NA_SE_EN_DEBU_WALK };
+u16 sKnightPauseSfx[3] = { NA_SE_EN_BOSU_LAUGH_K, NA_SE_EN_YASE_PAUSE_K, NA_SE_EN_DEBU_PAUSE_K };
+u16 sKnightLaughSfx[3] = { NA_SE_EN_BOSU_LAUGH_K, NA_SE_EN_YASE_LAUGH_K, NA_SE_EN_DEBU_LAUGH_K };
+u16 sKnightAttackSfx[3] = { NA_SE_EN_BOSU_ATTACK_W, NA_SE_EN_YASE_ATTACK_W, NA_SE_EN_DEBU_ATTACK_W };
+u16 sKnightDamagedSfx[3] = { NA_SE_EN_BOSU_DAMAGE, NA_SE_EN_YASE_DAMAGE, NA_SE_EN_DEBU_DAMAGE };
+u16 sKnightDefeatedSfx[3] = { NA_SE_EN_BOSU_DEAD, NA_SE_EN_YASE_DEAD, NA_SE_EN_DEBU_DEAD };
+u16 sKnightVoiceSfx[3] = { NA_SE_EN_BOSU_DEAD_VOICE, NA_SE_EN_YASE_DEAD_VOICE, NA_SE_EN_DEBU_DEAD_VOICE };
 
 EnKnight* sIgosInstance; // Bosu (igos)
 EnKnight* sYaseInstance; // Yase (tall minion)
@@ -695,10 +695,9 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKnight_Destroy(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
 }
 
-void EnKnight_CheckRetreatFromExplosiveOrLight(EnKnight* this, PlayState* play) {
+void EnKnight_CheckRetreat(EnKnight* this, PlayState* play) {
     Player* player;
     Actor* explosive;
     f32 px;
@@ -1974,8 +1973,8 @@ void EnKnight_SetupIgosSitting(EnKnight* this, PlayState* play) {
 }
 
 void EnKnight_SpawnDust(PlayState* play, u8 numEffects) {
-    static Color_RGBA8 primColor = { 60, 50, 20, 255 };
-    static Color_RGBA8 envColor = { 40, 30, 30, 255 };
+    static Color_RGBA8 sPrimColor = { 60, 50, 20, 255 };
+    static Color_RGBA8 sEnvColor = { 40, 30, 30, 255 };
     Player* player = GET_PLAYER(play);
     Vec3f pos;
     Vec3f velocity;
@@ -1991,7 +1990,7 @@ void EnKnight_SpawnDust(PlayState* play, u8 numEffects) {
         pos.x = player->actor.world.pos.x + Rand_CenteredFloat(30.0f);
         pos.y = player->actor.world.pos.y + 20.0f + Rand_CenteredFloat(30.0f);
         pos.z = player->actor.world.pos.z + Rand_CenteredFloat(30.0f);
-        func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, Rand_ZeroFloat(50.0f) + 100.0f, 10,
+        func_800B0EB0(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor, Rand_ZeroFloat(50.0f) + 100.0f, 10,
                       Rand_ZeroFloat(5.0f) + 14.0f);
     }
 }
@@ -2724,7 +2723,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->closeCurtainAction = KNIGHT_CLOSE_CURTAIN_ACTION_1;
             play->envCtx.lightSettingOverride = 1;
             play->envCtx.lightBlendOverride = 0;
-            sIgosInstance->roomIsLit = 0;
+            sIgosInstance->roomLightingState = 0;
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_2:
             this->curtainsLightRayAngle = 0x8000;
@@ -3179,9 +3178,9 @@ void EnKnight_UpdateDamageFallenOver(EnKnight* this, PlayState* play) {
 }
 
 void EnKnight_SpawnIceShards(EnKnight* this, PlayState* play) {
-    static Color_RGBA8 primColor = { 170, 255, 255, 255 };
-    static Color_RGBA8 envColor = { 200, 200, 255, 255 };
-    static Vec3f accel = { 0.0f, -1.0f, 0.0f };
+    static Color_RGBA8 sPrimColor = { 170, 255, 255, 255 };
+    static Color_RGBA8 sEnvColor = { 200, 200, 255, 255 };
+    static Vec3f sAccel = { 0.0f, -1.0f, 0.0f };
     Vec3f pos;
     Vec3f velocity;
     s32 i;
@@ -3195,7 +3194,7 @@ void EnKnight_SpawnIceShards(EnKnight* this, PlayState* play) {
         pos.x = velocity.x + this->bodyPartsPos[i].x;
         pos.y = velocity.y + this->bodyPartsPos[i].y;
         pos.z = velocity.z + this->bodyPartsPos[i].z;
-        EffectSsEnIce_Spawn(play, &pos, Rand_ZeroFloat(0.5f) + 0.7f, &velocity, &accel, &primColor, &envColor, 30);
+        EffectSsEnIce_Spawn(play, &pos, Rand_ZeroFloat(0.5f) + 0.7f, &velocity, &sAccel, &sPrimColor, &sEnvColor, 30);
     }
 }
 
@@ -3397,9 +3396,9 @@ void EnKnight_FlyingHeadAttack(EnKnight* this, PlayState* play) {
     dz = player->actor.world.pos.z - this->actor.world.pos.z;
 
     if (this->subAction != KNIGHT_SUB_ACTION_FLYING_HEAD_ATTACK_1) {
-        f32 var_fv1 = (this->subAction == KNIGHT_SUB_ACTION_FLYING_HEAD_ATTACK_2) ? 3000.0f : 1000.0f;
+        f32 jawRotationAdd = (this->subAction == KNIGHT_SUB_ACTION_FLYING_HEAD_ATTACK_2) ? 3000.0f : 1000.0f;
 
-        this->jawRotation = Math_SinS((KREG(40) * 0x100 + 0x1200) * this->randTimer) * 1000.0f + var_fv1;
+        this->jawRotation = Math_SinS((KREG(40) * 0x100 + 0x1200) * this->randTimer) * 1000.0f + jawRotationAdd;
     }
 
     dxz = sqrtf(SQ(dx) + SQ(dz));
@@ -3461,8 +3460,8 @@ void EnKnight_FlyingHeadAttack(EnKnight* this, PlayState* play) {
             break;
 
         case KNIGHT_SUB_ACTION_FLYING_HEAD_ATTACK_2:
-            if (CHECK_BTN_ALL(play->state.input[0].press.button, BTN_A) ||
-                CHECK_BTN_ALL(play->state.input[0].press.button, BTN_B)) {
+            if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
                 if (1) {}
                 if (this->actionTimers[0] != 0) {
@@ -3606,7 +3605,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
                 EN_KNIGHT_PARAM_IGOS_HEAD_AFTERIMAGE);
             if (afterImage != NULL) {
-                for (limbIndex = 0; limbIndex < KNIGHT_LIMB_MAX; limbIndex++) {
+                for (limbIndex = 0; limbIndex < IGOS_LIMB_MAX; limbIndex++) {
                     afterImage->skelAnime.jointTable[limbIndex] = this->skelAnime.jointTable[limbIndex];
                     afterImage->skelAnime.skeleton = this->skelAnime.skeleton;
                     afterImage->skelAnime.dListCount = this->skelAnime.dListCount;
@@ -3634,7 +3633,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
         this->curtainsLightRayAngle = gSaveContext.save.time;
         Math_ApproachS(&this->jawRotation, 0, 2, 0x200);
-    } else if (sIgosInstance->roomIsLit == 0) {
+    } else if (sIgosInstance->roomLightingState == 0) {
         this->actor.hintId = TATL_HINT_ID_KINGS_LACKEYS_DARK_ROOM;
     } else {
         this->actor.hintId = TATL_HINT_ID_KINGS_LACKEYS_LIGHT_ROOM;
@@ -3703,7 +3702,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
         this->actor.world.pos.z += this->animTranslationZ;
 
         if (this->canRetreat || (this->actionFunc == EnKnight_Retreat)) {
-            EnKnight_CheckRetreatFromExplosiveOrLight(this, play);
+            EnKnight_CheckRetreat(this, play);
 
             if (this->canRetreat && (sTargetKnight != NULL) && (this != sTargetKnight)) {
                 EnKnight_SetupLookAtOther(this, play);
@@ -3782,7 +3781,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    input = &play->state.input[3];
+    input = CONTROLLER4(&play->state);
     if (CHECK_BTN_ALL(input->press.button, BTN_L) && this == sIgosInstance) {
         // Left over debug feature to skip the first phase
         EnKnight_SetupDie(sYaseInstance, play);
@@ -3914,12 +3913,12 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
         EnKnight_UpdateEffects(this, play);
 
-        if (this->roomIsLit != 0) {
+        if (this->roomLightingState != 0) {
             u16 time;
 
             play->envCtx.lightSettingOverride = 0;
             play->envCtx.lightBlendOverride = 2;
-            if (this->roomIsLit == 1) {
+            if (this->roomLightingState == 1) {
                 play->envCtx.lightSetting = 8;
                 play->envCtx.prevLightSetting = 12;
             } else {
@@ -3931,7 +3930,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
             if ((s32)time > 0x8000) {
                 time = (0xFFFF - time) & 0xFFFF;
             }
-            play->envCtx.lightBlend = time * 0.000030517578f;
+            play->envCtx.lightBlend = time * (2.0f / 0x10000);
         }
 
         // Captain's Hat easter egg
@@ -3996,20 +3995,20 @@ void EnKnight_DrawEffectBlure(EnKnight* this, PlayState* play) {
 s32 EnKnight_OverrideLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKnight* this = THIS;
 
-    if (limbIndex == KNIGHT_LIMB_NECK) {
+    if (limbIndex == IGOS_LIMB_NECK) {
         rot->x += (f32)this->neckPitch;
     }
 
-    if (limbIndex == KNIGHT_LIMB_JAW) {
+    if (limbIndex == IGOS_LIMB_JAW) {
         rot->z += this->jawRotation;
-    } else if (limbIndex == KNIGHT_LIMB_HEAD) {
+    } else if (limbIndex == IGOS_LIMB_HEAD) {
         rot->z -= this->jawRotation;
     }
 
-    if (limbIndex != KNIGHT_LIMB_JAW && limbIndex != KNIGHT_LIMB_HEAD) {
+    if (limbIndex != IGOS_LIMB_JAW && limbIndex != IGOS_LIMB_HEAD) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
@@ -4022,29 +4021,29 @@ s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     }
 
     if (this == sIgosInstance) {
-        if (limbIndex == KNIGHT_LIMB_JAW) {
+        if (limbIndex == IGOS_LIMB_JAW) {
             rot->z += this->jawRotation;
-        } else if (limbIndex == KNIGHT_LIMB_HEAD) {
+        } else if (limbIndex == IGOS_LIMB_HEAD) {
             rot->z -= this->jawRotation;
         }
 
-        if (limbIndex == KNIGHT_LIMB_LEFT_LEG_UPPER) {
+        if (limbIndex == IGOS_LIMB_LEFT_LEG_UPPER) {
             rot->z -= this->leftLegUpperRotation;
         }
 
-        if (limbIndex == KNIGHT_LIMB_LEFT_LEG_LOWER) {
+        if (limbIndex == IGOS_LIMB_LEFT_LEG_LOWER) {
             rot->z -= this->leftLegLowerRotation;
         }
 
-        if (limbIndex == KNIGHT_LIMB_RIGHT_LEG_UPPER) {
+        if (limbIndex == IGOS_LIMB_RIGHT_LEG_UPPER) {
             rot->z -= this->rightLegUpperRotation;
         }
 
-        if (limbIndex == KNIGHT_LIMB_RIGHT_LEG_LOWER) {
+        if (limbIndex == IGOS_LIMB_RIGHT_LEG_LOWER) {
             rot->z -= this->rightLegLowerRotation;
         }
 
-        if ((limbIndex == KNIGHT_LIMB_JAW || limbIndex == KNIGHT_LIMB_HEAD) && this->isHeadless) {
+        if ((limbIndex == IGOS_LIMB_JAW || limbIndex == IGOS_LIMB_HEAD) && this->isHeadless) {
             *dList = NULL;
         }
     } else if (this == sDebuInstance) {
@@ -4056,7 +4055,7 @@ s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
             *dList = gKnightDebuHeadDL;
         }
     }
-    return 0;
+    return false;
 }
 
 void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -4129,9 +4128,9 @@ void EnKnight_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gf
     EnKnight* this = THIS;
 
     if (this == sIgosInstance) {
-        if (limbIndex == KNIGHT_LIMB_SHIELD) {
+        if (limbIndex == IGOS_LIMB_SHIELD) {
             Matrix_Scale(this->shieldScale, this->shieldScale, this->shieldScale, MTXMODE_APPLY);
-        } else if (limbIndex == KNIGHT_LIMB_SWORD) {
+        } else if (limbIndex == IGOS_LIMB_SWORD) {
             Matrix_Scale(this->swordScale, this->swordScale, this->swordScale, MTXMODE_APPLY);
         }
     }
@@ -4270,11 +4269,11 @@ s32 EnKnight_OverrideLimbDrawAfterImage(PlayState* play, s32 limbIndex, Gfx** dL
                                         Actor* thisx, Gfx** gfx) {
     EnKnight* this = THIS;
 
-    if (this->actor.params == EN_KNIGHT_PARAM_IGOS_HEAD_AFTERIMAGE && limbIndex != KNIGHT_LIMB_JAW &&
-        limbIndex != KNIGHT_LIMB_HEAD) {
+    if (this->actor.params == EN_KNIGHT_PARAM_IGOS_HEAD_AFTERIMAGE && limbIndex != IGOS_LIMB_JAW &&
+        limbIndex != IGOS_LIMB_HEAD) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnKnight_DrawAfterImage(Actor* thisx, PlayState* play) {
@@ -4312,7 +4311,7 @@ void EnKnight_UpdateEffects(EnKnight* this, PlayState* play) {
 
             eff->acceleration.y = BREG(56) * 0.01f + 1.0f;
 
-            if (eff->active == (u32) true) { // fake
+            if (eff->active == (u32) true) { //! FAKE:
                 Math_ApproachF(&eff->scale, (KREG(59) * 0.01f + 1.0f) * eff->scaleTarget, 0.1f,
                                eff->scaleTarget * 0.1f);
 
