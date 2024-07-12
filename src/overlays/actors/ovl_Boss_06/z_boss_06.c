@@ -462,7 +462,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((this->updateFireEffects != 0) && (this->updateFireEffects != 0)) {
+    if (this->updateFireEffects && this->updateFireEffects) {
         s32 i;
         Vec3f texCoords;
         f32 distFromHitPos;
@@ -663,7 +663,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
             child->world.pos.z = (this->actor.world.pos.z - 170.0f) + (lightRayBaseZ * 0.1f);
         }
 
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gIkanaThroneRoomLightRayMatAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gIkanaThroneRoomLightRayTexAnim));
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y - 234.0f, this->actor.world.pos.z + 30.0f,
                          MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

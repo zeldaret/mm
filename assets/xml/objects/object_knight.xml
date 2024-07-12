@@ -105,7 +105,7 @@
         <DList Name="gKnightBlureState2DL" Offset="0x188F8" />
         <DList Name="gKnightBlureState1DL" Offset="0x189F0" />
         <DList Name="gKnightBlureState0DL" Offset="0x18AF0" />
-        <TextureAnimation Name="gKnightBlureMatAnim" Offset="0x18BC4" />
+        <TextureAnimation Name="gKnightBlureTexAnim" Offset="0x18BC4" />
         <Array Name="gIkanaThroneRoomLightRayVtx" Count="18" Offset="0x18BD0">
             <Vtx/>
         </Array>
@@ -114,7 +114,7 @@
         <DList Name="object_knight_DL_018E50" Offset="0x18E50" />
         <Texture Name="object_knight_Tex_018E58" OutName="tex_018E58" Format="ia8" Width="16" Height="16" Offset="0x18E58" />
         <Texture Name="object_knight_Tex_018F58" OutName="tex_018F58" Format="ia16" Width="16" Height="32" Offset="0x18F58" />
-        <TextureAnimation Name="gIkanaThroneRoomLightRayMatAnim" Offset="0x19360" />
+        <TextureAnimation Name="gIkanaThroneRoomLightRayTexAnim" Offset="0x19360" />
         <DList Name="object_knight_DL_0193A8" Offset="0x193A8" />
         <DList Name="gIkanaThroneRoomCurtainDL" Offset="0x193B0" /> <!-- Original name is "w2_ikn_katen_model" -->
         <Texture Name="object_knight_TLUT_019470" OutName="tex_019470" Format="rgba16" Width="4" Height="4" Offset="0x19470" />
@@ -179,7 +179,7 @@
         <Limb Name="object_knight_Standardlimb_020114" Type="Standard" EnumName="IGOS_LIMB_RIGHT_LEG_UPPER" Offset="0x20114" />
         <Limb Name="object_knight_Standardlimb_020120" Type="Standard" EnumName="IGOS_LIMB_RIGHT_LEG_LOWER" Offset="0x20120" />
         <Limb Name="object_knight_Standardlimb_02012C" Type="Standard" EnumName="IGOS_LIMB_RIGHT_FOOT" Offset="0x2012C" />
-        <Skeleton Name="gIgosSkel" Type="Flex" LimbType="Standard" LimbNone="IGOS_LIMB_NONE" LimbMax="IGOS_LIMB_MAX" EnumName="ObjectKnight1Limb" Offset="0x201A8" />
+        <Skeleton Name="gIgosSkel" Type="Flex" LimbType="Standard" LimbNone="IGOS_LIMB_NONE" LimbMax="IGOS_LIMB_MAX" EnumName="IgosLimb" Offset="0x201A8" />
         <Limb Name="object_knight_Standardlimb_0201B4" Type="Standard" EnumName="KNIGHT_LIMB_ROOT" Offset="0x201B4" />
         <Limb Name="object_knight_Standardlimb_0201C0" Type="Standard" EnumName="KNIGHT_LIMB_SPINE_BASE" Offset="0x201C0" />
         <Limb Name="object_knight_Standardlimb_0201CC" Type="Standard" EnumName="KNIGHT_LIMB_SPINE_UPPER" Offset="0x201CC" />
@@ -208,7 +208,7 @@
         <Limb Name="object_knight_Standardlimb_0202E0" Type="Standard" EnumName="KNIGHT_LIMB_RIGHT_LEG_UPPER" Offset="0x202E0" />
         <Limb Name="object_knight_Standardlimb_0202EC" Type="Standard" EnumName="KNIGHT_LIMB_RIGHT_LEG_LOWER" Offset="0x202EC" />
         <Limb Name="object_knight_Standardlimb_0202F8" Type="Standard" EnumName="KNIGHT_LIMB_RIGHT_FOOT" Offset="0x202F8" />
-        <Skeleton Name="gKnightSkel" Type="Flex" LimbType="Standard" LimbNone="KNIGHT_LIMB_NONE" LimbMax="KNIGHT_LIMB_MAX" EnumName="ObjectKnight2Limb" Offset="0x20374" />
+        <Skeleton Name="gKnightSkel" Type="Flex" LimbType="Standard" LimbNone="KNIGHT_LIMB_NONE" LimbMax="KNIGHT_LIMB_MAX" EnumName="KnightLimb" Offset="0x20374" />
         <Animation Name="gKnightTelegraphHeavyAttackAnim" Offset="0x20950" /> <!-- Original name is probably "nsk_tategiri_tame" -->
         <Animation Name="gKnightIgosShrugStopAnim" Offset="0x2105C" /> <!-- Original name is probably "nsk_towaitBD" -->
         <Animation Name="gKnightIntroWalkAnim" Offset="0x21B10" /> <!-- Original name is probably "nsk_walkD" -->

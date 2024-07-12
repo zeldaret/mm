@@ -130,7 +130,7 @@ typedef enum {
     /*  3 */ KNIGHT_DMGEFF_ICE,
     /*  4 */ KNIGHT_DMGEFF_LIGHT,
     /* 10 */ KNIGHT_DMGEFF_ZORA_BARRIER = 10,
-    /* 13 */ KNIGHT_DMGEFF_LIGHT_RAY_FALLEN = 13,
+    /* 13 */ KNIGHT_DMGEFF_GORON_POUND = 13,
     /* 14 */ KNIGHT_DMGEFF_LIGHT_RAY,
     /* 15 */ KNIGHT_DMGEFF_OTHER
 } EnKnightDamageEffect;
@@ -146,7 +146,7 @@ static DamageTable sDamageTableStanding = {
     /* Hookshot       */ DMG_ENTRY(0, KNIGHT_DMGEFF_OTHER),
     /* Goron punch    */ DMG_ENTRY(1, KNIGHT_DMGEFF_OTHER),
     /* Sword          */ DMG_ENTRY(1, KNIGHT_DMGEFF_OTHER),
-    /* Goron pound    */ DMG_ENTRY(0, KNIGHT_DMGEFF_LIGHT_RAY_FALLEN),
+    /* Goron pound    */ DMG_ENTRY(0, KNIGHT_DMGEFF_GORON_POUND),
     /* Fire arrow     */ DMG_ENTRY(1, KNIGHT_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(1, KNIGHT_DMGEFF_ICE),
     /* Light arrow    */ DMG_ENTRY(2, KNIGHT_DMGEFF_LIGHT),
@@ -192,7 +192,7 @@ static DamageTable sDamageTableFallenOver = {
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, KNIGHT_DMGEFF_NONE),
     /* Zora barrier   */ DMG_ENTRY(0, KNIGHT_DMGEFF_ZORA_BARRIER),
     /* Normal shield  */ DMG_ENTRY(0, KNIGHT_DMGEFF_NONE),
-    /* Light ray      */ DMG_ENTRY(1, KNIGHT_DMGEFF_LIGHT_RAY_FALLEN),
+    /* Light ray      */ DMG_ENTRY(1, KNIGHT_DMGEFF_GORON_POUND),
     /* Thrown object  */ DMG_ENTRY(1, KNIGHT_DMGEFF_OTHER),
     /* Zora punch     */ DMG_ENTRY(1, KNIGHT_DMGEFF_OTHER),
     /* Spin attack    */ DMG_ENTRY(1, KNIGHT_DMGEFF_OTHER),
@@ -1406,7 +1406,7 @@ void EnKnight_SetupStunned(EnKnight* this, PlayState* play, u16 duration) {
     this->actionFunc = EnKnight_Stunned;
     this->actionTimers[0] = duration;
     this->actionTimers[1] = 30;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0x78, 0, duration);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, 0, duration);
 }
 
 void EnKnight_Stunned(EnKnight* this, PlayState* play) {
@@ -1594,7 +1594,7 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
 
 void EnKnight_SetupDie(EnKnight* this, PlayState* play) {
     this->actionFunc = EnKnight_Die;
-    this->actionTimers[2] = 0x32;
+    this->actionTimers[2] = 50;
     this->dmgEffectState = KNIGHT_DMGEFF_STATE_20;
 
     if (this == sIgosInstance) {
@@ -2272,7 +2272,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
 
     switch (this->csState) {
         case KNIGHT_CS_1_STATE_0:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 
@@ -2442,7 +2442,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
 
     switch (this->csState) {
         case KNIGHT_CS_2_STATE_0:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 
@@ -2665,7 +2665,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
     switch (this->csState) {
         case KNIGHT_INTRO_CS_STATE_0:
             // If the room clear flag is set, or there is a cs playing, or the player is too far away, don't play the cs
-            if (Flags_GetClear(play, play->roomCtx.curRoom.num) || (CutsceneManager_GetCurrentCsId() != -1) ||
+            if (Flags_GetClear(play, play->roomCtx.curRoom.num) || (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) ||
                 !(player->actor.world.pos.x >= 870.0f)) {
                 break;
             }
@@ -3117,7 +3117,7 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
                     this->invincibilityTimer = 15;
                     break;
 
-                case KNIGHT_DMGEFF_LIGHT_RAY_FALLEN:
+                case KNIGHT_DMGEFF_GORON_POUND:
                     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                         Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
                         Matrix_MultVecZ(-4.0f, &translation);
@@ -3631,7 +3631,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
             }
         }
 
-        this->curtainsLightRayAngle = gSaveContext.save.time;
+        this->curtainsLightRayAngle = CURRENT_TIME;
         Math_ApproachS(&this->jawRotation, 0, 2, 0x200);
     } else if (sIgosInstance->roomLightingState == 0) {
         this->actor.hintId = TATL_HINT_ID_KINGS_LACKEYS_DARK_ROOM;
@@ -3802,11 +3802,11 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
         case KNIGHT_DMGEFF_STATE_1:
             this->dmgEffectType = ACTOR_DRAW_DMGEFF_FIRE;
-            this->dmgEffectDuration = 0x50;
+            this->dmgEffectDuration = 80;
             this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_2
             this->dmgEffectAlpha = 1.0f;
             this->dmgEffectScale = 0.0f;
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0x78, 0, 0x3C);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, 0, 60);
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_2:
             if (this->dmgEffectDuration == 0) {
@@ -3821,7 +3821,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
         case KNIGHT_DMGEFF_STATE_10:
             this->dmgEffectType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
-            this->dmgEffectDuration = 0x50;
+            this->dmgEffectDuration = 80;
             this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_11
             this->dmgEffectAlpha = 1.0f;
             this->dmgEffectScale = 0.0f;
@@ -3842,7 +3842,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
         case KNIGHT_DMGEFF_STATE_20:
             this->dmgEffectType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-            this->dmgEffectDuration = 0x28;
+            this->dmgEffectDuration = 40;
             this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_21
             this->dmgEffectAlpha = 1.0f;
             this->dmgEffectScale = 0.0f;
@@ -3926,9 +3926,9 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
                 play->envCtx.prevLightSetting = 10;
             }
 
-            time = gSaveContext.save.time;
-            if ((s32)time > 0x8000) {
-                time = (0xFFFF - time) & 0xFFFF;
+            time = CURRENT_TIME;
+            if (time > CLOCK_TIME(12, 0)) {
+                time = (DAY_LENGTH - 1) - time;
             }
             play->envCtx.lightBlend = time * (2.0f / 0x10000);
         }
@@ -3951,12 +3951,12 @@ void EnKnight_DrawEffectBlure(EnKnight* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gKnightBlureMatAnim));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gKnightBlureTexAnim));
 
     gSPDisplayList(POLY_XLU_DISP++, D_08000000);
 
     if (this == sIgosInstance) {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(11) + 0xB4), 255, 255,
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(11) + 180), 255, 255,
                         (u8)((sREG(14) * 0.1f + 1.0f) * this->blureAlpha));
     } else {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)((sREG(14) * 0.1f + 1.0f) * this->blureAlpha));
@@ -4137,7 +4137,7 @@ void EnKnight_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gf
 }
 
 Gfx* EnKnight_BuildEmptyDL(GraphicsContext* gfxCtx) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 1 * sizeof(Gfx));
     gSPEndDisplayList(gfx);
     return gfx;
 }
@@ -4331,7 +4331,7 @@ void EnKnight_UpdateEffects(EnKnight* this, PlayState* play) {
                         eff->velocity.y = 0.0f;
                     }
                 }
-                eff->alpha -= (s16)(BREG(49) + 0xA);
+                eff->alpha -= (s16)(BREG(49) + 10);
                 if (eff->alpha <= 0) {
                     eff->alpha = 0;
                     eff->active = false;
