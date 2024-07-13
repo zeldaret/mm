@@ -4,6 +4,8 @@
  * Description: Player
  */
 
+#include "z64player.h"
+
 #include "global.h"
 #include "z64horse.h"
 #include "z64lifemeter.h"
