@@ -29,7 +29,7 @@ void Boss06_CurtainClosed(Boss06* this, PlayState* play);
 void Boss06_SetupCurtainDestroyed(Boss06* this, PlayState* play);
 void Boss06_CurtainDestroyed(Boss06* this, PlayState* play);
 
-static Vec3f sFireEffectPositions[128];
+Vec3f sCurtainFireEffectPositions[128];
 static EnKnight* sIgosInstance;
 static s32 sSeed1;
 static s32 sSeed2;
@@ -481,7 +481,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
         angle0 = 0.0f;
         angle1 = 0.0f;
 
-        for (i = 0; i < 8 * ARRAY_COUNT(sFireEffectPositions); i++) {
+        for (i = 0; i < 8 * ARRAY_COUNT(sCurtainFireEffectPositions); i++) {
             distFromHitPos = (sinf(angle1) * this->fireEffectDistanceScale1 + 1.0f) *
                                  (sinf(angle0) * this->fireEffectDistanceScale2 + this->fireEffectDistanceScale2) +
                              this->fireEffectDistanceAdd;
@@ -496,7 +496,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
             texCoords.y += (BOSS06_CURTAIN_TEX_HEIGHT / 2) + this->arrowHitPosScaled.y;
 
             if ((i % 8) == 0) {
-                Math_Vec3f_Copy(&sFireEffectPositions[i / 8], &texCoords);
+                Math_Vec3f_Copy(&sCurtainFireEffectPositions[i / 8], &texCoords);
             }
 
             if ((texCoords.x >= 0.0f) && (texCoords.y >= 0.0f) && (texCoords.x < BOSS06_CURTAIN_TEX_WIDTH) &&
@@ -629,16 +629,16 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         // Vertices 1,2,8,10,13 don't need to move, these are the vertices at the lower part of the [0,1,2,3] rectangle
 
         // These vertices are the 4 highest vertices, move these up and down based on the curtain height.
-        vertices[0].v.ob[1] = 3730 + (s16)this->lightRayTopVerticesOffset;
-        vertices[3].v.ob[1] = 3730 + (s16)this->lightRayTopVerticesOffset;
-        vertices[4].v.ob[1] = 3730 + (s16)this->lightRayTopVerticesOffset;
-        vertices[7].v.ob[1] = 3730 + (s16)this->lightRayTopVerticesOffset;
+        vertices[0].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[3].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[4].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[7].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
 
         // Move the ray based on the angle
         vertices[5].v.ob[0] = lightRayBaseX + 675;
-        vertices[5].v.ob[2] = lightRayBaseZ + (s16)this->lightRayBaseOffsetZ - 1800;
+        vertices[5].v.ob[2] = lightRayBaseZ + (s16)(s32)this->lightRayBaseOffsetZ - 1800;
         vertices[6].v.ob[0] = lightRayBaseX - 675;
-        vertices[6].v.ob[2] = lightRayBaseZ + (s16)this->lightRayBaseOffsetZ - 1800;
+        vertices[6].v.ob[2] = lightRayBaseZ + (s16)(s32)this->lightRayBaseOffsetZ - 1800;
         vertices[9].v.ob[0] = lightRayBaseX + 675;
         vertices[9].v.ob[2] = lightRayBaseZ - 450;
         vertices[11].v.ob[0] = lightRayBaseX - 675;
@@ -701,17 +701,17 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 128, 255, 255, 0, 230);
 
-            for (i = 0; i < ARRAY_COUNT(sFireEffectPositions); i++) {
-                if ((fabsf(sFireEffectPositions[i].x - 32.0f) < 30.0f) &&
-                    (fabsf(sFireEffectPositions[i].y - 32.0f) < 30.0f)) {
+            for (i = 0; i < ARRAY_COUNT(sCurtainFireEffectPositions); i++) {
+                if ((fabsf(sCurtainFireEffectPositions[i].x - 32.0f) < 30.0f) &&
+                    (fabsf(sCurtainFireEffectPositions[i].y - 32.0f) < 30.0f)) {
                     Matrix_Push();
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
                                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                                 ((play->gameplayFrames + (i * 10)) * -20) % 512, 32, 128));
 
-                    Matrix_Translate((sFireEffectPositions[i].x - 32.0f) * -2.4f,
-                                     (sFireEffectPositions[i].y - 32.0f) * -2.4f, 0.0f, MTXMODE_APPLY);
+                    Matrix_Translate((sCurtainFireEffectPositions[i].x - 32.0f) * -2.4f,
+                                     (sCurtainFireEffectPositions[i].y - 32.0f) * -2.4f, 0.0f, MTXMODE_APPLY);
                     Matrix_RotateZF(i * (M_PIf / 64), MTXMODE_APPLY);
 
                     if (Boss06_RandZeroOne() < 0.5f) {

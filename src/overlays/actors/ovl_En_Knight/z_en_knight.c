@@ -554,7 +554,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
 
     // Common init
 
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.damageTable = &sDamageTableStanding;
     this->bodyAlpha = 255.0f;

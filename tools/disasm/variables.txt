@@ -10178,7 +10178,7 @@
     0x809F416C:("D_809F416C","f32","",0x4),
     0x809F4170:("D_809F4170","f32","",0x4),
     0x809F4174:("D_809F4174","f32","",0x4),
-    0x809F4370:("sFireEffectPositions","UNK_TYPE4","",0x4),
+    0x809F4370:("sCurtainFireEffectPositions","UNK_TYPE4","",0x4),
     0x809F4970:("sIgosInstance","UNK_TYPE4","",0x4),
     0x809F4974:("sSeed1","UNK_TYPE4","",0x4),
     0x809F4978:("sSeed2","UNK_TYPE4","",0x4),
