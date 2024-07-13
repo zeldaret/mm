@@ -9,8 +9,6 @@ struct GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
 
-#include "graph.h"
-
 #include "regs.h"
 #include "fault.h"
 

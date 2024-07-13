@@ -156,6 +156,9 @@ typedef struct GraphicsContext {
     /* 0x2EC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x2F0
 
+// graph.c
+void Graph_ThreadEntry(void* arg);
+
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFog2(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
@@ -239,6 +242,9 @@ void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
 
 void Gfx_DrawDListOpa(struct PlayState* play, Gfx* dList);
 void Gfx_DrawDListXlu(struct PlayState* play, Gfx* dList);
+
+// graph.c
+extern struct GfxMasterList* gGfxMasterDL;
 
 extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];
