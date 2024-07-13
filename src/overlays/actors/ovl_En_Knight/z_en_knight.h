@@ -33,6 +33,25 @@ typedef enum {
     /* 2 */ KNIGHT_CLOSE_CURTAIN_ACTION_2
 } EnKnightCloseCurtainAction;
 
+typedef enum KnightBodyPart {
+    /*  0 */ KNIGHT_BODYPART_JAW,
+    /*  1 */ KNIGHT_BODYPART_TORSO,
+    /*  2 */ KNIGHT_BODYPART_PELVIS,
+    /*  3 */ KNIGHT_BODYPART_LEFT_UPPER_ARM,
+    /*  4 */ KNIGHT_BODYPART_LEFT_FOREARM,
+    /*  5 */ KNIGHT_BODYPART_SHIELD,
+    /*  6 */ KNIGHT_BODYPART_RIGHT_UPPER_ARM,
+    /*  7 */ KNIGHT_BODYPART_RIGHT_FOREARM,
+    /*  8 */ KNIGHT_BODYPART_SWORD,
+    /*  9 */ KNIGHT_BODYPART_LEFT_LEG_UPPER,
+    /* 10 */ KNIGHT_BODYPART_LEFT_LEG_LOWER,
+    /* 11 */ KNIGHT_BODYPART_LEFT_FOOT,
+    /* 12 */ KNIGHT_BODYPART_RIGHT_LEG_UPPER,
+    /* 13 */ KNIGHT_BODYPART_RIGHT_LEG_LOWER,
+    /* 14 */ KNIGHT_BODYPART_RIGHT_FOOT,
+    /* 15 */ KNIGHT_BODYPART_MAX
+} KnightBodyPart;
+
 typedef struct EnKnight {
     /* 0x000 */ Actor actor;
     /* 0x144 */ u16 curtainsLightRayAngle;

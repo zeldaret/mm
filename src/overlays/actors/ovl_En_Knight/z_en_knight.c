@@ -3185,7 +3185,7 @@ void EnKnight_SpawnIceShards(EnKnight* this, PlayState* play) {
     Vec3f velocity;
     s32 i;
 
-    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[0], 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[KNIGHT_BODYPART_JAW], 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
         velocity.x = Rand_CenteredFloat(7.0f);
@@ -4064,7 +4064,36 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     static Vec3f sShieldParticlesModelOffset = { 0.0f, 600.0f, 1000.0f };
     static Vec3f sSwordColliderModelOffset = { 1000.0f, 0.0f, 0.0f };
     static s8 sLimbToBodyParts[KNIGHT_LIMB_MAX + 1] = {
-        -1, -1, -1, -1, 3, 4, 5, -1, -1, 6, 7, 8, -1, -1, -1, -1, -1, -1, 0, -1, 1, 2, -1, 9, 10, 11, 12, 13, 14, -1,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        KNIGHT_BODYPART_LEFT_UPPER_ARM,
+        KNIGHT_BODYPART_LEFT_FOREARM,
+        KNIGHT_BODYPART_SHIELD,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        KNIGHT_BODYPART_RIGHT_UPPER_ARM,
+        KNIGHT_BODYPART_RIGHT_FOREARM,
+        KNIGHT_BODYPART_SWORD,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        BODYPART_NONE,
+        KNIGHT_BODYPART_JAW,
+        BODYPART_NONE,
+        KNIGHT_BODYPART_TORSO,
+        KNIGHT_BODYPART_PELVIS,
+        BODYPART_NONE,
+        KNIGHT_BODYPART_LEFT_LEG_UPPER,
+        KNIGHT_BODYPART_LEFT_LEG_LOWER,
+        KNIGHT_BODYPART_LEFT_FOOT,
+        KNIGHT_BODYPART_RIGHT_LEG_UPPER,
+        KNIGHT_BODYPART_RIGHT_LEG_LOWER,
+        KNIGHT_BODYPART_RIGHT_FOOT,
+        BODYPART_NONE,
     };
     static Vec3f sBreathBaseModelOffset = { 300.0f, 500.0f, 0.0f };
     static Vec3f sBodyCollider0ModelOffset = { 1000.0f, 0.0f, 0.0f };
@@ -4074,7 +4103,7 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     if (this->actionFunc == EnKnight_Die || this->dmgEffectAlpha > 0.0f) {
         s8 bodyPartIndex = sLimbToBodyParts[limbIndex];
-        if (bodyPartIndex >= 0) {
+        if (bodyPartIndex > BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
         }
     }
