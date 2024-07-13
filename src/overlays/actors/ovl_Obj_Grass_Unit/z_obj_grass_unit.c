@@ -91,11 +91,11 @@ s32 ObjGrassUnit_SpawnObjGrassCarry1(Actor* this, PlayState* play) {
 
 s32 ObjGrassUnit_IsUnderwater(PlayState* play, Vec3f* pos) {
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, pos->x, pos->z, &ySurface, &waterBox, &bgId) &&
-        (pos->y < ySurface)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, pos->x, pos->z, &waterSurface, &waterBox, &bgId) &&
+        (pos->y < waterSurface)) {
         return true;
     }
     return false;

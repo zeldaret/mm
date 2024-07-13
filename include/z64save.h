@@ -317,36 +317,36 @@ typedef struct SaveInfo {
 } SaveInfo; // size = 0xFE8
 
 typedef struct Save {
-    /* 0x00 */ s32 entrance;                            // "scene_no"
-    /* 0x04 */ u8 equippedMask;                         // "player_mask"
-    /* 0x05 */ u8 isFirstCycle;                         // "opening_flag"
+    /* 0x00 */ s32 entrance;        // "scene_no"
+    /* 0x04 */ u8 equippedMask;     // "player_mask"
+    /* 0x05 */ u8 isFirstCycle;     // "opening_flag"
     /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 linkAge;                              // "link_age"
-    /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
-    /* 0x0C */ u16 time;                                // "zelda_time"
-    /* 0x0E */ u16 owlWarpId; // See `OwlWarpId` enum
-    /* 0x10 */ s32 isNight;                             // "asahiru_fg"
-    /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
-    /* 0x18 */ s32 day;                                 // "totalday"
-    /* 0x1C */ s32 eventDayCount;                       // "eventday"
-    /* 0x20 */ u8 playerForm;                           // "player_character"
-    /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
-    /* 0x22 */ u8 hasTatl;                              // "bell_flag"
+    /* 0x07 */ u8 linkAge;          // "link_age"
+    /* 0x08 */ s32 cutsceneIndex;   // "day_time"
+    /* 0x0C */ u16 time;            // "zelda_time"
+    /* 0x0E */ u16 owlWarpId;       // See `OwlWarpId` enum
+    /* 0x10 */ s32 isNight;         // "asahiru_fg"
+    /* 0x14 */ s32 timeSpeedOffset; // "change_zelda_time"
+    /* 0x18 */ s32 day;             // "totalday"
+    /* 0x1C */ s32 eventDayCount;   // "eventday"
+    /* 0x20 */ u8 playerForm;       // "player_character"
+    /* 0x21 */ u8 snowheadCleared;  // "spring_flag"
+    /* 0x22 */ u8 hasTatl;          // "bell_flag"
     /* 0x23 */ u8 isOwlSave;
     /* 0x24 */ SaveInfo saveInfo;
 } Save; // size = 0x100C
 
 typedef struct SaveContext {
     /* 0x0000 */ Save save;
-    /* 0x100C */ u8 eventInf[8];                        // "event_inf"
-    /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
+    /* 0x100C */ u8 eventInf[8]; // "event_inf"
+    /* 0x1014 */ u8 unk_1014;    // "stone_set_flag"
     /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
-    /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
-    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
+    /* 0x1018 */ s16 rupeeAccumulator;                       // "lupy_udct"
+    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX];           // See the `BottleTimerState` enum. "bottle_status"
     /* 0x1020 */ OSTime bottleTimerStartOsTimes[BOTTLE_MAX]; // The osTime when the timer starts. "bottle_ostime"
     /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
-    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
+    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX];   // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
     /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
     /* 0x10E0 */ u8 pictoPhotoI5[PICTO_PHOTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
@@ -367,58 +367,58 @@ typedef struct SaveContext {
     /* 0x3DC0 */ s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
     /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
-    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
+    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX];  // See the `TimerState` enum. "event_fg"
     /* 0x3DD7 */ u8 timerDirections[TIMER_ID_MAX]; // See the `TimerDirection` enum. "calc_flag"
     /* 0x3DE0 */ u64 timerCurTimes[TIMER_ID_MAX]; // For countdown, the remaining time left. For countup, the time since the start. In centiseconds (1/100th sec). "event_ostime"
     /* 0x3E18 */ u64 timerTimeLimits[TIMER_ID_MAX]; // The original total time given for the timer to count from, in centiseconds (1/100th sec). "event_sub"
     /* 0x3E50 */ OSTime timerStartOsTimes[TIMER_ID_MAX]; // The osTime when the timer starts. "func_time"
     /* 0x3E88 */ u64 timerStopTimes[TIMER_ID_MAX];  // The total amount of time taken between the start and end of the timer, in centiseconds (1/100th sec). "func_end_time"
     /* 0x3EC0 */ OSTime timerPausedOsTimes[TIMER_ID_MAX]; // The cumulative osTime spent with the timer paused. "func_stop_time"
-    /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
-    /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
-    /* 0x3F14 */ s16 unk_3F14;                          // "character_change"
-    /* 0x3F16 */ u8 seqId;                              // "old_bgm"
-    /* 0x3F17 */ u8 ambienceId;                         // "old_env"
-    /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
+    /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX]; // "event_xp"
+    /* 0x3F06 */ s16 timerY[TIMER_ID_MAX]; // "event_yp"
+    /* 0x3F14 */ s16 unk_3F14;             // "character_change"
+    /* 0x3F16 */ u8 seqId;                 // "old_bgm"
+    /* 0x3F17 */ u8 ambienceId;            // "old_env"
+    /* 0x3F18 */ u8 buttonStatus[6];       // "button_item"
     /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
-    /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
-    /* 0x3F22 */ u16 hudVisibility; // current hud visibility "prev_alpha_type"
+    /* 0x3F20 */ u16 nextHudVisibility;  // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
+    /* 0x3F22 */ u16 hudVisibility;      // current hud visibility "prev_alpha_type"
     /* 0x3F24 */ u16 hudVisibilityTimer; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"
     /* 0x3F26 */ u16 prevHudVisibility; // used to store and recover hud visibility for pause menu and text boxes "last_time_type"
-    /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
-    /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
-    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
-    /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
-    /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
-    /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
-    /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
-    /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
-    /* 0x3F38 */ u16 minigameStatus;                    // "yabusame_mode"
-    /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
-    /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
-    /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 flashSaveAvailable;                 // "flash_flag"
+    /* 0x3F28 */ s16 magicState;          // determines magic meter behavior on each frame "magic_flag"
+    /* 0x3F2A */ s16 isMagicRequested;    // a request to add magic has been given "recovery_magic_flag"
+    /* 0x3F2C */ s16 magicFlag;           // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
+    /* 0x3F2E */ s16 magicCapacity;       // maximum magic available "magic_now_max"
+    /* 0x3F30 */ s16 magicFillTarget;     // target used to fill magic "magic_now_now"
+    /* 0x3F32 */ s16 magicToConsume;      // accumulated magic that is requested to be consumed "magic_used"
+    /* 0x3F34 */ s16 magicToAdd;          // accumulated magic that is requested to be added "magic_recovery"
+    /* 0x3F36 */ u16 mapIndex;            // set to enum DungeonSceneIndex when entering a dungeon related scene, or Map_GetMapIndexForOverworld on certain overworld scenes "scene_ID"
+    /* 0x3F38 */ u16 minigameStatus;      // "yabusame_mode"
+    /* 0x3F3A */ u16 minigameScore;       // "yabusame_total"
+    /* 0x3F3C */ u16 minigameHiddenScore; // "yabusame_out_ct"
+    /* 0x3F3E */ u8 unk_3F3E;             // "no_save"
+    /* 0x3F3F */ u8 flashSaveAvailable;   // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
-    /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
-    /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
-    /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
-    /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
-    /* 0x3F4D */ u8 chamberCutsceneNum;                 // remnant of OoT "Kenjya_no"
-    /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
-    /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
-    /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
-    /* 0x3F52 */ u16 skyboxTime;                        // "kankyo_time"
-    /* 0x3F54 */ u8 dogIsLost;                          // "dog_event_flag"
-    /* 0x3F55 */ u8 nextTransitionType;                 // "next_wipe"
-    /* 0x3F56 */ s16 worldMapArea;                      // "area_type"
-    /* 0x3F58 */ s16 sunsSongState;                     // "sunmoon_flag"
-    /* 0x3F5A */ s16 healthAccumulator;                 // "life_mode"
-    /* 0x3F5C */ s32 unk_3F5C;                          // "bet_rupees"
-    /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
-    /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
-    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
-    /* 0x48CA */ u8 masksGivenOnMoon[27];               // bit-packed, masks given away on the Moon. "mask_mask_bit"
+    /* 0x3F46 */ u16 forcedSeqId;              // "NottoriBgm"
+    /* 0x3F48 */ u8 cutsceneTransitionControl; // "fade_go"
+    /* 0x3F4A */ u16 nextCutsceneIndex;        // "next_daytime"
+    /* 0x3F4C */ u8 cutsceneTrigger;           // "doukidemo"
+    /* 0x3F4D */ u8 chamberCutsceneNum;        // remnant of OoT "Kenjya_no"
+    /* 0x3F4E */ u16 nextDayTime;              // "next_zelda_time"
+    /* 0x3F50 */ u8 transFadeDuration;         // "fade_speed"
+    /* 0x3F51 */ u8 transWipeSpeed;            // "wipe_speed"           transition related
+    /* 0x3F52 */ u16 skyboxTime;               // "kankyo_time"
+    /* 0x3F54 */ u8 dogIsLost;                 // "dog_event_flag"
+    /* 0x3F55 */ u8 nextTransitionType;        // "next_wipe"
+    /* 0x3F56 */ s16 worldMapArea;             // "area_type"
+    /* 0x3F58 */ s16 sunsSongState;            // "sunmoon_flag"
+    /* 0x3F5A */ s16 healthAccumulator;        // "life_mode"
+    /* 0x3F5C */ s32 unk_3F5C;                 // "bet_rupees"
+    /* 0x3F60 */ u8 screenScaleFlag;           // "framescale_flag"
+    /* 0x3F64 */ f32 screenScale;              // "framescale_scale"
+    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120]; // Scene flags that are temporarily stored over the duration of a single 3-day cycle
+    /* 0x48C8 */ u16 dungeonSceneSharedIndex; // similar to mapIndex, except values correspond to one of the four dungeons "scene_id_mix"
+    /* 0x48CA */ u8 masksGivenOnMoon[27];     // bit-packed, masks given away on the Moon. "mask_mask_bit"
 } SaveContext; // size = 0x48C8
 
 typedef enum ButtonStatus {
@@ -497,9 +497,16 @@ typedef enum {
 #define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
 #define RESET_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
 
-#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
-#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
-#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonIndex])
+#define CHECK_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] & gBitFlags[item])
+#define CHECK_DUNGEON_ITEM_ALT(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonSceneIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] |= (u8)gBitFlags[item])
+#define DUNGEON_KEY_COUNT(dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonSceneIndex])
+#define GET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 & gBitFlags[floor])
+#define SET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 |= gBitFlags[floor])
+#define GET_ROOM_VISITED(sceneId, room) (((void)0, gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms) & (1 << (room)))
+#define SET_ROOM_VISITED(sceneId, room) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms |= gBitFlags[room])
+#define GET_CYCLE_CHEST_OPENED(sceneId, chestFlagId) ((void)0, gSaveContext.cycleSceneFlags[(sceneId)].chest) & (1 << (chestFlagId));
+
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
@@ -1673,11 +1680,18 @@ typedef enum {
     gSaveContext.eventInf[7] = (temp)
 
 typedef enum {
-    /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
-    /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
-    /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
-} DungeonIndex;
+    // These first 4 values are also used represent the index of the temple the player is currently in
+    /* 0 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE,
+    /* 1 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE,
+    /* 2 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE,
+    /* 3 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE,
+
+    /* 4 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_INVERTED,
+    /* 5 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE_BOSS,
+    /* 6 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE_BOSS,
+    /* 7 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE_BOSS,
+    /* 8 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_BOSS
+} DungeonSceneIndex;
 
 #define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
 #define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area

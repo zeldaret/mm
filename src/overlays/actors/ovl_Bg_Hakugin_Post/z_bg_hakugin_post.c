@@ -4,7 +4,6 @@
  * Description: Snowhead Temple Central Pillar
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -924,7 +923,7 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 void func_80A9D360(BgHakuginPost* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
-        if (this->additionalCsId >= 0) {
+        if (this->additionalCsId > CS_ID_NONE) {
             func_80A9D3E4(this);
         } else {
             this->unkFunc(this);

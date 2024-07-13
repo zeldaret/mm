@@ -13,8 +13,8 @@ simpleReplace = {
 # if the occurence is the whole word
 # for example, if there is a space before and an open parenthesis after,
 # like for a function call: ` func_8002E4B4(`
-# 
-# Custom behaviour can be enabled by using a tuple as the value (see 
+#
+# Custom behaviour can be enabled by using a tuple as the value (see
 # explanation in replace_single below)
 wordReplace = {
     # Functions
@@ -936,17 +936,20 @@ wordReplace = {
     "func_800E8EA0": "Actor_ContinueText",
     "func_800B90F4": "Actor_DeactivateLens",
 
-    "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
-    "func_8010A074": "Map_IsInDungeonOrBossArea",
-    "func_8010A0F0": "Map_GetDungeonAreaIndex",
-    "func_8010A164": "Map_IsInDungeonArea",
-    "func_8010A194": "Map_GetBossAreaIndex",
-    "func_8010A208": "Map_IsInBossArea",
+    "func_8010A000": "Map_GetDungeonSceneIndex",
+    "func_8010A074": "Map_IsInDungeonOrBossScene",
+    "func_8010A0F0": "Map_GetDungeonSceneIndexForDungeon",
+    "func_8010A164": "Map_IsInDungeonScene",
+    "Map_IsInDungeonArea": "Map_IsInDungeonScene",
+    "func_8010A194": "Map_GetDungeonSceneIndexForBoss",
+    "func_8010A208": "Map_IsInBossScene",
+    "Map_IsInBossArea": "Map_IsInBossScene",
     "func_8010A2DC": "Minimap_SavePlayerRoomInitInfo",
     "func_8010A33C": "Map_InitRoomData",
     "func_8010A410": "Map_Destroy",
     "func_8010A430": "Map_Init",
-    "func_8010A54C": "Minimap_Draw",
+    "func_8010A54C": "Map_DrawMinimap",
+    "Minimap_Draw": "Map_DrawMinimap",
     "func_8010A580": "Map_Update",
 
     "Entrance_CreateIndex": "Entrance_Create",
@@ -1047,7 +1050,7 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
-    
+
     "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
     "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
@@ -1242,7 +1245,8 @@ wordReplace = {
     "globalCtx->envCtx.unk_E6": "play->envCtx.screenFillColor",
     "globalCtx->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
-    "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
+    "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonPlayerDoAction",
+    "globalCtx->interfaceCtx.bButtonDoAction": "play->interfaceCtx.bButtonPlayerDoAction",
     "play->interfaceCtx.unk_31A": "play->interfaceCtx.storyState",
     "play->interfaceCtx.unk_31B": "play->interfaceCtx.storyType",
     "play->interfaceCtx.unk_25C": "play->interfaceCtx.minigamePoints",
@@ -1300,6 +1304,7 @@ wordReplace = {
     "play->actorCtx.targetCtx.unk4C": "play->actorCtx.targetCtx.lockOnIndex",
     "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnTriangleSets",
     "play->actorCtx.targetCtx.unk8C": "play->actorCtx.targetCtx.nextTarget",
+    "play->doorCtx.transitionActorList": "play->transitionActors.list",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",

@@ -29,7 +29,7 @@
         <TextureAnimation Name="object_iknv_obj_Matanimheader_00F1C0" Offset="0xF1C0" />
         <DList Name="object_iknv_obj_DL_010D90" Offset="0x10D90" /> <!-- Original name is "z2_doukutu_modelT" -->
         <DList Name="object_iknv_obj_DL_010D98" Offset="0x10D98" /> <!-- Original name is "z2_doukutu_model" -->
-        <!-- <Blob Name="object_iknv_obj_Blob_0113E0" Size="0x10" Offset="0x113E0" /> -->
+        <TextureAnimation Name="object_iknv_obj_Matanimheader_0113E0" Offset="0x113E0" /> <!-- Empty TexAnim -->
         <DList Name="object_iknv_obj_DL_0115E0" Offset="0x115E0" /> <!-- Original name is "z2_doumizu_modelT" -->
         <DList Name="object_iknv_obj_DL_011788" Offset="0x11788" /> <!-- Original name is "z2_doumizu_model" -->
         <TextureAnimation Name="object_iknv_obj_Matanimheader_0117A0" Offset="0x117A0" />

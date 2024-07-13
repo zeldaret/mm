@@ -83,10 +83,10 @@ static AnimationInfo sAnimationInfo[STALCHILD_ANIM_MAX] = {
 };
 
 static Vec3f D_80997468[] = {
-    { -534.0f, 80.0, -1277.0f },
-    { 113.0f, 80.0, -1359.0f },
-    { 100.0f, 80.0, -770.0f },
-    { -334.0f, 80.0, -720.0f },
+    { -534.0f, 80.0f, -1277.0f },
+    { 113.0f, 80.0f, -1359.0f },
+    { 100.0f, 80.0f, -770.0f },
+    { -334.0f, 80.0f, -720.0f },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -1022,7 +1022,7 @@ void func_80996AD0(EnSkb* this, PlayState* play) {
 void func_80996BEC(EnSkb* this, PlayState* play) {
     static Color_RGBA8 D_80997550 = { 170, 255, 255, 255 };
     static Color_RGBA8 D_80997554 = { 200, 200, 255, 255 };
-    static Vec3f D_80997558 = { 0.0f, -1.0, 0.0f };
+    static Vec3f D_80997558 = { 0.0f, -1.0f, 0.0f };
     Vec3f sp84;
     s32 i;
     s16 yaw;

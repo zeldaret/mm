@@ -495,8 +495,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_lights.o"
     include "$(BUILD_DIR)/src/code/z_malloc.o"
     include "$(BUILD_DIR)/src/code/z_map_disp.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.data.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.bss.o"
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"
@@ -760,8 +758,7 @@ beginseg
     name "ovl_En_Okuta"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/z_en_okuta.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/ovl_En_Okuta_reloc.o"
 endseg
 
 beginseg
@@ -1048,17 +1045,14 @@ beginseg
     name "ovl_En_Death"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/z_en_death.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/ovl_En_Death_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Minideath"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/z_en_minideath.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/ovl_En_Minideath_reloc.o"
 endseg
 
 beginseg
@@ -3982,8 +3976,7 @@ beginseg
     name "ovl_Bg_Dblue_Elevator"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/z_bg_dblue_elevator.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator_reloc.o"
 endseg
 
 beginseg

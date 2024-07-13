@@ -126,15 +126,15 @@ void func_80ACBA10(ObjAqua* this) {
     Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, false);
 }
 
-s32 func_80ACBA60(ObjAqua* this, PlayState* play) {
+s32 ObjAqua_IsUnderwater(ObjAqua* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
-        (this->actor.world.pos.y < ySurface)) {
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -157,7 +157,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
 
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
-    if (func_80ACBA60(this, play)) {
+    if (ObjAqua_IsUnderwater(this, play)) {
         for (i = 0; i < 8; i++) {
             EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
         }

@@ -146,15 +146,15 @@ void func_809A13A0(ObjHamishi* this, PlayState* play) {
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
 }
 
-s32 func_809A1408(ObjHamishi* this, PlayState* play) {
+s32 ObjHamishi_IsUnderwater(ObjHamishi* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -187,7 +187,7 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
 
     this->actor.shape.yOffset = 80.0f;
 
-    if (func_809A1408(this, play)) {
+    if (ObjHamishi_IsUnderwater(this, play)) {
         this->unk_1A2 |= 1;
     }
 }

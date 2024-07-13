@@ -362,15 +362,15 @@ void func_8095E204(EnIshi* this, PlayState* play) {
     }
 }
 
-s32 func_8095E2B0(EnIshi* this, PlayState* play) {
+s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -421,7 +421,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (func_8095E2B0(this, play)) {
+    if (EnIshi_IsUnderwater(this, play)) {
         this->unk_197 |= 1;
     }
 
