@@ -57,7 +57,7 @@ typedef struct EnKnight {
     /* 0x144 */ u16 curtainsLightRayAngle;
     /* 0x146 */ s16 randTimer;
     /* 0x148 */ u8 subAction;
-    /* 0x14A */ s16 actionTimers[3];
+    /* 0x14A */ s16 timers[3];
     /* 0x150 */ UNK_TYPE1 unk_150;
     /* 0x151 */ u8 inCurtainCutscene;
     /* 0x152 */ u8 doBgChecks;
@@ -79,8 +79,8 @@ typedef struct EnKnight {
     /* 0x17A */ s16 rightLegLowerRotation;
     /* 0x17C */ f32 bodyAlpha;
     /* 0x180 */ f32 shadowAlphaFactor;
-    /* 0x184 */ s16 neckPitch;
-    /* 0x186 */ s16 neckPitchTarget;
+    /* 0x184 */ s16 neckYaw;
+    /* 0x186 */ s16 neckYawTarget;
     /* 0x188 */ s16 neckRoll;
     /* 0x18A */ s16 neckRollTarget;
     /* 0x18C */ s16 neckRotationMaxStep;

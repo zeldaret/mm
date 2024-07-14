@@ -31,9 +31,9 @@ void Boss06_CurtainDestroyed(Boss06* this, PlayState* play);
 
 Vec3f sCurtainFireEffectPositions[128];
 static EnKnight* sIgosInstance;
-static s32 sSeed1;
-static s32 sSeed2;
-static s32 sSeed3;
+s32 sBoss06Seed1;
+s32 sBoss06Seed2;
+s32 sBoss06Seed3;
 
 typedef enum {
     /*  0 */ BOSS06_DMGEFF_0 = 0,
@@ -125,20 +125,20 @@ typedef enum {
 } Boss06CutsceneState;
 
 void Boss06_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
-    sSeed1 = seedInit1;
-    sSeed2 = seedInit2;
-    sSeed3 = seedInit3;
+    sBoss06Seed1 = seedInit1;
+    sBoss06Seed2 = seedInit2;
+    sBoss06Seed3 = seedInit3;
 }
 
 f32 Boss06_RandZeroOne(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
-    sSeed1 = (sSeed1 * 171) % 30269;
-    sSeed2 = (sSeed2 * 172) % 30307;
-    sSeed3 = (sSeed3 * 170) % 30323;
+    sBoss06Seed1 = (sBoss06Seed1 * 171) % 30269;
+    sBoss06Seed2 = (sBoss06Seed2 * 172) % 30307;
+    sBoss06Seed3 = (sBoss06Seed3 * 170) % 30323;
 
-    randFloat = (sSeed1 / 30269.0f) + (sSeed2 / 30307.0f) + (sSeed3 / 30323.0f);
+    randFloat = (sBoss06Seed1 / 30269.0f) + (sBoss06Seed2 / 30307.0f) + (sBoss06Seed3 / 30323.0f);
     while (randFloat >= 1.0f) {
         randFloat -= 1.0f;
     }
@@ -521,7 +521,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss06* this = THIS;
     s32 i;
-    f32 lightOrbZOffset = 0.0f;
+    f32 lightOrbOffsetZ = 0.0f;
     s16 lightRayBaseX;
     s16 lightRayBaseZ;
     Vtx* vertices;
@@ -728,7 +728,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
                 }
             }
         } else {
-            lightOrbZOffset = 7.0f;
+            lightOrbOffsetZ = 7.0f;
         }
     }
 
@@ -737,7 +737,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
         Matrix_Translate(this->actor.world.pos.x + this->arrowHitPos.x,
                          this->actor.world.pos.y + 84.0f + this->arrowHitPos.y,
-                         (this->actor.world.pos.z - 2.0f) + lightOrbZOffset, MTXMODE_NEW);
+                         (this->actor.world.pos.z - 2.0f) + lightOrbOffsetZ, MTXMODE_NEW);
 
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(140.0f * lightRayBlueFactor + 115.0f), lightOrbAlpha);
