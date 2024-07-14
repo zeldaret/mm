@@ -2356,7 +2356,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
                 mainCam->eyeNext = this->csCamEye;
                 mainCam->at = this->csCamAt;
                 func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = 0;
+                this->csCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sMinibossStartBgmCountdown = 1;
@@ -2364,7 +2364,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != 0) {
+    if (this->csCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
         Play_SetCameraFov(play, this->csCamId, this->csCamFov);
@@ -2636,7 +2636,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
                 mainCam->at = this->csCamAt;
 
                 func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = 0;
+                this->csCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sMinibossStartBgmCountdown = 5;
@@ -2644,7 +2644,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != 0) {
+    if (this->csCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
         Play_SetCameraFov(play, this->csCamId, this->csCamFov);
@@ -3012,7 +3012,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 mainCam->at = this->csCamAt;
 
                 func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = 0;
+                this->csCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sMinibossStartBgmCountdown = 1;
@@ -3024,7 +3024,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != 0) {
+    if (this->csCamId != SUB_CAM_ID_DONE) {
         Vec3f eye;
         Vec3f at;
         f32 yOffset;
