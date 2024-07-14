@@ -441,7 +441,7 @@ typedef struct {
 #define MSCRIPT_CMD_SET_EVENT_INF(flag) \
     MSCRIPT_CMD_ID_SET_EVENT_INF, SCRIPT_UNPACK_8(((flag) >> 4)), SCRIPT_UNPACK_8((1 << ((flag) & 0xF)))
 
-#define MSCRIPT_CMD_EVENT_INF(flag) \
+#define MSCRIPT_CMD_UNSET_EVENT_INF(flag) \
     MSCRIPT_CMD_ID_UNSET_EVENT_INF, SCRIPT_UNPACK_8(((flag) >> 4)), SCRIPT_UNPACK_8((1 << ((flag) & 0xF)))
 
 #define MSCRIPT_CMD_CHECK_ITEM_ACTION(itemAction, skipEqual, skipDefault, skipContinue) \

@@ -36,7 +36,7 @@ cmd_info = [
     ('MSCRIPT_CMD_CHECK_QUEST_ITEM', 0x05, '', '>Hh', (1,)),
     ('MSCRIPT_CMD_CHECK_EVENT_INF', 0x05, '', '>Hh', (1,)),
     ('MSCRIPT_CMD_SET_EVENT_INF', 0x03, '', '>H', ()),
-    ('MSCRIPT_CMD_EVENT_INF', 0x03, '', '>H', ()),
+    ('MSCRIPT_CMD_UNSET_EVENT_INF', 0x03, '', '>H', ()),
     ('MSCRIPT_CMD_CHECK_ITEM_ACTION', 0x09, '', '>Hhhh', (1,2,3)),
     ('MSCRIPT_CMD_CHECK_HAS_SONG', 0x05, '', '>Hh', (1,)),
     ('MSCRIPT_CMD_CHECK_WORN_MASK', 0x05, '', '>Hh', (1,)),
