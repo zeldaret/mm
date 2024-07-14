@@ -4877,7 +4877,8 @@ void Interface_DrawClock(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[24], 8, 0);
 
-            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
+            OVERLAY_DISP =
+                Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
 
             // Colours the Three-Day Clocks's Hour Digit Above the Sun
             gDPPipeSync(OVERLAY_DISP++);
@@ -4901,7 +4902,8 @@ void Interface_DrawClock(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[32], 8, 0);
 
-            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
+            OVERLAY_DISP =
+                Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
 
             // Colours the Three-Day Clocks's Hour Digit Above the Moon
             gDPPipeSync(OVERLAY_DISP++);
