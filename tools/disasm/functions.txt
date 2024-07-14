@@ -8893,7 +8893,7 @@
     0x809B1BE8:("ObjChikuwa_Update",),
     0x809B1D90:("ObjChikuwa_Draw",),
     0x809B20F0:("EnKnight_EffectAdd",),
-    0x809B21F4:("EnKnight_UpdateLimbCollider",),
+    0x809B21F4:("EnKnight_SetColliderSphere",),
     0x809B22CC:("EnKnight_SpawnDustAtFeet",),
     0x809B2510:("EnKnight_Init",),
     0x809B2DC0:("EnKnight_Destroy",),

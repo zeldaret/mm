@@ -509,7 +509,7 @@ void EnKnight_EffectAdd(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* acc
     }
 }
 
-void EnKnight_UpdateLimbCollider(EnKnight* this, s32 elemNum, ColliderJntSph* jntSph, Vec3f* pos) {
+void EnKnight_SetColliderSphere(EnKnight* this, s32 elemNum, ColliderJntSph* jntSph, Vec3f* pos) {
     f32 scale = (this == sIgosInstance) ? 1.3076924f : 1.0f;
 
     if (this->actionFunc == EnKnight_FallOver) {
@@ -2100,7 +2100,7 @@ void EnKnight_IgosSitting(EnKnight* this, PlayState* play) {
         colliderPos.x = this->actor.world.pos.x + 40.0f;
         colliderPos.y = this->actor.world.pos.y + 70.0f;
         colliderPos.z = this->actor.world.pos.z;
-        EnKnight_UpdateLimbCollider(this, 0, &this->shieldCollider, &colliderPos);
+        EnKnight_SetColliderSphere(this, 0, &this->shieldCollider, &colliderPos);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->shieldCollider.base);
     }
 
@@ -4114,23 +4114,23 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     if (limbIndex == KNIGHT_LIMB_TORSO) {
         Matrix_MultVec3f(&sBodyCollider0ModelOffset, &colliderPos);
-        EnKnight_UpdateLimbCollider(this, 0, &this->bodyCollider, &colliderPos);
+        EnKnight_SetColliderSphere(this, 0, &this->bodyCollider, &colliderPos);
     }
 
     if (limbIndex == KNIGHT_LIMB_PELVIS) {
         Matrix_MultVec3f(&sBodyCollider1ModelOffset, &colliderPos);
-        EnKnight_UpdateLimbCollider(this, 1, &this->bodyCollider, &colliderPos);
+        EnKnight_SetColliderSphere(this, 1, &this->bodyCollider, &colliderPos);
     }
 
     if ((limbIndex == KNIGHT_LIMB_SHIELD) && (this->actionFunc != EnKnight_IgosSitting)) {
         Matrix_MultVec3f(&sShieldColliderModelOffset, &colliderPos);
-        EnKnight_UpdateLimbCollider(this, 0, &this->shieldCollider, &colliderPos);
+        EnKnight_SetColliderSphere(this, 0, &this->shieldCollider, &colliderPos);
         Matrix_MultVec3f(&sShieldParticlesModelOffset, &this->shieldParticlesPos);
     }
 
     if (limbIndex == KNIGHT_LIMB_SWORD) {
         Matrix_MultVec3f(&sSwordColliderModelOffset, &colliderPos);
-        EnKnight_UpdateLimbCollider(this, 0, &this->swordCollider, &colliderPos);
+        EnKnight_SetColliderSphere(this, 0, &this->swordCollider, &colliderPos);
     }
 
     if (limbIndex == KNIGHT_LIMB_RIGHT_FOOT) {
