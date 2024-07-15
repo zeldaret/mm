@@ -146,15 +146,15 @@ s32 func_80939470(Actor* thisx) {
     return false;
 }
 
-s32 func_8093951C(ObjBombiwa* this, PlayState* play) {
+s32 ObjBombiwa_IsUnderwater(ObjBombiwa* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -200,7 +200,7 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, -200.0f, D_8093A998[sp34].unk_04, 9.8f);
     this->actor.world.pos.y = this->actor.home.pos.y + 20.0f;
     this->actor.draw = D_8093A998[sp34].unk_08;
-    if (func_8093951C(this, play)) {
+    if (ObjBombiwa_IsUnderwater(this, play)) {
         this->unk_203 |= 1;
     }
     func_80939EE0(this);

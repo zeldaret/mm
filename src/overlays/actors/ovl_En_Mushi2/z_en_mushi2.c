@@ -676,7 +676,7 @@ void func_80A69D3C(EnMushi2* this) {
     }
 }
 
-s32 func_80A69EE4(EnMushi2* this, PlayState* play) {
+s32 EnMushi2_IsUnderwater(EnMushi2* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
     f32 waterSurface;
@@ -757,7 +757,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_80A68808(this);
     this->actor.colChkInfo.mass = 30;
-    sp3C = func_80A69EE4(this, play);
+    sp3C = EnMushi2_IsUnderwater(this, play);
 
     if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) &&
         (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0)) {

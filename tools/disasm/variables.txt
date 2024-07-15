@@ -2164,7 +2164,7 @@
     0x801D6190:("D_801D6190","f32","",0x4),
     0x801D6194:("D_801D6194","UNK_TYPE4","",0x4),
     0x801D61A0:("sSeqInstructionArgsTable","u8","[96]",0x60),
-    0x801D6200:("D_801D6200","UNK_TYPE1","",0x1),
+    0x801D6200:("aspMainStack","UNK_TYPE1","",0x1),
     0x801D6600:("gIsLargeSfxBank","UNK_TYPE1","",0x1),
     0x801D6608:("D_801D6608","UNK_TYPE1","",0x1),
     0x801D6610:("gChannelsPerBank","UNK_TYPE1","",0x1),

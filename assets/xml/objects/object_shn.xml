@@ -36,7 +36,7 @@
         <Texture Name="gBurlyGuyShoesTex" OutName="shooting_gallery_man_shoes" Format="ci8" Width="16" Height="16" Offset="0x7F48" />
 
         <!-- Unused Empty Texture Animation -->
-        <TextureAnimation Name="gBurlyGuyUnused8050TexAnim" Offset="0x8050" />
+        <TextureAnimation Name="gBurlyGuyEmpty1TexAnim" Offset="0x8050" />
 
         <!-- DisplayLists for an unused duplicate of the Town Shooting Gallery Man's head -->
         <DList Name="gUnusedTownShootingGalleryManEyesDL" Offset="0x8BA0" />
@@ -120,6 +120,6 @@
         <Texture Name="gTownShootingGalleryManSkinTex" OutName="town_shooting_gallery_man_skin" Format="ci8" Width="8" Height="8" Offset="0x111D0" />
 
         <!-- Unused Empty Texture Animation -->
-        <TextureAnimation Name="gBurlyGuyUnused11210TexAnim" Offset="0x11210" />
+        <TextureAnimation Name="gBurlyGuyEmpty2TexAnim" Offset="0x11210" />
     </File>
 </Root>
