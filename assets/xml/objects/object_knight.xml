@@ -52,15 +52,15 @@
         <Animation Name="gKnightIntroSitDownAnim" Offset="0x10E98" /> <!-- Original name is probably "nsk_suwaruD" -->
         <Animation Name="gKnightHeavyAttackAnim" Offset="0x11298" /> <!-- Original name is probably "nsk_tategiri" -->
         <Animation Name="gKnightBeginTelegraphHeavyAttackAnim" Offset="0x11AAC" /> <!-- Original name is probably "nsk_tategiri_kaburu" -->
-        <DList Name="gKnightDebuHeadDL" Offset="0x12400" />
+        <DList Name="gKnightWideHeadDL" Offset="0x12400" />
         <Texture Name="object_knight_Tex_012760" OutName="tex_012760" Format="rgba16" Width="16" Height="16" Offset="0x12760" />
         <Texture Name="object_knight_Tex_012960" OutName="tex_012960" Format="rgba16" Width="16" Height="16" Offset="0x12960" />
         <Texture Name="object_knight_Tex_012B60" OutName="tex_012B60" Format="rgba16" Width="8" Height="8" Offset="0x12B60" />
         <Texture Name="object_knight_Tex_012BE0" OutName="tex_012BE0" Format="ia16" Width="8" Height="8" Offset="0x12BE0" />
-        <DList Name="gKnightDebuJawDL" Offset="0x12DB0" />
+        <DList Name="gKnightWideJawDL" Offset="0x12DB0" />
         <Texture Name="object_knight_Tex_012EC0" OutName="tex_012EC0" Format="rgba16" Width="8" Height="16" Offset="0x12EC0" />
         <Texture Name="object_knight_Tex_012FC0" OutName="tex_012FC0" Format="rgba16" Width="4" Height="4" Offset="0x12FC0" />
-        <DList Name="gKnightDebuNeckDL" Offset="0x13020" />
+        <DList Name="gKnightWideNeckDL" Offset="0x13020" />
         <DList Name="object_knight_DL_0153E0" Offset="0x153E0" />
         <DList Name="object_knight_DL_0154B0" Offset="0x154B0" />
         <DList Name="object_knight_DL_0155A0" Offset="0x155A0" />

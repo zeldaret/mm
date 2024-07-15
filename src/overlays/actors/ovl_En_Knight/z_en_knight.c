@@ -388,9 +388,9 @@ u16 sKnightDamagedSfx[3] = { NA_SE_EN_BOSU_DAMAGE, NA_SE_EN_YASE_DAMAGE, NA_SE_E
 u16 sKnightDefeatedSfx[3] = { NA_SE_EN_BOSU_DEAD, NA_SE_EN_YASE_DEAD, NA_SE_EN_DEBU_DEAD };
 u16 sKnightVoiceSfx[3] = { NA_SE_EN_BOSU_DEAD_VOICE, NA_SE_EN_YASE_DEAD_VOICE, NA_SE_EN_DEBU_DEAD_VOICE };
 
-EnKnight* sIgosInstance; // Bosu (igos)
-EnKnight* sYaseInstance; // Yase (tall minion)
-EnKnight* sDebuInstance; // Debu (wide minion)
+EnKnight* sIgosInstance;
+EnKnight* sThinKnightInstance;
+EnKnight* sWideKnightInstance;
 EnKnight* sIgosHeadInstance;
 EnKnight* sTargetKnight; // During some actions, the other knight will use this knight as a target
 MirRay3* sMirRayInstance;
@@ -658,10 +658,10 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
         sTargetKnight = NULL;
         sIgosHeadInstance = NULL;
         this->actor.shape.rot.y = -0x4000;
-        sYaseInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2730.0f,
+        sThinKnightInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2730.0f,
                                                this->actor.shape.rot.x, this->actor.shape.rot.y,
                                                this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
-        sDebuInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2969.0f,
+        sWideKnightInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2969.0f,
                                                this->actor.shape.rot.x, this->actor.shape.rot.y,
                                                this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
 
@@ -1190,7 +1190,7 @@ void EnKnight_ApproachPlayer(EnKnight* this, PlayState* play) {
     if ((this != sIgosInstance) && (this->actor.xzDistToPlayer > 150.0f)) {
         Matrix_RotateYS(player->actor.world.rot.y, MTXMODE_NEW);
 
-        if (this == sYaseInstance) {
+        if (this == sThinKnightInstance) {
             moveOffsetLocal.x = 100.0f;
         } else {
             moveOffsetLocal.x = -100.0f;
@@ -1661,8 +1661,8 @@ void EnKnight_Die(EnKnight* this, PlayState* play) {
 void EnKnight_Dead(EnKnight* this, PlayState* play) {
     if ((this == sIgosInstance) && (this->timers[0] == 0)) {
         Actor_Kill(&this->actor);
-        Actor_Kill(&sYaseInstance->actor);
-        Actor_Kill(&sDebuInstance->actor);
+        Actor_Kill(&sThinKnightInstance->actor);
+        Actor_Kill(&sWideKnightInstance->actor);
     }
 }
 
@@ -1860,7 +1860,7 @@ void EnKnight_March(EnKnight* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    otherKnight = (this == sYaseInstance) ? sDebuInstance : sYaseInstance;
+    otherKnight = (this == sThinKnightInstance) ? sWideKnightInstance : sThinKnightInstance;
 
     switch (this->subAction) {
         case KNIGHT_SUB_ACTION_MARCH_0:
@@ -1901,7 +1901,7 @@ void EnKnight_March(EnKnight* this, PlayState* play) {
         case KNIGHT_SUB_ACTION_MARCH_1:
             this->actor.speed = KREG(38) + 1.0f;
 
-            if (this == sYaseInstance) {
+            if (this == sThinKnightInstance) {
                 this->actor.world.rot.y = (this->actor.world.rot.y + KREG(39) * 0x100) + 0x100;
             } else {
                 this->actor.world.rot.y = (this->actor.world.rot.y - KREG(39) * 0x100) - 0x100;
@@ -2104,7 +2104,7 @@ void EnKnight_IgosSitting(EnKnight* this, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->shieldCollider.base);
     }
 
-    if ((sYaseInstance->actor.draw == NULL) && (sDebuInstance->actor.draw == NULL)) {
+    if ((sThinKnightInstance->actor.draw == NULL) && (sWideKnightInstance->actor.draw == NULL)) {
         // phase 1 over
         EnKnight_SetupIgosStandCS(this, play);
         this->rightLegLowerRotation = this->leftLegLowerRotation = this->rightLegUpperRotation =
@@ -2390,7 +2390,7 @@ void EnKnight_KnightCaptainsHatCS(EnKnight* this, PlayState* play) {
 
     if (sIgosInstance->subAction == KNIGHT_SUB_ACTION_CAPTAINS_HAT_CS_IGOS_SITTING) {
         // If Igos is still sitting, position the other two at specific positions behind the player
-        if (this == sYaseInstance) {
+        if (this == sThinKnightInstance) {
             Matrix_RotateYS(sIgosInstance->actor.shape.rot.y + 0x1400, MTXMODE_NEW);
         } else {
             Matrix_RotateYS(sIgosInstance->actor.shape.rot.y - 0x1400, MTXMODE_NEW);
@@ -2421,8 +2421,8 @@ void EnKnight_SetupCaptainsHatCS(EnKnight* this, PlayState* play) {
         this->subAction = KNIGHT_SUB_ACTION_CAPTAINS_HAT_CS_IGOS_SITTING;
     }
 
-    EnKnight_SetupKnightCaptainsHatCS(sYaseInstance, play);
-    EnKnight_SetupKnightCaptainsHatCS(sDebuInstance, play);
+    EnKnight_SetupKnightCaptainsHatCS(sThinKnightInstance, play);
+    EnKnight_SetupKnightCaptainsHatCS(sWideKnightInstance, play);
     this->prevActionFunc = this->actionFunc;
     this->actionFunc = EnKnight_CaptainsHatCS;
 }
@@ -2807,8 +2807,8 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
 
             this->csState = KNIGHT_INTRO_CS_STATE_5;
             this->csTimer = 0;
-            Animation_MorphToLoop(&sDebuInstance->skelAnime, &gKnightIntroWalkAnim, 0.0f);
-            sDebuInstance->actor.world.pos.x = BREG(30) + 1363.0f + 120.0f;
+            Animation_MorphToLoop(&sWideKnightInstance->skelAnime, &gKnightIntroWalkAnim, 0.0f);
+            sWideKnightInstance->actor.world.pos.x = BREG(30) + 1363.0f + 120.0f;
             Message_StartTextbox(play, 0x1533, NULL);
             this->csCamFov = 30.0f;
             play->envCtx.lightSettingOverride = 2;
@@ -2820,7 +2820,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
 
             if ((this->csTimer == (u32)(BREG(72) + 10)) || (this->csTimer == (u32)(BREG(73) + 25)) ||
                 (this->csTimer == (u32)(BREG(74) + 40))) {
-                Actor_PlaySfx(&sDebuInstance->actor, sDebuInstance->walkSfx);
+                Actor_PlaySfx(&sWideKnightInstance->actor, sWideKnightInstance->walkSfx);
             }
 
             if ((this->csTimer > 8) && (this->csTimer < 44)) {
@@ -2838,13 +2838,13 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->csCamAt.x = 1377.0f;
             this->csCamAt.y = 121.0f;
             this->csCamAt.z = 2851.0f;
-            Math_ApproachF(&sDebuInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
-            sDebuInstance->actor.world.pos.y = 45.0f;
-            sDebuInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f;
+            Math_ApproachF(&sWideKnightInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
+            sWideKnightInstance->actor.world.pos.y = 45.0f;
+            sWideKnightInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f;
 
             if (this->csTimer == (u32)(BREG(35) + 45)) {
-                Animation_MorphToPlayOnce(&sDebuInstance->skelAnime, &gKnightLaugh2Anim, -10.0f);
-                Actor_PlaySfx(&sDebuInstance->actor, NA_SE_EN_DEBU_PAUSE_K);
+                Animation_MorphToPlayOnce(&sWideKnightInstance->skelAnime, &gKnightLaugh2Anim, -10.0f);
+                Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_PAUSE_K);
             }
 
             if (this->csTimer != (u32)(BREG(33) + 80)) {
@@ -2853,16 +2853,16 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
 
             this->csState = KNIGHT_INTRO_CS_STATE_6;
             this->csTimer = 0;
-            Animation_MorphToLoop(&sYaseInstance->skelAnime, &gKnightIntroWalkAnim, 0.0f);
-            sYaseInstance->actor.world.pos.x = BREG(30) + 1363.0f + 120.0f;
-            sDebuInstance->actor.world.pos.z = 3164.0f;
+            Animation_MorphToLoop(&sThinKnightInstance->skelAnime, &gKnightIntroWalkAnim, 0.0f);
+            sThinKnightInstance->actor.world.pos.x = BREG(30) + 1363.0f + 120.0f;
+            sWideKnightInstance->actor.world.pos.z = 3164.0f;
             Message_StartTextbox(play, 0x151B, NULL);
             play->envCtx.lightSettingOverride = 3;
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_6:
             if ((this->csTimer == (u32)(BREG(72) + 10)) || (this->csTimer == (u32)(BREG(73) + 25)) ||
                 (this->csTimer == (u32)(BREG(74) + 40))) {
-                Actor_PlaySfx(&sYaseInstance->actor, sYaseInstance->walkSfx);
+                Actor_PlaySfx(&sThinKnightInstance->actor, sThinKnightInstance->walkSfx);
             }
 
             if ((this->csTimer >= 10) && (this->csTimer < 34)) {
@@ -2875,13 +2875,13 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->csCamAt.x = 1372.0f;
             this->csCamAt.y = 122.0f;
             this->csCamAt.z = 2867.0f;
-            Math_ApproachF(&sYaseInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
-            sYaseInstance->actor.world.pos.y = 45.0f;
-            sYaseInstance->actor.world.pos.z = (BREG(31) + 2864.0f) - 60.0f;
+            Math_ApproachF(&sThinKnightInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
+            sThinKnightInstance->actor.world.pos.y = 45.0f;
+            sThinKnightInstance->actor.world.pos.z = (BREG(31) + 2864.0f) - 60.0f;
 
             if (this->csTimer == (u32)(BREG(35) + 45)) {
-                Animation_MorphToPlayOnce(&sYaseInstance->skelAnime, &gKnightLaugh2Anim, -10.0f);
-                Actor_PlaySfx(&sYaseInstance->actor, NA_SE_EN_YASE_PAUSE_K);
+                Animation_MorphToPlayOnce(&sThinKnightInstance->skelAnime, &gKnightLaugh2Anim, -10.0f);
+                Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_PAUSE_K);
             }
 
             if (this->csTimer != (u32)(BREG(33) + 80)) {
@@ -2890,10 +2890,10 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
 
             this->csState = KNIGHT_INTRO_CS_STATE_7;
             this->csTimer = 0;
-            sYaseInstance->actor.world.pos.z = ((BREG(31) + 2864.0f) - 60.0f) - 10.0f;
-            sDebuInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f + 10.0f;
-            sYaseInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
-            sDebuInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
+            sThinKnightInstance->actor.world.pos.z = ((BREG(31) + 2864.0f) - 60.0f) - 10.0f;
+            sWideKnightInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f + 10.0f;
+            sThinKnightInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
+            sWideKnightInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
             this->csCamEye.x = 1339.0f;
             this->csCamEye.y = 117.0f;
             this->csCamEye.z = 2864.0f;
@@ -2929,8 +2929,8 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             }
 
             if (this->csTimer == (u32)(BREG(44) + 40)) {
-                Animation_MorphToLoop(&sYaseInstance->skelAnime, &gKnightLaugh1Anim, -5.0f);
-                Animation_MorphToLoop(&sDebuInstance->skelAnime, &gKnightLaugh1Anim, -5.0f);
+                Animation_MorphToLoop(&sThinKnightInstance->skelAnime, &gKnightLaugh1Anim, -5.0f);
+                Animation_MorphToLoop(&sWideKnightInstance->skelAnime, &gKnightLaugh1Anim, -5.0f);
             }
 
             if (this->csTimer == 40) {
@@ -2938,11 +2938,11 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             }
 
             if (this->csTimer == 45) {
-                Actor_PlaySfx(&sDebuInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
+                Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
             }
 
             if (this->csTimer == 50) {
-                Actor_PlaySfx(&sYaseInstance->actor, NA_SE_EN_YASE_LAUGH_K);
+                Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             }
 
             Math_ApproachF(&this->csCamEye.x, 1196.0f, 0.1f, this->csStepValue * 143.0f);
@@ -2967,7 +2967,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->csCamAt.z = 2790.0f;
 
             play->envCtx.lightSettingOverride = 5;
-            Actor_PlaySfx(&sYaseInstance->actor, NA_SE_EN_YASE_LAUGH_K);
+            Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_8:
             if (this->csTimer == 15) {
@@ -2977,8 +2977,8 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->csCamAt.x = 1421.0f;
                 this->csCamAt.y = 103.0f;
                 this->csCamAt.z = 2930.0f;
-                Actor_PlaySfx(&sDebuInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
-                Actor_PlaySfx(&sYaseInstance->actor, NA_SE_EN_YASE_LAUGH_K);
+                Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
+                Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             }
 
             if (this->csTimer == 30) {
@@ -2990,8 +2990,8 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->csCamAt.z = 2864.0f;
                 play->envCtx.lightSettingOverride = 6;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_LAUGH_DEMO_K);
-                Actor_PlaySfx(&sDebuInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
-                Actor_PlaySfx(&sYaseInstance->actor, NA_SE_EN_YASE_LAUGH_K);
+                Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
+                Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             }
 
             if (this->csTimer == (u32)(BREG(19) + 55)) {
@@ -3000,11 +3000,11 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->csState = KNIGHT_INTRO_CS_STATE_0;
 
                 EnKnight_SetupIgosSitting(this, play);
-                EnKnight_SetupTurnToPlayer(sYaseInstance, play);
-                EnKnight_SetupTurnToPlayer(sDebuInstance, play);
+                EnKnight_SetupTurnToPlayer(sThinKnightInstance, play);
+                EnKnight_SetupTurnToPlayer(sWideKnightInstance, play);
 
-                sYaseInstance->actor.gravity = sDebuInstance->actor.gravity = -1.5f;
-                sYaseInstance->doBgChecks = sDebuInstance->doBgChecks = true;
+                sThinKnightInstance->actor.gravity = sWideKnightInstance->actor.gravity = -1.5f;
+                sThinKnightInstance->doBgChecks = sWideKnightInstance->doBgChecks = true;
 
                 mainCam->eye = this->csCamEye;
                 mainCam->eyeNext = this->csCamEye;
@@ -3783,8 +3783,8 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
     input = CONTROLLER4(&play->state);
     if (CHECK_BTN_ALL(input->press.button, BTN_L) && (this == sIgosInstance)) {
         // Left over debug feature to skip the first phase
-        EnKnight_SetupDie(sYaseInstance, play);
-        EnKnight_SetupDie(sDebuInstance, play);
+        EnKnight_SetupDie(sThinKnightInstance, play);
+        EnKnight_SetupDie(sWideKnightInstance, play);
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_R) && (this == sIgosInstance)) {
@@ -4045,13 +4045,13 @@ s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
         if ((limbIndex == IGOS_LIMB_JAW || limbIndex == IGOS_LIMB_HEAD) && this->isHeadless) {
             *dList = NULL;
         }
-    } else if (this == sDebuInstance) {
+    } else if (this == sWideKnightInstance) {
         if (limbIndex == KNIGHT_LIMB_NECK) {
-            *dList = gKnightDebuNeckDL;
+            *dList = gKnightWideNeckDL;
         } else if (limbIndex == KNIGHT_LIMB_JAW) {
-            *dList = gKnightDebuJawDL;
+            *dList = gKnightWideJawDL;
         } else if (limbIndex == KNIGHT_LIMB_HEAD) {
-            *dList = gKnightDebuHeadDL;
+            *dList = gKnightWideHeadDL;
         }
     }
     return false;
