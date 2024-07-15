@@ -179,7 +179,7 @@ void Boss06_UpdateDamage(Boss06* this) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
-        if ((this->csState == BOSS06_CS_STATE_BEGIN) && (sIgosInstance->csCamId == 0)) {
+        if ((this->csState == BOSS06_CS_STATE_BEGIN) && (sIgosInstance->subCamId == CAM_ID_MAIN)) {
             if (this->actor.colChkInfo.damageEffect == BOSS06_DMGEFF_FIRE_ARROW) {
                 Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
