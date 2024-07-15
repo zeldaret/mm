@@ -659,11 +659,11 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
         sIgosHeadInstance = NULL;
         this->actor.shape.rot.y = -0x4000;
         sThinKnightInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2730.0f,
-                                               this->actor.shape.rot.x, this->actor.shape.rot.y,
-                                               this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
+                                                     this->actor.shape.rot.x, this->actor.shape.rot.y,
+                                                     this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
         sWideKnightInstance = (EnKnight*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KNIGHT, 1398.0f, 66.0f, 2969.0f,
-                                               this->actor.shape.rot.x, this->actor.shape.rot.y,
-                                               this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
+                                                     this->actor.shape.rot.x, this->actor.shape.rot.y,
+                                                     this->actor.shape.rot.z, EN_KNIGHT_PARAM_OTHERS);
 
         // Spawn curtains
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BOSS_06, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
