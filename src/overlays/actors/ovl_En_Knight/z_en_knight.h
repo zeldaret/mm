@@ -133,13 +133,13 @@ typedef struct EnKnight {
     /* 0x680 */ u8 inCurtainReaction;
     /* 0x684 */ u32 csTimer;
     /* 0x688 */ s16 csState;
-    /* 0x68A */ s16 csCamId;
-    /* 0x68C */ Vec3f csCamEye;
-    /* 0x698 */ Vec3f csCamAt;
+    /* 0x68A */ s16 subCamId;
+    /* 0x68C */ Vec3f subCamEye;
+    /* 0x698 */ Vec3f subCamAt;
     /* 0x6A4 */ f32 csStepValue;
     /* 0x6A8 */ UNK_TYPE4 unk_6A8;
     /* 0x6AC */ s16 csPlayerYaw;
-    /* 0x6B0 */ f32 csCamFov;
+    /* 0x6B0 */ f32 subCamFov;
     /* 0x6B4 */ u16 walkSfx;
     /* 0x6B6 */ u16 pauseSfx;
     /* 0x6B8 */ u16 laughSfx;

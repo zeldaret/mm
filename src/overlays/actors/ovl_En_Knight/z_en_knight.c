@@ -684,7 +684,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
             this->doBgChecks = true;
             this->swordScale = this->shieldScale = 1.0f;
             this->actor.gravity = -1.5f;
-            this->csCamFov = 60.0f;
+            this->subCamFov = 60.0f;
         }
 
         play->envCtx.lightSettingOverride = 7;
@@ -2278,19 +2278,19 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
 
             Cutscene_StartManual(play, &play->csCtx);
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
-            this->csCamId = Play_CreateSubCamera(play);
+            this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_ChangeCameraStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->csTimer = 0;
             this->csState = KNIGHT_CS_1_STATE_1;
-            this->csCamEye.x = 1342.0f;
-            this->csCamEye.y = 56.0f;
-            this->csCamEye.z = 2810.0f;
-            this->csCamAt.x = 1400.0f;
-            this->csCamAt.y = 57.0f;
-            this->csCamAt.z = 2870.0f;
-            this->csCamFov = 60.0f;
+            this->subCamEye.x = 1342.0f;
+            this->subCamEye.y = 56.0f;
+            this->subCamEye.z = 2810.0f;
+            this->subCamAt.x = 1400.0f;
+            this->subCamAt.y = 57.0f;
+            this->subCamAt.z = 2870.0f;
+            this->subCamFov = 60.0f;
             FALLTHROUGH;
         case KNIGHT_CS_1_STATE_1:
             if (this->csTimer == (u32)(sREG(64) + 13)) {
@@ -2302,19 +2302,19 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
                 break;
             }
 
-            this->csCamEye.x = 1253.0f;
-            this->csCamEye.y = 79.0f;
-            this->csCamEye.z = 2903.0f;
-            this->csCamAt.x = 1354.0f;
-            this->csCamAt.y = 83.0f;
-            this->csCamAt.z = 2865.0f;
+            this->subCamEye.x = 1253.0f;
+            this->subCamEye.y = 79.0f;
+            this->subCamEye.z = 2903.0f;
+            this->subCamAt.x = 1354.0f;
+            this->subCamAt.y = 83.0f;
+            this->subCamAt.z = 2865.0f;
             Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosStandAndDrawAnim, 0.0f);
             this->csTimer = 0;
             this->csState = KNIGHT_CS_1_STATE_2;
             FALLTHROUGH;
         case KNIGHT_CS_1_STATE_2:
             this->csStepValue = sREG(67) * 0.001f + 0.05f;
-            Math_ApproachF(&this->csCamAt.y, 119.0f, 0.2f, this->csStepValue * 36.0f);
+            Math_ApproachF(&this->subCamAt.y, 119.0f, 0.2f, this->csStepValue * 36.0f);
             if (this->csTimer >= (u32)(sREG(68) + 10)) {
                 f32 weaponsScale;
 
@@ -2336,7 +2336,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
             }
 
             if (this->csTimer >= (u32)(sREG(69) + 50)) {
-                Math_ApproachF(&this->csCamFov, sREG(70) + 40.0f, 0.2f, sREG(71) * 0.1f + 3.0f);
+                Math_ApproachF(&this->subCamFov, sREG(70) + 40.0f, 0.2f, sREG(71) * 0.1f + 3.0f);
             }
 
             if (this->csTimer >= (u32)(sREG(72) + 90)) {
@@ -2351,11 +2351,11 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
                 this->doBgChecks = true;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->actor.gravity = -1.5f;
-                mainCam->eye = this->csCamEye;
-                mainCam->eyeNext = this->csCamEye;
-                mainCam->at = this->csCamAt;
-                func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = SUB_CAM_ID_DONE;
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sKnightMusicStartTimer = 1;
@@ -2363,10 +2363,10 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != SUB_CAM_ID_DONE) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
-        Play_SetCameraAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
-        Play_SetCameraFov(play, this->csCamId, this->csCamFov);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     }
 }
 
@@ -2447,13 +2447,13 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
 
             Cutscene_StartManual(play, &play->csCtx);
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
-            this->csCamId = Play_CreateSubCamera(play);
+            this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_ChangeCameraStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->csTimer = 0;
             this->csState = KNIGHT_CS_2_STATE_1;
-            this->csCamFov = 60.0f;
+            this->subCamFov = 60.0f;
 
             if (this->prevActionFunc == EnKnight_IgosSitting) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightCaptainsHatCSBeginSittingAnim, 0.0f);
@@ -2467,13 +2467,13 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             Matrix_RotateYS(KREG(29) + this->actor.shape.rot.y + 0x1B58, MTXMODE_NEW);
             Matrix_MultVecZ(KREG(16) + 90.0f, &posOffset);
 
-            this->csCamEye.x = this->actor.world.pos.x + posOffset.x;
-            this->csCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
-            this->csCamEye.z = this->actor.world.pos.z + posOffset.z;
+            this->subCamEye.x = this->actor.world.pos.x + posOffset.x;
+            this->subCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
+            this->subCamEye.z = this->actor.world.pos.z + posOffset.z;
 
-            this->csCamAt.x = this->actor.focus.pos.x;
-            this->csCamAt.y = this->actor.focus.pos.y + KREG(18) - 10.0f;
-            this->csCamAt.z = this->actor.focus.pos.z;
+            this->subCamAt.x = this->actor.focus.pos.x;
+            this->subCamAt.y = this->actor.focus.pos.y + KREG(18) - 10.0f;
+            this->subCamAt.z = this->actor.focus.pos.z;
 
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
@@ -2500,13 +2500,13 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
                 Math_ApproachF(&this->csStepValue, 40.0f, 0.2f, 2.0f);
             }
 
-            this->csCamEye.x = player->actor.world.pos.x + posOffset.x;
-            this->csCamEye.y = KREG(21) + (player->actor.world.pos.y + posOffset.y) + 44.0f;
-            this->csCamEye.z = player->actor.world.pos.z + posOffset.z;
+            this->subCamEye.x = player->actor.world.pos.x + posOffset.x;
+            this->subCamEye.y = KREG(21) + (player->actor.world.pos.y + posOffset.y) + 44.0f;
+            this->subCamEye.z = player->actor.world.pos.z + posOffset.z;
 
-            this->csCamAt.x = player->actor.world.pos.x;
-            this->csCamAt.y = (player->actor.world.pos.y + KREG(22) + 44.0f) - 5.0f;
-            this->csCamAt.z = player->actor.world.pos.z;
+            this->subCamAt.x = player->actor.world.pos.x;
+            this->subCamAt.y = (player->actor.world.pos.y + KREG(22) + 44.0f) - 5.0f;
+            this->subCamAt.z = player->actor.world.pos.z;
 
             if (this->csTimer == (u32)(KREG(48) + 85)) {
                 this->csState = KNIGHT_CS_2_STATE_3;
@@ -2531,14 +2531,14 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             Matrix_RotateYS(KREG(29) + this->actor.shape.rot.y + 0x1B58, MTXMODE_NEW);
             Matrix_MultVecZ(KREG(16) + 90.0f, &posOffset);
 
-            this->csCamEye.x = this->actor.world.pos.x + posOffset.x;
-            this->csCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
-            this->csCamEye.z = this->actor.world.pos.z + posOffset.z;
+            this->subCamEye.x = this->actor.world.pos.x + posOffset.x;
+            this->subCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
+            this->subCamEye.z = this->actor.world.pos.z + posOffset.z;
 
             if (this->csTimer < (u32)(KREG(24) + 35)) {
-                this->csCamAt.x = this->actor.focus.pos.x;
-                this->csCamAt.y = this->actor.focus.pos.y + KREG(18) - 10.0f;
-                this->csCamAt.z = this->actor.focus.pos.z;
+                this->subCamAt.x = this->actor.focus.pos.x;
+                this->subCamAt.y = this->actor.focus.pos.y + KREG(18) - 10.0f;
+                this->subCamAt.z = this->actor.focus.pos.z;
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
@@ -2558,16 +2558,16 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             Matrix_RotateYS(KREG(29) * 0x100 + this->actor.shape.rot.y + 0x2400, MTXMODE_NEW);
             Matrix_MultVecZ(KREG(16) + 230.0f, &posOffset);
 
-            this->csCamEye.x = this->actor.world.pos.x + posOffset.x;
-            this->csCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
-            this->csCamEye.z = this->actor.world.pos.z + posOffset.z;
+            this->subCamEye.x = this->actor.world.pos.x + posOffset.x;
+            this->subCamEye.y = this->actor.world.pos.y + KREG(17) + 40.0f;
+            this->subCamEye.z = this->actor.world.pos.z + posOffset.z;
 
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_MultVecZ(KREG(49) + 65.0f, &posOffset);
 
-            this->csCamAt.x = this->actor.world.pos.x + posOffset.x;
-            this->csCamAt.y = (this->actor.world.pos.y + KREG(50) + 50.0f) - 20.0f;
-            this->csCamAt.z = this->actor.world.pos.z + posOffset.z;
+            this->subCamAt.x = this->actor.world.pos.x + posOffset.x;
+            this->subCamAt.y = (this->actor.world.pos.y + KREG(50) + 50.0f) - 20.0f;
+            this->subCamAt.z = this->actor.world.pos.z + posOffset.z;
 
             if (this->csTimer == 60) {
                 Message_StartTextbox(play, 0x153F, NULL);
@@ -2630,12 +2630,12 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
                     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 }
 
-                mainCam->eye = this->csCamEye;
-                mainCam->eyeNext = this->csCamEye;
-                mainCam->at = this->csCamAt;
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
 
-                func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = SUB_CAM_ID_DONE;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sKnightMusicStartTimer = 5;
@@ -2643,10 +2643,10 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != SUB_CAM_ID_DONE) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
-        Play_SetCameraAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
-        Play_SetCameraFov(play, this->csCamId, this->csCamFov);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     }
 }
 
@@ -2671,19 +2671,19 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
 
             Cutscene_StartManual(play, &play->csCtx);
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
-            this->csCamId = Play_CreateSubCamera(play);
+            this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_ChangeCameraStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->csTimer = 0;
             this->csState = KNIGHT_INTRO_CS_STATE_1;
-            this->csCamFov = 60.0f;
-            this->csCamEye.x = 621.0f;
-            this->csCamEye.y = 54.0f;
-            this->csCamEye.z = 2865.0f;
-            this->csCamAt.x = 661.0f;
-            this->csCamAt.y = 110.0f;
-            this->csCamAt.z = 2939.0f;
+            this->subCamFov = 60.0f;
+            this->subCamEye.x = 621.0f;
+            this->subCamEye.y = 54.0f;
+            this->subCamEye.z = 2865.0f;
+            this->subCamAt.x = 661.0f;
+            this->subCamAt.y = 110.0f;
+            this->subCamAt.z = 2939.0f;
 
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 80);
             FALLTHROUGH;
@@ -2691,12 +2691,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             player->actor.world.pos.x = 870.0f;
             player->actor.world.pos.z = 2865.0f;
             this->csPlayerYaw = 0x4000;
-            this->csCamEye.x = player->actor.world.pos.x + BREG(16) + 100.0f;
-            this->csCamEye.y = player->actor.world.pos.y + BREG(17) + 20.0f;
-            this->csCamEye.z = player->actor.world.pos.z + BREG(18);
-            this->csCamAt.x = player->actor.world.pos.x + BREG(19);
-            this->csCamAt.y = player->actor.world.pos.y + BREG(20) + 40.0f;
-            this->csCamAt.z = player->actor.world.pos.z + BREG(21);
+            this->subCamEye.x = player->actor.world.pos.x + BREG(16) + 100.0f;
+            this->subCamEye.y = player->actor.world.pos.y + BREG(17) + 20.0f;
+            this->subCamEye.z = player->actor.world.pos.z + BREG(18);
+            this->subCamAt.x = player->actor.world.pos.x + BREG(19);
+            this->subCamAt.y = player->actor.world.pos.y + BREG(20) + 40.0f;
+            this->subCamAt.z = player->actor.world.pos.z + BREG(21);
 
             if (this->csTimer >= (u32)(BREG(22) + 20)) {
                 scale = 0.5f;
@@ -2735,12 +2735,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 Math_ApproachS(&this->csPlayerYaw, 0, 2, 0x1000);
             }
 
-            this->csCamEye.x = 896.0f;
-            this->csCamEye.y = 4.0f;
-            this->csCamEye.z = 2752.0f;
-            this->csCamAt.x = 894.0f;
-            this->csCamAt.y = 46.0f;
-            this->csCamAt.z = 2860.0f;
+            this->subCamEye.x = 896.0f;
+            this->subCamEye.y = 4.0f;
+            this->subCamEye.z = 2752.0f;
+            this->subCamAt.x = 894.0f;
+            this->subCamAt.y = 46.0f;
+            this->subCamAt.z = 2860.0f;
 
             if (this->csTimer == (u32)(BREG(65) + 40)) {
                 Message_StartTextbox(play, 0x1519, NULL);
@@ -2790,12 +2790,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_4:
             this->csStepValue = BREG(29) * 0.01f + 0.1f;
-            Math_ApproachF(&this->csCamEye.x, 1076.0f, 0.5f, this->csStepValue * 180.0f);
-            Math_ApproachF(&this->csCamEye.y, 20.0f, 0.5f, this->csStepValue * 16.0f);
-            Math_ApproachF(&this->csCamEye.z, 2741.0f, 0.5f, this->csStepValue * 11.0f);
-            Math_ApproachF(&this->csCamAt.x, 1155.0f, 0.5f, this->csStepValue * 261.0f);
-            Math_ApproachF(&this->csCamAt.y, 50.0f, 0.5f, this->csStepValue * 4.0f);
-            Math_ApproachF(&this->csCamAt.z, 2822.0f, 0.5f, this->csStepValue * 38.0f);
+            Math_ApproachF(&this->subCamEye.x, 1076.0f, 0.5f, this->csStepValue * 180.0f);
+            Math_ApproachF(&this->subCamEye.y, 20.0f, 0.5f, this->csStepValue * 16.0f);
+            Math_ApproachF(&this->subCamEye.z, 2741.0f, 0.5f, this->csStepValue * 11.0f);
+            Math_ApproachF(&this->subCamAt.x, 1155.0f, 0.5f, this->csStepValue * 261.0f);
+            Math_ApproachF(&this->subCamAt.y, 50.0f, 0.5f, this->csStepValue * 4.0f);
+            Math_ApproachF(&this->subCamAt.z, 2822.0f, 0.5f, this->csStepValue * 38.0f);
 
             this->actor.world.pos.x = BREG(27) + 1376.0f;
             this->actor.world.pos.y = 45.0f;
@@ -2810,7 +2810,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             Animation_MorphToLoop(&sWideKnightInstance->skelAnime, &gKnightIntroWalkAnim, 0.0f);
             sWideKnightInstance->actor.world.pos.x = BREG(30) + 1363.0f + 120.0f;
             Message_StartTextbox(play, 0x1533, NULL);
-            this->csCamFov = 30.0f;
+            this->subCamFov = 30.0f;
             play->envCtx.lightSettingOverride = 2;
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_5:
@@ -2832,12 +2832,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->animLastFrame = 1000.0f;
             }
 
-            this->csCamEye.x = 1349.0f;
-            this->csCamEye.y = 126.0f;
-            this->csCamEye.z = 2740.0f;
-            this->csCamAt.x = 1377.0f;
-            this->csCamAt.y = 121.0f;
-            this->csCamAt.z = 2851.0f;
+            this->subCamEye.x = 1349.0f;
+            this->subCamEye.y = 126.0f;
+            this->subCamEye.z = 2740.0f;
+            this->subCamAt.x = 1377.0f;
+            this->subCamAt.y = 121.0f;
+            this->subCamAt.z = 2851.0f;
             Math_ApproachF(&sWideKnightInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
             sWideKnightInstance->actor.world.pos.y = 45.0f;
             sWideKnightInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f;
@@ -2869,12 +2869,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->jawRotationAmplitudeTarget = KREG(42) + 200.0f;
             }
 
-            this->csCamEye.x = 1343.0f;
-            this->csCamEye.y = 146.0f;
-            this->csCamEye.z = 2975.0f;
-            this->csCamAt.x = 1372.0f;
-            this->csCamAt.y = 122.0f;
-            this->csCamAt.z = 2867.0f;
+            this->subCamEye.x = 1343.0f;
+            this->subCamEye.y = 146.0f;
+            this->subCamEye.z = 2975.0f;
+            this->subCamAt.x = 1372.0f;
+            this->subCamAt.y = 122.0f;
+            this->subCamAt.z = 2867.0f;
             Math_ApproachF(&sThinKnightInstance->actor.world.pos.x, BREG(30) + 1363.0f + 30.0f, 1.0f, BREG(32) + 2.0f);
             sThinKnightInstance->actor.world.pos.y = 45.0f;
             sThinKnightInstance->actor.world.pos.z = (BREG(31) + 2864.0f) - 60.0f;
@@ -2894,15 +2894,15 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             sWideKnightInstance->actor.world.pos.z = BREG(31) + 2864.0f + 60.0f + 10.0f;
             sThinKnightInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
             sWideKnightInstance->actor.world.pos.x = (BREG(30) + 1363.0f + 30.0f) - 40.0f;
-            this->csCamEye.x = 1339.0f;
-            this->csCamEye.y = 117.0f;
-            this->csCamEye.z = 2864.0f;
-            this->csCamAt.x = 1452.0f;
-            this->csCamAt.y = 120.0f;
-            this->csCamAt.z = 2864.0f;
+            this->subCamEye.x = 1339.0f;
+            this->subCamEye.y = 117.0f;
+            this->subCamEye.z = 2864.0f;
+            this->subCamAt.x = 1452.0f;
+            this->subCamAt.y = 120.0f;
+            this->subCamAt.z = 2864.0f;
             this->csStepValue = 0.0f;
             Message_StartTextbox(play, 0x1534, NULL);
-            this->csCamFov = 60.0f;
+            this->subCamFov = 60.0f;
             play->envCtx.lightSettingOverride = 4;
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_7:
@@ -2945,10 +2945,10 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             }
 
-            Math_ApproachF(&this->csCamEye.x, 1196.0f, 0.1f, this->csStepValue * 143.0f);
-            Math_ApproachF(&this->csCamEye.y, 52.0f, 0.1f, this->csStepValue * 65.0f);
-            Math_ApproachF(&this->csCamAt.x, 1302.0f, 0.1f, this->csStepValue * 150.0f);
-            Math_ApproachF(&this->csCamAt.y, 90.0f, 0.1f, this->csStepValue * 30.0f);
+            Math_ApproachF(&this->subCamEye.x, 1196.0f, 0.1f, this->csStepValue * 143.0f);
+            Math_ApproachF(&this->subCamEye.y, 52.0f, 0.1f, this->csStepValue * 65.0f);
+            Math_ApproachF(&this->subCamAt.x, 1302.0f, 0.1f, this->csStepValue * 150.0f);
+            Math_ApproachF(&this->subCamAt.y, 90.0f, 0.1f, this->csStepValue * 30.0f);
             Math_ApproachF(&this->csStepValue, BREG(45) * 0.01f + 0.1f, 1.0f, BREG(45) * 0.0001f + 0.01f);
 
             if (this->csTimer != (u32)(BREG(18) + 60)) {
@@ -2958,36 +2958,36 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->csState = KNIGHT_INTRO_CS_STATE_8;
             this->csTimer = 0;
 
-            this->csCamEye.x = 1309.0f;
-            this->csCamEye.y = 103.0f;
-            this->csCamEye.z = 2790.0f;
+            this->subCamEye.x = 1309.0f;
+            this->subCamEye.y = 103.0f;
+            this->subCamEye.z = 2790.0f;
 
-            this->csCamAt.x = 1421.0f;
-            this->csCamAt.y = 103.0f;
-            this->csCamAt.z = 2790.0f;
+            this->subCamAt.x = 1421.0f;
+            this->subCamAt.y = 103.0f;
+            this->subCamAt.z = 2790.0f;
 
             play->envCtx.lightSettingOverride = 5;
             Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_8:
             if (this->csTimer == 15) {
-                this->csCamEye.x = 1309.0f;
-                this->csCamEye.y = 103.0f;
-                this->csCamEye.z = 2930.0f;
-                this->csCamAt.x = 1421.0f;
-                this->csCamAt.y = 103.0f;
-                this->csCamAt.z = 2930.0f;
+                this->subCamEye.x = 1309.0f;
+                this->subCamEye.y = 103.0f;
+                this->subCamEye.z = 2930.0f;
+                this->subCamAt.x = 1421.0f;
+                this->subCamAt.y = 103.0f;
+                this->subCamAt.z = 2930.0f;
                 Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
                 Actor_PlaySfx(&sThinKnightInstance->actor, NA_SE_EN_YASE_LAUGH_K);
             }
 
             if (this->csTimer == 30) {
-                this->csCamEye.x = 1324.0f;
-                this->csCamEye.y = 144.0f;
-                this->csCamEye.z = 2864.0f;
-                this->csCamAt.x = 1436.0f;
-                this->csCamAt.y = 144.0f;
-                this->csCamAt.z = 2864.0f;
+                this->subCamEye.x = 1324.0f;
+                this->subCamEye.y = 144.0f;
+                this->subCamEye.z = 2864.0f;
+                this->subCamAt.x = 1436.0f;
+                this->subCamAt.y = 144.0f;
+                this->subCamAt.z = 2864.0f;
                 play->envCtx.lightSettingOverride = 6;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_LAUGH_DEMO_K);
                 Actor_PlaySfx(&sWideKnightInstance->actor, NA_SE_EN_DEBU_LAUGH_K);
@@ -3006,12 +3006,12 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 sThinKnightInstance->actor.gravity = sWideKnightInstance->actor.gravity = -1.5f;
                 sThinKnightInstance->doBgChecks = sWideKnightInstance->doBgChecks = true;
 
-                mainCam->eye = this->csCamEye;
-                mainCam->eyeNext = this->csCamEye;
-                mainCam->at = this->csCamAt;
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
 
-                func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = SUB_CAM_ID_DONE;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 sKnightMusicStartTimer = 1;
@@ -3023,7 +3023,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != SUB_CAM_ID_DONE) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Vec3f eye;
         Vec3f at;
         f32 yOffset;
@@ -3031,14 +3031,14 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
         ShrinkWindow_Letterbox_SetSizeTarget(27);
         yOffset = Math_SinS(this->randTimer * 0x6000) * 0.5f * scale;
 
-        eye.x = this->csCamEye.x;
-        eye.y = this->csCamEye.y + yOffset;
-        eye.z = this->csCamEye.z;
-        at.x = this->csCamAt.x;
-        at.y = this->csCamAt.y + 2.0f * yOffset;
-        at.z = this->csCamAt.z;
-        Play_SetCameraAtEye(play, this->csCamId, &at, &eye);
-        Play_SetCameraFov(play, this->csCamId, this->csCamFov);
+        eye.x = this->subCamEye.x;
+        eye.y = this->subCamEye.y + yOffset;
+        eye.z = this->subCamEye.z;
+        at.x = this->subCamAt.x;
+        at.y = this->subCamAt.y + 2.0f * yOffset;
+        at.z = this->subCamAt.z;
+        Play_SetCameraAtEye(play, this->subCamId, &at, &eye);
+        Play_SetCameraFov(play, this->subCamId, this->subCamFov);
         player->actor.world.rot.y = player->actor.shape.rot.y = this->csPlayerYaw;
     }
 
