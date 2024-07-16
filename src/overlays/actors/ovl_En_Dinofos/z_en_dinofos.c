@@ -45,7 +45,7 @@ void EnDinofos_Damaged(EnDinofos* this, PlayState* play);
 void EnDinofos_SetupSlashFromGround(EnDinofos* this);
 void EnDinofos_SetupTurnToPlayer(EnDinofos* this);
 void EnDinofos_SetupChooseJump(EnDinofos* this, s32 jumpType);
-void EnDinofos_SetupDodgeProjectile(EnDinofos* this, s16 arg1);
+void EnDinofos_SetupDodgeProjectile(EnDinofos* this, s16 angleToProjectile);
 void EnDinofos_SetupIdle(EnDinofos* this);
 void EnDinofos_SetupPlayCutscene(EnDinofos* this);
 void EnDinofos_SetupStartBreatheFire(EnDinofos* this);
@@ -306,12 +306,14 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     }
 
     this->envColorAlpha = 255;
+
     for (i = 6; i < ARRAY_COUNT(this->colliderJntSphElements); i++) {
         dim = &this->colliderJntSph.elements[i].dim;
         dim->worldSphere.radius = dim->modelSphere.radius;
     }
 
     this->isDodgingGoronPound = false;
+
     if (this->actor.csId == CS_ID_NONE) {
         EnDinofos_SetupIdle(this);
     } else {
@@ -345,9 +347,9 @@ void EnDinofos_Blink(EnDinofos* this) {
 }
 
 s32 EnDinofos_IsFacingPlayer(EnDinofos* this) {
-    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->headRotY) - this->actor.shape.rot.y;
+    s16 angleToPlayer = (this->actor.yawTowardsPlayer - this->headRotY) - this->actor.shape.rot.y;
 
-    if (ABS_ALT(temp_v0) < 0x3000) {
+    if (ABS_ALT(angleToPlayer) < 0x3000) {
         return true;
     }
     return false;
@@ -359,9 +361,9 @@ void EnDinofos_ChooseAction(EnDinofos* this, PlayState* play) {
             if (!Actor_OtherIsTargeted(play, &this->actor) &&
                 (((this->actionFunc != EnDinofos_SlashFromGround) && (Rand_ZeroOne() > 0.35f)) ||
                  ((this->actionFunc == EnDinofos_SlashFromGround) && (Rand_ZeroOne() > 0.8f)))) {
-                EnDinofos_SetupSlashFromGround(this); // slash
+                EnDinofos_SetupSlashFromGround(this);
             } else {
-                EnDinofos_SetupCircleAroundPlayer(this, play); // move in some fashion.
+                EnDinofos_SetupCircleAroundPlayer(this, play);
             }
         } else if ((this->actor.xzDistToPlayer < 260.0f) && (this->actor.xzDistToPlayer > 180.0f)) {
             if (((this->actionFunc != EnDinofos_Land) && (Rand_ZeroOne() < 0.1f)) ||
@@ -437,6 +439,7 @@ s32 EnDinofos_Dodge(EnDinofos* this, PlayState* play) {
     Actor* actor;
     s32 i;
 
+    // Subtracts headRotY from angleToProjectile to then add it back.
     actor = func_800BC270(play, &this->actor, 80.0f, 0x138B0);
     if (actor != NULL) {
         angleToProjectile = (Actor_WorldYawTowardActor(&this->actor, actor) - this->actor.shape.rot.y) - this->headRotY;
@@ -513,6 +516,7 @@ void EnDinofos_IntroCutsceneBeforeFall(EnDinofos* this, PlayState* play) {
     Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, this->subCamEyeStep);
     Math_Vec3f_StepTo(&subCam->at, &this->subCamAt, this->subCamAtStep);
     Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
+
     if (this->cutsceneTimer == 0) {
         EnDinofos_SetupIntroCutsceneFall(this);
     }
@@ -534,6 +538,7 @@ void EnDinofos_IntroCutsceneFall(EnDinofos* this, PlayState* play) {
 
     Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, 10.0f);
     this->cutsceneTimer++;
+
     if (this->cutsceneTimer == 10) {
         Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
@@ -700,11 +705,13 @@ void EnDinofos_SetupTurnToPlayer(EnDinofos* this) {
         Animation_MorphToLoop(&this->skelAnime, &gDinolfosWalkAnim, -4.0f);
         this->actor.speed = 0.0f;
     }
+
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
         this->targetRotY = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     } else {
         this->targetRotY = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
     }
+
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnDinofos_EnableBumperCollision(this);
     this->actionFunc = EnDinofos_TurnToPlayer;
@@ -891,6 +898,7 @@ void EnDinofos_JumpSlash(EnDinofos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->attackTimer++;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x1800);
+
     if ((this->actor.velocity.y < 0.0f) && (this->skelAnime.animation == &gDinolfosJumpAnim)) {
         this->knifeCollider.base.atFlags |= AT_ON;
         this->colliderJntSph.base.acFlags |= AC_ON;
@@ -1015,9 +1023,9 @@ void EnDinofos_Stunned(EnDinofos* this, PlayState* play) {
     }
 }
 
-void EnDinofos_SetupDamaged(EnDinofos* this, s32 arg1) {
+void EnDinofos_SetupDamaged(EnDinofos* this, s32 colliderIndex) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosHitAnim);
-    func_800BE5CC(&this->actor, &this->colliderJntSph, arg1);
+    func_800BE5CC(&this->actor, &this->colliderJntSph, colliderIndex);
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actor.speed = 10.0f;
     if (this->actor.velocity.y > 0.0f) {
@@ -1193,12 +1201,12 @@ void EnDinofos_Die(EnDinofos* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = this->envColorAlpha;
     } else if (Animation_OnFrame(&this->skelAnime, 26.0f)) {
-        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN); // wrong symbol.
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
-void EnDinofos_SetupDodgeProjectile(EnDinofos* this, s16 arg1) {
-    if (arg1 >= 0) {
+void EnDinofos_SetupDodgeProjectile(EnDinofos* this, s16 angleToProjectile) {
+    if (angleToProjectile >= 0) {
         this->actor.speed = -15.0f;
     } else {
         this->actor.speed = 15.0f;
@@ -1453,7 +1461,7 @@ s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
 static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
-static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
+static Vec3f sBaseCsFireVelocity = { 700.0f, 400.0f, 0.0f };
 
 static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
     BODYPART_NONE,                    // DINOLFOS_LIMB_NONE
@@ -1519,7 +1527,7 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             matrix = Matrix_GetCurrent();
             sp58 = 48 - (s32)this->skelAnime.curFrame;
             sp58 = CLAMP_MIN(sp58, 0);
-            Matrix_MultVec3f(&D_8089E3A4, &fireVelocity);
+            Matrix_MultVec3f(&sBaseCsFireVelocity, &fireVelocity);
             fireVelocity.x -= matrix->mf[3][0];
             fireVelocity.y -= matrix->mf[3][1];
             fireVelocity.z -= matrix->mf[3][2];
