@@ -31,7 +31,7 @@ typedef struct EnDinofos {
     /* 0x206 */ Vec3s morphTable[DINOLFOS_LIMB_MAX];
     /* 0x284 */ EnDinofosActionFunc actionFunc;
     /* 0x288 */ u8 unk_288;
-    /* 0x289 */ u8 unk_289;
+    /* 0x289 */ u8 eyeTexIndex;
     /* 0x28A */ u8 drawDmgEffType;
     /* 0x28B */ u8 unk_28B;
     /* 0x28C */ s16 unk_28C;
