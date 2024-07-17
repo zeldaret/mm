@@ -239,10 +239,10 @@ typedef struct Boss07 {
     /* 0x1878 */ Vec3f tentacleBasePos;
     /* 0x1884 */ s32 maskEyeTexIndex;
     /* 0x1888 */ u8 bgCheckTimer;
-    /* 0x188C */ f32 eyeBeamsZscale;
-    /* 0x1890 */ f32 beamFocusOrbScale;
-    /* 0x1894 */ f32 unk_1894;
-    /* 0x1898 */ f32 beamXYscale;
+    /* 0x188C */ f32 eyeBeamsLengthScale; // TODO: investigate how it's used for something else for remains and incarnation
+    /* 0x1890 */ f32 eyeBeamsFocusOrbScale;
+    /* 0x1894 */ f32 beamLengthScale;
+    /* 0x1898 */ f32 beamThicknessScale; // maybe `beamBaseScale`?
     /* 0x189C */ Vec3f unk_189C;
     /* 0x18A8 */ Vec3f unk_18A8;
     /* 0x18B4 */ Vec3f unk_18B4;
