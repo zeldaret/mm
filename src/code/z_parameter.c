@@ -4510,7 +4510,10 @@ void Interface_DrawClock(PlayState* play) {
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
         CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
         CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+        CLOCK_TIME(0, 0),
     };
+    //! @bug Because of this array missing two entries to match the length from `sThreeDayClockHours` then garbage data
+    //! is used to display the current hour.
     static TexturePtr sThreeDayClockHourTextures[] = {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
         gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
@@ -4518,6 +4521,9 @@ void Interface_DrawClock(PlayState* play) {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
         gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
         gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
+#ifdef AVOID_UB
+        (TexturePtr)0x0000009B,  (TexturePtr)0x00FF0000,
+#endif
     };
     static s16 sClockInvDiamondPrimRed = 0;
     static s16 sClockInvDiamondPrimGreen = 155;
@@ -4555,7 +4561,7 @@ void Interface_DrawClock(PlayState* play) {
     f32 timeInSeconds;
     f32 sp1CC;
     s32 pad1;
-    s16 sp1C6;
+    s16 hourIndex;
     s16 currentHour;
     u16 time;
     s16 pad2;
@@ -4801,8 +4807,12 @@ void Interface_DrawClock(PlayState* play) {
                               R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
 
             // determines the current hour
-            for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
-                if (CURRENT_TIME < sThreeDayClockHours[sp1C6 + 1]) {
+            for (hourIndex = 0; hourIndex < ARRAY_COUNT(sThreeDayClockHours) - 1; hourIndex++) {
+                //! @bug When this loop iterates to the end without a break, this results in `hourIndex` being 25,
+                //! leading to an OOB read for `sThreeDayClockHourTextures` because that array and `sThreeDayClockHours`
+                //! do not have the same length. In practice, this occurs for two frames changing between hours 23
+                //! to 24.
+                if (CURRENT_TIME < sThreeDayClockHours[hourIndex + 1]) {
                     break;
                 }
             }
@@ -4868,7 +4878,8 @@ void Interface_DrawClock(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[24], 8, 0);
 
-            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], G_IM_FMT_I, 16, 11, 0);
+            OVERLAY_DISP =
+                Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
 
             // Colours the Three-Day Clocks's Hour Digit Above the Sun
             gDPPipeSync(OVERLAY_DISP++);
@@ -4892,7 +4903,8 @@ void Interface_DrawClock(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[32], 8, 0);
 
-            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], G_IM_FMT_I, 16, 11, 0);
+            OVERLAY_DISP =
+                Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[hourIndex], G_IM_FMT_I, 16, 11, 0);
 
             // Colours the Three-Day Clocks's Hour Digit Above the Moon
             gDPPipeSync(OVERLAY_DISP++);
@@ -5028,11 +5040,11 @@ void Interface_DrawClock(PlayState* play) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sFinalHoursClockDigitsRed, 0, 0, sp1E6);
                 gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockDigitsRed, 0, 0, 0);
 
-                for (sp1C6 = 0; sp1C6 < 8; sp1C6++) {
-                    index = sFinalHoursDigitSlotPosXOffset[sp1C6];
+                for (hourIndex = 0; hourIndex < ARRAY_COUNT(sFinalHoursDigitSlotPosXOffset); hourIndex++) {
+                    index = sFinalHoursDigitSlotPosXOffset[hourIndex];
 
                     OVERLAY_DISP =
-                        Gfx_DrawTexRectI8(OVERLAY_DISP, sFinalHoursDigitTextures[finalHoursClockSlots[sp1C6]], 8, 8,
+                        Gfx_DrawTexRectI8(OVERLAY_DISP, sFinalHoursDigitTextures[finalHoursClockSlots[hourIndex]], 8, 8,
                                           index, 205, 8, 8, 1 << 10, 1 << 10);
                 }
             }
