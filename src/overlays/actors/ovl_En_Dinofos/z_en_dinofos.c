@@ -426,7 +426,7 @@ void EnDinofos_EnableBumperCollision(EnDinofos* this) {
     s32 i;
 
     if (this->isDodgingGoronPound) {
-        for (i = 0; i < ARRAY_COUNT(this->bodyAndFireColliderElements) - 3; i++) {
+        for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
             this->bodyAndFireCollider.elements[i].info.bumper.dmgFlags |= 0x400;
         }
         this->isDodgingGoronPound = false;
