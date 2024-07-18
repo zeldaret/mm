@@ -308,7 +308,7 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
 
     this->envColorAlpha = 255;
 
-    for (i = 6; i < ARRAY_COUNT(this->bodyAndFireColliderElements); i++) {
+    for (i = DINOFOS_COLLIDER_FIRE_START_INDEX; i < ARRAY_COUNT(this->bodyAndFireColliderElements); i++) {
         dim = &this->bodyAndFireCollider.elements[i].dim;
         dim->worldSphere.radius = dim->modelSphere.radius;
     }
