@@ -1138,7 +1138,7 @@ void EnDinofos_BreatheFire(EnDinofos* this, PlayState* play) {
     }
 
     // The fire balls sweep in front of Dinolfos.
-    for (i = 6; i < end; i++) {
+    for (i = DINOFOS_COLLIDER_FIRE_START_INDEX; i < end; i++) {
         dim = &this->bodyAndFireCollider.elements[i].dim;
         fireRotY =
             (s32)(Math_CosF((this->attackTimer + ((i - 5) << 1)) * (M_PIf / 20)) * 0x2C00) + this->actor.shape.rot.y;
