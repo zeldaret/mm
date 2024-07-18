@@ -1461,8 +1461,8 @@ s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
-static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
+static Vec3f sKnifeTipQuadOffset = { 400.0f, -3600.0f, 0.0f };
+static Vec3f sKnifeBaseQuadOffset = { 300.0f, 500.0f, 0.0f };
 static Vec3f sBaseCsFireVelocity = { 700.0f, 400.0f, 0.0f };
 
 static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
@@ -1491,10 +1491,10 @@ static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
 
 void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
-    Vec3f vtx3;
-    Vec3f vtx2;
-    Vec3f vtx1;
-    Vec3f vtx0;
+    Vec3f knifeTipQuadOldPos;
+    Vec3f knifeBaseQuadOldPos;
+    Vec3f knifeTipQuadPos;
+    Vec3f knifeBaseQuadPos;
     s32 dimAlphaStep;
     Vec3f fireVelocity;
     MtxF* matrix;
@@ -1506,13 +1506,13 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->timer2 != this->timer1) &&
         ((this->actionFunc == EnDinofos_Slash) || (this->actionFunc == EnDinofos_JumpSlash))) {
-        Math_Vec3f_Copy(&vtx2, &this->knifeCollider.dim.quad[0]);
-        Math_Vec3f_Copy(&vtx3, &this->knifeCollider.dim.quad[1]);
-        Matrix_MultVec3f(&D_8089E38C, &vtx1);
-        Matrix_MultVec3f(&D_8089E398, &vtx0);
-        Collider_SetQuadVertices(&this->knifeCollider, &vtx0, &vtx1, &vtx2, &vtx3);
+        Math_Vec3f_Copy(&knifeBaseQuadOldPos, &this->knifeCollider.dim.quad[0]);
+        Math_Vec3f_Copy(&knifeTipQuadOldPos, &this->knifeCollider.dim.quad[1]);
+        Matrix_MultVec3f(&sKnifeTipQuadOffset, &knifeTipQuadPos);
+        Matrix_MultVec3f(&sKnifeBaseQuadOffset, &knifeBaseQuadPos);
+        Collider_SetQuadVertices(&this->knifeCollider, &knifeBaseQuadPos, &knifeTipQuadPos, &knifeBaseQuadOldPos, &knifeTipQuadOldPos);
         if (this->knifeCollider.base.atFlags & AT_ON) {
-            EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &vtx1, &vtx0);
+            EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &knifeTipQuadPos, &knifeBaseQuadPos);
         }
         this->timer2 = this->attackTimer;
     }
