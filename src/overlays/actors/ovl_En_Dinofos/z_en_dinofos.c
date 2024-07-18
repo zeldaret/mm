@@ -1130,7 +1130,7 @@ void EnDinofos_BreatheFire(EnDinofos* this, PlayState* play) {
 
     // This lets the fire balls go away from Dinolfos' jaw one after the other.
     end = DINOFOS_COLLIDER_FIRE_START_INDEX;
-    for (i = 3; i > 0; i--) {
+    for (i = ARRAY_COUNT(bodyAndFireColliderElements) - DINOFOS_COLLIDER_FIRE_START_INDEX; i > 0; i--) {
         if (this->attackTimer < (20 + -(i * 2))) {
             end = i + DINOFOS_COLLIDER_FIRE_START_INDEX;
             break;
