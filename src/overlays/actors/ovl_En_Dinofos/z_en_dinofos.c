@@ -481,7 +481,7 @@ s32 EnDinofos_Dodge(EnDinofos* this, PlayState* play) {
     if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->av1.actionVar1 == 1) &&
         (!this->isDodgingGoronPound)) {
         this->isDodgingGoronPound = true;
-        for (i = 0; i < ARRAY_COUNT(this->bodyAndFireColliderElements) - 3; i++) {
+        for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
             this->bodyAndFireCollider.elements[i].info.bumper.dmgFlags &= ~0x400;
         }
     }
