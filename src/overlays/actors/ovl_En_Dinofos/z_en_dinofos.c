@@ -1183,18 +1183,18 @@ void EnDinofos_SetupDie(EnDinofos* this) {
 
 void EnDinofos_Die(EnDinofos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        s32 temp_v0 = this->envColorAlpha - 10;
+        s32 envColorAlpha = this->envColorAlpha - 10;
 
         if (this->actor.category == ACTORCAT_ENEMY) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
             EnDinofos_EndCutscene(this, play);
         }
 
-        if (temp_v0 <= 0) {
+        if (envColorAlpha <= 0) {
             Actor_Kill(&this->actor);
             this->envColorAlpha = 0;
         } else {
-            this->envColorAlpha = temp_v0;
+            this->envColorAlpha = envColorAlpha;
         }
 
         if (this->drawDmgEffAlpha > 0.0f) {
@@ -1272,7 +1272,7 @@ void EnDinofos_PlayCutscene(EnDinofos* this, PlayState* play) {
 }
 
 void EnDinofos_RotateHead(EnDinofos* this, PlayState* play) {
-    s16 headRotYDelta;
+    s16 headRotYDiff;
 
     if ((this->actionFunc == EnDinofos_Idle) && (this->headTimer != 0)) {
         Math_ScaledStepToS(&this->headRotY, Math_SinS(this->headTimer * 1400) * 0x2C00, 0x300);
@@ -1281,10 +1281,10 @@ void EnDinofos_RotateHead(EnDinofos* this, PlayState* play) {
     } else if (this->actionFunc == EnDinofos_BreatheFire) {
         this->headRotY = Math_CosF(this->headTimer * (M_PIf / 20)) * 0x2C00;
     } else if (!Play_InCsMode(play)) {
-        headRotYDelta = this->headRotY + this->actor.shape.rot.y;
-        headRotYDelta = BINANG_SUB(this->actor.yawTowardsPlayer, headRotYDelta);
-        headRotYDelta = CLAMP(headRotYDelta, -0x300, 0x300);
-        this->headRotY += headRotYDelta;
+        headRotYDiff = this->headRotY + this->actor.shape.rot.y;
+        headRotYDiff = BINANG_SUB(this->actor.yawTowardsPlayer, headRotYDiff);
+        headRotYDiff = CLAMP(headRotYDiff, -0x300, 0x300);
+        this->headRotY += headRotYDiff;
         this->headRotY = CLAMP(this->headRotY, -0x2C00, 0x2C00);
     }
 }
@@ -1510,7 +1510,8 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Math_Vec3f_Copy(&knifeTipQuadOldPos, &this->knifeCollider.dim.quad[1]);
         Matrix_MultVec3f(&sKnifeTipQuadOffset, &knifeTipQuadPos);
         Matrix_MultVec3f(&sKnifeBaseQuadOffset, &knifeBaseQuadPos);
-        Collider_SetQuadVertices(&this->knifeCollider, &knifeBaseQuadPos, &knifeTipQuadPos, &knifeBaseQuadOldPos, &knifeTipQuadOldPos);
+        Collider_SetQuadVertices(&this->knifeCollider, &knifeBaseQuadPos, &knifeTipQuadPos, &knifeBaseQuadOldPos,
+                                 &knifeTipQuadOldPos);
         if (this->knifeCollider.base.atFlags & AT_ON) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &knifeTipQuadPos, &knifeBaseQuadPos);
         }
