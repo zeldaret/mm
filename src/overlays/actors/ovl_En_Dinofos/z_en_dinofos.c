@@ -1132,7 +1132,7 @@ void EnDinofos_BreatheFire(EnDinofos* this, PlayState* play) {
     end = DINOFOS_COLLIDER_FIRE_START_INDEX;
     for (i = 3; i > 0; i--) {
         if (this->attackTimer < (20 + -(i * 2))) {
-            end = i + 6;
+            end = i + DINOFOS_COLLIDER_FIRE_START_INDEX;
             break;
         }
     }
