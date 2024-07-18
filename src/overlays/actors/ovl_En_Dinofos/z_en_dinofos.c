@@ -39,7 +39,7 @@ void EnDinofos_IntroCutsceneLandAndBreatheFire(EnDinofos* this, PlayState* play)
 void EnDinofos_IntroCutsceneYell(EnDinofos* this, PlayState* play);
 void EnDinofos_JumpSlash(EnDinofos* this, PlayState* play);
 void EnDinofos_Jump(EnDinofos* this, PlayState* play);
-void EnDinofos_RecoilFromBlockedSlash(EnDinofos* this, PlayState* play);
+void EnDinofos_Recoil(EnDinofos* this, PlayState* play);
 void EnDinofos_Stunned(EnDinofos* this, PlayState* play);
 void EnDinofos_Damaged(EnDinofos* this, PlayState* play);
 void EnDinofos_SetupSlash(EnDinofos* this);
@@ -982,10 +982,10 @@ void EnDinofos_SetupRecoil(EnDinofos* this) {
     } else {
         this->actor.speed = 3.0f;
     }
-    this->actionFunc = EnDinofos_RecoilFromBlockedSlash;
+    this->actionFunc = EnDinofos_Recoil;
 }
 
-void EnDinofos_RecoilFromBlockedSlash(EnDinofos* this, PlayState* play) {
+void EnDinofos_Recoil(EnDinofos* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     }
@@ -1130,7 +1130,7 @@ void EnDinofos_BreatheFire(EnDinofos* this, PlayState* play) {
 
     // This lets the fire balls go away from Dinolfos' jaw one after the other.
     end = DINOFOS_COLLIDER_FIRE_START_INDEX;
-    for (i = ARRAY_COUNT(bodyAndFireColliderElements) - DINOFOS_COLLIDER_FIRE_START_INDEX; i > 0; i--) {
+    for (i = ARRAY_COUNT(this->bodyAndFireColliderElements) - DINOFOS_COLLIDER_FIRE_START_INDEX; i > 0; i--) {
         if (this->attackTimer < (20 + -(i * 2))) {
             end = i + DINOFOS_COLLIDER_FIRE_START_INDEX;
             break;

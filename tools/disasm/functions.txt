@@ -5579,7 +5579,7 @@
     0x8089C4F8:("EnDinofos_SetupSlash",),
     0x8089C56C:("EnDinofos_Slash",),
     0x8089C690:("EnDinofos_SetupRecoil",),
-    0x8089C724:("EnDinofos_RecoilFromBlockedSlash",),
+    0x8089C724:("EnDinofos_Recoil",),
     0x8089C784:("EnDinofos_SetupStunned",),
     0x8089C7B8:("EnDinofos_Stunned",),
     0x8089C87C:("EnDinofos_SetupDamaged",),
