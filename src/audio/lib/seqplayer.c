@@ -1522,7 +1522,7 @@ void AudioScript_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->muteFlags = *data++;
                     channel->noteAllocPolicy = *data++;
                     AudioScript_SetChannelPriorities(channel, *data++);
-                    channel->transposition = *(s8*)data++;
+                    channel->transposition = (s8)*data++;
                     channel->newPan = *data++;
                     channel->panChannelWeight = *data++;
                     channel->targetReverbVol = *data++;
