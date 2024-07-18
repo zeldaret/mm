@@ -1458,7 +1458,7 @@ s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         rot->y -= this->headRotY;
     }
 
-    return 0;
+    return false;
 }
 
 static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
