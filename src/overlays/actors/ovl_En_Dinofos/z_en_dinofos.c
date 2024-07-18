@@ -1535,7 +1535,7 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             fireVelocity.z -= matrix->mf[3][2];
             EffectSsDFire_Spawn(play, &this->bodyPartsPos[DINOFOS_BODYPART_JAW], &fireVelocity, &gZeroVec3f, 30, 22,
                                 255 - (dimAlphaStep * 20), 20, 3, 8);
-            this->timer2 = this->timer1;
+            this->timer2 = this->cutsceneTimer;
         }
     }
 }
