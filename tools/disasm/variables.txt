@@ -5972,7 +5972,7 @@
     0x8089E368:("D_8089E368","EffectBlureInit2","",0x24),
     0x8089E38C:("sKnifeTipQuadOffset","UNK_TYPE1","",0x1),
     0x8089E398:("sKnifeBaseQuadOffset","UNK_TYPE1","",0x1),
-    0x8089E3A4:("sBaseCsFireVelocity","Vec3f","",0x1),
+    0x8089E3A4:("sCsFireVelocityOffset","Vec3f","",0x1),
     0x8089E3B0:("sLimbToBodyParts","UNK_TYPE1","",0x1),
     0x8089E3B4:("D_8089E3B4","UNK_TYPE1","",0x1),
     0x8089E3B6:("D_8089E3B6","UNK_TYPE1","",0x1),

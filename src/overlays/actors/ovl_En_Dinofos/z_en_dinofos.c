@@ -1462,7 +1462,7 @@ s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 static Vec3f sKnifeTipQuadOffset = { 400.0f, -3600.0f, 0.0f };
 static Vec3f sKnifeBaseQuadOffset = { 300.0f, 500.0f, 0.0f };
-static Vec3f sBaseCsFireVelocity = { 700.0f, 400.0f, 0.0f };
+static Vec3f sCsFireVelocityOffset = { 700.0f, 400.0f, 0.0f };
 
 static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
     BODYPART_NONE,                    // DINOLFOS_LIMB_NONE
@@ -1529,7 +1529,7 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             matrix = Matrix_GetCurrent();
             dimAlphaStep = 48 - (s32)this->skelAnime.curFrame;
             dimAlphaStep = CLAMP_MIN(dimAlphaStep, 0);
-            Matrix_MultVec3f(&sBaseCsFireVelocity, &fireVelocity);
+            Matrix_MultVec3f(&sCsFireVelocityOffset, &fireVelocity);
             fireVelocity.x -= matrix->mf[3][0];
             fireVelocity.y -= matrix->mf[3][1];
             fireVelocity.z -= matrix->mf[3][2];
