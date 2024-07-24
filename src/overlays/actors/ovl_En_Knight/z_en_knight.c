@@ -530,7 +530,7 @@ void EnKnight_SpawnDustAtFeet(EnKnight* this, PlayState* play, u8 timerMask) {
     Vec3f accel;
 
     if (!(this->randTimer & timerMask) && !this->isHeadless &&
-        ((this->animTranslationX > 1.0f) || (this->animTranslationZ > 1.0f) || (timerMask == 0) ||
+        ((this->animMovementX > 1.0f) || (this->animMovementZ > 1.0f) || (timerMask == 0) ||
          (this->actor.speed > 1.0f))) {
         for (i = 0; i < ARRAY_COUNT(this->feetPositions); i++) {
             velocity.x = Rand_CenteredFloat(3.0f);
@@ -852,8 +852,8 @@ void EnKnight_HeavyAttack(EnKnight* this, PlayState* play) {
     if ((this->skelAnime.curFrame >= 2.0f) && (this->skelAnime.curFrame <= 5.0f)) {
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(5.0f, &translation);
-        this->animTranslationX = translation.x;
-        this->animTranslationZ = translation.z;
+        this->animMovementX = translation.x;
+        this->animMovementZ = translation.z;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
@@ -902,8 +902,8 @@ void EnKnight_LowSwing(EnKnight* this, PlayState* play) {
     if ((this->skelAnime.curFrame >= 12.0f) && (this->skelAnime.curFrame <= 15.0f)) {
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
         Matrix_MultVecZ(5.0f, &translation);
-        this->animTranslationX = translation.x;
-        this->animTranslationZ = translation.z;
+        this->animMovementX = translation.x;
+        this->animMovementZ = translation.z;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
@@ -986,8 +986,8 @@ void EnKnight_SetupJumpAttack(EnKnight* this, PlayState* play) {
         this->actionFunc = EnKnight_JumpAttack;
         Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
         Matrix_MultVecZ(KREG(49) + 7.0f, &translation);
-        this->animTranslationX = translation.x;
-        this->animTranslationZ = translation.z;
+        this->animMovementX = translation.x;
+        this->animMovementZ = translation.z;
         this->actor.velocity.y = 10.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
         this->timers[0] = 15;
@@ -1018,8 +1018,8 @@ void EnKnight_JumpAttack(EnKnight* this, PlayState* play) {
 
     this->actor.speed = 0.0f;
     if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->animTranslationZ = 0.0f;
-        this->animTranslationX = 0.0f;
+        this->animMovementZ = 0.0f;
+        this->animMovementX = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 
@@ -1308,7 +1308,7 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
                  (BREG(70) + 300.0f < this->actor.xzDistToPlayer) || (this->lightRayDamageTimer != 0))) {
                 if (this->lightRayDamageTimer != 0) {
                     this->subAction = KNIGHT_SUB_ACTION_RETREAT_3;
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_30;
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_30;
                     Animation_MorphToLoop(&this->skelAnime, &gKnightStruckByLightRayAnim, -2.0f);
                     this->animLastFrame = Animation_GetLastFrame(&gKnightStruckByLightRayAnim);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STAL_FREEZE_LIGHTS);
@@ -1452,8 +1452,8 @@ void EnKnight_SetupRecoilFromDamage(EnKnight* this, PlayState* play) {
 
     Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-15.0f, &translation);
-    this->animTranslationX = translation.x;
-    this->animTranslationZ = translation.z;
+    this->animMovementX = translation.x;
+    this->animMovementZ = translation.z;
     this->timers[0] = 10;
 }
 
@@ -1506,8 +1506,8 @@ void EnKnight_SetupFallOver(EnKnight* this, PlayState* play) {
 
     Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(KREG(29) + -15.0f, &translation);
-    this->animTranslationX = translation.x;
-    this->animTranslationZ = translation.z;
+    this->animMovementX = translation.x;
+    this->animMovementZ = translation.z;
     this->timers[0] = 35;
     this->timers[1] = 150;
     this->actor.colChkInfo.damageTable = &sDamageTableFallenOver;
@@ -1571,8 +1571,8 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
     if (timerTarget == this->timers[0]) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        if (this->dmgEffectType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-            this->dmgEffectDuration = 0;
+        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            this->drawDmgEffDuration = 0;
         }
     }
 
@@ -1595,7 +1595,7 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
 void EnKnight_SetupDie(EnKnight* this, PlayState* play) {
     this->actionFunc = EnKnight_Die;
     this->timers[2] = 50;
-    this->dmgEffectState = KNIGHT_DMGEFF_STATE_20;
+    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_20;
 
     if (this == sIgosInstance) {
         Audio_RestorePrevBgm();
@@ -1674,8 +1674,8 @@ void EnKnight_SetupJumpBackwardsKnight(EnKnight* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightJumpBackAnim, 0.0f);
     Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-15.0f, &translation);
-    this->animTranslationX = translation.x;
-    this->animTranslationZ = translation.z;
+    this->animMovementX = translation.x;
+    this->animMovementZ = translation.z;
     this->actor.velocity.y = 7.5f;
 
     for (i = 0; i < 5; i++) {
@@ -1695,8 +1695,8 @@ void EnKnight_SetupJumpBackwardsIgos(EnKnight* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightJumpBackAnim, 0.0f);
     Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(KREG(90) + 14.0f, &translation);
-    this->animTranslationX = translation.x;
-    this->animTranslationZ = translation.z;
+    this->animMovementX = translation.x;
+    this->animMovementZ = translation.z;
     this->actor.velocity.y = KREG(91) + 13.0f;
 
     for (i = 0; i < 5; i++) {
@@ -1729,7 +1729,7 @@ void EnKnight_JumpBackwards(EnKnight* this, PlayState* play) {
     }
 
     if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->animTranslationX = this->animTranslationZ = 0.0f;
+        this->animMovementX = this->animMovementZ = 0.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
 
         if (this->subAction == KNIGHT_SUB_ACTION_JUMP_BACKWARDS_1) {
@@ -2434,8 +2434,8 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
     this->neckYawTarget = 0;
     this->actor.speed = 0.0f;
     this->csTimer++;
-    this->animTranslationX = 0.0f;
-    this->animTranslationZ = 0.0f;
+    this->animMovementX = 0.0f;
+    this->animMovementZ = 0.0f;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -3070,8 +3070,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
         }
         Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
         Matrix_MultVecZ((this == sIgosInstance) ? -6.0f : -4.0f, &translation);
-        this->animTranslationX = translation.x;
-        this->animTranslationZ = translation.z;
+        this->animMovementX = translation.x;
+        this->animMovementZ = translation.z;
         return;
     }
 
@@ -3085,7 +3085,7 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case KNIGHT_DMGEFF_ICE:
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_10;
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_10;
                     EnKnight_SetupStunned(this, play, 80);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->invincibilityTimer = 15;
@@ -3098,11 +3098,11 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
                     break;
 
                 case KNIGHT_DMGEFF_FIRE:
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_1;
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_1;
                     break;
 
                 case KNIGHT_DMGEFF_LIGHT:
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_20;
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_20;
                     break;
 
                 case KNIGHT_DMGEFF_LIGHT_RAY:
@@ -3110,7 +3110,7 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
                     break;
 
                 case KNIGHT_DMGEFF_ZORA_BARRIER:
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_40;
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_40;
                     EnKnight_SetupStunned(this, play, 40);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->invincibilityTimer = 15;
@@ -3120,8 +3120,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
                     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                         Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
                         Matrix_MultVecZ(-4.0f, &translation);
-                        this->animTranslationX = translation.x;
-                        this->animTranslationZ = translation.z;
+                        this->animMovementX = translation.x;
+                        this->animMovementZ = translation.z;
                         this->actor.velocity.y = 5.0f;
 
                         for (j = 0; j < 5; j++) {
@@ -3560,10 +3560,10 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
         this->neckYawTarget = 0;
         Actor_UpdateVelocityWithoutGravity(&this->actor);
         Actor_UpdatePos(&this->actor);
-        this->actor.world.pos.x += this->animTranslationX;
-        this->actor.world.pos.z += this->animTranslationZ;
-        Math_ApproachZeroF(&this->animTranslationX, 1.0f, KREG(86) + 2.0f);
-        Math_ApproachZeroF(&this->animTranslationZ, 1.0f, KREG(86) + 2.0f);
+        this->actor.world.pos.x += this->animMovementX;
+        this->actor.world.pos.z += this->animMovementZ;
+        Math_ApproachZeroF(&this->animMovementX, 1.0f, KREG(86) + 2.0f);
+        Math_ApproachZeroF(&this->animMovementZ, 1.0f, KREG(86) + 2.0f);
 
         if (this->doBgChecks) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 20.0f, 100.0f,
@@ -3676,8 +3676,8 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
             this->shieldHitTimer--;
         }
 
-        if (this->dmgEffectDuration != 0) {
-            this->dmgEffectDuration--;
+        if (this->drawDmgEffDuration != 0) {
+            this->drawDmgEffDuration--;
         }
 
         if (this->effectTimer != 0) {
@@ -3697,8 +3697,8 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         Actor_MoveWithGravity(&this->actor);
-        this->actor.world.pos.x += this->animTranslationX;
-        this->actor.world.pos.z += this->animTranslationZ;
+        this->actor.world.pos.x += this->animMovementX;
+        this->actor.world.pos.z += this->animMovementZ;
 
         if (this->canRetreat || (this->actionFunc == EnKnight_Retreat)) {
             EnKnight_CheckRetreat(this, play);
@@ -3721,8 +3721,8 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
             this->actor.velocity.y = -2.0f;
         }
 
-        Math_ApproachZeroF(&this->animTranslationX, 1.0f, 1.0f);
-        Math_ApproachZeroF(&this->animTranslationZ, 1.0f, 1.0f);
+        Math_ApproachZeroF(&this->animMovementX, 1.0f, 1.0f);
+        Math_ApproachZeroF(&this->animMovementZ, 1.0f, 1.0f);
     }
 
     Math_ApproachS(&this->neckYaw, this->neckYawTarget, this->neckRotationStepScale, this->neckRotationMaxStep);
@@ -3789,106 +3789,106 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
 
     if (CHECK_BTN_ALL(input->press.button, BTN_R) && (this == sIgosInstance)) {
         // Left over debug feature to test damage effects
-        this->dmgEffectState = KREG(17);
+        this->drawDmgEffState = KREG(17);
     }
 
-    switch (this->dmgEffectState) {
+    switch (this->drawDmgEffState) {
         case KNIGHT_DMGEFF_STATE_0:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_FIRE;
-            this->dmgEffectDuration = 0;
-            this->dmgEffectAlpha = 0.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+            this->drawDmgEffDuration = 0;
+            this->drawDmgEffAlpha = 0.0f;
             break;
 
         case KNIGHT_DMGEFF_STATE_1:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_FIRE;
-            this->dmgEffectDuration = 80;
-            this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_2
-            this->dmgEffectAlpha = 1.0f;
-            this->dmgEffectScale = 0.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+            this->drawDmgEffDuration = 80;
+            this->drawDmgEffState++; // = KNIGHT_DMGEFF_STATE_2
+            this->drawDmgEffAlpha = 1.0f;
+            this->drawDmgEffScale = 0.0f;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, 0, 60);
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_2:
-            if (this->dmgEffectDuration == 0) {
-                Math_ApproachZeroF(&this->dmgEffectAlpha, 1.0f, 0.02f);
-                if (this->dmgEffectAlpha == 0.0f) {
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_0;
+            if (this->drawDmgEffDuration == 0) {
+                Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
+                if (this->drawDmgEffAlpha == 0.0f) {
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_0;
                 }
             } else {
-                Math_ApproachF(&this->dmgEffectScale, 0.5f, 0.1f, 0.5f);
+                Math_ApproachF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.5f);
             }
             break;
 
         case KNIGHT_DMGEFF_STATE_10:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
-            this->dmgEffectDuration = 80;
-            this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_11
-            this->dmgEffectAlpha = 1.0f;
-            this->dmgEffectScale = 0.0f;
-            this->dmgEffectIceMeltingScale = 1.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
+            this->drawDmgEffDuration = 80;
+            this->drawDmgEffState++; // = KNIGHT_DMGEFF_STATE_11
+            this->drawDmgEffAlpha = 1.0f;
+            this->drawDmgEffScale = 0.0f;
+            this->drawDmgEffIceMeltingScale = 1.0f;
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_11:
-            if (this->dmgEffectDuration == 0) {
+            if (this->drawDmgEffDuration == 0) {
                 EnKnight_SpawnIceShards(this, play);
-                this->dmgEffectState = KNIGHT_DMGEFF_STATE_0;
+                this->drawDmgEffState = KNIGHT_DMGEFF_STATE_0;
             } else {
-                if (this->dmgEffectDuration == 50) {
-                    this->dmgEffectType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+                if (this->drawDmgEffDuration == 50) {
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 }
-                Math_ApproachF(&this->dmgEffectScale, 0.5f, 1.0f, 0.08f);
-                Math_ApproachF(&this->dmgEffectIceMeltingScale, 0.5f, 0.05f, 0.05f);
+                Math_ApproachF(&this->drawDmgEffScale, 0.5f, 1.0f, 0.08f);
+                Math_ApproachF(&this->drawDmgEffIceMeltingScale, 0.5f, 0.05f, 0.05f);
             }
             break;
 
         case KNIGHT_DMGEFF_STATE_20:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-            this->dmgEffectDuration = 40;
-            this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_21
-            this->dmgEffectAlpha = 1.0f;
-            this->dmgEffectScale = 0.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+            this->drawDmgEffDuration = 40;
+            this->drawDmgEffState++; // = KNIGHT_DMGEFF_STATE_21
+            this->drawDmgEffAlpha = 1.0f;
+            this->drawDmgEffScale = 0.0f;
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_21:
-            if (this->dmgEffectDuration == 0) {
-                Math_ApproachZeroF(&this->dmgEffectScale, 1.0f, 0.03f);
-                if (this->dmgEffectScale == 0.0f) {
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_0;
-                    this->dmgEffectAlpha = 0.0f;
+            if (this->drawDmgEffDuration == 0) {
+                Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
+                if (this->drawDmgEffScale == 0.0f) {
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_0;
+                    this->drawDmgEffAlpha = 0.0f;
                 }
             } else {
-                Math_ApproachF(&this->dmgEffectScale, 0.75f, 0.5f, 0.5f);
+                Math_ApproachF(&this->drawDmgEffScale, 0.75f, 0.5f, 0.5f);
             }
             break;
 
         case KNIGHT_DMGEFF_STATE_30:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-            this->dmgEffectDuration = 10;
-            this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_31
-            this->dmgEffectAlpha = 0.5f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+            this->drawDmgEffDuration = 10;
+            this->drawDmgEffState++; // = KNIGHT_DMGEFF_STATE_31
+            this->drawDmgEffAlpha = 0.5f;
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_31:
-            if (this->dmgEffectDuration == 0) {
-                Math_ApproachZeroF(&this->dmgEffectScale, 1.0f, 0.03f);
-                if (this->dmgEffectScale == 0.0f) {
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_0;
-                    this->dmgEffectAlpha = 0.0f;
+            if (this->drawDmgEffDuration == 0) {
+                Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
+                if (this->drawDmgEffScale == 0.0f) {
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_0;
+                    this->drawDmgEffAlpha = 0.0f;
                 }
             } else {
-                Math_ApproachF(&this->dmgEffectScale, 0.5f, 0.5f, 0.3f);
+                Math_ApproachF(&this->drawDmgEffScale, 0.5f, 0.5f, 0.3f);
             }
             break;
 
         case KNIGHT_DMGEFF_STATE_40:
-            this->dmgEffectType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
-            this->dmgEffectDuration = 50;
-            this->dmgEffectAlpha = 1.0f;
-            this->dmgEffectScale = KREG(18) * 0.1f + 0.5f;
-            this->dmgEffectState++; // = KNIGHT_DMGEFF_STATE_40
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+            this->drawDmgEffDuration = 50;
+            this->drawDmgEffAlpha = 1.0f;
+            this->drawDmgEffScale = KREG(18) * 0.1f + 0.5f;
+            this->drawDmgEffState++; // = KNIGHT_DMGEFF_STATE_40
             FALLTHROUGH;
         case KNIGHT_DMGEFF_STATE_41:
-            if (this->dmgEffectDuration == 0) {
-                Math_ApproachZeroF(&this->dmgEffectScale, 1.0f, 0.05f);
-                if (this->dmgEffectScale == 0.0f) {
-                    this->dmgEffectState = KNIGHT_DMGEFF_STATE_0;
-                    this->dmgEffectAlpha = 0.0f;
+            if (this->drawDmgEffDuration == 0) {
+                Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.05f);
+                if (this->drawDmgEffScale == 0.0f) {
+                    this->drawDmgEffState = KNIGHT_DMGEFF_STATE_0;
+                    this->drawDmgEffAlpha = 0.0f;
                 }
             }
             break;
@@ -4100,7 +4100,7 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     EnKnight* this = THIS;
     Vec3f colliderPos;
 
-    if ((this->actionFunc == EnKnight_Die) || (this->dmgEffectAlpha > 0.0f)) {
+    if ((this->actionFunc == EnKnight_Die) || (this->drawDmgEffAlpha > 0.0f)) {
         s8 bodyPartIndex = sLimbToBodyParts[limbIndex];
         if (bodyPartIndex > BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
@@ -4240,8 +4240,8 @@ void EnKnight_Draw(Actor* thisx, PlayState* play) {
         }
 
         Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->dmgEffectScale, this->dmgEffectIceMeltingScale, this->dmgEffectAlpha,
-                                this->dmgEffectType);
+                                this->drawDmgEffScale, this->drawDmgEffIceMeltingScale, this->drawDmgEffAlpha,
+                                this->drawDmgEffType);
 
         if (this->shieldLightReflectionScale > 0.01f) {
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
