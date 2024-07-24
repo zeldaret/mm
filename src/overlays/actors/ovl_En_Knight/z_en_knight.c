@@ -1744,7 +1744,7 @@ void EnKnight_JumpBackwards(EnKnight* this, PlayState* play) {
             } else {
                 EnKnight_SetupBreathAttack(this, play);
             }
-        } else if (this == sIgosInstance && Rand_ZeroOne() < 0.3f) {
+        } else if ((this == sIgosInstance) && (Rand_ZeroOne() < 0.3f)) {
             if ((Rand_ZeroOne() < 0.5f) || this->isHeadless) {
                 EnKnight_SetupJumpAttack(this, play);
             } else {
@@ -3274,7 +3274,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
 
             if ((this->timers[1] == 1) || (KREG(5) != 0)) {
                 KREG(5) = 0;
-                if (sIgosInstance->actionFunc != EnKnight_FallOver && sIgosInstance->actionFunc != EnKnight_Die) {
+                if ((sIgosInstance->actionFunc != EnKnight_FallOver) && (sIgosInstance->actionFunc != EnKnight_Die)) {
                     this->timers[1] = 0;
                     EnKnight_SetupFlyingHeadDone(sIgosInstance, play);
                     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosPutHeadBackOnAnim, -10.0f);
@@ -3301,7 +3301,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             } else {
                 Math_ApproachF(&this->actor.speed, sREG(48) + 5.0f, 1.0f, 5.0f);
 
-                if (this->timers[0] == 0 || dist < 50.0f) {
+                if ((this->timers[0] == 0) || (dist < 50.0f)) {
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
 
                     if (Rand_ZeroOne() < 0.2f) {
@@ -4004,7 +4004,7 @@ s32 EnKnight_OverrideLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, V
         rot->z -= this->jawRotation;
     }
 
-    if (limbIndex != IGOS_LIMB_JAW && limbIndex != IGOS_LIMB_HEAD) {
+    if ((limbIndex != IGOS_LIMB_JAW) && (limbIndex != IGOS_LIMB_HEAD)) {
         *dList = NULL;
     }
     return false;
@@ -4042,7 +4042,7 @@ s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
             rot->z -= this->rightLegLowerRotation;
         }
 
-        if ((limbIndex == IGOS_LIMB_JAW || limbIndex == IGOS_LIMB_HEAD) && this->isHeadless) {
+        if (((limbIndex == IGOS_LIMB_JAW) || (limbIndex == IGOS_LIMB_HEAD)) && this->isHeadless) {
             *dList = NULL;
         }
     } else if (this == sWideKnightInstance) {
