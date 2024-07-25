@@ -5387,22 +5387,22 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                     sp118.x = -sp118.x;
                     if (this->actionState == MAJORAS_MASK_BEAM_STATE_ACTIVE) {
                         this->actionState = MAJORAS_MASK_BEAM_STATE_REFLECT;
-                        this->beamTargetPitch = sp118.x;
-                        this->beamTargetYaw = sp118.y;
+                        this->reflectedBeamPitch = sp118.x;
+                        this->reflectedBeamYaw = sp118.y;
                     } else {
                         player->pushedYaw = this->actor.yawTowardsPlayer;
                         player->pushedSpeed = this->beamBaseScale * 0.5f;
                         sMajoraBattleHandler->lensFlareOn = true;
                         sMajoraBattleHandler->lensFlareScale = this->beamBaseScale * 30.0f;
                         sMajoraBattleHandler->lensFlarePos = this->beamEndPos;
-                        Math_ApproachS(&this->beamTargetPitch, sp118.x, 2, 0x2000);
-                        Math_ApproachS(&this->beamTargetYaw, sp118.y, 2, 0x2000);
+                        Math_ApproachS(&this->reflectedBeamPitch, sp118.x, 2, 0x2000);
+                        Math_ApproachS(&this->reflectedBeamYaw, sp118.y, 2, 0x2000);
                         sp16C.x = this->actor.world.pos.x - this->beamEndPos.x;
                         sp16C.y = this->actor.world.pos.y - this->beamEndPos.y;
                         sp16C.z = this->actor.world.pos.z - this->beamEndPos.z;
                         sp180 = sqrtf(SQXYZ(sp16C));
-                        Matrix_RotateXS(-this->beamTargetPitch, MTXMODE_NEW);
-                        Matrix_RotateYS(-this->beamTargetYaw, MTXMODE_APPLY);
+                        Matrix_RotateXS(-this->reflectedBeamPitch, MTXMODE_NEW);
+                        Matrix_RotateYS(-this->reflectedBeamYaw, MTXMODE_APPLY);
                         Matrix_Push();
                         Matrix_MultVec3f(&sp16C, &sp160);
                         if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
@@ -5491,7 +5491,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     spC8.z = spD4.z * -0.05f;
 
                                     Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
-                                    sMajoraRemains[i]->damagedFlashTimer |= 0xA;
+                                    sMajoraRemains[i]->damagedFlashTimer |= 10;
                                 } else {
                                     sMajoraRemains[i]->actionState = REMAINS_STATE_DEATH;
                                     sMajoraRemains[i]->timer_18D6 = 60;
@@ -6350,8 +6350,8 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
             Matrix_MultVecZ(20000.0f, &sp50);
             Matrix_Translate(this->beamEndPos.x, this->beamEndPos.y, this->beamEndPos.z, MTXMODE_NEW);
-            Matrix_RotateYS(this->beamTargetYaw, MTXMODE_APPLY);
-            Matrix_RotateXS(this->beamTargetPitch, MTXMODE_APPLY);
+            Matrix_RotateYS(this->reflectedBeamYaw, MTXMODE_APPLY);
+            Matrix_RotateXS(this->reflectedBeamPitch, MTXMODE_APPLY);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f,
                          this->reflectedBeamLengthScale * 0.01f, MTXMODE_APPLY);

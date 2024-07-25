@@ -247,8 +247,8 @@ typedef struct Boss07 {
     /* 0x18A8 */ Vec3f beamEndPos;
     /* 0x18B4 */ Vec3f reflectedBeamEndPos;
     /* 0x18C0 */ f32 reflectedBeamLengthScale;
-    /* 0x18C4 */ s16 beamTargetPitch;
-    /* 0x18C6 */ s16 beamTargetYaw;
+    /* 0x18C4 */ s16 reflectedBeamPitch;
+    /* 0x18C6 */ s16 reflectedBeamYaw;
     /* 0x18C8 */ s16 remainsOrbRot;
     /* 0x18CC */ f32 knockbackVelocityX;
     /* 0x18D0 */ f32 knockbackVelocityZ;
