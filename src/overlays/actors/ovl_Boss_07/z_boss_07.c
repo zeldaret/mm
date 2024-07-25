@@ -5254,8 +5254,8 @@ void Boss07_Mask_ClearBeam(Boss07* this) {
     this->eyeBeamsLengthScale = 0.0f;
     this->eyeBeamsFocusOrbScale = 0.0f;
     this->beamLengthScale = 0.0f;
-    this->beamThicknessScale = 0.0f;
-    this->unk_18C0 = 0.0f;
+    this->beamBaseScale = 0.0f;
+    this->reflectedBeamLengthScale = 0.0f;
 }
 
 void Boss07_Mask_SetupBeam(Boss07* this, PlayState* play) {
@@ -5311,7 +5311,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             if (this->timers[0] == 0) {
                 this->actionState = MAJORAS_MASK_BEAM_STATE_EYES;
                 this->timers[0] = 6;
-                this->beamThicknessScale = 1.0f;
+                this->beamBaseScale = 1.0f;
             }
             break;
 
@@ -5381,7 +5381,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                     Vec3s sp118;
 
                     this->beamLengthScale = sp180 * 0.05f;
-                    Math_ApproachF(&this->unk_18C0, sp180 * 0.2f, 1.0f, 7.0f);
+                    Math_ApproachF(&this->reflectedBeamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
                     Matrix_MtxFToYXZRot(&player->shieldMf, &sp118, 0);
                     sp118.y += 0x8000;
                     sp118.x = -sp118.x;
@@ -5391,9 +5391,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         this->beamTargetYaw = sp118.y;
                     } else {
                         player->pushedYaw = this->actor.yawTowardsPlayer;
-                        player->pushedSpeed = this->beamThicknessScale * 0.5f;
+                        player->pushedSpeed = this->beamBaseScale * 0.5f;
                         sMajoraBattleHandler->lensFlareOn = true;
-                        sMajoraBattleHandler->lensFlareScale = this->beamThicknessScale * 30.0f;
+                        sMajoraBattleHandler->lensFlareScale = this->beamBaseScale * 30.0f;
                         sMajoraBattleHandler->lensFlarePos = this->beamEndPos;
                         Math_ApproachS(&this->beamTargetPitch, sp118.x, 2, 0x2000);
                         Math_ApproachS(&this->beamTargetYaw, sp118.y, 2, 0x2000);
@@ -5406,7 +5406,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         Matrix_Push();
                         Matrix_MultVec3f(&sp16C, &sp160);
                         if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                            (sp160.z <= (this->unk_18C0 * 16.666668f)) &&
+                            (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                             (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                             s32 phi_s0_2;
                             Vec3f sp108;
@@ -5414,7 +5414,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             Vec3f spF0;
 
                             this->beamDmgTimer += 2;
-                            this->unk_18C0 = sp180 * 0.062f;
+                            this->reflectedBeamLengthScale = sp180 * 0.062f;
                             if (this->beamDmgTimer < 10) {
                                 sp108.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
                                 sp108.y = this->actor.world.pos.y + Rand_CenteredFloat(40.0f);
@@ -5469,7 +5469,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             Matrix_MultVec3f(&sp16C, &sp160);
 
                             if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                                (sp160.z <= (this->unk_18C0 * 16.666668f)) &&
+                                (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                                 (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                                 s32 j;
                                 Vec3f spE0;
@@ -5477,7 +5477,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 Vec3f spC8;
 
                                 this->beamDmgTimer += 2;
-                                this->unk_18C0 = sp180 * 0.062f;
+                                this->reflectedBeamLengthScale = sp180 * 0.062f;
 
                                 if (this->beamDmgTimer < 5) {
                                     spE0.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
@@ -5563,7 +5563,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                     this->timers[0] = 20;
                 }
             } else {
-                Math_ApproachZeroF(&this->beamThicknessScale, 1.0f, 0.05f);
+                Math_ApproachZeroF(&this->beamBaseScale, 1.0f, 0.05f);
                 if (this->timers[0] == 0) {
                     Boss07_Mask_SetupIdle(this, play);
                     this->timers[2] = 100;
@@ -6034,7 +6034,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         this->shouldUpdateTentaclesOrWhips = true;
         play->envCtx.lightSetting = 2;
         play->envCtx.prevLightSetting = 0;
-        Math_ApproachF(&play->envCtx.lightBlend, this->beamThicknessScale, 1.0f, 0.1f);
+        Math_ApproachF(&play->envCtx.lightBlend, this->beamBaseScale, 1.0f, 0.1f);
         this->frameCounter++;
 
         if (KREG(63) == 0) {
@@ -6307,16 +6307,16 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
         Matrix_Translate(250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
         Matrix_RotateYS(-0xA00, MTXMODE_APPLY);
-        Matrix_Scale(this->beamThicknessScale * 0.05f, this->beamThicknessScale * 0.05f,
-                     this->eyeBeamsLengthScale * 0.05f, MTXMODE_APPLY);
+        Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f, this->eyeBeamsLengthScale * 0.05f,
+                     MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
         Matrix_Pop();
 
         Matrix_Translate(-250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
         Matrix_RotateYS(0xA00, MTXMODE_APPLY);
-        Matrix_Scale(this->beamThicknessScale * 0.05f, this->beamThicknessScale * 0.05f,
-                     this->eyeBeamsLengthScale * 0.05f, MTXMODE_APPLY);
+        Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f, this->eyeBeamsLengthScale * 0.05f,
+                     MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
@@ -6324,8 +6324,8 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
         Matrix_Translate(0.0f, 0.0f, 1200.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        Matrix_Scale(this->eyeBeamsFocusOrbScale * 40.0f * this->beamThicknessScale,
-                     this->eyeBeamsFocusOrbScale * 40.0f * this->beamThicknessScale, 0.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale,
+                     this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale, 0.0f, MTXMODE_APPLY);
         Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
@@ -6339,13 +6339,13 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
         Matrix_Translate(0.0f, 0.0f, 1150.0f, MTXMODE_APPLY);
         Matrix_MultZero(&this->beamStartPos);
-        Matrix_Scale(this->beamThicknessScale * 0.05f, this->beamThicknessScale * 0.05f,
-                     (this->beamLengthScale * 0.01f) - 0.01f, MTXMODE_APPLY);
+        Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f, (this->beamLengthScale * 0.01f) - 0.01f,
+                     MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
         Matrix_MultVecZ(20100.0f, &this->beamEndPos);
 
-        if (this->unk_18C0 > 0.0f) {
+        if (this->reflectedBeamLengthScale > 0.0f) {
             Vec3f sp50;
 
             Matrix_MultVecZ(20000.0f, &sp50);
@@ -6353,15 +6353,15 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
             Matrix_RotateYS(this->beamTargetYaw, MTXMODE_APPLY);
             Matrix_RotateXS(this->beamTargetPitch, MTXMODE_APPLY);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_Scale(this->beamThicknessScale * 0.05f, this->beamThicknessScale * 0.05f, this->unk_18C0 * 0.01f,
-                         MTXMODE_APPLY);
+            Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f,
+                         this->reflectedBeamLengthScale * 0.01f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
 
             Matrix_MultVecZ(20100.0f, &this->reflectedBeamEndPos);
             Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(this->beamThicknessScale * 5.0f, this->beamThicknessScale * 5.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Scale(this->beamBaseScale * 5.0f, this->beamBaseScale * 5.0f, 0.0f, MTXMODE_APPLY);
             Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
