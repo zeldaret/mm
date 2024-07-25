@@ -75,7 +75,7 @@ extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments
 extern Mtx D_01000000;
+extern Gfx D_08000000[];
 extern u16 D_0F000000[];
-
 
 #endif
