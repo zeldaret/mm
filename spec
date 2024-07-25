@@ -2187,9 +2187,7 @@ beginseg
     name "ovl_En_Knight"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Knight/z_en_knight.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Knight/ovl_En_Knight_reloc.o"
 endseg
 
 beginseg

@@ -1,7 +1,7 @@
 <Root>
     <!-- Assets for Barten, the Milk Bar Bartender -->
     <File Name="object_tab" Segment="6">
-        <Animation Name="gBartenIdleAnim" Offset="0x758" />
+        <Animation Name="gBartenIdleAnim" Offset="0x758" /> <!-- Original name is "tab_wait01" -->
         <DList Name="gBartenPelvisDL" Offset="0x3E10" />
         <DList Name="gBartenLeftHandDL" Offset="0x3EF0" />
         <DList Name="gBartenLeftBroomDL" Offset="0x4270" />
@@ -59,6 +59,6 @@
         <Limb Name="gBartenLeftBroomLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_BROOM" Offset="0x7F14" />
         <Limb Name="gBartenLeftHandLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_HAND" Offset="0x7F20" />
         <Skeleton Name="gBartenSkel" Type="Flex" LimbType="Standard" LimbNone="BARTEN_LIMB_NONE" LimbMax="BARTEN_LIMB_MAX" EnumName="BartenLimb" Offset="0x7F78" />
-        <Animation Name="gBartenIdleBarCounterAnim" Offset="0x86AC" />
+        <Animation Name="gBartenIdleBarCounterAnim" Offset="0x86AC" /> <!-- Original name is "tab_wait02" -->
     </File>
 </Root>

@@ -3,6 +3,7 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
+#include "stack.h"
 #include "macros.h"
 
 // data
@@ -43,7 +44,7 @@ extern f32 gHeadsetPanVolume[];
 extern f32 gStereoPanVolume[];
 extern f32 gDefaultPanVolume[];
 extern s32 gAudioCtxInitalized;
-extern u8 D_801D6200[0x400];
+extern STACK(aspMainStack, 0x400);
 
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
@@ -74,7 +75,7 @@ extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments
 extern Mtx D_01000000;
+extern Gfx D_08000000[];
 extern u16 D_0F000000[];
-
 
 #endif
