@@ -243,9 +243,9 @@ typedef struct Boss07 {
     /* 0x1890 */ f32 eyeBeamsFocusOrbScale;
     /* 0x1894 */ f32 beamLengthScale;
     /* 0x1898 */ f32 beamThicknessScale; // maybe `beamBaseScale`?
-    /* 0x189C */ Vec3f unk_189C;
-    /* 0x18A8 */ Vec3f unk_18A8;
-    /* 0x18B4 */ Vec3f unk_18B4;
+    /* 0x189C */ Vec3f beamStartPos;
+    /* 0x18A8 */ Vec3f beamEndPos;
+    /* 0x18B4 */ Vec3f reflectedBeamEndPos;
     /* 0x18C0 */ f32 unk_18C0;
     /* 0x18C4 */ s16 beamTargetPitch;
     /* 0x18C6 */ s16 beamTargetYaw;

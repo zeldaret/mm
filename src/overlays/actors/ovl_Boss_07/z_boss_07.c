@@ -5340,14 +5340,14 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             // fallthrough
         case MAJORAS_MASK_BEAM_STATE_END:
             Math_ApproachF(&this->eyeBeamsFocusOrbScale, 1.0f, 0.2f, 0.2f);
-            temp_f20 = player->actor.world.pos.x - this->unk_189C.x;
-            temp_f12 = player->actor.world.pos.y - this->unk_189C.y + 20.0f;
-            temp_f22 = player->actor.world.pos.z - this->unk_189C.z;
+            temp_f20 = player->actor.world.pos.x - this->beamStartPos.x;
+            temp_f12 = player->actor.world.pos.y - this->beamStartPos.y + 20.0f;
+            temp_f22 = player->actor.world.pos.z - this->beamStartPos.z;
             sp180 = sqrtf(SQ(temp_f20) + SQ(temp_f12) + SQ(temp_f22));
             Math_ApproachF(&this->beamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_189C, &this->unk_18A8, &beamMarkPos, &sp158, 1, 1, 1,
-                                        1, &sp144) &&
+            if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamMarkPos, &sp158, 1,
+                                        1, 1, 1, &sp144) &&
                 (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                 Vec3f sp138;
                 Vec3f sp12C;
@@ -5365,9 +5365,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                 Boss07_SpawnEffect(play, &sp138, &sp12C, &sp120, Rand_ZeroFloat(10.0f) + 25.0f);
                 sp14B = true;
             }
-            sp16C.x = player->actor.world.pos.x - this->unk_189C.x;
-            sp16C.y = player->actor.world.pos.y - this->unk_189C.y + 10.0f;
-            sp16C.z = player->actor.world.pos.z - this->unk_189C.z;
+            sp16C.x = player->actor.world.pos.x - this->beamStartPos.x;
+            sp16C.y = player->actor.world.pos.y - this->beamStartPos.y + 10.0f;
+            sp16C.z = player->actor.world.pos.z - this->beamStartPos.z;
             Matrix_RotateXS(-this->actor.shape.rot.x, MTXMODE_NEW);
             Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
             Matrix_MultVec3f(&sp16C, &sp160);
@@ -5394,12 +5394,12 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         player->pushedSpeed = this->beamThicknessScale * 0.5f;
                         sMajoraBattleHandler->lensFlareOn = true;
                         sMajoraBattleHandler->lensFlareScale = this->beamThicknessScale * 30.0f;
-                        sMajoraBattleHandler->lensFlarePos = this->unk_18A8;
+                        sMajoraBattleHandler->lensFlarePos = this->beamEndPos;
                         Math_ApproachS(&this->beamTargetPitch, sp118.x, 2, 0x2000);
                         Math_ApproachS(&this->beamTargetYaw, sp118.y, 2, 0x2000);
-                        sp16C.x = this->actor.world.pos.x - this->unk_18A8.x;
-                        sp16C.y = this->actor.world.pos.y - this->unk_18A8.y;
-                        sp16C.z = this->actor.world.pos.z - this->unk_18A8.z;
+                        sp16C.x = this->actor.world.pos.x - this->beamEndPos.x;
+                        sp16C.y = this->actor.world.pos.y - this->beamEndPos.y;
+                        sp16C.z = this->actor.world.pos.z - this->beamEndPos.z;
                         sp180 = sqrtf(SQXYZ(sp16C));
                         Matrix_RotateXS(-this->beamTargetPitch, MTXMODE_NEW);
                         Matrix_RotateYS(-this->beamTargetYaw, MTXMODE_APPLY);
@@ -5462,9 +5462,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 continue;
                             }
 
-                            sp16C.x = sMajoraRemains[i]->actor.world.pos.x - this->unk_18A8.x;
-                            sp16C.y = sMajoraRemains[i]->actor.world.pos.y - this->unk_18A8.y;
-                            sp16C.z = sMajoraRemains[i]->actor.world.pos.z - this->unk_18A8.z;
+                            sp16C.x = sMajoraRemains[i]->actor.world.pos.x - this->beamEndPos.x;
+                            sp16C.y = sMajoraRemains[i]->actor.world.pos.y - this->beamEndPos.y;
+                            sp16C.z = sMajoraRemains[i]->actor.world.pos.z - this->beamEndPos.z;
                             sp180 = sqrtf(SQXYZ(sp16C));
                             Matrix_MultVec3f(&sp16C, &sp160);
 
@@ -5511,8 +5511,8 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 }
                             }
                         }
-                        if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_18A8, &this->unk_18B4, &beamMarkPos,
-                                                    &sp158, 1, 1, 1, 1, &sp144) &&
+                        if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamEndPos, &this->reflectedBeamEndPos,
+                                                    &beamMarkPos, &sp158, 1, 1, 1, 1, &sp144) &&
                             (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                             Vec3f spBC;
                             Vec3f spB0;
@@ -6338,18 +6338,18 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
         Matrix_Pop();
 
         Matrix_Translate(0.0f, 0.0f, 1150.0f, MTXMODE_APPLY);
-        Matrix_MultZero(&this->unk_189C);
+        Matrix_MultZero(&this->beamStartPos);
         Matrix_Scale(this->beamThicknessScale * 0.05f, this->beamThicknessScale * 0.05f,
                      (this->beamLengthScale * 0.01f) - 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
-        Matrix_MultVecZ(20100.0f, &this->unk_18A8);
+        Matrix_MultVecZ(20100.0f, &this->beamEndPos);
 
         if (this->unk_18C0 > 0.0f) {
             Vec3f sp50;
 
             Matrix_MultVecZ(20000.0f, &sp50);
-            Matrix_Translate(this->unk_18A8.x, this->unk_18A8.y, this->unk_18A8.z, MTXMODE_NEW);
+            Matrix_Translate(this->beamEndPos.x, this->beamEndPos.y, this->beamEndPos.z, MTXMODE_NEW);
             Matrix_RotateYS(this->beamTargetYaw, MTXMODE_APPLY);
             Matrix_RotateXS(this->beamTargetPitch, MTXMODE_APPLY);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -6358,7 +6358,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
 
-            Matrix_MultVecZ(20100.0f, &this->unk_18B4);
+            Matrix_MultVecZ(20100.0f, &this->reflectedBeamEndPos);
             Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(this->beamThicknessScale * 5.0f, this->beamThicknessScale * 5.0f, 0.0f, MTXMODE_APPLY);
