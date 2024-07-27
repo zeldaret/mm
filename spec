@@ -2074,8 +2074,7 @@ beginseg
     name "ovl_En_Zl4"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Zl4/z_en_zl4.o"
-    include "$(BUILD_DIR)/data/ovl_En_Zl4/ovl_En_Zl4.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Zl4/ovl_En_Zl4.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Zl4/ovl_En_Zl4_reloc.o"
 endseg
 
 beginseg
