@@ -61,7 +61,7 @@ typedef struct PlayState {
     /* 0x16D30 */ PauseContext pauseCtx;
     /* 0x17000 */ GameOverContext gameOverCtx;
     /* 0x17004 */ EnvironmentContext envCtx;
-    /* 0x17104 */ AnimationContext animationCtx;
+    /* 0x17104 */ AnimTaskQueue animTaskQueue;
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ TransitionActorList transitionActors;

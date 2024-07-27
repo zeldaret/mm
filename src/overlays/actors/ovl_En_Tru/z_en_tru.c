@@ -1088,7 +1088,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
         case 3:
             if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
+                AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
                 break;
             } else {
                 EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
