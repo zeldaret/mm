@@ -24,7 +24,7 @@ std::string ZCutscene::GetBodySourceCode() const
 {
 	std::string output = "";
 
-	output += StringHelper::Sprintf("    CS_BEGIN_CUTSCENE(%i, %i),\n", commands.size(), endFrame);
+	output += StringHelper::Sprintf("    CS_BEGIN_CUTSCENE(%i, %i),\n", numCommands, endFrame);
 
 	for (size_t i = 0; i < commands.size(); i++)
 	{
@@ -32,7 +32,7 @@ std::string ZCutscene::GetBodySourceCode() const
 		output += "    " + cmd->GenerateSourceCode();
 	}
 
-	output += StringHelper::Sprintf("    CS_END(),", commands.size(), endFrame);
+	output += StringHelper::Sprintf("    CS_END(),");
 
 	return output;
 }
@@ -371,4 +371,26 @@ std::string ZCutscene::GetSourceTypeName() const
 ZResourceType ZCutscene::GetResourceType() const
 {
 	return ZResourceType::Cutscene;
+}
+
+std::string ZCutscene::GetCsEncodedFloat(float f, CsFloatType type, bool useSciNotation)
+{
+	uint32_t i;
+	std::memcpy(&i, &f, sizeof(i));
+
+	switch (type)
+	{
+	default:
+	// This default case will NEVER be reached, but GCC still gives a warning.
+	case CsFloatType::HexOnly:
+		return StringHelper::Sprintf("0x%08X", i);
+	case CsFloatType::FloatOnly:
+		return StringHelper::Sprintf(useSciNotation ? "%.8ef" : "%ff", f);
+	case CsFloatType::HexAndFloat:
+		return StringHelper::Sprintf(useSciNotation ? "CS_FLOAT(0x%08X, %.8ef)" : "CS_FLOAT(0x%08X, %ff)", i, f);
+	case CsFloatType::HexAndCommentedFloatLeft:
+		return StringHelper::Sprintf(useSciNotation ? "/* %.8ef */ 0x%08X" : "/* %ff */ 0x%08X", f, i);
+	case CsFloatType::HexAndCommentedFloatRight:
+		return StringHelper::Sprintf(useSciNotation ? "0x%08X /* %.8ef */" : "0x%08X /* %ff */", i, f);
+	}
 }
