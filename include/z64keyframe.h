@@ -70,6 +70,8 @@ typedef struct {
     // Array of bitflags for each limb indicating whether to do keyframe interpolation
     // or pull from fixed values that do not change throughout the animation.
     union {
+        // Used to initalize bitflags without warnings
+    /* 0x00 */ void* data;
         // For standard the bit layout in each array element is:
         // [5] X Translation (root limb only)
         // [4] Y Translation (root limb only)
