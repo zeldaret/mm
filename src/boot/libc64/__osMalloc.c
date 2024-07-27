@@ -123,7 +123,7 @@ void __osMallocCleanup(Arena* arena) {
  * @param arena  The Arena to check.
  * @return u8    `true` if the \p arena has been initialized. `false` otherwise.
  */
-u8 __osMallocIsInitalized(Arena* arena) {
+u8 __osMallocIsInitialized(Arena* arena) {
     return arena->isInit;
 }
 

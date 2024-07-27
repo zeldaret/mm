@@ -43,7 +43,7 @@ extern s16 gInvalidAdpcmCodeBook[];
 extern f32 gHeadsetPanVolume[];
 extern f32 gStereoPanVolume[];
 extern f32 gDefaultPanVolume[];
-extern s32 gAudioCtxInitalized;
+extern s32 gAudioCtxInitialized;
 extern STACK(aspMainStack, 0x400);
 
 extern u8 gAudioSpecId;

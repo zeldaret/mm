@@ -23,7 +23,7 @@ typedef struct Arena {
 
 void __osMallocInit(Arena* arena, void* heap, size_t size);
 void __osMallocCleanup(Arena* arena);
-u8 __osMallocIsInitalized(Arena* arena);
+u8 __osMallocIsInitialized(Arena* arena);
 void* __osMalloc(Arena* arena, size_t size);
 void* __osMallocR(Arena* arena, size_t size);
 void __osFree(Arena* arena, void* ptr);

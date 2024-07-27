@@ -1071,7 +1071,7 @@ void AudioHeap_Init(void) {
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     AudioLoad_InitSampleDmaBuffers(gAudioCtx.numNotes);
 
-    // Initalize Loads
+    // Initialize Loads
     gAudioCtx.preloadSampleStackTop = 0;
     AudioLoad_InitSlowLoads();
     AudioLoad_InitScriptLoads();
