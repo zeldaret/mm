@@ -3597,7 +3597,7 @@ void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
 
     player = GET_PLAYER(play);
 
-    if (this->introOrbScale > 0.0f) {
+    if (this->introPlayerOrbScale > 0.0f) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(sREG(52) + 255));
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 0);
@@ -3618,7 +3618,7 @@ void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
                          player->actor.world.pos.z + sREG(61) - 15.0f + zPosOffset, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        Matrix_Scale(this->introOrbScale, this->introOrbScale, this->introOrbScale, MTXMODE_APPLY);
+        Matrix_Scale(this->introPlayerOrbScale, this->introPlayerOrbScale, this->introPlayerOrbScale, MTXMODE_APPLY);
         Matrix_RotateZS(play->gameplayFrames * 0x40, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
@@ -5630,7 +5630,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
         case MAJORAS_MASK_INTRO_STATE_1:
             if (this->cutsceneTimer >= 20) {
                 Audio_PlaySfx_2(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
-                Math_ApproachF(&sMajoraBattleHandler->introOrbScale, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
+                Math_ApproachF(&sMajoraBattleHandler->introPlayerOrbScale, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
             }
 
             if (this->cutsceneTimer == 35) {
@@ -5669,7 +5669,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
         case MAJORAS_MASK_INTRO_STATE_2:
             this->motionBlurAlpha = KREG(77) + 150;
             if (this->cutsceneTimer >= 20) {
-                Math_ApproachZeroF(&sMajoraBattleHandler->introOrbScale, 1.0f, 0.05f);
+                Math_ApproachZeroF(&sMajoraBattleHandler->introPlayerOrbScale, 1.0f, 0.05f);
             }
 
             if (this->cutsceneTimer == 20) {
@@ -5735,7 +5735,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT], play);
                     Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD], play);
                     this->subCamSpeedMod = 0.0f;
-                    sMajoraBattleHandler->introOrbScale = 0.0f;
+                    sMajoraBattleHandler->introPlayerOrbScale = 0.0f;
                     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 }
             }
@@ -6625,7 +6625,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
         case REMAINS_CS_STATE_FLY:
             this->cutsceneTimer++;
             this->timer_AB40++;
-            this->remainsOrbRot += 0x200;
+            this->introRemainsOrbRot += 0x200;
             Math_ApproachF(&this->eyeBeamsLengthScale, 1.2f, 1.0f, 0.1f);
             Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
             this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
@@ -6939,7 +6939,7 @@ void Boss07_Remains_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->eyeBeamsLengthScale, this->eyeBeamsLengthScale, 0.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        Matrix_RotateZS(this->remainsOrbRot, MTXMODE_APPLY);
+        Matrix_RotateZS(this->introRemainsOrbRot, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);

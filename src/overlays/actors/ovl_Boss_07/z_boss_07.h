@@ -249,7 +249,7 @@ typedef struct Boss07 {
     /* 0x18C0 */ f32 reflectedBeamLengthScale;
     /* 0x18C4 */ s16 reflectedBeamPitch;
     /* 0x18C6 */ s16 reflectedBeamYaw;
-    /* 0x18C8 */ s16 remainsOrbRot;
+    /* 0x18C8 */ s16 introRemainsOrbRot;
     /* 0x18CC */ f32 knockbackVelocityX;
     /* 0x18D0 */ f32 knockbackVelocityZ;
     /* 0x18D4 */ s16 angularVelocity;
@@ -265,7 +265,7 @@ typedef struct Boss07 {
     /* 0x1970 */ ColliderQuad maskBackCollider;
     /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_MAX];
     /* 0xAB40 */ s16 timer_AB40;
-    /* 0xAB44 */ f32 introOrbScale;
+    /* 0xAB44 */ f32 introPlayerOrbScale;
     /* 0xAB48 */ u8 noShadow;
     /* 0xAB4C */ f32 deathOrbScale;
     /* 0xAB50 */ f32 deathLightScale[30];
