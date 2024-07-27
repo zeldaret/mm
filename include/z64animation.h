@@ -37,7 +37,7 @@ typedef enum AnimationMode {
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
 } AnimationMode;
 
-typedef enum {
+typedef enum AnimationTapers {
     /* -1 */ ANIMTAPER_DECEL = -1,
     /*  0 */ ANIMTAPER_NONE,
     /*  1 */ ANIMTAPER_ACCEL
@@ -118,7 +118,7 @@ typedef struct {
     /* 0x4 */ Vec3s* base;
     /* 0x8 */ Vec3s* mod;
     /* 0xC */ f32 weight;
-} AnimEntryInterp; // size = 0x10
+} AnimTaskInterp; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 group;
@@ -140,15 +140,15 @@ typedef struct {
     /* 0x0 */ struct Actor* actor;
     /* 0x4 */ struct SkelAnime* skelAnime;
     /* 0x8 */ f32 diffScale;
-} AnimEntryMoveActor; // size = 0xC
+} AnimTaskActorMove; // size = 0xC
 
 typedef union {
     AnimTaskLoadPlayerFrame loadPlayerFrame;
     AnimTaskCopy copy;
-    AnimEntryInterp interp;
+    AnimTaskInterp interp;
     AnimTaskCopyUsingMap copyUsingMap;
     AnimTaskCopyUsingMapInverted copyUsingMapInverted;
-    AnimEntryMoveActor actorMove;
+    AnimTaskActorMove actorMove;
 } AnimTaskData; // size = 0x3C
 
 typedef struct {

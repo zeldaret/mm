@@ -1159,7 +1159,7 @@ void AnimTask_Copy(PlayState* play, AnimTaskData* data) {
  * Interpolate between the `base` and `mod` frame tables.
  */
 void AnimTask_Interp(PlayState* play, AnimTaskData* data) {
-    AnimEntryInterp* task = &data->interp;
+    AnimTaskInterp* task = &data->interp;
 
     if (!(task->group & sDisabledTransformTaskGroups)) {
         SkelAnime_InterpFrameTable(task->vecCount, task->base, task->base, task->mod, task->weight);
@@ -1210,7 +1210,7 @@ void AnimTask_CopyUsingMapInverted(PlayState* play, AnimTaskData* data) {
  * Move an actor according to the translation of its root limb for the current animation frame.
  */
 void AnimTask_ActorMove(PlayState* play, AnimTaskData* data) {
-    AnimEntryMoveActor* task = &data->actorMove;
+    AnimTaskActorMove* task = &data->actorMove;
     Actor* actor = task->actor;
     Vec3f diff;
 
