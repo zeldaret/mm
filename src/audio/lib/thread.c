@@ -581,7 +581,7 @@ s32 AudioThread_ResetAudioHeap(s32 specId) {
 
 void AudioThread_PreNMIInternal(void) {
     gAudioCtx.resetTimer = 1;
-    if (gAudioCtxInitalized) {
+    if (gAudioCtxInitialized) {
         AudioThread_ResetAudioHeap(0);
         gAudioCtx.resetStatus = 0;
     }

@@ -224,7 +224,7 @@
     0x8008720C:("__osMallocInit",),
     0x8008725C:("__osMallocAddHeap",),
     0x800872FC:("__osMallocCleanup",),
-    0x8008731C:("__osMallocIsInitalized",),
+    0x8008731C:("__osMallocIsInitialized",),
     0x80087324:("__osMalloc",),
     0x80087408:("__osMallocR",),
     0x800874EC:("__osFree",),
