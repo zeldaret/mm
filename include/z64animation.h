@@ -263,8 +263,8 @@ void AnimTaskQueue_AddInterp(struct PlayState* play, s32 vecCount, Vec3s* base, 
 void AnimTaskQueue_AddCopyUsingMap(struct PlayState* play, s32 vecCount, Vec3s* dest, Vec3s* src, u8* limbCopyMap);
 void AnimTaskQueue_AddCopyUsingMapInverted(struct PlayState* play, s32 vecCount, Vec3s* dest, Vec3s* src, u8* limbCopyMap);
 void AnimTaskQueue_AddActorMove(struct PlayState* play, struct Actor* actor, SkelAnime* skelAnime, f32 moveDiffScaleY);
-
 void AnimTaskQueue_Update(struct PlayState* play, AnimTaskQueue* animTaskQueue);
+
 void SkelAnime_InitPlayer(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
 void PlayerAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 PlayerAnimation_Update(struct PlayState* play, SkelAnime* skelAnime);
@@ -300,8 +300,8 @@ void Animation_MorphToLoop(SkelAnime* skelAnime, AnimationHeader* animation, f32
 void Animation_PlayLoopSetSpeed(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed);
 void Animation_EndLoop(SkelAnime* skelAnime);
 void Animation_Reverse(SkelAnime* skelAnime);
-void SkelAnime_CopyFrameTableTrue(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* limbCopyMap);
-void SkelAnime_CopyFrameTableFalse(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* limbCopyMap);
+void SkelAnime_CopyFrameTableTrue(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* copyFlag);
+void SkelAnime_CopyFrameTableFalse(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* copyFlag);
 void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle);
 s32 Animation_OnFrame(SkelAnime* skelAnime, f32 frame);
 void SkelAnime_Free(SkelAnime* skelAnime, struct PlayState* play);

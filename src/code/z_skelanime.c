@@ -1939,26 +1939,26 @@ void Animation_Reverse(SkelAnime* skelAnime) {
 }
 
 /**
- * Copies the src frame table to the dst frame table if limbCopyMap for that limb is true.
+ * Copies the src frame table to the dst frame table if copyFlag for that limb is true.
  */
-void SkelAnime_CopyFrameTableTrue(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* limbCopyMap) {
+void SkelAnime_CopyFrameTableTrue(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* copyFlag) {
     s32 i;
 
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
-        if (*limbCopyMap++) {
+        if (*copyFlag++) {
             *dst = *src;
         }
     }
 }
 
 /**
- * Copies the src frame table to the dst frame table if limbCopyMap for that limb is false.
+ * Copies the src frame table to the dst frame table if copyFlag for that limb is false.
  */
-void SkelAnime_CopyFrameTableFalse(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* limbCopyMap) {
+void SkelAnime_CopyFrameTableFalse(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src, u8* copyFlag) {
     s32 i;
 
     for (i = 0; i < skelAnime->limbCount; i++, dst++, src++) {
-        if (!*limbCopyMap++) {
+        if (!*copyFlag++) {
             *dst = *src;
         }
     }
