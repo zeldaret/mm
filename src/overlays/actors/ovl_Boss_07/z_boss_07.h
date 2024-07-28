@@ -253,8 +253,8 @@ typedef struct Boss07 {
     /* 0x18CC */ f32 knockbackVelocityX;
     /* 0x18D0 */ f32 knockbackVelocityZ;
     /* 0x18D4 */ s16 angularVelocity;
-    /* 0x18D6 */ s16 timer_18D6;
-    /* 0x18D8 */ s16 beamDmgTimer;
+    /* 0x18D6 */ s16 fireTimer; // used as a timer for spawning afterimages in `Boss07_Incarnation_Update`
+    /* 0x18D8 */ s16 beamDamageTimer;
     /* 0x18DA */ u8 readyDeath;
     /* 0x18DB */ u8 readyProjectile;
     /* 0x18DC */ s32 effectIndex;

@@ -4267,7 +4267,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
         }
 
         Boss07_Incarnation_SpawnDust(this, play, 3, false);
-        this->timer_18D6 = 5;
+        this->fireTimer = 5;
     }
 }
 
@@ -4313,9 +4313,8 @@ void Boss07_Incarnation_SetupHopak(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    // This uses `cutsceneTimer` in an unconventional way; it's used to count how many loops of the dancing animation
-    // Majora's Incarnation completes. Specifically, it's incremented every time Incarnation reaches the 5th frame of
-    // its animation; Incarnation will play a different sound effect depending on whether the loop count is even or odd.
+    // This uses `cutsceneTimer` to count how many loops of the dancing animation Majora's Incarnation completes.
+    // Specifically, it's incremented every time Incarnation reaches the 5th frame of its animation.
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         if ((this->cutsceneTimer % 2) == 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_UAUOO1_OLD);
@@ -4702,7 +4701,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         DECR(this->invincibilityTimer);
         DECR(this->damagedFlashTimer);
         DECR(this->collisionTimer);
-        DECR(this->timer_18D6);
+        DECR(this->fireTimer);
 
         Math_ApproachZeroF(&this->unk_330, 1.0f, 0.04f);
 
@@ -4734,7 +4733,10 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x1000);
     }
 
-    if ((this->timer_18D6 != 0) && !(this->frameCounter & 1)) {
+    // This code uses `fireTimer` to determine whether or not to spawn afterimages. While Incarnation is running,
+    // `Boss07_Incarnation_Run` will constantly set `fireTimer` to 5, so this will spawn afterimages every other frame.
+    // Once it stops running, this will continue to spawn afterimages every other frame until `fireTimer` reaches 0.
+    if ((this->fireTimer != 0) && !(this->frameCounter & 1)) {
         Boss07* afterimage = (Boss07*)Actor_SpawnAsChild(
             &play->actorCtx, &this->actor, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
             this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, 7, MAJORA_TYPE_AFTERIMAGE);
@@ -5413,9 +5415,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             Vec3f spFC;
                             Vec3f spF0;
 
-                            this->beamDmgTimer += 2;
+                            this->beamDamageTimer += 2;
                             this->reflectedBeamLengthScale = sp180 * 0.062f;
-                            if (this->beamDmgTimer < 10) {
+                            if (this->beamDamageTimer < 10) {
                                 sp108.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
                                 sp108.y = this->actor.world.pos.y + Rand_CenteredFloat(40.0f);
                                 sp108.z = this->actor.world.pos.z + Rand_CenteredFloat(40.0f);
@@ -5448,9 +5450,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 }
 
                                 if ((s8)this->actor.colChkInfo.health <= 0) {
-                                    this->timer_18D6 = 200;
+                                    this->fireTimer = 200;
                                 } else {
-                                    this->timer_18D6 = 60;
+                                    this->fireTimer = 60;
                                 }
                             }
                         }
@@ -5476,10 +5478,10 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 Vec3f spD4;
                                 Vec3f spC8;
 
-                                this->beamDmgTimer += 2;
+                                this->beamDamageTimer += 2;
                                 this->reflectedBeamLengthScale = sp180 * 0.062f;
 
-                                if (this->beamDmgTimer < 5) {
+                                if (this->beamDamageTimer < 5) {
                                     spE0.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
                                     spE0.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(40.0f);
                                     spE0.z = sMajoraRemains[i]->actor.world.pos.z + Rand_CenteredFloat(40.0f);
@@ -5494,7 +5496,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                     sMajoraRemains[i]->damagedFlashTimer |= 10;
                                 } else {
                                     sMajoraRemains[i]->actionState = REMAINS_STATE_DEATH;
-                                    sMajoraRemains[i]->timer_18D6 = 60;
+                                    sMajoraRemains[i]->fireTimer = 60;
                                     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
                                     for (j = 0; j < 20; j++) {
                                         spE0.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
@@ -5705,10 +5707,9 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actionState = REMAINS_CS_STATE_ATTACH;
                 }
 
-                // This code uses `sfxTimer` in an unconventional way; it's being used as an index to track which of the
-                // remains is currently attaching itself to the wall. The index is used to update the camera's position
-                // and orientation, and as it increases, this code will also signal to the appropriate remains to start
-                // attaching to the wall.
+                // This code uses `sfxTimer` as an index to track which of the remains is currently attaching itself to
+                // the wall. The index is used to update the camera's position and orientation, and as it increases,
+                // this code will also signal to the appropriate remains to start attaching to the wall.
                 if ((this->cutsceneTimer == 180) || (this->cutsceneTimer == 200) || (this->cutsceneTimer == 220)) {
                     this->sfxTimer++;
                     sMajoraRemains[this->sfxTimer]->actionState = REMAINS_CS_STATE_ATTACH;
@@ -5910,7 +5911,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
                 this->cutsceneTimer = 0;
                 this->cutsceneState = MAJORAS_MASK_DEATH_STATE_1;
                 this->subCamAtNext.z = 0.0f;
-                this->timer_18D6 = 120;
+                this->fireTimer = 120;
                 Play_EnableMotionBlur(150);
                 this->subCamEyeNext.x = 0.0f;
                 this->subCamEyeNext.y = -30.0f;
@@ -6051,8 +6052,8 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             DECR(this->maskShakeTimer);
             DECR(this->invincibilityTimer);
             DECR(this->damagedFlashTimer);
-            DECR(this->timer_18D6);
-            DECR(this->beamDmgTimer);
+            DECR(this->fireTimer);
+            DECR(this->beamDamageTimer);
 
             this->beamOn = false;
 
@@ -6144,7 +6145,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             }
         }
 
-        if (this->timer_18D6 != 0) {
+        if (this->fireTimer != 0) {
             Vec3f sp5C;
             Vec3f sp50;
             Vec3f sp44;
@@ -6776,7 +6777,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                                     UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->readyDeath) {
-                    this->timer_18D6 |= 4;
+                    this->fireTimer |= 4;
                 }
                 Math_ApproachF(&this->actor.scale.z, 0.0f, 1.0f, 0.001f);
                 if (this->actor.scale.z == 0.0f) {
@@ -6822,7 +6823,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         }
     }
 
-    if (this->timer_18D6 != 0) {
+    if (this->fireTimer != 0) {
         sp60.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
         sp60.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
         if (this->readyDeath) {
@@ -6873,7 +6874,7 @@ void Boss07_Remains_Update(Actor* thisx, PlayState* play2) {
         DECR(this->timers[i]);
     }
 
-    DECR(this->timer_18D6);
+    DECR(this->fireTimer);
     DECR(this->invincibilityTimer);
     DECR(this->damagedFlashTimer);
 
