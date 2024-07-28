@@ -970,15 +970,12 @@
         <Texture Name="gSwordBeam2Tex" OutName="sword_beam_2" Format="i8" Width="32" Height="64" Offset="0x271E0" />
         <DList Name="gSwordBeamDL" Offset="0x27CA0" />
 
-        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x32C" Offset="0x27DD0" />
-        <Blob Name="gameplay_keep_Blob_0281DC" Size="0x14" Offset="0x281DC" />
-
+        <KeyFrameAnimation Name="gameplay_keep_KFAnim_0281DC" Skel="0x2900C" Offset="0x281DC"/>
         <DList Name="gameplay_keep_DL_0282D0" Offset="0x282D0" />
         <Texture Name="gameplay_keep_Tex_0283B8" OutName="tex_0283B8" Format="i4" Width="64" Height="64" Offset="0x283B8" />
         <Texture Name="gameplay_keep_Tex_028BB8" OutName="tex_028BB8" Format="i8" Width="32" Height="32" Offset="0x28BB8" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_028FEC" Offset="0x28FEC" />
-        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x10" Offset="0x28FFC" />
-        <Blob Name="gameplay_keep_Blob_02900C" Size="0x14" Offset="0x2900C" />
+        <KeyFrameSkel Name="gameplay_keep_KFSkel_02900C" LimbType="Flex" Offset="0x2900C"/>
         <Animation Name="gameplay_keep_Anim_029140" Offset="0x29140" />
         <Texture Name="gameplay_keep_Tex_029150" OutName="tex_029150" Format="i8" Width="32" Height="64" Offset="0x29150" />
         <DList Name="gameplay_keep_DL_029990" Offset="0x29990" />
@@ -1333,10 +1330,7 @@
         <Texture Name="gameplay_keep_Tex_06ABF8" OutName="tex_06ABF8" Format="rgba16" Width="36" Height="36" Offset="0x6ABF8" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_06B6A0" Offset="0x6B6A0" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_06B730" Offset="0x6B730" />
-
-        <Blob Name="gameplay_keep_Blob_06B750" Size="0x3BC" Offset="0x6B750" />
-        <Blob Name="gameplay_keep_Blob_06BB0C" Size="0x14" Offset="0x6BB0C" />
-
+        <KeyFrameAnimation Name="gameplay_keep_KFAnim_06BB0C" Skel="0x6EB70" Offset="0x6BB0C"/>
         <DList Name="gameplay_keep_DL_06BFE0" Offset="0x6BFE0" />
         <DList Name="gameplay_keep_DL_06C098" Offset="0x6C098" />
         <DList Name="gameplay_keep_DL_06C1E8" Offset="0x6C1E8" />
@@ -1345,8 +1339,7 @@
         <Texture Name="gameplay_keep_Tex_06D350" OutName="tex_06D350" Format="i4" Width="64" Height="64" Offset="0x6D350" />
         <Texture Name="gameplay_keep_Tex_06DB50" OutName="tex_06DB50" Format="i4" Width="64" Height="64" Offset="0x6DB50" />
         <Texture Name="gameplay_keep_Tex_06E350" OutName="tex_06E350" Format="i4" Width="64" Height="64" Offset="0x6E350" />
-        <Blob Name="gameplay_keep_Blob_06EB50" Size="0x20" Offset="0x6EB50" />
-        <Blob Name="gameplay_keep_Blob_06EB70" Size="0x10" Offset="0x6EB70" />
+        <KeyFrameSkel Name="gameplay_keep_KFSkel_06EB70" LimbType="Flex" Offset="0x6EB70"/>
         <Texture Name="gameplay_keep_Tex_06EB80" OutName="tex_06EB80" Format="i4" Width="64" Height="64" Offset="0x6EB80" />
         <DList Name="gameplay_keep_DL_06F380" Offset="0x6F380" />
         <DList Name="gameplay_keep_DL_06F9F0" Offset="0x6F9F0" />
@@ -1450,8 +1443,7 @@
         <DList Name="gSoaringWarpCsEmptyDL" Offset="0x81620" />
         <DList Name="gSoaringWarpCsFeatherDL" Offset="0x81628" />
         <Texture Name="gSoaringWarpCsFeatherTex" OutName="soaring_warp_cs_feather" Format="rgba16" Width="16" Height="32" Offset="0x816C0" />
-        <Blob Name="gameplay_keep_Blob_081AC0" Size="0x1A74" Offset="0x81AC0" />
-        <Blob Name="gameplay_keep_Blob_083534" Size="0x1C" Offset="0x83534" /> <!-- Is a `KeyFrameAnimation` struct -->
+        <KeyFrameAnimation Name="gameplay_keep_KFAnim_083534" Skel="0x85640" Offset="0x83534"/>
         <DList Name="gameplay_keep_DL_084790" Offset="0x84790" />
         <DList Name="gameplay_keep_DL_0847E0" Offset="0x847E0" />
         <DList Name="gameplay_keep_DL_084850" Offset="0x84850" />
@@ -1482,8 +1474,7 @@
         <DList Name="gameplay_keep_DL_0853B0" Offset="0x853B0" />
         <DList Name="gameplay_keep_DL_085418" Offset="0x85418" />
         <DList Name="gameplay_keep_DL_085490" Offset="0x85490" />
-        <Blob Name="gameplay_keep_Blob_085510" Size="0x130" Offset="0x85510" />
-        <Blob Name="gameplay_keep_Blob_085640" Size="0x10" Offset="0x85640" /> <!-- Is a `KeyFrameSkeleton` struct -->
+        <KeyFrameSkel Name="gameplay_keep_KFSkel_085640" LimbType="Flex" Offset="0x85640"/>
 
         <!-- Zora Elegy of Emptiness Shell -->
         <DList Name="gElegyShellZoraDL" Offset="0x89070" /> <!-- Original name is "pzs_zo_model" -->
