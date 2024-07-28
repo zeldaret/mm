@@ -5,6 +5,9 @@
  */
 
 #include "z_en_jso2.h"
+
+#include "z64olib.h"
+
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Col_Man/z_en_col_man.h"
