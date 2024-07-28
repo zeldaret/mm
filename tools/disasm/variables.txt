@@ -9239,7 +9239,7 @@
     0x809A1B0C:("D_809A1B0C","f32","",0x4),
     0x809A1B10:("D_809A1B10","f32","",0x4),
     0x809A1F60:("En_Zl4_InitVars","UNK_TYPE1","",0x1),
-    0x809A1F80:("D_809A1F80","UNK_TYPE1","",0x1),
+    0x809A1F80:("sAnimationInfo","UNK_TYPE1","",0x1),
     0x809A1F98:("D_809A1F98","UNK_TYPE4","",0x4),
     0x809A1FB0:("D_809A1FB0","f32","",0x4),
     0x809A2250:("En_Mm2_InitVars","UNK_TYPE1","",0x1),
