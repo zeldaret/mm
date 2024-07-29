@@ -99,13 +99,13 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
         }
 
         if ((this->unk_148 != 0) || (this->actor.xzDistToPlayer < 240.0f)) {
-            if ((this->unk_148 == 0) && (captainKeeta->unk2DC != 0)) {
+            if ((this->unk_148 == 0) && (captainKeeta->unk_02DC != 0)) {
                 Actor_Kill(&this->actor);
                 return;
             }
 
             fireWallParams = BGFIREWALL_PARAM_0;
-            if ((this->unk_148 == 0) || (captainKeeta->unk2DC != 0)) {
+            if ((this->unk_148 == 0) || (captainKeeta->unk_02DC != 0)) {
                 i = 0;
                 if (this->unk_148 != 0) {
                     fireWallParams = BGFIREWALL_PARAM_1;

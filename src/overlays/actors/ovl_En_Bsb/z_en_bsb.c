@@ -1088,19 +1088,20 @@ void func_80C0D9B4(EnBsb* this, PlayState* play) {
 }
 
 void func_80C0DA58(EnBsb* this) {
-    this->unk_1118 = this->unk_111C = 0;
     this->actor.speed = 0.0f;
-    this->unk_1120 = 0.0f;
     this->unk_02A4 = 0;
+    this->unk_1118 = this->unk_111C = 0;
     this->unk_111A = 0;
-    // clang-format off
-    this->unk_1140.x = -480.0f; this->unk_1128.x = -480.0f;
-    this->unk_1140.y = 375.0f; this->unk_1128.y = 375.0f;
-    this->unk_1140.z = -1630.0f; this->unk_1128.z = -1630.0f;
-    this->unk_114C.x = -360.0f; this->unk_1134.x = -360.0f; this->unk_1124 = 60.0f; if (1);
-    this->unk_114C.y = 500.0f; this->unk_1134.y = 500.0f; 
-    this->unk_114C.z = -2250.0f; this->unk_1134.z = -2250.0f;
-    // clang-format on
+
+    this->unk_1120 = 0.0f;
+    this->unk_1124 = 60.0f;
+
+    this->unk_1128.x = this->unk_1140.x = -480.0f;
+    this->unk_1128.y = this->unk_1140.y = 375.0f;
+    this->unk_1128.z = this->unk_1140.z = -1630.0f;
+    this->unk_1134.x = this->unk_114C.x = -360.0f;
+    this->unk_1134.y = this->unk_114C.y = 500.0f;
+    this->unk_1134.z = this->unk_114C.z = -2250.0f;
     this->unk_1118 = 0;
     WEEKEVENTREG(85) |= 0x40;
     this->unk_02B4 = 13;
@@ -1110,13 +1111,15 @@ void func_80C0DA58(EnBsb* this) {
 void func_80C0DB18(EnBsb* this, PlayState* play) {
     Vec3f sp64 = D_80C0FAC8[0];
     f32 curFrame = this->skelAnime.curFrame;
-    s32 pad[3];
+    f32 sin;
+    f32 cos;
+    s32 pad;
     s16 sp52;
-    char pad2[2];
+    s32 pad2;
 
     if (this->unk_02A4 == 0) {
         if (CutsceneManager_IsNext(this->unk_02CC[3]) == 0) {
-            CutsceneManager_Queue(((void*)0, this->unk_02CC)[3]);
+            CutsceneManager_Queue(this->unk_02CC[3]);
             return;
         }
         CutsceneManager_StartWithPlayerCs(this->unk_02CC[3], &this->actor);
@@ -1130,29 +1133,30 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
         func_80C0B970(this, play);
     }
 
-    this->unk_1128.x = -480.0f;
-    this->unk_1140.x = -480.0f;
-    this->unk_1128.y = 375.0f;
-    this->unk_1140.y = 375.0f;
-    this->unk_1128.z = -1630.0f;
-    this->unk_1140.z = -1630.0f;
-    this->unk_1134.x = -360.0f;
-    this->unk_114C.x = -360.0f;
-    this->unk_1134.y = 500.0f;
-    this->unk_114C.y = 500.0f;
-    this->unk_114C.z = -2250.0f;
-    this->unk_1134.z = -2250.0f;
+    this->unk_1128.x = this->unk_1140.x = -480.0f;
+    this->unk_1128.y = this->unk_1140.y = 375.0f;
+    this->unk_1128.z = this->unk_1140.z = -1630.0f;
+
+
+    this->unk_1134.x = this->unk_114C.x = -360.0f;
+    this->unk_1134.y = this->unk_114C.y = 500.0f;
+    this->unk_1134.z = this->unk_114C.z = -2250.0f;
 
     func_80C0BE1C(this, play);
 
     switch (this->unk_1118) {
         case 0:
             Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp64), 1, 2000, 0);
-            Math_ApproachF(&this->actor.world.pos.x, sp64.x, 0.5f, fabsf(Math_SinS(this->actor.world.rot.y) * 3.2f));
-            Math_ApproachF(&this->actor.world.pos.z, sp64.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 3.2f));
+
+            sin = Math_SinS(this->actor.world.rot.y);
+            Math_ApproachF(&this->actor.world.pos.x, sp64.x, 0.5f, fabsf(sin * 3.2f));
+
+            cos = Math_CosS(this->actor.world.rot.y);
+            Math_ApproachF(&this->actor.world.pos.z, sp64.z, 0.5f, fabsf(cos * 3.2f));
+
             if (sqrtf(SQ(this->actor.world.pos.x - sp64.x) + SQ(this->actor.world.pos.z - sp64.z)) < 3.0f) {
                 this->unk_028C = this->unk_0288->count - 1;
-                if (SubS_CopyPointFromPath(this->unk_0288, this->unk_028C, &this->unk_02EC) != 0) {
+                if (SubS_CopyPointFromPath(this->unk_0288, this->unk_028C, &this->unk_02EC)) {
                     this->unk_02EC.y = this->actor.world.pos.y;
                     func_80C0B290(this, 3);
                     this->unk_1118++;
@@ -1161,7 +1165,7 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
             break;
 
         case 1:
-            if ((Animation_OnFrame(&this->skelAnime, 7.0f) != 0) || (Animation_OnFrame(&this->skelAnime, 15.0f) != 0)) {
+            if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KTIA_PAUSE_K);
             }
 
