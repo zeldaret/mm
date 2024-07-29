@@ -6566,7 +6566,7 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
             this->actionFunc = Boss07_Remains_Fly;
             if ((s8)this->actor.colChkInfo.health <= 0) {
                 this->actionState = REMAINS_STATE_DEATH;
-                this->readyDeath = true;
+                this->burnOnLanding = true;
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
             } else {
@@ -6727,7 +6727,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         case REMAINS_STATE_FLY:
             Actor_PlaySfx(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             if (this->timers[2] == 0) {
-                this->readyProjectile = true;
+                this->tryFireProjectile = true;
                 this->timers[2] = Rand_ZeroFloat(200.0f) + 100.0f;
             }
 
@@ -6776,7 +6776,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 100.0f, 100.0f,
                                     UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-                if (this->readyDeath) {
+                if (this->burnOnLanding) {
                     this->fireTimer |= 4;
                 }
                 Math_ApproachF(&this->actor.scale.z, 0.0f, 1.0f, 0.001f);
@@ -6815,8 +6815,8 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
     }
 
-    if (this->readyProjectile) {
-        this->readyProjectile = false;
+    if (this->tryFireProjectile) {
+        this->tryFireProjectile = false;
         if (Boss07_IsFacingPlayer(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_REMAINS_PROJECTILE);
@@ -6826,7 +6826,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
     if (this->fireTimer != 0) {
         sp60.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
         sp60.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
-        if (this->readyDeath) {
+        if (this->burnOnLanding) {
             sp48.x = sp48.z = 0.0f;
             sp48.y = 0.03f;
             sp60.y = Rand_ZeroFloat(10.0f) + this->actor.world.pos.y;
