@@ -616,32 +616,30 @@ s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 /**
- * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos/Velocity arrays.
+ * This maps a given limb based on its limbIndex to its appropriate index in the `bodyPartsPos/Velocity` arrays.
  */
 static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
-    BODYPART_NONE,     // BUBBLE_LIMB_NONE
-    BODYPART_NONE,     // BUBBLE_LIMB_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_CRANIUM_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_JAW_ROOT
-    BUBBLE_BODYPART_0, // BUBBLE_LIMB_JAW
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WRAPPER
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
-    BUBBLE_BODYPART_1, // BUBBLE_LIMB_LEFT_WING_WEBBING
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_BONE
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WRAPPER
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
-    BUBBLE_BODYPART_2, // BUBBLE_LIMB_RIGHT_WING_WEBBING
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_BONE
-    BUBBLE_BODYPART_3, // BUBBLE_LIMB_CRANIUM
+    BODYPART_NONE,                      // BUBBLE_LIMB_NONE
+    BODYPART_NONE,                      // BUBBLE_LIMB_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_CRANIUM_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_JAW_ROOT
+    BUBBLE_BODYPART_JAW,                // BUBBLE_LIMB_JAW
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_LEFT_WING_WEBBING,  // BUBBLE_LIMB_LEFT_WING_WEBBING
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_BONE
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_RIGHT_WING_WEBBING, // BUBBLE_LIMB_RIGHT_WING_WEBBING
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_BONE
+    BUBBLE_BODYPART_CRANIUM,            // BUBBLE_LIMB_CRANIUM
 };
 
 /**
- * The last element of the bodyParts arrays is a duplicate of the cranium
- * limb, which is then offset by a certain amount. There is no display list
- * associated with this, so it is only used for effects.
+ * The last element of the `bodyParts` arrays is not tied to any particular limb and is instead used to control the
+ * placement of effects. The positions of these effects are offset by a certain amount from the Bubble's cranium limb.
  */
 static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
@@ -652,10 +650,10 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
-            if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_0) {
-                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_0]);
-            } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_3) {
-                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_3]);
+            if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_JAW) {
+                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_JAW]);
+            } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_CRANIUM) {
+                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_CRANIUM]);
                 Matrix_MultVec3f(&sEffectsBodyPartOffset, &this->bodyPartsPos[BUBBLE_BODYPART_EFFECTS]);
             } else {
                 Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);

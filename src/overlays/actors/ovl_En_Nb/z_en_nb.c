@@ -75,7 +75,7 @@ MsgScript D_80BC1464[] = {
     /* 0x004F 0x01 */ MSCRIPT_CMD_PAUSE(),
     /* 0x0050 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x010C - 0x0053),
     /* 0x0053 0x01 */ MSCRIPT_CMD_PLAY_DECIDE(),
-    /* 0x0054 0x03 */ MSCRIPT_CMD_EVENT_INF(EVENTINF_42),
+    /* 0x0054 0x03 */ MSCRIPT_CMD_UNSET_EVENT_INF(EVENTINF_42),
     /* 0x0057 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x290B),
     /* 0x005A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
     /* 0x005B 0x05 */ MSCRIPT_CMD_CHECK_WORN_MASK(PLAYER_MASK_ALL_NIGHT, 0x0064 - 0x0060),
@@ -428,7 +428,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_1:
             // Setup a black fill-screen, although initialize to 0 alpha
-            Play_FillScreen(&play->state, true, 0, 0, 0, 0);
+            Play_FillScreen(play, true, 0, 0, 0, 0);
             this->storyTimer = 40;
             this->behaviour = (u16)(this->behaviour + 1);
             break;

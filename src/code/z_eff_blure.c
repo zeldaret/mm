@@ -390,7 +390,7 @@ void EffectBlure_SetupSmooth(EffectBlure* this, GraphicsContext* gfxCtx) {
 
 void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* elem, s32 index,
                                          GraphicsContext* gfxCtx) {
-    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
+    static Vtx_t sBaseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
     Vtx* vtx;
     Vec3s sp8C;
     Vec3s sp84;
@@ -408,10 +408,10 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
     vtx = GRAPH_ALLOC(gfxCtx, 4 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
-        vtx[0].v = baseVtx;
-        vtx[1].v = baseVtx;
-        vtx[2].v = baseVtx;
-        vtx[3].v = baseVtx;
+        vtx[0].v = sBaseVtx;
+        vtx[1].v = sBaseVtx;
+        vtx[2].v = sBaseVtx;
+        vtx[3].v = sBaseVtx;
 
         ratio = (f32)elem->timer / (f32)this->elemDuration;
         EffectBlure_GetComputedValues(this, index, ratio, &sp8C, &sp84, &sp7C, &sp78);
@@ -480,7 +480,7 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
 
 void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElement* elem, s32 index,
                                               GraphicsContext* gfxCtx) {
-    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
+    static Vtx_t sBaseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
     Vtx* vtx;
     Vec3s sp1EC;
     Vec3s sp1E4;
@@ -568,8 +568,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
         Color_RGBA8_Copy(&sp148, &sp1A4);
         Color_RGBA8_Copy(&sp144, &sp1A0);
 
-        vtx[0].v = baseVtx;
-        vtx[1].v = baseVtx;
+        vtx[0].v = sBaseVtx;
+        vtx[1].v = sBaseVtx;
 
         vtx[0].v.ob[0] = Math_FNearbyIntF(sp158.x);
         vtx[0].v.ob[1] = Math_FNearbyIntF(sp158.y);
@@ -613,8 +613,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
             Math_Vec3f_Diff(&spE0, &sp138, &sp14C);
             Math_Vec3f_Scale(&sp14C, 10.0f);
 
-            vtx[j1].v = baseVtx;
-            vtx[j2].v = baseVtx;
+            vtx[j1].v = sBaseVtx;
+            vtx[j2].v = sBaseVtx;
 
             vtx[j1].v.ob[0] = Math_FNearbyIntF(sp158.x);
             vtx[j1].v.ob[1] = Math_FNearbyIntF(sp158.y);

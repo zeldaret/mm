@@ -174,7 +174,7 @@ AudioTask* AudioThread_UpdateImpl(void) {
     task->ucode = aspMainTextStart;
     task->ucode_data = aspMainDataStart;
     task->ucode_size = SP_UCODE_SIZE;
-    task->dram_stack = (u64*)D_801D6200;
+    task->dram_stack = aspMainStack;
     task->dram_stack_size = 0;
     task->output_buff = NULL;
     task->output_buff_size = NULL;
@@ -581,7 +581,7 @@ s32 AudioThread_ResetAudioHeap(s32 specId) {
 
 void AudioThread_PreNMIInternal(void) {
     gAudioCtx.resetTimer = 1;
-    if (gAudioCtxInitalized) {
+    if (gAudioCtxInitialized) {
         AudioThread_ResetAudioHeap(0);
         gAudioCtx.resetStatus = 0;
     }

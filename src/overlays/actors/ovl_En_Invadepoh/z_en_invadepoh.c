@@ -29,9 +29,9 @@
  * system is mainly used to manage their blinking.
  */
 
-#include "prevent_bss_reordering.h"
-#include "sys_cfb.h"
 #include "z_en_invadepoh.h"
+
+#include "sys_cfb.h"
 #include "z64horse.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
@@ -5267,7 +5267,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         gfx = POLY_XLU_DISP;
         gfx = Gfx_SetupDL20_NoCD(gfx);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 

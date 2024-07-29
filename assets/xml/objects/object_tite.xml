@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_tite" Segment="6">
-        <Animation Name="object_tite_Anim_0001D4" Offset="0x1D4" />
-        <Animation Name="object_tite_Anim_0004F8" Offset="0x4F8" />
-        <Animation Name="object_tite_Anim_00069C" Offset="0x69C" />
-        <Animation Name="object_tite_Anim_00083C" Offset="0x83C" />
-        <Animation Name="object_tite_Anim_000A14" Offset="0xA14" />
-        <Animation Name="object_tite_Anim_000C70" Offset="0xC70" />
+        <Animation Name="object_tite_Anim_0001D4" Offset="0x1D4" /> <!-- Original name might be "tt_dmg" -->
+        <Animation Name="object_tite_Anim_0004F8" Offset="0x4F8" /> <!-- Original name is "tt_jump" -->
+        <Animation Name="object_tite_Anim_00069C" Offset="0x69C" /> <!-- Original name is "tt_jump_end" -->
+        <Animation Name="object_tite_Anim_00083C" Offset="0x83C" /> <!-- Original name is "tt_jump_start" -->
+        <Animation Name="object_tite_Anim_000A14" Offset="0xA14" /> <!-- Original name is "tt_move" -->
+        <Animation Name="object_tite_Anim_000C70" Offset="0xC70" /> <!-- Original name is "tt_smalljump"-->
         <Animation Name="object_tite_Anim_000F50" Offset="0xF50" />
-        <Animation Name="object_tite_Anim_0012E4" Offset="0x12E4" />
+        <Animation Name="object_tite_Anim_0012E4" Offset="0x12E4" /> <!-- Original name is "tt_wait" -->
         <Texture Name="object_tite_Tex_001300" OutName="tex_001300" Format="rgba16" Width="16" Height="32" Offset="0x1300" />
         <Texture Name="object_tite_Tex_001700" OutName="tex_001700" Format="rgba16" Width="16" Height="16" Offset="0x1700" />
         <Texture Name="object_tite_Tex_001900" OutName="tex_001900" Format="rgba16" Width="8" Height="16" Offset="0x1900" />

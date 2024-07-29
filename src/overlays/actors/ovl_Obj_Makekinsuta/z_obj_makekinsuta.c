@@ -128,7 +128,7 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
 void func_8099FD7C(Actor* thisx, PlayState* play) {
     if (CutsceneManager_IsNext(thisx->csId)) {
         CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
-        if (thisx->csId >= 0) {
+        if (thisx->csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, thisx, PLAYER_CSACTION_4);
         }
         func_8099FB64(thisx, play);

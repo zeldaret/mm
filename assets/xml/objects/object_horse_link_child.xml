@@ -35,8 +35,6 @@
         <Animation Name="gEponaWhinnyAnim" Offset="0x7468" /> <!-- Original name is "hlc_anim_wait02" -->
         <Animation Name="gEponaWalkAnim" Offset="0x7D50" /> <!-- Original name is "hlc_anim_walk_30" -->
 
-        <!-- <Blob Name="object_horse_link_child_Blob_007D60" Size="0x2388" Offset="0x7D60" /> -->
-
         <!-- z64Utils will not render because of skin type skeleton -->
         <Limb Name="object_horse_link_child_Skinlimb_00A0E8" Type="Skin" EnumName="OBJECT_HORSE_LINK_CHILD_LIMB_01" Offset="0xA0E8" />
         <Limb Name="object_horse_link_child_Skinlimb_00A0F8" Type="Skin" EnumName="OBJECT_HORSE_LINK_CHILD_LIMB_02" Offset="0xA0F8" />

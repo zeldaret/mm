@@ -1,6 +1,6 @@
-#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h" // bumps the bss index by 65
 // clang-format off
-// Partial structs taken from "prevent_bss_reordering.h"
+// Partial structs taken from "prevent_bss_reordering.h", bumps the bss index by 59
 struct Dummy200 { int x; };
 struct Dummy201 { int x; };
 struct Dummy202 { int x; };
@@ -14,17 +14,37 @@ struct Dummy209 { int x; };
 struct Dummy210 { int x; };
 struct Dummy211 { int x; };
 struct Dummy212 { int x; };
+struct Dummy213 { int x; };
+struct Dummy214 { int x; };
+struct Dummy215 { int x; };
+struct Dummy216 { int x; };
+struct Dummy217 { int x; };
+struct Dummy218 { int x; };
+struct Dummy219 { int x; };
+struct Dummy220 { int x; };
+struct Dummy221 { int x; };
+struct Dummy222 { int x; };
+struct Dummy223 { int x; };
+struct Dummy224 { int x; };
+struct Dummy225 { int x; };
+struct Dummy226 { int x; };
+struct Dummy227 { int x; };
+struct Dummy228 { int x; };
+typedef int Dummy229;
+
 // clang-format on
 
+// Headers are currently valued at 60 mod 256 (./tools/calc_bss.sh <headers>)
 #include "z64math.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "PR/gu.h"
+// The bss index at this point should be 184
+
+#include "macros.h"
 
 Vec3f gZeroVec3f = { 0.0f, 0.0f, 0.0f };
 Vec3s gZeroVec3s = { 0, 0, 0 };
-
-#define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);

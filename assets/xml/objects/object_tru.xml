@@ -1,22 +1,22 @@
 ﻿<Root>
     <!-- Assets for Koume -->
     <File Name="object_tru" Segment="6">
-        <DList Name="gKoumeTargetDL" Offset="0x390" />
-        <DList Name="gKoumeChainDL" Offset="0x4C8" />
+        <DList Name="gKoumeTargetDL" Offset="0x390" /> <!-- Original name is "tru_mato1_model" -->
+        <DList Name="gKoumeChainDL" Offset="0x4C8" /> <!-- Original name is "tru_kusari1_model" -->
         <Texture Name="gKoumeChainTex" OutName="koume_chain" Format="rgba16" Width="16" Height="32" Offset="0x560" />
         <Texture Name="gKoumeTargetSideTex" OutName="koume_target_side" Format="rgba16" Width="32" Height="32" Offset="0x960" />
         <Texture Name="gKoumeTargetFaceTex" OutName="koume_target_face" Format="rgba16" Width="32" Height="32" Offset="0x1160" />
 
-        <DList Name="gKoumeBottleDL" Offset="0x1F90" />
-        <DList Name="gKoumePotionDL" Offset="0x20C8" />
+        <DList Name="gKoumeBottleDL" Offset="0x1F90" /> <!-- Original name is "trU_bottle_modelT" -->
+        <DList Name="gKoumePotionDL" Offset="0x20C8" /> <!-- Original name is "trU_bottle_aft_modelT" -->
         <DList Name="gKoumeEmptyDL" Offset="0x2160" />
         <Texture Name="gKoumeBottleTex" OutName="koume_bottle" Format="i4" Width="16" Height="16" Offset="0x2168" />
 
-        <Animation Name="gKoumeFlyAnim" Offset="0x2BD8" />
-        <Animation Name="gKoumeTakeOffAnim" Offset="0x3698" />
-        <Animation Name="gKoumeHoverAnim" Offset="0x446C" />
-        <Animation Name="gKoumeDrinkAnim" Offset="0x7FA0" />
-        <Animation Name="gKoumeInjuredRaiseHeadAnim" Offset="0x9348" />
+        <Animation Name="gKoumeFlyAnim" Offset="0x2BD8" /> <!-- Original name is "trU_fly" -->
+        <Animation Name="gKoumeTakeOffAnim" Offset="0x3698" /> <!-- Original name is "trU_flyaway" -->
+        <Animation Name="gKoumeHoverAnim" Offset="0x446C" /> <!-- Original name is "trU_flywait" -->
+        <Animation Name="gKoumeDrinkAnim" Offset="0x7FA0" /> <!-- Original name is "trU_nomu" -->
+        <Animation Name="gKoumeInjuredRaiseHeadAnim" Offset="0x9348" /> <!-- Original name is "trU_okiru" -->
 
         <DList Name="gKoumePelvisDL" Offset="0xB730" />
         <DList Name="gKoumeTorsoDL" Offset="0xB940" />
@@ -45,14 +45,14 @@
         <DList Name="gKoumeLeftShinDL" Offset="0xDE18" />
         <DList Name="gKoumeLeftFootDL" Offset="0xDEC8" />
 
-        <Animation Name="gKoumeInjuredTalkAnim" Offset="0xEEDC" />
-        <Animation Name="gKoumeInjuredLyingDownAnim" Offset="0xF9A0" />
-        <Animation Name="gKoumeTryGetUpAnim" Offset="0x108AC" />
-        <Animation Name="gKoumeHealedAnim" Offset="0x11F88" />
-        <Animation Name="gKoumeTakeAnim" Offset="0x14728" />
-        <Animation Name="gKoumeIdleAnim" Offset="0x15068" />
-        <Animation Name="gKoumeInjuredHeadUpAnim" Offset="0x15CA0" />
-        <Animation Name="gKoumeFinishedDrinkingAnim" Offset="0x16B4C" />
+        <Animation Name="gKoumeInjuredTalkAnim" Offset="0xEEDC" /> <!-- Original name is "trU_talk" -->
+        <Animation Name="gKoumeInjuredLyingDownAnim" Offset="0xF9A0" /> <!-- Original name is "trU_taore01" -->
+        <Animation Name="gKoumeTryGetUpAnim" Offset="0x108AC" /> <!-- Original name is "trU_taore02" -->
+        <Animation Name="gKoumeHealedAnim" Offset="0x11F88" /> <!-- Original name is "trU_tatu" -->
+        <Animation Name="gKoumeTakeAnim" Offset="0x14728" /> <!-- Original name is "trU_ubau" -->
+        <Animation Name="gKoumeIdleAnim" Offset="0x15068" /> <!-- Original name is "trU_wait" -->
+        <Animation Name="gKoumeInjuredHeadUpAnim" Offset="0x15CA0" /> <!-- Original name is "trU_wait01" -->
+        <Animation Name="gKoumeFinishedDrinkingAnim" Offset="0x16B4C" /> <!-- Original name is "trU_wait02" -->
 
         <Texture Name="gKoumeSkinTLUT" OutName="koume_skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0x16B60" />
         <Texture Name="gKoumeMouthTLUT" OutName="koume_mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x16D60" />
@@ -82,7 +82,7 @@
         <Texture Name="gKoumeJewelTex" OutName="koume_jewel" Format="rgba16" Width="8" Height="8" Offset="0x1A7A0" />
 
         <DList Name="gKoumeDustMaterialDL" Offset="0x1A820" />
-        <DList Name="gKoumeDustModelDL" Offset="0x1A830" />
+        <DList Name="gKoumeDustModelDL" Offset="0x1A830" /> <!-- Original name is "tru_flash_model" -->
 
         <Limb Name="gKoumePelvisLimb" Type="Standard" EnumName="KOUME_LIMB_PELVIS" Offset="0x1A8C0" />
         <Limb Name="gKoumeLeftThighLimb" Type="Standard" EnumName="KOUME_LIMB_LEFT_THIGH" Offset="0x1A8CC" />
@@ -112,6 +112,6 @@
         <Limb Name="gKoumeLeftBraidEndLimb" Type="Standard" EnumName="KOUME_LIMB_LEFT_BRAID_END" Offset="0x1A9EC" />
         <Skeleton Name="gKoumeSkel" Type="Flex" LimbType="Standard" LimbNone="KOUME_LIMB_NONE" LimbMax="KOUME_LIMB_MAX" EnumName="KoumeLimb" Offset="0x1AA60" />
 
-        <Animation Name="gKoumeShakeAnim" Offset="0x1B5C4" />
+        <Animation Name="gKoumeShakeAnim" Offset="0x1B5C4" /> <!-- Original name is "trU_yorokobu" -->
     </File>
 </Root>

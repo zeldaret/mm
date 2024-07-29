@@ -30,7 +30,7 @@ ActorInit Dm_Char04_InitVars = {
     /**/ DmChar04_Draw,
 };
 
-typedef enum {
+typedef enum DmChar04Animation {
     /* 0 */ DMCHAR04_ANIM_0,
     /* 1 */ DMCHAR04_ANIM_1,
     /* 2 */ DMCHAR04_ANIM_MAX
@@ -156,7 +156,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
     gSPEndDisplayList(gfx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->envColors.r, (u8)(s8)this->envColors.g, (u8)(s8)this->envColors.b,
                    (u8)(s8)((f32)alpha * 1));
-    gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
+    gDPSetDither(POLY_XLU_DISP++, G_AD_PATTERN | G_CD_BAYER);
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    DmChar04_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
 

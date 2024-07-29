@@ -61,6 +61,7 @@ Gfx* sSkyboxStarsDList;
 
 #include "z64environment.h"
 
+#include "gfxalloc.h"
 #include "global.h"
 #include "string.h"
 #include "sys_cfb.h"
@@ -1204,7 +1205,7 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
             (msgCtx->currentTextId == 0x140C) ||
             ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
             (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
-            if (!FrameAdvance_IsEnabled(&play->state) &&
+            if (!FrameAdvance_IsEnabled(play) &&
                 ((play->transitionMode == TRANS_MODE_OFF) || (gSaveContext.gameMode != GAMEMODE_NORMAL))) {
                 if (play->transitionTrigger == TRANS_TRIGGER_OFF) {
                     if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && !Play_InCsMode(play)) {
@@ -1930,8 +1931,8 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
             if (sSunDepthTestY < 0) {
                 sSunDepthTestY = 0;
             }
-            if (sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0) || screenPos.x < 0.0f || screenPos.y < 0.0f ||
-                screenPos.x > SCREEN_WIDTH || screenPos.y > SCREEN_HEIGHT) {
+            if ((sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0)) || (screenPos.x < 0.0f) || (screenPos.y < 0.0f) ||
+                (screenPos.x > SCREEN_WIDTH) || (screenPos.y > SCREEN_HEIGHT)) {
                 isOffScreen = true;
             }
         }
@@ -2436,28 +2437,28 @@ void Environment_PlaySceneSequence(PlayState* play) {
             gSaveContext.forcedSeqId = NA_BGM_GENERAL_SFX;
         } else if (!Environment_IsFinalHours(play) || func_800FE5D0(play) ||
                    (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS)) {
-            if (play->sequenceCtx.seqId == NA_BGM_NO_MUSIC) {
-                if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
+            if (play->sceneSequences.seqId == NA_BGM_NO_MUSIC) {
+                if (play->sceneSequences.ambienceId == AMBIENCE_ID_13) {
                     return;
                 }
-                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                if (play->sceneSequences.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                 }
-            } else if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
-                if (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId)) {
-                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+            } else if (play->sceneSequences.ambienceId == AMBIENCE_ID_13) {
+                if (play->sceneSequences.seqId != ((void)0, gSaveContext.seqId)) {
+                    Audio_PlaySceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 }
             } else if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(17, 10))) {
                 if (gSceneSeqState != SCENESEQ_DEFAULT) {
-                    Audio_PlayMorningSceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                    Audio_PlayMorningSceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 } else if ((CURRENT_TIME >= CLOCK_TIME(6, 1)) &&
-                           (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId))) {
-                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                           (play->sceneSequences.seqId != ((void)0, gSaveContext.seqId))) {
+                    Audio_PlaySceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 }
                 play->envCtx.timeSeqState = TIMESEQ_FADE_DAY_BGM;
             } else {
-                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                if (play->sceneSequences.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                 }
                 if ((CURRENT_TIME > CLOCK_TIME(17, 10)) && (CURRENT_TIME < CLOCK_TIME(19, 0))) {
                     play->envCtx.timeSeqState = TIMESEQ_EARLY_NIGHT_CRITTERS;
@@ -2499,7 +2500,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
 
             case TIMESEQ_EARLY_NIGHT_CRITTERS:
                 if (play->envCtx.precipitation[PRECIP_RAIN_CUR] < 9) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                     Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_0, 1, 1);
                 }
                 play->envCtx.timeSeqState++;
@@ -2600,7 +2601,7 @@ void Environment_FadeInGameOverLights(PlayState* play) {
         sGameOverLightsIntensity += 2;
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             if (play->envCtx.adjLightSettings.ambientColor[i] > -255) {
                 play->envCtx.adjLightSettings.ambientColor[i] -= 12;
@@ -2647,7 +2648,7 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
                                   sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.ambientColor[i], 0, 5, 12, 1);
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.light1Color[i], 0, 5, 12, 1);
@@ -2944,7 +2945,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
         return 0;
     }
 
-    if (!Play_CamIsNotFixed(&play->state)) {
+    if (!Play_CamIsNotFixed(play)) {
         return 0;
     }
     if (play->unk_18880) {
@@ -3050,12 +3051,12 @@ s32 Environment_IsForcedSequenceDisabled(void) {
 }
 
 void Environment_PlayStormNatureAmbience(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+    if (((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId == AMBIENCE_ID_13)) ||
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         Audio_PlayAmbience(AMBIENCE_ID_07);
-    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+    } else if ((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId != AMBIENCE_ID_13)) {
         if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
-            Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+            Audio_PlayAmbience(play->sceneSequences.ambienceId);
         }
     }
 
@@ -3064,10 +3065,10 @@ void Environment_PlayStormNatureAmbience(PlayState* play) {
 }
 
 void Environment_StopStormNatureAmbience(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+    if (((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId == AMBIENCE_ID_13)) ||
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
-    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+    } else if ((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId != AMBIENCE_ID_13)) {
         if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
         }

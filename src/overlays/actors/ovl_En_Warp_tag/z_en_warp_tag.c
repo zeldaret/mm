@@ -86,7 +86,7 @@ void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
 void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObjectSlot)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
-        DynaPolyActor_Init(&this->dyna, 0x1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
         this->dyna.actor.objectSlot = this->dangeonKeepObjectSlot;
         this->dyna.actor.draw = EnWarpTag_Draw;
@@ -211,11 +211,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, entrance,
-                                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, entrance, play->setupEntranceList[playerSpawnIndex].room,
+                                    playerParams, &newRespawnPos,
                                     DEG_TO_BINANG_ALT((playerActorEntry->rot.y >> 7) & 0x1FF));
 
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
                 gSaveContext.respawnFlag = -5;
                 Play_DisableMotionBlur();
             }

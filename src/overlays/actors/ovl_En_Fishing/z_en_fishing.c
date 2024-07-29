@@ -3108,7 +3108,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
                     Math_ApproachF(&this->unk_1A8, 8192.0f, 1.0f, 768.0f);
-                    Math_ApproachF(&this->actor.speed, 4.2f, 1.0f, 0.75);
+                    Math_ApproachF(&this->actor.speed, 4.2f, 1.0f, 0.75f);
                     this->unk_188 = 1.2f;
                     this->unk_18C = 4000.0f;
                     this->unk_172[0] = 20;
@@ -3137,7 +3137,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->unk_15E, 0, 0x14, 0x20);
 
             if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
-                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.75);
+                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.75f);
                 this->unk_188 = 1.0f;
                 this->unk_172[0] = 20;
                 this->unk_18C = 4000.0f;
@@ -4796,7 +4796,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
 
-                play->interfaceCtx.unk_27E = 1;
+                play->interfaceCtx.fishingHUDControl = 1;
                 play->startPlayerFishing(play);
                 D_809171FC = 1;
                 D_8090CD04 = 20;
@@ -5022,7 +5022,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     D_8090CD0C = false;
                 }
                 D_809171FC = 0;
-                play->interfaceCtx.unk_27E = 0;
+                play->interfaceCtx.fishingHUDControl = 0;
             }
             break;
 

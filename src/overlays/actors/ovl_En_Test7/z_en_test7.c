@@ -383,9 +383,9 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     this->playerScaleZ = player->actor.scale.z;
 
     // Keyframe animations
-    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&gameplay_keep_Blob_085640,
-                      (KeyFrameAnimation*)&gameplay_keep_Blob_083534, this->jointTable, this->morphTable, NULL);
-    Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&gameplay_keep_Blob_083534);
+    Keyframe_InitFlex(&this->kfSkelAnime, &gameplay_keep_KFSkel_085640, &gameplay_keep_KFAnim_083534, this->jointTable,
+                      this->morphTable, NULL);
+    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &gameplay_keep_KFAnim_083534);
 
     EnTest7_InitFeathers(this->feathers);
     EnTest7_InitWindCapsule(&this->windCapsule);
@@ -660,7 +660,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_WARP_TO_ENTRANCE) {
-        func_80169F78(&play->state);
+        func_80169F78(play);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
             PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_6);
         gSaveContext.respawnFlag = -6;

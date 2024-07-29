@@ -2,12 +2,12 @@
     <!-- Assets for Kotake -->
     <File Name="object_trt" Segment="6">
         <!-- Animations -->
-        <Animation Name="gKotakeHoverAnim" Offset="0xA44" />
-        <Animation Name="gKotakeFlyLookAroundAnim" Offset="0x1EF4" />
-        <Animation Name="gKotakeFlyDownAnim" Offset="0x2224" />
-        <Animation Name="gKotakeFlyAnim" Offset="0x2CB0" />
-        <Animation Name="gKotakeWakeUpAnim" Offset="0x30EC" />
-        <Animation Name="gKotakeSurprisedAnim" Offset="0x3D78" />
+        <Animation Name="gKotakeHoverAnim" Offset="0xA44" /> <!-- Original name is "kt_fly_fuwafuwa" -->
+        <Animation Name="gKotakeFlyLookAroundAnim" Offset="0x1EF4" /> <!-- Original name is "kt_fly_kyoro" -->
+        <Animation Name="gKotakeFlyDownAnim" Offset="0x2224" /> <!-- Original name is "kt_kouka_loop" -->
+        <Animation Name="gKotakeFlyAnim" Offset="0x2CB0" /> <!-- Original name is "kt_tati_loop" -->
+        <Animation Name="gKotakeWakeUpAnim" Offset="0x30EC" /> <!-- Original name is "trT_kizuku" -->
+        <Animation Name="gKotakeSurprisedAnim" Offset="0x3D78" /> <!-- Original name is "trT_odoroku" -->
 
         <!-- DLists -->
         <DList Name="gKotakePelvisDL" Offset="0x6380" />
@@ -66,13 +66,13 @@
         <Texture Name="gKotakeJewelTex" OutName="kotake_jewel" Format="rgba16" Width="8" Height="8" Offset="0xC8B8" />
 
         <!-- Unused Eye TexAnim-->
-        <TextureAnimation Name="gKotakeEyesTexAnim" Offset="0xC988" />
+        <TextureAnimation Name="gKotakeEyeTexAnim" Offset="0xC988" />
 
         <!-- Animations -->
-        <Animation Name="gKotakeHandsOnCounterAnim" Offset="0xD52C" />
-        <Animation Name="gKotakeIdleAnim" Offset="0xDE68" />
-        <Animation Name="gKotakeHalfAwakeAnim" Offset="0xEE98" />
-        <Animation Name="gKotakeSleepingAnim" Offset="0xFD34" />
+        <Animation Name="gKotakeHandsOnCounterAnim" Offset="0xD52C" /> <!-- Original name is "trT_talk" -->
+        <Animation Name="gKotakeIdleAnim" Offset="0xDE68" /> <!-- Original name is "trT_wait" -->
+        <Animation Name="gKotakeHalfAwakeAnim" Offset="0xEE98" /> <!-- Original name is "trT_wait01" -->
+        <Animation Name="gKotakeSleepingAnim" Offset="0xFD34" /> <!-- Original name is "trT_wait02" -->
 
         <!-- Skeleton -->
         <Limb Name="gKotakePelvisLimb" Type="Standard" EnumName="KOTAKE_LIMB_PELVIS" Offset="0xFD50" />

@@ -3,27 +3,10 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
+#include "stack.h"
 #include "macros.h"
 
 // data
-
-extern u32 gBitFlags[32];
-extern u16 gEquipMasks[];
-extern u16 gEquipNegMasks[];
-extern u32 gUpgradeMasks[8];
-extern u32 gUpgradeNegMasks[];
-extern u8 gEquipShifts[];
-extern u8 gUpgradeShifts[8];
-extern u16 gUpgradeCapacities[][4];
-extern u32 gGsFlagsMask[];
-extern u32 gGsFlagsShift[];
-extern TexturePtr gItemIcons[];
-extern u8 gItemSlots[];
-extern s16 gItemPrices[];
-extern u16 gSceneIdsPerRegion[11][27];
-extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
-
-extern s32 gDbgCamEnabled;
 
 extern s16 gLowPassFilterData[];
 extern s16 gHighPassFilterData[];
@@ -44,8 +27,8 @@ extern s16 gInvalidAdpcmCodeBook[];
 extern f32 gHeadsetPanVolume[];
 extern f32 gStereoPanVolume[];
 extern f32 gDefaultPanVolume[];
-extern s32 gAudioCtxInitalized;
-extern u8 D_801D6200[0x400];
+extern s32 gAudioCtxInitialized;
+extern STACK(aspMainStack, 0x400);
 
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
@@ -62,11 +45,6 @@ extern u8 gSampleBankTable[];
 
 // bss
 
-extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gPlayVisMonoColor;
-
-extern GfxMasterList* gGfxMasterDL;
-
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 
@@ -79,7 +57,7 @@ extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments
 extern Mtx D_01000000;
+extern Gfx D_08000000[];
 extern u16 D_0F000000[];
-
 
 #endif

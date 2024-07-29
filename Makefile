@@ -127,7 +127,7 @@ CC_CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -W
 # Have CC_CHECK pretend to be a MIPS compiler
 MIPS_BUILTIN_DEFS := -DMIPSEB -D_MIPS_FPSET=16 -D_MIPS_ISA=2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
 # The -MMD flags additionaly creates a .d file with the same name as the .o file.
-CC_CHECK_FLAGS   := -MMD -MP -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
+CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
 
 ifneq ($(WERROR), 0)
   CC_CHECK_WARNINGS += -Werror
@@ -167,7 +167,8 @@ CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
 
 WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594
 ASFLAGS          := -march=vr4300 -32 -G0
-COMMON_DEFINES   := -D_MIPS_SZLONG=32
+GBI_DEFINES 	 := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
+COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
 AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
 C_DEFINES        := $(COMMON_DEFINES) -DLANGUAGE_C -D_LANGUAGE_C
 ENDIAN           := -EB

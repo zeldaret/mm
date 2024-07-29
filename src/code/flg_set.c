@@ -11,6 +11,8 @@
  */
 
 #include "flg_set.h"
+
+#include "gfxalloc.h"
 #include "global.h"
 
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"

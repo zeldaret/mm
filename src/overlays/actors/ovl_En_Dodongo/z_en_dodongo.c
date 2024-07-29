@@ -876,7 +876,7 @@ void func_808785B0(EnDodongo* this, PlayState* play) {
         func_80876D28(this, play);
         if (this->actor.colChkInfo.health == 0) {
             func_80878724(this);
-        } else if (this->actor.xzDistToPlayer > 100.0f * this->unk_334) {
+        } else if (this->actor.xzDistToPlayer > (100.0f * this->unk_334)) {
             func_80877494(this);
         } else {
             func_80876B08(this, play);

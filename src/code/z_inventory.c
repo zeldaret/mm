@@ -1,4 +1,14 @@
+#include "z64inventory.h"
+
 #include "global.h"
+#include "regs.h"
+
+#include "z64item.h"
+#include "z64interface.h"
+#include "z64player.h"
+#include "z64save.h"
+#include "z64scene.h"
+
 #include "interface/parameter_static/parameter_static.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "archives/icon_item_24_static/icon_item_24_static_yar.h"
@@ -478,10 +488,10 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
     } else if (gSaveContext.bButtonStatus == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
-        if (play->interfaceCtx.unk_21C != 0) {
-            if (play->interfaceCtx.bButtonDoAction != 0) {
-                return play->interfaceCtx.bButtonDoAction;
-            }
+        //! @bug "Weird B": If the B button is empty and there's a B do action text displaying, pressing B will use the
+        //! item with the same id as the current do action. It's unclear what this code was originally intended for.
+        if (play->interfaceCtx.bButtonPlayerDoActionActive && play->interfaceCtx.bButtonPlayerDoAction != 0) {
+            return play->interfaceCtx.bButtonPlayerDoAction;
         }
         return ITEM_NONE;
     } else {

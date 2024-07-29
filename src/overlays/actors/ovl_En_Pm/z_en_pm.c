@@ -544,7 +544,7 @@ void func_80AF7F68(EnPm* this, PlayState* play) {
     f32 temp;
     s32 pad;
 
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 9:
         case 20:
         case 21:
@@ -567,7 +567,7 @@ void func_80AF7F68(EnPm* this, PlayState* play) {
 Actor* func_80AF8040(EnPm* this, PlayState* play) {
     Actor* actor;
 
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 16:
             actor = EnPm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
             break;
@@ -585,7 +585,7 @@ Actor* func_80AF8040(EnPm* this, PlayState* play) {
         case 5:
         case 6:
         case 7:
-            actor = func_80AF7DC4(this, play, this->unk_258 - 3);
+            actor = func_80AF7DC4(this, play, this->scheduleResult - 3);
             break;
 
         case 19:
@@ -744,7 +744,7 @@ s32 func_80AF8478(Actor* thisx, PlayState* play) {
 }
 
 MsgScript* EnPm_GetMsgScript(EnPm* this, PlayState* play) {
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 28:
             this->msgScriptCallback = func_80AF8348;
             return D_80AFB6BC;
@@ -779,7 +779,7 @@ MsgScript* EnPm_GetMsgScript(EnPm* this, PlayState* play) {
                 return D_80AFB744;
             }
 
-            switch (this->unk_258) {
+            switch (this->scheduleResult) {
                 case 9:
                     return D_80AFB614;
 
@@ -822,8 +822,8 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
         this->msgScriptCallback = NULL;
         this->actor.child = this->unk_268;
         this->msgScript = EnPm_GetMsgScript(this, play);
-        if ((this->unk_258 != 24) && (this->unk_258 != 9) && (this->unk_258 != 20) && (this->unk_258 != 21) &&
-            (this->unk_258 != 22)) {
+        if ((this->scheduleResult != 24) && (this->scheduleResult != 9) && (this->scheduleResult != 20) &&
+            (this->scheduleResult != 21) && (this->scheduleResult != 22)) {
             this->unk_356 |= 0x20;
         }
         this->actionFunc = func_80AFA5FC;
@@ -839,14 +839,14 @@ s32 func_80AF87C4(EnPm* this, PlayState* play) {
         (play->curSpawn == 1)) {
         if (!this->unk_380) {
             func_80AF7E98(this, 0);
-            this->unk_258 = 255;
+            this->scheduleResult = 255;
             this->unk_380 = true;
             this->actor.speed = 4.0f;
             this->actor.gravity = -1.0f;
         }
         ret = true;
     } else if (this->unk_380) {
-        this->unk_258 = 0;
+        this->scheduleResult = 0;
         this->unk_380 = false;
         this->actor.speed = 0.0f;
     }
@@ -1113,7 +1113,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     }
 
     if (this->timePath != 0) {
-        if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->timePathTimeSpeed >= 0)) {
+        if ((this->scheduleResult < 38) && (this->scheduleResult != 0) && (this->timePathTimeSpeed >= 0)) {
             phi_v1 = sp2E;
         } else {
             phi_v1 = scheduleOutput->time0;
@@ -1132,7 +1132,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
-        if (this->unk_258 == 27) {
+        if (this->scheduleResult == 27) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
             Flags_UnsetSwitch(play, 0);
         }
@@ -1336,7 +1336,7 @@ s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
-        if (this->unk_258 != 0) {
+        if (this->scheduleResult != 0) {
             this->unk_356 |= 0x800;
             func_80AF7E98(this, 5);
         } else {
@@ -1354,7 +1354,7 @@ s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
-        if (this->unk_258 != 0) {
+        if (this->scheduleResult != 0) {
             this->unk_356 |= 0x800;
             func_80AF7E98(this, 5);
         } else {
@@ -1372,7 +1372,7 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x9000;
         this->unk_356 |= 0x20;
-        if (this->unk_258 != 0) {
+        if (this->scheduleResult != 0) {
             this->unk_356 |= 0x800;
             func_80AF7E98(this, 5);
         } else {
@@ -1518,7 +1518,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF9D04(EnPm* this, PlayState* play) {
-    EnDoor* door = EnPm_FindScheduleDoor(play, this->unk_258);
+    EnDoor* door = EnPm_FindScheduleDoor(play, this->scheduleResult);
     Vec3f sp38;
     s32 pad;
     f32 temp;
@@ -1594,12 +1594,12 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
         this->timePathElapsedTime = sp54;
         this->timePathWaypoint = sp50;
         this->timePathTargetPos = timePathTargetPos;
-    } else if ((this->unk_258 != 91) &&
+    } else if ((this->scheduleResult != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
-    if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
+    if ((this->unk_356 & 0x10) && (this->scheduleResult == 90)) {
         //! @bug Uses SET_WEEKEVENTREG instead of CHECK_WEEKEVENTREG
         if (!SET_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
@@ -1613,7 +1613,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
     Vec3f sp34;
     Vec3f sp28;
 
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 28:
             if (CURRENT_TIME >= CLOCK_TIME(1, 39)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
@@ -1645,10 +1645,10 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
-            if (this->unk_258 == 19) {
+            if (this->scheduleResult == 19) {
                 func_80AF8BA8(4);
             } else {
-                func_80AF8BA8(this->unk_258 - 3);
+                func_80AF8BA8(this->scheduleResult - 3);
             }
             break;
     }
@@ -1665,7 +1665,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
 s32 func_80AFA334(EnPm* this, PlayState* play) {
     s16 temp_v0;
 
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 14:
         case 24:
             temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
@@ -1699,7 +1699,7 @@ s32 func_80AFA334(EnPm* this, PlayState* play) {
 }
 
 void func_80AFA438(EnPm* this, PlayState* play) {
-    switch (this->unk_258) {
+    switch (this->scheduleResult) {
         case 3:
         case 4:
         case 5:
@@ -1807,7 +1807,7 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     };
     u16 time = CURRENT_TIME;
     u16 sp3C = 0;
-    ScheduleOutput sp2C;
+    ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (this->unk_38C != 0) {
@@ -1816,17 +1816,17 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
         gSaveContext.save.time = time;
     }
 
-    if (!Schedule_RunScript(play, D_80AFB900[this->unk_38C], &sp2C) ||
-        ((this->unk_258 != sp2C.result) && !func_80AF9BF8(this, play, &sp2C))) {
+    if (!Schedule_RunScript(play, D_80AFB900[this->unk_38C], &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80AF9BF8(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp2C.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
-    this->unk_258 = sp2C.result;
+    this->scheduleResult = scheduleOutput.result;
     this->unk_268 = func_80AF8040(this, play);
     func_80AFA438(this, play);
     if (this->unk_38C != 0) {
@@ -1850,9 +1850,9 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
         return;
     }
 
-    if ((this->unk_258 != 9) && (this->unk_258 != 14) && (this->unk_258 != 16) && (this->unk_258 != 17) &&
-        (this->unk_258 != 20) && (this->unk_258 != 21) && (this->unk_258 != 22) && (this->unk_258 != 24) &&
-        (this->unk_258 != 25)) {
+    if ((this->scheduleResult != 9) && (this->scheduleResult != 14) && (this->scheduleResult != 16) &&
+        (this->scheduleResult != 17) && (this->scheduleResult != 20) && (this->scheduleResult != 21) &&
+        (this->scheduleResult != 22) && (this->scheduleResult != 24) && (this->scheduleResult != 25)) {
         if ((this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
             Math_Vec3f_Copy(&sp38, &this->unk_268->world.pos);
             Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
@@ -1882,7 +1882,7 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_38C = func_80AF7B40();
-    this->unk_258 = 0;
+    this->scheduleResult = 0;
     this->unk_356 = 0;
     this->actionFunc = func_80AFA4D0;
     this->actionFunc(this, play);
@@ -1905,7 +1905,7 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
     } else {
         this->actionFunc(this, play);
         func_80AF7BAC(this);
-        if (this->unk_258 != 0) {
+        if (this->scheduleResult != 0) {
             func_80AF8DD4(this, play);
             func_80AF7E6C(this);
             func_80AF8AC8(this);
@@ -1950,10 +1950,11 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             break;
 
         case 8:
-            if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
+            if ((this->scheduleResult == 9) || (this->scheduleResult == 20) || (this->scheduleResult == 21) ||
+                (this->scheduleResult == 22)) {
                 Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
-            } else if (this->unk_258 == 24) {
+            } else if (this->scheduleResult == 24) {
                 Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
@@ -2000,7 +2001,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play) {
     EnPm* this = THIS;
     s32 pad;
 
-    if (this->unk_258 != 0) {
+    if (this->scheduleResult != 0) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);

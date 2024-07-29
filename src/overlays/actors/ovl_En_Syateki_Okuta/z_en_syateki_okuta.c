@@ -124,11 +124,11 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
 /**
  * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
  */
-void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
-    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+void EnSyatekiOkuta_SpawnSmoke(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sSmokePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sSmokeEnvColor = { 150, 150, 150, 255 };
 
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sSmokePrimColor, &sSmokeEnvColor, 400, scaleStep);
 }
 
 /**
@@ -288,7 +288,7 @@ void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
  * make it do nothing until the Shooting Gallery Man tells it to appear again.
  */
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
-    static Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
     Vec3f velocity;
@@ -308,7 +308,7 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
             velocity.x = 0.0f;
             velocity.y = -0.5f;
             velocity.z = 0.0f;
-            EnSyatekiOkuta_SpawnDust(&pos, &velocity, -20, play);
+            EnSyatekiOkuta_SpawnSmoke(&pos, &velocity, -20, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
@@ -502,8 +502,9 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
- * parameter.
+ * Gets the scaling factor for animating the snout limb. If the limb is not being transformed, no scale value is
+ * returned. Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the
+ * `scale` parameter.
  */
 s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnSyatekiOkuta_Appear) {

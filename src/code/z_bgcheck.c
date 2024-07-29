@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "z64bgcheck.h"
 
 #include "libc64/fixed_point.h"
@@ -412,8 +413,8 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
     dpA += a0->poly->normal.z * a0->posA->z;
     dpB += a0->poly->normal.z * a0->posB->z;
 
-    dpA *= COLPOLY_NORMAL_FRAC;
-    dpB *= COLPOLY_NORMAL_FRAC;
+    dpA = COLPOLY_GET_NORMAL(dpA);
+    dpB = COLPOLY_GET_NORMAL(dpB);
 
     planeDistA += dpA;
     planeDistB += dpB;
