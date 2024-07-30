@@ -258,9 +258,9 @@ typedef struct Boss07 {
     /* 0x18DA */ u8 burnOnLanding;
     /* 0x18DB */ u8 tryFireProjectile;
     /* 0x18DC */ s32 effectIndex;
-    /* 0x18E0 */ Vec3f beamMarkLastPos;
-    /* 0x18EC */ u8 beamOn;
-    /* 0x18ED */ u8 beamOnLastFrame;
+    /* 0x18E0 */ Vec3f prevBeamTireMarkPos;
+    /* 0x18EC */ u8 beamTireMarkEnabled;
+    /* 0x18ED */ u8 prevBeamTireMarkEnabled;
     /* 0x18F0 */ ColliderQuad maskFrontCollider;
     /* 0x1970 */ ColliderQuad maskBackCollider;
     /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_MAX];

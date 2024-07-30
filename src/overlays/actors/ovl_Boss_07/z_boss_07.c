@@ -5279,7 +5279,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     Vec3f sp160;
     Player* player = GET_PLAYER(play);
     CollisionPoly* sp158;
-    Vec3f beamMarkPos;
+    Vec3f beamTireMarkPos;
     u8 sp14B = false;
     s32 sp144;
 
@@ -5348,16 +5348,16 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             sp180 = sqrtf(SQ(temp_f20) + SQ(temp_f12) + SQ(temp_f22));
             Math_ApproachF(&this->beamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamMarkPos, &sp158, 1,
-                                        1, 1, 1, &sp144) &&
+            if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamTireMarkPos, &sp158,
+                                        1, 1, 1, 1, &sp144) &&
                 (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                 Vec3f sp138;
                 Vec3f sp12C;
                 Vec3f sp120;
 
-                sp138.x = Rand_CenteredFloat(20.0f) + beamMarkPos.x;
-                sp138.y = Rand_CenteredFloat(20.0f) + beamMarkPos.y;
-                sp138.z = Rand_CenteredFloat(20.0f) + beamMarkPos.z;
+                sp138.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
+                sp138.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
+                sp138.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
                 sp12C.x = 0.0f;
                 sp12C.y = 6.0f;
                 sp12C.z = 0.0f;
@@ -5514,16 +5514,16 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             }
                         }
                         if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamEndPos, &this->reflectedBeamEndPos,
-                                                    &beamMarkPos, &sp158, 1, 1, 1, 1, &sp144) &&
+                                                    &beamTireMarkPos, &sp158, 1, 1, 1, 1, &sp144) &&
                             (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                             Vec3f spBC;
                             Vec3f spB0;
                             Vec3f spA4;
 
                             sp14B = true;
-                            spBC.x = Rand_CenteredFloat(20.0f) + beamMarkPos.x;
-                            spBC.y = Rand_CenteredFloat(20.0f) + beamMarkPos.y;
-                            spBC.z = Rand_CenteredFloat(20.0f) + beamMarkPos.z;
+                            spBC.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
+                            spBC.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
+                            spBC.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
                             spB0.x = 0.0f;
                             spB0.y = 6.0f;
                             spB0.z = 0.0f;
@@ -5549,14 +5549,14 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             }
 
             if (sp14B) {
-                if (beamMarkPos.y == 0.0f) {
-                    temp_f20 = this->beamMarkLastPos.x - beamMarkPos.x;
-                    temp_f22 = this->beamMarkLastPos.z - beamMarkPos.z;
-                    func_800AE930(&play->colCtx, Effect_GetByIndex(this->effectIndex), &beamMarkPos, 15.0f,
+                if (beamTireMarkPos.y == 0.0f) {
+                    temp_f20 = this->prevBeamTireMarkPos.x - beamTireMarkPos.x;
+                    temp_f22 = this->prevBeamTireMarkPos.z - beamTireMarkPos.z;
+                    func_800AE930(&play->colCtx, Effect_GetByIndex(this->effectIndex), &beamTireMarkPos, 15.0f,
                                   Math_Atan2S(temp_f20, temp_f22), sp158, sp144);
-                    this->beamOn = true;
+                    this->beamTireMarkEnabled = true;
                 }
-                this->beamMarkLastPos = beamMarkPos;
+                this->prevBeamTireMarkPos = beamTireMarkPos;
             }
 
             if (this->actionState != MAJORAS_MASK_BEAM_STATE_END) {
@@ -6055,15 +6055,15 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             DECR(this->fireTimer);
             DECR(this->beamDamageTimer);
 
-            this->beamOn = false;
+            this->beamTireMarkEnabled = false;
 
             this->actionFunc(this, play);
 
-            if (!this->beamOn && this->beamOnLastFrame) {
+            if (!this->beamTireMarkEnabled && this->prevBeamTireMarkEnabled) {
                 func_800AEF44(Effect_GetByIndex(this->effectIndex));
             }
 
-            this->beamOnLastFrame = this->beamOn;
+            this->prevBeamTireMarkEnabled = this->beamTireMarkEnabled;
 
             if (this->actionFunc != Boss07_Mask_IntroCutscene) {
                 if (this->actionFunc != Boss07_Mask_Damaged) {
