@@ -373,6 +373,8 @@ venv:
 	$(PYTHON) -m pip install -U -r requirements.txt
 
 ## Extraction step
+
+# TODO this is a temporary rule for testing audio, to be removed
 setup-audio:
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
@@ -381,7 +383,7 @@ setup:
 	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
-	$(MAKE) setup-audio
+	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 assets:
 	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
