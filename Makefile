@@ -160,7 +160,7 @@ SCHC        := $(PYTHON) tools/buildtools/schc.py
 SCHC_FLAGS  :=
 
 # Audio tools
-AUDIO_EXTRACT := $(PYTHON) tools/audio/extraction/audio_extract.py
+AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 
 # Command to replace path variables in the spec file. We can't use the C
 # preprocessor for this because it won't substitute inside string literals.
@@ -373,12 +373,15 @@ venv:
 	$(PYTHON) -m pip install -U -r requirements.txt
 
 ## Extraction step
+setup-audio:
+	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+
 setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
-	$(AUDIO_EXTRACT) -r $(BASEROM_DIR)/baserom-decompressed.z64 -v mm-$(VERSION) --read-xml
+	$(MAKE) setup-audio
 
 assets:
 	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
