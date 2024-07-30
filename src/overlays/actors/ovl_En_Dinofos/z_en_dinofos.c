@@ -892,8 +892,7 @@ void EnDinofos_SetupJumpSlash(EnDinofos* this) {
 }
 
 /**
- * The Dinolfos will always swing
- * its knife when it begins falling from jumping over the player.
+ * The Dinolfos will always swing its knife when it begins falling from jumping over the player.
  */
 void EnDinofos_JumpSlash(EnDinofos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
