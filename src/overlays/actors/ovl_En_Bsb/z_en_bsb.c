@@ -11,6 +11,7 @@
 
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -884,7 +885,6 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
     f32 dx;
     f32 dy;
     f32 dz;
-    s16 yaw;
 
     hitPos.x = this->collider.elements[1].info.bumper.hitPos.x;
     hitPos.y = this->collider.elements[1].info.bumper.hitPos.y;
@@ -901,7 +901,7 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
          (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) < 0x2000) &&
          (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) > -0x2000))) {
         this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-        EffectSsHitmark_SpawnFixedScale(play, 3, &hitPos);
+        EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         func_80C0CF4C(this);
     } else if (curFrame >= this->animEndFrame) {
