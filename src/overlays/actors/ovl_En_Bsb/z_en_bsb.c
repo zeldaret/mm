@@ -478,8 +478,8 @@ void func_80C0BA58(EnBsb* this, PlayState* play) {
 }
 
 s32 func_80C0BC30(EnBsb* this) {
-    if (this->actor.world.pos.z < -2180.0f && this->actor.world.pos.z > -2470.0f &&
-        fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 30.0f) {
+    if ((this->actor.world.pos.z < -2180.0f) && (this->actor.world.pos.z > -2470.0f) &&
+        (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 30.0f)) {
         Vec3s sp38 = { 0x2EE0, -0x2710, 0xB5C8 };
         Vec3s sp30 = { -0x2710, 0x2710, -0x2710 };
 
@@ -524,9 +524,9 @@ void func_80C0BE1C(EnBsb* this, PlayState* play) {
 void func_80C0BF2C(EnBsb* this) {
     s32 i;
 
-    this->collider.elements->dim.modelSphere.radius = 110;
-    this->collider.elements->dim.modelSphere.center.x = 300;
-    this->collider.elements->dim.modelSphere.center.y = 400;
+    this->collider.elements[0].dim.modelSphere.radius = 110;
+    this->collider.elements[0].dim.modelSphere.center.x = 300;
+    this->collider.elements[0].dim.modelSphere.center.y = 400;
     this->collider.base.colType = COLTYPE_HARD;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -566,9 +566,9 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
 
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->unk_02A4 = 0;
-    this->collider.elements->dim.modelSphere.radius = 40;
-    this->collider.elements->dim.modelSphere.center.x = 1000;
-    this->collider.elements->dim.modelSphere.center.y = 400;
+    this->collider.elements[0].dim.modelSphere.radius = 40;
+    this->collider.elements[0].dim.modelSphere.center.x = 1000;
+    this->collider.elements[0].dim.modelSphere.center.y = 400;
     this->collider.base.colType = COLTYPE_NONE;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -737,7 +737,7 @@ void func_80C0C6A8(EnBsb* this, PlayState* play) {
 
     func_80C0B888(this, play);
 
-    if ((!this->unk_02DC || (this->unk_02DC && (this->animIndex == ENBSB_ANIM_2) && (this->animEndFrame <= curFrame) &&
+    if ((!this->unk_02DC || (this->unk_02DC && (this->animIndex == ENBSB_ANIM_2) && (curFrame >= this->animEndFrame) &&
                              (this->unk_0294 == 0))) &&
         ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
@@ -748,7 +748,7 @@ void func_80C0C6A8(EnBsb* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    if ((this->animIndex == ENBSB_ANIM_2) && (this->animEndFrame <= curFrame) && (this->unk_0294 == 0)) {
+    if ((this->animIndex == ENBSB_ANIM_2) && (curFrame >= this->animEndFrame) && (this->unk_0294 == 0)) {
         if (!this->unk_02DC) {
             EnBsb_ChangeAnim(this, ENBSB_ANIM_3);
         } else {
@@ -760,7 +760,7 @@ void func_80C0C6A8(EnBsb* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_KTIA_PAUSE_K);
         }
 
-        if (this->animEndFrame <= curFrame) {
+        if (curFrame >= this->animEndFrame) {
             this->unk_02A4++;
             if (this->unk_02A4 >= 2) {
                 func_80C0C430(this);
@@ -840,7 +840,7 @@ void func_80C0CB3C(EnBsb* this, PlayState* play) {
         func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 5.0f, 16);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 10, 8.0f,
                                  2000, 100, true);
         Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
@@ -898,12 +898,13 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
 
     if ((this->collider.base.atFlags & AT_BOUNCED) ||
         ((player->stateFlags1 & PLAYER_STATE1_400000) && (dist <= 70.0f) &&
-         (yaw = (player->actor.shape.rot.y - this->actor.shape.rot.y) + 0x8000, (yaw < 0x2000)) && (yaw > -0x2000))) {
+         (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) < 0x2000) &&
+         (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) > -0x2000))) {
         this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
         EffectSsHitmark_SpawnFixedScale(play, 3, &hitPos);
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         func_80C0CF4C(this);
-    } else if (this->animEndFrame <= curFrame) {
+    } else if (curFrame >= this->animEndFrame) {
         func_80C0C86C(this);
     }
 }
@@ -964,7 +965,7 @@ void func_80C0D10C(EnBsb* this, PlayState* play) {
     func_80C0B31C(play, this, &this->unk_0304);
     func_80C0B31C(play, this, &this->unk_02F8);
 
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if ((this->actor.world.pos.z > -1300.0f) || (this->actor.colChkInfo.health < 10)) {
             func_80C0CA28(this, play);
         } else {
@@ -988,8 +989,8 @@ void func_80C0D27C(EnBsb* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     }
 
-    if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX ||
-         this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+    if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
+         (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
         (this->drawDmgEffTimer != 0)) {
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENBSB_BODYPART_MAX, 2,
                               this->drawDmgEffFrozenSteamScale, 0.4f);
@@ -1013,7 +1014,7 @@ void func_80C0D334(EnBsb* this) {
 void func_80C0D384(EnBsb* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         func_80C0C86C(this);
     }
 }
@@ -1091,7 +1092,7 @@ void func_80C0D51C(EnBsb* this, PlayState* play) {
         Math_SmoothStepToS(&this->unk_02AC, 0x1000, 1, 0x1F4, 0);
         yaw = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
-        if (this->actor.velocity.y < -5.0f && yaw < 0x1000) {
+        if ((this->actor.velocity.y < -5.0f) && (yaw < 0x1000)) {
             this->unk_02A8 = 1;
         }
     } else {
@@ -1227,7 +1228,7 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_02EC), 1,
                                0x7D0, 0);
 
-            if (this->animEndFrame <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 this->unk_111C++;
                 if (this->unk_111C >= 3) {
                     EnBsb_ChangeAnim(this, ENBSB_ANIM_1);
@@ -1586,7 +1587,6 @@ s32 func_80C0E9CC(EnBsb* this, PlayState* play) {
 void EnBsb_Update(Actor* thisx, PlayState* play) {
     EnBsb* this = THIS;
     s32 pad;
-    f32 curFrame;
 
     DECR(this->unk_0292);
 
@@ -1610,7 +1610,7 @@ void EnBsb_Update(Actor* thisx, PlayState* play) {
             this->actor.focus.pos.y = this->unk_02E0.y;
             this->actor.focus.pos.z = (Math_CosS(this->actor.world.rot.y) * 20.0f) + this->unk_02E0.z;
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.world.pos.z < -1300.0f) {
                     this->actor.world.pos.z += this->unk_0298.z;
                 }
@@ -1619,14 +1619,15 @@ void EnBsb_Update(Actor* thisx, PlayState* play) {
                 Math_ApproachZeroF(&this->unk_0298.z, 1.0f, 2.0f);
             }
         } else {
-            curFrame = this->skelAnime.curFrame;
-            if ((this->animIndex == ENBSB_ANIM_14) && (this->animEndFrame <= curFrame)) {
+            f32 curFrame = this->skelAnime.curFrame;
+
+            if ((this->animIndex == ENBSB_ANIM_14) && (curFrame >= this->animEndFrame)) {
                 EnBsb_ChangeAnim(this, ENBSB_ANIM_15);
             }
-            if ((this->animIndex == ENBSB_ANIM_16) && (this->animEndFrame <= curFrame)) {
+            if ((this->animIndex == ENBSB_ANIM_16) && (curFrame >= this->animEndFrame)) {
                 EnBsb_ChangeAnim(this, ENBSB_ANIM_17);
             }
-            if ((this->animIndex == ENBSB_ANIM_18) && (this->animEndFrame <= curFrame)) {
+            if ((this->animIndex == ENBSB_ANIM_18) && (curFrame >= this->animEndFrame)) {
                 EnBsb_ChangeAnim(this, ENBSB_ANIM_19);
             }
         }
