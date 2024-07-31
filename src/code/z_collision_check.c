@@ -1,5 +1,7 @@
 #include "z64collision_check.h"
 
+#include "stdbool.h"
+
 #include "macros.h"
 #include "sfx.h"
 #include "sys_matrix.h"
@@ -1141,43 +1143,43 @@ s32 Collider_ResetLineOC(struct PlayState* play, OcLine* line) {
  * Initializes CollisionCheckContext.
  * Clears all collider arrays, disables SAC, and sets flags for drawing colliders.
  */
-void CollisionCheck_InitContext(struct PlayState* play, CollisionCheckContext* colCtxt) {
-    colCtxt->sacFlags = 0;
-    CollisionCheck_ClearContext(play, colCtxt);
+void CollisionCheck_InitContext(struct PlayState* play, CollisionCheckContext* colChkCtx) {
+    colChkCtx->sacFlags = 0;
+    CollisionCheck_ClearContext(play, colChkCtx);
 }
 
-void CollisionCheck_DestroyContext(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_DestroyContext(struct PlayState* play, CollisionCheckContext* colChkCtx) {
 }
 
 /**
  * Clears all collider lists in CollisionCheckContext when not in SAC mode.
  */
-void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** col;
     OcLine** line;
 
-    if (colCtxt->sacFlags & SAC_ON) {
+    if (colChkCtx->sacFlags & SAC_ON) {
         return;
     }
 
-    colCtxt->colATCount = 0;
-    colCtxt->colACCount = 0;
-    colCtxt->colOCCount = 0;
-    colCtxt->colLineCount = 0;
+    colChkCtx->colATCount = 0;
+    colChkCtx->colACCount = 0;
+    colChkCtx->colOCCount = 0;
+    colChkCtx->colLineCount = 0;
 
-    for (col = &colCtxt->colAT[0]; col < &colCtxt->colAT[ARRAY_COUNT(colCtxt->colAT)]; col++) {
+    for (col = &colChkCtx->colAT[0]; col < &colChkCtx->colAT[ARRAY_COUNT(colChkCtx->colAT)]; col++) {
         *col = NULL;
     }
 
-    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[ARRAY_COUNT(colCtxt->colAC)]; col++) {
+    for (col = &colChkCtx->colAC[0]; col < &colChkCtx->colAC[ARRAY_COUNT(colChkCtx->colAC)]; col++) {
         *col = NULL;
     }
 
-    for (col = &colCtxt->colOC[0]; col < &colCtxt->colOC[ARRAY_COUNT(colCtxt->colOC)]; col++) {
+    for (col = &colChkCtx->colOC[0]; col < &colChkCtx->colOC[ARRAY_COUNT(colChkCtx->colOC)]; col++) {
         *col = NULL;
     }
 
-    for (line = &colCtxt->colLine[0]; line < &colCtxt->colLine[ARRAY_COUNT(colCtxt->colLine)]; line++) {
+    for (line = &colChkCtx->colLine[0]; line < &colChkCtx->colLine[ARRAY_COUNT(colChkCtx->colLine)]; line++) {
         *line = NULL;
     }
 }
@@ -1185,26 +1187,29 @@ void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* 
 /**
  * Enables SAC, an alternate collision check mode that allows direct management of collider lists.
  */
-void CollisionCheck_EnableSAC(struct PlayState* play, CollisionCheckContext* colCtxt) {
-    colCtxt->sacFlags |= SAC_ON;
+void CollisionCheck_EnableSAC(struct PlayState* play, CollisionCheckContext* colChkCtx) {
+    colChkCtx->sacFlags |= SAC_ON;
 }
 
 /**
  * Disables SAC, an alternate collision check mode that allows direct management of collider lists.
  */
-void CollisionCheck_DisableSAC(struct PlayState* play, CollisionCheckContext* colCtxt) {
-    colCtxt->sacFlags &= ~SAC_ON;
+void CollisionCheck_DisableSAC(struct PlayState* play, CollisionCheckContext* colChkCtx) {
+    colChkCtx->sacFlags &= ~SAC_ON;
 }
 
-ColChkResetFunc sATResetFuncs[] = {
-    Collider_ResetJntSphAT, Collider_ResetCylinderAT, Collider_ResetTrisAT,
-    Collider_ResetQuadAT,   Collider_ResetSphereAT,
+ColChkResetFunc sATResetFuncs[COLSHAPE_MAX] = {
+    Collider_ResetJntSphAT,   // COLSHAPE_JNTSPH
+    Collider_ResetCylinderAT, // COLSHAPE_CYLINDER
+    Collider_ResetTrisAT,     // COLSHAPE_TRIS
+    Collider_ResetQuadAT,     // COLSHAPE_QUAD
+    Collider_ResetSphereAT,   // COLSHAPE_SPHERE
 };
 
 /**
  * Sets collider as an AT (attack) for the current frame, which will be checked against ACs (attack colliders)
  */
-s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     s32 index;
 
     if (FrameAdvance_IsEnabled(play)) {
@@ -1215,14 +1220,14 @@ s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colCtxt,
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->colATCount >= ARRAY_COUNT(colCtxt->colAT)) {
+    if (colChkCtx->colATCount >= ARRAY_COUNT(colChkCtx->colAT)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
+    if (colChkCtx->sacFlags & SAC_ON) {
         return -1;
     }
-    index = colCtxt->colATCount;
-    colCtxt->colAT[colCtxt->colATCount++] = collider;
+    index = colChkCtx->colATCount;
+    colChkCtx->colAT[colChkCtx->colATCount++] = collider;
 
     return index;
 }
@@ -1232,7 +1237,7 @@ s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colCtxt,
  * If CollisionCheck_SAC is enabled, the collider will be inserted into the list at the specified index, otherwise it
  * will be inserted into the next slot.
  */
-s32 CollisionCheck_SetAT_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
+s32 CollisionCheck_SetAT_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, s32 index) {
     if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
@@ -1241,30 +1246,33 @@ s32 CollisionCheck_SetAT_SAC(struct PlayState* play, CollisionCheckContext* colC
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
-        if (index >= colCtxt->colATCount) {
+    if (colChkCtx->sacFlags & SAC_ON) {
+        if (index >= colChkCtx->colATCount) {
             return -1;
         }
-        colCtxt->colAT[index] = collider;
+        colChkCtx->colAT[index] = collider;
     } else {
-        if (colCtxt->colATCount >= ARRAY_COUNT(colCtxt->colAT)) {
+        if (colChkCtx->colATCount >= ARRAY_COUNT(colChkCtx->colAT)) {
             return -1;
         }
-        index = colCtxt->colATCount;
-        colCtxt->colAT[colCtxt->colATCount++] = collider;
+        index = colChkCtx->colATCount;
+        colChkCtx->colAT[colChkCtx->colATCount++] = collider;
     }
     return index;
 }
 
-ColChkResetFunc sACResetFuncs[] = {
-    Collider_ResetJntSphAC, Collider_ResetCylinderAC, Collider_ResetTrisAC,
-    Collider_ResetQuadAC,   Collider_ResetSphereAC,
+ColChkResetFunc sACResetFuncs[COLSHAPE_MAX] = {
+    Collider_ResetJntSphAC,   // COLSHAPE_JNTSPH
+    Collider_ResetCylinderAC, // COLSHAPE_CYLINDER
+    Collider_ResetTrisAC,     // COLSHAPE_TRIS
+    Collider_ResetQuadAC,     // COLSHAPE_QUAD
+    Collider_ResetSphereAC,   // COLSHAPE_SPHERE
 };
 
 /**
  * Sets collider as an AC (attack collider) for the current frame, allowing it to detect ATs (attacks)
  */
-s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     s32 index;
 
     if (FrameAdvance_IsEnabled(play)) {
@@ -1275,14 +1283,14 @@ s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colCtxt,
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->colACCount >= ARRAY_COUNT(colCtxt->colAC)) {
+    if (colChkCtx->colACCount >= ARRAY_COUNT(colChkCtx->colAC)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
+    if (colChkCtx->sacFlags & SAC_ON) {
         return -1;
     }
-    index = colCtxt->colACCount;
-    colCtxt->colAC[colCtxt->colACCount++] = collider;
+    index = colChkCtx->colACCount;
+    colChkCtx->colAC[colChkCtx->colACCount++] = collider;
 
     return index;
 }
@@ -1292,7 +1300,7 @@ s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colCtxt,
  * If CollisionCheck_SAC is enabled, the collider will be inserted into the list at the specified index, otherwise it
  * will be inserted into the next slot
  */
-s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
+s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, s32 index) {
     if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
@@ -1301,24 +1309,27 @@ s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colC
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
-        if (index >= colCtxt->colACCount) {
+    if (colChkCtx->sacFlags & SAC_ON) {
+        if (index >= colChkCtx->colACCount) {
             return -1;
         }
-        colCtxt->colAC[index] = collider;
+        colChkCtx->colAC[index] = collider;
     } else {
-        if (colCtxt->colACCount >= ARRAY_COUNT(colCtxt->colAC)) {
+        if (colChkCtx->colACCount >= ARRAY_COUNT(colChkCtx->colAC)) {
             return -1;
         }
-        index = colCtxt->colACCount;
-        colCtxt->colAC[colCtxt->colACCount++] = collider;
+        index = colChkCtx->colACCount;
+        colChkCtx->colAC[colChkCtx->colACCount++] = collider;
     }
     return index;
 }
 
-ColChkResetFunc sOCResetFuncs[] = {
-    Collider_ResetJntSphOC, Collider_ResetCylinderOC, Collider_ResetTrisOC,
-    Collider_ResetQuadOC,   Collider_ResetSphereOC,
+static ColChkResetFunc sOCResetFuncs[COLSHAPE_MAX] = {
+    Collider_ResetJntSphOC,   // COLSHAPE_JNTSPH
+    Collider_ResetCylinderOC, // COLSHAPE_CYLINDER
+    Collider_ResetTrisOC,     // COLSHAPE_TRIS
+    Collider_ResetQuadOC,     // COLSHAPE_QUAD
+    Collider_ResetSphereOC,   // COLSHAPE_SPHERE
 };
 
 TriNorm D_801EE6C8;
@@ -1327,7 +1338,7 @@ TriNorm D_801EE700;
 /**
  * Sets collider as an OC (object collider) for the current frame, allowing it to detect other OCs.
  */
-s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     s32 index;
 
     if (FrameAdvance_IsEnabled(play)) {
@@ -1338,14 +1349,14 @@ s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colCtxt,
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->colOCCount >= ARRAY_COUNT(colCtxt->colOC)) {
+    if (colChkCtx->colOCCount >= ARRAY_COUNT(colChkCtx->colOC)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
+    if (colChkCtx->sacFlags & SAC_ON) {
         return -1;
     }
-    index = colCtxt->colOCCount;
-    colCtxt->colOC[colCtxt->colOCCount++] = collider;
+    index = colChkCtx->colOCCount;
+    colChkCtx->colOC[colChkCtx->colOCCount++] = collider;
 
     return index;
 }
@@ -1355,7 +1366,7 @@ s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colCtxt,
  * If CollisionCheck_SAC is enabled, the collider will be inserted into the list at the specified index, otherwise it
  * will be inserted into the next slot.
  */
-s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
+s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, s32 index) {
     if (FrameAdvance_IsEnabled(play)) {
         return -1;
     }
@@ -1364,20 +1375,20 @@ s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colC
     if ((collider->actor != NULL) && (collider->actor->update == NULL)) {
         return -1;
     }
-    if (colCtxt->sacFlags & SAC_ON) {
-        if (index >= colCtxt->colOCCount) {
+    if (colChkCtx->sacFlags & SAC_ON) {
+        if (index >= colChkCtx->colOCCount) {
             return -1;
         }
         //! @bug should be colOC
-        colCtxt->colAT[index] = collider;
+        colChkCtx->colAT[index] = collider;
     } else {
-        if (colCtxt->colOCCount >= ARRAY_COUNT(colCtxt->colOC)) {
+        if (colChkCtx->colOCCount >= ARRAY_COUNT(colChkCtx->colOC)) {
             return -1;
         }
-        index = colCtxt->colOCCount;
+        index = colChkCtx->colOCCount;
 
-        colCtxt->colOC[colCtxt->colOCCount] = collider;
-        colCtxt->colOCCount++;
+        colChkCtx->colOC[colChkCtx->colOCCount] = collider;
+        colChkCtx->colOCCount++;
     }
     return index;
 }
@@ -1385,7 +1396,7 @@ s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colC
 /**
  * Sets a line as an OC collider for this frame.
  */
-s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colCtxt, OcLine* line) {
+s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colChkCtx, OcLine* line) {
     s32 index;
 
     if (FrameAdvance_IsEnabled(play)) {
@@ -1394,11 +1405,11 @@ s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colC
 
     Collider_ResetLineOC(play, line);
 
-    if (colCtxt->colLineCount >= ARRAY_COUNT(colCtxt->colLine)) {
+    if (colChkCtx->colLineCount >= ARRAY_COUNT(colChkCtx->colLine)) {
         return -1;
     }
-    index = colCtxt->colLineCount;
-    colCtxt->colLine[colCtxt->colLineCount++] = line;
+    index = colChkCtx->colLineCount;
+    colChkCtx->colLine[colChkCtx->colLineCount++] = line;
 
     return index;
 }
@@ -1428,9 +1439,9 @@ s32 CollisionCheck_SkipBump(ColliderInfo* info) {
  */
 s32 CollisionCheck_NoSharedFlags(ColliderInfo* toucher, ColliderInfo* bumper) {
     if (!(toucher->toucher.dmgFlags & bumper->bumper.dmgFlags)) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 /**
@@ -1768,7 +1779,7 @@ TriNorm D_801EF638;
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                       Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderJntSphElement* atElem;
@@ -1792,7 +1803,7 @@ void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckCont
                 }
 
                 if (Math3D_SphVsSphOverlapCenterDist(&atElem->dim.worldSphere, &acElem->dim.worldSphere, &overlapSize,
-                                                     &centerDist) != 0) {
+                                                     &centerDist)) {
                     f32 acToHit;
                     Vec3f hitPos;
                     Vec3f atPos;
@@ -1824,7 +1835,7 @@ void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckCont
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                    Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderJntSphElement* atElem;
@@ -1873,7 +1884,7 @@ void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderJntSphElement* atElem;
@@ -1893,7 +1904,7 @@ void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContex
                 if (CollisionCheck_NoSharedFlags(&atElem->info, &acElem->info)) {
                     continue;
                 }
-                if (Math3D_TriVsSphIntersect(&atElem->dim.worldSphere, &acElem->dim, &hitPos) != 0) {
+                if (Math3D_TriVsSphIntersect(&atElem->dim.worldSphere, &acElem->dim, &hitPos)) {
                     Vec3f atPos;
                     Vec3f acPos;
 
@@ -1911,7 +1922,7 @@ void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
@@ -1932,8 +1943,8 @@ void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContex
             if (CollisionCheck_NoSharedFlags(&sphElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_TriVsSphIntersect(&sphElem->dim.worldSphere, &D_801EF590, &hitPos) != 0 ||
-                Math3D_TriVsSphIntersect(&sphElem->dim.worldSphere, &D_801EF5C8, &hitPos) != 0) {
+            if (Math3D_TriVsSphIntersect(&sphElem->dim.worldSphere, &D_801EF590, &hitPos) ||
+                Math3D_TriVsSphIntersect(&sphElem->dim.worldSphere, &D_801EF5C8, &hitPos)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -1950,7 +1961,7 @@ void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                       Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderSphere* ac = (ColliderSphere*)colAC;
@@ -1970,7 +1981,7 @@ void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
                 continue;
             }
             if (Math3D_SphVsSphOverlapCenterDist(&sphElem->dim.worldSphere, &ac->dim.worldSphere, &overlapSize,
-                                                 &centerDist) != 0) {
+                                                 &centerDist)) {
                 f32 acToHit;
                 Vec3f hitPos;
                 Vec3f atPos;
@@ -1996,7 +2007,7 @@ void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                    Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderJntSph* ac = (ColliderJntSph*)colAC;
@@ -2015,7 +2026,7 @@ void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext
             if (CollisionCheck_NoSharedFlags(&at->info, &sphElem->info)) {
                 continue;
             }
-            if (Math3D_SphVsCylOverlapCenterDist(&sphElem->dim.worldSphere, &at->dim, &overlapSize, &centerDist) != 0) {
+            if (Math3D_SphVsCylOverlapCenterDist(&sphElem->dim.worldSphere, &at->dim, &overlapSize, &centerDist)) {
                 Vec3f hitPos;
                 Vec3f atPos;
                 Vec3f acPos;
@@ -2048,7 +2059,7 @@ void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                 Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
@@ -2066,7 +2077,7 @@ void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* c
             return;
         }
 
-        if (Math3D_CylVsCylOverlapCenterDist(&at->dim, &ac->dim, &overlapSize, &centerDist) != 0) {
+        if (Math3D_CylVsCylOverlapCenterDist(&at->dim, &ac->dim, &overlapSize, &centerDist)) {
             Vec3f hitPos;
             Vec3f atPos;
             Vec3f acPos;
@@ -2101,7 +2112,7 @@ void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* c
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                  Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
@@ -2121,7 +2132,7 @@ void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* 
                 continue;
             }
 
-            if (Math3D_CylTriVsIntersect(&at->dim, &acElem->dim, &hitPos) != 0) {
+            if (Math3D_CylTriVsIntersect(&at->dim, &acElem->dim, &hitPos)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2137,7 +2148,7 @@ void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                  Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
@@ -2155,14 +2166,14 @@ void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* 
         Math3D_TriNorm(&D_801EF600, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
         Math3D_TriNorm(&D_801EF638, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-        if (Math3D_CylTriVsIntersect(&at->dim, &D_801EF600, &D_801EDE00) != 0) {
+        if (Math3D_CylTriVsIntersect(&at->dim, &D_801EF600, &D_801EDE00)) {
             Vec3f atPos;
             Vec3f acPos;
 
             Math_Vec3s_ToVec3f(&atPos, &at->dim.pos);
             CollisionCheck_QuadAvgPoint(ac, &acPos);
             CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EDE00);
-        } else if (Math3D_CylTriVsIntersect(&at->dim, &D_801EF638, &D_801EDE00) != 0) {
+        } else if (Math3D_CylTriVsIntersect(&at->dim, &D_801EF638, &D_801EDE00)) {
             Vec3f atPos;
             Vec3f acPos;
 
@@ -2176,7 +2187,7 @@ void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                    Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderSphere* ac = (ColliderSphere*)colAC;
@@ -2194,7 +2205,7 @@ void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext
             return;
         }
 
-        if (Math3D_SphVsCylOverlapCenterDist(&ac->dim.worldSphere, &at->dim, &overlapSize, &centerDist) != 0) {
+        if (Math3D_SphVsCylOverlapCenterDist(&ac->dim.worldSphere, &at->dim, &overlapSize, &centerDist)) {
             Vec3f hitPos;
             Vec3f atPos;
             Vec3f acPos;
@@ -2223,7 +2234,7 @@ void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderJntSphElement* acElem;
@@ -2264,7 +2275,7 @@ void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                  Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
@@ -2281,7 +2292,7 @@ void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* 
             if (CollisionCheck_NoSharedFlags(&atElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_CylTriVsIntersect(&ac->dim, &atElem->dim, &D_801EDE10) != 0) {
+            if (Math3D_CylTriVsIntersect(&ac->dim, &atElem->dim, &D_801EDE10)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2298,7 +2309,7 @@ void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                   Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderTrisElement* atElem;
@@ -2317,7 +2328,7 @@ void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext*
                 if (CollisionCheck_NoSharedFlags(&atElem->info, &acElem->info)) {
                     continue;
                 }
-                if (Math3D_TriVsTriIntersect(&atElem->dim, &acElem->dim, &D_801EDE20) != 0) {
+                if (Math3D_TriVsTriIntersect(&atElem->dim, &acElem->dim, &D_801EDE20)) {
                     Vec3f atPos;
                     Vec3f acPos;
 
@@ -2335,7 +2346,7 @@ void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext*
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                   Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
@@ -2356,8 +2367,8 @@ void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext*
             if (CollisionCheck_NoSharedFlags(&atElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_TriVsTriIntersect(&D_801EDE40, &atElem->dim, &D_801EDE30) != 0 ||
-                Math3D_TriVsTriIntersect(&D_801EDE78, &atElem->dim, &D_801EDE30) != 0) {
+            if (Math3D_TriVsTriIntersect(&D_801EDE40, &atElem->dim, &D_801EDE30) ||
+                Math3D_TriVsTriIntersect(&D_801EDE78, &atElem->dim, &D_801EDE30)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2374,7 +2385,7 @@ void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext*
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderTrisElement* atElem;
@@ -2392,7 +2403,7 @@ void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContex
             if (CollisionCheck_NoSharedFlags(&atElem->info, &ac->info)) {
                 continue;
             }
-            if (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &atElem->dim, &hitPos) != 0) {
+            if (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &atElem->dim, &hitPos)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2407,7 +2418,7 @@ void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderJntSphElement* acElem;
     Vec3f hitPos;
@@ -2428,8 +2439,8 @@ void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContex
             if (CollisionCheck_NoSharedFlags(&at->info, &acElem->info)) {
                 continue;
             }
-            if (Math3D_TriVsSphIntersect(&acElem->dim.worldSphere, &D_801EDEC8, &hitPos) != 0 ||
-                Math3D_TriVsSphIntersect(&acElem->dim.worldSphere, &D_801EDF00, &hitPos) != 0) {
+            if (Math3D_TriVsSphIntersect(&acElem->dim.worldSphere, &D_801EDEC8, &hitPos) ||
+                Math3D_TriVsSphIntersect(&acElem->dim.worldSphere, &D_801EDF00, &hitPos)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2451,7 +2462,7 @@ void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                  Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
@@ -2470,7 +2481,7 @@ void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* 
         Math3D_TriNorm(&D_801EDF58, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
         Math3D_TriNorm(&D_801EDF90, &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
 
-        if (Math3D_CylTriVsIntersect(&ac->dim, &D_801EDF58, &D_801EDFE0) != 0) {
+        if (Math3D_CylTriVsIntersect(&ac->dim, &D_801EDF58, &D_801EDFE0)) {
             if (Collider_QuadSetNearestAC(play, at, &D_801EDFE0)) {
                 Vec3f atPos;
                 Vec3f acPos;
@@ -2481,7 +2492,7 @@ void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* 
                 return;
             }
         }
-        if (Math3D_CylTriVsIntersect(&ac->dim, &D_801EDF90, &D_801EDFE0) != 0) {
+        if (Math3D_CylTriVsIntersect(&ac->dim, &D_801EDF90, &D_801EDFE0)) {
             if (Collider_QuadSetNearestAC(play, at, &D_801EDFE0)) {
                 Vec3f atPos;
                 Vec3f acPos;
@@ -2497,7 +2508,7 @@ void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                   Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
@@ -2519,8 +2530,8 @@ void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext*
                 continue;
             }
 
-            if ((Math3D_TriVsTriIntersect(&D_801EE000, &acElem->dim, &D_801EDFF0) != 0) ||
-                (Math3D_TriVsTriIntersect(&D_801EE038, &acElem->dim, &D_801EDFF0) != 0)) {
+            if ((Math3D_TriVsTriIntersect(&D_801EE000, &acElem->dim, &D_801EDFF0)) ||
+                (Math3D_TriVsTriIntersect(&D_801EE038, &acElem->dim, &D_801EDFF0))) {
                 if (Collider_QuadSetNearestAC(play, at, &D_801EDFF0)) {
                     Vec3f atPos;
                     Vec3f acPos;
@@ -2539,7 +2550,7 @@ void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext*
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                   Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
@@ -2563,8 +2574,8 @@ void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext*
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
-            if (Math3D_TriVsTriIntersect(&D_801EE0E8[j], &D_801EE070[i], &D_801EE0D8) != 0 &&
-                Collider_QuadSetNearestAC(play, at, &D_801EE0D8) != 0) {
+            if (Math3D_TriVsTriIntersect(&D_801EE0E8[j], &D_801EE070[i], &D_801EE0D8) &&
+                Collider_QuadSetNearestAC(play, at, &D_801EE0D8)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
@@ -2580,7 +2591,7 @@ void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext*
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     Vec3f hitPos;
@@ -2596,8 +2607,8 @@ void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContex
     Math3D_TriNorm(&D_801EE150, &at->dim.quad[2], &at->dim.quad[3], &at->dim.quad[1]);
     Math3D_TriNorm(&D_801EE188, &at->dim.quad[2], &at->dim.quad[1], &at->dim.quad[0]);
 
-    if ((Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE150, &hitPos) != 0) ||
-        (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE188, &hitPos) != 0)) {
+    if ((Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE150, &hitPos)) ||
+        (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE188, &hitPos))) {
         if (Collider_QuadSetNearestAC(play, at, &hitPos)) {
             Vec3f atPos;
             Vec3f acPos;
@@ -2612,7 +2623,7 @@ void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                       Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     ColliderJntSph* ac = (ColliderJntSph*)colAC;
@@ -2634,7 +2645,7 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
             }
 
             if (Math3D_SphVsSphOverlapCenterDist(&at->dim.worldSphere, &acElem->dim.worldSphere, &overlapSize,
-                                                 &centerDist) != 0) {
+                                                 &centerDist)) {
                 f32 acToHit;
                 Vec3f hitPos;
                 Vec3f atPos;
@@ -2659,7 +2670,7 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                         Collider* colAC) {
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
     ColliderSphere* at = (ColliderSphere*)colAT;
@@ -2676,7 +2687,7 @@ void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckCo
         return;
     }
 
-    if (Math3D_SphVsCylOverlapCenterDist(&at->dim.worldSphere, &ac->dim, &overlapSize, &centerDist) != 0) {
+    if (Math3D_SphVsCylOverlapCenterDist(&at->dim.worldSphere, &ac->dim, &overlapSize, &centerDist)) {
         Vec3f hitPos;
         Vec3f atPos;
         Vec3f acPos;
@@ -2706,7 +2717,7 @@ void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckCo
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
@@ -2724,7 +2735,7 @@ void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContex
         if (CollisionCheck_NoSharedFlags(&at->info, &acElem->info)) {
             continue;
         }
-        if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &acElem->dim, &hitPos) != 0) {
+        if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &acElem->dim, &hitPos)) {
             Vec3f atPos;
             Vec3f acPos;
 
@@ -2739,7 +2750,7 @@ void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                     Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     Vec3f hitPos;
@@ -2755,8 +2766,8 @@ void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContex
     Math3D_TriNorm(&D_801EE6C8, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
     Math3D_TriNorm(&D_801EE700, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-    if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE6C8, &hitPos) != 0 ||
-        Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE700, &hitPos) != 0) {
+    if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE6C8, &hitPos) ||
+        Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE700, &hitPos)) {
         Vec3f atPos;
         Vec3f acPos;
 
@@ -2769,7 +2780,7 @@ void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContex
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
+void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT,
                                       Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     ColliderSphere* ac = (ColliderSphere*)colAC;
@@ -2786,7 +2797,7 @@ void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckCont
         return;
     }
 
-    if (Math3D_SphVsSphOverlapCenterDist(&at->dim.worldSphere, &ac->dim.worldSphere, &overlapSize, &centerDist) != 0) {
+    if (Math3D_SphVsSphOverlapCenterDist(&at->dim.worldSphere, &ac->dim.worldSphere, &overlapSize, &centerDist)) {
         f32 acToHit;
         Vec3f hitPos;
         Vec3f atPos;
@@ -2809,7 +2820,7 @@ void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckCont
 /**
  * Sets a ColliderJntSph's hit effects
  */
-void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderJntSph* jntSph = (ColliderJntSph*)collider;
     ColliderJntSphElement* element;
 
@@ -2830,7 +2841,7 @@ void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext
 /**
  * Sets a ColliderCylinder's hit effects
  */
-void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderCylinder* cylinder = (ColliderCylinder*)collider;
 
     if ((cylinder->info.bumperFlags & BUMP_DRAW_HITMARK) && (cylinder->info.acHitInfo != NULL) &&
@@ -2847,7 +2858,7 @@ void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* c
 /**
  * Sets a ColliderTris's hit effects
  */
-void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderTris* tris = (ColliderTris*)collider;
     ColliderTrisElement* element;
 
@@ -2868,7 +2879,7 @@ void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* 
 /**
  * Sets a ColliderQuad's hit effects
  */
-void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderQuad* quad = (ColliderQuad*)collider;
 
     if ((quad->info.bumperFlags & BUMP_DRAW_HITMARK) && (quad->info.acHitInfo != NULL) &&
@@ -2884,7 +2895,7 @@ void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* 
 /**
  * Sets a ColliderSphere's hit effects
  */
-void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderSphere* sphere = (ColliderSphere*)collider;
 
     if ((sphere->info.bumperFlags & BUMP_DRAW_HITMARK) && (sphere->info.acHitInfo != NULL) &&
@@ -2898,49 +2909,82 @@ void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext
     }
 }
 
-ColChkApplyFunc sColChkApplyFuncs[] = {
-    CollisionCheck_SetJntSphHitFX, CollisionCheck_SetCylHitFX,    CollisionCheck_SetTrisHitFX,
-    CollisionCheck_SetQuadHitFX,   CollisionCheck_SetSphereHitFX,
+ColChkApplyFunc sColChkApplyFuncs[COLSHAPE_MAX] = {
+    CollisionCheck_SetJntSphHitFX, // COLSHAPE_JNTSPH
+    CollisionCheck_SetCylHitFX,    // COLSHAPE_CYLINDER
+    CollisionCheck_SetTrisHitFX,   // COLSHAPE_TRIS
+    CollisionCheck_SetQuadHitFX,   // COLSHAPE_QUAD
+    CollisionCheck_SetSphereHitFX, // COLSHAPE_SPHERE
 };
 
 /**
  * Handles hit effects for each AC collider that had an AC collision. Spawns hitmarks and plays sound effects.
  */
-void CollisionCheck_SetHitEffects(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_SetHitEffects(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** col;
 
-    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[colCtxt->colACCount]; col++) {
+    for (col = &colChkCtx->colAC[0]; col < &colChkCtx->colAC[colChkCtx->colACCount]; col++) {
         Collider* colAC = *col;
 
         if ((colAC != NULL) && (colAC->acFlags & AC_ON)) {
             if ((colAC->actor != NULL) && (colAC->actor->update == NULL)) {
                 continue;
             }
-            sColChkApplyFuncs[colAC->shape](play, colCtxt, colAC);
+            sColChkApplyFuncs[colAC->shape](play, colChkCtx, colAC);
         }
     }
 }
 
 ColChkVsFunc sACVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX] = {
-    { CollisionCheck_AC_JntSphVsJntSph, CollisionCheck_AC_JntSphVsCyl, CollisionCheck_AC_JntSphVsTris,
-      CollisionCheck_AC_JntSphVsQuad, CollisionCheck_AC_JntSphVsSphere },
-    { CollisionCheck_AC_CylVsJntSph, CollisionCheck_AC_CylVsCyl, CollisionCheck_AC_CylVsTris,
-      CollisionCheck_AC_CylVsQuad, CollisionCheck_AC_CylVsSphere },
-    { CollisionCheck_AC_TrisVsJntSph, CollisionCheck_AC_TrisVsCyl, CollisionCheck_AC_TrisVsTris,
-      CollisionCheck_AC_TrisVsQuad, CollisionCheck_AC_TrisVsSphere },
-    { CollisionCheck_AC_QuadVsJntSph, CollisionCheck_AC_QuadVsCyl, CollisionCheck_AC_QuadVsTris,
-      CollisionCheck_AC_QuadVsQuad, CollisionCheck_AC_QuadVsSphere },
-    { CollisionCheck_AC_SphereVsJntSph, CollisionCheck_AC_SphereVsCylinder, CollisionCheck_AC_SphereVsTris,
-      CollisionCheck_AC_SphereVsQuad, CollisionCheck_AC_SphereVsSphere },
+    // COLSHAPE_JNTSPH
+    {
+        CollisionCheck_AC_JntSphVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_AC_JntSphVsCyl,    // COLSHAPE_CYLINDER
+        CollisionCheck_AC_JntSphVsTris,   // COLSHAPE_TRIS
+        CollisionCheck_AC_JntSphVsQuad,   // COLSHAPE_QUAD
+        CollisionCheck_AC_JntSphVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_CYLINDER
+    {
+        CollisionCheck_AC_CylVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_AC_CylVsCyl,    // COLSHAPE_CYLINDER
+        CollisionCheck_AC_CylVsTris,   // COLSHAPE_TRIS
+        CollisionCheck_AC_CylVsQuad,   // COLSHAPE_QUAD
+        CollisionCheck_AC_CylVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_TRIS
+    {
+        CollisionCheck_AC_TrisVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_AC_TrisVsCyl,    // COLSHAPE_CYLINDER
+        CollisionCheck_AC_TrisVsTris,   // COLSHAPE_TRIS
+        CollisionCheck_AC_TrisVsQuad,   // COLSHAPE_QUAD
+        CollisionCheck_AC_TrisVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_QUAD
+    {
+        CollisionCheck_AC_QuadVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_AC_QuadVsCyl,    // COLSHAPE_CYLINDER
+        CollisionCheck_AC_QuadVsTris,   // COLSHAPE_TRIS
+        CollisionCheck_AC_QuadVsQuad,   // COLSHAPE_QUAD
+        CollisionCheck_AC_QuadVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_SPHERE
+    {
+        CollisionCheck_AC_SphereVsJntSph,   // COLSHAPE_JNTSPH
+        CollisionCheck_AC_SphereVsCylinder, // COLSHAPE_CYLINDER
+        CollisionCheck_AC_SphereVsTris,     // COLSHAPE_TRIS
+        CollisionCheck_AC_SphereVsQuad,     // COLSHAPE_QUAD
+        CollisionCheck_AC_SphereVsSphere    // COLSHAPE_SPHERE
+    },
 };
 
 /**
  * Iterates through all AC colliders, performing AC collisions with the AT collider.
  */
-void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT) {
+void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* colAT) {
     Collider** col;
 
-    for (col = &colCtxt->colAC[0]; col < &colCtxt->colAC[colCtxt->colACCount]; col++) {
+    for (col = &colChkCtx->colAC[0]; col < &colChkCtx->colAC[colChkCtx->colACCount]; col++) {
         Collider* colAC = *col;
 
         if ((colAC != NULL) && (colAC->acFlags & AC_ON)) {
@@ -2951,7 +2995,7 @@ void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colCtxt, C
                 if (!(colAT->atFlags & AT_SELF) && (colAT->actor != NULL) && (colAC->actor == colAT->actor)) {
                     continue;
                 }
-                sACVsFuncs[colAT->shape][colAC->shape](play, colCtxt, colAT, colAC);
+                sACVsFuncs[colAT->shape][colAC->shape](play, colChkCtx, colAT, colAC);
             }
         }
     }
@@ -2963,25 +3007,25 @@ void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colCtxt, C
  * successful collision. To collide, an AT collider must share a type (AC_TYPE_PLAYER, AC_TYPE_ENEMY, or AC_TYPE_OTHER)
  * with the AC collider and the toucher and bumper elements that overlapped must share a dmgFlag.
  */
-void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** col;
 
-    if ((colCtxt->colATCount == 0) || (colCtxt->colACCount == 0)) {
+    if ((colChkCtx->colATCount == 0) || (colChkCtx->colACCount == 0)) {
         return;
     }
 
-    for (col = &colCtxt->colAT[0]; col < &colCtxt->colAT[colCtxt->colATCount]; col++) {
+    for (col = &colChkCtx->colAT[0]; col < &colChkCtx->colAT[colChkCtx->colATCount]; col++) {
         Collider* colAC = *col;
 
         if ((colAC != NULL) && (colAC->atFlags & AT_ON)) {
             if ((colAC->actor != NULL) && (colAC->actor->update == NULL)) {
                 continue;
             }
-            CollisionCheck_AC(play, colCtxt, colAC);
+            CollisionCheck_AC(play, colChkCtx, colAC);
         }
     }
 
-    CollisionCheck_SetHitEffects(play, colCtxt);
+    CollisionCheck_SetHitEffects(play, colChkCtx);
 }
 
 /**
@@ -3101,7 +3145,7 @@ void CollisionCheck_SetOCvsOC(struct PlayState* play, Collider* left, ColliderIn
 /**
  * OC overlap check for two JntSphs
  */
-void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
+void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l,
                                       Collider* r) {
     ColliderJntSph* left = (ColliderJntSph*)l;
     ColliderJntSph* right = (ColliderJntSph*)r;
@@ -3120,8 +3164,7 @@ void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckCont
                 if (!(rightElem->info.ocElemFlags & OCELEM_ON)) {
                     continue;
                 }
-                if (Math3D_SphVsSphOverlap(&leftElem->dim.worldSphere, &rightElem->dim.worldSphere, &overlapSize) !=
-                    0) {
+                if (Math3D_SphVsSphOverlap(&leftElem->dim.worldSphere, &rightElem->dim.worldSphere, &overlapSize)) {
                     Vec3f leftPos;
                     Vec3f rightPos;
 
@@ -3138,7 +3181,7 @@ void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckCont
 /**
  * OC overlap check for a JntSph and Cylinder
  */
-void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
+void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l, Collider* r) {
     ColliderJntSph* left = (ColliderJntSph*)l;
     ColliderCylinder* right = (ColliderCylinder*)r;
     ColliderJntSphElement* leftElem;
@@ -3151,7 +3194,7 @@ void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext
             if (!(leftElem->info.ocElemFlags & OCELEM_ON)) {
                 continue;
             }
-            if (Math3D_SphVsCylOverlap(&leftElem->dim.worldSphere, &right->dim, &overlapSize) != 0) {
+            if (Math3D_SphVsCylOverlap(&leftElem->dim.worldSphere, &right->dim, &overlapSize)) {
                 Vec3f leftPos;
                 Vec3f rightPos;
 
@@ -3167,7 +3210,7 @@ void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext
 /**
  * OC overlap check for a JntSph and Sphere
  */
-void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
+void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l,
                                       Collider* r) {
     ColliderJntSph* left = (ColliderJntSph*)l;
     ColliderSphere* right = (ColliderSphere*)r;
@@ -3181,7 +3224,7 @@ void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
             if (!(leftElem->info.ocElemFlags & OCELEM_ON)) {
                 continue;
             }
-            if (Math3D_SphVsSphOverlap(&leftElem->dim.worldSphere, &right->dim.worldSphere, &overlapSize) != 0) {
+            if (Math3D_SphVsSphOverlap(&leftElem->dim.worldSphere, &right->dim.worldSphere, &overlapSize)) {
                 Vec3f leftPos;
                 Vec3f rightPos;
 
@@ -3197,21 +3240,21 @@ void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
 /**
  * OC overlap check for a Cylinder and JntSph
  */
-void CollisionCheck_OC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
-    CollisionCheck_OC_JntSphVsCyl(play, colCtxt, r, l);
+void CollisionCheck_OC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l, Collider* r) {
+    CollisionCheck_OC_JntSphVsCyl(play, colChkCtx, r, l);
 }
 
 /**
  * OC overlap check for two Cylinders
  */
-void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
+void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l, Collider* r) {
     ColliderCylinder* left = (ColliderCylinder*)l;
     ColliderCylinder* right = (ColliderCylinder*)r;
     f32 overlapSize;
 
     if ((left->base.ocFlags1 & OCELEM_ON) && (right->base.ocFlags1 & OCELEM_ON) &&
         (left->info.ocElemFlags & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
-        if (Math3D_CylVsCylOverlap(&left->dim, &right->dim, &overlapSize) != 0) {
+        if (Math3D_CylVsCylOverlap(&left->dim, &right->dim, &overlapSize)) {
             Vec3f leftPos;
             Vec3f rightPos;
 
@@ -3226,14 +3269,14 @@ void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* c
 /**
  * OC overlap check for a Cylinder and Sphere
  */
-void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
+void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l, Collider* r) {
     ColliderCylinder* left = (ColliderCylinder*)l;
     ColliderSphere* right = (ColliderSphere*)r;
     f32 overlapSize;
 
     if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
         (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
-        if (Math3D_SphVsCylOverlap(&right->dim.worldSphere, &left->dim, &overlapSize) != 0) {
+        if (Math3D_SphVsCylOverlap(&right->dim.worldSphere, &left->dim, &overlapSize)) {
             Vec3f leftPos;
             Vec3f rightPos;
 
@@ -3248,22 +3291,22 @@ void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext
 /**
  * OC overlap check for a Sphere and JntSph
  */
-void CollisionCheck_OC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
+void CollisionCheck_OC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l,
                                       Collider* r) {
-    CollisionCheck_OC_JntSphVsSphere(play, colCtxt, r, l);
+    CollisionCheck_OC_JntSphVsSphere(play, colChkCtx, r, l);
 }
 
 /**
  * OC overlap check for a Sphere and Cylinder
  */
-void CollisionCheck_OC_SphereVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
-    CollisionCheck_OC_CylVsSphere(play, colCtxt, r, l);
+void CollisionCheck_OC_SphereVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l, Collider* r) {
+    CollisionCheck_OC_CylVsSphere(play, colChkCtx, r, l);
 }
 
 /**
  * OC overlap check for two Spheres
  */
-void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
+void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* l,
                                       Collider* r) {
     ColliderSphere* left = (ColliderSphere*)l;
     ColliderSphere* right = (ColliderSphere*)r;
@@ -3271,7 +3314,7 @@ void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckCont
 
     if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
         (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
-        if (Math3D_SphVsSphOverlap(&left->dim.worldSphere, &right->dim.worldSphere, &overlapSize) != 0) {
+        if (Math3D_SphVsSphOverlap(&left->dim.worldSphere, &right->dim.worldSphere, &overlapSize)) {
             Vec3f leftPos;
             Vec3f rightPos;
 
@@ -3312,11 +3355,46 @@ s32 CollisionCheck_Incompatible(Collider* left, Collider* right) {
 }
 
 ColChkVsFunc sOCVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX] = {
-    { CollisionCheck_OC_JntSphVsJntSph, CollisionCheck_OC_JntSphVsCyl, NULL, NULL, CollisionCheck_OC_JntSphVsSphere },
-    { CollisionCheck_OC_CylVsJntSph, CollisionCheck_OC_CylVsCyl, NULL, NULL, CollisionCheck_OC_CylVsSphere },
-    { NULL, NULL, NULL, NULL, NULL },
-    { NULL, NULL, NULL, NULL, NULL },
-    { CollisionCheck_OC_SphereVsJntSph, CollisionCheck_OC_SphereVsCyl, NULL, NULL, CollisionCheck_OC_SphereVsSphere },
+    // COLSHAPE_JNTSPH
+    {
+        CollisionCheck_OC_JntSphVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_OC_JntSphVsCyl,    // COLSHAPE_CYLINDER
+        NULL,                             // COLSHAPE_TRIS
+        NULL,                             // COLSHAPE_QUAD
+        CollisionCheck_OC_JntSphVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_CYLINDER
+    {
+        CollisionCheck_OC_CylVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_OC_CylVsCyl,    // COLSHAPE_CYLINDER
+        NULL,                          // COLSHAPE_TRIS
+        NULL,                          // COLSHAPE_QUAD
+        CollisionCheck_OC_CylVsSphere  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_TRIS
+    {
+        NULL, // COLSHAPE_JNTSPH
+        NULL, // COLSHAPE_CYLINDER
+        NULL, // COLSHAPE_TRIS
+        NULL, // COLSHAPE_QUAD
+        NULL  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_QUAD
+    {
+        NULL, // COLSHAPE_JNTSPH
+        NULL, // COLSHAPE_CYLINDER
+        NULL, // COLSHAPE_TRIS
+        NULL, // COLSHAPE_QUAD
+        NULL  // COLSHAPE_SPHERE
+    },
+    // COLSHAPE_SPHERE
+    {
+        CollisionCheck_OC_SphereVsJntSph, // COLSHAPE_JNTSPH
+        CollisionCheck_OC_SphereVsCyl,    // COLSHAPE_CYLINDER
+        NULL,                             // COLSHAPE_TRIS
+        NULL,                             // COLSHAPE_QUAD
+        CollisionCheck_OC_SphereVsSphere  // COLSHAPE_SPHERE
+    },
 };
 
 /**
@@ -3326,16 +3404,16 @@ ColChkVsFunc sOCVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX] = {
  * colliders can collide, and each collider must have the OC flag corresponding to the other's OC type. Additionally,
  * OC2_UNK1 cannot collide with OC2_UNK2, nor can two colliders that share an actor.
  */
-void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** left;
     Collider** right;
     ColChkVsFunc vsFunc;
 
-    for (left = colCtxt->colOC; left < colCtxt->colOC + colCtxt->colOCCount; left++) {
+    for (left = colChkCtx->colOC; left < colChkCtx->colOC + colChkCtx->colOCCount; left++) {
         if ((*left == NULL) || CollisionCheck_SkipOC(*left)) {
             continue;
         }
-        for (right = left + 1; right < colCtxt->colOC + colCtxt->colOCCount; right++) {
+        for (right = left + 1; right < colChkCtx->colOC + colChkCtx->colOCCount; right++) {
             if ((*right == NULL) || CollisionCheck_SkipOC(*right) || CollisionCheck_Incompatible(*left, *right)) {
                 continue;
             }
@@ -3343,7 +3421,7 @@ void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colCtxt) {
             if (vsFunc == NULL) {
                 continue;
             }
-            vsFunc(play, colCtxt, *left, *right);
+            vsFunc(play, colChkCtx, *left, *right);
         }
     }
 }
@@ -3413,7 +3491,7 @@ void CollisionCheck_SetInfoGetDamageTable(CollisionCheckInfo* info, s32 index, C
 /**
  * Apply AC damage effect
  */
-void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider,
+void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider,
                                 ColliderInfo* info) {
     f32 damage;
     f32 finalDamage = 0.0f;
@@ -3464,13 +3542,13 @@ void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* c
 /**
  * Apply ColliderJntSph AC damage effect
  */
-void CollisionCheck_ApplyDamageJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_ApplyDamageJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderJntSph* jntSph = (ColliderJntSph*)collider;
     s32 i;
 
     if ((jntSph->count > 0) && (jntSph->elements != NULL)) {
         for (i = 0; i < jntSph->count; i++) {
-            CollisionCheck_ApplyDamage(play, colCtxt, &jntSph->base, &jntSph->elements[i].info);
+            CollisionCheck_ApplyDamage(play, colChkCtx, &jntSph->base, &jntSph->elements[i].info);
         }
     }
 }
@@ -3478,58 +3556,61 @@ void CollisionCheck_ApplyDamageJntSph(struct PlayState* play, CollisionCheckCont
 /**
  * Apply ColliderCylinder AC damage effect
  */
-void CollisionCheck_ApplyDamageCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_ApplyDamageCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderCylinder* cylinder = (ColliderCylinder*)collider;
 
-    CollisionCheck_ApplyDamage(play, colCtxt, &cylinder->base, &cylinder->info);
+    CollisionCheck_ApplyDamage(play, colChkCtx, &cylinder->base, &cylinder->info);
 }
 
 /**
  * Apply ColliderTris AC damage effect
  */
-void CollisionCheck_ApplyDamageTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_ApplyDamageTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderTris* tris = (ColliderTris*)collider;
     s32 i;
 
     // unlike sphere groups above, tri groups are not guarded against
     //  tris->elements being NULL
     for (i = 0; i < tris->count; i++) {
-        CollisionCheck_ApplyDamage(play, colCtxt, &tris->base, &tris->elements[i].info);
+        CollisionCheck_ApplyDamage(play, colChkCtx, &tris->base, &tris->elements[i].info);
     }
 }
 
 /**
  * Apply ColliderQuad AC damage effect
  */
-void CollisionCheck_ApplyDamageQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_ApplyDamageQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderQuad* quad = (ColliderQuad*)collider;
 
-    CollisionCheck_ApplyDamage(play, colCtxt, &quad->base, &quad->info);
+    CollisionCheck_ApplyDamage(play, colChkCtx, &quad->base, &quad->info);
 }
 
 /**
  * Apply ColliderSphere AC damage effect
  */
-void CollisionCheck_ApplyDamageSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider) {
+void CollisionCheck_ApplyDamageSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider) {
     ColliderSphere* sphere = (ColliderSphere*)collider;
 
-    CollisionCheck_ApplyDamage(play, colCtxt, &sphere->base, &sphere->info);
+    CollisionCheck_ApplyDamage(play, colChkCtx, &sphere->base, &sphere->info);
 }
 
-ColChkApplyFunc sApplyDamageFuncs[] = {
-    CollisionCheck_ApplyDamageJntSph, CollisionCheck_ApplyDamageCyl,    CollisionCheck_ApplyDamageTris,
-    CollisionCheck_ApplyDamageQuad,   CollisionCheck_ApplyDamageSphere,
+ColChkApplyFunc sApplyDamageFuncs[COLSHAPE_MAX] = {
+    CollisionCheck_ApplyDamageJntSph, // COLSHAPE_JNTSPH
+    CollisionCheck_ApplyDamageCyl,    // COLSHAPE_CYLINDER
+    CollisionCheck_ApplyDamageTris,   // COLSHAPE_TRIS
+    CollisionCheck_ApplyDamageQuad,   // COLSHAPE_QUAD
+    CollisionCheck_ApplyDamageSphere, // COLSHAPE_SPHERE
 };
 
 /**
  * For all AC colliders, sets any damage effects from collisions with AT colliders to their corresponding actor's
  * CollisionCheckInfo.
  */
-void CollisionCheck_Damage(struct PlayState* play, CollisionCheckContext* colCtxt) {
+void CollisionCheck_Damage(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     s32 i;
 
-    for (i = 0; i < colCtxt->colACCount; i++) {
-        Collider* col = colCtxt->colAC[i];
+    for (i = 0; i < colChkCtx->colACCount; i++) {
+        Collider* col = colChkCtx->colAC[i];
 
         if (col == NULL) {
             continue;
@@ -3537,7 +3618,7 @@ void CollisionCheck_Damage(struct PlayState* play, CollisionCheckContext* colCtx
         if (col->acFlags & AC_NO_DAMAGE) {
             continue;
         }
-        sApplyDamageFuncs[col->shape](play, colCtxt, col);
+        sApplyDamageFuncs[col->shape](play, colChkCtx, col);
     }
 }
 
@@ -3558,11 +3639,11 @@ s32 CollisionCheck_LineOC_JntSph(struct PlayState* play, CollisionCheckContext* 
 
         D_801EDEB0.a = *a;
         D_801EDEB0.b = *b;
-        if (Math3D_LineVsSph(&element->dim.worldSphere, &D_801EDEB0) != 0) {
-            return 1;
+        if (Math3D_LineVsSph(&element->dim.worldSphere, &D_801EDEB0)) {
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 /**
@@ -3573,14 +3654,14 @@ s32 CollisionCheck_LineOC_Cyl(struct PlayState* play, CollisionCheckContext* col
     ColliderCylinder* cylinder = (ColliderCylinder*)collider;
 
     if (!(cylinder->info.ocElemFlags & OCELEM_ON)) {
-        return 0;
+        return false;
     }
 
-    if (Math3D_CylVsLineSeg(&cylinder->dim, a, b, &D_801EDF38, &D_801EDF48) != 0) {
-        return 1;
+    if (Math3D_CylVsLineSeg(&cylinder->dim, a, b, &D_801EDF38, &D_801EDF48)) {
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /**
@@ -3591,20 +3672,24 @@ s32 CollisionCheck_LineOC_Sphere(struct PlayState* play, CollisionCheckContext* 
     ColliderSphere* sphere = (ColliderSphere*)collider;
 
     if (!(sphere->info.ocElemFlags & OCELEM_ON)) {
-        return 0;
+        return false;
     }
 
     D_801EDFC8.a = *a;
     D_801EDFC8.b = *b;
-    if (Math3D_LineVsSph(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
-        return 1;
+    if (Math3D_LineVsSph(&sphere->dim.worldSphere, &D_801EDFC8)) {
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-ColChkLineFunc sOCLineCheckFuncs[] = {
-    CollisionCheck_LineOC_JntSph, CollisionCheck_LineOC_Cyl, NULL, NULL, CollisionCheck_LineOC_Sphere,
+static ColChkLineFunc sOCLineCheckFuncs[COLSHAPE_MAX] = {
+    CollisionCheck_LineOC_JntSph, // COLSHAPE_JNTSPH
+    CollisionCheck_LineOC_Cyl,    // COLSHAPE_CYLINDER
+    NULL,                         // COLSHAPE_TRIS
+    NULL,                         // COLSHAPE_QUAD
+    CollisionCheck_LineOC_Sphere, // COLSHAPE_SPHERE
 };
 
 /**
@@ -3617,17 +3702,17 @@ s32 CollisionCheck_LineOC(struct PlayState* play, CollisionCheckContext* colChkC
     Collider** col;
     s32 i;
     s32 exclude;
-    s32 result = 0;
+    s32 result = false;
 
     for (col = colChkCtx->colOC; col < &colChkCtx->colOC[colChkCtx->colOCCount]; col++) {
         if (CollisionCheck_SkipOC(*col)) {
             continue;
         }
 
-        exclude = 0;
+        exclude = false;
         for (i = 0; i < numExclusions; i++) {
             if ((*col)->actor == exclusions[i]) {
-                exclude = 1;
+                exclude = true;
                 break;
             }
         }
@@ -3652,17 +3737,17 @@ s32 CollisionCheck_LineOC(struct PlayState* play, CollisionCheckContext* colChkC
  * Checks if the line segment ab intersects any OC colliders. Returns true if there are any intersections and false
  * otherwise.
  */
-s32 CollisionCheck_LineOCCheckAll(struct PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b) {
-    return CollisionCheck_LineOC(play, colCtxt, a, b, NULL, 0);
+s32 CollisionCheck_LineOCCheckAll(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b) {
+    return CollisionCheck_LineOC(play, colChkCtx, a, b, NULL, 0);
 }
 
 /**
  * Checks if the line segment ab intersects any OC colliders, excluding those attached to actors on the exclusion list.
  * Returns true if there are any intersections and false otherwise.
  */
-s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b,
+s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b,
                                Actor** exclusions, s32 numExclusions) {
-    return CollisionCheck_LineOC(play, colCtxt, a, b, exclusions, numExclusions);
+    return CollisionCheck_LineOC(play, colChkCtx, a, b, exclusions, numExclusions);
 }
 
 /**
@@ -4026,21 +4111,21 @@ s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* a
             return 0;
         }
         if ((SQ(actorDotItemXZ) - (4.0f * SQXZ(itemStep) * radSqDiff)) > zero) {
-            intersect1 = intersect2 = 1;
+            intersect1 = intersect2 = true;
         } else {
-            intersect1 = 1;
-            intersect2 = 0;
+            intersect1 = true;
+            intersect2 = false;
         }
         closeDist = sqrtf(SQ(actorDotItemXZ) - (4.0f * SQXZ(itemStep) * radSqDiff));
-        if (intersect1 != 0) {
+        if (intersect1) {
             frac1 = (closeDist - actorDotItemXZ) / (2.0f * SQXZ(itemStep));
         }
-        if (intersect2 != 0) {
+        if (intersect2) {
             frac2 = (-actorDotItemXZ - closeDist) / (2.0f * SQXZ(itemStep));
         }
     } else if (!IS_ZERO(DOTXZ(2.0f * itemStep, actorToItem))) {
-        intersect1 = 1;
-        intersect2 = 0;
+        intersect1 = true;
+        intersect2 = false;
         frac1 = -radSqDiff / DOTXZ(2.0f * itemStep, actorToItem);
     } else {
         if (radSqDiff <= 0.0f) {
@@ -4064,7 +4149,7 @@ s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* a
         return 0;
     }
 
-    if (intersect2 == 0) {
+    if (!intersect2) {
         if ((frac1 < 0.0f) || (1.0f < frac1)) {
             return 0;
         }
@@ -4076,24 +4161,24 @@ s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* a
             return 0;
         }
         if (test1) {
-            intersect1 = 0;
+            intersect1 = false;
         }
         if (test2) {
-            intersect2 = 0;
+            intersect2 = false;
         }
     }
 
-    if ((intersect1 != 0) &&
+    if (intersect1 &&
         (((frac1 * itemStep.y + actorToItem.y) < 0.0f) || (height < (frac1 * itemStep.y + actorToItem.y)))) {
-        intersect1 = 0;
+        intersect1 = false;
     }
-    if ((intersect2 != 0) &&
+    if (intersect2 &&
         (((frac2 * itemStep.y + actorToItem.y) < 0.0f) || (height < (frac2 * itemStep.y + actorToItem.y)))) {
-        intersect2 = 0;
+        intersect2 = false;
     }
-    if ((intersect1 == 0) && (intersect2 == 0)) {
+    if (!intersect1 && !intersect2) {
         return 0;
-    } else if ((intersect1 != 0) && (intersect2 != 0)) {
+    } else if (intersect1 && intersect2) {
         out1->x = frac1 * itemStep.x + actorToItem.x + actorPos->x;
         out1->y = frac1 * itemStep.y + actorToItem.y + actorPos->y;
         out1->z = frac1 * itemStep.z + actorToItem.z + actorPos->z;
@@ -4101,12 +4186,12 @@ s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* a
         out2->y = frac2 * itemStep.y + actorToItem.y + actorPos->y;
         out2->z = frac2 * itemStep.z + actorToItem.z + actorPos->z;
         return 2;
-    } else if (intersect1 != 0) {
+    } else if (intersect1) {
         out1->x = frac1 * itemStep.x + actorToItem.x + actorPos->x;
         out1->y = frac1 * itemStep.y + actorToItem.y + actorPos->y;
         out1->z = frac1 * itemStep.z + actorToItem.z + actorPos->z;
         return 1;
-    } else if (intersect2 != 0) {
+    } else if (intersect2) {
         out1->x = frac2 * itemStep.x + actorToItem.x + actorPos->x;
         out1->y = frac2 * itemStep.y + actorToItem.y + actorPos->y;
         out1->z = frac2 * itemStep.z + actorToItem.z + actorPos->z;
