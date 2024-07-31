@@ -4707,16 +4707,16 @@ u8 Actor_ApplyDamage(Actor* actor) {
     return actor->colChkInfo.health;
 }
 
-void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo) {
-    ColliderInfo* acHitInfo = colInfo->acHitInfo;
+void Actor_SetDropFlag(Actor* actor, ColliderElement* elem) {
+    ColliderElement* acHitElem = elem->acHitElem;
 
-    if (acHitInfo == NULL) {
+    if (acHitElem == NULL) {
         actor->dropFlag = DROPFLAG_NONE;
-    } else if (acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW) {
+    } else if (acHitElem->toucher.dmgFlags & DMG_FIRE_ARROW) {
         actor->dropFlag = DROPFLAG_1;
-    } else if (acHitInfo->toucher.dmgFlags & DMG_ICE_ARROW) {
+    } else if (acHitElem->toucher.dmgFlags & DMG_ICE_ARROW) {
         actor->dropFlag = DROPFLAG_2;
-    } else if (acHitInfo->toucher.dmgFlags & DMG_LIGHT_ARROW) {
+    } else if (acHitElem->toucher.dmgFlags & DMG_LIGHT_ARROW) {
         actor->dropFlag = DROPFLAG_20;
     } else {
         actor->dropFlag = DROPFLAG_NONE;
@@ -4726,19 +4726,19 @@ void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo) {
 void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
     s32 i;
     ColliderJntSphElement* jntElement;
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
     s32 flag;
 
     actor->dropFlag = DROPFLAG_NONE;
 
     for (i = jntSphere->count - 1; i >= 0; i--) {
         jntElement = &jntSphere->elements[i];
-        acHitInfo = jntElement->info.acHitInfo;
+        acHitElem = jntElement->info.acHitElem;
 
-        if (acHitInfo == NULL) {
+        if (acHitElem == NULL) {
             flag = DROPFLAG_NONE;
         } else {
-            s32 dmgFlags = acHitInfo->toucher.dmgFlags;
+            s32 dmgFlags = acHitElem->toucher.dmgFlags;
 
             if (dmgFlags & DMG_FIRE_ARROW) {
                 flag = DROPFLAG_1;
@@ -4791,7 +4791,7 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
 
 void func_800BE504(Actor* actor, ColliderCylinder* collider) {
     // Checks if was hit by either DMG_NORMAL_ARROW, DMG_FIRE_ARROW, DMG_ICE_ARROW, DMG_LIGHT_ARROW or DMG_DEKU_BUBBLE
-    if ((collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
+    if ((collider->info.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
@@ -4799,7 +4799,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider) {
 }
 
 void func_800BE568(Actor* actor, ColliderSphere* collider) {
-    if (collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+    if (collider->info.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
@@ -4807,7 +4807,7 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
 }
 
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
-    if (collider->elements[colliderIndex].info.acHitInfo->toucher.dmgFlags &
+    if (collider->elements[colliderIndex].info.acHitElem->toucher.dmgFlags &
         (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {

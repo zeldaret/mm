@@ -505,7 +505,7 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;

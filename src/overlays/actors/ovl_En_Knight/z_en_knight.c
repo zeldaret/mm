@@ -3160,15 +3160,15 @@ void EnKnight_UpdateDamageFallenOver(EnKnight* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
         ColliderJntSphElement* colliderElem = &this->bodyCollider.elements[i];
-        ColliderInfo* acHitInfo;
+        ColliderElement* acHitElem;
 
         if (colliderElem->info.bumperFlags & BUMP_HIT) {
             colliderElem->info.bumperFlags &= ~BUMP_HIT;
 
-            acHitInfo = colliderElem->info.acHitInfo;
+            acHitElem = colliderElem->info.acHitElem;
 
             this->invincibilityTimer = 10;
-            if (acHitInfo->toucher.dmgFlags & DMG_LIGHT_RAY) {
+            if (acHitElem->toucher.dmgFlags & DMG_LIGHT_RAY) {
                 this->damageFlashTimer = 15;
                 this->invincibilityTimer = 1000;
                 EnKnight_SetupDie(this, play);

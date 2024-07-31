@@ -177,7 +177,7 @@ void Actor_Noop(Actor* actor, PlayState* play);
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
 u8 Actor_ApplyDamage(Actor* actor);
-void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo);
+void Actor_SetDropFlag(Actor* actor, ColliderElement* elem);
 void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* dst, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);

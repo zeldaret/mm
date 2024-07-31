@@ -764,7 +764,7 @@ void EnKame_UpdateDamage(EnKame* this, PlayState* play) {
 
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            (this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return;
         }
 
