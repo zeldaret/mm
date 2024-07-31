@@ -204,7 +204,7 @@ ActorInit En_Bsb_InitVars = {
     /**/ EnBsb_Draw,
 };
 
-typedef enum {
+typedef enum EnBsbAnimation {
     /*  0 */ ENBSB_ANIM_0,
     /*  1 */ ENBSB_ANIM_1,
     /*  2 */ ENBSB_ANIM_2,
@@ -463,7 +463,7 @@ void func_80C0BA58(EnBsb* this, PlayState* play) {
         }
     }
 
-    if (this->actor.xzDistToPlayer < BREG(7) + 400.0f) {
+    if (this->actor.xzDistToPlayer < (BREG(7) + 400.0f)) {
         sourceIntensity = BREG(8) + 160.0f - this->actor.xzDistToPlayer * 0.3f;
 
         if (sourceIntensity > 70) {
@@ -481,7 +481,7 @@ void func_80C0BA58(EnBsb* this, PlayState* play) {
 s32 func_80C0BC30(EnBsb* this) {
     if ((this->actor.world.pos.z < -2180.0f) && (this->actor.world.pos.z > -2470.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 30.0f)) {
-        Vec3s sp38 = { 0x2EE0, -0x2710, 0xB5C8 };
+        Vec3s sp38 = { 0x2EE0, -0x2710, -0x4A38 };
         Vec3s sp30 = { -0x2710, 0x2710, -0x2710 };
 
         Math_SmoothStepToS(&this->unk_0316.x, sp38.x, 1, 0x7D0, 0);
@@ -618,7 +618,7 @@ void func_80C0C238(EnBsb* this, PlayState* play) {
             func_80C0B31C(play, this, &this->actor.world.pos);
         }
         Math_ApproachF(&this->actor.shape.shadowScale, 25.0f, 1.0f, 2.5f);
-        if (this->animEndFrame <= this->skelAnime.curFrame) {
+        if (this->skelAnime.curFrame >= this->animEndFrame) {
             func_80C0C32C(this);
         }
     }
@@ -1031,13 +1031,13 @@ void func_80C0D3C0(EnBsb* this, PlayState* play) {
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
 
-    this->subCamEye.x = this->subCamEyeNext.x = Math_SinS(this->actor.yawTowardsPlayer) * 300.0f + this->unk_02E0.x;
+    this->subCamEye.x = this->subCamEyeNext.x = this->unk_02E0.x + Math_SinS(this->actor.yawTowardsPlayer) * 300.0f;
     this->subCamEye.y = this->subCamEyeNext.y = this->unk_02E0.y - 30.0f;
-    this->subCamEye.z = this->subCamEyeNext.z = Math_CosS(this->actor.yawTowardsPlayer) * 300.0f + this->unk_02E0.z;
+    this->subCamEye.z = this->subCamEyeNext.z = this->unk_02E0.z + Math_CosS(this->actor.yawTowardsPlayer) * 300.0f;
 
-    this->subCamAt.x = this->subCamAtNext.x = Math_SinS(this->actor.yawTowardsPlayer) * 10.0f + this->unk_02E0.x;
+    this->subCamAt.x = this->subCamAtNext.x = this->unk_02E0.x + Math_SinS(this->actor.yawTowardsPlayer) * 10.0f;
     this->subCamAt.y = this->subCamAtNext.y = this->unk_02E0.y - 10.0f;
-    this->subCamAt.z = this->subCamAtNext.z = Math_CosS(this->actor.yawTowardsPlayer) * 10.0f + this->unk_02E0.z;
+    this->subCamAt.z = this->subCamAtNext.z = this->unk_02E0.z + Math_CosS(this->actor.yawTowardsPlayer) * 10.0f;
 
     this->subCamFovNext = 60.0f;
     EnBsb_ChangeAnim(this, ENBSB_ANIM_2);
@@ -1074,9 +1074,9 @@ void func_80C0D51C(EnBsb* this, PlayState* play) {
         f32 sin = Math_SinS(this->actor.world.rot.y) * 380.f;
         f32 cos = Math_CosS(this->actor.world.rot.y) * 380.f;
 
-        this->subCamEyeNext.x = sin + this->unk_02E0.x;
+        this->subCamEyeNext.x = this->unk_02E0.x + sin;
         this->subCamEyeNext.y = this->unk_02E0.y + 30.0f;
-        this->subCamEyeNext.z = cos + this->unk_02E0.z;
+        this->subCamEyeNext.z = this->unk_02E0.z + cos;
 
         this->subCamAtNext.x = Math_SinS(this->actor.world.rot.y) * 10.0f + this->unk_02E0.x;
         this->subCamAtNext.y = this->unk_02E0.y - 63.0f;
@@ -1301,6 +1301,9 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
                 Actor_Kill(&this->actor);
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -1436,7 +1439,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         var_s0 = 1;
                         break;
                     }
-
+                    // fallthrough
                 case 15:
                     var_s0 = -1;
                     break;
@@ -1474,9 +1477,9 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         (this->drawDmgEffTimer == 0)) {
                         this->drawDmgEffTimer = 80;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
-                        var_s0 = -1;
                         this->drawDmgEffScale = 0.0f;
                         this->drawDmgEffFrozenSteamScale = 1.5f;
+                        var_s0 = -1;
                     }
                     break;
 
@@ -1498,7 +1501,9 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                     } else {
                         func_80C0D214(this);
                     }
+                    break;
 
+                default:
                     break;
             }
         }
@@ -1574,6 +1579,9 @@ s32 func_80C0E9CC(EnBsb* this, PlayState* play) {
                     Flags_SetSwitch(play, this->switchFlag2);
                     Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
                     break;
+
+                default:
+                    break;
             }
         }
         this->cueId = play->csCtx.actorCues[cueChannel]->id;
@@ -1606,9 +1614,9 @@ void EnBsb_Update(Actor* thisx, PlayState* play) {
         func_80C0E618(this, play);
         if ((!func_80C0E9CC(this, play)) && (this->unk_02B4 != 14)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            this->actor.focus.pos.x = Math_SinS(this->actor.world.rot.y) * 20.0f + this->unk_02E0.x;
+            this->actor.focus.pos.x = this->unk_02E0.x + Math_SinS(this->actor.world.rot.y) * 20.0f;
             this->actor.focus.pos.y = this->unk_02E0.y;
-            this->actor.focus.pos.z = (Math_CosS(this->actor.world.rot.y) * 20.0f) + this->unk_02E0.z;
+            this->actor.focus.pos.z = this->unk_02E0.z + Math_CosS(this->actor.world.rot.y) * 20.0f;
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.world.pos.z < -1300.0f) {
