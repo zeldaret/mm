@@ -372,7 +372,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0x320);
         if (sp70 < SQ(100.0f)) {
             if ((this->actor.xzDistToPlayer < 100.0f) ||
-                (this->colliderJntSph.elements[0].info.ocElemFlags & OCELEM_HIT)) {
+                (this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT)) {
                 s32 pad;
 
                 if (Math_SinS(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0.0f) {
@@ -4275,7 +4275,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
             }
         }
 
-        if (this->colliderJntSph.elements->info.ocElemFlags & OCELEM_HIT) {
+        if (this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT) {
             if (thisx->speed > 10.0f) {
                 thisx->speed -= 1.0f;
             }
@@ -4295,7 +4295,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
         }
 
         if ((this->playerControlled == false) && (this->unk_1EC & 8)) {
-            if ((this->colliderJntSph.elements->info.ocElemFlags & OCELEM_HIT) &&
+            if ((this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT) &&
                 (this->colliderJntSph.base.oc->id == ACTOR_EN_IN)) {
                 func_80884868(this);
             }

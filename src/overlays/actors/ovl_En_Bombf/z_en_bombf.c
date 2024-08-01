@@ -261,13 +261,13 @@ void func_808AEF68(EnBombf* this, PlayState* play) {
 }
 
 void func_808AEFD4(EnBombf* this, PlayState* play) {
-    if (this->colliderJntSph.elements->dim.modelSphere.radius == 0) {
+    if (this->colliderJntSph.elements[0].dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->colliderJntSph.elements->dim.modelSphere.radius = 100;
-    this->colliderJntSph.elements->dim.worldSphere.radius = 100;
+    this->colliderJntSph.elements[0].dim.modelSphere.radius = 100;
+    this->colliderJntSph.elements[0].dim.worldSphere.radius = 100;
 
     if (ENBOMBF_GET(&this->actor) == ENBOMBF_1) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderJntSph.base);

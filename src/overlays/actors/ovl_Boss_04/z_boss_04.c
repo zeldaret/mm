@@ -565,11 +565,10 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 }
 
 void func_809ED45C(Boss04* this, PlayState* play) {
-    ColliderJntSphElement* temp_v0;
     u8 damage;
 
-    if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
-        this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
+    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.bumperFlags & BUMP_HIT)) {
+        this->collider1.elements[0].base.bumperFlags &= ~BUMP_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health -= damage;

@@ -380,12 +380,12 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
     }
 
     if (this->unk_1B3) {
-        if (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x0182C29C) {
+        if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x0182C29C) {
             func_8098CEAC(this, play);
             func_8098DA74(this, play);
             Actor_Kill(&this->actor);
         } else {
-            s32 dmgFlags = this->collider.elements->info.acHitElem->toucher.dmgFlags;
+            s32 dmgFlags = this->collider.elements[0].base.acHitElem->toucher.dmgFlags;
 
             if (dmgFlags & 0x13820) {
                 this->unk_1A8 = 0xDAC;

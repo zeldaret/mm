@@ -411,7 +411,7 @@ void func_808CCDE4(EnVm* this, PlayState* play) {
         this->colliderJntSph.base.acFlags &= ~AC_HIT;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElements); i++) {
-            if (this->colliderJntSph.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->colliderJntSph.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }

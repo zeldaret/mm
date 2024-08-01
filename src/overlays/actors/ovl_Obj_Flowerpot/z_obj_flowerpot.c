@@ -465,8 +465,8 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1BD80(this, play);
         func_80A1B994(this, play);
         Actor_Kill(&this->actor);
-    } else if ((this->collider.elements[0].info.bumperFlags & BUMP_HIT) &&
-               (this->collider.elements[0].info.acHitElem->toucher.dmgFlags & 0x058BFFBC)) {
+    } else if ((this->collider.elements[0].base.bumperFlags & BUMP_HIT) &&
+               (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x058BFFBC)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C0FC(this, play);
@@ -477,10 +477,10 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1B994(this, play);
         Actor_Kill(&this->actor);
     } else {
-        if (this->collider.elements[1].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[1].base.bumperFlags & BUMP_HIT) {
             if (!(this->unk_1EA & 2)) {
                 this->unk_1EA |= 2;
-                this->collider.elements[1].info.bumperFlags &= ~BUMP_ON;
+                this->collider.elements[1].base.bumperFlags &= ~BUMP_ON;
                 func_80A1C0FC(this, play);
                 func_80A1B914(this, play);
                 func_80A1B9CC(this, play);
@@ -589,10 +589,10 @@ void func_80A1CD10(ObjFlowerpot* this) {
 
 void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
     Actor* thisx = &this->actor;
-    s32 sp28 = this->collider.elements[0].info.toucherFlags & TOUCH_HIT;
+    s32 sp28 = this->collider.elements[0].base.toucherFlags & TOUCH_HIT;
 
     if (sp28) {
-        this->collider.elements[0].info.toucherFlags &= ~TOUCH_ON;
+        this->collider.elements[0].base.toucherFlags &= ~TOUCH_ON;
     }
 
     if (this->unk_1E8 > 0) {

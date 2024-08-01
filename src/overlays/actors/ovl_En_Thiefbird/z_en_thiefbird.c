@@ -928,18 +928,18 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C12B1C(EnThiefbird* this, PlayState* play) {
-    ColliderJntSphElement* sph;
+    ColliderJntSphElement* jntSphElem;
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~AT_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements[0].base);
         func_80C114C0(this, play);
         this->unk_194 = 0;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -951,9 +951,9 @@ void func_80C12B1C(EnThiefbird* this, PlayState* play) {
             this->drawDmgEffScale = 0.5f;
             this->drawDmgEffAlpha = 4.0f;
             if (i != ARRAY_COUNT(this->colliderElements)) {
-                sph = &this->collider.elements[i];
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0,
+                jntSphElem = &this->collider.elements[i];
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.bumper.hitPos.x,
+                            jntSphElem->base.bumper.hitPos.y, jntSphElem->base.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {

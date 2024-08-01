@@ -93,6 +93,12 @@ typedef struct {
     /* 0x16 */ u8 ocElemFlags; // Information flags for OC collisions
 } ColliderElementInit; // size = 0x18
 
+/*
+ * JntSph - A collider made of sphere shaped elements. Each sphere can attach to a skeleton joint (limb).
+ */
+
+// collider structs
+
 typedef struct {
     /* 0x00 */ Sphere16 modelSphere; // model space sphere
     /* 0x08 */ Sphere16 worldSphere; // world space sphere
@@ -101,26 +107,26 @@ typedef struct {
 } ColliderJntSphElementDim; // size = 0x18
 
 typedef struct {
-    /* 0x0 */ u8 limb; // attached limb
-    /* 0x2 */ Sphere16 modelSphere; // model space sphere
-    /* 0xA */ s16 scale; // world space sphere = model * scale * 0.01
-} ColliderJntSphElementDimInit; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ ColliderElement info;
+    /* 0x00 */ ColliderElement base;
     /* 0x28 */ ColliderJntSphElementDim dim;
 } ColliderJntSphElement; // size = 0x40
-
-typedef struct {
-    /* 0x00 */ ColliderElementInit info;
-    /* 0x18 */ ColliderJntSphElementDimInit dim;
-} ColliderJntSphElementInit; // size = 0x24
 
 typedef struct {
     /* 0x00 */ Collider base;
     /* 0x18 */ s32 count;
     /* 0x1C */ ColliderJntSphElement* elements;
 } ColliderJntSph; // size = 0x20
+
+typedef struct {
+    /* 0x0 */ u8 limb; // attached limb
+    /* 0x2 */ Sphere16 modelSphere; // model space sphere
+    /* 0xA */ s16 scale; // world space sphere = model * scale * 0.01
+} ColliderJntSphElementDimInit; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ ColliderElementInit base;
+    /* 0x18 */ ColliderJntSphElementDimInit dim;
+} ColliderJntSphElementInit; // size = 0x24
 
 typedef struct {
     /* 0x0 */ ColliderInit base;
@@ -492,19 +498,19 @@ void Collider_ResetOCElement(struct PlayState* play, ColliderElement* elem);
 s32 Collider_InitJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dim);
 s32 Collider_DestroyJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dim);
 s32 Collider_SetJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dest, ColliderJntSphElementDimInit* src);
-s32 Collider_InitJntSphElement(struct PlayState* play, ColliderJntSphElement* element);
-s32 Collider_DestroyJntSphElement(struct PlayState* play, ColliderJntSphElement* element);
+s32 Collider_InitJntSphElement(struct PlayState* play, ColliderJntSphElement* jntSphElem);
+s32 Collider_DestroyJntSphElement(struct PlayState* play, ColliderJntSphElement* jntSphElem);
 s32 Collider_SetJntSphElement(struct PlayState* play, ColliderJntSphElement* dest, ColliderJntSphElementInit* src);
-s32 Collider_ResetJntSphElementAT(struct PlayState* play, ColliderJntSphElement* collider);
-s32 Collider_ResetJntSphElementAC(struct PlayState* play, ColliderJntSphElement* collider);
-s32 Collider_ResetJntSphElementOC(struct PlayState* play, ColliderJntSphElement* collider);
-s32 Collider_InitJntSph(struct PlayState* play, ColliderJntSph* collider);
-s32 Collider_FreeJntSph(struct PlayState* play, ColliderJntSph* collider);
-s32 Collider_DestroyJntSph(struct PlayState* play, ColliderJntSph* collider);
-s32 Collider_SetJntSphToActor(struct PlayState* play, ColliderJntSph* collider, ColliderJntSphInitToActor* src);
-s32 Collider_SetJntSphAllocType1(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInitType1* src);
-s32 Collider_SetJntSph(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
-s32 Collider_InitAndSetJntSph(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
+s32 Collider_ResetJntSphElementAT(struct PlayState* play, ColliderJntSphElement* jntSphElem);
+s32 Collider_ResetJntSphElementAC(struct PlayState* play, ColliderJntSphElement* jntSphElem);
+s32 Collider_ResetJntSphElementOC(struct PlayState* play, ColliderJntSphElement* jntSphElem);
+s32 Collider_InitJntSph(struct PlayState* play, ColliderJntSph* jntSph);
+s32 Collider_FreeJntSph(struct PlayState* play, ColliderJntSph* jntSph);
+s32 Collider_DestroyJntSph(struct PlayState* play, ColliderJntSph* jntSph);
+s32 Collider_SetJntSphToActor(struct PlayState* play, ColliderJntSph* dest, ColliderJntSphInitToActor* src);
+s32 Collider_SetJntSphAllocType1(struct PlayState* play, ColliderJntSph* dest, struct Actor* actor, ColliderJntSphInitType1* src);
+s32 Collider_SetJntSph(struct PlayState* play, ColliderJntSph* dest, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
+s32 Collider_InitAndSetJntSph(struct PlayState* play, ColliderJntSph* dest, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
 s32 Collider_ResetJntSphAT(struct PlayState* play, Collider* col);
 s32 Collider_ResetJntSphAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetJntSphOC(struct PlayState* play, Collider* col);
@@ -663,8 +669,8 @@ void Collider_SetCylinderPosition(ColliderCylinder* collider, Vec3s* pos);
 void Collider_SetQuadVertices(ColliderQuad* collider, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);
 void Collider_SetTrisVertices(ColliderTris* collider, s32 index, Vec3f* a, Vec3f* b, Vec3f* c);
 void Collider_SetTrisDim(struct PlayState* play, ColliderTris* collider, s32 index, ColliderTrisElementDimInit* init);
-void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider);
-void Collider_UpdateSpheresElement(ColliderJntSph* collider, s32 index, struct Actor* actor);
+void Collider_UpdateSpheres(s32 limb, ColliderJntSph* jntSph);
+void Collider_UpdateSpheresElement(ColliderJntSph* jntSph, s32 elemIndex, struct Actor* actor);
 void Collider_UpdateSphere(s32 limb, ColliderSphere* collider);
 void CollisionCheck_SpawnRedBlood(struct PlayState* play, Vec3f* v);
 void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v);

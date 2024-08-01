@@ -232,7 +232,7 @@ u8 EnPametfrog_Vec3fNormalize(Vec3f* vec) {
 void EnPametfrog_Freeze(EnPametfrog* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider.base.colType = COLTYPE_HIT3;
-    this->collider.elements->info.elemType = ELEMTYPE_UNK0;
+    this->collider.elements[0].base.elemType = ELEMTYPE_UNK0;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
@@ -243,7 +243,7 @@ void EnPametfrog_Thaw(EnPametfrog* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
-        this->collider.elements->info.elemType = ELEMTYPE_UNK1;
+        this->collider.elements[0].base.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
     }
@@ -393,8 +393,8 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 3.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
-                    this->collider.elements[0].info.bumper.hitPos.y, this->collider.elements[0].info.bumper.hitPos.z, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
+                    this->collider.elements[0].base.bumper.hitPos.y, this->collider.elements[0].base.bumper.hitPos.z, 0,
                     0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_Freeze(this);
@@ -1273,7 +1273,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elements->info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
                     Audio_RestorePrevBgm();
@@ -1301,9 +1301,9 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                         this->drawDmgEffScale = 0.75f;
                         this->drawDmgEffAlpha = 4.0f;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                    this->collider.elements[0].info.bumper.hitPos.x,
-                                    this->collider.elements[0].info.bumper.hitPos.y,
-                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    this->collider.elements[0].base.bumper.hitPos.x,
+                                    this->collider.elements[0].base.bumper.hitPos.y,
+                                    this->collider.elements[0].base.bumper.hitPos.z, 0, 0, 0,
                                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
                     EnPametfrog_SetupDamage(this);

@@ -209,10 +209,10 @@ void EnWdhand_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        ColliderJntSphElement* elem = &this->collider.elements[i];
+        ColliderJntSphElement* jntSphElem = &this->collider.elements[i];
 
-        elem->dim.worldSphere.radius = elem->dim.modelSphere.radius;
-        EnWdhand_Vec3fToVec3s(&elem->dim.worldSphere.center, &this->actor.world.pos);
+        jntSphElem->dim.worldSphere.radius = jntSphElem->dim.modelSphere.radius;
+        EnWdhand_Vec3fToVec3s(&jntSphElem->dim.worldSphere.center, &this->actor.world.pos);
     }
 
     for (i = 0; i < EN_WDHAND_NUM_SEGMENTS; i++) {
@@ -601,7 +601,7 @@ void EnWdhand_SetupDie(EnWdhand* this) {
 
     // Finds the particular collider that was hit
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
             break;
         }
     }

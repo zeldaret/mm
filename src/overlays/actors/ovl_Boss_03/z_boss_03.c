@@ -220,14 +220,14 @@ void Boss03_SpawnEffectBubble(PlayState* play, Vec3f* pos) {
 /* End of SpawnEffect section */
 
 void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
     collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
     collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
 
-    sphElement = &collider->elements[index];
-    sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
+    jntSphElem = &collider->elements[index];
+    jntSphElem->dim.worldSphere.radius = jntSphElem->dim.scale * jntSphElem->dim.modelSphere.radius;
 }
 
 /* Start of RNG section */
@@ -1843,16 +1843,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->headCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->bodyCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1862,16 +1862,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    acHitElem = this->bodyCollider.elements[i].info.acHitElem;
-                    this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                    acHitElem = this->bodyCollider.elements[i].base.acHitElem;
+                    this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].info.acHitElem->toucher.damage
+                                 ? this->bodyCollider.elements[i].base.acHitElem->toucher.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1895,9 +1895,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                acHitElem = this->headCollider.elements[i].info.acHitElem;
-                this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->headCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                acHitElem = this->headCollider.elements[i].base.acHitElem;
+                this->headCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1920,7 +1920,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].info.acHitElem->toucher.damage)
+                                 ? (this->headCollider.elements[i].base.acHitElem->toucher.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;

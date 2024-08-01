@@ -58,10 +58,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 void func_80BCD000(EnScopecrow* this, PlayState* play) {
-    this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.elements->dim.worldSphere.center.y =
+    this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.elements[0].dim.worldSphere.center.y =
         sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
-    this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->collider.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
@@ -316,7 +316,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
 
         Collider_InitJntSph(play, &this->collider);
         Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+        this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
         Actor_SetScale(&this->actor, 0.03f);
         this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);
