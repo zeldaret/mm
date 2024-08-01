@@ -229,7 +229,7 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->collider.info.toucher.dmgFlags = DMG_FIRE_ARROW;
+        arrow->collider.elem.toucher.dmgFlags = DMG_FIRE_ARROW;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;

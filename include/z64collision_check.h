@@ -220,6 +220,12 @@ typedef struct {
     /* 0xC */ ColliderTrisElementInit* elements;
 } ColliderTrisInitType1; // size = 0x10
 
+/*
+ * Quad - A single quad shaped collider
+ */
+
+// collider structs
+
 typedef struct {
     /* 0x00 */ Vec3f quad[4];
     /* 0x30 */ Vec3s dcMid; // midpoint of vectors d, c
@@ -228,24 +234,26 @@ typedef struct {
 } ColliderQuadDim; // size = 0x40
 
 typedef struct {
+    /* 0x00 */ Collider base;
+    /* 0x18 */ ColliderElement elem;
+    /* 0x40 */ ColliderQuadDim dim;
+} ColliderQuad; // size = 0x80
+
+// init data structs
+
+typedef struct {
     /* 0x00 */ Vec3f quad[4];
 } ColliderQuadDimInit; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ Collider base;
-    /* 0x18 */ ColliderElement info;
-    /* 0x40 */ ColliderQuadDim dim;
-} ColliderQuad; // size = 0x80
-
-typedef struct {
     /* 0x00 */ ColliderInit base;
-    /* 0x08 */ ColliderElementInit info;
+    /* 0x08 */ ColliderElementInit elem;
     /* 0x20 */ ColliderQuadDimInit dim;
 } ColliderQuadInit; // size = 0x50
 
 typedef struct {
     /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ ColliderElementInit info;
+    /* 0x08 */ ColliderElementInit elem;
     /* 0x20 */ ColliderQuadDimInit dim;
 } ColliderQuadInitType1; // size = 0x50
 
@@ -566,12 +574,12 @@ s32 Collider_InitQuadDim(struct PlayState* play, ColliderQuadDim* dim);
 s32 Collider_DestroyQuadDim(struct PlayState* play, ColliderQuadDim* dim);
 s32 Collider_ResetQuadACDist(struct PlayState* play, ColliderQuadDim* dim);
 void Collider_SetQuadMidpoints(ColliderQuadDim* dim);
-s32 Collider_SetQuadDim(struct PlayState* play, ColliderQuadDim* dim, ColliderQuadDimInit* init);
-s32 Collider_InitQuad(struct PlayState* play, ColliderQuad* collider);
-s32 Collider_DestroyQuad(struct PlayState* play, ColliderQuad* collider);
-s32 Collider_SetQuadType1(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInitType1* src);
-s32 Collider_SetQuad(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInit* src);
-s32 Collider_InitAndSetQuad(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInit* src);
+s32 Collider_SetQuadDim(struct PlayState* play, ColliderQuadDim* dest, ColliderQuadDimInit* src);
+s32 Collider_InitQuad(struct PlayState* play, ColliderQuad* quad);
+s32 Collider_DestroyQuad(struct PlayState* play, ColliderQuad* quad);
+s32 Collider_SetQuadType1(struct PlayState* play, ColliderQuad* dest, struct Actor* actor, ColliderQuadInitType1* src);
+s32 Collider_SetQuad(struct PlayState* play, ColliderQuad* dest, struct Actor* actor, ColliderQuadInit* src);
+s32 Collider_InitAndSetQuad(struct PlayState* play, ColliderQuad* dest, struct Actor* actor, ColliderQuadInit* src);
 s32 Collider_ResetQuadAT(struct PlayState* play, Collider* col);
 s32 Collider_ResetQuadAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetQuadOC(struct PlayState* play, Collider* col);
@@ -684,7 +692,7 @@ s32 CollisionCheck_LineOCCheckAll(struct PlayState* play, CollisionCheckContext*
 s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b, struct Actor** exclusions, s32 numExclusions);
 void Collider_UpdateCylinder(struct Actor* actor, ColliderCylinder* cyl);
 void Collider_SetCylinderPosition(ColliderCylinder* cyl, Vec3s* pos);
-void Collider_SetQuadVertices(ColliderQuad* collider, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);
+void Collider_SetQuadVertices(ColliderQuad* quad, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);
 void Collider_SetTrisVertices(ColliderTris* tris, s32 elemIndex, Vec3f* a, Vec3f* b, Vec3f* c);
 void Collider_SetTrisDim(struct PlayState* play, ColliderTris* dest, s32 elemIndex, ColliderTrisElementDimInit* src);
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* jntSph);
