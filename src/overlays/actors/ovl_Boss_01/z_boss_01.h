@@ -133,8 +133,8 @@ typedef struct Boss01 {
     /* 0x9F0 */ Vec3f subCamAt;
     /* 0x9FC */ Vec3f subCamUp;
     /* 0xA08 */ Vec3f subCamEyeNext;
-    /* 0xA14 */ f32 deathCsInitialSubCamRot;
-    /* 0xA18 */ f32 deathCsSubCamRot;
+    /* 0xA14 */ f32 deathCsInitialSubCamRotY;
+    /* 0xA18 */ f32 deathCsSubCamRotY;
     /* 0xA1C */ f32 subCamVelocity;
     /* 0xA20 */ f32 deathShrinkSpeed;
     /* 0xA24 */ f32 screenShakeOffsetY;

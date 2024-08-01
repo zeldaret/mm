@@ -1522,11 +1522,11 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     dataIndex = 4;
                 }
 
-                Math_ApproachF(&this->subCamEyeNext.y, sCamPoints[dataIndex].eyeY, 0.075f, this->subCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->subCamEyeNext.y, sCamPoints[dataIndex].eyeY, 0.075f, this->subCamVelocity * 7.0f);
                 Math_ApproachF(&this->subCamEyeNext.z, sCamPoints[dataIndex].eyeZ, 0.075f,
-                               this->subCamSpeedMod * 17.0f);
-                Math_ApproachF(&this->subCamAtNext.y, sCamPoints[dataIndex].atY, 0.075f, this->subCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
+                               this->subCamVelocity * 17.0f);
+                Math_ApproachF(&this->subCamAtNext.y, sCamPoints[dataIndex].atY, 0.075f, this->subCamVelocity * 7.0f);
+                Math_ApproachF(&this->subCamVelocity, 1.0f, 1.0f, 0.01f);
 
                 if (this->cutsceneTimer == 70) {
                     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathIntroAnim, -15.0f);
@@ -1658,7 +1658,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             this->subCamAt.y = mainCam->at.y;
             this->subCamAt.z = mainCam->at.z;
             this->subCamRotY = this->actor.shape.rot.y * M_PIf / 0x8000;
-            this->subCamRotVelocity = this->subCamSpeedMod = sMajoraBattleHandler->lensFlareScale = 0.0f;
+            this->subCamAngularVelocity = this->subCamVelocity = sMajoraBattleHandler->lensFlareScale = 0.0f;
             Boss07_InitRand(1, 0x71AC, 0x263A);
 
             for (i = 0; i < ARRAY_COUNT(this->deathLightScale); i++) {
@@ -1745,7 +1745,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 spA0 = 1.0f;
 
                 this->bodyDecayRate = KREG(81) + 10;
-                this->noShadow = true;
+                this->disableShadow = true;
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else {
                 spB4.x = 0.0f;
@@ -1759,9 +1759,9 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                     spA4 = 2000.0f;
                     spA0 = 1.0f;
                 }
-                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->subCamSpeedMod);
-                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->subCamSpeedMod);
-                Math_ApproachF(&this->subCamSpeedMod, 5.0f, 1.0f, 0.1f);
+                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->subCamVelocity);
+                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->subCamVelocity);
+                Math_ApproachF(&this->subCamVelocity, 5.0f, 1.0f, 0.1f);
             }
 
             if (this->cutsceneTimer >= 260) {
@@ -1811,10 +1811,10 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                     Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.1f);
                 }
             }
-            this->subCamRotY += this->subCamRotVelocity;
-            this->subCamRotVelocity += 0.0004f;
-            if (this->subCamRotVelocity > 0.02f) {
-                this->subCamRotVelocity = 0.02f;
+            this->subCamRotY += this->subCamAngularVelocity;
+            this->subCamAngularVelocity += 0.0004f;
+            if (this->subCamAngularVelocity > 0.02f) {
+                this->subCamAngularVelocity = 0.02f;
             }
 
             if (this->cutsceneTimer >= (u32)(sREG(93) + 180)) {
@@ -3664,7 +3664,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     Boss07_Wrath_DrawWhips(this, play, this->leftWhip.pos, this->leftWhip.rot, this->whipScale,
                            MAJORAS_WRATH_LEFT_HAND);
 
-    if (!this->noShadow) {
+    if (!this->disableShadow) {
         Boss07_Wrath_GenShadowTex(shadowTex, this, play);
         Boss07_Wrath_DrawShadowTex(shadowTex, this, play);
     }
@@ -3936,12 +3936,12 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             break;
 
         case MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_OTHER_LIMBS:
-            Math_ApproachF(&this->subCamEyeNext.x, 0.0f, 0.05f, this->subCamSpeedMod * 40.0f);
-            Math_ApproachF(&this->subCamEyeNext.y, 100.0f, 0.05f, this->subCamSpeedMod * 30.0f);
-            Math_ApproachF(&this->subCamEyeNext.z, 270.0f, 0.05f, this->subCamSpeedMod * 150.0f);
-            Math_ApproachF(&this->subCamAtNext.x, 0.0f, 0.05f, this->subCamSpeedMod * 20.0f);
-            Math_ApproachF(&this->subCamAtNext.y, 100.0f, 0.05f, this->subCamSpeedMod * 20.0f);
-            Math_ApproachF(&this->subCamSpeedMod, 0.05f, 1.0f, 0.002f);
+            Math_ApproachF(&this->subCamEyeNext.x, 0.0f, 0.05f, this->subCamVelocity * 40.0f);
+            Math_ApproachF(&this->subCamEyeNext.y, 100.0f, 0.05f, this->subCamVelocity * 30.0f);
+            Math_ApproachF(&this->subCamEyeNext.z, 270.0f, 0.05f, this->subCamVelocity * 150.0f);
+            Math_ApproachF(&this->subCamAtNext.x, 0.0f, 0.05f, this->subCamVelocity * 20.0f);
+            Math_ApproachF(&this->subCamAtNext.y, 100.0f, 0.05f, this->subCamVelocity * 20.0f);
+            Math_ApproachF(&this->subCamVelocity, 0.05f, 1.0f, 0.002f);
 
             if (this->cutsceneTimer >= 20) {
                 if (this->cutsceneTimer == 20) {
@@ -4016,7 +4016,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             if (this->cutsceneTimer == 30) {
                 this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_DANCE;
                 this->cutsceneTimer = 0;
-                this->subCamSpeedMod = 0.0f;
+                this->subCamVelocity = 0.0f;
                 this->animEndFrame = 1000.0f;
                 Play_DisableMotionBlur();
             }
@@ -4055,11 +4055,11 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                 play->envCtx.lightBlend = 0.0f;
             }
 
-            Math_ApproachF(&this->subCamEyeNext.x, -80.0f, 0.05f, this->subCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->subCamEyeNext.y, 20.0f, 0.05f, this->subCamSpeedMod * 60.0f);
-            Math_ApproachF(&this->subCamEyeNext.z, 220.0f, 0.05f, this->subCamSpeedMod * 180.0f);
-            Math_ApproachF(&this->subCamAtNext.y, 110.0f, 0.05f, this->subCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->subCamSpeedMod, 0.1f, 1.0f, 0.005f);
+            Math_ApproachF(&this->subCamEyeNext.x, -80.0f, 0.05f, this->subCamVelocity * 80.0f);
+            Math_ApproachF(&this->subCamEyeNext.y, 20.0f, 0.05f, this->subCamVelocity * 60.0f);
+            Math_ApproachF(&this->subCamEyeNext.z, 220.0f, 0.05f, this->subCamVelocity * 180.0f);
+            Math_ApproachF(&this->subCamAtNext.y, 110.0f, 0.05f, this->subCamVelocity * 80.0f);
+            Math_ApproachF(&this->subCamVelocity, 0.1f, 1.0f, 0.005f);
 
             if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -4214,11 +4214,11 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
     PlayerImpactType playerImpactType;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WALK_OLD - SFX_FLAG);
-    this->timer_AB40++;
+    this->miscTimer++;
 
-    if (this->timer_AB40 >= 2) {
+    if (this->miscTimer >= 2) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
-        this->timer_AB40 = 0;
+        this->miscTimer = 0;
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -5691,8 +5691,8 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer > 30) {
                 Math_ApproachF(&this->subCamAt.y, player->actor.world.pos.y + 24.0f + 20.0f, 0.05f,
-                               this->subCamSpeedMod);
-                Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.01f);
+                               this->subCamVelocity);
+                Math_ApproachF(&this->subCamVelocity, 1.0f, 1.0f, 0.01f);
             }
 
             if (this->cutsceneTimer >= 160) {
@@ -5735,7 +5735,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG], play);
                     Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT], play);
                     Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD], play);
-                    this->subCamSpeedMod = 0.0f;
+                    this->subCamVelocity = 0.0f;
                     sMajoraBattleHandler->introPlayerOrbScale = 0.0f;
                     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 }
@@ -5818,12 +5818,12 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
                 if (this->cutsceneTimer > 100) {
                     Math_ApproachF(&this->subCamEye.x, player->actor.world.pos.x + 40.0f, 0.1f,
-                                   this->subCamSpeedMod * 20.0f);
+                                   this->subCamVelocity * 20.0f);
                     Math_ApproachF(&this->subCamEye.y, player->actor.world.pos.y + 10.0f, 0.1f,
-                                   this->subCamSpeedMod * 20.0f);
+                                   this->subCamVelocity * 20.0f);
                     Math_ApproachF(&this->subCamEye.z, player->actor.world.pos.z + 90.0f, 0.1f,
-                                   this->subCamSpeedMod * 60.0f);
-                    Math_ApproachF(&this->subCamSpeedMod, 1.0f, 1.0f, 0.03f);
+                                   this->subCamVelocity * 60.0f);
+                    Math_ApproachF(&this->subCamVelocity, 1.0f, 1.0f, 0.03f);
                 }
 
                 if (this->cutsceneTimer == 175) {
@@ -6620,12 +6620,12 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             sp4C = this->moveTarget.z - this->actor.world.pos.z;
             this->actor.world.rot.y = Math_Atan2S(sp54, sp4C);
             this->actor.world.rot.x = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
-            this->timer_AB40 = Rand_ZeroFloat(100.0f);
+            this->miscTimer = Rand_ZeroFloat(100.0f);
             break;
 
         case REMAINS_CS_STATE_FLY:
             this->cutsceneTimer++;
-            this->timer_AB40++;
+            this->miscTimer++;
             this->introRemainsOrbRot += 0x200;
             Math_ApproachF(&this->eyeBeamsLengthScale, 1.2f, 1.0f, 0.1f);
             Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
@@ -6640,7 +6640,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
                 sp3C = 0x190;
                 phi_f2 = 0.0f;
             } else {
-                phi_f2 = Math_SinS(this->timer_AB40 * 0x300) * 20.0f;
+                phi_f2 = Math_SinS(this->miscTimer * 0x300) * 20.0f;
                 sp38 = 1.0f;
                 sp34 = 0.1f;
                 sp40 = 0x5DC;

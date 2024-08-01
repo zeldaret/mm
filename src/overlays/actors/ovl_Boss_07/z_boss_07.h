@@ -264,9 +264,9 @@ typedef struct Boss07 {
     /* 0x18F0 */ ColliderQuad maskFrontCollider;
     /* 0x1970 */ ColliderQuad maskBackCollider;
     /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_MAX];
-    /* 0xAB40 */ s16 timer_AB40;
+    /* 0xAB40 */ s16 miscTimer; // used for making the remains bob up and down in the intro and for Incarnation running SFX
     /* 0xAB44 */ f32 introPlayerOrbScale;
-    /* 0xAB48 */ u8 noShadow;
+    /* 0xAB48 */ u8 disableShadow;
     /* 0xAB4C */ f32 deathOrbScale;
     /* 0xAB50 */ f32 deathLightScale[30];
     /* 0xABC8 */ u32 cutsceneTimer; // used as an animation loop count in `Boss07_Incarnation_Hopak`
@@ -278,8 +278,8 @@ typedef struct Boss07 {
     /* 0xABEC */ Vec3f subCamEyeNext;
     /* 0xABF8 */ Vec3f subCamAtNext;
     /* 0xAC04 */ f32 subCamRotY;
-    /* 0xAC08 */ f32 subCamRotVelocity;
-    /* 0xAC0C */ f32 subCamSpeedMod;
+    /* 0xAC08 */ f32 subCamAngularVelocity;
+    /* 0xAC0C */ f32 subCamVelocity;
     /* 0xAC10 */ UNK_TYPE1 unkAC10[4]; // probably float
     /* 0xAC14 */ f32 subCamEyeModY;
     /* 0xAC18 */ UNK_TYPE1 unkAC18[8]; // probably floats

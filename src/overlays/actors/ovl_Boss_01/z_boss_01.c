@@ -2149,8 +2149,8 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
             this->subCamAt.z = mainCam->at.z;
             diffX = this->subCamEye.x - this->actor.world.pos.x;
             diffZ = this->subCamEye.z - this->actor.world.pos.z;
-            this->deathCsInitialSubCamRot = Math_Atan2F_XY(diffZ, diffX);
-            this->deathCsSubCamRot = -0.5f;
+            this->deathCsInitialSubCamRotY = Math_Atan2F_XY(diffZ, diffX);
+            this->deathCsSubCamRotY = -0.5f;
             // fallthrough
         case ODOLWA_DEATH_CS_STATE_PLAY_ANIM_AND_FALL_FORWARD:
             if (this->cutsceneTimer < 15) {
@@ -2169,11 +2169,11 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
             }
             // fallthrough
         case ODOLWA_DEATH_CS_STATE_BURST_INTO_FLAMES_AND_SHRINK:
-            Math_ApproachF(&this->deathCsSubCamRot, 1.3f, 0.1f, 0.008f);
+            Math_ApproachF(&this->deathCsSubCamRotY, 1.3f, 0.1f, 0.008f);
             subCamOffset.x = 0.0f;
             subCamOffset.y = 30.0f;
             subCamOffset.z = 300.0f;
-            Matrix_RotateYF(this->deathCsInitialSubCamRot + this->deathCsSubCamRot, MTXMODE_NEW);
+            Matrix_RotateYF(this->deathCsInitialSubCamRotY + this->deathCsSubCamRotY, MTXMODE_NEW);
             Matrix_MultVec3f(&subCamOffset, &this->subCamEyeNext);
             this->subCamEyeNext.x += this->pelvisPos.x;
             this->subCamEyeNext.y += this->pelvisPos.y;
