@@ -154,13 +154,13 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = EnFirefly_FlyIdle;
     } else if (this->actor.params == KEESE_ICE_FLY) {
         this->auraType = KEESE_AURA_ICE;
-        this->collider.info.toucher.effect = 2; // Freeze
+        this->collider.elem.toucher.effect = 2; // Freeze
         this->actor.hintId = TATL_HINT_ID_ICE_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_FlyIdle;
     } else {
         this->auraType = KEESE_AURA_NONE;
-        this->collider.info.toucher.effect = 0; // Nothing
+        this->collider.elem.toucher.effect = 0; // Nothing
         this->actor.hintId = TATL_HINT_ID_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_Perch;
@@ -186,7 +186,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_Extinguish(EnFirefly* this) {
     this->currentType = KEESE_NORMAL;
-    this->collider.info.toucher.effect = 0; // Nothing
+    this->collider.elem.toucher.effect = 0; // Nothing
     this->auraType = KEESE_AURA_NONE;
     this->actor.hintId = TATL_HINT_ID_KEESE;
 }
@@ -194,7 +194,7 @@ void EnFirefly_Extinguish(EnFirefly* this) {
 void EnFirefly_Ignite(EnFirefly* this) {
     if (this->actor.params == KEESE_FIRE_FLY) {
         this->currentType = KEESE_FIRE;
-        this->collider.info.toucher.effect = 1; // Fire
+        this->collider.elem.toucher.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
         this->actor.hintId = TATL_HINT_ID_FIRE_KEESE;
     }
@@ -359,8 +359,8 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffScale = 0.55f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                    this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -644,7 +644,7 @@ void EnFirefly_DisturbDiveAttack(EnFirefly* this, PlayState* play) {
 void EnFirefly_UpdateDamage(EnFirefly* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
 
         if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_STUN) {
             this->timer = 40;

@@ -1028,39 +1028,39 @@ s32 Collider_QuadSetNearestAC(struct PlayState* play, ColliderQuad* quad, Vec3f*
 /**
  * Initializes a ColliderSphere to default values.
  */
-s32 Collider_InitSphere(struct PlayState* play, ColliderSphere* collider) {
-    Collider_InitBase(play, &collider->base);
-    Collider_InitElement(play, &collider->info);
-    Collider_InitJntSphElementDim(play, &collider->dim);
+s32 Collider_InitSphere(struct PlayState* play, ColliderSphere* sph) {
+    Collider_InitBase(play, &sph->base);
+    Collider_InitElement(play, &sph->elem);
+    Collider_InitJntSphElementDim(play, &sph->dim);
     return 1;
 }
 
 /**
  * Destroys a ColliderSphere.
  */
-s32 Collider_DestroySphere(struct PlayState* play, ColliderSphere* collider) {
-    Collider_DestroyBase(play, &collider->base);
-    Collider_DestroyElement(play, &collider->info);
-    Collider_DestroyJntSphElementDim(play, &collider->dim);
+s32 Collider_DestroySphere(struct PlayState* play, ColliderSphere* sph) {
+    Collider_DestroyBase(play, &sph->base);
+    Collider_DestroyElement(play, &sph->elem);
+    Collider_DestroyJntSphElementDim(play, &sph->dim);
     return 1;
 }
 
 /**
  * Sets up the ColliderSphere using the values in src.
  */
-s32 Collider_SetSphere(struct PlayState* play, ColliderSphere* collider, Actor* actor, ColliderSphereInit* src) {
-    Collider_SetBase(play, &collider->base, actor, &src->base);
-    Collider_SetElement(play, &collider->info, &src->info);
-    Collider_SetJntSphElementDim(play, &collider->dim, &src->dim);
+s32 Collider_SetSphere(struct PlayState* play, ColliderSphere* dest, Actor* actor, ColliderSphereInit* src) {
+    Collider_SetBase(play, &dest->base, actor, &src->base);
+    Collider_SetElement(play, &dest->elem, &src->elem);
+    Collider_SetJntSphElementDim(play, &dest->dim, &src->dim);
     return 1;
 }
 
 /**
  * Fully initializes a ColliderSphere using the values in src.
  */
-s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* collider, Actor* actor, ColliderSphereInit* src) {
-    Collider_InitSphere(play, collider);
-    Collider_SetSphere(play, collider, actor, src);
+s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* dest, Actor* actor, ColliderSphereInit* src) {
+    Collider_InitSphere(play, dest);
+    Collider_SetSphere(play, dest, actor, src);
     return 0;
 }
 
@@ -1068,10 +1068,10 @@ s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* collider, 
  * Resets the collider's AT collision flags.
  */
 s32 Collider_ResetSphereAT(struct PlayState* play, Collider* col) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    Collider_ResetATBase(play, &sphere->base);
-    Collider_ResetATElement(play, &sphere->info);
+    Collider_ResetATBase(play, &sph->base);
+    Collider_ResetATElement(play, &sph->elem);
     return 1;
 }
 
@@ -1079,10 +1079,10 @@ s32 Collider_ResetSphereAT(struct PlayState* play, Collider* col) {
  * Resets the collider's AC collision flags.
  */
 s32 Collider_ResetSphereAC(struct PlayState* play, Collider* col) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    Collider_ResetACBase(play, &sphere->base);
-    Collider_ResetACElement(play, &sphere->info);
+    Collider_ResetACBase(play, &sph->base);
+    Collider_ResetACElement(play, &sph->elem);
     return 1;
 }
 
@@ -1090,10 +1090,10 @@ s32 Collider_ResetSphereAC(struct PlayState* play, Collider* col) {
  * Resets the collider's OC collision flags.
  */
 s32 Collider_ResetSphereOC(struct PlayState* play, Collider* col) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    Collider_ResetOCBase(play, &sphere->base);
-    Collider_ResetOCElement(play, &sphere->info);
+    Collider_ResetOCBase(play, &sph->base);
+    Collider_ResetOCElement(play, &sph->elem);
     return 1;
 }
 
@@ -1970,23 +1970,23 @@ void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContex
 void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                       Collider* acCol) {
     ColliderJntSph* atJntSph = (ColliderJntSph*)atCol;
-    ColliderSphere* ac = (ColliderSphere*)acCol;
+    ColliderSphere* acSph = (ColliderSphere*)acCol;
     ColliderJntSphElement* atJntSphElem;
     f32 overlapSize;
     f32 centerDist;
 
     if ((atJntSph->count > 0) && (atJntSph->elements != NULL)) {
-        if (CollisionCheck_SkipBump(&ac->info)) {
+        if (CollisionCheck_SkipBump(&acSph->elem)) {
             return;
         }
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
             if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
                 continue;
             }
-            if (CollisionCheck_NoSharedFlags(&atJntSphElem->base, &ac->info)) {
+            if (CollisionCheck_NoSharedFlags(&atJntSphElem->base, &acSph->elem)) {
                 continue;
             }
-            if (Math3D_SphVsSphOverlapCenterDist(&atJntSphElem->dim.worldSphere, &ac->dim.worldSphere, &overlapSize,
+            if (Math3D_SphVsSphOverlapCenterDist(&atJntSphElem->dim.worldSphere, &acSph->dim.worldSphere, &overlapSize,
                                                  &centerDist)) {
                 f32 acToHit;
                 Vec3f hitPos;
@@ -1994,16 +1994,16 @@ void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
                 Vec3f acPos;
 
                 Math_Vec3s_ToVec3f(&atPos, &atJntSphElem->dim.worldSphere.center);
-                Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&acPos, &acSph->dim.worldSphere.center);
                 if (!IS_ZERO(centerDist)) {
-                    acToHit = ac->dim.worldSphere.radius / centerDist;
+                    acToHit = acSph->dim.worldSphere.radius / centerDist;
                     hitPos.x = ((atPos.x - acPos.x) * acToHit) + acPos.x;
                     hitPos.y = ((atPos.y - acPos.y) * acToHit) + acPos.y;
                     hitPos.z = ((atPos.z - acPos.z) * acToHit) + acPos.z;
                 } else {
                     Math_Vec3f_Copy(&hitPos, &atPos);
                 }
-                CollisionCheck_SetATvsAC(play, &atJntSph->base, &atJntSphElem->base, &atPos, &ac->base, &ac->info,
+                CollisionCheck_SetATvsAC(play, &atJntSph->base, &atJntSphElem->base, &atPos, &acSph->base, &acSph->elem,
                                          &acPos, &hitPos);
             }
         }
@@ -2201,7 +2201,7 @@ void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* 
 void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                    Collider* acCol) {
     ColliderCylinder* atCyl = (ColliderCylinder*)atCol;
-    ColliderSphere* ac = (ColliderSphere*)acCol;
+    ColliderSphere* acSph = (ColliderSphere*)acCol;
     f32 overlapSize;
     f32 centerDist;
 
@@ -2209,24 +2209,24 @@ void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext
         if (CollisionCheck_SkipTouch(&atCyl->elem)) {
             return;
         }
-        if (CollisionCheck_SkipBump(&ac->info)) {
+        if (CollisionCheck_SkipBump(&acSph->elem)) {
             return;
         }
-        if (CollisionCheck_NoSharedFlags(&atCyl->elem, &ac->info)) {
+        if (CollisionCheck_NoSharedFlags(&atCyl->elem, &acSph->elem)) {
             return;
         }
 
-        if (Math3D_SphVsCylOverlapCenterDist(&ac->dim.worldSphere, &atCyl->dim, &overlapSize, &centerDist)) {
+        if (Math3D_SphVsCylOverlapCenterDist(&acSph->dim.worldSphere, &atCyl->dim, &overlapSize, &centerDist)) {
             Vec3f hitPos;
             Vec3f atPos;
             Vec3f acPos;
             f32 acToHit;
 
             Math_Vec3s_ToVec3f(&atPos, &atCyl->dim.pos);
-            Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
+            Math_Vec3s_ToVec3f(&acPos, &acSph->dim.worldSphere.center);
 
             if (!IS_ZERO(centerDist)) {
-                acToHit = ac->dim.worldSphere.radius / centerDist;
+                acToHit = acSph->dim.worldSphere.radius / centerDist;
                 if (acToHit <= 1.0f) {
                     hitPos.x = ((atPos.x - acPos.x) * acToHit) + acPos.x;
                     hitPos.y = ((atPos.y - acPos.y) * acToHit) + acPos.y;
@@ -2237,7 +2237,8 @@ void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext
             } else {
                 Math_Vec3f_Copy(&hitPos, &atPos);
             }
-            CollisionCheck_SetATvsAC(play, &atCyl->base, &atCyl->elem, &atPos, &ac->base, &ac->info, &acPos, &hitPos);
+            CollisionCheck_SetATvsAC(play, &atCyl->base, &atCyl->elem, &atPos, &acSph->base, &acSph->elem, &acPos,
+                                     &hitPos);
         }
     }
 }
@@ -2400,28 +2401,28 @@ void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContex
                                     Collider* acCol) {
     ColliderTris* atTris = (ColliderTris*)atCol;
     ColliderTrisElement* atTrisElem;
-    ColliderSphere* ac = (ColliderSphere*)acCol;
+    ColliderSphere* acSph = (ColliderSphere*)acCol;
     Vec3f hitPos;
 
     if ((atTris->count > 0) && (atTris->elements != NULL)) {
-        if (CollisionCheck_SkipBump(&ac->info)) {
+        if (CollisionCheck_SkipBump(&acSph->elem)) {
             return;
         }
         for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
             if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
                 continue;
             }
-            if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &ac->info)) {
+            if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acSph->elem)) {
                 continue;
             }
-            if (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &atTrisElem->dim, &hitPos)) {
+            if (Math3D_TriVsSphIntersect(&acSph->dim.worldSphere, &atTrisElem->dim, &hitPos)) {
                 Vec3f atPos;
                 Vec3f acPos;
 
-                Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&acPos, &acSph->dim.worldSphere.center);
                 CollisionCheck_TrisAvgPoint(atTrisElem, &atPos);
-                CollisionCheck_SetATvsAC(play, &atTris->base, &atTrisElem->base, &atPos, &ac->base, &ac->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &atTris->base, &atTrisElem->base, &atPos, &acSph->base, &acSph->elem,
+                                         &acPos, &hitPos);
             }
         }
     }
@@ -2611,27 +2612,28 @@ void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContex
                                     Collider* acCol) {
     ColliderQuad* atQuad = (ColliderQuad*)atCol;
     Vec3f hitPos;
-    ColliderSphere* ac = (ColliderSphere*)acCol;
+    ColliderSphere* acSph = (ColliderSphere*)acCol;
 
     if (CollisionCheck_SkipTouch(&atQuad->elem)) {
         return;
     }
-    if (CollisionCheck_SkipBump(&ac->info) || CollisionCheck_NoSharedFlags(&atQuad->elem, &ac->info)) {
+    if (CollisionCheck_SkipBump(&acSph->elem) || CollisionCheck_NoSharedFlags(&atQuad->elem, &acSph->elem)) {
         return;
     }
 
     Math3D_TriNorm(&D_801EE150, &atQuad->dim.quad[2], &atQuad->dim.quad[3], &atQuad->dim.quad[1]);
     Math3D_TriNorm(&D_801EE188, &atQuad->dim.quad[2], &atQuad->dim.quad[1], &atQuad->dim.quad[0]);
 
-    if ((Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE150, &hitPos)) ||
-        (Math3D_TriVsSphIntersect(&ac->dim.worldSphere, &D_801EE188, &hitPos))) {
+    if ((Math3D_TriVsSphIntersect(&acSph->dim.worldSphere, &D_801EE150, &hitPos)) ||
+        (Math3D_TriVsSphIntersect(&acSph->dim.worldSphere, &D_801EE188, &hitPos))) {
         if (Collider_QuadSetNearestAC(play, atQuad, &hitPos)) {
             Vec3f atPos;
             Vec3f acPos;
 
-            Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
+            Math_Vec3s_ToVec3f(&acPos, &acSph->dim.worldSphere.center);
             CollisionCheck_QuadAvgPoint(atQuad, &atPos);
-            CollisionCheck_SetATvsAC(play, &atQuad->base, &atQuad->elem, &atPos, &ac->base, &ac->info, &acPos, &hitPos);
+            CollisionCheck_SetATvsAC(play, &atQuad->base, &atQuad->elem, &atPos, &acSph->base, &acSph->elem, &acPos,
+                                     &hitPos);
         }
     }
 }
@@ -2641,14 +2643,14 @@ void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContex
  */
 void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                       Collider* acCol) {
-    ColliderSphere* at = (ColliderSphere*)atCol;
+    ColliderSphere* atSph = (ColliderSphere*)atCol;
     ColliderJntSph* acJntSph = (ColliderJntSph*)acCol;
     ColliderJntSphElement* acJntSphElem;
     f32 overlapSize;
     f32 centerDist;
 
     if ((acJntSph->count > 0) && (acJntSph->elements != NULL)) {
-        if (CollisionCheck_SkipTouch(&at->info)) {
+        if (CollisionCheck_SkipTouch(&atSph->elem)) {
             return;
         }
 
@@ -2656,18 +2658,18 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
             if (CollisionCheck_SkipBump(&acJntSphElem->base)) {
                 continue;
             }
-            if (CollisionCheck_NoSharedFlags(&at->info, &acJntSphElem->base)) {
+            if (CollisionCheck_NoSharedFlags(&atSph->elem, &acJntSphElem->base)) {
                 continue;
             }
 
-            if (Math3D_SphVsSphOverlapCenterDist(&at->dim.worldSphere, &acJntSphElem->dim.worldSphere, &overlapSize,
+            if (Math3D_SphVsSphOverlapCenterDist(&atSph->dim.worldSphere, &acJntSphElem->dim.worldSphere, &overlapSize,
                                                  &centerDist)) {
                 f32 acToHit;
                 Vec3f hitPos;
                 Vec3f atPos;
                 Vec3f acPos;
 
-                Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
+                Math_Vec3s_ToVec3f(&atPos, &atSph->dim.worldSphere.center);
                 Math_Vec3s_ToVec3f(&acPos, &acJntSphElem->dim.worldSphere.center);
                 if (!IS_ZERO(centerDist)) {
                     acToHit = acJntSphElem->dim.worldSphere.radius / centerDist;
@@ -2677,7 +2679,7 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
                 } else {
                     Math_Vec3f_Copy(&hitPos, &atPos);
                 }
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &acJntSph->base, &acJntSphElem->base,
+                CollisionCheck_SetATvsAC(play, &atSph->base, &atSph->elem, &atPos, &acJntSph->base, &acJntSphElem->base,
                                          &acPos, &hitPos);
             }
         }
@@ -2690,26 +2692,26 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
 void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                         Collider* acCol) {
     ColliderCylinder* acCyl = (ColliderCylinder*)acCol;
-    ColliderSphere* at = (ColliderSphere*)atCol;
+    ColliderSphere* atSph = (ColliderSphere*)atCol;
     f32 overlapSize;
     f32 centerDist;
 
-    if (CollisionCheck_SkipTouch(&at->info)) {
+    if (CollisionCheck_SkipTouch(&atSph->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acCyl->elem)) {
         return;
     }
-    if (CollisionCheck_NoSharedFlags(&at->info, &acCyl->elem)) {
+    if (CollisionCheck_NoSharedFlags(&atSph->elem, &acCyl->elem)) {
         return;
     }
 
-    if (Math3D_SphVsCylOverlapCenterDist(&at->dim.worldSphere, &acCyl->dim, &overlapSize, &centerDist)) {
+    if (Math3D_SphVsCylOverlapCenterDist(&atSph->dim.worldSphere, &acCyl->dim, &overlapSize, &centerDist)) {
         Vec3f hitPos;
         Vec3f atPos;
         Vec3f acPos;
 
-        Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&atPos, &atSph->dim.worldSphere.center);
         Math_Vec3s_ToVec3f(&acPos, &acCyl->dim.pos);
 
         if (!IS_ZERO(centerDist)) {
@@ -2725,10 +2727,10 @@ void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckCo
         } else {
             Math_Vec3f_Copy(&hitPos, &atPos);
         }
-        CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &acCyl->base, &acCyl->elem, &acPos, &hitPos);
+        CollisionCheck_SetATvsAC(play, &atSph->base, &atSph->elem, &atPos, &acCyl->base, &acCyl->elem, &acPos, &hitPos);
     }
 
-    if (at) {}
+    if (atSph) {}
 }
 
 /**
@@ -2736,12 +2738,12 @@ void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckCo
  */
 void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                     Collider* acCol) {
-    ColliderSphere* at = (ColliderSphere*)atCol;
+    ColliderSphere* atSph = (ColliderSphere*)atCol;
     ColliderTris* acTris = (ColliderTris*)acCol;
     ColliderTrisElement* acTrisElem;
     Vec3f hitPos;
 
-    if (CollisionCheck_SkipTouch(&at->info)) {
+    if (CollisionCheck_SkipTouch(&atSph->elem)) {
         return;
     }
 
@@ -2749,16 +2751,16 @@ void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContex
         if (CollisionCheck_SkipBump(&acTrisElem->base)) {
             continue;
         }
-        if (CollisionCheck_NoSharedFlags(&at->info, &acTrisElem->base)) {
+        if (CollisionCheck_NoSharedFlags(&atSph->elem, &acTrisElem->base)) {
             continue;
         }
-        if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &acTrisElem->dim, &hitPos)) {
+        if (Math3D_TriVsSphIntersect(&atSph->dim.worldSphere, &acTrisElem->dim, &hitPos)) {
             Vec3f atPos;
             Vec3f acPos;
 
-            Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
+            Math_Vec3s_ToVec3f(&atPos, &atSph->dim.worldSphere.center);
             CollisionCheck_TrisAvgPoint(acTrisElem, &acPos);
-            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &acTris->base, &acTrisElem->base, &acPos,
+            CollisionCheck_SetATvsAC(play, &atSph->base, &atSph->elem, &atPos, &acTris->base, &acTrisElem->base, &acPos,
                                      &hitPos);
             return;
         }
@@ -2770,28 +2772,29 @@ void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContex
  */
 void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                     Collider* acCol) {
-    ColliderSphere* at = (ColliderSphere*)atCol;
+    ColliderSphere* atSph = (ColliderSphere*)atCol;
     Vec3f hitPos;
     ColliderQuad* acQuad = (ColliderQuad*)acCol;
 
-    if (CollisionCheck_SkipTouch(&at->info)) {
+    if (CollisionCheck_SkipTouch(&atSph->elem)) {
         return;
     }
-    if (CollisionCheck_SkipBump(&acQuad->elem) || CollisionCheck_NoSharedFlags(&at->info, &acQuad->elem)) {
+    if (CollisionCheck_SkipBump(&acQuad->elem) || CollisionCheck_NoSharedFlags(&atSph->elem, &acQuad->elem)) {
         return;
     }
 
     Math3D_TriNorm(&D_801EE6C8, &acQuad->dim.quad[2], &acQuad->dim.quad[3], &acQuad->dim.quad[1]);
     Math3D_TriNorm(&D_801EE700, &acQuad->dim.quad[1], &acQuad->dim.quad[0], &acQuad->dim.quad[2]);
 
-    if (Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE6C8, &hitPos) ||
-        Math3D_TriVsSphIntersect(&at->dim.worldSphere, &D_801EE700, &hitPos)) {
+    if (Math3D_TriVsSphIntersect(&atSph->dim.worldSphere, &D_801EE6C8, &hitPos) ||
+        Math3D_TriVsSphIntersect(&atSph->dim.worldSphere, &D_801EE700, &hitPos)) {
         Vec3f atPos;
         Vec3f acPos;
 
-        Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&atPos, &atSph->dim.worldSphere.center);
         CollisionCheck_QuadAvgPoint(acQuad, &acPos);
-        CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &acQuad->base, &acQuad->elem, &acPos, &hitPos);
+        CollisionCheck_SetATvsAC(play, &atSph->base, &atSph->elem, &atPos, &acQuad->base, &acQuad->elem, &acPos,
+                                 &hitPos);
     }
 }
 
@@ -2800,38 +2803,38 @@ void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContex
  */
 void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol,
                                       Collider* acCol) {
-    ColliderSphere* at = (ColliderSphere*)atCol;
-    ColliderSphere* ac = (ColliderSphere*)acCol;
+    ColliderSphere* atSph = (ColliderSphere*)atCol;
+    ColliderSphere* acSph = (ColliderSphere*)acCol;
     f32 overlapSize;
     f32 centerDist;
 
-    if (CollisionCheck_SkipTouch(&at->info)) {
+    if (CollisionCheck_SkipTouch(&atSph->elem)) {
         return;
     }
-    if (CollisionCheck_SkipBump(&ac->info)) {
+    if (CollisionCheck_SkipBump(&acSph->elem)) {
         return;
     }
-    if (CollisionCheck_NoSharedFlags(&at->info, &ac->info)) {
+    if (CollisionCheck_NoSharedFlags(&atSph->elem, &acSph->elem)) {
         return;
     }
 
-    if (Math3D_SphVsSphOverlapCenterDist(&at->dim.worldSphere, &ac->dim.worldSphere, &overlapSize, &centerDist)) {
+    if (Math3D_SphVsSphOverlapCenterDist(&atSph->dim.worldSphere, &acSph->dim.worldSphere, &overlapSize, &centerDist)) {
         f32 acToHit;
         Vec3f hitPos;
         Vec3f atPos;
         Vec3f acPos;
 
-        Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
-        Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&atPos, &atSph->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&acPos, &acSph->dim.worldSphere.center);
         if (!IS_ZERO(centerDist)) {
-            acToHit = ac->dim.worldSphere.radius / centerDist;
+            acToHit = acSph->dim.worldSphere.radius / centerDist;
             hitPos.x = (atPos.x - acPos.x) * acToHit + acPos.x;
             hitPos.y = (atPos.y - acPos.y) * acToHit + acPos.y;
             hitPos.z = (atPos.z - acPos.z) * acToHit + acPos.z;
         } else {
             Math_Vec3f_Copy(&hitPos, &atPos);
         }
-        CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &hitPos);
+        CollisionCheck_SetATvsAC(play, &atSph->base, &atSph->elem, &atPos, &acSph->base, &acSph->elem, &acPos, &hitPos);
     }
 }
 
@@ -2913,16 +2916,15 @@ void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* 
  * Sets a ColliderSphere's hit effects
  */
 void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    if ((sphere->info.bumperFlags & BUMP_DRAW_HITMARK) && (sphere->info.acHitElem != NULL) &&
-        !(sphere->info.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+    if ((sph->elem.bumperFlags & BUMP_DRAW_HITMARK) && (sph->elem.acHitElem != NULL) &&
+        !(sph->elem.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
         Vec3f hitPos;
 
-        Math_Vec3s_ToVec3f(&hitPos, &sphere->info.bumper.hitPos);
-        CollisionCheck_HitEffects(play, sphere->info.acHit, sphere->info.acHitElem, &sphere->base, &sphere->info,
-                                  &hitPos);
-        sphere->info.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+        Math_Vec3s_ToVec3f(&hitPos, &sph->elem.bumper.hitPos);
+        CollisionCheck_HitEffects(play, sph->elem.acHit, sph->elem.acHitElem, &sph->base, &sph->elem, &hitPos);
+        sph->elem.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
     }
 }
 
@@ -3236,26 +3238,26 @@ void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext
 void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol,
                                       Collider* rightCol) {
     ColliderJntSph* leftJntSph = (ColliderJntSph*)leftCol;
-    ColliderSphere* right = (ColliderSphere*)rightCol;
+    ColliderSphere* rightSph = (ColliderSphere*)rightCol;
     ColliderJntSphElement* leftJntSphElem;
     f32 overlapSize;
 
     if ((leftJntSph->count > 0) && (leftJntSph->elements != NULL) && (leftJntSph->base.ocFlags1 & OCELEM_ON) &&
-        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
+        (rightSph->base.ocFlags1 & OCELEM_ON) && (rightSph->elem.ocElemFlags & OCELEM_ON)) {
 
         for (leftJntSphElem = leftJntSph->elements; leftJntSphElem < &leftJntSph->elements[leftJntSph->count];
              leftJntSphElem++) {
             if (!(leftJntSphElem->base.ocElemFlags & OCELEM_ON)) {
                 continue;
             }
-            if (Math3D_SphVsSphOverlap(&leftJntSphElem->dim.worldSphere, &right->dim.worldSphere, &overlapSize)) {
+            if (Math3D_SphVsSphOverlap(&leftJntSphElem->dim.worldSphere, &rightSph->dim.worldSphere, &overlapSize)) {
                 Vec3f leftPos;
                 Vec3f rightPos;
 
                 Math_Vec3s_ToVec3f(&leftPos, &leftJntSphElem->dim.worldSphere.center);
-                Math_Vec3s_ToVec3f(&rightPos, &right->dim.worldSphere.center);
-                CollisionCheck_SetOCvsOC(play, &leftJntSph->base, &leftJntSphElem->base, &leftPos, &right->base,
-                                         &right->info, &rightPos, overlapSize);
+                Math_Vec3s_ToVec3f(&rightPos, &rightSph->dim.worldSphere.center);
+                CollisionCheck_SetOCvsOC(play, &leftJntSph->base, &leftJntSphElem->base, &leftPos, &rightSph->base,
+                                         &rightSph->elem, &rightPos, overlapSize);
             }
         }
     }
@@ -3298,18 +3300,18 @@ void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* c
 void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol,
                                    Collider* rightCol) {
     ColliderCylinder* leftCyl = (ColliderCylinder*)leftCol;
-    ColliderSphere* right = (ColliderSphere*)rightCol;
+    ColliderSphere* rightSph = (ColliderSphere*)rightCol;
     f32 overlapSize;
 
     if ((leftCyl->base.ocFlags1 & OCELEM_ON) && (leftCyl->elem.ocElemFlags & OCELEM_ON) &&
-        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
-        if (Math3D_SphVsCylOverlap(&right->dim.worldSphere, &leftCyl->dim, &overlapSize)) {
+        (rightSph->base.ocFlags1 & OCELEM_ON) && (rightSph->elem.ocElemFlags & OCELEM_ON)) {
+        if (Math3D_SphVsCylOverlap(&rightSph->dim.worldSphere, &leftCyl->dim, &overlapSize)) {
             Vec3f leftPos;
             Vec3f rightPos;
 
             Math_Vec3s_ToVec3f(&leftPos, &leftCyl->dim.pos);
-            Math_Vec3s_ToVec3f(&rightPos, &right->dim.worldSphere.center);
-            CollisionCheck_SetOCvsOC(play, &leftCyl->base, &leftCyl->elem, &leftPos, &right->base, &right->info,
+            Math_Vec3s_ToVec3f(&rightPos, &rightSph->dim.worldSphere.center);
+            CollisionCheck_SetOCvsOC(play, &leftCyl->base, &leftCyl->elem, &leftPos, &rightSph->base, &rightSph->elem,
                                      &rightPos, overlapSize);
         }
     }
@@ -3336,20 +3338,20 @@ void CollisionCheck_OC_SphereVsCyl(struct PlayState* play, CollisionCheckContext
  */
 void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol,
                                       Collider* rightCol) {
-    ColliderSphere* left = (ColliderSphere*)leftCol;
-    ColliderSphere* right = (ColliderSphere*)rightCol;
+    ColliderSphere* leftSph = (ColliderSphere*)leftCol;
+    ColliderSphere* rightSph = (ColliderSphere*)rightCol;
     f32 overlapSize;
 
-    if ((left->base.ocFlags1 & OCELEM_ON) && (left->info.ocElemFlags & OCELEM_ON) &&
-        (right->base.ocFlags1 & OCELEM_ON) && (right->info.ocElemFlags & OCELEM_ON)) {
-        if (Math3D_SphVsSphOverlap(&left->dim.worldSphere, &right->dim.worldSphere, &overlapSize)) {
+    if ((leftSph->base.ocFlags1 & OCELEM_ON) && (leftSph->elem.ocElemFlags & OCELEM_ON) &&
+        (rightSph->base.ocFlags1 & OCELEM_ON) && (rightSph->elem.ocElemFlags & OCELEM_ON)) {
+        if (Math3D_SphVsSphOverlap(&leftSph->dim.worldSphere, &rightSph->dim.worldSphere, &overlapSize)) {
             Vec3f leftPos;
             Vec3f rightPos;
 
-            Math_Vec3s_ToVec3f(&leftPos, &left->dim.worldSphere.center);
-            Math_Vec3s_ToVec3f(&rightPos, &right->dim.worldSphere.center);
-            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info, &rightPos,
-                                     overlapSize);
+            Math_Vec3s_ToVec3f(&leftPos, &leftSph->dim.worldSphere.center);
+            Math_Vec3s_ToVec3f(&rightPos, &rightSph->dim.worldSphere.center);
+            CollisionCheck_SetOCvsOC(play, &leftSph->base, &leftSph->elem, &leftPos, &rightSph->base, &rightSph->elem,
+                                     &rightPos, overlapSize);
         }
     }
 }
@@ -3618,9 +3620,9 @@ void CollisionCheck_ApplyDamageQuad(struct PlayState* play, CollisionCheckContex
  * Apply ColliderSphere AC damage effect
  */
 void CollisionCheck_ApplyDamageSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    CollisionCheck_ApplyDamage(play, colChkCtx, &sphere->base, &sphere->info);
+    CollisionCheck_ApplyDamage(play, colChkCtx, &sph->base, &sph->elem);
 }
 
 ColChkApplyFunc sApplyDamageFuncs[COLSHAPE_MAX] = {
@@ -3698,15 +3700,15 @@ s32 CollisionCheck_LineOC_Cyl(struct PlayState* play, CollisionCheckContext* col
  */
 s32 CollisionCheck_LineOC_Sphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, Vec3f* a,
                                  Vec3f* b) {
-    ColliderSphere* sphere = (ColliderSphere*)col;
+    ColliderSphere* sph = (ColliderSphere*)col;
 
-    if (!(sphere->info.ocElemFlags & OCELEM_ON)) {
+    if (!(sph->elem.ocElemFlags & OCELEM_ON)) {
         return false;
     }
 
     D_801EDFC8.a = *a;
     D_801EDFC8.b = *b;
-    if (Math3D_LineVsSph(&sphere->dim.worldSphere, &D_801EDFC8)) {
+    if (Math3D_LineVsSph(&sph->dim.worldSphere, &D_801EDFC8)) {
         return true;
     }
 
@@ -3879,19 +3881,19 @@ void Collider_UpdateSpheresElement(ColliderJntSph* jntSph, s32 elemIndex, Actor*
 /**
  * Updates the world sphere for the ColliderSphere if it is attached to the specified limb
  */
-void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
+void Collider_UpdateSphere(s32 limb, ColliderSphere* sph) {
     static Vec3f D_801EE1E0;
     static Vec3f D_801EE1F0;
 
-    if (limb == collider->dim.limb) {
-        D_801EE1E0.x = collider->dim.modelSphere.center.x;
-        D_801EE1E0.y = collider->dim.modelSphere.center.y;
-        D_801EE1E0.z = collider->dim.modelSphere.center.z;
+    if (limb == sph->dim.limb) {
+        D_801EE1E0.x = sph->dim.modelSphere.center.x;
+        D_801EE1E0.y = sph->dim.modelSphere.center.y;
+        D_801EE1E0.z = sph->dim.modelSphere.center.z;
         Matrix_MultVec3f(&D_801EE1E0, &D_801EE1F0);
-        collider->dim.worldSphere.center.x = D_801EE1F0.x;
-        collider->dim.worldSphere.center.y = D_801EE1F0.y;
-        collider->dim.worldSphere.center.z = D_801EE1F0.z;
-        collider->dim.worldSphere.radius = collider->dim.modelSphere.radius * collider->dim.scale;
+        sph->dim.worldSphere.center.x = D_801EE1F0.x;
+        sph->dim.worldSphere.center.y = D_801EE1F0.y;
+        sph->dim.worldSphere.center.z = D_801EE1F0.z;
+        sph->dim.worldSphere.radius = sph->dim.modelSphere.radius * sph->dim.scale;
     }
 }
 

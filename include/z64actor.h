@@ -864,7 +864,7 @@ void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSph);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* dst, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* cyl);
-void func_800BE568(Actor* actor, ColliderSphere* collider);
+void func_800BE568(Actor* actor, ColliderSphere* sph);
 void func_800BE5CC(Actor* actor, ColliderJntSph* jntSph, s32 elemIndex);
 s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(struct PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount,

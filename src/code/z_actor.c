@@ -4798,11 +4798,11 @@ void func_800BE504(Actor* actor, ColliderCylinder* cyl) {
     }
 }
 
-void func_800BE568(Actor* actor, ColliderSphere* collider) {
-    if (collider->info.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
-        actor->world.rot.y = collider->base.ac->shape.rot.y;
+void func_800BE568(Actor* actor, ColliderSphere* sph) {
+    if (sph->elem.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+        actor->world.rot.y = sph->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(sph->base.ac, actor);
     }
 }
 

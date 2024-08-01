@@ -218,8 +218,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     } else if (flameColliderACDmgFlags & 0x20) {
                         Actor* flameColliderACActor = this->flameCollider.base.ac;
 
-                        if ((flameColliderACActor->update != NULL) &&
-                            (flameColliderACActor->id == ACTOR_EN_ARROW)) {
+                        if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderACActor->params = 0;
                             ((EnArrow*)flameColliderACActor)->collider.elem.toucher.dmgFlags = 0x800;
@@ -232,8 +231,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
-                             (flameColliderACDmgFlags & 0x800)) ||
+                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) && (flameColliderACDmgFlags & 0x800)) ||
                             ((interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) && (player->unk_B28 != 0)))) {
                     if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;

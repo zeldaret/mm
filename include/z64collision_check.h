@@ -257,15 +257,23 @@ typedef struct {
     /* 0x20 */ ColliderQuadDimInit dim;
 } ColliderQuadInitType1; // size = 0x50
 
+/*
+ * Sphere - A single sphere shaped collider
+ */
+
+// collider structs
+
 typedef struct {
     /* 0x00 */ Collider base;
-    /* 0x18 */ ColliderElement info;
+    /* 0x18 */ ColliderElement elem;
     /* 0x40 */ ColliderJntSphElementDim dim;
 } ColliderSphere; // size = 0x58
 
+// init data structs
+
 typedef struct {
     /* 0x00 */ ColliderInit base;
-    /* 0x08 */ ColliderElementInit info;
+    /* 0x08 */ ColliderElementInit elem;
     /* 0x20 */ ColliderJntSphElementDimInit dim;
 } ColliderSphereInit; // size = 0x2C
 
@@ -584,10 +592,10 @@ s32 Collider_ResetQuadAT(struct PlayState* play, Collider* col);
 s32 Collider_ResetQuadAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetQuadOC(struct PlayState* play, Collider* col);
 s32 Collider_QuadSetNearestAC(struct PlayState* play, ColliderQuad* quad, Vec3f* hitPos);
-s32 Collider_InitSphere(struct PlayState* play, ColliderSphere* collider);
-s32 Collider_DestroySphere(struct PlayState* play, ColliderSphere* collider);
-s32 Collider_SetSphere(struct PlayState* play, ColliderSphere* collider, struct Actor* actor, ColliderSphereInit* src);
-s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* collider, struct Actor* actor, ColliderSphereInit* src);
+s32 Collider_InitSphere(struct PlayState* play, ColliderSphere* sph);
+s32 Collider_DestroySphere(struct PlayState* play, ColliderSphere* sph);
+s32 Collider_SetSphere(struct PlayState* play, ColliderSphere* dest, struct Actor* actor, ColliderSphereInit* src);
+s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* dest, struct Actor* actor, ColliderSphereInit* src);
 s32 Collider_ResetSphereAT(struct PlayState* play, Collider* col);
 s32 Collider_ResetSphereAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetSphereOC(struct PlayState* play, Collider* col);
@@ -697,7 +705,7 @@ void Collider_SetTrisVertices(ColliderTris* tris, s32 elemIndex, Vec3f* a, Vec3f
 void Collider_SetTrisDim(struct PlayState* play, ColliderTris* dest, s32 elemIndex, ColliderTrisElementDimInit* src);
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* jntSph);
 void Collider_UpdateSpheresElement(ColliderJntSph* jntSph, s32 elemIndex, struct Actor* actor);
-void Collider_UpdateSphere(s32 limb, ColliderSphere* collider);
+void Collider_UpdateSphere(s32 limb, ColliderSphere* sph);
 void CollisionCheck_SpawnRedBlood(struct PlayState* play, Vec3f* v);
 void CollisionCheck_SpawnWaterDroplets(struct PlayState* play, Vec3f* v);
 void CollisionCheck_SpawnShieldParticles(struct PlayState* play, Vec3f* v);

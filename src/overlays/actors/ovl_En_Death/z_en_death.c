@@ -1220,8 +1220,8 @@ void EnDeath_UpdateDamage(EnDeath* this, PlayState* play) {
                 this->dmgEffectAlpha = 3.0f;
                 this->dmgEffectScale = 0.8f;
                 this->dmgEffect = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->coreCollider.info.bumper.hitPos.x,
-                            this->coreCollider.info.bumper.hitPos.y, this->coreCollider.info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->coreCollider.elem.bumper.hitPos.x,
+                            this->coreCollider.elem.bumper.hitPos.y, this->coreCollider.elem.bumper.hitPos.z, 0, 0, 0,
                             4);
             }
             if (play->envCtx.lightSettingOverride == 27) {
