@@ -1127,9 +1127,9 @@ s32 Collider_SetLinePoints(struct PlayState* play, OcLine* line, Vec3f* a, Vec3f
 /**
  * Sets up an OcLine using the values in src.
  */
-s32 Collider_SetLine(struct PlayState* play, OcLine* line, OcLine* src) {
-    line->ocFlags = src->ocFlags;
-    Collider_SetLinePoints(play, line, &src->line.a, &src->line.b);
+s32 Collider_SetLine(struct PlayState* play, OcLine* dst, OcLine* src) {
+    dst->ocFlags = src->ocFlags;
+    Collider_SetLinePoints(play, dst, &src->line.a, &src->line.b);
     return 1;
 }
 
@@ -1158,7 +1158,7 @@ void CollisionCheck_DestroyContext(struct PlayState* play, CollisionCheckContext
  */
 void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** colP;
-    OcLine** line;
+    OcLine** lineP;
 
     if (colChkCtx->sacFlags & SAC_ON) {
         return;
@@ -1181,8 +1181,8 @@ void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* 
         *colP = NULL;
     }
 
-    for (line = &colChkCtx->colLine[0]; line < &colChkCtx->colLine[ARRAY_COUNT(colChkCtx->colLine)]; line++) {
-        *line = NULL;
+    for (lineP = &colChkCtx->colLine[0]; lineP < &colChkCtx->colLine[ARRAY_COUNT(colChkCtx->colLine)]; lineP++) {
+        *lineP = NULL;
     }
 }
 

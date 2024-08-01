@@ -277,6 +277,10 @@ typedef struct {
     /* 0x20 */ ColliderJntSphElementDimInit dim;
 } ColliderSphereInit; // size = 0x2C
 
+/*
+ * Line collider
+ */
+
 typedef struct {
     /* 0x00 */ Linef line;
     /* 0x18 */ u16 ocFlags;
@@ -602,7 +606,7 @@ s32 Collider_ResetSphereOC(struct PlayState* play, Collider* col);
 s32 Collider_InitLine(struct PlayState* play, OcLine* line);
 s32 Collider_DestroyLine(struct PlayState* play, OcLine* line);
 s32 Collider_SetLinePoints(struct PlayState* play, OcLine* line, Vec3f* a, Vec3f* b);
-s32 Collider_SetLine(struct PlayState* play, OcLine* line, OcLine* src);
+s32 Collider_SetLine(struct PlayState* play, OcLine* dst, OcLine* src);
 s32 Collider_ResetLineOC(struct PlayState* play, OcLine* line);
 void CollisionCheck_InitContext(struct PlayState* play, CollisionCheckContext* colChkCtx);
 void CollisionCheck_DestroyContext(struct PlayState* play, CollisionCheckContext* colCtxt);
