@@ -383,9 +383,9 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     this->playerScaleZ = player->actor.scale.z;
 
     // Keyframe animations
-    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&gameplay_keep_Blob_085640,
-                      (KeyFrameAnimation*)&gameplay_keep_Blob_083534, this->jointTable, this->morphTable, NULL);
-    Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&gameplay_keep_Blob_083534);
+    Keyframe_InitFlex(&this->kfSkelAnime, &gameplay_keep_KFSkel_085640, &gameplay_keep_KFAnim_083534, this->jointTable,
+                      this->morphTable, NULL);
+    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &gameplay_keep_KFAnim_083534);
 
     EnTest7_InitFeathers(this->feathers);
     EnTest7_InitWindCapsule(&this->windCapsule);

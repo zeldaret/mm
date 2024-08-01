@@ -186,9 +186,9 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         this->surfaceMaterial = SurfaceType_GetMaterial(&play->colCtx, thisx->floorPoly, bgId);
     }
 
-    Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&gameplay_keep_Blob_06EB70,
-                      (KeyFrameAnimation*)&gameplay_keep_Blob_06BB0C, this->jointTable, this->morphTable, NULL);
-    Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&gameplay_keep_Blob_06BB0C);
+    Keyframe_InitFlex(&this->kfSkelAnime, &gameplay_keep_KFSkel_06EB70, &gameplay_keep_KFAnim_06BB0C, this->jointTable,
+                      this->morphTable, NULL);
+    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &gameplay_keep_KFAnim_06BB0C);
     this->kfSkelAnime.frameCtrl.curTime = 9.0f;
     func_80862B70(this->unk_20C);
 }

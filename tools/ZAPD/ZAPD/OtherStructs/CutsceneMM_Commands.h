@@ -282,7 +282,8 @@ public:
 	uint16_t posZ;
 	uint16_t relTo;
 
-	CutsceneSubCommandEntry_SplineCamPoint(const std::vector<uint8_t>& rawData, offset_t rawDataIndex);
+	CutsceneSubCommandEntry_SplineCamPoint(const std::vector<uint8_t>& rawData,
+	                                       offset_t rawDataIndex);
 
 	std::string GetBodySourceCode() const override;
 
@@ -296,8 +297,9 @@ public:
 	uint16_t roll;
 	uint16_t fov;
 	uint16_t unused1;
-	
-	CutsceneSubCommandEntry_SplineMiscPoint(const std::vector<uint8_t>& rawData, offset_t rawDataIndex);
+
+	CutsceneSubCommandEntry_SplineMiscPoint(const std::vector<uint8_t>& rawData,
+	                                        offset_t rawDataIndex);
 
 	std::string GetBodySourceCode() const override;
 
@@ -306,8 +308,9 @@ public:
 
 class CutsceneSubCommandEntry_SplineFooter : public CutsceneSubCommandEntry
 {
-public:	
-	CutsceneSubCommandEntry_SplineFooter(const std::vector<uint8_t>& rawData, offset_t rawDataIndex);
+public:
+	CutsceneSubCommandEntry_SplineFooter(const std::vector<uint8_t>& rawData,
+	                                     offset_t rawDataIndex);
 
 	std::string GetBodySourceCode() const override;
 
@@ -321,7 +324,8 @@ public:
 	uint16_t unused0;
 	uint16_t unused1;
 	uint16_t duration;
-	CutsceneSubCommandEntry_SplineHeader(const std::vector<uint8_t>& rawData, offset_t rawDataIndex);
+	CutsceneSubCommandEntry_SplineHeader(const std::vector<uint8_t>& rawData,
+	                                     offset_t rawDataIndex);
 
 	std::string GetBodySourceCode() const override;
 

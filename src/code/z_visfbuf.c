@@ -10,8 +10,10 @@
  * VisFbuf_Draw() for how to do this.
  */
 
-#include "global.h"
 #include "z64visfbuf.h"
+
+#include "gfxalloc.h"
+#include "global.h"
 #include "sys_cfb.h"
 #include "sys_ucode.h"
 

@@ -42,7 +42,6 @@
         <Texture Name="gChildZelda1TLUT_6ED0" OutName="child_zelda_1_tlut_6ED0" Format="rgba16" Width="252" Height="1" Offset="0x6ED0" />
         <Texture Name="gChildZelda1TLUT_70C8" OutName="child_zelda_1_tlut_70C8" Format="rgba16" Width="160" Height="1" Offset="0x70C8" />
         <Texture Name="gChildZelda1EyeOpenLookingUpRightTex" OutName="child_zelda_1_eye_open_looking_up_right" Format="ci8" Width="32" Height="32" Offset="0x7208" TlutOffset="0x6CD8" />
-        <!-- <Blob Name="object_zl1_Blob_0072C8" Size="0x740" Offset="0x72C8" /> -->
         <Texture Name="gChildZelda1MouthNeutralTex" OutName="child_zelda_1_mouth_neutral" Format="ci8" Width="32" Height="32" Offset="0x7608" TlutOffset="0x6ED0" />
         <Texture Name="gChildZelda1HeaddressGradientTex" OutName="child_zelda_1_headdress_gradient" Format="ci8" Width="8" Height="8" Offset="0x7A08" TlutOffset="0x70C8" />
         <Texture Name="gChildZelda1SkinGradientTex" OutName="child_zelda_1_skin_gradient" Format="rgba16" Width="8" Height="8" Offset="0x7A48" />

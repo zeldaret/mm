@@ -46,9 +46,9 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
-        Keyframe_InitFlex(&this->kfSkelAnime, (KeyFrameFlexSkeleton*)&object_moonend_Blob_00B5A0,
-                          (KeyFrameAnimation*)&object_moonend_Blob_001214, this->jointTable, this->morphTable, NULL);
-        Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&object_moonend_Blob_001214);
+        Keyframe_InitFlex(&this->kfSkelAnime, &object_moonend_KFSkel_00B5A0, &object_moonened_KFAnim_001214,
+                          this->jointTable, this->morphTable, NULL);
+        Keyframe_FlexPlayOnce(&this->kfSkelAnime, &object_moonened_KFAnim_001214);
         this->cueType = CS_CMD_ACTOR_CUE_560;
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
@@ -110,13 +110,13 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             switch (this->cueId) {
                 case 1:
                     this->actor.draw = DemoMoonend_Draw;
-                    Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&object_moonend_Blob_001214);
+                    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &object_moonened_KFAnim_001214);
                     this->kfSkelAnime.frameCtrl.speed = 0.0f;
                     break;
 
                 case 2:
                     this->actor.draw = DemoMoonend_Draw;
-                    Keyframe_FlexPlayOnce(&this->kfSkelAnime, (KeyFrameAnimation*)&object_moonend_Blob_001214);
+                    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &object_moonened_KFAnim_001214);
                     this->kfSkelAnime.frameCtrl.speed = 2.0f / 3.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EV_MOON_EXPLOSION);
                     this->actor.home.rot.z = 1;
