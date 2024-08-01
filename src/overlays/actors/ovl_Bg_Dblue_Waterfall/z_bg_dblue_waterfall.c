@@ -150,13 +150,13 @@ void func_80B83EA4(BgDblueWaterfall* this, PlayState* play) {
     Vec3f sp98;
     s32 phi_s3;
 
-    if (this->collider.info.bumperFlags & BUMP_HIT) {
+    if (this->collider.elem.bumperFlags & BUMP_HIT) {
         f32 temp_f0_2;
         f32 temp_f20;
 
-        spB0.x = this->collider.info.bumper.hitPos.x;
-        spB0.y = this->collider.info.bumper.hitPos.y;
-        spB0.z = this->collider.info.bumper.hitPos.z;
+        spB0.x = this->collider.elem.bumper.hitPos.x;
+        spB0.y = this->collider.elem.bumper.hitPos.y;
+        spB0.z = this->collider.elem.bumper.hitPos.z;
 
         sp98.x = spB0.x - this->actor.world.pos.x;
         sp98.y = 0.0f;
@@ -206,10 +206,10 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
     s32 temp_s3;
     s32 phi_s2;
 
-    if (this->collider.info.bumperFlags & BUMP_HIT) {
-        temp_f22 = this->collider.info.bumper.hitPos.x;
-        temp_f24 = this->collider.info.bumper.hitPos.y;
-        temp_f26 = this->collider.info.bumper.hitPos.z;
+    if (this->collider.elem.bumperFlags & BUMP_HIT) {
+        temp_f22 = this->collider.elem.bumper.hitPos.x;
+        temp_f24 = this->collider.elem.bumper.hitPos.y;
+        temp_f26 = this->collider.elem.bumper.hitPos.z;
 
         for (i = 0, phi_s2 = 0; i < 10; i++, phi_s2 += 0x1999) {
             temp_s3 = (s32)(Rand_ZeroOne() * 6553.0f) + phi_s2;
@@ -419,13 +419,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
         if (sp2C) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
-                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x800) {
+                if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x800) {
                     this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
-                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x1000) {
+                if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x1000) {
                     this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }

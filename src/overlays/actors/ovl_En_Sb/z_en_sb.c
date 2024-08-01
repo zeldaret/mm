@@ -346,9 +346,9 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
-        hitPoint.x = this->collider.info.bumper.hitPos.x;
-        hitPoint.y = this->collider.info.bumper.hitPos.y;
-        hitPoint.z = this->collider.info.bumper.hitPos.z;
+        hitPoint.x = this->collider.elem.bumper.hitPos.x;
+        hitPoint.y = this->collider.elem.bumper.hitPos.y;
+        hitPoint.z = this->collider.elem.bumper.hitPos.z;
         CollisionCheck_SpawnShieldParticlesMetal2(play, &hitPoint);
         return;
     }

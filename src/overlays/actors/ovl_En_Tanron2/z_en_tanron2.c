@@ -424,7 +424,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
     if (this->unk_154 == 0) {
         if (this->collider1.base.acFlags & AC_HIT) {
             this->collider1.base.acFlags &= ~AC_HIT;
-            acHitElem = this->collider1.info.acHitElem;
+            acHitElem = this->collider1.elem.acHitElem;
             if (acHitElem->toucher.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;

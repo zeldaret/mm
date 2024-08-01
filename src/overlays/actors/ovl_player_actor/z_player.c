@@ -2759,10 +2759,10 @@ void Player_ResetCylinder(Player* this) {
     this->cylinder.base.atFlags = AT_NONE;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
-    this->cylinder.info.elemType = ELEMTYPE_UNK1;
-    this->cylinder.info.toucher.dmgFlags = 0;
-    this->cylinder.info.bumper.dmgFlags = 0xF7CFFFFF;
-    this->cylinder.info.toucherFlags = TOUCH_NONE | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.elemType = ELEMTYPE_UNK1;
+    this->cylinder.elem.toucher.dmgFlags = 0;
+    this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
+    this->cylinder.elem.toucherFlags = TOUCH_NONE | TOUCH_SFX_NORMAL;
     this->cylinder.dim.radius = 12;
 }
 
@@ -2789,17 +2789,17 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
         this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
     }
 
-    this->cylinder.info.elemType = ELEMTYPE_UNK2;
-    this->cylinder.info.toucherFlags = TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.elemType = ELEMTYPE_UNK2;
+    this->cylinder.elem.toucherFlags = TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL;
     this->cylinder.dim.radius = radius;
-    this->cylinder.info.toucher.dmgFlags = dmgFlags;
-    this->cylinder.info.toucher.damage = damage;
+    this->cylinder.elem.toucher.dmgFlags = dmgFlags;
+    this->cylinder.elem.toucher.damage = damage;
 
     if (dmgFlags & DMG_GORON_POUND) {
         this->cylinder.base.acFlags = AC_NONE;
     } else {
         this->cylinder.base.colType = COLTYPE_NONE;
-        this->cylinder.info.bumper.dmgFlags = 0xF7CFFFFF;
+        this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
 
         if (dmgFlags & DMG_ZORA_BARRIER) {
             this->cylinder.base.acFlags = AC_NONE;
@@ -5796,8 +5796,8 @@ s32 func_80834600(Player* this, PlayState* play) {
         }
     } else if ((this->shieldQuad.base.acFlags & AC_BOUNCED) || (this->shieldCylinder.base.acFlags & AC_BOUNCED) ||
                ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & AC_HIT) &&
-                (this->cylinder.info.acHitElem != NULL) &&
-                (this->cylinder.info.acHitElem->toucher.dmgFlags != DMG_UNBLOCKABLE))) {
+                (this->cylinder.elem.acHitElem != NULL) &&
+                (this->cylinder.elem.acHitElem->toucher.dmgFlags != DMG_UNBLOCKABLE))) {
         PlayerAnimationHeader* var_a2;
         s32 sp64;
 
@@ -12318,7 +12318,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
              0.5f);
         temp_fv0 += this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 10.0f;
 
-        if (this->cylinder.info.toucher.dmgFlags == 0x80000) {
+        if (this->cylinder.elem.toucher.dmgFlags == 0x80000) {
             this->cylinder.dim.height = 80;
             var_fv1_2 = ((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f;
         } else {
@@ -12336,9 +12336,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         if (this->unk_B62 != 0) {
             this->shieldCylinder.base.acFlags = AC_NONE;
-            this->shieldCylinder.info.toucher.dmgFlags = 0x80000;
-            this->shieldCylinder.info.toucherFlags = TOUCH_ON;
-            this->shieldCylinder.info.bumperFlags = BUMP_NONE;
+            this->shieldCylinder.elem.toucher.dmgFlags = 0x80000;
+            this->shieldCylinder.elem.toucherFlags = TOUCH_ON;
+            this->shieldCylinder.elem.bumperFlags = BUMP_NONE;
             this->shieldCylinder.dim.height = 80;
             this->shieldCylinder.dim.radius = 50;
             this->shieldCylinder.dim.yShift = ((temp_fv0 + var_fv1_2) * 0.5f - 40.0f) - this->actor.world.pos.y;
@@ -12348,9 +12348,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         } else if (this->stateFlags1 & PLAYER_STATE1_400000) {
             if ((this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU)) {
                 this->shieldCylinder.base.acFlags = AC_ON | AC_HARD | AC_TYPE_ENEMY;
-                this->shieldCylinder.info.toucher.dmgFlags = 0x100000;
-                this->shieldCylinder.info.toucherFlags = TOUCH_NONE;
-                this->shieldCylinder.info.bumperFlags = BUMP_ON;
+                this->shieldCylinder.elem.toucher.dmgFlags = 0x100000;
+                this->shieldCylinder.elem.toucherFlags = TOUCH_NONE;
+                this->shieldCylinder.elem.bumperFlags = BUMP_ON;
 
                 if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.height = 35;

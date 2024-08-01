@@ -505,7 +505,7 @@ void func_80B2D7D4(EnPoh* this, PlayState* play) {
     this->unk_197 = this->unk_18C * (255.0f / 32.0f);
     if (this->unk_18C == 0) {
         this->unk_190 = Rand_S16Offset(100, 50);
-        this->colliderCylinder.info.bumper.dmgFlags = 0x40001;
+        this->colliderCylinder.elem.bumper.dmgFlags = 0x40001;
         func_80B2CB60(this);
     }
 }
@@ -532,7 +532,7 @@ void func_80B2D980(EnPoh* this, PlayState* play) {
     if (this->unk_18C == 32) {
         this->unk_190 = Rand_S16Offset(700, 300);
         this->unk_18C = 0;
-        this->colliderCylinder.info.bumper.dmgFlags = ~0x8340001;
+        this->colliderCylinder.elem.bumper.dmgFlags = ~0x8340001;
         func_80B2CB60(this);
     }
 }
@@ -708,9 +708,9 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == 4) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.45f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
-                                this->colliderCylinder.info.bumper.hitPos.y,
-                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.elem.bumper.hitPos.x,
+                                this->colliderCylinder.elem.bumper.hitPos.y,
+                                this->colliderCylinder.elem.bumper.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_80B2CFF8(this);

@@ -123,7 +123,7 @@ void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
-        if (this->collider.info.acHitElem->toucher.dmgFlags & (1 << 13)) {
+        if (this->collider.elem.acHitElem->toucher.dmgFlags & (1 << 13)) {
             this->collisionCounter = 8;
         }
         // light ray
