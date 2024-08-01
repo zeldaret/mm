@@ -270,7 +270,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
 void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp40;
-    ColliderTrisElement* element;
+    ColliderTrisElement* trisElem;
     s16 sp3A;
     s32 i;
     f32 temp_f12;
@@ -289,10 +289,10 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < 2; i++) {
-            element = &this->collider.elements[i];
-            if (element->info.bumperFlags & BUMP_HIT) {
-                if (this->collider.elements[i].info.acHitElem->toucher.dmgFlags & 0x800) {
-                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &element->info.bumper.hitPos);
+            trisElem = &this->collider.elements[i];
+            if (trisElem->base.bumperFlags & BUMP_HIT) {
+                if (this->collider.elements[i].base.acHitElem->toucher.dmgFlags & 0x800) {
+                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.bumper.hitPos);
                     func_809CEE74(this);
                     return;
                 }
@@ -422,7 +422,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
     f32 sp58;
     f32 temp_f10;
     f32 temp_f18;
-    ColliderTrisElement* ptr;
+    ColliderTrisElement* trisElem;
     s32 i;
     Vec3f sp3C;
     f32 sp38;
@@ -432,9 +432,9 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            ptr = &this->collider.elements[i];
-            if (ptr->info.bumperFlags & BUMP_HIT) {
-                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &ptr->info.bumper.hitPos);
+            trisElem = &this->collider.elements[i];
+            if (trisElem->base.bumperFlags & BUMP_HIT) {
+                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.bumper.hitPos);
                 break;
             }
         }

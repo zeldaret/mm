@@ -180,25 +180,33 @@ typedef struct {
     /* 0x20 */ Cylinder16 dim;
 } ColliderCylinderInitToActor; // size = 0x2C
 
-typedef struct {
-    /* 0x00 */ Vec3f vtx[3];
-} ColliderTrisElementDimInit; // size = 0x24
+/*
+ * Tris - A collider made of triangle shaped elements
+ */
+
+// collider structs
 
 typedef struct {
-    /* 0x00 */ ColliderElement info;
+    /* 0x00 */ ColliderElement base;
     /* 0x28 */ TriNorm dim;
 } ColliderTrisElement; // size = 0x5C
-
-typedef struct {
-    /* 0x00 */ ColliderElementInit info;
-    /* 0x18 */ ColliderTrisElementDimInit dim;
-} ColliderTrisElementInit; // size = 0x3C
 
 typedef struct {
     /* 0x00 */ Collider base;
     /* 0x18 */ s32 count;
     /* 0x1C */ ColliderTrisElement* elements;
 } ColliderTris; // size = 0x20
+
+// init data structs
+
+typedef struct {
+    /* 0x00 */ Vec3f vtx[3];
+} ColliderTrisElementDimInit; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ ColliderElementInit base;
+    /* 0x18 */ ColliderTrisElementDimInit dim;
+} ColliderTrisElementInit; // size = 0x3C
 
 typedef struct {
     /* 0x0 */ ColliderInit base;
@@ -538,19 +546,19 @@ s32 Collider_ResetCylinderAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetCylinderOC(struct PlayState* play, Collider* col);
 s32 Collider_InitTrisElementDim(struct PlayState* play, TriNorm* dim);
 s32 Collider_DestroyTrisElementDim(struct PlayState* play, TriNorm* dim);
-s32 Collider_SetTrisElementDim(struct PlayState* play, TriNorm* dim, ColliderTrisElementDimInit* src);
-s32 Collider_InitTrisElement(struct PlayState* play, ColliderTrisElement* element);
-s32 Collider_DestroyTrisElement(struct PlayState* play, ColliderTrisElement* element);
-s32 Collider_SetTrisElement(struct PlayState* play, ColliderTrisElement* element, ColliderTrisElementInit* src);
-s32 Collider_ResetTrisElementAT(struct PlayState* play, ColliderTrisElement* element);
-s32 Collider_ResetTrisElementAC(struct PlayState* play, ColliderTrisElement* element);
-s32 Collider_ResetTrisElementOC(struct PlayState* play, ColliderTrisElement* element);
+s32 Collider_SetTrisElementDim(struct PlayState* play, TriNorm* dest, ColliderTrisElementDimInit* src);
+s32 Collider_InitTrisElement(struct PlayState* play, ColliderTrisElement* trisElem);
+s32 Collider_DestroyTrisElement(struct PlayState* play, ColliderTrisElement* trisElem);
+s32 Collider_SetTrisElement(struct PlayState* play, ColliderTrisElement* dest, ColliderTrisElementInit* src);
+s32 Collider_ResetTrisElementAT(struct PlayState* play, ColliderTrisElement* trisElem);
+s32 Collider_ResetTrisElementAC(struct PlayState* play, ColliderTrisElement* trisElem);
+s32 Collider_ResetTrisElementOC(struct PlayState* play, ColliderTrisElement* trisElem);
 s32 Collider_InitTris(struct PlayState* play, ColliderTris* tris);
 s32 Collider_FreeTris(struct PlayState* play, ColliderTris* tris);
 s32 Collider_DestroyTris(struct PlayState* play, ColliderTris* tris);
-s32 Collider_SetTrisAllocType1(struct PlayState* play, ColliderTris* tris, struct Actor* actor, ColliderTrisInitType1* src);
-s32 Collider_SetTris(struct PlayState* play, ColliderTris* triGroup, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* tris);
-s32 Collider_InitAndSetTris(struct PlayState* play, ColliderTris* tris, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* elements);
+s32 Collider_SetTrisAllocType1(struct PlayState* play, ColliderTris* dest, struct Actor* actor, ColliderTrisInitType1* src);
+s32 Collider_SetTris(struct PlayState* play, ColliderTris* dest, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* trisElements);
+s32 Collider_InitAndSetTris(struct PlayState* play, ColliderTris* dest, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* trisElements);
 s32 Collider_ResetTrisAT(struct PlayState* play, Collider* col);
 s32 Collider_ResetTrisAC(struct PlayState* play, Collider* col);
 s32 Collider_ResetTrisOC(struct PlayState* play, Collider* col);
@@ -606,7 +614,7 @@ s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderElement* acElem);
 void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderElement* atElem, Collider* ac, ColliderElement* acElem, Vec3f* hitPos);
 void CollisionCheck_SetBounce(Collider* at, Collider* ac);
 s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderElement* atElem, Vec3f* atPos, Collider* acCol, ColliderElement* acElem, Vec3f* acPos, Vec3f* hitPos);
-void CollisionCheck_TrisAvgPoint(ColliderTrisElement* tri, Vec3f* avg);
+void CollisionCheck_TrisAvgPoint(ColliderTrisElement* trisElem, Vec3f* avg);
 void CollisionCheck_QuadAvgPoint(ColliderQuad* quad, Vec3f* avg);
 void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
 void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
@@ -677,8 +685,8 @@ s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* co
 void Collider_UpdateCylinder(struct Actor* actor, ColliderCylinder* cyl);
 void Collider_SetCylinderPosition(ColliderCylinder* cyl, Vec3s* pos);
 void Collider_SetQuadVertices(ColliderQuad* collider, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);
-void Collider_SetTrisVertices(ColliderTris* collider, s32 index, Vec3f* a, Vec3f* b, Vec3f* c);
-void Collider_SetTrisDim(struct PlayState* play, ColliderTris* collider, s32 index, ColliderTrisElementDimInit* init);
+void Collider_SetTrisVertices(ColliderTris* tris, s32 elemIndex, Vec3f* a, Vec3f* b, Vec3f* c);
+void Collider_SetTrisDim(struct PlayState* play, ColliderTris* dest, s32 elemIndex, ColliderTrisElementDimInit* src);
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* jntSph);
 void Collider_UpdateSpheresElement(ColliderJntSph* jntSph, s32 elemIndex, struct Actor* actor);
 void Collider_UpdateSphere(s32 limb, ColliderSphere* collider);
