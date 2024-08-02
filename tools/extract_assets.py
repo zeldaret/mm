@@ -2,9 +2,9 @@
 
 import argparse, json, os, signal, time, colorama, multiprocessing
 
-colorama.init()
+from pathlib import Path
 
-EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
+colorama.init()
 
 dontGenerateCFilesList = [
     "map_grand_static",
@@ -80,6 +80,7 @@ def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, man
 
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
+    parser.add_argument("-v", "--version", help="Which version should be processed", default="n64-us")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
     parser.add_argument("-j", "--jobs", help="Number of cpu cores to extract with.")
@@ -110,9 +111,10 @@ def main():
     manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
+    extractedAssetsFile = Path("extracted") / args.version / ".extracted-assets.json"
     extractedAssetsTracker = manager.dict()
-    if not args.force and os.path.exists(EXTRACTED_ASSETS_NAMEFILE):
-        with open(EXTRACTED_ASSETS_NAMEFILE, encoding='utf-8') as f:
+    if not args.force and extractedAssetsFile.exists():
+        with extractedAssetsFile.open(encoding='utf-8') as f:
             extractedAssetsTracker.update(json.load(f, object_hook=manager.dict))
 
     extract_text_path = "assets/text/message_data.h"
@@ -121,11 +123,11 @@ def main():
     asset_path = args.single
     if asset_path is not None:
         if "text/" in asset_path:
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)
 
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
             msgdisStaff.main(extract_staff_text_path)
         else:
@@ -142,12 +144,12 @@ def main():
     else:
         # Only extract text if the header does not already exist, or if --force was passed
         if args.force or not os.path.isfile(extract_text_path):
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)
 
         if args.force or not os.path.isfile(extract_staff_text_path):
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
             msgdisStaff.main(extract_staff_text_path)
 
@@ -173,7 +175,7 @@ def main():
             for singlePath in xmlFiles:
                 ExtractFunc(singlePath)
 
-    with open(EXTRACTED_ASSETS_NAMEFILE, 'w', encoding='utf-8') as f:
+    with extractedAssetsFile.open('w', encoding='utf-8') as f:
         serializableDict = dict()
         for xml, data in extractedAssetsTracker.items():
             serializableDict[xml] = dict(data)
