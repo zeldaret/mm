@@ -358,7 +358,7 @@ assetclean:
 	$(RM) -r $(ASSET_BIN_DIRS)
 	$(RM) -r $(BUILD_DIR)/assets
 	$(RM) -r assets/text/*.h
-	$(RM) -r .extracted-assets.json
+	$(RM) -r $(EXTRACTED_DIR)/.extracted-assets.json
 
 distclean: assetclean clean
 	$(RM) -r asm data extracted
@@ -377,7 +377,7 @@ setup:
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
 assets:
-	$(PYTHON) extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) extract_assets.py -v $(VERSION) -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:
