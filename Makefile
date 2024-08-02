@@ -1,7 +1,7 @@
 # Build options can be changed by modifying the makefile or by building with 'make SETTING=value'.
-# It is also possible to override the settings in Defaults in a file called .make_options as 'SETTING=value'.
+# It is also possible to override the settings in Defaults in a file called .options.mk as 'SETTING=value'.
 
--include .make_options
+-include .options.mk
 
 MAKEFLAGS += --no-builtin-rules
 
