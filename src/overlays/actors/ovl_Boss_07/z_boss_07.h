@@ -164,8 +164,8 @@ typedef struct Boss07 {
     /* 0x0144 */ Boss07ActionFunc actionFunc;
     /* 0x0148 */ u8 shouldStartDeath;
     /* 0x0149 */ u8 shouldUpdateTentaclesOrWhips;
-    /* 0x014A */ u8 envEffectOn;
-    /* 0x014B */ u8 envEffectTimer;
+    /* 0x014A */ u8 lightSettingsMode;
+    /* 0x014B */ u8 lightSettingsIndex;
     /* 0x014C */ s16 frameCounter;
     /* 0x014E */ u8 actionState;
     /* 0x014F */ u8 whipCrackTimer;

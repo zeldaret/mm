@@ -9435,7 +9435,7 @@
     0x809F2EE8:("Boss06_CurtainDestroyed",),
     0x809F2F0C:("Boss06_Update",),
     0x809F334C:("Boss06_Draw",),
-    0x809F4980:("Boss07_Remains_DamageSfx",),
+    0x809F4980:("Boss07_Remains_PlayDamageSfx",),
     0x809F49A0:("Boss07_InitRand",),
     0x809F49C0:("Boss07_RandZeroOne",),
     0x809F4AE8:("Boss07_SpawnEffect",),

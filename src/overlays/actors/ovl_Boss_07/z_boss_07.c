@@ -3,6 +3,7 @@
  * Overlay: ovl_Boss_07
  * Description: Majora
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_boss_07.h"
 #include "z64shrink_window.h"
@@ -14,9 +15,6 @@
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss07*)thisx)
-
-// TODO: Remove this
-#define FACING_ANGLE(actor1, actor2) ((s16)((actor1)->shape.rot.y - (actor2)->shape.rot.y + 0x8000))
 
 #define MAJORA_EFFECT_COUNT 50
 
@@ -555,7 +553,7 @@ ActorInit Boss_07_InitVars = {
     /**/ Boss07_Wrath_Draw,
 };
 
-static ColliderJntSphElementInit sWrathJntSphElementsInit1[11] = {
+static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -739,7 +737,7 @@ static ColliderJntSphInit sWrathJntSphInit2 = {
     sWrathJntSphElementsInit2,
 };
 
-static ColliderQuadInit sMaskQuadInit1 = {
+static ColliderQuadInit sMaskFrontQuadInit = {
     {
         COLTYPE_METAL,
         AT_ON | AT_TYPE_ENEMY,
@@ -759,7 +757,7 @@ static ColliderQuadInit sMaskQuadInit1 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-static ColliderQuadInit sMaskQuadInit2 = {
+static ColliderQuadInit sMaskBackQuadInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -779,7 +777,7 @@ static ColliderQuadInit sMaskQuadInit2 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-static ColliderJntSphElementInit sIncarnationJntSphElementsInit[11] = {
+static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -995,7 +993,7 @@ s32 sMajoraRandSeed1;
 s32 sMajoraRandSeed2;
 s32 sMajoraRandSeed3;
 
-void Boss07_Remains_DamageSfx(Boss07* this) {
+void Boss07_Remains_PlayDamageSfx(Boss07* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DAMAGE);
 }
 
@@ -1348,8 +1346,8 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 Boss07_Mask_SetupIntroCutscene(this, play);
             }
 
-            Collider_InitAndSetQuad(play, &this->maskFrontCollider, &this->actor, &sMaskQuadInit1);
-            Collider_InitAndSetQuad(play, &this->maskBackCollider, &this->actor, &sMaskQuadInit2);
+            Collider_InitAndSetQuad(play, &this->maskFrontCollider, &this->actor, &sMaskFrontQuadInit);
+            Collider_InitAndSetQuad(play, &this->maskBackCollider, &this->actor, &sMaskBackQuadInit);
             this->actor.colChkInfo.health = 14;
 
             for (i = 0; i < MAJORA_REMAINS_TYPE_MAX; i++) {
@@ -1383,7 +1381,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 Boss07_Incarnation_SetupIntroCutscene(this, play);
             } else {
                 Boss07_Incarnation_SetupTaunt(this, play);
-                this->envEffectOn = 1;
+                this->lightSettingsMode = 1;
                 for (i = 0; i < MAJORAS_INCARNATION_GROW_BODYPART_MAX; i++) {
                     this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
@@ -3251,36 +3249,29 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
         velocity->y = (pos->y - tempPos.y) * mobility;
         velocity->z = (pos->z - tempPos.z) * mobility;
 
-//! TODO: Generalize
-#define CLAMP_VAR(x, xmin, xmax) \
-    if (x > (xmax))              \
-        x = (xmax);              \
-    if (x < (xmin))              \
-        x = (xmin);              \
-    (void)0
+        if (velocity->x > 200.0f) {
+            velocity->x = 200.0f;
+        }
 
-        // if (velocity->x > 200.0f) velocity->x = 200.0f;if (velocity->x < -200.0f) velocity->x = -200.0f;
-        CLAMP_VAR(velocity->x, -200.0f, 200.0f);
-        CLAMP_VAR(velocity->y, -200.0f, 200.0f);
-        CLAMP_VAR(velocity->z, -200.0f, 200.0f);
-        // if (velocity->x > 200.0f) {
-        //     velocity->x = 200.0f;
-        // }
-        // if (velocity->x < -200.0f) {
-        //     velocity->x = -200.0f;
-        // }
-        // if (velocity->y > 200.0f) {
-        //     velocity->y = 200.0f;
-        // }
-        // if (velocity->y < -200.0f) {
-        //     velocity->y = -200.0f;
-        // }
-        // if (velocity->z > 200.0f) {
-        //     velocity->z = 200.0f;
-        // }
-        // if (velocity->z < -200.0f) {
-        //     velocity->z = -200.0f;
-        // }
+        if (velocity->x < -200.0f) {
+            velocity->x = -200.0f;
+        }
+
+        if (velocity->y > 200.0f) {
+            velocity->y = 200.0f;
+        }
+
+        if (velocity->y < -200.0f) {
+            velocity->y = -200.0f;
+        }
+
+        if (velocity->z > 200.0f) {
+            velocity->z = 200.0f;
+        }
+
+        if (velocity->z < -200.0f) {
+            velocity->z = -200.0f;
+        }
     }
 }
 
@@ -4051,7 +4042,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer == 20) {
                 SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MAJORAS_INCARNATION | SEQ_FLAG_ASYNC);
-                this->envEffectOn = 1;
+                this->lightSettingsMode = 1;
                 play->envCtx.lightBlend = 0.0f;
             }
 
@@ -4672,20 +4663,20 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     this->frameCounter++;
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
-    if (this->envEffectOn == 1) {
+    if (this->lightSettingsMode == 1) {
         s32 pad;
 
         Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.1f);
 
         if (play->envCtx.lightBlend == 1.0f) {
             play->envCtx.lightBlend = 0.0f;
-            this->envEffectTimer++;
-            if (this->envEffectTimer >= 8) {
-                this->envEffectTimer = 0;
+            this->lightSettingsIndex++;
+            if (this->lightSettingsIndex >= 8) {
+                this->lightSettingsIndex = 0;
             }
         }
-        play->envCtx.prevLightSetting = D_80A08198[this->envEffectTimer];
-        play->envCtx.lightSetting = D_80A081A0[this->envEffectTimer];
+        play->envCtx.prevLightSetting = D_80A08198[this->lightSettingsIndex];
+        play->envCtx.lightSetting = D_80A081A0[this->lightSettingsIndex];
     }
 
     Math_ApproachF(&play->envCtx.lightBlend, 0.0f, 1.0f, 0.03f);
@@ -5378,8 +5369,8 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                 (sp160.z <= (this->beamLengthScale * 20))) {
                 if (Player_HasMirrorShieldEquipped(play) && (player->transformation == PLAYER_FORM_HUMAN) &&
                     (player->stateFlags1 & PLAYER_STATE1_400000) &&
-                    (FACING_ANGLE(&player->actor, &this->actor) < 0x2000) &&
-                    (FACING_ANGLE(&player->actor, &this->actor) > -0x2000)) {
+                    (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) < 0x2000) &&
+                    (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) > -0x2000)) {
                     Vec3s sp118;
 
                     this->beamLengthScale = sp180 * 0.05f;
@@ -6572,7 +6563,7 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
             } else {
                 this->actionState = REMAINS_STATE_DAMAGED;
                 this->timers[0] = 15;
-                Boss07_Remains_DamageSfx(this);
+                Boss07_Remains_PlayDamageSfx(this);
             }
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
             Matrix_MultVecZ(-20.0f, &sp2C);
