@@ -299,7 +299,7 @@ void Boss07_Wrath_ShockStun(Boss07* this, PlayState* play);
 
 void Boss07_Wrath_GenShadowTex(u8* tex, Boss07* this, PlayState* play);
 void Boss07_Wrath_DrawShadowTex(u8* tex, Boss07* this, PlayState* play);
-void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight);
+void Boss07_Wrath_FillShadowTex(Boss07* this, u8* tex, f32 weight);
 
 void Boss07_Mask_SetupIdle(Boss07* this, PlayState* play);
 void Boss07_Mask_Idle(Boss07* this, PlayState* play);
@@ -1050,13 +1050,18 @@ void Boss07_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* pos) {
         collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale;
 }
 
-s32 Boss07_IsFacingPlayer(Boss07* this, PlayState* play) {
+/**
+ * Returns true if this actor's model is rotated such that it is looking at the player *and* if the player's model is
+ * rotated such that they are looking at this actor.
+ */
+s32 Boss07_ArePlayerAndActorFacing(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 0x3000) &&
-        (ABS_ALT((s16)(this->actor.yawTowardsPlayer - (s16)(player->actor.shape.rot.y + 0x8000))) < 0x3000)) {
+    if ((ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3000) &&
+        (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, BINANG_ROT180(player->actor.shape.rot.y))) < 0x3000)) {
         return true;
     }
+
     return false;
 }
 
@@ -1087,9 +1092,12 @@ void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterva
             velocity.x = Rand_CenteredFloat(5.0f);
             velocity.y = Rand_ZeroFloat(2.0f) + 1.0f;
             velocity.z = Rand_CenteredFloat(5.0f);
+
             accel.x = accel.z = 0.0f;
             accel.y = -0.1f;
+
             pos.y = Rand_ZeroFloat(10.0f) + 3.0f;
+
             if (spawnAtFocus) {
                 pos.x = this->actor.focus.pos.x + Rand_CenteredFloat(150.0f);
                 pos.z = this->actor.focus.pos.z + Rand_CenteredFloat(150.0f);
@@ -1097,6 +1105,7 @@ void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterva
                 pos.z = this->incarnationFeetPos[i].z + Rand_CenteredFloat(20.0f);
                 pos.x = this->incarnationFeetPos[i].x + Rand_CenteredFloat(20.0f);
             }
+
             func_800B0EB0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvColor,
                           Rand_ZeroFloat(150.0f) + 350.0f, 10, Rand_ZeroFloat(5.0f) + 14.0f);
         }
@@ -1146,8 +1155,10 @@ void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel) {
         } else {
             Boss07_Wrath_SetupJump(this, play);
         }
+
         this->collisionTimer = 10;
         this->whipGrabIndex = 0;
+
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
@@ -1156,7 +1167,7 @@ void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel) {
     }
 }
 
-void Boss07_Wrath_CheckExplosives(Boss07* this, PlayState* play) {
+void Boss07_Wrath_DodgeExplosives(Boss07* this, PlayState* play) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
@@ -1168,6 +1179,7 @@ void Boss07_Wrath_CheckExplosives(Boss07* this, PlayState* play) {
             Boss07_Wrath_Dodge(this, play, false);
             break;
         }
+
         explosive = explosive->next;
     }
 }
@@ -1188,12 +1200,11 @@ void Boss07_Wrath_BlastWhip(Vec3f* bombPos, Vec3f* pos, Vec3f* velocity) {
         dz = pos->z - bombPos->z;
 
         if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 300.0f) {
-
             push = 300.0f - sqrtf(SQ(dx) + SQ(dy) + SQ(dz));
             push = CLAMP_MAX(push, 200.0f);
-
             impulse.y = push;
             impulse.z = push;
+
             Matrix_RotateYF(Math_Atan2F_XY(dz, dx), MTXMODE_NEW);
             Matrix_MultVec3f(&impulse, velocity);
         }
@@ -1208,6 +1219,7 @@ void Boss07_Wrath_BombWhips(Boss07* this, PlayState* play) {
             Boss07_Wrath_BlastWhip(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.velocity);
             Boss07_Wrath_BlastWhip(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.velocity);
         }
+
         explosive = explosive->next;
     }
 }
@@ -2699,7 +2711,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                         this->rightWhip.tension = 0.0f;
                         Audio_PlaySfx(NA_SE_EN_LAST3_GET_LINK_OLD);
                     }
-                } else if ((player->stateFlags1 & PLAYER_STATE1_400000) && Boss07_IsFacingPlayer(this, play)) {
+                } else if ((player->stateFlags1 & PLAYER_STATE1_400000) && Boss07_ArePlayerAndActorFacing(this, play)) {
                     player->pushedSpeed = 10.0f;
                     player->pushedYaw = this->actor.yawTowardsPlayer;
                     Audio_PlaySfx(NA_SE_IT_SHIELD_BOUND);
@@ -3010,7 +3022,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         (this->frameCounter >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->kickCollider.base);
     } else {
-        if (this->canDodge && Boss07_IsFacingPlayer(this, play)) {
+        if (this->canDodge && Boss07_ArePlayerAndActorFacing(this, play)) {
             if ((player->unk_D57 == 4) && (player->heldItemAction != PLAYER_IA_BOW_LIGHT)) {
                 if ((this->actor.xzDistToPlayer >= 400.0f) && (Rand_ZeroOne() < 0.5f)) {
                     Boss07_Wrath_SetupSidestep(this, play);
@@ -3032,7 +3044,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         }
     }
     if (this->canDodge) {
-        Boss07_Wrath_CheckExplosives(this, play);
+        Boss07_Wrath_DodgeExplosives(this, play);
     }
 
     Boss07_Wrath_BombWhips(this, play);
@@ -3621,7 +3633,7 @@ void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
 void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
-    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, MAJORAS_WRATH_SHADOW_TEX_SIZE);
+    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, MAJORAS_WRATH_SHADOW_TEX_SIZE);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3656,8 +3668,8 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
                            MAJORAS_WRATH_LEFT_HAND);
 
     if (!this->disableShadow) {
-        Boss07_Wrath_GenShadowTex(shadowTex, this, play);
-        Boss07_Wrath_DrawShadowTex(shadowTex, this, play);
+        Boss07_Wrath_GenShadowTex(tex, this, play);
+        Boss07_Wrath_DrawShadowTex(tex, this, play);
     }
 
     Boss07_Wrath_DrawShocks(this, play);
@@ -3681,8 +3693,8 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
 /**
  * These four arrays encode circular shadow maps of various sizes. For an array of length N, the shadow map is N rows
  * tall, and each entry in the array describes the start and end point of the shadow within a given row (the exact
- * values of the start and end points are determined by the loops within Boss01_FillShadowTex). To illustrate using the
- * sShadowSmallMap as an example:
+ * values of the start and end points are determined by the loops within Boss07_Wrath_FillShadowTex). To illustrate
+ * using the sShadowSmallMap as an example:
  * -3 -2 -1  0  1
  *  -------------
  *  0  0  1  0  0
@@ -3744,7 +3756,7 @@ static u8 sShadowSizes[MAJORAS_WRATH_BODYPART_MAX] = {
     MAJORAS_WRATH_SHADOW_SIZE_SMALL,       // MAJORAS_WRATH_BODYPART_LEFT_FOOT
 };
 
-void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
+void Boss07_Wrath_FillShadowTex(Boss07* this, u8* tex, f32 weight) {
     s32 index;
     s32 i;
     s32 baseX;
@@ -3757,6 +3769,7 @@ void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
     Vec3f startVec;
 
     for (i = 0; i < MAJORAS_WRATH_BODYPART_MAX; i++) {
+        // TODO: match with a continue
         if ((weight == 0.0f) || ((y = sParentShadowBodyParts[i]) > BODYPART_NONE)) {
             if (weight > 0.0f) {
                 VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[y], weight);
@@ -3783,7 +3796,7 @@ void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
                     for (x = -sShadowExtraLargeMap[y]; x < sShadowExtraLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
-                            shadowTex[index] = 255;
+                            tex[index] = 255;
                         }
                     }
                 }
@@ -3792,7 +3805,7 @@ void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
                     for (x = -sShadowLargeMap[y]; x < sShadowLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
-                            shadowTex[index] = 255;
+                            tex[index] = 255;
                         }
                     }
                 }
@@ -3801,7 +3814,7 @@ void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
                     for (x = -sShadowMediumMap[y]; x < sShadowMediumMap[y] - 1; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
-                            shadowTex[index] = 255;
+                            tex[index] = 255;
                         }
                     }
                 }
@@ -3810,7 +3823,7 @@ void Boss07_Wrath_FillShadowTex(Boss07* this, u8* shadowTex, f32 weight) {
                     for (x = -sShadowSmallMap[y]; x < sShadowSmallMap[y] - 1; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < MAJORAS_WRATH_SHADOW_TEX_SIZE)) {
-                            shadowTex[index] = 255;
+                            tex[index] = 255;
                         }
                     }
                 }
@@ -3834,6 +3847,9 @@ void Boss07_Wrath_GenShadowTex(u8* tex, Boss07* this, PlayState* play) {
     }
 }
 
+/**
+ * Draws Wrath's dynamic shadow underneath it.
+ */
 void Boss07_Wrath_DrawShadowTex(u8* tex, Boss07* this, PlayState* play) {
     s32 pad[2];
     f32 alpha;
@@ -5340,24 +5356,28 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->beamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
 
             if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamTireMarkPos, &sp158,
-                                        1, 1, 1, 1, &sp144) &&
+                                        true, true, true, true, &sp144) &&
                 (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
-                Vec3f sp138;
-                Vec3f sp12C;
-                Vec3f sp120;
+                Vec3f flamePos;
+                Vec3f flameVelocity;
+                Vec3f flameAccel;
 
-                sp138.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
-                sp138.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
-                sp138.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
-                sp12C.x = 0.0f;
-                sp12C.y = 6.0f;
-                sp12C.z = 0.0f;
-                sp120.x = sp12C.x * -0.05f;
-                sp120.y = sp12C.y * -0.05f;
-                sp120.z = sp12C.z * -0.05f;
-                Boss07_SpawnEffect(play, &sp138, &sp12C, &sp120, Rand_ZeroFloat(10.0f) + 25.0f);
+                flamePos.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
+                flamePos.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
+                flamePos.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
+
+                flameVelocity.x = 0.0f;
+                flameVelocity.y = 6.0f;
+                flameVelocity.z = 0.0f;
+
+                flameAccel.x = flameVelocity.x * -0.05f;
+                flameAccel.y = flameVelocity.y * -0.05f;
+                flameAccel.z = flameVelocity.z * -0.05f;
+
+                Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel, Rand_ZeroFloat(10.0f) + 25.0f);
                 sp14B = true;
             }
+
             sp16C.x = player->actor.world.pos.x - this->beamStartPos.x;
             sp16C.y = player->actor.world.pos.y - this->beamStartPos.y + 10.0f;
             sp16C.z = player->actor.world.pos.z - this->beamStartPos.z;
@@ -5402,24 +5422,29 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                             (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                             (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                             s32 phi_s0_2;
-                            Vec3f sp108;
-                            Vec3f spFC;
-                            Vec3f spF0;
+                            Vec3f flamePos;
+                            Vec3f flameVelocity;
+                            Vec3f flameAccel;
 
                             this->beamDamageTimer += 2;
                             this->reflectedBeamLengthScale = sp180 * 0.062f;
+
                             if (this->beamDamageTimer < 10) {
-                                sp108.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
-                                sp108.y = this->actor.world.pos.y + Rand_CenteredFloat(40.0f);
-                                sp108.z = this->actor.world.pos.z + Rand_CenteredFloat(40.0f);
-                                spFC.x = 0.0f;
-                                spFC.y = 6.0f;
-                                spFC.z = 0.0f;
-                                spF0.x = spFC.x * -0.05f;
-                                spF0.y = spFC.y * -0.05f;
-                                spF0.z = spFC.z * -0.05f;
-                                Boss07_SpawnEffect(play, &sp108, &spFC, &spF0, Rand_ZeroFloat(10.0f) + 25.0f);
-                                this->damagedFlashTimer |= 0xA;
+                                flamePos.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
+                                flamePos.y = this->actor.world.pos.y + Rand_CenteredFloat(40.0f);
+                                flamePos.z = this->actor.world.pos.z + Rand_CenteredFloat(40.0f);
+
+                                flameVelocity.x = 0.0f;
+                                flameVelocity.y = 6.0f;
+                                flameVelocity.z = 0.0f;
+
+                                flameAccel.x = flameVelocity.x * -0.05f;
+                                flameAccel.y = flameVelocity.y * -0.05f;
+                                flameAccel.z = flameVelocity.z * -0.05f;
+
+                                Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel,
+                                                   Rand_ZeroFloat(10.0f) + 25.0f);
+                                this->damagedFlashTimer |= 10;
                             } else {
                                 this->invincibilityTimer = 50;
                                 this->damagedFlashTimer = 15;
@@ -5427,17 +5452,22 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
                                 Boss07_Mask_SetupDamaged(this, play, 2, NULL);
                                 Boss07_Mask_ClearBeam(this);
+
                                 for (phi_s0_2 = 0; phi_s0_2 < 20; phi_s0_2++) {
-                                    sp108.x = this->actor.world.pos.x + Rand_CenteredFloat(50.0f);
-                                    sp108.y = this->actor.world.pos.y + Rand_CenteredFloat(50.0f);
-                                    sp108.z = this->actor.world.pos.z + Rand_CenteredFloat(50.0f);
-                                    spFC.x = Rand_CenteredFloat(20.0f);
-                                    spFC.y = Rand_CenteredFloat(20.0f);
-                                    spFC.z = Rand_CenteredFloat(20.0f);
-                                    spF0.x = spFC.x * -0.05f;
-                                    spF0.y = spFC.y * -0.05f;
-                                    spF0.z = spFC.z * -0.05f;
-                                    Boss07_SpawnEffect(play, &sp108, &spFC, &spF0, Rand_ZeroFloat(10.0f) + 25.0f);
+                                    flamePos.x = this->actor.world.pos.x + Rand_CenteredFloat(50.0f);
+                                    flamePos.y = this->actor.world.pos.y + Rand_CenteredFloat(50.0f);
+                                    flamePos.z = this->actor.world.pos.z + Rand_CenteredFloat(50.0f);
+
+                                    flameVelocity.x = Rand_CenteredFloat(20.0f);
+                                    flameVelocity.y = Rand_CenteredFloat(20.0f);
+                                    flameVelocity.z = Rand_CenteredFloat(20.0f);
+
+                                    flameAccel.x = flameVelocity.x * -0.05f;
+                                    flameAccel.y = flameVelocity.y * -0.05f;
+                                    flameAccel.z = flameVelocity.z * -0.05f;
+
+                                    Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel,
+                                                       Rand_ZeroFloat(10.0f) + 25.0f);
                                 }
 
                                 if ((s8)this->actor.colChkInfo.health <= 0) {
@@ -5465,64 +5495,75 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                 (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                                 (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
                                 s32 j;
-                                Vec3f spE0;
-                                Vec3f spD4;
-                                Vec3f spC8;
+                                Vec3f flamePos;
+                                Vec3f flameVelocity;
+                                Vec3f flameAccel;
 
                                 this->beamDamageTimer += 2;
                                 this->reflectedBeamLengthScale = sp180 * 0.062f;
 
                                 if (this->beamDamageTimer < 5) {
-                                    spE0.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
-                                    spE0.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(40.0f);
-                                    spE0.z = sMajoraRemains[i]->actor.world.pos.z + Rand_CenteredFloat(40.0f);
-                                    spD4.x = 0.0f;
-                                    spD4.y = 6.0f;
-                                    spD4.z = 0.0f;
-                                    spC8.x = spD4.x * -0.05f;
-                                    spC8.y = spD4.y * -0.05f;
-                                    spC8.z = spD4.z * -0.05f;
+                                    flamePos.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
+                                    flamePos.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(40.0f);
+                                    flamePos.z = sMajoraRemains[i]->actor.world.pos.z + Rand_CenteredFloat(40.0f);
 
-                                    Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
+                                    flameVelocity.x = 0.0f;
+                                    flameVelocity.y = 6.0f;
+                                    flameVelocity.z = 0.0f;
+
+                                    flameAccel.x = flameVelocity.x * -0.05f;
+                                    flameAccel.y = flameVelocity.y * -0.05f;
+                                    flameAccel.z = flameVelocity.z * -0.05f;
+
+                                    Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel,
+                                                       Rand_ZeroFloat(10.0f) + 25.0f);
                                     sMajoraRemains[i]->damagedFlashTimer |= 10;
                                 } else {
                                     sMajoraRemains[i]->actionState = REMAINS_STATE_DEATH;
                                     sMajoraRemains[i]->fireTimer = 60;
                                     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
                                     for (j = 0; j < 20; j++) {
-                                        spE0.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
-                                        spE0.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(50.0f);
-                                        spE0.z = sMajoraRemains[i]->actor.world.pos.z + Rand_CenteredFloat(50.0f);
-                                        spD4.x = Rand_CenteredFloat(20.0f);
-                                        spD4.y = Rand_CenteredFloat(20.0f);
-                                        spD4.z = Rand_CenteredFloat(20.0f);
-                                        spC8.x = spD4.x * -0.05f;
-                                        spC8.y = spD4.y * -0.05f;
-                                        spC8.z = spD4.z * -0.05f;
-                                        Boss07_SpawnEffect(play, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
+                                        flamePos.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
+                                        flamePos.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(50.0f);
+                                        flamePos.z = sMajoraRemains[i]->actor.world.pos.z + Rand_CenteredFloat(50.0f);
+
+                                        flameVelocity.x = Rand_CenteredFloat(20.0f);
+                                        flameVelocity.y = Rand_CenteredFloat(20.0f);
+                                        flameVelocity.z = Rand_CenteredFloat(20.0f);
+
+                                        flameAccel.x = flameVelocity.x * -0.05f;
+                                        flameAccel.y = flameVelocity.y * -0.05f;
+                                        flameAccel.z = flameVelocity.z * -0.05f;
+
+                                        Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel,
+                                                           Rand_ZeroFloat(10.0f) + 25.0f);
                                     }
                                 }
                             }
                         }
                         if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamEndPos, &this->reflectedBeamEndPos,
-                                                    &beamTireMarkPos, &sp158, 1, 1, 1, 1, &sp144) &&
+                                                    &beamTireMarkPos, &sp158, true, true, true, true, &sp144) &&
                             (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
-                            Vec3f spBC;
-                            Vec3f spB0;
-                            Vec3f spA4;
+                            Vec3f flamePos;
+                            Vec3f flameVelocity;
+                            Vec3f flameAccel;
 
                             sp14B = true;
-                            spBC.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
-                            spBC.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
-                            spBC.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
-                            spB0.x = 0.0f;
-                            spB0.y = 6.0f;
-                            spB0.z = 0.0f;
-                            spA4.x = spB0.x * -0.05f;
-                            spA4.y = spB0.y * -0.05f;
-                            spA4.z = spB0.z * -0.05f;
 
-                            Boss07_SpawnEffect(play, &spBC, &spB0, &spA4, Rand_ZeroFloat(10.0f) + 25.0f);
+                            flamePos.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
+                            flamePos.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
+                            flamePos.z = Rand_CenteredFloat(20.0f) + beamTireMarkPos.z;
+
+                            flameVelocity.x = 0.0f;
+                            flameVelocity.y = 6.0f;
+                            flameVelocity.z = 0.0f;
+
+                            flameAccel.x = flameVelocity.x * -0.05f;
+                            flameAccel.y = flameVelocity.y * -0.05f;
+                            flameAccel.z = flameVelocity.z * -0.05f;
+
+                            Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel,
+                                               Rand_ZeroFloat(10.0f) + 25.0f);
                         }
                     }
                 } else if (!player->isBurning && (this->actionState != MAJORAS_MASK_BEAM_STATE_END)) {
@@ -6137,24 +6178,24 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         }
 
         if (this->fireTimer != 0) {
-            Vec3f sp5C;
-            Vec3f sp50;
-            Vec3f sp44;
+            Vec3f flamePos;
+            Vec3f flameVelocity;
+            Vec3f flameAccel;
             f32 sp40 = (this->actionFunc == Boss07_Mask_DeathCutscene) ? 130.0f : 80.0f;
 
-            sp5C.x = Rand_CenteredFloat(sp40) + this->actor.world.pos.x;
-            sp5C.y = Rand_CenteredFloat(sp40) + this->actor.world.pos.y;
-            sp5C.z = Rand_CenteredFloat(sp40) + this->actor.world.pos.z;
+            flamePos.x = Rand_CenteredFloat(sp40) + this->actor.world.pos.x;
+            flamePos.y = Rand_CenteredFloat(sp40) + this->actor.world.pos.y;
+            flamePos.z = Rand_CenteredFloat(sp40) + this->actor.world.pos.z;
 
-            sp50.x = 0.0f;
-            sp50.y = 5.0f;
-            sp50.z = 0.0f;
+            flameVelocity.x = 0.0f;
+            flameVelocity.y = 5.0f;
+            flameVelocity.z = 0.0f;
 
-            sp44.x = sp50.x * -0.05f;
-            sp44.y = sp50.y * -0.05f;
-            sp44.z = sp50.z * -0.05f;
+            flameAccel.x = flameVelocity.x * -0.05f;
+            flameAccel.y = flameVelocity.y * -0.05f;
+            flameAccel.z = flameVelocity.z * -0.05f;
 
-            Boss07_SpawnEffect(play, &sp5C, &sp50, &sp44, Rand_ZeroFloat(10.0f) + 25.0f);
+            Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel, Rand_ZeroFloat(10.0f) + 25.0f);
             Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EV_BURN_OUT - SFX_FLAG);
         }
     }
@@ -6695,9 +6736,6 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
     f32 sp74;
     f32 sp70;
     s32 pad;
-    Vec3f sp60;
-    Vec3f sp54;
-    Vec3f sp48;
 
     switch (this->actionState) {
         case REMAINS_STATE_ACTIVATE:
@@ -6741,23 +6779,28 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             sp7C = Math_Atan2S(sp78, sp70);
             sp7E = Math_Atan2S(sp74, sqrtf(SQ(sp78) + SQ(sp70)));
             sp7E += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
+
             Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->velocity_170);
             Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->velocity_170);
             Math_ApproachF(&this->velocity_170, 0x7D0, 1.0f, 0x64);
             Math_ApproachF(&this->actor.speed, this->flySpeedTarget, 1.0f, 1.0f);
+
             if ((this->flySpeedTarget < 8.0f) && !Play_InCsMode(play)) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             } else {
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 0xA, 0x1000);
             }
+
             Actor_UpdateVelocityWithoutGravity(&this->actor);
             Actor_UpdatePos(&this->actor);
+
             if (this->bgCheckTimer == 0) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 100.0f, 100,
                                         UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
             } else {
                 this->bgCheckTimer--;
             }
+
             Boss07_Remains_CollisionCheck(this, play);
             break;
 
@@ -6770,12 +6813,15 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                 if (this->burnOnLanding) {
                     this->fireTimer |= 4;
                 }
+
                 Math_ApproachF(&this->actor.scale.z, 0.0f, 1.0f, 0.001f);
+
                 if (this->actor.scale.z == 0.0f) {
                     this->actionState = REMAINS_STATE_GONE;
                     this->actor.draw = NULL;
                     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 }
+
                 Boss07_SmoothStop(this, 2.0f);
             } else {
                 this->actor.shape.rot.z += 0x200;
@@ -6786,10 +6832,13 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
             this->actor.world.pos.y -= 50.0f;
             this->actor.prevPos.y -= 50.0f;
+
             Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f,
                                     UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+
             this->actor.world.pos.y += 50.0f;
             this->actor.prevPos.y += 50.0f;
+
             if (this->timers[0] == 0) {
                 this->actionState = 1;
             }
@@ -6808,30 +6857,38 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
 
     if (this->tryFireProjectile) {
         this->tryFireProjectile = false;
-        if (Boss07_IsFacingPlayer(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
+        if (Boss07_ArePlayerAndActorFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_REMAINS_PROJECTILE);
         }
     }
 
     if (this->fireTimer != 0) {
-        sp60.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
-        sp60.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
+        Vec3f flamePos;
+        Vec3f flameVelocity;
+        Vec3f flameAccel;
+
+        flamePos.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
+        flamePos.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
+
         if (this->burnOnLanding) {
-            sp48.x = sp48.z = 0.0f;
-            sp48.y = 0.03f;
-            sp60.y = Rand_ZeroFloat(10.0f) + this->actor.world.pos.y;
-            EffectSsKFire_Spawn(play, &sp60, &gZeroVec3f, &sp48, Rand_ZeroFloat(30.0f) + 30.0f, 0);
+            flameAccel.x = flameAccel.z = 0.0f;
+            flameAccel.y = 0.03f;
+            flamePos.y = Rand_ZeroFloat(10.0f) + this->actor.world.pos.y;
+            EffectSsKFire_Spawn(play, &flamePos, &gZeroVec3f, &flameAccel, Rand_ZeroFloat(30.0f) + 30.0f, 0);
             Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
-            sp60.y = (Rand_ZeroFloat(30.0f) + this->actor.world.pos.y) - 15.0f;
-            sp54.x = 0.0f;
-            sp54.y = 5.0f;
-            sp54.z = 0.0f;
-            sp48.x = sp54.x * -0.05f;
-            sp48.y = sp54.y * -0.05f;
-            sp48.z = sp54.z * -0.05f;
-            Boss07_SpawnEffect(play, &sp60, &sp54, &sp48, Rand_ZeroFloat(10.0f) + 25.0f);
+            flamePos.y = (Rand_ZeroFloat(30.0f) + this->actor.world.pos.y) - 15.0f;
+
+            flameVelocity.x = 0.0f;
+            flameVelocity.y = 5.0f;
+            flameVelocity.z = 0.0f;
+
+            flameAccel.x = flameVelocity.x * -0.05f;
+            flameAccel.y = flameVelocity.y * -0.05f;
+            flameAccel.z = flameVelocity.z * -0.05f;
+
+            Boss07_SpawnEffect(play, &flamePos, &flameVelocity, &flameAccel, Rand_ZeroFloat(10.0f) + 25.0f);
             Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
         }
     }
@@ -6848,6 +6905,7 @@ void Boss07_Remains_Stunned(Boss07* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->generalCollider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->generalCollider.base);
+
     if (this->timers[0] == 0) {
         this->actionFunc = Boss07_Remains_Fly;
         this->actionState = REMAINS_STATE_FLY;
