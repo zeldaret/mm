@@ -377,7 +377,7 @@ setup:
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
 assets:
-	$(PYTHON) extract_assets.py -v $(VERSION) -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) tools/extract_assets.py -v $(VERSION) -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:

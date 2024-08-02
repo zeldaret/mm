@@ -123,11 +123,11 @@ def main():
     asset_path = args.single
     if asset_path is not None:
         if "text/" in asset_path:
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)
 
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
             msgdisStaff.main(extract_staff_text_path)
         else:
@@ -144,12 +144,12 @@ def main():
     else:
         # Only extract text if the header does not already exist, or if --force was passed
         if args.force or not os.path.isfile(extract_text_path):
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)
 
         if args.force or not os.path.isfile(extract_staff_text_path):
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
             msgdisStaff.main(extract_staff_text_path)
 
