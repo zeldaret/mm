@@ -1503,7 +1503,7 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
-    if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->timer2 != this->timer1) &&
+    if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->timer2 != this->attackTimer) &&
         ((this->actionFunc == EnDinofos_Slash) || (this->actionFunc == EnDinofos_JumpSlash))) {
         Math_Vec3f_Copy(&knifeBaseQuadOldPos, &this->knifeCollider.dim.quad[0]);
         Math_Vec3f_Copy(&knifeTipQuadOldPos, &this->knifeCollider.dim.quad[1]);
