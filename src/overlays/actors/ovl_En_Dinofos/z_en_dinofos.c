@@ -79,7 +79,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 1, { { 200, 300, 0 }, 19 }, 100 },
+        { DINOLFOS_LIMB_LOWER_BODY, { { 200, 300, 0 }, 19 }, 100 },
     },
     {
         {
@@ -90,7 +90,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 8, { { 200, 200, 0 }, 17 }, 100 },
+        { DINOLFOS_LIMB_UPPER_BODY, { { 200, 200, 0 }, 17 }, 100 },
     },
     {
         {
@@ -101,7 +101,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 16, { { 600, 200, 0 }, 15 }, 100 },
+        { DINOLFOS_LIMB_HEAD, { { 600, 200, 0 }, 15 }, 100 },
     },
     {
         {
@@ -112,7 +112,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 15, { { 700, 100, 0 }, 10 }, 100 },
+        { DINOLFOS_LIMB_NECK, { { 700, 100, 0 }, 10 }, 100 },
     },
     {
         {
@@ -123,7 +123,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 2, { { 1300, 100, 0 }, 12 }, 100 },
+        { DINOLFOS_LIMB_LEFT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
     },
     {
         {
@@ -134,7 +134,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
-        { 5, { { 1300, 100, 0 }, 12 }, 100 },
+        { DINOLFOS_LIMB_RIGHT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
     },
     {
         {
@@ -145,7 +145,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_NONE,
             OCELEM_NONE,
         },
-        { 21, { { 0, -10, 35 }, 20 }, 100 },
+        { DINOLFOS_LIMB_MAX, { { 0, -10, 35 }, 20 }, 100 },
     },
     {
         {
@@ -156,7 +156,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_NONE,
             OCELEM_NONE,
         },
-        { 21, { { 0, -10, 70 }, 28 }, 100 },
+        { DINOLFOS_LIMB_MAX, { { 0, -10, 70 }, 28 }, 100 },
     },
     {
         {
@@ -167,7 +167,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             BUMP_NONE,
             OCELEM_NONE,
         },
-        { 21, { { 0, -5, 110 }, 30 }, 100 },
+        { DINOLFOS_LIMB_MAX, { { 0, -5, 110 }, 30 }, 100 },
     },
 };
 
@@ -1490,8 +1490,8 @@ static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
 
 void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
-    Vec3f knifeTipQuadOldPos;
-    Vec3f knifeBaseQuadOldPos;
+    Vec3f prevKnifeTipQuadPos;
+    Vec3f prevKnifeBaseQuadPos;
     Vec3f knifeTipQuadPos;
     Vec3f knifeBaseQuadPos;
     s32 dimAlphaStep;
@@ -1505,12 +1505,12 @@ void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->timer2 != this->attackTimer) &&
         ((this->actionFunc == EnDinofos_Slash) || (this->actionFunc == EnDinofos_JumpSlash))) {
-        Math_Vec3f_Copy(&knifeBaseQuadOldPos, &this->knifeCollider.dim.quad[0]);
-        Math_Vec3f_Copy(&knifeTipQuadOldPos, &this->knifeCollider.dim.quad[1]);
+        Math_Vec3f_Copy(&prevKnifeBaseQuadPos, &this->knifeCollider.dim.quad[0]);
+        Math_Vec3f_Copy(&prevKnifeTipQuadPos, &this->knifeCollider.dim.quad[1]);
         Matrix_MultVec3f(&sKnifeTipQuadOffset, &knifeTipQuadPos);
         Matrix_MultVec3f(&sKnifeBaseQuadOffset, &knifeBaseQuadPos);
-        Collider_SetQuadVertices(&this->knifeCollider, &knifeBaseQuadPos, &knifeTipQuadPos, &knifeBaseQuadOldPos,
-                                 &knifeTipQuadOldPos);
+        Collider_SetQuadVertices(&this->knifeCollider, &knifeBaseQuadPos, &knifeTipQuadPos, &prevKnifeBaseQuadPos,
+                                 &prevKnifeTipQuadPos);
         if (this->knifeCollider.base.atFlags & AT_ON) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &knifeTipQuadPos, &knifeBaseQuadPos);
         }
