@@ -157,13 +157,16 @@ def main():
         description="Convert a rom that uses dmadata to an uncompressed one."
     )
     parser.add_argument(
-        "version",
+        "-v",
+        "--mm-version",
         help="Version of the game to decompress.",
+        required=True,
+        default="n64-us",
     )
 
     args = parser.parse_args()
 
-    version = args.version
+    version = args.mm_version
 
     baserom_dir = Path(f"baseroms/{version}")
     if not baserom_dir.exists():

@@ -14,6 +14,13 @@ fpr_name_options = {
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
+    "--baserom-segments",
+    dest="baserom_segments_dir",
+    type=Path,
+    required=True,
+    help="Directory of uncompressed ROM segments",
+)
+parser.add_argument(
     "-j", dest="jobs", type=int, default=1, help="number of processes to run at once"
 )
 parser.add_argument(
@@ -38,6 +45,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 jobs = args.jobs
+
+baserom_segments_dir = args.baserom_segments_dir
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
 rabbitizer.config.regNames_userFpcCsr = False
@@ -1873,7 +1882,7 @@ def disassemble_makerom(section):
 
     elif section[-1]["type"] == "ipl3":
         # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"extracted/n64-us/baserom/makerom\", 0x40, 0xFC0\n"
+        out = f"{asm_header('.text')}\n.incbin \"{baserom_segments_dir}/makerom\", 0x40, 0xFC0\n"
 
         with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
             outfile.write(out)
@@ -2099,6 +2108,8 @@ print("Setting Up")
 files_spec = None
 with open("tools/disasm/files.txt", "r") as infile:
     files_spec = ast.literal_eval(infile.read())
+for segment in files_spec:
+    segment[1] = segment[1].replace("$(BASEROM)", str(baserom_segments_dir))
 
 with open("tools/disasm/functions.txt", "r") as infile:
     functions_ast = ast.literal_eval(infile.read())
