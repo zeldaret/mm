@@ -204,7 +204,7 @@ static ColliderQuadInit sQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-typedef enum {
+typedef enum EnDinofosDamageEffect {
     /* 0x0 */ DINOLFOS_DMGEFF_NONE,
     /* 0x1 */ DINOLFOS_DMGEFF_STUN,
     /* 0x2 */ DINOLFOS_DMGEFF_FIRE,
