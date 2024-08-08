@@ -135,7 +135,6 @@ typedef enum MajorasMaskBeamState {
     /* 6 */ MAJORAS_MASK_BEAM_STATE_MAX
 } MajorasMaskBeamState;
 
-// TODO: Is this used for both Incarnation's projectiles and the boss remain's projectiles?
 typedef enum MajoraProjectileState {
     /* 0 */ MAJORA_PROJECTILE_STATE_0,
     /* 1 */ MAJORA_PROJECTILE_STATE_1,
@@ -1965,7 +1964,7 @@ void Boss07_Wrath_Jump(Boss07* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Boss07_Wrath_SetupIdle(this, play, 1);
-        this->jumpSfxTimer = 5;
+        this->landSfxTimer = 5;
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x4000);
@@ -2020,7 +2019,7 @@ void Boss07_Wrath_Flip(Boss07* this, PlayState* play) {
             Boss07_Wrath_SetupIdle(this, play, 1);
             this->actor.speed = 5.0f;
         }
-        this->jumpSfxTimer = 5;
+        this->landSfxTimer = 5;
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x4000);
 }
@@ -2979,7 +2978,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         DECR(this->collisionTimer);
         DECR(this->invincibilityTimer);
         DECR(this->damagedFlashTimer);
-        DECR(this->jumpSfxTimer);
+        DECR(this->landSfxTimer);
 
         Math_ApproachZeroF(&this->unk_32C, 1.0f, 0.2f);
         Math_ApproachZeroF(&this->unk_330, 1.0f, 0.04f);
@@ -3084,7 +3083,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
 
     Boss07_DamageEffects(this, play);
 
-    if ((this->jumpSfxTimer == 1) || (this->jumpSfxTimer == 4)) {
+    if ((this->landSfxTimer == 1) || (this->landSfxTimer == 4)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
     }
 
@@ -4913,6 +4912,7 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         } else {
             Matrix_MultVec3f(&sLimbColliderOffsets[index], &sp28);
         }
+
         Boss07_SetColliderSphere(index, &this->bodyCollider, &sp28);
     }
 
@@ -5084,6 +5084,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
             Boss07_SmoothStop(this, 1.0f);
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x100);
             Math_ApproachS(&this->angularVelocity, 0x2000, 1, 0x100);
+
             if (this->timers[0] == 0) {
                 this->actionState = MAJORAS_MASK_SPIN_STATE_ATTACK;
                 this->actor.world.rot.x = 0;
@@ -5124,6 +5125,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                 } else {
                     Boss07_RandVec3fXZ(&this->moveTarget, 500.0f);
                     this->moveTarget.y = Rand_ZeroFloat(100.0f) + 100.0f;
+
                     if (Rand_ZeroOne() < 0.3f) {
                         this->timers[1] = 20;
                         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ATTACK_2ND_OLD);
@@ -5132,6 +5134,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                         this->timers[1] = 0;
                         this->cutsceneState = 0;
                     }
+
                     this->timers[0] = 50;
                     this->velocity_170 = 0.0f;
                 }
@@ -5201,10 +5204,12 @@ void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* h
         } else {
             this->actor.speed = 13.0f;
             this->actor.velocity.y = 10.0f;
+
             if (hitActor != NULL) {
                 this->actor.world.rot.y = hitActor->world.rot.y;
             }
         }
+
         this->angularVelocity = 0x1000;
     }
 
@@ -5213,6 +5218,7 @@ void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* h
     if ((s8)this->actor.colChkInfo.health <= 0) {
         this->timers[0] = 30;
     }
+    
     this->timers[1] = 30;
 }
 
