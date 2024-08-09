@@ -161,6 +161,7 @@ SCHC_FLAGS  :=
 
 # Audio tools
 AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
+SAMPLECONV    := tools/audio/sampleconv/sampleconv
 
 # Command to replace path variables in the spec file. We can't use the C
 # preprocessor for this because it won't substitute inside string literals.
@@ -212,6 +213,24 @@ $(shell mkdir -p asm data extracted)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
+
+ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
+  AIFF_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
+else
+  AIFF_EXTRACT_DIRS :=
+endif
+
+ifneq ($(wildcard assets/audio/samples),)
+  AIFF_DIRS := $(shell find assets/audio/samples -type d)
+else
+  AIFF_DIRS :=
+endif
+
+AIFF_FILES         := $(foreach dir,$(AIFF_DIRS),$(wildcard $(dir)/*.wav))
+AIFF_EXTRACT_FILES := $(foreach dir,$(AIFF_EXTRACT_DIRS),$(wildcard $(dir)/*.wav))
+AIFC_FILES         := $(foreach f,$(AIFF_FILES),$(BUILD_DIR)/$(f:.wav=.aifc)) $(foreach f,$(AIFF_EXTRACT_FILES:.wav=.aifc),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
+SAMPLE_BLOBS_IN    := $(foreach dir,$(AIFF_EXTRACT_DIRS),$(wildcard $(dir)/*.bin))
+SAMPLE_BLOBS       := $(foreach f,$(SAMPLE_BLOBS_IN),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
@@ -504,6 +523,30 @@ $(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
 
 $(BUILD_DIR)/%.schl.inc: %.schl
 	$(SCHC) $(SCHC_FLAGS) -o $@ $<
+
+# Audio
+
+AUDIO_BUILD_DEBUG ?= 0
+
+# first build samples...
+
+$(BUILD_DIR)/assets/audio/samples/%.half.aifc: assets/audio/samples/%.half.wav
+	$(SAMPLECONV) vadpcm-half $< $@
+
+$(BUILD_DIR)/assets/audio/samples/%.half.aifc: $(EXTRACTED_DIR)/assets/audio/samples/%.half.wav
+	$(SAMPLECONV) vadpcm-half $< $@
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+	@(cmp $(<D)/aifc/$(<F:.half.wav=.half.aifc) $@ && echo "$(<F) OK") || (mkdir -p NONMATCHINGS/$(<D) && cp $(<D)/aifc/$(<F:.half.wav=.half.aifc) NONMATCHINGS/$(<D)/$(<F:.half.wav=.half.aifc))
+endif
+
+$(BUILD_DIR)/assets/audio/samples/%.aifc: assets/audio/samples/%.wav
+	$(SAMPLECONV) vadpcm $< $@
+
+$(BUILD_DIR)/assets/audio/samples/%.aifc: $(EXTRACTED_DIR)/assets/audio/samples/%.wav
+	$(SAMPLECONV) vadpcm $< $@
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+	@(cmp $(<D)/aifc/$(<F:.wav=.aifc) $@ && echo "$(<F) OK") || (mkdir -p NONMATCHINGS/$(<D) && cp $(<D)/aifc/$(<F:.wav=.aifc) NONMATCHINGS/$(<D)/$(<F:.wav=.aifc))
+endif
 
 -include $(DEP_FILES)
 
