@@ -18,7 +18,7 @@ void EnKitan_Draw(Actor* thisx, PlayState* play);
 void EnKitan_Talk(EnKitan* this, PlayState* play);
 void EnKitan_WaitToAppear(EnKitan* this, PlayState* play);
 
-ActorInit En_Kitan_InitVars = {
+ActorProfile En_Kitan_Profile = {
     /**/ ACTOR_EN_KITAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

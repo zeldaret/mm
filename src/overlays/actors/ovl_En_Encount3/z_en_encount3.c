@@ -22,7 +22,7 @@ void func_809AD084(EnEncount3* this, PlayState* play);
 void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
-ActorInit En_Encount3_InitVars = {
+ActorProfile En_Encount3_Profile = {
     /**/ ACTOR_EN_ENCOUNT3,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

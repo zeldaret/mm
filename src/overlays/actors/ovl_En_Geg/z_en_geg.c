@@ -36,7 +36,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-ActorInit En_Geg_InitVars = {
+ActorProfile En_Geg_Profile = {
     /**/ ACTOR_EN_GEG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

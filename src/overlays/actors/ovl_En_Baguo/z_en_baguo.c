@@ -42,7 +42,7 @@ typedef enum {
     /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-ActorInit En_Baguo_InitVars = {
+ActorProfile En_Baguo_Profile = {
     /**/ ACTOR_EN_BAGUO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

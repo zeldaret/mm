@@ -20,7 +20,7 @@ void func_80943BC0(EnDaiku* this);
 void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
-ActorInit En_Daiku_InitVars = {
+ActorProfile En_Daiku_Profile = {
     /**/ ACTOR_EN_DAIKU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

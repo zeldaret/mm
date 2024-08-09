@@ -18,7 +18,7 @@ void DemoGetitem_Wait(DemoGetitem* this, PlayState* play);
 void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play);
 void DemoGetitem_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Demo_Getitem_InitVars = {
+ActorProfile Demo_Getitem_Profile = {
     /**/ ACTOR_DEMO_GETITEM,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

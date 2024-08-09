@@ -375,7 +375,7 @@ MsgScript D_80BDFF24[] = {
     /* 0x0070 0x03 */ MSCRIPT_CMD_JUMP(0x001A - 0x0073),
 };
 
-ActorInit En_Al_InitVars = {
+ActorProfile En_Al_Profile = {
     /**/ ACTOR_EN_AL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

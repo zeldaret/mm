@@ -35,7 +35,7 @@ void func_80B111AC(EnGb2* this, PlayState* play);
 void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
-ActorInit En_Gb2_InitVars = {
+ActorProfile En_Gb2_Profile = {
     /**/ ACTOR_EN_GB2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

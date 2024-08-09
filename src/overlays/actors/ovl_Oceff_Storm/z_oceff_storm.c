@@ -19,7 +19,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play);
 void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_Draw2(Actor* thisx, PlayState* play);
 
-ActorInit Oceff_Storm_InitVars = {
+ActorProfile Oceff_Storm_Profile = {
     /**/ ACTOR_OCEFF_STORM,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

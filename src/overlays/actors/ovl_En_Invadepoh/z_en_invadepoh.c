@@ -234,7 +234,7 @@ void EnInvadepoh_AlienAbductor_AbductRomani(EnInvadepoh* this, PlayState* play);
 s32 EnInvadepoh_SnapToFloor(EnInvadepoh* this);
 s32 EnInvadepoh_StepToXZ(f32* pValueX, f32* pValueZ, f32 targetX, f32 targetZ, f32 step);
 
-ActorInit En_Invadepoh_InitVars = {
+ActorProfile En_Invadepoh_Profile = {
     /**/ ACTOR_EN_INVADEPOH,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

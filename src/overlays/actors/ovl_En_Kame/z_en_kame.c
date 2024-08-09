@@ -57,7 +57,7 @@ typedef enum {
     /* 4 */ EN_KAME_EYE_MAX
 } EnKameEyeTexture;
 
-ActorInit En_Kame_InitVars = {
+ActorProfile En_Kame_Profile = {
     /**/ ACTOR_EN_KAME,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

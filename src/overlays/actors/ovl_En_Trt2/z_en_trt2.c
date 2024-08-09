@@ -53,7 +53,7 @@ static AnimationInfoS sAnimationInfo[TRT2_ANIM_MAX] = {
     { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT2_ANIM_FLY
 };
 
-ActorInit En_Trt2_InitVars = {
+ActorProfile En_Trt2_Profile = {
     /**/ ACTOR_EN_TRT2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

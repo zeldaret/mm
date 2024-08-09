@@ -162,7 +162,7 @@ static SkeletonHeader* sSkeletonHeaders[HORSE_TYPE_MAX] = {
     NULL,        // HORSE_TYPE_DONKEY
 };
 
-ActorInit En_Horse_InitVars = {
+ActorProfile En_Horse_Profile = {
     /**/ ACTOR_EN_HORSE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

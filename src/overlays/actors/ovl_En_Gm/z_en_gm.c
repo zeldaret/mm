@@ -254,7 +254,7 @@ static MsgScript D_80951C34[] = {
     /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Gm_InitVars = {
+ActorProfile En_Gm_Profile = {
     /**/ ACTOR_EN_GM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

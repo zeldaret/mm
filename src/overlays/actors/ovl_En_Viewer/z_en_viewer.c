@@ -23,7 +23,7 @@ static u8 D_8089F3E0 = 0;
 
 static u8 D_8089F3E4 = 0;
 
-ActorInit En_Viewer_InitVars = {
+ActorProfile En_Viewer_Profile = {
     /**/ ACTOR_EN_VIEWER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

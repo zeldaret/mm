@@ -26,7 +26,7 @@ void func_809542A0(BgIngate* this, PlayState* play);
 void func_80954340(BgIngate* this, PlayState* play);
 void func_809543D4(BgIngate* this, PlayState* play);
 
-ActorInit Bg_Ingate_InitVars = {
+ActorProfile Bg_Ingate_Profile = {
     /**/ ACTOR_BG_INGATE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

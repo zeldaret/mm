@@ -234,7 +234,7 @@ static DamageTable D_80A07A00 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xB),
 };
 
-ActorInit Boss_07_InitVars = {
+ActorProfile Boss_07_Profile = {
     /**/ ACTOR_BOSS_07,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

@@ -16,7 +16,7 @@ void ObjToudai_Destroy(Actor* thisx, PlayState* play);
 void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Toudai_InitVars = {
+ActorProfile Obj_Toudai_Profile = {
     /**/ ACTOR_OBJ_TOUDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

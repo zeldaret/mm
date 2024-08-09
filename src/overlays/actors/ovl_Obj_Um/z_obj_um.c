@@ -63,7 +63,7 @@ void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
 void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-ActorInit Obj_Um_InitVars = {
+ActorProfile Obj_Um_Profile = {
     /**/ ACTOR_OBJ_UM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

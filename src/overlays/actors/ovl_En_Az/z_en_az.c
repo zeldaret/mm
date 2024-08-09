@@ -94,7 +94,7 @@ static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
     { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
-ActorInit En_Az_InitVars = {
+ActorProfile En_Az_Profile = {
     /**/ ACTOR_EN_AZ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -16,7 +16,7 @@ void EnTalk_Update(Actor* thisx, PlayState* play);
 void func_80BDE058(EnTalk* this, PlayState* play);
 void func_80BDE090(EnTalk* this, PlayState* play);
 
-ActorInit En_Talk_InitVars = {
+ActorProfile En_Talk_Profile = {
     /**/ ACTOR_EN_TALK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

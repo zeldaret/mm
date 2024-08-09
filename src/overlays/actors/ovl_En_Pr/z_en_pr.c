@@ -74,7 +74,7 @@ f32 D_80A338C0[PLAYER_FORM_MAX] = {
     15.0f, // PLAYER_FORM_HUMAN
 };
 
-ActorInit En_Pr_InitVars = {
+ActorProfile En_Pr_Profile = {
     /**/ ACTOR_EN_PR,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

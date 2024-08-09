@@ -16,7 +16,7 @@ void ObjYado_Destroy(Actor* thisx, PlayState* play);
 void ObjYado_Update(Actor* thisx, PlayState* play);
 void ObjYado_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Yado_InitVars = {
+ActorProfile Obj_Yado_Profile = {
     /**/ ACTOR_OBJ_YADO,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

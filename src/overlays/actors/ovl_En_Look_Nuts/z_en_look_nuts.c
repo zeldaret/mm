@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-ActorInit En_Look_Nuts_InitVars = {
+ActorProfile En_Look_Nuts_Profile = {
     /**/ ACTOR_EN_LOOK_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

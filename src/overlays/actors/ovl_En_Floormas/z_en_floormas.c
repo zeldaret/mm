@@ -60,7 +60,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play);
 void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
-ActorInit En_Floormas_InitVars = {
+ActorProfile En_Floormas_Profile = {
     /**/ ACTOR_EN_FLOORMAS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

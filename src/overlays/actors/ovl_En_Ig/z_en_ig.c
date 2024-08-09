@@ -113,7 +113,7 @@ static MsgScript D_80BF33F0[] = {
     /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Ig_InitVars = {
+ActorProfile En_Ig_Profile = {
     /**/ ACTOR_EN_IG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

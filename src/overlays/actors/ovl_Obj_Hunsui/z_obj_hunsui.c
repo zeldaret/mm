@@ -46,7 +46,7 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
-ActorInit Obj_Hunsui_InitVars = {
+ActorProfile Obj_Hunsui_Profile = {
     /**/ ACTOR_OBJ_HUNSUI,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

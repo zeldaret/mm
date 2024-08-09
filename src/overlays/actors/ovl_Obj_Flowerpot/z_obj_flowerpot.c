@@ -30,7 +30,7 @@ s16 D_80A1DA3C;
 s16 D_80A1DA3E;
 s16 D_80A1DA40;
 
-ActorInit Obj_Flowerpot_InitVars = {
+ActorProfile Obj_Flowerpot_Profile = {
     /**/ ACTOR_OBJ_FLOWERPOT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

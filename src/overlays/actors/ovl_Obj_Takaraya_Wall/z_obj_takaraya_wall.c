@@ -38,7 +38,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play);
 
 void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play);
 
-ActorInit Obj_Takaraya_Wall_InitVars = {
+ActorProfile Obj_Takaraya_Wall_Profile = {
     /**/ ACTOR_OBJ_TAKARAYA_WALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

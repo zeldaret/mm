@@ -18,7 +18,7 @@ void BgBotihasira_Draw(Actor* thisx, PlayState* play);
 
 void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play);
 
-ActorInit Bg_Botihasira_InitVars = {
+ActorProfile Bg_Botihasira_Profile = {
     /**/ ACTOR_BG_BOTIHASIRA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

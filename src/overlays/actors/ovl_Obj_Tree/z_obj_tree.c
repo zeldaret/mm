@@ -20,7 +20,7 @@ void ObjTree_DoNothing(ObjTree* this, PlayState* play);
 void ObjTree_SetupDoNothing(ObjTree* this);
 void ObjTree_Sway(ObjTree* this, PlayState* play);
 
-ActorInit Obj_Tree_InitVars = {
+ActorProfile Obj_Tree_Profile = {
     /**/ ACTOR_OBJ_TREE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

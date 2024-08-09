@@ -18,7 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Umajump_InitVars = {
+ActorProfile Bg_Umajump_Profile = {
     /**/ ACTOR_BG_UMAJUMP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

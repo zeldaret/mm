@@ -81,7 +81,7 @@ typedef enum {
     /* 5 */ EN_WIZ_ANIM_DAMAGE
 } EnWizAnimation;
 
-ActorInit En_Wiz_InitVars = {
+ActorProfile En_Wiz_Profile = {
     /**/ ACTOR_EN_WIZ,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

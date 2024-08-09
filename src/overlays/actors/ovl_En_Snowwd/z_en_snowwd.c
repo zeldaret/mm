@@ -18,7 +18,7 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
 void EnSnowwd_Idle(EnSnowwd* this, PlayState* play);
 
-ActorInit En_Snowwd_InitVars = {
+ActorProfile En_Snowwd_Profile = {
     /**/ ACTOR_EN_SNOWWD,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

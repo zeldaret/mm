@@ -48,7 +48,7 @@ static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
-ActorInit En_Fish2_InitVars = {
+ActorProfile En_Fish2_Profile = {
     /**/ ACTOR_EN_FISH2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

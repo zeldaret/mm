@@ -36,7 +36,7 @@ void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
 
-ActorInit En_Am_InitVars = {
+ActorProfile En_Am_Profile = {
     /**/ ACTOR_EN_AM,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

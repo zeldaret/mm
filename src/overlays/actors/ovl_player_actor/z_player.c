@@ -10681,7 +10681,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->unk_18794 = func_8085B854;
     play->setPlayerTalkAnim = func_8085B930;
 
-    gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = GAMEPLAY_KEEP;
+    gActorOverlayTable[ACTOR_PLAYER].profile->objectId = GAMEPLAY_KEEP;
 
     this->actor.room = -1;
     this->csId = CS_ID_NONE;

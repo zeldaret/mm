@@ -38,7 +38,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-ActorInit Bg_Hakugin_Post_InitVars = {
+ActorProfile Bg_Hakugin_Post_Profile = {
     /**/ ACTOR_BG_HAKUGIN_POST,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

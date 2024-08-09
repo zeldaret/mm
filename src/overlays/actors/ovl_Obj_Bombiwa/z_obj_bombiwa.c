@@ -24,7 +24,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play);
 void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bombiwa_InitVars = {
+ActorProfile Obj_Bombiwa_Profile = {
     /**/ ACTOR_OBJ_BOMBIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -31,7 +31,7 @@ void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
 
-ActorInit En_Takaraya_InitVars = {
+ActorProfile En_Takaraya_Profile = {
     /**/ ACTOR_EN_TAKARAYA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

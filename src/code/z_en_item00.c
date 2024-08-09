@@ -25,7 +25,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
-ActorInit En_Item00_InitVars = {
+ActorProfile En_Item00_Profile = {
     /**/ ACTOR_EN_ITEM00,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,

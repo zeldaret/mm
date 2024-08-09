@@ -34,7 +34,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play);
 void func_80B81DAC(BgIkanaRotaryroom* this);
 void func_80B81DC8(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Ikana_Rotaryroom_InitVars = {
+ActorProfile Bg_Ikana_Rotaryroom_Profile = {
     /**/ ACTOR_BG_IKANA_ROTARYROOM,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -23,7 +23,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-ActorInit En_Arrow_InitVars = {
+ActorProfile En_Arrow_Profile = {
     /**/ ACTOR_EN_ARROW,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

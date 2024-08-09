@@ -24,7 +24,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-ActorInit Obj_Taru_InitVars = {
+ActorProfile Obj_Taru_Profile = {
     /**/ ACTOR_OBJ_TARU,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

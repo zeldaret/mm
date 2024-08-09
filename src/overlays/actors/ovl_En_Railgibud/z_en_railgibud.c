@@ -61,7 +61,7 @@ typedef enum {
     /* 2 */ EN_RAILGIBUD_GRAB_RELEASE
 } EnRailgibudGrabState;
 
-ActorInit En_Railgibud_InitVars = {
+ActorProfile En_Railgibud_Profile = {
     /**/ ACTOR_EN_RAILGIBUD,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -293,7 +293,7 @@ static MsgScript D_80AFB764[] = {
     /* 0x000B 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Pm_InitVars = {
+ActorProfile En_Pm_Profile = {
     /**/ ACTOR_EN_PM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

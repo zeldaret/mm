@@ -636,7 +636,7 @@ static ColliderCylinderInit sBugATColliderCylinderInit = {
     { 8, 15, 10, { 0, 0, 0 } },
 };
 
-ActorInit Boss_01_InitVars = {
+ActorProfile Boss_01_Profile = {
     /**/ ACTOR_BOSS_01,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

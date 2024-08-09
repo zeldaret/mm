@@ -16,7 +16,7 @@ void EnTest_Destroy(Actor* thisx, PlayState* play);
 void EnTest_Update(Actor* thisx, PlayState* play);
 void EnTest_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Test_InitVars = {
+ActorProfile En_Test_Profile = {
     /**/ ACTOR_EN_TEST,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

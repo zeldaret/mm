@@ -20,7 +20,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2);
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-ActorInit Dm_Char00_InitVars = {
+ActorProfile Dm_Char00_Profile = {
     /**/ ACTOR_DM_CHAR00,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

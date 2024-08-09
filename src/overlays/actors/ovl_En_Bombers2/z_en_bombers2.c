@@ -22,7 +22,7 @@ void func_80C04B40(EnBombers2* this);
 void func_80C04D00(EnBombers2* this);
 void func_80C050B8(EnBombers2* this, PlayState* play);
 
-ActorInit En_Bombers2_InitVars = {
+ActorProfile En_Bombers2_Profile = {
     /**/ ACTOR_EN_BOMBERS2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

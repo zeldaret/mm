@@ -36,7 +36,7 @@ typedef enum {
     /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
-ActorInit En_Bb_InitVars = {
+ActorProfile En_Bb_Profile = {
     /**/ ACTOR_EN_BB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

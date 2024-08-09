@@ -29,7 +29,7 @@ void EnEgblock_SpawnEffect(EnEgblock* this, Vec3f* pos, s16 lifetime, s16 arg3);
 void EnEgblock_UpdateEffects(EnEgblock* this, PlayState* play);
 void EnEgblock_DrawEffects(EnEgblock* this, PlayState* play);
 
-ActorInit En_Egblock_InitVars = {
+ActorProfile En_Egblock_Profile = {
     /**/ ACTOR_EN_EGBLOCK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

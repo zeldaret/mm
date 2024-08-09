@@ -214,7 +214,7 @@ static Vec3f sSlashFlameOffsets[] = {
     { 600.0f, -100.0f, -100.0f }, { 300.0f, -100.0f, -80.0f }, { 100.0f, -100.0f, -60.0f },
 };
 
-ActorInit En_Jso2_InitVars = {
+ActorProfile En_Jso2_Profile = {
     /**/ ACTOR_EN_JSO2,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

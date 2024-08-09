@@ -18,7 +18,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play);
 void EffChange_SetColors(EffChange* this, s32 arg1);
 void func_80A4C5CC(EffChange* this, PlayState* play);
 
-ActorInit Eff_Change_InitVars = {
+ActorProfile Eff_Change_Profile = {
     /**/ ACTOR_EFF_CHANGE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

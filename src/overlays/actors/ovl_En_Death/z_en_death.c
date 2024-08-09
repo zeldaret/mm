@@ -57,7 +57,7 @@ void EnDeath_SetupPlayCutscene(EnDeath* this);
 void EnDeath_SetupBeginWithoutCutscene(EnDeath* this);
 void EnDeath_SetupDeathCutscenePart4(EnDeath* this);
 
-ActorInit En_Death_InitVars = {
+ActorProfile En_Death_Profile = {
     /**/ ACTOR_EN_DEATH,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

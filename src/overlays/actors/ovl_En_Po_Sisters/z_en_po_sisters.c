@@ -63,7 +63,7 @@ static Color_RGBA8 sPoSisterEnvColors[] = {
     { 0, 150, 0, 255 },   // Amy
 };
 
-ActorInit En_Po_Sisters_InitVars = {
+ActorProfile En_Po_Sisters_Profile = {
     /**/ ACTOR_EN_PO_SISTERS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

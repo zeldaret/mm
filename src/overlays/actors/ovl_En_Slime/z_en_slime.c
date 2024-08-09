@@ -66,7 +66,7 @@ void EnSlime_WaitForRevive(EnSlime* this, PlayState* play);
 void EnSlime_SetupRevive(EnSlime* this);
 void EnSlime_Revive(EnSlime* this, PlayState* play);
 
-ActorInit En_Slime_InitVars = {
+ActorProfile En_Slime_Profile = {
     /**/ ACTOR_EN_SLIME,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

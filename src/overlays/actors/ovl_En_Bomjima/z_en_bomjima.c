@@ -53,7 +53,7 @@ typedef enum EnBomjimaAction {
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
 
-ActorInit En_Bomjima_InitVars = {
+ActorProfile En_Bomjima_Profile = {
     /**/ ACTOR_EN_BOMJIMA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

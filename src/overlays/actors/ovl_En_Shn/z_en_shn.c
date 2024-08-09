@@ -392,7 +392,7 @@ static MsgScript D_80AE71C4[] = {
     /* 0x0031 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Shn_InitVars = {
+ActorProfile En_Shn_Profile = {
     /**/ ACTOR_EN_SHN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

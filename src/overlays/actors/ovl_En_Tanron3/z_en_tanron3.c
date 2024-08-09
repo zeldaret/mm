@@ -31,7 +31,7 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 
 static Boss03* sGyorg = NULL;
 
-ActorInit En_Tanron3_InitVars = {
+ActorProfile En_Tanron3_Profile = {
     /**/ ACTOR_EN_TANRON3,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

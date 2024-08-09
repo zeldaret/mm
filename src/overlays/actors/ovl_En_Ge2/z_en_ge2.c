@@ -23,7 +23,7 @@ void EnGe2_GuardStationary(EnGe2* this, PlayState* play);
 
 s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx);
 
-ActorInit En_Ge2_InitVars = {
+ActorProfile En_Ge2_Profile = {
     /**/ ACTOR_EN_GE2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

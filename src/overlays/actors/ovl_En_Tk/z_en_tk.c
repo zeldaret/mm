@@ -63,7 +63,7 @@ static s32 D_80AF0050;
 
 #include "src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
 
-ActorInit En_Tk_InitVars = {
+ActorProfile En_Tk_Profile = {
     /**/ ACTOR_EN_TK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -26,7 +26,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-ActorInit En_Encount2_InitVars = {
+ActorProfile En_Encount2_Profile = {
     /**/ ACTOR_EN_ENCOUNT2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

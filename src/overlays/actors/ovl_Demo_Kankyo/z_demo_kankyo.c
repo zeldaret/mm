@@ -22,7 +22,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play);
 static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
-ActorInit Demo_Kankyo_InitVars = {
+ActorProfile Demo_Kankyo_Profile = {
     /**/ ACTOR_DEMO_KANKYO,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

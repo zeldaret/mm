@@ -91,7 +91,7 @@ static AnimationSpeedInfo sAnimationSpeedInfo[EN_DNO_ANIM_MAX] = {
     { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                   // EN_DNO_ANIM_GRIEVE
 };
 
-ActorInit En_Dno_InitVars = {
+ActorProfile En_Dno_Profile = {
     /**/ ACTOR_EN_DNO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

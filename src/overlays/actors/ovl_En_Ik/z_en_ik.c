@@ -75,7 +75,7 @@ static Gfx* sIronKnuckleArmorType[3][3] = {
     { gIronKnuckleWhiteArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL },
 };
 
-ActorInit En_Ik_InitVars = {
+ActorProfile En_Ik_Profile = {
     /**/ ACTOR_EN_IK,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

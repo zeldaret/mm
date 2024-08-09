@@ -15,7 +15,7 @@ void DmAh_Destroy(Actor* thisx, PlayState* play);
 void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Ah_InitVars = {
+ActorProfile Dm_Ah_Profile = {
     /**/ ACTOR_DM_AH,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -18,7 +18,7 @@ void EnCha_Draw(Actor* thisx, PlayState* play);
 
 void EnCha_Idle(EnCha* this, PlayState* play);
 
-ActorInit En_Cha_InitVars = {
+ActorProfile En_Cha_Profile = {
     /**/ ACTOR_EN_CHA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

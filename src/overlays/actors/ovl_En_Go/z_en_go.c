@@ -574,7 +574,7 @@ static MsgScript sMsgScriptGoronSleeping[] = {
     /* 0x0005 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Go_InitVars = {
+ActorProfile En_Go_Profile = {
     /**/ ACTOR_EN_GO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

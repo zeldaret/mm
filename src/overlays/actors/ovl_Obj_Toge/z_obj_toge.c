@@ -23,7 +23,7 @@ void func_809A481C(ObjToge* this, PlayState* play);
 void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
-ActorInit Obj_Toge_InitVars = {
+ActorProfile Obj_Toge_Profile = {
     /**/ ACTOR_OBJ_TOGE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
