@@ -215,22 +215,22 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
-  AIFF_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
+  SAMPLE_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
 else
-  AIFF_EXTRACT_DIRS :=
+  SAMPLE_EXTRACT_DIRS :=
 endif
 
 ifneq ($(wildcard assets/audio/samples),)
-  AIFF_DIRS := $(shell find assets/audio/samples -type d)
+  SAMPLE_DIRS := $(shell find assets/audio/samples -type d)
 else
-  AIFF_DIRS :=
+  SAMPLE_DIRS :=
 endif
 
-AIFF_FILES         := $(foreach dir,$(AIFF_DIRS),$(wildcard $(dir)/*.wav))
-AIFF_EXTRACT_FILES := $(foreach dir,$(AIFF_EXTRACT_DIRS),$(wildcard $(dir)/*.wav))
-AIFC_FILES         := $(foreach f,$(AIFF_FILES),$(BUILD_DIR)/$(f:.wav=.aifc)) $(foreach f,$(AIFF_EXTRACT_FILES:.wav=.aifc),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
-SAMPLE_BLOBS_IN    := $(foreach dir,$(AIFF_EXTRACT_DIRS),$(wildcard $(dir)/*.bin))
-SAMPLE_BLOBS       := $(foreach f,$(SAMPLE_BLOBS_IN),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
+SAMPLE_FILES         := $(foreach dir,$(SAMPLE_DIRS),$(wildcard $(dir)/*.wav))
+SAMPLE_EXTRACT_FILES := $(foreach dir,$(SAMPLE_EXTRACT_DIRS),$(wildcard $(dir)/*.wav))
+AIFC_FILES           := $(foreach f,$(SAMPLE_FILES),$(BUILD_DIR)/$(f:.wav=.aifc)) $(foreach f,$(SAMPLE_EXTRACT_FILES:.wav=.aifc),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
+SAMPLE_BLOBS_IN      := $(foreach dir,$(SAMPLE_EXTRACT_DIRS),$(wildcard $(dir)/*.bin))
+SAMPLE_BLOBS         := $(foreach f,$(SAMPLE_BLOBS_IN),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
