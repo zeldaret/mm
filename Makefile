@@ -162,7 +162,9 @@ SCHC_FLAGS  :=
 # Audio tools
 AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 SAMPLECONV    := tools/audio/sampleconv/sampleconv
-SBC           := tools/audio/sbc --matching
+SBC           := tools/audio/sbc
+
+SBCFLAGS := --matching
 
 # Command to replace $(BUILD_DIR) in some files with the build path.
 # We can't use the C preprocessor for this because it won't substitute inside string literals.
@@ -594,7 +596,7 @@ $(BUILD_DIR)/assets/audio/samplebanks/%.xml: $(EXTRACTED_DIR)/assets/audio/sampl
 
 .PRECIOUS: $(BUILD_DIR)/assets/audio/samplebanks/%.s
 $(BUILD_DIR)/assets/audio/samplebanks/%.s: $(BUILD_DIR)/assets/audio/samplebanks/%.xml | $(AIFC_FILES) $(SAMPLE_BLOBS)
-	$(SBC) --makedepend $(@:.s=.d) $< $@
+	$(SBC) $(SBCFLAGS) --makedepend $(@:.s=.d) $< $@
 
 -include $(SAMPLEBANK_DEP_FILES)
 
