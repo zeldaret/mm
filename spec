@@ -265,7 +265,9 @@ endseg
 
 beginseg
     name "Audiotable"
-    include "$(BUILD_DIR)/baserom/Audiotable.o"
+    address 0
+    include "$(BUILD_DIR)/assets/audio/samplebanks/SampleBank_0.o"
+    include "$(BUILD_DIR)/assets/audio/samplebanks/SampleBank_2.o"
 endseg
 
 beginseg
