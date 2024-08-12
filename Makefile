@@ -300,10 +300,12 @@ $(shell mkdir -p $(foreach dir, \
                       $(SAMPLE_DIRS) \
                       $(SAMPLEBANK_DIRS), \
                     $(BUILD_DIR)/$(dir)))
-$(shell mkdir -p $(foreach dir,\
+ifneq ($(wildcard $(EXTRACTED_DIR)),)
+$(shell mkdir -p $(foreach dir, \
                       $(SAMPLE_EXTRACT_DIRS) \
                       $(SAMPLEBANK_EXTRACT_DIRS), \
                     $(dir:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)))
+endif
 
 # directory flags
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
