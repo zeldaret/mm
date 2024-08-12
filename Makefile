@@ -300,7 +300,7 @@ $(shell mkdir -p $(foreach dir, \
                       $(SAMPLE_DIRS) \
                       $(SAMPLEBANK_DIRS), \
                     $(BUILD_DIR)/$(dir)))
-ifneq ($(wildcard $(EXTRACTED_DIR)),)
+ifneq ($(wildcard $(EXTRACTED_DIR)/assets),)
 $(shell mkdir -p $(foreach dir, \
                       $(SAMPLE_EXTRACT_DIRS) \
                       $(SAMPLEBANK_EXTRACT_DIRS), \
