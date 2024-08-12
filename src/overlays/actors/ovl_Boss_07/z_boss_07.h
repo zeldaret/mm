@@ -173,10 +173,10 @@ typedef struct Boss07 {
     /* 0x0156 */ s16 landSfxTimer;
     /* 0x0158 */ s16 disableCollisionTimer;
     /* 0x015A */ s16 whipCollisionTimer;
-    /* 0x015C */ s16 invincibilityTimer;
+    /* 0x015C */ s16 damagedTimer; // TODO: Revisit this name when the equivalent Player variables are named
     /* 0x015E */ s16 damagedFlashTimer;
     /* 0x0160 */ s16 motionBlurAlpha;
-    /* 0x0164 */ Vec3f moveTarget;
+    /* 0x0164 */ Vec3f targetPos;
     /* 0x0170 */ f32 velocity_170; // move speed for wrath sidestep and spin, turn rate for all others
     /* 0x0174 */ u8 canDodge;
     /* 0x0178 */ f32 topSpinAngle; 
