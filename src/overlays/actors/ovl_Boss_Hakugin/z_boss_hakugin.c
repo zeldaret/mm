@@ -119,7 +119,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -130,7 +130,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -141,7 +141,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -152,7 +152,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -163,7 +163,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -174,7 +174,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -185,7 +185,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -196,7 +196,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -207,7 +207,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -218,7 +218,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -229,7 +229,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -240,7 +240,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -251,7 +251,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -262,7 +262,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -273,7 +273,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -284,7 +284,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -295,7 +295,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -306,7 +306,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -317,7 +317,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_HITMARK,
             OCELEM_ON,
         },
@@ -344,7 +344,7 @@ static ColliderTrisElementInit sTrisElementsInit[1] = {
             ELEMTYPE_UNK5,
             { 0x20000000, 0x03, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -378,7 +378,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK5,
         { 0x20000000, 0x00, 0x08 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
+        ATELEM_ON | ATELEM_SFX_HARD,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -398,7 +398,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x02, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -1617,7 +1617,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     }
 
     if ((this->iceCollider.base.acFlags & AC_HIT) &&
-        (this->iceCollider.elem.acHitElem->toucher.dmgFlags == DMG_FIRE_ARROW)) {
+        (this->iceCollider.elem.acHitElem->atDmgInfo.dmgFlags == DMG_FIRE_ARROW)) {
         this->iceCollider.base.atFlags &= ~AT_HIT;
         this->iceCollider.base.acFlags &= ~AC_HIT;
         this->iceCollider.base.ocFlags1 &= ~OC1_HIT;
@@ -2621,7 +2621,7 @@ void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
     if ((this->bodyCollider.base.atFlags & AT_HIT) &&
         ((this->actionFunc == BossHakugin_Charge) || !(player->stateFlags3 & PLAYER_STATE3_80000))) {
         if ((this->actionFunc == BossHakugin_Charge) &&
-            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.toucherFlags & TOUCH_HIT) &&
+            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.atElemFlags & ATELEM_HIT) &&
             !(this->bodyCollider.base.atFlags & AT_BOUNCED) && play->grabPlayer(play, player)) {
             BossHakugin_SetupThrow(this, play);
         } else if (player->stateFlags3 & PLAYER_STATE3_1000) {
@@ -2668,7 +2668,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyCollider.elements[i].base.acHitElem->toucher.dmgFlags & 0x000DB0B3)) {
+            (this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0x000DB0B3)) {
             return false;
         }
 
@@ -2714,7 +2714,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
-            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].base.acHitElem->toucher.damage;
+            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage;
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -2760,7 +2760,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 ColliderElement* elem = &this->bodyCollider.elements[j].base;
 
                 if ((elem->bumperFlags & BUMP_HIT) && (elem->acHitElem != NULL) &&
-                    !(elem->acHitElem->toucherFlags & TOUCH_SFX_NONE)) {
+                    !(elem->acHitElem->atElemFlags & ATELEM_SFX_NONE)) {
                     Math_Vec3s_ToVec3f(&hitPos, &elem->bumper.hitPos);
                     EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
                     CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);

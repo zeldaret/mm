@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF3CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -250,9 +250,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
                         u8 i;
 
-                        if (acHitElem->toucher.dmgFlags & 0x200) {
+                        if (acHitElem->atDmgInfo.dmgFlags & 0x200) {
                             this->cutType = sCutTypes[player->meleeWeaponAnimation];
-                        } else if (acHitElem->toucher.dmgFlags & 0x10) {
+                        } else if (acHitElem->atDmgInfo.dmgFlags & 0x10) {
                             this->invincibilityTimer = 0;
                             this->cutType = this->unk_19A + 3;
                             this->unk_19A = 1 - this->unk_19A;
@@ -264,7 +264,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->cutType = 0;
                         }
 
-                        if ((ABS_ALT(yawDiff) > 0x4000) && !(acHitElem->toucher.dmgFlags & 0x10)) {
+                        if ((ABS_ALT(yawDiff) > 0x4000) && !(acHitElem->atDmgInfo.dmgFlags & 0x10)) {
                             if (this->cutType == 4) {
                                 this->cutType = 3;
                             } else if (this->cutType == 1) {
@@ -361,8 +361,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         piece->actor.world.rot.y =
                             BINANG_ROT180((s32)Rand_CenteredFloat(0x4000) + this->actor.yawTowardsPlayer);
 
-                        if ((acHitElem->toucher.dmgFlags & 0x10) || (acHitElem->toucher.dmgFlags & 8) ||
-                            (acHitElem->toucher.dmgFlags & 0x80000000)) {
+                        if ((acHitElem->atDmgInfo.dmgFlags & 0x10) || (acHitElem->atDmgInfo.dmgFlags & 8) ||
+                            (acHitElem->atDmgInfo.dmgFlags & 0x80000000)) {
                             piece->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
                             piece->actor.speed = Rand_ZeroFloat(4.0f) + 6.0f;
                         } else {

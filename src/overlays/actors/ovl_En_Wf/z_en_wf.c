@@ -74,7 +74,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -85,7 +85,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -96,7 +96,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             ELEMTYPE_UNK1,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -107,7 +107,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             ELEMTYPE_UNK1,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -141,7 +141,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         ELEMTYPE_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -161,7 +161,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         ELEMTYPE_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -321,8 +321,8 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
         this->actor.hintId = TATL_HINT_ID_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
-        this->collider1.elements[0].base.toucher.damage = 8;
-        this->collider1.elements[1].base.toucher.damage = 8;
+        this->collider1.elements[0].base.atDmgInfo.damage = 8;
+        this->collider1.elements[1].base.atDmgInfo.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitAnim, this->jointTable,
@@ -1421,7 +1421,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
 
         if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(collider->elem.acHitElem->toucher.dmgFlags &
+             !(collider->elem.acHitElem->atDmgInfo.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
             if (!Actor_ApplyDamage(&this->actor)) {

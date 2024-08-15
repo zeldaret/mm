@@ -50,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00013A28, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -63,7 +63,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             ELEMTYPE_UNK0,
             { 0x00000008, 0x00, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -167,8 +167,8 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
-                   ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x13828) ||
-                    ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x200) &&
+                   ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x13828) ||
+                    ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x200) &&
                      (player->transformation == PLAYER_FORM_GORON) && (player->actor.speed > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {

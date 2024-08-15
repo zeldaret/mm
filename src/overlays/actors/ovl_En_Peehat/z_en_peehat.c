@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -83,7 +83,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -96,7 +96,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -107,7 +107,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -690,7 +690,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     if (this->colliderSphere.base.acFlags & AC_HIT) {
         this->colliderSphere.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->colliderSphere.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->colliderSphere.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             if (!Actor_ApplyDamage(&this->actor)) {
                 Enemy_StartFinishingBlow(play, &this->actor);
             }
@@ -739,7 +739,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
                (this->colliderCylinder.base.acFlags & AC_HIT) &&
                ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                !(this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+                !(this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
         func_808971DC(this, play);
         this->actor.colorFilterTimer = 0;
         func_80897648(this);

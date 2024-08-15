@@ -87,7 +87,7 @@ static ColliderCylinderInit sCylinderInit[] = {
             ELEMTYPE_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37FBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -106,7 +106,7 @@ static ColliderCylinderInit sCylinderInit[] = {
             ELEMTYPE_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -482,7 +482,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->toucher.dmgFlags & 0x508)) {
+    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (sp30 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);

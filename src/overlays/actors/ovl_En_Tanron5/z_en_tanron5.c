@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK2,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -370,7 +370,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 fragmentAndItemCount = (s32)Rand_ZeroFloat(2.99f) + 10;
             }
 
-            if ((KREG(19) != 0) || ((acHitElem->toucher.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
+            if ((KREG(19) != 0) || ((acHitElem->atDmgInfo.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
                 (ac->id == ACTOR_BOSS_02)) {
                 if (this->dList == gTwinmoldRuinPillarDL) {
                     // To create the appearance of the pillar shrinking after being hit, push it further into the floor,

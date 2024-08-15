@@ -53,7 +53,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -1155,11 +1155,11 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
         if (!ENSW_GET_3(&this->actor)) {
             this->actor.hintId = TATL_HINT_ID_SKULLWALLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-            this->collider.elem.toucher.damage = 8;
+            this->collider.elem.atDmgInfo.damage = 8;
         } else {
             this->actor.hintId = TATL_HINT_ID_GOLD_SKULLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit2);
-            this->collider.elem.toucher.damage = 16;
+            this->collider.elem.atDmgInfo.damage = 16;
         }
 
         this->path =

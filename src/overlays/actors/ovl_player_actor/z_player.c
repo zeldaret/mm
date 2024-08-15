@@ -1688,7 +1688,7 @@ ColliderCylinderInit D_8085C2EC = {
         ELEMTYPE_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -1709,7 +1709,7 @@ ColliderCylinderInit D_8085C318 = {
         ELEMTYPE_UNK2,
         { 0x00100000, 0x00, 0x02 },
         { 0xD7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -1730,7 +1730,7 @@ ColliderQuadInit D_8085C344 = {
         ELEMTYPE_UNK2,
         { 0x00000000, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -1751,7 +1751,7 @@ ColliderQuadInit D_8085C394 = {
         ELEMTYPE_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xD7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -2760,9 +2760,9 @@ void Player_ResetCylinder(Player* this) {
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
     this->cylinder.elem.elemType = ELEMTYPE_UNK1;
-    this->cylinder.elem.toucher.dmgFlags = 0;
+    this->cylinder.elem.atDmgInfo.dmgFlags = 0;
     this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
-    this->cylinder.elem.toucherFlags = TOUCH_NONE | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.atElemFlags = ATELEM_NONE | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = 12;
 }
 
@@ -2790,10 +2790,10 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
     }
 
     this->cylinder.elem.elemType = ELEMTYPE_UNK2;
-    this->cylinder.elem.toucherFlags = TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.atElemFlags = ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = radius;
-    this->cylinder.elem.toucher.dmgFlags = dmgFlags;
-    this->cylinder.elem.toucher.damage = damage;
+    this->cylinder.elem.atDmgInfo.dmgFlags = dmgFlags;
+    this->cylinder.elem.atDmgInfo.damage = damage;
 
     if (dmgFlags & DMG_GORON_POUND) {
         this->cylinder.base.acFlags = AC_NONE;
@@ -5399,13 +5399,13 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
 }
 
 void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
-    this->meleeWeaponQuads[index].elem.toucher.dmgFlags = dmgFlags;
-    this->meleeWeaponQuads[index].elem.toucher.damage = damage;
+    this->meleeWeaponQuads[index].elem.atDmgInfo.dmgFlags = dmgFlags;
+    this->meleeWeaponQuads[index].elem.atDmgInfo.damage = damage;
 
     if (dmgFlags == DMG_DEKU_STICK) {
-        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_WOOD);
+        this->meleeWeaponQuads[index].elem.atElemFlags = (ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_WOOD);
     } else {
-        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST);
+        this->meleeWeaponQuads[index].elem.atElemFlags = (ATELEM_ON | ATELEM_NEAREST);
     }
 }
 
@@ -5861,7 +5861,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     } else if ((this->shieldQuad.base.acFlags & AC_BOUNCED) || (this->shieldCylinder.base.acFlags & AC_BOUNCED) ||
                ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & AC_HIT) &&
                 (this->cylinder.elem.acHitElem != NULL) &&
-                (this->cylinder.elem.acHitElem->toucher.dmgFlags != DMG_UNBLOCKABLE))) {
+                (this->cylinder.elem.acHitElem->atDmgInfo.dmgFlags != DMG_UNBLOCKABLE))) {
         PlayerAnimationHeader* var_a2;
         s32 sp64;
 
@@ -12392,7 +12392,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
              0.5f);
         temp_fv0 += this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 10.0f;
 
-        if (this->cylinder.elem.toucher.dmgFlags == 0x80000) {
+        if (this->cylinder.elem.atDmgInfo.dmgFlags == 0x80000) {
             this->cylinder.dim.height = 80;
             var_fv1_2 = ((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f;
         } else {
@@ -12410,8 +12410,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         if (this->unk_B62 != 0) {
             this->shieldCylinder.base.acFlags = AC_NONE;
-            this->shieldCylinder.elem.toucher.dmgFlags = 0x80000;
-            this->shieldCylinder.elem.toucherFlags = TOUCH_ON;
+            this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x80000;
+            this->shieldCylinder.elem.atElemFlags = ATELEM_ON;
             this->shieldCylinder.elem.bumperFlags = BUMP_NONE;
             this->shieldCylinder.dim.height = 80;
             this->shieldCylinder.dim.radius = 50;
@@ -12422,8 +12422,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         } else if (this->stateFlags1 & PLAYER_STATE1_400000) {
             if ((this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU)) {
                 this->shieldCylinder.base.acFlags = AC_ON | AC_HARD | AC_TYPE_ENEMY;
-                this->shieldCylinder.elem.toucher.dmgFlags = 0x100000;
-                this->shieldCylinder.elem.toucherFlags = TOUCH_NONE;
+                this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x100000;
+                this->shieldCylinder.elem.atElemFlags = ATELEM_NONE;
                 this->shieldCylinder.elem.bumperFlags = BUMP_ON;
 
                 if (this->transformation == PLAYER_FORM_GORON) {

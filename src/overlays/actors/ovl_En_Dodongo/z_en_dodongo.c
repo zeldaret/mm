@@ -54,7 +54,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -65,7 +65,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -76,7 +76,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -87,7 +87,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -98,7 +98,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -109,7 +109,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -120,7 +120,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -131,7 +131,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -142,7 +142,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -153,7 +153,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -193,7 +193,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
             ELEMTYPE_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -204,7 +204,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
             ELEMTYPE_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -215,7 +215,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
             ELEMTYPE_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -330,7 +330,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
             this->collider1.elements[i].dim.modelSphere.radius *= 2;
-            this->collider1.elements[i].base.toucher.damage *= 2;
+            this->collider1.elements[i].base.atDmgInfo.damage *= 2;
         }
 
         for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
@@ -970,7 +970,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
         if ((i != ARRAY_COUNT(this->collider2Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider2.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider2.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].base.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
@@ -994,7 +994,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
         if ((i != ARRAY_COUNT(this->collider1Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider1.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider1.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (!Actor_ApplyDamage(&this->actor)) {

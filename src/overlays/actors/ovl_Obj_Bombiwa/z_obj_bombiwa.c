@@ -49,7 +49,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37FBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37BBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -111,15 +111,15 @@ s32 func_809393B0(Actor* thisx) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* ac = this->collider.base.ac;
 
-        if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(150.0f))) {
                 return true;
             }
-        } else if (this->collider.elem.acHitElem->toucher.dmgFlags & 8) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(95.0f))) {
                 return true;
             }
-        } else if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x500) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x500) {
             return true;
         }
     }
@@ -133,11 +133,11 @@ s32 func_80939470(Actor* thisx) {
         Actor* temp_v0 = this->collider.base.ac;
 
         if (temp_v0 != NULL) {
-            if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
                 if (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(175.0f)) {
                     return true;
                 }
-            } else if ((this->collider.elem.acHitElem->toucher.dmgFlags & 8) &&
+            } else if ((this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) &&
                        (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(115.0f))) {
                 return true;
             }

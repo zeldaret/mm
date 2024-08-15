@@ -43,7 +43,7 @@ static ColliderCylinderInit sStandColliderInit = {
         ELEMTYPE_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xF6CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -63,7 +63,7 @@ static ColliderCylinderInit sFlameColliderInit = {
         ELEMTYPE_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -193,8 +193,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
-                if (this->flameCollider.elem.acHitElem->toucher.dmgFlags & 0x820) {
+                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags;
+                if (this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
@@ -221,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderACActor->params = 0;
-                            ((EnArrow*)flameColliderACActor)->collider.elem.toucher.dmgFlags = 0x800;
+                            ((EnArrow*)flameColliderACActor)->collider.elem.atDmgInfo.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&

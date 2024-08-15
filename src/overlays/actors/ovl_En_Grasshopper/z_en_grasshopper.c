@@ -228,7 +228,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -239,7 +239,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x07, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -526,10 +526,10 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
             BgCheck_SphVsFirstPoly(&play->colCtx, &collisionCheckPos, 10.0f)) {
             EnGrasshopper_SetupBank(this);
         } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
-            this->collider.elements[0].base.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
+            this->collider.elements[0].base.atElemFlags |= (ATELEM_ON | ATELEM_SFX_WOOD);
             EnGrasshopper_RaiseTail(this);
         } else if (this->collider.base.atFlags & AT_BOUNCED) {
-            this->collider.elements[0].base.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
+            this->collider.elements[0].base.atElemFlags &= ~(ATELEM_ON | ATELEM_SFX_WOOD);
             EnGrasshopper_SetupBounced(this);
         } else {
             this->targetRot.z = (this->actor.world.rot.y - this->targetRot.y) * 0.2f;
@@ -612,7 +612,7 @@ void EnGrasshopper_Bounced(EnGrasshopper* this, PlayState* play) {
     this->targetRot.z *= 0.8f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->angularVelocity, 5);
     if (this->timer == 0) {
-        this->collider.elements[0].base.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
+        this->collider.elements[0].base.atElemFlags |= (ATELEM_ON | ATELEM_SFX_WOOD);
         this->timer = 0;
         this->action = DRAGONFLY_ACTION_ROAM_IN_CIRCLES;
         this->waitTimer = this->timer;
@@ -681,8 +681,8 @@ void EnGrasshopper_SetupAttack(EnGrasshopper* this) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xFA0, 0xA);
     this->actor.speed = 3.0f;
     this->baseFlyHeight = this->actor.world.pos.y;
-    this->collider.elements[0].base.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
-    this->collider.elements[1].base.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
+    this->collider.elements[0].base.atElemFlags &= ~(ATELEM_ON | ATELEM_SFX_WOOD);
+    this->collider.elements[1].base.atElemFlags |= (ATELEM_ON | ATELEM_SFX_WOOD);
     Actor_PlaySfx(&this->actor, NA_SE_EN_BATTA_ATTACK);
     this->action = DRAGONFLY_ACTION_ATTACK;
     this->actionFunc = EnGrasshopper_Attack;
@@ -733,7 +733,7 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
         ((player->stateFlags1 & PLAYER_STATE1_400000) && (playerToHitPosDist <= 60.0f) &&
          ((s16)((player->actor.shape.rot.y - this->actor.shape.rot.y) + 0x8000) < 0x2000) &&
          ((s16)((player->actor.shape.rot.y - this->actor.shape.rot.y) + 0x8000) > -0x2000))) {
-        this->collider.elements[1].base.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
+        this->collider.elements[1].base.atElemFlags &= ~(ATELEM_ON | ATELEM_SFX_WOOD);
     }
 
     Math_ApproachF(&this->actor.world.pos.y, this->targetApproachPos.y, 0.1f, this->approachSpeed);
@@ -752,7 +752,7 @@ void EnGrasshopper_SetupWaitAfterAttack(EnGrasshopper* this) {
     this->action = DRAGONFLY_ACTION_WAIT_AFTER_ATTACK;
     this->waitTimer = 20;
     this->actor.speed = 0.0f;
-    this->collider.elements[1].base.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
+    this->collider.elements[1].base.atElemFlags &= ~(ATELEM_ON | ATELEM_SFX_WOOD);
     this->actionFunc = EnGrasshopper_WaitAfterAttack;
 }
 
@@ -764,7 +764,7 @@ void EnGrasshopper_WaitAfterAttack(EnGrasshopper* this, PlayState* play) {
     this->targetPosY = (Math_SinS(this->bobPhase) * 10.0f) + this->baseFlyHeight;
     Math_ApproachF(&this->actor.world.pos.y, this->targetPosY, 0.1f, 10.0f);
     if (this->waitTimer == 0) {
-        this->collider.elements[0].base.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
+        this->collider.elements[0].base.atElemFlags |= (ATELEM_ON | ATELEM_SFX_WOOD);
         EnGrasshopper_RaiseTail(this);
     }
 }
@@ -776,7 +776,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->approachSpeed = 0.0f;
-    this->collider.elements[1].base.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
+    this->collider.elements[1].base.atElemFlags &= ~(ATELEM_ON | ATELEM_SFX_WOOD);
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-20.0f, &damagedVelocity);
     Math_Vec3f_Copy(&this->damagedVelocity, &damagedVelocity);

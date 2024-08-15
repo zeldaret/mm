@@ -68,7 +68,7 @@ static ColliderCylinderInit sProjectileCylinderInit = {
         ELEMTYPE_UNK4,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
+        ATELEM_ON | ATELEM_SFX_HARD,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -88,7 +88,7 @@ static ColliderCylinderInit sOctorokCylinderInit = {
         ELEMTYPE_UNK1,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
+        ATELEM_ON | ATELEM_SFX_HARD,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -766,8 +766,8 @@ void EnOkuta_Projectile_Fly(EnOkuta* this, PlayState* play) {
                 if (this->collider.base.atFlags & AT_BOUNCED) {
                     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED | AT_TYPE_ENEMY);
                     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-                    this->collider.elem.toucher.dmgFlags = DMG_THROWN_OBJECT;
-                    this->collider.elem.toucher.damage = 2;
+                    this->collider.elem.atDmgInfo.dmgFlags = DMG_THROWN_OBJECT;
+                    this->collider.elem.atDmgInfo.damage = 2;
                     Matrix_MtxFToYXZRot(&player->shieldMf, &shieldRot, false);
                     this->actor.world.rot.y = shieldRot.y + 0x8000;
                     this->timer = 22;
@@ -855,7 +855,7 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
     this->collider.base.acFlags &= ~AC_HIT;
 
     if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX ||
-        !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+        !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
         Actor_SetDropFlag(&this->actor, &this->collider.elem);
         EnOkuta_Thaw(this, play);
 

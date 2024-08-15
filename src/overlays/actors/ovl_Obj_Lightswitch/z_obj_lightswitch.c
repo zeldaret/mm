@@ -45,7 +45,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00202000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -328,7 +328,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
-        if ((this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x2000) != 0) {
+        if ((this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
         } else if (LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {

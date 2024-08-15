@@ -61,7 +61,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00013828, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -74,7 +74,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
             ELEMTYPE_UNK0,
             { 0x00000008, 0x00, 0x02 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -101,7 +101,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
             ELEMTYPE_UNK0,
             { 0x80000008, 0x00, 0x04 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -162,7 +162,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider2Elements[0].base.toucher.damage += ENBOM_GET_FF00(thisx);
+    this->collider2Elements[0].base.atDmgInfo.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;

@@ -176,7 +176,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -196,7 +196,7 @@ static ColliderQuadInit sQuadInit = {
         ELEMTYPE_UNK4,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -1768,9 +1768,9 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     s32 i;
 
     if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
-        this->swordCollider.elem.toucher.damage = 0;
+        this->swordCollider.elem.atDmgInfo.damage = 0;
     } else {
-        this->swordCollider.elem.toucher.damage = 4;
+        this->swordCollider.elem.atDmgInfo.damage = 4;
     }
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {

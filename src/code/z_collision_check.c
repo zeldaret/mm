@@ -119,10 +119,10 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* atCol, ColliderElement* 
     f32 damage;
 
     *effect = 0;
-    damage = CollisionCheck_GetToucherDamage(atCol, atElem, acCol, acElem);
+    damage = CollisionCheck_GetElementATDamage(atCol, atElem, acCol, acElem);
 
     if (acCol->actor->colChkInfo.damageTable != NULL) {
-        dmgFlags = atElem->toucher.dmgFlags;
+        dmgFlags = atElem->atDmgInfo.dmgFlags;
 
         for (i = 0; i < ARRAY_COUNT(acCol->actor->colChkInfo.damageTable->attack); i++) {
             if (dmgFlags == 1) {
@@ -150,13 +150,13 @@ f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderElement* acElem) {
  * Gets the damage to be inflicted by `at` on `ac`, before applying other
  * factors such as the ac collider's defense.
  */
-s32 CollisionCheck_GetToucherDamage(Collider* atCol, ColliderElement* atElem, Collider* acCol,
+s32 CollisionCheck_GetElementATDamage(Collider* atCol, ColliderElement* atElem, Collider* acCol,
                                     ColliderElement* acElem) {
     if ((atCol->actor != NULL) && (atCol->actor->id == ACTOR_EN_BOM) && (acCol->actor != NULL) &&
         (acCol->actor->id == ACTOR_PLAYER)) {
         return 8;
     }
-    return atElem->toucher.damage;
+    return atElem->atDmgInfo.damage;
 }
 
 s32 Collider_InitBase(struct PlayState* play, Collider* col) {
@@ -226,21 +226,22 @@ void Collider_ResetOCBase(struct PlayState* play, Collider* col) {
     col->ocFlags2 &= ~OC2_HIT_PLAYER;
 }
 
-s32 Collider_InitTouch(struct PlayState* play, ColliderTouch* touch) {
-    static ColliderTouch sDefaultColliderTouch = { 0x00000000, 0, 0 };
+s32 Collider_InitElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* atDmgInfo) {
+    static ColliderElementDamageInfoAT sDefaultDamageInfoAT = { 0x00000000, 0, 0 };
 
-    *touch = sDefaultColliderTouch;
+    *atDmgInfo = sDefaultDamageInfoAT;
     return 1;
 }
 
-s32 Collider_DestroyTouch(struct PlayState* play, ColliderTouch* touch) {
+s32 Collider_DestroyElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* atDmgInfo) {
     return 1;
 }
 
-s32 Collider_SetTouch(struct PlayState* play, ColliderTouch* touch, ColliderTouchInit* src) {
-    touch->dmgFlags = src->dmgFlags;
-    touch->effect = src->effect;
-    touch->damage = src->damage;
+s32 Collider_SetElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* dest,
+                                    ColliderElementDamageInfoATInit* src) {
+    dest->dmgFlags = src->dmgFlags;
+    dest->effect = src->effect;
+    dest->damage = src->damage;
     return 1;
 }
 
@@ -268,29 +269,29 @@ s32 Collider_SetBump(struct PlayState* play, ColliderBump* bump, ColliderBumpIni
 s32 Collider_InitElement(struct PlayState* play, ColliderElement* elem) {
     static ColliderElement sDefaultColliderElement = {
         { 0, 0, 0 },   { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
-        ELEMTYPE_UNK0, TOUCH_NONE,
+        ELEMTYPE_UNK0, ATELEM_NONE,
         BUMP_NONE,     OCELEM_NONE,
         NULL,          NULL,
         NULL,          NULL,
     };
 
     *elem = sDefaultColliderElement;
-    Collider_InitTouch(play, &elem->toucher);
+    Collider_InitElementDamageInfoAT(play, &elem->atDmgInfo);
     Collider_InitBump(play, &elem->bumper);
     return 1;
 }
 
 s32 Collider_DestroyElement(struct PlayState* play, ColliderElement* elem) {
-    Collider_DestroyTouch(play, &elem->toucher);
+    Collider_DestroyElementDamageInfoAT(play, &elem->atDmgInfo);
     Collider_DestroyBump(play, &elem->bumper);
     return 1;
 }
 
 s32 Collider_SetElement(struct PlayState* play, ColliderElement* elem, ColliderElementInit* elemInit) {
     elem->elemType = elemInit->elemType;
-    Collider_SetTouch(play, &elem->toucher, &elemInit->toucher);
+    Collider_SetElementDamageInfoAT(play, &elem->atDmgInfo, &elemInit->atDmgInfo);
     Collider_SetBump(play, &elem->bumper, &elemInit->bumper);
-    elem->toucherFlags = elemInit->toucherFlags;
+    elem->atElemFlags = elemInit->atElemFlags;
     elem->bumperFlags = elemInit->bumperFlags;
     elem->ocElemFlags = elemInit->ocElemFlags;
     return 1;
@@ -299,8 +300,8 @@ s32 Collider_SetElement(struct PlayState* play, ColliderElement* elem, ColliderE
 void Collider_ResetATElement(struct PlayState* play, ColliderElement* elem) {
     elem->atHit = NULL;
     elem->atHitElem = NULL;
-    elem->toucherFlags &= ~TOUCH_HIT;
-    elem->toucherFlags &= ~TOUCH_DREW_HITMARK;
+    elem->atElemFlags &= ~ATELEM_HIT;
+    elem->atElemFlags &= ~ATELEM_DREW_HITMARK;
     Collider_ResetATElementUnk(play, elem);
 }
 
@@ -997,14 +998,14 @@ s32 Collider_ResetQuadOC(struct PlayState* play, Collider* col) {
 }
 
 /**
- * For quad colliders with TOUCH_NEAREST, resets the previous AC collider it hit if the current element is closer,
+ * For quad colliders with ATELEM_NEAREST, resets the previous AC collider it hit if the current element is closer,
  * otherwise returns false. Used on player AT colliders to prevent multiple collisions from registering.
  */
 s32 Collider_QuadSetNearestAC(struct PlayState* play, ColliderQuad* quad, Vec3f* hitPos) {
     f32 acDist;
     Vec3f dcMid;
 
-    if (!(quad->elem.toucherFlags & TOUCH_NEAREST)) {
+    if (!(quad->elem.atElemFlags & ATELEM_NEAREST)) {
         return 1;
     }
     Math_Vec3s_ToVec3f(&dcMid, &quad->dim.dcMid);
@@ -1419,11 +1420,11 @@ s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colC
 /**
  * Skips AT elements that are off.
  */
-s32 CollisionCheck_SkipTouch(ColliderElement* elem) {
-    if (!(elem->toucherFlags & TOUCH_ON)) {
-        return 1;
+s32 CollisionCheck_IsElementNotAT(ColliderElement* elem) {
+    if (!(elem->atElemFlags & ATELEM_ON)) {
+        return true;
     }
-    return 0;
+    return false;
 }
 
 /**
@@ -1440,7 +1441,7 @@ s32 CollisionCheck_SkipBump(ColliderElement* elem) {
  * If the AT element has no dmgFlags in common with the AC element, no collision happens.
  */
 s32 CollisionCheck_NoSharedFlags(ColliderElement* atElem, ColliderElement* acElem) {
-    if (!(atElem->toucher.dmgFlags & acElem->bumper.dmgFlags)) {
+    if (!(atElem->atDmgInfo.dmgFlags & acElem->bumper.dmgFlags)) {
         return true;
     }
     return false;
@@ -1589,30 +1590,30 @@ void CollisionCheck_RedBloodUnused(struct PlayState* play, Collider* col, Vec3f*
  * Plays sound effects and displays hitmarks for solid-type AC colliders (METAL, WOOD, HARD, and TREE)
  */
 void CollisionCheck_HitSolid(struct PlayState* play, ColliderElement* elem, Collider* col, Vec3f* hitPos) {
-    s32 flags = elem->toucherFlags & TOUCH_SFX_NONE;
+    s32 flags = elem->atElemFlags & ATELEM_SFX_NONE;
 
-    if ((flags == TOUCH_SFX_NORMAL) && (col->colType != COLTYPE_METAL)) {
+    if ((flags == ATELEM_SFX_NORMAL) && (col->colType != COLTYPE_METAL)) {
         EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (col->actor == NULL) {
             Audio_PlaySfx(NA_SE_IT_SHIELD_BOUND);
         } else {
             Audio_PlaySfx_AtPos(&col->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
-    } else if (flags == TOUCH_SFX_NORMAL) {
+    } else if (flags == ATELEM_SFX_NORMAL) {
         EffectSsHitmark_SpawnFixedScale(play, 3, hitPos);
         if (col->actor == NULL) {
             CollisionCheck_SpawnShieldParticlesMetal(play, hitPos);
         } else {
             CollisionCheck_SpawnShieldParticlesMetalSound(play, hitPos, &col->actor->projectedPos);
         }
-    } else if (flags == TOUCH_SFX_HARD) {
+    } else if (flags == ATELEM_SFX_HARD) {
         EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (col->actor == NULL) {
             Audio_PlaySfx(NA_SE_IT_SHIELD_BOUND);
         } else {
             Audio_PlaySfx_AtPos(&col->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
-    } else if (flags == TOUCH_SFX_WOOD) {
+    } else if (flags == ATELEM_SFX_WOOD) {
         EffectSsHitmark_SpawnFixedScale(play, 1, hitPos);
         if (col->actor == NULL) {
             Audio_PlaySfx(NA_SE_IT_REFLECTION_WOOD);
@@ -1661,7 +1662,7 @@ void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderEle
         return;
     }
 
-    if (!(atElem->toucherFlags & TOUCH_AT_HITMARK) && (atElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+    if (!(atElem->atElemFlags & ATELEM_AT_HITMARK) && (atElem->atElemFlags & ATELEM_DREW_HITMARK)) {
         return;
     }
 
@@ -1710,7 +1711,7 @@ s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderEl
     f32 damage;
     u32 effect;
 
-    if (CollisionCheck_GetToucherDamage(atCol, atElem, acCol, acElem) != 0) {
+    if (CollisionCheck_GetElementATDamage(atCol, atElem, acCol, acElem) != 0) {
         damage = CollisionCheck_GetDamageAndEffectOnBumper(atCol, atElem, acCol, acElem, &effect);
         if (damage < 1.0f) {
             if (effect == 0) {
@@ -1727,7 +1728,7 @@ s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderEl
         atCol->atFlags |= AT_HIT;
         atCol->at = acCol->actor;
         atElem->atHit = acCol;
-        atElem->toucherFlags |= TOUCH_HIT;
+        atElem->atElemFlags |= ATELEM_HIT;
         atElem->atHitElem = acElem;
         if (!(atElem->bumperFlags & BUMP_HIT)) {
             atElem->bumper.hitPos.x = hitPos->x;
@@ -1745,18 +1746,18 @@ s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderEl
         acElem->acHitElem = atElem;
         acElem->bumperFlags |= BUMP_HIT;
         if (acCol->actor != NULL) {
-            acCol->actor->colChkInfo.acHitEffect = atElem->toucher.effect;
+            acCol->actor->colChkInfo.acHitEffect = atElem->atDmgInfo.effect;
         }
         acElem->bumper.hitPos.x = hitPos->x;
         acElem->bumper.hitPos.y = hitPos->y;
         acElem->bumper.hitPos.z = hitPos->z;
     }
-    if (!(atElem->toucherFlags & TOUCH_AT_HITMARK) && (acCol->colType != COLTYPE_METAL) &&
+    if (!(atElem->atElemFlags & ATELEM_AT_HITMARK) && (acCol->colType != COLTYPE_METAL) &&
         (acCol->colType != COLTYPE_WOOD) && (acCol->colType != COLTYPE_HARD)) {
         acElem->bumperFlags |= BUMP_DRAW_HITMARK;
     } else {
         CollisionCheck_HitEffects(play, atCol, atElem, acCol, acElem, hitPos);
-        atElem->toucherFlags |= TOUCH_DREW_HITMARK;
+        atElem->atElemFlags |= ATELEM_DREW_HITMARK;
     }
     return 1;
 }
@@ -1793,7 +1794,7 @@ void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckCont
     if ((atJntSph->count > 0) && (atJntSph->elements != NULL) && (acJntSph->count > 0) &&
         (acJntSph->elements != NULL)) {
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
-            if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atJntSphElem->base)) {
                 continue;
             }
 
@@ -1852,7 +1853,7 @@ void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext
             return;
         }
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
-            if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atJntSphElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atJntSphElem->base, &acCyl->elem)) {
@@ -1900,7 +1901,7 @@ void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContex
 
     if ((atJntSph->count > 0) && (atJntSph->elements != NULL) && (acTris->count > 0) && (acTris->elements != NULL)) {
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
-            if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atJntSphElem->base)) {
                 continue;
             }
             for (acTrisElem = acTris->elements; acTrisElem < &acTris->elements[acTris->count]; acTrisElem++) {
@@ -1943,7 +1944,7 @@ void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContex
         Math3D_TriNorm(&D_801EF5C8, &acQuad->dim.quad[1], &acQuad->dim.quad[0], &acQuad->dim.quad[2]);
 
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
-            if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atJntSphElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atJntSphElem->base, &acQuad->elem)) {
@@ -1980,7 +1981,7 @@ void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckCont
             return;
         }
         for (atJntSphElem = atJntSph->elements; atJntSphElem < &atJntSph->elements[atJntSph->count]; atJntSphElem++) {
-            if (CollisionCheck_SkipTouch(&atJntSphElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atJntSphElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atJntSphElem->base, &acSph->elem)) {
@@ -2022,7 +2023,7 @@ void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext
     ColliderJntSphElement* acJntSphElem;
 
     if ((acJntSph->count > 0) && (acJntSph->elements != NULL) && (atCyl->dim.radius > 0) && (atCyl->dim.height > 0)) {
-        if (CollisionCheck_SkipTouch(&atCyl->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atCyl->elem)) {
             return;
         }
         for (acJntSphElem = acJntSph->elements; acJntSphElem < &acJntSph->elements[acJntSph->count]; acJntSphElem++) {
@@ -2077,7 +2078,7 @@ void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* c
         if (CollisionCheck_SkipBump(&acCyl->elem)) {
             return;
         }
-        if (CollisionCheck_SkipTouch(&atCyl->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atCyl->elem)) {
             return;
         }
         if (CollisionCheck_NoSharedFlags(&atCyl->elem, &acCyl->elem)) {
@@ -2128,7 +2129,7 @@ void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* 
     Vec3f hitPos;
 
     if ((atCyl->dim.radius > 0) && (atCyl->dim.height > 0) && (acTris->count > 0) && (acTris->elements != NULL)) {
-        if (CollisionCheck_SkipTouch(&atCyl->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atCyl->elem)) {
             return;
         }
 
@@ -2163,7 +2164,7 @@ void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* 
     ColliderQuad* acQuad = (ColliderQuad*)acCol;
 
     if ((atCyl->dim.height > 0) && (atCyl->dim.radius > 0)) {
-        if (CollisionCheck_SkipTouch(&atCyl->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atCyl->elem)) {
             return;
         }
         if (CollisionCheck_SkipBump(&acQuad->elem)) {
@@ -2206,7 +2207,7 @@ void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext
     f32 centerDist;
 
     if ((atCyl->dim.radius > 0) && (atCyl->dim.height > 0)) {
-        if (CollisionCheck_SkipTouch(&atCyl->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atCyl->elem)) {
             return;
         }
         if (CollisionCheck_SkipBump(&acSph->elem)) {
@@ -2260,7 +2261,7 @@ void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContex
                 continue;
             }
             for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
-                if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
+                if (CollisionCheck_IsElementNotAT(&atTrisElem->base)) {
                     continue;
                 }
                 if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acJntSphElem->base)) {
@@ -2298,7 +2299,7 @@ void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* 
             return;
         }
         for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
-            if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atTrisElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acCyl->elem)) {
@@ -2334,7 +2335,7 @@ void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext*
                 continue;
             }
             for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
-                if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
+                if (CollisionCheck_IsElementNotAT(&atTrisElem->base)) {
                     continue;
                 }
                 if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acTrisElem->base)) {
@@ -2373,7 +2374,7 @@ void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext*
         Math3D_TriNorm(&D_801EDE78, &acQuad->dim.quad[1], &acQuad->dim.quad[0], &acQuad->dim.quad[2]);
 
         for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
-            if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atTrisElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acQuad->elem)) {
@@ -2409,7 +2410,7 @@ void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContex
             return;
         }
         for (atTrisElem = atTris->elements; atTrisElem < &atTris->elements[atTris->count]; atTrisElem++) {
-            if (CollisionCheck_SkipTouch(&atTrisElem->base)) {
+            if (CollisionCheck_IsElementNotAT(&atTrisElem->base)) {
                 continue;
             }
             if (CollisionCheck_NoSharedFlags(&atTrisElem->base, &acSph->elem)) {
@@ -2439,7 +2440,7 @@ void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContex
     ColliderJntSph* acJntSph = (ColliderJntSph*)acCol;
 
     if ((acJntSph->count > 0) && (acJntSph->elements != NULL)) {
-        if (CollisionCheck_SkipTouch(&atQuad->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atQuad->elem)) {
             return;
         }
         Math3D_TriNorm(&D_801EDEC8, &atQuad->dim.quad[2], &atQuad->dim.quad[3], &atQuad->dim.quad[1]);
@@ -2485,7 +2486,7 @@ void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* 
         if (CollisionCheck_SkipBump(&acCyl->elem)) {
             return;
         }
-        if (CollisionCheck_SkipTouch(&atQuad->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atQuad->elem)) {
             return;
         }
         if (CollisionCheck_NoSharedFlags(&atQuad->elem, &acCyl->elem)) {
@@ -2531,7 +2532,7 @@ void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext*
     ColliderTrisElement* acTrisElem;
 
     if ((acTris->count > 0) && (acTris->elements != NULL)) {
-        if (CollisionCheck_SkipTouch(&atQuad->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atQuad->elem)) {
             return;
         }
 
@@ -2573,7 +2574,7 @@ void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext*
     s32 i;
     s32 j;
 
-    if (CollisionCheck_SkipTouch(&atQuad->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atQuad->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acQuad->elem)) {
@@ -2614,7 +2615,7 @@ void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContex
     Vec3f hitPos;
     ColliderSphere* acSph = (ColliderSphere*)acCol;
 
-    if (CollisionCheck_SkipTouch(&atQuad->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atQuad->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acSph->elem) || CollisionCheck_NoSharedFlags(&atQuad->elem, &acSph->elem)) {
@@ -2650,7 +2651,7 @@ void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckCont
     f32 centerDist;
 
     if ((acJntSph->count > 0) && (acJntSph->elements != NULL)) {
-        if (CollisionCheck_SkipTouch(&atSph->elem)) {
+        if (CollisionCheck_IsElementNotAT(&atSph->elem)) {
             return;
         }
 
@@ -2696,7 +2697,7 @@ void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckCo
     f32 overlapSize;
     f32 centerDist;
 
-    if (CollisionCheck_SkipTouch(&atSph->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atSph->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acCyl->elem)) {
@@ -2743,7 +2744,7 @@ void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContex
     ColliderTrisElement* acTrisElem;
     Vec3f hitPos;
 
-    if (CollisionCheck_SkipTouch(&atSph->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atSph->elem)) {
         return;
     }
 
@@ -2776,7 +2777,7 @@ void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContex
     Vec3f hitPos;
     ColliderQuad* acQuad = (ColliderQuad*)acCol;
 
-    if (CollisionCheck_SkipTouch(&atSph->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atSph->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acQuad->elem) || CollisionCheck_NoSharedFlags(&atSph->elem, &acQuad->elem)) {
@@ -2808,7 +2809,7 @@ void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckCont
     f32 overlapSize;
     f32 centerDist;
 
-    if (CollisionCheck_SkipTouch(&atSph->elem)) {
+    if (CollisionCheck_IsElementNotAT(&atSph->elem)) {
         return;
     }
     if (CollisionCheck_SkipBump(&acSph->elem)) {
@@ -2847,13 +2848,13 @@ void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext
 
     for (jntSphElem = jntSph->elements; jntSphElem < &jntSph->elements[jntSph->count]; jntSphElem++) {
         if ((jntSphElem->base.bumperFlags & BUMP_DRAW_HITMARK) && (jntSphElem->base.acHitElem != NULL) &&
-            !(jntSphElem->base.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+            !(jntSphElem->base.acHitElem->atElemFlags & ATELEM_DREW_HITMARK)) {
             Vec3f hitPos;
 
             Math_Vec3s_ToVec3f(&hitPos, &jntSphElem->base.bumper.hitPos);
             CollisionCheck_HitEffects(play, jntSphElem->base.acHit, jntSphElem->base.acHitElem, &jntSph->base,
                                       &jntSphElem->base, &hitPos);
-            jntSphElem->base.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+            jntSphElem->base.acHitElem->atElemFlags |= ATELEM_DREW_HITMARK;
             return;
         }
     }
@@ -2866,12 +2867,12 @@ void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* c
     ColliderCylinder* cyl = (ColliderCylinder*)col;
 
     if ((cyl->elem.bumperFlags & BUMP_DRAW_HITMARK) && (cyl->elem.acHitElem != NULL) &&
-        !(cyl->elem.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+        !(cyl->elem.acHitElem->atElemFlags & ATELEM_DREW_HITMARK)) {
         Vec3f hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, &cyl->elem.bumper.hitPos);
         CollisionCheck_HitEffects(play, cyl->elem.acHit, cyl->elem.acHitElem, &cyl->base, &cyl->elem, &hitPos);
-        cyl->elem.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+        cyl->elem.acHitElem->atElemFlags |= ATELEM_DREW_HITMARK;
     }
 }
 
@@ -2884,13 +2885,13 @@ void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* 
 
     for (trisElem = tris->elements; trisElem < &tris->elements[tris->count]; trisElem++) {
         if ((trisElem->base.bumperFlags & BUMP_DRAW_HITMARK) && (trisElem->base.acHitElem != NULL) &&
-            !(trisElem->base.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+            !(trisElem->base.acHitElem->atElemFlags & ATELEM_DREW_HITMARK)) {
             Vec3f hitPos;
 
             Math_Vec3s_ToVec3f(&hitPos, &trisElem->base.bumper.hitPos);
             CollisionCheck_HitEffects(play, trisElem->base.acHit, trisElem->base.acHitElem, &tris->base,
                                       &trisElem->base, &hitPos);
-            trisElem->base.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+            trisElem->base.acHitElem->atElemFlags |= ATELEM_DREW_HITMARK;
             return;
         }
     }
@@ -2903,12 +2904,12 @@ void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* 
     ColliderQuad* quad = (ColliderQuad*)col;
 
     if ((quad->elem.bumperFlags & BUMP_DRAW_HITMARK) && (quad->elem.acHitElem != NULL) &&
-        !(quad->elem.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+        !(quad->elem.acHitElem->atElemFlags & ATELEM_DREW_HITMARK)) {
         Vec3f hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, &quad->elem.bumper.hitPos);
         CollisionCheck_HitEffects(play, quad->elem.acHit, quad->elem.acHitElem, &quad->base, &quad->elem, &hitPos);
-        quad->elem.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+        quad->elem.acHitElem->atElemFlags |= ATELEM_DREW_HITMARK;
     }
 }
 
@@ -2919,12 +2920,12 @@ void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext
     ColliderSphere* sph = (ColliderSphere*)col;
 
     if ((sph->elem.bumperFlags & BUMP_DRAW_HITMARK) && (sph->elem.acHitElem != NULL) &&
-        !(sph->elem.acHitElem->toucherFlags & TOUCH_DREW_HITMARK)) {
+        !(sph->elem.acHitElem->atElemFlags & ATELEM_DREW_HITMARK)) {
         Vec3f hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, &sph->elem.bumper.hitPos);
         CollisionCheck_HitEffects(play, sph->elem.acHit, sph->elem.acHitElem, &sph->base, &sph->elem, &hitPos);
-        sph->elem.acHitElem->toucherFlags |= TOUCH_DREW_HITMARK;
+        sph->elem.acHitElem->atElemFlags |= ATELEM_DREW_HITMARK;
     }
 }
 
@@ -3024,7 +3025,7 @@ void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colChkCtx,
  * Iterates through all AT colliders, testing them for AC collisions with each AC collider, setting the info regarding
  * the collision for each AC and AT collider that collided. Then spawns hitmarks and plays sound effects for each
  * successful collision. To collide, an AT collider must share a type (AC_TYPE_PLAYER, AC_TYPE_ENEMY, or AC_TYPE_OTHER)
- * with the AC collider and the toucher and bumper elements that overlapped must share a dmgFlag.
+ * with the AC collider and the atDmgInfo and bumper elements that overlapped must share a dmgFlag.
  */
 void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colChkCtx) {
     Collider** acColP;
@@ -3546,7 +3547,7 @@ void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* c
     if ((atCol != NULL) && (atElem != NULL) && (col != NULL) && (elem != NULL)) {
         damage = CollisionCheck_GetDamageAndEffectOnBumper(atCol, atElem, col, elem, &effect);
 
-        if (CollisionCheck_GetToucherDamage(atCol, atElem, col, elem) != 0) {
+        if (CollisionCheck_GetElementATDamage(atCol, atElem, col, elem) != 0) {
             if (damage < 1.0f) {
                 finalDamage = 0.0f;
                 if (effect == 0) {
@@ -3562,7 +3563,7 @@ void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* c
         if (col->actor->colChkInfo.damageTable != NULL) {
             col->actor->colChkInfo.damageEffect = effect;
         }
-        if (!(col->acFlags & AC_HARD) || ((col->acFlags & AC_HARD) && (atElem->toucher.dmgFlags == 0x20000000))) {
+        if (!(col->acFlags & AC_HARD) || ((col->acFlags & AC_HARD) && (atElem->atDmgInfo.dmgFlags == 0x20000000))) {
             if (col->actor->colChkInfo.damage < finalDamage) {
                 col->actor->colChkInfo.damage = finalDamage;
             }

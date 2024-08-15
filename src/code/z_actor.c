@@ -4723,11 +4723,11 @@ void Actor_SetDropFlag(Actor* actor, ColliderElement* elem) {
 
     if (acHitElem == NULL) {
         actor->dropFlag = DROPFLAG_NONE;
-    } else if (acHitElem->toucher.dmgFlags & DMG_FIRE_ARROW) {
+    } else if (acHitElem->atDmgInfo.dmgFlags & DMG_FIRE_ARROW) {
         actor->dropFlag = DROPFLAG_1;
-    } else if (acHitElem->toucher.dmgFlags & DMG_ICE_ARROW) {
+    } else if (acHitElem->atDmgInfo.dmgFlags & DMG_ICE_ARROW) {
         actor->dropFlag = DROPFLAG_2;
-    } else if (acHitElem->toucher.dmgFlags & DMG_LIGHT_ARROW) {
+    } else if (acHitElem->atDmgInfo.dmgFlags & DMG_LIGHT_ARROW) {
         actor->dropFlag = DROPFLAG_20;
     } else {
         actor->dropFlag = DROPFLAG_NONE;
@@ -4749,7 +4749,7 @@ void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSph) {
         if (acHitElem == NULL) {
             flag = DROPFLAG_NONE;
         } else {
-            s32 dmgFlags = acHitElem->toucher.dmgFlags;
+            s32 dmgFlags = acHitElem->atDmgInfo.dmgFlags;
 
             if (dmgFlags & DMG_FIRE_ARROW) {
                 flag = DROPFLAG_1;
@@ -4802,7 +4802,7 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
 
 void func_800BE504(Actor* actor, ColliderCylinder* cyl) {
     // Checks if was hit by either DMG_NORMAL_ARROW, DMG_FIRE_ARROW, DMG_ICE_ARROW, DMG_LIGHT_ARROW or DMG_DEKU_BUBBLE
-    if ((cyl->elem.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
+    if ((cyl->elem.acHitElem->atDmgInfo.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         actor->world.rot.y = cyl->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_WorldYawTowardActor(cyl->base.ac, actor);
@@ -4810,7 +4810,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* cyl) {
 }
 
 void func_800BE568(Actor* actor, ColliderSphere* sph) {
-    if (sph->elem.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+    if (sph->elem.acHitElem->atDmgInfo.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = sph->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_WorldYawTowardActor(sph->base.ac, actor);
@@ -4818,7 +4818,7 @@ void func_800BE568(Actor* actor, ColliderSphere* sph) {
 }
 
 void func_800BE5CC(Actor* actor, ColliderJntSph* jntSph, s32 elemIndex) {
-    if (jntSph->elements[elemIndex].base.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+    if (jntSph->elements[elemIndex].base.acHitElem->atDmgInfo.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = jntSph->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_WorldYawTowardActor(jntSph->base.ac, actor);

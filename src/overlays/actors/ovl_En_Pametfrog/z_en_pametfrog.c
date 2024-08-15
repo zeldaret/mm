@@ -130,7 +130,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -141,7 +141,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_WOOD,
+            ATELEM_ON | ATELEM_SFX_WOOD,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -1273,7 +1273,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
                     Audio_RestorePrevBgm();

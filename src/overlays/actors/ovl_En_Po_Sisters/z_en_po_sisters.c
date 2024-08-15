@@ -87,7 +87,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CBFFFE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -192,7 +192,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     } else if (this->type == POE_SISTERS_TYPE_MEG) {
         if (this->megCloneId == POE_SISTERS_MEG_REAL) {
             this->actor.colChkInfo.health = 8;
-            this->collider.elem.toucher.damage = 16;
+            this->collider.elem.atDmgInfo.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
             EnPoSisters_SpawnMegClones(this, play);
             EnPoSisters_SetupSpawnPo(this);

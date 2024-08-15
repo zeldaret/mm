@@ -61,7 +61,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -505,7 +505,7 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlag(&this->actor, &this->collider.elem);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;

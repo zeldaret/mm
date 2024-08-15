@@ -88,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00400000, 0x00, 0x02 },
         { 0x05CBFFBE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -474,7 +474,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.elem.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
+               (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {

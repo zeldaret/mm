@@ -37,7 +37,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x04 },
             { 0xF7CFD757, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -48,7 +48,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK,
             OCELEM_NONE,
         },
@@ -98,10 +98,10 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
 s32 func_8089F59C(EnBubble* this) {
     ColliderElement* elem = &this->colliderSphere.elements[0].base;
 
-    elem->toucher.dmgFlags = DMG_EXPLOSIVES;
-    elem->toucher.effect = 0;
-    elem->toucher.damage = 4;
-    elem->toucherFlags = TOUCH_ON;
+    elem->atDmgInfo.dmgFlags = DMG_EXPLOSIVES;
+    elem->atDmgInfo.effect = 0;
+    elem->atDmgInfo.damage = 4;
+    elem->atElemFlags = ATELEM_ON;
     this->actor.velocity.y = 0.0f;
     return 6;
 }
@@ -112,7 +112,7 @@ s32 func_8089F5D0(EnBubble* this) {
 }
 
 void EnBubble_DamagePlayer(EnBubble* this, PlayState* play) {
-    play->damagePlayer(play, -this->colliderSphere.elements[0].base.toucher.damage);
+    play->damagePlayer(play, -this->colliderSphere.elements[0].base.atDmgInfo.damage);
     func_800B8E1C(play, &this->actor, 6.0f, this->actor.yawTowardsPlayer, 6.0f);
 }
 

@@ -63,7 +63,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0x00000000, 0x00, 0x00 },
             { 0x01CBFFBE, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -182,7 +182,7 @@ void ObjMine_Air_CheckAC(ObjMine* this, s16* hitAngle, s16* torqueAngle) {
     yawToAttack = Math_Vec3f_Yaw(&attackActor->world.pos, &centerPos);
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_FIRE_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
-    if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x13820) {
+    if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x13820) {
         *hitAngle = attackActor->shape.rot.y;
         *torqueAngle = attackActor->shape.rot.y - yawToAttack;
     } else {
@@ -199,7 +199,7 @@ void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* knockbackDir) {
     Actor* attackActor = this->collider.base.ac;
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_LIGHT_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
-    if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x13820) {
+    if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x13820) {
         Matrix_Push();
         Matrix_RotateYS(attackActor->shape.rot.y, MTXMODE_NEW);
         Matrix_RotateXS(attackActor->shape.rot.x, MTXMODE_APPLY);

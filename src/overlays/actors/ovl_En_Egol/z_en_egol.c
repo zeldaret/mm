@@ -96,7 +96,7 @@ static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -110,7 +110,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -121,7 +121,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -132,7 +132,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -143,7 +143,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -154,7 +154,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -165,7 +165,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -212,7 +212,7 @@ static ColliderQuadInit sLaserQuadInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x07, 0x10 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -960,8 +960,8 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
         this->bodyCollider.elements[1].dim.modelSphere.radius = 20;
         EnEgol_SetupWalk(this);
     } else if (!this->hitPlayer) {
-        if ((this->bodyCollider.elements[0].base.toucherFlags & TOUCH_HIT) ||
-            (this->bodyCollider.elements[1].base.toucherFlags & TOUCH_HIT)) {
+        if ((this->bodyCollider.elements[0].base.atElemFlags & ATELEM_HIT) ||
+            (this->bodyCollider.elements[1].base.atElemFlags & ATELEM_HIT)) {
             this->hitPlayer = true;
             func_800B8D50(play, &this->actor, 10.0f, this->actor.home.rot.y, 10.0f, 0);
         }

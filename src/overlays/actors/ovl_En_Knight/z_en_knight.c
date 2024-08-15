@@ -212,7 +212,7 @@ static ColliderJntSphElementInit sKnightSwordColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -226,7 +226,7 @@ static ColliderJntSphElementInit sIgosSwordColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -266,7 +266,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -293,7 +293,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -304,7 +304,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -338,7 +338,7 @@ static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
         ELEMTYPE_UNK3,
         { 0xF7CFFFFF, 0x00, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -358,7 +358,7 @@ static ColliderCylinderInit sHeadColliderCylinderInit = {
         ELEMTYPE_UNK3,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -3168,7 +3168,7 @@ void EnKnight_UpdateDamageFallenOver(EnKnight* this, PlayState* play) {
             acHitElem = jntSphElem->base.acHitElem;
 
             this->invincibilityTimer = 10;
-            if (acHitElem->toucher.dmgFlags & DMG_LIGHT_RAY) {
+            if (acHitElem->atDmgInfo.dmgFlags & DMG_LIGHT_RAY) {
                 this->damageFlashTimer = 15;
                 this->invincibilityTimer = 1000;
                 EnKnight_SetupDie(this, play);

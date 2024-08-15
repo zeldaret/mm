@@ -45,7 +45,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x80000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -104,7 +104,8 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if ((this->collider.elem.acHitElem != NULL) && (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000)) {
+        if ((this->collider.elem.acHitElem != NULL) &&
+            (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
                 azimuth = Rand_Next() >> 0x10;

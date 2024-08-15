@@ -69,7 +69,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x01, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
+        ATELEM_ON | ATELEM_SFX_HARD,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -154,13 +154,13 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = EnFirefly_FlyIdle;
     } else if (this->actor.params == KEESE_ICE_FLY) {
         this->auraType = KEESE_AURA_ICE;
-        this->collider.elem.toucher.effect = 2; // Freeze
+        this->collider.elem.atDmgInfo.effect = 2; // Freeze
         this->actor.hintId = TATL_HINT_ID_ICE_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_FlyIdle;
     } else {
         this->auraType = KEESE_AURA_NONE;
-        this->collider.elem.toucher.effect = 0; // Nothing
+        this->collider.elem.atDmgInfo.effect = 0; // Nothing
         this->actor.hintId = TATL_HINT_ID_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_Perch;
@@ -186,7 +186,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_Extinguish(EnFirefly* this) {
     this->currentType = KEESE_NORMAL;
-    this->collider.elem.toucher.effect = 0; // Nothing
+    this->collider.elem.atDmgInfo.effect = 0; // Nothing
     this->auraType = KEESE_AURA_NONE;
     this->actor.hintId = TATL_HINT_ID_KEESE;
 }
@@ -194,7 +194,7 @@ void EnFirefly_Extinguish(EnFirefly* this) {
 void EnFirefly_Ignite(EnFirefly* this) {
     if (this->actor.params == KEESE_FIRE_FLY) {
         this->currentType = KEESE_FIRE;
-        this->collider.elem.toucher.effect = 1; // Fire
+        this->collider.elem.atDmgInfo.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
         this->actor.hintId = TATL_HINT_ID_FIRE_KEESE;
     }

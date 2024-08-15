@@ -348,7 +348,7 @@ static ColliderJntSphElementInit sSwordColliderJntSphElementsInit[3] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -359,7 +359,7 @@ static ColliderJntSphElementInit sSwordColliderJntSphElementsInit[3] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -370,7 +370,7 @@ static ColliderJntSphElementInit sSwordColliderJntSphElementsInit[3] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -398,7 +398,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -426,7 +426,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -437,7 +437,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -448,7 +448,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -459,7 +459,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -470,7 +470,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -481,7 +481,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -492,7 +492,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -503,7 +503,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -514,7 +514,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -525,7 +525,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -536,7 +536,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -564,7 +564,7 @@ static ColliderJntSphElementInit sKickAndShieldBashColliderJntSphElementsInit[2]
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
+            ATELEM_ON | ATELEM_SFX_HARD,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -575,7 +575,7 @@ static ColliderJntSphElementInit sKickAndShieldBashColliderJntSphElementsInit[2]
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
+            ATELEM_ON | ATELEM_SFX_HARD,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -609,7 +609,7 @@ static ColliderCylinderInit sBugACColliderCylinderInit = {
         ELEMTYPE_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -629,7 +629,7 @@ static ColliderCylinderInit sBugATColliderCylinderInit = {
         ELEMTYPE_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -1956,7 +1956,7 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
         if (this->damagedTimer == 0) {
             ColliderElement* acHitElem = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].base.acHitElem;
 
-            if (acHitElem->toucher.dmgFlags == DMG_SWORD_BEAM) {
+            if (acHitElem->atDmgInfo.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
@@ -1965,16 +1965,16 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
         }
     } else if (this->damagedTimer == 0) {
         for (i = 0; i < ODOLWA_SWORD_COLLIDER_MAX; i++) {
-            if (this->swordCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->swordCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->swordCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->swordCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 15.0f;
             }
         }
 
         for (i = 0; i < ODOLWA_KICK_AND_SHIELD_BASH_COLLIDER_MAX; i++) {
-            if (this->kickAndShieldBashCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->kickAndShieldBashCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->kickAndShieldBashCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->kickAndShieldBashCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 20.0f;
             }
@@ -3255,7 +3255,7 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-            if (acHitElem->toucher.dmgFlags & 0x300000) {
+            if (acHitElem->atDmgInfo.dmgFlags & 0x300000) {
                 this->damagedTimer = 10;
                 Matrix_MultVecZ(-10.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;

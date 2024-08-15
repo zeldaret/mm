@@ -48,7 +48,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00202000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -123,7 +123,7 @@ void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
-        if (this->collider.elem.acHitElem->toucher.dmgFlags & (1 << 13)) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & (1 << 13)) {
             this->collisionCounter = 8;
         }
         // light ray

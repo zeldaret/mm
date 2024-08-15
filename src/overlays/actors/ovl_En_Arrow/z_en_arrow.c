@@ -48,7 +48,7 @@ static ColliderQuadInit sQuadInit = {
         ELEMTYPE_UNK2,
         { 0x00000020, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NONE,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -151,16 +151,16 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
 
     if (ARROW_IS_ARROW(this->actor.params)) {
-        this->collider.elem.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
-        this->collider.elem.toucherFlags |= 0;
+        this->collider.elem.atElemFlags &= ~(ATELEM_SFX_WOOD | ATELEM_SFX_HARD);
+        this->collider.elem.atElemFlags |= 0;
     }
 
     if (this->actor.params < ARROW_TYPE_NORMAL_LIT) {
         this->collider.base.atFlags = (AT_TYPE_ENEMY | AT_ON);
     } else {
-        this->collider.elem.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
+        this->collider.elem.atDmgInfo.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
         if (this->actor.params == ARROW_TYPE_DEKU_NUT) {
-            this->collider.elem.toucher.damage = 1;
+            this->collider.elem.atDmgInfo.damage = 1;
         }
 
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
@@ -351,7 +351,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             }
 
             this->actor.params = ARROW_TYPE_NORMAL;
-            this->collider.elem.toucher.dmgFlags = 0x20;
+            this->collider.elem.atDmgInfo.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
                 Actor_Kill(this->actor.child);

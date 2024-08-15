@@ -56,7 +56,7 @@ static ColliderCylinderInit sShellCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFC74F, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -76,7 +76,7 @@ static ColliderCylinderInit sBodyCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x000038B0, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -490,12 +490,12 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
         if (this->bodyCollider.base.acFlags & AC_HIT) {
-            if (this->bodyCollider.elem.acHitElem->toucher.dmgFlags & 0x1000) { // Ice Arrow
+            if (this->bodyCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
-            } else if (this->bodyCollider.elem.acHitElem->toucher.dmgFlags & 0x2000) { // Light Arrow
+            } else if (this->bodyCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;

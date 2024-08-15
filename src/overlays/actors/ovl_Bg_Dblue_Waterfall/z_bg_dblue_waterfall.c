@@ -50,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0x00CBFBB0, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -419,13 +419,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
         if (sp2C) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
-                if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x800) {
+                if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x800) {
                     this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
-                if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x1000) {
+                if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) {
                     this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }

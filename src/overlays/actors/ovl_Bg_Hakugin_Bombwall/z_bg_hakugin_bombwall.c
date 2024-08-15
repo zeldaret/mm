@@ -51,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_NONE,
     },
@@ -359,7 +359,7 @@ s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
 
 s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.elem.acHitElem->toucher.dmgFlags & 8) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
                 Actor* thisx = &this->dyna.actor;
 

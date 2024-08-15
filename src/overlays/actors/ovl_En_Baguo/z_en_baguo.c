@@ -60,7 +60,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -357,7 +357,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements[0].dim.scale = 3.0f;
-                this->collider.elements[0].base.toucher.damage = 8;
+                this->collider.elements[0].base.atDmgInfo.damage = 8;
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xB0);
                 this->actionFunc = EnBaguo_PostDetonation;
             }

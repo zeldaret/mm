@@ -237,7 +237,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -2620,7 +2620,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
         if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->gekkoCollider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->gekkoCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {

@@ -44,7 +44,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_WOOD,
+        ATELEM_ON | ATELEM_SFX_WOOD,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -82,8 +82,8 @@ void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
 void EnNutsball_InitColliderParams(EnNutsball* this) {
     this->collider.base.atFlags &= ~(AT_HIT | AT_TYPE_ENEMY | AT_BOUNCED);
     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-    this->collider.elem.toucher.dmgFlags = 0x400000;
-    this->collider.elem.toucher.damage = 2;
+    this->collider.elem.atDmgInfo.dmgFlags = 0x400000;
+    this->collider.elem.atDmgInfo.damage = 2;
 }
 
 void EnNutsball_Update(Actor* thisx, PlayState* play2) {

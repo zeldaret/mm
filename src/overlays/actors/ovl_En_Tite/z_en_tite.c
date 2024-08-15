@@ -71,7 +71,7 @@ static ColliderSphereInit sSphereInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
+        ATELEM_ON | ATELEM_SFX_HARD,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -947,7 +947,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.elem);
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             func_80893E54(this, play);
             if (this->actor.shape.yOffset < 0.0f) {
                 func_80895DE8(this);

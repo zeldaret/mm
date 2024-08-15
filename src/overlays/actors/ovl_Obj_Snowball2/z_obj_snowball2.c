@@ -44,7 +44,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             ELEMTYPE_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x0583FFBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -361,14 +361,14 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
     } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
         func_80B3A498(this);
-    } else if (sp38 && (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x0583FFBC)) {
+    } else if (sp38 && (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x0583FFBC)) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
         Actor_Kill(&this->actor);
         return;
     } else {
-        if (sp38 && (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 2)) {
+        if (sp38 && (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 2)) {
             func_80B39908(this, play);
         }
 

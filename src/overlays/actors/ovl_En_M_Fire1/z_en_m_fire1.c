@@ -39,7 +39,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK2,
         { 0x00000001, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -53,7 +53,7 @@ void EnMFire1_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->actor.params != 0) {
-        this->collider.elem.toucher.dmgFlags = 0x40000;
+        this->collider.elem.atDmgInfo.dmgFlags = 0x40000;
     }
 }
 

@@ -295,7 +295,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -306,7 +306,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -334,7 +334,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -345,7 +345,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -356,7 +356,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -367,7 +367,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -378,7 +378,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             ELEMTYPE_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_ON,
         },
@@ -1843,16 +1843,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->headCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->bodyCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1870,8 +1870,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].base.acHitElem->toucher.damage
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1919,8 +1919,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].base.acHitElem->toucher.damage)
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].base.acHitElem->atDmgInfo.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;

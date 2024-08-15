@@ -42,7 +42,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -53,7 +53,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -80,7 +80,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -91,7 +91,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -102,7 +102,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -113,7 +113,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_ON,
             OCELEM_NONE,
         },
@@ -291,7 +291,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         for (i = 0; i < 2; i++) {
             trisElem = &this->collider.elements[i];
             if (trisElem->base.bumperFlags & BUMP_HIT) {
-                if (this->collider.elements[i].base.acHitElem->toucher.dmgFlags & 0x800) {
+                if (this->collider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0x800) {
                     Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.bumper.hitPos);
                     func_809CEE74(this);
                     return;

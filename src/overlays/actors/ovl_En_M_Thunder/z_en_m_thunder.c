@@ -54,7 +54,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK2,
         { 0x01000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -146,7 +146,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK)) {
             player->unk_B08 = 1.0f;
-            this->collider.elem.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
+            this->collider.elem.atDmgInfo.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 6;
@@ -157,7 +157,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
             }
         } else {
             player->unk_B08 = 0.5f;
-            this->collider.elem.toucher.damage = sDamages[this->type];
+            this->collider.elem.atDmgInfo.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 4;
@@ -173,8 +173,8 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMThunder_SwordBeam_Attack;
             this->timer = 1;
             this->scaleTarget = 12;
-            this->collider.elem.toucher.dmgFlags = DMG_SWORD_BEAM;
-            this->collider.elem.toucher.damage = 3;
+            this->collider.elem.atDmgInfo.dmgFlags = DMG_SWORD_BEAM;
+            this->collider.elem.atDmgInfo.damage = 3;
         } else {
             this->actionFunc = EnMThunder_Spin_Attack;
             this->timer = 8;
@@ -275,7 +275,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         }
 
         if (player->unk_B08 < 0.85f) {
-            this->collider.elem.toucher.damage = sDamages[this->type];
+            this->collider.elem.atDmgInfo.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 4;
@@ -285,7 +285,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
                 this->scaleTarget = 2;
             }
         } else {
-            this->collider.elem.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
+            this->collider.elem.atDmgInfo.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
             if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 6;

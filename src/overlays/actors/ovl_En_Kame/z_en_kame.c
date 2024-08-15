@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CF7FFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -764,7 +764,7 @@ void EnKame_UpdateDamage(EnKame* this, PlayState* play) {
 
         Actor_SetDropFlag(&this->actor, &this->collider.elem);
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             return;
         }
 

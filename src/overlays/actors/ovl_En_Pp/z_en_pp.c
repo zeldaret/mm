@@ -134,7 +134,7 @@ static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -161,7 +161,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[1] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -195,7 +195,7 @@ static ColliderQuadInit sQuadInit = {
         ELEMTYPE_UNK0,
         { 0xF7CFFFFF, 0x04, 0x08 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
         BUMP_NONE,
         OCELEM_NONE,
     },
@@ -248,7 +248,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
         this->bodyCollider.elements[0].dim.scale = 1.0f;
         if (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED) {
             this->actor.hintId = TATL_HINT_ID_HIPLOOP;
-            this->maskColliderElements[0].base.toucherFlags &= ~TOUCH_ON;
+            this->maskColliderElements[0].base.atElemFlags &= ~ATELEM_ON;
             this->maskColliderElements[0].base.bumperFlags &= ~BUMP_ON;
             this->maskColliderElements[0].base.ocElemFlags &= ~OCELEM_ON;
             this->maskCollider.base.colType = COLTYPE_HIT2;
@@ -271,7 +271,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.modelSphere.center.x = 400;
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
             this->bodyColliderElements[0].base.bumperFlags |= BUMP_HOOKABLE;
-            this->maskCollider.elements[0].base.toucher.damage = 0x10;
+            this->maskCollider.elements[0].base.atDmgInfo.damage = 0x10;
         }
 
         Collider_InitQuad(play, &this->hornCollider);

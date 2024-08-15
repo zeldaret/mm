@@ -47,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x20000000, 0x01, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_NONE,
         OCELEM_ON,
     },
@@ -365,11 +365,11 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         Actor_PlaySfx_Flagged(thisx, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            this->collider.elem.toucher.damage = 0;
-            this->collider.elem.toucher.effect = 0;
+            this->collider.elem.atDmgInfo.damage = 0;
+            this->collider.elem.atDmgInfo.effect = 0;
         } else {
-            this->collider.elem.toucher.damage = 4;
-            this->collider.elem.toucher.effect = 1;
+            this->collider.elem.atDmgInfo.damage = 4;
+            this->collider.elem.atDmgInfo.effect = 1;
         }
 
         Collider_UpdateCylinder(thisx, &this->collider);

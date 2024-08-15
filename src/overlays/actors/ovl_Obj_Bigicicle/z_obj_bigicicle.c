@@ -49,7 +49,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00003820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -180,7 +180,7 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
 
 void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
-        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.elem.acHitElem->toucher.dmgFlags & 0x3820))) {
+        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.elem.acHitElem->atDmgInfo.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
             CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;

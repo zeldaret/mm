@@ -47,16 +47,16 @@ typedef struct {
 } ColliderInitToActor; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ u32 dmgFlags; // Toucher damage type flags.
+    /* 0x0 */ u32 dmgFlags; // Damage types dealt by this collider element as AT.
     /* 0x4 */ u8 effect; // Damage Effect (Knockback, Fire, etc.)
     /* 0x5 */ u8 damage; // Damage or Stun Timer
-} ColliderTouch; // size = 0x8
+} ColliderElementDamageInfoAT; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ u32 dmgFlags; // Toucher damage type flags.
+    /* 0x0 */ u32 dmgFlags; // Damage types dealt by this collider element as AT.
     /* 0x4 */ u8 effect; // Damage Effect (Knockback, Fire, etc.)
     /* 0x5 */ u8 damage; // Damage or Stun Timer
-} ColliderTouchInit; // size = 0x8
+} ColliderElementDamageInfoATInit; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u32 dmgFlags; // Bumper damage type flags.
@@ -72,10 +72,10 @@ typedef struct {
 } ColliderBumpInit; // size = 0x8
 
 typedef struct ColliderElement {
-    /* 0x00 */ ColliderTouch toucher; // Damage properties when acting as an AT collider
+    /* 0x00 */ ColliderElementDamageInfoAT atDmgInfo; // Damage properties when acting as an AT collider
     /* 0x08 */ ColliderBump bumper; // Damage properties when acting as an AC collider
     /* 0x14 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
-    /* 0x15 */ u8 toucherFlags; // Information flags for AT collisions
+    /* 0x15 */ u8 atElemFlags; // Information flags for AT collisions
     /* 0x16 */ u8 bumperFlags; // Information flags for AC collisions
     /* 0x17 */ u8 ocElemFlags; // Information flags for OC collisions
     /* 0x18 */ Collider* atHit; // object touching this element's AT collider
@@ -86,9 +86,9 @@ typedef struct ColliderElement {
 
 typedef struct {
     /* 0x00 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
-    /* 0x04 */ ColliderTouchInit toucher; // Damage properties when acting as an AT collider
+    /* 0x04 */ ColliderElementDamageInfoATInit atDmgInfo; // Damage properties when acting as an AT collider
     /* 0x0C */ ColliderBumpInit bumper; // Damage properties when acting as an AC collider
-    /* 0x14 */ u8 toucherFlags; // Information flags for AT collisions
+    /* 0x14 */ u8 atElemFlags; // Information flags for AT collisions
     /* 0x15 */ u8 bumperFlags; // Information flags for AC collisions
     /* 0x16 */ u8 ocElemFlags; // Information flags for OC collisions
 } ColliderElementInit; // size = 0x18
@@ -405,17 +405,17 @@ typedef enum {
 #define OC2_TYPE_2 OC1_TYPE_2 // Has OC type 2
 #define OC2_FIRST_ONLY (1 << 6) // Skips AC checks on elements after the first collision. Only used by Ganon
 
-#define TOUCH_NONE 0 // No flags set. Cannot have AT collisions
-#define TOUCH_ON (1 << 0) // Can have AT collisions
-#define TOUCH_HIT (1 << 1) // Had an AT collision
-#define TOUCH_NEAREST (1 << 2) // If a Quad, only collides with the closest bumper
-#define TOUCH_SFX_NORMAL (0 << 3) // Hit sound effect based on AC collider's type
-#define TOUCH_SFX_HARD (1 << 3) // Always uses hard deflection sound
-#define TOUCH_SFX_WOOD (2 << 3) // Always uses wood deflection sound
-#define TOUCH_SFX_NONE (3 << 3) // No hit sound effect
-#define TOUCH_AT_HITMARK (1 << 5) // Draw hitmarks for every AT collision
-#define TOUCH_DREW_HITMARK (1 << 6) // Already drew hitmark for this frame
-#define TOUCH_UNK7 (1 << 7) // Unknown purpose. Used by some enemy quads
+#define ATELEM_NONE 0 // No flags set. Cannot have AT collisions
+#define ATELEM_ON (1 << 0) // Can have AT collisions
+#define ATELEM_HIT (1 << 1) // Had an AT collision
+#define ATELEM_NEAREST (1 << 2) // If a Quad, only collides with the closest bumper
+#define ATELEM_SFX_NORMAL (0 << 3) // Hit sound effect based on AC collider's type
+#define ATELEM_SFX_HARD (1 << 3) // Always uses hard deflection sound
+#define ATELEM_SFX_WOOD (2 << 3) // Always uses wood deflection sound
+#define ATELEM_SFX_NONE (3 << 3) // No hit sound effect
+#define ATELEM_AT_HITMARK (1 << 5) // Draw hitmarks for every AT collision
+#define ATELEM_DREW_HITMARK (1 << 6) // Already drew hitmark for this frame
+#define ATELEM_UNK7 (1 << 7) // Unknown purpose. Used by some enemy quads
 
 #define BUMP_NONE 0 // No flags set. Cannot have AC collisions
 #define BUMP_ON (1 << 0) // Can have AC collisions
@@ -511,7 +511,7 @@ DamageTable* DamageTable_Get(s32 index);
 void DamageTable_Clear(DamageTable* damageTable);
 f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* atCol, ColliderElement* atElem, Collider* acCol, ColliderElement* acElem, u32* effect);
 f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderElement* acElem);
-s32 CollisionCheck_GetToucherDamage(Collider* atCol, ColliderElement* atElem, Collider* acCol, ColliderElement* acElem);
+s32 CollisionCheck_GetElementATDamage(Collider* atCol, ColliderElement* atElem, Collider* acCol, ColliderElement* acElem);
 s32 Collider_InitBase(struct PlayState* play, Collider* col);
 s32 Collider_DestroyBase(struct PlayState* play, Collider* collider);
 s32 Collider_SetBaseToActor(struct PlayState* play, Collider* col, ColliderInitToActor* src);
@@ -520,9 +520,9 @@ s32 Collider_SetBase(struct PlayState* play, Collider* col, struct Actor* actor,
 void Collider_ResetATBase(struct PlayState* play, Collider* col);
 void Collider_ResetACBase(struct PlayState* play, Collider* col);
 void Collider_ResetOCBase(struct PlayState* play, Collider* col);
-s32 Collider_InitTouch(struct PlayState* play, ColliderTouch* touch);
-s32 Collider_DestroyTouch(struct PlayState* play, ColliderTouch* touch);
-s32 Collider_SetTouch(struct PlayState* play, ColliderTouch* touch, ColliderTouchInit* src);
+s32 Collider_InitElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* atDmgInfo);
+s32 Collider_DestroyElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* atDmgInfo);
+s32 Collider_SetElementDamageInfoAT(struct PlayState* play, ColliderElementDamageInfoAT* dest, ColliderElementDamageInfoATInit* src);
 void Collider_ResetATElementUnk(struct PlayState* play, ColliderElement* elem);
 s32 Collider_InitBump(struct PlayState* play, ColliderBump* bump);
 s32 Collider_DestroyBump(struct PlayState* play, ColliderBump* bump);
@@ -620,7 +620,7 @@ s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colC
 s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
 s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, s32 index);
 s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colChkCtx, OcLine* line);
-s32 CollisionCheck_SkipTouch(ColliderElement* elem);
+s32 CollisionCheck_IsElementNotAT(ColliderElement* elem);
 s32 CollisionCheck_SkipBump(ColliderElement* elem);
 s32 CollisionCheck_NoSharedFlags(ColliderElement* atElem, ColliderElement* acElem);
 void CollisionCheck_NoBlood(struct PlayState* play, Collider* collider, Vec3f* v);

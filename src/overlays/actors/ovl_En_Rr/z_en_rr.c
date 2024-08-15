@@ -54,7 +54,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         ELEMTYPE_UNK1,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_ON,
     },
@@ -74,7 +74,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         ELEMTYPE_UNK1,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
         BUMP_ON | BUMP_HOOKABLE,
         OCELEM_NONE,
     },
@@ -459,7 +459,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
         this->collider2.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (sp2C->elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            (sp2C->elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             return false;
         }
 

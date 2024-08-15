@@ -48,7 +48,7 @@ static ColliderCylinderInit sCylinderInit = {
         ELEMTYPE_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x01C37BB6, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
         BUMP_ON,
         OCELEM_ON,
     },
@@ -278,7 +278,7 @@ void ObjToge_Update(Actor* thisx, PlayState* play) {
     ColliderCylinder* collider = &this->collider;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x1000) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) {
             func_809A43A8(this, play);
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 250, COLORFILTER_BUFFLAG_OPA, 250);
         }

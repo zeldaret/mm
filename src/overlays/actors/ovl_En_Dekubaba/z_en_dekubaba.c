@@ -61,7 +61,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
+            ATELEM_ON | ATELEM_SFX_HARD,
             BUMP_ON | BUMP_HOOKABLE,
             OCELEM_ON,
         },
@@ -72,7 +72,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_ON,
         },
@@ -83,7 +83,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -94,7 +94,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -105,7 +105,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -116,7 +116,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -127,7 +127,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             ELEMTYPE_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
             BUMP_NONE,
             OCELEM_NONE,
         },
@@ -1085,7 +1085,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 !(jntSphElem->base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+                 !(jntSphElem->base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 
