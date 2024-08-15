@@ -17,7 +17,14 @@ typedef enum SampleBankTableType {
     /* 2 */ SAMPLE_TABLE
 } SampleBankTableType;
 
-typedef struct AudioTableEntry {
+typedef struct {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ uintptr_t romAddr;
+    /* 0x08 */ char pad[0x8];
+} AudioTableHeader; // size = 0x10
+
+typedef struct {
     /* 0x0 */ uintptr_t romAddr;
     /* 0x4 */ size_t size;
     /* 0x8 */ s8 medium;
@@ -27,11 +34,8 @@ typedef struct AudioTableEntry {
     /* 0xE */ s16 shortData3;
 } AudioTableEntry; // size = 0x10
 
-typedef struct AudioTable {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ uintptr_t romAddr;
-    /* 0x08 */ char pad[0x8];
+typedef struct {
+    /* 0x00 */ AudioTableHeader header;
     /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
 } AudioTable; // size >= 0x20
 
