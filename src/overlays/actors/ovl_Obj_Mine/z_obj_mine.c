@@ -64,7 +64,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             { 0x00000000, 0x00, 0x00 },
             { 0x01CBFFBE, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 30 }, 100 },
@@ -187,7 +187,7 @@ void ObjMine_Air_CheckAC(ObjMine* this, s16* hitAngle, s16* torqueAngle) {
         *torqueAngle = attackActor->shape.rot.y - yawToAttack;
     } else {
         Vec3f hitPos;
-        Vec3s* hitPos3s = &this->collider.elements[0].base.bumper.hitPos;
+        Vec3s* hitPos3s = &this->collider.elements[0].base.acDmgInfo.hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, hitPos3s);
         *hitAngle = Actor_WorldYawTowardActor(attackActor, &this->actor);

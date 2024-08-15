@@ -296,7 +296,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
@@ -307,7 +307,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_ROOT, { { 0, 0, 0 }, 50 }, 100 },
@@ -335,7 +335,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_HEAD, { { 0, 0, 0 }, 20 }, 100 },
@@ -346,7 +346,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_LOWER_TRUNK, { { 0, 0, 0 }, 20 }, 100 },
@@ -357,7 +357,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_TAIL, { { 0, 0, 0 }, 70 }, 100 },
@@ -368,7 +368,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_RIGHT_FIN_ROOT, { { 0, 0, 0 }, 70 }, 100 },
@@ -379,7 +379,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_UPPER_RIGHT_FIN, { { 0, 0, 0 }, 30 }, 100 },
@@ -1862,9 +1862,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                     acHitElem = this->bodyCollider.elements[i].base.acHitElem;
-                    this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+                    this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
@@ -1895,9 +1895,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->headCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 acHitElem = this->headCollider.elements[i].base.acHitElem;
-                this->headCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+                this->headCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {

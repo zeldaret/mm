@@ -88,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CBFFFE, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 18, 60, 15, { 0, 0, 0 } },
@@ -199,7 +199,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.elem.elemType = ELEMTYPE_UNK4;
-            this->collider.elem.bumper.dmgFlags |= (0x40000 | 0x1);
+            this->collider.elem.acDmgInfo.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
             EnPoSisters_MegCloneVanish(this, NULL);
         }
@@ -599,7 +599,7 @@ void EnPoSisters_SetupSpinToInvis(EnPoSisters* this) {
 void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 0;
-        this->collider.elem.bumper.dmgFlags = (0x40000 | 0x1);
+        this->collider.elem.acDmgInfo.dmgFlags = (0x40000 | 0x1);
         EnPoSisters_SetupAimlessIdleFlying(this);
     } else {
         s32 alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
@@ -632,7 +632,7 @@ void EnPoSisters_SpinBackToVisible(EnPoSisters* this, PlayState* play) {
         this->color.a = 255; // fully visible
         if (this->type != POE_SISTERS_TYPE_MEG) {
             this->poSisterFlags |= POE_SISTERS_FLAG_CHECK_AC;
-            this->collider.elem.bumper.dmgFlags = ~(0x8000000 | 0x200000 | 0x100000 | 0x40000 | 0x1);
+            this->collider.elem.acDmgInfo.dmgFlags = ~(0x8000000 | 0x200000 | 0x100000 | 0x40000 | 0x1);
 
             DECR(this->spinInvisibleTimer);
 
@@ -942,8 +942,8 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == POE_SISTERS_DMGEFF_LIGHTARROWS) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.5f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                                this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                                this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 EnPoSisters_SetupDamageFlinch(this);

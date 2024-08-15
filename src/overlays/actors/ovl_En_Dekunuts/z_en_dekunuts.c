@@ -66,7 +66,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 32, 0, { 0, 0, 0 } },
@@ -133,7 +133,8 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->collider.base.colType = COLTYPE_NONE;
-        this->collider.elem.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
+        this->collider.elem.acElemFlags |=
+            (ACELEM_NO_HITMARK | ACELEM_NO_SWORD_SFX | ACELEM_NO_DAMAGE | ACELEM_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
         this->actor.targetMode = TARGET_MODE_0;
     }
@@ -609,8 +610,8 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                                this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                                this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;

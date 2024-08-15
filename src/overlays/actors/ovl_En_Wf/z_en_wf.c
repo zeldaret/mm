@@ -75,7 +75,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 15, { { 0, 0, 0 }, 15 }, 100 },
@@ -86,7 +86,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 21, { { 0, 0, 0 }, 15 }, 100 },
@@ -97,7 +97,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 17, { { 800, 0, 0 }, 25 }, 100 },
@@ -108,7 +108,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 12, { { 0, 0, 0 }, 30 }, 100 },
@@ -142,7 +142,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -162,7 +162,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 15, 20, -15, { 0, 0, 0 } },
@@ -1459,8 +1459,8 @@ void func_8099386C(EnWf* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->drawDmgEffScale = 0.75f;
                     this->drawDmgEffAlpha = 4.0f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.bumper.hitPos.x,
-                                collider->elem.bumper.hitPos.y, collider->elem.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.acDmgInfo.hitPos.x,
+                                collider->elem.acDmgInfo.hitPos.y, collider->elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 

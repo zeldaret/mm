@@ -46,7 +46,7 @@ static ColliderSphereInit sCylinderInit1 = {
         { 0x20000000, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 0, { { 0, 960, 0 }, 70 }, 100 },
@@ -67,7 +67,7 @@ static ColliderSphereInit sCylinderInit2 = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 0, { { 0, 1100, 0 }, 74 }, 100 },
@@ -135,7 +135,7 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
 
     this->unk_21C = CLAMP(this->unk_21C, 0.0f, 18000.0f);
     if (phi_a3 == true) {
-        Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.elem.bumper.hitPos);
+        Math_Vec3s_ToVec3f(&bumperPos, &this->collider2.elem.acDmgInfo.hitPos);
         Math_Vec3f_Copy(&worldPos, &this->dyna.actor.world.pos);
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&bumperPos, &worldPos);
         if (this->unk_20C <= 0x4000 && this->unk_20C >= -0x4000) {

@@ -71,7 +71,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0x00000800, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 44, 62, -31, { 0, 0, 0 } },
@@ -1488,7 +1488,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         if (ICEBLOCK_GET_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
             this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
             this->collider.base.ocFlags1 |= (OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER);
-            this->collider.elem.bumper.dmgFlags |=
+            this->collider.elem.acDmgInfo.dmgFlags |=
                 (0x800000 | 0x400000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x100 | 0x80 | 0x20 | 0x10 | 0x2);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }

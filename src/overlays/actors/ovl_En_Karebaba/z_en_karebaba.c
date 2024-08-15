@@ -65,7 +65,7 @@ static ColliderCylinderInit sHurtCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 7, 25, 0, { 0, 0, 0 } },
@@ -85,7 +85,7 @@ static ColliderCylinderInit sAttackCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_WOOD,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 4, 25, 0, { 0, 0, 0 } },
@@ -202,8 +202,8 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 3.0f;
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.elem.bumper.hitPos.x,
-                    this->hurtCollider.elem.bumper.hitPos.y, this->hurtCollider.elem.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.elem.acDmgInfo.hitPos.x,
+                    this->hurtCollider.elem.acDmgInfo.hitPos.y, this->hurtCollider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KAREBABA_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;

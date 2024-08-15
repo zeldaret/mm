@@ -76,7 +76,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_LOWER_BODY, { { 200, 300, 0 }, 19 }, 100 },
@@ -87,7 +87,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_UPPER_BODY, { { 200, 200, 0 }, 17 }, 100 },
@@ -98,7 +98,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_HEAD, { { 600, 200, 0 }, 15 }, 100 },
@@ -109,7 +109,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_NECK, { { 700, 100, 0 }, 10 }, 100 },
@@ -120,7 +120,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_LEFT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
@@ -131,7 +131,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_RIGHT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
@@ -142,7 +142,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -10, 35 }, 20 }, 100 },
@@ -153,7 +153,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -10, 70 }, 28 }, 100 },
@@ -164,7 +164,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -5, 110 }, 30 }, 100 },
@@ -198,7 +198,7 @@ static ColliderQuadInit sQuadInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -427,7 +427,7 @@ void EnDinofos_EnableBumperCollision(EnDinofos* this) {
 
     if (this->isDodgingGoronPound) {
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags |= 0x400;
+            this->bodyAndFireCollider.elements[i].base.acDmgInfo.dmgFlags |= 0x400;
         }
         this->isDodgingGoronPound = false;
     }
@@ -482,7 +482,7 @@ s32 EnDinofos_Dodge(EnDinofos* this, PlayState* play) {
         (!this->isDodgingGoronPound)) {
         this->isDodgingGoronPound = true;
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags &= ~0x400;
+            this->bodyAndFireCollider.elements[i].base.acDmgInfo.dmgFlags &= ~0x400;
         }
     }
 
@@ -1296,7 +1296,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         Actor_SetDropFlagJntSph(&this->actor, &this->bodyAndFireCollider);
 
         for (i = 0; i < ARRAY_COUNT(this->bodyAndFireColliderElements); i++) {
-            if (this->bodyAndFireCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->bodyAndFireCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 break;
             }
         }
@@ -1374,9 +1374,9 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.x,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.y,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.z, 0, 0, 0,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.x,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.y,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnDinofos_SetupDamaged(this, i);

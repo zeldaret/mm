@@ -177,7 +177,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -197,7 +197,7 @@ static ColliderQuadInit sQuadInit = {
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -1939,9 +1939,9 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             Vec3f pos;
             Player* player = GET_PLAYER(play);
 
-            pos.x = this->bodyCollider.elem.bumper.hitPos.x;
-            pos.y = this->bodyCollider.elem.bumper.hitPos.y;
-            pos.z = this->bodyCollider.elem.bumper.hitPos.z;
+            pos.x = this->bodyCollider.elem.acDmgInfo.hitPos.x;
+            pos.y = this->bodyCollider.elem.acDmgInfo.hitPos.y;
+            pos.z = this->bodyCollider.elem.acDmgInfo.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->pushedYaw = this->picto.actor.yawTowardsPlayer;

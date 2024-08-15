@@ -73,7 +73,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CBFFFE, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 40, 20, { 0, 0, 0 } },
@@ -86,7 +86,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 18, { { 0, 1400, 0 }, 10 }, 100 },
@@ -505,7 +505,7 @@ void func_80B2D7D4(EnPoh* this, PlayState* play) {
     this->unk_197 = this->unk_18C * (255.0f / 32.0f);
     if (this->unk_18C == 0) {
         this->unk_190 = Rand_S16Offset(100, 50);
-        this->colliderCylinder.elem.bumper.dmgFlags = 0x40001;
+        this->colliderCylinder.elem.acDmgInfo.dmgFlags = 0x40001;
         func_80B2CB60(this);
     }
 }
@@ -532,7 +532,7 @@ void func_80B2D980(EnPoh* this, PlayState* play) {
     if (this->unk_18C == 32) {
         this->unk_190 = Rand_S16Offset(700, 300);
         this->unk_18C = 0;
-        this->colliderCylinder.elem.bumper.dmgFlags = ~0x8340001;
+        this->colliderCylinder.elem.acDmgInfo.dmgFlags = ~0x8340001;
         func_80B2CB60(this);
     }
 }
@@ -708,10 +708,10 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == 4) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.45f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.elem.bumper.hitPos.x,
-                                this->colliderCylinder.elem.bumper.hitPos.y,
-                                this->colliderCylinder.elem.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                    Actor_Spawn(
+                        &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.elem.acDmgInfo.hitPos.x,
+                        this->colliderCylinder.elem.acDmgInfo.hitPos.y, this->colliderCylinder.elem.acDmgInfo.hitPos.z,
+                        0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_80B2CFF8(this);
             }

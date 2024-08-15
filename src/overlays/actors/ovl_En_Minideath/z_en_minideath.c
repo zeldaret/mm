@@ -58,7 +58,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
@@ -69,7 +69,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
@@ -80,7 +80,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
@@ -301,7 +301,7 @@ void EnMinideath_UpdateEffects(EnMinideath* this, PlayState* play) {
             } else if (this->actionFunc == EnMinideath_CrowdParent) {
                 Math_Vec3f_Diff(&this->actor.parent->focus.pos, &this->actor.world.pos, &effect->vel);
                 effect->state = 0;
-                this->collider.elements[i].base.bumperFlags |= BUMP_ON;
+                this->collider.elements[i].base.acElemFlags |= ACELEM_ON;
                 this->collider.elements[i].base.atElemFlags |= ATELEM_ON;
                 phi_s7 = 1;
                 phi_s3++;
@@ -754,8 +754,8 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
             s32 phi_a0;
 
             for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
-                if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
-                    this->collider.elements[i].base.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
+                if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                    this->collider.elements[i].base.acElemFlags &= ~(ACELEM_ON | ACELEM_HIT);
                     this->collider.elements[i].base.atElemFlags &= ~(ATELEM_ON | ATELEM_HIT);
                     this->effects[i].vel.y = -1.0f;
                     this->effects[i].state = 1;

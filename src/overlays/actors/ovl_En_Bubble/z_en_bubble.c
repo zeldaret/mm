@@ -38,7 +38,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0x00000000, 0x00, 0x04 },
             { 0xF7CFD757, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 16 }, 100 },
@@ -49,7 +49,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0x00000000, 0x00, 0x00 },
             { 0x00002820, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK,
+            ACELEM_ON | ACELEM_NO_AT_INFO | ACELEM_NO_DAMAGE | ACELEM_NO_SWORD_SFX | ACELEM_NO_HITMARK,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 16 }, 100 },
@@ -205,7 +205,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
     s32 bgId;
     u8 bounceCount;
 
-    if (this->colliderSphere.elements[1].base.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.acElemFlags & ACELEM_HIT) {
         bumpActor = this->colliderSphere.base.ac;
         this->normalizedBumpVelocity = bumpActor->velocity;
         EnBubble_Vec3fNormalize(&this->normalizedBumpVelocity);
@@ -283,7 +283,7 @@ s32 func_8089FF30(EnBubble* this) {
         return false;
     }
     this->colliderSphere.base.acFlags &= ~AC_HIT;
-    if (this->colliderSphere.elements[1].base.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.acElemFlags & ACELEM_HIT) {
         this->unk1F4.x = this->colliderSphere.base.ac->velocity.x / 10.0f;
         this->unk1F4.y = this->colliderSphere.base.ac->velocity.y / 10.0f;
         this->unk1F4.z = this->colliderSphere.base.ac->velocity.z / 10.0f;

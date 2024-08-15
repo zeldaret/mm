@@ -45,7 +45,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             { 0x00400000, 0x00, 0x02 },
             { 0x0583FFBE, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
@@ -273,8 +273,8 @@ void func_80B39908(ObjSnowball2* this, PlayState* play) {
     Vec3f sp94;
     s32 i;
 
-    if (this->collider.elements[0].base.bumperFlags & BUMP_HIT) {
-        Vec3s* hitPos = &this->collider.elements[0].base.bumper.hitPos;
+    if (this->collider.elements[0].base.acElemFlags & ACELEM_HIT) {
+        Vec3s* hitPos = &this->collider.elements[0].base.acDmgInfo.hitPos;
 
         for (i = 0; i < 4; i++) {
             sp94.x = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->x;

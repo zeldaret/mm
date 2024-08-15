@@ -103,7 +103,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_HEAD, { { 0, 0, 0 }, 0 }, 1 },
@@ -114,7 +114,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_COLLAR, { { 0, 0, 0 }, 0 }, 1 },
@@ -125,7 +125,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_COLLAR, { { 0, 0, 0 }, 0 }, 1 },
@@ -136,7 +136,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_BODY_SEGMENT_1, { { 0, 0, 0 }, 0 }, 1 },
@@ -147,7 +147,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_BODY_SEGMENT_1, { { 0, 0, 0 }, 0 }, 1 },
@@ -158,7 +158,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
@@ -169,7 +169,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
@@ -180,7 +180,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
@@ -619,9 +619,9 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     }
 
     if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) ||
-        !(player->stateFlags2 & PLAYER_STATE2_80) || (this->collider.elements[0].base.bumperFlags & BUMP_HIT) ||
-        (this->collider.elements[1].base.bumperFlags & BUMP_HIT) ||
-        (this->collider.elements[2].base.bumperFlags & BUMP_HIT)) {
+        !(player->stateFlags2 & PLAYER_STATE2_80) || (this->collider.elements[0].base.acElemFlags & ACELEM_HIT) ||
+        (this->collider.elements[1].base.acElemFlags & ACELEM_HIT) ||
+        (this->collider.elements[2].base.acElemFlags & ACELEM_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
@@ -736,12 +736,12 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     PlayerImpactType playerImpactType;
 
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
-        if ((this->collider.elements[2].base.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[3].base.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[4].base.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[5].base.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[6].base.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[7].base.bumperFlags & BUMP_HIT)) {
+        if ((this->collider.elements[2].base.acElemFlags & ACELEM_HIT) ||
+            (this->collider.elements[3].base.acElemFlags & ACELEM_HIT) ||
+            (this->collider.elements[4].base.acElemFlags & ACELEM_HIT) ||
+            (this->collider.elements[5].base.acElemFlags & ACELEM_HIT) ||
+            (this->collider.elements[6].base.acElemFlags & ACELEM_HIT) ||
+            (this->collider.elements[7].base.acElemFlags & ACELEM_HIT)) {
             Actor_ApplyDamage(&this->actor);
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             if (this->actor.colChkInfo.health > 0) {

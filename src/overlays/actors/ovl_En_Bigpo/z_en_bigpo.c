@@ -109,7 +109,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 35, 100, 10, { 0, 0, 0 } },
@@ -583,7 +583,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
 void EnBigpo_SetupSpinUp(EnBigpo* this) {
     this->collider.base.colType = COLTYPE_METAL;
     this->collider.base.acFlags |= AC_HARD;
-    this->collider.elem.bumper.dmgFlags &= ~0x8000;
+    this->collider.elem.acDmgInfo.dmgFlags &= ~0x8000;
     this->collider.base.atFlags |= AT_ON;
     this->angularVelocity = 0x800;
     this->actionFunc = EnBigpo_SpinningUp;
@@ -640,7 +640,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
         // spin down complete, re-allow hittable
         this->collider.base.colType = COLTYPE_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
-        this->collider.elem.bumper.dmgFlags |= 0x8000;
+        this->collider.elem.acDmgInfo.dmgFlags |= 0x8000;
         EnBigpo_SetupIdleFlying(this);
     }
     EnBigpo_UpdateSpin(this);
@@ -1143,8 +1143,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == 4) {
             this->drawDmgEffAlpha = 4.0f;
             this->drawDmgEffScale = 1.0f;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                        this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                        this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnBigpo_HitStun(this);

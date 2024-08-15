@@ -82,7 +82,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 50 }, 100 },
@@ -109,7 +109,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 70 }, 100 },
@@ -567,8 +567,8 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 void func_809ED45C(Boss04* this, PlayState* play) {
     u8 damage;
 
-    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.bumperFlags & BUMP_HIT)) {
-        this->collider1.elements[0].base.bumperFlags &= ~BUMP_HIT;
+    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.acElemFlags & ACELEM_HIT)) {
+        this->collider1.elements[0].base.acElemFlags &= ~ACELEM_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health -= damage;

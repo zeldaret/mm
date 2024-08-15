@@ -104,7 +104,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 90, 140, 10, { 0, 0, 0 } },
@@ -184,10 +184,10 @@ void Boss06_UpdateDamage(Boss06* this) {
                 Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
-                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.bumper.hitPos.x);
+                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.acDmgInfo.hitPos.x);
                 this->arrowHitPosScaled.x = this->arrowHitPos.x * 0.35f;
 
-                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.bumper.hitPos.y);
+                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.acDmgInfo.hitPos.y);
                 this->arrowHitPosScaled.y = this->arrowHitPos.y * -0.35f;
             }
         }

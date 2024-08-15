@@ -51,7 +51,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 32, 50, -24, { 0, 0, 0 } },
@@ -73,7 +73,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 60, -30, { 0, 0, 0 } },
@@ -86,7 +86,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 1, { { 0, -240, 0 }, 28 }, 100 },
@@ -194,12 +194,12 @@ void EnSsh_InitColliders(EnSsh* this, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider1[i], &this->actor, cylinders[i]);
     }
 
-    this->collider1[0].elem.bumper.dmgFlags = 0x38A9;
-    this->collider1[1].elem.bumper.dmgFlags = ~0x83038A9;
+    this->collider1[0].elem.acDmgInfo.dmgFlags = 0x38A9;
+    this->collider1[1].elem.acDmgInfo.dmgFlags = ~0x83038A9;
     this->collider1[2].base.colType = COLTYPE_METAL;
-    this->collider1[2].elem.bumperFlags = (BUMP_NO_AT_INFO | BUMP_HOOKABLE | BUMP_ON);
+    this->collider1[2].elem.acElemFlags = (ACELEM_NO_AT_INFO | ACELEM_HOOKABLE | ACELEM_ON);
     this->collider1[2].elem.elemType = ELEMTYPE_UNK2;
-    this->collider1[2].elem.bumper.dmgFlags = ~0x83038A9;
+    this->collider1[2].elem.acDmgInfo.dmgFlags = ~0x83038A9;
 
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(2), &sColChkInfoInit);
     Collider_InitJntSph(play, &this->collider2);
@@ -473,13 +473,13 @@ void EnSsh_CheckBodyStickHit(EnSsh* this, PlayState* play) {
     ColliderElement* elem = &this->collider1[0].elem;
 
     if (player->unk_B28 != 0) {
-        elem->bumper.dmgFlags |= 2;
-        this->collider1[1].elem.bumper.dmgFlags &= ~2;
-        this->collider1[2].elem.bumper.dmgFlags &= ~2;
+        elem->acDmgInfo.dmgFlags |= 2;
+        this->collider1[1].elem.acDmgInfo.dmgFlags &= ~2;
+        this->collider1[2].elem.acDmgInfo.dmgFlags &= ~2;
     } else {
-        elem->bumper.dmgFlags &= ~2;
-        this->collider1[1].elem.bumper.dmgFlags |= 2;
-        this->collider1[2].elem.bumper.dmgFlags |= 2;
+        elem->acDmgInfo.dmgFlags &= ~2;
+        this->collider1[1].elem.acDmgInfo.dmgFlags |= 2;
+        this->collider1[2].elem.acDmgInfo.dmgFlags |= 2;
     }
 }
 

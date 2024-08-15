@@ -229,7 +229,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DRAGONFLY_LIMB_THORAX, { { 0, 0, 0 }, 0 }, 0 },
@@ -240,7 +240,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x07, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { DRAGONFLY_LIMB_TAIL_TIP, { { 0, 0, 0 }, 0 }, 0 },
@@ -721,9 +721,9 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
     this->bobPhase += 0xAF0;
     this->targetApproachPos.y = (Math_SinS(this->bobPhase) * 10.0f) + (player->actor.world.pos.y + 60.0f);
 
-    hitPos.x = this->collider.elements[1].base.bumper.hitPos.x;
-    hitPos.y = this->collider.elements[1].base.bumper.hitPos.y;
-    hitPos.z = this->collider.elements[1].base.bumper.hitPos.z;
+    hitPos.x = this->collider.elements[1].base.acDmgInfo.hitPos.x;
+    hitPos.y = this->collider.elements[1].base.acDmgInfo.hitPos.y;
+    hitPos.z = this->collider.elements[1].base.acDmgInfo.hitPos.z;
     diff.x = hitPos.x - player->actor.world.pos.x;
     diff.y = hitPos.y - player->actor.world.pos.y;
     diff.z = hitPos.z - player->actor.world.pos.z;
@@ -924,8 +924,8 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
     s32 pad;
     s16 attackDealsDamage = false;
 
-    if ((this->collider.elements[0].base.bumperFlags & BUMP_HIT) ||
-        (this->collider.elements[1].base.bumperFlags & BUMP_HIT)) {
+    if ((this->collider.elements[0].base.acElemFlags & ACELEM_HIT) ||
+        (this->collider.elements[1].base.acElemFlags & ACELEM_HIT)) {
         this->collider.base.acFlags &= ~AC_HIT;
         if ((this->action != DRAGONFLY_ACTION_DAMAGED) && (this->action != DRAGONFLY_ACTION_DEAD) &&
             (this->action != DRAGONFLY_ACTION_FALL)) {

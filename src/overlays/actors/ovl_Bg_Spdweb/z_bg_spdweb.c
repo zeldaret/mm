@@ -43,7 +43,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 75.0f, -8.0f, 75.0f }, { 75.0f, -8.0f, -75.0f }, { -75.0f, -8.0f, -75.0f } } },
@@ -54,7 +54,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 75.0f, -8.0f, 75.0f }, { -75.0f, -8.0f, -75.0f }, { -75.0f, -8.0f, 75.0f } } },
@@ -81,7 +81,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 160.0f, 15.0f }, { -70.0f, 160.0f, 15.0f }, { -70.0f, 20.0f, 15.0f } } },
@@ -92,7 +92,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 160.0f, 15.0f }, { -70.0f, 20.0f, 15.0f }, { 70.0f, 20.0f, 15.0f } } },
@@ -103,7 +103,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 160.0f, -15.0f }, { 70.0f, 160.0f, -15.0f }, { 70.0f, 20.0f, -15.0f } } },
@@ -114,7 +114,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 160.0f, -15.0f }, { 70.0f, 20.0f, -15.0f }, { -70.0f, 20.0f, -15.0f } } },
@@ -290,9 +290,9 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < 2; i++) {
             trisElem = &this->collider.elements[i];
-            if (trisElem->base.bumperFlags & BUMP_HIT) {
+            if (trisElem->base.acElemFlags & ACELEM_HIT) {
                 if (this->collider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0x800) {
-                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.bumper.hitPos);
+                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.acDmgInfo.hitPos);
                     func_809CEE74(this);
                     return;
                 }
@@ -433,8 +433,8 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
             trisElem = &this->collider.elements[i];
-            if (trisElem->base.bumperFlags & BUMP_HIT) {
-                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.bumper.hitPos);
+            if (trisElem->base.acElemFlags & ACELEM_HIT) {
+                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.acDmgInfo.hitPos);
                 break;
             }
         }

@@ -51,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0x00CBFBB0, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 50, 740, -740, { 0, 0, 0 } },
@@ -150,13 +150,13 @@ void func_80B83EA4(BgDblueWaterfall* this, PlayState* play) {
     Vec3f sp98;
     s32 phi_s3;
 
-    if (this->collider.elem.bumperFlags & BUMP_HIT) {
+    if (this->collider.elem.acElemFlags & ACELEM_HIT) {
         f32 temp_f0_2;
         f32 temp_f20;
 
-        spB0.x = this->collider.elem.bumper.hitPos.x;
-        spB0.y = this->collider.elem.bumper.hitPos.y;
-        spB0.z = this->collider.elem.bumper.hitPos.z;
+        spB0.x = this->collider.elem.acDmgInfo.hitPos.x;
+        spB0.y = this->collider.elem.acDmgInfo.hitPos.y;
+        spB0.z = this->collider.elem.acDmgInfo.hitPos.z;
 
         sp98.x = spB0.x - this->actor.world.pos.x;
         sp98.y = 0.0f;
@@ -206,10 +206,10 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
     s32 temp_s3;
     s32 phi_s2;
 
-    if (this->collider.elem.bumperFlags & BUMP_HIT) {
-        temp_f22 = this->collider.elem.bumper.hitPos.x;
-        temp_f24 = this->collider.elem.bumper.hitPos.y;
-        temp_f26 = this->collider.elem.bumper.hitPos.z;
+    if (this->collider.elem.acElemFlags & ACELEM_HIT) {
+        temp_f22 = this->collider.elem.acDmgInfo.hitPos.x;
+        temp_f24 = this->collider.elem.acDmgInfo.hitPos.y;
+        temp_f26 = this->collider.elem.acDmgInfo.hitPos.z;
 
         for (i = 0, phi_s2 = 0; i < 10; i++, phi_s2 += 0x1999) {
             temp_s3 = (s32)(Rand_ZeroOne() * 6553.0f) + phi_s2;

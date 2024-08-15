@@ -213,7 +213,7 @@ static ColliderJntSphElementInit sKnightSwordColliderJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 27 }, 100 },
@@ -227,7 +227,7 @@ static ColliderJntSphElementInit sIgosSwordColliderJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 32 }, 100 },
@@ -267,7 +267,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 27 }, 100 },
@@ -294,7 +294,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
@@ -305,7 +305,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 17 }, 100 },
@@ -339,7 +339,7 @@ static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 15, 20, -10, { 0, 0, 0 } },
@@ -359,7 +359,7 @@ static ColliderCylinderInit sHeadColliderCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7FFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, 0, { 0, 0, 0 } },
@@ -1586,8 +1586,8 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
         } else {
             this->actor.colChkInfo.health = 6 - BREG(40);
         }
-        this->bodyCollider.elements[0].base.bumperFlags &= ~BUMP_HIT;
-        this->bodyCollider.elements[1].base.bumperFlags &= ~BUMP_HIT;
+        this->bodyCollider.elements[0].base.acElemFlags &= ~ACELEM_HIT;
+        this->bodyCollider.elements[1].base.acElemFlags &= ~ACELEM_HIT;
         this->actor.colChkInfo.damageTable = &sDamageTableStanding;
         this->invincibilityTimer = 25;
     }
@@ -3059,8 +3059,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
     Vec3f translation;
     Player* player = GET_PLAYER(play);
 
-    if (this->shieldCollider.elements[0].base.bumperFlags & BUMP_HIT) {
-        this->shieldCollider.elements[0].base.bumperFlags &= ~BUMP_HIT;
+    if (this->shieldCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
+        this->shieldCollider.elements[0].base.acElemFlags &= ~ACELEM_HIT;
         this->shieldingInvulnerabilityTimer = 5;
 
         if ((player->meleeWeaponState != PLAYER_MWA_FORWARD_SLASH_1H) &&
@@ -3081,8 +3081,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
             continue;
         }
 
-        if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
-            this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+        if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+            this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case KNIGHT_DMGEFF_ICE:
@@ -3162,8 +3162,8 @@ void EnKnight_UpdateDamageFallenOver(EnKnight* this, PlayState* play) {
         ColliderJntSphElement* jntSphElem = &this->bodyCollider.elements[i];
         ColliderElement* acHitElem;
 
-        if (jntSphElem->base.bumperFlags & BUMP_HIT) {
-            jntSphElem->base.bumperFlags &= ~BUMP_HIT;
+        if (jntSphElem->base.acElemFlags & ACELEM_HIT) {
+            jntSphElem->base.acElemFlags &= ~ACELEM_HIT;
 
             acHitElem = jntSphElem->base.acHitElem;
 

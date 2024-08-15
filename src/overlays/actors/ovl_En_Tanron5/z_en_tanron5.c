@@ -70,7 +70,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 70, 450, 0, { 0, 0, 0 } },
@@ -462,9 +462,9 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 Vec3f hitPos;
                 ColliderElement* acHitElem = this->collider.elem.acHitElem;
 
-                hitPos.x = acHitElem->bumper.hitPos.x;
-                hitPos.y = acHitElem->bumper.hitPos.y;
-                hitPos.z = acHitElem->bumper.hitPos.z;
+                hitPos.x = acHitElem->acDmgInfo.hitPos.x;
+                hitPos.y = acHitElem->acDmgInfo.hitPos.y;
+                hitPos.z = acHitElem->acDmgInfo.hitPos.z;
 
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
                 CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);

@@ -112,7 +112,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -123,7 +123,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -151,7 +151,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
@@ -179,7 +179,7 @@ static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7FFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -468,7 +468,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         s32 i = 0;
 
         while (true) {
-            if (this->lilyPadCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->lilyPadCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case BIO_BABA_DMGEFF_FIRE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
@@ -486,7 +486,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
 
             i++;
             if (i == BIO_BABA_LILY_PAD_COLLIDER_MAX) {
-                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT) {
+                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
 
                     this->dyna.actor.colChkInfo.health -= damage;
@@ -950,8 +950,8 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) &&
-        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags &= ~BUMP_HIT;
+        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT)) {
+        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags &= ~ACELEM_HIT;
         acHitElem = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acHitElem;
         if (acHitElem->atDmgInfo.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;

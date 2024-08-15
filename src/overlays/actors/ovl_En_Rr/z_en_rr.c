@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 45, 60, 0, { 0, 0, 0 } },
@@ -75,7 +75,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_NONE,
     },
     { 30, 45, -30, { 0, 0, 0 } },
@@ -179,8 +179,8 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
         this->drawDmgEffScale = 0.85f;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.bumper.hitPos.x,
-                    collider->elem.bumper.hitPos.y, collider->elem.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.acDmgInfo.hitPos.x,
+                    collider->elem.acDmgInfo.hitPos.y, collider->elem.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 5) {
         this->drawDmgEffScale = 0.85f;

@@ -131,7 +131,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 32 }, 100 },
@@ -142,7 +142,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_WOOD,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 1, { { 0, 0, 0 }, 25 }, 100 },
@@ -393,9 +393,10 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 3.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
-                    this->collider.elements[0].base.bumper.hitPos.y, this->collider.elements[0].base.bumper.hitPos.z, 0,
-                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.acDmgInfo.hitPos.x,
+                    this->collider.elements[0].base.acDmgInfo.hitPos.y,
+                    this->collider.elements[0].base.acDmgInfo.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_Freeze(this);
     }
@@ -1301,9 +1302,9 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                         this->drawDmgEffScale = 0.75f;
                         this->drawDmgEffAlpha = 4.0f;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                    this->collider.elements[0].base.bumper.hitPos.x,
-                                    this->collider.elements[0].base.bumper.hitPos.y,
-                                    this->collider.elements[0].base.bumper.hitPos.z, 0, 0, 0,
+                                    this->collider.elements[0].base.acDmgInfo.hitPos.x,
+                                    this->collider.elements[0].base.acDmgInfo.hitPos.y,
+                                    this->collider.elements[0].base.acDmgInfo.hitPos.z, 0, 0, 0,
                                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
                     EnPametfrog_SetupDamage(this);

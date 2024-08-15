@@ -1689,7 +1689,7 @@ ColliderCylinderInit D_8085C2EC = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 12, 60, 0, { 0, 0, 0 } },
@@ -1710,7 +1710,7 @@ ColliderCylinderInit D_8085C318 = {
         { 0x00100000, 0x00, 0x02 },
         { 0xD7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 25, 60, 0, { 0, 0, 0 } },
@@ -1731,7 +1731,7 @@ ColliderQuadInit D_8085C344 = {
         { 0x00000000, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -1752,7 +1752,7 @@ ColliderQuadInit D_8085C394 = {
         { 0x00100000, 0x00, 0x00 },
         { 0xD7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -2761,7 +2761,7 @@ void Player_ResetCylinder(Player* this) {
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
     this->cylinder.elem.elemType = ELEMTYPE_UNK1;
     this->cylinder.elem.atDmgInfo.dmgFlags = 0;
-    this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
+    this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->cylinder.elem.atElemFlags = ATELEM_NONE | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = 12;
 }
@@ -2799,7 +2799,7 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
         this->cylinder.base.acFlags = AC_NONE;
     } else {
         this->cylinder.base.colType = COLTYPE_NONE;
-        this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
+        this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
 
         if (dmgFlags & DMG_ZORA_BARRIER) {
             this->cylinder.base.acFlags = AC_NONE;
@@ -12412,7 +12412,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->shieldCylinder.base.acFlags = AC_NONE;
             this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x80000;
             this->shieldCylinder.elem.atElemFlags = ATELEM_ON;
-            this->shieldCylinder.elem.bumperFlags = BUMP_NONE;
+            this->shieldCylinder.elem.acElemFlags = ACELEM_NONE;
             this->shieldCylinder.dim.height = 80;
             this->shieldCylinder.dim.radius = 50;
             this->shieldCylinder.dim.yShift = ((temp_fv0 + var_fv1_2) * 0.5f - 40.0f) - this->actor.world.pos.y;
@@ -12424,7 +12424,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 this->shieldCylinder.base.acFlags = AC_ON | AC_HARD | AC_TYPE_ENEMY;
                 this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x100000;
                 this->shieldCylinder.elem.atElemFlags = ATELEM_NONE;
-                this->shieldCylinder.elem.bumperFlags = BUMP_ON;
+                this->shieldCylinder.elem.acElemFlags = ACELEM_ON;
 
                 if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.height = 35;

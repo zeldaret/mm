@@ -57,7 +57,7 @@ static ColliderCylinderInit sShellCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFC74F, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 75, 125, 0, { 0, 0, 0 } },
@@ -77,7 +77,7 @@ static ColliderCylinderInit sBodyCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0x000038B0, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 70, 125, 0, { 0, 0, 0 } },
@@ -499,9 +499,9 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.elem.bumper.hitPos.x,
-                            this->bodyCollider.elem.bumper.hitPos.y, this->bodyCollider.elem.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.elem.acDmgInfo.hitPos.x,
+                            this->bodyCollider.elem.acDmgInfo.hitPos.y, this->bodyCollider.elem.acDmgInfo.hitPos.z, 0,
+                            0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 

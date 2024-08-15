@@ -62,7 +62,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 100, 1000 }, 15 }, 100 },
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 51, { { 0, 0, 1500 }, 8 }, 100 },
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 52, { { 0, 0, 500 }, 8 }, 100 },
@@ -95,7 +95,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 53, { { 0, 0, 1500 }, 8 }, 100 },
@@ -106,7 +106,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 54, { { 0, 0, 500 }, 8 }, 100 },
@@ -117,7 +117,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 55, { { 0, 0, 1500 }, 8 }, 100 },
@@ -128,7 +128,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 56, { { 0, 0, 500 }, 8 }, 100 },
@@ -248,7 +248,7 @@ void EnDekubaba_DisableHitboxes(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.bumperFlags &= ~BUMP_ON;
+        this->collider.elements[i].base.acElemFlags &= ~ACELEM_ON;
     }
 }
 
@@ -279,8 +279,8 @@ void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
         jntSphElem = &this->collider.elements[index];
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.bumper.hitPos.x,
-                    jntSphElem->base.bumper.hitPos.y, jntSphElem->base.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.acDmgInfo.hitPos.x,
+                    jntSphElem->base.acDmgInfo.hitPos.y, jntSphElem->base.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     }
 }
@@ -936,7 +936,7 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.bumperFlags |= BUMP_ON;
+        this->collider.elements[i].base.acElemFlags |= ACELEM_ON;
     }
 
     if (this->timer == 1) {
@@ -1078,7 +1078,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
             (this->actor.colChkInfo.damageEffect != DEKUBABA_DMGEFF_HOOKSHOT)) {
             jntSphElem = &this->collider.elements[0];
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, jntSphElem++) {
-                if (jntSphElem->base.bumperFlags & BUMP_HIT) {
+                if (jntSphElem->base.acElemFlags & ACELEM_HIT) {
                     break;
                 }
             }

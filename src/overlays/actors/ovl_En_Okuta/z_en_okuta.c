@@ -69,7 +69,7 @@ static ColliderCylinderInit sProjectileCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_HARD,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 13, 20, 0, { 0, 0, 0 } },
@@ -89,7 +89,7 @@ static ColliderCylinderInit sOctorokCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_HARD,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, -30, { 0, 0, 0 } },
@@ -868,8 +868,8 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
             this->drawDmgEffAlpha = 4.0f;
             this->drawDmgEffScale = 0.6f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                        this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                        this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 

@@ -51,7 +51,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
@@ -62,7 +62,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
@@ -95,7 +95,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
@@ -106,7 +106,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
@@ -117,7 +117,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1000, 0 }, 15 }, 100 },
@@ -601,7 +601,7 @@ void EnWdhand_SetupDie(EnWdhand* this) {
 
     // Finds the particular collider that was hit
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
             break;
         }
     }

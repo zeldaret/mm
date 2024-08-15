@@ -146,7 +146,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { TINGLE_LIMB_BALLOON, { { 2400, 0, 0 }, 50 }, 100 },

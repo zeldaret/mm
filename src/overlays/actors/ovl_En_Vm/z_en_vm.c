@@ -48,7 +48,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 2, { { 0, 0, 0 }, 20 }, 100 },
@@ -59,7 +59,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 10, { { 0, 2300, 0 }, 33 }, 100 },
@@ -86,7 +86,7 @@ static ColliderTrisElementInit sTrisElementsInit[] = {
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -408,7 +408,7 @@ void func_808CCDE4(EnVm* this, PlayState* play) {
         this->colliderJntSph.base.acFlags &= ~AC_HIT;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElements); i++) {
-            if (this->colliderJntSph.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->colliderJntSph.elements[i].base.acElemFlags & ACELEM_HIT) {
                 break;
             }
         }

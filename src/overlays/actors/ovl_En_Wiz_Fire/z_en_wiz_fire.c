@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x09, 0x10 },
         { 0x01001202, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -88,7 +88,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->isIceType = true;
             this->collider.elem.atDmgInfo.damage = 8;
             this->collider.elem.atDmgInfo.effect = 2;
-            this->collider.elem.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
+            this->collider.elem.acDmgInfo.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
             // fallthrough
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:

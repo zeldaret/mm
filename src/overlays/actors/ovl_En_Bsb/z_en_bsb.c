@@ -71,7 +71,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 10, { { 1000, 400, 0 }, 40 }, 100 },
@@ -82,7 +82,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0xF7CFFFFF, 0x04, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 9, { { 0, 700, 200 }, 35 }, 100 },
@@ -93,7 +93,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 6, { { 100, 600, 0 }, 35 }, 100 },
@@ -104,7 +104,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 3, { { 400, 200, 0 }, 40 }, 100 },
@@ -115,7 +115,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 13, { { 700, -100, 0 }, 35 }, 100 },
@@ -126,7 +126,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 16, { { 200, 300, 0 }, 30 }, 100 },
@@ -137,7 +137,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 19, { { 200, 300, 0 }, 30 }, 100 },
@@ -886,9 +886,9 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
     f32 dy;
     f32 dz;
 
-    hitPos.x = this->collider.elements[1].base.bumper.hitPos.x;
-    hitPos.y = this->collider.elements[1].base.bumper.hitPos.y;
-    hitPos.z = this->collider.elements[1].base.bumper.hitPos.z;
+    hitPos.x = this->collider.elements[1].base.acDmgInfo.hitPos.x;
+    hitPos.y = this->collider.elements[1].base.acDmgInfo.hitPos.y;
+    hitPos.z = this->collider.elements[1].base.acDmgInfo.hitPos.z;
 
     dx = hitPos.x - player->actor.world.pos.x;
     dy = hitPos.y - player->actor.world.pos.y;
@@ -1524,10 +1524,10 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                 func_80C0D3C0(this, play);
             } else {
                 for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-                    if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
-                        sp48.x = this->collider.elements[i].base.bumper.hitPos.x;
-                        sp48.y = this->collider.elements[i].base.bumper.hitPos.y;
-                        sp48.z = this->collider.elements[i].base.bumper.hitPos.z;
+                    if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                        sp48.x = this->collider.elements[i].base.acDmgInfo.hitPos.x;
+                        sp48.y = this->collider.elements[i].base.acDmgInfo.hitPos.y;
+                        sp48.z = this->collider.elements[i].base.acDmgInfo.hitPos.z;
                         CollisionCheck_BlueBlood(play, NULL, &sp48);
                     }
                 }

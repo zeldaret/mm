@@ -52,7 +52,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_ON,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 80, 80, 0, { 0, 0, 0 } },
@@ -326,7 +326,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->collider.dim.radius = ptr->unk_14;
     this->collider.dim.height = ptr->unk_16;
-    this->collider.elem.bumper.dmgFlags = ptr->unk_18;
+    this->collider.elem.acDmgInfo.dmgFlags = ptr->unk_18;
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     Actor_SetFocus(&this->dyna.actor, ptr->unk_08);

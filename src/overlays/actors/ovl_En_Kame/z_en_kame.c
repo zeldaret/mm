@@ -83,7 +83,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CF7FFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 35, 40, 0, { 0, 0, 0 } },
@@ -530,11 +530,11 @@ void EnKame_SetupFlip(EnKame* this) {
     if (this->actionFunc == EnKame_Struggle) {
         Animation_MorphToPlayOnce(&this->snapperSkelAnime, &gSnapperBouncedUprightAnim, -3.0f);
         this->flipType = EN_KAME_FLIP_TYPE_RIGHTSIDE_UP;
-        this->collider.elem.bumper.dmgFlags &= ~0x8000;
+        this->collider.elem.acDmgInfo.dmgFlags &= ~0x8000;
     } else {
         Animation_MorphToPlayOnce(&this->snapperSkelAnime, &gSnapperFlipOverAnim, -3.0f);
         this->flipType = EN_KAME_FLIP_TYPE_UPSIDE_DOWN;
-        this->collider.elem.bumper.dmgFlags |= 0x8000;
+        this->collider.elem.acDmgInfo.dmgFlags |= 0x8000;
     }
 
     this->actor.draw = EnKame_Draw;
@@ -611,7 +611,7 @@ void EnKame_FlipUpright(EnKame* this, PlayState* play) {
         // See EnKame_PostLimbDraw and EnKame_Draw for more information.
         this->actor.shape.shadowDraw = NULL;
         this->collider.base.acFlags &= ~AC_ON;
-        this->collider.elem.bumper.dmgFlags &= ~0x8000;
+        this->collider.elem.acDmgInfo.dmgFlags &= ~0x8000;
     }
 }
 
@@ -817,8 +817,8 @@ void EnKame_UpdateDamage(EnKame* this, PlayState* play) {
                     this->drawDmgEffScale = 0.6f;
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                                this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                                this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 

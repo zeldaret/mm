@@ -188,7 +188,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         { 0x00000004, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 70, 0, { 0, 0, 0 } },
@@ -208,7 +208,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 70, 0, { 0, 0, 0 } },
@@ -221,7 +221,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
             { 0x00000000, 0x00, 0x00 },
             { 0x00013820, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK,
+            ACELEM_ON | ACELEM_NO_AT_INFO | ACELEM_NO_DAMAGE | ACELEM_NO_SWORD_SFX | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { 13, { { 0, 0, 0 }, 20 }, 100 },
@@ -936,12 +936,12 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     if (this->unk_1EC & 0x100) {
         this->colliderCylinder1.base.colType = COLTYPE_HIT3;
         this->colliderCylinder1.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder1.elem.bumperFlags |= BUMP_ON;
-        this->colliderCylinder1.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder1.elem.acElemFlags |= ACELEM_ON;
+        this->colliderCylinder1.elem.acDmgInfo.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
         this->colliderCylinder2.base.colType = COLTYPE_HIT3;
         this->colliderCylinder2.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder2.elem.bumperFlags |= BUMP_ON;
-        this->colliderCylinder2.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder2.elem.acElemFlags |= ACELEM_ON;
+        this->colliderCylinder2.elem.acDmgInfo.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
     }
 }
 

@@ -72,7 +72,7 @@ static ColliderCylinderInit sCylinderInit = {
         { 0xF7CFFFFF, 0x04, 0x04 },
         { 0xF7CF7FFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 53, 50, 0, { 0, 0, 0 } },
@@ -484,7 +484,7 @@ void func_80A2866C(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A286C0(EnBigpamet* this) {
-    this->collider.elem.bumper.dmgFlags = 0xF7CF7FFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CF7FFF;
     this->collider.base.atFlags |= AT_ON;
     this->actor.shape.rot.z = 0x680;
     this->unk_29E = 15;
@@ -563,7 +563,7 @@ void func_80A28970(EnBigpamet* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
     this->actor.shape.rot.z = 0;
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.elem.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A289C8;
 }
@@ -616,7 +616,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     Animation_PlayLoop(&this->snapperSkelAnime, &gSnapperDeathAnim);
 
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.elem.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
     this->collider.base.acFlags &= ~AC_ON;
 

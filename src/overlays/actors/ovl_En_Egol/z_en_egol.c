@@ -97,7 +97,7 @@ static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_EYE_COLLIDER, { { 0, 0, 0 }, 0 }, 1 },
@@ -111,7 +111,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_LEFT_HAND, { { 0, 0, 0 }, 0 }, 1 },
@@ -122,7 +122,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_RIGHT_HAND, { { 0, 0, 0 }, 0 }, 1 },
@@ -133,7 +133,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_HEAD, { { 0, 0, 0 }, 0 }, 1 },
@@ -144,7 +144,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_LEFT_SHOULDER, { { 0, 0, 0 }, 0 }, 1 },
@@ -155,7 +155,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_RIGHT_SHOULDER, { { 0, 0, 0 }, 0 }, 1 },
@@ -166,7 +166,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
-            BUMP_ON,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_FAULDS, { { 0, 0, 0 }, 0 }, 1 },
@@ -213,7 +213,7 @@ static ColliderQuadInit sLaserQuadInit = {
         { 0xF7CFFFFF, 0x07, 0x10 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
-        BUMP_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -1148,7 +1148,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
         EnEgol_SetupWalk(this);
     }
-    if (this->eyeCollider.elements[0].base.bumperFlags & BUMP_HIT) {
+    if (this->eyeCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
         reaction = EYEGORE_HIT_IMMUNE;
         switch (this->actor.colChkInfo.damageEffect) {
             case EYEGORE_DMGEFF_LIGHT_ARROW:
@@ -1201,9 +1201,9 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
     } else if (reaction == EYEGORE_HIT_IMMUNE) {
         Vec3f hitPos;
 
-        hitPos.x = this->eyeCollider.elements[0].base.bumper.hitPos.x;
-        hitPos.y = this->eyeCollider.elements[0].base.bumper.hitPos.y;
-        hitPos.z = this->eyeCollider.elements[0].base.bumper.hitPos.z;
+        hitPos.x = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.x;
+        hitPos.y = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.y;
+        hitPos.z = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.z;
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
         CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);
