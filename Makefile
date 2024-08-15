@@ -159,6 +159,10 @@ endif
 SCHC        := $(PYTHON) tools/buildtools/schc.py
 SCHC_FLAGS  :=
 
+# Audio tools
+AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
+SAMPLECONV    := tools/audio/sampleconv/sampleconv
+
 # Command to replace path variables in the spec file. We can't use the C
 # preprocessor for this because it won't substitute inside string literals.
 SPEC_REPLACE_VARS := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
@@ -209,6 +213,24 @@ $(shell mkdir -p asm data extracted)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
+
+ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
+  SAMPLE_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
+else
+  SAMPLE_EXTRACT_DIRS :=
+endif
+
+ifneq ($(wildcard assets/audio/samples),)
+  SAMPLE_DIRS := $(shell find assets/audio/samples -type d)
+else
+  SAMPLE_DIRS :=
+endif
+
+SAMPLE_FILES         := $(foreach dir,$(SAMPLE_DIRS),$(wildcard $(dir)/*.wav))
+SAMPLE_EXTRACT_FILES := $(foreach dir,$(SAMPLE_EXTRACT_DIRS),$(wildcard $(dir)/*.wav))
+AIFC_FILES           := $(foreach f,$(SAMPLE_FILES),$(BUILD_DIR)/$(f:.wav=.aifc)) $(foreach f,$(SAMPLE_EXTRACT_FILES:.wav=.aifc),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
+SAMPLE_BLOBS_IN      := $(foreach dir,$(SAMPLE_EXTRACT_DIRS),$(wildcard $(dir)/*.bin))
+SAMPLE_BLOBS         := $(foreach f,$(SAMPLE_BLOBS_IN),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
@@ -370,14 +392,20 @@ venv:
 	$(PYTHON) -m pip install -U -r requirements.txt
 
 ## Extraction step
+
 setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/buildtools/decompress_baserom.py $(VERSION)
 	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
 	$(PYTHON) tools/buildtools/extract_yars.py $(VERSION)
 
+# TODO this is a temporary rule for testing audio, to be removed
+setup-audio:
+	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+
 assets:
-	$(PYTHON) tools/extract_assets.py -v $(VERSION) -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) tools/extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
 disasm:
@@ -495,6 +523,30 @@ $(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
 
 $(BUILD_DIR)/%.schl.inc: %.schl
 	$(SCHC) $(SCHC_FLAGS) -o $@ $<
+
+# Audio
+
+AUDIO_BUILD_DEBUG ?= 0
+
+# first build samples...
+
+$(BUILD_DIR)/assets/audio/samples/%.half.aifc: assets/audio/samples/%.half.wav
+	$(SAMPLECONV) vadpcm-half $< $@
+
+$(BUILD_DIR)/assets/audio/samples/%.half.aifc: $(EXTRACTED_DIR)/assets/audio/samples/%.half.wav
+	$(SAMPLECONV) vadpcm-half $< $@
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+	@(cmp $(<D)/aifc/$(<F:.half.wav=.half.aifc) $@ && echo "$(<F) OK") || (mkdir -p NONMATCHINGS/$(<D) && cp $(<D)/aifc/$(<F:.half.wav=.half.aifc) NONMATCHINGS/$(<D)/$(<F:.half.wav=.half.aifc))
+endif
+
+$(BUILD_DIR)/assets/audio/samples/%.aifc: assets/audio/samples/%.wav
+	$(SAMPLECONV) vadpcm $< $@
+
+$(BUILD_DIR)/assets/audio/samples/%.aifc: $(EXTRACTED_DIR)/assets/audio/samples/%.wav
+	$(SAMPLECONV) vadpcm $< $@
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+	@(cmp $(<D)/aifc/$(<F:.wav=.aifc) $@ && echo "$(<F) OK") || (mkdir -p NONMATCHINGS/$(<D) && cp $(<D)/aifc/$(<F:.wav=.aifc) NONMATCHINGS/$(<D)/$(<F:.wav=.aifc))
+endif
 
 -include $(DEP_FILES)
 
