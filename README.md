@@ -70,12 +70,13 @@ The build process has the following package requirements:
 * python3-pip
 * python3-venv
 * libpng-dev
+* libxml2-dev
 
 Under Debian / Ubuntu (which we recommend using), you can install them with the following commands:
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip python3-venv libpng-dev
+sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip python3-venv libpng-dev libxml2-dev
 ```
 
 #### 2. Clone the repository
