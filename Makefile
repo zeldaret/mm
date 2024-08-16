@@ -289,7 +289,7 @@ LD_FINAL_FILES := $(foreach f,$(shell find linker_scripts/final/*.ld),$(BUILD_DI
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # Other directories that need to be created in the build directory
-OTHER_DIRS := baserom dmadata linker_scripts
+OTHER_DIRS := baserom dmadata $(shell find linker_scripts -type d)
 
 # create build directories
 $(shell mkdir -p $(foreach dir,$(OTHER_DIRS),$(BUILD_DIR)/$(dir)))
