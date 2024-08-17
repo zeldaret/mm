@@ -620,7 +620,7 @@ $(BUILD_DIR)/assets/audio/samplebank_table.h: $(SAMPLEBANK_BUILD_XMLS)
 $(BUILD_DIR)/src/audio/tables/samplebank_table.o: src/audio/tables/samplebank_table.c $(BUILD_DIR)/assets/audio/samplebank_table.h
 	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
-	@$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@
+	$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@
 	@$(RM) $(@:.o=.tmp)
 	$(RM_MDEBUG)
 
