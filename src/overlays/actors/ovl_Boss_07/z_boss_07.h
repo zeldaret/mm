@@ -177,10 +177,10 @@ typedef struct Boss07 {
     /* 0x015E */ s16 damagedFlashTimer;
     /* 0x0160 */ s16 motionBlurAlpha;
     /* 0x0164 */ Vec3f targetPos;
-    /* 0x0170 */ f32 velocity_170; // move speed for wrath sidestep and spin, turn rate for all others
-    /* 0x0174 */ u8 canDodge;
+    /* 0x0170 */ f32 speedToTarget;
+    /* 0x0174 */ u8 canEvade;
     /* 0x0178 */ f32 topSpinAngle; 
-    /* 0x017C */ f32 topSpinRate;
+    /* 0x017C */ f32 topSpinAngularVelocity;
     /* 0x0180 */ s16 unk_180; // top precess angle and incarnation yaw target
     /* 0x0184 */ f32 unk_184; // y rot during long whip attack
     /* 0x0188 */ f32 unk_188; // x rot during long whip attack

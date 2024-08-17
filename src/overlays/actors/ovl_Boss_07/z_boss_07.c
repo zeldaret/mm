@@ -1347,7 +1347,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 this->targetPos.x = 0.0f;
                 this->targetPos.y = 200.0f;
                 this->targetPos.z = 0.0f;
-                this->velocity_170 = 0.0f;
+                this->speedToTarget = 0.0f;
                 this->timers[0] = 50;
                 this->timers[2] = 200;
                 this->bgCheckTimer = 50;
@@ -1929,7 +1929,7 @@ void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-    this->canDodge = true;
+    this->canEvade = true;
 }
 
 void Boss07_Wrath_SetupJump(Boss07* this, PlayState* play) {
@@ -2050,7 +2050,7 @@ void Boss07_Wrath_SetupSidestep(Boss07* this, PlayState* play) {
     this->targetPos.z += this->actor.world.pos.z;
     this->timers[1] = 21;
     this->disableCollisionTimer = 10;
-    this->velocity_170 = 0.0f;
+    this->speedToTarget = 0.0f;
     this->sfxTimer = 0;
 }
 
@@ -2072,9 +2072,9 @@ void Boss07_Wrath_Sidestep(Boss07* this, PlayState* play) {
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-    Math_ApproachF(&this->actor.world.pos.x, this->targetPos.x, 0.8f, this->velocity_170);
-    Math_ApproachF(&this->actor.world.pos.z, this->targetPos.z, 0.8f, this->velocity_170);
-    Math_ApproachF(&this->velocity_170, 20.0f, 1.0f, 10.0f);
+    Math_ApproachF(&this->actor.world.pos.x, this->targetPos.x, 0.8f, this->speedToTarget);
+    Math_ApproachF(&this->actor.world.pos.z, this->targetPos.z, 0.8f, this->speedToTarget);
+    Math_ApproachF(&this->speedToTarget, 20.0f, 1.0f, 10.0f);
 
     if (this->timers[1] == 0) {
         if (Rand_ZeroOne() < 0.3f) {
@@ -2132,7 +2132,7 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathSpinAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathSpinAttackAnim);
             Boss07_RandVec3fXZ(&this->targetPos, 650.0f);
-            this->velocity_170 = 0.0f;
+            this->speedToTarget = 0.0f;
             break;
 
         case MAJORAS_WRATH_STATE_TAUNT:
@@ -2166,7 +2166,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
     this->leftWhip.drag = this->rightWhip.drag = 1.0f;
 
     if (this->frameCounter > 20) {
-        this->canDodge = true;
+        this->canEvade = true;
     }
 
     switch (this->subAction) {
@@ -2264,16 +2264,16 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                     Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_DANCE_OLD - SFX_FLAG);
-                Math_ApproachF(&this->actor.world.pos.x, this->targetPos.x, 0.1f, this->velocity_170);
-                Math_ApproachF(&this->actor.world.pos.z, this->targetPos.z, 0.1f, this->velocity_170);
-                Math_ApproachF(&this->velocity_170, 20.0f, 1.0f, 4.0f);
+                Math_ApproachF(&this->actor.world.pos.x, this->targetPos.x, 0.1f, this->speedToTarget);
+                Math_ApproachF(&this->actor.world.pos.z, this->targetPos.z, 0.1f, this->speedToTarget);
+                Math_ApproachF(&this->speedToTarget, 20.0f, 1.0f, 4.0f);
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
-                this->canDodge = false;
+                this->canEvade = false;
             }
             break;
 
         case MAJORAS_WRATH_STATE_KICK:
-            this->canDodge = false;
+            this->canEvade = false;
             if (this->frameCounter == 3) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
             }
@@ -2283,7 +2283,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             this->rightWhip.mobility = this->leftWhip.mobility = 0.7f;
             this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-            this->canDodge = true;
+            this->canEvade = true;
             break;
 
         case MAJORAS_WRATH_STATE_THREE_HIT:
@@ -2964,7 +2964,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
     if (KREG(63) == 0) {
-        this->canDodge = false;
+        this->canEvade = false;
         this->frameCounter++;
         Actor_SetScale(&this->actor, 0.015f);
         Math_ApproachZeroF(&this->unk_184, 1.0f, 0.02f);
@@ -3021,7 +3021,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         (this->frameCounter >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->kickCollider.base);
     } else {
-        if (this->canDodge && Boss07_ArePlayerAndActorFacing(this, play)) {
+        if (this->canEvade && Boss07_ArePlayerAndActorFacing(this, play)) {
             if ((player->unk_D57 == 4) && (player->heldItemAction != PLAYER_IA_BOW_LIGHT)) {
                 if ((this->actor.xzDistToPlayer >= 400.0f) && (Rand_ZeroOne() < 0.5f)) {
                     Boss07_Wrath_SetupSidestep(this, play);
@@ -3042,7 +3042,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
-    if (this->canDodge) {
+    if (this->canEvade) {
         Boss07_Wrath_DodgeExplosives(this, play);
     }
 
@@ -3884,7 +3884,7 @@ void Boss07_Incarnation_AvoidPlayer(Boss07* this) {
     this->timers[1] = 30;
     this->targetPos.x += this->actor.world.pos.x;
     this->targetPos.z += this->actor.world.pos.z;
-    this->velocity_170 = 0x4E20;
+    this->speedToTarget = 0x4E20;
 }
 
 void Boss07_Incarnation_SetupIntroCutscene(Boss07* this, PlayState* play) {
@@ -4254,12 +4254,12 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
             } else {
                 Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
                 this->timers[1] = Rand_ZeroFloat(50.0f) + 20.0f;
-                this->velocity_170 = 0.0f;
+                this->speedToTarget = 0.0f;
             }
         }
 
-        Math_ApproachS(&this->actor.world.rot.y, Math_Atan2S(sp34, sp30), 5, this->velocity_170);
-        Math_ApproachF(&this->velocity_170, 0xFA0, 1.0f, 0x1F4);
+        Math_ApproachS(&this->actor.world.rot.y, Math_Atan2S(sp34, sp30), 5, this->speedToTarget);
+        Math_ApproachF(&this->speedToTarget, 0xFA0, 1.0f, 0x1F4);
         Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 20.0f);
 
         if (this->timers[0] == 0) {
@@ -4697,7 +4697,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
     Math_ApproachF(&play->envCtx.lightBlend, 0.0f, 1.0f, 0.03f);
 
     if (KREG(63) == 0) {
-        this->canDodge = false;
+        this->canEvade = false;
         this->actor.shape.shadowAlpha = 130;
 
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
@@ -5018,7 +5018,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
             Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
             this->targetPos.y = Rand_ZeroFloat(350.0f) + 100.0f;
             this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
-            this->velocity_170 = 0.0f;
+            this->speedToTarget = 0.0f;
             this->flySpeedTarget = Rand_ZeroFloat(12.0f) + 3.0f;
         }
     }
@@ -5030,9 +5030,9 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     sp36 = Math_Atan2S(sp2C, sqrtf(SQ(sp30) + SQ(sp28)));
     sp36 += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
 
-    Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->velocity_170);
-    Math_ApproachS(&this->actor.world.rot.x, sp36, 5, this->velocity_170);
-    Math_ApproachF(&this->velocity_170, 0x7D0, 1.0f, 0x64);
+    Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->speedToTarget);
+    Math_ApproachS(&this->actor.world.rot.x, sp36, 5, this->speedToTarget);
+    Math_ApproachF(&this->speedToTarget, 0x7D0, 1.0f, 0x64);
     Math_ApproachF(&this->actor.speed, this->flySpeedTarget, 1.0f, 1.0f);
 
     if (this->timers[1] != 0) {
@@ -5091,7 +5091,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 this->timers[0] = 100;
                 this->timers[1] = 20;
-                this->velocity_170 = 0.0f;
+                this->speedToTarget = 0.0f;
             }
             break;
 
@@ -5113,9 +5113,9 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
             sp34 = Math_Atan2S(sp30, sp28);
             sp24 = sqrtf(SQ(sp30) + SQ(sp28));
             sp36 = Math_Atan2S(sp2C, sp24);
-            Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->velocity_170);
-            Math_ApproachS(&this->actor.world.rot.x, sp36, 0xA, this->velocity_170);
-            Math_ApproachF(&this->velocity_170, 0xBB8, 1.0f, 0x64);
+            Math_ApproachS(&this->actor.world.rot.y, sp34, 0xA, this->speedToTarget);
+            Math_ApproachS(&this->actor.world.rot.x, sp36, 0xA, this->speedToTarget);
+            Math_ApproachF(&this->speedToTarget, 0xBB8, 1.0f, 0x64);
             Math_ApproachF(&this->actor.speed, 20.0f, 1.0f, 2.0f);
 
             if (((this->cutsceneState == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
@@ -5136,7 +5136,7 @@ void Boss07_Mask_Spin(Boss07* this, PlayState* play) {
                     }
 
                     this->timers[0] = 50;
-                    this->velocity_170 = 0.0f;
+                    this->speedToTarget = 0.0f;
                 }
             }
             break;
@@ -5159,7 +5159,7 @@ void Boss07_Mask_SetupStunned(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Stunned;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasMaskJerkingAnim, -10.0f);
     this->timers[0] = 100;
-    this->velocity_170 = 0.0f;
+    this->speedToTarget = 0.0f;
 }
 
 void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
@@ -5174,8 +5174,8 @@ void Boss07_Mask_Stunned(Boss07* this, PlayState* play) {
     }
 
     Math_ApproachF(&this->actor.world.pos.y, 50.0f + 10.0f * Math_SinS(this->frameCounter * 0x5DC), 0.1f,
-                   this->velocity_170);
-    Math_ApproachF(&this->velocity_170, 15.0f, 1.0f, 1.0f);
+                   this->speedToTarget);
+    Math_ApproachF(&this->speedToTarget, 15.0f, 1.0f, 1.0f);
 
     if ((this->timers[0] > 30) || ((this->timers[0] & 2) != 0)) {
         this->maskEyeTexIndex = 1;
@@ -5260,7 +5260,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
             this->timers[0] = 50;
             this->timers[2] = 100;
             this->flySpeedTarget = 6.0f;
-            this->velocity_170 = 0.0f;
+            this->speedToTarget = 0.0f;
         }
     }
 }
@@ -5277,7 +5277,7 @@ void Boss07_Mask_SetupBeam(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_Beam;
     this->subAction = MAJORAS_MASK_BEAM_STATE_CHARGE;
     this->timers[0] = 30;
-    this->velocity_170 = 0.0f;
+    this->speedToTarget = 0.0f;
 }
 
 void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
@@ -5308,13 +5308,13 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     }
 
     phi_s0 = (player->stateFlags1 & PLAYER_STATE1_400000) ? 1 : 10;
-    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, phi_s0, this->velocity_170);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, phi_s0, this->speedToTarget);
     temp_f20 = player->actor.world.pos.x - this->actor.world.pos.x;
     temp_f12 = player->actor.world.pos.y - this->actor.world.pos.y + phi_f24;
     temp_f22 = player->actor.world.pos.z - this->actor.world.pos.z;
     Math_ApproachS(&this->actor.shape.rot.x, -Math_Atan2S(temp_f12, sqrtf(SQ(temp_f20) + SQ(temp_f22))), phi_s0,
-                   this->velocity_170);
-    Math_ApproachF(&this->velocity_170, 0xFA0, 1.0f, 0xC8);
+                   this->speedToTarget);
+    Math_ApproachF(&this->speedToTarget, 0xFA0, 1.0f, 0xC8);
     this->tentacleState = 1;
 
     switch (this->subAction) {
@@ -5875,7 +5875,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     this->targetPos.x = 0.0f;
                     this->targetPos.y = 200.0f;
                     this->targetPos.z = 0.0f;
-                    this->velocity_170 = 0.0f;
+                    this->speedToTarget = 0.0f;
                     mainCam->eye = this->subCamEye;
                     mainCam->eyeNext = this->subCamEye;
                     mainCam->at = this->subCamAt;
@@ -6077,7 +6077,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
         this->frameCounter++;
 
         if (KREG(63) == 0) {
-            this->canDodge = false;
+            this->canEvade = false;
             this->maskEyeTexIndex = 0;
             this->tentacleState = 0;
             Actor_SetScale(&this->actor, 0.1f);
@@ -6689,9 +6689,9 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             sp4C = this->targetPos.z - this->actor.world.pos.z;
             sp30 = Math_Atan2S(sp54, sp4C);
             sp32 = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
-            Math_ApproachS(&this->actor.world.rot.y, sp30, 5, this->velocity_170);
-            Math_ApproachS(&this->actor.world.rot.x, sp32, 5, this->velocity_170);
-            Math_ApproachF(&this->velocity_170, sp40, 1.0f, sp3C);
+            Math_ApproachS(&this->actor.world.rot.y, sp30, 5, this->speedToTarget);
+            Math_ApproachS(&this->actor.world.rot.x, sp32, 5, this->speedToTarget);
+            Math_ApproachF(&this->speedToTarget, sp40, 1.0f, sp3C);
             Math_ApproachF(&this->actor.speed, sp38, 1.0f, sp34);
             Actor_UpdateVelocityWithoutGravity(&this->actor);
             Actor_UpdatePos(&this->actor);
@@ -6774,7 +6774,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                     Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
                     this->targetPos.y = Rand_ZeroFloat(350.0f) + 100.0f;
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
-                    this->velocity_170 = 0.0f;
+                    this->speedToTarget = 0.0f;
                     this->flySpeedTarget = Rand_ZeroFloat(5.0f) + 5.0f;
                 }
             }
@@ -6786,9 +6786,9 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             sp7E = Math_Atan2S(sp74, sqrtf(SQ(sp78) + SQ(sp70)));
             sp7E += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
 
-            Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->velocity_170);
-            Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->velocity_170);
-            Math_ApproachF(&this->velocity_170, 0x7D0, 1.0f, 0x64);
+            Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->speedToTarget);
+            Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->speedToTarget);
+            Math_ApproachF(&this->speedToTarget, 0x7D0, 1.0f, 0x64);
             Math_ApproachF(&this->actor.speed, this->flySpeedTarget, 1.0f, 1.0f);
 
             if ((this->flySpeedTarget < 8.0f) && !Play_InCsMode(play)) {
@@ -7007,7 +7007,7 @@ void Boss07_Remains_Draw(Actor* thisx, PlayState* play2) {
 void Boss07_Top_SetupThrown(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Top_Thrown;
     this->actor.gravity = 0.0f;
-    this->topSpinRate = (sREG(42) * 0.01f) + 0.9f;
+    this->topSpinAngularVelocity = (sREG(42) * 0.01f) + 0.9f;
     this->timers[0] = 200;
 }
 
@@ -7052,7 +7052,7 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
     f32 sp48;
 
     Audio_PlaySfx_AtPosWithFreq(&this->actor.projectedPos, NA_SE_EN_LAST3_KOMA_OLD - SFX_FLAG,
-                                this->topSpinRate * 1.1111112f);
+                                this->topSpinAngularVelocity * 1.1111112f);
     Actor_MoveWithGravity(&this->actor);
     this->actor.world.pos.x += this->knockbackVelocityX;
     this->actor.world.pos.z += this->knockbackVelocityZ;
@@ -7060,8 +7060,8 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
 
     if ((this->disableCollisionTimer == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         this->disableCollisionTimer = 10;
-        if (this->topSpinRate > 0.01f) {
-            if (this->topSpinRate < 0.45f) {
+        if (this->topSpinAngularVelocity > 0.01f) {
+            if (this->topSpinAngularVelocity < 0.45f) {
                 this->actor.speed *= -1.0f;
             } else {
                 this->actor.speed = -10.0f;
@@ -7075,17 +7075,17 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
             if (this->timers[0] >= (s16)(sREG(25) + 35)) {
                 Math_ApproachZeroF(&this->actor.speed, 1.0f, (sREG(17) * 0.01f) + 0.1f);
                 Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, sREG(18) + 0x1A0);
-                Math_ApproachZeroF(&this->topSpinRate, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
+                Math_ApproachZeroF(&this->topSpinAngularVelocity, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
                 Math_ApproachS(&this->unk_180, (sREG(20) * 0x800) + 0x2000, 1, (sREG(21) * 16) + 0xC0);
             } else if (this->timers[0] == 0) {
                 Math_ApproachZeroF(&this->actor.speed, 1.0f, (sREG(26) * 0.01f) + 0.5f);
                 Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, 0x800);
-                Math_ApproachZeroF(&this->topSpinRate, 1.0f, (sREG(27) * 0.001f) + 0.024f);
+                Math_ApproachZeroF(&this->topSpinAngularVelocity, 1.0f, (sREG(27) * 0.001f) + 0.024f);
                 Math_ApproachS(&this->unk_180, 0, 2, sREG(28) + 106);
             } else {
                 Math_ApproachF(&this->actor.speed, sREG(22) + 10.0f, 1.0f, (sREG(23) * 0.01f) + 0.6f);
                 Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, sREG(18) + 0x410);
-                Math_ApproachZeroF(&this->topSpinRate, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
+                Math_ApproachZeroF(&this->topSpinAngularVelocity, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
                 Math_ApproachS(&this->unk_180, (sREG(29) * 0x800) - 0x800, 1, (sREG(30) * 16) + 0x340);
             }
 
@@ -7158,14 +7158,14 @@ void Boss07_Top_Collide(Boss07* this, PlayState* play) {
                         this->actor.speed = -10.0f;
                     } else {
                         this->actor.speed = -5.0f;
-                        this->topSpinRate = (sREG(89) * 0.01f) + 0.2f;
+                        this->topSpinAngularVelocity = (sREG(89) * 0.01f) + 0.2f;
                         this->unk_180 = 0x800;
                     }
                     if (top->timers[0] > 0) {
                         top->actor.speed = -10.0f;
                     } else {
                         top->actor.speed = -5.0f;
-                        top->topSpinRate = (sREG(89) * 0.01f) + 0.2f;
+                        top->topSpinAngularVelocity = (sREG(89) * 0.01f) + 0.2f;
                         top->unk_180 = 0x800;
                     }
 
@@ -7277,7 +7277,7 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
     Boss07_Top_Collide(this, play);
 
-    this->topSpinAngle -= this->topSpinRate;
+    this->topSpinAngle -= this->topSpinAngularVelocity;
     if (this->topSpinAngle < -2.0f * M_PIf) {
         this->topSpinAngle += 2.0f * M_PIf;
     }
