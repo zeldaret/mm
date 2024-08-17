@@ -41,7 +41,7 @@ extern const AudioHeapInitSizes gAudioHeapInitSizes;
 extern u8 gSoundFontTable[];
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];
-extern u8 gSampleBankTable[];
+extern AudioTable gSampleBankTable;
 
 // bss
 

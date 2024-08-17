@@ -163,6 +163,7 @@ SCHC_FLAGS  :=
 AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 SAMPLECONV    := tools/audio/sampleconv/sampleconv
 SBC           := tools/audio/sbc
+ATBLGEN       := tools/audio/atblgen
 
 SBCFLAGS := --matching
 
@@ -281,14 +282,14 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | $(BUILD_DIR_REPLACE) | g
 
 SCHEDULE_INC_FILES := $(foreach f,$(SCHEDULE_FILES:.schl=.schl.inc),$(BUILD_DIR)/$f)
 
-LD_FILES := $(foreach f,$(shell find linker_scripts/*.ld),$(BUILD_DIR)/$f)
+LD_FINAL_FILES := $(foreach f,$(shell find linker_scripts/final/*.ld),$(BUILD_DIR)/$f)
 
 # Automatic dependency files
 # (Only asm_processor dependencies and reloc dependencies are handled for now)
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # Other directories that need to be created in the build directory
-OTHER_DIRS := baserom dmadata linker_scripts
+OTHER_DIRS := baserom dmadata $(shell find linker_scripts -type d)
 
 # create build directories
 $(shell mkdir -p $(foreach dir,$(OTHER_DIRS),$(BUILD_DIR)/$(dir)))
@@ -382,9 +383,9 @@ $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/dmadata/compress_ranges.txt
 	$(PYTHON) tools/buildtools/compress.py --in $(ROM) --out $@ --dma-start `tools/buildtools/dmadata_start.sh $(NM) $(ELF)` --compress `cat $(BUILD_DIR)/dmadata/compress_ranges.txt` --threads $(N_THREADS)
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
-$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(LD_FILES) \
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(LD_FINAL_FILES) \
         $(SAMPLEBANK_O_FILES)
-	$(LD) -T $(LDSCRIPT) -T $(LD_FILES) --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
+	$(LD) -T $(LDSCRIPT) -T $(LD_FINAL_FILES) --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
 
 ## Order-only prerequisites 
 # These ensure e.g. the O_FILES are built before the OVL_RELOC_FILES.
@@ -608,6 +609,20 @@ ifeq ($(AUDIO_BUILD_DEBUG),1)
 	$(OBJCOPY) -O binary --only-section .rodata $@ $(@:.o=.bin)
 	@cmp $(@:.o=.bin) $(patsubst $(BUILD_DIR)/assets/audio/samplebanks/%,$(EXTRACTED_DIR)/baserom_audiotest/audiotable_files/%,$(@:.o=.bin)) && echo "$(<F) OK"
 endif
+
+# put together the tables
+
+$(BUILD_DIR)/assets/audio/samplebank_table.h: $(SAMPLEBANK_BUILD_XMLS)
+	$(ATBLGEN) --banks $@ $^
+
+# build the tables into objects, move data -> rodata
+
+$(BUILD_DIR)/src/audio/tables/samplebank_table.o: src/audio/tables/samplebank_table.c $(BUILD_DIR)/assets/audio/samplebank_table.h
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
+	$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@
+	@$(RM) $(@:.o=.tmp)
+	$(RM_MDEBUG)
 
 -include $(DEP_FILES)
 
