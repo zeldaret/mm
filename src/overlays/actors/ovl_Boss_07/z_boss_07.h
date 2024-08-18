@@ -182,12 +182,12 @@ typedef struct Boss07 {
     /* 0x0178 */ f32 topSpinAngle; 
     /* 0x017C */ f32 topSpinAngularVelocity;
     /* 0x0180 */ s16 unk_180; // top precess angle and incarnation yaw target
-    /* 0x0184 */ f32 unk_184; // y rot during long whip attack
-    /* 0x0188 */ f32 unk_188; // x rot during long whip attack
+    /* 0x0184 */ f32 wrathLeanRotY;
+    /* 0x0188 */ f32 wrathLeanRotX;
     /* 0x018C */ f32 flySpeedTarget;
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ f32 animEndFrame;
-    /* 0x01D8 */ s32 bodyDecayRate;
+    /* 0x01D8 */ s32 maxDecayPixels;
     /* 0x01DC */ Vec3s jointTable[MAJORA_LIMB_COUNT];
     /* 0x0284 */ Vec3s morphTable[MAJORA_LIMB_COUNT];
     /* 0x032C */ f32 unk_32C; // shock scale related

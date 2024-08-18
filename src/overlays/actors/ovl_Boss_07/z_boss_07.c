@@ -1753,7 +1753,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 spA4 = 2000.0f;
                 spA0 = 1.0f;
 
-                this->bodyDecayRate = KREG(81) + 10;
+                this->maxDecayPixels = KREG(81) + 10;
                 this->disableShadow = true;
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else {
@@ -1763,7 +1763,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 this->subCamAtNext.x = this->actor.focus.pos.x;
                 this->subCamAtNext.y = this->actor.focus.pos.y - 40.0f - 60.0f;
                 this->subCamAtNext.z = this->actor.focus.pos.z;
-                this->bodyDecayRate = 0;
+                this->maxDecayPixels = 0;
                 if (this->cutsceneTimer > 330) {
                     spA4 = 2000.0f;
                     spA0 = 1.0f;
@@ -1850,7 +1850,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer >= (u32)(sREG(94) + 290)) {
-                this->bodyDecayRate = KREG(86) + 25;
+                this->maxDecayPixels = KREG(86) + 25;
                 Math_ApproachZeroF(&this->whipScale, 1.0f, 0.015f);
             }
             break;
@@ -2245,8 +2245,8 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
                 this->whipCrackTimer = 11;
             }
 
-            Math_ApproachF(&this->unk_184, -0.1f, 0.5f, 0.1f);
-            Math_ApproachF(&this->unk_188, 0.3f, 0.5f, 0.1f);
+            Math_ApproachF(&this->wrathLeanRotY, -0.1f, 0.5f, 0.1f);
+            Math_ApproachF(&this->wrathLeanRotX, 0.3f, 0.5f, 0.1f);
 
             if (this->frameCounter == 5) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
@@ -2967,8 +2967,8 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         this->canEvade = false;
         this->frameCounter++;
         Actor_SetScale(&this->actor, 0.015f);
-        Math_ApproachZeroF(&this->unk_184, 1.0f, 0.02f);
-        Math_ApproachZeroF(&this->unk_188, 1.0f, 0.02f);
+        Math_ApproachZeroF(&this->wrathLeanRotY, 1.0f, 0.02f);
+        Math_ApproachZeroF(&this->wrathLeanRotX, 1.0f, 0.02f);
 
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
             DECR(this->timers[i]);
@@ -3054,30 +3054,31 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         Boss07_Wrath_SetupDeathCutscene(this, play);
     }
 
-    if (this->bodyDecayRate != 0) {
-        u16* sp74 = SEGMENTED_TO_K0(gMajorasWrathEarTex);
-        u16* sp70 = SEGMENTED_TO_K0(gMajoraStripesTex);
-        u16* sp6C = SEGMENTED_TO_K0(gMajorasWrathMouthTex);
-        u16* sp68 = SEGMENTED_TO_K0(gMajoraBloodshotEyeTex);
-        u16* sp64 = SEGMENTED_TO_K0(gMajorasWrathEyeTex);
-        u16* sp60 = SEGMENTED_TO_K0(gMajorasMaskWithNormalEyesTex);
-        u16* sp5C = SEGMENTED_TO_K0(gMajoraVeinsTex);
-        u16* sp58 = SEGMENTED_TO_K0(gMajoraHandTex);
-        u16* sp54 = SEGMENTED_TO_K0(gMajoraBodyTex);
+    if (this->maxDecayPixels != 0) {
+        u16* earTex = SEGMENTED_TO_K0(gMajorasWrathEarTex);
+        u16* stripesTex = SEGMENTED_TO_K0(gMajoraStripesTex);
+        u16* mouthTex = SEGMENTED_TO_K0(gMajorasWrathMouthTex);
+        u16* bloodshotEyeTex = SEGMENTED_TO_K0(gMajoraBloodshotEyeTex);
+        u16* eyeTex = SEGMENTED_TO_K0(gMajorasWrathEyeTex);
+        u16* maskTex = SEGMENTED_TO_K0(gMajorasMaskWithNormalEyesTex);
+        u16* veinsTex = SEGMENTED_TO_K0(gMajoraVeinsTex);
+        u16* handTex = SEGMENTED_TO_K0(gMajoraHandTex);
+        u16* bodyTex = SEGMENTED_TO_K0(gMajoraBodyTex);
 
-        for (i = 0; i < this->bodyDecayRate; i++) {
-            s32 sp50;
-            s32 sp4C;
-            s32 sp48;
-            s32 sp44;
+        for (i = 0; i < this->maxDecayPixels; i++) {
+            s32 rand32x64;
+            s32 rand32x16;
+            s32 rand32x32;
+            s32 rand16x16;
 
-            sp44 = Rand_ZeroFloat(0x100 - 0.01f);
-            sp4C = Rand_ZeroFloat(0x200 - 0.01f);
-            sp48 = Rand_ZeroFloat(0x400 - 0.01f);
-            sp50 = Rand_ZeroFloat(0x800 - 0.01f);
+            rand16x16 = Rand_ZeroFloat((16 * 16) - 0.01f);
+            rand32x16 = Rand_ZeroFloat((32 * 16) - 0.01f);
+            rand32x32 = Rand_ZeroFloat((32 * 32) - 0.01f);
+            rand32x64 = Rand_ZeroFloat((32 * 64) - 0.01f);
 
-            sp74[sp44] = sp70[sp4C] = sp6C[sp48] = sp68[sp48] = sp64[sp50] = sp60[sp50] = sp5C[sp50] = sp58[sp50] =
-                sp54[sp50] = 0;
+            earTex[rand16x16] = stripesTex[rand32x16] = mouthTex[rand32x32] = bloodshotEyeTex[rand32x32] =
+                eyeTex[rand32x64] = maskTex[rand32x64] = veinsTex[rand32x64] = handTex[rand32x64] = bodyTex[rand32x64] =
+                    0;
         }
     }
 
@@ -3643,8 +3644,8 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
-    Matrix_RotateYF(this->unk_184, MTXMODE_APPLY);
-    Matrix_RotateXFApply(this->unk_188);
+    Matrix_RotateYF(this->wrathLeanRotY, MTXMODE_APPLY);
+    Matrix_RotateXFApply(this->wrathLeanRotX);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, Boss07_Wrath_OverrideLimbDraw, Boss07_Wrath_PostLimbDraw,
                                    Boss07_Wrath_TransformLimbDraw, &this->actor);
