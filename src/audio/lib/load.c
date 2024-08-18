@@ -1302,7 +1302,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
 
     // Connect audio tables to their tables in memory
     gAudioCtx.sequenceTable = (AudioTable*)gSequenceTable;
-    gAudioCtx.soundFontTable = (AudioTable*)gSoundFontTable;
+    gAudioCtx.soundFontTable = &gSoundFontTable;
     gAudioCtx.sampleBankTable = &gSampleBankTable;
     gAudioCtx.sequenceFontTable = gSequenceFontTable;
 
