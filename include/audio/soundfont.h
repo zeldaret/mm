@@ -7,7 +7,7 @@ struct EnvelopePoint;
 
 typedef struct AdpcmLoopHeader {
     /* 0x00 */ u32 start;
-    /* 0x04 */ u32 loopEnd; // numSamples position into the sample where the loop ends
+    /* 0x04 */ u32 loopEnd; // s16 sample position where the loop ends
     /* 0x08 */ u32 count; // The number of times the loop is played before the sound completes. Setting count to -1 indicates that the loop should play indefinitely.
     /* 0x0C */ u32 sampleEnd; // total number of s16-samples in the sample audio clip
 } AdpcmLoopHeader; // size = 0x30 (or 0x10)
