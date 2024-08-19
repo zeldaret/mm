@@ -1,2 +1,4 @@
+[95mWarning: [97mInvalid pointer indirect: 0 for samplebank SampleBank_2
+[0m
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
