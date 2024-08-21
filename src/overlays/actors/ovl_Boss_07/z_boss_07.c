@@ -1416,7 +1416,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         Boss07_Wrath_SetupIntroCutscene(this, play);
     } else {
         Boss07_Wrath_SetupIdle(this, play, 50);
-        this->whipScale = 1.0f;
+        this->whipLengthScale = 1.0f;
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MAJORAS_WRATH | SEQ_FLAG_ASYNC);
     }
 
@@ -1545,13 +1545,13 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                 }
 
                 if (this->cutsceneTimer >= 110) {
-                    Math_ApproachF(&this->whipScale, 1.0f, 1.0f, 0.05f);
+                    Math_ApproachF(&this->whipLengthScale, 1.0f, 1.0f, 0.05f);
                     this->leftWhip.mobility = this->rightWhip.mobility = 0.01f * 80;
                     this->leftWhip.drag = this->rightWhip.drag = 1.0f;
                 }
 
                 if (this->cutsceneTimer == 127) {
-                    this->whipScale = 1.0f;
+                    this->whipLengthScale = 1.0f;
                 }
 
                 if (this->cutsceneTimer == 120) {
@@ -1851,7 +1851,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer >= (u32)(sREG(94) + 290)) {
                 this->maxDecayPixels = KREG(86) + 25;
-                Math_ApproachZeroF(&this->whipScale, 1.0f, 0.015f);
+                Math_ApproachZeroF(&this->whipLengthScale, 1.0f, 0.015f);
             }
             break;
 
@@ -2428,12 +2428,13 @@ void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_Shock;
 
     temp_v0 = this->whipGrabIndex + 10;
-    this->whipShockIndexHigh = this->whipShockIndexLow = temp_v0;
+    this->whipShockMaxIndex = this->whipShockMinIndex = temp_v0;
 
     temp_v1 = sWhipSegCount - 1;
     if (temp_v1 < temp_v0) {
-        this->whipShockIndexHigh = this->whipShockIndexLow = temp_v1;
+        this->whipShockMaxIndex = this->whipShockMinIndex = temp_v1;
     }
+
     this->frameCounter = 0;
     Audio_PlaySfx(NA_SE_EV_ELECTRIC_EXPLOSION);
 }
@@ -2453,29 +2454,31 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
     }
 
     for (i = 0; i < 4; i++) {
-        if (this->whipShockIndexLow != 0) {
-            this->whipShockIndexLow--;
+        if (this->whipShockMinIndex != 0) {
+            this->whipShockMinIndex--;
         }
     }
 
-    if (this->whipShockIndexLow == 0) {
+    if (this->whipShockMinIndex == 0) {
         Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.3f);
-        Math_ApproachF(&this->unk_32C, 5.0f, 0.5f, 3.0f);
+        Math_ApproachF(&this->shockOrbScale, 5.0f, 0.5f, 3.0f);
         Audio_PlaySfx(NA_SE_EN_BIRI_SPARK - SFX_FLAG);
     } else {
-        this->unk_32C = 0.01f;
+        this->shockOrbScale = 0.01f;
     }
 
-    if (this->unk_32C > 4.0f) {
+    if (this->shockOrbScale > 4.0f) {
         this->actionFunc = Boss07_Wrath_ShockStun;
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathStunAnim, -10.0f);
         this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathStunAnim);
         this->whipGrabIndex = 0;
+
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
             player->csAction = PLAYER_CSACTION_NONE;
         }
+
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y - 10.0f,
                     this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         this->frameCounter = 0;
@@ -2489,12 +2492,12 @@ void Boss07_Wrath_ShockStun(Boss07* this, PlayState* play) {
     this->whipCollisionTimer = 20;
 
     for (i = 0; i < 2; i++) {
-        DECR(this->whipShockIndexHigh);
+        DECR(this->whipShockMaxIndex);
     }
 
     if (this->frameCounter < 70) {
-        Math_ApproachF(&this->unk_32C, 5.0f, 0.5f, 3.0f);
-        Math_ApproachF(&this->unk_330, 2.5f, 0.5f, 2.0f);
+        Math_ApproachF(&this->shockOrbScale, 5.0f, 0.5f, 3.0f);
+        Math_ApproachF(&this->shockSparkScale, 2.5f, 0.5f, 2.0f);
         Audio_PlaySfx(NA_SE_EN_BIRI_SPARK - SFX_FLAG);
         Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.3f);
     }
@@ -2980,8 +2983,8 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         DECR(this->damagedFlashTimer);
         DECR(this->landSfxTimer);
 
-        Math_ApproachZeroF(&this->unk_32C, 1.0f, 0.2f);
-        Math_ApproachZeroF(&this->unk_330, 1.0f, 0.04f);
+        Math_ApproachZeroF(&this->shockOrbScale, 1.0f, 0.2f);
+        Math_ApproachZeroF(&this->shockSparkScale, 1.0f, 0.04f);
 
         this->actionFunc(this, play);
 
@@ -3491,25 +3494,25 @@ void Boss07_Wrath_DrawShocks(Boss07* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx = play->state.gfxCtx);
 
-    if ((this->unk_32C > 0.0f) || (this->unk_330 > 0.0f)) {
+    if ((this->shockOrbScale > 0.0f) || (this->shockSparkScale > 0.0f)) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 0);
 
-        if (this->unk_32C > 0.0f) {
+        if (this->shockOrbScale > 0.0f) {
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
             for (i = 0; i < MAJORAS_WRATH_BODYPART_MAX; i++) {
                 Matrix_Translate(this->bodyPartsPos[i].x, this->bodyPartsPos[i].y, this->bodyPartsPos[i].z,
                                  MTXMODE_NEW);
                 Matrix_ReplaceRotation(&play->billboardMtxF);
-                Matrix_Scale(this->unk_32C, this->unk_32C, this->unk_32C, MTXMODE_APPLY);
+                Matrix_Scale(this->shockOrbScale, this->shockOrbScale, this->shockOrbScale, MTXMODE_APPLY);
                 Matrix_RotateZF(Rand_ZeroFloat(2.0f * M_PIf), MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
             }
 
-            for (i = this->whipShockIndexHigh; i >= this->whipShockIndexLow; i--) {
+            for (i = this->whipShockMaxIndex; i >= this->whipShockMinIndex; i--) {
                 Matrix_Translate(this->rightWhip.pos[i].x, this->rightWhip.pos[i].y, this->rightWhip.pos[i].z,
                                  MTXMODE_NEW);
                 Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -3519,14 +3522,15 @@ void Boss07_Wrath_DrawShocks(Boss07* this, PlayState* play) {
                 gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
             }
         }
-        if (this->unk_330 > 0.0f) {
+
+        if (this->shockSparkScale > 0.0f) {
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial2DL);
 
             for (i = 0; i < MAJORAS_WRATH_BODYPART_MAX * 2; i++) {
                 Matrix_Translate(this->bodyPartsPos[i / 2].x + Rand_CenteredFloat(30.0f),
                                  this->bodyPartsPos[i / 2].y + Rand_CenteredFloat(30.0f),
                                  this->bodyPartsPos[i / 2].z + Rand_CenteredFloat(30.0f), MTXMODE_NEW);
-                Matrix_Scale(this->unk_330, this->unk_330, this->unk_330, MTXMODE_APPLY);
+                Matrix_Scale(this->shockSparkScale, this->shockSparkScale, this->shockSparkScale, MTXMODE_APPLY);
                 Matrix_RotateXFApply(Rand_ZeroFloat(2.0f * M_PIf));
                 Matrix_RotateZF(Rand_ZeroFloat(2.0f * M_PIf), MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3655,16 +3659,16 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
         Boss07_Wrath_UpdateWhips(this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
                                  this->rightWhip.velocity, this->rightWhip.gravity, this->rightWhip.mobility,
                                  this->rightWhip.drag, this->rightWhip.tension, &this->rightWhip.baseRot,
-                                 this->whipGrabIndex, this->whipScale, MAJORAS_WRATH_RIGHT_HAND);
+                                 this->whipGrabIndex, this->whipLengthScale, MAJORAS_WRATH_RIGHT_HAND);
         Boss07_Wrath_UpdateWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
                                  this->leftWhip.velocity, this->leftWhip.gravity, this->leftWhip.mobility,
                                  this->leftWhip.drag, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
-                                 this->whipScale, MAJORAS_WRATH_LEFT_HAND);
+                                 this->whipLengthScale, MAJORAS_WRATH_LEFT_HAND);
     }
 
-    Boss07_Wrath_DrawWhips(this, play, this->rightWhip.pos, this->rightWhip.rot, this->whipScale,
+    Boss07_Wrath_DrawWhips(this, play, this->rightWhip.pos, this->rightWhip.rot, this->whipLengthScale,
                            MAJORAS_WRATH_RIGHT_HAND);
-    Boss07_Wrath_DrawWhips(this, play, this->leftWhip.pos, this->leftWhip.rot, this->whipScale,
+    Boss07_Wrath_DrawWhips(this, play, this->leftWhip.pos, this->leftWhip.rot, this->whipLengthScale,
                            MAJORAS_WRATH_LEFT_HAND);
 
     if (!this->disableShadow) {
@@ -4710,7 +4714,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         DECR(this->disableCollisionTimer);
         DECR(this->fireTimer);
 
-        Math_ApproachZeroF(&this->unk_330, 1.0f, 0.04f);
+        Math_ApproachZeroF(&this->shockSparkScale, 1.0f, 0.04f);
 
         this->actionFunc(this, play);
 

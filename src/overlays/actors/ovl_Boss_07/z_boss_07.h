@@ -190,8 +190,8 @@ typedef struct Boss07 {
     /* 0x01D8 */ s32 maxDecayPixels;
     /* 0x01DC */ Vec3s jointTable[MAJORA_LIMB_COUNT];
     /* 0x0284 */ Vec3s morphTable[MAJORA_LIMB_COUNT];
-    /* 0x032C */ f32 unk_32C; // shock scale related
-    /* 0x0330 */ f32 unk_330; // shock scale related
+    /* 0x032C */ f32 shockOrbScale;
+    /* 0x0330 */ f32 shockSparkScale;
     /* 0x0334 */ Vec3f bodyPartsPos[MAJORA_BODYPART_MAX];
     /* 0x03E8 */ ColliderJntSph bodyCollider;
     /* 0x0408 */ ColliderJntSphElement bodyColliderElements[MAJORA_COLLIDER_BODYPART_MAX];
@@ -200,9 +200,9 @@ typedef struct Boss07 {
     /* 0x0728 */ ColliderCylinder unusedCollider;
     /* 0x0774 */ u8 activateRemains;
     /* 0x0778 */ s32 whipTopIndex; // whip top spawn index
-    /* 0x077C */ f32 whipScale;
-    /* 0x0780 */ s32 whipShockIndexHigh; // whip shock index
-    /* 0x0784 */ s32 whipShockIndexLow; // whip shock index
+    /* 0x077C */ f32 whipLengthScale;
+    /* 0x0780 */ s32 whipShockMaxIndex;
+    /* 0x0784 */ s32 whipShockMinIndex;
     /* 0x0788 */ MajoraWhip rightWhip;
     /* 0x0F7C */ s16 whipWrapIndex;
     /* 0x0F7E */ s16 whipGrabIndex;
