@@ -773,7 +773,7 @@ beginseg
     include "$(BUILD_DIR)/src/audio/session_config.o"
     include "$(BUILD_DIR)/src/code/jpegutils.o"
     include "$(BUILD_DIR)/src/code/jpegdecoder.o"
-    include_data_with_rodata "$(BUILD_DIR)/src/code/z_game_over.o"
+    include "$(BUILD_DIR)/src/code/z_game_over.o"
     include "$(BUILD_DIR)/src/code/z_construct.o"
     include "$(BUILD_DIR)/src/audio/tables/soundfont_table.o"
     include "$(BUILD_DIR)/assets/audio/sequence_font_table.o"
