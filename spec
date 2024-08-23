@@ -38,7 +38,6 @@ beginseg
     include "$(BUILD_DIR)/src/boot/O2/padutils.o"
     include "$(BUILD_DIR)/src/boot/O2/stackcheck.o"
     include "$(BUILD_DIR)/src/boot/O2/gfxprint.o"
-    include "$(BUILD_DIR)/data/boot/gfxprint.data.o"
     include "$(BUILD_DIR)/src/boot/O2/mtxuty-cvt.o"
     include "$(BUILD_DIR)/src/boot/O2/debug.o"
     include "$(BUILD_DIR)/src/boot/O2/system_heap.o"
