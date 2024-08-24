@@ -589,7 +589,6 @@ beginseg
     include "$(BUILD_DIR)/src/audio/lib/data.o"
     include "$(BUILD_DIR)/src/audio/lib/synthesis.o"
     include "$(BUILD_DIR)/src/audio/lib/heap.o"
-    include "$(BUILD_DIR)/data/code/audio_heap.bss.o"
     include "$(BUILD_DIR)/src/audio/lib/load.o"
     include "$(BUILD_DIR)/src/audio/lib/thread.o"
     include "$(BUILD_DIR)/src/audio/lib/dcache.o"

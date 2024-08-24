@@ -1396,6 +1396,9 @@ typedef struct {
     /* 0xC */ u8 newMedium;
 } StorageChange; // size = 0x10
 
+s32 D_801FD120;
+static s32 sBssPad[3];
+
 void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
     if ((sample != NULL) && ((sample->medium == change->newMedium) || (D_801FD120 != 1)) &&
         ((sample->medium == MEDIUM_RAM) || (D_801FD120 != 0))) {

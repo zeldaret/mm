@@ -48,8 +48,6 @@ extern AudioTable gSampleBankTable;
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 
-extern s32 D_801FD120;
-
 extern u8 sResetAudioHeapTimer;
 extern u16 sResetAudioHeapFadeReverbVolume;
 extern u16 sResetAudioHeapFadeReverbVolumeStep;
