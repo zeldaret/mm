@@ -7,7 +7,21 @@
 #define GFXP_FLAG_ENLARGE (1 << 6)
 #define GFXP_FLAG_OPEN (1 << 7)
 
-#include "assets/boot/gfxprint/gfxprint.c"
+u64 sGfxPrintFontTLUT[] = {
+#include "assets/boot/gfxprint/gfx_print_font_tlut.rgba16.inc.c"
+};
+
+u64 sGfxPrintRainbowTLUT[] = {
+#include "assets/boot/gfxprint/gfx_print_rainbow_tlut.rgba16.inc.c"
+};
+
+u8 sGfxPrintRainbowFont[] = {
+#include "assets/boot/gfxprint/sGfxPrintRainbowFont.bin.inc.c"
+};
+
+u8 sGfxPrintFont[] = {
+#include "assets/boot/gfxprint/sGfxPrintFont.bin.inc.c"
+};
 
 void GfxPrint_Setup(GfxPrint* this) {
     s32 width = 16;
