@@ -576,13 +576,13 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
     include "$(BUILD_DIR)/src/code/sys_rumble.o"
-    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     include "$(BUILD_DIR)/src/code/code_80183070.o"
     include "$(BUILD_DIR)/src/code/c_keyframe.o"
     include "$(BUILD_DIR)/src/code/sys_slowly.o"
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
     include "$(BUILD_DIR)/asm/code/kanread.text.o" // handwritten
     include "$(BUILD_DIR)/src/code/osFlash.o"
+    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     pad_text
     pad_text
     pad_text
