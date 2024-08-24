@@ -48,9 +48,6 @@ extern AudioTable gSampleBankTable;
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 
-extern u8 sResetAudioHeapTimer;
-extern u16 sResetAudioHeapFadeReverbVolume;
-extern u16 sResetAudioHeapFadeReverbVolumeStep;
 extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments
