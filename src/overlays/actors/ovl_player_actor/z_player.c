@@ -6361,7 +6361,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     this->av1.actionVar1 = 0;
     this->unk_397 = this->doorType;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    Actor_OffsetOfPointInActorCoords(&doorSliding->dyna.actor, &sp38, &this->actor.world.pos);
+    Actor_WorldToActorCoords(&doorSliding->dyna.actor, &sp38, &this->actor.world.pos);
 
     func_80835BF8(&this->actor.world.pos, doorSliding->dyna.actor.shape.rot.y,
                   (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);

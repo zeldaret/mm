@@ -61,7 +61,7 @@ void BgCtowerRot_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerStoneDoorCol);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y - 0x4000;
     }
-    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z < 0.0f) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * 80.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 80.0f);
@@ -83,7 +83,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, PlayState* play) {
     Vec3f offset;
     f32 rotZ;
 
-    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     rotZ = CLAMP(1100.0f - offset.z, 0.0f, 1000.0f);
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_DUNGEON0);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
@@ -116,7 +116,7 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f offset;
 
-    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
         CutsceneManager_Queue(this->dyna.actor.csId);
