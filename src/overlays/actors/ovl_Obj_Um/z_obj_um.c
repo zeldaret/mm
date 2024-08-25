@@ -7,6 +7,7 @@
 #include "z_obj_um.h"
 #include "z64horse.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -1864,7 +1865,7 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
     s32 i;
     Vec3f sp70;
 
-    EffectSsHitmark_SpawnFixedScale(play, 0, potPos);
+    EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, potPos);
 
     for (i = 0; i < 20; i++) {
         sp70.x = (Rand_ZeroOne() * 20.0f) - 10.0f;
@@ -1942,7 +1943,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                 if (this->potsLife[i] == 1) {
                     ObjUm_SpawnFragments(play, &calcPotPos);
                 } else {
-                    EffectSsHitmark_SpawnFixedScale(play, 0, &calcPotPos);
+                    EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, &calcPotPos);
                 }
             }
             Matrix_Pop();
