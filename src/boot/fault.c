@@ -55,7 +55,6 @@
 FaultMgr* sFaultInstance;
 f32 sFaultTimeTotal; // read but not set anywhere
 
-// data
 const char* sCpuExceptions[] = {
     "Interrupt",
     "TLB modification",
@@ -348,9 +347,9 @@ void Fault_DrawCornerRec(u16 color) {
 
 void Fault_PrintFReg(s32 index, f32* value) {
     u32 raw = *(u32*)value;
-    s32 exp = ((raw & 0x7F800000) >> 0x17) - 0x7F;
+    s32 exp = ((raw & 0x7F800000) >> 23) - 127;
 
-    if (((exp > -0x7F) && (exp <= 0x7F)) || (raw == 0)) {
+    if (((exp > -127) && (exp <= 127)) || (raw == 0)) {
         FaultDrawer_Printf("F%02d:%14.7e ", index, *value);
     } else {
         // Print subnormal floats as their IEEE-754 hex representation
@@ -360,9 +359,9 @@ void Fault_PrintFReg(s32 index, f32* value) {
 
 void Fault_LogFReg(s32 index, f32* value) {
     u32 raw = *(u32*)value;
-    s32 exp = ((raw & 0x7F800000) >> 0x17) - 0x7F;
+    s32 exp = ((raw & 0x7F800000) >> 23) - 127;
 
-    if (((exp > -0x7F) && (exp <= 0x7F)) || (raw == 0)) {
+    if (((exp > -127) && (exp <= 127)) || (raw == 0)) {
         osSyncPrintf("F%02d:%14.7e ", index, *value);
     } else {
         osSyncPrintf("F%02d:  %08x(16) ", index, *(u32*)value);
@@ -444,22 +443,22 @@ void Fault_PrintThreadContext(OSThread* thread) {
     Fault_PrintFReg(6, &threadCtx->fp6.f.f_even);
     FaultDrawer_Printf("\n");
     Fault_PrintFReg(8, &threadCtx->fp8.f.f_even);
-    Fault_PrintFReg(0xA, &threadCtx->fp10.f.f_even);
+    Fault_PrintFReg(10, &threadCtx->fp10.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0xC, &threadCtx->fp12.f.f_even);
-    Fault_PrintFReg(0xE, &threadCtx->fp14.f.f_even);
+    Fault_PrintFReg(12, &threadCtx->fp12.f.f_even);
+    Fault_PrintFReg(14, &threadCtx->fp14.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x10, &threadCtx->fp16.f.f_even);
-    Fault_PrintFReg(0x12, &threadCtx->fp18.f.f_even);
+    Fault_PrintFReg(16, &threadCtx->fp16.f.f_even);
+    Fault_PrintFReg(18, &threadCtx->fp18.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x14, &threadCtx->fp20.f.f_even);
-    Fault_PrintFReg(0x16, &threadCtx->fp22.f.f_even);
+    Fault_PrintFReg(20, &threadCtx->fp20.f.f_even);
+    Fault_PrintFReg(22, &threadCtx->fp22.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x18, &threadCtx->fp24.f.f_even);
-    Fault_PrintFReg(0x1A, &threadCtx->fp26.f.f_even);
+    Fault_PrintFReg(24, &threadCtx->fp24.f.f_even);
+    Fault_PrintFReg(26, &threadCtx->fp26.f.f_even);
     FaultDrawer_Printf("\n");
-    Fault_PrintFReg(0x1C, &threadCtx->fp28.f.f_even);
-    Fault_PrintFReg(0x1E, &threadCtx->fp30.f.f_even);
+    Fault_PrintFReg(28, &threadCtx->fp28.f.f_even);
+    Fault_PrintFReg(30, &threadCtx->fp30.f.f_even);
     FaultDrawer_Printf("\n");
     FaultDrawer_SetCharPad(0, 0);
 
@@ -1047,7 +1046,7 @@ void Fault_ThreadEntry(void* arg) {
             Fault_ProcessClients();
 
             // Memory dump page
-            Fault_DrawMemDump((u32)(faultedThread->context.pc - 0x100), (u32)faultedThread->context.sp, 0, 0);
+            Fault_DrawMemDump(faultedThread->context.pc - 0x100, faultedThread->context.sp, 0, 0);
             Fault_DrawStackTrace(faultedThread, 1);
             Fault_LogStackTrace(faultedThread, 1);
             Fault_WaitForInput();
