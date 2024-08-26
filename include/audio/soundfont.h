@@ -10,7 +10,7 @@ typedef struct AdpcmLoopHeader {
     /* 0x04 */ u32 loopEnd; // s16 sample position where the loop ends
     /* 0x08 */ u32 count; // The number of times the loop is played before the sound completes. Setting count to -1 indicates that the loop should play indefinitely.
     /* 0x0C */ u32 sampleEnd; // total number of s16-samples in the sample audio clip
-} AdpcmLoopHeader; // size = 0x30 (or 0x10)
+} AdpcmLoopHeader; // size = 0x10
 
 typedef struct AdpcmLoop {
     /* 0x00 */ AdpcmLoopHeader header;
@@ -18,9 +18,9 @@ typedef struct AdpcmLoop {
 } AdpcmLoop; // size = 0x30 (or 0x10)
 
 typedef struct AdpcmBookHeader {
-    /* 0x00 */ s32 order;
-    /* 0x04 */ s32 numPredictors;
-} AdpcmBookHeader;
+    /* 0x0 */ s32 order;
+    /* 0x4 */ s32 numPredictors;
+} AdpcmBookHeader; // size = 0x8
 
 /**
  * A table of prediction coefficients that the coder selects from to optimize sound quality.
