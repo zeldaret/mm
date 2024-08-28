@@ -903,7 +903,7 @@ s32 AudioThread_GetSamplePos(s32 seqPlayerIndex, s32 channelIndex, s32 layerInde
                 if (tunedSample == NULL) {
                     return false;
                 }
-                *loopEnd = tunedSample->sample->loop->loopEnd;
+                *loopEnd = tunedSample->sample->loop->header.loopEnd;
                 *samplePosInt = note->synthesisState.samplePosInt;
                 return true;
             }

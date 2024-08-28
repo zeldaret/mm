@@ -163,9 +163,12 @@ SCHC_FLAGS  :=
 AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 SAMPLECONV    := tools/audio/sampleconv/sampleconv
 SBC           := tools/audio/sbc
+SFC           := tools/audio/sfc
+SFPATCH       := tools/audio/sfpatch
 ATBLGEN       := tools/audio/atblgen
 
 SBCFLAGS := --matching
+SFCFLAGS := --matching
 
 # Command to replace $(BUILD_DIR) in some files with the build path.
 # We can't use the C preprocessor for this because it won't substitute inside string literals.
@@ -173,7 +176,7 @@ BUILD_DIR_REPLACE := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
 
 CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
 
-WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594
+WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
 ASFLAGS          := -march=vr4300 -32 -G0
 GBI_DEFINES 	 := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
 COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
@@ -221,9 +224,11 @@ ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell fi
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
   SAMPLE_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
   SAMPLEBANK_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samplebanks -type d)
+  SOUNDFONT_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/soundfonts -type d)
 else
   SAMPLE_EXTRACT_DIRS :=
   SAMPLEBANK_EXTRACT_DIRS :=
+  SOUNDFONT_EXTRACT_DIRS :=
 endif
 
 ifneq ($(wildcard assets/audio/samples),)
@@ -238,6 +243,12 @@ else
   SAMPLEBANK_DIRS :=
 endif
 
+ifneq ($(wildcard assets/audio/soundfonts),)
+  SOUNDFONT_DIRS := $(shell find assets/audio/soundfonts -type d)
+else
+  SOUNDFONT_DIRS :=
+endif
+
 SAMPLE_FILES         := $(foreach dir,$(SAMPLE_DIRS),$(wildcard $(dir)/*.wav))
 SAMPLE_EXTRACT_FILES := $(foreach dir,$(SAMPLE_EXTRACT_DIRS),$(wildcard $(dir)/*.wav))
 AIFC_FILES           := $(foreach f,$(SAMPLE_FILES),$(BUILD_DIR)/$(f:.wav=.aifc)) $(foreach f,$(SAMPLE_EXTRACT_FILES:.wav=.aifc),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
@@ -249,6 +260,13 @@ SAMPLEBANK_EXTRACT_XMLS := $(foreach dir,$(SAMPLEBANK_EXTRACT_DIRS),$(wildcard $
 SAMPLEBANK_BUILD_XMLS   := $(foreach f,$(SAMPLEBANK_XMLS),$(BUILD_DIR)/$f) $(foreach f,$(SAMPLEBANK_EXTRACT_XMLS),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
 SAMPLEBANK_O_FILES      := $(foreach f,$(SAMPLEBANK_BUILD_XMLS),$(f:.xml=.o))
 SAMPLEBANK_DEP_FILES    := $(foreach f,$(SAMPLEBANK_O_FILES),$(f:.o=.d))
+
+SOUNDFONT_XMLS         := $(foreach dir,$(SOUNDFONT_DIRS),$(wildcard $(dir)/*.xml))
+SOUNDFONT_EXTRACT_XMLS := $(foreach dir,$(SOUNDFONT_EXTRACT_DIRS),$(wildcard $(dir)/*.xml))
+SOUNDFONT_BUILD_XMLS   := $(foreach f,$(SOUNDFONT_XMLS),$(BUILD_DIR)/$f) $(foreach f,$(SOUNDFONT_EXTRACT_XMLS),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%))
+SOUNDFONT_O_FILES      := $(foreach f,$(SOUNDFONT_BUILD_XMLS),$(f:.xml=.o))
+SOUNDFONT_HEADERS      := $(foreach f,$(SOUNDFONT_BUILD_XMLS),$(f:.xml=.h))
+SOUNDFONT_DEP_FILES    := $(foreach f,$(SOUNDFONT_O_FILES),$(f:.o=.d))
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
@@ -299,12 +317,14 @@ $(shell mkdir -p $(foreach dir, \
                       $(ASSET_BIN_DIRS) \
                       $(ASSET_BIN_DIRS_C_FILES) \
                       $(SAMPLE_DIRS) \
-                      $(SAMPLEBANK_DIRS), \
+                      $(SAMPLEBANK_DIRS) \
+                      $(SOUNDFONT_DIRS), \
                     $(BUILD_DIR)/$(dir)))
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets),)
 $(shell mkdir -p $(foreach dir, \
                       $(SAMPLE_EXTRACT_DIRS) \
-                      $(SAMPLEBANK_EXTRACT_DIRS), \
+                      $(SAMPLEBANK_EXTRACT_DIRS) \
+                      $(SOUNDFONT_EXTRACT_DIRS), \
                     $(dir:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)))
 endif
 
@@ -384,7 +404,7 @@ $(ROMC): $(ROM) $(ELF) $(BUILD_DIR)/dmadata/compress_ranges.txt
 	$(PYTHON) -m ipl3checksum sum --cic 6105 --update $@
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) $(OVL_RELOC_FILES) $(LDSCRIPT) $(LD_FINAL_FILES) \
-        $(SAMPLEBANK_O_FILES)
+        $(SAMPLEBANK_O_FILES) $(SOUNDFONT_O_FILES)
 	$(LD) -T $(LDSCRIPT) -T $(LD_FINAL_FILES) --no-check-sections --accept-unknown-input-arch --emit-relocs -Map $(MAP) -o $@
 
 ## Order-only prerequisites 
@@ -560,6 +580,10 @@ $(BUILD_DIR)/%.schl.inc: %.schl
 # Audio
 
 AUDIO_BUILD_DEBUG ?= 0
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+  # for debugging only, make soundfonts depend on samplebanks so they can be linked against
+  $(BUILD_DIR)/assets/audio/soundfonts/%.o: $(SAMPLEBANK_O_FILES)
+endif
 
 # first build samples...
 
@@ -610,14 +634,58 @@ ifeq ($(AUDIO_BUILD_DEBUG),1)
 	@cmp $(@:.o=.bin) $(patsubst $(BUILD_DIR)/assets/audio/samplebanks/%,$(EXTRACTED_DIR)/baserom_audiotest/audiotable_files/%,$(@:.o=.bin)) && echo "$(<F) OK"
 endif
 
+# also assemble the soundfonts and generate the associated headers...
+
+$(BUILD_DIR)/assets/audio/soundfonts/%.xml: assets/audio/soundfonts/%.xml
+	cat $< | $(BUILD_DIR_REPLACE) > $@
+
+$(BUILD_DIR)/assets/audio/soundfonts/%.xml: $(EXTRACTED_DIR)/assets/audio/soundfonts/%.xml
+	cat $< | $(BUILD_DIR_REPLACE) > $@
+
+.PRECIOUS: $(BUILD_DIR)/assets/audio/soundfonts/%.c $(BUILD_DIR)/assets/audio/soundfonts/%.h $(BUILD_DIR)/assets/audio/soundfonts/%.name
+$(BUILD_DIR)/assets/audio/soundfonts/%.c $(BUILD_DIR)/assets/audio/soundfonts/%.h $(BUILD_DIR)/assets/audio/soundfonts/%.name: $(BUILD_DIR)/assets/audio/soundfonts/%.xml | $(SAMPLEBANK_BUILD_XMLS) $(AIFC_FILES)
+# This rule can be triggered for either the .c or .h file, so $@ may refer to either the .c or .h file. A simple
+# substitution $(@:.c=.h) will fail ~50% of the time with -j. Instead, don't assume anything about the suffix of $@.
+	$(SFC) $(SFCFLAGS)  --makedepend $(basename $@).d $< $(basename $@).c $(basename $@).h $(basename $@).name
+
+-include $(SOUNDFONT_DEP_FILES)
+
+$(BUILD_DIR)/assets/audio/soundfonts/%.o: $(BUILD_DIR)/assets/audio/soundfonts/%.c $(BUILD_DIR)/assets/audio/soundfonts/%.name #$(SAMPLEBANK_O_FILES) # (for debugging only)
+# compile c to unlinked object
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -I include/audio -o $(@:.o=.tmp) $<
+# partial link
+	$(LD) -r -T linker_scripts/soundfont.ld $(@:.o=.tmp) -o $(@:.o=.tmp2)
+# patch defined symbols to be ABS symbols so that they remain file-relative offsets forever
+	$(SFPATCH) $(@:.o=.tmp2) $(@:.o=.tmp2)
+# write start and size symbols afterwards, filename != symbolic name so source symbolic name from the .name file written by sfc
+	$(OBJCOPY) --add-symbol $$(cat $(<:.c=.name))_Start=.rodata:0,global --redefine-sym __LEN__=$$(cat $(<:.c=.name))_Size $(@:.o=.tmp2) $@
+# cleanup temp files
+	@$(RM) $(@:.o=.tmp) $(@:.o=.tmp2)
+	$(RM_MDEBUG)
+ifeq ($(AUDIO_BUILD_DEBUG),1)
+	$(LD) $(foreach f,$(SAMPLEBANK_O_FILES),-R $f) -T linker_scripts/soundfont.ld $@ -o $(@:.o=.elf)
+	$(OBJCOPY) -O binary -j.rodata $(@:.o=.elf) $(@:.o=.bin)
+	@(cmp $(@:.o=.bin) $(patsubst $(BUILD_DIR)/assets/audio/soundfonts/%,$(EXTRACTED_DIR)/baserom_audiotest/audiobank_files/%,$(@:.o=.bin)) && echo "$(<F) OK" || (mkdir -p NONMATCHINGS/soundfonts && cp $(@:.o=.bin) NONMATCHINGS/soundfonts/$(@F:.o=.bin)))
+endif
+
 # put together the tables
 
 $(BUILD_DIR)/assets/audio/samplebank_table.h: $(SAMPLEBANK_BUILD_XMLS)
 	$(ATBLGEN) --banks $@ $^
 
+$(BUILD_DIR)/assets/audio/soundfont_table.h: $(SOUNDFONT_BUILD_XMLS) $(SAMPLEBANK_BUILD_XMLS)
+	$(ATBLGEN) --fonts $@ $(SOUNDFONT_BUILD_XMLS)
+
 # build the tables into objects, move data -> rodata
 
 $(BUILD_DIR)/src/audio/tables/samplebank_table.o: src/audio/tables/samplebank_table.c $(BUILD_DIR)/assets/audio/samplebank_table.h
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
+	$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@
+	@$(RM) $(@:.o=.tmp)
+	$(RM_MDEBUG)
+
+$(BUILD_DIR)/src/audio/tables/soundfont_table.o: src/audio/tables/soundfont_table.c $(BUILD_DIR)/assets/audio/soundfont_table.h $(SOUNDFONT_HEADERS)
 	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
 	$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@

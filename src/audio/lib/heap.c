@@ -1694,9 +1694,9 @@ void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 isFirst
     reverb->sample.medium = MEDIUM_RAM;
     reverb->sample.size = reverb->delayNumSamples * SAMPLE_SIZE;
     reverb->sample.sampleAddr = (u8*)reverb->leftReverbBuf;
-    reverb->loop.start = 0;
-    reverb->loop.count = 1;
-    reverb->loop.loopEnd = reverb->delayNumSamples;
+    reverb->loop.header.start = 0;
+    reverb->loop.header.count = 1;
+    reverb->loop.header.loopEnd = reverb->delayNumSamples;
 
     AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_LEFT, settings->lowPassFilterCutoffLeft, isFirstInit);
     AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_RIGHT, settings->lowPassFilterCutoffRight,
