@@ -198,17 +198,17 @@ typedef struct Boss07 {
     /* 0x06C8 */ ColliderJntSph kickCollider;
     /* 0x06E8 */ ColliderJntSphElement kickColliderElements[1];
     /* 0x0728 */ ColliderCylinder unusedCollider;
-    /* 0x0774 */ u8 activateRemains;
-    /* 0x0778 */ s32 whipTopIndex; // whip top spawn index
+    /* 0x0774 */ u8 startRemainsCs;
+    /* 0x0778 */ s32 whipTopIndex; // unlike other index variables, this is an index from the *end* of the whip, not from the beginning of it.
     /* 0x077C */ f32 whipLengthScale;
     /* 0x0780 */ s32 whipShockMaxIndex;
     /* 0x0784 */ s32 whipShockMinIndex;
     /* 0x0788 */ MajoraWhip rightWhip;
-    /* 0x0F7C */ s16 whipWrapIndex;
-    /* 0x0F7E */ s16 whipGrabIndex;
+    /* 0x0F7C */ s16 whipWrapStartIndex;
+    /* 0x0F7E */ s16 whipWrapEndOffset;
     /* 0x0F80 */ Vec3f whipGrabPos;
-    /* 0x0F8C */ f32 unk_F8C;
-    /* 0x0F90 */ f32 unk_F90;
+    /* 0x0F8C */ f32 whipWrapRotY;
+    /* 0x0F90 */ f32 whipWrapRotX;
     /* 0x0F94 */ MajoraWhip leftWhip;
     /* 0x1788 */ Vec3f incarnationFeetPos[2];
     /* 0x17A0 */ Vec3f incarnationLeftHandPos;

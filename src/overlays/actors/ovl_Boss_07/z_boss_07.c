@@ -1156,7 +1156,7 @@ void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel) {
         }
 
         this->disableCollisionTimer = 10;
-        this->whipGrabIndex = 0;
+        this->whipWrapEndOffset = 0;
 
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
@@ -2360,9 +2360,9 @@ void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play) {
     player->actor.world.pos = this->whipGrabPos;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->whipCollisionTimer = 20;
-    this->whipWrapIndex++;
+    this->whipWrapStartIndex++;
 
-    if (this->frameCounter > (s16)(46 - this->whipGrabIndex)) {
+    if (this->frameCounter > (s16)(46 - this->whipWrapEndOffset)) {
         Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_THROW_OLD);
         Audio_PlaySfx(NA_SE_EN_LAST3_COIL_ATTACK_OLD);
         this->actionFunc = Boss07_Wrath_ThrowPlayer;
@@ -2387,7 +2387,7 @@ void Boss07_Wrath_ThrowPlayer(Boss07* this, PlayState* play) {
     this->whipCollisionTimer = 20;
 
     if (this->frameCounter == 6) {
-        this->whipGrabIndex = 0;
+        this->whipWrapEndOffset = 0;
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
@@ -2427,7 +2427,7 @@ void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play) {
 
     this->actionFunc = Boss07_Wrath_Shock;
 
-    temp_v0 = this->whipGrabIndex + 10;
+    temp_v0 = this->whipWrapEndOffset + 10;
     this->whipShockMaxIndex = this->whipShockMinIndex = temp_v0;
 
     temp_v1 = sWhipSegCount - 1;
@@ -2449,8 +2449,8 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->whipCollisionTimer = 20;
 
-    if (this->frameCounter <= (s16)(46 - this->whipGrabIndex)) {
-        this->whipWrapIndex++;
+    if (this->frameCounter <= (s16)(46 - this->whipWrapEndOffset)) {
+        this->whipWrapStartIndex++;
     }
 
     for (i = 0; i < 4; i++) {
@@ -2471,7 +2471,7 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
         this->actionFunc = Boss07_Wrath_ShockStun;
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathStunAnim, -10.0f);
         this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathStunAnim);
-        this->whipGrabIndex = 0;
+        this->whipWrapEndOffset = 0;
 
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
@@ -2700,14 +2700,14 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                         player->actor.parent = &this->actor;
                         AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4,
                                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-                        this->whipWrapIndex = 0;
-                        this->whipGrabIndex = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
+                        this->whipWrapStartIndex = 0;
+                        this->whipWrapEndOffset = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
                         dx1 = player->actor.world.pos.x - this->rightWhip.basePos.x;
                         dy1 = player->actor.world.pos.y - this->rightWhip.basePos.y + 50.0f;
                         dz1 = player->actor.world.pos.z - this->rightWhip.basePos.z;
                         dxz1 = sqrtf(SQ(dx1) + SQ(dz1));
-                        this->unk_F8C = Math_Atan2F_XY(dz1, dx1);
-                        this->unk_F90 = -Math_Atan2F_XY(dxz1, dy1);
+                        this->whipWrapRotY = Math_Atan2F_XY(dz1, dx1);
+                        this->whipWrapRotX = -Math_Atan2F_XY(dxz1, dy1);
                         this->actionFunc = Boss07_Wrath_GrabPlayer;
                         this->frameCounter = 0;
                         this->rightWhip.tension = 0.0f;
@@ -2816,7 +2816,7 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
         } else {
             this->damagedTimer = 15;
             Boss07_Wrath_SetupStunned(this, play);
-            this->whipGrabIndex = 0;
+            this->whipWrapEndOffset = 0;
             if (&this->actor == player->actor.parent) {
                 player->av2.actionVar2 = 101;
                 player->actor.parent = NULL;
@@ -3175,8 +3175,8 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     if (grabIndex != 0) {
         spAC.z = 200.0f;
         // replaces the tension direction with the direction from Wrath's hand to Link
-        Matrix_RotateYF(this->unk_F8C, MTXMODE_NEW);
-        Matrix_RotateXFApply(this->unk_F90);
+        Matrix_RotateYF(this->whipWrapRotY, MTXMODE_NEW);
+        Matrix_RotateXFApply(this->whipWrapRotX);
     } else {
         spAC.z = tension;
     }
@@ -3195,7 +3195,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             shapeForce.z = (6 - i) * handForce.z * 0.2f;
         } else if (grabIndex != 0) {
             // wraps the whip around Link
-            if ((i >= grabIndex) && (i < (s16)(grabIndex + this->whipWrapIndex))) {
+            if ((i >= grabIndex) && (i < (s16)(grabIndex + this->whipWrapStartIndex))) {
                 shapeForce.y = 0.0f;
                 shapeForce.x = sinf(this->actor.yawTowardsPlayer * M_PIf / 0x8000 + (j * 1.4f)) * 100.0f;
                 shapeForce.z = cosf(this->actor.yawTowardsPlayer * M_PIf / 0x8000 + (j * 1.4f)) * 100.0f;
@@ -3659,7 +3659,7 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
         Boss07_Wrath_UpdateWhips(this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
                                  this->rightWhip.velocity, this->rightWhip.gravity, this->rightWhip.mobility,
                                  this->rightWhip.drag, this->rightWhip.tension, &this->rightWhip.baseRot,
-                                 this->whipGrabIndex, this->whipLengthScale, MAJORAS_WRATH_RIGHT_HAND);
+                                 this->whipWrapEndOffset, this->whipLengthScale, MAJORAS_WRATH_RIGHT_HAND);
         Boss07_Wrath_UpdateWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
                                  this->leftWhip.velocity, this->leftWhip.gravity, this->leftWhip.mobility,
                                  this->leftWhip.drag, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
@@ -5246,7 +5246,7 @@ void Boss07_Mask_Damaged(Boss07* this, PlayState* play) {
     }
 
     if ((this->timers[0] == 15) && ((s8)this->actor.colChkInfo.health < 10)) {
-        this->activateRemains = true;
+        this->startRemainsCs = true;
     }
 
     if (this->timers[0] == 0) {
@@ -7345,7 +7345,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
 
     switch (this->cutsceneState) {
         case MAJORA_BATTLE_HANDLER_CS_STATE_0:
-            if ((sMajorasMask != NULL) && sMajorasMask->activateRemains) {
+            if ((sMajorasMask != NULL) && sMajorasMask->startRemainsCs) {
                 this->cutsceneState = MAJORA_BATTLE_HANDLER_CS_STATE_1;
                 this->cutsceneTimer = 0;
             }
