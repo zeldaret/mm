@@ -7,8 +7,8 @@
 
 import argparse
 
-from audio.extraction.audio_extract import extract_audio_for_version, GameVersionInfo, MMLVersion
-from audio.extraction.disassemble_sequence import MMLVersion, SqSection
+from audio.extraction.audio_extract import extract_audio_for_version, GameVersionInfo
+from audio.extraction.disassemble_sequence import MMLVersion, SequenceTableSpec, SqSection
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="baserom audio asset extractor")
@@ -172,31 +172,31 @@ if __name__ == '__main__':
     audiotable_buffer_bugs = ()
 
     # Tables have no clear start and end in a sequence. Mark the locations of all tables that appear in sequences.
-    seq_disas_hacks = {
-        # sequence number : ((start offset, number of entries, addend, section_type), ...)
+    seq_disas_tables = {
+        # sequence number : (spec, ...)
         0 : (
-                (0x011E,   8, 0, SqSection.TABLE),
-                (0x012E, 464, 0, SqSection.CHAN),
-                (0x18B2,  48, 0, SqSection.LAYER),
-                (0x1990, 112, 0, SqSection.CHAN),
-                (0x23D8,   8, 0, SqSection.TABLE),
-                (0x23E8, 464, 0, SqSection.CHAN),
-                (0x566E,   8, 0, SqSection.TABLE),
-                (0x567E, 733, 0, SqSection.CHAN),
-                (0xA4C1,  96, 0, SqSection.CHAN),
-                (0xB163,  16, 0, SqSection.CHAN),
-                (0xB2FE,   8, 0, SqSection.TABLE),
-                (0xB30E, 390, 0, SqSection.CHAN),
+                SequenceTableSpec(0x011E,   8, 0, SqSection.TABLE),
+                SequenceTableSpec(0x012E, 464, 0, SqSection.CHAN),
+                SequenceTableSpec(0x18B2,  48, 0, SqSection.LAYER),
+                SequenceTableSpec(0x1990, 112, 0, SqSection.CHAN),
+                SequenceTableSpec(0x23D8,   8, 0, SqSection.TABLE),
+                SequenceTableSpec(0x23E8, 464, 0, SqSection.CHAN),
+                SequenceTableSpec(0x566E,   8, 0, SqSection.TABLE),
+                SequenceTableSpec(0x567E, 733, 0, SqSection.CHAN),
+                SequenceTableSpec(0xA4C1,  96, 0, SqSection.CHAN),
+                SequenceTableSpec(0xB163,  16, 0, SqSection.CHAN),
+                SequenceTableSpec(0xB2FE,   8, 0, SqSection.TABLE),
+                SequenceTableSpec(0xB30E, 390, 0, SqSection.CHAN),
 
             ),
         1 : (
-                (0x018A, 20, 0, SqSection.LAYER),
-                (0x01B2, 20, 0, SqSection.LAYER),
-                (0x01DA, 20, 0, SqSection.LAYER),
-                (0x0202, 20, 0, SqSection.LAYER),
-                (0x022A, 20, 1, SqSection.LAYER),
-                (0x0252, 20, 1, SqSection.LAYER),
-                (0x027A, 20, 1, SqSection.LAYER),
+                SequenceTableSpec(0x018A, 20, 0, SqSection.LAYER),
+                SequenceTableSpec(0x01B2, 20, 0, SqSection.LAYER),
+                SequenceTableSpec(0x01DA, 20, 0, SqSection.LAYER),
+                SequenceTableSpec(0x0202, 20, 0, SqSection.LAYER),
+                SequenceTableSpec(0x022A, 20, 1, SqSection.LAYER),
+                SequenceTableSpec(0x0252, 20, 1, SqSection.LAYER),
+                SequenceTableSpec(0x027A, 20, 1, SqSection.LAYER),
             ),
     }
 
@@ -209,6 +209,6 @@ if __name__ == '__main__':
                                    handwritten_sequences,
                                    fake_banks,
                                    audiotable_buffer_bugs,
-                                   seq_disas_hacks)
+                                   seq_disas_tables)
 
     extract_audio_for_version(version_info, args.extracted_dir, args.read_xml, args.write_xml)
