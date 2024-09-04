@@ -86,18 +86,13 @@ def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, man
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
     parser.add_argument(
-        "--baserom-segments",
-        dest="baserom_segments_dir",
+        "baserom_segments_dir",
         type=Path,
-        required=True,
         help="Directory of uncompressed ROM segments",
     )
     parser.add_argument(
-        "-o",
-        "--output-dir",
-        dest="output_dir",
+        "output_dir",
         type=Path,
-        required=True,
         help="Output directory to place files in",
     )
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")

@@ -448,22 +448,22 @@ venv:
 
 setup:
 	$(MAKE) -C tools
-	$(PYTHON) tools/buildtools/decompress_baserom.py --mm-version $(VERSION)
-	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 -o $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
-	$(PYTHON) tools/buildtools/extract_yars.py --baserom-segments $(EXTRACTED_DIR)/baserom --mm-version $(VERSION)
+	$(PYTHON) tools/buildtools/decompress_baserom.py -v $(VERSION)
+	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
+	$(PYTHON) tools/buildtools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 # TODO this is a temporary rule for testing audio, to be removed
 setup-audio:
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 assets:
-	$(PYTHON) extract_assets.py --baserom-segments $(EXTRACTED_DIR)/baserom -o assets -j$(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) extract_assets.py $(EXTRACTED_DIR)/baserom assets -j$(N_THREADS) -Z Wno-hardcoded-pointer
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
 disasm:
 	$(RM) -r asm data
-	$(PYTHON) tools/disasm/disasm.py --baserom-segments $(EXTRACTED_DIR)/baserom -j $(N_THREADS) $(DISASM_FLAGS)
+	$(PYTHON) tools/disasm/disasm.py $(EXTRACTED_DIR)/baserom -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: rom
 	$(RM) -r expected/

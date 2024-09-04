@@ -14,8 +14,7 @@ fpr_name_options = {
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--baserom-segments",
-    dest="baserom_segments_dir",
+    "baserom_segments_dir",
     type=Path,
     required=True,
     help="Directory of uncompressed ROM segments",
@@ -46,7 +45,7 @@ parser.add_argument(
 args = parser.parse_args()
 jobs = args.jobs
 
-baserom_segments_dir = args.baserom_segments_dir
+baserom_segments_dir: Path = args.baserom_segments_dir
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
 rabbitizer.config.regNames_userFpcCsr = False
@@ -2108,8 +2107,6 @@ print("Setting Up")
 files_spec = None
 with open("tools/disasm/files.txt", "r") as infile:
     files_spec = ast.literal_eval(infile.read())
-for segment in files_spec:
-    segment[1] = segment[1].replace("$(BASEROM)", str(baserom_segments_dir))
 
 with open("tools/disasm/functions.txt", "r") as infile:
     functions_ast = ast.literal_eval(infile.read())
@@ -2165,7 +2162,7 @@ for var in sorted(variables_ast.keys()):
 # Read in binary and relocation data for each segment
 for seg, segment in enumerate(files_spec):
     binary = None
-    with open(segment[1] + "/" + segment[0], "rb") as infile:
+    with (baserom_segments_dir / segment[0]).open("rb") as infile:
         binary = bytes(infile.read())
 
     if segment[2] == "overlay":

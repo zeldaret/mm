@@ -158,15 +158,14 @@ def main():
     )
     parser.add_argument(
         "-v",
-        "--mm-version",
+        "--version",
         help="Version of the game to decompress.",
-        required=True,
         default="n64-us",
     )
 
     args = parser.parse_args()
 
-    version = args.mm_version
+    version = args.version
 
     baserom_dir = Path(f"baseroms/{version}")
     if not baserom_dir.exists():
