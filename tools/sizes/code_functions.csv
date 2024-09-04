@@ -1914,11 +1914,11 @@ asm/non_matchings/code/z_room/Room_GetImageMultiBgEntry.s,Room_GetImageMultiBgEn
 asm/non_matchings/code/z_room/Room_DrawImageMulti.s,Room_DrawImageMulti,0x8012E32C,0xDF
 asm/non_matchings/code/z_room/Room_DrawImage.s,Room_DrawImage,0x8012E6A8,0x1A
 asm/non_matchings/code/z_room/Room_Init.s,Room_Init,0x8012E710,0x10
-asm/non_matchings/code/z_room/Room_AllocateAndLoad.s,Room_AllocateAndLoad,0x8012E750,0x87
-asm/non_matchings/code/z_room/Room_StartRoomTransition.s,Room_StartRoomTransition,0x8012E96C,0x4F
-asm/non_matchings/code/z_room/Room_HandleLoadCallbacks.s,Room_HandleLoadCallbacks,0x8012EAA8,0x40
+asm/non_matchings/code/z_room/Room_SetupFirstRoom.s,Room_SetupFirstRoom,0x8012E750,0x87
+asm/non_matchings/code/z_room/Room_RequestNewRoom.s,Room_RequestNewRoom,0x8012E96C,0x4F
+asm/non_matchings/code/z_room/Room_ProcessRoomRequest.s,Room_ProcessRoomRequest,0x8012EAA8,0x40
 asm/non_matchings/code/z_room/Room_Draw.s,Room_Draw,0x8012EBA8,0x14
-asm/non_matchings/code/z_room/func_8012EBF8.s,func_8012EBF8,0x8012EBF8,0x22
+asm/non_matchings/code/z_room/Room_FinishRoomChange.s,Room_FinishRoomChange,0x8012EBF8,0x22
 asm/non_matchings/code/z_inventory/Inventory_GetBtnBItem.s,Inventory_GetBtnBItem,0x8012EC80,0x2D
 asm/non_matchings/code/z_inventory/Inventory_ChangeEquipment.s,Inventory_ChangeEquipment,0x8012ED34,0x11
 asm/non_matchings/code/z_inventory/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C

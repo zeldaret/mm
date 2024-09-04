@@ -332,14 +332,13 @@ typedef enum {
 } RoomBehaviorType2;
 
 typedef struct {
-    /* 0x00 */ s8 num;
+    /* 0x00 */ s8 num; // -1 is invalid room
     /* 0x01 */ u8 unk1;
     /* 0x02 */ u8 behaviorType2;
     /* 0x03 */ u8 behaviorType1;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
-    /* 0x07 */ UNK_TYPE1 pad7[0x1];
     /* 0x08 */ RoomShape* roomShape;
     /* 0x0C */ void* segment;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
@@ -348,11 +347,10 @@ typedef struct {
 typedef struct RoomContext {
     /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
-    /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
-    /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
-    /* 0x31 */ s8 status;
-    /* 0x32 */ UNK_TYPE1 pad32[0x2];
-    /* 0x34 */ void* activeRoomVram;
+    /* 0x28 */ void* bufPtrs[2]; // Start and end pointers for the room buffer. Can be split into two pages, where page 0 is allocated from the start pointer and page 1 is allocated from the end pointer.
+    /* 0x30 */ u8 activeBufPage; // 0 - First page in memory, 1 - Second page
+    /* 0x31 */ s8 status; // 0 - Free for new room request, 1 - DmaRequest for a new room is in progress
+    /* 0x34 */ void* roomRequestAddr; // ram pointer to where the requested room segment will be stored
     /* 0x38 */ DmaRequest dmaRequest;
     /* 0x58 */ OSMesgQueue loadQueue;
     /* 0x70 */ OSMesg loadMsg[1];
@@ -361,6 +359,11 @@ typedef struct RoomContext {
     /* 0x79 */ s8 unk79;
     /* 0x7A */ UNK_TYPE2 unk7A[3];
 } RoomContext; // size = 0x80
+
+typedef struct RoomList {
+    /* 0x00 */ u8 count;
+    /* 0x04 */ RomFile* romFiles; // Array of rom addresses for each room in a scene
+} RoomList;
 
 typedef void(*RoomDrawHandler)(struct PlayState* play, Room* room, u32 flags);
 

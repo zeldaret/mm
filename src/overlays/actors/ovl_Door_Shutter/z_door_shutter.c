@@ -568,9 +568,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
             play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
-            play->roomCtx.activeMemPage ^= 1;
+            play->roomCtx.activeBufPage ^= 1;
         }
-        func_8012EBF8(play, &play->roomCtx);
+        Room_FinishRoomChange(play, &play->roomCtx);
     }
 
     this->slidingDoor.unk_15C = 0;
