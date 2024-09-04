@@ -16,7 +16,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "baserom_segments_dir",
     type=Path,
-    required=True,
     help="Directory of uncompressed ROM segments",
 )
 parser.add_argument(
