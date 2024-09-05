@@ -361,9 +361,9 @@ typedef struct RoomContext {
 } RoomContext; // size = 0x80
 
 typedef struct RoomList {
-    /* 0x00 */ u8 count;
-    /* 0x04 */ RomFile* romFiles; // Array of rom addresses for each room in a scene
-} RoomList;
+    /* 0x0 */ u8 count;
+    /* 0x4 */ RomFile* romFiles; // Array of rom addresses for each room in a scene
+} RoomList; // size = 0x8
 
 typedef void(*RoomDrawHandler)(struct PlayState* play, Room* room, u32 flags);
 
