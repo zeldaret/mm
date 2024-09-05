@@ -157,8 +157,10 @@ def main():
         description="Convert a rom that uses dmadata to an uncompressed one."
     )
     parser.add_argument(
-        "version",
+        "-v",
+        "--version",
         help="Version of the game to decompress.",
+        default="n64-us",
     )
 
     args = parser.parse_args()

@@ -38,10 +38,10 @@ extern AudioSpec gAudioSpecs[21];
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
 extern const AudioHeapInitSizes gAudioHeapInitSizes;
-extern u8 gSoundFontTable[];
+extern AudioTable gSoundFontTable;
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];
-extern u8 gSampleBankTable[];
+extern AudioTable gSampleBankTable;
 
 // bss
 

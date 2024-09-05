@@ -100,20 +100,33 @@ def extractArchive(archivePath: Path, outPath: Path):
 
 def main():
     parser = argparse.ArgumentParser(description="MM archives extractor")
-    parser.add_argument("version", help="version to process", default="n64-us")
+    parser.add_argument(
+        "baserom_segments_dir",
+        type=Path,
+        help="Directory of uncompressed ROM segments",
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="version to process",
+        default="n64-us",
+    )
     parser.add_argument("--xml", help="Generate xml to stdout", action="store_true")
 
     args = parser.parse_args()
 
+    baseromSegmentsDir: Path = args.baserom_segments_dir
+    version: str = args.version
+
     global PRINT_XML
     PRINT_XML = args.xml
 
-    archivesCsvPath = Path(f"tools/filelists/{args.version}/archives.csv")
+    archivesCsvPath = Path(f"tools/filelists/{version}/archives.csv")
 
     with archivesCsvPath.open() as f:
         for line in f:
             archiveName = line.strip().split(",")[1]
-            archivePath = Path(f"extracted/{args.version}/baserom/{archiveName}")
+            archivePath = baseromSegmentsDir / archiveName
 
             extractedPath = Path(str(archivePath) + ".unarchive")
             extractArchive(archivePath, extractedPath)
