@@ -14,6 +14,11 @@ fpr_name_options = {
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
+    "baserom_segments_dir",
+    type=Path,
+    help="Directory of uncompressed ROM segments",
+)
+parser.add_argument(
     "-j", dest="jobs", type=int, default=1, help="number of processes to run at once"
 )
 parser.add_argument(
@@ -38,6 +43,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 jobs = args.jobs
+
+baserom_segments_dir: Path = args.baserom_segments_dir
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
 rabbitizer.config.regNames_userFpcCsr = False
@@ -1873,7 +1880,7 @@ def disassemble_makerom(section):
 
     elif section[-1]["type"] == "ipl3":
         # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"extracted/n64-us/baserom/makerom\", 0x40, 0xFC0\n"
+        out = f"{asm_header('.text')}\n.incbin \"{baserom_segments_dir}/makerom\", 0x40, 0xFC0\n"
 
         with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
             outfile.write(out)
@@ -2154,7 +2161,7 @@ for var in sorted(variables_ast.keys()):
 # Read in binary and relocation data for each segment
 for seg, segment in enumerate(files_spec):
     binary = None
-    with open(segment[1] + "/" + segment[0], "rb") as infile:
+    with (baserom_segments_dir / segment[0]).open("rb") as infile:
         binary = bytes(infile.read())
 
     if segment[2] == "overlay":

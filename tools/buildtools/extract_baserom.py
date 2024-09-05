@@ -20,10 +20,8 @@ def main():
         "rom", metavar="ROM", type=Path, help="Path to uncompressed ROM"
     )
     parser.add_argument(
-        "-o",
-        "--output-dir",
+        "output_dir",
         type=Path,
-        required=True,
         help="Output directory for segments",
     )
     parser.add_argument(
