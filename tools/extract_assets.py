@@ -3,8 +3,6 @@
 import argparse, json, os, signal, time, colorama, multiprocessing
 from pathlib import Path
 
-from pathlib import Path
-
 colorama.init()
 
 dontGenerateCFilesList = [
