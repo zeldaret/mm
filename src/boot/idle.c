@@ -1,3 +1,5 @@
+#include "stdbool.h"
+
 #include "prevent_bss_reordering.h"
 #include "buffers.h"
 #include "irqmgr.h"

@@ -1,6 +1,8 @@
 #ifndef Z64PLAYER_H
 #define Z64PLAYER_H
 
+#include "stdbool.h"
+
 #include "alignment.h"
 #include "PR/os.h"
 #include "z64actor.h"
