@@ -1,7 +1,7 @@
 # Build options can be changed by modifying the makefile or by building with 'make SETTING=value'.
-# It is also possible to override the settings in Defaults in a file called .make_options as 'SETTING=value'.
+# It is also possible to override the settings in Defaults in a file called .make_options.mk as 'SETTING=value'.
 
--include .make_options
+-include .make_options.mk
 
 MAKEFLAGS += --no-builtin-rules
 
@@ -433,7 +433,7 @@ assetclean:
 	$(RM) -r $(ASSET_BIN_DIRS)
 	$(RM) -r $(BUILD_DIR)/assets
 	$(RM) -r assets/text/*.h
-	$(RM) -r .extracted-assets.json
+	$(RM) -r $(EXTRACTED_DIR)/.extracted-assets.json
 
 distclean: assetclean clean
 	$(RM) -r asm data extracted
@@ -457,7 +457,7 @@ setup-audio:
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 assets:
-	$(PYTHON) extract_assets.py $(EXTRACTED_DIR)/baserom assets -j$(N_THREADS) -Z Wno-hardcoded-pointer
+	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
