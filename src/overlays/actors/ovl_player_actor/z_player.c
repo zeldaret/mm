@@ -14819,8 +14819,8 @@ void Player_Action_26(Player* this, PlayState* play) {
 
             if (func_8083FBC4(play, this)) {
                 Actor_PlaySfx_Flagged2(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
-                                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+                                                         ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                                         : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
 
             Player_PlayAnimSfx(this, D_8085D61C);
@@ -17743,8 +17743,7 @@ void Player_Action_83(Player* this, PlayState* play) {
     }
 
     this->shockTimer = 40;
-    Actor_PlaySfx_Flagged2(&this->actor,
-                                   this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
+    Actor_PlaySfx_Flagged2(&this->actor, this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
 void Player_Action_84(Player* this, PlayState* play) {
