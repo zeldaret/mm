@@ -324,7 +324,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
     }
 
     if (this->isMoving) {
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
     if (this->actor.speed != 0.0f) {
