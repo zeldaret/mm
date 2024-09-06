@@ -15,7 +15,7 @@ typedef struct IrqMgrClient {
     /* 0x4 */ OSMesgQueue* queue;
 } IrqMgrClient; // size = 0x8
 
-typedef struct {
+typedef struct IrqMgr {
     /* 0x000 */ OSScMsg retraceMsg;
     /* 0x020 */ OSScMsg prenmiMsg;
     /* 0x040 */ OSScMsg nmiMsg;
