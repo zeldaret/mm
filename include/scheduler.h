@@ -58,4 +58,6 @@ void Sched_SendGfxCancelMsg(Scheduler* sched);
 
 void Sched_Init(Scheduler* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 
+extern Scheduler gScheduler;
+
 #endif

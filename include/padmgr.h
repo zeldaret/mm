@@ -88,4 +88,6 @@ void PadMgr_RumbleSetSingle(s32 port, s32 enable);
 void PadMgr_RumbleSet(u8 enable[MAXCONTROLLERS]);
 s32 PadMgr_ControllerHasRumblePak(s32 port);
 
+extern PadMgr gPadMgr;
+
 #endif
