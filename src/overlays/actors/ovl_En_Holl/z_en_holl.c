@@ -142,7 +142,7 @@ void EnHoll_ChangeRooms(PlayState* play) {
 
     play->roomCtx.curRoom = play->roomCtx.prevRoom;
     play->roomCtx.prevRoom = tempRoom;
-    play->roomCtx.activeMemPage ^= 1;
+    play->roomCtx.activeBufPage ^= 1;
 }
 
 void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
@@ -187,7 +187,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                     if (play->roomCtx.prevRoom.num == this->actor.room) {
                         EnHoll_ChangeRooms(play);
                     }
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                 }
             } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
                 play->nextEntrance = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
@@ -198,7 +198,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
             } else {
                 this->actor.room = play->transitionActors.list[enHollId].sides[this->playerSide ^ 1].room;
                 if (play->roomCtx.prevRoom.num < 0) {
-                    Room_StartRoomTransition(play, &play->roomCtx, this->actor.room);
+                    Room_RequestNewRoom(play, &play->roomCtx, this->actor.room);
                     if (this == sInstancePlayingSound) {
                         sInstancePlayingSound = NULL;
                     }
@@ -242,7 +242,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
             this->actor.room = room;
 
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
         }
@@ -267,7 +267,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play) {
             this->actor.room = play->transitionActors.list[enHollId].sides[playerSide].room;
 
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
                 this->bgCoverAlphaActive = true;
             }
@@ -290,7 +290,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 
             this->actor.room = play->transitionActors.list[enHollId].sides[playerSide].room;
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
         }
@@ -299,7 +299,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
     if (play->roomCtx.status == 0) {
-        func_8012EBF8(play, &play->roomCtx);
+        Room_FinishRoomChange(play, &play->roomCtx);
         if (play->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;
         }

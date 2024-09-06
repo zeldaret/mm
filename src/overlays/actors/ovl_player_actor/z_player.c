@@ -6534,7 +6534,7 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
                                      .room;
 
                     if ((roomNum >= 0) && (roomNum != play->roomCtx.curRoom.num)) {
-                        Room_StartRoomTransition(play, &play->roomCtx, roomNum);
+                        Room_RequestNewRoom(play, &play->roomCtx, roomNum);
                     }
                 }
             }
@@ -13738,14 +13738,14 @@ void Player_Action_1(Player* this, PlayState* play) {
                     play->roomCtx.curRoom.segment = NULL;
                     play->roomCtx.prevRoom.segment = NULL;
 
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                     this->av2.actionVar2 = -1;
                     this->av1.actionVar1 = this->unk_3CE;
                 }
             }
         }
     } else if (this->av2.actionVar2 < 0) {
-        if (Room_StartRoomTransition(play, &play->roomCtx, this->av1.actionVar1)) {
+        if (Room_RequestNewRoom(play, &play->roomCtx, this->av1.actionVar1)) {
             Map_InitRoomData(play, play->roomCtx.curRoom.num);
             Map_SetAreaEntrypoint(play);
             this->av2.actionVar2 = 5;
@@ -15220,7 +15220,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 
                                 play->roomCtx.curRoom.num = -1;
                                 play->roomCtx.curRoom.segment = NULL;
-                                func_8012EBF8(play, &play->roomCtx);
+                                Room_FinishRoomChange(play, &play->roomCtx);
                             } else {
                                 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
                                 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
@@ -15228,7 +15228,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 
                                 R_PLAY_FILL_SCREEN_ON = -16;
                                 if (play->roomCtx.curRoom.num < 0) {
-                                    Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
+                                    Room_RequestNewRoom(play, &play->roomCtx, temp_v1_4->sides[0].room);
                                     play->roomCtx.prevRoom.num = -1;
                                     play->roomCtx.prevRoom.segment = NULL;
                                 }
@@ -15336,7 +15336,7 @@ void Player_Action_36(Player* this, PlayState* play) {
 
             if ((this->actor.category == ACTORCAT_PLAYER) && !framedDoor) {
                 if (play->roomCtx.prevRoom.num >= 0) {
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                 }
 
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
