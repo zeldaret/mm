@@ -28,7 +28,7 @@ typedef struct {
     /* 0x18 */ f32 yScale;
 } CfbInfo; // size = 0x1C
 
-typedef struct {
+typedef struct Scheduler {
     /* 0x000 */ OSMesgQueue interruptQueue;
     /* 0x018 */ OSMesg interruptMsgBuf[64];
     /* 0x118 */ OSMesgQueue cmdQueue;

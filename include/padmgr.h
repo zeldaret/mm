@@ -23,7 +23,7 @@ typedef enum {
     /* 2 */ CONT_PAK_OTHER
 } ControllerPakType;
 
-typedef struct {
+typedef struct PadMgr {
     /* 0x000 */ u8 validCtrlrsMask;
     /* 0x004 */ void (*rumbleRetraceCallback)(void*);
     /* 0x008 */ void* rumbleRetraceArg;
