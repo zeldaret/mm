@@ -1,7 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "stdint.h"
+#include "PR/ultratypes.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
