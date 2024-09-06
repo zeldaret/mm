@@ -46,6 +46,7 @@
 #include "libc64/sprintf.h"
 #include "PR/osint.h"
 
+#include "controller.h"
 #include "macros.h"
 #include "main.h"
 #include "vt.h"
