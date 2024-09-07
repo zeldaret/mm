@@ -38,7 +38,6 @@ beginseg
     include "$(BUILD_DIR)/src/boot/O2/padutils.o"
     include "$(BUILD_DIR)/src/boot/O2/stackcheck.o"
     include "$(BUILD_DIR)/src/boot/O2/gfxprint.o"
-    include "$(BUILD_DIR)/data/boot/gfxprint.data.o"
     include "$(BUILD_DIR)/src/boot/O2/mtxuty-cvt.o"
     include "$(BUILD_DIR)/src/boot/O2/debug.o"
     include "$(BUILD_DIR)/src/boot/O2/system_heap.o"
@@ -617,20 +616,19 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
     include "$(BUILD_DIR)/src/code/sys_rumble.o"
-    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     include "$(BUILD_DIR)/src/code/code_80183070.o"
     include "$(BUILD_DIR)/src/code/c_keyframe.o"
     include "$(BUILD_DIR)/src/code/sys_slowly.o"
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
     include "$(BUILD_DIR)/asm/code/kanread.text.o" // handwritten
     include "$(BUILD_DIR)/src/code/osFlash.o"
+    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     pad_text
     pad_text
     pad_text
     include "$(BUILD_DIR)/src/audio/lib/data.o"
     include "$(BUILD_DIR)/src/audio/lib/synthesis.o"
     include "$(BUILD_DIR)/src/audio/lib/heap.o"
-    include "$(BUILD_DIR)/data/code/audio_heap.bss.o"
     include "$(BUILD_DIR)/src/audio/lib/load.o"
     include "$(BUILD_DIR)/src/audio/lib/thread.o"
     include "$(BUILD_DIR)/src/audio/lib/dcache.o"
@@ -649,7 +647,6 @@ beginseg
     include "$(BUILD_DIR)/src/audio/sfx_params.o"
     include "$(BUILD_DIR)/src/audio/sfx.o"
     include "$(BUILD_DIR)/src/audio/sequence.o"
-    include "$(BUILD_DIR)/data/code/sequence.bss.o"
     include "$(BUILD_DIR)/src/audio/session_config.o"
     include "$(BUILD_DIR)/src/code/jpegutils.o"
     include "$(BUILD_DIR)/src/code/jpegdecoder.o"
