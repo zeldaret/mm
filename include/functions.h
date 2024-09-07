@@ -123,9 +123,9 @@ s32 Actor_HasNoRider(PlayState* play, Actor* horse);
 
 void Actor_PlaySfx(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_SurfaceBomb(PlayState* play, Actor* actor);
+void Actor_PlaySfx_Flagged2(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedCentered1(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedCentered2(Actor* actor, u16 sfxId);
-void Actor_PlaySfx_FlaggedCentered3(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_Flagged(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedTimer(Actor* actor, s32 timer);
 void Actor_PlaySeq_FlaggedKamaroDance(Actor* actor);

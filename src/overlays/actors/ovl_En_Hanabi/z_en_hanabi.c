@@ -328,7 +328,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
         if (play->csCtx.curFrame > 1650) {
             func_80B236C8(this, play);
-            Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 

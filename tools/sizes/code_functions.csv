@@ -317,9 +317,9 @@ asm/non_matchings/code/z_actor/func_800B8E1C.s,func_800B8E1C,0x800B8E1C,0xF
 asm/non_matchings/code/z_actor/Player_PlaySfx.s,Player_PlaySfx,0x800B8E58,0x1C
 asm/non_matchings/code/z_actor/Actor_PlaySfx.s,Actor_PlaySfx,0x800B8EC8,0xB
 asm/non_matchings/code/z_actor/Actor_PlaySfx_SurfaceBomb.s,Actor_PlaySfx_SurfaceBomb,0x800B8EF4,0x29
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered1.s,Actor_PlaySfx_FlaggedCentered1,0x800B8F98,0xA
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered2.s,Actor_PlaySfx_FlaggedCentered2,0x800B8FC0,0xA
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered3.s,Actor_PlaySfx_FlaggedCentered3,0x800B8FE8,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_Flagged2.s,Actor_PlaySfx_Flagged2,0x800B8F98,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered1.s,Actor_PlaySfx_FlaggedCentered1,0x800B8FC0,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered2.s,Actor_PlaySfx_FlaggedCentered2,0x800B8FE8,0xA
 asm/non_matchings/code/z_actor/Actor_PlaySfx_Flagged.s,Actor_PlaySfx_Flagged,0x800B9010,0xA
 asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedTimer.s,Actor_PlaySfx_FlaggedTimer,0x800B9038,0x13
 asm/non_matchings/code/z_actor/Actor_PlaySeq_FlaggedKamaroDance.s,Actor_PlaySeq_FlaggedKamaroDance,0x800B9084,0x5
