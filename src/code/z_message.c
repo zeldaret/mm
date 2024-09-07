@@ -55,7 +55,7 @@ u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type) & 0xF) << 4) | ((yPos) & 0xF), _message_##textId },
+#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId },
 
 MessageTableEntry sMessageTableNES[] = {
 #include "assets/text/message_data.h"
@@ -64,7 +64,8 @@ MessageTableEntry sMessageTableNES[] = {
 
 #undef DEFINE_MESSAGE
 
-#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type) & 0xF) << 4) | ((yPos) & 0xF), _message_##textId##_staff },
+#define DEFINE_MESSAGE(textId, type, yPos, msg) \
+    { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId##_staff },
 
 MessageTableEntry sMessageTableCredits[] = {
 #include "assets/text/message_data_staff.h"
