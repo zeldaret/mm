@@ -2602,10 +2602,7 @@ class MessageDecoder:
         return f"0x{c:04X}"
 
     def format_item_id(self, c : int) -> str:
-        try:
-            return item_ids[c]
-        except KeyError:
-            return f"0x{c:04X}"
+        return item_ids[c]
 
     def format_decimal(self, c : int) -> str:
         return str(c)
