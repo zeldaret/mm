@@ -38,7 +38,6 @@
 
 #include "fault.h"
 #include "macros.h"
-#include "main.h"
 #include "scheduler.h"
 #include "z64math.h"
 #include "z64voice.h"

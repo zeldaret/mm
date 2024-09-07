@@ -23,6 +23,7 @@
 #include "padutils.h"
 #include "regs.h"
 #include "scheduler.h"
+#include "segmented_address.h"
 #include "sequence.h"
 #include "seqcmd.h"
 #include "sfx.h"
