@@ -2,7 +2,7 @@
 #define Z_EN_GM_H
 
 #include "global.h"
-#include "objects/object_in2/object_in2.h"
+#include "assets/objects/object_in2/object_in2.h"
 
 struct EnGm;
 

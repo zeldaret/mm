@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.h"
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

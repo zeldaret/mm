@@ -5,8 +5,8 @@
  */
 
 #include "z_en_box.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_box/object_box.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_box/object_box.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000000

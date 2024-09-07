@@ -5,8 +5,8 @@
  */
 
 #include "z_demo_effect.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_efc_tw/object_efc_tw.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_efc_tw/object_efc_tw.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

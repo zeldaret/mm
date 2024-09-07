@@ -6,7 +6,7 @@
 
 #include "z_obj_lightblock.h"
 #include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
-#include "objects/object_lightblock/object_lightblock.h"
+#include "assets/objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000
 

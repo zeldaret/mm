@@ -5,7 +5,7 @@
  */
 
 #include "z_en_akindonuts.h"
-#include "objects/object_dnt/object_dnt.h"
+#include "assets/objects/object_dnt/object_dnt.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

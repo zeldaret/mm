@@ -2,7 +2,7 @@
 #define Z_EN_WIZ_H
 
 #include "global.h"
-#include "objects/object_wiz/object_wiz.h"
+#include "assets/objects/object_wiz/object_wiz.h"
 
 #define EN_WIZ_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define EN_WIZ_GET_TYPE(thisx) (((thisx)->params >> 8) & 0xFF)

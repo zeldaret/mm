@@ -42,9 +42,9 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_bdoor/object_bdoor.h"
 
 #define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS (1 << 0)
 #define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 1)

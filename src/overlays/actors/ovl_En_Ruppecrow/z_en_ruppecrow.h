@@ -2,7 +2,7 @@
 #define Z_EN_RUPPECROW_H
 
 #include "global.h"
-#include "objects/object_crow/object_crow.h"
+#include "assets/objects/object_crow/object_crow.h"
 
 #define ENRUPPECROW_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 

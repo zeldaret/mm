@@ -6,7 +6,7 @@
 
 #include "z_obj_dhouse.h"
 #include "z64quake.h"
-#include "objects/object_dhouse/object_dhouse.h"
+#include "assets/objects/object_dhouse/object_dhouse.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 

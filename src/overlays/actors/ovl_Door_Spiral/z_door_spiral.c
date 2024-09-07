@@ -5,12 +5,12 @@
  */
 
 #include "z_door_spiral.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
-#include "objects/object_danpei_object/object_danpei_object.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_danpei_object/object_danpei_object.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

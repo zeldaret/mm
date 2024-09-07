@@ -34,7 +34,7 @@ Week Event Flags:
 #include "z_en_s_goro.h"
 #include "overlays/actors/ovl_En_Gk/z_en_gk.h" // Goron Elder's Son
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
-#include "objects/object_taisou/object_taisou.h"
+#include "assets/objects/object_taisou/object_taisou.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)

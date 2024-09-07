@@ -9,7 +9,7 @@
 
 #include "z_en_dt.h"
 
-#include "objects/object_dt/object_dt.h"
+#include "assets/objects/object_dt/object_dt.h"
 #include "overlays/actors/ovl_En_Baisen/z_en_baisen.h"
 #include "overlays/actors/ovl_En_Muto/z_en_muto.h"
 

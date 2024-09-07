@@ -6,7 +6,7 @@
 
 #include "z_obj_mine.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_ny/object_ny.h"
+#include "assets/objects/object_ny/object_ny.h"
 
 #define FLAGS 0x00000000
 

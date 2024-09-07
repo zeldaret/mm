@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
-#include "objects/object_gla/object_gla.h"
+#include "assets/objects/object_gla/object_gla.h"
 
 struct EnGe2;
 

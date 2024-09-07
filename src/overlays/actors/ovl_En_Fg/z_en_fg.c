@@ -5,7 +5,7 @@
  */
 
 #include "z_en_fg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
 

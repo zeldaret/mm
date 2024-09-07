@@ -5,7 +5,7 @@
  */
 
 #include "z_en_osn.h"
-#include "objects/object_osn/object_osn.h"
+#include "assets/objects/object_osn/object_osn.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 

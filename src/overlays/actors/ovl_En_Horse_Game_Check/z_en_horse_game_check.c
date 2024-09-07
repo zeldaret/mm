@@ -6,7 +6,7 @@
 
 #include "z_en_horse_game_check.h"
 #include "z64horse.h"
-#include "objects/object_horse_game_check/object_horse_game_check.h"
+#include "assets/objects/object_horse_game_check/object_horse_game_check.h"
 #include "debug.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -49,7 +49,7 @@ ActorInit En_Horse_Game_Check_InitVars = {
     /**/ EnHorseGameCheck_Draw,
 };
 
-#include "overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"
+#include "assets/overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"
 
 s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     s32 pad[3];

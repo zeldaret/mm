@@ -5,8 +5,8 @@
  */
 
 #include "z_arms_hook.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

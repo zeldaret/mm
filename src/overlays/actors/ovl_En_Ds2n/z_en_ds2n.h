@@ -2,7 +2,7 @@
 #define Z_EN_DS2N_H
 
 #include "global.h"
-#include "objects/object_ds2n/object_ds2n.h"
+#include "assets/objects/object_ds2n/object_ds2n.h"
 
 struct EnDs2n;
 

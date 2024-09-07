@@ -2,7 +2,7 @@
 #define Z_EN_SYATEKI_MAN_H
 
 #include "global.h"
-#include "objects/object_shn/object_shn.h"
+#include "assets/objects/object_shn/object_shn.h"
 #include "overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.h"
 
 struct EnSyatekiMan;

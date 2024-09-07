@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spdweb.h"
-#include "objects/object_spdweb/object_spdweb.h"
+#include "assets/objects/object_spdweb/object_spdweb.h"
 
 #define FLAGS 0x00000000
 

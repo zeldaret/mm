@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_ice_smoke.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rAlpha regs[0]
 #define rScale regs[1]

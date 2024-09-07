@@ -21,8 +21,8 @@
  */
 
 #include "z_en_tanron5.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_boss02/object_boss02.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_boss02/object_boss02.h"
 #include "overlays/actors/ovl_Boss_02/z_boss_02.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)

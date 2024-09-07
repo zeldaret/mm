@@ -2,7 +2,7 @@
 #define Z_EN_KAME_H
 
 #include "global.h"
-#include "objects/object_tl/object_tl.h"
+#include "assets/objects/object_tl/object_tl.h"
 
 struct EnKame;
 

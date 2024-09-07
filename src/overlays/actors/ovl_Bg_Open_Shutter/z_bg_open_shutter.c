@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_open_shutter.h"
-#include "objects/object_open_obj/object_open_obj.h"
+#include "assets/objects/object_open_obj/object_open_obj.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_nozoki.h"
-#include "objects/object_secom_obj/object_secom_obj.h"
+#include "assets/objects/object_secom_obj/object_secom_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

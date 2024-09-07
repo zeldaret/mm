@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_vspinyroll.h"
-#include "objects/object_spinyroll/object_spinyroll.h"
+#include "assets/objects/object_spinyroll/object_spinyroll.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

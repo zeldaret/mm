@@ -2,7 +2,7 @@
 #define Z_EN_ANI_H
 
 #include "global.h"
-#include "objects/object_ani/object_ani.h"
+#include "assets/objects/object_ani/object_ani.h"
 
 struct EnAni;
 

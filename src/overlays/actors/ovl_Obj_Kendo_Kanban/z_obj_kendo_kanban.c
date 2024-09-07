@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kendo_kanban.h"
-#include "objects/object_dora/object_dora.h"
+#include "assets/objects/object_dora/object_dora.h"
 
 #define FLAGS 0x00000000
 

@@ -6,7 +6,7 @@
 
 #include "z_en_maruta.h"
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
-#include "objects/object_maruta/object_maruta.h"
+#include "assets/objects/object_maruta/object_maruta.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 

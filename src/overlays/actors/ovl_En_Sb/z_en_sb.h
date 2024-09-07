@@ -2,7 +2,7 @@
 #define Z_EN_SB_H
 
 #include "global.h"
-#include "objects/object_sb/object_sb.h"
+#include "assets/objects/object_sb/object_sb.h"
 
 struct EnSb;
 

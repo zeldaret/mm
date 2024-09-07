@@ -2,7 +2,7 @@
 #define Z_EN_JGAME_TSN_H
 
 #include "global.h"
-#include "objects/object_tsn/object_tsn.h"
+#include "assets/objects/object_tsn/object_tsn.h"
 
 struct EnJgameTsn;
 

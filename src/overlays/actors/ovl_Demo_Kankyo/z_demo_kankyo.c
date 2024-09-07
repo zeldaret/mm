@@ -5,8 +5,8 @@
  */
 
 #include "z_demo_kankyo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_bubble/object_bubble.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bubble/object_bubble.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

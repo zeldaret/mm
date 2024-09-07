@@ -2,7 +2,7 @@
 #define Z_EN_SCOPENUTS_H
 
 #include "global.h"
-#include "objects/object_dnt/object_dnt.h"
+#include "assets/objects/object_dnt/object_dnt.h"
 
 struct EnScopenuts;
 

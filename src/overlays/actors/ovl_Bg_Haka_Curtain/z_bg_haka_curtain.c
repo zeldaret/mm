@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_haka_curtain.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -2,7 +2,7 @@
 #define Z_EN_PST_H
 
 #include "global.h"
-#include "objects/object_pst/object_pst.h"
+#include "assets/objects/object_pst/object_pst.h"
 
 typedef enum {
     /* 0 */ POSTBOX_SOUTH_UPPER_CLOCKTOWN,

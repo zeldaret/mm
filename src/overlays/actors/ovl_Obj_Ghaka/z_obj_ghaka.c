@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ghaka.h"
-#include "objects/object_ghaka/object_ghaka.h"
+#include "assets/objects/object_ghaka/object_ghaka.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 

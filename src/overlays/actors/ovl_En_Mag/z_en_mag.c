@@ -8,7 +8,7 @@
 
 #include "gfxalloc.h"
 
-#include "objects/object_mag/object_mag.h"
+#include "assets/objects/object_mag/object_mag.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

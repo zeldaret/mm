@@ -9,10 +9,10 @@
 #include "z64view.h"
 #include "z64voice.h"
 
-#include "archives/icon_item_static/icon_item_static_yar.h"
-#include "interface/parameter_static/parameter_static.h"
-#include "interface/do_action_static/do_action_static.h"
-#include "misc/story_static/story_static.h"
+#include "assets/archives/icon_item_static/icon_item_static_yar.h"
+#include "assets/interface/parameter_static/parameter_static.h"
+#include "assets/interface/do_action_static/do_action_static.h"
+#include "assets/misc/story_static/story_static.h"
 
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"

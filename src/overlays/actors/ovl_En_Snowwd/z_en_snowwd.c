@@ -5,7 +5,7 @@
  */
 
 #include "z_en_snowwd.h"
-#include "objects/object_snowwd/object_snowwd.h"
+#include "assets/objects/object_snowwd/object_snowwd.h"
 
 #define FLAGS 0x00000000
 

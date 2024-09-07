@@ -2,7 +2,7 @@
 #define Z_EN_PR2_H
 
 #include "global.h"
-#include "objects/object_pr/object_pr.h"
+#include "assets/objects/object_pr/object_pr.h"
 
 struct EnPr2;
 

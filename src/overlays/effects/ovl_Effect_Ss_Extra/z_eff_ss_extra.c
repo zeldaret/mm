@@ -6,7 +6,7 @@
  */
 
 #include "z_eff_ss_extra.h"
-#include "objects/object_yabusame_point/object_yabusame_point.h"
+#include "assets/objects/object_yabusame_point/object_yabusame_point.h"
 
 #define PARAMS ((EffectSsExtraInitParams*)initParamsx)
 

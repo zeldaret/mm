@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_fire_wall.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 
 #define FLAGS 0x00000000

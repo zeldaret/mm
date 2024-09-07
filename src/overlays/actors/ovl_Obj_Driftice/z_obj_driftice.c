@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_driftice.h"
-#include "objects/object_driftice/object_driftice.h"
+#include "assets/objects/object_driftice/object_driftice.h"
 
 #define FLAGS 0x00000000
 

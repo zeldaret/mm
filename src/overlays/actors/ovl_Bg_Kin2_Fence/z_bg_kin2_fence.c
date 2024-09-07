@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_kin2_fence.h"
-#include "objects/object_kin2_obj/object_kin2_obj.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

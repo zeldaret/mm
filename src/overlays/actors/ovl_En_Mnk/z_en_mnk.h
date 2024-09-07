@@ -2,7 +2,7 @@
 #define Z_EN_MNK_H
 
 #include "global.h"
-#include "objects/object_mnk/object_mnk.h"
+#include "assets/objects/object_mnk/object_mnk.h"
 #include "z64snap.h"
 
 struct EnMnk;

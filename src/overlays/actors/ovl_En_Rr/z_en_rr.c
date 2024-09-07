@@ -7,7 +7,7 @@
 #include "z_en_rr.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_rr/object_rr.h"
+#include "assets/objects/object_rr/object_rr.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 

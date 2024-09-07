@@ -5,7 +5,7 @@
  */
 
 #include "z_en_zl4.h"
-#include "objects/object_stk/object_stk.h"
+#include "assets/objects/object_stk/object_stk.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

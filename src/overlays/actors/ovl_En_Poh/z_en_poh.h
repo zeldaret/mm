@@ -2,7 +2,7 @@
 #define Z_EN_POH_H
 
 #include "global.h"
-#include "objects/object_po/object_po.h"
+#include "assets/objects/object_po/object_po.h"
 
 struct EnPoh;
 

@@ -2,7 +2,7 @@
 #define Z_EN_NWC_H
 
 #include "global.h"
-#include "objects/object_niw/object_niw.h"
+#include "assets/objects/object_niw/object_niw.h"
 #include "overlays/actors/ovl_En_Hs/z_en_hs.h" // grog
 
 

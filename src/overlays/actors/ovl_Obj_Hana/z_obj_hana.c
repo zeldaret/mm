@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hana.h"
-#include "objects/object_hana/object_hana.h"
+#include "assets/objects/object_hana/object_hana.h"
 
 #define FLAGS 0x00000000
 

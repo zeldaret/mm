@@ -2,7 +2,7 @@
 #define Z_EN_YB_H
 
 #include "global.h"
-#include "objects/object_yb/object_yb.h"
+#include "assets/objects/object_yb/object_yb.h"
 
 struct EnYb;
 

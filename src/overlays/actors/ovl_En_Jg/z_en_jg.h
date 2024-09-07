@@ -2,7 +2,7 @@
 #define Z_EN_JG_H
 
 #include "global.h"
-#include "objects/object_jg/object_jg.h"
+#include "assets/objects/object_jg/object_jg.h"
 
 #define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
 #define EN_JG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)

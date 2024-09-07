@@ -13,10 +13,10 @@
 
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 
-#include "archives/icon_item_static/icon_item_static_yar.h"
-#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
-#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-#include "interface/icon_item_vtx_static/icon_item_vtx_static.h"
+#include "assets/archives/icon_item_static/icon_item_static_yar.h"
+#include "assets/interface/icon_item_gameover_static/icon_item_gameover_static.h"
+#include "assets/interface/icon_item_jpn_static/icon_item_jpn_static.h"
+#include "assets/interface/icon_item_vtx_static/icon_item_vtx_static.h"
 
 // Page Textures (Background of Page):
 // Broken up into multiple textures.

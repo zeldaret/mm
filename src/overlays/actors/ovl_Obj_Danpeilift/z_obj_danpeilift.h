@@ -2,7 +2,7 @@
 #define Z_OBJ_DANPEILIFT_H
 
 #include "global.h"
-#include "objects/object_obj_danpeilift/object_obj_danpeilift.h"
+#include "assets/objects/object_obj_danpeilift/object_obj_danpeilift.h"
 
 struct ObjDanpeilift;
 

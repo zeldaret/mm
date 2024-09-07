@@ -5,8 +5,8 @@
  */
 
 #include "z_bg_numa_hana.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_syokudai/object_syokudai.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 

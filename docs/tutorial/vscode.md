@@ -49,7 +49,6 @@ You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configur
                 "include",
                 "include/libc",
                 "src",
-                "assets",
                 "build/n64-us/",
                 "${workspaceFolder}"
             ],

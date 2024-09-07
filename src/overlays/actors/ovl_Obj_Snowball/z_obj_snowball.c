@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_snowball.h"
-#include "objects/object_goroiwa/object_goroiwa.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_goroiwa/object_goroiwa.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 

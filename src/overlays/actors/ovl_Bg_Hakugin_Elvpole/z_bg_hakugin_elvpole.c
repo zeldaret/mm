@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_elvpole.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_lbfshot.h"
-#include "objects/object_lbfshot/object_lbfshot.h"
+#include "assets/objects/object_lbfshot/object_lbfshot.h"
 
 #define FLAGS 0x00000000
 

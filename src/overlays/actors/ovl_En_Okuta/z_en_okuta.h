@@ -2,7 +2,7 @@
 #define Z_EN_OKUTA_H
 
 #include "global.h"
-#include "objects/object_okuta/object_okuta.h"
+#include "assets/objects/object_okuta/object_okuta.h"
 
 struct EnOkuta;
 

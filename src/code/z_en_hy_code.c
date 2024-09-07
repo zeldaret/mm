@@ -5,11 +5,11 @@
 
 #include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
-#include "objects/object_aob/object_aob.h"
-#include "objects/object_bba/object_bba.h"
-#include "objects/object_bji/object_bji.h"
-#include "objects/object_boj/object_boj.h"
-#include "objects/object_os_anime/object_os_anime.h"
+#include "assets/objects/object_aob/object_aob.h"
+#include "assets/objects/object_bba/object_bba.h"
+#include "assets/objects/object_bji/object_bji.h"
+#include "assets/objects/object_boj/object_boj.h"
+#include "assets/objects/object_os_anime/object_os_anime.h"
 
 static AnimationInfoS sAnimationInfo[ENHY_ANIM_MAX] = {
     { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENHY_ANIM_AOB_0

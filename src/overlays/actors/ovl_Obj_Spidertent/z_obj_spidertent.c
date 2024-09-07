@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_spidertent.h"
-#include "objects/object_spidertent/object_spidertent.h"
+#include "assets/objects/object_spidertent/object_spidertent.h"
 
 #define FLAGS (ACTOR_FLAG_10000000)
 

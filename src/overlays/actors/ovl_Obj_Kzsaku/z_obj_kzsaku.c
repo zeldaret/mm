@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kzsaku.h"
-#include "objects/object_kzsaku/object_kzsaku.h"
+#include "assets/objects/object_kzsaku/object_kzsaku.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

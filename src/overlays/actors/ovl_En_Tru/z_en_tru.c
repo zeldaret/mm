@@ -5,7 +5,7 @@
  */
 
 #include "z_en_tru.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -130,7 +130,7 @@ ActorInit En_Tru_InitVars = {
     /**/ EnTru_Draw,
 };
 
-#include "overlays/ovl_En_Tru/ovl_En_Tru.c"
+#include "assets/overlays/ovl_En_Tru/ovl_En_Tru.c"
 
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 

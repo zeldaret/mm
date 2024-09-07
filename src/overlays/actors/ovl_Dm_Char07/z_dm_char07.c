@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char07.h"
-#include "objects/object_milkbar/object_milkbar.h"
+#include "assets/objects/object_milkbar/object_milkbar.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

@@ -2,7 +2,7 @@
 #define Z_EN_DINOFOS_H
 
 #include "global.h"
-#include "objects/object_dinofos/object_dinofos.h"
+#include "assets/objects/object_dinofos/object_dinofos.h"
 
 struct EnDinofos;
 

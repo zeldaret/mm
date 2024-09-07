@@ -1,7 +1,7 @@
 #include "z64eff_spark.h"
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 void EffectSpark_Init(void* thisx, void* initParamsx) {
     EffectSpark* this = (EffectSpark*)thisx;

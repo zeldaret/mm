@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hakaisi.h"
-#include "objects/object_hakaisi/object_hakaisi.h"
+#include "assets/objects/object_hakaisi/object_hakaisi.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 

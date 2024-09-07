@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char03.h"
-#include "objects/object_osn/object_osn.h"
+#include "assets/objects/object_osn/object_osn.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

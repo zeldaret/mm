@@ -2,7 +2,7 @@
 #define Z_DM_CHAR04_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 struct DmChar04;
 

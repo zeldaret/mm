@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_f40_block.h"
-#include "objects/object_f40_obj/object_f40_obj.h"
+#include "assets/objects/object_f40_obj/object_f40_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

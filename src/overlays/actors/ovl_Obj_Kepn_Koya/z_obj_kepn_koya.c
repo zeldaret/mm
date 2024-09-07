@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kepn_koya.h"
-#include "objects/object_kepn_koya/object_kepn_koya.h"
+#include "assets/objects/object_kepn_koya/object_kepn_koya.h"
 
 #define FLAGS 0x00000000
 

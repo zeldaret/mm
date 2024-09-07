@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Sob1/z_en_sob1.h"
-#include "objects/object_bba/object_bba.h"
+#include "assets/objects/object_bba/object_bba.h"
 
 struct EnBaba;
 
