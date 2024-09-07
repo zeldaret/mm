@@ -1,7 +1,7 @@
 #include "z64jpeg.h"
 
 #include "stdbool.h"
-#include "main.h"
+#include "scheduler.h"
 #include "sys_ucode.h"
 #include "macros.h"
 
