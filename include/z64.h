@@ -21,6 +21,7 @@
 #include "message_data_static.h"
 #include "padmgr.h"
 #include "padutils.h"
+#include "rand.h"
 #include "regs.h"
 #include "scheduler.h"
 #include "sequence.h"
