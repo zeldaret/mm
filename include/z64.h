@@ -13,6 +13,7 @@
 #include "libc64/qrand.h"
 
 #include "color.h"
+#include "controller.h"
 #include "gfx.h"
 #include "gfxprint.h"
 #include "ichain.h"

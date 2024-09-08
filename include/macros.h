@@ -1,7 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "stdint.h"
+#include "PR/ultratypes.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -40,9 +40,6 @@
 
 // To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
 #define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
-
-#define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
-#define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
 

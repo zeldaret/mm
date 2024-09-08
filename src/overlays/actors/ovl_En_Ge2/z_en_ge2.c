@@ -504,7 +504,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
     } else if (this->collider.base.acFlags & AC_HIT) {
         if ((this->collider.info.acHitInfo != NULL) &&
             (this->collider.info.acHitInfo->toucher.dmgFlags & DMG_DEKU_NUT)) {
-            Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 400);
+            Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 400);
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_Stunned;
             this->stateFlags |= GERUDO_PURPLE_STATE_STUNNED;

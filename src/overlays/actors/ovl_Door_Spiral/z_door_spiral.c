@@ -173,7 +173,7 @@ f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg
     point.y = player->actor.world.pos.y + arg2;
     point.z = player->actor.world.pos.z;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &point);
+    Actor_WorldToActorCoords(&this->actor, &offset, &point);
 
     if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
         return FLT_MAX;

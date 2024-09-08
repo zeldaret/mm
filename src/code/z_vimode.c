@@ -3,6 +3,7 @@
 #include "stdbool.h"
 #include "PR/viint.h"
 
+#include "controller.h"
 #include "debug.h"
 #include "macros.h"
 #include "main.h"
