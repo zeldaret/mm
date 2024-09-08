@@ -11,7 +11,6 @@
 #include "libc64/malloc.h"
 
 #include "z64debug_text.h"
-#include "z64pause_menu.h"
 #include "z64rumble.h"
 #include "z64speed_meter.h"
 #include "z64vimode.h"

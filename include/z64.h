@@ -49,6 +49,7 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "kaleido_manager.h"
 #include "z64keyframe.h"
 #include "z64lib.h"
 #include "z64light.h"

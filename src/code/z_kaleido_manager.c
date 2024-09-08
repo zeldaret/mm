@@ -1,4 +1,4 @@
-#include "z64pause_menu.h"
+#include "kaleido_manager.h"
 
 #include "global.h"
 #include "fault.h"
