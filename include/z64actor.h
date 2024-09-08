@@ -432,7 +432,7 @@ typedef struct ActorContext {
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ Attention attention;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
-    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1E4 */ TitleCardContext titleCtx;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];

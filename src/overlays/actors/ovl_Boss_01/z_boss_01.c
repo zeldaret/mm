@@ -1121,7 +1121,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 50) {
-                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                        Lib_SegmentedToVirtual(&gOdolwaTitleCardTex), 160, 180, 128, 40);
             }
 
