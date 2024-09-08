@@ -15,7 +15,7 @@ typedef struct IrqMgrClient {
     /* 0x4 */ OSMesgQueue* queue;
 } IrqMgrClient; // size = 0x8
 
-typedef struct {
+typedef struct IrqMgr {
     /* 0x000 */ OSScMsg retraceMsg;
     /* 0x020 */ OSScMsg prenmiMsg;
     /* 0x040 */ OSScMsg nmiMsg;
@@ -28,6 +28,8 @@ typedef struct {
     /* 0x258 */ OSTimer timer;
     /* 0x278 */ OSTime retraceTime;
 } IrqMgr; // size = 0x280
+
+extern IrqMgr gIrqMgr;
 
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;

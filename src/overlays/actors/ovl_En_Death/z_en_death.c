@@ -814,7 +814,7 @@ void EnDeath_SetupDeathCutscenePart1(EnDeath* this, PlayState* play) {
 
     this->coreGuarded = false;
     this->coreCollider.base.acFlags &= ~AC_ON;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 30);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->actionTimer = 35;
     this->actor.world.pos.y = this->actor.home.pos.y;
     this->actor.speed = 0.0f;

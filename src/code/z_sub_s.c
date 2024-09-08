@@ -1148,12 +1148,12 @@ s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep) {
     f32 distSqBefore;
     f32 distSqAfter;
 
-    Actor_OffsetOfPointInActorCoords(actor, &offsetBefore, point);
+    Actor_WorldToActorCoords(actor, &offsetBefore, point);
     Math_SmoothStepToS(&actor->world.rot.y, SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqBefore), 4,
                        rotStep, 1);
     actor->shape.rot.y = actor->world.rot.y;
     Actor_MoveWithGravity(actor);
-    Actor_OffsetOfPointInActorCoords(actor, &offsetAfter, point);
+    Actor_WorldToActorCoords(actor, &offsetAfter, point);
     SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqAfter);
     return ((offsetBefore.z > 0.0f) && (offsetAfter.z <= 0.0f)) ? true : false;
 }

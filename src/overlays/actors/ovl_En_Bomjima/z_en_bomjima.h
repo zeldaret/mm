@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "assets/objects/object_cs/object_cs.h"
+#include "overlays/actors/ovl_En_Bombal/z_en_bombal.h"
 
 struct EnBomjima;
 

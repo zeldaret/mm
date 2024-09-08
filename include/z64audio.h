@@ -132,7 +132,7 @@ typedef struct {
     /* 0x48 */ char unk_48[0x8];
 } AudioTask; // size = 0x50
 
-typedef struct {
+typedef struct AudioContext {
     /* 0x0000 */ char unk_0000;
     /* 0x0001 */ s8 numSynthesisReverbs;
     /* 0x0002 */ u16 unk_2; // reads from audio spec unk_14, never used, always set to 0x7FFF

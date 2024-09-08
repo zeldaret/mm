@@ -279,7 +279,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
     sp28.y = player->actor.world.pos.y + arg2;
     sp28.z = player->actor.world.pos.z;
 
-    Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
+    Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
 
     if ((arg3 < fabsf(sp1C.x)) || (arg4 < fabsf(sp1C.y))) {
         return FLT_MAX;
@@ -556,7 +556,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     Vec3f sp44;
 
     if (this->slidingDoor.dyna.actor.room >= 0) {
-        Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
 
         this->slidingDoor.dyna.actor.room =
             play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)]

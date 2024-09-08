@@ -7,7 +7,7 @@
 #include "scheduler.h"
 #include "z64audio.h"
 
-typedef struct {
+typedef struct AudioMgr {
     /* 0x000 */ IrqMgr* irqMgr;
     /* 0x004 */ Scheduler* sched;
     /* 0x008 */ OSScTask audioTask;

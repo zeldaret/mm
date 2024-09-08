@@ -1007,12 +1007,12 @@ void BossHakugin_AddLightningSegments(BossHakugin* this, Vec3f* startPos, PlaySt
     targetPos.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
     targetPos.y = player->actor.world.pos.y + 40.0f;
     targetPos.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedTargetPos, &targetPos);
+    Actor_WorldToActorCoords(&this->actor, &transformedTargetPos, &targetPos);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER_THR);
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
         lightningSegment = &this->lightningSegments[i];
-        Actor_OffsetOfPointInActorCoords(&this->actor, &transformedRootPos, &rootPos);
+        Actor_WorldToActorCoords(&this->actor, &transformedRootPos, &rootPos);
 
         if (transformedTargetPos.z < transformedRootPos.z) {
             lightningSegment->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
@@ -3012,7 +3012,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     }
 
     BossHakugin_UpdateBaseRot(this, play);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, (89100.0f * 0.001f), 0.0f,

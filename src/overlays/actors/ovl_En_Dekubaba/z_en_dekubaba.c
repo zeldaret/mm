@@ -293,7 +293,7 @@ void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
@@ -788,14 +788,14 @@ void EnDekubaba_SetupHit(EnDekubaba* this, s32 hitType) {
     Actor_SetScale(&this->actor, this->size * 0.01f);
 
     if (hitType == DEKUBABA_HIT_STUN_NUT) {
-        Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 155, COLORFILTER_BUFFLAG_OPA, 42);
     } else if (hitType == DEKUBABA_HIT_STUN_ELECTRIC) {
-        Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 155, COLORFILTER_BUFFLAG_OPA, 42);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 2.0f;
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 42);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 42);
     }
     this->actionFunc = EnDekubaba_Hit;
 }
@@ -982,7 +982,7 @@ void EnDekubaba_SetupSway(EnDekubaba* this) {
     this->stemSectionAngle[2] = -0x5000;
     this->stemSectionAngle[1] = -0x4800;
     EnDekubaba_DisableHitboxes(this);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 35);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 35);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnDekubaba_Sway;
 }
@@ -997,7 +997,7 @@ void EnDekubaba_Sway(EnDekubaba* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, this->stemSectionAngle[0], 0x71C);
     Math_ScaledStepToS(this->stemSectionAngle, this->stemSectionAngle[1], 0x71C);
     Math_ScaledStepToS(&this->stemSectionAngle[1], this->stemSectionAngle[2], 0x71C);
-    if (Math_ScaledStepToS(&this->stemSectionAngle[2], this->targetSwayAngle, 0x71C) != 0) {
+    if (Math_ScaledStepToS(&this->stemSectionAngle[2], this->targetSwayAngle, 0x71C)) {
         this->targetSwayAngle = -0x4000 - (s32)((this->targetSwayAngle + 0x4000) * 0.8f);
     }
 

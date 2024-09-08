@@ -1,0 +1,9 @@
+<Root>
+    <File Name="boot" OutName="gfxprint" BaseAddress="0x80080060" RangeStart="0x16BF0" RangeEnd="0x174A0" >
+        <Texture Name="sGfxPrintFontTLUT" OutName="gfx_print_font_tlut" Format="rgba16" Width="8" Height="8" Offset="0x16BF0"/>
+        <Texture Name="sGfxPrintRainbowTLUT" OutName="gfx_print_rainbow_tlut" Format="rgba16" Width="8" Height="2" Offset="0x16C70"/>
+        <!-- TODO: Properly extract fonts not as blobs -->
+        <Blob Name="sGfxPrintRainbowFont" Size="0x8" Offset="0x16C90"/>
+        <Blob Name="sGfxPrintFont" Size="0x808" Offset="0x16C98"/>
+    </File>
+</Root>

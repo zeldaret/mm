@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_spinyroll.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/object_spinyroll/object_spinyroll.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -148,7 +149,7 @@ void func_80A1DA50(PlayState* play, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3
 
     Math_Vec3f_Sum(arg2, arg3, &sp1C);
     Math_Vec3f_Scale(&sp1C, 0.5f);
-    EffectSsHitmark_SpawnFixedScale(play, 3, &sp1C);
+    EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &sp1C);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
