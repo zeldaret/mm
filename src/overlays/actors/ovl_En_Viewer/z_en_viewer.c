@@ -131,7 +131,7 @@ void func_8089F2C4(EnViewer* this, PlayState* play) {
     Vec3f sp20;
     f32 temp;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp20, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp20, &player->actor.world.pos);
     if (this->unk_14C == 0.0f) {
         this->unk_14C = 0.1f;
     }

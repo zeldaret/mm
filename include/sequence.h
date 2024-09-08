@@ -407,9 +407,9 @@ u8 func_801A3950(u8 seqPlayerIndex, u8 resetChannelIO);
 u8 func_801A39F8(void);
 s32 func_801A46F8(void);
 
-extern SeqRequest sSeqRequests[][5];
+extern SeqRequest sSeqRequests[5][5];
 extern u8 sNumSeqRequests[5];
 extern u32 sAudioSeqCmds[0x100];
-extern ActiveSequence gActiveSeqs[];
+extern ActiveSequence gActiveSeqs[5];
 
 #endif

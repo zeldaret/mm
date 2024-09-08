@@ -732,7 +732,7 @@
     0x800B6DF8:("Actor_WorldDistXYZToPoint",),
     0x800B6E1C:("Actor_WorldDistXZToActor",),
     0x800B6E48:("Actor_WorldDistXZToPoint",),
-    0x800B6E6C:("Actor_OffsetOfPointInActorCoords",),
+    0x800B6E6C:("Actor_WorldToActorCoords",),
     0x800B6F0C:("Actor_HeightDiff",),
     0x800B6F20:("Actor_SetControlStickData",),
     0x800B6FC8:("Player_GetHeight",),

@@ -246,7 +246,7 @@ asm/non_matchings/code/z_actor/Actor_WorldDistXYZToActor.s,Actor_WorldDistXYZToA
 asm/non_matchings/code/z_actor/Actor_WorldDistXYZToPoint.s,Actor_WorldDistXYZToPoint,0x800B6DF8,0x9
 asm/non_matchings/code/z_actor/Actor_WorldDistXZToActor.s,Actor_WorldDistXZToActor,0x800B6E1C,0xB
 asm/non_matchings/code/z_actor/Actor_WorldDistXZToPoint.s,Actor_WorldDistXZToPoint,0x800B6E48,0x9
-asm/non_matchings/code/z_actor/Actor_OffsetOfPointInActorCoords.s,Actor_OffsetOfPointInActorCoords,0x800B6E6C,0x28
+asm/non_matchings/code/z_actor/Actor_WorldToActorCoords.s,Actor_WorldToActorCoords,0x800B6E6C,0x28
 asm/non_matchings/code/z_actor/Actor_HeightDiff.s,Actor_HeightDiff,0x800B6F0C,0x5
 asm/non_matchings/code/z_actor/Actor_SetControlStickData.s,Actor_SetControlStickData,0x800B6F20,0x2A
 asm/non_matchings/code/z_actor/Player_GetHeight.s,Player_GetHeight,0x800B6FC8,0x32

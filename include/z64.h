@@ -13,6 +13,7 @@
 #include "libc64/qrand.h"
 
 #include "color.h"
+#include "controller.h"
 #include "gfx.h"
 #include "gfxprint.h"
 #include "ichain.h"
@@ -24,6 +25,7 @@
 #include "rand.h"
 #include "regs.h"
 #include "scheduler.h"
+#include "segmented_address.h"
 #include "sequence.h"
 #include "seqcmd.h"
 #include "sfx.h"

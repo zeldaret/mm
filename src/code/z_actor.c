@@ -1295,7 +1295,7 @@ f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint) {
  * @param[out] offset The transformed coordinates.
  * @param[in]  point  The point to transform to actor coordinates.
  */
-void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
+void Actor_WorldToActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos = Math_CosS(actor->shape.rot.y);
     f32 sin = Math_SinS(actor->shape.rot.y);
     f32 diffX;

@@ -108,7 +108,7 @@ void EnHoll_SetupAction(EnHoll* this) {
 void EnHoll_SetPlayerSide(PlayState* play, EnHoll* this, Vec3f* transformedPlayerPos) {
     Player* player = GET_PLAYER(play);
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, transformedPlayerPos, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, transformedPlayerPos, &player->actor.world.pos);
     this->playerSide = (transformedPlayerPos->z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
 }
 
@@ -225,8 +225,8 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedPlayerPos,
-                                     useViewEye ? &play->view.eye : &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &transformedPlayerPos,
+                             useViewEye ? &play->view.eye : &player->actor.world.pos);
     enHollTop = (play->sceneId == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&

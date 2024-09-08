@@ -566,7 +566,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     if ((door != NULL) && !door->knobDoor.requestOpen &&
         ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
         Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
-        Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
+        Actor_WorldToActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
         this->player.doorType = PLAYER_DOORTYPE_HANDLE;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
         this->player.doorActor = &door->knobDoor.dyna.actor;
