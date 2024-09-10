@@ -1,5 +1,5 @@
 #include "prevent_bss_reordering.h"
-#include "z64pause_menu.h"
+#include "kaleido_manager.h"
 
 #include "z64.h"
 #include "z64shrink_window.h"
