@@ -8,7 +8,7 @@
 
 s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
-#include "code/sub_s/sub_s.c"
+#include "assets/code/sub_s/sub_s.c"
 
 Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 

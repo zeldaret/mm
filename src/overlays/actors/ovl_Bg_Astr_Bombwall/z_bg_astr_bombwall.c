@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_astr_bombwall.h"
-#include "objects/object_astr_obj/object_astr_obj.h"
+#include "assets/objects/object_astr_obj/object_astr_obj.h"
 
 #define FLAGS 0x00000000
 

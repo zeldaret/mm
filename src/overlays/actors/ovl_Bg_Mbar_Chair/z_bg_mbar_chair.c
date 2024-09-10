@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_mbar_chair.h"
-#include "objects/object_mbar_obj/object_mbar_obj.h"
+#include "assets/objects/object_mbar_obj/object_mbar_obj.h"
 
 #define FLAGS 0x00000000
 

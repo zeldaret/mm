@@ -5,8 +5,8 @@
  */
 
 #include "z_dm_an.h"
-#include "objects/object_an4/object_an4.h"
-#include "objects/object_msmo/object_msmo.h"
+#include "assets/objects/object_an4/object_an4.h"
+#include "assets/objects/object_msmo/object_msmo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 

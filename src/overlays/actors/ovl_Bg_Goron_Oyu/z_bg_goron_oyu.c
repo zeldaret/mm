@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_goron_oyu.h"
-#include "objects/object_oyu/object_oyu.h"
+#include "assets/objects/object_oyu/object_oyu.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

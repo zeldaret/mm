@@ -6,8 +6,8 @@
 
 #include "z_en_daiku2.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_daiku/object_daiku.h"
-#include "objects/object_bombiwa/object_bombiwa.h"
+#include "assets/objects/object_daiku/object_daiku.h"
+#include "assets/objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 

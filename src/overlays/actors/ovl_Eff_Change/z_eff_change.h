@@ -2,7 +2,7 @@
 #define Z_EFF_CHANGE_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define EFFCHANGE_GET_COLORS(thisx) ((thisx)->params & 7)
 

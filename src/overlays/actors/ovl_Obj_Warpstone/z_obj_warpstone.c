@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_warpstone.h"
-#include "objects/object_sek/object_sek.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_sek/object_sek.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 

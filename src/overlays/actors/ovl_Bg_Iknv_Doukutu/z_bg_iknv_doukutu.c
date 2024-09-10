@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_iknv_doukutu.h"
-#include "objects/object_iknv_obj/object_iknv_obj.h"
+#include "assets/objects/object_iknv_obj/object_iknv_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

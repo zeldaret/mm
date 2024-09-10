@@ -5,7 +5,7 @@
  */
 
 #include "z_en_warp_uzu.h"
-#include "objects/object_warp_uzu/object_warp_uzu.h"
+#include "assets/objects/object_warp_uzu/object_warp_uzu.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 

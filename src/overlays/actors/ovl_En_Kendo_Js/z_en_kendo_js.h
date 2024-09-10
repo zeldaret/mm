@@ -2,7 +2,7 @@
 #define Z_EN_KENDO_JS_H
 
 #include "global.h"
-#include "objects/object_js/object_js.h"
+#include "assets/objects/object_js/object_js.h"
 
 struct EnKendoJs;
 

@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
-#include "objects/object_kz/object_kz.h"
+#include "assets/objects/object_kz/object_kz.h"
 
 struct EnKaizoku;
 

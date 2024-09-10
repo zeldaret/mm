@@ -2,7 +2,7 @@
 #define Z_EN_DG_H
 
 #include "global.h"
-#include "objects/object_dog/object_dog.h"
+#include "assets/objects/object_dog/object_dog.h"
 
 typedef enum {
     /* 0 */ DOG_COLOR_DEFAULT, // ends up just being treated as beige

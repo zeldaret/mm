@@ -8,8 +8,8 @@
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
-#include "objects/object_taru/object_taru.h"
-#include "objects/object_kibako2/object_kibako2.h"
+#include "assets/objects/object_taru/object_taru.h"
+#include "assets/objects/object_kibako2/object_kibako2.h"
 
 #define FLAGS 0x00000000
 

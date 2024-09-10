@@ -2,7 +2,7 @@
 #define Z_EN_OSK_H
 
 #include "global.h"
-#include "objects/object_ikn_demo/object_ikn_demo.h"
+#include "assets/objects/object_ikn_demo/object_ikn_demo.h"
 
 struct EnOsk;
 

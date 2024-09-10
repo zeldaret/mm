@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tree.h"
-#include "objects/object_tree/object_tree.h"
+#include "assets/objects/object_tree/object_tree.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 

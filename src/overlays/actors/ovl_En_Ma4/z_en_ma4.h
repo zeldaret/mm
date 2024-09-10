@@ -2,7 +2,7 @@
 #define Z_EN_MA4_H
 
 #include "global.h"
-#include "objects/object_ma1/object_ma1.h"
+#include "assets/objects/object_ma1/object_ma1.h"
 
 struct EnMa4;
 

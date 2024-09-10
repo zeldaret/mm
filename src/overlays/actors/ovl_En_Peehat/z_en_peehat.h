@@ -2,7 +2,7 @@
 #define Z_EN_PEEHAT_H
 
 #include "global.h"
-#include "objects/object_ph/object_ph.h"
+#include "assets/objects/object_ph/object_ph.h"
 
 struct EnPeehat;
 

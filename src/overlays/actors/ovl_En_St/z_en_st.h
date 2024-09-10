@@ -2,7 +2,7 @@
 #define Z_EN_ST_H
 
 #include "global.h"
-#include "objects/object_st/object_st.h"
+#include "assets/objects/object_st/object_st.h"
 
 struct EnSt;
 

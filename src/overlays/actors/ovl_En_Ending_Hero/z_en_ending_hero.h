@@ -2,7 +2,7 @@
 #define Z_EN_ENDING_HERO_H
 
 #include "global.h"
-#include "objects/object_dt/object_dt.h"
+#include "assets/objects/object_dt/object_dt.h"
 
 struct EnEndingHero;
 

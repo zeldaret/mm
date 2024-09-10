@@ -39,13 +39,13 @@
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#include "objects/object_link_boy/object_link_boy.h"
-#include "objects/object_link_goron/object_link_goron.h"
-#include "objects/object_link_zora/object_link_zora.h"
-#include "objects/object_link_nuts/object_link_nuts.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/object_link_boy/object_link_boy.h"
+#include "assets/objects/object_link_goron/object_link_goron.h"
+#include "assets/objects/object_link_zora/object_link_zora.h"
+#include "assets/objects/object_link_nuts/object_link_nuts.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 #define THIS ((Player*)thisx)
 

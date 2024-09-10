@@ -5,7 +5,7 @@
  * into a Deku Scrub.
  */
 #include "z_bg_open_spot.h"
-#include "objects/object_open_obj/object_open_obj.h"
+#include "assets/objects/object_open_obj/object_open_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -1,5 +1,5 @@
 #include "z_bg_lotus.h"
-#include "objects/object_lotus/object_lotus.h"
+#include "assets/objects/object_lotus/object_lotus.h"
 
 #define FLAGS 0x00000000
 

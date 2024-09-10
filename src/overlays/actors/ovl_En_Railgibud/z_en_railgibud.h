@@ -2,7 +2,7 @@
 #define Z_EN_RAILGIBUD_H
 
 #include "global.h"
-#include "objects/object_rd/object_rd.h"
+#include "assets/objects/object_rd/object_rd.h"
 
 struct EnRailgibud;
 

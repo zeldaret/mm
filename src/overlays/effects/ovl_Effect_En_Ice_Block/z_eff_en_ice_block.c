@@ -6,7 +6,7 @@
  */
 
 #include "z_eff_en_ice_block.h"
-#include "objects/object_ice_block/object_ice_block.h"
+#include "assets/objects/object_ice_block/object_ice_block.h"
 
 #define PARAMS ((EffectEnIceBlockInitParams*)initParamsx)
 

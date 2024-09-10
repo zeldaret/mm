@@ -3,7 +3,7 @@
 
 #include "assert.h"
 #include "global.h"
-#include "objects/object_knight/object_knight.h"
+#include "assets/objects/object_knight/object_knight.h"
 
 static_assert((u32)IGOS_LIMB_MAX == (u32)KNIGHT_LIMB_MAX,
               "The skeletons for Igos du Ikana and his aides must match in structure");

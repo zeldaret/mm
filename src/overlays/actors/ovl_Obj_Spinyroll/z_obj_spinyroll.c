@@ -6,7 +6,7 @@
 
 #include "z_obj_spinyroll.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
-#include "objects/object_spinyroll/object_spinyroll.h"
+#include "assets/objects/object_spinyroll/object_spinyroll.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -2,7 +2,7 @@
 #define Z_EN_BOMBERS2_H
 
 #include "global.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
 
 struct EnBombers2;
 

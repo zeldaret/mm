@@ -2,7 +2,7 @@
 #define Z_EN_AOB_01_H
 
 #include "global.h"
-#include "objects/object_aob/object_aob.h"
+#include "assets/objects/object_aob/object_aob.h"
 
 struct EnAob01;
 

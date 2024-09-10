@@ -6,9 +6,9 @@
 
 #include "z_obj_tsubo.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_tsubo/object_tsubo.h"
-#include "objects/object_racetsubo/object_racetsubo.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_tsubo/object_tsubo.h"
+#include "assets/objects/object_racetsubo/object_racetsubo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 

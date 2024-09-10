@@ -10,8 +10,8 @@
 #include "z64save.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
-#include "interface/parameter_static/parameter_static.h"
-#include "misc/title_static/title_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
+#include "assets/misc/title_static/title_static.h"
 
 s32 D_808144F10 = 100;
 f32 D_808144F14 = 8.0f;

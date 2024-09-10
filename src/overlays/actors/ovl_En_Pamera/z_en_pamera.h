@@ -2,7 +2,7 @@
 #define Z_EN_PAMERA_H
 
 #include "global.h"
-#include "objects/object_pamera/object_pamera.h"
+#include "assets/objects/object_pamera/object_pamera.h"
 
 struct EnPamera;
 

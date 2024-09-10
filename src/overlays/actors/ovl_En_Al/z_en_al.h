@@ -2,7 +2,7 @@
 #define Z_EN_AL_H
 
 #include "global.h"
-#include "objects/object_al/object_al.h"
+#include "assets/objects/object_al/object_al.h"
 
 struct EnAl;
 

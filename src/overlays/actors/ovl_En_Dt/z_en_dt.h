@@ -2,7 +2,7 @@
 #define Z_EN_DT_H
 
 #include "global.h"
-#include "objects/object_dt/object_dt.h"
+#include "assets/objects/object_dt/object_dt.h"
 
 #define EN_DT_CUTSCENE_COUNT 11
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_en_cha.h"
-#include "objects/object_cha/object_cha.h"
+#include "assets/objects/object_cha/object_cha.h"
 
 #define FLAGS 0x00000000
 

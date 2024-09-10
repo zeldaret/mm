@@ -13,7 +13,7 @@
 #include "z64shrink_window.h"
 #include "z64save.h"
 
-#include "interface/parameter_static/parameter_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 
 u8 D_801C6A70 = 0;
 s16 sOcarinaButtonIndexBufPos = 0;

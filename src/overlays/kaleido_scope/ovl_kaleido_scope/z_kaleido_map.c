@@ -5,11 +5,11 @@
  */
 
 #include "z_kaleido_scope.h"
-#include "interface/parameter_static/parameter_static.h"
-#include "interface/icon_item_field_static/icon_item_field_static.h"
-#include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
-#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-#include "archives/icon_item_24_static/icon_item_24_static_yar.h"
+#include "assets/interface/parameter_static/parameter_static.h"
+#include "assets/interface/icon_item_field_static/icon_item_field_static.h"
+#include "assets/interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
+#include "assets/interface/icon_item_jpn_static/icon_item_jpn_static.h"
+#include "assets/archives/icon_item_24_static/icon_item_24_static_yar.h"
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];

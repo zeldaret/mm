@@ -14,8 +14,8 @@
 
 #include "z_en_water_effect.h"
 #include "overlays/actors/ovl_Bg_Ikana_Rotaryroom/z_bg_ikana_rotaryroom.h"
-#include "objects/object_water_effect/object_water_effect.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_water_effect/object_water_effect.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

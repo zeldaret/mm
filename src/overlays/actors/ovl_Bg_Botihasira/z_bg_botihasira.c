@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_botihasira.h"
-#include "objects/object_botihasira/object_botihasira.h"
+#include "assets/objects/object_botihasira/object_botihasira.h"
 
 #define FLAGS 0x00000000
 

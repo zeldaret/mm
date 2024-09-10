@@ -8,10 +8,10 @@
 
 #include "z64malloc.h"
 
-#include "objects/object_test3/object_test3.h"
+#include "assets/objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_mask_ki_tan/object_mask_ki_tan.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 

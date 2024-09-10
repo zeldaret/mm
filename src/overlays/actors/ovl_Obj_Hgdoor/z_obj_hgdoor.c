@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hgdoor.h"
-#include "objects/object_hgdoor/object_hgdoor.h"
+#include "assets/objects/object_hgdoor/object_hgdoor.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
 

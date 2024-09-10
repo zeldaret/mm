@@ -2,7 +2,7 @@
 #define Z_EN_SCOPECROW_H
 
 #include "global.h"
-#include "objects/object_crow/object_crow.h"
+#include "assets/objects/object_crow/object_crow.h"
 
 struct EnScopecrow;
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spout_fire.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 
 #define FLAGS 0x00000000
 

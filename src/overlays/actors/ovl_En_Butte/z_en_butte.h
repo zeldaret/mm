@@ -2,7 +2,7 @@
 #define Z_EN_BUTTE_H
 
 #include "global.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 struct EnButte;
 

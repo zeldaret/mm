@@ -2,7 +2,7 @@
 #define Z_EN_MM3_H
 
 #include "global.h"
-#include "objects/object_mm/object_mm.h"
+#include "assets/objects/object_mm/object_mm.h"
 
 struct EnMm3;
 

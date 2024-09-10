@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tokei_tobira.h"
-#include "objects/object_tokei_tobira/object_tokei_tobira.h"
+#include "assets/objects/object_tokei_tobira/object_tokei_tobira.h"
 
 #define FLAGS 0x00000000
 

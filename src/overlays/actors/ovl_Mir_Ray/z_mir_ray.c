@@ -6,7 +6,7 @@
  */
 
 #include "z_mir_ray.h"
-#include "objects/object_mir_ray/object_mir_ray.h"
+#include "assets/objects/object_mir_ray/object_mir_ray.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

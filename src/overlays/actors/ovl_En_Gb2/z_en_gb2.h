@@ -2,7 +2,7 @@
 #define Z_EN_GB2_H
 
 #include "global.h"
-#include "objects/object_ps/object_ps.h"
+#include "assets/objects/object_ps/object_ps.h"
 
 struct EnGb2;
 

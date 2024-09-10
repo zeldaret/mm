@@ -114,7 +114,7 @@ NM      := $(MIPS_BINUTILS_PREFIX)nm
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
 
-IINC := -Iinclude -Iinclude/libc -Isrc -Iassets -I$(BUILD_DIR) -I.
+IINC := -Iinclude -Iinclude/libc -Isrc -I$(BUILD_DIR) -I.
 
 ifeq ($(KEEP_MDEBUG),0)
   RM_MDEBUG = $(OBJCOPY) --remove-section .mdebug $@

@@ -10,9 +10,9 @@
  */
 
 #include "z_obj_chan.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_obj_chan/object_obj_chan.h"
-#include "objects/object_tsubo/object_tsubo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_obj_chan/object_obj_chan.h"
+#include "assets/objects/object_tsubo/object_tsubo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

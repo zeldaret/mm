@@ -2,7 +2,7 @@
 #define Z_EN_MS_H
 
 #include "global.h"
-#include "objects/object_ms/object_ms.h"
+#include "assets/objects/object_ms/object_ms.h"
 
 struct EnMs;
 

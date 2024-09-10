@@ -2,7 +2,7 @@
 #define Z_EN_DNO_H
 
 #include "global.h"
-#include "objects/object_dnj/object_dnj.h"
+#include "assets/objects/object_dnj/object_dnj.h"
 
 struct EnDno;
 

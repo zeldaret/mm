@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Minideath/z_en_minideath.h"
-#include "objects/object_death/object_death.h"
+#include "assets/objects/object_death/object_death.h"
 
 struct EnDeath;
 

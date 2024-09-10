@@ -2,11 +2,11 @@
 #define Z_EN_ENDING_HERO6_H
 
 #include "global.h"
-#include "objects/object_dt/object_dt.h"
-#include "objects/object_daiku/object_daiku.h"
-#include "objects/object_bai/object_bai.h"
-#include "objects/object_toryo/object_toryo.h"
-#include "objects/object_sdn/object_sdn.h"
+#include "assets/objects/object_dt/object_dt.h"
+#include "assets/objects/object_daiku/object_daiku.h"
+#include "assets/objects/object_bai/object_bai.h"
+#include "assets/objects/object_toryo/object_toryo.h"
+#include "assets/objects/object_sdn/object_sdn.h"
 
 struct EnEndingHero6;
 

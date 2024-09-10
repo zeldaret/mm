@@ -2,7 +2,7 @@
 #define Z_EN_ZORAEGG_H
 
 #include "global.h"
-#include "objects/object_zoraegg/object_zoraegg.h"
+#include "assets/objects/object_zoraegg/object_zoraegg.h"
 
 struct EnZoraegg;
 

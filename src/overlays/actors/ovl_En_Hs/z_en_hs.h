@@ -2,7 +2,7 @@
 #define Z_EN_HS_H
 
 #include "global.h"
-#include "objects/object_hs/object_hs.h"
+#include "assets/objects/object_hs/object_hs.h"
 
 struct EnHs;
 

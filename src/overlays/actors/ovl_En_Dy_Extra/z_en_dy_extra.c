@@ -5,7 +5,7 @@
  */
 
 #include "z_en_dy_extra.h"
-#include "objects/object_dy_obj/object_dy_obj.h"
+#include "assets/objects/object_dy_obj/object_dy_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

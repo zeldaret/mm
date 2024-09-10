@@ -5,8 +5,8 @@
  */
 
 #include "z_en_kanban.h"
-#include "objects/object_kanban/object_kanban.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_kanban/object_kanban.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -918,7 +918,7 @@ static f32 sCutAngles[] = {
     /*            */ 0.00f * M_PIf,
 };
 
-#include "overlays/ovl_En_Kanban/ovl_En_Kanban.c"
+#include "assets/overlays/ovl_En_Kanban/ovl_En_Kanban.c"
 
 void EnKanban_Draw(Actor* thisx, PlayState* play) {
     EnKanban* this = THIS;

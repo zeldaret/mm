@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_icicle.h"
-#include "objects/object_icicle/object_icicle.h"
+#include "assets/objects/object_icicle/object_icicle.h"
 
 #define FLAGS 0x00000000
 

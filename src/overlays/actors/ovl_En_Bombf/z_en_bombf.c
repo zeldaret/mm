@@ -7,7 +7,7 @@
 #include "z_en_bombf.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_bombf/object_bombf.h"
+#include "assets/objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 

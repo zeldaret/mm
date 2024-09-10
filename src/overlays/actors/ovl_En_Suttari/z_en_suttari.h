@@ -2,7 +2,7 @@
 #define Z_EN_SUTTARI_H
 
 #include "global.h"
-#include "objects/object_boj/object_boj.h"
+#include "assets/objects/object_boj/object_boj.h"
 #include "overlays/actors/ovl_En_Fsn/z_en_fsn.h"
 
 struct EnSuttari;

@@ -2,7 +2,7 @@
 #define Z_EN_RACEDOG_H
 
 #include "global.h"
-#include "objects/object_dog/object_dog.h"
+#include "assets/objects/object_dog/object_dog.h"
 
 #define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)

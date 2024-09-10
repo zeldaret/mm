@@ -2,7 +2,7 @@
 #define Z_EN_TG_H
 
 #include "global.h"
-#include "objects/object_mu/object_mu.h"
+#include "assets/objects/object_mu/object_mu.h"
 
 struct EnTg;
 

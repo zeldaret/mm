@@ -17,10 +17,10 @@
 
 #include "z_en_fall.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_fall/object_fall.h"
-#include "objects/object_fall2/object_fall2.h"
-#include "objects/object_lodmoon/object_lodmoon.h"
-#include "objects/object_moonston/object_moonston.h"
+#include "assets/objects/object_fall/object_fall.h"
+#include "assets/objects/object_fall2/object_fall2.h"
+#include "assets/objects/object_lodmoon/object_lodmoon.h"
+#include "assets/objects/object_moonston/object_moonston.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

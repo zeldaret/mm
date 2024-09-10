@@ -11,7 +11,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
-#include "objects/object_horse_link_child/object_horse_link_child.h"
+#include "assets/objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

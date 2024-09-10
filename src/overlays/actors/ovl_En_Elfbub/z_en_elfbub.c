@@ -6,7 +6,7 @@
 
 #include "z_en_elfbub.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
-#include "objects/object_bubble/object_bubble.h"
+#include "assets/objects/object_bubble/object_bubble.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE)
 

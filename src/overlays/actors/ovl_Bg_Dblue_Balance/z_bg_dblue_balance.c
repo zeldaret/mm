@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_dblue_balance.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
 
 #define FLAGS 0x00000000
 
