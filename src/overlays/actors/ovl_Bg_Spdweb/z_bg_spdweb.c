@@ -39,7 +39,7 @@ ActorProfile Bg_Spdweb_Profile = {
 static ColliderTrisElementInit sTrisElementsInit1[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -50,7 +50,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -77,7 +77,7 @@ static ColliderTrisInit sTrisInit1 = {
 static ColliderTrisElementInit sTrisElementsInit2[4] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -88,7 +88,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -99,7 +99,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -110,7 +110,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

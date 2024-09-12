@@ -91,7 +91,7 @@ static f32 sScale[] = { 0.123f, 0.123f, 0.1f, 0.118f, 0.118f, 0.248f };
 static ColliderTrisElementInit sRustyFloorTrisElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000400, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -102,7 +102,7 @@ static ColliderTrisElementInit sRustyFloorTrisElementsInit[2] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000400, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -129,7 +129,7 @@ static ColliderTrisInit sRustyFloorTrisInit = {
 static ColliderTrisElementInit sEyeSwitchTrisElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -140,7 +140,7 @@ static ColliderTrisElementInit sEyeSwitchTrisElementsInit[2] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -167,7 +167,7 @@ static ColliderTrisInit sEyeSwitchTrisInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x01CBFFBE, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

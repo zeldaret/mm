@@ -47,7 +47,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -69,7 +69,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -198,7 +198,7 @@ void EnSsh_InitColliders(EnSsh* this, PlayState* play) {
     this->collider1[1].elem.acDmgInfo.dmgFlags = ~0x83038A9;
     this->collider1[2].base.colMaterial = COL_MATERIAL_METAL;
     this->collider1[2].elem.acElemFlags = (ACELEM_NO_AT_INFO | ACELEM_HOOKABLE | ACELEM_ON);
-    this->collider1[2].elem.elemType = ELEMTYPE_UNK2;
+    this->collider1[2].elem.elemMaterial = ELEM_MATERIAL_UNK2;
     this->collider1[2].elem.acDmgInfo.dmgFlags = ~0x83038A9;
 
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(2), &sColChkInfoInit);

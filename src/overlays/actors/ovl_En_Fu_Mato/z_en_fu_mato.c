@@ -49,7 +49,7 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -98,7 +98,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
 
     fu = (EnFu*)this->dyna.actor.parent;
     if (fu->unk_542 == 2) {
-        this->collider.elem.elemType = ELEMTYPE_UNK0;
+        this->collider.elem.elemMaterial = ELEM_MATERIAL_UNK0;
         this->collider.dim.worldSphere.radius = 30;
     } else {
         this->collider.dim.worldSphere.radius = 17;

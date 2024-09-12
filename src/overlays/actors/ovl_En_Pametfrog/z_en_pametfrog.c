@@ -127,7 +127,7 @@ static DamageTable sDamageTable = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -138,7 +138,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_WOOD,
@@ -232,7 +232,7 @@ u8 EnPametfrog_Vec3fNormalize(Vec3f* vec) {
 void EnPametfrog_Freeze(EnPametfrog* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider.base.colMaterial = COL_MATERIAL_HIT3;
-    this->collider.elements[0].base.elemType = ELEMTYPE_UNK0;
+    this->collider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK0;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
@@ -243,7 +243,7 @@ void EnPametfrog_Thaw(EnPametfrog* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colMaterial = COL_MATERIAL_HIT6;
-        this->collider.elements[0].base.elemType = ELEMTYPE_UNK1;
+        this->collider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
     }

@@ -45,7 +45,7 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000020, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NONE,
@@ -380,7 +380,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         ((this->actor.params == ARROW_TYPE_DEKU_BUBBLE) &&
          ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
-            if (phi_a2 && (this->collider.elem.atHitElem->elemType != ELEMTYPE_UNK4) &&
+            if (phi_a2 && (this->collider.elem.atHitElem->elemMaterial != ELEM_MATERIAL_UNK4) &&
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
@@ -434,7 +434,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         } else {
             EffectSsHitmark_SpawnCustomScale(play, EFFECT_HITMARK_WHITE, 150, &this->actor.world.pos);
 
-            if (sp50 && (this->collider.elem.atHitElem->elemType != ELEMTYPE_UNK4)) {
+            if (sp50 && (this->collider.elem.atHitElem->elemMaterial != ELEM_MATERIAL_UNK4)) {
                 sp7C = this->collider.base.at;
 
                 if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&

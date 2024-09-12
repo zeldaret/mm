@@ -50,7 +50,7 @@ ActorProfile Obj_Dora_Profile = {
 static ColliderTrisElementInit sTrisElementsInit[6] = {
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x00100000, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -61,7 +61,7 @@ static ColliderTrisElementInit sTrisElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x00100000, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -72,7 +72,7 @@ static ColliderTrisElementInit sTrisElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -83,7 +83,7 @@ static ColliderTrisElementInit sTrisElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -94,7 +94,7 @@ static ColliderTrisElementInit sTrisElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -105,7 +105,7 @@ static ColliderTrisElementInit sTrisElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

@@ -93,7 +93,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play);
 static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -107,7 +107,7 @@ static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
 static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -118,7 +118,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -129,7 +129,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -140,7 +140,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -151,7 +151,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -162,7 +162,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -209,7 +209,7 @@ static ColliderQuadInit sLaserQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x07, 0x10 },
         { 0x00000000, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
@@ -974,7 +974,7 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
 void EnEgol_SetupSlamWait(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_SLAM_WAIT);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK1;
     this->action = EYEGORE_ACTION_SLAM_WAIT;
     this->actionFunc = EnEgol_SlamWait;
 }
@@ -985,7 +985,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 20) {
-            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK2;
             EnEgol_SetupSlamEnd(this);
         }
     }
@@ -994,7 +994,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
 void EnEgol_SetupStunned(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STUNNED);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK1;
     this->bodyCollider.elements[0].dim.modelSphere.radius = 0;
     this->bodyCollider.elements[1].dim.modelSphere.radius = 0;
     this->action = EYEGORE_ACTION_STUNNED;
@@ -1007,7 +1007,7 @@ void EnEgol_Stunned(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 80) {
-            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK2;
             EnEgol_SetupStunEnd(this);
         }
     }

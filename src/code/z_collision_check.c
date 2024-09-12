@@ -269,11 +269,16 @@ s32 Collider_SetElementDamageInfoAC(struct PlayState* play, ColliderElementDamag
 
 s32 Collider_InitElement(struct PlayState* play, ColliderElement* elem) {
     static ColliderElement sDefaultColliderElement = {
-        { 0, 0, 0 },   { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
-        ELEMTYPE_UNK0, ATELEM_NONE,
-        ACELEM_NONE,   OCELEM_NONE,
-        NULL,          NULL,
-        NULL,          NULL,
+        { 0, 0, 0 },
+        { 0xF7CFFFFF, 0, 0, { 0, 0, 0 } },
+        ELEM_MATERIAL_UNK0,
+        ATELEM_NONE,
+        ACELEM_NONE,
+        OCELEM_NONE,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
     };
 
     *elem = sDefaultColliderElement;
@@ -289,7 +294,7 @@ s32 Collider_DestroyElement(struct PlayState* play, ColliderElement* elem) {
 }
 
 s32 Collider_SetElement(struct PlayState* play, ColliderElement* elem, ColliderElementInit* elemInit) {
-    elem->elemType = elemInit->elemType;
+    elem->elemMaterial = elemInit->elemMaterial;
     Collider_SetElementDamageInfoAT(play, &elem->atDmgInfo, &elemInit->atDmgInfo);
     Collider_SetElementDamageInfoAC(play, &elem->acDmgInfo, &elemInit->acDmgInfo);
     elem->atElemFlags = elemInit->atElemFlags;
@@ -1625,17 +1630,17 @@ void CollisionCheck_HitSolid(struct PlayState* play, ColliderElement* elem, Coll
 }
 
 /**
- * Plays a hit sound effect for AT colliders attached to Player based on the AC element's elemType.
+ * Plays a hit sound effect for AT colliders attached to Player based on the AC element's elemMaterial.
  */
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderElement* acElem) {
     if ((at->actor != NULL) && (at->actor->category == ACTORCAT_PLAYER)) {
-        if (acElem->elemType == ELEMTYPE_UNK0) {
+        if (acElem->elemMaterial == ELEM_MATERIAL_UNK0) {
             Audio_PlaySfx_AtPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
-        } else if (acElem->elemType == ELEMTYPE_UNK1) {
+        } else if (acElem->elemMaterial == ELEM_MATERIAL_UNK1) {
             Audio_PlaySfx_AtPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
-        } else if (acElem->elemType == ELEMTYPE_UNK2) {
+        } else if (acElem->elemMaterial == ELEM_MATERIAL_UNK2) {
             Audio_PlaySfx_AtPos(&at->actor->projectedPos, 0);
-        } else if (acElem->elemType == ELEMTYPE_UNK3) {
+        } else if (acElem->elemMaterial == ELEM_MATERIAL_UNK3) {
             Audio_PlaySfx_AtPos(&at->actor->projectedPos, 0);
         }
     }

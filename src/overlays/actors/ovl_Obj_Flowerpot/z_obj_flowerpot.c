@@ -45,7 +45,7 @@ ActorProfile Obj_Flowerpot_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x05CBFFBE, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -56,7 +56,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x0580C71C, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

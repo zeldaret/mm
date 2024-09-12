@@ -51,7 +51,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
@@ -71,7 +71,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
@@ -192,7 +192,7 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
 void func_808FA11C(EnRr* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider1.base.colMaterial = COL_MATERIAL_HIT3;
-    this->collider1.elem.elemType = ELEMTYPE_UNK0;
+    this->collider1.elem.elemMaterial = ELEM_MATERIAL_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
     this->drawDmgEffFrozenSteamScale = 1275.0f * 0.001f;
@@ -206,7 +206,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider1.base.colMaterial = COL_MATERIAL_HIT0;
-        this->collider1.elem.elemType = ELEMTYPE_UNK1;
+        this->collider1.elem.elemMaterial = ELEM_MATERIAL_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,
                               this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);

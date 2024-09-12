@@ -44,7 +44,7 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x02, 0x00 },
         { 0xF7CFF7FF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NONE,
@@ -64,7 +64,7 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK5,
+        ELEM_MATERIAL_UNK5,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000800, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,

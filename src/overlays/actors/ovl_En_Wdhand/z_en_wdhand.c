@@ -47,7 +47,7 @@ ActorProfile En_Wdhand_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEMENTS] = {
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -58,7 +58,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -69,7 +69,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -80,7 +80,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -91,7 +91,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -102,7 +102,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,
@@ -113,7 +113,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NONE,

@@ -90,7 +90,7 @@ static Vec3f sPointBR = { 300.0f, 10.0f, 40.0f };
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x01000202, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -101,7 +101,7 @@ static ColliderTrisElementInit sTrisElementsInit[] = {
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x01000202, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -135,7 +135,7 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,

@@ -51,7 +51,7 @@ ActorProfile En_Dodongo_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -62,7 +62,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -95,7 +95,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x800CB019, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -106,7 +106,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -117,7 +117,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -128,7 +128,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -139,7 +139,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -150,7 +150,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -190,7 +190,7 @@ static ColliderJntSphInit sJntSphInit2 = {
 static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -201,7 +201,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -212,7 +212,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x01, 0x10 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -315,7 +315,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->collider3, &this->actor, &sJntSphInit3, this->collider3Elements);
 
     for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
-        this->collider2.elements[i].base.elemType = ELEMTYPE_UNK2;
+        this->collider2.elements[i].base.elemMaterial = ELEM_MATERIAL_UNK2;
         this->collider2.elements[i].base.acDmgInfo.dmgFlags = 0x77C34FE6;
     }
 

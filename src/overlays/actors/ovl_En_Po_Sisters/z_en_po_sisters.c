@@ -84,7 +84,7 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CBFFFE, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -198,7 +198,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_SetupSpawnPo(this);
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
-            this->collider.elem.elemType = ELEMTYPE_UNK4;
+            this->collider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
             this->collider.elem.acDmgInfo.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
             EnPoSisters_MegCloneVanish(this, NULL);

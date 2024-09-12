@@ -67,7 +67,7 @@ f32 D_80C0F8D0 = 0.0f;
 static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -78,7 +78,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x08 },
             { 0x00000000, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -89,7 +89,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -100,7 +100,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -111,7 +111,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -122,7 +122,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -133,7 +133,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -531,7 +531,7 @@ void func_80C0BF2C(EnBsb* this) {
     this->collider.base.colMaterial = COL_MATERIAL_HARD;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.elemType = ELEMTYPE_UNK2;
+        this->collider.elements[i].base.elemMaterial = ELEM_MATERIAL_UNK2;
     }
 
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
@@ -573,7 +573,7 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     this->collider.base.colMaterial = COL_MATERIAL_NONE;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.elemType = ELEMTYPE_UNK0;
+        this->collider.elements[i].base.elemMaterial = ELEM_MATERIAL_UNK0;
     }
 
     this->unk_02AE = false;

@@ -108,7 +108,7 @@ typedef enum BioDekuBabaLilyPadWithHeadMovementState {
 static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
@@ -119,7 +119,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
@@ -147,7 +147,7 @@ static ColliderJntSphInit sLilyPadJntSphInit = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,
@@ -175,7 +175,7 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7FFFFFF, 0x00, 0x00 },
             ATELEM_ON | ATELEM_SFX_HARD,

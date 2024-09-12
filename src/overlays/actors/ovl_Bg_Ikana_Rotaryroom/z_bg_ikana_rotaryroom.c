@@ -49,7 +49,7 @@ ActorProfile Bg_Ikana_Rotaryroom_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -60,7 +60,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -87,7 +87,7 @@ static ColliderJntSphInit sJntSphInit1 = {
 static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

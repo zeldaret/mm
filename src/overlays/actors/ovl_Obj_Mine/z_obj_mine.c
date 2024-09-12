@@ -60,7 +60,7 @@ ActorProfile Obj_Mine_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0x00000000, 0x00, 0x00 },
             { 0x01CBFFBE, 0x00, 0x00 },
             ATELEM_NONE | ATELEM_SFX_NORMAL,

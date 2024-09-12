@@ -74,7 +74,7 @@ typedef struct {
 typedef struct ColliderElement {
     /* 0x00 */ ColliderElementDamageInfoAT atDmgInfo; // Damage properties when acting as an AT collider
     /* 0x08 */ ColliderElementDamageInfoAC acDmgInfo; // Damage properties when acting as an AC collider
-    /* 0x14 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
+    /* 0x14 */ u8 elemMaterial; // Affects sfx when attacked by Player, and interaction with hookshot and arrows. See `ElementMaterial` enum
     /* 0x15 */ u8 atElemFlags; // Information flags for AT collisions
     /* 0x16 */ u8 acElemFlags; // Information flags for AC collisions
     /* 0x17 */ u8 ocElemFlags; // Information flags for OC collisions
@@ -85,7 +85,7 @@ typedef struct ColliderElement {
 } ColliderElement; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
+    /* 0x00 */ u8 elemMaterial; // Affects sfx when attacked by Player, and interaction with hookshot and arrows. See `ElementMaterial` enum
     /* 0x04 */ ColliderElementDamageInfoATInit atDmgInfo; // Damage properties when acting as an AT collider
     /* 0x0C */ ColliderElementDamageInfoACInit acDmgInfo; // Damage properties when acting as an AC collider
     /* 0x14 */ u8 atElemFlags; // Information flags for AT collisions
@@ -353,16 +353,16 @@ typedef enum {
     /* 5 */ COLSHAPE_MAX
 } ColliderShape;
 
-typedef enum {
-    /* 0 */ ELEMTYPE_UNK0,
-    /* 1 */ ELEMTYPE_UNK1,
-    /* 2 */ ELEMTYPE_UNK2,
-    /* 3 */ ELEMTYPE_UNK3,
-    /* 4 */ ELEMTYPE_UNK4,
-    /* 5 */ ELEMTYPE_UNK5,
-    /* 6 */ ELEMTYPE_UNK6,
-    /* 7 */ ELEMTYPE_UNK7
-} ElementType;
+typedef enum ElementMaterial {
+    /* 0 */ ELEM_MATERIAL_UNK0,
+    /* 1 */ ELEM_MATERIAL_UNK1,
+    /* 2 */ ELEM_MATERIAL_UNK2,
+    /* 3 */ ELEM_MATERIAL_UNK3,
+    /* 4 */ ELEM_MATERIAL_UNK4,
+    /* 5 */ ELEM_MATERIAL_UNK5,
+    /* 6 */ ELEM_MATERIAL_UNK6,
+    /* 7 */ ELEM_MATERIAL_UNK7
+} ElementMaterial;
 
 #define SAC_ON (1 << 0) // CollisionContext SAC Flag
 

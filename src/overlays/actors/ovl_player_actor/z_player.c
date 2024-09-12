@@ -1685,7 +1685,7 @@ ColliderCylinderInit D_8085C2EC = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -1706,7 +1706,7 @@ ColliderCylinderInit D_8085C318 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x02 },
         { 0xD7CFFFFF, 0x00, 0x00 },
         ATELEM_NONE | ATELEM_SFX_NORMAL,
@@ -1727,7 +1727,7 @@ ColliderQuadInit D_8085C344 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -1748,7 +1748,7 @@ ColliderQuadInit D_8085C394 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xD7CFFFFF, 0x00, 0x00 },
         ATELEM_ON | ATELEM_SFX_NORMAL,
@@ -2759,7 +2759,7 @@ void Player_ResetCylinder(Player* this) {
     this->cylinder.base.atFlags = AT_NONE;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
-    this->cylinder.elem.elemType = ELEMTYPE_UNK1;
+    this->cylinder.elem.elemMaterial = ELEM_MATERIAL_UNK1;
     this->cylinder.elem.atDmgInfo.dmgFlags = 0;
     this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->cylinder.elem.atElemFlags = ATELEM_NONE | ATELEM_SFX_NORMAL;
@@ -2789,7 +2789,7 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
         this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
     }
 
-    this->cylinder.elem.elemType = ELEMTYPE_UNK2;
+    this->cylinder.elem.elemMaterial = ELEM_MATERIAL_UNK2;
     this->cylinder.elem.atElemFlags = ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = radius;
     this->cylinder.elem.atDmgInfo.dmgFlags = dmgFlags;
