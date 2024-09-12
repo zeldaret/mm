@@ -94,9 +94,6 @@ def discard_decomped_files(files_spec, include_files):
             if file == "":
                 file = f"{type}_{offset:08X}"
                 include = True
-            # flg_set_table is not in the spec, and buffers has its own section, just add them
-            elif file == "flg_set_table" or "buffers" in file:
-                include = True
             else:
                 include = False
                 i = seg_start
