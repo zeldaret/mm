@@ -126,7 +126,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,

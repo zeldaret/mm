@@ -53,7 +53,7 @@ ActorProfile En_Karebaba_Profile = {
 
 static ColliderCylinderInit sHurtCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -73,7 +73,7 @@ static ColliderCylinderInit sHurtCylinderInit = {
 
 static ColliderCylinderInit sAttackCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -220,7 +220,7 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_ResetColliders(EnKarebaba* this) {
     this->hurtCollider.dim.radius = 7;
     this->hurtCollider.dim.height = 25;
-    this->hurtCollider.base.colType = COLTYPE_HARD;
+    this->hurtCollider.base.colMaterial = COL_MATERIAL_HARD;
     this->hurtCollider.base.acFlags |= AC_HARD;
     this->attackCollider.dim.height = 25;
 }
@@ -287,7 +287,7 @@ void EnKarebaba_SetupUpright(EnKarebaba* this) {
     if (this->actionFunc != EnKarebaba_Spin) {
         Actor_SetScale(&this->actor, 0.01f);
 
-        this->hurtCollider.base.colType = COLTYPE_HIT6;
+        this->hurtCollider.base.colMaterial = COL_MATERIAL_HIT6;
         this->hurtCollider.base.acFlags &= ~AC_HARD;
         this->hurtCollider.dim.radius = 15;
 

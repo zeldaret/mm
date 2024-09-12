@@ -132,7 +132,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sLilyPadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -160,7 +160,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -188,7 +188,7 @@ static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sWalkingHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,

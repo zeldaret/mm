@@ -316,7 +316,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -388,7 +388,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -2025,9 +2025,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     if (this->actionFunc != Boss03_DeathCutscene) {
         if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
         } else {
-            this->bodyCollider.base.colType = COLTYPE_METAL;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_METAL;
         }
 
         Boss03_UpdateCollision(this, play);

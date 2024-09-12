@@ -17,12 +17,12 @@ typedef struct {
     /* 0x11 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x12 */ u8 ocFlags1; // Information flags for OC collisions.
     /* 0x13 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
-    /* 0x14 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
+    /* 0x14 */ u8 colMaterial; // Determines hitmarks and sound effects during AC collisions. See `ColliderMaterial` enum
     /* 0x15 */ u8 shape; // See `ColliderShape` enum
 } Collider; // size = 0x18
 
 typedef struct {
-    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
+    /* 0x0 */ u8 colMaterial; // Determines hitmarks and sound effects during AC collisions. See `ColliderMaterial` enum
     /* 0x1 */ u8 atFlags; // Information flags for AT collisions. 
     /* 0x2 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
@@ -31,7 +31,7 @@ typedef struct {
 } ColliderInit; // size = 0x6
 
 typedef struct {
-    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
+    /* 0x0 */ u8 colMaterial; // Determines hitmarks and sound effects during AC collisions. See `ColliderMaterial` enum
     /* 0x1 */ u8 atFlags; // Information flags for AT collisions. 
     /* 0x2 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
@@ -327,22 +327,22 @@ typedef enum {
     /* 2 */ MASSTYPE_NORMAL
 } ColChkMassType;
 
-typedef enum {
-    /*  0 */ COLTYPE_HIT0, // Blue blood, white hitmark
-    /*  1 */ COLTYPE_HIT1, // No blood, dust hitmark
-    /*  2 */ COLTYPE_HIT2, // Green blood, dust hitmark
-    /*  3 */ COLTYPE_HIT3, // No blood, white hitmark
-    /*  4 */ COLTYPE_HIT4, // Water burst, no hitmark
-    /*  5 */ COLTYPE_HIT5, // No blood, red hitmark
-    /*  6 */ COLTYPE_HIT6, // Green blood, white hitmark
-    /*  7 */ COLTYPE_HIT7, // Red blood, white hitmark
-    /*  8 */ COLTYPE_HIT8, // Blue blood, red hitmark
-    /*  9 */ COLTYPE_METAL,
-    /* 10 */ COLTYPE_NONE,
-    /* 11 */ COLTYPE_WOOD,
-    /* 12 */ COLTYPE_HARD,
-    /* 13 */ COLTYPE_TREE
-} ColliderType;
+typedef enum ColliderMaterial {
+    /*  0 */ COL_MATERIAL_HIT0, // Blue blood, white hitmark
+    /*  1 */ COL_MATERIAL_HIT1, // No blood, dust hitmark
+    /*  2 */ COL_MATERIAL_HIT2, // Green blood, dust hitmark
+    /*  3 */ COL_MATERIAL_HIT3, // No blood, white hitmark
+    /*  4 */ COL_MATERIAL_HIT4, // Water burst, no hitmark
+    /*  5 */ COL_MATERIAL_HIT5, // No blood, red hitmark
+    /*  6 */ COL_MATERIAL_HIT6, // Green blood, white hitmark
+    /*  7 */ COL_MATERIAL_HIT7, // Red blood, white hitmark
+    /*  8 */ COL_MATERIAL_HIT8, // Blue blood, red hitmark
+    /*  9 */ COL_MATERIAL_METAL,
+    /* 10 */ COL_MATERIAL_NONE,
+    /* 11 */ COL_MATERIAL_WOOD,
+    /* 12 */ COL_MATERIAL_HARD,
+    /* 13 */ COL_MATERIAL_TREE
+} ColliderMaterial;
 
 typedef enum {
     /* 0 */ COLSHAPE_JNTSPH,

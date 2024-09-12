@@ -76,7 +76,7 @@ ActorProfile En_Po_Sisters_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -417,7 +417,7 @@ void EnPoSisters_Investigating(EnPoSisters* this, PlayState* play) {
  */
 void EnPoSisters_SetupSpinUp(EnPoSisters* this) {
     if (this->color.a != 0) {
-        this->collider.base.colType = COLTYPE_METAL;
+        this->collider.base.colMaterial = COL_MATERIAL_METAL;
         this->collider.base.acFlags |= AC_HARD;
     }
 
@@ -442,7 +442,7 @@ void EnPoSisters_SpinUp(EnPoSisters* this, PlayState* play) {
 void EnPoSisters_SetupSpinAttack(EnPoSisters* this) {
     this->actor.speed = 5.0f;
     if (this->type == POE_SISTERS_TYPE_MEG) {
-        this->collider.base.colType = COLTYPE_METAL;
+        this->collider.base.colMaterial = COL_MATERIAL_METAL;
         this->collider.base.acFlags |= AC_HARD;
         Animation_MorphToLoop(&this->skelAnime, &gPoeSistersAttackAnim, -5.0f);
     }
@@ -466,7 +466,7 @@ void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play) {
 
         if (ABS_ALT(rotY) < 0x1000) {
             if (this->type != POE_SISTERS_TYPE_MEG) {
-                this->collider.base.colType = COLTYPE_HIT3;
+                this->collider.base.colMaterial = COL_MATERIAL_HIT3;
                 this->collider.base.acFlags &= ~AC_HARD;
                 EnPoSisters_SetupAimlessIdleFlying(this);
             } else {
@@ -488,7 +488,7 @@ void EnPoSisters_SetupAttackConnect(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &gPoeSistersFloatAnim, -3.0f);
     this->actor.world.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
     if (this->type != POE_SISTERS_TYPE_MEG) {
-        this->collider.base.colType = COLTYPE_HIT3;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
     }
 
@@ -764,7 +764,7 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->invisibleTimer = 100; // 5 seconds
     this->poSisterFlags = POE_SISTERS_FLAG_UPDATE_FIRES;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->collider.base.acFlags &= ~AC_HARD;
 
     if (play != NULL) {
@@ -918,7 +918,7 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
                 pos.z = this->actor.world.pos.z;
                 Item_DropCollectible(play, &pos, ITEM00_ARROWS_10);
             }
-        } else if (this->collider.base.colType != 9) {
+        } else if (this->collider.base.colMaterial != COL_MATERIAL_METAL) {
             if (this->actor.colChkInfo.damageEffect == POE_SISTERS_DMGEFF_DEKUNUT) {
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 this->poSisterFlags |= POE_SISTERS_FLAG_UPDATE_SHAPE_ROT;

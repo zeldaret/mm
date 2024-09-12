@@ -71,7 +71,7 @@ ActorProfile En_Kame_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -195,7 +195,7 @@ void EnKame_Freeze(EnKame* this) {
     this->drawDmgEffScale = 0.6f;
     this->drawDmgEffFrozenSteamScale = 900.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->stunTimer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -204,7 +204,7 @@ void EnKame_Freeze(EnKame* this) {
 void EnKame_Thaw(EnKame* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, SNAPPER_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
@@ -243,7 +243,7 @@ void EnKame_SetupWalk(EnKame* this) {
     this->timer = Animation_GetLastFrame(&gSnapperWalkAnim) * ((s32)Rand_ZeroFloat(5.0f) + 3);
     this->targetRotY = this->actor.shape.rot.y;
     this->collider.base.acFlags |= (AC_HARD | AC_ON);
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
     this->actionFunc = EnKame_Walk;
 }
 
@@ -567,7 +567,7 @@ void EnKame_SetupStruggle(EnKame* this) {
     Animation_MorphToPlayOnce(&this->snapperSkelAnime, &gSnapperWiggleLegsAnim, -3.0f);
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.acFlags &= ~AC_HARD;
-    this->collider.base.colType = COLTYPE_HIT6;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT6;
     this->actor.speed = 0.0f;
     this->actionFunc = EnKame_Struggle;
 }

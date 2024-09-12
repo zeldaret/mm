@@ -50,7 +50,7 @@ static f32 enBomScales[] = { 0.01f, 0.03f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
 
 static ColliderJntSphInit sJntSphInit1 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,
@@ -111,7 +111,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
 
 static ColliderJntSphInit sJntSphInit2 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,

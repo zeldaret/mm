@@ -122,7 +122,7 @@ Vec3f D_80BC36D0 = { 0.0f, 58.0f, 20.0f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,

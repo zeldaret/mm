@@ -236,7 +236,7 @@ static ColliderJntSphElementInit sIgosSwordColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sKnightSwordColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -249,7 +249,7 @@ static ColliderJntSphInit sKnightSwordColliderJntSphInit = {
 
 static ColliderJntSphInit sIgosSwordColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -276,7 +276,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sShieldColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -314,7 +314,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sBodyColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1,
@@ -327,7 +327,7 @@ static ColliderJntSphInit sBodyColliderJntSphInit = {
 
 static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -347,7 +347,7 @@ static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
 
 static ColliderCylinderInit sHeadColliderCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ALL,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -1349,7 +1349,7 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
             goto common_case;
 
         common_case:
-            this->bodyCollider.base.colType = COLTYPE_NONE;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
             Math_ApproachZeroF(&this->actor.speed, 1.0f, 1.0f);
 
             if (this->animLastFrame > 10.0f) {
@@ -3656,7 +3656,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
     this->swordColliderActive = false;
     this->shieldColliderActive = false;
     this->canRetreat = false;
-    this->bodyCollider.base.colType = COLTYPE_HIT3;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
 
     if (((KREG(63) == 0) && (this != sIgosInstance)) || ((KREG(63) != 2) && (this == sIgosInstance))) {
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {

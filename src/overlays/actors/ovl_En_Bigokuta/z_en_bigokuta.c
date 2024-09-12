@@ -45,7 +45,7 @@ ActorProfile En_Bigokuta_Profile = {
 
 static ColliderCylinderInit sShellCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -65,7 +65,7 @@ static ColliderCylinderInit sShellCylinderInit = {
 
 static ColliderCylinderInit sBodyCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,

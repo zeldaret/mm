@@ -165,7 +165,7 @@ ActorProfile En_Kaizoku_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -185,7 +185,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -1102,7 +1102,7 @@ void func_80B87C7C(EnKaizoku* this) {
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->bodyCollider.elem.elemType = ELEMTYPE_UNK4;
-    this->bodyCollider.base.colType = COLTYPE_NONE;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
     this->swordCollider.elem.elemType = ELEMTYPE_UNK4;
     this->action = KAIZOKU_ACTION_6;
     this->actionFunc = func_80B87D3C;
@@ -1131,7 +1131,7 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
     if ((curFrame >= this->animEndFrame) &&
         (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
-        this->bodyCollider.base.colType = COLTYPE_HIT3;
+        this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
         this->swordCollider.elem.elemType = ELEMTYPE_UNK2;
         this->picto.actor.shape.rot.x = 0;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
@@ -1147,7 +1147,7 @@ void func_80B87E28(EnKaizoku* this) {
     this->picto.actor.speed = -8.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->bodyCollider.elem.elemType = ELEMTYPE_UNK4;
-    this->bodyCollider.base.colType = COLTYPE_NONE;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
     this->swordCollider.elem.elemType = ELEMTYPE_UNK4;
     this->action = KAIZOKU_ACTION_7;
     this->actionFunc = func_80B87E9C;
@@ -1842,7 +1842,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
                                          40);
                     this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
-                    this->bodyCollider.base.colType = COLTYPE_HIT3;
+                    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
                     this->swordCollider.elem.elemType = ELEMTYPE_UNK2;
                     func_80B891B8(this);
                 }
@@ -1882,7 +1882,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     (this->unk_2B8 == 0)) {
                     Actor_ApplyDamage(&this->picto.actor);
                     this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
-                    this->bodyCollider.base.colType = COLTYPE_HIT3;
+                    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
                     this->swordCollider.elem.elemType = ELEMTYPE_UNK4;
                     this->unk_2B8 = 80;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
@@ -1923,7 +1923,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             }
 
             this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
             this->swordCollider.elem.elemType = ELEMTYPE_UNK4;
             Math_Vec3f_Copy(&sp58, &this->picto.actor.focus.pos);
             for (i = 0; i < 3; i++) {

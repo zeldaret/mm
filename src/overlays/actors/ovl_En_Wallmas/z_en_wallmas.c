@@ -59,7 +59,7 @@ ActorProfile En_Wallmas_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -202,7 +202,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffScale = 0.55f;
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->collider.base.colType = 3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -211,7 +211,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
 void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = 0;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;

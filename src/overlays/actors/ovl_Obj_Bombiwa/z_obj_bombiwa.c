@@ -38,7 +38,7 @@ ActorProfile Obj_Bombiwa_Profile = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -363,9 +363,9 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
             if (this->unk_202 > 0) {
                 this->unk_202--;
                 if (this->unk_202 == 0) {
-                    this->collider.base.colType = COLTYPE_HARD;
+                    this->collider.base.colMaterial = COL_MATERIAL_HARD;
                 } else {
-                    this->collider.base.colType = COLTYPE_NONE;
+                    this->collider.base.colMaterial = COL_MATERIAL_NONE;
                 }
             }
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

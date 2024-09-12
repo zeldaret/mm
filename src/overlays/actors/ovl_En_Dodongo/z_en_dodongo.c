@@ -163,7 +163,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
 
 static ColliderJntSphInit sJntSphInit1 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -176,7 +176,7 @@ static ColliderJntSphInit sJntSphInit1 = {
 
 static ColliderJntSphInit sJntSphInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -225,7 +225,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[3] = {
 
 static ColliderJntSphInit sJntSphInit3 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -427,7 +427,7 @@ void func_80876BD0(EnDodongo* this, PlayState* play, s32 arg2) {
 
 void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider1.base.colType = COLTYPE_HIT3;
+    this->collider1.base.colMaterial = COL_MATERIAL_HIT3;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
@@ -441,7 +441,7 @@ void func_80876D28(EnDodongo* this, PlayState* play) {
         this->timer = 0;
         this->actor.colorFilterTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider1.base.colType = COLTYPE_HIT0;
+        this->collider1.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DODONGO_BODYPART_MAX, 2, this->unk_334 * 0.3f,
                               this->unk_334 * 0.2f);

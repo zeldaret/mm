@@ -48,7 +48,7 @@ s16 D_80A3D478[] = { 1, 10, 20, 30, 40, 50, 60, 70 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,

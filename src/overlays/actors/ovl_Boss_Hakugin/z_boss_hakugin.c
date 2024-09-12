@@ -327,7 +327,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -354,7 +354,7 @@ static ColliderTrisElementInit sTrisElementsInit[1] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -367,7 +367,7 @@ static ColliderTrisInit sTrisInit = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -387,7 +387,7 @@ static ColliderSphereInit sSphereInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -3799,7 +3799,7 @@ void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this) {
         this->bodyCollider.elements[i].base.ocElemFlags &= ~OCELEM_ON;
     }
 
-    this->bodyCollider.base.colType = COLTYPE_HARD;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_HARD;
 }
 
 /**

@@ -61,7 +61,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -157,11 +157,11 @@ void func_8093E9B0(EnGoroiwa* this, PlayState* play) {
     if ((params == ENGOROIWA_C000_1) || (params == ENGOROIWA_C000_2)) {
         this->collider.elements[0].base.acDmgInfo.dmgFlags |= (0x4000 | 0x400 | 0x100);
         if (params == ENGOROIWA_C000_1) {
-            this->collider.base.colType = COLTYPE_WOOD;
+            this->collider.base.colMaterial = COL_MATERIAL_WOOD;
         } else {
             this->collider.elements[0].base.acDmgInfo.dmgFlags &= ~(0x400000 | 0x200 | 0x2);
             this->collider.elements[0].base.acDmgInfo.dmgFlags |= (0x80000000 | 0x800 | 0x8);
-            this->collider.base.colType = COLTYPE_NONE;
+            this->collider.base.colMaterial = COL_MATERIAL_NONE;
         }
     }
 }

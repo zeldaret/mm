@@ -97,7 +97,7 @@ ActorProfile En_Bigpo_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE | AT_TYPE_ENEMY,
         AC_NONE | AC_TYPE_PLAYER,
         OC1_NONE | OC1_TYPE_ALL,
@@ -581,7 +581,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupSpinUp(EnBigpo* this) {
-    this->collider.base.colType = COLTYPE_METAL;
+    this->collider.base.colMaterial = COL_MATERIAL_METAL;
     this->collider.base.acFlags |= AC_HARD;
     this->collider.elem.acDmgInfo.dmgFlags &= ~0x8000;
     this->collider.base.atFlags |= AT_ON;
@@ -614,7 +614,7 @@ void EnBigpo_SpinAttack(EnBigpo* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y, 0.3f, 7.5f, 1.0f);
     EnBigpo_UpdateSpin(this);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-    // because acFlags AC_HARD and COLTYPE_METAL, if we hit it means we contacted as attack
+    // because acFlags AC_HARD and COL_MATERIAL_METAL, if we hit it means we contacted as attack
     if ((this->collider.base.atFlags & AT_HIT) ||
         ((ABS_ALT(yawDiff) > 0x4000) && (this->actor.xzDistToPlayer > 50.0f))) {
         // hit the player OR the poe has missed and flew past player
@@ -638,7 +638,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     if (Math_ScaledStepToS(&this->angularVelocity, 0, 0x200)) {
         // spin down complete, re-allow hittable
-        this->collider.base.colType = COLTYPE_HIT3;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
         this->collider.elem.acDmgInfo.dmgFlags |= 0x8000;
         EnBigpo_SetupIdleFlying(this);

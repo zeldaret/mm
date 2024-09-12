@@ -89,7 +89,7 @@ ActorProfile En_Ik_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -134,7 +134,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -147,7 +147,7 @@ static ColliderTrisInit sTrisInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -802,7 +802,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
             }
             if (isArmorBroken == true) {
                 this->drawArmorFlags = 1;
-                this->colliderCylinder.base.colType = 3;
+                this->colliderCylinder.base.colMaterial = COL_MATERIAL_HIT3;
                 this->actor.colChkInfo.damageTable = &sDamageTableNoArmor;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO);
                 EnIk_SetupCutscene(this);

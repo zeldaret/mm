@@ -165,7 +165,7 @@ ActorProfile Dm_Stk_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -1102,10 +1102,10 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                     }
 
                     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                        sCylinderInit.base.colType = COLTYPE_WOOD;
+                        sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                         this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion1;
                     } else {
-                        sCylinderInit.base.colType = COLTYPE_WOOD;
+                        sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                         this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion2;
                     }
 
@@ -1120,7 +1120,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                     }
 
                     this->actor.world.pos.y = 120.0f;
-                    sCylinderInit.base.colType = COLTYPE_WOOD;
+                    sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
                     this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
@@ -1130,7 +1130,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                 this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_READY;
                 this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
-                sCylinderInit.base.colType = COLTYPE_WOOD;
+                sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                 this->actionFunc = DmStk_ClockTower_Idle;
             }
 

@@ -226,7 +226,7 @@ ActorProfile En_Bigslime_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
@@ -333,7 +333,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     Collider_InitAndSetCylinder(play, &this->gekkoCollider, &this->actor, &sCylinderInit);
-    this->gekkoCollider.base.colType = COLTYPE_HIT6;
+    this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT6;
     this->gekkoCollider.elem.elemType = ELEMTYPE_UNK1;
     this->gekkoCollider.base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
@@ -908,7 +908,7 @@ void EnBigslime_GekkoSfxInsideBigslime(EnBigslime* this, u16 sfxId) {
 
 void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->gekkoCollider.base.colType = COLTYPE_HIT3;
+    this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT3;
     this->gekkoCollider.elem.elemType = ELEMTYPE_UNK0;
     this->stunTimer = 2;
     this->gekkoDrawDmgEffScale = 0.75f;
@@ -920,7 +920,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
 void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
     if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->gekkoCollider.base.colType = COLTYPE_HIT6;
+        this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT6;
         this->gekkoCollider.elem.elemType = ELEMTYPE_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);

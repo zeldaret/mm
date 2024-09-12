@@ -161,7 +161,7 @@ s32 CollisionCheck_GetElementATDamage(Collider* atCol, ColliderElement* atElem, 
 
 s32 Collider_InitBase(struct PlayState* play, Collider* col) {
     static Collider sDefaultCollider = {
-        NULL, NULL, NULL, NULL, AT_NONE, AC_NONE, OC1_NONE, OC2_NONE, COLTYPE_HIT3, COLSHAPE_MAX,
+        NULL, NULL, NULL, NULL, AT_NONE, AC_NONE, OC1_NONE, OC2_NONE, COL_MATERIAL_HIT3, COLSHAPE_MAX,
     };
 
     *col = sDefaultCollider;
@@ -173,7 +173,7 @@ s32 Collider_DestroyBase(struct PlayState* play, Collider* col) {
 }
 
 /**
- * Uses default OC2_TYPE_1 and COLTYPE_HIT0
+ * Uses default OC2_TYPE_1 and COL_MATERIAL_HIT0
  */
 s32 Collider_SetBaseToActor(struct PlayState* play, Collider* col, ColliderInitToActor* src) {
     col->actor = src->actor;
@@ -190,7 +190,7 @@ s32 Collider_SetBaseToActor(struct PlayState* play, Collider* col, ColliderInitT
  */
 s32 Collider_SetBaseType1(struct PlayState* play, Collider* col, Actor* actor, ColliderInitType1* src) {
     col->actor = actor;
-    col->colType = src->colType;
+    col->colMaterial = src->colMaterial;
     col->atFlags = src->atFlags;
     col->acFlags = src->acFlags;
     col->ocFlags1 = src->ocFlags1;
@@ -201,7 +201,7 @@ s32 Collider_SetBaseType1(struct PlayState* play, Collider* col, Actor* actor, C
 
 s32 Collider_SetBase(struct PlayState* play, Collider* col, Actor* actor, ColliderInit* src) {
     col->actor = actor;
-    col->colType = src->colType;
+    col->colMaterial = src->colMaterial;
     col->atFlags = src->atFlags;
     col->acFlags = src->acFlags;
     col->ocFlags1 = src->ocFlags1;
@@ -422,7 +422,7 @@ s32 Collider_DestroyJntSph(struct PlayState* play, ColliderJntSph* jntSph) {
 
 /**
  * Sets up the ColliderJntSph using the values in src, sets it to the actor specified in src, and dynamically allocates
- * the element array. Uses default OC2_TYPE_1 and COLTYPE_HIT0.
+ * the element array. Uses default OC2_TYPE_1 and COL_MATERIAL_HIT0.
  */
 s32 Collider_SetJntSphToActor(struct PlayState* play, ColliderJntSph* dest, ColliderJntSphInitToActor* src) {
     ColliderJntSphElement* destElem;
@@ -585,7 +585,7 @@ s32 Collider_DestroyCylinder(struct PlayState* play, ColliderCylinder* cyl) {
 
 /**
  * Sets up the ColliderCylinder using the values in src and sets it to the actor specified in src. Uses default
- * OC2_TYPE_1 and COLTYPE_0.
+ * OC2_TYPE_1 and COL_MATERIAL_0.
  */
 s32 Collider_SetCylinderToActor(struct PlayState* play, ColliderCylinder* dest, ColliderCylinderInitToActor* src) {
     Collider_SetBaseToActor(play, &dest->base, &src->base);
@@ -1593,7 +1593,7 @@ void CollisionCheck_RedBloodUnused(struct PlayState* play, Collider* col, Vec3f*
 void CollisionCheck_HitSolid(struct PlayState* play, ColliderElement* elem, Collider* col, Vec3f* hitPos) {
     s32 flags = elem->atElemFlags & ATELEM_SFX_NONE;
 
-    if ((flags == ATELEM_SFX_NORMAL) && (col->colType != COLTYPE_METAL)) {
+    if ((flags == ATELEM_SFX_NORMAL) && (col->colMaterial != COL_MATERIAL_METAL)) {
         EffectSsHitmark_SpawnFixedScale(play, 0, hitPos);
         if (col->actor == NULL) {
             Audio_PlaySfx(NA_SE_IT_SHIELD_BOUND);
@@ -1655,7 +1655,7 @@ HitInfo sHitInfo[] = {
 };
 
 /**
- * Handles hitmarks, blood, and sound effects for each AC collision, determined by the AC collider's colType
+ * Handles hitmarks, blood, and sound effects for each AC collision, determined by the AC collider's colMaterial
  */
 void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderElement* atElem, Collider* ac,
                                ColliderElement* acElem, Vec3f* hitPos) {
@@ -1668,20 +1668,20 @@ void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderEle
     }
 
     if (ac->actor != NULL) {
-        sBloodFuncs[sHitInfo[ac->colType].blood](play, ac, hitPos);
+        sBloodFuncs[sHitInfo[ac->colMaterial].blood](play, ac, hitPos);
     }
     if (ac->actor != NULL) {
-        if (sHitInfo[ac->colType].effect == HIT_SOLID) {
+        if (sHitInfo[ac->colMaterial].effect == HIT_SOLID) {
             CollisionCheck_HitSolid(play, atElem, ac, hitPos);
-        } else if (sHitInfo[ac->colType].effect == HIT_WOOD) {
+        } else if (sHitInfo[ac->colMaterial].effect == HIT_WOOD) {
             if (at->actor == NULL) {
                 CollisionCheck_SpawnShieldParticles(play, hitPos);
                 Audio_PlaySfx(NA_SE_IT_REFLECTION_WOOD);
             } else {
                 CollisionCheck_SpawnShieldParticlesWood(play, hitPos, &at->actor->projectedPos);
             }
-        } else if (sHitInfo[ac->colType].effect != HIT_NONE) {
-            EffectSsHitmark_SpawnFixedScale(play, sHitInfo[ac->colType].effect, hitPos);
+        } else if (sHitInfo[ac->colMaterial].effect != HIT_NONE) {
+            EffectSsHitmark_SpawnFixedScale(play, sHitInfo[ac->colMaterial].effect, hitPos);
             if (!(acElem->acElemFlags & ACELEM_NO_SWORD_SFX)) {
                 CollisionCheck_SwordHitAudio(at, acElem);
             }
@@ -1753,8 +1753,8 @@ s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderEl
         acElem->acDmgInfo.hitPos.y = hitPos->y;
         acElem->acDmgInfo.hitPos.z = hitPos->z;
     }
-    if (!(atElem->atElemFlags & ATELEM_AT_HITMARK) && (acCol->colType != COLTYPE_METAL) &&
-        (acCol->colType != COLTYPE_WOOD) && (acCol->colType != COLTYPE_HARD)) {
+    if (!(atElem->atElemFlags & ATELEM_AT_HITMARK) && (acCol->colMaterial != COL_MATERIAL_METAL) &&
+        (acCol->colMaterial != COL_MATERIAL_WOOD) && (acCol->colMaterial != COL_MATERIAL_HARD)) {
         acElem->acElemFlags |= ACELEM_DRAW_HITMARK;
     } else {
         CollisionCheck_HitEffects(play, atCol, atElem, acCol, acElem, hitPos);

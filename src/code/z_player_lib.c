@@ -2415,17 +2415,17 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
     return true;
 }
 
-u8 sPlayerShieldCollisionTypes[PLAYER_SHIELD_MAX] = {
-    COLTYPE_METAL, // PLAYER_SHIELD_NONE
-    COLTYPE_METAL, // PLAYER_SHIELD_HEROS_SHIELD
-    COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
+u8 sPlayerShieldColMaterials[PLAYER_SHIELD_MAX] = {
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_NONE
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_HEROS_SHIELD
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
 };
 
 void Player_UpdateShieldCollider(PlayState* play, Player* player, ColliderQuad* collider, Vec3f quadSrc[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f quadDest[4];
 
-        player->shieldQuad.base.colType = sPlayerShieldCollisionTypes[player->currentShield];
+        player->shieldQuad.base.colMaterial = sPlayerShieldColMaterials[player->currentShield];
         Matrix_MultVec3f(&quadSrc[0], &quadDest[0]);
         Matrix_MultVec3f(&quadSrc[1], &quadDest[1]);
         Matrix_MultVec3f(&quadSrc[2], &quadDest[2]);

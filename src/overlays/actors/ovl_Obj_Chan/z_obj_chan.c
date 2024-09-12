@@ -42,7 +42,7 @@ ActorProfile Obj_Chan_Profile = {
 
 static ColliderCylinderInit sObjChanCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,

@@ -42,7 +42,7 @@ ActorProfile Obj_Hugebombiwa_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -390,9 +390,9 @@ void func_80A54C04(ObjHugebombiwa* this, PlayState* play) {
     if (this->unk_4B3 > 0) {
         this->unk_4B3--;
         if (this->unk_4B3 == 0) {
-            this->collider.base.colType = COLTYPE_HARD;
+            this->collider.base.colMaterial = COL_MATERIAL_HARD;
         } else {
-            this->collider.base.colType = COLTYPE_NONE;
+            this->collider.base.colMaterial = COL_MATERIAL_NONE;
         }
     }
 

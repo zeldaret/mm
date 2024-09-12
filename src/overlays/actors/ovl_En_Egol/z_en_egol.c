@@ -175,7 +175,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -188,7 +188,7 @@ static ColliderJntSphInit sBodyJntSphInit = {
 
 static ColliderJntSphInit sEyeJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -201,7 +201,7 @@ static ColliderJntSphInit sEyeJntSphInit = {
 
 static ColliderQuadInit sLaserQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,

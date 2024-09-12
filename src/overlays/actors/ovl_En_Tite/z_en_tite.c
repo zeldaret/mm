@@ -60,7 +60,7 @@ ActorProfile En_Tite_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -189,7 +189,7 @@ void EnTite_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80893A18(EnTite* this) {
-    this->collider.base.colType = COLTYPE_HIT6;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT6;
     this->collider.base.acFlags &= ~AC_HARD;
 }
 
@@ -266,7 +266,7 @@ void func_80893BCC(EnTite* this, PlayState* play) {
 
 void func_80893DD4(EnTite* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_2BC = 80;
     this->drawDmgEffScale = 0.5f;
     this->drawDmgEffFrozenSteamScale = 0.75f;
@@ -278,7 +278,7 @@ void func_80893DD4(EnTite* this) {
 void func_80893E54(EnTite* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENTITE_BODYPART_MAX, 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
@@ -749,7 +749,7 @@ void func_80895640(EnTite* this, PlayState* play) {
 void func_808956B8(EnTite* this) {
     this->unk_2BC = 400;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
     this->collider.base.acFlags |= AC_HARD;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80895738;
@@ -938,7 +938,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~AT_HIT;
-        if (this->collider.base.colType == COLTYPE_HARD) {
+        if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
             func_808956FC(this);
             func_800BE568(&this->actor, &this->collider);
             return;

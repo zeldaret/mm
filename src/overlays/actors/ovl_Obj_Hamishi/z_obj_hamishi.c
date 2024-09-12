@@ -30,7 +30,7 @@ ActorProfile Obj_Hamishi_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -242,9 +242,9 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
         if (this->unk_1A1 > 0) {
             this->unk_1A1--;
             if (this->unk_1A1 == 0) {
-                this->collider.base.colType = COLTYPE_HARD;
+                this->collider.base.colMaterial = COL_MATERIAL_HARD;
             } else {
-                this->collider.base.colType = COLTYPE_NONE;
+                this->collider.base.colMaterial = COL_MATERIAL_NONE;
             }
         }
 

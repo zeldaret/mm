@@ -52,7 +52,7 @@ ActorProfile En_Peehat_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_WOOD,
+        COL_MATERIAL_WOOD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -72,7 +72,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -117,7 +117,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -232,7 +232,7 @@ void func_80897170(EnPeehat* this) {
     this->drawDmgEffScale = 1.1f;
     this->drawDmgEffFrozenSteamScale = 1650.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->colliderSphere.base.colType = COLTYPE_HIT3;
+    this->colliderSphere.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_2B0 = 80;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
@@ -240,7 +240,7 @@ void func_80897170(EnPeehat* this) {
 void func_808971DC(EnPeehat* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->colliderSphere.base.colType = COLTYPE_HIT6;
+        this->colliderSphere.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, 2, 0.5f, 0.35f);
     }

@@ -144,7 +144,7 @@ static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sMaskColliderJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -171,7 +171,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sBodyColliderJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -184,7 +184,7 @@ static ColliderJntSphInit sBodyColliderJntSphInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -251,7 +251,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->maskColliderElements[0].base.atElemFlags &= ~ATELEM_ON;
             this->maskColliderElements[0].base.acElemFlags &= ~ACELEM_ON;
             this->maskColliderElements[0].base.ocElemFlags &= ~OCELEM_ON;
-            this->maskCollider.base.colType = COLTYPE_HIT2;
+            this->maskCollider.base.colMaterial = COL_MATERIAL_HIT2;
             this->maskCollider.elements[0].dim.modelSphere.radius = 42;
             this->maskCollider.elements[0].dim.scale = 1.0f;
             this->maskCollider.elements[0].dim.modelSphere.center.x = 400;

@@ -146,7 +146,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -528,7 +528,7 @@ void func_80C0BF2C(EnBsb* this) {
     this->collider.elements[0].dim.modelSphere.radius = 110;
     this->collider.elements[0].dim.modelSphere.center.x = 300;
     this->collider.elements[0].dim.modelSphere.center.y = 400;
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
         this->collider.elements[i].base.elemType = ELEMTYPE_UNK2;
@@ -570,7 +570,7 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     this->collider.elements[0].dim.modelSphere.radius = 40;
     this->collider.elements[0].dim.modelSphere.center.x = 1000;
     this->collider.elements[0].dim.modelSphere.center.y = 400;
-    this->collider.base.colType = COLTYPE_NONE;
+    this->collider.base.colMaterial = COL_MATERIAL_NONE;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
         this->collider.elements[i].base.elemType = ELEMTYPE_UNK0;

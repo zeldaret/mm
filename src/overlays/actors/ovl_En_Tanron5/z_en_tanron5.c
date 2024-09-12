@@ -58,7 +58,7 @@ ActorProfile En_Tanron5_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ALL,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,

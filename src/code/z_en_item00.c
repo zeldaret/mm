@@ -39,7 +39,7 @@ ActorProfile En_Item00_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AT_TYPE_PLAYER,
         OC1_NONE,

@@ -76,7 +76,7 @@ static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
 static ColliderCylinderInit sCylinderInit[] = {
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -95,7 +95,7 @@ static ColliderCylinderInit sCylinderInit[] = {
     },
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -504,9 +504,9 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         if (this->unk_195 > 0) {
             this->unk_195--;
             if (this->unk_195 == 0) {
-                this->collider.base.colType = sCylinderInit[sp38].base.colType;
+                this->collider.base.colMaterial = sCylinderInit[sp38].base.colMaterial;
             } else {
-                this->collider.base.colType = COLTYPE_NONE;
+                this->collider.base.colMaterial = COL_MATERIAL_NONE;
             }
         }
 

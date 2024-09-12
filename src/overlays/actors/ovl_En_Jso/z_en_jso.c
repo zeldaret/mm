@@ -166,7 +166,7 @@ ActorProfile En_Jso_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -186,7 +186,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -804,7 +804,7 @@ void EnJso_SpinBeforeAttack(EnJso* this, PlayState* play) {
 void EnJso_SetupDashAttack(EnJso* this) {
     this->action = EN_JSO_ACTION_DASH_ATTACK;
     this->attackMovementTimer = 40;
-    this->bodyCollider.base.colType = COLTYPE_HIT2;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT2;
     this->bodyCollider.base.acFlags &= ~AC_HARD;
     this->actor.speed = 15.0f;
     this->actor.velocity.y = 13.0f;
@@ -938,7 +938,7 @@ void EnJso_SetupWaitAfterSlash(EnJso* this) {
 void EnJso_WaitAfterSlash(EnJso* this, PlayState* play) {
     if (this->timer == 0) {
         this->attackTimer = Rand_S16Offset(30, 30);
-        this->bodyCollider.base.colType = COLTYPE_NONE;
+        this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
         this->bodyCollider.base.acFlags |= AC_HARD;
         this->slashHitSomething = false;
         sIsAttacking = false;
@@ -1428,7 +1428,7 @@ void EnJso_UpdateDamage(EnJso* this, PlayState* play) {
 
             if (attackDealsDamage) {
                 Actor_ApplyDamage(&this->actor);
-                this->bodyCollider.base.colType = COLTYPE_NONE;
+                this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
                 this->bodyCollider.base.acFlags |= AC_HARD;
                 if (this->actor.colChkInfo.health > 0) {
                     EnJso_SetupDamaged(this, play);

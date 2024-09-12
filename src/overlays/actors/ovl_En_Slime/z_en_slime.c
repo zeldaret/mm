@@ -80,7 +80,7 @@ ActorProfile En_Slime_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -227,7 +227,7 @@ void EnSlime_Destroy(Actor* thisx, PlayState* play) {
 void EnSlime_Freeze(EnSlime* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.4f;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->drawDmgEffFrozenSteamScale = 0.6f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
@@ -242,7 +242,7 @@ void EnSlime_Freeze(EnSlime* this) {
 void EnSlime_Thaw(EnSlime* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = 0; // So it's not triggered again until Freeze has been called again.
-        this->collider.base.colType = COLTYPE_NONE;
+        this->collider.base.colMaterial = COL_MATERIAL_NONE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_SLIME_BODYPART_MAX, 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;

@@ -137,7 +137,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -290,7 +290,7 @@ void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -299,7 +299,7 @@ void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
 void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX, 4, this->size * 0.3f,
                               this->size * 0.2f);
@@ -320,7 +320,7 @@ void EnDekubaba_SetupWait(EnDekubaba* this) {
 
     Actor_SetScale(&this->actor, this->size * 0.01f * 0.5f);
 
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
     this->collider.base.acFlags |= AC_HARD;
     this->timer = 45;
 
@@ -362,7 +362,7 @@ void EnDekubaba_SetupGrow(EnDekubaba* this) {
         this->collider.elements[i].base.ocElemFlags |= OCELEM_ON;
     }
 
-    this->collider.base.colType = COLTYPE_HIT6;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT6;
     this->collider.base.acFlags &= ~AC_HARD;
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = EnDekubaba_Grow;
@@ -1074,7 +1074,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlagJntSph(&this->actor, &this->collider);
 
-        if ((this->collider.base.colType != COLTYPE_HARD) &&
+        if ((this->collider.base.colMaterial != COL_MATERIAL_HARD) &&
             (this->actor.colChkInfo.damageEffect != DEKUBABA_DMGEFF_HOOKSHOT)) {
             jntSphElem = &this->collider.elements[0];
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, jntSphElem++) {
@@ -1140,8 +1140,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
             return;
         }
     } else if ((play->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < SQ(200.0f)) &&
-               (this->collider.base.colType != COLTYPE_HARD) && (this->actionFunc != EnDekubaba_StunnedVertical) &&
-               (this->actionFunc != EnDekubaba_Hit) && (this->actor.colChkInfo.health != 0)) {
+               (this->collider.base.colMaterial != COL_MATERIAL_HARD) &&
+               (this->actionFunc != EnDekubaba_StunnedVertical) && (this->actionFunc != EnDekubaba_Hit) &&
+               (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
         EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_OTHER);

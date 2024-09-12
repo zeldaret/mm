@@ -43,7 +43,7 @@ ActorProfile En_Rr_Profile = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -63,7 +63,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -191,7 +191,7 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
 
 void func_808FA11C(EnRr* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider1.base.colType = COLTYPE_HIT3;
+    this->collider1.base.colMaterial = COL_MATERIAL_HIT3;
     this->collider1.elem.elemType = ELEMTYPE_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
@@ -205,7 +205,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
     this->unk_1EE = 0;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider1.base.colType = COLTYPE_HIT0;
+        this->collider1.base.colMaterial = COL_MATERIAL_HIT0;
         this->collider1.elem.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,

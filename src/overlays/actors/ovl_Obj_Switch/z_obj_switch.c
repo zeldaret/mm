@@ -115,7 +115,7 @@ static ColliderTrisElementInit sRustyFloorTrisElementsInit[2] = {
 
 static ColliderTrisInit sRustyFloorTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -153,7 +153,7 @@ static ColliderTrisElementInit sEyeSwitchTrisElementsInit[2] = {
 
 static ColliderTrisInit sEyeSwitchTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -180,7 +180,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -954,9 +954,9 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
                 }
             }
             if (this->disableCrystalSwitchTimer == 0) {
-                this->colliderJntSph.base.colType = sJntSphInit.base.colType;
+                this->colliderJntSph.base.colMaterial = sJntSphInit.base.colMaterial;
             } else {
-                this->colliderJntSph.base.colType = COLTYPE_NONE;
+                this->colliderJntSph.base.colMaterial = COL_MATERIAL_NONE;
             }
             this->collisionFlags = this->colliderJntSph.base.acFlags;
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderJntSph.base);

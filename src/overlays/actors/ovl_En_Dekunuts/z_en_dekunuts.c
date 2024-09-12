@@ -54,7 +54,7 @@ ActorProfile En_Dekunuts_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -132,7 +132,7 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        this->collider.base.colType = COLTYPE_NONE;
+        this->collider.base.colMaterial = COL_MATERIAL_NONE;
         this->collider.elem.acElemFlags |=
             (ACELEM_NO_HITMARK | ACELEM_NO_SWORD_SFX | ACELEM_NO_DAMAGE | ACELEM_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
@@ -153,7 +153,7 @@ void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffScale = 0.55f;
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_190 = 80;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
@@ -161,7 +161,7 @@ void func_808BD348(EnDekunuts* this) {
 void func_808BD3B4(EnDekunuts* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENDEKUNUTS_BODYPART_MAX, 2, 0.2f, 0.2f);
     }

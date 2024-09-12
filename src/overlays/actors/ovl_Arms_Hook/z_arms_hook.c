@@ -34,7 +34,7 @@ ActorProfile Arms_Hook_Profile = {
 
 static ColliderQuadInit D_808C1BC0 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,

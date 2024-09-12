@@ -173,7 +173,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -186,7 +186,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -401,7 +401,7 @@ void EnDinofos_EndCutscene(EnDinofos* this, PlayState* play) {
 void EnDinofos_Freeze(EnDinofos* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->bodyAndFireCollider.base.colType = COLTYPE_HIT3;
+    this->bodyAndFireCollider.base.colMaterial = COL_MATERIAL_HIT3;
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->stunTimer = 80;
@@ -412,7 +412,7 @@ void EnDinofos_Freeze(EnDinofos* this) {
 void EnDinofos_ThawIfFrozen(EnDinofos* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->bodyAndFireCollider.base.colType = COLTYPE_HIT0;
+        this->bodyAndFireCollider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;

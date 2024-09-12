@@ -142,7 +142,7 @@ static ColliderTrisElementInit sMirrorColliderElementsInit[] = {
 
 static ColliderTrisInit sMirrorColliderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_NONE,
@@ -156,7 +156,7 @@ static ColliderTrisInit sMirrorColliderInit = {
 static ColliderQuadInit sLightRaysCollidersInit[] = {
     {
         {
-            COLTYPE_NONE,
+            COL_MATERIAL_NONE,
             AT_ON | AT_TYPE_OTHER,
             AC_NONE,
             OC1_NONE,
@@ -175,7 +175,7 @@ static ColliderQuadInit sLightRaysCollidersInit[] = {
     },
     {
         {
-            COLTYPE_NONE,
+            COL_MATERIAL_NONE,
             AT_ON | AT_TYPE_OTHER,
             AC_NONE,
             OC1_NONE,

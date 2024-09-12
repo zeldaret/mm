@@ -1677,7 +1677,7 @@ struct_8085C2A4 D_8085C2A4[] = {
 // sCylinderInit
 ColliderCylinderInit D_8085C2EC = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -1698,7 +1698,7 @@ ColliderCylinderInit D_8085C2EC = {
 // sShieldCylinderInit
 ColliderCylinderInit D_8085C318 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_HARD | AC_TYPE_ENEMY,
         OC1_NONE,
@@ -1719,7 +1719,7 @@ ColliderCylinderInit D_8085C318 = {
 // sMeleeWeaponQuadInit
 ColliderQuadInit D_8085C344 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -1740,7 +1740,7 @@ ColliderQuadInit D_8085C344 = {
 // sShieldQuadInit
 ColliderQuadInit D_8085C394 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_HARD | AC_TYPE_ENEMY,
         OC1_NONE,
@@ -2755,7 +2755,7 @@ void Player_LerpEnvLighting(PlayState* play, PlayerEnvLighting* lighting, f32 le
  * Revert cylinder to normal properties
  */
 void Player_ResetCylinder(Player* this) {
-    this->cylinder.base.colType = COLTYPE_HIT5;
+    this->cylinder.base.colMaterial = COL_MATERIAL_HIT5;
     this->cylinder.base.atFlags = AT_NONE;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
@@ -2798,7 +2798,7 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
     if (dmgFlags & DMG_GORON_POUND) {
         this->cylinder.base.acFlags = AC_NONE;
     } else {
-        this->cylinder.base.colType = COLTYPE_NONE;
+        this->cylinder.base.colMaterial = COL_MATERIAL_NONE;
         this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
 
         if (dmgFlags & DMG_ZORA_BARRIER) {

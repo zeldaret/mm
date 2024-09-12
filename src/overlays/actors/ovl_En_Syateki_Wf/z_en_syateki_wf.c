@@ -46,7 +46,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderCylinderInit sBodyCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -66,7 +66,7 @@ static ColliderCylinderInit sBodyCylinderInit = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -79,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderCylinderInit sTailCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,

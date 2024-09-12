@@ -32,7 +32,7 @@ ActorProfile Obj_Syokudai_Profile = {
 
 static ColliderCylinderInit sStandColliderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -52,7 +52,7 @@ static ColliderCylinderInit sStandColliderInit = {
 
 static ColliderCylinderInit sFlameColliderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
+static u8 sColMaterials[] = { COL_MATERIAL_METAL, COL_MATERIAL_WOOD, COL_MATERIAL_WOOD };
 
 static Gfx* sDLists[] = {
     gObjectSyokudaiTypeSwitchCausesFlameDL,
@@ -97,7 +97,7 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     func_800B4AEC(play, thisx, 50.0f);
     ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
     Collider_InitAndSetCylinder(play, &this->standCollider, thisx, &sStandColliderInit);
-    this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
+    this->standCollider.base.colMaterial = sColMaterials[OBJ_SYOKUDAI_GET_TYPE(thisx)];
     Collider_InitAndSetCylinder(play, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + OBJ_SYOKUDAI_GLOW_HEIGHT,

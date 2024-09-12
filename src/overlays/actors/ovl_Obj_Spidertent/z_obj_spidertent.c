@@ -118,7 +118,7 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
 
 static ColliderTrisInit sTrisInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -212,7 +212,7 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
 
 static ColliderTrisInit sTrisInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,

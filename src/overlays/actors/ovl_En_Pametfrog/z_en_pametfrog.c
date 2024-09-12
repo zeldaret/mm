@@ -151,7 +151,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -231,7 +231,7 @@ u8 EnPametfrog_Vec3fNormalize(Vec3f* vec) {
 
 void EnPametfrog_Freeze(EnPametfrog* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->collider.elements[0].base.elemType = ELEMTYPE_UNK0;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffFrozenSteamScale = 1.125f;
@@ -242,7 +242,7 @@ void EnPametfrog_Thaw(EnPametfrog* this, PlayState* play) {
     this->freezeTimer = 0;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->collider.elements[0].base.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);

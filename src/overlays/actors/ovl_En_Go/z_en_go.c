@@ -588,7 +588,7 @@ ActorProfile En_Go_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -609,7 +609,7 @@ static ColliderSphereInit sSphereInit = {
 // Collider for the frozen solid Gorons.
 static ColliderCylinderInit sCylinderInitFrozen = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -630,7 +630,7 @@ static ColliderCylinderInit sCylinderInitFrozen = {
 // Collider for normal Gorons.
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,

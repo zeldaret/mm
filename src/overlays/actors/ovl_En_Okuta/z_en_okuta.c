@@ -57,7 +57,7 @@ ActorProfile En_Okuta_Profile = {
 
 static ColliderCylinderInit sProjectileCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -77,7 +77,7 @@ static ColliderCylinderInit sProjectileCylinderInit = {
 
 static ColliderCylinderInit sOctorokCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -177,7 +177,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
         }
 
         if (EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_BLUE_OCTOROK) {
-            this->collider.base.colType = COLTYPE_HARD;
+            this->collider.base.colMaterial = COL_MATERIAL_HARD;
             this->collider.base.acFlags |= AC_HARD;
         }
 
@@ -214,7 +214,7 @@ void EnOkuta_Freeze(EnOkuta* this) {
     this->drawDmgEffFrozenSteamScale = 9.0f * 0.1f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -227,7 +227,7 @@ void EnOkuta_Thaw(EnOkuta* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_OKUTA_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->collider.base.colType = COLTYPE_HIT0;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT0;
     }
 }
 
