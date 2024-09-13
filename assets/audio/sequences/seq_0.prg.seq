@@ -2,8 +2,8 @@
 #include "Soundfont_1.h"
 #include "Soundfont_0.h"
 
-#define IO_PORT_SFX_INDEX IO_PORT_4
-
+#define IO_PORT_SFX_INDEX_LOBITS IO_PORT_4
+#define IO_PORT_SFX_INDEX_HIBITS IO_PORT_5
 
 // Provide the sfx ids for use as constants
 #define DEFINE_SFX(lblName, sfxId, priority, decay, rand, flags1, flags2) \
@@ -16,18 +16,25 @@
 
 .set __SFX_ID_CTR, 0x0800
 #include "playerbank_table.h"
+.set PLAYERBANK_TABLE_SIZE, __SFX_ID_CTR - 0x0800
 .set __SFX_ID_CTR, 0x1800
 #include "itembank_table.h"
+.set ITEMBANK_TABLE_SIZE, __SFX_ID_CTR - 0x1800
 .set __SFX_ID_CTR, 0x2800
 #include "environmentbank_table.h"
+.set ENVIRONMENTBANK_TABLE_SIZE, __SFX_ID_CTR - 0x2800
 .set __SFX_ID_CTR, 0x3800
 #include "enemybank_table.h"
+.set ENEMYBANK_TABLE_SIZE, __SFX_ID_CTR - 0x3800
 .set __SFX_ID_CTR, 0x4800
 #include "systembank_table.h"
+.set SYSTEMBANK_TABLE_SIZE, __SFX_ID_CTR - 0x4800
 .set __SFX_ID_CTR, 0x5800
 #include "ocarinabank_table.h"
+.set OCARINABANK_TABLE_SIZE, __SFX_ID_CTR - 0x5800
 .set __SFX_ID_CTR, 0x6800
 #include "voicebank_table.h"
+.set VOICEBANK_TABLE_SIZE, __SFX_ID_CTR - 0x6800
 .internal __SFX_ID_CTR
 
 #undef DEFINE_SFX
@@ -103,7 +110,7 @@ CHAN_005C:
 /* 0x006B [0x73                    ] */ stio        IO_PORT_3
 /* 0x006C [0xC4                    ] */ noshort
 /* 0x006D [0xCA 0x20               ] */ mutebhv     0x20
-/* 0x006F [0xD0 0x80               ] */ effects     128
+/* 0x006F [0xD0 0x80               ] */ effects     TRUE, 0, 0, 0, 0, 0
 /* 0x0071 [0xE9 0x0E               ] */ notepri     14
 /* 0x0073 [0xE5 0x01               ] */ reverbidx   1
 /* 0x0075 [0xFF                    ] */ end
@@ -122,35 +129,29 @@ CHAN_005C:
 /* 0x0081 [0xC7 0x00 0x00 0x86     ] */ stseq       0, STSEQ_HERE + STSEQ_VOL
 /* 0x0085 [0xDF 0x7F               ] */ vol         127
 CHAN_0087:
-/* 0x0087 [0xA0 0x00               ] */ unk_A0      0
-/* 0x0089 [0x09                    ] */ cdelay      9
+/* 0x0087 [0xA0 0x00 0x09          ] */ unk_A0      9
 /* 0x008A [0xF2 0x0B               ] */ rbltz       CHAN_0097
 /* 0x008C [0xC7 0x00 0x00 0x91     ] */ stseq       0, STSEQ_HERE + STSEQ_PAN
 /* 0x0090 [0xDD 0x7F               ] */ pan         127
 /* 0x0092 [0xCC 0xFF               ] */ ldi         255
-/* 0x0094 [0xA2 0x00               ] */ unk_A2      0
-/* 0x0096 [0x09                    ] */ cdelay      9
+/* 0x0094 [0xA2 0x00 0x09          ] */ unk_A2      9
 CHAN_0097:
-/* 0x0097 [0xA0 0x00               ] */ unk_A0      0
-/* 0x0099 [0x08                    ] */ cdelay      8
+/* 0x0097 [0xA0 0x00 0x08          ] */ unk_A0      8
 /* 0x009A [0xF2 0x06               ] */ rbltz       CHAN_00A2
 /* 0x009C [0xC7 0x00 0x00 0xA1     ] */ stseq       0, STSEQ_HERE + STSEQ_REVERB
 /* 0x00A0 [0xD4 0x7F               ] */ reverb      127
 CHAN_00A2:
-/* 0x00A2 [0xA0 0x00               ] */ unk_A0      0
-/* 0x00A4 [0x0D                    ] */ cdelay      13
+/* 0x00A2 [0xA0 0x00 0x0D          ] */ unk_A0      13
 /* 0x00A5 [0xF2 0x06               ] */ rbltz       CHAN_00AD
 /* 0x00A7 [0xC7 0x00 0x00 0xAC     ] */ stseq       0, STSEQ_HERE + STSEQ_UNK_A4
 /* 0x00AB [0xA4 0x00               ] */ unk_A4      0
 CHAN_00AD:
-/* 0x00AD [0xA0 0x00               ] */ unk_A0      0
-/* 0x00AF [0x0B                    ] */ cdelay      11
+/* 0x00AD [0xA0 0x00 0x0B          ] */ unk_A0      11
 /* 0x00B0 [0xF2 0x06               ] */ rbltz       CHAN_00B8
 /* 0x00B2 [0xC7 0x00 0x00 0xB7     ] */ stseq       0, STSEQ_HERE + STSEQ_FILTER_IDX
 /* 0x00B6 [0xB3 0x00               ] */ filter      0, 0
 CHAN_00B8:
-/* 0x00B8 [0xA0 0x00               ] */ unk_A0      0
-/* 0x00BA [0x0C                    ] */ cdelay      12
+/* 0x00B8 [0xA0 0x00 0x0C          ] */ unk_A0      12
 /* 0x00BB [0xC7 0x00 0x00 0xC1     ] */ stseq       0, STSEQ_HERE + STSEQ_COMBFILTER_ARG1_HI
 /* 0x00BF [0xBB 0x10 0x7F 0xFF     ] */ combfilter  16, 32767
 /* 0x00C3 [0x63                    ] */ ldio        IO_PORT_3
@@ -191,12 +192,12 @@ CHAN_00F1:
 /* 0x00F1 [0xFC 0x00 0x76          ] */ call        CHAN_0076
 /* 0x00F4 [0x92                    ] */ dellayer    2
 /* 0x00F5 [0xD8 0x00               ] */ vibdepth    0
-/* 0x00F7 [0x65                    ] */ ldio        IO_PORT_5                       # upper 7 bits
+/* 0x00F7 [0x65                    ] */ ldio        IO_PORT_SFX_INDEX_HIBITS        # upper 7 bits
 /* 0x00F8 [0xC9 0x7F               ] */ and         127
 /* 0x00FA [0xB2 0x01 0x1E          ] */ ldseqtoptr  ARRAY_011E                      # load pointer from location
 /* 0x00FD [0xCF 0x01 0x01          ] */ stptrtoseq  STSEQ_HERE + STSEQ_PTR_DYNTBL   # store pointer into dyntbl command
 /* 0x0100 [0xC2 0x04 0x2E          ] */ dyntbl      TABLE_PLAYER + 2 * 3 * 128      # set table
-/* 0x0103 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX               # sfx index
+/* 0x0103 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS        # sfx index
 /* 0x0104 [0xC9 0x7F               ] */ and         127
 /* 0x0106 [0xE4                    ] */ dyncall                                     # call table indexed by sfx index
 CHAN_0107:
@@ -3074,12 +3075,12 @@ LAYER_15EE:
 /* 0x15F7 [0x89 0x06 0x44          ] */ ldlayer     1, LAYER_0644
 /* 0x15FA [0xD7 0xF0               ] */ vibfreq     240
 /* 0x15FC [0xE2 0x00 0x10 0x04     ] */ vibdepthgrad 0, 16, 4
-/* 0x1600 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x1600 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x1601 [0xC8 0xB0               ] */ sub         NA_SE_PL_DEKUNUTS_JUMP & 0xFF
 /* 0x1603 [0xCB 0x16 0x27          ] */ ldseq       ARRAY_1627
 /* 0x1606 [0xC7 0x0F 0x16 0x21     ] */ stseq       PITCH_C2, LAYER_161F + STSEQ_PORTAMENTO_PITCH
 /* 0x160A [0xC7 0x67 0x16 0x23     ] */ stseq       (NOTEDV_OPCODE | PITCH_C4), LAYER_1623 + STSEQ_NOTEDV_OPCODE_PITCH
-/* 0x160E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x160E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x160F [0xC8 0xB0               ] */ sub         NA_SE_PL_DEKUNUTS_JUMP & 0xFF
 /* 0x1611 [0xCB 0x16 0x2F          ] */ ldseq       ARRAY_162F
 /* 0x1614 [0xC7 0x14 0x16 0x24     ] */ stseq       20, LAYER_1623 + STSEQ_NOTEDV_DELAY
@@ -3522,7 +3523,7 @@ CHAN_196E:
 /* 0x1971 [0x92                    ] */ dellayer    2
 /* 0x1972 [0xD8 0x00               ] */ vibdepth    0
 /* 0x1974 [0xDC 0x7F               ] */ panweight   127
-/* 0x1976 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x1976 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x1977 [0xE4                    ] */ dyncall
 CHAN_1978:
 /* 0x1978 [0xFC 0x00 0x7E          ] */ call        CHAN_007E
@@ -4955,24 +4956,25 @@ LAYER_2283:
 /* 0x2320 [0xB8 0x40               ] */ rand        64
 /* 0x2322 [0xC7 0x20 0x23 0x42     ] */ stseq       32, LAYER_2341 + STSEQ_NOTEPAN
 /* 0x2326 [0xB8 0x6E               ] */ rand        110
-/* 0x2328 [0xA7 0xC4 0xC7          ] */ unk_A7      17607
-/* 0x232B [0x0A                    ] */ cdelay      10
-/* 0x232C [0x23 0x40 0xB8          ] */ ldchan      3, CHAN_40B8
-/* 0x232F [0x4D 0xC7               ] */ ldcio       13, 199 # BAD IO PORT NUMBER
-/* 0x2331 [0x32 0x23               ] */ stcio       2, 35 # BAD IO PORT NUMBER
-/* 0x2333 [0x4C 0xD8               ] */ ldcio       12, 216 # BAD IO PORT NUMBER
-/* 0x2335 [0x10 0xD7 0x60          ] */ sample      0, SEQ_0_END + 0x10C0
+/* 0x2328 [0xA7 0xC4               ] */ unk_A7      0xC4
+/* 0x232A [0xC7 0x0A 0x23 0x40     ] */ stseq       10, LAYER_233F + STSEQ_TRANSPOSITION
+/* 0x232E [0xB8 0x4D               ] */ rand        77
+/* 0x2330 [0xC7 0x32 0x23 0x4C     ] */ stseq       50, LAYER_234B + STSEQ_NOTEDV_DELAY
+/* 0x2334 [0xD8 0x10               ] */ vibdepth    16
+/* 0x2336 [0xD7 0x60               ] */ vibfreq     96
 /* 0x2338 [0xFF                    ] */ end
 
 .layer LAYER_2339
 /* 0x2339 [0xC6 0x72               ] */ instr       SF0_INST_114
 /* 0x233B [0xCB 0xBF 0x30 0xFB     ] */ env         ENVELOPE_BF30, 251
+LAYER_233F:
 /* 0x233F [0xC2 0x00               ] */ transpose   0
 LAYER_2341:
 /* 0x2341 [0xCA 0x00               ] */ notepan     0
 /* 0x2343 [0xC4                    ] */ legato
 /* 0x2344 [0xC7 0x85 0x17 0xFF     ] */ portamento  0x85, PITCH_AF2, 255
 /* 0x2348 [0x5D 0x0A 0x64          ] */ notedv      PITCH_D3, 10, 100
+LAYER_234B:
 /* 0x234B [0x55 0x64 0x64          ] */ notedv      PITCH_GF2, 100, 100
 /* 0x234E [0xC0 0x80 0xFA          ] */ ldelay      250
 /* 0x2351 [0xFF                    ] */ end
@@ -5017,12 +5019,12 @@ CHAN_23A4:
 /* 0x23AD [0x00                    ] */ cdelay      0
 /* 0x23AE [0xFC 0x00 0x76          ] */ call        CHAN_0076
 /* 0x23B1 [0x92                    ] */ dellayer    2
-/* 0x23B2 [0x65                    ] */ ldio        IO_PORT_5
+/* 0x23B2 [0x65                    ] */ ldio        IO_PORT_SFX_INDEX_HIBITS
 /* 0x23B3 [0xC9 0x7F               ] */ and         127
 /* 0x23B5 [0xB2 0x23 0xD8          ] */ ldseqtoptr  TABLE_23D8
 /* 0x23B8 [0xCF 0x23 0xBC          ] */ stptrtoseq  STSEQ_HERE + STSEQ_PTR_DYNTBL
 /* 0x23BB [0xC2 0x23 0xE8          ] */ dyntbl      TABLE_23E8
-/* 0x23BE [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x23BE [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x23BF [0xC9 0x7F               ] */ and         127
 /* 0x23C1 [0xE4                    ] */ dyncall
 CHAN_23C2:
@@ -9283,8 +9285,7 @@ LAYER_4197:
 /* 0x41EF [0x88 0x42 0x42          ] */ ldlayer     0, LAYER_4242
 /* 0x41F2 [0x89 0x42 0x1C          ] */ ldlayer     1, LAYER_421C
 CHAN_41F5:
-/* 0x41F5 [0xA0 0x00               ] */ unk_A0      0
-/* 0x41F7 [0x0D                    ] */ cdelay      13
+/* 0x41F5 [0xA0 0x00 0x0D          ] */ unk_A0      13
 /* 0x41F8 [0xF2 0x15               ] */ rbltz       CHAN_420F
 /* 0x41FA [0x76                    ] */ stio        IO_PORT_6
 /* 0x41FB [0xCC 0x7F               ] */ ldi         127
@@ -10712,8 +10713,8 @@ CHAN_4B32:
 /* 0x4B37 [0x66                    ] */ ldio        IO_PORT_6
 CHAN_4B38:
 /* 0x4B38 [0xC7 0x20 0x4B 0x5D     ] */ stseq       32, LAYER_4B5C + STSEQ_NOTEDV_DELAY
-/* 0x4B3C [0xA7 0xC1 0xC7          ] */ unk_A7      16839
-/* 0x4B3F [0x10 0x4B 0x64          ] */ sample      0, LAYER_4B63 + 1
+/* 0x4B3C [0xA7 0xC1               ] */ unk_A7      0xC1
+/* 0x4B3E [0xC7 0x10 0x4B 0x64     ] */ stseq       16, LAYER_4B63 + STSEQ_NOTEDV_DELAY
 /* 0x4B42 [0xC7 0x10 0x4B 0x69     ] */ stseq       16, LAYER_4B68 + STSEQ_NOTEDV_DELAY
 /* 0x4B46 [0xCC 0x20               ] */ ldi         32
 /* 0x4B48 [0xFC 0x00 0x48          ] */ call        CHAN_0048
@@ -11088,9 +11089,8 @@ LAYER_4D53:
 CHAN_4DAB:
 /* 0x4DAB [0xB8 0x3B               ] */ rand        59
 /* 0x4DAD [0xC7 0x06 0x4D 0xFD     ] */ stseq       6, LAYER_4DFC + 1
-/* 0x4DB1 [0xA7 0xC1 0xC7          ] */ unk_A7      16839
-/* 0x4DB4 [0x03                    ] */ cdelay      3
-/* 0x4DB5 [0x4D 0xE5               ] */ ldcio       13, 229 # BAD IO PORT NUMBER
+/* 0x4DB1 [0xA7 0xC1               ] */ unk_A7      0xC1
+/* 0x4DB3 [0xC7 0x03 0x4D 0xE5     ] */ stseq       3, CHAN_4DE4 + STSEQ_LDI_IMM
 /* 0x4DB7 [0xB8 0x3B               ] */ rand        59
 /* 0x4DB9 [0xC9 0x01               ] */ and         1
 /* 0x4DBB [0xF3 0x06               ] */ rbeqz       CHAN_4DC3
@@ -11101,9 +11101,9 @@ CHAN_4DAB:
 CHAN_4DC3:
 /* 0x4DC3 [0xB8 0x3B               ] */ rand        59
 CHAN_4DC5:
-/* 0x4DC5 [0xA7 0xC1 0xC7          ] */ unk_A7      16839
-/* 0x4DC8 [0x03                    ] */ cdelay      3
-/* 0x4DC9 [0x4D 0xCC               ] */ ldcio       13, 204 # BAD IO PORT NUMBER
+/* 0x4DC5 [0xA7 0xC1               ] */ unk_A7      0xC1
+/* 0x4DC7 [0xC7 0x03 0x4D 0xCC     ] */ stseq       3, CHAN_4DCB + STSEQ_LDI_IMM
+CHAN_4DCB:
 /* 0x4DCB [0xCC 0x20               ] */ ldi         32
 /* 0x4DCD [0xFC 0x00 0x48          ] */ call        CHAN_0048
 /* 0x4DD0 [0xB8 0x0C               ] */ rand        12
@@ -11121,6 +11121,7 @@ CHAN_4DDD:
 CHAN_4DDF:
 /* 0x4DDF [0x76                    ] */ stio        IO_PORT_6
 /* 0x4DE0 [0xC7 0x67 0x4D 0xFC     ] */ stseq       (NOTEDV_OPCODE | PITCH_C4), LAYER_4DFC + STSEQ_NOTEDV_OPCODE_PITCH
+CHAN_4DE4:
 /* 0x4DE4 [0xCC 0x20               ] */ ldi         32
 /* 0x4DE6 [0xFC 0x00 0x48          ] */ call        CHAN_0048
 /* 0x4DE9 [0xF4 0xC0               ] */ rjump       CHAN_4DAB
@@ -11633,10 +11634,8 @@ CHAN_5156:
 /* 0x5156 [0xC7 0x1C 0x51 0xAD     ] */ stseq       28, LAYER_51AC + STSEQ_NOTEDV_DELAY
 /* 0x515A [0xC7 0x1C 0x51 0x99     ] */ stseq       28, LAYER_5198 + STSEQ_NOTEDV_DELAY
 /* 0x515E [0xC7 0x1C 0x51 0x6D     ] */ stseq       28, CHAN_516C + STSEQ_LDI_IMM
-/* 0x5162 [0xA7 0xC3 0xC7          ] */ unk_A7      17351
-/* 0x5165 [0x07                    ] */ cdelay      7
-/* 0x5166 [0x51                    ] */ subio       IO_PORT_1
-/* 0x5167 [0xAA                    ] */ unk_AA
+/* 0x5162 [0xA7 0xC3               ] */ unk_A7      0xC3
+/* 0x5164 [0xC7 0x07 0x51 0xAA     ] */ stseq       7, LAYER_51A8 + STSEQ_PORTAMENTO_PITCH
 /* 0x5168 [0xC7 0x07 0x51 0x96     ] */ stseq       7, LAYER_5194 + STSEQ_PORTAMENTO_PITCH
 CHAN_516C:
 /* 0x516C [0xCC 0x40               ] */ ldi         64
@@ -11673,6 +11672,7 @@ LAYER_5198:
 /* 0x51A2 [0xCB 0xC0 0x80 0xC8     ] */ env         ENVELOPE_C080, 200
 LAYER_51A6:
 /* 0x51A6 [0xC0 0x14               ] */ ldelay      20
+LAYER_51A8:
 /* 0x51A8 [0xC7 0x81 0x0C 0xFF     ] */ portamento  0x81, PITCH_A1, 255
 LAYER_51AC:
 /* 0x51AC [0x46 0x7F 0x69          ] */ notedv      PITCH_EF1, 127, 105
@@ -12338,12 +12338,12 @@ CHAN_5634:
 /* 0x563D [0xDC 0x7F               ] */ panweight   127
 /* 0x563F [0xBD 0x00               ] */ samplestart 0
 /* 0x5641 [0x00                    ] */ cdelay      0
-/* 0x5642 [0x65                    ] */ ldio        IO_PORT_5
+/* 0x5642 [0x65                    ] */ ldio        IO_PORT_SFX_INDEX_HIBITS
 /* 0x5643 [0xC9 0x7F               ] */ and         127
 /* 0x5645 [0xB2 0x56 0x6E          ] */ ldseqtoptr  TABLE_566E
 /* 0x5648 [0xCF 0x56 0x4C          ] */ stptrtoseq  STSEQ_HERE + STSEQ_PTR_DYNTBL
 /* 0x564B [0xC2 0x04 0x2E          ] */ dyntbl      TABLE_PLAYER + 2 * 3 * 128
-/* 0x564E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x564E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x564F [0xC9 0x7F               ] */ and         127
 /* 0x5651 [0xDA 0xC4 0x54          ] */ env         ENVELOPE_C454
 /* 0x5654 [0xD9 0xFB               ] */ releaserate 251
@@ -12408,7 +12408,7 @@ CHAN_5668:
 
 .channel CHAN_5C53
 /* 0x5C53 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x5C55 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX               # Load sfx index
+/* 0x5C55 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS               # Load sfx index
 /* 0x5C56 [0xC8 0xB0               ] */ sub         NA_SE_EN_TWINROBA_LAUGH & 0xFF  # Subtract base id for this group
 /* 0x5C58 [0xC7 0x00 0x5C 0x67     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_0), LAYER_5C67 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x5C5C [0xCB 0x5C 0x6C          ] */ ldseq       ARRAY_5C6C
@@ -20851,7 +20851,7 @@ LAYER_92D9:
 .channel CHAN_9345
 /* 0x9345 [0xED 0x1E               ] */ gain        30
 /* 0x9347 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9349 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9349 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x934A [0xC8 0x30               ] */ sub         NA_SE_EN_BOSU_ATTACK & 0xFF
 /* 0x934C [0xC7 0x14 0x93 0x5B     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_20), LAYER_935B + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9350 [0xCB 0x93 0x60          ] */ ldseq       ARRAY_9360
@@ -20869,7 +20869,7 @@ LAYER_92D9:
 .channel CHAN_936A
 /* 0x936A [0xED 0x1E               ] */ gain        30
 /* 0x936C [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x936E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x936E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x936F [0xC8 0x3A               ] */ sub         NA_SE_EN_BOSU_DAMAGE & 0xFF
 /* 0x9371 [0xC7 0x1E 0x93 0x83     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_30), LAYER_9383 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9375 [0xCB 0x93 0x88          ] */ ldseq       ARRAY_9388
@@ -20888,7 +20888,7 @@ LAYER_92D9:
 .channel CHAN_938E
 /* 0x938E [0xED 0x1E               ] */ gain        30
 /* 0x9390 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9392 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9392 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9393 [0xC8 0x5B               ] */ sub         NA_SE_EN_BOSU_DEAD_VOICE & 0xFF
 /* 0x9395 [0xC7 0x21 0x93 0xA4     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_33), LAYER_93A4 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9399 [0xCB 0x93 0xA9          ] */ ldseq       ARRAY_93A9
@@ -21393,7 +21393,7 @@ LAYER_9688:
 .channel CHAN_968E
 /* 0x968E [0xED 0x19               ] */ gain        25
 /* 0x9690 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9692 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9692 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9693 [0xC8 0x53               ] */ sub         NA_SE_EN_LAST3_VOICE_KICK_OLD & 0xFF
 /* 0x9695 [0xC7 0x24 0x96 0xA4     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_36), LAYER_96A4 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9699 [0xCB 0x96 0xA9          ] */ ldseq       ARRAY_96A9
@@ -21411,7 +21411,7 @@ LAYER_9688:
 .channel CHAN_96AE
 /* 0x96AE [0xED 0x19               ] */ gain        25
 /* 0x96B0 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x96B2 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x96B2 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x96B3 [0xC8 0x58               ] */ sub         NA_SE_EN_LAST3_VOICE_DAMAGE_OLD & 0xFF
 /* 0x96B5 [0xC7 0x29 0x96 0xC7     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_41), LAYER_96C7 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x96B9 [0xCB 0x96 0xCC          ] */ ldseq       ARRAY_96CC
@@ -21657,7 +21657,7 @@ LAYER_981D:
 .channel CHAN_9842
 /* 0x9842 [0xED 0x0F               ] */ gain        15
 /* 0x9844 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9846 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9846 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9847 [0xC8 0x68               ] */ sub         NA_SE_EN_LAST2_VOICE_BALLET & 0xFF
 /* 0x9849 [0xC7 0x2C 0x98 0x58     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_44), LAYER_9858 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x984D [0xCB 0x98 0x5D          ] */ ldseq       ARRAY_985D
@@ -21675,7 +21675,7 @@ LAYER_981D:
 .channel CHAN_9861
 /* 0x9861 [0xED 0x19               ] */ gain        25
 /* 0x9863 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9865 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9865 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9866 [0xC8 0x6C               ] */ sub         NA_SE_EN_LAST2_DAMAGE_OLD & 0xFF
 /* 0x9868 [0xC7 0x30 0x98 0x7A     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_48), LAYER_987A + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x986C [0xCB 0x98 0x7F          ] */ ldseq       ARRAY_987F
@@ -21784,7 +21784,7 @@ LAYER_98AA:
 
 .channel CHAN_9903
 /* 0x9903 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9905 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9905 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9906 [0xC8 0x71               ] */ sub         NA_SE_EN_PIRATE_COOL_LAUGH & 0xFF
 /* 0x9908 [0xC7 0x34 0x99 0x17     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_52), LAYER_9917 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x990C [0xCB 0x99 0x1C          ] */ ldseq       ARRAY_991C
@@ -22113,7 +22113,7 @@ LAYER_9B3B:
 
 .channel CHAN_9B3E
 /* 0x9B3E [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9B40 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9B40 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9B41 [0xC8 0x75               ] */ sub         NA_SE_EN_STAL01_LAUGH & 0xFF
 /* 0x9B43 [0xC7 0x38 0x9B 0x60     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_56), LAYER_9B60 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9B47 [0xCB 0x9B 0x65          ] */ ldseq       ARRAY_9B65
@@ -22138,7 +22138,7 @@ LAYER_9B3B:
 
 .channel CHAN_9B68
 /* 0x9B68 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9B6A [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9B6A [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9B6B [0xC8 0x78               ] */ sub         NA_SE_EN_STAL04_ANGER & 0xFF
 /* 0x9B6D [0xC7 0x3B 0x9B 0x8A     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_59), LAYER_9B8A + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9B71 [0xCB 0x9B 0x8F          ] */ ldseq       ARRAY_9B8F
@@ -22181,7 +22181,7 @@ LAYER_9B3B:
 
 .channel CHAN_9BAF
 /* 0x9BAF [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0x9BB1 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0x9BB1 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0x9BB2 [0xC8 0x7E               ] */ sub         NA_SE_EN_STAL10_LAUGH_SHY & 0xFF
 /* 0x9BB4 [0xC7 0x01 0x9B 0xC9     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_1), LAYER_9BC9 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0x9BB8 [0xCB 0x9B 0xCE          ] */ ldseq       ARRAY_9BCE
@@ -23238,7 +23238,7 @@ CHAN_A0C0:
 
 .channel CHAN_A289
 /* 0xA289 [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0xA28B [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xA28B [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xA28C [0xC8 0xC7               ] */ sub         NA_SE_EN__copy514 & 0xFF
 /* 0xA28E [0xC7 0x12 0xA2 0x9F     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_18), LAYER_A29F + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xA292 [0xCB 0xA2 0xA4          ] */ ldseq       ARRAY_A2A4
@@ -23402,7 +23402,7 @@ LAYER_A29F:
 
 .channel CHAN_A38B
 /* 0xA38B [0xC1 0x7E               ] */ instr       FONTANY_INSTR_SFX
-/* 0xA38D [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xA38D [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xA38E [0xC8 0xD7               ] */ sub         NA_SE_EN_IRONNACK_DAMAGE & 0xFF
 /* 0xA390 [0xC7 0x00 0xA3 0xA2     ] */ stseq       (NOTEDVG_OPCODE | SF1_EFFECT_0), LAYER_A3A2 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xA394 [0xCB 0xA3 0xA7          ] */ ldseq       ARRAY_A3A7
@@ -23528,7 +23528,7 @@ CHAN_A486:
 /* 0xA48B [0xCA 0x00               ] */ mutebhv     0x00
 /* 0xA48D [0xE9 0x0E               ] */ notepri     14
 /* 0xA48F [0xE5 0x01               ] */ reverbidx   1
-/* 0xA491 [0xD0 0x80               ] */ effects     128
+/* 0xA491 [0xD0 0x80               ] */ effects     TRUE, 0, 0, 0, 0, 0
 /* 0xA493 [0xC6 0x00               ] */ font        Soundfont_0_ID
 CHAN_A495:
 /* 0xA495 [0xFE                    ] */ delay1
@@ -23544,7 +23544,7 @@ CHAN_A49F:
 /* 0xA4A6 [0x92                    ] */ dellayer    2
 /* 0xA4A7 [0xD8 0x00               ] */ vibdepth    0
 /* 0xA4A9 [0xDC 0x00               ] */ panweight   0
-/* 0xA4AB [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xA4AB [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xA4AC [0xE4                    ] */ dyncall
 CHAN_A4AD:
 /* 0xA4AD [0xFE                    ] */ delay1
@@ -25084,7 +25084,7 @@ CHAN_AF8A:
 /* 0xAF98 [0x8A 0x47 0x3A          ] */ ldlayer     2, LAYER_473A
 /* 0xAF9B [0xF8 0x78               ] */ loop        120
 /* 0xAF9D [0xFE                    ] */ delay1
-/* 0xAF9E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xAF9E [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xAF9F [0xC8 0x58               ] */ sub         88
 /* 0xAFA1 [0xF3 0x02               ] */ rbeqz       CHAN_AFA5
 /* 0xAFA3 [0xF4 0x02               ] */ rjump       CHAN_AFA7
@@ -25298,7 +25298,7 @@ LAYER_B093:
 /* 0xB111 [0xC6 0x00               ] */ font        Soundfont_0_ID
 /* 0xB113 [0xDC 0x7F               ] */ panweight   127
 /* 0xB115 [0xCA 0x00               ] */ mutebhv     0x00
-/* 0xB117 [0xD0 0x80               ] */ effects     128
+/* 0xB117 [0xD0 0x80               ] */ effects     TRUE, 0, 0, 0, 0, 0
 /* 0xB119 [0xE9 0x0E               ] */ notepri     14
 CHAN_B11B:
 /* 0xB11B [0xFE                    ] */ delay1
@@ -25326,7 +25326,7 @@ CHAN_B131:
 /* 0xB138 [0xCC 0x00               ] */ ldi         0
 /* 0xB13A [0x76                    ] */ stio        IO_PORT_6
 /* 0xB13B [0x71                    ] */ stio        IO_PORT_1
-/* 0xB13C [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xB13C [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xB13D [0xC9 0x0F               ] */ and         15
 /* 0xB13F [0xE4                    ] */ dyncall
 CHAN_B140:
@@ -25386,7 +25386,7 @@ CHAN_B1A8:
 /* 0xB1A8 [0xC1 0x34               ] */ instr       SF0_INST_52
 CHAN_B1AA:
 /* 0xB1AA [0xED 0x00               ] */ gain        0
-/* 0xB1AC [0x65                    ] */ ldio        IO_PORT_5
+/* 0xB1AC [0x65                    ] */ ldio        IO_PORT_SFX_INDEX_HIBITS
 /* 0xB1AD [0xF2 0x04               ] */ rbltz       CHAN_B1B3
 /* 0xB1AF [0xC7 0x00 0xB1 0xC8     ] */ stseq       0, LAYER_B1C7 + STSEQ_TRANSPOSITION
 CHAN_B1B3:
@@ -25532,7 +25532,7 @@ CHAN_B2B7:
 /* 0xB2BC [0xD9 0xFB               ] */ releaserate 251
 /* 0xB2BE [0xD3 0x00               ] */ bend        0
 /* 0xB2C0 [0xB3 0x00               ] */ filter      0, 0
-/* 0xB2C2 [0xD0 0x80               ] */ effects     128
+/* 0xB2C2 [0xD0 0x80               ] */ effects     TRUE, 0, 0, 0, 0, 0
 CHAN_B2C4:
 /* 0xB2C4 [0xFE                    ] */ delay1
 /* 0xB2C5 [0x60                    ] */ ldio        IO_PORT_0
@@ -25548,12 +25548,12 @@ CHAN_B2CC:
 /* 0xB2D3 [0xD8 0x00               ] */ vibdepth    0
 /* 0xB2D5 [0xCC 0x00               ] */ ldi         0
 /* 0xB2D7 [0x71                    ] */ stio        IO_PORT_1
-/* 0xB2D8 [0x65                    ] */ ldio        IO_PORT_5
+/* 0xB2D8 [0x65                    ] */ ldio        IO_PORT_SFX_INDEX_HIBITS
 /* 0xB2D9 [0xC9 0x7F               ] */ and         127
 /* 0xB2DB [0xB2 0xB2 0xFE          ] */ ldseqtoptr  TABLE_B2FE
 /* 0xB2DE [0xCF 0xB2 0xE2          ] */ stptrtoseq  STSEQ_HERE + STSEQ_PTR_DYNTBL
 /* 0xB2E1 [0xC2 0xB3 0x0E          ] */ dyntbl      TABLE_B30E
-/* 0xB2E4 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xB2E4 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xB2E5 [0xC9 0x7F               ] */ and         127
 /* 0xB2E7 [0xE4                    ] */ dyncall
 CHAN_B2E8:
@@ -26429,7 +26429,7 @@ CHAN_BA9A:
 .channel CHAN_BAC3
 /* 0xBAC3 [0xCC 0x08               ] */ ldi         8
 /* 0xBAC5 [0x71                    ] */ stio        IO_PORT_1
-/* 0xBAC6 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xBAC6 [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xBAC7 [0xC8 0x50               ] */ sub         NA_SE_VO_NARRATION_0 & 0xFF
 /* 0xBAC9 [0xC7 0x19 0xBA 0xDC     ] */ stseq       (NOTEDVG_OPCODE | SF0_EFFECT_25), LAYER_BADC + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xBACD [0xCB 0xBA 0xE1          ] */ ldseq       ARRAY_BAE1
@@ -26452,7 +26452,7 @@ LAYER_BADC:
 .channel CHAN_BB08
 /* 0xBB08 [0xCC 0x08               ] */ ldi         8
 /* 0xBB0A [0x71                    ] */ stio        IO_PORT_1
-/* 0xBB0B [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xBB0B [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xBB0C [0xC8 0x77               ] */ sub         NA_SE_VO_Z1_OPENDOOR & 0xFF
 /* 0xBB0E [0xC7 0x00 0xBB 0x1F     ] */ stseq       (NOTEDVG_OPCODE | SF0_EFFECT_0), LAYER_BB1F + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xBB12 [0xCB 0xBB 0x24          ] */ ldseq       ARRAY_BB24
@@ -27038,7 +27038,7 @@ LAYER_BDE7:
 .channel CHAN_BE59
 /* 0xBE59 [0xCC 0x08               ] */ ldi         8
 /* 0xBE5B [0x71                    ] */ stio        IO_PORT_1
-/* 0xBE5C [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xBE5C [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xBE5D [0xC7 0x00 0xBE 0x67     ] */ stseq       (NOTEDVG_OPCODE | SF0_EFFECT_0), LAYER_BE67 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xBE61 [0x88 0xBE 0x65          ] */ ldlayer     0, LAYER_BE65
 /* 0xBE64 [0xFF                    ] */ end
@@ -27052,7 +27052,7 @@ LAYER_BE67:
 .channel CHAN_BE6C
 /* 0xBE6C [0xCC 0x08               ] */ ldi         8
 /* 0xBE6E [0x71                    ] */ stio        IO_PORT_1
-/* 0xBE6F [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xBE6F [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xBE70 [0xC8 0x40               ] */ sub         NA_SE_VO_CHVO07 & 0xFF
 /* 0xBE72 [0xC7 0x00 0xBE 0x83     ] */ stseq       (NOTEDVG_OPCODE | SF0_EFFECT_0), LAYER_BE83 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xBE76 [0xCB 0xBE 0x88          ] */ ldseq       ARRAY_BE88
@@ -27075,7 +27075,7 @@ LAYER_BE83:
 .channel CHAN_BEC8
 /* 0xBEC8 [0xCC 0x08               ] */ ldi         8
 /* 0xBECA [0x71                    ] */ stio        IO_PORT_1
-/* 0xBECB [0x64                    ] */ ldio        IO_PORT_SFX_INDEX
+/* 0xBECB [0x64                    ] */ ldio        IO_PORT_SFX_INDEX_LOBITS
 /* 0xBECC [0xC8 0x80               ] */ sub         NA_SE_VO_OMVO03 & 0xFF
 /* 0xBECE [0xC7 0x00 0xBE 0xD8     ] */ stseq       (NOTEDVG_OPCODE | SF0_EFFECT_0), LAYER_BED8 + STSEQ_NOTEDVG_OPCODE_PITCH
 /* 0xBED2 [0x88 0xBE 0xD6          ] */ ldlayer     0, LAYER_BED6
