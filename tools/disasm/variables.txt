@@ -10431,7 +10431,7 @@
     0x80A09740:("D_80A09740","UNK_TYPE1","",0x1),
     0x80A09A40:("sMajoraSfxPos","UNK_TYPE1","",0x1),
     0x80A09A4C:("sHeartbeatTimer","UNK_TYPE1","",0x1),
-    0x80A09A50:("sWhipSegCount","UNK_TYPE4","",0x4),
+    0x80A09A50:("sWhipLength","UNK_TYPE4","",0x4),
     0x80A09A54:("sMajorasWrath","UNK_TYPE4","",0x4),
     0x80A09A58:("sMajoraStatic","UNK_TYPE4","",0x4),
     0x80A09A5C:("sMajorasMask","UNK_TYPE4","",0x4),

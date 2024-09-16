@@ -7,9 +7,9 @@
 struct Boss07;
 
 #define MAJORA_TENTACLE_LENGTH 10
-#define MAJORA_TENTACLE_COUNT 25
-#define MAJORA_TENTACLE_MAX 100
-#define MAJORA_WHIP_MAX_LENGTH 50
+#define MAJORA_TENTACLE_COUNT_MAX 100
+#define MAJORA_WHIP_LENGTH_MAX 50
+#define MAJORA_DEATH_LIGHT_COUNT 30
 
 #define MAJORA_LIMB_COUNT MAX((s32)MAJORAS_MASK_LIMB_MAX, MAX((s32)MAJORAS_INCARNATION_LIMB_MAX, (s32)MAJORAS_WRATH_LIMB_MAX))
 
@@ -57,10 +57,10 @@ typedef struct MajoraWhip {
     /* 0x010 */ f32 drag;
     /* 0x014 */ f32 tension;
     /* 0x018 */ Vec3f basePos;
-    /* 0x024 */ Vec3f pos[MAJORA_WHIP_MAX_LENGTH];
-    /* 0x27C */ Vec3f rot[MAJORA_WHIP_MAX_LENGTH];
-    /* 0x4D4 */ Vec3f velocity[MAJORA_WHIP_MAX_LENGTH];
-    /* 0x72C */ f32 unk_72C[MAJORA_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
+    /* 0x024 */ Vec3f pos[MAJORA_WHIP_LENGTH_MAX];
+    /* 0x27C */ Vec3f rot[MAJORA_WHIP_LENGTH_MAX];
+    /* 0x4D4 */ Vec3f velocity[MAJORA_WHIP_LENGTH_MAX];
+    /* 0x72C */ f32 unk_72C[MAJORA_WHIP_LENGTH_MAX]; // unused, probably a stretch factor
 } MajoraWhip; // size = 0x7F4
 
 typedef enum MajorasWrathBodyPart {
@@ -159,6 +159,17 @@ typedef enum MajorasIncarnationGrowBodyPart {
     /* 4 */ MAJORAS_INCARNATION_GROW_BODYPART_MAX
 } MajorasIncarnationGrowBodyPart;
 
+typedef enum MajorasIncarnationFoot {
+    /* 0 */ MAJORAS_INCARNATION_FOOT_RIGHT,
+    /* 1 */ MAJORAS_INCARNATION_FOOT_LEFT,
+    /* 2 */ MAJORAS_INCARNATION_FOOT_MAX
+} MajorasIncarnationFoot;
+
+typedef enum MajorasWrathKickCollider {
+    /* 0 */ MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT,
+    /* 1 */ MAJORAS_WARTH_KICK_COLLIDER_MAX
+} MajorasWrathKickCollider;
+
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ Boss07ActionFunc actionFunc;
@@ -181,7 +192,7 @@ typedef struct Boss07 {
     /* 0x0174 */ u8 canEvade;
     /* 0x0178 */ f32 topSpinAngle; 
     /* 0x017C */ f32 topSpinAngularVelocity;
-    /* 0x0180 */ s16 unk_180; // top precess angle and incarnation yaw target
+    /* 0x0180 */ s16 topPrecessionVelocity; // also used as a target rotation for Incarnation's various dance moves
     /* 0x0184 */ f32 wrathLeanRotY;
     /* 0x0188 */ f32 wrathLeanRotX;
     /* 0x018C */ f32 flySpeedTarget;
@@ -196,7 +207,7 @@ typedef struct Boss07 {
     /* 0x03E8 */ ColliderJntSph bodyCollider;
     /* 0x0408 */ ColliderJntSphElement bodyColliderElements[MAJORA_COLLIDER_BODYPART_MAX];
     /* 0x06C8 */ ColliderJntSph kickCollider;
-    /* 0x06E8 */ ColliderJntSphElement kickColliderElements[1];
+    /* 0x06E8 */ ColliderJntSphElement kickColliderElements[MAJORAS_WARTH_KICK_COLLIDER_MAX];
     /* 0x0728 */ ColliderCylinder unusedCollider;
     /* 0x0774 */ u8 startRemainsCs;
     /* 0x0778 */ s32 whipTopIndex; // unlike other index variables, this is an index from the *end* of the whip, not from the beginning of it.
@@ -210,7 +221,7 @@ typedef struct Boss07 {
     /* 0x0F8C */ f32 whipWrapRotY;
     /* 0x0F90 */ f32 whipWrapRotX;
     /* 0x0F94 */ MajoraWhip leftWhip;
-    /* 0x1788 */ Vec3f incarnationFeetPos[2];
+    /* 0x1788 */ Vec3f incarnationFeetPos[MAJORAS_INCARNATION_FOOT_MAX];
     /* 0x17A0 */ Vec3f incarnationLeftHandPos;
     /* 0x17AC */ Vec3f incarnationRightHandPos;
     /* 0x17B8 */ f32 incarnationIntroBodyPartsScale[MAJORAS_INCARNATION_GROW_BODYPART_MAX];
@@ -235,11 +246,11 @@ typedef struct Boss07 {
     /* 0x1820 */ ColliderCylinder generalCollider;
     /* 0x186C */ s16 maskShakeTimer;
     /* 0x1870 */ f32 tentacleLengthScale;
-    /* 0x1874 */ u8 tentacleState; // wavy tentacles
+    /* 0x1874 */ u8 tentacleState; // see `TentacleState`
     /* 0x1878 */ Vec3f tentacleBasePos;
     /* 0x1884 */ s32 maskEyeTexIndex;
     /* 0x1888 */ u8 bgCheckTimer;
-    /* 0x188C */ f32 eyeBeamsLengthScale; // TODO: investigate how it's used for something else for remains and incarnation
+    /* 0x188C */ f32 eyeBeamsLengthScale; // also used as a scale for the light orbs that surround the Remains during the intro cutscene
     /* 0x1890 */ f32 eyeBeamsFocusOrbScale;
     /* 0x1894 */ f32 beamLengthScale;
     /* 0x1898 */ f32 beamBaseScale;
@@ -253,7 +264,7 @@ typedef struct Boss07 {
     /* 0x18CC */ f32 knockbackVelocityX;
     /* 0x18D0 */ f32 knockbackVelocityZ;
     /* 0x18D4 */ s16 angularVelocity;
-    /* 0x18D6 */ s16 fireTimer; // used as a timer for spawning afterimages in `Boss07_Incarnation_Update`
+    /* 0x18D6 */ s16 fireTimer; // also used as a timer for spawning afterimages in `Boss07_Incarnation_Update`
     /* 0x18D8 */ s16 beamDamageTimer;
     /* 0x18DA */ u8 burnOnLanding;
     /* 0x18DB */ u8 tryFireProjectile;
@@ -263,14 +274,14 @@ typedef struct Boss07 {
     /* 0x18ED */ u8 prevBeamTireMarkEnabled;
     /* 0x18F0 */ ColliderQuad maskFrontCollider;
     /* 0x1970 */ ColliderQuad maskBackCollider;
-    /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_MAX];
+    /* 0x19F0 */ MajoraTentacle tentacles[MAJORA_TENTACLE_COUNT_MAX];
     /* 0xAB40 */ s16 miscTimer; // used for making the remains bob up and down in the intro and for Incarnation running SFX
     /* 0xAB44 */ f32 introPlayerOrbScale;
     /* 0xAB48 */ u8 disableShadow;
     /* 0xAB4C */ f32 deathOrbScale;
-    /* 0xAB50 */ f32 deathLightScale[30];
-    /* 0xABC8 */ u32 cutsceneTimer; // used as an animation loop count in `Boss07_Incarnation_Hopak`
-    /* 0xABCC */ s32 sfxTimer; // used as an index in `Boss07_Mask_IntroCutscene`
+    /* 0xAB50 */ f32 deathLightScale[MAJORA_DEATH_LIGHT_COUNT];
+    /* 0xABC8 */ u32 cutsceneTimer; // also used as an animation loop count in `Boss07_Incarnation_Hopak`
+    /* 0xABCC */ s32 sfxTimer; // also used as an index in `Boss07_Mask_IntroCutscene`
     /* 0xABD0 */ s16 cutsceneState; // TODO: investigate how it's used for something else in `Boss07_Mask_Spin`
     /* 0xABD2 */ s16 subCamId;
     /* 0xABD4 */ Vec3f subCamEye;
