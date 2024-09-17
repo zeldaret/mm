@@ -89,7 +89,7 @@ typedef struct {
     /* 0xC */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
 
-typedef enum {
+typedef enum AnimTaskType {
     /* 0 */ ANIMTASK_LOAD_PLAYER_FRAME,
     /* 1 */ ANIMTASK_COPY,
     /* 2 */ ANIMTASK_INTERP,
