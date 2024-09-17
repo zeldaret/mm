@@ -142,7 +142,7 @@ static TrackOptionsSet sTrackOptions = {
 };
 
 s32 EnBaba_FindBombShopkeeper(EnBaba* this, PlayState* play) {
-    //! The bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
+    //! The bomb shopkeeper is an EnSob1, but initializes itself with id `ACTOR_EN_OSSAN`
     //! Note if there are other `EnOssan` actors, it may find that instance instead
     //! in which case `EnSob1` struct acceses would be incorrect
     this->bombShopkeeper = (EnSob1*)SubS_FindActor(play, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);

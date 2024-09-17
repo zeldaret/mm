@@ -8,6 +8,7 @@
 #include "unk.h"
 
 struct GameState;
+struct PlayState;
 
 #define TMEM_SIZE 0x1000
 
@@ -88,7 +89,7 @@ typedef enum SetupDL {
     /* 0x49 */ SETUPDL_MAX
 } SetupDL;
 
-typedef struct {
+typedef struct GfxMasterList {
     /* 0x000 */ Gfx taskStart[9];
     /* 0x048 */ Gfx clearZBuffer[8];     // original name: clear_zb_dl
     /* 0x088 */ Gfx clearFrameBuffer[5]; // original name: clear_fb_dl
@@ -154,6 +155,9 @@ typedef struct GraphicsContext {
     /* 0x2E8 */ f32 yScale;
     /* 0x2EC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x2F0
+
+// graph.c
+void Graph_ThreadEntry(void* arg);
 
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
@@ -235,6 +239,12 @@ Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s3
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b);
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
+
+void Gfx_DrawDListOpa(struct PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(struct PlayState* play, Gfx* dList);
+
+// graph.c
+extern struct GfxMasterList* gGfxMasterDL;
 
 extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];

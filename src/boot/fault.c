@@ -924,7 +924,7 @@ void Fault_ProcessClients(void) {
 }
 
 void Fault_SetOptions(void) {
-    static u32 faultCustomOptions;
+    static u32 sFaultCustomOptions;
     Input* input3 = &sFaultInstance->inputs[3];
     s32 pad;
     uintptr_t pc;
@@ -932,18 +932,18 @@ void Fault_SetOptions(void) {
     uintptr_t sp;
 
     if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
-        faultCustomOptions = !faultCustomOptions;
+        sFaultCustomOptions = !sFaultCustomOptions;
     }
 
-    if (faultCustomOptions) {
+    if (sFaultCustomOptions) {
         pc = gGraphThread.context.pc;
         ra = gGraphThread.context.ra;
         sp = gGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
-            static u32 faultCopyToLog;
+            static u32 sFaultCopyToLog;
 
-            faultCopyToLog = !faultCopyToLog;
-            FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
+            sFaultCopyToLog = !sFaultCopyToLog;
+            FaultDrawer_SetOsSyncPrintfEnabled(sFaultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->cur.button, BTN_A)) {
             osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", pc, ra, sp);

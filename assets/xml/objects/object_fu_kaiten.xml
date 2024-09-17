@@ -12,7 +12,6 @@
         <DList Name="object_fu_kaiten_DL_002FC0" Offset="0x2FC0" />
         <Texture Name="object_fu_kaiten_Tex_002FD0" OutName="tex_002FD0" Format="rgba16" Width="32" Height="32" Offset="0x2FD0" />
         <TextureAnimation Name="object_fu_kaiten_Matanimheader_0037D8" Offset="0x37D8" />
-        <!-- <Blob Name="object_fu_kaiten_Blob_0037E0" Size="0x18" Offset="0x37E0" /> -->
         <Collision Name="object_fu_kaiten_Colheader_0037F8" Offset="0x37F8" /> <!-- Original name is "z2_bowling_mizu_bgdatainfo" -->
     </File>
 </Root>

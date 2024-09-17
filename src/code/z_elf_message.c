@@ -7,7 +7,12 @@
  * which hint to give based on a script.
  * That system has been replaced with a single function that hardcodes the checks.
  */
+
+#include "z64elf_message.h"
+
 #include "global.h"
+#include "z64save.h"
+#include "z64scene.h"
 
 /**
  * Gets the relevant text ID for Tatl hints in first cycle.

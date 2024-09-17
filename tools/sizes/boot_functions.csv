@@ -221,7 +221,7 @@ asm/non_matchings/boot/__osMalloc/ArenaImpl_GetLastBlock.s,ArenaImpl_GetLastBloc
 asm/non_matchings/boot/__osMalloc/__osMallocInit.s,__osMallocInit,0x8008720C,0x14
 asm/non_matchings/boot/__osMalloc/__osMallocAddHeap.s,__osMallocAddHeap,0x8008725C,0x28
 asm/non_matchings/boot/__osMalloc/__osMallocCleanup.s,__osMallocCleanup,0x800872FC,0x8
-asm/non_matchings/boot/__osMalloc/__osMallocIsInitalized.s,__osMallocIsInitalized,0x8008731C,0x2
+asm/non_matchings/boot/__osMalloc/__osMallocIsInitialized.s,__osMallocIsInitialized,0x8008731C,0x2
 asm/non_matchings/boot/__osMalloc/__osMalloc.s,__osMalloc,0x80087324,0x39
 asm/non_matchings/boot/__osMalloc/__osMallocR.s,__osMallocR,0x80087408,0x39
 asm/non_matchings/boot/__osMalloc/__osFree.s,__osFree,0x800874EC,0x3E

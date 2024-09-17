@@ -1842,12 +1842,12 @@ void EnBigslime_SetupFreeze(EnBigslime* this) {
         targetVtx->n.a = 0;
     }
 
-    // Initalizes frozen effect alpha near bottom of sphere by increasing levels of alpha
+    // Initializes frozen effect alpha near bottom of sphere by increasing levels of alpha
     for (i = 0; i < 20; i++) {
         sBigslimeTargetVtx[i + 138].n.a = 10 * i;
     }
 
-    // Initalizes/seeds frozen effect alpha in bottom 4 nodes in vtx sphere to highest level of alpha
+    // Initializes/seeds frozen effect alpha in bottom 4 nodes in vtx sphere to highest level of alpha
     for (i = 0; i < 4; i++) {
         sBigslimeTargetVtx[i + 158].n.a = 200;
     }

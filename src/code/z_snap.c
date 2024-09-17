@@ -1,5 +1,8 @@
-#include "global.h"
 #include "z64snap.h"
+
+#include "global.h"
+#include "z64olib.h"
+
 #include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
 
 #define PICTO_SEEN_IN_SCENE 1
