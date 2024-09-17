@@ -2,7 +2,7 @@
 #define Z_EN_MK_H
 
 #include "global.h"
-#include "objects/object_mk/object_mk.h"
+#include "assets/objects/object_mk/object_mk.h"
 
 struct EnMk;
 

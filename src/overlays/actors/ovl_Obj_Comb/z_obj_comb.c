@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_comb.h"
-#include "objects/object_comb/object_comb.h"
+#include "assets/objects/object_comb/object_comb.h"
 
 #define FLAGS 0x00000000
 

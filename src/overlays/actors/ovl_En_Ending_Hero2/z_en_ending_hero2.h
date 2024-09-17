@@ -2,7 +2,7 @@
 #define Z_EN_ENDING_HERO2_H
 
 #include "global.h"
-#include "objects/object_bai/object_bai.h"
+#include "assets/objects/object_bai/object_bai.h"
 
 struct EnEndingHero2;
 

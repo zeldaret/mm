@@ -2,7 +2,7 @@
 #define Z_EN_IG_H
 
 #include "global.h"
-#include "objects/object_dai/object_dai.h"
+#include "assets/objects/object_dai/object_dai.h"
 
 struct EnIg;
 

@@ -2,7 +2,7 @@
 #define Z_EN_DEMO_HEISHI_H
 
 #include "global.h"
-#include "objects/object_sdn/object_sdn.h"
+#include "assets/objects/object_sdn/object_sdn.h"
 
 struct EnDemoheishi;
 

@@ -85,7 +85,7 @@ static AnimationInfo sAnimationInfo[ENMM3_ANIM_MAX] = {
     { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f }, // ENMM3_ANIM_7
 };
 
-#include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"
+#include "assets/overlays/ovl_En_Mm3/ovl_En_Mm3.c"
 
 Vec3f D_80A704F0 = { 0.0f, 0.0f, 0.0f };
 

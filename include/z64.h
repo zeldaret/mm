@@ -13,6 +13,7 @@
 #include "libc64/qrand.h"
 
 #include "color.h"
+#include "controller.h"
 #include "gfx.h"
 #include "gfxprint.h"
 #include "ichain.h"
@@ -23,6 +24,7 @@
 #include "padutils.h"
 #include "regs.h"
 #include "scheduler.h"
+#include "segmented_address.h"
 #include "sequence.h"
 #include "seqcmd.h"
 #include "sfx.h"
@@ -49,6 +51,7 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "kaleido_manager.h"
 #include "z64keyframe.h"
 #include "z64lib.h"
 #include "z64light.h"

@@ -38,21 +38,16 @@ extern AudioSpec gAudioSpecs[21];
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
 extern const AudioHeapInitSizes gAudioHeapInitSizes;
-extern u8 gSoundFontTable[];
+extern AudioTable gSoundFontTable;
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];
-extern u8 gSampleBankTable[];
+extern AudioTable gSampleBankTable;
 
 // bss
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 
-extern s32 D_801FD120;
-
-extern u8 sResetAudioHeapTimer;
-extern u16 sResetAudioHeapFadeReverbVolume;
-extern u16 sResetAudioHeapFadeReverbVolumeStep;
 extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments

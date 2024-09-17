@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_inibs_movebg.h"
-#include "objects/object_inibs_object/object_inibs_object.h"
+#include "assets/objects/object_inibs_object/object_inibs_object.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

@@ -1,7 +1,7 @@
 #include "z64eff_tire_mark.h"
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 angle,
                    CollisionPoly* colPoly, s32 bgId) {

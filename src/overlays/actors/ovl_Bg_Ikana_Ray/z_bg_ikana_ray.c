@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_ray.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS 0x00000000
 

@@ -2,7 +2,7 @@
 #define Z_EN_TAKARAYA_H
 
 #include "global.h"
-#include "objects/object_bg/object_bg.h"
+#include "assets/objects/object_bg/object_bg.h"
 
 struct EnTakaraya;
 

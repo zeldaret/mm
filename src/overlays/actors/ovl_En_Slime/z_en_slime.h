@@ -2,8 +2,8 @@
 #define Z_EN_SLIME_H
 
 #include "global.h"
-#include "objects/object_slime/object_slime.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_slime/object_slime.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 struct EnSlime;
 

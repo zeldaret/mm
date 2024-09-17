@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_iceblock.h"
-#include "objects/object_ice_block/object_ice_block.h"
+#include "assets/objects/object_ice_block/object_ice_block.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

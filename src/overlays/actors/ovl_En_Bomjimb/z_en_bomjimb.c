@@ -962,7 +962,7 @@ s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-#include "overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
+#include "assets/overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
 
 void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80C03260[] = {

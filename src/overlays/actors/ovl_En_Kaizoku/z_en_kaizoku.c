@@ -6,6 +6,7 @@
 
 #include "z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
@@ -1949,7 +1950,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
 
             this->bodyCollider.base.acFlags &= ~AC_HIT;
             Actor_PlaySfx(&this->picto.actor, NA_SE_IT_SHIELD_BOUND);
-            EffectSsHitmark_SpawnFixedScale(play, 3, &pos);
+            EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &pos);
             CollisionCheck_SpawnShieldParticlesMetal(play, &pos);
         }
     }

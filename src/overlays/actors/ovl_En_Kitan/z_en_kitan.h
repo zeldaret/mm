@@ -2,7 +2,7 @@
 #define Z_EN_KITAN_H
 
 #include "global.h"
-#include "objects/object_kitan/object_kitan.h"
+#include "assets/objects/object_kitan/object_kitan.h"
 
 #define ENKITAN_GET_COLLECT_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 

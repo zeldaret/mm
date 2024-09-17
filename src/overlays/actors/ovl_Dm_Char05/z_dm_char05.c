@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char05.h"
-#include "objects/object_dmask/object_dmask.h"
+#include "assets/objects/object_dmask/object_dmask.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

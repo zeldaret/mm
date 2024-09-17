@@ -23,7 +23,7 @@ typedef enum {
     /* 2 */ CONT_PAK_OTHER
 } ControllerPakType;
 
-typedef struct {
+typedef struct PadMgr {
     /* 0x000 */ u8 validCtrlrsMask;
     /* 0x004 */ void (*rumbleRetraceCallback)(void*);
     /* 0x008 */ void* rumbleRetraceArg;
@@ -87,5 +87,7 @@ void PadMgr_RumblePause(void);
 void PadMgr_RumbleSetSingle(s32 port, s32 enable);
 void PadMgr_RumbleSet(u8 enable[MAXCONTROLLERS]);
 s32 PadMgr_ControllerHasRumblePak(s32 port);
+
+extern PadMgr gPadMgr;
 
 #endif

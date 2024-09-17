@@ -3,8 +3,8 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
-#include "objects/object_ani/object_ani.h"
-#include "objects/object_fsn/object_fsn.h"
+#include "assets/objects/object_ani/object_ani.h"
+#include "assets/objects/object_fsn/object_fsn.h"
 
 // Note: adding 1 to FSN_LIMB_MAX due to bug in the skeleton, see bug in object_fsn.xml
 #define ENOSSAN_LIMB_MAX MAX((s32)FSN_LIMB_MAX + 1, (s32)ANI_LIMB_MAX)

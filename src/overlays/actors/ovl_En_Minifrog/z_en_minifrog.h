@@ -2,7 +2,7 @@
 #define Z_EN_MINIFROG_H
 
 #include "global.h"
-#include "objects/object_fr/object_fr.h"
+#include "assets/objects/object_fr/object_fr.h"
 
 struct EnMinifrog;
 

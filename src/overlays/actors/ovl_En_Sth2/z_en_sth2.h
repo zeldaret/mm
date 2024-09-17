@@ -2,7 +2,7 @@
 #define Z_EN_STH2_H
 
 #include "global.h"
-#include "objects/object_sth/object_sth.h"
+#include "assets/objects/object_sth/object_sth.h"
 
 struct EnSth2;
 

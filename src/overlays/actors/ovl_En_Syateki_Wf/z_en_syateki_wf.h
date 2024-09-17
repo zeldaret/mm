@@ -2,7 +2,7 @@
 #define Z_EN_SYATEKI_WF_H
 
 #include "global.h"
-#include "objects/object_wf/object_wf.h"
+#include "assets/objects/object_wf/object_wf.h"
 
 #define SG_WOLFOS_GET_POINT_TO_HOWL(thisx) (((thisx)->params & 0xF0) >> 4)
 #define SG_WOLFOS_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)

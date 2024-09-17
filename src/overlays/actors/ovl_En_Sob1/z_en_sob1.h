@@ -3,9 +3,9 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
-#include "objects/object_rsn/object_rsn.h"
-#include "objects/object_zo/object_zo.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "assets/objects/object_rsn/object_rsn.h"
+#include "assets/objects/object_zo/object_zo.h"
+#include "assets/objects/object_oF1d_map/object_oF1d_map.h"
 
 #define ENSOB1_LIMB_MAX MAX(MAX((s32)ZORA_LIMB_MAX, (s32)BOMB_SHOPKEEPER_LIMB_MAX), (s32)GORON_LIMB_MAX)
 

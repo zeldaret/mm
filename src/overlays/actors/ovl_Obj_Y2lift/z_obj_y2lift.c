@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_y2lift.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

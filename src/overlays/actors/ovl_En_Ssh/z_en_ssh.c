@@ -5,7 +5,7 @@
  */
 
 #include "z_en_ssh.h"
-#include "objects/object_st/object_st.h"
+#include "assets/objects/object_st/object_st.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

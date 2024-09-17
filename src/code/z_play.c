@@ -993,7 +993,7 @@ void Play_UpdateMain(PlayState* this) {
                         this->envCtx.fillScreen = false;
                     }
                 } else {
-                    Room_HandleLoadCallbacks(this, &this->roomCtx);
+                    Room_ProcessRoomRequest(this, &this->roomCtx);
                     CollisionCheck_AT(this, &this->colChkCtx);
                     CollisionCheck_OC(this, &this->colChkCtx);
                     CollisionCheck_Damage(this, &this->colChkCtx);
@@ -1597,7 +1597,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     scene->unk_D = 0;
     gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
-    Room_AllocateAndLoad(this, &this->roomCtx);
+    Room_SetupFirstRoom(this, &this->roomCtx);
 }
 
 void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
@@ -2311,7 +2311,8 @@ void Play_Init(GameState* thisx) {
 
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
-    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
+    // Busyloop until the room loads
+    while (!Room_ProcessRoomRequest(this, &this->roomCtx)) {}
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) ||
                                (this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5))) {

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 

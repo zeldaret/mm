@@ -2,7 +2,7 @@
 #define Z_EN_DNH_H
 
 #include "global.h"
-#include "objects/object_tro/object_tro.h"
+#include "assets/objects/object_tro/object_tro.h"
 
 struct EnDnh;
 

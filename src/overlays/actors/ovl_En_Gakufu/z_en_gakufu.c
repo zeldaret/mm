@@ -5,7 +5,7 @@
  */
 
 #include "z_en_gakufu.h"
-#include "interface/parameter_static/parameter_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -96,7 +96,7 @@ TexturePtr sOcarinaBtnWallTextures[] = {
     gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
 };
 
-#include "overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
+#include "assets/overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
 
 void EnGakufu_ProcessNotes(EnGakufu* this) {
     OcarinaStaff* playbackStaff;

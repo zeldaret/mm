@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_market_step.h"
-#include "objects/object_market_obj/object_market_obj.h"
+#include "assets/objects/object_market_obj/object_market_obj.h"
 
 #define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_10000000)
 

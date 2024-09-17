@@ -5,8 +5,8 @@
  */
 
 #include "z_en_trt.h"
-#include "objects/object_trt/object_trt.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_trt/object_trt.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 

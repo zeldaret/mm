@@ -2,7 +2,7 @@
 #define Z_EN_BBFALL_H
 
 #include "global.h"
-#include "objects/object_bb/object_bb.h"
+#include "assets/objects/object_bb/object_bb.h"
 #include "overlays/actors/ovl_En_Bb/z_en_bb.h"
 
 struct EnBbfall;

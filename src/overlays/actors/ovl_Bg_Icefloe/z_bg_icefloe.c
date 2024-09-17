@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_icefloe.h"
-#include "objects/object_icefloe/object_icefloe.h"
+#include "assets/objects/object_icefloe/object_icefloe.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

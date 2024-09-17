@@ -2,7 +2,7 @@
 #define Z_EN_BJT_H
 
 #include "global.h"
-#include "objects/object_bjt/object_bjt.h"
+#include "assets/objects/object_bjt/object_bjt.h"
 
 struct EnBjt;
 

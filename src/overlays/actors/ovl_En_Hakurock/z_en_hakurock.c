@@ -25,8 +25,8 @@
 
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_boss_hakugin/object_boss_hakugin.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_boss_hakugin/object_boss_hakugin.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

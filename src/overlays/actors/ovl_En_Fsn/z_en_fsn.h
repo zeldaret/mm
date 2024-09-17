@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
-#include "objects/object_fsn/object_fsn.h"
+#include "assets/objects/object_fsn/object_fsn.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
 #define ENFSN_IS_SHOP(thisx) (!((thisx)->params & 1))

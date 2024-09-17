@@ -6,7 +6,7 @@
 
 #include "z_bg_ikana_shutter.h"
 #include "z64quake.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

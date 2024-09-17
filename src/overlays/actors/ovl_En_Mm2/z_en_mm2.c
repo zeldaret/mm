@@ -30,7 +30,7 @@ ActorInit En_Mm2_InitVars = {
     /**/ EnMm2_Draw,
 };
 
-#include "overlays/ovl_En_Mm2/ovl_En_Mm2.c"
+#include "assets/overlays/ovl_En_Mm2/ovl_En_Mm2.c"
 
 void EnMm2_Init(Actor* thisx, PlayState* play) {
     EnMm2* this = THIS;

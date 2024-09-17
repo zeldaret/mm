@@ -50,7 +50,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
     return 1;
 }
 
-#include "overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
+#include "assets/overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
 
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;

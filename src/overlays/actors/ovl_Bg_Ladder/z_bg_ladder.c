@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ladder.h"
-#include "objects/object_ladder/object_ladder.h"
+#include "assets/objects/object_ladder/object_ladder.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_tokei_step/object_tokei_step.h"
+#include "assets/objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 

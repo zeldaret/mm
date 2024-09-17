@@ -1,0 +1,6 @@
+<Root>
+    <File Name="boot" OutName="fault_drawer" BaseAddress="0x80080060" RangeStart="0x18BF0" RangeEnd="0x18FF0" >
+        <!-- The real version is const and found in fault_drawer.c, though shares the same name -->
+        <Blob Name="sFaultDrawerFont" Size="0x400" Offset="0x18BF0"/>
+    </File>
+</Root>

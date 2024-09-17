@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_haka_bombwall.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char08.h"
-#include "objects/object_kamejima/object_kamejima.h"
+#include "assets/objects/object_kamejima/object_kamejima.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 
@@ -48,7 +48,7 @@ ActorInit Dm_Char08_InitVars = {
     /**/ DmChar08_Draw,
 };
 
-#include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
+#include "assets/overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
 typedef enum {
     /*  0 */ TURTLE_ANIM_IDLE,

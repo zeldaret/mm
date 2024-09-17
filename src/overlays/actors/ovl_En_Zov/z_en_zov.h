@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
-#include "objects/object_zov/object_zov.h"
+#include "assets/objects/object_zov/object_zov.h"
 
 struct EnZov;
 

@@ -8,6 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
@@ -974,9 +975,9 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 CollisionCheck_BlueBlood(play, NULL, &sp3C);
-                EffectSsHitmark_SpawnFixedScale(play, 0, &sp3C);
-            } else if (this->actor.colChkInfo.damageEffect != 14) {
-                EffectSsHitmark_SpawnFixedScale(play, 3, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, &sp3C);
+            } else if (this->actor.colChkInfo.damageEffect != 0xE) {
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &sp3C);
                 CollisionCheck_SpawnShieldParticlesMetalSound(play, &sp3C, &this->actor.projectedPos);
             }
         }

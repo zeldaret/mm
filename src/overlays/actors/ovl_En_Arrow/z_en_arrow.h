@@ -2,7 +2,7 @@
 #define Z_EN_ARROW_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 struct EnArrow;
 

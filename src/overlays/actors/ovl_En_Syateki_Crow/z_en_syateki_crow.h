@@ -2,7 +2,7 @@
 #define Z_EN_SYATEKI_CROW_H
 
 #include "global.h"
-#include "objects/object_crow/object_crow.h"
+#include "assets/objects/object_crow/object_crow.h"
 
 #define SG_GUAY_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
 #define SG_GUAY_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)

@@ -4,7 +4,7 @@
  * Description: Ocean Spider House - Bombable Wall
  */
 #include "z_bg_kin2_bombwall.h"
-#include "objects/object_kin2_obj/object_kin2_obj.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_10000000)
 

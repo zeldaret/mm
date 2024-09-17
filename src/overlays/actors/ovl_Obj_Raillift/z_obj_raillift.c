@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_raillift.h"
-#include "objects/object_raillift/object_raillift.h"
+#include "assets/objects/object_raillift/object_raillift.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS (ACTOR_FLAG_10)

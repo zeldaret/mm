@@ -6,7 +6,7 @@ All contributions are welcome. This is a group effort, and even small contributi
 This document is meant to be a set of tips and guidelines for contributing to the project.
 For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/main/README.md).
 
-Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
+Most discussions happen on our [Discord Server](https://discord.zelda.deco.mp) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
 ## Useful Links
 
@@ -14,7 +14,7 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev) whe
 - [Style Guide](STYLE.md) - Description of the project style that we ask contributors to adhere to.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
-- [Zelda 64 Reverse Engineering Website](https://zelda64.dev/games/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
+- [Zelda 64 Reverse Engineering Website](https://zelda.deco.mp/games/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
 - [MM decomp tutorial](tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
 - [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/main/docs/tutorial/contents.md) - The tutorial the MM one was based on. For OOT, but largely applicable to MM as well. Covers slightly different topics, including how to get your data OK with `vbindiff`.
 - The `#resources` channel on the Discord contains many more links on specific details of decompiling IDO MIPS code.
@@ -45,7 +45,7 @@ You should be able to build a matching ROM before you start making any changes.
 Usually, the best place to get started is to decompile an actor overlay.
 An *actor* is any thing in the game that moves or performs actions or interactions. This includes things like Link, enemies, NPCs, doors, pots, etc. Actors are good for a first file because they are generally small, self-contained systems.
 
-We recommend that you [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
+We recommend that you [join the Discord](https://discord.zelda.deco.mp/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
 We track who is working on what on some Google Sheets available in the Discord. Once you've decided on or been recommended a good first file, mark it as Reserved.
 

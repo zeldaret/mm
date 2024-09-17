@@ -2,7 +2,7 @@
 #define Z_EN_RAF_H
 
 #include "global.h"
-#include "objects/object_raf/object_raf.h"
+#include "assets/objects/object_raf/object_raf.h"
 
 #define CARNIVOROUS_LILY_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
 #define CARNIVOROUS_LILY_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)

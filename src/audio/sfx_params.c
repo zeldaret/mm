@@ -1,6 +1,6 @@
 #include "global.h"
 
-#define DEFINE_SFX(_0, importance, distParam, randParam, flags2, flags1)           \
+#define DEFINE_SFX(_0, _1, importance, distParam, randParam, flags2, flags1)       \
     { importance, flags2,                                                          \
       ((((distParam) << SFX_PARAM_DIST_RANGE_SHIFT) & SFX_PARAM_DIST_RANGE_MASK) | \
        (((randParam) << SFX_PARAM_RAND_FREQ_RAISE_SHIFT) & SFX_PARAM_RAND_FREQ_RAISE_MASK) | (flags1)) },

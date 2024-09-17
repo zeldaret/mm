@@ -87,8 +87,7 @@ typedef struct PlayState {
     /* 0x18844 */ u8 unk_18844; // bool
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
-    /* 0x18848 */ u8 numRooms;
-    /* 0x1884C */ RomFile* roomList;
+    /* 0x18848 */ RoomList roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ ActorCsCamInfo* actorCsCamList;

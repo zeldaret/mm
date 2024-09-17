@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_milk_bin.h"
-#include "objects/object_obj_milk_bin/object_obj_milk_bin.h"
+#include "assets/objects/object_obj_milk_bin/object_obj_milk_bin.h"
 
 #define FLAGS 0x00000000
 

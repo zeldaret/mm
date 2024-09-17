@@ -2,7 +2,7 @@
 #define Z_EN_FLOORMAS_H
 
 #include "global.h"
-#include "objects/object_wallmaster/object_wallmaster.h"
+#include "assets/objects/object_wallmaster/object_wallmaster.h"
 
 struct EnFloormas;
 

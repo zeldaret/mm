@@ -7,7 +7,7 @@
 #include "z_bg_hakugin_post.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -801,7 +801,7 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
         Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
-        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered2(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 
@@ -879,7 +879,7 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
-        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered2(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 

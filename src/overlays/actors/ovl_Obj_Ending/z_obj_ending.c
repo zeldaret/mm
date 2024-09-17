@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ending.h"
-#include "objects/object_ending_obj/object_ending_obj.h"
+#include "assets/objects/object_ending_obj/object_ending_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

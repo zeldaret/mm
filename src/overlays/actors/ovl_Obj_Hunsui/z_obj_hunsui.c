@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hunsui.h"
-#include "objects/object_hunsui/object_hunsui.h"
+#include "assets/objects/object_hunsui/object_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

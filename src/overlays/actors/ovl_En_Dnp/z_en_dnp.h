@@ -2,7 +2,7 @@
 #define Z_EN_DNP_H
 
 #include "global.h"
-#include "objects/object_dnq/object_dnq.h"
+#include "assets/objects/object_dnq/object_dnq.h"
 
 struct EnDnp;
 

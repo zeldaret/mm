@@ -2,7 +2,7 @@
 #define Z_EN_DRAGON_H
 
 #include "global.h"
-#include "objects/object_utubo/object_utubo.h"
+#include "assets/objects/object_utubo/object_utubo.h"
 
 #define EN_DRAGON_GET_PYTHON_INDEX(thisx) (((thisx)->params >> 7) & 0x1F)
 

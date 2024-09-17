@@ -246,7 +246,7 @@ asm/non_matchings/code/z_actor/Actor_WorldDistXYZToActor.s,Actor_WorldDistXYZToA
 asm/non_matchings/code/z_actor/Actor_WorldDistXYZToPoint.s,Actor_WorldDistXYZToPoint,0x800B6DF8,0x9
 asm/non_matchings/code/z_actor/Actor_WorldDistXZToActor.s,Actor_WorldDistXZToActor,0x800B6E1C,0xB
 asm/non_matchings/code/z_actor/Actor_WorldDistXZToPoint.s,Actor_WorldDistXZToPoint,0x800B6E48,0x9
-asm/non_matchings/code/z_actor/Actor_OffsetOfPointInActorCoords.s,Actor_OffsetOfPointInActorCoords,0x800B6E6C,0x28
+asm/non_matchings/code/z_actor/Actor_WorldToActorCoords.s,Actor_WorldToActorCoords,0x800B6E6C,0x28
 asm/non_matchings/code/z_actor/Actor_HeightDiff.s,Actor_HeightDiff,0x800B6F0C,0x5
 asm/non_matchings/code/z_actor/Actor_SetControlStickData.s,Actor_SetControlStickData,0x800B6F20,0x2A
 asm/non_matchings/code/z_actor/Player_GetHeight.s,Player_GetHeight,0x800B6FC8,0x32
@@ -317,9 +317,9 @@ asm/non_matchings/code/z_actor/func_800B8E1C.s,func_800B8E1C,0x800B8E1C,0xF
 asm/non_matchings/code/z_actor/Player_PlaySfx.s,Player_PlaySfx,0x800B8E58,0x1C
 asm/non_matchings/code/z_actor/Actor_PlaySfx.s,Actor_PlaySfx,0x800B8EC8,0xB
 asm/non_matchings/code/z_actor/Actor_PlaySfx_SurfaceBomb.s,Actor_PlaySfx_SurfaceBomb,0x800B8EF4,0x29
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered1.s,Actor_PlaySfx_FlaggedCentered1,0x800B8F98,0xA
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered2.s,Actor_PlaySfx_FlaggedCentered2,0x800B8FC0,0xA
-asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered3.s,Actor_PlaySfx_FlaggedCentered3,0x800B8FE8,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_Flagged2.s,Actor_PlaySfx_Flagged2,0x800B8F98,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered1.s,Actor_PlaySfx_FlaggedCentered1,0x800B8FC0,0xA
+asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedCentered2.s,Actor_PlaySfx_FlaggedCentered2,0x800B8FE8,0xA
 asm/non_matchings/code/z_actor/Actor_PlaySfx_Flagged.s,Actor_PlaySfx_Flagged,0x800B9010,0xA
 asm/non_matchings/code/z_actor/Actor_PlaySfx_FlaggedTimer.s,Actor_PlaySfx_FlaggedTimer,0x800B9038,0x13
 asm/non_matchings/code/z_actor/Actor_PlaySeq_FlaggedKamaroDance.s,Actor_PlaySeq_FlaggedKamaroDance,0x800B9084,0x5
@@ -1914,11 +1914,11 @@ asm/non_matchings/code/z_room/Room_GetImageMultiBgEntry.s,Room_GetImageMultiBgEn
 asm/non_matchings/code/z_room/Room_DrawImageMulti.s,Room_DrawImageMulti,0x8012E32C,0xDF
 asm/non_matchings/code/z_room/Room_DrawImage.s,Room_DrawImage,0x8012E6A8,0x1A
 asm/non_matchings/code/z_room/Room_Init.s,Room_Init,0x8012E710,0x10
-asm/non_matchings/code/z_room/Room_AllocateAndLoad.s,Room_AllocateAndLoad,0x8012E750,0x87
-asm/non_matchings/code/z_room/Room_StartRoomTransition.s,Room_StartRoomTransition,0x8012E96C,0x4F
-asm/non_matchings/code/z_room/Room_HandleLoadCallbacks.s,Room_HandleLoadCallbacks,0x8012EAA8,0x40
+asm/non_matchings/code/z_room/Room_SetupFirstRoom.s,Room_SetupFirstRoom,0x8012E750,0x87
+asm/non_matchings/code/z_room/Room_RequestNewRoom.s,Room_RequestNewRoom,0x8012E96C,0x4F
+asm/non_matchings/code/z_room/Room_ProcessRoomRequest.s,Room_ProcessRoomRequest,0x8012EAA8,0x40
 asm/non_matchings/code/z_room/Room_Draw.s,Room_Draw,0x8012EBA8,0x14
-asm/non_matchings/code/z_room/func_8012EBF8.s,func_8012EBF8,0x8012EBF8,0x22
+asm/non_matchings/code/z_room/Room_FinishRoomChange.s,Room_FinishRoomChange,0x8012EBF8,0x22
 asm/non_matchings/code/z_inventory/Inventory_GetBtnBItem.s,Inventory_GetBtnBItem,0x8012EC80,0x2D
 asm/non_matchings/code/z_inventory/Inventory_ChangeEquipment.s,Inventory_ChangeEquipment,0x8012ED34,0x11
 asm/non_matchings/code/z_inventory/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C

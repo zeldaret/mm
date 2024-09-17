@@ -39,13 +39,13 @@
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#include "objects/object_link_boy/object_link_boy.h"
-#include "objects/object_link_goron/object_link_goron.h"
-#include "objects/object_link_zora/object_link_zora.h"
-#include "objects/object_link_nuts/object_link_nuts.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/object_link_boy/object_link_boy.h"
+#include "assets/objects/object_link_goron/object_link_goron.h"
+#include "assets/objects/object_link_zora/object_link_zora.h"
+#include "assets/objects/object_link_nuts/object_link_nuts.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 #define THIS ((Player*)thisx)
 
@@ -6361,7 +6361,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     this->av1.actionVar1 = 0;
     this->unk_397 = this->doorType;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    Actor_OffsetOfPointInActorCoords(&doorSliding->dyna.actor, &sp38, &this->actor.world.pos);
+    Actor_WorldToActorCoords(&doorSliding->dyna.actor, &sp38, &this->actor.world.pos);
 
     func_80835BF8(&this->actor.world.pos, doorSliding->dyna.actor.shape.rot.y,
                   (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);
@@ -6534,7 +6534,7 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
                                      .room;
 
                     if ((roomNum >= 0) && (roomNum != play->roomCtx.curRoom.num)) {
-                        Room_StartRoomTransition(play, &play->roomCtx, roomNum);
+                        Room_RequestNewRoom(play, &play->roomCtx, roomNum);
                     }
                 }
             }
@@ -8702,7 +8702,7 @@ void func_8083BF54(PlayState* play, Player* this) {
         this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
 
         if ((this->linearVelocity == 0.0f) && (fabsf(this->unk_AB8 - temp_fv1_2) > 2.0f)) {
-            Actor_PlaySfx_FlaggedCentered1(&this->actor, sfxId);
+            Actor_PlaySfx_Flagged2(&this->actor, sfxId);
         }
 
         this->actor.gravity -= this->unk_AB8 * 0.004f;
@@ -11660,7 +11660,7 @@ void func_808445C4(PlayState* play, Player* this) {
         pos.y = (Rand_CenteredFloat(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
         pos.z = (Rand_CenteredFloat(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
         EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, FHGFLASH_SHOCK_PLAYER);
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
 }
 
@@ -13737,14 +13737,14 @@ void Player_Action_1(Player* this, PlayState* play) {
                     play->roomCtx.curRoom.segment = NULL;
                     play->roomCtx.prevRoom.segment = NULL;
 
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                     this->av2.actionVar2 = -1;
                     this->av1.actionVar1 = this->unk_3CE;
                 }
             }
         }
     } else if (this->av2.actionVar2 < 0) {
-        if (Room_StartRoomTransition(play, &play->roomCtx, this->av1.actionVar1)) {
+        if (Room_RequestNewRoom(play, &play->roomCtx, this->av1.actionVar1)) {
             Map_InitRoomData(play, play->roomCtx.curRoom.num);
             Map_SetAreaEntrypoint(play);
             this->av2.actionVar2 = 5;
@@ -14817,9 +14817,9 @@ void Player_Action_26(Player* this, PlayState* play) {
             func_8083CB58(this, speedTarget, this->actor.shape.rot.y);
 
             if (func_8083FBC4(play, this)) {
-                Actor_PlaySfx_FlaggedCentered1(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
-                                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+                Actor_PlaySfx_Flagged2(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
+                                                         ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                                         : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
 
             Player_PlayAnimSfx(this, D_8085D61C);
@@ -15219,7 +15219,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 
                                 play->roomCtx.curRoom.num = -1;
                                 play->roomCtx.curRoom.segment = NULL;
-                                func_8012EBF8(play, &play->roomCtx);
+                                Room_FinishRoomChange(play, &play->roomCtx);
                             } else {
                                 static Vec3f D_8085D62C = { 0.0f, 0.0f, 0.0f };
                                 static Vec3f D_8085D638 = { 0.0f, 0.0f, 0.0f };
@@ -15227,7 +15227,7 @@ void Player_Action_35(Player* this, PlayState* play) {
 
                                 R_PLAY_FILL_SCREEN_ON = -16;
                                 if (play->roomCtx.curRoom.num < 0) {
-                                    Room_StartRoomTransition(play, &play->roomCtx, temp_v1_4->sides[0].room);
+                                    Room_RequestNewRoom(play, &play->roomCtx, temp_v1_4->sides[0].room);
                                     play->roomCtx.prevRoom.num = -1;
                                     play->roomCtx.prevRoom.segment = NULL;
                                 }
@@ -15335,7 +15335,7 @@ void Player_Action_36(Player* this, PlayState* play) {
 
             if ((this->actor.category == ACTORCAT_PLAYER) && !framedDoor) {
                 if (play->roomCtx.prevRoom.num >= 0) {
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                 }
 
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
@@ -16437,7 +16437,7 @@ void Player_Action_56(Player* this, PlayState* play) {
             this->unk_B86[0] = 1;
         } else {
             speedTarget = 9.0f;
-            Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
+            Actor_PlaySfx_Flagged2(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
         }
 
         // Y
@@ -17741,8 +17741,7 @@ void Player_Action_83(Player* this, PlayState* play) {
     }
 
     this->shockTimer = 40;
-    Actor_PlaySfx_FlaggedCentered1(&this->actor,
-                                   this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
+    Actor_PlaySfx_Flagged2(&this->actor, this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
 void Player_Action_84(Player* this, PlayState* play) {
@@ -18743,7 +18742,7 @@ void Player_Action_95(Player* this, PlayState* play) {
 
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos, 2.0f,
                       this->currentYaw, this->actor.floorPoly, this->actor.floorBgId);
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
+        Actor_PlaySfx_Flagged2(&this->actor, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
     }
 }
 
@@ -18771,7 +18770,7 @@ void func_808576BC(PlayState* play, Player* this) {
     }
 
     if (var_v0 > 0x1770) {
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
     }
 
     if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 160, 20, true)) {
@@ -19043,7 +19042,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                         if ((gSaveContext.magicState == MAGIC_STATE_IDLE) &&
                             (gSaveContext.save.saveInfo.playerData.magic >= 2) && (this->av2.actionVar2 >= 0x36B0)) {
                             this->av1.actionVar1++;
-                            Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_GORON_BALL_CHARGE - SFX_FLAG);
+                            Actor_PlaySfx_Flagged2(&this->actor, NA_SE_PL_GORON_BALL_CHARGE - SFX_FLAG);
                         } else {
                             this->av1.actionVar1 = 4;
                         }
@@ -20167,7 +20166,7 @@ void Player_CsAction_32(PlayState* play, Player* this, CsCmdActorCue* cue) {
     if (this->skelAnime.animation == &gPlayerAnim_cl_nigeru) {
         Player_PlayAnimSfx(this, D_8085DA48);
     } else if (this->skelAnime.animation == &gPlayerAnim_alink_rakkatyu) {
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&this->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
     } else {
         Player_CsAnimHelper_PlayAnimSfxLostHorse(this);
     }

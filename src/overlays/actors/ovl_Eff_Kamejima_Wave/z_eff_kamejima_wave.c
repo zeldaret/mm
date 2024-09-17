@@ -5,7 +5,7 @@
  */
 #include "prevent_bss_reordering.h"
 #include "z_eff_kamejima_wave.h"
-#include "objects/object_kamejima/object_kamejima.h"
+#include "assets/objects/object_kamejima/object_kamejima.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

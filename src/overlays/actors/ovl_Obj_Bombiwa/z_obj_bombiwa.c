@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_bombiwa.h"
-#include "objects/object_bombiwa/object_bombiwa.h"
+#include "assets/objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS 0x00000000
 

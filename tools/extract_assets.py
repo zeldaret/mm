@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse, json, os, signal, time, colorama, multiprocessing
+from pathlib import Path
 
 colorama.init()
-
-EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
 dontGenerateCFilesList = [
     "map_grand_static",
@@ -27,7 +26,7 @@ def ExtractFile(xmlPath, outputPath, outputSourcePath):
             generateSourceFile = "0"
             break
 
-    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b extracted/n64-us/baserom -o {outputPath} -osf {outputSourcePath} -gsf {generateSourceFile} -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
+    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b {globalBaseromSegmentsDir} -o {outputPath} -osf {outputSourcePath} -gsf {generateSourceFile} -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
 
     if globalUnaccounted:
         execStr += " -Wunaccounted"
@@ -46,9 +45,9 @@ def ExtractFunc(fullPath):
     objectName = os.path.splitext(xmlName)[0]
 
     if "scenes" in pathList:
-        outPath = os.path.join("assets", *pathList[2:])
+        outPath = os.path.join(globalOutputDir, *pathList[2:])
     else:
-        outPath = os.path.join("assets", *pathList[2:], objectName)
+        outPath = os.path.join(globalOutputDir, *pathList[2:], objectName)
     outSourcePath = outPath
 
     if fullPath in globalExtractedAssetsTracker:
@@ -68,24 +67,42 @@ def ExtractFunc(fullPath):
             globalExtractedAssetsTracker[fullPath] = globalManager.dict()
         globalExtractedAssetsTracker[fullPath]["timestamp"] = currentTimeStamp
 
-def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, manager):
+def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, manager, baseromSegmentsDir: Path, outputDir: Path):
     global globalAbort
     global globalUnaccounted
     global globalExtractedAssetsTracker
     global globalManager
+    global globalBaseromSegmentsDir
+    global globalOutputDir
     globalAbort = abort
     globalUnaccounted = unaccounted
     globalExtractedAssetsTracker = extractedAssetsTracker
     globalManager = manager
+    globalBaseromSegmentsDir = baseromSegmentsDir
+    globalOutputDir = outputDir
 
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
+    parser.add_argument(
+        "baserom_segments_dir",
+        type=Path,
+        help="Directory of uncompressed ROM segments",
+    )
+    parser.add_argument(
+        "output_dir",
+        type=Path,
+        help="Output directory to place files in",
+    )
+    parser.add_argument("-v", "--version", help="Which version should be processed", default="n64-us")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
     parser.add_argument("-j", "--jobs", help="Number of cpu cores to extract with.")
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     parser.add_argument("-Z", help="Pass the argument on to ZAPD, e.g. `-ZWunaccounted` to warn about unaccounted blocks in XMLs. Each argument should be passed separately, *without* the leading dash.", metavar="ZAPD_ARG", action="append")
     args = parser.parse_args()
+
+    baseromSegmentsDir: Path = args.baserom_segments_dir
+    outputDir: Path = args.output_dir
 
     global ZAPDArgs
     ZAPDArgs = ""
@@ -110,22 +127,23 @@ def main():
     manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
+    extractedAssetsFile = Path("extracted") / args.version / ".extracted-assets.json"
     extractedAssetsTracker = manager.dict()
-    if not args.force and os.path.exists(EXTRACTED_ASSETS_NAMEFILE):
-        with open(EXTRACTED_ASSETS_NAMEFILE, encoding='utf-8') as f:
+    if not args.force and extractedAssetsFile.exists():
+        with extractedAssetsFile.open(encoding='utf-8') as f:
             extractedAssetsTracker.update(json.load(f, object_hook=manager.dict))
 
-    extract_text_path = "assets/text/message_data.h"
-    extract_staff_text_path = "assets/text/staff_message_data.h"
+    extract_text_path = outputDir / "text/message_data.h"
+    extract_staff_text_path = outputDir / "text/staff_message_data.h"
 
     asset_path = args.single
     if asset_path is not None:
         if "text/" in asset_path:
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)
 
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
             msgdisStaff.main(extract_staff_text_path)
         else:
@@ -134,7 +152,7 @@ def main():
                 print(f"Error. File {fullPath} does not exist.", file=os.sys.stderr)
                 exit(1)
 
-            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager)
+            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)
             # Always extract if -s is used.
             if fullPath in extractedAssetsTracker:
                 del extractedAssetsTracker[fullPath]
@@ -142,14 +160,14 @@ def main():
     else:
         # Only extract text if the header does not already exist, or if --force was passed
         if args.force or not os.path.isfile(extract_text_path):
-            from tools.msg.nes import msgdisNES
+            from msg.nes import msgdisNES
             print("Extracting message_data")
-            msgdisNES.main(extract_text_path)
+            msgdisNES.main(baseromSegmentsDir, extract_text_path)
 
         if args.force or not os.path.isfile(extract_staff_text_path):
-            from tools.msg.staff import msgdisStaff
+            from msg.staff import msgdisStaff
             print("Extracting staff_message_data")
-            msgdisStaff.main(extract_staff_text_path)
+            msgdisStaff.main(baseromSegmentsDir, extract_staff_text_path)
 
         xmlFiles = []
         for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
@@ -163,17 +181,17 @@ def main():
             if numCores <= 0:
                 numCores = 1
             print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
-            with multiprocessing.get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
+            with multiprocessing.get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)) as p:
                 p.map(ExtractFunc, xmlFiles)
         except (multiprocessing.ProcessError, TypeError):
             print("Warning: Multiprocessing exception ocurred.", file=os.sys.stderr)
             print("Disabling mutliprocessing.", file=os.sys.stderr)
 
-            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager)
+            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)
             for singlePath in xmlFiles:
                 ExtractFunc(singlePath)
 
-    with open(EXTRACTED_ASSETS_NAMEFILE, 'w', encoding='utf-8') as f:
+    with extractedAssetsFile.open('w', encoding='utf-8') as f:
         serializableDict = dict()
         for xml, data in extractedAssetsTracker.items():
             serializableDict[xml] = dict(data)

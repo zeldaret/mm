@@ -5,8 +5,8 @@
  */
 
 #include "z_en_estone.h"
-#include "objects/object_eg/object_eg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_eg/object_eg.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

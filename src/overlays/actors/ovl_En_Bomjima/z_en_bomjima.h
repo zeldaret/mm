@@ -2,7 +2,8 @@
 #define Z_EN_BOMJIMA_H
 
 #include "global.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
+#include "overlays/actors/ovl_En_Bombal/z_en_bombal.h"
 
 struct EnBomjima;
 

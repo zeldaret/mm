@@ -5,12 +5,12 @@
  */
 
 #include "z_en_test2.h"
-#include "objects/object_dekucity_ana_obj/object_dekucity_ana_obj.h"
-#include "objects/object_sichitai_obj/object_sichitai_obj.h"
-#include "objects/object_yukimura_obj/object_yukimura_obj.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "objects/object_meganeana_obj/object_meganeana_obj.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_dekucity_ana_obj/object_dekucity_ana_obj.h"
+#include "assets/objects/object_sichitai_obj/object_sichitai_obj.h"
+#include "assets/objects/object_yukimura_obj/object_yukimura_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_meganeana_obj/object_meganeana_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_REACT_TO_LENS)
 

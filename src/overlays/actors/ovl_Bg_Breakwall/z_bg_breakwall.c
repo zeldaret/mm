@@ -5,15 +5,15 @@
  */
 
 #include "z_bg_breakwall.h"
-#include "objects/object_omoya_obj/object_omoya_obj.h"
-#include "objects/object_yukimura_obj/object_yukimura_obj.h"
-#include "objects/object_keikoku_obj/object_keikoku_obj.h"
-#include "objects/object_posthouse_obj/object_posthouse_obj.h"
-#include "objects/object_kumo30/object_kumo30.h"
-#include "objects/object_mnk/object_mnk.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/object_spot11_obj/object_spot11_obj.h"
+#include "assets/objects/object_omoya_obj/object_omoya_obj.h"
+#include "assets/objects/object_yukimura_obj/object_yukimura_obj.h"
+#include "assets/objects/object_keikoku_obj/object_keikoku_obj.h"
+#include "assets/objects/object_posthouse_obj/object_posthouse_obj.h"
+#include "assets/objects/object_kumo30/object_kumo30.h"
+#include "assets/objects/object_mnk/object_mnk.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_spot11_obj/object_spot11_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

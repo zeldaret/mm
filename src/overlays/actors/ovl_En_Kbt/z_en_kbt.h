@@ -2,7 +2,7 @@
 #define Z_EN_KBT_H
 
 #include "global.h"
-#include "objects/object_kbt/object_kbt.h"
+#include "assets/objects/object_kbt/object_kbt.h"
 
 struct EnKbt;
 

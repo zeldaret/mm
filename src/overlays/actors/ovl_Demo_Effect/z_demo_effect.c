@@ -5,8 +5,8 @@
  */
 
 #include "z_demo_effect.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_efc_tw/object_efc_tw.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_efc_tw/object_efc_tw.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -216,7 +216,7 @@ void DemoEffect_FinishTimewarp(DemoEffect* this, PlayState* play) {
         this->actor.scale.x = scale;
         this->actor.scale.z = scale;
         DemoEffect_SetPerVertexAlpha(alphaScale);
-        Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
     } else {
         DemoEffect_SetPerVertexAlpha(1.0f);
         Actor_Kill(&this->actor);
@@ -227,7 +227,7 @@ void DemoEffect_FinishTimewarp(DemoEffect* this, PlayState* play) {
  * Runs until animation plays to frame 59 and pauses it on frame 59.
  */
 void DemoEffect_StartTimewarp(DemoEffect* this, PlayState* play) {
-    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
 
     if (SkelCurve_Update(play, &this->skelCurve)) {
         SkelCurve_SetAnim(&this->skelCurve, &gTimewarpAnim, 1.0f, 60.0f, 59.0f, 0.0f);

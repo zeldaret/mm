@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_visiblock.h"
-#include "objects/object_visiblock/object_visiblock.h"
+#include "assets/objects/object_visiblock/object_visiblock.h"
 
 #define FLAGS (ACTOR_FLAG_REACT_TO_LENS)
 

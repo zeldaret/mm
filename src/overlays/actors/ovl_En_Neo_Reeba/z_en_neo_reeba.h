@@ -2,7 +2,7 @@
 #define Z_EN_NEO_REEBA_H
 
 #include "global.h"
-#include "objects/object_rb/object_rb.h"
+#include "assets/objects/object_rb/object_rb.h"
 
 #define EN_NEO_REEBA_IS_LARGE(thisx) ((thisx)->params & 0x8000)
 

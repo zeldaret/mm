@@ -7,7 +7,7 @@
 #include "z_obj_bigicicle.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigicicle/object_bigicicle.h"
+#include "assets/objects/object_bigicicle/object_bigicicle.h"
 
 #define FLAGS 0x00000000
 

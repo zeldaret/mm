@@ -73,7 +73,7 @@ f32 Actor_WorldDistXYZToActor(Actor* actorA, Actor* actorB);
 f32 Actor_WorldDistXYZToPoint(Actor* actor, Vec3f* refPoint);
 f32 Actor_WorldDistXZToActor(Actor* actorA, Actor* actorB);
 f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint);
-void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point);
+void Actor_WorldToActorCoords(Actor* actor, Vec3f* offset, Vec3f* point);
 f32 Actor_HeightDiff(Actor* actor1, Actor* actor2);
 void Actor_SetControlStickData(PlayState* play, Input* input, f32 controlStickMagnitude, s16 controlStickAngle);
 
@@ -123,9 +123,9 @@ s32 Actor_HasNoRider(PlayState* play, Actor* horse);
 
 void Actor_PlaySfx(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_SurfaceBomb(PlayState* play, Actor* actor);
+void Actor_PlaySfx_Flagged2(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedCentered1(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedCentered2(Actor* actor, u16 sfxId);
-void Actor_PlaySfx_FlaggedCentered3(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_Flagged(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedTimer(Actor* actor, s32 timer);
 void Actor_PlaySeq_FlaggedKamaroDance(Actor* actor);
@@ -223,12 +223,12 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
-size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
-s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index);
-s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx);
+size_t Room_SetupFirstRoom(PlayState* play, RoomContext* roomCtx);
+s32 Room_RequestNewRoom(PlayState* play, RoomContext* roomCtx, s32 index);
+s32 Room_ProcessRoomRequest(PlayState* play, RoomContext* roomCtx);
 void Room_Draw(PlayState* play, Room* room, u32 flags);
 
-void func_8012EBF8(PlayState* play, RoomContext* roomCtx);
+void Room_FinishRoomChange(PlayState* play, RoomContext* roomCtx);
 
 void func_80183070(void);
 

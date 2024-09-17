@@ -179,12 +179,37 @@ u16 sCustomSequencePc;
 
 // Sfx Data
 // If the Sfx Bank has more than 255 values (max value of u8)
-u8 gIsLargeSfxBank[] = {
-    true, false, true, true, false, false, true,
+#define DEFINE_SFX(_0, _1, _2, _3, _4, _5, _6) 1 +
+u8 gIsLargeSfxBank[7] = {
+    (
+#include "tables/sfx/playerbank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/itembank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/environmentbank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/enemybank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/systembank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/ocarinabank_table.h"
+        0) > UINT8_MAX,
+    (
+#include "tables/sfx/voicebank_table.h"
+        0) > UINT8_MAX,
 };
+#undef DEFINE_SFX
+
+// TODO generate this similarly to above?
 u8 D_801D6608[] = {
     true, true, true, true, true, false, true,
 };
+
 u8 gChannelsPerBank[4][7] = {
     { 3, 2, 3, 3, 2, 1, 2 },
     { 3, 2, 2, 2, 2, 2, 2 },
@@ -279,136 +304,13 @@ u8 sObjSoundMainBgmSeqId = NA_BGM_GENERAL_SFX;
 // Unused, repurposed for SubBgm
 #define SEQ_FLAG_NO_AMBIENCE (1 << 7)
 
+#define DEFINE_SEQUENCE(name, seqId, storageMedium, cachePolicy, seqFlags) seqFlags,
+#define DEFINE_SEQUENCE_PTR(seqIdReal, seqId, storageMediumReal, cachePolicyReal, seqFlags) seqFlags,
 u8 sSeqFlags[] = {
-    SEQ_FLAG_FANFARE | SEQ_FLAG_ENEMY, // NA_BGM_GENERAL_SFX
-    SEQ_FLAG_ENEMY,                    // NA_BGM_AMBIENCE
-    SEQ_FLAG_ENEMY,                    // NA_BGM_TERMINA_FIELD
-    SEQ_FLAG_RESTORE,                  // NA_BGM_CHASE
-    0,                                 // NA_BGM_MAJORAS_THEME
-    0,                                 // NA_BGM_CLOCK_TOWER
-    SEQ_FLAG_ENEMY,                    // NA_BGM_STONE_TOWER_TEMPLE
-    SEQ_FLAG_ENEMY,                    // NA_BGM_INV_STONE_TOWER_TEMPLE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_FAILURE_0
-    SEQ_FLAG_FANFARE,                  // NA_BGM_FAILURE_1
-    0,                                 // NA_BGM_HAPPY_MASK_SALESMAN
-    0,                                 // NA_BGM_SONG_OF_HEALING
-    SEQ_FLAG_ENEMY,                    // NA_BGM_SWAMP_REGION
-    0,                                 // NA_BGM_ALIEN_INVASION
-    SEQ_FLAG_FANFARE,                  // NA_BGM_SWAMP_CRUISE
-    0,                                 // NA_BGM_SHARPS_CURSE
-    SEQ_FLAG_ENEMY,                    // NA_BGM_GREAT_BAY_REGION
-    SEQ_FLAG_ENEMY,                    // NA_BGM_IKANA_REGION
-    0,                                 // NA_BGM_DEKU_PALACE
-    SEQ_FLAG_ENEMY,                    // NA_BGM_MOUNTAIN_REGION
-    0,                                 // NA_BGM_PIRATES_FORTRESS
-    0,                                 // NA_BGM_CLOCK_TOWN_DAY_1
-    0,                                 // NA_BGM_CLOCK_TOWN_DAY_2
-    0,                                 // NA_BGM_CLOCK_TOWN_DAY_3
-    SEQ_FLAG_SKIP_HARP_INTRO,          // NA_BGM_FILE_SELECT
-    SEQ_FLAG_RESUME,                   // NA_BGM_CLEAR_EVENT
-    0,                                 // NA_BGM_ENEMY
-    SEQ_FLAG_RESTORE,                  // NA_BGM_BOSS
-    SEQ_FLAG_ENEMY,                    // NA_BGM_WOODFALL_TEMPLE
-    0,                                 // NA_BGM_CLOCK_TOWN_MAIN_SEQUENCE
-    0,                                 // NA_BGM_OPENING
-    SEQ_FLAG_RESUME_PREV,              // NA_BGM_INSIDE_A_HOUSE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GAME_OVER
-    0,                                 // NA_BGM_CLEAR_BOSS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_ITEM
-    SEQ_FLAG_FANFARE,                  // NA_BGM_CLOCK_TOWN_DAY_2_PTR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_HEART
-    SEQ_FLAG_RESTORE,                  // NA_BGM_TIMED_MINI_GAME
-    0,                                 // NA_BGM_GORON_RACE
-    0,                                 // NA_BGM_MUSIC_BOX_HOUSE
-    0,                                 // NA_BGM_FAIRY_FOUNTAIN
-    0,                                 // NA_BGM_ZELDAS_LULLABY
-    0,                                 // NA_BGM_ROSA_SISTERS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OPEN_CHEST
-    0,                                 // NA_BGM_MARINE_RESEARCH_LAB
-    SEQ_FLAG_SKIP_HARP_INTRO,          // NA_BGM_GIANTS_THEME
-    0,                                 // NA_BGM_SONG_OF_STORMS
-    0,                                 // NA_BGM_ROMANI_RANCH
-    0,                                 // NA_BGM_GORON_VILLAGE
-    0,                                 // NA_BGM_MAYORS_OFFICE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_EPONA
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_SUNS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_TIME
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_STORM
-    SEQ_FLAG_RESUME,                   // NA_BGM_ZORA_HALL
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_NEW_MASK
-    SEQ_FLAG_RESTORE,                  // NA_BGM_MINI_BOSS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_SMALL_ITEM
-    0,                                 // NA_BGM_ASTRAL_OBSERVATORY
-    SEQ_FLAG_ENEMY,                    // NA_BGM_CAVERN
-    SEQ_FLAG_RESUME | SEQ_FLAG_ENEMY,  // NA_BGM_MILK_BAR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_ZELDA_APPEAR
-    0,                                 // NA_BGM_SARIAS_SONG
-    0,                                 // NA_BGM_GORON_GOAL
-    0,                                 // NA_BGM_HORSE
-    0,                                 // NA_BGM_HORSE_GOAL
-    0,                                 // NA_BGM_INGO
-    0,                                 // NA_BGM_KOTAKE_POTION_SHOP
-    SEQ_FLAG_RESUME_PREV,              // NA_BGM_SHOP
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OWL
-    SEQ_FLAG_RESUME_PREV,              // NA_BGM_SHOOTING_GALLERY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_SOARING
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_HEALING
-    SEQ_FLAG_FANFARE,                  // NA_BGM_INVERTED_SONG_OF_TIME
-    SEQ_FLAG_FANFARE,                  // NA_BGM_SONG_OF_DOUBLE_TIME
-    SEQ_FLAG_FANFARE,                  // NA_BGM_SONATA_OF_AWAKENING
-    SEQ_FLAG_FANFARE,                  // NA_BGM_GORON_LULLABY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_BOSSA_NOVA
-    SEQ_FLAG_FANFARE,                  // NA_BGM_ELEGY_OF_EMPTINESS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OATH_TO_ORDER
-    0,                                 // NA_BGM_SWORD_TRAINING_HALL
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_LULLABY_INTRO
-    SEQ_FLAG_FANFARE,                  // NA_BGM_LEARNED_NEW_SONG
-    SEQ_FLAG_FANFARE,                  // NA_BGM_BREMEN_MARCH
-    SEQ_FLAG_FANFARE,                  // NA_BGM_BALLAD_OF_THE_WIND_FISH
-    SEQ_FLAG_RESTORE,                  // NA_BGM_SONG_OF_SOARING
-    0,                                 // NA_BGM_MILK_BAR_DUPLICATE
-    0,                                 // NA_BGM_FINAL_HOURS
-    SEQ_FLAG_FANFARE,                  // NA_BGM_MIKAU_RIFF
-    SEQ_FLAG_FANFARE,                  // NA_BGM_MIKAU_FINALE
-    0,                                 // NA_BGM_FROG_SONG
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_SONATA
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_LULLABY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_NEW_WAVE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_ELEGY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_OATH
-    0,                                 // NA_BGM_MAJORAS_LAIR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_LULLABY_INTRO_PTR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_GUITAR_BASS_SESSION
-    SEQ_FLAG_FANFARE,                  // NA_BGM_PIANO_SESSION
-    SEQ_FLAG_FANFARE,                  // NA_BGM_INDIGO_GO_SESSION
-    SEQ_FLAG_ENEMY,                    // NA_BGM_SNOWHEAD_TEMPLE
-    SEQ_FLAG_ENEMY,                    // NA_BGM_GREAT_BAY_TEMPLE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_SAXOPHONE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_VOCAL
-    0,                                 // NA_BGM_MAJORAS_WRATH
-    0,                                 // NA_BGM_MAJORAS_INCARNATION
-    0,                                 // NA_BGM_MAJORAS_MASK
-    SEQ_FLAG_FANFARE,                  // NA_BGM_BASS_PLAY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_DRUMS_PLAY
-    SEQ_FLAG_FANFARE,                  // NA_BGM_PIANO_PLAY
-    SEQ_FLAG_ENEMY,                    // NA_BGM_IKANA_CASTLE
-    0,                                 // NA_BGM_GATHERING_GIANTS
-    SEQ_FLAG_FANFARE_KAMARO,           // NA_BGM_KAMARO_DANCE
-    0,                                 // NA_BGM_CREMIA_CARRIAGE
-    SEQ_FLAG_FANFARE,                  // NA_BGM_KEATON_QUIZ
-    0,                                 // NA_BGM_END_CREDITS_1
-    0,                                 // NA_BGM_OPENING_LOOP
-    0,                                 // NA_BGM_TITLE_THEME
-    SEQ_FLAG_FANFARE,                  // NA_BGM_DUNGEON_APPEAR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_WOODFALL_CLEAR
-    SEQ_FLAG_FANFARE,                  // NA_BGM_SNOWHEAD_CLEAR
-    0,                                 //
-    0,                                 // NA_BGM_INTO_THE_MOON
-    0,                                 // NA_BGM_GOODBYE_GIANT
-    0,                                 // NA_BGM_TATL_AND_TAEL
-    0,                                 // NA_BGM_MOONS_DESTRUCTION
-    0,                                 // NA_BGM_END_CREDITS_SECOND_HALF
+#include "tables/sequence_table.h"
 };
+#undef DEFINE_SEQUENCE
+#undef DEFINE_SEQUENCE_PTR
 
 s8 sSpecReverbs[] = {
     0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

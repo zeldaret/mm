@@ -2,7 +2,7 @@
 #define Z_EN_WALLMAS_H
 
 #include "global.h"
-#include "objects/object_wallmaster/object_wallmaster.h"
+#include "assets/objects/object_wallmaster/object_wallmaster.h"
 
 #define WALLMASTER_GET_TYPE(thisx) ((thisx)->params)
 #define WALLMASTER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)

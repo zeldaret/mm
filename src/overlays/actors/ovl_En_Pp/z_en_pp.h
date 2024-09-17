@@ -2,7 +2,7 @@
 #define Z_EN_PP_H
 
 #include "global.h"
-#include "objects/object_pp/object_pp.h"
+#include "assets/objects/object_pp/object_pp.h"
 
 struct EnPp;
 

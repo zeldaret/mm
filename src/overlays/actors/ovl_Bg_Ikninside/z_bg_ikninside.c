@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikninside.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
