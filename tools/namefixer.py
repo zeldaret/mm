@@ -294,7 +294,7 @@ wordReplace = {
     "Lib_PlaySfxAtPos": "Lib_PlaySfx_AtPos",
 
     "SkelAnime_AnimationType1Loaded": "AnimTask_Copy",
-    "SkelAnime_AnimationType2Loaded": "AnimationContext_CopyInterp",
+    "SkelAnime_AnimationType2Loaded": "AnimTask_Interp",
     "SkelAnime_AnimationType3Loaded": "AnimTask_CopyUsingMap",
     "SkelAnime_AnimationType4Loaded": "AnimTask_CopyUsingMapInverted",
     "SkelAnime_AnimationType5Loaded": "AnimTask_ActorMove",

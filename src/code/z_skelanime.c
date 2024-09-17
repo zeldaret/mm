@@ -1119,13 +1119,13 @@ void AnimTaskQueue_AddCopyUsingMapInverted(PlayState* play, s32 vecCount, Vec3s*
 /**
  * Creates a task which will move an actor according to the translation of its root limb for the current frame.
  */
-void AnimTaskQueue_AddActorMove(PlayState* play, Actor* actor, SkelAnime* skelAnime, f32 moveDiffScaleY) {
+void AnimTaskQueue_AddActorMove(PlayState* play, Actor* actor, SkelAnime* skelAnime, f32 moveDiffScale) {
     AnimTask* task = AnimTaskQueue_NewTask(&play->animTaskQueue, ANIMTASK_ACTOR_MOVE);
 
     if (task != NULL) {
         task->data.actorMove.actor = actor;
         task->data.actorMove.skelAnime = skelAnime;
-        task->data.actorMove.diffScale = moveDiffScaleY;
+        task->data.actorMove.diffScale = moveDiffScale;
     }
 }
 
@@ -1221,22 +1221,23 @@ void AnimTask_ActorMove(PlayState* play, AnimTaskData* data) {
     actor->world.pos.z += diff.z * actor->scale.z * task->diffScale;
 }
 
-typedef void (*AnimationEntryCallback)(struct PlayState*, AnimTaskData*);
+typedef void (*AnimTaskFunc)(struct PlayState* play, AnimTaskData* data);
 
 /**
  * Update the AnimTaskQueue, processing all tasks in order.
  * Variables related to anim task groups are then reset for the next frame.
  */
 void AnimTaskQueue_Update(PlayState* play, AnimTaskQueue* animTaskQueue) {
-    static AnimationEntryCallback sAnimTaskFuncs[ANIMTASK_MAX] = {
+    static AnimTaskFunc sAnimTaskFuncs[ANIMTASK_MAX] = {
         AnimTask_LoadPlayerFrame,      AnimTask_Copy,      AnimTask_Interp, AnimTask_CopyUsingMap,
         AnimTask_CopyUsingMapInverted, AnimTask_ActorMove,
     };
     AnimTask* task = animTaskQueue->tasks;
 
-    for (; animTaskQueue->count != 0; animTaskQueue->count--) {
+    while (animTaskQueue->count != 0) {
         sAnimTaskFuncs[task->type](play, &task->data);
         task++;
+        animTaskQueue->count--;
     }
 
     sCurAnimTaskGroup = 1 << 0;

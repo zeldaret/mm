@@ -2067,7 +2067,7 @@ asm/non_matchings/code/z_skelanime/AnimTaskQueue_AddCopyUsingMapInverted.s,AnimT
 asm/non_matchings/code/z_skelanime/AnimTaskQueue_AddActorMove.s,AnimTaskQueue_AddActorMove,0x80135BE0,0x17
 asm/non_matchings/code/z_skelanime/AnimTask_LoadPlayerFrame.s,AnimTask_LoadPlayerFrame,0x80135C3C,0xC
 asm/non_matchings/code/z_skelanime/AnimTask_Copy.s,AnimTask_Copy,0x80135C6C,0x1C
-asm/non_matchings/code/z_skelanime/AnimationContext_CopyInterp.s,AnimationContext_CopyInterp,0x80135CDC,0x17
+asm/non_matchings/code/z_skelanime/AnimTask_Interp.s,AnimTask_Interp,0x80135CDC,0x17
 asm/non_matchings/code/z_skelanime/AnimTask_CopyUsingMap.s,AnimTask_CopyUsingMap,0x80135D38,0x20
 asm/non_matchings/code/z_skelanime/AnimTask_CopyUsingMapInverted.s,AnimTask_CopyUsingMapInverted,0x80135DB8,0x21
 asm/non_matchings/code/z_skelanime/AnimTask_ActorMove.s,AnimTask_ActorMove,0x80135E3C,0x2B
