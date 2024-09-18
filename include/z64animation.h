@@ -37,11 +37,11 @@ typedef enum AnimationMode {
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
 } AnimationMode;
 
-typedef enum AnimationTapers {
+typedef enum AnimationTaper {
     /* -1 */ ANIMTAPER_DECEL = -1,
     /*  0 */ ANIMTAPER_NONE,
     /*  1 */ ANIMTAPER_ACCEL
-} AnimationTapers;
+} AnimationTaper;
 
 typedef struct {
     /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
