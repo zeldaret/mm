@@ -147,7 +147,7 @@ void Player_Action_30(Player* this, PlayState* play);
 void Player_Action_31(Player* this, PlayState* play);
 void Player_Action_32(Player* this, PlayState* play);
 void Player_Action_33(Player* this, PlayState* play);
-void Player_Action_34(Player* this, PlayState* play);
+void Player_Action_WaitForPutAway(Player* this, PlayState* play);
 void Player_Action_35(Player* this, PlayState* play);
 void Player_Action_36(Player* this, PlayState* play);
 void Player_Action_37(Player* this, PlayState* play);
@@ -636,7 +636,11 @@ void func_8082DD2C(PlayState* play, Player* this) {
     this->unk_AC0 = 0.0f;
 }
 
-s32 func_8082DE14(PlayState* play, Player* this) {
+/**
+ * Puts away item currently in hand, if holding any.
+ * @return  true if an item needs to be put away, false if not.
+ */
+s32 Player_PutAwayHeldItem(PlayState* play, Player* this) {
     if (this->heldItemAction > PLAYER_IA_LAST_USED) {
         Player_UseItem(play, this, ITEM_NONE);
         return true;
@@ -3298,7 +3302,7 @@ void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this) {
     Actor* explosiveActor;
 
     if (this->stateFlags1 & PLAYER_STATE1_800) {
-        func_8082DE14(play, this);
+        Player_PutAwayHeldItem(play, this);
         return;
     }
 
@@ -4521,7 +4525,7 @@ void func_80831F34(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
 }
 
 bool Player_CanUpdateItems(Player* this) {
-    return (!(Player_Action_34 == this->actionFunc) ||
+    return (!(Player_Action_WaitForPutAway == this->actionFunc) ||
             ((this->stateFlags3 & PLAYER_STATE3_START_CHANGING_HELD_ITEM) &&
              ((this->heldItemId == ITEM_FC) || (this->heldItemId == ITEM_NONE)))) &&
            (!(Player_UpperAction_ChangeHeldItem == this->upperActionFunc) ||
@@ -4614,17 +4618,27 @@ bool func_8083249C(Player* this) {
     return true;
 }
 
-s32 func_808324EC(PlayState* play, Player* this, PlayerFuncD58 arg2, s32 csId) {
-    this->unk_D58 = arg2;
+/**
+ * Sets up `Player_Action_WaitForPutAway`, which will allow the held item put away process
+ * to complete before moving on to a new action.
+ *
+ * The function provided by the `afterPutAwayFunc` argument will run after the put away is complete.
+ * This function is expected to set a new action and move execution away from `Player_Action_WaitForPutAway`.
+ *
+ * @return  From `Player_PutAwayHeldItem`: true if an item needs to be put away, false if not.
+ */
+s32 Player_SetupWaitForPutAwayWithCs(PlayState* play, Player* this, AfterPutAwayFunc afterPutAwayFunc, s32 csId) {
+    this->afterPutAwayFunc = afterPutAwayFunc;
     this->csId = csId;
-    Player_SetAction(play, this, Player_Action_34, 0);
+    Player_SetAction(play, this, Player_Action_WaitForPutAway, 0);
     func_8083249C(this);
     this->stateFlags2 |= PLAYER_STATE2_40;
-    return func_8082DE14(play, this);
+
+    return Player_PutAwayHeldItem(play, this);
 }
 
-s32 func_80832558(PlayState* play, Player* this, PlayerFuncD58 arg2) {
-    return func_808324EC(play, this, arg2, CS_ID_NONE);
+s32 Player_SetupWaitForPutAway(PlayState* play, Player* this, AfterPutAwayFunc afterPutAwayFunc) {
+    return Player_SetupWaitForPutAwayWithCs(play, this, afterPutAwayFunc, CS_ID_NONE);
 }
 
 // To do with turning, related to targeting
@@ -6438,7 +6452,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
 
     Player_SetAction(play, this, Player_Action_36, 0);
     this->stateFlags2 |= PLAYER_STATE2_800000;
-    func_8082DE14(play, this);
+    Player_PutAwayHeldItem(play, this);
     if (this->doorDirection < 0) {
         this->actor.shape.rot.y = knobDoor->dyna.actor.shape.rot.y;
     } else {
@@ -7118,7 +7132,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                                       var_v1_2 ? &gPlayerAnim_link_normal_Fclimb_startB
                                                : &gPlayerAnim_link_normal_fall);
                         if (var_v1_2) {
-                            func_80832558(play, this, func_80837C20);
+                            Player_SetupWaitForPutAway(play, this, func_80837C20);
 
                             this->actor.shape.rot.y = this->currentYaw += 0x8000;
                             this->stateFlags1 |= PLAYER_STATE1_200000;
@@ -8959,7 +8973,7 @@ s32 Player_ActionChange_3(Player* this, PlayState* play) {
                 f32 temp_fv0;
                 f32 temp_fv1;
 
-                func_80832558(play, this, func_80837BD0);
+                Player_SetupWaitForPutAway(play, this, func_80837BD0);
 
                 this->stateFlags1 |= PLAYER_STATE1_800000;
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
@@ -9085,7 +9099,8 @@ s32 Player_ActionChange_2(Player* this, PlayState* play) {
                         if (!(this->stateFlags2 & PLAYER_STATE2_400) ||
                             (this->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER)) {
                             Player_StopCutscene(this);
-                            func_808324EC(play, this, func_80837C78, play->playerCsIds[PLAYER_CS_ID_ITEM_GET]);
+                            Player_SetupWaitForPutAwayWithCs(play, this, func_80837C78,
+                                                             play->playerCsIds[PLAYER_CS_ID_ITEM_GET]);
                             Player_Anim_PlayOnceAdjusted(play, this,
                                                          (this->transformation == PLAYER_FORM_DEKU)
                                                              ? &gPlayerAnim_pn_getB
@@ -9118,7 +9133,7 @@ s32 Player_ActionChange_2(Player* this, PlayState* play) {
                                 giEntry = &sGetItemTable[-this->getItemId - 1];
                             }
 
-                            func_80832558(play, this, func_80837C78);
+                            Player_SetupWaitForPutAway(play, this, func_80837C78);
                             this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_20000000);
                             func_80838830(this, giEntry->objectId);
 
@@ -9162,7 +9177,7 @@ s32 Player_ActionChange_2(Player* this, PlayState* play) {
 
                             this->stateFlags2 |= PLAYER_STATE2_10000;
                             if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
-                                func_80832558(play, this, func_808379C0);
+                                Player_SetupWaitForPutAway(play, this, func_808379C0);
                                 func_8082DAD4(this);
                                 this->stateFlags1 |= PLAYER_STATE1_800;
 
@@ -9280,7 +9295,7 @@ s32 func_8083D860(Player* this, PlayState* play) {
                 f32 distToInteractWall = this->distToInteractWall;
                 PlayerAnimationHeader* anim;
 
-                func_80832558(play, this, func_80837C20);
+                Player_SetupWaitForPutAway(play, this, func_80837C20);
 
                 this->stateFlags1 |= PLAYER_STATE1_200000;
                 this->stateFlags1 &= ~PLAYER_STATE1_8000000;
@@ -9380,7 +9395,7 @@ void func_8083DEE4(PlayState* play, Player* this) {
 }
 
 void func_8083DF38(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
-    if (!func_80832558(play, this, func_80837BF8)) {
+    if (!Player_SetupWaitForPutAway(play, this, func_80837BF8)) {
         Player_SetAction(play, this, Player_Action_45, 0);
     }
 
@@ -15121,21 +15136,38 @@ void Player_Action_33(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_34(Player* this, PlayState* play) {
-    s32 temp_v0;
+/**
+ * Allow the held item put away process to complete before running `afterPutAwayFunc`
+ */
+void Player_Action_WaitForPutAway(Player* this, PlayState* play) {
+    s32 upperBodyIsBusy;
 
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
-    if (this->unk_D58 == func_80837BF8) {
+    if (this->afterPutAwayFunc == func_80837BF8) {
         this->stateFlags2 |= PLAYER_STATE2_1;
     }
 
     PlayerAnimation_Update(play, &this->skelAnime);
     func_8083249C(this);
 
-    temp_v0 = Player_UpdateUpperBody(this, play);
+    // Wait for the held item put away process to complete.
+    // Determining if the put away process is complete is a bit complicated:
+    // `Player_UpdateUpperBody` will only return false if the current UpperAction returns false.
+    // The UpperAction responsible for putting away items, `Player_UpperAction_ChangeHeldItem`, constantly
+    // returns true until the item change is done. False won't be returned until the item change is done, and a new
+    // UpperAction is running and can return false itself.
+    // Note that this implementation allows for delaying indefinitely by, for example, holding shield
+    // during the item put away. The shield UpperAction will return true while shielding and targeting.
+    // Meaning, `afterPutAwayFunc` will be delayed until the player decides to let go of shield.
+    // This quirk can contribute to the possibility of other bugs manifesting.
+    //
+    // The other conditions listed will force the put away delay function to run instantly if carrying an actor.
+    // This is necessary because the UpperAction for carrying actors will always return true while holding
+    // the actor, so `!upperBodyIsBusy` could never pass.
+    upperBodyIsBusy = Player_UpdateUpperBody(this, play);
     if (((this->stateFlags1 & PLAYER_STATE1_800) && (this->heldActor != NULL) && (this->getItemId == GI_NONE)) ||
-        !temp_v0) {
-        this->unk_D58(play, this);
+        !upperBodyIsBusy) {
+        this->afterPutAwayFunc(play, this);
     }
 }
 
@@ -20563,7 +20595,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     if (actor->textId == 0xFFFF) {
         Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_1);
         actor->flags |= ACTOR_FLAG_TALK;
-        func_8082DE14(play, player);
+        Player_PutAwayHeldItem(play, player);
     } else {
         if (player->actor.flags & ACTOR_FLAG_TALK) {
             player->actor.textId = 0;
@@ -20575,12 +20607,12 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
         if (player->stateFlags1 & PLAYER_STATE1_800000) {
             s32 sp24 = player->av2.actionVar2;
 
-            func_8082DE14(play, player);
+            Player_PutAwayHeldItem(play, player);
             func_80837B60(play, player);
             player->av2.actionVar2 = sp24;
         } else {
             if (func_801242B4(player)) {
-                func_80832558(play, player, func_80837B60);
+                Player_SetupWaitForPutAway(play, player, func_80837B60);
                 Player_Anim_PlayLoopSlowMorph(play, player, &gPlayerAnim_link_swimer_swim_wait);
             } else if ((actor->category != ACTORCAT_NPC) || (player->heldItemAction == PLAYER_IA_FISHING_ROD)) {
                 func_80837B60(play, player);
@@ -20593,7 +20625,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
                     }
                 }
             } else {
-                func_80832558(play, player, func_80837B60);
+                Player_SetupWaitForPutAway(play, player, func_80837B60);
                 Player_Anim_PlayOnceAdjusted(play, player,
                                              (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))
                                                  ? &gPlayerAnim_link_normal_backspace

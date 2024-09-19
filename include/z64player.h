@@ -1096,7 +1096,7 @@ typedef enum PlayerUnkAA5 {
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
-typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
+typedef void (*AfterPutAwayFunc)(struct PlayState* play, struct Player* this);
 
 
 typedef struct Player {
@@ -1306,7 +1306,7 @@ typedef struct Player {
     /* 0xD44 */ u8 isBurning;
     /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
-    /* 0xD58 */ PlayerFuncD58 unk_D58;
+    /* 0xD58 */ AfterPutAwayFunc afterPutAwayFunc; // See `Player_SetupWaitForPutAway` and `Player_Action_WaitForPutAway`
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0xD5D */ u8 floorTypeTimer; // Unused remnant of OoT
     /* 0xD5E */ u8 floorProperty; // FloorProperty enum
