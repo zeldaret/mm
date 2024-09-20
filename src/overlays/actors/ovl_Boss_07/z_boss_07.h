@@ -22,15 +22,15 @@ struct Boss07;
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
 typedef enum MajoraType {
-    /*   0 */ MAJORA_TYPE_BOSS,
+    /*   0 */ MAJORA_TYPE_BATTLE_INIT, // initializes effects, spawns the battle handler, etc. Becomes `MAJORA_TYPE_MASK` after one frame.
     /*  10 */ MAJORA_TYPE_MASK = 10,
-    /*  11 */ MAJORA_TYPE_MASK_CS,
+    /*  11 */ MAJORA_TYPE_MASK_UNK, // immediately crashes if spawned
     /*  20 */ MAJORA_TYPE_INCARNATION = 20,
-    /*  21 */ MAJORA_TYPE_AFTERIMAGE,
+    /*  21 */ MAJORA_TYPE_INCARNATION_AFTERIMAGE,
     /*  30 */ MAJORA_TYPE_WRATH = 30,
-    /* 100 */ MAJORA_TYPE_REMAINS_PROJECTILE = 100,
-    /* 101 */ MAJORA_TYPE_INCARNATION_PROJECTILE,
-    /* 150 */ MAJORA_TYPE_BATTLE_HANDLER = 150,
+    /* 100 */ MAJORA_TYPE_PROJECTILE_REMAINS = 100,
+    /* 101 */ MAJORA_TYPE_PROJECTILE_INCARNATION,
+    /* 150 */ MAJORA_TYPE_BATTLE_HANDLER = 150, // handles effects, lens flare, the Remains activation cutscene, etc. 
     /* 180 */ MAJORA_TYPE_TOP = 180,
     /* 200 */ MAJORA_TYPE_REMAINS = 200
 } MajoraType;
@@ -237,7 +237,7 @@ typedef struct Boss07 {
     /* 0x17FC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x1800 */ f32 drawDmgEffAlpha;
     /* 0x1804 */ u8 drawDmgEffType;
-    /* 0x1805 */ u8 drawDmgEffState;
+    /* 0x1805 */ u8 drawDmgEffState; // see `MajoraDrawDmgEffState`
     /* 0x1806 */ s16 drawDmgEffTimer;
     /* 0x1808 */ u8 lensFlareOn;
     /* 0x180c */ f32 lensFlareScale;
@@ -261,8 +261,8 @@ typedef struct Boss07 {
     /* 0x18C4 */ s16 reflectedBeamPitch;
     /* 0x18C6 */ s16 reflectedBeamYaw;
     /* 0x18C8 */ s16 introRemainsOrbRot;
-    /* 0x18CC */ f32 knockbackVelocityX;
-    /* 0x18D0 */ f32 knockbackVelocityZ;
+    /* 0x18CC */ f32 knockbackMovementX;
+    /* 0x18D0 */ f32 knockbackMovementZ;
     /* 0x18D4 */ s16 angularVelocity;
     /* 0x18D6 */ s16 fireTimer; // also used as a timer for spawning afterimages in `Boss07_Incarnation_Update`
     /* 0x18D8 */ s16 beamDamageTimer;
@@ -282,7 +282,7 @@ typedef struct Boss07 {
     /* 0xAB50 */ f32 deathLightScale[MAJORA_DEATH_LIGHT_COUNT];
     /* 0xABC8 */ u32 cutsceneTimer; // also used as an animation loop count in `Boss07_Incarnation_Hopak`
     /* 0xABCC */ s32 sfxTimer; // also used as an index in `Boss07_Mask_IntroCutscene`
-    /* 0xABD0 */ s16 cutsceneState; // TODO: investigate how it's used for something else in `Boss07_Mask_Spin`
+    /* 0xABD0 */ s16 cutsceneState; // also used to control whether Majora's Mask should target the player or avoid them in `Boss07_Mask_SpinAttack`
     /* 0xABD2 */ s16 subCamId;
     /* 0xABD4 */ Vec3f subCamEye;
     /* 0xABE0 */ Vec3f subCamAt;
