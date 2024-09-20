@@ -74,6 +74,7 @@ struct Dummy251 { int x; };
 struct Dummy252 { int x; };
 struct Dummy253 { int x; };
 struct Dummy254 { int x; };
+struct Dummy255 { int x; };
 // clang-format on
 
 Vec3f D_801EDE00;
