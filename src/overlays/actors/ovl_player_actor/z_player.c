@@ -510,7 +510,7 @@ typedef struct struct_8085D200 {
 f32 sPlayerControlStickMagnitude;
 s16 sPlayerControlStickAngle;
 s16 D_80862B02; // analog stick yaw + camera yaw
-s32 D_80862B04; // boolean, set to the return value of Player_UpdateUpperBody
+s32 sUpperBodyIsBusy; // see `Player_UpdateUpperBody`
 FloorType sPlayerFloorType;
 u32 sPlayerTouchedWallFlags;
 ConveyorSpeed sPlayerConveyorSpeedIndex;
@@ -5120,7 +5120,7 @@ s32 (*sPlayerActionChangeFuncs[PLAYER_ACTION_CHG_MAX])(Player*, PlayState*) = {
 s32 Player_TryActionChangeList(PlayState* play, Player* this, s8* actionChangeList, s32 updateUpperBody) {
     if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
         if (updateUpperBody) {
-            D_80862B04 = Player_UpdateUpperBody(this, play);
+            sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
             if (Player_Action_64 == this->actionFunc) {
                 return true;
             }
@@ -5166,7 +5166,7 @@ s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame
             return 0;
         }
 
-        if (D_80862B04 || Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play)) {
+        if (sUpperBodyIsBusy || Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play)) {
             return 1;
         }
     }
@@ -8003,14 +8003,14 @@ void func_8083A04C(Player* this) {
 }
 
 s32 Player_ActionChange_14(Player* this, PlayState* play) {
-    if (!D_80862B04 && (this->transformation == PLAYER_FORM_ZORA)) {
+    if (!sUpperBodyIsBusy && (this->transformation == PLAYER_FORM_ZORA)) {
         func_8083A04C(this);
     }
     return false;
 }
 
 s32 Player_ActionChange_6(Player* this, PlayState* play) {
-    if (!D_80862B04 && !(this->stateFlags1 & PLAYER_STATE1_800000) && !func_8082FB68(this)) {
+    if (!sUpperBodyIsBusy && !(this->stateFlags1 & PLAYER_STATE1_800000) && !func_8082FB68(this)) {
         if ((this->transformation == PLAYER_FORM_ZORA) && (this->stateFlags1 & PLAYER_STATE1_8000000)) {
             func_8083A04C(this);
         } else if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && !func_8082FB68(this)) {
@@ -14498,7 +14498,7 @@ void Player_Action_18(Player* this, PlayState* play) {
 void Player_Action_19(Player* this, PlayState* play) {
     func_80832F24(this);
     if (this->av1.actionVar1 == 0) {
-        D_80862B04 = Player_UpdateUpperBody(this, play);
+        sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
         if ((Player_UpperAction_3 == this->upperActionFunc) ||
             (func_808331FC(play, this, &this->skelAnimeUpper, 4.0f) > 0)) {
             Player_SetAction(play, this, Player_Action_2, 1);
@@ -16136,7 +16136,7 @@ void Player_Action_52(Player* this, PlayState* play) {
         }
 
         if (this->av2.actionVar2 == 1) {
-            if (D_80862B04 || func_8082DAFC(play)) {
+            if (sUpperBodyIsBusy || func_8082DAFC(play)) {
                 Player_Anim_PlayOnce(play, this, &gPlayerAnim_link_uma_wait_3);
             } else if (PlayerAnimation_Update(play, &this->skelAnime)) {
                 this->av2.actionVar2 = 0x63;
@@ -16154,8 +16154,8 @@ void Player_Action_52(Player* this, PlayState* play) {
             this->unk_AA5 = PLAYER_UNKAA5_0;
             this->av1.actionVar1 = 0;
         } else if ((this->av2.actionVar2 < 2) || (this->av2.actionVar2 >= 4)) {
-            D_80862B04 = Player_UpdateUpperBody(this, play);
-            if (D_80862B04) {
+            sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
+            if (sUpperBodyIsBusy) {
                 this->av1.actionVar1 = 0;
             }
         }
@@ -16166,7 +16166,7 @@ void Player_Action_52(Player* this, PlayState* play) {
 
         this->currentYaw = this->actor.shape.rot.y = rideActor->actor.shape.rot.y;
 
-        if (!D_80862B04) {
+        if (!sUpperBodyIsBusy) {
             if (this->av1.actionVar1 != 0) {
                 if (PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
                     rideActor->stateFlags &= ~ENHORSE_FLAG_8;
