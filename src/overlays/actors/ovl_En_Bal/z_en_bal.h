@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
-#include "objects/object_bal/object_bal.h"
+#include "assets/objects/object_bal/object_bal.h"
 
 #define TINGLE_GET_MAP_ID(thisx) ((thisx)->params & 0xFF)
 

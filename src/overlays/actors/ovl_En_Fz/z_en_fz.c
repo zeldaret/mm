@@ -6,8 +6,8 @@
 
 #include "z_en_fz.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
-#include "objects/object_fz/object_fz.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_fz/object_fz.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 

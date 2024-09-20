@@ -5,7 +5,7 @@
  */
 
 #include "z_en_encount3.h"
-#include "objects/object_big_fwall/object_big_fwall.h"
+#include "assets/objects/object_big_fwall/object_big_fwall.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
 

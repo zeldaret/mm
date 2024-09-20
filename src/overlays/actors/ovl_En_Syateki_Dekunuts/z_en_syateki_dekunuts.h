@@ -2,7 +2,7 @@
 #define Z_EN_SYATEKI_DEKUNUTS_H
 
 #include "global.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
+#include "assets/objects/object_dekunuts/object_dekunuts.h"
 
 #define SG_DEKU_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define SG_DEKU_GET_INDEX(thisx) (((thisx)->params & 0xF0) >> 4)

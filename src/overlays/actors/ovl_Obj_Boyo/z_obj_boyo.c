@@ -1,7 +1,7 @@
 #include "z_obj_boyo.h"
 #include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_boyo/object_boyo.h"
+#include "assets/objects/object_boyo/object_boyo.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

@@ -48,7 +48,7 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
     uintptr_t relocatedAddress;
     u32 i;
     u32* luiInstRef;
-    uintptr_t allocu32 = (uintptr_t)allocatedRamAddr;
+    u32 isLoNeg;
     u32* regValP;
     //! MIPS ELF relocation does not generally require tracking register values, so at first glance it appears this
     //! register tracking was an unnecessary complication. However there is a bug in the IDO compiler that can cause
@@ -58,7 +58,8 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
     //! due to the incorrect ordering.
     u32* luiRefs[32];
     u32 luiVals[32];
-    u32 isLoNeg;
+    uintptr_t allocu32 = (uintptr_t)allocatedRamAddr;
+    uintptr_t vramu32 = (uintptr_t)vramStart;
 
     if (gOverlayLogSeverity >= 3) {
         // "DoRelocation(%08x, %08x, %08x)\n"
@@ -84,7 +85,7 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0x0F000000) == 0) {
-                    *relocDataP = *relocDataP - (uintptr_t)vramStart + allocu32;
+                    *relocDataP = *relocDataP - vramu32 + allocu32;
                 } else if (gOverlayLogSeverity >= 3) {
                     // Segment pointer 32 %08x
                     // "セグメントポインタ32です %08x\n"
@@ -99,8 +100,7 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
                 if (1) {
                     *relocDataP =
                         (*relocDataP & 0xFC000000) |
-                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - (uintptr_t)vramStart + allocu32) & 0x0FFFFFFF) >>
-                         2);
+                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - vramu32 + allocu32) & 0x0FFFFFFF) >> 2);
                 } else if (gOverlayLogSeverity >= 3) {
                     // Segment pointer 26 %08x
                     // "セグメントポインタ26です %08x\n"
@@ -128,7 +128,7 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - (uintptr_t)vramStart + allocu32;
+                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vramu32 + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);

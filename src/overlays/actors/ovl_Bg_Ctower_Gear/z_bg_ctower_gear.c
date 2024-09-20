@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ctower_gear.h"
-#include "objects/object_ctower_rot/object_ctower_rot.h"
+#include "assets/objects/object_ctower_rot/object_ctower_rot.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

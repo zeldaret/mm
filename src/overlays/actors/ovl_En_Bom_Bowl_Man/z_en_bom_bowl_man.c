@@ -5,7 +5,7 @@
  */
 
 #include "z_en_bom_bowl_man.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -718,7 +718,7 @@ s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     return false;
 }
 
-#include "overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
+#include "assets/overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
 
 TexturePtr D_809C6200[] = {
     gEnBomBowlMan_D_809C61E0, gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,

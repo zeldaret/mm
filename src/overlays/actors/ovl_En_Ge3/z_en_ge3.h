@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
-#include "objects/object_geldb/object_geldb.h"
+#include "assets/objects/object_geldb/object_geldb.h"
 
 struct EnGe3;
 

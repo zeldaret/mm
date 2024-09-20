@@ -118,7 +118,7 @@ static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_16
 };
 
-#include "overlays/ovl_En_Bombers/ovl_En_Bombers.c"
+#include "assets/overlays/ovl_En_Bombers/ovl_En_Bombers.c"
 
 Gfx* D_80C04818[] = {
     ovl_En_Bombers_DL_12C8, ovl_En_Bombers_DL_12D8, ovl_En_Bombers_DL_12D8,

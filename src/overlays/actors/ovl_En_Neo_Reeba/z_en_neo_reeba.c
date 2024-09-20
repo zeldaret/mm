@@ -5,7 +5,7 @@
  */
 
 #include "z_en_neo_reeba.h"
-#include "objects/object_rb/object_rb.h"
+#include "assets/objects/object_rb/object_rb.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 

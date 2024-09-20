@@ -9,8 +9,8 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigslime/object_bigslime.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bigslime/object_bigslime.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
@@ -130,22 +130,22 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play);
 
 // Reference data: used to store the original vertices
 static Vtx sBigslimeStaticVtx[BIGSLIME_NUM_VTX] = {
-#include "overlays/ovl_En_Bigslime/sBigslimeStaticVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeStaticVtx.vtx.inc"
 };
 
 // Dynamic data: used to draw the real shape and has 2 states
 static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = {
     {
-#include "overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
     },
     {
-#include "overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
     },
 };
 
 // Target data: used to define the shape the dynamic vertices morph to
 static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
-#include "overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
 };
 
 /*

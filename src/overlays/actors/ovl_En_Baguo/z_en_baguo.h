@@ -2,7 +2,7 @@
 #define Z_EN_BAGUO_H
 
 #include "global.h"
-#include "objects/object_gmo/object_gmo.h"
+#include "assets/objects/object_gmo/object_gmo.h"
 
 struct EnBaguo;
 

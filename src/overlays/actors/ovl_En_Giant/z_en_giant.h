@@ -2,7 +2,7 @@
 #define Z_EN_GIANT_H
 
 #include "global.h"
-#include "objects/object_giant/object_giant.h"
+#include "assets/objects/object_giant/object_giant.h"
 
 #define GIANT_TYPE(thisx) ((thisx)->params & 0xF)
 

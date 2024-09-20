@@ -2,7 +2,7 @@
 #define Z_EN_DEKUNUTS_H
 
 #include "global.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
+#include "assets/objects/object_dekunuts/object_dekunuts.h"
 
 struct EnDekunuts;
 

@@ -6,7 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
-#include "objects/object_wood02/object_wood02.h"
+#include "assets/objects/object_wood02/object_wood02.h"
 
 #define FLAGS 0x00000000
 

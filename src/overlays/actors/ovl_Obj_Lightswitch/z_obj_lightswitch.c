@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_lightswitch.h"
-#include "objects/object_lightswitch/object_lightswitch.h"
+#include "assets/objects/object_lightswitch/object_lightswitch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

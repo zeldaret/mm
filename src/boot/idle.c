@@ -1,6 +1,8 @@
 #include "prevent_bss_reordering.h"
+
+#include "stdbool.h"
+
 #include "buffers.h"
-#include "irqmgr.h"
 #include "main.h"
 #include "segment_symbols.h"
 #include "stack.h"
@@ -10,7 +12,7 @@
 #include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
-IrqMgr gIrqMgr;
+struct IrqMgr gIrqMgr;
 STACK(sIrqMgrStack, 0x500);
 StackEntry sIrqMgrStackInfo;
 OSThread sMainThread;
@@ -22,6 +24,7 @@ OSViMode gViConfigMode;
 u8 gViConfigModeType;
 
 #include "idle.h"
+#include "irqmgr.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseBlack = true;

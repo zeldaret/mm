@@ -2,8 +2,8 @@
 #define Z_EN_DRS_H
 
 #include "global.h"
-#include "objects/object_drs/object_drs.h"
-#include "objects/object_msmo/object_msmo.h"
+#include "assets/objects/object_drs/object_drs.h"
+#include "assets/objects/object_msmo/object_msmo.h"
 
 struct EnDrs;
 

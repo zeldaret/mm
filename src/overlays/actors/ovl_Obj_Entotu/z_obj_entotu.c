@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_entotu.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -28,7 +28,7 @@ ActorInit Obj_Entotu_InitVars = {
     /**/ ObjEntotu_Draw,
 };
 
-#include "overlays/ovl_Obj_Entotu/ovl_Obj_Entotu.c"
+#include "assets/overlays/ovl_Obj_Entotu/ovl_Obj_Entotu.c"
 
 s32 func_80A34700(s16 minutes) {
     s32 ret = 0;

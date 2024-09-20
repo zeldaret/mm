@@ -975,7 +975,7 @@ void Play_UpdateMain(PlayState* this) {
 
             sp5C = IS_PAUSED(&this->pauseCtx);
 
-            AnimationContext_Reset(&this->animationCtx);
+            AnimTaskQueue_Reset(&this->animTaskQueue);
             Object_UpdateEntries(&this->objectCtx);
 
             if (!sp5C && (IREG(72) == 0)) {
@@ -993,7 +993,7 @@ void Play_UpdateMain(PlayState* this) {
                         this->envCtx.fillScreen = false;
                     }
                 } else {
-                    Room_HandleLoadCallbacks(this, &this->roomCtx);
+                    Room_ProcessRoomRequest(this, &this->roomCtx);
                     CollisionCheck_AT(this, &this->colChkCtx);
                     CollisionCheck_OC(this, &this->colChkCtx);
                     CollisionCheck_Damage(this, &this->colChkCtx);
@@ -1023,7 +1023,7 @@ void Play_UpdateMain(PlayState* this) {
 
             Message_Update(this);
             Interface_Update(this);
-            AnimationContext_Update(this, &this->animationCtx);
+            AnimTaskQueue_Update(this, &this->animTaskQueue);
             SoundSource_UpdateAll(this);
             ShrinkWindow_Update(this->state.framerateDivisor);
             TransitionFade_Update(&this->unk_18E48, this->state.framerateDivisor);
@@ -1597,7 +1597,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     scene->unk_D = 0;
     gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
-    Room_AllocateAndLoad(this, &this->roomCtx);
+    Room_SetupFirstRoom(this, &this->roomCtx);
 }
 
 void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
@@ -2183,7 +2183,7 @@ void Play_Init(GameState* thisx) {
     Effect_Init(this);
     EffectSS_Init(this, 100);
     CollisionCheck_InitContext(this, &this->colChkCtx);
-    AnimationContext_Reset(&this->animationCtx);
+    AnimTaskQueue_Reset(&this->animTaskQueue);
     Cutscene_InitContext(this, &this->csCtx);
 
     if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
@@ -2311,7 +2311,8 @@ void Play_Init(GameState* thisx) {
 
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
-    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
+    // Busyloop until the room loads
+    while (!Room_ProcessRoomRequest(this, &this->roomCtx)) {}
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) ||
                                (this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5))) {
@@ -2332,7 +2333,7 @@ void Play_Init(GameState* thisx) {
     Environment_PlaySceneSequence(this);
     gSaveContext.seqId = this->sceneSequences.seqId;
     gSaveContext.ambienceId = this->sceneSequences.ambienceId;
-    AnimationContext_Update(this, &this->animationCtx);
+    AnimTaskQueue_Update(this, &this->animTaskQueue);
     Cutscene_HandleEntranceTriggers(this);
     gSaveContext.respawnFlag = 0;
     sBombersNotebookOpen = false;

@@ -2,7 +2,7 @@
 #define Z_EN_BH_H
 
 #include "global.h"
-#include "objects/object_bh/object_bh.h"
+#include "assets/objects/object_bh/object_bh.h"
 
 struct EnBh;
 

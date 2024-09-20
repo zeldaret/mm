@@ -5,22 +5,34 @@
 
 struct EnvelopePoint;
 
-typedef struct AdpcmLoop {
+typedef struct AdpcmLoopHeader {
     /* 0x00 */ u32 start;
-    /* 0x04 */ u32 loopEnd; // numSamples position into the sample where the loop ends
+    /* 0x04 */ u32 loopEnd; // s16 sample position where the loop ends
     /* 0x08 */ u32 count; // The number of times the loop is played before the sound completes. Setting count to -1 indicates that the loop should play indefinitely.
     /* 0x0C */ u32 sampleEnd; // total number of s16-samples in the sample audio clip
+} AdpcmLoopHeader; // size = 0x10
+
+typedef struct AdpcmLoop {
+    /* 0x00 */ AdpcmLoopHeader header;
     /* 0x10 */ s16 predictorState[16]; // only exists if count != 0. 8-byte aligned
 } AdpcmLoop; // size = 0x30 (or 0x10)
 
+typedef struct AdpcmBookHeader {
+    /* 0x0 */ s32 order;
+    /* 0x4 */ s32 numPredictors;
+} AdpcmBookHeader; // size = 0x8
+
 /**
+ * A table of prediction coefficients that the coder selects from to optimize sound quality.
+ *
  * The procedure used to design the codeBook is based on an adaptive clustering algorithm.
  * The size of the codeBook is (8 * order * numPredictors) and is 8-byte aligned
  */
+typedef s16 AdpcmBookData[];
+
 typedef struct AdpcmBook {
-    /* 0x0 */ s32 order;
-    /* 0x4 */ s32 numPredictors;
-    /* 0x8 */ s16 codeBook[1]; // a table of prediction coefficients that the coder selects from to optimize sound quality.
+    /* 0x0 */ AdpcmBookHeader header;
+    /* 0x8 */ AdpcmBookData codeBook;
 } AdpcmBook; // size >= 0x8
 
 typedef enum SampleCodec {

@@ -2,7 +2,7 @@
 #define Z_EN_SHN_H
 
 #include "global.h"
-#include "objects/object_shn/object_shn.h"
+#include "assets/objects/object_shn/object_shn.h"
 
 struct EnShn;
 

@@ -2,7 +2,7 @@
 #define Z_EN_WF_H
 
 #include "global.h"
-#include "objects/object_wf/object_wf.h"
+#include "assets/objects/object_wf/object_wf.h"
 
 struct EnWf;
 

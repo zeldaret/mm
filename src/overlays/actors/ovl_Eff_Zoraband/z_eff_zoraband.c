@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_zoraband.h"
-#include "objects/object_zoraband/object_zoraband.h"
+#include "assets/objects/object_zoraband/object_zoraband.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

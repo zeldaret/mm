@@ -2,7 +2,7 @@
 #define Z_EN_JA_H
 
 #include "global.h"
-#include "objects/object_boj/object_boj.h"
+#include "assets/objects/object_boj/object_boj.h"
 
 struct EnJa;
 

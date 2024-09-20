@@ -8,19 +8,19 @@
 
 #include "assert.h"
 
-#include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
-#include "objects/object_dor01/object_dor01.h"
-#include "objects/object_dor02/object_dor02.h"
-#include "objects/object_dor03/object_dor03.h"
-#include "objects/object_dor04/object_dor04.h"
-#include "objects/object_wdor01/object_wdor01.h"
-#include "objects/object_wdor02/object_wdor02.h"
-#include "objects/object_wdor03/object_wdor03.h"
-#include "objects/object_wdor04/object_wdor04.h"
-#include "objects/object_wdor05/object_wdor05.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/object_kinsta2_obj/object_kinsta2_obj.h"
+#include "assets/objects/object_dor01/object_dor01.h"
+#include "assets/objects/object_dor02/object_dor02.h"
+#include "assets/objects/object_dor03/object_dor03.h"
+#include "assets/objects/object_dor04/object_dor04.h"
+#include "assets/objects/object_wdor01/object_wdor01.h"
+#include "assets/objects/object_wdor02/object_wdor02.h"
+#include "assets/objects/object_wdor03/object_wdor03.h"
+#include "assets/objects/object_wdor04/object_wdor04.h"
+#include "assets/objects/object_wdor05/object_wdor05.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -484,7 +484,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
         Vec3f playerPosRelToDoor;
 
         // Check if player is near this door and looking at it
-        Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (sDoorIsMilkBarMember || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             s16 yawDiff = player->actor.shape.rot.y - this->knobDoor.dyna.actor.shape.rot.y;

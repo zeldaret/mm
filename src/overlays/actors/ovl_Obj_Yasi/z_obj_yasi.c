@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_yasi.h"
-#include "objects/object_obj_yasi/object_obj_yasi.h"
+#include "assets/objects/object_obj_yasi/object_obj_yasi.h"
 
 #define FLAGS 0x00000000
 

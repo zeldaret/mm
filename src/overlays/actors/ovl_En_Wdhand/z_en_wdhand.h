@@ -2,7 +2,7 @@
 #define Z_EN_WDHAND_H
 
 #include "global.h"
-#include "objects/object_wdhand/object_wdhand.h"
+#include "assets/objects/object_wdhand/object_wdhand.h"
 
 struct EnWdhand;
 

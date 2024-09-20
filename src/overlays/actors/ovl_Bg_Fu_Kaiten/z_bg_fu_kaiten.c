@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_fu_kaiten.h"
-#include "objects/object_fu_kaiten/object_fu_kaiten.h"
+#include "assets/objects/object_fu_kaiten/object_fu_kaiten.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

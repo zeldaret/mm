@@ -2,7 +2,7 @@
 #define Z_DM_NB_H
 
 #include "global.h"
-#include "objects/object_nb/object_nb.h"
+#include "assets/objects/object_nb/object_nb.h"
 
 struct DmNb;
 

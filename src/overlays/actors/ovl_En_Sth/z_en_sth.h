@@ -3,9 +3,9 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Si/z_en_si.h"
-#include "objects/object_sth/object_sth.h"
-#include "objects/object_ahg/object_ahg.h" 
-#include "objects/object_mask_truth/object_mask_truth.h"
+#include "assets/objects/object_sth/object_sth.h"
+#include "assets/objects/object_ahg/object_ahg.h" 
+#include "assets/objects/object_mask_truth/object_mask_truth.h"
 
 struct EnSth;
 

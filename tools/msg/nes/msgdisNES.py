@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+from pathlib import Path
 import sys
 import struct
 
@@ -250,9 +251,9 @@ class MessageNES:
                 prevNewline = False
                 prevCmd = True
 
-def parseTable(start):
+def parseTable(baseromSegmentsDir: Path, start):
     table = {}
-    with open("extracted/n64-us/baserom/code","rb") as f:
+    with open(baseromSegmentsDir / "code","rb") as f:
         f.seek(start)
         buf = f.read(8)
         textId, typePos, segment = struct.unpack(">HBxI", buf)
@@ -266,12 +267,10 @@ def parseTable(start):
 NES_MESSAGE_TABLE_ADDR = 0x1210D8 # Location of NES message table in extracted/n64-us/baserom/code
 NES_SEGMENT_ADDR = 0x08000000
 
-def main(outfile):
-    msgTable = parseTable(NES_MESSAGE_TABLE_ADDR)
+def main(baseromSegmentsDir: Path, outfile):
+    msgTable = parseTable(baseromSegmentsDir, NES_MESSAGE_TABLE_ADDR)
 
-    buf = []
-    with open("extracted/n64-us/baserom/message_data_static", "rb") as f:
-        buf = f.read()
+    buf = (baseromSegmentsDir / "message_data_static").read_bytes()
 
     bufLen = len(buf)
     i = 0
@@ -310,7 +309,14 @@ def main(outfile):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Extract message_data_static text")
+    parser.add_argument(
+        "--baserom-segments",
+        dest="baserom_segments_dir",
+        type=Path,
+        required=True,
+        help="Directory of uncompressed ROM segments",
+    )
     parser.add_argument('-o', '--outfile', help='output file to write to. None for stdout')
     args = parser.parse_args()
 
-    main(args.outfile)
+    main(args.baserom_segments_dir, args.outfile)

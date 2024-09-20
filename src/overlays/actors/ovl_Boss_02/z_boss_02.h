@@ -2,7 +2,7 @@
 #define Z_BOSS_02_H
 
 #include "global.h"
-#include "objects/object_boss02/object_boss02.h"
+#include "assets/objects/object_boss02/object_boss02.h"
 
 struct Boss02;
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_opstage.h"
-#include "objects/object_keikoku_demo/object_keikoku_demo.h"
+#include "assets/objects/object_keikoku_demo/object_keikoku_demo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

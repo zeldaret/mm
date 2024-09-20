@@ -9,7 +9,7 @@
 
 #include "z_en_nwc.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
-#include "objects/object_nwc/object_nwc.h"
+#include "assets/objects/object_nwc/object_nwc.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

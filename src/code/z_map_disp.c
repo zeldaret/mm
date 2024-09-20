@@ -509,7 +509,7 @@ void MapDisp_Init(PlayState* play) {
     sMapDisp.swapAnimTimer = 0;
 
     if (!Map_IsInBossScene(play)) {
-        sSceneNumRooms = play->numRooms;
+        sSceneNumRooms = play->roomList.count;
     }
     sMapDisp.texBuff0 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
     sMapDisp.texBuff1 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
@@ -691,7 +691,7 @@ void MapDisp_InitMapData(PlayState* play, void* segmentAddress) {
     s32 i;
 
     if (!Map_IsInBossScene(play)) {
-        sSceneNumRooms = play->numRooms;
+        sSceneNumRooms = play->roomList.count;
         mapDataScene = Lib_SegmentedToVirtual(segmentAddress);
         sMapDataScene = *mapDataScene;
         mapDataRooms = Lib_SegmentedToVirtual(mapDataScene->rooms);

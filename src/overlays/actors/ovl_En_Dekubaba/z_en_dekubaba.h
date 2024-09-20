@@ -2,7 +2,7 @@
 #define Z_EN_DEKUBABA_H
 
 #include "global.h"
-#include "objects/object_dekubaba/object_dekubaba.h"
+#include "assets/objects/object_dekubaba/object_dekubaba.h"
 
 struct EnDekubaba;
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_jg_gakki.h"
-#include "objects/object_jg/object_jg.h"
+#include "assets/objects/object_jg/object_jg.h"
 
 #define FLAGS (ACTOR_FLAG_20)
 

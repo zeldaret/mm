@@ -5,7 +5,7 @@
  */
 
 #include "z_en_stream.h"
-#include "objects/object_stream/object_stream.h"
+#include "assets/objects/object_stream/object_stream.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -127,7 +127,7 @@ void EnStream_Update(Actor* thisx, PlayState* play) {
     EnStream* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
 }
 
 void EnStream_Draw(Actor* thisx, PlayState* play) {

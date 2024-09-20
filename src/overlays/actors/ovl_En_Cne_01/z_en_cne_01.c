@@ -5,7 +5,7 @@
  */
 
 #include "z_en_cne_01.h"
-#include "objects/object_cne/object_cne.h"
+#include "assets/objects/object_cne/object_cne.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 

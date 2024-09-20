@@ -2,7 +2,7 @@
 #define Z_EN_BB_H
 
 #include "global.h"
-#include "objects/object_bb/object_bb.h"
+#include "assets/objects/object_bb/object_bb.h"
 
 #define EN_BB_ATTACK_RANGE(thisx) (((thisx)->params >> 8) & 0xFF)
 

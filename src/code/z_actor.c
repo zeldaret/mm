@@ -42,21 +42,21 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_bdoor/object_bdoor.h"
 
-#define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS (1 << 0)
-#define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 1)
-#define ACTOR_AUDIO_FLAG_SFX_CENTERED_2 (1 << 2)
-#define ACTOR_AUDIO_FLAG_SFX_CENTERED_3 (1 << 3)
+#define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_1 (1 << 0)
+#define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_2 (1 << 1) // identical behavior to ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_1
+#define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 2)
+#define ACTOR_AUDIO_FLAG_SFX_CENTERED_2 (1 << 3) // identical behavior to ACTOR_AUDIO_FLAG_SFX_CENTERED_1
 #define ACTOR_AUDIO_FLAG_SFX_TIMER (1 << 4)
 #define ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE (1 << 5)
 #define ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE (1 << 6)
 
 #define ACTOR_AUDIO_FLAG_SFX_ALL                                                                      \
-    (ACTOR_AUDIO_FLAG_SFX_TIMER | ACTOR_AUDIO_FLAG_SFX_CENTERED_3 | ACTOR_AUDIO_FLAG_SFX_CENTERED_2 | \
-     ACTOR_AUDIO_FLAG_SFX_CENTERED_1 | ACTOR_AUDIO_FLAG_SFX_ACTOR_POS)
+    (ACTOR_AUDIO_FLAG_SFX_TIMER | ACTOR_AUDIO_FLAG_SFX_CENTERED_2 | ACTOR_AUDIO_FLAG_SFX_CENTERED_1 | \
+     ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_2 | ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_1)
 #define ACTOR_AUDIO_FLAG_SEQ_ALL (ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE | ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE)
 #define ACTOR_AUDIO_FLAG_ALL (ACTOR_AUDIO_FLAG_SFX_ALL | ACTOR_AUDIO_FLAG_SEQ_ALL)
 
@@ -1295,7 +1295,7 @@ f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint) {
  * @param[out] offset The transformed coordinates.
  * @param[in]  point  The point to transform to actor coordinates.
  */
-void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
+void Actor_WorldToActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos = Math_CosS(actor->shape.rot.y);
     f32 sin = Math_SinS(actor->shape.rot.y);
     f32 diffX;
@@ -2327,6 +2327,15 @@ void Actor_PlaySfx_SurfaceBomb(PlayState* play, Actor* actor) {
 }
 
 /**
+ * Play a sfx at the actor's position using the shared audioFlag system
+ */
+void Actor_PlaySfx_Flagged2(Actor* actor, u16 sfxId) {
+    actor->sfxId = sfxId;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_2;
+}
+
+/**
  * Play a sfx at the center of the screen using the shared audioFlag system
  */
 void Actor_PlaySfx_FlaggedCentered1(Actor* actor, u16 sfxId) {
@@ -2345,21 +2354,12 @@ void Actor_PlaySfx_FlaggedCentered2(Actor* actor, u16 sfxId) {
 }
 
 /**
- * Play a sfx at the center of the screen using the shared audioFlag system
- */
-void Actor_PlaySfx_FlaggedCentered3(Actor* actor, u16 sfxId) {
-    actor->sfxId = sfxId;
-    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
-    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_CENTERED_3;
-}
-
-/**
  * Play a sfx at the actor's position using the shared audioFlag system
  */
 void Actor_PlaySfx_Flagged(Actor* actor, u16 sfxId) {
     actor->sfxId = sfxId;
     actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
-    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_ACTOR_POS;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_1;
 }
 
 void Actor_PlaySfx_FlaggedTimer(Actor* actor, s32 timer) {
@@ -2781,16 +2781,16 @@ void Actor_UpdateFlaggedAudio(Actor* actor) {
     s32 sfxId = actor->sfxId;
 
     if (sfxId != NA_SE_NONE) {
-        if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_1) {
+        if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_2) {
             AudioSfx_PlaySfx(sfxId, &actor->projectedPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale,
                              &gSfxDefaultReverb);
-        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_2) {
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_1) {
             Audio_PlaySfx(sfxId);
-        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_3) {
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_2) {
             Audio_PlaySfx_2(sfxId);
         } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_TIMER) {
             Audio_PlaySfx_AtPosWithChannelIO(&gSfxDefaultPos, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
-        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_ACTOR_POS) {
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_ACTOR_POS_1) {
             Audio_PlaySfx_AtPos(&actor->projectedPos, sfxId);
         }
     }

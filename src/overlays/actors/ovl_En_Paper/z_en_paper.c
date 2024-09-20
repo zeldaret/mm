@@ -11,7 +11,7 @@
 #include "z_en_paper.h"
 #include "su_mtx.h"
 
-#include "objects/object_bal/object_bal.h"
+#include "assets/objects/object_bal/object_bal.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 

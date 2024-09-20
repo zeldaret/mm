@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_kin2_shelf.h"
-#include "objects/object_kin2_obj/object_kin2_obj.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS 0x00000000
 

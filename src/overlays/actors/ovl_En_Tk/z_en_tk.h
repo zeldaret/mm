@@ -2,7 +2,7 @@
 #define Z_EN_TK_H
 
 #include "global.h"
-#include "objects/object_tk/object_tk.h"
+#include "assets/objects/object_tk/object_tk.h"
 
 struct EnTk;
 

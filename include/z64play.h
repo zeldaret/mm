@@ -61,7 +61,7 @@ typedef struct PlayState {
     /* 0x16D30 */ PauseContext pauseCtx;
     /* 0x17000 */ GameOverContext gameOverCtx;
     /* 0x17004 */ EnvironmentContext envCtx;
-    /* 0x17104 */ AnimationContext animationCtx;
+    /* 0x17104 */ AnimTaskQueue animTaskQueue;
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ TransitionActorList transitionActors;
@@ -87,8 +87,7 @@ typedef struct PlayState {
     /* 0x18844 */ u8 unk_18844; // bool
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
-    /* 0x18848 */ u8 numRooms;
-    /* 0x1884C */ RomFile* roomList;
+    /* 0x18848 */ RoomList roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
     /* 0x18858 */ ActorCsCamInfo* actorCsCamList;

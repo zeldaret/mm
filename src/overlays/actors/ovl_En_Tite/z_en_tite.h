@@ -2,7 +2,7 @@
 #define Z_EN_TITE_H
 
 #include "global.h"
-#include "objects/object_tite/object_tite.h"
+#include "assets/objects/object_tite/object_tite.h"
 
 struct EnTite;
 

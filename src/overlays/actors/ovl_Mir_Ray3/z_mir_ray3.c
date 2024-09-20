@@ -5,7 +5,7 @@
  */
 
 #include "z_mir_ray3.h"
-#include "objects/object_mir_ray/object_mir_ray.h"
+#include "assets/objects/object_mir_ray/object_mir_ray.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -139,7 +139,7 @@ void MirRay3_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_214 > 0.1f) {
-        Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
     }
 
     Math_ApproachZeroF(&this->unk_214, 1.0f, 0.1f);

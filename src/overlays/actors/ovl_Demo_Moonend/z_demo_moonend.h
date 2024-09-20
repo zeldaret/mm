@@ -2,7 +2,7 @@
 #define Z_DEMO_MOONEND_H
 
 #include "global.h"
-#include "objects/object_moonend/object_moonend.h"
+#include "assets/objects/object_moonend/object_moonend.h"
 
 struct DemoMoonend;
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tokei_tobira.h"
-#include "objects/object_tokei_tobira/object_tokei_tobira.h"
+#include "assets/objects/object_tokei_tobira/object_tokei_tobira.h"
 
 #define FLAGS 0x00000000
 
@@ -115,7 +115,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
             f32 sp40;
             Vec3f sp34;
 
-            Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &sp34, &player->actor.world.pos);
+            Actor_WorldToActorCoords(&this->dyna.actor, &sp34, &player->actor.world.pos);
             sp40 = sp34.x * sp48;
 
             if (sp40 > 20.0f) {
@@ -146,7 +146,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     } else if (this->unk168 == 1) {
         Vec3f sp24;
 
-        Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &sp24, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->dyna.actor, &sp24, &player->actor.world.pos);
 
         if ((sp24.z > 0.0f) && (sp24.z < 30.0f)) {
             this->unk168 = 1;

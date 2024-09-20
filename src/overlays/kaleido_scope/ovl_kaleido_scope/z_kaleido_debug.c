@@ -8,7 +8,7 @@
 
 #include "gfxalloc.h"
 
-#include "interface/parameter_static/parameter_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 
 s16 sCurSection = 0;
 s16 sCurRow = 0;

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_rotlift.h"
-#include "objects/object_rotlift/object_rotlift.h"
+#include "assets/objects/object_rotlift/object_rotlift.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS 0x00000000

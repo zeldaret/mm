@@ -3,8 +3,8 @@
 
 #include "global.h"
 #include "z64skin.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_ha/object_ha.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_ha/object_ha.h"
 
 struct EnHorse;
 struct EnIn;

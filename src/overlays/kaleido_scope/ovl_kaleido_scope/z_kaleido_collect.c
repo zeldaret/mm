@@ -5,8 +5,8 @@
  */
 
 #include "z_kaleido_scope.h"
-#include "interface/parameter_static/parameter_static.h"
-#include "archives/icon_item_static/icon_item_static_yar.h"
+#include "assets/interface/parameter_static/parameter_static.h"
+#include "assets/archives/icon_item_static/icon_item_static_yar.h"
 
 s32 KaleidoScope_UpdateQuestStatusPoint(PauseContext* pauseCtx, s16 point);
 

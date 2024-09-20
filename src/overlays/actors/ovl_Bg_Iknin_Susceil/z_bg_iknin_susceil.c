@@ -7,7 +7,7 @@
 #include "z_bg_iknin_susceil.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -56,7 +56,7 @@ bool func_80C0A740(BgIkninSusceil* this, PlayState* play) {
     Vec3f offset;
     Player* player = GET_PLAYER(play);
 
-    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
 
     return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.z) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
 }
@@ -98,7 +98,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, PlayState* play) {
     f32 temp3;
     f32 temp4;
 
-    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {
         temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
         temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;

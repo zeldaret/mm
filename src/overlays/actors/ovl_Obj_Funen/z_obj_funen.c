@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_funen.h"
-#include "objects/object_funen/object_funen.h"
+#include "assets/objects/object_funen/object_funen.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

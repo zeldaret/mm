@@ -4,7 +4,7 @@
 #include "z64actor.h"
 #include "z64scene.h"
 
-#include "code/sub_s/sub_s.h"
+#include "assets/code/sub_s/sub_s.h"
 
 extern Vec3f gOneVec3f;
 

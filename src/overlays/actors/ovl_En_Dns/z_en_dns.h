@@ -2,7 +2,7 @@
 #define Z_EN_DNS_H
 
 #include "global.h"
-#include "objects/object_dns/object_dns.h"
+#include "assets/objects/object_dns/object_dns.h"
 
 struct EnDns;
 

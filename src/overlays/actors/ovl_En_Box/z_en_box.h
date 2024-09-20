@@ -2,7 +2,7 @@
 #define Z_EN_BOX_H
 
 #include "global.h"
-#include "objects/object_box/object_box.h"
+#include "assets/objects/object_box/object_box.h"
 
 struct EnBox;
 struct struct_80867BDC_a0;

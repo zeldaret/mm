@@ -7,7 +7,7 @@
 #include "z_en_fu_mato.h"
 #include "overlays/actors/ovl_En_Fu/z_en_fu.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_fu_mato/object_fu_mato.h"
+#include "assets/objects/object_fu_mato/object_fu_mato.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

@@ -2,7 +2,7 @@
 #define Z_EN_OWL_H
 
 #include "global.h"
-#include "objects/object_owl/object_owl.h"
+#include "assets/objects/object_owl/object_owl.h"
 
 struct EnOwl;
 

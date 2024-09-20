@@ -30,7 +30,7 @@
  */
 
 #include "z_obj_tokeidai.h"
-#include "objects/object_obj_tokeidai/object_obj_tokeidai.h"
+#include "assets/objects/object_obj_tokeidai/object_obj_tokeidai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

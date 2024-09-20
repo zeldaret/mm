@@ -5,7 +5,7 @@
  */
 
 #include "z_en_egblock.h"
-#include "objects/object_eg/object_eg.h"
+#include "assets/objects/object_eg/object_eg.h"
 
 #define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 

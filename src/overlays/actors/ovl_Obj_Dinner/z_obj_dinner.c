@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_dinner.h"
-#include "objects/object_obj_dinner/object_obj_dinner.h"
+#include "assets/objects/object_obj_dinner/object_obj_dinner.h"
 
 #define FLAGS (ACTOR_FLAG_20)
 

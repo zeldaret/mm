@@ -32,7 +32,7 @@ ActorInit En_Tanron1_InitVars = {
 
 static s32 sPad = 0;
 
-#include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
+#include "assets/overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
 void EnTanron1_Init(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;

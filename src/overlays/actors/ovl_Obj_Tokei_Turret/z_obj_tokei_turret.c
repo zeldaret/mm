@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tokei_turret.h"
-#include "objects/object_tokei_turret/object_tokei_turret.h"
+#include "assets/objects/object_tokei_turret/object_tokei_turret.h"
 
 #define FLAGS 0x00000000
 

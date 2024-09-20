@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_keikoku_spr.h"
-#include "objects/object_keikoku_obj/object_keikoku_obj.h"
+#include "assets/objects/object_keikoku_obj/object_keikoku_obj.h"
 
 #define FLAGS 0x00000000
 

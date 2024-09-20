@@ -7,18 +7,18 @@
 #include "z_door_shutter.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
-#include "objects/object_redead_obj/object_redead_obj.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
-#include "objects/object_random_obj/object_random_obj.h"
-#include "objects/object_kinsta1_obj/object_kinsta1_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/object_last_obj/object_last_obj.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bdoor/object_bdoor.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_redead_obj/object_redead_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_random_obj/object_random_obj.h"
+#include "assets/objects/object_kinsta1_obj/object_kinsta1_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_last_obj/object_last_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -279,7 +279,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
     sp28.y = player->actor.world.pos.y + arg2;
     sp28.z = player->actor.world.pos.z;
 
-    Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
+    Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
 
     if ((arg3 < fabsf(sp1C.x)) || (arg4 < fabsf(sp1C.y))) {
         return FLT_MAX;
@@ -556,7 +556,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     Vec3f sp44;
 
     if (this->slidingDoor.dyna.actor.room >= 0) {
-        Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
 
         this->slidingDoor.dyna.actor.room =
             play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)]
@@ -568,9 +568,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
             play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
-            play->roomCtx.activeMemPage ^= 1;
+            play->roomCtx.activeBufPage ^= 1;
         }
-        func_8012EBF8(play, &play->roomCtx);
+        Room_FinishRoomChange(play, &play->roomCtx);
     }
 
     this->slidingDoor.unk_15C = 0;

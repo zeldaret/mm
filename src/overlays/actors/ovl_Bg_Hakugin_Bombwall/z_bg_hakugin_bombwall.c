@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_bombwall.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS 0x00000000
 

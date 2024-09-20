@@ -2,7 +2,7 @@
 #define Z_EN_AZ_H
 
 #include "global.h"
-#include "objects/object_az/object_az.h"
+#include "assets/objects/object_az/object_az.h"
 
 struct EnAz;
 

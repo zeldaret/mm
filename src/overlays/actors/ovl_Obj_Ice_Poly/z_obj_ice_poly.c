@@ -6,7 +6,7 @@
 
 #include "z_obj_ice_poly.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

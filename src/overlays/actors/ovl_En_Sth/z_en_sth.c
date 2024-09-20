@@ -39,7 +39,7 @@ ActorInit En_Sth_InitVars = {
     /**/ NULL,
 };
 
-#include "overlays/ovl_En_Sth/ovl_En_Sth.c"
+#include "assets/overlays/ovl_En_Sth/ovl_En_Sth.c"
 
 static ColliderCylinderInit sCylinderInit = {
     {

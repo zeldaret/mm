@@ -2,7 +2,7 @@
 #define Z_EN_GUARD_NUTS_H
 
 #include "global.h"
-#include "objects/object_dnk/object_dnk.h"
+#include "assets/objects/object_dnk/object_dnk.h"
 
 struct EnGuardNuts;
 

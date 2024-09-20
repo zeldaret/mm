@@ -8,8 +8,9 @@
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_Mir_Ray3/z_mir_ray3.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_knight/object_knight.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_knight/object_knight.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -2116,7 +2117,7 @@ void EnKnight_IgosSitting(EnKnight* this, PlayState* play) {
 
         Math_Vec3f_Copy(&hitmarkPos, &player->actor.world.pos);
         hitmarkPos.y += 25.0f;
-        EffectSsHitmark_SpawnFixedScale(play, 0, &hitmarkPos);
+        EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, &hitmarkPos);
 
         func_800B8D50(play, NULL, KREG(53) + 12.0f, this->actor.shape.rot.y + yaw, KREG(54) + 7.0f, 0x10);
         EnKnight_SpawnDust(play, 12);

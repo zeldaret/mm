@@ -5,11 +5,11 @@
 
 #include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
-#include "objects/object_aob/object_aob.h"
-#include "objects/object_bba/object_bba.h"
-#include "objects/object_bji/object_bji.h"
-#include "objects/object_boj/object_boj.h"
-#include "objects/object_os_anime/object_os_anime.h"
+#include "assets/objects/object_aob/object_aob.h"
+#include "assets/objects/object_bba/object_bba.h"
+#include "assets/objects/object_bji/object_bji.h"
+#include "assets/objects/object_boj/object_boj.h"
+#include "assets/objects/object_os_anime/object_os_anime.h"
 
 static AnimationInfoS sAnimationInfo[ENHY_ANIM_MAX] = {
     { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENHY_ANIM_AOB_0
@@ -183,14 +183,14 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &enHy->actor.world.pos);
+    Actor_WorldToActorCoords(&door->knobDoor.dyna.actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
     enHy->skelAnime.prevTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
     enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
-    AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
+    AnimTaskQueue_AddActorMove(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->knobDoor.requestOpen = true;
     door->knobDoor.animIndex = animIndex;
 }

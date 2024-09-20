@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ocarinalift.h"
-#include "objects/object_raillift/object_raillift.h"
+#include "assets/objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

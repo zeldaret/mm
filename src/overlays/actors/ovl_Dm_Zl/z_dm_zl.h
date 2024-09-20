@@ -2,7 +2,7 @@
 #define Z_DM_ZL_H
 
 #include "global.h"
-#include "objects/object_zl4/object_zl4.h"
+#include "assets/objects/object_zl4/object_zl4.h"
 
 struct DmZl;
 
