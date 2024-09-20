@@ -7,7 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_07.h"
 #include "z64shrink_window.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
