@@ -576,7 +576,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     this->slidingDoor.unk_15C = 0;
     this->slidingDoor.dyna.actor.velocity.y = 0.0f;
 
-    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
+    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_ACTOR_CARRY)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));

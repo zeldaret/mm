@@ -1150,7 +1150,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             }
         }
         leftHandActor = this->player.heldActor;
-        if ((leftHandActor != NULL) && (this->player.stateFlags1 & PLAYER_STATE1_800)) {
+        if ((leftHandActor != NULL) && (this->player.stateFlags1 & PLAYER_STATE1_ACTOR_CARRY)) {
             Vec3s curRot;
 
             Matrix_Get(&curMtxF);
