@@ -885,7 +885,7 @@ typedef enum PlayerCueId {
 // 
 #define PLAYER_STATE1_400        (1 << 10)
 // Currently carrying an actor
-#define PLAYER_STATE1_ACTOR_CARRY (1 << 11)
+#define PLAYER_STATE1_CARRYING_ACTOR (1 << 11)
 // charging spin attack
 #define PLAYER_STATE1_1000       (1 << 12)
 // 

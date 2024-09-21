@@ -353,7 +353,7 @@ s32 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_ACTOR_CARRY | PLAYER_STATE1_200000 |
+        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_200000 |
                                  PLAYER_STATE1_800000 | PLAYER_STATE1_20000000)) &&
         !(player->stateFlags2 & PLAYER_STATE2_1)) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
@@ -540,11 +540,11 @@ bool func_801234D4(PlayState* play) {
 bool func_80123590(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & PLAYER_STATE1_ACTOR_CARRY) && (player->heldActor == actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) && (player->heldActor == actor)) {
         player->interactRangeActor = NULL;
         player->heldActor = NULL;
         player->actor.child = NULL;
-        player->stateFlags1 &= ~PLAYER_STATE1_ACTOR_CARRY;
+        player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
         return true;
     }
 
@@ -3411,7 +3411,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     temp_s1 = &heldActor->world.rot;
                     Matrix_MtxFToYXZRot(&sp230, temp_s1, false);
                     heldActor->shape.rot = *temp_s1;
-                } else if (player->stateFlags1 & PLAYER_STATE1_ACTOR_CARRY) {
+                } else if (player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) {
                     heldActor->world.rot.y = heldActor->shape.rot.y =
                         player->actor.shape.rot.y + player->leftHandWorld.rot.y;
                 }
