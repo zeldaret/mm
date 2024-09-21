@@ -4626,6 +4626,8 @@ bool func_8083249C(Player* this) {
  * The function provided by the `afterPutAwayFunc` argument will run after the put away is complete.
  * This function is expected to set a new action and move execution away from `Player_Action_WaitForPutAway`.
  *
+ * This will also initiate a cutscene with the cutscene id provided.
+ *
  * @return  From `Player_PutAwayHeldItem`: true if an item needs to be put away, false if not.
  */
 s32 Player_SetupWaitForPutAwayWithCs(PlayState* play, Player* this, AfterPutAwayFunc afterPutAwayFunc, s32 csId) {
@@ -4638,6 +4640,15 @@ s32 Player_SetupWaitForPutAwayWithCs(PlayState* play, Player* this, AfterPutAway
     return Player_PutAwayHeldItem(play, this);
 }
 
+/**
+ * Sets up `Player_Action_WaitForPutAway`, which will allow the held item put away process
+ * to complete before moving on to a new action.
+ *
+ * The function provided by the `afterPutAwayFunc` argument will run after the put away is complete.
+ * This function is expected to set a new action and move execution away from `Player_Action_WaitForPutAway`.
+ *
+ * @return  From `Player_PutAwayHeldItem`: true if an item needs to be put away, false if not.
+ */
 s32 Player_SetupWaitForPutAway(PlayState* play, Player* this, AfterPutAwayFunc afterPutAwayFunc) {
     return Player_SetupWaitForPutAwayWithCs(play, this, afterPutAwayFunc, CS_ID_NONE);
 }
@@ -15156,8 +15167,6 @@ void Player_Action_WaitForPutAway(Player* this, PlayState* play) {
     PlayerAnimation_Update(play, &this->skelAnime);
     func_8083249C(this);
 
-    upperBodyIsBusy = Player_UpdateUpperBody(this, play);
-
     // Wait for the held item put away process to complete.
     // Determining if the put away process is complete is a bit complicated:
     // `Player_UpdateUpperBody` will only return false if the current UpperAction returns false.
@@ -15172,6 +15181,9 @@ void Player_Action_WaitForPutAway(Player* this, PlayState* play) {
     // The other conditions listed will force the put away delay function to run instantly if carrying an actor.
     // This is necessary because the UpperAction for carrying actors will always return true while holding
     // the actor, so `!upperBodyIsBusy` could never pass.
+
+    upperBodyIsBusy = Player_UpdateUpperBody(this, play);
+
     if (((this->stateFlags1 & PLAYER_STATE1_ACTOR_CARRY) && (this->heldActor != NULL) &&
          (this->getItemId == GI_NONE)) ||
         !upperBodyIsBusy) {
