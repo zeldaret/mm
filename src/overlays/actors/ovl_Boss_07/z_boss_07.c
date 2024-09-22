@@ -39,16 +39,39 @@ typedef struct MajoraEffect {
 } MajoraEffect; // size = 0x48
 
 typedef enum MajorasWrathDamageEffect {
-    /* 0x0 */ MAJORAS_WRATH_DMGEFF_0,
-    /* 0x2 */ MAJORAS_WRATH_DMGEFF_2 = 2,
-    /* 0x3 */ MAJORAS_WRATH_DMGEFF_3,
-    /* 0x4 */ MAJORAS_WRATH_DMGEFF_4,
-    /* 0x9 */ MAJORAS_WRATH_DMGEFF_9 = 9,
-    /* 0xA */ MAJORAS_WRATH_DMGEFF_A,
-    /* 0xC */ MAJORAS_WRATH_DMGEFF_C = 0xC,
-    /* 0xD */ MAJORAS_WRATH_DMGEFF_D,
-    /* 0xE */ MAJORAS_WRATH_DMGEFF_E,
-    /* 0xF */ MAJORAS_WRATH_DMGEFF_F
+    // Named based on the fact that everything with this damage effect is ignored by Wrath. If this effect is given to
+    // an attack that isn't ignored, it will behave exactly like `MAJORAS_WRATH_DMGEFF_STUN_NONE`.
+    /* 0x0 */ MAJORAS_WRATH_DMGEFF_IMMUNE,
+
+    // Stuns and surrounds Wrath with fire.
+    /* 0x2 */ MAJORAS_WRATH_DMGEFF_FIRE = 2,
+
+    // Stuns and surrounds Wrath with ice that shatters after a short time.
+    /* 0x3 */ MAJORAS_WRATH_DMGEFF_FREEZE,
+
+    // Stuns and surrounds Wrath with yellow light orbs.
+    /* 0x4 */ MAJORAS_WRATH_DMGEFF_LIGHT_ORB,
+
+    // Deals damage and surrounds Wrath with blue light orbs.
+    /* 0x9 */ MAJORAS_WRATH_DMGEFF_BLUE_LIGHT_ORB = 9,
+
+    // Stuns and surrounds Wrath with electric sparks.
+    /* 0xA */ MAJORAS_WRATH_DMGEFF_ELECTRIC_SPARKS,
+
+    // When an attack with this effect hits Wrath while it is either stunned or currently playing its damaged animation,
+    // it sets the `damagedTimer` to 15 frames, which is longer than the usual 5 frames.
+    /* 0xC */ MAJORAS_WRATH_DMGEFF_EXPLOSIVE = 0xC,
+
+    // Deals damage and has no special effect.
+    /* 0xD */ MAJORAS_WRATH_DMGEFF_DAMAGE_NONE,
+
+    // When an attack with this effect hits Wrath while it is currently playing its damaged animation, it checks to see
+    // if the attack landed within the last 4 frames of the animation. If so, it will restart Wrath's damaged animation.
+    // Otherwise, it will set the `disableCollisionTimer` to 30 frames.
+    /* 0xE */ MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK,
+
+    // Stuns and has no special effect.
+    /* 0xF */ MAJORAS_WRATH_DMGEFF_STUN_NONE
 } MajorasWrathDamageEffect;
 
 typedef enum MajorasIncarnationDamageEffect {
@@ -56,31 +79,31 @@ typedef enum MajorasIncarnationDamageEffect {
     // attack that deals non-zero damage, it will behave exactly like `MAJORAS_INCARNATION_DMGEFF_NONE`.
     /* 0x0 */ MAJORAS_INCARNATION_DMGEFF_IMMUNE,
 
-    // Surrounds Incarnation with fire.
+    // Deals damage and surrounds Incarnation with fire.
     /* 0x2 */ MAJORAS_INCARNATION_DMGEFF_FIRE = 2,
 
-    // Surrounds Incarnation with ice that shatters after a short time.
+    // Deals damage and surrounds Incarnation with ice that shatters after a short time.
     /* 0x3 */ MAJORAS_INCARNATION_DMGEFF_FREEZE,
 
-    // Surrounds Incarnation with yellow light orbs.
+    // Deals damage and surrounds Incarnation with yellow light orbs.
     /* 0x4 */ MAJORAS_INCARNATION_DMGEFF_LIGHT_ORB,
 
-    // Surrounds Incarnation with blue light orbs.
+    // Deals damage and surrounds Incarnation with blue light orbs.
     /* 0x9 */ MAJORAS_INCARNATION_DMGEFF_BLUE_LIGHT_ORB = 9,
 
-    // Surrounds Incarnation with electric sparks.
+    // Deals damage and surrounds Incarnation with electric sparks.
     /* 0xA */ MAJORAS_INCARNATION_DMGEFF_ELECTRIC_SPARKS,
 
     // When an attack with this effect hits Incarnation while it is either stunned or currently playing its damaged
     // animation, it sets the `damagedTimer` to 15 frames, which is longer than the usual 5 frames.
-    /* 0xC */ MAJORAS_INCARNATION_DMGEFF_LONGER_DAMAGED_TIMER = 0xC,
+    /* 0xC */ MAJORAS_INCARNATION_DMGEFF_EXPLOSIVE = 0xC,
 
     // Named after the only attack that uses it. Behaves exactly like `MAJORAS_INCARNATION_DMGEFF_NONE`.
     /* 0xD */ MAJORAS_INCARNATION_DMGEFF_SPIN_ATTACK,
 
-    // When an attack with this effect hits Incarnation while it currently playing its damaged animation, it will check
-    // to see how close the animation is to ending. If it lands within the last 4 frames of the animation, it will
-    // restart Incarnation's damaged animation. Otherwise, it will set the `damagedTimer` to 30 frames.
+    // When an attack with this effect hits Incarnation while it is currently playing its damaged animation, it checks
+    // to see if the attack landed within the last 4 frames of the animation. If so, it will restart Incarnation's
+    // damaged animation. Otherwise, it will set the `damagedTimer` and `disableCollisionTimer` to 30 frames.
     /* 0xE */ MAJORAS_INCARNATION_DMGEFF_ANIM_FRAME_CHECK,
 
     // Deals damage with no special effect.
@@ -443,7 +466,7 @@ static DamageTable sMajorasIncarnationDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
     /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_NONE),
     /* Horse trample  */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
-    /* Explosives     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_LONGER_DAMAGED_TIMER),
+    /* Explosives     */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_EXPLOSIVE),
     /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_NONE),
     /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_INCARNATION_DMGEFF_NONE),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
@@ -471,42 +494,42 @@ static DamageTable sMajorasIncarnationDamageTable = {
     /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
     /* Unblockable    */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_INCARNATION_DMGEFF_IMMUNE),
-    /* Powder Keg     */ DMG_ENTRY(4, MAJORAS_INCARNATION_DMGEFF_LONGER_DAMAGED_TIMER),
+    /* Powder Keg     */ DMG_ENTRY(4, MAJORAS_INCARNATION_DMGEFF_EXPLOSIVE),
 };
 
 static DamageTable sMajorasWrathDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Horse trample  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Explosives     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_C),
-    /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
-    /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Hookshot       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Goron punch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Sword          */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Goron pound    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
-    /* Fire arrow     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_2),
-    /* Ice arrow      */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_3),
-    /* Light arrow    */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_4),
-    /* Goron spikes   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Deku spin      */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Deku bubble    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
-    /* Deku launch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Zora barrier   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_A),
-    /* Normal shield  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Light ray      */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Thrown object  */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_F),
-    /* Zora punch     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_E),
-    /* Spin attack    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_D),
-    /* Sword beam     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_9),
-    /* Normal Roll    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Unblockable    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_0),
-    /* Powder Keg     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_C),
+    /* Deku Nut       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Deku Stick     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Horse trample  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_EXPLOSIVE),
+    /* Zora boomerang */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_STUN_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_STUN_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Goron punch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Sword          */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Goron pound    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_STUN_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Deku spin      */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Deku bubble    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_STUN_NONE),
+    /* Deku launch    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Zora barrier   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_ELECTRIC_SPARKS),
+    /* Normal shield  */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_STUN_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK),
+    /* Spin attack    */ DMG_ENTRY(1, MAJORAS_WRATH_DMGEFF_DAMAGE_NONE),
+    /* Sword beam     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_BLUE_LIGHT_ORB),
+    /* Normal Roll    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MAJORAS_WRATH_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(2, MAJORAS_WRATH_DMGEFF_EXPLOSIVE),
 };
 
 static DamageTable sRemainsDamageTable = {
@@ -2642,22 +2665,25 @@ void Boss07_Wrath_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u8 dmgE
     if ((s8)this->actor.colChkInfo.health >= 0) {
         this->actor.colChkInfo.health -= damage;
     }
+
     if ((s8)this->actor.colChkInfo.health <= 0) {
         if (KREG(19) != 0) {
             Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
         }
+
         this->shouldStartDeath = true;
         Enemy_StartFinishingBlow(play, &this->actor);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE2_OLD);
+
         if (this->actionFunc != Boss07_Wrath_Damaged) {
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDamageAnim, -10.0f);
             this->actionFunc = Boss07_Wrath_Damaged;
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathDamageAnim);
             this->sfxTimer = 0;
-        } else if (dmgEffect == MAJORAS_WRATH_DMGEFF_E) {
+        } else if (dmgEffect == MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK) {
             if (this->skelAnime.curFrame <= (this->animEndFrame - 5.0f)) {
                 this->disableCollisionTimer = 30;
             } else {
@@ -2811,26 +2837,26 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
         }
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case MAJORAS_WRATH_DMGEFF_3:
+            case MAJORAS_WRATH_DMGEFF_FREEZE:
                 this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_FROZEN_INIT;
                 break;
 
-            case MAJORAS_WRATH_DMGEFF_2:
+            case MAJORAS_WRATH_DMGEFF_FIRE:
                 this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_FIRE_INIT;
                 break;
 
-            case MAJORAS_WRATH_DMGEFF_4:
+            case MAJORAS_WRATH_DMGEFF_LIGHT_ORB:
                 this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 break;
 
-            case MAJORAS_WRATH_DMGEFF_A:
+            case MAJORAS_WRATH_DMGEFF_ELECTRIC_SPARKS:
                 this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_INIT;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 break;
 
-            case MAJORAS_WRATH_DMGEFF_9:
+            case MAJORAS_WRATH_DMGEFF_BLUE_LIGHT_ORB:
                 this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_BLUE_LIGHT_ORB_INIT;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
@@ -2844,21 +2870,22 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
 
         if ((this->actionFunc == Boss07_Wrath_Stunned) || (this->actionFunc == Boss07_Wrath_Damaged)) {
             if ((this->actionFunc == Boss07_Wrath_Stunned) &&
-                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_E) &&
-                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_D) &&
-                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_9) &&
-                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_C)) {
+                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_ANIM_FRAME_CHECK) &&
+                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_DAMAGE_NONE) &&
+                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_BLUE_LIGHT_ORB) &&
+                (this->actor.colChkInfo.damageEffect != MAJORAS_WRATH_DMGEFF_EXPLOSIVE)) {
                 Boss07_Wrath_SetupStunned(this, play);
                 this->damagedTimer = 6;
             } else {
                 this->damagedFlashTimer = 15;
-                this->damagedTimer = (this->actor.colChkInfo.damageEffect == MAJORAS_WRATH_DMGEFF_C) ? 15 : 5;
+                this->damagedTimer = (this->actor.colChkInfo.damageEffect == MAJORAS_WRATH_DMGEFF_EXPLOSIVE) ? 15 : 5;
                 Boss07_Wrath_SetupDamaged(this, play, damage, this->actor.colChkInfo.damageEffect);
             }
         } else {
             this->damagedTimer = 15;
             Boss07_Wrath_SetupStunned(this, play);
             this->whipWrapEndOffset = 0;
+
             if (&this->actor == player->actor.parent) {
                 player->av2.actionVar2 = 101;
                 player->actor.parent = NULL;
@@ -4693,8 +4720,7 @@ void Boss07_Incarnation_CollisionCheck(Boss07* this, PlayState* play) {
         }
 
         if ((this->actionFunc == Boss07_Incarnation_Stunned) || (this->actionFunc == Boss07_Incarnation_Damaged)) {
-            this->damagedTimer =
-                (this->actor.colChkInfo.damageEffect == MAJORAS_INCARNATION_DMGEFF_LONGER_DAMAGED_TIMER) ? 15 : 5;
+            this->damagedTimer = (this->actor.colChkInfo.damageEffect == MAJORAS_INCARNATION_DMGEFF_EXPLOSIVE) ? 15 : 5;
             damage = this->actor.colChkInfo.damage;
             Boss07_Incarnation_SetupDamaged(this, play, damage, this->actor.colChkInfo.damageEffect);
             this->damagedFlashTimer = 15;
@@ -6086,7 +6112,7 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
             if ((this->actionFunc == Boss07_Mask_Stunned) || (player->stateFlags3 & PLAYER_STATE3_200)) {
                 hitActor = this->maskBackCollider.base.ac;
                 hitbox = this->maskBackCollider.info.acHitInfo;
-                damage = (hitbox->toucher.dmgFlags & 0xF7CFFFFF) ? this->actor.colChkInfo.damage : 0;
+                damage = (hitbox->toucher.dmgFlags & ~0x8300000) ? this->actor.colChkInfo.damage : 0;
                 this->damagedTimer = 50;
                 this->damagedFlashTimer = 15;
                 AudioSfx_StopByPos(&this->actor.projectedPos);

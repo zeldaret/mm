@@ -60,7 +60,7 @@ typedef struct MajoraWhip {
     /* 0x024 */ Vec3f pos[MAJORA_WHIP_LENGTH_MAX];
     /* 0x27C */ Vec3f rot[MAJORA_WHIP_LENGTH_MAX];
     /* 0x4D4 */ Vec3f velocity[MAJORA_WHIP_LENGTH_MAX];
-    /* 0x72C */ f32 unk_72C[MAJORA_WHIP_LENGTH_MAX]; // unused, probably a stretch factor
+    /* 0x72C */ f32 unk_72C[MAJORA_WHIP_LENGTH_MAX];
 } MajoraWhip; // size = 0x7F4
 
 typedef enum MajorasWrathBodyPart {
@@ -291,9 +291,9 @@ typedef struct Boss07 {
     /* 0xAC04 */ f32 subCamRotY;
     /* 0xAC08 */ f32 subCamAngularVelocity;
     /* 0xAC0C */ f32 subCamVelocity;
-    /* 0xAC10 */ UNK_TYPE1 unkAC10[4]; // probably float
+    /* 0xAC10 */ UNK_TYPE1 unkAC10[4];
     /* 0xAC14 */ f32 subCamEyeModY;
-    /* 0xAC18 */ UNK_TYPE1 unkAC18[8]; // probably floats
+    /* 0xAC18 */ UNK_TYPE1 unkAC18[8];
 } Boss07; // size = 0xAC20
 
 #endif // Z_BOSS_07_H
