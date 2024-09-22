@@ -2,21 +2,29 @@
 #define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
+#include "stdbool.h"
 #include "color.h"
 #include "padutils.h"
 #include "z64actor_dlftbls.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
+#include "z64item.h"
 #include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
 struct Actor;
-struct PlayState;
-struct Lights;
+struct ActorEntry;
+struct CollisionContext;
+struct CollisionHeader;
 struct CollisionPoly;
+struct GameState;
+struct GraphicsContext;
+struct Lights;
+struct Player;
+struct PlayState;
 
 struct EnBox;
 struct EnTorch2;
@@ -668,15 +676,15 @@ extern Gfx D_801AEFA0[];
 extern Actor* D_801ED920;
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
-void ActorShadow_DrawCircle(Actor* actor, Lights* lights, struct PlayState* play);
-void ActorShadow_DrawSquare(Actor* actor, Lights* lights, struct PlayState* play);
-void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, struct PlayState* play);
-void ActorShadow_DrawHorse(Actor* actor, Lights* lights, struct PlayState* play);
+void ActorShadow_DrawCircle(Actor* actor, struct Lights* lights, struct PlayState* play);
+void ActorShadow_DrawSquare(Actor* actor, struct Lights* lights, struct PlayState* play);
+void ActorShadow_DrawWhiteCircle(Actor* actor, struct Lights* lights, struct PlayState* play);
+void ActorShadow_DrawHorse(Actor* actor, struct Lights* lights, struct PlayState* play);
 
-void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, struct PlayState* play);
+void ActorShadow_DrawFeet(Actor* actor, struct Lights* mapper, struct PlayState* play);
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos);
 void func_800B4AEC(struct PlayState* play, Actor* actor, f32 y);
-void func_800B4B50(Actor* actor, Lights* mapper, struct PlayState* play);
+void func_800B4B50(Actor* actor, struct Lights* mapper, struct PlayState* play);
 void Actor_GetProjectedPos(struct PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW);
 
 void Target_Draw(TargetContext* targetCtx, struct PlayState* play);
@@ -697,7 +705,7 @@ void Flags_UnsetClearTemp(struct PlayState* play, s32 roomNumber);
 s32 Flags_GetCollectible(struct PlayState* play, s32 flag);
 void Flags_SetCollectible(struct PlayState* play, s32 flag);
 
-void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
+void TitleCard_InitBossName(struct GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
 
 s32 Actor_SetPlayerImpact(struct PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos);
 f32 Actor_GetPlayerImpact(struct PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type);
@@ -742,25 +750,23 @@ s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 maxAngleDiff);
 s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff);
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff);
 
-void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw);
+void Actor_GetSlopeDirection(struct CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw);
 void Actor_UpdateBgCheckInfo(struct PlayState* play, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 updBgCheckInfoFlags);
-Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
+Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, struct GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, struct PlayState* play, s32 flag);
 void func_800B8118(Actor* actor, struct PlayState* play, s32 flag);
 PosRot Actor_GetFocus(Actor* actor);
 PosRot Actor_GetWorld(Actor* actor);
 PosRot Actor_GetWorldPosShapeRot(Actor* actor);
 
-s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash);
-s32 Actor_TalkOfferAccepted(Actor* actor, GameState* gameState);
-s32 Actor_OfferTalkExchange(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
-s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, struct PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);
+s32 Target_OutsideLeashRange(Actor* actor, struct Player* player, s32 ignoreLeash);
+s32 Actor_TalkOfferAccepted(Actor* actor, struct GameState* gameState);
 s32 Actor_OfferTalk(Actor* actor, struct PlayState* play, f32 radius);
 s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, struct PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, struct PlayState* play, Actor* actor2);
 
-s32 func_800B8718(Actor* actor, GameState* gameState);
+s32 func_800B8718(Actor* actor, struct GameState* gameState);
 s32 func_800B874C(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, struct PlayState* play, f32 xzRange);
 s32 func_800B886C(Actor* actor, struct PlayState* play);
@@ -787,10 +793,10 @@ void Actor_PlaySfx_Flagged(Actor* actor, u16 sfxId);
 void Actor_PlaySfx_FlaggedTimer(Actor* actor, s32 timer);
 void Actor_PlaySeq_FlaggedKamaroDance(Actor* actor);
 void Actor_PlaySeq_FlaggedMusicBoxHouse(Actor* actor);
-s32 func_800B90AC(struct PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4);
+s32 func_800B90AC(struct PlayState* play, Actor* actor, struct CollisionPoly* polygon, s32 bgId, Vec3f* arg4);
 void Actor_DeactivateLens(struct PlayState* play);
 void Actor_InitHalfDaysBit(ActorContext* actorCtx);
-void Actor_InitContext(struct PlayState* play, ActorContext* actorCtx, ActorEntry* actorEntry);
+void Actor_InitContext(struct PlayState* play, ActorContext* actorCtx, struct ActorEntry* actorEntry);
 void Actor_UpdateAll(struct PlayState* play, ActorContext* actorCtx);
 s32 Actor_AddToLensActors(struct PlayState* play, Actor* actor);
 void Actor_DrawAll(struct PlayState* play, ActorContext* actorCtx);
@@ -845,18 +851,18 @@ s32 Actor_IsSmallChest(struct EnBox* chest);
 void Actor_DrawDamageEffects(struct PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
 void Actor_SpawnIceEffects(struct PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount, s32 effectsPerBodyPart, f32 scale, f32 scaleRange);
 
-void DynaPolyActor_UpdateCarriedActorPos(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
-void DynaPolyActor_UpdateCarriedActorRotY(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
-void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedActor, s32 bgId);
-u32 DynaPolyActor_TransformCarriedActor(CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
+void DynaPolyActor_UpdateCarriedActorPos(struct CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
+void DynaPolyActor_UpdateCarriedActorRotY(struct CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
+void DynaPolyActor_AttachCarriedActor(struct CollisionContext* colCtx, Actor* carriedActor, s32 bgId);
+u32 DynaPolyActor_TransformCarriedActor(struct CollisionContext* colCtx, s32 bgId, Actor* carriedActor);
 void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 transformFlags);
-void DynaPolyActor_LoadMesh(struct PlayState* play, DynaPolyActor* dynaActor, CollisionHeader* meshHeader);
+void DynaPolyActor_LoadMesh(struct PlayState* play, DynaPolyActor* dynaActor, struct CollisionHeader* meshHeader);
 void DynaPolyActor_UnsetAllInteractFlags(DynaPolyActor* dynaActor);
 void DynaPolyActor_SetActorOnTop(DynaPolyActor* dynaActor);
 void DynaPolyActor_SetPlayerOnTop(DynaPolyActor* dynaActor);
-void DynaPoly_SetPlayerOnTop(CollisionContext* colCtx, s32 bgId);
+void DynaPoly_SetPlayerOnTop(struct CollisionContext* colCtx, s32 bgId);
 void DynaPolyActor_SetPlayerAbove(DynaPolyActor* dynaActor);
-void DynaPoly_SetPlayerAbove(CollisionContext* colCtx, s32 bgId);
+void DynaPoly_SetPlayerAbove(struct CollisionContext* colCtx, s32 bgId);
 void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor);
 void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor);

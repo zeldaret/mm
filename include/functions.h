@@ -10,6 +10,10 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
 
+// Ideally these two prototypes would be in z64actor.h, but they use PlayerItemAction which would require including z64player.h there.
+s32 Actor_OfferTalkExchange(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
+s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, struct PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);
+
 void GetItem_Draw(PlayState* play, s16 drawId);
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
