@@ -135,13 +135,29 @@ typedef enum MajoraRemainsDamageEffect {
 } MajoraRemainsDamageEffect;
 
 typedef enum MajoraTopDamageEffect {
-    /* 0x0 */ TOP_DMGEFF_0,
-    /* 0xA */ TOP_DMGEFF_A = 0xA,
-    /* 0xB */ TOP_DMGEFF_B,
-    /* 0xC */ TOP_DMGEFF_C,
-    /* 0xD */ TOP_DMGEFF_D,
-    /* 0xE */ TOP_DMGEFF_E,
-    /* 0xF */ TOP_DMGEFF_F
+    // If an attack with this effect hits the top, it will not react in any way.
+    /* 0x0 */ TOP_DMGEFF_NO_REACTION_0,
+
+    // If an attack with this effect hits the top, the top's speed is set to -15. However, if the player is currently in
+    // Fierce Diety form when the attack lands, the speed will be set to -30, and the top will be bounced into the air.
+    /* 0xA */ TOP_DMGEFF_REVERSE_DIRECTION = 0xA,
+
+    // If an attack with this effect hits the top, the top is bounced into the air and knocked backwards away from the
+    // source of the damage.
+    /* 0xB */ TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE,
+
+    // If an attack with this effect hits the top, the top is knocked backwards away from the player. The speed that the
+    // top is knocked backwards depends on the player's speed when the top is hit.
+    /* 0xC */ TOP_DMGEFF_KNOCKED_BACK_FROM_PLAYER,
+
+    // If an attack with this effect hits the top, the player is quickly pushed backwards.
+    /* 0xD */ TOP_DMGEFF_PUSH_BACK_PLAYER,
+
+    // If an attack with this effect hits the top, it will not react in any way.
+    /* 0xE */ TOP_DMGEFF_NO_REACTION_E,
+
+    // If an attack with this effect hits the top, it will not react in any way.
+    /* 0xF */ TOP_DMGEFF_NO_REACTION_F
 } MajoraTopDamageEffect;
 
 typedef enum MajoraEffectType {
@@ -570,38 +586,38 @@ static DamageTable sRemainsDamageTable = {
 };
 
 static DamageTable sTopDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Deku Stick     */ DMG_ENTRY(1, TOP_DMGEFF_D),
-    /* Horse trample  */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Explosives     */ DMG_ENTRY(1, TOP_DMGEFF_B),
-    /* Zora boomerang */ DMG_ENTRY(1, TOP_DMGEFF_F),
-    /* Normal arrow   */ DMG_ENTRY(1, TOP_DMGEFF_F),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Hookshot       */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Goron punch    */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Sword          */ DMG_ENTRY(1, TOP_DMGEFF_D),
-    /* Goron pound    */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Fire arrow     */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Ice arrow      */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Light arrow    */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Goron spikes   */ DMG_ENTRY(1, TOP_DMGEFF_C),
-    /* Deku spin      */ DMG_ENTRY(1, TOP_DMGEFF_F),
-    /* Deku bubble    */ DMG_ENTRY(1, TOP_DMGEFF_F),
-    /* Deku launch    */ DMG_ENTRY(1, TOP_DMGEFF_F),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Zora barrier   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Normal shield  */ DMG_ENTRY(1, TOP_DMGEFF_D),
-    /* Light ray      */ DMG_ENTRY(1, TOP_DMGEFF_D),
-    /* Thrown object  */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Zora punch     */ DMG_ENTRY(1, TOP_DMGEFF_E),
-    /* Spin attack    */ DMG_ENTRY(1, TOP_DMGEFF_A),
-    /* Sword beam     */ DMG_ENTRY(1, TOP_DMGEFF_A),
-    /* Normal Roll    */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Unblockable    */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, TOP_DMGEFF_0),
-    /* Powder Keg     */ DMG_ENTRY(2, TOP_DMGEFF_B),
+    /* Deku Nut       */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Deku Stick     */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
+    /* Horse trample  */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Explosives     */ DMG_ENTRY(1, TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
+    /* Normal arrow   */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Hookshot       */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Goron punch    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Sword          */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
+    /* Goron pound    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Fire arrow     */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Ice arrow      */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Light arrow    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Goron spikes   */ DMG_ENTRY(1, TOP_DMGEFF_KNOCKED_BACK_FROM_PLAYER),
+    /* Deku spin      */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
+    /* Deku bubble    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
+    /* Deku launch    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Zora barrier   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Normal shield  */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
+    /* Light ray      */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
+    /* Thrown object  */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Zora punch     */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
+    /* Spin attack    */ DMG_ENTRY(1, TOP_DMGEFF_REVERSE_DIRECTION),
+    /* Sword beam     */ DMG_ENTRY(1, TOP_DMGEFF_REVERSE_DIRECTION),
+    /* Normal Roll    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Unblockable    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Powder Keg     */ DMG_ENTRY(2, TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE),
 };
 
 ActorInit Boss_07_InitVars = {
@@ -7287,34 +7303,39 @@ void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
 
     if (this->generalCollider.base.acFlags & AC_HIT) {
         this->generalCollider.base.acFlags &= ~AC_HIT;
+
         if (this->damagedTimer == 0) {
             this->damagedTimer = 5;
-            if ((this->actor.colChkInfo.damageEffect == TOP_DMGEFF_D) ||
-                (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_A)) {
-                if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_D) {
+
+            if ((this->actor.colChkInfo.damageEffect == TOP_DMGEFF_PUSH_BACK_PLAYER) ||
+                (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_REVERSE_DIRECTION)) {
+                if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_PUSH_BACK_PLAYER) {
                     player->pushedYaw = this->actor.yawTowardsPlayer;
                     player->pushedSpeed = 20.0f;
                 }
+
                 if (this->timers[0] > 40) {
                     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+
                     if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
                         this->actor.speed = -30.0f;
                         this->actor.velocity.y = 10.0f;
+
                         if ((s16)(sREG(47) + 100) < this->timers[0]) {
                             this->timers[0] = sREG(47) + 100;
                             this->timers[1] = sREG(77) + 170;
                         }
-                    } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_A) {
+                    } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_REVERSE_DIRECTION) {
                         this->actor.speed = -15.0f;
                     } else {
                         this->actor.speed = -7.0f;
                     }
                 }
-            } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_C) {
+            } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_KNOCKED_BACK_FROM_PLAYER) {
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 this->actor.speed = 2.0f * -player->actor.speed;
                 sp38 = true;
-            } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_B) {
+            } else if (this->actor.colChkInfo.damageEffect == TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE) {
                 this->actor.world.rot.y =
                     Math_Atan2S(this->generalCollider.base.ac->world.pos.x - this->actor.world.pos.x,
                                 this->generalCollider.base.ac->world.pos.z - this->actor.world.pos.z);
@@ -7324,6 +7345,7 @@ void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
             }
         }
     }
+
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if ((Actor_GetPlayerImpact(play, 5.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
             (playerImpactType == PLAYER_IMPACT_GORON_GROUND_POUND)) {
@@ -7332,6 +7354,7 @@ void Boss07_Top_CollisionCheck(Boss07* this, PlayState* play) {
             sp38 = true;
         }
     }
+
     if (sp38 && (this->timers[0] > 90)) {
         this->actor.shape.rot.z = Rand_CenteredFloat((f32)(sREG(29) + 30) * 0x100);
         this->timers[0] = Rand_ZeroFloat(10.0f) + 70.0f;
