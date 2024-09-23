@@ -165,31 +165,31 @@ typedef enum MajoraEffectType {
     /* 1 */ MAJORA_EFFECT_FLAME
 } MajoraEffectType;
 
-typedef enum MajorasWrathActionState {
-    /* 0 */ MAJORAS_WRATH_STATE_QUICK_WHIP,
-    /* 1 */ MAJORAS_WRATH_STATE_FLURRY,
-    /* 2 */ MAJORAS_WRATH_STATE_DOUBLE_WHIP,
-    /* 3 */ MAJORAS_WRATH_STATE_LONG_WHIP,
-    /* 4 */ MAJORAS_WRATH_STATE_SPIN_ATTACK,
-    /* 5 */ MAJORAS_WRATH_STATE_TAUNT,
-    /* 6 */ MAJORAS_WRATH_STATE_THREE_HIT,
-    /* 7 */ MAJORAS_WRATH_STATE_KICK,
-    /* 8 */ MAJORAS_WRATH_STATE_MAX
-} MajorasWrathActionState;
+typedef enum MajorasWrathAttackSubAction {
+    /* 0 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_QUICK_WHIP,
+    /* 1 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY,
+    /* 2 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP,
+    /* 3 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_LONG_WHIP,
+    /* 4 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK,
+    /* 5 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_TAUNT,
+    /* 6 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_THREE_HIT,
+    /* 7 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK,
+    /* 8 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_MAX
+} MajorasWrathAttackSubAction;
 
-typedef enum MajorasIncarnationActionState {
-    /* 0 */ MAJORAS_INCARNATION_STATE_0,
-    /* 1 */ MAJORAS_INCARNATION_STATE_1,
-    /* 2 */ MAJORAS_INCARNATION_STATE_2,
-    /* 3 */ MAJORAS_INCARNATION_STATE_MAX
-} MajorasIncarnationActionState;
+typedef enum MajorasIncarnationTauntSubAction {
+    /* 0 */ MAJORAS_INCARNATION_TAUNT_SUB_ACTION_DANCE_1,
+    /* 1 */ MAJORAS_INCARNATION_TAUNT_SUB_ACTION_DANCE_2,
+    /* 2 */ MAJORAS_INCARNATION_TAUNT_SUB_ACTION_JUMP,
+    /* 3 */ MAJORAS_INCARNATION_TAUNT_SUB_ACTION_MAX
+} MajorasIncarnationTauntSubAction;
 
-typedef enum MajorasMaskSpinState {
-    /* 0 */ MAJORAS_MASK_SPIN_STATE_START,
-    /* 1 */ MAJORAS_MASK_SPIN_STATE_ATTACK,
-    /* 2 */ MAJORAS_MASK_SPIN_STATE_END,
-    /* 3 */ MAJORAS_MASK_SPIN_STATE_MAX
-} MajorasMaskSpinState;
+typedef enum MajorasMaskSpinAttackSubAction {
+    /* 0 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_WIND_UP,
+    /* 1 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_ATTACK,
+    /* 2 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END,
+    /* 3 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_MAX
+} MajorasMaskSpinAttackSubAction;
 
 typedef enum MajorasMaskBeamState {
     /* 0 */ MAJORAS_MASK_BEAM_STATE_CHARGE,
@@ -2173,60 +2173,61 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
     this->timers[1] = 0;
 
     if (player->stateFlags3 & PLAYER_STATE3_100) {
-        this->subAction = MAJORAS_WRATH_STATE_SPIN_ATTACK;
+        this->subAction = MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK;
     } else if (this->actor.xzDistToPlayer <= 300.0f) {
         if (this->actor.xzDistToPlayer <= 200.0f) {
-            this->subAction = MAJORAS_WRATH_STATE_KICK;
+            this->subAction = MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK;
         } else {
-            this->subAction = MAJORAS_WRATH_STATE_SPIN_ATTACK;
+            this->subAction = MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK;
         }
     } else {
         this->subAction = Rand_ZeroFloat(6.99f);
         if (((s8)this->actor.colChkInfo.health >= 28) &&
-            ((this->subAction == MAJORAS_WRATH_STATE_FLURRY) || (this->subAction == MAJORAS_WRATH_STATE_DOUBLE_WHIP))) {
-            this->subAction = MAJORAS_WRATH_STATE_QUICK_WHIP;
+            ((this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY) ||
+             (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP))) {
+            this->subAction = MAJORAS_WRATH_ATTACK_SUB_ACTION_QUICK_WHIP;
         }
     }
 
     switch (this->subAction) {
-        case MAJORAS_WRATH_STATE_QUICK_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_QUICK_WHIP:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathShortSingleWhipAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathShortSingleWhipAttackAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_FLURRY:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathWhipFlurryAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathWhipFlurryAttackAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_DOUBLE_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDoubleWhipAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathDoubleWhipAttackAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_LONG_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_LONG_WHIP:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathLongSingleWhipAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathLongSingleWhipAttackAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_SPIN_ATTACK:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathSpinAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathSpinAttackAnim);
             Boss07_RandVec3fXZ(&this->targetPos, 650.0f);
             this->speedToTarget = 0.0f;
             break;
 
-        case MAJORAS_WRATH_STATE_TAUNT:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_TAUNT:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathTauntAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathTauntAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_THREE_HIT:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_THREE_HIT:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathThreeAttackComboAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathThreeAttackComboAnim);
             break;
 
-        case MAJORAS_WRATH_STATE_KICK:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathKickAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathKickAnim);
             break;
@@ -2251,7 +2252,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
     }
 
     switch (this->subAction) {
-        case MAJORAS_WRATH_STATE_QUICK_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_QUICK_WHIP:
             if (this->frameCounter == (s16)(KREG(92) + 1)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -2273,7 +2274,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_WRATH_STATE_FLURRY:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY:
             if (this->frameCounter == (s16)(KREG(91) + 3)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_THROW_OLD);
             }
@@ -2290,7 +2291,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_WRATH_STATE_DOUBLE_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP:
             if (this->frameCounter == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -2313,7 +2314,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_WRATH_STATE_LONG_WHIP:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_LONG_WHIP:
             if (this->frameCounter == (s16)(KREG(84) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -2338,7 +2339,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_WRATH_STATE_SPIN_ATTACK:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK:
             if ((this->frameCounter > 16) && (this->frameCounter <= 40)) {
                 this->leftWhip.tension = this->rightWhip.tension = 200.0f;
                 if ((this->frameCounter % 8) == 0) {
@@ -2353,21 +2354,21 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_WRATH_STATE_KICK:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK:
             this->canEvade = false;
             if (this->frameCounter == 3) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
             }
             break;
 
-        case MAJORAS_WRATH_STATE_TAUNT:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_TAUNT:
             this->rightWhip.mobility = this->leftWhip.mobility = 0.7f;
             this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             this->canEvade = true;
             break;
 
-        case MAJORAS_WRATH_STATE_THREE_HIT:
+        case MAJORAS_WRATH_ATTACK_SUB_ACTION_THREE_HIT:
             if (this->frameCounter == (s16)(KREG(85) + 5)) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
@@ -2760,7 +2761,8 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
         }
     }
     if ((tension >= 50.0f) && (this->whipCollisionTimer == 0) &&
-        (!(player->stateFlags3 & PLAYER_STATE3_100) || (this->subAction == MAJORAS_WRATH_STATE_SPIN_ATTACK))) {
+        (!(player->stateFlags3 & PLAYER_STATE3_100) ||
+         (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK))) {
         if ((Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
             (playerImpactType != PLAYER_IMPACT_ZORA_BARRIER)) {
             playerImpactType = -1;
@@ -3108,7 +3110,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
 
-    if ((this->actionFunc == Boss07_Wrath_Attack) && (this->subAction == MAJORAS_WRATH_STATE_KICK) &&
+    if ((this->actionFunc == Boss07_Wrath_Attack) && (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK) &&
         (this->frameCounter >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->kickCollider.base);
     } else {
@@ -4198,7 +4200,7 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
     };
 
     this->actionFunc = Boss07_Incarnation_Taunt;
-    this->subAction = Rand_ZeroFloat(MAJORAS_INCARNATION_STATE_MAX - 0.001f);
+    this->subAction = Rand_ZeroFloat(MAJORAS_INCARNATION_TAUNT_SUB_ACTION_MAX - 0.001f);
     Animation_MorphToLoop(&this->skelAnime, sTauntAnimations[this->subAction], -10.0f);
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
@@ -4207,9 +4209,10 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Taunt(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->subAction < MAJORAS_INCARNATION_STATE_2) {
+    if (this->subAction < MAJORAS_INCARNATION_TAUNT_SUB_ACTION_JUMP) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WAIT_OLD - SFX_FLAG);
-    } else if ((this->subAction == MAJORAS_INCARNATION_STATE_2) && Animation_OnFrame(&this->skelAnime, 5.0f)) {
+    } else if ((this->subAction == MAJORAS_INCARNATION_TAUNT_SUB_ACTION_JUMP) &&
+               Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_JUMP_OLD);
     }
 
@@ -5154,7 +5157,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
 
 void Boss07_Mask_SetupSpinAttack(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_SpinAttack;
-    this->subAction = MAJORAS_MASK_SPIN_STATE_START;
+    this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_WIND_UP;
     this->cutsceneState = MASK_SPIN_ATTACK_RETARGET_PASSIVE;
     this->timers[0] = 30;
     this->angularVelocity = 0;
@@ -5173,14 +5176,14 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
     this->actor.shape.rot.z -= this->angularVelocity;
 
     switch (this->subAction) {
-        case MAJORAS_MASK_SPIN_STATE_START:
+        case MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_WIND_UP:
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             Boss07_SmoothStop(this, 1.0f);
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x100);
             Math_ApproachS(&this->angularVelocity, 0x2000, 1, 0x100);
 
             if (this->timers[0] == 0) {
-                this->subAction = MAJORAS_MASK_SPIN_STATE_ATTACK;
+                this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_ATTACK;
                 this->actor.world.rot.x = 0;
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 this->timers[0] = 100;
@@ -5189,7 +5192,7 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_MASK_SPIN_STATE_ATTACK:
+        case MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_ATTACK:
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x400);
             Math_ApproachS(&this->angularVelocity, 0x2000, 1, 0x200);
 
@@ -5219,7 +5222,7 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
             if (((this->cutsceneState == MASK_SPIN_ATTACK_RETARGET_PASSIVE) && (sp24 < 100.0f)) ||
                 (this->timers[0] == 0)) {
                 if (Rand_ZeroOne() < 0.25f) {
-                    this->subAction = MAJORAS_MASK_SPIN_STATE_END;
+                    this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END;
                     this->timers[0] = 30;
                 } else {
                     Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
@@ -5240,7 +5243,7 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
             }
             break;
 
-        case MAJORAS_MASK_SPIN_STATE_END:
+        case MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END:
             Math_ApproachS(&this->angularVelocity, 0, 1, 0x100);
             Math_ApproachS(&this->actor.world.rot.x, 0x2000, 0xA, 0x7D0);
             Boss07_SmoothStop(this, 0.5f);
