@@ -5243,7 +5243,7 @@
     0x80862AFC:("sPlayerControlStickMagnitude","f32","",0x4),
     0x80862B00:("sPlayerControlStickAngle","UNK_TYPE1","",0x1),
     0x80862B02:("D_80862B02","UNK_TYPE1","",0x1),
-    0x80862B04:("D_80862B04","UNK_TYPE1","",0x1),
+    0x80862B04:("sUpperBodyIsBusy","UNK_TYPE1","",0x1),
     0x80862B08:("sPlayerFloorType","UNK_TYPE1","",0x1),
     0x80862B0C:("sPlayerTouchedWallFlags","UNK_TYPE1","",0x1),
     0x80862B10:("sPlayerConveyorSpeedIndex","UNK_TYPE1","",0x1),
