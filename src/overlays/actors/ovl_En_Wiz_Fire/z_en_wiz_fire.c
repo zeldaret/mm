@@ -37,7 +37,7 @@ typedef enum {
 
 static s32 sPoolHitByIceArrow = false;
 
-ActorInit En_Wiz_Fire_InitVars = {
+ActorProfile En_Wiz_Fire_Profile = {
     /**/ ACTOR_EN_WIZ_FIRE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

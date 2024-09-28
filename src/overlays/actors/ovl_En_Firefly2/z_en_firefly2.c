@@ -16,7 +16,7 @@ void EnFirefly2_Destroy(Actor* thisx, PlayState* play);
 void EnFirefly2_Update(Actor* thisx, PlayState* play);
 void EnFirefly2_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Firefly2_InitVars = {
+ActorProfile En_Firefly2_Profile = {
     /**/ ACTOR_EN_FIREFLY2,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

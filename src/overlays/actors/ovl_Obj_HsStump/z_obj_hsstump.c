@@ -21,7 +21,7 @@ void ObjHsStump_Idle(ObjHsStump* this, PlayState* play);
 void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play);
 void ObjHsStump_Appear(ObjHsStump* this, PlayState* play);
 
-ActorInit Obj_HsStump_InitVars = {
+ActorProfile Obj_HsStump_Profile = {
     /**/ ACTOR_OBJ_HSSTUMP,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

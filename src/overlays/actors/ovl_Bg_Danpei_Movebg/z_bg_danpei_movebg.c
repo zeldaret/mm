@@ -29,7 +29,7 @@ void func_80AF72F8(BgDanpeiMovebg* this, PlayState* play);
 void func_80AF7354(BgDanpeiMovebg* this, PlayState* play);
 void func_80AF746C(BgDanpeiMovebg* this, PlayState* play);
 
-ActorInit Bg_Danpei_Movebg_InitVars = {
+ActorProfile Bg_Danpei_Movebg_Profile = {
     /**/ ACTOR_BG_DANPEI_MOVEBG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

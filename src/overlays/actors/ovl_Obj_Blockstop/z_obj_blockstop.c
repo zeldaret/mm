@@ -17,7 +17,7 @@ void ObjBlockstop_Update(Actor* thisx, PlayState* play);
 void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play);
 void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play);
 
-ActorInit Obj_Blockstop_InitVars = {
+ActorProfile Obj_Blockstop_Profile = {
     /**/ ACTOR_OBJ_BLOCKSTOP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

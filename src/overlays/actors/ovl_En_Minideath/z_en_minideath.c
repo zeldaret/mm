@@ -39,7 +39,7 @@ void EnMinideath_SetupReturn(EnMinideath* this);
 void EnMinideath_SetupIntro3(EnMinideath* this);
 void EnMinideath_SetupDead(EnMinideath* this);
 
-ActorInit En_Minideath_InitVars = {
+ActorProfile En_Minideath_Profile = {
     /**/ ACTOR_EN_MINIDEATH,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

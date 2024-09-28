@@ -52,7 +52,7 @@ typedef enum {
     /* 2 */ ENFSN_CUTSCENESTATE_PLAYING
 } EnFsnCutsceneState;
 
-ActorInit En_Fsn_InitVars = {
+ActorProfile En_Fsn_Profile = {
     /**/ ACTOR_EN_FSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

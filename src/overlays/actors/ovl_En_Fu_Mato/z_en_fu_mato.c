@@ -27,7 +27,7 @@ void func_80ACECFC(EnFuMato* this, PlayState* play);
 void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
-ActorInit En_Fu_Mato_InitVars = {
+ActorProfile En_Fu_Mato_Profile = {
     /**/ ACTOR_EN_FU_MATO,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

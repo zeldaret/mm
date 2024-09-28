@@ -34,7 +34,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play);
 void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, PlayState* play);
 
-ActorInit En_Thiefbird_InitVars = {
+ActorProfile En_Thiefbird_Profile = {
     /**/ ACTOR_EN_THIEFBIRD,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

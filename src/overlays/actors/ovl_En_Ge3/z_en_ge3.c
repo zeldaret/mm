@@ -35,7 +35,7 @@ typedef enum GerudoAveilAnimation {
     /*  9 */ GERUDO_AVEIL_ANIM_MAX
 } GerudoAveilAnimation;
 
-ActorInit En_Ge3_InitVars = {
+ActorProfile En_Ge3_Profile = {
     /**/ ACTOR_EN_GE3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

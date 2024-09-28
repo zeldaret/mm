@@ -22,7 +22,7 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play);
 void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this);
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play);
 
-ActorInit Bg_Kin2_Bombwall_InitVars = {
+ActorProfile Bg_Kin2_Bombwall_Profile = {
     /**/ ACTOR_BG_KIN2_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

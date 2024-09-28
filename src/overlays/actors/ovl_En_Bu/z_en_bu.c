@@ -17,7 +17,7 @@ void EnBu_Draw(Actor* thisx, PlayState* play);
 
 void EnBu_DoNothing(EnBu* this, PlayState* play);
 
-ActorInit En_Bu_InitVars = {
+ActorProfile En_Bu_Profile = {
     /**/ ACTOR_EN_BU,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

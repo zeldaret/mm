@@ -30,7 +30,7 @@ typedef struct {
     /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
-typedef struct ActorInit {
+typedef struct ActorProfile {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -40,7 +40,7 @@ typedef struct ActorInit {
     /* 0x14 */ ActorFunc destroy;
     /* 0x18 */ ActorFunc update;
     /* 0x1C */ ActorFunc draw;
-} ActorInit; // size = 0x20
+} ActorProfile; // size = 0x20
 
 typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 

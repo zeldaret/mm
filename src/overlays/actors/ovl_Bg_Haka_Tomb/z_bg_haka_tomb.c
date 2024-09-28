@@ -23,7 +23,7 @@ void func_80BD6768(BgHakaTomb* this, PlayState* play);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, PlayState* play);
 
-ActorInit Bg_Haka_Tomb_InitVars = {
+ActorProfile Bg_Haka_Tomb_Profile = {
     /**/ ACTOR_BG_HAKA_TOMB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

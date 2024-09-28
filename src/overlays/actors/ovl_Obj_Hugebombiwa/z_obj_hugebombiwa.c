@@ -28,7 +28,7 @@ void func_80A55310(ObjHugebombiwa* this);
 void func_80A55564(ObjHugebombiwa* this, PlayState* play);
 void func_80A55B34(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hugebombiwa_InitVars = {
+ActorProfile Obj_Hugebombiwa_Profile = {
     /**/ ACTOR_OBJ_HUGEBOMBIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

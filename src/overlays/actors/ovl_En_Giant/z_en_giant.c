@@ -50,7 +50,7 @@ typedef enum {
     /* 15 */ GIANT_CUEID_HOLDING_UP_MOON_IN_CLOCK_TOWER
 } GiantCueId;
 
-ActorInit En_Giant_InitVars = {
+ActorProfile En_Giant_Profile = {
     /**/ ACTOR_EN_GIANT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

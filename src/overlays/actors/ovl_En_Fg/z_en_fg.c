@@ -32,7 +32,7 @@ typedef enum {
     /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
 } BetaFrogDamageEffect;
 
-ActorInit En_Fg_InitVars = {
+ActorProfile En_Fg_Profile = {
     /**/ ACTOR_EN_FG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -24,7 +24,7 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
 void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 
-ActorInit En_Po_Fusen_InitVars = {
+ActorProfile En_Po_Fusen_Profile = {
     /**/ ACTOR_EN_PO_FUSEN,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

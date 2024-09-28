@@ -21,7 +21,7 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play);
 void DmGm_DoNothing(DmGm* this, PlayState* play);
 void DmGm_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Gm_InitVars = {
+ActorProfile Dm_Gm_Profile = {
     /**/ ACTOR_DM_GM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

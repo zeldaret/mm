@@ -66,7 +66,7 @@ typedef enum ElfgrpSpawnedFairyTypes {
     /* 1 */ SPAWNED_STRAY_FAIRY_TYPE_RETURNING // STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN
 } ElfgrpSpawnedFairyTypes;
 
-ActorInit En_Elfgrp_InitVars = {
+ActorProfile En_Elfgrp_Profile = {
     /**/ ACTOR_EN_ELFGRP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

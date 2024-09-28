@@ -17,7 +17,7 @@ void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor);
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
-ActorInit Obj_Boyo_InitVars = {
+ActorProfile Obj_Boyo_Profile = {
     /**/ ACTOR_OBJ_BOYO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -20,7 +20,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play);
 
-ActorInit En_Attack_Niw_InitVars = {
+ActorProfile En_Attack_Niw_Profile = {
     /**/ ACTOR_EN_ATTACK_NIW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -18,7 +18,7 @@ void EnEndingHero5_Draw(Actor* thisx, PlayState* play);
 void EnEndingHero5_SetupIdle(EnEndingHero5* this);
 void EnEndingHero5_Idle(EnEndingHero5* this, PlayState* play);
 
-ActorInit En_Ending_Hero5_InitVars = {
+ActorProfile En_Ending_Hero5_Profile = {
     /**/ ACTOR_EN_ENDING_HERO5,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

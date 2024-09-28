@@ -44,7 +44,7 @@ typedef enum EnNiwState {
     /* 8 */ NIW_STATE_HOPPING
 } EnNiwState;
 
-ActorInit En_Niw_InitVars = {
+ActorProfile En_Niw_Profile = {
     /**/ ACTOR_EN_NIW,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

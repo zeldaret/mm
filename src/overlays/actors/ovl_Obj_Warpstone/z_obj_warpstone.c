@@ -22,7 +22,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-ActorInit Obj_Warpstone_InitVars = {
+ActorProfile Obj_Warpstone_Profile = {
     /**/ ACTOR_OBJ_WARPSTONE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

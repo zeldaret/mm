@@ -23,7 +23,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 static s32 sBssPad;
 
-ActorInit Arrow_Ice_InitVars = {
+ActorProfile Arrow_Ice_Profile = {
     /**/ ACTOR_ARROW_ICE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

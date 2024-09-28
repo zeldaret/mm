@@ -59,7 +59,7 @@ typedef enum CarnivorousLilyPetalScaleType {
     /* 3 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } CarnivorousLilyPetalScaleType;
 
-ActorInit En_Raf_InitVars = {
+ActorProfile En_Raf_Profile = {
     /**/ ACTOR_EN_RAF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

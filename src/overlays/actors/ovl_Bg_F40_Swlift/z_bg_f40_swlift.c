@@ -19,7 +19,7 @@ void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 static s32 sSwitchFlags[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
 static s32 sHeights[4];
 
-ActorInit Bg_F40_Swlift_InitVars = {
+ActorProfile Bg_F40_Swlift_Profile = {
     /**/ ACTOR_BG_F40_SWLIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

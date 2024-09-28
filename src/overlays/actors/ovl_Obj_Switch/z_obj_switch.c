@@ -72,7 +72,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 
 static s32 sTexturesDesegmented = false;
 
-ActorInit Obj_Switch_InitVars = {
+ActorProfile Obj_Switch_Profile = {
     /**/ ACTOR_OBJ_SWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

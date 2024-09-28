@@ -18,7 +18,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 
 void DmChar04_HandleCutscene(DmChar04* this, PlayState* play);
 
-ActorInit Dm_Char04_InitVars = {
+ActorProfile Dm_Char04_Profile = {
     /**/ ACTOR_DM_CHAR04,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

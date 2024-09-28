@@ -118,7 +118,7 @@ static MsgScript D_80A889A4[] = {
     /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Tru_InitVars = {
+ActorProfile En_Tru_Profile = {
     /**/ ACTOR_EN_TRU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

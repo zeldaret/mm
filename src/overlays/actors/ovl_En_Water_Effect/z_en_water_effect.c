@@ -31,7 +31,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2);
 void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-ActorInit En_Water_Effect_InitVars = {
+ActorProfile En_Water_Effect_Profile = {
     /**/ ACTOR_EN_WATER_EFFECT,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

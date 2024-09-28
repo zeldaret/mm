@@ -31,7 +31,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play);
 void func_80AC9C20(ObjOcarinalift* this);
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play);
 
-ActorInit Obj_Ocarinalift_InitVars = {
+ActorProfile Obj_Ocarinalift_Profile = {
     /**/ ACTOR_OBJ_OCARINALIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -17,7 +17,7 @@ void EnBh_Draw(Actor* thisx, PlayState* play);
 
 void func_80C22DEC(EnBh* this, PlayState* play);
 
-ActorInit En_Bh_InitVars = {
+ActorProfile En_Bh_Profile = {
     /**/ ACTOR_EN_BH,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

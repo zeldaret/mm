@@ -21,7 +21,7 @@ void func_80B23910(EnHanabi* this, PlayState* play);
 void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Hanabi_InitVars = {
+ActorProfile En_Hanabi_Profile = {
     /**/ ACTOR_EN_HANABI,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

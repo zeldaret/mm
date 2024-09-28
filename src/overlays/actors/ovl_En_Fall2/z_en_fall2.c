@@ -18,7 +18,7 @@ void EnFall2_Draw(Actor* thisx, PlayState* play);
 void EnFall2_DoNothing(EnFall2* this, PlayState* play);
 void EnFall2_HandleCutscene(EnFall2* this, PlayState* play);
 
-ActorInit En_Fall2_InitVars = {
+ActorProfile En_Fall2_Profile = {
     /**/ ACTOR_EN_FALL2,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

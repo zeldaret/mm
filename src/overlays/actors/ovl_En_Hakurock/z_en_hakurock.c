@@ -58,7 +58,7 @@ typedef enum EnHakurockEffectType {
     /* 3 */ EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED
 } EnHakurockEffectType;
 
-ActorInit En_Hakurock_InitVars = {
+ActorProfile En_Hakurock_Profile = {
     /**/ ACTOR_EN_HAKUROCK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

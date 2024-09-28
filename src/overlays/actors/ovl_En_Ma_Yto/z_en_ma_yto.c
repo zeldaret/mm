@@ -69,7 +69,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-ActorInit En_Ma_Yto_InitVars = {
+ActorProfile En_Ma_Yto_Profile = {
     /**/ ACTOR_EN_MA_YTO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

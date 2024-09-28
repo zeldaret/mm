@@ -18,7 +18,7 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
 void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play);
 
-ActorInit Dm_Opstage_InitVars = {
+ActorProfile Dm_Opstage_Profile = {
     /**/ ACTOR_DM_OPSTAGE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

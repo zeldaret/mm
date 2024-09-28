@@ -24,7 +24,7 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play);
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
-ActorInit Bg_F40_Switch_InitVars = {
+ActorProfile Bg_F40_Switch_Profile = {
     /**/ ACTOR_BG_F40_SWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

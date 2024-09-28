@@ -38,7 +38,7 @@ void func_80898594(EnPeehat* this, PlayState* play);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
-ActorInit En_Peehat_InitVars = {
+ActorProfile En_Peehat_Profile = {
     /**/ ACTOR_EN_PEEHAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

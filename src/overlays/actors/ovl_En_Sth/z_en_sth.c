@@ -27,7 +27,7 @@ void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play);
 void EnSth_Update(Actor* thisx, PlayState* play);
 void EnSth_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Sth_InitVars = {
+ActorProfile En_Sth_Profile = {
     /**/ ACTOR_EN_STH,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

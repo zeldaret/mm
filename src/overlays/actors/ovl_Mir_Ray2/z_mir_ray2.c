@@ -15,7 +15,7 @@ void MirRay2_Destroy(Actor* thisx, PlayState* play);
 void MirRay2_Update(Actor* thisx, PlayState* play);
 void MirRay2_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Mir_Ray2_InitVars = {
+ActorProfile Mir_Ray2_Profile = {
     /**/ ACTOR_MIR_RAY2,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -32,7 +32,7 @@ typedef enum {
     /* 4 */ DEKU_PRINCESS_EYE_MAX
 } EnDnpEyeIndex;
 
-ActorInit En_Dnp_InitVars = {
+ActorProfile En_Dnp_Profile = {
     /**/ ACTOR_EN_DNP,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

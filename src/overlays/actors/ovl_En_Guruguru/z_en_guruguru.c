@@ -26,7 +26,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-ActorInit En_Guruguru_InitVars = {
+ActorProfile En_Guruguru_Profile = {
     /**/ ACTOR_EN_GURUGURU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

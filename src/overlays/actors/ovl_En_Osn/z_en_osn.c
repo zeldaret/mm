@@ -49,7 +49,7 @@ void EnOsn_Talk(EnOsn* this, PlayState* play);
 #define OSN_MASK_TEXT_ALL_NIGHT (1 << 18)
 #define OSN_MASK_TEXT_ROMANI (1 << 19)
 
-ActorInit En_Osn_InitVars = {
+ActorProfile En_Osn_Profile = {
     /**/ ACTOR_EN_OSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

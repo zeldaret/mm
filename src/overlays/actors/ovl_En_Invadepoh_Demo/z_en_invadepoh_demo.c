@@ -94,7 +94,7 @@ typedef enum {
     /* 4 */ EN_INVADEPOH_DEMO_UFO_CUEID_MAX
 } EnInvadepohDemoUfoCueId;
 
-ActorInit En_Invadepoh_Demo_InitVars = {
+ActorProfile En_Invadepoh_Demo_Profile = {
     /**/ ACTOR_EN_INVADEPOH_DEMO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

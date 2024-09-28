@@ -18,7 +18,7 @@ void EnLight_Draw(Actor* thisx, PlayState* play);
 
 void func_80865F38(Actor* thisx, PlayState* play);
 
-ActorInit En_Light_InitVars = {
+ActorProfile En_Light_Profile = {
     /**/ ACTOR_EN_LIGHT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

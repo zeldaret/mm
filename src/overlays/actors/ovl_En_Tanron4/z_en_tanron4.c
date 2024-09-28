@@ -31,7 +31,7 @@ typedef enum SeagullTimer {
     /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET
 } SeagullTimer;
 
-ActorInit En_Tanron4_InitVars = {
+ActorProfile En_Tanron4_Profile = {
     /**/ ACTOR_EN_TANRON4,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

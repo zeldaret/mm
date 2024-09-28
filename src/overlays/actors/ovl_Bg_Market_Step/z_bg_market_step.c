@@ -14,7 +14,7 @@
 void BgMarketStep_Init(Actor* thisx, PlayState* play);
 void BgMarketStep_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Market_Step_InitVars = {
+ActorProfile Bg_Market_Step_Profile = {
     /**/ ACTOR_BG_MARKET_STEP,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

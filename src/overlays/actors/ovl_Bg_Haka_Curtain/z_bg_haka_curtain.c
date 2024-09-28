@@ -26,7 +26,7 @@ void func_80B6DD9C(BgHakaCurtain* this, PlayState* play);
 void func_80B6DEA8(BgHakaCurtain* this, PlayState* play);
 void func_80B6DE80(BgHakaCurtain* this);
 
-ActorInit Bg_Haka_Curtain_InitVars = {
+ActorProfile Bg_Haka_Curtain_Profile = {
     /**/ ACTOR_BG_HAKA_CURTAIN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

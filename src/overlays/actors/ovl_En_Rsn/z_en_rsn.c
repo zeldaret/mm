@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void EnRsn_DoNothing(EnRsn* this, PlayState* play);
 
-ActorInit En_Rsn_InitVars = {
+ActorProfile En_Rsn_Profile = {
     /**/ ACTOR_EN_RSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

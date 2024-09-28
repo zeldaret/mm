@@ -85,7 +85,7 @@ typedef enum EnTalkGibudGrabState {
     /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE
 } EnTalkGibudGrabState;
 
-ActorInit En_Talk_Gibud_InitVars = {
+ActorProfile En_Talk_Gibud_Profile = {
     /**/ ACTOR_EN_TALK_GIBUD,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

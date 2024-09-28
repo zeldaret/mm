@@ -36,7 +36,7 @@ typedef enum {
     /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
 } TurtleEyeMode;
 
-ActorInit Dm_Char08_InitVars = {
+ActorProfile Dm_Char08_Profile = {
     /**/ ACTOR_DM_CHAR08,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-ActorInit Obj_Wturn_InitVars = {
+ActorProfile Obj_Wturn_Profile = {
     /**/ ACTOR_OBJ_WTURN,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

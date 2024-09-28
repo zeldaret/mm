@@ -24,7 +24,7 @@ void DemoEffect_ExpandLight(DemoEffect* this, PlayState* play);
 void DemoEffect_DrawTimewarp(Actor* thisx, PlayState* play);
 void DemoEffect_DrawLight(Actor* thisx, PlayState* play2);
 
-ActorInit Demo_Effect_InitVars = {
+ActorProfile Demo_Effect_Profile = {
     /**/ ACTOR_DEMO_EFFECT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

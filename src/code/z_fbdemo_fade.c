@@ -30,7 +30,7 @@ static Gfx sTransFadeSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
-TransitionInit TransitionFade_InitVars = {
+TransitionProfile TransitionFade_Profile = {
     TransitionFade_Init,   TransitionFade_Destroy, TransitionFade_Update,   TransitionFade_Draw,
     TransitionFade_Start,  TransitionFade_SetType, TransitionFade_SetColor, NULL,
     TransitionFade_IsDone,

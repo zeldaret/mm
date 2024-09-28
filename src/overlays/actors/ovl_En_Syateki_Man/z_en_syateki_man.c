@@ -86,7 +86,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 // the Heart Piece, then this score will be used instead to determine if the player should get a Purple Rupee.
 #define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
-ActorInit En_Syateki_Man_InitVars = {
+ActorProfile En_Syateki_Man_Profile = {
     /**/ ACTOR_EN_SYATEKI_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

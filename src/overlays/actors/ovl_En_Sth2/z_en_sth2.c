@@ -18,7 +18,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2);
 void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
-ActorInit En_Sth2_InitVars = {
+ActorProfile En_Sth2_Profile = {
     /**/ ACTOR_EN_STH2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

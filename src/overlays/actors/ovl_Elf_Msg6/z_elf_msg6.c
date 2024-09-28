@@ -23,7 +23,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play);
 void func_80BA215C(ElfMsg6* this, PlayState* play);
 void func_80BA21C4(ElfMsg6* this, PlayState* play);
 
-ActorInit Elf_Msg6_InitVars = {
+ActorProfile Elf_Msg6_Profile = {
     /**/ ACTOR_ELF_MSG6,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

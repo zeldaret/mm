@@ -212,7 +212,7 @@ MsgScript D_80BE1A0C[] = {
     /* 0x0068 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Tab_InitVars = {
+ActorProfile En_Tab_Profile = {
     /**/ ACTOR_EN_TAB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

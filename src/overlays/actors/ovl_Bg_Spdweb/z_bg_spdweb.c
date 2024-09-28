@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-ActorInit Bg_Spdweb_InitVars = {
+ActorProfile Bg_Spdweb_Profile = {
     /**/ ACTOR_BG_SPDWEB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

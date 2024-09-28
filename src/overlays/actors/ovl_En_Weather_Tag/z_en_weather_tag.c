@@ -35,7 +35,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play);
 void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
-ActorInit En_Weather_Tag_InitVars = {
+ActorProfile En_Weather_Tag_Profile = {
     /**/ ACTOR_EN_WEATHER_TAG,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

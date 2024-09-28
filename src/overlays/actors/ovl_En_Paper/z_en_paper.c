@@ -29,7 +29,7 @@ void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play);
 void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
-ActorInit En_Paper_InitVars = {
+ActorProfile En_Paper_Profile = {
     /**/ ACTOR_EN_PAPER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -16,7 +16,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static s16 sScores[] = { EXTRA_SCORE_30, EXTRA_SCORE_60, EXTRA_SCORE_100 };
 
-EffectSsInit Effect_Ss_Extra_InitVars = {
+EffectSsProfile Effect_Ss_Extra_Profile = {
     EFFECT_SS_EXTRA,
     EffectSsExtra_Init,
 };

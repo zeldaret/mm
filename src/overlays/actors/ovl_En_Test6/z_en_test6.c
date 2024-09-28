@@ -54,7 +54,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play);
 
 SoTCsAmmoDrops sSoTCsAmmoDrops[12];
 
-ActorInit En_Test6_InitVars = {
+ActorProfile En_Test6_Profile = {
     /**/ ACTOR_EN_TEST6,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

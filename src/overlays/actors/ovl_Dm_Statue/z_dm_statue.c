@@ -16,7 +16,7 @@ void DmStatue_Destroy(Actor* thisx, PlayState* play);
 void DmStatue_Update(Actor* thisx, PlayState* play);
 void DmStatue_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Statue_InitVars = {
+ActorProfile Dm_Statue_Profile = {
     /**/ ACTOR_DM_STATUE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

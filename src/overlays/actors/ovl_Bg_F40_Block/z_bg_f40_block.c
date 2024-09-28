@@ -26,7 +26,7 @@ void func_80BC44F4(BgF40Block* this, PlayState* play);
 void func_80BC4530(BgF40Block* this, PlayState* play);
 void func_80BC457C(BgF40Block* this, PlayState* play);
 
-ActorInit Bg_F40_Block_InitVars = {
+ActorProfile Bg_F40_Block_Profile = {
     /**/ ACTOR_BG_F40_BLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

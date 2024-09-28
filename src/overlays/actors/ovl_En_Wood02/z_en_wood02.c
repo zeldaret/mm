@@ -39,7 +39,7 @@ typedef enum {
 f32 sWood02SpawnCos;
 f32 sWood02SpawnSin;
 
-ActorInit En_Wood02_InitVars = {
+ActorProfile En_Wood02_Profile = {
     /**/ ACTOR_EN_WOOD02,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

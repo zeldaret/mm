@@ -45,7 +45,7 @@ void ObjMine_DrawExplosion(Actor* thisx, PlayState* play);
 void ObjMine_Air_Draw(Actor* thisx, PlayState* play);
 void ObjMine_Water_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Mine_InitVars = {
+ActorProfile Obj_Mine_Profile = {
     /**/ ACTOR_OBJ_MINE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

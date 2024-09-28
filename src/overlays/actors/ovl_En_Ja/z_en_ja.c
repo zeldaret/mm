@@ -103,7 +103,7 @@ MsgScript D_80BC366C[] = {
     /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Ja_InitVars = {
+ActorProfile En_Ja_Profile = {
     /**/ ACTOR_EN_JA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

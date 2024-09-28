@@ -17,7 +17,7 @@ void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Chikuwa_InitVars = {
+ActorProfile Obj_Chikuwa_Profile = {
     /**/ ACTOR_OBJ_CHIKUWA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

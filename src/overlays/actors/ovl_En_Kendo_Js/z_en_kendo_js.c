@@ -37,7 +37,7 @@ s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 
-ActorInit En_Kendo_Js_InitVars = {
+ActorProfile En_Kendo_Js_Profile = {
     /**/ ACTOR_EN_KENDO_JS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

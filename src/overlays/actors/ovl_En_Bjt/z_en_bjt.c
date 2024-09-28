@@ -85,7 +85,7 @@ static MsgScript sMsgScript[] = {
     /* 0x0071 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Bjt_InitVars = {
+ActorProfile En_Bjt_Profile = {
     /**/ ACTOR_EN_BJT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

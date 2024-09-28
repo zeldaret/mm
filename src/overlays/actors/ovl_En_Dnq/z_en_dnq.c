@@ -61,7 +61,7 @@ static MsgScript D_80A53438[] = {
     /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Dnq_InitVars = {
+ActorProfile En_Dnq_Profile = {
     /**/ ACTOR_EN_DNQ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

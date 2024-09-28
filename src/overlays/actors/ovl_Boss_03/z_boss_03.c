@@ -276,7 +276,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-ActorInit Boss_03_InitVars = {
+ActorProfile Boss_03_Profile = {
     /**/ ACTOR_BOSS_03,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

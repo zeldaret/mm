@@ -101,7 +101,7 @@ typedef enum GohtShadowSize {
     /* 3 */ GOHT_SHADOW_SIZE_SMALL
 } GohtShadowSize;
 
-ActorInit Boss_Hakugin_InitVars = {
+ActorProfile Boss_Hakugin_Profile = {
     /**/ ACTOR_BOSS_HAKUGIN,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

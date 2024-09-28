@@ -17,7 +17,7 @@ void ElfMsg3_Update(Actor* thisx, PlayState* play);
 
 void func_80A2CF7C(ElfMsg3* this, PlayState* play);
 
-ActorInit Elf_Msg3_InitVars = {
+ActorProfile Elf_Msg3_Profile = {
     /**/ ACTOR_ELF_MSG3,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

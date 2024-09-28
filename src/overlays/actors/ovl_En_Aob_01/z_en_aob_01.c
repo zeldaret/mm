@@ -32,7 +32,7 @@ void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play);
 void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play);
 s32 EnAob01_PlayerIsHoldingDog(EnAob01* this, PlayState* play);
 
-ActorInit En_Aob_01_InitVars = {
+ActorProfile En_Aob_01_Profile = {
     /**/ ACTOR_EN_AOB_01,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

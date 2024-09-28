@@ -21,7 +21,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects)
 void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
 void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, s32 numEffects);
 
-ActorInit En_Tg_InitVars = {
+ActorProfile En_Tg_Profile = {
     /**/ ACTOR_EN_TG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

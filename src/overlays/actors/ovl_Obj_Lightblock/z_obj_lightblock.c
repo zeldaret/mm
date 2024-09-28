@@ -23,7 +23,7 @@ void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play);
 void ObjLightblock_SetupFadeAway(ObjLightblock* this);
 void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play);
 
-ActorInit Obj_Lightblock_InitVars = {
+ActorProfile Obj_Lightblock_Profile = {
     /**/ ACTOR_OBJ_LIGHTBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

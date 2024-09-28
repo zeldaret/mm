@@ -43,7 +43,7 @@ void EnDekubaba_Frozen(EnDekubaba* this, PlayState* play);
 void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, PlayState* play);
 void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play);
 
-ActorInit En_Dekubaba_InitVars = {
+ActorProfile En_Dekubaba_Profile = {
     /**/ ACTOR_EN_DEKUBABA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
