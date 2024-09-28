@@ -419,13 +419,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
         if (sp2C) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
-                if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
+                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x800) {
                     this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
-                if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
+                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x1000) {
                     this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }

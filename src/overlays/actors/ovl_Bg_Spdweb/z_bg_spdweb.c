@@ -291,7 +291,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         for (i = 0; i < 2; i++) {
             element = &this->collider.elements[i];
             if (element->info.bumperFlags & BUMP_HIT) {
-                if (this->collider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x800) {
+                if (this->collider.elements[i].info.acHitElem->toucher.dmgFlags & 0x800) {
                     Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &element->info.bumper.hitPos);
                     func_809CEE74(this);
                     return;

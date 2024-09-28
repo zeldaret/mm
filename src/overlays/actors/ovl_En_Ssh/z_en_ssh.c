@@ -470,14 +470,14 @@ void EnSsh_Sway(EnSsh* this) {
 
 void EnSsh_CheckBodyStickHit(EnSsh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    ColliderInfo* colliderInfo = &this->collider1[0].info;
+    ColliderElement* elem = &this->collider1[0].info;
 
     if (player->unk_B28 != 0) {
-        colliderInfo->bumper.dmgFlags |= 2;
+        elem->bumper.dmgFlags |= 2;
         this->collider1[1].info.bumper.dmgFlags &= ~2;
         this->collider1[2].info.bumper.dmgFlags &= ~2;
     } else {
-        colliderInfo->bumper.dmgFlags &= ~2;
+        elem->bumper.dmgFlags &= ~2;
         this->collider1[1].info.bumper.dmgFlags |= 2;
         this->collider1[2].info.bumper.dmgFlags |= 2;
     }

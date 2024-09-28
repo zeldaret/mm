@@ -459,7 +459,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
         this->collider2.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (sp2C->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            (sp2C->info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 

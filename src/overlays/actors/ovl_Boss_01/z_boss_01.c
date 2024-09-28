@@ -1954,9 +1954,9 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
     if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.bumperFlags & BUMP_HIT) {
         this->bodyInvincibilityTimer = 5;
         if (this->damagedTimer == 0) {
-            ColliderInfo* acHitInfo = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitInfo;
+            ColliderElement* acHitElem = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitElem;
 
-            if (acHitInfo->toucher.dmgFlags == DMG_SWORD_BEAM) {
+            if (acHitElem->toucher.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
@@ -3246,16 +3246,16 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
     Vec3f additionalVelocity;
     s32 pad[2];
     u8 damage;
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
     OdolwaEffect* effect = play->specialEffects;
 
     if (this->bugACCollider.base.acFlags & AC_HIT) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
-        acHitInfo = this->bugACCollider.info.acHitInfo;
+        acHitElem = this->bugACCollider.info.acHitElem;
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-            if (acHitInfo->toucher.dmgFlags & 0x300000) {
+            if (acHitElem->toucher.dmgFlags & 0x300000) {
                 this->damagedTimer = 10;
                 Matrix_MultVecZ(-10.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;

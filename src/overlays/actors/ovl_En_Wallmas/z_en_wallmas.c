@@ -561,7 +561,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            (!(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);

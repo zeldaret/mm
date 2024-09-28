@@ -248,16 +248,16 @@ s32 func_80B9BF7C(ObjTaru* this) {
 
         this->collider.base.acFlags &= ~AC_HIT;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000) {
                 phi_a3 = false;
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+            } else if (this->collider.info.acHitElem->toucher.dmgFlags & 8) {
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
+            } else if (this->collider.info.acHitElem->toucher.dmgFlags & 0x500) {
                 phi_a3 = true;
             }
         }
