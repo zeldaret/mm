@@ -43,7 +43,7 @@ void EnDekubaba_Frozen(EnDekubaba* this, PlayState* play);
 void EnDekubaba_SetupDeadStickDrop(EnDekubaba* this, PlayState* play);
 void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play);
 
-ActorInit En_Dekubaba_InitVars = {
+ActorProfile En_Dekubaba_Profile = {
     /**/ ACTOR_EN_DEKUBABA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -1085,7 +1085,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 !(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+                 !(sphElement->info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 

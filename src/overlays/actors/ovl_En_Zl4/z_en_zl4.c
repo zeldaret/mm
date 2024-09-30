@@ -18,7 +18,7 @@ void EnZl4_Draw(Actor* thisx, PlayState* play);
 
 void EnZl4_DoNothing(EnZl4* this, PlayState* play);
 
-ActorInit En_Zl4_InitVars = {
+ActorProfile En_Zl4_Profile = {
     /**/ ACTOR_EN_ZL4,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

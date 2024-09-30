@@ -329,7 +329,7 @@ static DamageTable sWalkingHeadDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
 };
 
-ActorInit Boss_05_InitVars = {
+ActorProfile Boss_05_Profile = {
     /**/ ACTOR_BOSS_05,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -947,13 +947,13 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     s32 pad[2];
     u8 attackDealsDamage = false;
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) &&
         (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
         this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
-        acHitInfo = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
-        if (acHitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
+        acHitElem = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.acHitElem;
+        if (acHitElem->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
             this->damagedTimer = 6;

@@ -24,7 +24,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
-ActorInit En_Sekihi_InitVars = {
+ActorProfile En_Sekihi_Profile = {
     /**/ ACTOR_EN_SEKIHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -32,7 +32,7 @@ void func_80B5253C(EnGk* this, PlayState* play);
 void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
-ActorInit En_Gk_InitVars = {
+ActorProfile En_Gk_Profile = {
     /**/ ACTOR_EN_GK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

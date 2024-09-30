@@ -45,7 +45,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-ActorInit En_Ishi_InitVars = {
+ActorProfile En_Ishi_Profile = {
     /**/ ACTOR_EN_ISHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -482,7 +482,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x508)) {
+    if (sp34 && (sp38 == 0) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x508)) {
         if (sp30 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);

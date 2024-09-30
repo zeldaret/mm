@@ -33,7 +33,7 @@ void func_80B95240(EnZog* this, PlayState* play);
 
 static u8 sTexturesDesegmented;
 
-ActorInit En_Zog_InitVars = {
+ActorProfile En_Zog_Profile = {
     /**/ ACTOR_EN_ZOG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

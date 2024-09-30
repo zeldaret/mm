@@ -836,7 +836,7 @@ MsgScript sAnjuMsgScript_SchWithKafei[] = {
     /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_An_InitVars = {
+ActorProfile En_An_Profile = {
     /**/ ACTOR_EN_AN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

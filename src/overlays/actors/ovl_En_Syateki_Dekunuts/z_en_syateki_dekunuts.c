@@ -39,7 +39,7 @@ typedef enum {
     /* 1 */ SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP
 } ShootingGalleryDekuScrubHeaddressType;
 
-ActorInit En_Syateki_Dekunuts_InitVars = {
+ActorProfile En_Syateki_Dekunuts_Profile = {
     /**/ ACTOR_EN_SYATEKI_DEKUNUTS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

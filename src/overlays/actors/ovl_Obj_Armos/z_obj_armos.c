@@ -23,7 +23,7 @@ void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
-ActorInit Obj_Armos_InitVars = {
+ActorProfile Obj_Armos_Profile = {
     /**/ ACTOR_OBJ_ARMOS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

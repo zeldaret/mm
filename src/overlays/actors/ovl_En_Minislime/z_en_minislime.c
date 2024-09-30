@@ -41,7 +41,7 @@ void EnMinislime_MoveToGekko(EnMinislime* this, PlayState* play);
 void EnMinislime_SetupGekkoThrow(EnMinislime* this);
 void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play);
 
-ActorInit En_Minislime_InitVars = {
+ActorProfile En_Minislime_Profile = {
     /**/ ACTOR_EN_MINISLIME,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

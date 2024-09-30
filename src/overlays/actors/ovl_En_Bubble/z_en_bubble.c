@@ -19,7 +19,7 @@ void EnBubble_Wait(EnBubble* this, PlayState* play);
 void EnBubble_Pop(EnBubble* this, PlayState* play);
 void EnBubble_Regrow(EnBubble* this, PlayState* play);
 
-ActorInit En_Bubble_InitVars = {
+ActorProfile En_Bubble_Profile = {
     /**/ ACTOR_EN_BUBBLE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -96,12 +96,12 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
 }
 
 s32 func_8089F59C(EnBubble* this) {
-    ColliderInfo* info = &this->colliderSphere.elements[0].info;
+    ColliderElement* elem = &this->colliderSphere.elements[0].info;
 
-    info->toucher.dmgFlags = DMG_EXPLOSIVES;
-    info->toucher.effect = 0;
-    info->toucher.damage = 4;
-    info->toucherFlags = TOUCH_ON;
+    elem->toucher.dmgFlags = DMG_EXPLOSIVES;
+    elem->toucher.effect = 0;
+    elem->toucher.damage = 4;
+    elem->toucherFlags = TOUCH_ON;
     this->actor.velocity.y = 0.0f;
     return 6;
 }

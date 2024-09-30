@@ -18,7 +18,7 @@ void DmSa_Draw(Actor* thisx, PlayState* play);
 
 void DmSa_DoNothing(DmSa* this, PlayState* play);
 
-ActorInit Dm_Sa_InitVars = {
+ActorProfile Dm_Sa_Profile = {
     /**/ ACTOR_DM_SA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

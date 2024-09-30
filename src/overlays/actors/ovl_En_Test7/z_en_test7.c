@@ -36,7 +36,7 @@ void EnTest7_StartArriveCsSkip(EnTest7* this, PlayState* play);
 void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play);
 void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play);
 
-ActorInit En_Test7_InitVars = {
+ActorProfile En_Test7_Profile = {
     /**/ ACTOR_EN_TEST7,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

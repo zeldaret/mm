@@ -43,7 +43,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play);
 
 #include "assets/overlays/ovl_En_Okuta/ovl_En_Okuta.c"
 
-ActorInit En_Okuta_InitVars = {
+ActorProfile En_Okuta_Profile = {
     /**/ ACTOR_EN_OKUTA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -855,7 +855,7 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
     this->collider.base.acFlags &= ~AC_HIT;
 
     if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX ||
-        !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         EnOkuta_Thaw(this, play);
 

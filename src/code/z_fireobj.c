@@ -223,7 +223,7 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
     FireObj_UpdateStateTransitions(play, fire);
     if (fire->state == FIRE_STATE_NOT_LIT) {
         if ((fire->collision.base.acFlags & AC_HIT) &&
-            (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
+            (fire->collision.info.acHitElem->toucher.dmgFlags & DMG_FIRE_ARROW)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&

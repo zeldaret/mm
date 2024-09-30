@@ -18,7 +18,7 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 
 void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play);
 
-ActorInit En_Encount1_InitVars = {
+ActorProfile En_Encount1_Profile = {
     /**/ ACTOR_EN_ENCOUNT1,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

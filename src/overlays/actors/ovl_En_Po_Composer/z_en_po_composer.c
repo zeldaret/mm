@@ -32,7 +32,7 @@ void EnPoComposer_SetupStartCutscene(EnPoComposer* this);
 void EnPoComposer_SetupStartedCutscene(EnPoComposer* this);
 void EnPoComposer_StepLightAlpha(EnPoComposer* this);
 
-ActorInit En_Po_Composer_InitVars = {
+ActorProfile En_Po_Composer_Profile = {
     /**/ ACTOR_EN_PO_COMPOSER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

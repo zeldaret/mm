@@ -123,6 +123,7 @@ endif
 
 # Check code syntax with host compiler
 CC_CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
+CC_CHECK_WARNINGS += -Werror=implicit-int -Werror=implicit-function-declaration -Werror=int-conversion -Werror=incompatible-pointer-types
 # Have CC_CHECK pretend to be a MIPS compiler
 MIPS_BUILTIN_DEFS := -DMIPSEB -D_MIPS_FPSET=16 -D_MIPS_ISA=2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
 # The -MMD flags additionaly creates a .d file with the same name as the .o file.
@@ -556,6 +557,15 @@ $(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/$(SPEC)
 	$(FADO) $$(tools/buildtools/reloc_prereq $< $(*F)) -n $(*F) -o $(@:.o=.s) -M $(@:.o=.d)
 	$(AS) $(ASFLAGS) $(ENDIAN) $(IINC) $(@:.o=.s) -o $@
 
+# Incremental link z_game_over data into rodata
+$(BUILD_DIR)/src/code/z_game_over.o: src/code/z_game_over.c
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
+	$(LD) -r -T linker_scripts/data_with_rodata.ld $(@:.o=.tmp) -o $@
+	@$(RM) $(@:.o=.tmp)
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
+
 $(SHIFTJIS_O_FILES): $(BUILD_DIR)/src/%.o: src/%.c
 	$(SHIFTJIS_CONV) -o $(@:.o=.enc.c) $<
 	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $@ $(@:.o=.enc.c)
@@ -731,7 +741,7 @@ $(BUILD_DIR)/src/audio/tables/sequence_table.o: CFLAGS += -I include/tables
 $(BUILD_DIR)/src/audio/tables/%.o: src/audio/tables/%.c
 	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
-	$(LD) -r -T linker_scripts/audio_table_rodata.ld $(@:.o=.tmp) -o $@
+	$(LD) -r -T linker_scripts/data_with_rodata.ld $(@:.o=.tmp) -o $@
 	@$(RM) $(@:.o=.tmp)
 	$(RM_MDEBUG)
 

@@ -113,7 +113,7 @@ static MsgScript D_80BF33F0[] = {
     /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Ig_InitVars = {
+ActorProfile En_Ig_Profile = {
     /**/ ACTOR_EN_IG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -514,7 +514,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     u16 temp = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400 | PLAYER_STATE1_800)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR)) {
         this->unk_3D0 |= 0x400;
         if (this->unk_3D2 != temp) {
             if ((this->animIndex == ENIG_ANIM_2) || (this->animIndex == ENIG_ANIM_3)) {

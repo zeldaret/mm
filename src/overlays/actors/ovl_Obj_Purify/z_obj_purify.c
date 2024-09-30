@@ -41,7 +41,7 @@ typedef struct ObjPurifyInfo {
     /* 0x24 */ s32 isDekuCity;
 } ObjPurifyInfo; // size = 0x28
 
-ActorInit Obj_Purify_InitVars = {
+ActorProfile Obj_Purify_Profile = {
     /**/ ACTOR_OBJ_PURIFY,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

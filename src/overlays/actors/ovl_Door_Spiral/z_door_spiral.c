@@ -31,7 +31,7 @@ void func_809A2DB0(DoorSpiral* this, PlayState* play);
 void func_809A3098(DoorSpiral* this, PlayState* play);
 s32 func_809A2EA0(DoorSpiral* this, PlayState* play);
 
-ActorInit Door_Spiral_InitVars = {
+ActorProfile Door_Spiral_Profile = {
     /**/ ACTOR_DOOR_SPIRAL,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,

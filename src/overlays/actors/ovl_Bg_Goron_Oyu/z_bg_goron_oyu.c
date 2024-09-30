@@ -23,7 +23,7 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play);
 void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play);
 void func_80B40160(BgGoronOyu* this, PlayState* play);
 
-ActorInit Bg_Goron_Oyu_InitVars = {
+ActorProfile Bg_Goron_Oyu_Profile = {
     /**/ ACTOR_BG_GORON_OYU,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

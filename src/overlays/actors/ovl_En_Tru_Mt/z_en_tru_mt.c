@@ -40,7 +40,7 @@ typedef enum {
     /* 0x10 */ KOUME_MT_ANIM_MAX
 } KoumeMtAnimation;
 
-ActorInit En_Tru_Mt_InitVars = {
+ActorProfile En_Tru_Mt_Profile = {
     /**/ ACTOR_EN_TRU_MT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

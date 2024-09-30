@@ -28,7 +28,7 @@ void func_80AD0028(EnFuKago* this, PlayState* play);
 void func_80AD0274(EnFuKago* this);
 void func_80AD0288(EnFuKago* this, PlayState* play);
 
-ActorInit En_Fu_Kago_InitVars = {
+ActorProfile En_Fu_Kago_Profile = {
     /**/ ACTOR_EN_FU_KAGO,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

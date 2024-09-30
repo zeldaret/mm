@@ -23,7 +23,7 @@ void func_80959C94(EnMk* this, PlayState* play);
 void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
-ActorInit En_Mk_InitVars = {
+ActorProfile En_Mk_Profile = {
     /**/ ACTOR_EN_MK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

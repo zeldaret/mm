@@ -45,7 +45,7 @@ typedef enum {
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
-ActorInit En_Zod_InitVars = {
+ActorProfile En_Zod_Profile = {
     /**/ ACTOR_EN_ZOD,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

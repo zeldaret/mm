@@ -20,7 +20,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play);
 void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Door_Etc_InitVars = {
+ActorProfile En_Door_Etc_Profile = {
     /**/ ACTOR_EN_DOOR_ETC,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,

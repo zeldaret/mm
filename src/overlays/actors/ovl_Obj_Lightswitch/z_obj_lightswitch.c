@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-ActorInit Obj_Lightswitch_InitVars = {
+ActorProfile Obj_Lightswitch_Profile = {
     /**/ ACTOR_OBJ_LIGHTSWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,
@@ -328,7 +328,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
-        if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
+        if ((this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
         } else if (LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {

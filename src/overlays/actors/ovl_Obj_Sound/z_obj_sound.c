@@ -15,7 +15,7 @@ void ObjSound_Destroy(Actor* thisx, PlayState* play);
 void ObjSound_Update(Actor* thisx, PlayState* play);
 void ObjSound_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Sound_InitVars = {
+ActorProfile Obj_Sound_Profile = {
     /**/ ACTOR_OBJ_SOUND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

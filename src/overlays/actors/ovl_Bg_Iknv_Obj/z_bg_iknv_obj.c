@@ -21,7 +21,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, PlayState* play);
 
-ActorInit Bg_Iknv_Obj_InitVars = {
+ActorProfile Bg_Iknv_Obj_Profile = {
     /**/ ACTOR_BG_IKNV_OBJ,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -31,7 +31,7 @@ Boss04* D_80BB8450;
 f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
-ActorInit En_Tanron2_InitVars = {
+ActorProfile En_Tanron2_Profile = {
     /**/ ACTOR_EN_TANRON2,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -415,7 +415,7 @@ void func_80BB7408(EnTanron2* this, PlayState* play) {
 }
 
 void func_80BB7578(EnTanron2* this, PlayState* play) {
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
     s32 pad;
     Player* player = GET_PLAYER(play);
     s32 pad2[2];
@@ -424,8 +424,8 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
     if (this->unk_154 == 0) {
         if (this->collider1.base.acFlags & AC_HIT) {
             this->collider1.base.acFlags &= ~AC_HIT;
-            acHitInfo = this->collider1.info.acHitInfo;
-            if (acHitInfo->toucher.dmgFlags & 0x80) {
+            acHitElem = this->collider1.info.acHitElem;
+            if (acHitElem->toucher.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
@@ -438,7 +438,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 this->unk_154 = 15;
                 if (this->actionFunc != func_80BB69FC) {
                     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-                    if ((acHitInfo->toucher.dmgFlags & 0x300000) != 0) {
+                    if ((acHitElem->toucher.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
                         Matrix_MultVecZ(-10.0f, &this->actor.velocity);
                     } else {

@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-ActorInit En_Boom_InitVars = {
+ActorProfile En_Boom_Profile = {
     /**/ ACTOR_EN_BOOM,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

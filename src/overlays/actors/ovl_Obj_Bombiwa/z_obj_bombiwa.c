@@ -24,7 +24,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play);
 void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bombiwa_InitVars = {
+ActorProfile Obj_Bombiwa_Profile = {
     /**/ ACTOR_OBJ_BOMBIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -111,15 +111,15 @@ s32 func_809393B0(Actor* thisx) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* ac = this->collider.base.ac;
 
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+        if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(150.0f))) {
                 return true;
             }
-        } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+        } else if (this->collider.info.acHitElem->toucher.dmgFlags & 8) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(95.0f))) {
                 return true;
             }
-        } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
+        } else if (this->collider.info.acHitElem->toucher.dmgFlags & 0x500) {
             return true;
         }
     }
@@ -133,11 +133,11 @@ s32 func_80939470(Actor* thisx) {
         Actor* temp_v0 = this->collider.base.ac;
 
         if (temp_v0 != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000) {
                 if (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(175.0f)) {
                     return true;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 8) &&
+            } else if ((this->collider.info.acHitElem->toucher.dmgFlags & 8) &&
                        (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(115.0f))) {
                 return true;
             }

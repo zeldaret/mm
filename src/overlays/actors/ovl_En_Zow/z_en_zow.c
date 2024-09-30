@@ -22,7 +22,7 @@ void func_80BDD634(EnZow* this, PlayState* play);
 void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
-ActorInit En_Zow_InitVars = {
+ActorProfile En_Zow_Profile = {
     /**/ ACTOR_EN_ZOW,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

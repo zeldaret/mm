@@ -57,7 +57,7 @@ void EnDinofos_SetupLand(EnDinofos* this);
 void EnDinofos_SetupJump(EnDinofos* this);
 void EnDinofos_SetupJumpSlash(EnDinofos* this);
 
-ActorInit En_Dinofos_InitVars = {
+ActorProfile En_Dinofos_Profile = {
     /**/ ACTOR_EN_DINOFOS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -1306,7 +1306,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         }
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyAndFireCollider.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            (this->bodyAndFireCollider.elements[i].info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 

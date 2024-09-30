@@ -118,7 +118,7 @@ static MsgScript D_80A889A4[] = {
     /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Tru_InitVars = {
+ActorProfile En_Tru_Profile = {
     /**/ ACTOR_EN_TRU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -1088,7 +1088,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
         case 3:
             if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
+                AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
                 break;
             } else {
                 EnTru_ChangeAnim(this, KOUME_ANIM_FLY);

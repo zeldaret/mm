@@ -58,7 +58,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-ActorInit En_Kusa_InitVars = {
+ActorProfile En_Kusa_Profile = {
     /**/ ACTOR_EN_KUSA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

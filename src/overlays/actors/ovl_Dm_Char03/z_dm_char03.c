@@ -20,7 +20,7 @@ void func_80AAB644(DmChar03* this, PlayState* play);
 void DmChar03_DoNothing(DmChar03* this, PlayState* play);
 void func_80AABA84(PlayState* play, DmChar03* this);
 
-ActorInit Dm_Char03_InitVars = {
+ActorProfile Dm_Char03_Profile = {
     /**/ ACTOR_DM_CHAR03,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

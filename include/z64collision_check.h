@@ -17,25 +17,25 @@ typedef struct {
     /* 0x11 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x12 */ u8 ocFlags1; // Information flags for OC collisions.
     /* 0x13 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
-    /* 0x14 */ u8 colType; // Determines hitmarks and sound effects during AC collisions.
-    /* 0x15 */ u8 shape; // JntSph, Cylinder, Tris, or Quad
+    /* 0x14 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
+    /* 0x15 */ u8 shape; // See `ColliderShape` enum
 } Collider; // size = 0x18
 
 typedef struct {
-    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions.
-    /* 0x1 */ u8 atFlags; // Information flags for AT collisions. 
-    /* 0x2 */ u8 acFlags; // Information flags for OC collisions.
-    /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
-    /* 0x4 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
-    /* 0x5 */ u8 shape; // JntSph, Cylinder, Tris, or Quad
-} ColliderInit; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions.
+    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
     /* 0x1 */ u8 atFlags; // Information flags for AT collisions. 
     /* 0x2 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
-    /* 0x4 */ u8 shape; // JntSph, Cylinder, Tris, or Quad
+    /* 0x4 */ u8 ocFlags2; // Flags related to which colliders it can OC collide with.
+    /* 0x5 */ u8 shape; // See `ColliderShape` enum
+} ColliderInit; // size = 0x6
+
+typedef struct {
+    /* 0x0 */ u8 colType; // Determines hitmarks and sound effects during AC collisions. See `ColliderType` enum
+    /* 0x1 */ u8 atFlags; // Information flags for AT collisions. 
+    /* 0x2 */ u8 acFlags; // Information flags for AC collisions.
+    /* 0x3 */ u8 ocFlags1; // Information flags for OC collisions.
+    /* 0x4 */ u8 shape; // See `ColliderShape` enum
 } ColliderInitType1; // size = 0x5
 
 typedef struct {
@@ -43,7 +43,7 @@ typedef struct {
     /* 0x4 */ u8 atFlags; // Information flags for AT collisions.
     /* 0x5 */ u8 acFlags; // Information flags for AC collisions.
     /* 0x6 */ u8 ocFlags1; // Information flags for OC collisions.
-    /* 0x7 */ u8 shape; // JntSph, Cylinder, Tris, or Quad
+    /* 0x7 */ u8 shape; // See `ColliderShape` enum
 } ColliderInitToActor; // size = 0x8
 
 typedef struct {
@@ -71,7 +71,7 @@ typedef struct {
     /* 0x5 */ u8 defense; // Damage Resistance
 } ColliderBumpInit; // size = 0x8
 
-typedef struct ColliderInfo {
+typedef struct ColliderElement {
     /* 0x00 */ ColliderTouch toucher; // Damage properties when acting as an AT collider
     /* 0x08 */ ColliderBump bumper; // Damage properties when acting as an AC collider
     /* 0x14 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
@@ -80,9 +80,9 @@ typedef struct ColliderInfo {
     /* 0x17 */ u8 ocElemFlags; // Information flags for OC collisions
     /* 0x18 */ Collider* atHit; // object touching this element's AT collider
     /* 0x1C */ Collider* acHit; // object touching this element's AC collider
-    /* 0x20 */ struct ColliderInfo* atHitInfo; // element that hit the AT collider
-    /* 0x24 */ struct ColliderInfo* acHitInfo; // element that hit the AC collider
-} ColliderInfo; // size = 0x28
+    /* 0x20 */ struct ColliderElement* atHitElem; // element that hit the AT collider
+    /* 0x24 */ struct ColliderElement* acHitElem; // element that hit the AC collider
+} ColliderElement; // size = 0x28
 
 typedef struct {
     /* 0x00 */ u8 elemType; // Affects sfx reaction when attacked by Link and hookability. Full purpose unknown.
@@ -91,7 +91,7 @@ typedef struct {
     /* 0x14 */ u8 toucherFlags; // Information flags for AT collisions
     /* 0x15 */ u8 bumperFlags; // Information flags for AC collisions
     /* 0x16 */ u8 ocElemFlags; // Information flags for OC collisions
-} ColliderInfoInit; // size = 0x18
+} ColliderElementInit; // size = 0x18
 
 typedef struct {
     /* 0x00 */ Sphere16 modelSphere; // model space sphere
@@ -107,12 +107,12 @@ typedef struct {
 } ColliderJntSphElementDimInit; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ ColliderInfo info;
+    /* 0x00 */ ColliderElement info;
     /* 0x28 */ ColliderJntSphElementDim dim;
 } ColliderJntSphElement; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ ColliderInfoInit info;
+    /* 0x00 */ ColliderElementInit info;
     /* 0x18 */ ColliderJntSphElementDimInit dim;
 } ColliderJntSphElementInit; // size = 0x24
 
@@ -142,25 +142,25 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Collider base;
-    /* 0x18 */ ColliderInfo info;
+    /* 0x18 */ ColliderElement info;
     /* 0x40 */ Cylinder16 dim;
 } ColliderCylinder; // size = 0x4C
 
 typedef struct {
     /* 0x00 */ ColliderInit base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ Cylinder16 dim;
 } ColliderCylinderInit; // size = 0x2C
 
 typedef struct {
     /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ Cylinder16 dim;
 } ColliderCylinderInitType1; // size = 0x2C
 
 typedef struct {
     /* 0x00 */ ColliderInitToActor base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ Cylinder16 dim;
 } ColliderCylinderInitToActor; // size = 0x2C
 
@@ -169,12 +169,12 @@ typedef struct {
 } ColliderTrisElementDimInit; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ ColliderInfo info;
+    /* 0x00 */ ColliderElement info;
     /* 0x28 */ TriNorm dim;
 } ColliderTrisElement; // size = 0x5C
 
 typedef struct {
-    /* 0x00 */ ColliderInfoInit info;
+    /* 0x00 */ ColliderElementInit info;
     /* 0x18 */ ColliderTrisElementDimInit dim;
 } ColliderTrisElementInit; // size = 0x3C
 
@@ -209,31 +209,31 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Collider base;
-    /* 0x18 */ ColliderInfo info;
+    /* 0x18 */ ColliderElement info;
     /* 0x40 */ ColliderQuadDim dim;
 } ColliderQuad; // size = 0x80
 
 typedef struct {
     /* 0x00 */ ColliderInit base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ ColliderQuadDimInit dim;
 } ColliderQuadInit; // size = 0x50
 
 typedef struct {
     /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ ColliderQuadDimInit dim;
 } ColliderQuadInitType1; // size = 0x50
 
 typedef struct {
     /* 0x00 */ Collider base;
-    /* 0x18 */ ColliderInfo info;
+    /* 0x18 */ ColliderElement info;
     /* 0x40 */ ColliderJntSphElementDim dim;
 } ColliderSphere; // size = 0x58
 
 typedef struct {
     /* 0x00 */ ColliderInit base;
-    /* 0x08 */ ColliderInfoInit info;
+    /* 0x08 */ ColliderElementInit info;
     /* 0x20 */ ColliderJntSphElementDimInit dim;
 } ColliderSphereInit; // size = 0x2C
 
@@ -465,30 +465,30 @@ typedef struct CollisionCheckInfo {
 
 DamageTable* DamageTable_Get(s32 index);
 void DamageTable_Clear(DamageTable* damageTable);
-f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, u32* effect);
-f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderInfo* ac);
-s32 CollisionCheck_GetToucherDamage(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo);
-s32 Collider_InitBase(struct PlayState* play, Collider* collider);
+f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* atCol, ColliderElement* atElem, Collider* acCol, ColliderElement* acElem, u32* effect);
+f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderElement* acElem);
+s32 CollisionCheck_GetToucherDamage(Collider* atCol, ColliderElement* atElem, Collider* acCol, ColliderElement* acElem);
+s32 Collider_InitBase(struct PlayState* play, Collider* col);
 s32 Collider_DestroyBase(struct PlayState* play, Collider* collider);
-s32 Collider_SetBaseToActor(struct PlayState* play, Collider* collider, ColliderInitToActor* src);
-s32 Collider_SetBaseType1(struct PlayState* play, Collider* collider, struct Actor* actor, ColliderInitType1* src);
-s32 Collider_SetBase(struct PlayState* play, Collider* collider, struct Actor* actor, ColliderInit* src);
-void Collider_ResetATBase(struct PlayState* play, Collider* collider);
-void Collider_ResetACBase(struct PlayState* play, Collider* collider);
-void Collider_ResetOCBase(struct PlayState* play, Collider* collider);
+s32 Collider_SetBaseToActor(struct PlayState* play, Collider* col, ColliderInitToActor* src);
+s32 Collider_SetBaseType1(struct PlayState* play, Collider* col, struct Actor* actor, ColliderInitType1* src);
+s32 Collider_SetBase(struct PlayState* play, Collider* col, struct Actor* actor, ColliderInit* src);
+void Collider_ResetATBase(struct PlayState* play, Collider* col);
+void Collider_ResetACBase(struct PlayState* play, Collider* col);
+void Collider_ResetOCBase(struct PlayState* play, Collider* col);
 s32 Collider_InitTouch(struct PlayState* play, ColliderTouch* touch);
 s32 Collider_DestroyTouch(struct PlayState* play, ColliderTouch* touch);
 s32 Collider_SetTouch(struct PlayState* play, ColliderTouch* touch, ColliderTouchInit* src);
-void Collider_ResetATInfoUnk(struct PlayState* play, ColliderInfo* info);
+void Collider_ResetATElementUnk(struct PlayState* play, ColliderElement* elem);
 s32 Collider_InitBump(struct PlayState* play, ColliderBump* bump);
 s32 Collider_DestroyBump(struct PlayState* play, ColliderBump* bump);
 s32 Collider_SetBump(struct PlayState* play, ColliderBump* bump, ColliderBumpInit* src);
-s32 Collider_InitInfo(struct PlayState* play, ColliderInfo* info);
-s32 Collider_DestroyInfo(struct PlayState* play, ColliderInfo* info);
-s32 Collider_SetInfo(struct PlayState* play, ColliderInfo* info, ColliderInfoInit* src);
-void Collider_ResetATInfo(struct PlayState* play, ColliderInfo* info);
-void Collider_ResetACInfo(struct PlayState* play, ColliderInfo* info);
-void Collider_ResetOCInfo(struct PlayState* play, ColliderInfo* info);
+s32 Collider_InitElement(struct PlayState* play, ColliderElement* elem);
+s32 Collider_DestroyElement(struct PlayState* play, ColliderElement* elem);
+s32 Collider_SetElement(struct PlayState* play, ColliderElement* elem, ColliderElementInit* elemInit);
+void Collider_ResetATElement(struct PlayState* play, ColliderElement* elem);
+void Collider_ResetACElement(struct PlayState* play, ColliderElement* elem);
+void Collider_ResetOCElement(struct PlayState* play, ColliderElement* elem);
 s32 Collider_InitJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dim);
 s32 Collider_DestroyJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dim);
 s32 Collider_SetJntSphElementDim(struct PlayState* play, ColliderJntSphElementDim* dest, ColliderJntSphElementDimInit* src);
@@ -505,9 +505,9 @@ s32 Collider_SetJntSphToActor(struct PlayState* play, ColliderJntSph* collider, 
 s32 Collider_SetJntSphAllocType1(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInitType1* src);
 s32 Collider_SetJntSph(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
 s32 Collider_InitAndSetJntSph(struct PlayState* play, ColliderJntSph* sphereGroup, struct Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
-s32 Collider_ResetJntSphAT(struct PlayState* play, Collider* collider);
-s32 Collider_ResetJntSphAC(struct PlayState* play, Collider* collider);
-s32 Collider_ResetJntSphOC(struct PlayState* play, Collider* collider);
+s32 Collider_ResetJntSphAT(struct PlayState* play, Collider* col);
+s32 Collider_ResetJntSphAC(struct PlayState* play, Collider* col);
+s32 Collider_ResetJntSphOC(struct PlayState* play, Collider* col);
 s32 Collider_InitCylinderDim(struct PlayState* play, Cylinder16* dim);
 s32 Collider_DestroyCylinderDim(struct PlayState* play, Cylinder16* dim);
 s32 Collider_SetCylinderDim(struct PlayState* play, Cylinder16* dim, Cylinder16* src);
@@ -517,9 +517,9 @@ s32 Collider_SetCylinderToActor(struct PlayState* play, ColliderCylinder* collid
 s32 Collider_SetCylinderType1(struct PlayState* play, ColliderCylinder* collider, struct Actor* actor, ColliderCylinderInitType1* src);
 s32 Collider_SetCylinder(struct PlayState* play, ColliderCylinder* collider, struct Actor* actor, ColliderCylinderInit* src);
 s32 Collider_InitAndSetCylinder(struct PlayState* play, ColliderCylinder* collider, struct Actor* actor, ColliderCylinderInit* src);
-s32 Collider_ResetCylinderAT(struct PlayState* play, Collider* collider);
-s32 Collider_ResetCylinderAC(struct PlayState* play, Collider* collider);
-s32 Collider_ResetCylinderOC(struct PlayState* play, Collider* collider);
+s32 Collider_ResetCylinderAT(struct PlayState* play, Collider* col);
+s32 Collider_ResetCylinderAC(struct PlayState* play, Collider* col);
+s32 Collider_ResetCylinderOC(struct PlayState* play, Collider* col);
 s32 Collider_InitTrisElementDim(struct PlayState* play, TriNorm* dim);
 s32 Collider_DestroyTrisElementDim(struct PlayState* play, TriNorm* dim);
 s32 Collider_SetTrisElementDim(struct PlayState* play, TriNorm* dim, ColliderTrisElementDimInit* src);
@@ -535,9 +535,9 @@ s32 Collider_DestroyTris(struct PlayState* play, ColliderTris* tris);
 s32 Collider_SetTrisAllocType1(struct PlayState* play, ColliderTris* tris, struct Actor* actor, ColliderTrisInitType1* src);
 s32 Collider_SetTris(struct PlayState* play, ColliderTris* triGroup, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* tris);
 s32 Collider_InitAndSetTris(struct PlayState* play, ColliderTris* tris, struct Actor* actor, ColliderTrisInit* src, ColliderTrisElement* elements);
-s32 Collider_ResetTrisAT(struct PlayState* play, Collider* collider);
-s32 Collider_ResetTrisAC(struct PlayState* play, Collider* collider);
-s32 Collider_ResetTrisOC(struct PlayState* play, Collider* collider);
+s32 Collider_ResetTrisAT(struct PlayState* play, Collider* col);
+s32 Collider_ResetTrisAC(struct PlayState* play, Collider* col);
+s32 Collider_ResetTrisOC(struct PlayState* play, Collider* col);
 s32 Collider_InitQuadDim(struct PlayState* play, ColliderQuadDim* dim);
 s32 Collider_DestroyQuadDim(struct PlayState* play, ColliderQuadDim* dim);
 s32 Collider_ResetQuadACDist(struct PlayState* play, ColliderQuadDim* dim);
@@ -548,116 +548,116 @@ s32 Collider_DestroyQuad(struct PlayState* play, ColliderQuad* collider);
 s32 Collider_SetQuadType1(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInitType1* src);
 s32 Collider_SetQuad(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInit* src);
 s32 Collider_InitAndSetQuad(struct PlayState* play, ColliderQuad* collider, struct Actor* actor, ColliderQuadInit* src);
-s32 Collider_ResetQuadAT(struct PlayState* play, Collider* collider);
-s32 Collider_ResetQuadAC(struct PlayState* play, Collider* collider);
-s32 Collider_ResetQuadOC(struct PlayState* play, Collider* collider);
+s32 Collider_ResetQuadAT(struct PlayState* play, Collider* col);
+s32 Collider_ResetQuadAC(struct PlayState* play, Collider* col);
+s32 Collider_ResetQuadOC(struct PlayState* play, Collider* col);
 s32 Collider_QuadSetNearestAC(struct PlayState* play, ColliderQuad* quad, Vec3f* hitPos);
 s32 Collider_InitSphere(struct PlayState* play, ColliderSphere* collider);
 s32 Collider_DestroySphere(struct PlayState* play, ColliderSphere* collider);
 s32 Collider_SetSphere(struct PlayState* play, ColliderSphere* collider, struct Actor* actor, ColliderSphereInit* src);
 s32 Collider_InitAndSetSphere(struct PlayState* play, ColliderSphere* collider, struct Actor* actor, ColliderSphereInit* src);
-s32 Collider_ResetSphereAT(struct PlayState* play, Collider* collider);
-s32 Collider_ResetSphereAC(struct PlayState* play, Collider* collider);
-s32 Collider_ResetSphereOC(struct PlayState* play, Collider* collider);
+s32 Collider_ResetSphereAT(struct PlayState* play, Collider* col);
+s32 Collider_ResetSphereAC(struct PlayState* play, Collider* col);
+s32 Collider_ResetSphereOC(struct PlayState* play, Collider* col);
 s32 Collider_InitLine(struct PlayState* play, OcLine* line);
 s32 Collider_DestroyLine(struct PlayState* play, OcLine* line);
 s32 Collider_SetLinePoints(struct PlayState* play, OcLine* line, Vec3f* a, Vec3f* b);
 s32 Collider_SetLine(struct PlayState* play, OcLine* line, OcLine* src);
 s32 Collider_ResetLineOC(struct PlayState* play, OcLine* line);
-void CollisionCheck_InitContext(struct PlayState* play, CollisionCheckContext* colCtxt);
+void CollisionCheck_InitContext(struct PlayState* play, CollisionCheckContext* colChkCtx);
 void CollisionCheck_DestroyContext(struct PlayState* play, CollisionCheckContext* colCtxt);
-void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* colCtxt);
-void CollisionCheck_EnableSAC(struct PlayState* play, CollisionCheckContext* colCtxt);
-void CollisionCheck_DisableSAC(struct PlayState* play, CollisionCheckContext* colCtxt);
-s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-s32 CollisionCheck_SetAT_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index);
-s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index);
-s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, s32 index);
-s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colCtxt, OcLine* line);
-s32 CollisionCheck_SkipTouch(ColliderInfo* info);
-s32 CollisionCheck_SkipBump(ColliderInfo* info);
-s32 CollisionCheck_NoSharedFlags(ColliderInfo* toucher, ColliderInfo* bumper);
+void CollisionCheck_ClearContext(struct PlayState* play, CollisionCheckContext* colChkCtx);
+void CollisionCheck_EnableSAC(struct PlayState* play, CollisionCheckContext* colChkCtx);
+void CollisionCheck_DisableSAC(struct PlayState* play, CollisionCheckContext* colChkCtx);
+s32 CollisionCheck_SetAT(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+s32 CollisionCheck_SetAT_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, s32 index);
+s32 CollisionCheck_SetAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+s32 CollisionCheck_SetAC_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, s32 index);
+s32 CollisionCheck_SetOC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+s32 CollisionCheck_SetOC_SAC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, s32 index);
+s32 CollisionCheck_SetOCLine(struct PlayState* play, CollisionCheckContext* colChkCtx, OcLine* line);
+s32 CollisionCheck_SkipTouch(ColliderElement* elem);
+s32 CollisionCheck_SkipBump(ColliderElement* elem);
+s32 CollisionCheck_NoSharedFlags(ColliderElement* atElem, ColliderElement* acElem);
 void CollisionCheck_NoBlood(struct PlayState* play, Collider* collider, Vec3f* v);
 void CollisionCheck_BlueBlood(struct PlayState* play, Collider* collider, Vec3f* v);
 void CollisionCheck_GreenBlood(struct PlayState* play, Collider* collider, Vec3f* v);
 void CollisionCheck_WaterBurst(struct PlayState* play, Collider* collider, Vec3f* v);
 void CollisionCheck_RedBlood(struct PlayState* play, Collider* collider, Vec3f* v);
 void CollisionCheck_RedBloodUnused(struct PlayState* play, Collider* collider, Vec3f* v);
-void CollisionCheck_HitSolid(struct PlayState* play, ColliderInfo* info, Collider* collider, Vec3f* hitPos);
-s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo);
-void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, Vec3f* hitPos);
+void CollisionCheck_HitSolid(struct PlayState* play, ColliderElement* elem, Collider* col, Vec3f* hitPos);
+s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderElement* acElem);
+void CollisionCheck_HitEffects(struct PlayState* play, Collider* at, ColliderElement* atElem, Collider* ac, ColliderElement* acElem, Vec3f* hitPos);
 void CollisionCheck_SetBounce(Collider* at, Collider* ac);
-s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* at, ColliderInfo* atInfo, Vec3f* atPos, Collider* ac, ColliderInfo* acInfo, Vec3f* acPos, Vec3f* hitPos);
+s32 CollisionCheck_SetATvsAC(struct PlayState* play, Collider* atCol, ColliderElement* atElem, Vec3f* atPos, Collider* acCol, ColliderElement* acElem, Vec3f* acPos, Vec3f* hitPos);
 void CollisionCheck_TrisAvgPoint(ColliderTrisElement* tri, Vec3f* avg);
 void CollisionCheck_QuadAvgPoint(ColliderQuad* quad, Vec3f* avg);
-void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
-void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_SetHitEffects(struct PlayState* play, CollisionCheckContext* colCtxt);
-void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT);
-void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colCtxt);
+void CollisionCheck_AC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_JntSphVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_JntSphVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_CylVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_CylVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_TrisVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_TrisVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_TrisVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_TrisVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_TrisVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_QuadVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_QuadVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_QuadVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_QuadVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_QuadVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_SphereVsCylinder(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_SphereVsTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_SphereVsQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_AC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* atCol, Collider* acCol);
+void CollisionCheck_SetJntSphHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col);
+void CollisionCheck_SetCylHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col);
+void CollisionCheck_SetTrisHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col);
+void CollisionCheck_SetQuadHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col);
+void CollisionCheck_SetSphereHitFX(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col);
+void CollisionCheck_SetHitEffects(struct PlayState* play, CollisionCheckContext* colChkCtx);
+void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* atCol);
+void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colChkCtx);
 s32 CollisionCheck_GetMassType(u8 mass);
-void CollisionCheck_SetOCvsOC(struct PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlapSize);
-void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_SphereVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-s32 CollisionCheck_SkipOC(Collider* collider);
-s32 CollisionCheck_Incompatible(Collider* left, Collider* right);
-void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colCtxt);
+void CollisionCheck_SetOCvsOC(struct PlayState* play, Collider* leftCol, ColliderElement* leftElem, Vec3f* leftPos, Collider* rightCol, ColliderElement* rightElem, Vec3f* rightPos, f32 overlapSize);
+void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_CylVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_CylVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_CylVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_SphereVsJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_SphereVsCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC_SphereVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* leftCol, Collider* rightCol);
+s32 CollisionCheck_SkipOC(Collider* col);
+s32 CollisionCheck_Incompatible(Collider* leftCol, Collider* rightCol);
+void CollisionCheck_OC(struct PlayState* play, CollisionCheckContext* colChkCtx);
 void CollisionCheck_InitInfo(CollisionCheckInfo* info);
 void CollisionCheck_ResetDamage(CollisionCheckInfo* info);
 void CollisionCheck_SetInfoNoDamageTable(CollisionCheckInfo* info, CollisionCheckInfoInit* init);
 void CollisionCheck_SetInfo(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit* init);
 void CollisionCheck_SetInfo2(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit2* init);
 void CollisionCheck_SetInfoGetDamageTable(CollisionCheckInfo* info, s32 index, CollisionCheckInfoInit2* init);
-void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider, ColliderInfo* info);
-void CollisionCheck_ApplyDamageJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_ApplyDamageCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_ApplyDamageTris(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_ApplyDamageQuad(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_ApplyDamageSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* collider);
-void CollisionCheck_Damage(struct PlayState* play, CollisionCheckContext* colCtxt);
-s32 CollisionCheck_LineOC_JntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOC_Cyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOC_Sphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
+void CollisionCheck_ApplyDamage(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* col, ColliderElement* elem);
+void CollisionCheck_ApplyDamageJntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+void CollisionCheck_ApplyDamageCyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+void CollisionCheck_ApplyDamageTris(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+void CollisionCheck_ApplyDamageQuad(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+void CollisionCheck_ApplyDamageSphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col);
+void CollisionCheck_Damage(struct PlayState* play, CollisionCheckContext* colChkCtx);
+s32 CollisionCheck_LineOC_JntSph(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOC_Cyl(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOC_Sphere(struct PlayState* play, CollisionCheckContext* colChkCtx, Collider* col, Vec3f* a, Vec3f* b);
 s32 CollisionCheck_LineOC(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b, struct Actor** exclusions, s32 numExclusions);
-s32 CollisionCheck_LineOCCheckAll(struct PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b, struct Actor** exclusions, s32 numExclusions);
+s32 CollisionCheck_LineOCCheckAll(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOCCheck(struct PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b, struct Actor** exclusions, s32 numExclusions);
 void Collider_UpdateCylinder(struct Actor* actor, ColliderCylinder* collider);
 void Collider_SetCylinderPosition(ColliderCylinder* collider, Vec3s* pos);
 void Collider_SetQuadVertices(ColliderQuad* collider, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);

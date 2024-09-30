@@ -63,7 +63,7 @@ typedef struct {
 
 EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
-ActorInit En_Fall_InitVars = {
+ActorProfile En_Fall_Profile = {
     /**/ ACTOR_EN_FALL,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

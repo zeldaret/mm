@@ -83,7 +83,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play);
 void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
-ActorInit En_Bigpo_InitVars = {
+ActorProfile En_Bigpo_Profile = {
     /**/ ACTOR_EN_BIGPO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -49,7 +49,7 @@ void EnLiftNuts_Hide(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_UpdateEyes(EnLiftNuts* this);
 void EnLiftNuts_SpawnDust(EnLiftNuts* this, PlayState* play);
 
-ActorInit En_Lift_Nuts_InitVars = {
+ActorProfile En_Lift_Nuts_Profile = {
     /**/ ACTOR_EN_LIFT_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

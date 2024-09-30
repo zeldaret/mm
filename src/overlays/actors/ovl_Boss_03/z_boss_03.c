@@ -276,7 +276,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-ActorInit Boss_03_InitVars = {
+ActorProfile Boss_03_Profile = {
     /**/ ACTOR_BOSS_03,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -1828,7 +1828,7 @@ void Boss03_Damaged(Boss03* this, PlayState* play) {
 /* End of ActionFuncs section */
 
 void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
-    ColliderInfo* hitbox;
+    ColliderElement* acHitElem;
     u8 sp4B = true;
     Player* player = GET_PLAYER(play);
     s32 i;
@@ -1863,15 +1863,15 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
                 if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    hitbox = this->bodyCollider.elements[i].info.acHitInfo;
+                    acHitElem = this->bodyCollider.elements[i].info.acHitElem;
                     this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].info.acHitInfo->toucher.damage
+                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].info.acHitElem->toucher.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1896,7 +1896,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
             if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                hitbox = this->headCollider.elements[i].info.acHitInfo;
+                acHitElem = this->headCollider.elements[i].info.acHitElem;
                 this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
                 this->unk_25C = 15;
 
@@ -1919,8 +1919,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].info.acHitInfo->toucher.damage)
+                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].info.acHitElem->toucher.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;

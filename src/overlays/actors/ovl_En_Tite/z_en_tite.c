@@ -46,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-ActorInit En_Tite_InitVars = {
+ActorProfile En_Tite_Profile = {
     /**/ ACTOR_EN_TITE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -947,7 +947,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             func_80893E54(this, play);
             if (this->actor.shape.yOffset < 0.0f) {
                 func_80895DE8(this);

@@ -28,7 +28,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Vspinyroll_InitVars = {
+ActorProfile Obj_Vspinyroll_Profile = {
     /**/ ACTOR_OBJ_VSPINYROLL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

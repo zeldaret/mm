@@ -27,7 +27,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2);
 
 static f32 D_808DE5B0;
 
-ActorInit Object_Kankyo_InitVars = {
+ActorProfile Object_Kankyo_Profile = {
     /**/ ACTOR_OBJECT_KANKYO,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

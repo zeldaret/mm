@@ -50,7 +50,7 @@ void func_80B726B4(EnRailSkb* this, PlayState* play);
 void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
-ActorInit En_Rail_Skb_InitVars = {
+ActorProfile En_Rail_Skb_Profile = {
     /**/ ACTOR_EN_RAIL_SKB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

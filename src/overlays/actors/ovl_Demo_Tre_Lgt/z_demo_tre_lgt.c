@@ -35,7 +35,7 @@ static DemoTreLgtInfo D_808E1490[2] = {
     { 1.0f, 136.0f, 220.0f, 50.0f },
 };
 
-ActorInit Demo_Tre_Lgt_InitVars = {
+ActorProfile Demo_Tre_Lgt_Profile = {
     /**/ ACTOR_DEMO_TRE_LGT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

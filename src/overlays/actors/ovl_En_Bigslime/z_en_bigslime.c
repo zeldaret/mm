@@ -212,7 +212,7 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 142, 126, 127 }, { 130, 111, 145 },
 };
 
-ActorInit En_Bigslime_InitVars = {
+ActorProfile En_Bigslime_Profile = {
     /**/ ACTOR_EN_BIGSLIME,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -2620,7 +2620,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
         if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->gekkoCollider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->gekkoCollider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {

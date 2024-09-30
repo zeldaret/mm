@@ -28,7 +28,7 @@ void EnCrow_SetupRespawn(EnCrow* this);
 void EnCrow_TurnAway(EnCrow* this, PlayState* play);
 void EnCrow_Respawn(EnCrow* this, PlayState* play);
 
-ActorInit En_Crow_InitVars = {
+ActorProfile En_Crow_Profile = {
     /**/ ACTOR_EN_CROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -16,7 +16,7 @@ void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
 void ObjHamishi_Update(Actor* thisx, PlayState* play);
 void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hamishi_InitVars = {
+ActorProfile Obj_Hamishi_Profile = {
     /**/ ACTOR_OBJ_HAMISHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -212,14 +212,14 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
     }
 
     if (sp24) {
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000500) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x400) {
+        if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000500) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags & 0x400) {
                 this->unk_1A0 = 26;
             } else {
                 this->unk_1A0 = 11;
             }
 
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000) {
                 this->unk_19E = 2;
             } else {
                 this->unk_19E++;

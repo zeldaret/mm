@@ -62,7 +62,7 @@ typedef enum {
     /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE
 } EnSnowmanCombineState;
 
-ActorInit En_Snowman_InitVars = {
+ActorProfile En_Snowman_Profile = {
     /**/ ACTOR_EN_SNOWMAN,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -36,7 +36,7 @@ typedef enum {
     /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
-ActorInit En_Bb_InitVars = {
+ActorProfile En_Bb_Profile = {
     /**/ ACTOR_EN_BB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -505,7 +505,7 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;

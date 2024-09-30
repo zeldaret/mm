@@ -20,7 +20,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
-ActorInit En_Elfbub_InitVars = {
+ActorProfile En_Elfbub_Profile = {
     /**/ ACTOR_EN_ELFBUB,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,

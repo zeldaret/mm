@@ -38,7 +38,7 @@ typedef struct {
     /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
-typedef struct ActorInit {
+typedef struct ActorProfile {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -48,7 +48,7 @@ typedef struct ActorInit {
     /* 0x14 */ ActorFunc destroy;
     /* 0x18 */ ActorFunc update;
     /* 0x1C */ ActorFunc draw;
-} ActorInit; // size = 0x20
+} ActorProfile; // size = 0x20
 
 typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
@@ -851,7 +851,7 @@ void Actor_Noop(Actor* actor, struct PlayState* play);
 Actor* Actor_FindNearby(struct PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(struct PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
 u8 Actor_ApplyDamage(Actor* actor);
-void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo);
+void Actor_SetDropFlag(Actor* actor, ColliderElement* elem);
 void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* dst, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);

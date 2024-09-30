@@ -20,7 +20,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
-ActorInit Door_Ana_InitVars = {
+ActorProfile Door_Ana_Profile = {
     /**/ ACTOR_DOOR_ANA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

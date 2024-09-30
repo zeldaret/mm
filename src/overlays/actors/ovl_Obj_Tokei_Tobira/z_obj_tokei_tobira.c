@@ -17,7 +17,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this);
 
-ActorInit Obj_Tokei_Tobira_InitVars = {
+ActorProfile Obj_Tokei_Tobira_Profile = {
     /**/ ACTOR_OBJ_TOKEI_TOBIRA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

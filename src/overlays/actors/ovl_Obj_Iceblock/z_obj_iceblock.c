@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-ActorInit Obj_Iceblock_InitVars = {
+ActorProfile Obj_Iceblock_Profile = {
     /**/ ACTOR_OBJ_ICEBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -1448,7 +1448,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) ||
+    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x800)) ||
         (this->meltTimer == 0)) {
         this->meltTimer = -1;
         this->unk_2B0 = 4;

@@ -22,7 +22,7 @@ void func_808F3690(EnIn* this, PlayState* play);
 void func_808F5A34(EnIn* this, PlayState* play);
 s32 func_808F5994(EnIn* this, PlayState* play, Vec3f* arg2, s16 arg3);
 
-ActorInit En_In_InitVars = {
+ActorProfile En_In_Profile = {
     /**/ ACTOR_EN_IN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

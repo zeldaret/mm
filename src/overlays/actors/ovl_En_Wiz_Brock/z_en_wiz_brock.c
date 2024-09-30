@@ -21,7 +21,7 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
 s16 sPlatformIndex = 0;
 
-ActorInit En_Wiz_Brock_InitVars = {
+ActorProfile En_Wiz_Brock_Profile = {
     /**/ ACTOR_EN_WIZ_BROCK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

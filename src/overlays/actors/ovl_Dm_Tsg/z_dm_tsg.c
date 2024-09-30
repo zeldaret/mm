@@ -16,7 +16,7 @@ void DmTsg_Destroy(Actor* thisx, PlayState* play);
 void DmTsg_Update(Actor* thisx, PlayState* play);
 void DmTsg_Draw(Actor* thisx, PlayState* play2);
 
-ActorInit Dm_Tsg_InitVars = {
+ActorProfile Dm_Tsg_Profile = {
     /**/ ACTOR_DM_TSG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

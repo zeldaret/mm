@@ -20,7 +20,7 @@ void func_809200F8(ItemEtcetera* this, PlayState* play);
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Item_Etcetera_InitVars = {
+ActorProfile Item_Etcetera_Profile = {
     /**/ ACTOR_ITEM_ETCETERA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

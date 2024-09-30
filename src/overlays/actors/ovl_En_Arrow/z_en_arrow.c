@@ -23,7 +23,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-ActorInit En_Arrow_InitVars = {
+ActorProfile En_Arrow_Profile = {
     /**/ ACTOR_EN_ARROW,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -380,7 +380,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         ((this->actor.params == ARROW_TYPE_DEKU_BUBBLE) &&
          ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
-            if (phi_a2 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4) &&
+            if (phi_a2 && (this->collider.info.atHitElem->elemType != ELEMTYPE_UNK4) &&
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
@@ -434,7 +434,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         } else {
             EffectSsHitmark_SpawnCustomScale(play, EFFECT_HITMARK_WHITE, 150, &this->actor.world.pos);
 
-            if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
+            if (sp50 && (this->collider.info.atHitElem->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
 
                 if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&

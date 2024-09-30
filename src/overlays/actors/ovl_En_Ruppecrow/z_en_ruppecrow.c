@@ -27,7 +27,7 @@ void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play);
 
-ActorInit En_Ruppecrow_InitVars = {
+ActorProfile En_Ruppecrow_Profile = {
     /**/ ACTOR_EN_RUPPECROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

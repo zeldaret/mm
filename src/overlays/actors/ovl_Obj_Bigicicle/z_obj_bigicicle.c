@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-ActorInit Obj_Bigicicle_InitVars = {
+ActorProfile Obj_Bigicicle_Profile = {
     /**/ ACTOR_OBJ_BIGICICLE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -180,7 +180,7 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
 
 void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
-        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
+        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitElem->toucher.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
             CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;

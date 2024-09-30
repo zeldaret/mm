@@ -23,7 +23,7 @@ typedef struct {
     /* 0x4 */ s16 amount;
 } RuppeInfo; // size = 0x8
 
-ActorInit En_Sc_Ruppe_InitVars = {
+ActorProfile En_Sc_Ruppe_Profile = {
     /**/ ACTOR_EN_SC_RUPPE,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

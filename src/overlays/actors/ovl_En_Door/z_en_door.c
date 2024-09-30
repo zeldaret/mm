@@ -85,7 +85,7 @@ ScheduleScript* sDoorSchedules[] = {
 static_assert(ARRAY_COUNT(sDoorSchedules) == ENDOOR_SCH_TYPE_MAX,
               "The entry count of `sDoorSchedules` should match the `EnDoorScheduleType` enum");
 
-ActorInit En_Door_InitVars = {
+ActorProfile En_Door_Profile = {
     /**/ ACTOR_EN_DOOR,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,

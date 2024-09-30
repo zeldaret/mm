@@ -18,7 +18,7 @@ void func_80C229AC(DmTag* this, PlayState* play);
 void DmTag_DoNothing(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
-ActorInit Dm_Tag_InitVars = {
+ActorProfile Dm_Tag_Profile = {
     /**/ ACTOR_DM_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

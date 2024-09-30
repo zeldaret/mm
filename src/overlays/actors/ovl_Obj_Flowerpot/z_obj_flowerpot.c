@@ -30,7 +30,7 @@ s16 D_80A1DA3C;
 s16 D_80A1DA3E;
 s16 D_80A1DA40;
 
-ActorInit Obj_Flowerpot_InitVars = {
+ActorProfile Obj_Flowerpot_Profile = {
     /**/ ACTOR_OBJ_FLOWERPOT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -466,7 +466,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1B994(this, play);
         Actor_Kill(&this->actor);
     } else if ((this->collider.elements[0].info.bumperFlags & BUMP_HIT) &&
-               (this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x058BFFBC)) {
+               (this->collider.elements[0].info.acHitElem->toucher.dmgFlags & 0x058BFFBC)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C0FC(this, play);

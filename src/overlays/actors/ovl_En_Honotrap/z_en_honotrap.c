@@ -73,7 +73,7 @@ static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = {
 
 static s32 sTexturesNotDesegmented = true;
 
-ActorInit En_Honotrap_InitVars = {
+ActorProfile En_Honotrap_Profile = {
     /**/ ACTOR_EN_HONOTRAP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

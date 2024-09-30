@@ -44,7 +44,7 @@ typedef enum TwinmoldPropItemDropType {
 
 s32 sFragmentAndItemDropCount = 0;
 
-ActorInit En_Tanron5_InitVars = {
+ActorProfile En_Tanron5_Profile = {
     /**/ ACTOR_EN_TANRON5,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -354,7 +354,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
     if (this->timer == 0) {
         if (this->collider.base.acFlags & AC_HIT) {
-            ColliderInfo* acHitInfo = this->collider.info.acHitInfo;
+            ColliderElement* acHitElem = this->collider.info.acHitElem;
             Actor* ac = this->collider.base.ac;
 
             this->collider.base.acFlags &= ~AC_HIT;
@@ -370,7 +370,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 fragmentAndItemCount = (s32)Rand_ZeroFloat(2.99f) + 10;
             }
 
-            if ((KREG(19) != 0) || ((acHitInfo->toucher.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
+            if ((KREG(19) != 0) || ((acHitElem->toucher.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
                 (ac->id == ACTOR_BOSS_02)) {
                 if (this->dList == gTwinmoldRuinPillarDL) {
                     // To create the appearance of the pillar shrinking after being hit, push it further into the floor,
@@ -460,11 +460,11 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 // Something hit the ruin, but it wasn't Twinmold, and it wasn't the player while in giant
                 // mode. Play the reflect sound effect and spawn some sparks instead of breaking.
                 Vec3f hitPos;
-                ColliderInfo* info = this->collider.info.acHitInfo;
+                ColliderElement* acHitElem = this->collider.info.acHitElem;
 
-                hitPos.x = info->bumper.hitPos.x;
-                hitPos.y = info->bumper.hitPos.y;
-                hitPos.z = info->bumper.hitPos.z;
+                hitPos.x = acHitElem->bumper.hitPos.x;
+                hitPos.y = acHitElem->bumper.hitPos.y;
+                hitPos.z = acHitElem->bumper.hitPos.z;
 
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
                 CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);

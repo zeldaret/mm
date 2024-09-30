@@ -101,7 +101,7 @@ typedef enum GohtShadowSize {
     /* 3 */ GOHT_SHADOW_SIZE_SMALL
 } GohtShadowSize;
 
-ActorInit Boss_Hakugin_InitVars = {
+ActorProfile Boss_Hakugin_Profile = {
     /**/ ACTOR_BOSS_HAKUGIN,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -1617,7 +1617,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     }
 
     if ((this->iceCollider.base.acFlags & AC_HIT) &&
-        (this->iceCollider.info.acHitInfo->toucher.dmgFlags == DMG_FIRE_ARROW)) {
+        (this->iceCollider.info.acHitElem->toucher.dmgFlags == DMG_FIRE_ARROW)) {
         this->iceCollider.base.atFlags &= ~AT_HIT;
         this->iceCollider.base.acFlags &= ~AC_HIT;
         this->iceCollider.base.ocFlags1 &= ~OC1_HIT;
@@ -2668,7 +2668,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyCollider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
+            (this->bodyCollider.elements[i].info.acHitElem->toucher.dmgFlags & 0x000DB0B3)) {
             return false;
         }
 
@@ -2714,7 +2714,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
-            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitInfo->toucher.damage;
+            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitElem->toucher.damage;
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -2757,11 +2757,11 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             this->disableBodyCollidersTimer = 20;
             for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
                 Vec3f hitPos;
-                ColliderInfo* colliderInfo = &this->bodyCollider.elements[j].info;
+                ColliderElement* elem = &this->bodyCollider.elements[j].info;
 
-                if ((colliderInfo->bumperFlags & BUMP_HIT) && (colliderInfo->acHitInfo != NULL) &&
-                    !(colliderInfo->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
-                    Math_Vec3s_ToVec3f(&hitPos, &colliderInfo->bumper.hitPos);
+                if ((elem->bumperFlags & BUMP_HIT) && (elem->acHitElem != NULL) &&
+                    !(elem->acHitElem->toucherFlags & TOUCH_SFX_NONE)) {
+                    Math_Vec3s_ToVec3f(&hitPos, &elem->bumper.hitPos);
                     EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
                     CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);
                     break;

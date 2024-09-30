@@ -2,11 +2,11 @@
 
 #include "fault.h"
 
-// Segment and InitVars declarations (also used in the table below)
+// Segment and Profile declarations (also used in the table below)
 #define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) \
-    extern struct ActorInit name##_InitVars;                   \
+    extern struct ActorProfile name##_Profile;                 \
     DECLARE_OVERLAY_SEGMENT(name)
-#define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern struct ActorInit name##_InitVars;
+#define DEFINE_ACTOR_INTERNAL(name, _enumValue, _allocType, _debugName) extern struct ActorProfile name##_Profile;
 #define DEFINE_ACTOR_UNSET(_enumValue)
 
 #include "tables/actor_table.h"
@@ -22,15 +22,15 @@
         SEGMENT_START(ovl_##name),                            \
         SEGMENT_END(ovl_##name),                              \
         NULL,                                                 \
-        &name##_InitVars,                                     \
+        &name##_Profile,                                      \
         NULL,                                                 \
         allocType,                                            \
         0,                                                    \
     },
 
-#define DEFINE_ACTOR_INTERNAL(name, _enumValue, allocType, _debugName)          \
-    {                                                                           \
-        ROM_FILE_UNSET, NULL, NULL, NULL, &name##_InitVars, NULL, allocType, 0, \
+#define DEFINE_ACTOR_INTERNAL(name, _enumValue, allocType, _debugName)         \
+    {                                                                          \
+        ROM_FILE_UNSET, NULL, NULL, NULL, &name##_Profile, NULL, allocType, 0, \
     },
 
 #define DEFINE_ACTOR_UNSET(_enumValue) { 0 },

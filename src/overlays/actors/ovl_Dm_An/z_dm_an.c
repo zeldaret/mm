@@ -21,7 +21,7 @@ void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_An_InitVars = {
+ActorProfile Dm_An_Profile = {
     /**/ ACTOR_DM_AN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

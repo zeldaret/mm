@@ -56,7 +56,7 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, PlayState* play);
 s32 func_8099408C(PlayState* play, EnWf* this);
 
-ActorInit En_Wf_InitVars = {
+ActorProfile En_Wf_Profile = {
     /**/ ACTOR_EN_WF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -1419,7 +1419,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
 
         if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(collider->info.acHitInfo->toucher.dmgFlags &
+             !(collider->info.acHitElem->toucher.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
             if (!Actor_ApplyDamage(&this->actor)) {

@@ -15,7 +15,7 @@ void BgInibsMovebg_Init(Actor* thisx, PlayState* play);
 void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgInibsMovebg_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Inibs_Movebg_InitVars = {
+ActorProfile Bg_Inibs_Movebg_Profile = {
     /**/ ACTOR_BG_INIBS_MOVEBG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

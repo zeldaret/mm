@@ -61,7 +61,7 @@ EnOt* D_80B5E880;
 EnOt* D_80B5E884;
 EnOt* D_80B5E888;
 
-ActorInit En_Ot_InitVars = {
+ActorProfile En_Ot_Profile = {
     /**/ ACTOR_EN_OT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

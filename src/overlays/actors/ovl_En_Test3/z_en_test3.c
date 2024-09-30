@@ -83,7 +83,7 @@ void func_80A40A6C(EnTest3* this, PlayState* play);
 
 #include "src/overlays/actors/ovl_En_Test3/scheduleScripts.schl.inc"
 
-ActorInit En_Test3_InitVars = {
+ActorProfile En_Test3_Profile = {
     /**/ ACTOR_EN_TEST3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -1150,7 +1150,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             }
         }
         leftHandActor = this->player.heldActor;
-        if ((leftHandActor != NULL) && (this->player.stateFlags1 & PLAYER_STATE1_800)) {
+        if ((leftHandActor != NULL) && (this->player.stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
             Vec3s curRot;
 
             Matrix_Get(&curMtxF);

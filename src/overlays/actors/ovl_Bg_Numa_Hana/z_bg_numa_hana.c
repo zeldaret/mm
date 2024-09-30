@@ -30,7 +30,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-ActorInit Bg_Numa_Hana_InitVars = {
+ActorProfile Bg_Numa_Hana_Profile = {
     /**/ ACTOR_BG_NUMA_HANA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

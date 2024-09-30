@@ -20,7 +20,7 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
-ActorInit En_Ds2n_InitVars = {
+ActorProfile En_Ds2n_Profile = {
     /**/ ACTOR_EN_DS2N,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

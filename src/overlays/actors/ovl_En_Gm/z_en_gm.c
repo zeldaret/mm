@@ -254,7 +254,7 @@ static MsgScript D_80951C34[] = {
     /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Gm_InitVars = {
+ActorProfile En_Gm_Profile = {
     /**/ ACTOR_EN_GM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -1469,7 +1469,7 @@ s32 func_809503F8(EnGm* this, PlayState* play) {
             SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
         } else {
-            AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
+            AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
         }
     }
     return false;
@@ -1506,7 +1506,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
                 EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
                 func_8094E278(play);
             } else {
-                AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
+                AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
             }
             break;
 

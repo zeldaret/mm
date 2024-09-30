@@ -9,7 +9,7 @@
 DECLARE_OVERLAY_SEGMENT(Arrow_Fire)
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 
-struct ActorInit;
+struct ActorProfile;
 
 #define DEFINE_ACTOR(_name, enumValue, _allocType, _debugName) enumValue,
 #define DEFINE_ACTOR_INTERNAL(_name, enumValue, _allocType, _debugName) enumValue,
@@ -35,7 +35,7 @@ typedef struct ActorOverlay {
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr; // original name: "allocp"
-    /* 0x14 */ struct ActorInit* initInfo;
+    /* 0x14 */ struct ActorProfile* profile;
     /* 0x18 */ char* name;
     /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
     /* 0x1E */ s8 numLoaded; // original name: "clients"

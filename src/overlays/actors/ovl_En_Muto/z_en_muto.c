@@ -20,7 +20,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play);
 void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
 void EnMuto_InDialogue(EnMuto* this, PlayState* play);
 
-ActorInit En_Muto_InitVars = {
+ActorProfile En_Muto_Profile = {
     /**/ ACTOR_EN_MUTO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -88,7 +88,7 @@ static s16 sZeldaEffectColorTargetIndex = 0;
 static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
-ActorInit En_Mag_InitVars = {
+ActorProfile En_Mag_Profile = {
     /**/ ACTOR_EN_MAG,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

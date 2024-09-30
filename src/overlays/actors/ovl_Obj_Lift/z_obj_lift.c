@@ -27,7 +27,7 @@ void func_8093DB70(ObjLift* this);
 void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Lift_InitVars = {
+ActorProfile Obj_Lift_Profile = {
     /**/ ACTOR_OBJ_LIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

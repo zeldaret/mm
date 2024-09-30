@@ -27,7 +27,7 @@ typedef enum {
     /* 2 */ BGOPENSHUTTER_DOOR_CLOSED
 } BGOpenShutterDoorState;
 
-ActorInit Bg_Open_Shutter_InitVars = {
+ActorProfile Bg_Open_Shutter_Profile = {
     /**/ ACTOR_BG_OPEN_SHUTTER,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,

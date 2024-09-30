@@ -36,7 +36,7 @@ void func_808786C8(EnDodongo* this, PlayState* play);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
-ActorInit En_Dodongo_InitVars = {
+ActorProfile En_Dodongo_Profile = {
     /**/ ACTOR_EN_DODONGO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -970,7 +970,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
         if ((i != ARRAY_COUNT(this->collider2Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider2.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider2.elements[i].info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
@@ -994,7 +994,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
         if ((i != ARRAY_COUNT(this->collider1Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider1.elements[i].info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (!Actor_ApplyDamage(&this->actor)) {
