@@ -1350,7 +1350,7 @@ void func_800B8DD4(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32
 void func_800B8E1C(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void Player_PlaySfx(Player* player, u16 sfxId);
 
-// z_player_lib.c functions
+// z_player_lib.c
 
 s32 func_801226E0(struct PlayState* play, s32 arg1);
 s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints, Vec3s* targetPosList);
