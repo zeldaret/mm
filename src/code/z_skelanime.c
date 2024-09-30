@@ -1,5 +1,5 @@
 #include "global.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 #define ANIM_INTERP 1
 

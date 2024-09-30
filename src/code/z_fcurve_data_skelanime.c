@@ -31,7 +31,7 @@
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64curve.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64.h"
 
 void SkelCurve_Clear(SkelCurve* skelCurve) {

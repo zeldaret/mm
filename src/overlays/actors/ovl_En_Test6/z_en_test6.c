@@ -7,7 +7,7 @@
 #include "z_en_test6.h"
 
 #include "z64cutscene_commands.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64quake.h"
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"

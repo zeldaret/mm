@@ -9,7 +9,7 @@
 #include "z64actor.h"
 #include "z64effect.h"
 #include "z64frameadvance.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64math.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);

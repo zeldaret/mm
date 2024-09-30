@@ -1,4 +1,4 @@
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 #include "libc64/os_malloc.h"
 
