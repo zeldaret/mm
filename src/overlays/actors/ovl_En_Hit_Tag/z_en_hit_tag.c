@@ -16,7 +16,7 @@ void EnHitTag_Update(Actor* thisx, PlayState* play);
 
 void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
-ActorInit En_Hit_Tag_InitVars = {
+ActorProfile En_Hit_Tag_Profile = {
     /**/ ACTOR_EN_HIT_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

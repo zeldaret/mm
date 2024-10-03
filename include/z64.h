@@ -15,6 +15,7 @@
 #include "color.h"
 #include "controller.h"
 #include "gfx.h"
+#include "gfx_setupdl.h"
 #include "gfxprint.h"
 #include "ichain.h"
 #include "irqmgr.h"

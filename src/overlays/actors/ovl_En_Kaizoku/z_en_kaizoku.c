@@ -151,7 +151,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
 };
 
-ActorInit En_Kaizoku_InitVars = {
+ActorProfile En_Kaizoku_Profile = {
     /**/ ACTOR_EN_KAIZOKU,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

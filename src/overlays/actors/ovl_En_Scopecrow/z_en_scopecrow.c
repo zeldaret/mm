@@ -18,7 +18,7 @@ void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-ActorInit En_Scopecrow_InitVars = {
+ActorProfile En_Scopecrow_Profile = {
     /**/ ACTOR_EN_SCOPECROW,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

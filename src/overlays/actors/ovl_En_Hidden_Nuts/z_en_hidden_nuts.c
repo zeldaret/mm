@@ -31,7 +31,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play);
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
-ActorInit En_Hidden_Nuts_InitVars = {
+ActorProfile En_Hidden_Nuts_Profile = {
     /**/ ACTOR_EN_HIDDEN_NUTS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -18,7 +18,7 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2);
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play);
 
-ActorInit Eff_Zoraband_InitVars = {
+ActorProfile Eff_Zoraband_Profile = {
     /**/ ACTOR_EFF_ZORABAND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

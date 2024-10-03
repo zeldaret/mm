@@ -28,7 +28,7 @@ void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this);
 
-ActorInit En_Syateki_Okuta_InitVars = {
+ActorProfile En_Syateki_Okuta_Profile = {
     /**/ ACTOR_EN_SYATEKI_OKUTA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

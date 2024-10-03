@@ -354,7 +354,7 @@ MsgScript D_80B2C490[] = {
     /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Pst_InitVars = {
+ActorProfile En_Pst_Profile = {
     /**/ ACTOR_EN_PST,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

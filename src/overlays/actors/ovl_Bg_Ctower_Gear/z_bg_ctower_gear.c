@@ -19,7 +19,7 @@ void BgCtowerGear_Draw(Actor* thisx, PlayState* play);
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play);
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Ctower_Gear_InitVars = {
+ActorProfile Bg_Ctower_Gear_Profile = {
     /**/ ACTOR_BG_CTOWER_GEAR,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -175,7 +175,7 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     play->objectCtx.numEntries = loadedCount;
     play->objectCtx.numPersistentEntries = loadedCount;
     playerObjectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
-    gActorOverlayTable[0].initInfo->objectId = playerObjectId;
+    gActorOverlayTable[ACTOR_PLAYER].profile->objectId = playerObjectId;
     Object_SpawnPersistent(&play->objectCtx, playerObjectId);
 
     play->objectCtx.slots[play->objectCtx.numEntries].segment = objectPtr;

@@ -68,7 +68,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play);
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 
-ActorInit En_Pametfrog_InitVars = {
+ActorProfile En_Pametfrog_Profile = {
     /**/ ACTOR_EN_PAMETFROG,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

@@ -35,7 +35,7 @@ void func_80A4E67C(EnMkk* this);
 void func_80A4E84C(EnMkk* this);
 void func_80A4EBBC(EnMkk* this, PlayState* play);
 
-ActorInit En_Mkk_InitVars = {
+ActorProfile En_Mkk_Profile = {
     /**/ ACTOR_EN_MKK,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

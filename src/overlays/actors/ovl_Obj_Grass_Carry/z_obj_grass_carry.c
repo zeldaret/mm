@@ -29,7 +29,7 @@ void ObjGrassCarry_SetupFall(ObjGrassCarry* this);
 void ObjGrassCarry_Fall(ObjGrassCarry* this, PlayState* play);
 void ObjGrassCarry_Draw(Actor* this, PlayState* play);
 
-ActorInit Obj_Grass_Carry_InitVars = {
+ActorProfile Obj_Grass_Carry_Profile = {
     /**/ ACTOR_OBJ_GRASS_CARRY,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

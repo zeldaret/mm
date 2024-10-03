@@ -26,7 +26,7 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
 s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
 
-ActorInit Obj_Hgdoor_InitVars = {
+ActorProfile Obj_Hgdoor_Profile = {
     /**/ ACTOR_OBJ_HGDOOR,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -25,7 +25,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-ActorInit En_Syateki_Crow_InitVars = {
+ActorProfile En_Syateki_Crow_Profile = {
     /**/ ACTOR_EN_SYATEKI_CROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

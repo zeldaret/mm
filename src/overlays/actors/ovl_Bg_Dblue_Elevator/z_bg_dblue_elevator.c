@@ -28,7 +28,7 @@ void BgDblueElevator_Pause(BgDblueElevator* this, PlayState* play);
 void BgDblueElevator_SetupMove(BgDblueElevator* this);
 void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play);
 
-ActorInit Bg_Dblue_Elevator_InitVars = {
+ActorProfile Bg_Dblue_Elevator_Profile = {
     /**/ ACTOR_BG_DBLUE_ELEVATOR,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

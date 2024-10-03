@@ -29,7 +29,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
-ActorInit En_Ginko_Man_InitVars = {
+ActorProfile En_Ginko_Man_Profile = {
     /**/ ACTOR_EN_GINKO_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

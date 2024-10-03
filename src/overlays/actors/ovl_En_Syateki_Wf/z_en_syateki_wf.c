@@ -101,7 +101,7 @@ static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
-ActorInit En_Syateki_Wf_InitVars = {
+ActorProfile En_Syateki_Wf_Profile = {
     /**/ ACTOR_EN_SYATEKI_WF,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

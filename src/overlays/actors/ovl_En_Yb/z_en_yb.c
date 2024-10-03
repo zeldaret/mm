@@ -32,7 +32,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
-ActorInit En_Yb_InitVars = {
+ActorProfile En_Yb_Profile = {
     /**/ ACTOR_EN_YB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

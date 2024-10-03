@@ -369,7 +369,7 @@ static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
 
 static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
 
-const ActorInit En_Knight_InitVars = {
+const ActorProfile En_Knight_Profile = {
     /**/ ACTOR_EN_KNIGHT,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

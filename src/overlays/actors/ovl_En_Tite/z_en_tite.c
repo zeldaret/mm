@@ -46,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-ActorInit En_Tite_InitVars = {
+ActorProfile En_Tite_Profile = {
     /**/ ACTOR_EN_TITE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

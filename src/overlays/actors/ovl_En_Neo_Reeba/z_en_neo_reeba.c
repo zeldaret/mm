@@ -36,7 +36,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this);
 void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
-ActorInit En_Neo_Reeba_InitVars = {
+ActorProfile En_Neo_Reeba_Profile = {
     /**/ ACTOR_EN_NEO_REEBA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

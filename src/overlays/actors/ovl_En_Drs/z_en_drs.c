@@ -17,7 +17,7 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
-ActorInit En_Drs_InitVars = {
+ActorProfile En_Drs_Profile = {
     /**/ ACTOR_EN_DRS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

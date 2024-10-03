@@ -14,7 +14,7 @@
 void ObjFunen_Init(Actor* thisx, PlayState* play);
 void ObjFunen_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Funen_InitVars = {
+ActorProfile Obj_Funen_Profile = {
     /**/ ACTOR_OBJ_FUNEN,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

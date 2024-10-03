@@ -57,7 +57,7 @@ void EnDinofos_SetupLand(EnDinofos* this);
 void EnDinofos_SetupJump(EnDinofos* this);
 void EnDinofos_SetupJumpSlash(EnDinofos* this);
 
-ActorInit En_Dinofos_InitVars = {
+ActorProfile En_Dinofos_Profile = {
     /**/ ACTOR_EN_DINOFOS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

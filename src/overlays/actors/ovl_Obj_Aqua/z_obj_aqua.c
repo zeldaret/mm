@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-ActorInit Obj_Aqua_InitVars = {
+ActorProfile Obj_Aqua_Profile = {
     /**/ ACTOR_OBJ_AQUA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

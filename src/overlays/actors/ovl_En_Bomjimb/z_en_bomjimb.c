@@ -39,7 +39,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-ActorInit En_Bomjimb_InitVars = {
+ActorProfile En_Bomjimb_Profile = {
     /**/ ACTOR_EN_BOMJIMB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

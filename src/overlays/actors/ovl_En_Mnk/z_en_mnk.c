@@ -42,7 +42,7 @@ void func_80AB92CC(EnMnk* this, PlayState* play);
 s32 EnMnk_ValidatePictograph(PlayState* play, Actor* thisx);
 s32 EnMnk_AlreadyExists(EnMnk* this, PlayState* play);
 
-ActorInit En_Mnk_InitVars = {
+ActorProfile En_Mnk_Profile = {
     /**/ ACTOR_EN_MNK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

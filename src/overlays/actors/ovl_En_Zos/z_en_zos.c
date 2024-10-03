@@ -50,7 +50,7 @@ typedef enum {
     /* 13 */ EN_ZOS_ANIM_MAX
 } EnZosAnimation;
 
-ActorInit En_Zos_InitVars = {
+ActorProfile En_Zos_Profile = {
     /**/ ACTOR_EN_ZOS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

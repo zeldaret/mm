@@ -32,7 +32,7 @@ void EnWdhand_SetupDie(EnWdhand* this);
 void EnWdhand_GetInitVelocity(EnWdhand* this, Vec3f* dst);
 void EnWdhand_Vec3fToVec3s(Vec3s* dst, Vec3f* src);
 
-ActorInit En_Wdhand_InitVars = {
+ActorProfile En_Wdhand_Profile = {
     /**/ ACTOR_EN_WDHAND,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

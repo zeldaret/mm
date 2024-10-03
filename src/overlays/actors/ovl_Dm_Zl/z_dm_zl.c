@@ -17,7 +17,7 @@ void DmZl_Draw(Actor* thisx, PlayState* play);
 
 void DmZl_DoNothing(DmZl* this, PlayState* play);
 
-ActorInit Dm_Zl_InitVars = {
+ActorProfile Dm_Zl_Profile = {
     /**/ ACTOR_DM_ZL,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

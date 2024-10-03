@@ -15,7 +15,7 @@ void ObjVisiblock_Init(Actor* thisx, PlayState* play);
 void ObjVisiblock_Destroy(Actor* thisx, PlayState* play);
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Visiblock_InitVars = {
+ActorProfile Obj_Visiblock_Profile = {
     /**/ ACTOR_OBJ_VISIBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

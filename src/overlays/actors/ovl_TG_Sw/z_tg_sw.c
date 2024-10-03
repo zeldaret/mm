@@ -21,7 +21,7 @@ void TGSw_Draw(Actor* thisx, PlayState* play);
 
 void TGSw_Die(struct TGSw* this, PlayState* play);
 
-ActorInit TG_Sw_InitVars = {
+ActorProfile TG_Sw_Profile = {
     /**/ ACTOR_TG_SW,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

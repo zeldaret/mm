@@ -25,7 +25,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play);
 void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
-ActorInit Bg_Dblue_Waterfall_InitVars = {
+ActorProfile Bg_Dblue_Waterfall_Profile = {
     /**/ ACTOR_BG_DBLUE_WATERFALL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

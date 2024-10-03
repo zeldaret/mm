@@ -96,7 +96,7 @@ typedef enum {
     /* 3 */ EN_DT_BROW_TEXTURE_MAX
 } EnDtBrowTextures;
 
-ActorInit En_Dt_InitVars = {
+ActorProfile En_Dt_Profile = {
     /**/ ACTOR_EN_DT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

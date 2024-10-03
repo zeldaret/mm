@@ -19,7 +19,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play);
 void EnZo_TreadWater(EnZo* this, PlayState* play);
 void EnZo_DoNothing(EnZo* this, PlayState* play);
 
-ActorInit En_Zo_InitVars = {
+ActorProfile En_Zo_Profile = {
     /**/ ACTOR_EN_ZO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

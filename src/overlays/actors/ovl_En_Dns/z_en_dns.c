@@ -79,7 +79,7 @@ static MsgScript D_8092DD00[] = {
     /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Dns_InitVars = {
+ActorProfile En_Dns_Profile = {
     /**/ ACTOR_EN_DNS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

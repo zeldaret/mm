@@ -44,7 +44,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-ActorInit En_Dragon_InitVars = {
+ActorProfile En_Dragon_Profile = {
     /**/ ACTOR_EN_DRAGON,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

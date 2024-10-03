@@ -43,7 +43,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play);
 
 #include "assets/overlays/ovl_En_Okuta/ovl_En_Okuta.c"
 
-ActorInit En_Okuta_InitVars = {
+ActorProfile En_Okuta_Profile = {
     /**/ ACTOR_EN_OKUTA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

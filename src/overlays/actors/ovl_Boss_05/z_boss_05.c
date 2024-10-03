@@ -329,7 +329,7 @@ static DamageTable sWalkingHeadDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
 };
 
-ActorInit Boss_05_InitVars = {
+ActorProfile Boss_05_Profile = {
     /**/ ACTOR_BOSS_05,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

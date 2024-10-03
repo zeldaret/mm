@@ -21,7 +21,7 @@ void func_80AF04D8(ObjLupygamelift* this, PlayState* play);
 void func_80AF0514(ObjLupygamelift* this);
 void func_80AF0530(ObjLupygamelift* this, PlayState* play);
 
-ActorInit Obj_Lupygamelift_InitVars = {
+ActorProfile Obj_Lupygamelift_Profile = {
     /**/ ACTOR_OBJ_LUPYGAMELIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

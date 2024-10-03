@@ -278,7 +278,7 @@ static Color_RGB8 sLightOrbColors[] = {
     { 255, 255, 255 }, // white
 };
 
-ActorInit En_Egol_InitVars = {
+ActorProfile En_Egol_Profile = {
     /**/ ACTOR_EN_EGOL,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

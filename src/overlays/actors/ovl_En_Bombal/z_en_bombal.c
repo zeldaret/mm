@@ -26,7 +26,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal* this, PlayState* play);
 
-ActorInit En_Bombal_InitVars = {
+ActorProfile En_Bombal_Profile = {
     /**/ ACTOR_EN_BOMBAL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

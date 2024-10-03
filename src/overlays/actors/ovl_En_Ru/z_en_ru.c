@@ -15,7 +15,7 @@ void EnRu_Destroy(Actor* thisx, PlayState* play);
 void EnRu_Update(Actor* thisx, PlayState* play);
 void EnRu_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Ru_InitVars = {
+ActorProfile En_Ru_Profile = {
     /**/ ACTOR_EN_RU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

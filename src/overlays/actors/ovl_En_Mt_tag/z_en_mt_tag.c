@@ -28,7 +28,7 @@ typedef enum {
     /* 2 */ GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND
 } PlayerCheatStatus;
 
-ActorInit En_Mt_tag_InitVars = {
+ActorProfile En_Mt_tag_Profile = {
     /**/ ACTOR_EN_MT_TAG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

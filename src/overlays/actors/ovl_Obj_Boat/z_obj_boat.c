@@ -18,7 +18,7 @@ void ObjBoat_Draw(Actor* thisx, PlayState* play);
 
 void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2);
 
-ActorInit Obj_Boat_InitVars = {
+ActorProfile Obj_Boat_Profile = {
     /**/ ACTOR_OBJ_BOAT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

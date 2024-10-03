@@ -18,7 +18,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play);
 
 void func_80BF0DE0(EffStk* this, PlayState* play);
 
-ActorInit Eff_Stk_InitVars = {
+ActorProfile Eff_Stk_Profile = {
     /**/ ACTOR_EFF_STK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

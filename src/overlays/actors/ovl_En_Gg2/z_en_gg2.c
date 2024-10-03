@@ -26,7 +26,7 @@ void func_80B3B5D4(EnGg2* this, PlayState* play);
 s32 EnGg2_HasReachedPoint(EnGg2* this, Path* path, s32 pointIndex);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-ActorInit En_Gg2_InitVars = {
+ActorProfile En_Gg2_Profile = {
     /**/ ACTOR_EN_GG2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

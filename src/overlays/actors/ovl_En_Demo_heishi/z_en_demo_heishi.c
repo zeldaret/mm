@@ -20,7 +20,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 
-ActorInit En_Demo_heishi_InitVars = {
+ActorProfile En_Demo_heishi_Profile = {
     /**/ ACTOR_EN_DEMO_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

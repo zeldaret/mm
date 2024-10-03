@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED
 } EnRatHookedState;
 
-ActorInit En_Rat_InitVars = {
+ActorProfile En_Rat_Profile = {
     /**/ ACTOR_EN_RAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

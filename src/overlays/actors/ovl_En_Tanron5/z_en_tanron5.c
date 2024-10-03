@@ -44,7 +44,7 @@ typedef enum TwinmoldPropItemDropType {
 
 s32 sFragmentAndItemDropCount = 0;
 
-ActorInit En_Tanron5_InitVars = {
+ActorProfile En_Tanron5_Profile = {
     /**/ ACTOR_EN_TANRON5,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

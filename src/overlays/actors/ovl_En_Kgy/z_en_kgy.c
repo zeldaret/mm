@@ -45,7 +45,7 @@ typedef enum EnKgyAnimation {
     /* 10 */ ENKGY_ANIM_MAX
 } EnKgyAnimation;
 
-ActorInit En_Kgy_InitVars = {
+ActorProfile En_Kgy_Profile = {
     /**/ ACTOR_EN_KGY,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

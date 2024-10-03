@@ -28,7 +28,7 @@ typedef enum EffLastDayAction {
     /* 3 */ EFFLASTDAY_ACTION_3
 } EffLastDayAction;
 
-ActorInit Eff_Lastday_InitVars = {
+ActorProfile Eff_Lastday_Profile = {
     /**/ ACTOR_EFF_LASTDAY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

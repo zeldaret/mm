@@ -39,7 +39,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 11, 28, 0, { 0, 0, 0 } },
 };
 
-ActorInit En_Tubo_Trap_InitVars = {
+ActorProfile En_Tubo_Trap_Profile = {
     /**/ ACTOR_EN_TUBO_TRAP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

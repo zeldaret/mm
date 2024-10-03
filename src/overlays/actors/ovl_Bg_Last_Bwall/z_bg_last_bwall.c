@@ -37,7 +37,7 @@ void func_80C18884(BgLastBwall* this, PlayState* play);
 void func_80C188C4(BgLastBwall* this, PlayState* play);
 void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play);
 
-ActorInit Bg_Last_Bwall_InitVars = {
+ActorProfile Bg_Last_Bwall_Profile = {
     /**/ ACTOR_BG_LAST_BWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

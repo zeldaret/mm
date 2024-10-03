@@ -29,7 +29,7 @@ void func_80B83758(Actor* thisx, PlayState* play);
 AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
-ActorInit Bg_Dblue_Balance_InitVars = {
+ActorProfile Bg_Dblue_Balance_Profile = {
     /**/ ACTOR_BG_DBLUE_BALANCE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

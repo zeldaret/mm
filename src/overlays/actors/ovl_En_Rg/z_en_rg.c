@@ -20,7 +20,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-ActorInit En_Rg_InitVars = {
+ActorProfile En_Rg_Profile = {
     /**/ ACTOR_EN_RG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

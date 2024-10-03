@@ -72,7 +72,7 @@ void EnSGoro_Destroy(Actor* thisx, PlayState* play);
 void EnSGoro_Update(Actor* thisx, PlayState* play);
 void EnSGoro_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_S_Goro_InitVars = {
+ActorProfile En_S_Goro_Profile = {
     /**/ ACTOR_EN_S_GORO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

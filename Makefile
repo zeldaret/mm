@@ -328,10 +328,12 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 OTHER_DIRS := baserom dmadata $(shell find linker_scripts -type d)
 
 # create build directories
-$(shell mkdir -p $(foreach dir,$(OTHER_DIRS),$(BUILD_DIR)/$(dir)))
 $(shell mkdir -p $(foreach dir, \
                       $(SRC_DIRS) \
                       $(ASM_DIRS) \
+                      $(OTHER_DIRS), \
+                    $(BUILD_DIR)/$(dir)))
+$(shell mkdir -p $(foreach dir, \
                       $(ASSET_BIN_DIRS) \
                       $(ASSET_BIN_DIRS_C_FILES) \
                       $(SAMPLE_DIRS) \

@@ -16,7 +16,7 @@ void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
 void ObjJgGakki_Update(Actor* thisx, PlayState* play);
 void ObjJgGakki_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Jg_Gakki_InitVars = {
+ActorProfile Obj_Jg_Gakki_Profile = {
     /**/ ACTOR_OBJ_JG_GAKKI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

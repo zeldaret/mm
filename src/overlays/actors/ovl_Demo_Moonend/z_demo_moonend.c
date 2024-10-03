@@ -20,7 +20,7 @@ void func_80C17B60(DemoMoonend* this, PlayState* play);
 void func_80C17C48(DemoMoonend* this, PlayState* play);
 void func_80C17FCC(Actor* thisx, PlayState* play);
 
-ActorInit Demo_Moonend_InitVars = {
+ActorProfile Demo_Moonend_Profile = {
     /**/ ACTOR_DEMO_MOONEND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

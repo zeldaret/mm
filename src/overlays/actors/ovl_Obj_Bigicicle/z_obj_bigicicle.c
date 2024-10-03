@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-ActorInit Obj_Bigicicle_InitVars = {
+ActorProfile Obj_Bigicicle_Profile = {
     /**/ ACTOR_OBJ_BIGICICLE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

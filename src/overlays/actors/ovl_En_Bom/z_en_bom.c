@@ -34,7 +34,7 @@ typedef struct {
 
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-ActorInit En_Bom_InitVars = {
+ActorProfile En_Bom_Profile = {
     /**/ ACTOR_EN_BOM,
     /**/ ACTORCAT_EXPLOSIVES,
     /**/ FLAGS,

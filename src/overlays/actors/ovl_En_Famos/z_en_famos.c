@@ -47,7 +47,7 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 
-ActorInit En_Famos_InitVars = {
+ActorProfile En_Famos_Profile = {
     /**/ ACTOR_EN_FAMOS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

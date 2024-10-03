@@ -29,7 +29,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play);
 void func_80AE0D78(EnTsn* this, PlayState* play);
 void func_80AE0F84(Actor* thisx, PlayState* play);
 
-ActorInit En_Tsn_InitVars = {
+ActorProfile En_Tsn_Profile = {
     /**/ ACTOR_EN_TSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

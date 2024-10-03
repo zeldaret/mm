@@ -31,7 +31,7 @@ void TransitionCircle_SetType(void* thisx, s32 type);
 void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
 s32 TransitionCircle_IsDone(void* thisx);
 
-TransitionInit TransitionCircle_InitVars = {
+TransitionProfile TransitionCircle_Profile = {
     TransitionCircle_Init,   TransitionCircle_Destroy, TransitionCircle_Update,   TransitionCircle_Draw,
     TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor, NULL,
     TransitionCircle_IsDone,

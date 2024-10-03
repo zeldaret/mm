@@ -211,7 +211,7 @@ MsgScript D_80BC15C8[] = {
     /* 0x0007 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Nb_InitVars = {
+ActorProfile En_Nb_Profile = {
     /**/ ACTOR_EN_NB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -33,7 +33,7 @@ void func_80B04B48(ObjSnowball* this, PlayState* play);
 void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Snowball_InitVars = {
+ActorProfile Obj_Snowball_Profile = {
     /**/ ACTOR_OBJ_SNOWBALL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

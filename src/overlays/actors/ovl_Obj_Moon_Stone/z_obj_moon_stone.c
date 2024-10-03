@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-ActorInit Obj_Moon_Stone_InitVars = {
+ActorProfile Obj_Moon_Stone_Profile = {
     /**/ ACTOR_OBJ_MOON_STONE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -16,7 +16,7 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
-ActorInit En_Onpuman_InitVars = {
+ActorProfile En_Onpuman_Profile = {
     /**/ ACTOR_EN_ONPUMAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

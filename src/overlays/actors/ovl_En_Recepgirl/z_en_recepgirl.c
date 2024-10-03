@@ -20,7 +20,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play);
 void EnRecepgirl_SetupTalk(EnRecepgirl* this);
 void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play);
 
-ActorInit En_Recepgirl_InitVars = {
+ActorProfile En_Recepgirl_Profile = {
     /**/ ACTOR_EN_RECEPGIRL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

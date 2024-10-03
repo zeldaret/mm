@@ -29,7 +29,7 @@ void func_80977E6C(PlayState* play, u32 index, EffectSs* this);
 void func_80977F28(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKirakira_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Kirakira_InitVars = {
+EffectSsProfile Effect_Ss_Kirakira_Profile = {
     EFFECT_SS_KIRAKIRA,
     EffectSsKirakira_Init,
 };

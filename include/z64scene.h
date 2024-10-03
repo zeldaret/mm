@@ -383,7 +383,7 @@ typedef struct {
     /* 0x4 */ TransitionActorEntry* list;
 } TransitionActorList; // size = 0x8
 
-typedef struct {
+typedef struct ActorEntry {
     /* 0x0 */ s16 id;
     /* 0x2 */ Vec3s pos;
     /* 0x8 */ Vec3s rot;
