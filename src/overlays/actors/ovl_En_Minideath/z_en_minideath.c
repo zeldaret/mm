@@ -834,8 +834,8 @@ void EnMinideath_Update(Actor* thisx, PlayState* play) {
 
         Actor_SetFocus(&this->actor, 0.0f);
 
-        effect = this->effects;
-        jntSphElem = this->collider.elements;
+        effect = &this->effects[0];
+        jntSphElem = &this->collider.elements[0];
         for (i = 0; i != MINIDEATH_NUM_EFFECTS; i++) {
             if (effect->state == 0) {
                 Math_Vec3f_Sum(&this->actor.world.pos, &effect->vel, &effect->pos);

@@ -117,6 +117,8 @@ typedef struct {
     /* 0x1C */ ColliderJntSphElement* elements;
 } ColliderJntSph; // size = 0x20
 
+// init data structs
+
 typedef struct {
     /* 0x0 */ u8 limb; // attached limb
     /* 0x2 */ Sphere16 modelSphere; // model space sphere
