@@ -4,7 +4,7 @@
 #include "sys_cmpdma.h"
 #include "sys_ucode.h"
 #include "z64lifemeter.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "z64voice.h"

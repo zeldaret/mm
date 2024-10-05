@@ -23,7 +23,7 @@ u8 sMotionBlurStatus;
 
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"

@@ -48,7 +48,7 @@
 #include "global.h"
 #include "string.h"
 
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64olib.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"

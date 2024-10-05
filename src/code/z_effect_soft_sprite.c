@@ -2,7 +2,7 @@
 
 #include "tha.h"
 #include "loadfragment.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "global.h"
 
 void EffectSS_ResetEntry(EffectSs* particle);

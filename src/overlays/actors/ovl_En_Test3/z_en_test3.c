@@ -6,7 +6,7 @@
 
 #include "z_en_test3.h"
 
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 #include "assets/objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
