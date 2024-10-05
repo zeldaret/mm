@@ -408,15 +408,6 @@ typedef struct {
 } SceneEntranceTableEntry; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded
-    /* 0x02 */ UNK_TYPE1 pad2[0x2];
-    /* 0x04 */ void* segment;
-    /* 0x08 */ DmaRequest dmaReq;
-    /* 0x28 */ OSMesgQueue loadQueue;
-    /* 0x40 */ OSMesg loadMsg;
-} ObjectEntry; // size = 0x44
-
-typedef struct {
     /* 0x0 */ RomFile segment;
     /* 0x8 */ u16 titleTextId;
     /* 0xA */ u8 unk_A;
@@ -466,18 +457,6 @@ typedef struct {
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
 } AnimatedMaterial; // size = 0x8
-
-#define OBJECT_SLOT_NONE -1
-
-typedef struct {
-    /* 0x000 */ void* spaceStart;
-    /* 0x004 */ void* spaceEnd;
-    /* 0x008 */ u8 numEntries; // total amount of used entries
-    /* 0x009 */ u8 numPersistentEntries; // amount of entries that won't be reused when loading a new object list (when loading a new room)
-    /* 0x00A */ u8 mainKeepSlot; // "gameplay_keep" slot
-    /* 0x00B */ u8 subKeepSlot; // "gameplay_field_keep" or "gameplay_dangeon_keep" slot
-    /* 0x00C */ ObjectEntry slots[35];
-} ObjectContext; // size = 0x958
 
 typedef struct {
     /* 0x0 */ u16 mapId;
@@ -897,45 +876,7 @@ typedef enum {
 #define SCENE_CMD_MINIMAP_INFO SCENE_CMD_MAP_DATA
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO SCENE_CMD_MAP_DATA_CHESTS
 
-s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id);
-void Object_InitContext(struct GameState* gameState, ObjectContext* objectCtx);
-void Object_UpdateEntries(ObjectContext* objectCtx);
-s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId);
-s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot);
-void Object_LoadAll(ObjectContext* objectCtx);
-void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id);
-void Scene_CommandSpawnList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandActorList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandActorCutsceneCamList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandCollisionHeader(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandRoomList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandEntranceList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandSpecialFiles(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandRoomBehavior(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMesh(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandObjectList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandLightList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandPathList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandTransitionActorList(struct PlayState* play, SceneCmd* cmd);
 void Scene_ResetTransitionActorList(GameState* gameState, TransitionActorList* transitionActors);
-void Scene_CommandEnvLightSettings(struct PlayState* play, SceneCmd* cmd);
-void Scene_LoadAreaTextures(struct PlayState* play, s32 fileIndex);
-void Scene_CommandSkyboxSettings(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandSkyboxDisables(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandTimeSettings(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandWindSettings(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandExitList(struct PlayState* play, SceneCmd* cmd);
-void Scene_Command09(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandSoundSettings(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandEchoSetting(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandAltHeaderList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandCutsceneScriptList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandCutsceneList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMapData(struct PlayState* play, SceneCmd* cmd);
-void Scene_Command1D(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMapDataChests(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandSetRegionVisitedFlag(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandAnimatedMaterials(struct PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(struct PlayState* play);
 s32 Scene_ExecuteCommands(struct PlayState* play, SceneCmd* sceneCmd);
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer);
