@@ -248,7 +248,7 @@ void EnDekubaba_DisableHitboxes(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.bumperFlags &= ~BUMP_ON;
+        this->collider.elements[i].base.bumperFlags &= ~BUMP_ON;
     }
 }
 
@@ -268,7 +268,7 @@ void EnDekubaba_UpdateHeadPosition(EnDekubaba* this) {
 }
 
 void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index) {
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -278,9 +278,9 @@ void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
-        sphElement = &this->collider.elements[index];
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sphElement->info.bumper.hitPos.x,
-                    sphElement->info.bumper.hitPos.y, sphElement->info.bumper.hitPos.z, 0, 0, 0,
+        jntSphElem = &this->collider.elements[index];
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.bumper.hitPos.x,
+                    jntSphElem->base.bumper.hitPos.y, jntSphElem->base.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     }
 }
@@ -309,7 +309,7 @@ void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
 
 void EnDekubaba_SetupWait(EnDekubaba* this) {
     s32 i;
-    ColliderJntSphElement* element;
+    ColliderJntSphElement* jntSphElem;
 
     this->actor.shape.rot.x = -0x4000;
     this->stemSectionAngle[0] = this->stemSectionAngle[1] = this->stemSectionAngle[2] = this->actor.shape.rot.x;
@@ -325,10 +325,10 @@ void EnDekubaba_SetupWait(EnDekubaba* this) {
     this->timer = 45;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        element = &this->collider.elements[i];
-        element->dim.worldSphere.center.x = this->actor.world.pos.x;
-        element->dim.worldSphere.center.y = (s32)this->actor.world.pos.y - 7;
-        element->dim.worldSphere.center.z = this->actor.world.pos.z;
+        jntSphElem = &this->collider.elements[i];
+        jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+        jntSphElem->dim.worldSphere.center.y = (s32)this->actor.world.pos.y - 7;
+        jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
     }
 
     this->actionFunc = EnDekubaba_Wait;
@@ -359,7 +359,7 @@ void EnDekubaba_SetupGrow(EnDekubaba* this) {
     this->timer = 15;
 
     for (i = 2; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.ocElemFlags |= OCELEM_ON;
+        this->collider.elements[i].base.ocElemFlags |= OCELEM_ON;
     }
 
     this->collider.base.colType = COLTYPE_HIT6;
@@ -447,7 +447,7 @@ void EnDekubaba_SetupRetract(EnDekubaba* this) {
     this->timer = 15;
 
     for (i = 2; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.ocElemFlags &= ~OCELEM_ON;
+        this->collider.elements[i].base.ocElemFlags &= ~OCELEM_ON;
     }
 
     this->actionFunc = EnDekubaba_Retract;
@@ -936,7 +936,7 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.bumperFlags |= BUMP_ON;
+        this->collider.elements[i].base.bumperFlags |= BUMP_ON;
     }
 
     if (this->timer == 1) {
@@ -1068,7 +1068,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
 void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
     s32 newHealth;
     s32 i;
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
@@ -1076,16 +1076,16 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
         if ((this->collider.base.colType != COLTYPE_HARD) &&
             (this->actor.colChkInfo.damageEffect != DEKUBABA_DMGEFF_HOOKSHOT)) {
-            sphElement = &this->collider.elements[0];
-            for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, sphElement++) {
-                if (sphElement->info.bumperFlags & BUMP_HIT) {
+            jntSphElem = &this->collider.elements[0];
+            for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, jntSphElem++) {
+                if (jntSphElem->base.bumperFlags & BUMP_HIT) {
                     break;
                 }
             }
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 !(sphElement->info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+                 !(jntSphElem->base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 

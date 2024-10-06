@@ -328,7 +328,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
-        if ((this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x2000) != 0) {
+        if ((this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
         } else if (LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {

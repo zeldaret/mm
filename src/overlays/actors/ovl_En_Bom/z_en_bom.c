@@ -162,7 +162,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
+    this->collider2Elements[0].base.toucher.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
@@ -342,12 +342,12 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Color_RGBA8 sp84;
     Color_RGBA8 sp80;
 
-    if (this->collider2.elements->dim.modelSphere.radius == 0) {
+    if (this->collider2.elements[0].dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
+    this->collider2.elements[0].dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
         this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }

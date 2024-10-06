@@ -182,12 +182,12 @@ void ObjMine_Air_CheckAC(ObjMine* this, s16* hitAngle, s16* torqueAngle) {
     yawToAttack = Math_Vec3f_Yaw(&attackActor->world.pos, &centerPos);
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_FIRE_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
-    if (this->collider.elements[0].info.acHitElem->toucher.dmgFlags & 0x13820) {
+    if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x13820) {
         *hitAngle = attackActor->shape.rot.y;
         *torqueAngle = attackActor->shape.rot.y - yawToAttack;
     } else {
         Vec3f hitPos;
-        Vec3s* hitPos3s = &this->collider.elements[0].info.bumper.hitPos;
+        Vec3s* hitPos3s = &this->collider.elements[0].base.bumper.hitPos;
 
         Math_Vec3s_ToVec3f(&hitPos, hitPos3s);
         *hitAngle = Actor_WorldYawTowardActor(attackActor, &this->actor);
@@ -199,7 +199,7 @@ void ObjMine_Water_CheckAC(ObjMine* this, Vec3f* knockbackDir) {
     Actor* attackActor = this->collider.base.ac;
 
     // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_LIGHT_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
-    if (this->collider.elements[0].info.acHitElem->toucher.dmgFlags & 0x13820) {
+    if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x13820) {
         Matrix_Push();
         Matrix_RotateYS(attackActor->shape.rot.y, MTXMODE_NEW);
         Matrix_RotateXS(attackActor->shape.rot.x, MTXMODE_APPLY);

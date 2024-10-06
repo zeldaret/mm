@@ -762,7 +762,7 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
                 this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1013A22;
+                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1013A22;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
 
@@ -1049,7 +1049,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
             this->alpha = 0;
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000202;
+                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1000202;
             }
 
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
@@ -1281,7 +1281,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
             // in the final game, since EnWiz_Init effectively disables them), then the below code will
             // "destroy" the ghost by turning into a cloud of smoke.
             if ((R_TRANS_FADE_FLASH_ALPHA_STEP != 0) ||
-                (this->ghostColliders.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
+                (this->ghostColliders.elements[i + 1].base.bumperFlags & BUMP_HIT)) {
                 //! @bug: If a single ghost is destroyed, then changing the fight state here will cause
                 //! strange behavior; the ghosts will stand still and pretend to attack the player like
                 //! the real Wizrobe. Since Deku Nuts destroy all ghosts at once, and since the ghost

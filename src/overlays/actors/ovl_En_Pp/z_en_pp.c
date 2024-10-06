@@ -248,9 +248,9 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
         this->bodyCollider.elements[0].dim.scale = 1.0f;
         if (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED) {
             this->actor.hintId = TATL_HINT_ID_HIPLOOP;
-            this->maskColliderElements[0].info.toucherFlags &= ~TOUCH_ON;
-            this->maskColliderElements[0].info.bumperFlags &= ~BUMP_ON;
-            this->maskColliderElements[0].info.ocElemFlags &= ~OCELEM_ON;
+            this->maskColliderElements[0].base.toucherFlags &= ~TOUCH_ON;
+            this->maskColliderElements[0].base.bumperFlags &= ~BUMP_ON;
+            this->maskColliderElements[0].base.ocElemFlags &= ~OCELEM_ON;
             this->maskCollider.base.colType = COLTYPE_HIT2;
             this->maskCollider.elements[0].dim.modelSphere.radius = 42;
             this->maskCollider.elements[0].dim.scale = 1.0f;
@@ -270,8 +270,8 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.scale = 1.0f;
             this->bodyCollider.elements[0].dim.modelSphere.center.x = 400;
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
-            this->bodyColliderElements[0].info.bumperFlags |= BUMP_HOOKABLE;
-            this->maskCollider.elements[0].info.toucher.damage = 0x10;
+            this->bodyColliderElements[0].base.bumperFlags |= BUMP_HOOKABLE;
+            this->maskCollider.elements[0].base.toucher.damage = 0x10;
         }
 
         Collider_InitQuad(play, &this->hornCollider);
@@ -1257,7 +1257,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
     }
 
     if ((EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) && (this->action < EN_PP_ACTION_MASK_DETACH)) {
-        if (this->maskCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+        if (this->maskCollider.elements[0].base.bumperFlags & BUMP_HIT) {
             if (yawDiff < (BREG(2) + 0x4A9C)) {
                 if (this->actor.colChkInfo.damageEffect == EN_PP_DMGEFF_HOOKSHOT) {
                     EnPp_Mask_SetupDetach(this, play);
@@ -1269,12 +1269,12 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
             } else {
                 attackBouncedOffMask = true;
             }
-        } else if (this->maskCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+        } else if (this->maskCollider.elements[0].base.bumperFlags & BUMP_HIT) {
             attackBouncedOffMask = true;
         }
     }
 
-    if (this->bodyCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+    if (this->bodyCollider.elements[0].base.bumperFlags & BUMP_HIT) {
         if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_MASKED) {
             if ((this->action < EN_PP_ACTION_DAMAGED) && (this->action != EN_PP_ACTION_JUMP)) {
                 if (this->actor.colChkInfo.damageEffect == EN_PP_DMGEFF_HOOKSHOT) {

@@ -181,7 +181,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->tailCollider, &this->actor, &sTailCylinderInit);
     Collider_InitJntSph(play, &this->headCollider);
     Collider_SetJntSph(play, &this->headCollider, &this->actor, &sJntSphInit, this->headColliderElements);
-    this->headCollider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    this->headCollider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable, this->morphTable,
                        WOLFOS_NORMAL_LIMB_MAX);

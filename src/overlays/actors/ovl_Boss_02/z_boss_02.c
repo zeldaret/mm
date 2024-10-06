@@ -1107,8 +1107,8 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
         }
 
         for (i = temp; i < ARRAY_COUNT(this->colliderSphere2Elements); i++) {
-            if (this->colliderSphere2.elements[i].info.bumperFlags & BUMP_HIT) {
-                this->colliderSphere2.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->colliderSphere2.elements[i].base.bumperFlags & BUMP_HIT) {
+                this->colliderSphere2.elements[i].base.bumperFlags &= ~BUMP_HIT;
                 this->unk_0154 = 15;
                 this->unk_0156 = 15;
 

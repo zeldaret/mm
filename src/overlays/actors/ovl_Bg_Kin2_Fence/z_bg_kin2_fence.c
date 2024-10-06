@@ -103,7 +103,7 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
             return i;
         }
     }
