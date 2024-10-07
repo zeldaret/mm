@@ -123,18 +123,18 @@ typedef enum MajorasMaskDamageEffect {
 
 // All of these damage effects behave in exactly the same way; assigning them to a particular type of attack won't
 // change its properties at all. Therefore, these are all named based on the types of attacks that use them.
-typedef enum MajoraRemainsDamageEffect {
+typedef enum RemainsDamageEffect {
     /* 0x0 */ REMAINS_DMGEFF_IMMUNE,
     /* 0x2 */ REMAINS_DMGEFF_FIRE_ARROW = 2,
     /* 0x3 */ REMAINS_DMGEFF_ICE_ARROW,
     /* 0x4 */ REMAINS_DMGEFF_LIGHT_ARROW,
     /* 0x9 */ REMAINS_DMGEFF_SWORD_BEAM = 9,
     /* 0xD */ REMAINS_DMGEFF_SPIN_ATTACK = 0xD,
-    /* 0xE */ REMAINS_DMGEFF_EXPLOSIVES_GORON_PUNCH_AND_SWORD,
+    /* 0xE */ REMAINS_DMGEFF_OTHER,
     /* 0xF */ REMAINS_DMGEFF_DAMAGE
-} MajoraRemainsDamageEffect;
+} RemainsDamageEffect;
 
-typedef enum MajoraTopDamageEffect {
+typedef enum TopDamageEffect {
     // If an attack with this effect hits the top, it will not react in any way.
     /* 0x0 */ TOP_DMGEFF_NO_REACTION_0,
 
@@ -158,7 +158,7 @@ typedef enum MajoraTopDamageEffect {
 
     // If an attack with this effect hits the top, it will not react in any way.
     /* 0xF */ TOP_DMGEFF_NO_REACTION_F
-} MajoraTopDamageEffect;
+} TopDamageEffect;
 
 typedef enum MajoraEffectType {
     /* 0 */ MAJORA_EFFECT_NONE,
@@ -173,8 +173,8 @@ typedef enum MajorasWrathAttackSubAction {
     /* 4 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK,
     /* 5 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_TAUNT,
     /* 6 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_THREE_HIT,
-    /* 7 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK,
-    /* 8 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_MAX
+    /* 7 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_WHIP_ATTACK_MAX,
+    /* 7 */ MAJORAS_WRATH_ATTACK_SUB_ACTION_KICK = 7,
 } MajorasWrathAttackSubAction;
 
 typedef enum MajorasIncarnationTauntSubAction {
@@ -188,24 +188,22 @@ typedef enum MajorasMaskSpinAttackSubAction {
     /* 0 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_WIND_UP,
     /* 1 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_ATTACK,
     /* 2 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END,
-    /* 3 */ MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_MAX
 } MajorasMaskSpinAttackSubAction;
 
-typedef enum MajorasMaskBeamState {
-    /* 0 */ MAJORAS_MASK_BEAM_STATE_CHARGE,
-    /* 1 */ MAJORAS_MASK_BEAM_STATE_EYES,
-    /* 2 */ MAJORAS_MASK_BEAM_STATE_FOCUS,
-    /* 3 */ MAJORAS_MASK_BEAM_STATE_ACTIVE,
-    /* 4 */ MAJORAS_MASK_BEAM_STATE_REFLECT,
-    /* 5 */ MAJORAS_MASK_BEAM_STATE_END,
-    /* 6 */ MAJORAS_MASK_BEAM_STATE_MAX
-} MajorasMaskBeamState;
+typedef enum MajorasMaskFireBeamSubAction {
+    /* 0 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_CHARGE_UP,
+    /* 1 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_FIRE_EYE_BEAMS,
+    /* 2 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_GROW_FOCUS_LIGHT_ORB,
+    /* 3 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE,
+    /* 4 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_REFLECTED,
+    /* 5 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END,
+    /* 6 */ MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_MAX
+} MajorasMaskFireBeamSubAction;
 
-typedef enum MajoraProjectileState {
-    /* 0 */ MAJORA_PROJECTILE_STATE_0,
-    /* 1 */ MAJORA_PROJECTILE_STATE_1,
-    /* 2 */ MAJORA_PROJECTILE_STATE_MAX
-} MajoraProjectileState;
+typedef enum ProjectileSubAction {
+    /* 0 */ PROJECTILE_SUB_ACTION_SPAWN,
+    /* 1 */ PROJECTILE_SUB_ACTION_FLY,
+} ProjectileSubAction;
 
 typedef enum MajoraRemainsState {
     /*  0 */ REMAINS_STATE_WAIT,
@@ -312,13 +310,13 @@ typedef enum TentacleState {
     /* 2 */ TENTACLE_STATE_DEATH
 } TentacleState;
 
-typedef enum MaskSpinAttackRetargetState {
+typedef enum MajorasMaskSpinAttackRetargetState {
     // The mask targets a random position at least 100 units off the ground, making it hard to hit the player.
-    /* 0 */ MASK_SPIN_ATTACK_RETARGET_PASSIVE,
+    /* 0 */ MAJORAS_MASK_SPIN_ATTACK_RETARGET_PASSIVE,
 
     // The mask targets a point 10 units above the player's current position for up to 20 frames.
-    /* 1 */ MASK_SPIN_ATTACK_RETARGET_ACTIVE,
-} MaskSpinAttackRetargetState;
+    /* 1 */ MAJORAS_MASK_SPIN_ATTACK_RETARGET_ACTIVE,
+} MajorasMaskSpinAttackRetargetState;
 
 void Boss07_RandVec3fXZ(Vec3f* dst, f32 length);
 void Boss07_Incarnation_AvoidPlayer(Boss07* this);
@@ -384,8 +382,8 @@ void Boss07_Mask_SetupIdle(Boss07* this, PlayState* play);
 void Boss07_Mask_Idle(Boss07* this, PlayState* play);
 void Boss07_Mask_SetupSpinAttack(Boss07* this, PlayState* play);
 void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play);
-void Boss07_Mask_SetupBeam(Boss07* this, PlayState* play);
-void Boss07_Mask_Beam(Boss07* this, PlayState* play);
+void Boss07_Mask_SetupFireBeam(Boss07* this, PlayState* play);
+void Boss07_Mask_FireBeam(Boss07* this, PlayState* play);
 void Boss07_Mask_SetupStunned(Boss07* this, PlayState* play);
 void Boss07_Mask_Stunned(Boss07* this, PlayState* play);
 void Boss07_Mask_SetupDamaged(Boss07* this, PlayState* play, u8 damage, Actor* hitActor);
@@ -554,13 +552,13 @@ static DamageTable sRemainsDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
     /* Deku Stick     */ DMG_ENTRY(1, REMAINS_DMGEFF_DAMAGE),
     /* Horse trample  */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
-    /* Explosives     */ DMG_ENTRY(2, REMAINS_DMGEFF_EXPLOSIVES_GORON_PUNCH_AND_SWORD),
+    /* Explosives     */ DMG_ENTRY(2, REMAINS_DMGEFF_OTHER),
     /* Zora boomerang */ DMG_ENTRY(1, REMAINS_DMGEFF_DAMAGE),
     /* Normal arrow   */ DMG_ENTRY(1, REMAINS_DMGEFF_DAMAGE),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
     /* Hookshot       */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
-    /* Goron punch    */ DMG_ENTRY(1, REMAINS_DMGEFF_EXPLOSIVES_GORON_PUNCH_AND_SWORD),
-    /* Sword          */ DMG_ENTRY(1, REMAINS_DMGEFF_EXPLOSIVES_GORON_PUNCH_AND_SWORD),
+    /* Goron punch    */ DMG_ENTRY(1, REMAINS_DMGEFF_OTHER),
+    /* Sword          */ DMG_ENTRY(1, REMAINS_DMGEFF_OTHER),
     /* Goron pound    */ DMG_ENTRY(1, REMAINS_DMGEFF_DAMAGE),
     /* Fire arrow     */ DMG_ENTRY(2, REMAINS_DMGEFF_FIRE_ARROW),
     /* Ice arrow      */ DMG_ENTRY(2, REMAINS_DMGEFF_ICE_ARROW),
@@ -582,7 +580,7 @@ static DamageTable sRemainsDamageTable = {
     /* UNK_DMG_0x1C   */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
     /* Unblockable    */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, REMAINS_DMGEFF_IMMUNE),
-    /* Powder Keg     */ DMG_ENTRY(2, REMAINS_DMGEFF_EXPLOSIVES_GORON_PUNCH_AND_SWORD),
+    /* Powder Keg     */ DMG_ENTRY(2, REMAINS_DMGEFF_OTHER),
 };
 
 static DamageTable sTopDamageTable = {
@@ -2181,7 +2179,7 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
             this->subAction = MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK;
         }
     } else {
-        this->subAction = Rand_ZeroFloat(6.99f);
+        this->subAction = Rand_ZeroFloat(MAJORAS_WRATH_ATTACK_SUB_ACTION_WHIP_ATTACK_MAX - 0.01f);
         if (((s8)this->actor.colChkInfo.health >= 28) &&
             ((this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY) ||
              (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP))) {
@@ -5104,7 +5102,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
         if (this->timers[2] == 0) {
             if (((s8)this->actor.colChkInfo.health <= 8) && (player->transformation != PLAYER_FORM_FIERCE_DEITY) &&
                 (Rand_ZeroOne() < 0.75f)) {
-                Boss07_Mask_SetupBeam(this, play);
+                Boss07_Mask_SetupFireBeam(this, play);
             } else {
                 Boss07_Mask_SetupSpinAttack(this, play);
             }
@@ -5158,7 +5156,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
 void Boss07_Mask_SetupSpinAttack(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Mask_SpinAttack;
     this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_WIND_UP;
-    this->cutsceneState = MASK_SPIN_ATTACK_RETARGET_PASSIVE;
+    this->cutsceneState = MAJORAS_MASK_SPIN_ATTACK_RETARGET_PASSIVE;
     this->timers[0] = 30;
     this->angularVelocity = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ATTACK_OLD);
@@ -5219,7 +5217,7 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
             // spin or if it should actively try to attack them. Note that the Mask will always attempt to attack the
             // player immediately after the spin attack starts; this code will only run after it has approached the
             // player at least once.
-            if (((this->cutsceneState == MASK_SPIN_ATTACK_RETARGET_PASSIVE) && (sp24 < 100.0f)) ||
+            if (((this->cutsceneState == MAJORAS_MASK_SPIN_ATTACK_RETARGET_PASSIVE) && (sp24 < 100.0f)) ||
                 (this->timers[0] == 0)) {
                 if (Rand_ZeroOne() < 0.25f) {
                     this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END;
@@ -5231,10 +5229,10 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
                     if (Rand_ZeroOne() < 0.3f) {
                         this->timers[1] = 20;
                         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ATTACK_2ND_OLD);
-                        this->cutsceneState = MASK_SPIN_ATTACK_RETARGET_ACTIVE;
+                        this->cutsceneState = MAJORAS_MASK_SPIN_ATTACK_RETARGET_ACTIVE;
                     } else {
                         this->timers[1] = 0;
-                        this->cutsceneState = MASK_SPIN_ATTACK_RETARGET_PASSIVE;
+                        this->cutsceneState = MAJORAS_MASK_SPIN_ATTACK_RETARGET_PASSIVE;
                     }
 
                     this->timers[0] = 50;
@@ -5375,14 +5373,14 @@ void Boss07_Mask_ClearBeam(Boss07* this) {
     this->reflectedBeamLengthScale = 0.0f;
 }
 
-void Boss07_Mask_SetupBeam(Boss07* this, PlayState* play) {
-    this->actionFunc = Boss07_Mask_Beam;
-    this->subAction = MAJORAS_MASK_BEAM_STATE_CHARGE;
+void Boss07_Mask_SetupFireBeam(Boss07* this, PlayState* play) {
+    this->actionFunc = Boss07_Mask_FireBeam;
+    this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_CHARGE_UP;
     this->timers[0] = 30;
     this->speedToTarget = 0.0f;
 }
 
-void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
+void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
     f32 temp_f20;
     f32 temp_f22;
     f32 temp_f12;
@@ -5420,42 +5418,42 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
     this->tentacleState = TENTACLE_STATE_FIRING_BEAM;
 
     switch (this->subAction) {
-        case MAJORAS_MASK_BEAM_STATE_CHARGE:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_CHARGE_UP:
             if (this->timers[0] == 25) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST1_BLOW_OLD);
             }
 
             if (this->timers[0] == 0) {
-                this->subAction = MAJORAS_MASK_BEAM_STATE_EYES;
+                this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_FIRE_EYE_BEAMS;
                 this->timers[0] = 6;
                 this->beamBaseScale = 1.0f;
             }
             break;
 
-        case MAJORAS_MASK_BEAM_STATE_EYES:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_FIRE_EYE_BEAMS:
             Math_ApproachF(&this->eyeBeamsLengthScale, 1.0f, 1.0f, 0.2f);
 
             if (this->timers[0] == 0) {
-                this->subAction = MAJORAS_MASK_BEAM_STATE_FOCUS;
+                this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_GROW_FOCUS_LIGHT_ORB;
                 this->timers[0] = 8;
             }
             break;
 
-        case MAJORAS_MASK_BEAM_STATE_FOCUS:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_GROW_FOCUS_LIGHT_ORB:
             Audio_PlaySfx(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
             Math_ApproachF(&this->eyeBeamsFocusOrbScale, 1.0f, 0.2f, 0.2f);
 
             if (this->timers[0] == 0) {
-                this->subAction = MAJORAS_MASK_BEAM_STATE_ACTIVE;
+                this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE;
                 this->timers[0] = 100;
             }
             break;
 
-        case MAJORAS_MASK_BEAM_STATE_ACTIVE:
-        case MAJORAS_MASK_BEAM_STATE_REFLECT:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_REFLECTED:
             Audio_PlaySfx(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
             // fallthrough
-        case MAJORAS_MASK_BEAM_STATE_END:
+        case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END:
             Math_ApproachF(&this->eyeBeamsFocusOrbScale, 1.0f, 0.2f, 0.2f);
             temp_f20 = player->actor.world.pos.x - this->beamStartPos.x;
             temp_f12 = player->actor.world.pos.y - this->beamStartPos.y + 20.0f;
@@ -5465,7 +5463,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
 
             if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamTireMarkPos, &sp158,
                                         true, true, true, true, &sp144) &&
-                (this->subAction != MAJORAS_MASK_BEAM_STATE_END)) {
+                (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                 Vec3f flamePos;
                 Vec3f flameVelocity;
                 Vec3f flameAccel;
@@ -5506,8 +5504,8 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                     Matrix_MtxFToYXZRot(&player->shieldMf, &sp118, 0);
                     sp118.y += 0x8000;
                     sp118.x = -sp118.x;
-                    if (this->subAction == MAJORAS_MASK_BEAM_STATE_ACTIVE) {
-                        this->subAction = MAJORAS_MASK_BEAM_STATE_REFLECT;
+                    if (this->subAction == MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE) {
+                        this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_REFLECTED;
                         this->reflectedBeamPitch = sp118.x;
                         this->reflectedBeamYaw = sp118.y;
                     } else {
@@ -5528,7 +5526,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         Matrix_MultVec3f(&sp16C, &sp160);
                         if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
                             (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
-                            (this->subAction != MAJORAS_MASK_BEAM_STATE_END)) {
+                            (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                             s32 phi_s0_2;
                             Vec3f flamePos;
                             Vec3f flameVelocity;
@@ -5601,7 +5599,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
 
                             if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
                                 (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
-                                (this->subAction != MAJORAS_MASK_BEAM_STATE_END)) {
+                                (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                                 s32 j;
                                 Vec3f flamePos;
                                 Vec3f flameVelocity;
@@ -5651,7 +5649,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                         }
                         if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamEndPos, &this->reflectedBeamEndPos,
                                                     &beamTireMarkPos, &sp158, true, true, true, true, &sp144) &&
-                            (this->subAction != MAJORAS_MASK_BEAM_STATE_END)) {
+                            (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                             Vec3f flamePos;
                             Vec3f flameVelocity;
                             Vec3f flameAccel;
@@ -5674,7 +5672,7 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                                                Rand_ZeroFloat(10.0f) + 25.0f);
                         }
                     }
-                } else if (!player->isBurning && (this->subAction != MAJORAS_MASK_BEAM_STATE_END)) {
+                } else if (!player->isBurning && (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                     s32 i;
 
                     func_800B8D50(play, &this->actor, 5.0f, this->actor.shape.rot.y, 0.0f, 0x10);
@@ -5699,9 +5697,9 @@ void Boss07_Mask_Beam(Boss07* this, PlayState* play) {
                 this->prevBeamTireMarkPos = beamTireMarkPos;
             }
 
-            if (this->subAction != MAJORAS_MASK_BEAM_STATE_END) {
+            if (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END) {
                 if (this->timers[0] == 0) {
-                    this->subAction = MAJORAS_MASK_BEAM_STATE_END;
+                    this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END;
                     this->timers[0] = 20;
                 }
             } else {
@@ -6433,7 +6431,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actionFunc == Boss07_Mask_Beam) {
+    if (this->actionFunc == Boss07_Mask_FireBeam) {
         gSPSegment(POLY_XLU_DISP++, 0x0C,
                    Gfx_TexScroll(play->state.gfxCtx, 0, (this->frameCounter * -15) % 0x100U, 0x20, 0x40));
         gDPPipeSync(POLY_XLU_DISP++);
@@ -6624,7 +6622,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
     if (KREG(63) == 0) {
         Actor_SetScale(&this->actor, 3.5f);
 
-        if (this->subAction == MAJORA_PROJECTILE_STATE_0) {
+        if (this->subAction == PROJECTILE_SUB_ACTION_SPAWN) {
             sp58 = player->actor.world.pos.x - this->actor.world.pos.x;
             sp54 = player->actor.world.pos.y - this->actor.world.pos.y + 20.0f;
             sp50 = player->actor.world.pos.z - this->actor.world.pos.z;
@@ -6632,7 +6630,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
             this->actor.world.rot.y = Math_Atan2S(sp58, sp50);
             temp = sqrtf(SQ(sp58) + SQ(sp50));
             this->actor.world.rot.x = Math_Atan2S(sp54, temp);
-            this->subAction = MAJORA_PROJECTILE_STATE_1;
+            this->subAction = PROJECTILE_SUB_ACTION_FLY;
             this->actor.speed = 30.0f;
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_PROJECTILE_INCARNATION) {
@@ -6658,6 +6656,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
                         this->actor.world.pos.z, 0, 0, this->projectileColorIndex,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
         }
+
         Collider_UpdateCylinder(&this->actor, &this->generalCollider);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
@@ -6966,7 +6965,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
 
     if (this->tryFireProjectile) {
         this->tryFireProjectile = false;
-        if (Boss07_ArePlayerAndActorFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_Beam)) {
+        if (Boss07_ArePlayerAndActorFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_FireBeam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_PROJECTILE_REMAINS);
         }

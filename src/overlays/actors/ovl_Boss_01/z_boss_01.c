@@ -235,8 +235,8 @@ typedef enum {
     // Deals damage and has no special effect.
     /* 0xD */ ODOLWA_DMGEFF_DAMAGE,
 
-    // Deals damage and checks the timer that tracks how long Odolwa should be in his damaged state. If the timer is 7
-    // or more, it will reset the timer to 20 frames keep Odolwa in the damaged state for longer. If the timer is 6 or
+    // Deals damage and checks the timer that tracks how long Odolwa should be in his damaged state. If the timer is 5
+    // or more, it will reset the timer to 20 frames keep Odolwa in the damaged state for longer. If the timer is 4 or
     // less, it will disable Odolwa's collision for 20 frames to ensure he can jump away without taking further damage.
     /* 0xE */ ODOLWA_DMGEFF_DAMAGE_TIMER_CHECK,
 
@@ -1905,9 +1905,9 @@ void Boss01_ShieldBash(Boss01* this, PlayState* play) {
  * function will transition him to that state and start a 20 frame timer; when this timer reaches 0, he will recover and
  * jump away. However, if he is already in the "damaged" state, and if the player attacked him with an attack that has
  * the ODOLWA_DMGEFF_DAMAGE_TIMER_CHECK damage effect, then one of two things will happen:
- * - If the attack hit while his current action timer is 7 or more, the timer will be set to 20 again; this will keep
+ * - If the attack hit while his current action timer is 5 or more, the timer will be set to 20 again; this will keep
  *   Odolwa in the "damaged" state for longer and allow the player to attack him more.
- * - If the attack hit while his current action timer is 6 or less, Odolwa will disable all of his collision for 20
+ * - If the attack hit while his current action timer is 4 or less, Odolwa will disable all of his collision for 20
  *   frames to ensure that the player cannot hit him with subsequent attacks.
  */
 void Boss01_SetupDamaged(Boss01* this, PlayState* play, u8 damageEffect) {
