@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_kakera.h"
-#include "debug.h"
+#include "libu64/debug.h"
 
 #define rReg0 regs[0]
 #define rGravity regs[1]

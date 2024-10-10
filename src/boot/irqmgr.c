@@ -38,7 +38,7 @@
 
 #include "macros.h"
 #include "scheduler.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "z64thread.h"
 
 vs32 gIrqMgrResetStatus = IRQ_RESET_STATUS_IDLE;

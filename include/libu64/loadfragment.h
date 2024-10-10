@@ -1,5 +1,5 @@
-#ifndef LOADFRAGMENT_H
-#define LOADFRAGMENT_H
+#ifndef LIBU64_LOADFRAGMENT_H
+#define LIBU64_LOADFRAGMENT_H
 
 #include "PR/ultratypes.h"
 #include "stdint.h"

@@ -2,7 +2,7 @@
 
 #include "global.h"
 #include "fault.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 
 #define KALEIDO_OVERLAY(name) \
     { NULL, ROM_FILE(ovl_##name), SEGMENT_START(ovl_##name), SEGMENT_END(ovl_##name), 0, #name }

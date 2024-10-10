@@ -5,7 +5,7 @@
 
 #include "fault.h"
 #include "sys_cfb.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sActorFaultClient; // 2 funcs
