@@ -1,5 +1,5 @@
-#ifndef SYSTEM_HEAP_H
-#define SYSTEM_HEAP_H
+#ifndef LIBU64_SYSTEM_HEAP_H
+#define LIBU64_SYSTEM_HEAP_H
 
 #include "stddef.h"
 #include "PR/ultratypes.h"

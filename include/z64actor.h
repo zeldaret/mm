@@ -4,7 +4,7 @@
 #include "PR/ultratypes.h"
 #include "stdbool.h"
 #include "color.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 #include "z64actor_dlftbls.h"
 #include "z64math.h"
 #include "z64animation.h"

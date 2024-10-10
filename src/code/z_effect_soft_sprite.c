@@ -1,7 +1,7 @@
 #include "z64effect_ss.h"
 
 #include "tha.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 #include "zelda_arena.h"
 #include "global.h"
 

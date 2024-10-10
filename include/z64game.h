@@ -7,7 +7,7 @@
 #include "stdint.h"
 #include "gamealloc.h"
 #include "padmgr.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 #include "romfile.h"
 #include "tha.h"
 #include "unk.h"
