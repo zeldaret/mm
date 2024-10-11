@@ -39,8 +39,7 @@ typedef struct MajoraEffect {
 } MajoraEffect; // size = 0x48
 
 typedef enum MajorasWrathDamageEffect {
-    // Named based on the fact that everything with this damage effect is ignored by Wrath. If this effect is given to
-    // an attack that isn't ignored, it will behave exactly like `MAJORAS_WRATH_DMGEFF_STUN_NONE`.
+    // Named because everything with this effect is ignored thanks to `CollisionCheck_SetATvsAC`.
     /* 0x0 */ MAJORAS_WRATH_DMGEFF_IMMUNE,
 
     // Stuns and surrounds Wrath with fire.
@@ -75,8 +74,7 @@ typedef enum MajorasWrathDamageEffect {
 } MajorasWrathDamageEffect;
 
 typedef enum MajorasIncarnationDamageEffect {
-    // Named based on the fact that everything with this damage effect deals zero damage. If this effect is given to an
-    // attack that deals non-zero damage, it will behave exactly like `MAJORAS_INCARNATION_DMGEFF_NONE`.
+    // Named because everything with this effect is ignored thanks to `CollisionCheck_SetATvsAC`.
     /* 0x0 */ MAJORAS_INCARNATION_DMGEFF_IMMUNE,
 
     // Deals damage and surrounds Incarnation with fire.
@@ -110,9 +108,10 @@ typedef enum MajorasIncarnationDamageEffect {
     /* 0xF */ MAJORAS_INCARNATION_DMGEFF_NONE
 } MajorasIncarnationDamageEffect;
 
-// All of these damage effects behave in exactly the same way; assigning them to a particular type of attack won't
-// change its properties at all. Therefore, these are all named based on the types of attacks that use them.
+// All of these damage effects (except `MAJORAS_MASK_DMGEFF_IMMUNE`) behave in exactly the same way. Therefore, these
+// are all named based on the types of attacks that use them.
 typedef enum MajorasMaskDamageEffect {
+    // Named because everything with this effect is ignored thanks to `CollisionCheck_SetATvsAC`.
     /* 0x0 */ MAJORAS_MASK_DMGEFF_IMMUNE,
     /* 0x2 */ MAJORAS_MASK_DMGEFF_FIRE_ARROW = 2,
     /* 0x3 */ MAJORAS_MASK_DMGEFF_ICE_ARROW,
@@ -121,9 +120,10 @@ typedef enum MajorasMaskDamageEffect {
     /* 0xF */ MAJORAS_MASK_DMGEFF_DAMAGE = 0xF
 } MajorasMaskDamageEffect;
 
-// All of these damage effects behave in exactly the same way; assigning them to a particular type of attack won't
-// change its properties at all. Therefore, these are all named based on the types of attacks that use them.
+// All of these damage effects (except `REMAINS_DMGEFF_IMMUNE`) behave in exactly the same way. Therefore, these are all
+// named based on the types of attacks that use them.
 typedef enum RemainsDamageEffect {
+    // Named because everything with this effect is ignored thanks to `CollisionCheck_SetATvsAC`.
     /* 0x0 */ REMAINS_DMGEFF_IMMUNE,
     /* 0x2 */ REMAINS_DMGEFF_FIRE_ARROW = 2,
     /* 0x3 */ REMAINS_DMGEFF_ICE_ARROW,
@@ -135,8 +135,8 @@ typedef enum RemainsDamageEffect {
 } RemainsDamageEffect;
 
 typedef enum TopDamageEffect {
-    // If an attack with this effect hits the top, it will not react in any way.
-    /* 0x0 */ TOP_DMGEFF_NO_REACTION_0,
+    // Named because everything with this effect is ignored thanks to `CollisionCheck_SetATvsAC`.
+    /* 0x0 */ TOP_DMGEFF_IMMUNE,
 
     // If an attack with this effect hits the top, the top's speed is set to -15. However, if the player is currently in
     // Fierce Diety form when the attack lands, the speed will be set to -30, and the top will be bounced into the air.
@@ -205,27 +205,26 @@ typedef enum ProjectileSubAction {
     /* 1 */ PROJECTILE_SUB_ACTION_FLY,
 } ProjectileSubAction;
 
-typedef enum MajoraRemainsState {
-    /*  0 */ REMAINS_STATE_WAIT,
-    /*  1 */ REMAINS_STATE_FLY,
-    /*  2 */ REMAINS_STATE_DEATH,
-    /*  3 */ REMAINS_STATE_GONE,
-    /* 10 */ REMAINS_STATE_DAMAGED = 10,
-    /* 20 */ REMAINS_STATE_ACTIVATE = 20
-} MajoraRemainsState;
+typedef enum RemainsMoveSubAction {
+    /*  0 */ REMAINS_MOVE_SUB_ACTION_WAIT,
+    /*  1 */ REMAINS_MOVE_SUB_ACTION_FLY,
+    /*  2 */ REMAINS_MOVE_SUB_ACTION_DIE,
+    /*  3 */ REMAINS_MOVE_SUB_ACTION_DEAD,
+    /* 10 */ REMAINS_MOVE_SUB_ACTION_DAMAGED = 10,
+    /* 20 */ REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL = 20
+} RemainsMoveSubAction;
 
-typedef enum MajoraRemainscutsceneState {
-    /* 0 */ REMAINS_CS_STATE_WAIT,
-    /* 1 */ REMAINS_CS_STATE_FLY,
-    /* 2 */ REMAINS_CS_STATE_ATTACH_WAIT,
-    /* 3 */ REMAINS_CS_STATE_ATTACH
-} MajoraRemainscutsceneState;
+typedef enum RemainsIntroSubAction {
+    /* 0 */ REMAINS_INTRO_SUB_ACTION_WAIT,
+    /* 1 */ REMAINS_INTRO_SUB_ACTION_FLY,
+    /* 2 */ REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT,
+    /* 3 */ REMAINS_INTRO_SUB_ACTION_ATTACH_TO_WALL
+} RemainsIntroSubAction;
 
-typedef enum MajoraTopStates {
-    /* 0 */ TOP_STATE_IN_AIR,
-    /* 1 */ TOP_STATE_ON_GROUND,
-    /* 2 */ TOP_STATE_MAX
-} MajoraTopStates;
+typedef enum TopMoveSubAction {
+    /* 0 */ TOP_MOVE_SUB_ACTION_AIRBORNE,
+    /* 1 */ TOP_MOVE_SUB_ACTION_GROUNDED,
+} TopMoveSubAction;
 
 typedef enum MajorasMaskIntroState {
     /* 0 */ MAJORAS_MASK_INTRO_STATE_0,
@@ -416,15 +415,15 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play);
 
 void Boss07_Remains_SetupIntro(Boss07* this, PlayState* play);
 void Boss07_Remains_Intro(Boss07* this, PlayState* play);
-void Boss07_Remains_SetupFly(Boss07* this, PlayState* play);
-void Boss07_Remains_Fly(Boss07* this, PlayState* play);
+void Boss07_Remains_SetupMove(Boss07* this, PlayState* play);
+void Boss07_Remains_Move(Boss07* this, PlayState* play);
 void Boss07_Remains_SetupStunned(Boss07* this, PlayState* play);
 void Boss07_Remains_Stunned(Boss07* this, PlayState* play);
 
 void Boss07_Top_Thrown(Boss07* this, PlayState* play);
-void Boss07_Top_Ground(Boss07* this, PlayState* play);
+void Boss07_Top_Move(Boss07* this, PlayState* play);
 void Boss07_Top_SetupThrown(Boss07* this, PlayState* play);
-void Boss07_Top_SetupGround(Boss07* this, PlayState* play);
+void Boss07_Top_SetupMove(Boss07* this, PlayState* play);
 
 void Boss07_BattleHandler_UpdateEffects(PlayState* play);
 void Boss07_BattleHandler_DrawEffects(PlayState* play);
@@ -584,17 +583,17 @@ static DamageTable sRemainsDamageTable = {
 };
 
 static DamageTable sTopDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Deku Nut       */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
     /* Deku Stick     */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
     /* Horse trample  */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Explosives     */ DMG_ENTRY(1, TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE),
     /* Zora boomerang */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
     /* Normal arrow   */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
     /* Hookshot       */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Goron punch    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Sword          */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
-    /* Goron pound    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Goron pound    */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
     /* Fire arrow     */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Ice arrow      */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Light arrow    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
@@ -602,19 +601,19 @@ static DamageTable sTopDamageTable = {
     /* Deku spin      */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
     /* Deku bubble    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
     /* Deku launch    */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_F),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
-    /* Zora barrier   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
+    /* Zora barrier   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
     /* Normal shield  */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
     /* Light ray      */ DMG_ENTRY(1, TOP_DMGEFF_PUSH_BACK_PLAYER),
     /* Thrown object  */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Zora punch     */ DMG_ENTRY(1, TOP_DMGEFF_NO_REACTION_E),
     /* Spin attack    */ DMG_ENTRY(1, TOP_DMGEFF_REVERSE_DIRECTION),
     /* Sword beam     */ DMG_ENTRY(1, TOP_DMGEFF_REVERSE_DIRECTION),
-    /* Normal Roll    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
-    /* Unblockable    */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, TOP_DMGEFF_NO_REACTION_0),
+    /* Normal Roll    */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, TOP_DMGEFF_IMMUNE),
     /* Powder Keg     */ DMG_ENTRY(2, TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE),
 };
 
@@ -1368,7 +1367,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             this->actor.world.pos.y = 370.0f;
             this->actor.world.pos.z = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z;
             this->actor.shape.rot.y = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y;
-            Boss07_Remains_SetupFly(this, play);
+            Boss07_Remains_SetupMove(this, play);
         } else {
             Boss07_Remains_SetupIntro(this, play);
         }
@@ -1703,7 +1702,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
 
     if (sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA] != NULL) {
         for (i = 0; i < MAJORA_REMAINS_TYPE_MAX; i++) {
-            sMajoraRemains[i]->subAction = REMAINS_STATE_DEATH;
+            sMajoraRemains[i]->subAction = REMAINS_MOVE_SUB_ACTION_DIE;
         }
     }
 
@@ -5587,7 +5586,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                         Matrix_Pop();
 
                         for (i = 0; i < MAJORA_REMAINS_TYPE_MAX; i++) {
-                            if (sMajoraRemains[i]->subAction >= REMAINS_STATE_DEATH) {
+                            if (sMajoraRemains[i]->subAction >= REMAINS_MOVE_SUB_ACTION_DIE) {
                                 continue;
                             }
 
@@ -5625,7 +5624,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                                        Rand_ZeroFloat(10.0f) + 25.0f);
                                     sMajoraRemains[i]->damagedFlashTimer |= 10;
                                 } else {
-                                    sMajoraRemains[i]->subAction = REMAINS_STATE_DEATH;
+                                    sMajoraRemains[i]->subAction = REMAINS_MOVE_SUB_ACTION_DIE;
                                     sMajoraRemains[i]->fireTimer = 60;
                                     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
                                     for (j = 0; j < 20; j++) {
@@ -5813,10 +5812,10 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 20) {
-                sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_CS_STATE_FLY;
-                sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_CS_STATE_FLY;
-                sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_CS_STATE_FLY;
-                sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_CS_STATE_FLY;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_INTRO_SUB_ACTION_FLY;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_INTRO_SUB_ACTION_FLY;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_INTRO_SUB_ACTION_FLY;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_INTRO_SUB_ACTION_FLY;
             }
 
             if (this->cutsceneTimer == 0) {
@@ -5835,14 +5834,14 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer >= 160) {
                 if (this->cutsceneTimer == 160) {
-                    sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_CS_STATE_ATTACH_WAIT;
-                    sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_CS_STATE_ATTACH_WAIT;
-                    sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_CS_STATE_ATTACH_WAIT;
-                    sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_CS_STATE_ATTACH_WAIT;
+                    sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT;
+                    sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT;
+                    sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT;
+                    sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT;
                 }
 
                 if (this->cutsceneTimer == 161) {
-                    sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_CS_STATE_ATTACH;
+                    sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_TO_WALL;
                 }
 
                 // This code uses `sfxTimer` as an index to track which of the remains is currently attaching itself to
@@ -5850,7 +5849,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 // this code will also signal to the appropriate remains to start attaching to the wall.
                 if ((this->cutsceneTimer == 180) || (this->cutsceneTimer == 200) || (this->cutsceneTimer == 220)) {
                     this->sfxTimer++;
-                    sMajoraRemains[this->sfxTimer]->subAction = REMAINS_CS_STATE_ATTACH;
+                    sMajoraRemains[this->sfxTimer]->subAction = REMAINS_INTRO_SUB_ACTION_ATTACH_TO_WALL;
                 }
 
                 this->subCamEye.x = sIntroCamEyes[this->sfxTimer].x;
@@ -5869,10 +5868,10 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     this->subCamAt.x = this->actor.world.pos.x;
                     this->subCamAt.y = this->actor.world.pos.y;
                     this->subCamAt.z = this->actor.world.pos.z;
-                    Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA], play);
-                    Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG], play);
-                    Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT], play);
-                    Boss07_Remains_SetupFly(sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD], play);
+                    Boss07_Remains_SetupMove(sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA], play);
+                    Boss07_Remains_SetupMove(sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG], play);
+                    Boss07_Remains_SetupMove(sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT], play);
+                    Boss07_Remains_SetupMove(sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD], play);
                     this->subCamVelocity = 0.0f;
                     sMajoraBattleHandler->introPlayerOrbScale = 0.0f;
                     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
@@ -6703,14 +6702,14 @@ void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
 
             this->actor.colChkInfo.health -= damage;
             this->damagedFlashTimer = 15;
-            this->actionFunc = Boss07_Remains_Fly;
+            this->actionFunc = Boss07_Remains_Move;
             if ((s8)this->actor.colChkInfo.health <= 0) {
-                this->subAction = REMAINS_STATE_DEATH;
+                this->subAction = REMAINS_MOVE_SUB_ACTION_DIE;
                 this->burnOnLanding = true;
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
             } else {
-                this->subAction = REMAINS_STATE_DAMAGED;
+                this->subAction = REMAINS_MOVE_SUB_ACTION_DAMAGED;
                 this->timers[0] = 15;
                 Boss07_Remains_PlayDamageSfx(this);
             }
@@ -6741,7 +6740,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->subAction) {
-        case REMAINS_CS_STATE_WAIT:
+        case REMAINS_INTRO_SUB_ACTION_WAIT:
             Actor_SetScale(&this->actor, 0.0f);
             this->actor.world.pos.x = player->actor.world.pos.x;
             this->actor.world.pos.y = player->actor.world.pos.y + 30.0f;
@@ -6763,7 +6762,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             this->miscTimer = Rand_ZeroFloat(100.0f);
             break;
 
-        case REMAINS_CS_STATE_FLY:
+        case REMAINS_INTRO_SUB_ACTION_FLY:
             this->cutsceneTimer++;
             this->miscTimer++;
             this->introRemainsOrbRot += 0x200;
@@ -6800,7 +6799,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             this->actor.shape.rot = this->actor.world.rot;
             break;
 
-        case REMAINS_CS_STATE_ATTACH_WAIT:
+        case REMAINS_INTRO_SUB_ACTION_ATTACH_WAIT:
             Actor_SetScale(&this->actor, 0.0f);
             this->eyeBeamsLengthScale = 0.0f;
             this->actor.speed = 0.0f;
@@ -6811,7 +6810,7 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
             this->sfxTimer = 0;
             break;
 
-        case REMAINS_CS_STATE_ATTACH:
+        case REMAINS_INTRO_SUB_ACTION_ATTACH_TO_WALL:
             this->sfxTimer++;
             if (this->sfxTimer == 10) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_STAY);
@@ -6828,16 +6827,16 @@ void Boss07_Remains_Intro(Boss07* this, PlayState* play) {
     }
 }
 
-void Boss07_Remains_SetupFly(Boss07* this, PlayState* play) {
-    this->actionFunc = Boss07_Remains_Fly;
+void Boss07_Remains_SetupMove(Boss07* this, PlayState* play) {
+    this->actionFunc = Boss07_Remains_Move;
     this->actor.gravity = -0.75f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sRemainsCylinderInit);
     this->actor.colChkInfo.health = 5;
-    this->subAction = REMAINS_STATE_WAIT;
+    this->subAction = REMAINS_MOVE_SUB_ACTION_WAIT;
 }
 
-void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
+void Boss07_Remains_Move(Boss07* this, PlayState* play) {
     s16 sp7E;
     s16 sp7C;
     f32 sp78;
@@ -6846,7 +6845,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
     s32 pad;
 
     switch (this->subAction) {
-        case REMAINS_STATE_ACTIVATE:
+        case REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL:
             Actor_PlaySfx(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             this->timers[0] = 80;
             this->timers[2] = 100.0f + Rand_ZeroFloat(100.0f);
@@ -6854,14 +6853,14 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             this->actor.speed = 5.0f;
             this->targetPos = gZeroVec3f;
             this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
-            this->subAction = REMAINS_STATE_FLY;
+            this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
             this->bgCheckTimer = 100;
             this->generalCollider.base.colType = COLTYPE_HIT3;
             this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_TARGETABLE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
 
-        case REMAINS_STATE_FLY:
+        case REMAINS_MOVE_SUB_ACTION_FLY:
             Actor_PlaySfx(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
             if (this->timers[2] == 0) {
                 this->tryFireProjectile = true;
@@ -6912,11 +6911,12 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             Boss07_Remains_CollisionCheck(this, play);
             break;
 
-        case REMAINS_STATE_DEATH:
+        case REMAINS_MOVE_SUB_ACTION_DIE:
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x500);
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 100.0f, 100.0f,
                                     UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->burnOnLanding) {
                     this->fireTimer |= 4;
@@ -6925,7 +6925,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
                 Math_ApproachF(&this->actor.scale.z, 0.0f, 1.0f, 0.001f);
 
                 if (this->actor.scale.z == 0.0f) {
-                    this->subAction = REMAINS_STATE_GONE;
+                    this->subAction = REMAINS_MOVE_SUB_ACTION_DEAD;
                     this->actor.draw = NULL;
                     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 }
@@ -6936,7 +6936,7 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             }
             break;
 
-        case REMAINS_STATE_DAMAGED:
+        case REMAINS_MOVE_SUB_ACTION_DAMAGED:
             Actor_MoveWithGravity(&this->actor);
             this->actor.world.pos.y -= 50.0f;
             this->actor.prevPos.y -= 50.0f;
@@ -6948,16 +6948,16 @@ void Boss07_Remains_Fly(Boss07* this, PlayState* play) {
             this->actor.prevPos.y += 50.0f;
 
             if (this->timers[0] == 0) {
-                this->subAction = 1;
+                this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
             }
             break;
 
-        case REMAINS_STATE_WAIT:
+        case REMAINS_MOVE_SUB_ACTION_WAIT:
         default:
             break;
     }
 
-    if (this->subAction <= REMAINS_STATE_FLY) {
+    if (this->subAction <= REMAINS_MOVE_SUB_ACTION_FLY) {
         Collider_UpdateCylinder(&this->actor, &this->generalCollider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->generalCollider.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->generalCollider.base);
@@ -7015,8 +7015,8 @@ void Boss07_Remains_Stunned(Boss07* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->generalCollider.base);
 
     if (this->timers[0] == 0) {
-        this->actionFunc = Boss07_Remains_Fly;
-        this->subAction = REMAINS_STATE_FLY;
+        this->actionFunc = Boss07_Remains_Move;
+        this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
     }
 }
 
@@ -7122,17 +7122,17 @@ void Boss07_Top_Thrown(Boss07* this, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 50.0f, 80.0f, UPDBGCHECKINFO_FLAG_1);
 
     if ((sMajorasWrath->frameCounter >= (s16)(KREG(50) + 21)) || (sMajorasWrath->damagedTimer != 0)) {
-        Boss07_Top_SetupGround(this, play);
+        Boss07_Top_SetupMove(this, play);
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        Boss07_Top_SetupGround(this, play);
+        Boss07_Top_SetupMove(this, play);
         this->actor.speed = -15.0f;
         CollisionCheck_SpawnShieldParticles(play, &this->actor.focus.pos);
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
     }
 }
 
-void Boss07_Top_SetupGround(Boss07* this, PlayState* play) {
-    this->actionFunc = Boss07_Top_Ground;
+void Boss07_Top_SetupMove(Boss07* this, PlayState* play) {
+    this->actionFunc = Boss07_Top_Move;
     this->actor.gravity = -2.0f;
 
     if (sMajorasWrath->damagedTimer != 0) {
@@ -7149,7 +7149,7 @@ void Boss07_Top_SetupGround(Boss07* this, PlayState* play) {
     this->actor.shape.rot.z = Rand_ZeroFloat((f32)(sREG(29) + 10) * 0x100);
 }
 
-void Boss07_Top_Ground(Boss07* this, PlayState* play) {
+void Boss07_Top_Move(Boss07* this, PlayState* play) {
     f32 sp4C;
     f32 sp48;
 
@@ -7168,10 +7168,12 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
             } else {
                 this->actor.speed = -10.0f;
             }
+
             CollisionCheck_SpawnShieldParticles(play, &this->actor.focus.pos);
             Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
         }
     }
+
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->timers[0] < (s16)(sREG(24) + 70)) {
             if (this->timers[0] >= (s16)(sREG(25) + 35)) {
@@ -7214,12 +7216,14 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         sp48 = this->actor.prevPos.z - this->actor.world.pos.z;
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->effectIndex), &this->actor.world.pos, 3.0f,
                       Math_Atan2S(sp4C, sp48), this->actor.floorPoly, this->actor.floorBgId);
-        this->subAction = TOP_STATE_ON_GROUND;
-    } else if (this->subAction != TOP_STATE_IN_AIR) {
-        this->subAction = TOP_STATE_IN_AIR;
+        this->subAction = TOP_MOVE_SUB_ACTION_GROUNDED;
+    } else if (this->subAction != TOP_MOVE_SUB_ACTION_AIRBORNE) {
+        this->subAction = TOP_MOVE_SUB_ACTION_AIRBORNE;
         func_800AEF44(Effect_GetByIndex(this->effectIndex));
     }
+
     this->actor.shape.rot.y = this->actor.world.rot.y;
+
     if (this->timers[1] == 0) {
         EnBom* bomb =
             (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
@@ -7228,6 +7232,7 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         if (bomb != NULL) {
             bomb->timer = 0;
         }
+
         Actor_Kill(&this->actor);
     } else if (this->timers[1] == 25) {
         this->damagedFlashTimer = 25;
@@ -7473,7 +7478,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             // fallthrough
         case MAJORA_BATTLE_HANDLER_CS_STATE_2:
             if (this->cutsceneTimer == 20) {
-                sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_STATE_ACTIVATE;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
             }
             this->subCamAt.x = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.x;
             this->subCamAt.y = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.y;
@@ -7491,7 +7496,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             // fallthrough
         case MAJORA_BATTLE_HANDLER_CS_STATE_3:
             if (this->cutsceneTimer == 20) {
-                sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_STATE_ACTIVATE;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
             }
             this->subCamAt.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.x;
             this->subCamAt.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.y;
@@ -7509,7 +7514,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             // fallthrough
         case MAJORA_BATTLE_HANDLER_CS_STATE_4:
             if (this->cutsceneTimer == 20) {
-                sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_STATE_ACTIVATE;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
             }
             this->subCamAt.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.x;
             this->subCamAt.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.y;
@@ -7525,7 +7530,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             // fallthrough
         case MAJORA_BATTLE_HANDLER_CS_STATE_5:
             if (this->cutsceneTimer == 20) {
-                sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_STATE_ACTIVATE;
+                sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
             }
 
             this->subCamAt.x = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.x;
