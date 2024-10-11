@@ -1,8 +1,8 @@
 # Determines how certain text sequences should be encoded. The text sequence is
-# converted to either the first or second tuple element based on whether the
-# target encoding is the "wide" encoding. The first element is for the non-wide
-# encoding, used for all languages besides JP, while the second element is for
-# the wide encoding, used for JP, the third element is for encoding credits.
+# converted to one of the tuple elements based on the chosen encoding:
+#   Element 1: Non-wide encoding, for text other than Japanese text and the credits.
+#   Element 2: For Japanese text.
+#   Element 3: For credits text.
 {
     '\n'            : (0x11, 0x000A, 0x01),
 
