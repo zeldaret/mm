@@ -5169,21 +5169,45 @@ s32 Player_TryActionChangeList(PlayState* play, Player* this, s8* actionChangeLi
     return false;
 }
 
-s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame) {
-    if ((skelAnime->endFrame - frame) <= skelAnime->curFrame) {
+typedef enum PlayerActionInterruptResult {
+    /* -1 */ PLAYER_INTERRUPT_NONE = -1,
+    /*  0 */ PLAYER_INTERRUPT_NEW_ACTION,
+    /*  1 */ PLAYER_INTERRUPT_MOVE
+} PlayerActionInterruptResult;
+
+/**
+ * An Action Interrupt allows for ending an action early, toward the end of an animation.
+ *
+ * First, `sPlayerActionChangeList7` will be checked to see if any of those actions should be used.
+ * It should be noted that the `updateUpperBody` argument passed to `Player_TryActionChangeList`
+ * is `true`. This means that an item can be used during the interrupt window.
+ *
+ * If no actions from the Action Change List are used, then the control stick is checked to see if
+ * any movement should occur.
+ *
+ * Note that while this function can set up a new action with `sPlayerActionChangeList7`, this function
+ * will not set up an appropriate action for moving.
+ * It is the callers responsibility to react accordingly to `PLAYER_INTERRUPT_MOVE`.
+ *
+ * @param frameRange  The number of frames, from the end of the current animation, where an interrupt can occur.
+ * @return The interrupt result. See `PlayerActionInterruptResult`.
+ */
+s32 Player_TryActionInterrupt(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frameRange) {
+    if ((skelAnime->endFrame - frameRange) <= skelAnime->curFrame) {
         f32 speedTarget;
         s16 yawTarget;
 
         if (Player_TryActionChangeList(play, this, sPlayerActionChangeList7, true)) {
-            return 0;
+            return PLAYER_INTERRUPT_NEW_ACTION;
         }
 
         if (sUpperBodyIsBusy ||
             Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play)) {
-            return 1;
+            return PLAYER_INTERRUPT_MOVE;
         }
     }
-    return -1;
+
+    return PLAYER_INTERRUPT_NONE;
 }
 
 void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam) {
@@ -14518,15 +14542,18 @@ void Player_Action_19(Player* this, PlayState* play) {
     if (this->av1.actionVar1 == 0) {
         sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
         if ((Player_UpperAction_3 == this->upperActionFunc) ||
-            (func_808331FC(play, this, &this->skelAnimeUpper, 4.0f) > 0)) {
+            (Player_TryActionInterrupt(play, this, &this->skelAnimeUpper, 4.0f) >= PLAYER_INTERRUPT_MOVE)) {
             Player_SetAction(play, this, Player_Action_2, 1);
         }
     } else {
-        s32 temp_v0;
+        s32 interruptResult;
 
         this->stateFlags1 |= PLAYER_STATE1_400000;
-        temp_v0 = func_808331FC(play, this, &this->skelAnime, 4.0f);
-        if ((temp_v0 != 0) && ((temp_v0 > 0) || PlayerAnimation_Update(play, &this->skelAnime))) {
+
+        interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 4.0f);
+
+        if ((interruptResult != PLAYER_INTERRUPT_NEW_ACTION) &&
+            ((interruptResult >= PLAYER_INTERRUPT_MOVE) || PlayerAnimation_Update(play, &this->skelAnime))) {
             PlayerAnimationHeader* anim;
             f32 endFrame;
 
@@ -14541,12 +14568,14 @@ void Player_Action_19(Player* this, PlayState* play) {
 }
 
 void Player_Action_20(Player* this, PlayState* play) {
-    s32 temp_v0;
+    s32 interruptResult;
 
     func_80832F24(this);
-    temp_v0 = func_808331FC(play, this, &this->skelAnime, 16.0f);
-    if (temp_v0 != 0) {
-        if (PlayerAnimation_Update(play, &this->skelAnime) || (temp_v0 > 0)) {
+
+    interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 16.0f);
+
+    if (interruptResult != PLAYER_INTERRUPT_NEW_ACTION) {
+        if (PlayerAnimation_Update(play, &this->skelAnime) || (interruptResult >= PLAYER_INTERRUPT_MOVE)) {
             func_80836988(this, play);
         }
     }
@@ -14633,10 +14662,10 @@ void Player_Action_23(Player* this, PlayState* play) {
     if (this->stateFlags1 & PLAYER_STATE1_20000000) {
         PlayerAnimation_Update(play, &this->skelAnime);
     } else {
-        s32 temp_v0 = func_808331FC(play, this, &this->skelAnime, 16.0f);
+        s32 interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 16.0f);
 
-        if (temp_v0 != 0) {
-            if (PlayerAnimation_Update(play, &this->skelAnime) || (temp_v0 > 0)) {
+        if (interruptResult != PLAYER_INTERRUPT_NEW_ACTION) {
+            if (PlayerAnimation_Update(play, &this->skelAnime) || (interruptResult >= PLAYER_INTERRUPT_MOVE)) {
                 func_80836988(this, play);
             }
         }
@@ -14822,12 +14851,14 @@ void Player_Action_26(Player* this, PlayState* play) {
     }
 
     if (this->av2.actionVar2 != 0) {
-        s32 temp_v0;
+        s32 interruptResult;
 
         Math_StepToF(&this->linearVelocity, 0.0f, 2.0f);
-        temp_v0 = func_808331FC(play, this, &this->skelAnime, 5.0f);
-        if (temp_v0 != 0) {
-            if ((temp_v0 > 0) || animFinished) {
+
+        interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 5.0f);
+
+        if (interruptResult != PLAYER_INTERRUPT_NEW_ACTION) {
+            if ((interruptResult >= PLAYER_INTERRUPT_MOVE) || animFinished) {
                 func_80836A5C(this, play);
             }
         }
@@ -15090,7 +15121,7 @@ void Player_Action_32(Player* this, PlayState* play) {
 void Player_Action_33(Player* this, PlayState* play) {
     s32 animFinished;
     f32 frame;
-    s32 temp_v0;
+    s32 interruptResult;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
     animFinished = PlayerAnimation_Update(play, &this->skelAnime);
@@ -15115,12 +15146,14 @@ void Player_Action_33(Player* this, PlayState* play) {
             this->av2.actionVar2 = -1;
         }
     } else {
-        temp_v0 = func_808331FC(play, this, &this->skelAnime, 4.0f);
-        if (temp_v0 == 0) {
+        interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 4.0f);
+
+        if (interruptResult == PLAYER_INTERRUPT_NEW_ACTION) {
             this->stateFlags1 &= ~(PLAYER_STATE1_4 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000);
             return;
         }
-        if (animFinished || (temp_v0 > 0)) {
+
+        if (animFinished || (interruptResult >= PLAYER_INTERRUPT_MOVE)) {
             func_80839E74(this, play);
             this->stateFlags1 &= ~(PLAYER_STATE1_4 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000);
             this->unk_ABC = 0.0f;
@@ -15991,14 +16024,15 @@ AnimSfxEntry D_8085D67C[] = {
 };
 
 void Player_Action_51(Player* this, PlayState* play) {
-    s32 temp_v0;
+    s32 interruptResult;
 
     this->stateFlags2 |= PLAYER_STATE2_40;
 
-    temp_v0 = func_808331FC(play, this, &this->skelAnime, 4.0f);
-    if (temp_v0 == 0) {
+    interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 4.0f);
+
+    if (interruptResult == PLAYER_INTERRUPT_NEW_ACTION) {
         this->stateFlags1 &= ~PLAYER_STATE1_200000;
-    } else if ((temp_v0 > 0) || PlayerAnimation_Update(play, &this->skelAnime)) {
+    } else if ((interruptResult >= PLAYER_INTERRUPT_MOVE) || PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80839E74(this, play);
         this->stateFlags1 &= ~PLAYER_STATE1_200000;
     } else {
