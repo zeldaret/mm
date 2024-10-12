@@ -7,7 +7,7 @@
 #include "z_en_egblock.h"
 #include "assets/objects/object_eg/object_eg.h"
 
-#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEgblock*)thisx)
 
