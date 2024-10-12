@@ -505,8 +505,15 @@ bool Player_InCsMode(PlayState* play) {
     return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
-bool func_80123420(Player* player) {
-    return player->stateFlags3 & PLAYER_STATE3_80000000;
+/**
+ * Checks if Player is currently locked onto a hostile actor.
+ * `PLAYER_STATE3_HOSTILE_LOCK_ON` controls Player's "battle" response to hostile actors.
+ *
+ * Note that within Player, `Player_UpdateHostileLockOn` exists, which updates the flag and also returns the check.
+ * Player can use this function instead if the flag should be checked, but not updated.
+ */
+bool Player_CheckHostileLockOn(Player* player) {
+    return player->stateFlags3 & PLAYER_STATE3_HOSTILE_LOCK_ON;
 }
 
 bool func_80123434(Player* player) {

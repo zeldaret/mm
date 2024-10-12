@@ -3576,15 +3576,28 @@ void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWe
     this->meleeWeaponState = meleeWeaponState;
 }
 
-s32 func_8082FB68(Player* this) {
+/**
+ * Checks the current state of `lockOnActor` and if it is a hostile actor (if applicable).
+ * If so, sets `PLAYER_STATE3_HOSTILE_LOCK_ON` which will control Player's "battle" response to
+ * hostile actors. This includes affecting how movement is handled, and enabling a "fighting" set
+ * of animations.
+ *
+ * Note that `Player_CheckHostileLockOn` also exists to check if there is currently a hostile lock-on actor.
+ * This function differs in that it first updates the flag if appropriate, then returns the same information.
+ *
+ * @return  true if there is curerntly a hostile lock-on actor, false otherwise
+ */
+s32 Player_UpdateHostileLockOn(Player* this) {
     if ((this->lockOnActor != NULL) &&
         CHECK_FLAG_ALL(this->lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
-        this->stateFlags3 |= PLAYER_STATE3_80000000;
+        this->stateFlags3 |= PLAYER_STATE3_HOSTILE_LOCK_ON;
         return true;
     }
 
-    if (this->stateFlags3 & PLAYER_STATE3_80000000) {
-        this->stateFlags3 &= ~PLAYER_STATE3_80000000;
+    if (this->stateFlags3 & PLAYER_STATE3_HOSTILE_LOCK_ON) {
+        this->stateFlags3 &= ~PLAYER_STATE3_HOSTILE_LOCK_ON;
+
+        // sync world and shape yaw when not moving
         if (this->linearVelocity == 0.0f) {
             this->currentYaw = this->actor.shape.rot.y;
         }
@@ -3594,11 +3607,11 @@ s32 func_8082FB68(Player* this) {
 }
 
 bool func_8082FBE8(Player* this) {
-    return func_80123420(this) || func_80123434(this);
+    return Player_CheckHostileLockOn(this) || func_80123434(this);
 }
 
 bool func_8082FC24(Player* this) {
-    return func_8082FB68(this) || func_80123434(this);
+    return Player_UpdateHostileLockOn(this) || func_80123434(this);
 }
 
 void func_8082FC60(Player* this) {
@@ -4055,7 +4068,7 @@ void Player_WaitToFinishItemChange(PlayState* play, Player* this) {
         Player_FinishItemChange(play, this);
     }
 
-    func_8082FB68(this);
+    Player_UpdateHostileLockOn(this);
 }
 
 s32 func_80830DF0(Player* this, PlayState* play) {
@@ -5569,7 +5582,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speed, f32 veloc
                 Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_FALL_L);
             }
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-        } else if ((this->linearVelocity > 4.0f) && !func_80123420(this)) {
+        } else if ((this->linearVelocity > 4.0f) && !Player_CheckHostileLockOn(this)) {
             this->unk_B64 = 20;
 
             Player_RequestRumble(play, this, 120, 20, 10, SQ(0));
@@ -5595,7 +5608,7 @@ void func_80833B18(PlayState* play, Player* this, s32 arg2, f32 speed, f32 veloc
                 animPtr += 2;
             }
 
-            if (func_80123420(this)) {
+            if (Player_CheckHostileLockOn(this)) {
                 animPtr++;
             }
 
@@ -6602,7 +6615,7 @@ void func_8083692C(Player* this, PlayState* play) {
 }
 
 void func_80836988(Player* this, PlayState* play) {
-    if (func_80123420(this)) {
+    if (Player_CheckHostileLockOn(this)) {
         func_80836888(this, play);
     } else if (func_80123434(this)) {
         func_8083692C(this, play);
@@ -6614,7 +6627,7 @@ void func_80836988(Player* this, PlayState* play) {
 void func_808369F4(Player* this, PlayState* play) {
     PlayerActionFunc actionFunc;
 
-    if (func_80123420(this)) {
+    if (Player_CheckHostileLockOn(this)) {
         actionFunc = Player_Action_2;
     } else if (func_80123434(this)) {
         actionFunc = Player_Action_3;
@@ -6626,7 +6639,7 @@ void func_808369F4(Player* this, PlayState* play) {
 
 void func_80836A5C(Player* this, PlayState* play) {
     func_808369F4(this, play);
-    if (func_80123420(this)) {
+    if (Player_CheckHostileLockOn(this)) {
         this->av2.actionVar2 = 1;
     }
 }
@@ -6823,14 +6836,14 @@ void func_80837134(PlayState* play, Player* this) {
             return;
         }
     } else if (this->stateFlags2 & PLAYER_STATE2_80000) {
-        if (func_80123420(this)) {
+        if (Player_CheckHostileLockOn(this)) {
             anim = D_8085C2A4[this->av1.actionVar1].unk_8;
         } else {
             anim = D_8085C2A4[this->av1.actionVar1].unk_4;
         }
     } else if (this->skelAnime.animation == &gPlayerAnim_link_normal_run_jump) {
         anim = &gPlayerAnim_link_normal_run_jump_end;
-    } else if (func_80123420(this)) {
+    } else if (Player_CheckHostileLockOn(this)) {
         anim = &gPlayerAnim_link_anchor_landingR;
         func_8082FC60(this);
     } else if (this->fallDistance <= 80) {
@@ -7773,7 +7786,7 @@ s32 Player_ActionChange_0(Player* this, PlayState* play) {
                (CHECK_FLAG_ALL(this->lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
                 (this->lockOnActor->hintId != TATL_HINT_ID_NONE))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
-    } else if ((this->tatlTextId == 0) && !func_80123420(this) &&
+    } else if ((this->tatlTextId == 0) && !Player_CheckHostileLockOn(this) &&
                CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP) &&
                !func_80831814(this, play, PLAYER_UNKAA5_1)) {
         Audio_PlaySfx(NA_SE_SY_ERROR);
@@ -8024,10 +8037,10 @@ s32 Player_ActionChange_14(Player* this, PlayState* play) {
 }
 
 s32 Player_ActionChange_6(Player* this, PlayState* play) {
-    if (!sUpperBodyIsBusy && !(this->stateFlags1 & PLAYER_STATE1_800000) && !func_8082FB68(this)) {
+    if (!sUpperBodyIsBusy && !(this->stateFlags1 & PLAYER_STATE1_800000) && !Player_UpdateHostileLockOn(this)) {
         if ((this->transformation == PLAYER_FORM_ZORA) && (this->stateFlags1 & PLAYER_STATE1_8000000)) {
             func_8083A04C(this);
-        } else if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && !func_8082FB68(this)) {
+        } else if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && !Player_UpdateHostileLockOn(this)) {
             if (this->transformation == PLAYER_FORM_GORON) {
                 if (func_80839F98(play, this)) {
                     return true;
@@ -8072,7 +8085,7 @@ s32 Player_ActionChange_11(Player* this, PlayState* play) {
                     }
 
                     if (anim != this->skelAnime.animation) {
-                        if (func_80123420(this)) {
+                        if (Player_CheckHostileLockOn(this)) {
                             this->unk_B3C = 1.0f;
                         } else {
                             this->unk_B3C = 0.0f;
@@ -10108,7 +10121,7 @@ void func_808400CC(PlayState* play, Player* this) {
             s32 pad;
 
             Player_SetAction(play, this, Player_Action_85, 0);
-            if (func_80123420(this)) {
+            if (Player_CheckHostileLockOn(this)) {
                 var_v1 = 2;
             } else {
                 var_v1 = 0;
@@ -11149,7 +11162,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 !Player_IsGoronOrDeku(this)) {
                 if ((this->transformation != PLAYER_FORM_GORON) &&
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
-                    (func_80123420(this) ||
+                    (Player_CheckHostileLockOn(this) ||
                      ((sPlayerFloorType != FLOOR_TYPE_7) &&
                       (func_80123434(this) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
                                                !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
@@ -13662,7 +13675,7 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
 
             this->stateFlags1 |= PLAYER_STATE1_2000000;
             this->stateFlags3 &= ~PLAYER_STATE3_800000;
-            if (!func_80123420(this)) {
+            if (!Player_CheckHostileLockOn(this)) {
                 func_8083133C(this);
             }
 
@@ -13818,7 +13831,8 @@ void Player_Action_2(Player* this, PlayState* play) {
         return;
     }
 
-    if (!func_8082FB68(this) && (!func_80123434(this) || (Player_UpperAction_3 != this->upperActionFunc))) {
+    if (!Player_UpdateHostileLockOn(this) &&
+        (!func_80123434(this) || (Player_UpperAction_3 != this->upperActionFunc))) {
         func_8083B29C(this, play);
         return;
     }
@@ -13873,7 +13887,7 @@ void Player_Action_3(Player* this, PlayState* play) {
         return;
     }
 
-    if (func_8082FB68(this)) {
+    if (Player_UpdateHostileLockOn(this)) {
         func_8083B23C(this, play);
         return;
     }
@@ -13940,7 +13954,7 @@ void Player_Action_4(Player* this, PlayState* play) {
     func_80832F24(this);
     if ((this->av2.actionVar2 == 0) && !func_80847880(play, this) &&
         !Player_TryActionChangeList(play, this, sPlayerActionChangeList7, true)) {
-        if (func_8082FB68(this)) {
+        if (Player_UpdateHostileLockOn(this)) {
             func_8083B23C(this, play);
             return;
         }
@@ -14010,7 +14024,7 @@ void Player_Action_5(Player* this, PlayState* play) {
         return;
     }
 
-    if (func_8082FB68(this)) {
+    if (Player_UpdateHostileLockOn(this)) {
         func_8083B23C(this, play);
         return;
     }
@@ -14160,7 +14174,7 @@ void Player_Action_9(Player* this, PlayState* play) {
             func_8083AF8C(this, yawTarget, play);
         }
     } else if ((this->linearVelocity < 3.6f) && (speedTarget < 4.0f)) {
-        if (!func_80123420(this) && func_80123434(this)) {
+        if (!Player_CheckHostileLockOn(this) && func_80123434(this)) {
             func_8083AF30(this, play);
         } else {
             func_80836988(this, play);
@@ -14687,7 +14701,7 @@ void Player_Action_25(Player* this, PlayState* play) {
     s16 yawTarget;
     Actor* heldActor;
 
-    if (func_80123420(this)) {
+    if (Player_CheckHostileLockOn(this)) {
         this->actor.gravity = -1.2f;
     }
 
@@ -15538,7 +15552,7 @@ void Player_Action_43(Player* this, PlayState* play) {
     if (((this->unk_AA5 == PLAYER_UNKAA5_2) && !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) ||
         ((this->unk_AA5 != PLAYER_UNKAA5_2) &&
          ((((this->csAction != PLAYER_CSACTION_NONE) || ((u32)this->unk_AA5 == PLAYER_UNKAA5_0) ||
-            (this->unk_AA5 >= PLAYER_UNKAA5_5) || func_8082FB68(this) || (this->lockOnActor != NULL) ||
+            (this->unk_AA5 >= PLAYER_UNKAA5_5) || Player_UpdateHostileLockOn(this) || (this->lockOnActor != NULL) ||
             (func_8083868C(play, this) == CAM_MODE_NORMAL) ||
             ((this->unk_AA5 == PLAYER_UNKAA5_3) &&
              (((Player_ItemToItemAction(this, Inventory_GetBtnBItem(play)) != this->heldItemAction) &&
@@ -15601,7 +15615,7 @@ void Player_Action_44(Player* this, PlayState* play) {
             this->actor.velocity.y = 0.0f;
             this->actor.gravity = 0.0f;
         }
-    } else if (!func_80123420(this) && PlayerAnimation_Update(play, &this->skelAnime)) {
+    } else if (!Player_CheckHostileLockOn(this) && PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this->skelAnime.moveFlags != 0) {
             Player_Anim_ResetMove(this);
             if ((this->talkActor->category == ACTORCAT_NPC) && (this->heldItemAction != PLAYER_IA_FISHING_ROD)) {
@@ -17840,7 +17854,8 @@ void Player_Action_84(Player* this, PlayState* play) {
         sPlayerUseHeldItem = this->av2.actionVar2;
 
         if (!Player_ActionChange_7(this, play)) {
-            PlayerAnimationHeader* anim = func_80123420(this) ? attackInfoEntry->unk_8 : attackInfoEntry->unk_4;
+            PlayerAnimationHeader* anim =
+                Player_CheckHostileLockOn(this) ? attackInfoEntry->unk_8 : attackInfoEntry->unk_4;
 
             func_8082DC38(this);
 
@@ -20638,7 +20653,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
             } else if ((actor->category != ACTORCAT_NPC) || (player->heldItemAction == PLAYER_IA_FISHING_ROD)) {
                 func_80837B60(play, player);
 
-                if (!func_80123420(player)) {
+                if (!Player_CheckHostileLockOn(player)) {
                     if ((actor != player->tatlActor) && (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))) {
                         Player_Anim_PlayOnceAdjusted(play, player, &gPlayerAnim_link_normal_backspace);
                     } else {
