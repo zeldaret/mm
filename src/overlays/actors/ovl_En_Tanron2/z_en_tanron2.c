@@ -429,8 +429,8 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
-                if ((player->lockOnActor != NULL) && (&this->actor != player->lockOnActor)) {
-                    player->lockOnActor = &this->actor;
+                if ((player->focusActor != NULL) && (&this->actor != player->focusActor)) {
+                    player->focusActor = &this->actor;
                     play->actorCtx.targetCtx.fairyActor = &this->actor;
                     play->actorCtx.targetCtx.lockOnActor = &this->actor;
                 }

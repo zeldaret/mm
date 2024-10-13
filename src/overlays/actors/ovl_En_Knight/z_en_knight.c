@@ -2178,7 +2178,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 Actor_Kill(&sIgosHeadInstance->actor);
                 sIgosHeadInstance = NULL;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-                player->lockOnActor = &this->actor;
+                player->focusActor = &this->actor;
                 play->actorCtx.targetCtx.fairyActor = &this->actor;
                 play->actorCtx.targetCtx.lockOnActor = &this->actor;
             }
@@ -3256,7 +3256,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             this->actor.world.rot.x = KREG(39) * 0x1000 + 0x2000;
             this->timers[0] = 20;
             sIgosInstance->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-            player->lockOnActor = &this->actor;
+            player->focusActor = &this->actor;
             play->actorCtx.targetCtx.fairyActor = &this->actor;
             play->actorCtx.targetCtx.lockOnActor = &this->actor;
             Math_Vec3f_Copy(&this->actor.world.pos, &sIgosInstance->actor.world.pos);

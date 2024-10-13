@@ -430,7 +430,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         func_80A6F9C8(this);
     } else {
         Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
-        func_80123E90(play, &this->actor);
+        Player_SetAutoLockOnActor(play, &this->actor);
         if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
             Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
         } else {
