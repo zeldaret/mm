@@ -10978,10 +10978,10 @@ void Player_ApproachZeroBinang(s16* pValue) {
 
 void func_808425B4(Player* this) {
     if (!(this->unk_AA6_rotFlags & UNKAA6_ROT_FOCUS_Y)) {
-        s16 sp26 = this->actor.focus.rot.y - this->actor.shape.rot.y;
+        s16 diff = this->actor.focus.rot.y - this->actor.shape.rot.y;
 
-        Player_ApproachZeroBinang(&sp26);
-        this->actor.focus.rot.y = this->actor.shape.rot.y + sp26;
+        Player_ApproachZeroBinang(&diff);
+        this->actor.focus.rot.y = this->actor.shape.rot.y + diff;
     }
 
     if (!(this->unk_AA6_rotFlags & UNKAA6_ROT_FOCUS_X)) {
