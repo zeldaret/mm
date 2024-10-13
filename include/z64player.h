@@ -1222,7 +1222,7 @@ typedef struct Player {
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 unk_AA4;
     /* 0xAA5 */ u8 unk_AA5; // PlayerUnkAA5 enum
-    /* 0xAA6 */ u16 unk_AA6_rotFlags; // flags of some kind
+    /* 0xAA6 */ u16 unk_AA6_rotFlags; // See `UNKAA6_ROT_` macros. If its flag isn't set, a rot steps to 0.
     /* 0xAA8 */ s16 upperLimbYawSecondary;
     /* 0xAAA */ s16 unk_AAA;
     /* 0xAAC */ Vec3s headLimbRot;
