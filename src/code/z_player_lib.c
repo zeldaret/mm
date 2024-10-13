@@ -2159,9 +2159,9 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             s16 rotX;
             s16 rotZ = 0x44C;
 
-            if (player->unk_AA8 != 0) {
+            if (player->upperLimbYawSecondary != 0) {
                 Matrix_RotateZS(rotZ, MTXMODE_APPLY);
-                Matrix_RotateYS(player->unk_AA8, MTXMODE_APPLY);
+                Matrix_RotateYS(player->upperLimbYawSecondary, MTXMODE_APPLY);
             }
 
             if (player->upperLimbRot.y != 0) {

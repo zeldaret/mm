@@ -1109,9 +1109,9 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         } else if (limbIndex == KAFEI_LIMB_UPPER_ROOT) {
             s32 requiredScopeTemp;
 
-            if (this->player.unk_AA8 != 0) {
+            if (this->player.upperLimbYawSecondary != 0) {
                 Matrix_RotateZS(0x44C, MTXMODE_APPLY);
-                Matrix_RotateYS(this->player.unk_AA8, MTXMODE_APPLY);
+                Matrix_RotateYS(this->player.upperLimbYawSecondary, MTXMODE_APPLY);
             }
             if (this->player.upperLimbRot.y != 0) {
                 Matrix_RotateYS(this->player.upperLimbRot.y, MTXMODE_APPLY);
