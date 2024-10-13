@@ -356,8 +356,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_SetScale(&this->actor, 0.0f);
-                this->collider.elements->dim.scale = 3.0f;
-                this->collider.elements->info.toucher.damage = 8;
+                this->collider.elements[0].dim.scale = 3.0f;
+                this->collider.elements[0].base.toucher.damage = 8;
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xB0);
                 this->actionFunc = EnBaguo_PostDetonation;
             }

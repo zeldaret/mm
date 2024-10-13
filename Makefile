@@ -481,6 +481,7 @@ setup-audio:
 
 assets:
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
+	$(PYTHON) tools/text/msgdis.py $(EXTRACTED_DIR)/baserom assets/text -v $(VERSION)
 	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
@@ -533,6 +534,11 @@ $(BUILD_DIR)/src/dmadata/dmadata.o: $(BUILD_DIR)/dmadata/dmadata_table_spec.h
 $(BUILD_DIR)/%.o: %.s
 	$(CPP) $(CPPFLAGS) $(IINC) $< | $(AS) $(ASFLAGS) $(IINC) $(ENDIAN) -o $@
 
+$(BUILD_DIR)/assets/text/%.o: assets/text/%.c
+# Preprocess text with modern cpp for varargs macros
+	$(CPP) -undef -D_LANGUAGE_C -D__sgi $(CPPFLAGS) $(IINC) $< -o $(@:.o=.c)
+	$(CC) -c $(CFLAGS) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $(@:.o=.c)
+
 $(BUILD_DIR)/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
 	$(OBJCOPY_BIN)
@@ -545,15 +551,15 @@ $(BUILD_DIR)/%.yar.o: $(BUILD_DIR)/%.o
 $(BUILD_DIR)/baserom/%.o: $(EXTRACTED_DIR)/baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
-$(BUILD_DIR)/assets/text/message_data.enc.h: assets/text/message_data.h
-	$(PYTHON) tools/msg/nes/msgencNES.py -o $@ $<
+$(BUILD_DIR)/assets/text/message_data.enc.h: assets/text/message_data.h assets/text/charmap.txt
+	$(CPP) $(CPPFLAGS) -I$(EXTRACTED_DIR) $< | $(PYTHON) tools/text/msgenc.py --encoding nes --charmap assets/text/charmap.txt - $@
 
-$(BUILD_DIR)/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
-	$(PYTHON) tools/msg/staff/msgencStaff.py -o $@ $<
+$(BUILD_DIR)/assets/text/message_data_staff.enc.h: assets/text/message_data_staff.h assets/text/charmap.txt
+	$(CPP) $(CPPFLAGS) -I$(EXTRACTED_DIR) $< | $(PYTHON) tools/text/msgenc.py --encoding credits --charmap assets/text/charmap.txt - $@
 
 $(BUILD_DIR)/assets/text/message_data_static.o: $(BUILD_DIR)/assets/text/message_data.enc.h
-$(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/staff_message_data.enc.h
-$(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/staff_message_data.enc.h
+$(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/message_data_staff.enc.h
+$(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/message_data_staff.enc.h
 
 $(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/$(SPEC)
 	$(FADO) $$(tools/buildtools/reloc_prereq $< $(*F)) -n $(*F) -o $(@:.o=.s) -M $(@:.o=.d)

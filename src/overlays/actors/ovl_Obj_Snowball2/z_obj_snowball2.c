@@ -273,8 +273,8 @@ void func_80B39908(ObjSnowball2* this, PlayState* play) {
     Vec3f sp94;
     s32 i;
 
-    if (this->collider.elements[0].info.bumperFlags & BUMP_HIT) {
-        Vec3s* hitPos = &this->collider.elements[0].info.bumper.hitPos;
+    if (this->collider.elements[0].base.bumperFlags & BUMP_HIT) {
+        Vec3s* hitPos = &this->collider.elements[0].base.bumper.hitPos;
 
         for (i = 0; i < 4; i++) {
             sp94.x = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->x;
@@ -361,14 +361,14 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
     } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
         func_80B3A498(this);
-    } else if (sp38 && (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x0583FFBC)) {
+    } else if (sp38 && (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x0583FFBC)) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
         Actor_Kill(&this->actor);
         return;
     } else {
-        if (sp38 && (this->collider.elements->info.acHitElem->toucher.dmgFlags & 2)) {
+        if (sp38 && (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 2)) {
             func_80B39908(this, play);
         }
 

@@ -531,7 +531,7 @@ void func_80C0BF2C(EnBsb* this) {
     this->collider.base.colType = COLTYPE_HARD;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.elemType = ELEMTYPE_UNK2;
+        this->collider.elements[i].base.elemType = ELEMTYPE_UNK2;
     }
 
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
@@ -573,7 +573,7 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     this->collider.base.colType = COLTYPE_NONE;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.elemType = ELEMTYPE_UNK0;
+        this->collider.elements[i].base.elemType = ELEMTYPE_UNK0;
     }
 
     this->unk_02AE = false;
@@ -886,9 +886,9 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
     f32 dy;
     f32 dz;
 
-    hitPos.x = this->collider.elements[1].info.bumper.hitPos.x;
-    hitPos.y = this->collider.elements[1].info.bumper.hitPos.y;
-    hitPos.z = this->collider.elements[1].info.bumper.hitPos.z;
+    hitPos.x = this->collider.elements[1].base.bumper.hitPos.x;
+    hitPos.y = this->collider.elements[1].base.bumper.hitPos.y;
+    hitPos.z = this->collider.elements[1].base.bumper.hitPos.z;
 
     dx = hitPos.x - player->actor.world.pos.x;
     dy = hitPos.y - player->actor.world.pos.y;
@@ -1425,8 +1425,8 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
     if ((this->unk_02B4 != 0) && (this->unk_02B4 != 1) && (this->unk_02B4 != 9) && (this->unk_02B4 != 12) &&
         (this->unk_02B4 != 13) && (this->unk_02B4 != 5) && ((this->unk_02B4 != 8) || !this->unk_02DC)) {
         if (!(this->collider.base.atFlags & AT_BOUNCED)) {
-            if (this->collider.elements[1].info.toucherFlags & TOUCH_HIT) {
-                this->collider.elements[1].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->collider.elements[1].base.toucherFlags & TOUCH_HIT) {
+                this->collider.elements[1].base.toucherFlags &= ~TOUCH_HIT;
                 if ((this->unk_02B4 != 11) && (this->unk_02B4 != 7)) {
                     func_80C0D334(this);
                 }
@@ -1524,10 +1524,10 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                 func_80C0D3C0(this, play);
             } else {
                 for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-                    if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
-                        sp48.x = this->collider.elements[i].info.bumper.hitPos.x;
-                        sp48.y = this->collider.elements[i].info.bumper.hitPos.y;
-                        sp48.z = this->collider.elements[i].info.bumper.hitPos.z;
+                    if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
+                        sp48.x = this->collider.elements[i].base.bumper.hitPos.x;
+                        sp48.y = this->collider.elements[i].base.bumper.hitPos.y;
+                        sp48.z = this->collider.elements[i].base.bumper.hitPos.z;
                         CollisionCheck_BlueBlood(play, NULL, &sp48);
                     }
                 }

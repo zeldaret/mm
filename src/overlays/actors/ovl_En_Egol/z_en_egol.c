@@ -960,8 +960,8 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
         this->bodyCollider.elements[1].dim.modelSphere.radius = 20;
         EnEgol_SetupWalk(this);
     } else if (!this->hitPlayer) {
-        if ((this->bodyCollider.elements[0].info.toucherFlags & TOUCH_HIT) ||
-            (this->bodyCollider.elements[1].info.toucherFlags & TOUCH_HIT)) {
+        if ((this->bodyCollider.elements[0].base.toucherFlags & TOUCH_HIT) ||
+            (this->bodyCollider.elements[1].base.toucherFlags & TOUCH_HIT)) {
             this->hitPlayer = true;
             func_800B8D50(play, &this->actor, 10.0f, this->actor.home.rot.y, 10.0f, 0);
         }
@@ -974,7 +974,7 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
 void EnEgol_SetupSlamWait(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_SLAM_WAIT);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
     this->action = EYEGORE_ACTION_SLAM_WAIT;
     this->actionFunc = EnEgol_SlamWait;
 }
@@ -985,7 +985,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 20) {
-            this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
             EnEgol_SetupSlamEnd(this);
         }
     }
@@ -994,7 +994,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
 void EnEgol_SetupStunned(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STUNNED);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
     this->bodyCollider.elements[0].dim.modelSphere.radius = 0;
     this->bodyCollider.elements[1].dim.modelSphere.radius = 0;
     this->action = EYEGORE_ACTION_STUNNED;
@@ -1007,7 +1007,7 @@ void EnEgol_Stunned(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 80) {
-            this->eyeCollider.elements->info.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
             EnEgol_SetupStunEnd(this);
         }
     }
@@ -1148,7 +1148,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
         EnEgol_SetupWalk(this);
     }
-    if (this->eyeCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+    if (this->eyeCollider.elements[0].base.bumperFlags & BUMP_HIT) {
         reaction = EYEGORE_HIT_IMMUNE;
         switch (this->actor.colChkInfo.damageEffect) {
             case EYEGORE_DMGEFF_LIGHT_ARROW:
@@ -1201,9 +1201,9 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
     } else if (reaction == EYEGORE_HIT_IMMUNE) {
         Vec3f hitPos;
 
-        hitPos.x = this->eyeCollider.elements[0].info.bumper.hitPos.x;
-        hitPos.y = this->eyeCollider.elements[0].info.bumper.hitPos.y;
-        hitPos.z = this->eyeCollider.elements[0].info.bumper.hitPos.z;
+        hitPos.x = this->eyeCollider.elements[0].base.bumper.hitPos.x;
+        hitPos.y = this->eyeCollider.elements[0].base.bumper.hitPos.y;
+        hitPos.z = this->eyeCollider.elements[0].base.bumper.hitPos.z;
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
         CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);
