@@ -12311,6 +12311,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         Player_UpdateShapeYaw(this, play);
+
         if (this->actor.flags & ACTOR_FLAG_TALK) {
             this->talkActorDistance = 0.0f;
         } else {
