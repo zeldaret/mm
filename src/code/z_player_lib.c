@@ -518,13 +518,13 @@ bool func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->focusActor == NULL));
+           ((player->transformation != PLAYER_FORM_HUMAN) || (!func_80123434(player) && player->focusActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
 // Hypothesis: this function checks if the current form would crouch when he tries to use the shield
 bool Player_IsGoronOrDeku(Player* player) {
-    return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
+    return (player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU);
 }
 
 bool func_801234D4(PlayState* play) {
