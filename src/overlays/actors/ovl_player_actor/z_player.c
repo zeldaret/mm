@@ -5192,7 +5192,8 @@ typedef enum PlayerActionInterruptResult {
  * @param frameRange  The number of frames, from the end of the current animation, where an interrupt can occur.
  * @return The interrupt result. See `PlayerActionInterruptResult`.
  */
-s32 Player_TryActionInterrupt(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frameRange) {
+PlayerActionInterruptResult Player_TryActionInterrupt(PlayState* play, Player* this, SkelAnime* skelAnime,
+                                                      f32 frameRange) {
     if ((skelAnime->endFrame - frameRange) <= skelAnime->curFrame) {
         f32 speedTarget;
         s16 yawTarget;
@@ -14546,7 +14547,7 @@ void Player_Action_19(Player* this, PlayState* play) {
             Player_SetAction(play, this, Player_Action_2, 1);
         }
     } else {
-        s32 interruptResult;
+        PlayerActionInterruptResult interruptResult;
 
         this->stateFlags1 |= PLAYER_STATE1_400000;
 
@@ -14568,7 +14569,7 @@ void Player_Action_19(Player* this, PlayState* play) {
 }
 
 void Player_Action_20(Player* this, PlayState* play) {
-    s32 interruptResult;
+    PlayerActionInterruptResult interruptResult;
 
     func_80832F24(this);
 
@@ -14662,7 +14663,7 @@ void Player_Action_23(Player* this, PlayState* play) {
     if (this->stateFlags1 & PLAYER_STATE1_20000000) {
         PlayerAnimation_Update(play, &this->skelAnime);
     } else {
-        s32 interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 16.0f);
+        PlayerActionInterruptResult interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 16.0f);
 
         if (interruptResult != PLAYER_INTERRUPT_NEW_ACTION) {
             if (PlayerAnimation_Update(play, &this->skelAnime) || (interruptResult >= PLAYER_INTERRUPT_MOVE)) {
@@ -14851,7 +14852,7 @@ void Player_Action_26(Player* this, PlayState* play) {
     }
 
     if (this->av2.actionVar2 != 0) {
-        s32 interruptResult;
+        PlayerActionInterruptResult interruptResult;
 
         Math_StepToF(&this->linearVelocity, 0.0f, 2.0f);
 
@@ -15121,7 +15122,7 @@ void Player_Action_32(Player* this, PlayState* play) {
 void Player_Action_33(Player* this, PlayState* play) {
     s32 animFinished;
     f32 frame;
-    s32 interruptResult;
+    PlayerActionInterruptResult interruptResult;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
     animFinished = PlayerAnimation_Update(play, &this->skelAnime);
@@ -16024,7 +16025,7 @@ AnimSfxEntry D_8085D67C[] = {
 };
 
 void Player_Action_51(Player* this, PlayState* play) {
-    s32 interruptResult;
+    PlayerActionInterruptResult interruptResult;
 
     this->stateFlags2 |= PLAYER_STATE2_40;
 
