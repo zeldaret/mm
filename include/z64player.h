@@ -894,7 +894,7 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_4000       (1 << 14)
 // 
 #define PLAYER_STATE1_8000       (1 << 15)
-// 
+// Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
 // 
 #define PLAYER_STATE1_20000      (1 << 17)

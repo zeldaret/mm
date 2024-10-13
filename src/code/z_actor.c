@@ -3550,7 +3550,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
                                            ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
-    Actor* lockOnActor = player->focusActor;
+    Actor* playerFocusActor = player->focusActor;
     s32 isNearestTargetableActor;
     s32 phi_s2_2;
 
@@ -3574,7 +3574,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
         }
 
         // If this actor is the currently targeted one, then ignore it unless it has the ACTOR_FLAG_80000 flag
-        if ((actor == lockOnActor) && !(actor->flags & ACTOR_FLAG_80000)) {
+        if ((actor == playerFocusActor) && !(actor->flags & ACTOR_FLAG_80000)) {
             continue;
         }
 
