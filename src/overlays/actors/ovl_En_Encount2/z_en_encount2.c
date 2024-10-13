@@ -126,11 +126,11 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->collider.elements->dim.modelSphere.radius = 57;
-    this->collider.elements->dim.scale = 1.0f;
-    this->collider.elements->dim.modelSphere.center.x = 0;
-    this->collider.elements->dim.modelSphere.center.y = -4;
-    this->collider.elements->dim.modelSphere.center.z = 0;
+    this->collider.elements[0].dim.modelSphere.radius = 57;
+    this->collider.elements[0].dim.scale = 1.0f;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.modelSphere.center.y = -4;
+    this->collider.elements[0].dim.modelSphere.center.z = 0;
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetupIdle(this);

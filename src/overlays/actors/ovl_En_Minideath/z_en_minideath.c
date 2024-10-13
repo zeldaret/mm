@@ -301,8 +301,8 @@ void EnMinideath_UpdateEffects(EnMinideath* this, PlayState* play) {
             } else if (this->actionFunc == EnMinideath_CrowdParent) {
                 Math_Vec3f_Diff(&this->actor.parent->focus.pos, &this->actor.world.pos, &effect->vel);
                 effect->state = 0;
-                this->collider.elements[i].info.bumperFlags |= BUMP_ON;
-                this->collider.elements[i].info.toucherFlags |= TOUCH_ON;
+                this->collider.elements[i].base.bumperFlags |= BUMP_ON;
+                this->collider.elements[i].base.toucherFlags |= TOUCH_ON;
                 phi_s7 = 1;
                 phi_s3++;
             }
@@ -754,9 +754,9 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
             s32 phi_a0;
 
             for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
-                if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    this->collider.elements[i].info.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
-                    this->collider.elements[i].info.toucherFlags &= ~(TOUCH_ON | TOUCH_HIT);
+                if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
+                    this->collider.elements[i].base.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
+                    this->collider.elements[i].base.toucherFlags &= ~(TOUCH_ON | TOUCH_HIT);
                     this->effects[i].vel.y = -1.0f;
                     this->effects[i].state = 1;
                     this->effects[i].angle.y = this->actor.shape.rot.y;
@@ -791,7 +791,7 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
 void EnMinideath_Update(Actor* thisx, PlayState* play) {
     EnMinideath* this = THIS;
     s32 pad;
-    ColliderJntSphElement* elem;
+    ColliderJntSphElement* jntSphElem;
     s32 temp;
     s32 i;
     MiniDeathEffect* effect;
@@ -834,8 +834,8 @@ void EnMinideath_Update(Actor* thisx, PlayState* play) {
 
         Actor_SetFocus(&this->actor, 0.0f);
 
-        effect = this->effects;
-        elem = this->collider.elements;
+        effect = &this->effects[0];
+        jntSphElem = &this->collider.elements[0];
         for (i = 0; i != MINIDEATH_NUM_EFFECTS; i++) {
             if (effect->state == 0) {
                 Math_Vec3f_Sum(&this->actor.world.pos, &effect->vel, &effect->pos);
@@ -847,12 +847,12 @@ void EnMinideath_Update(Actor* thisx, PlayState* play) {
                     }
                 }
 
-                elem->dim.worldSphere.center.x = effect->pos.x;
-                elem->dim.worldSphere.center.y = effect->pos.y;
-                elem->dim.worldSphere.center.z = effect->pos.z;
+                jntSphElem->dim.worldSphere.center.x = effect->pos.x;
+                jntSphElem->dim.worldSphere.center.y = effect->pos.y;
+                jntSphElem->dim.worldSphere.center.z = effect->pos.z;
             }
             effect++;
-            elem++;
+            jntSphElem++;
         }
 
         if (this->collider.base.atFlags & AT_HIT) {

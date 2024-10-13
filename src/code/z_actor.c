@@ -4723,17 +4723,17 @@ void Actor_SetDropFlag(Actor* actor, ColliderElement* elem) {
     }
 }
 
-void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
+void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSph) {
     s32 i;
-    ColliderJntSphElement* jntElement;
+    ColliderJntSphElement* jntSphElem;
     ColliderElement* acHitElem;
     s32 flag;
 
     actor->dropFlag = DROPFLAG_NONE;
 
-    for (i = jntSphere->count - 1; i >= 0; i--) {
-        jntElement = &jntSphere->elements[i];
-        acHitElem = jntElement->info.acHitElem;
+    for (i = jntSph->count - 1; i >= 0; i--) {
+        jntSphElem = &jntSph->elements[i];
+        acHitElem = jntSphElem->base.acHitElem;
 
         if (acHitElem == NULL) {
             flag = DROPFLAG_NONE;
@@ -4806,12 +4806,11 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
     }
 }
 
-void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
-    if (collider->elements[colliderIndex].info.acHitElem->toucher.dmgFlags &
-        (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
-        actor->world.rot.y = collider->base.ac->shape.rot.y;
+void func_800BE5CC(Actor* actor, ColliderJntSph* jntSph, s32 elemIndex) {
+    if (jntSph->elements[elemIndex].base.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+        actor->world.rot.y = jntSph->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(jntSph->base.ac, actor);
     }
 }
 

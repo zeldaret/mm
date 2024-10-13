@@ -427,7 +427,7 @@ void EnDinofos_EnableBumperCollision(EnDinofos* this) {
 
     if (this->isDodgingGoronPound) {
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].info.bumper.dmgFlags |= 0x400;
+            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags |= 0x400;
         }
         this->isDodgingGoronPound = false;
     }
@@ -482,7 +482,7 @@ s32 EnDinofos_Dodge(EnDinofos* this, PlayState* play) {
         (!this->isDodgingGoronPound)) {
         this->isDodgingGoronPound = true;
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].info.bumper.dmgFlags &= ~0x400;
+            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags &= ~0x400;
         }
     }
 
@@ -1296,7 +1296,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         Actor_SetDropFlagJntSph(&this->actor, &this->bodyAndFireCollider);
 
         for (i = 0; i < ARRAY_COUNT(this->bodyAndFireColliderElements); i++) {
-            if (this->bodyAndFireCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->bodyAndFireCollider.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -1306,7 +1306,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         }
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyAndFireCollider.elements[i].info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            (this->bodyAndFireCollider.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 
@@ -1374,9 +1374,9 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                        this->bodyAndFireCollider.elements[i].info.bumper.hitPos.x,
-                        this->bodyAndFireCollider.elements[i].info.bumper.hitPos.y,
-                        this->bodyAndFireCollider.elements[i].info.bumper.hitPos.z, 0, 0, 0,
+                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.x,
+                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.y,
+                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnDinofos_SetupDamaged(this, i);
