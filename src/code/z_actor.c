@@ -426,11 +426,12 @@ void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos
     *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
-void Target_SetLockOnPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
-    targetCtx->lockOnReticles[index].pos.x = x;
-    targetCtx->lockOnReticles[index].pos.y = y;
-    targetCtx->lockOnReticles[index].pos.z = z;
-    targetCtx->lockOnReticles[index].radius = targetCtx->reticleRadius;
+void Target_SetReticlePos(TargetContext* targetCtx, s32 reticleNum, f32 x, f32 y, f32 z) {
+    targetCtx->lockOnReticles[reticleNum].pos.x = x;
+    targetCtx->lockOnReticles[reticleNum].pos.y = y;
+    targetCtx->lockOnReticles[reticleNum].pos.z = z;
+
+    targetCtx->lockOnReticles[reticleNum].radius = targetCtx->reticleRadius;
 }
 
 typedef struct {
@@ -455,23 +456,23 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_MAX
 };
 
-void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
+void Target_InitReticle(TargetContext* targetCtx, ActorType actorCategory, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
-    LockOnReticle* triangleSet;
+    LockOnReticle* reticle;
 
     Math_Vec3f_Copy(&targetCtx->reticlePos, &play->view.eye);
     targetCtx->reticleFadeAlphaControl = 256;
-    tatlColorEntry = &sTatlColorList[type];
+    tatlColorEntry = &sTatlColorList[actorCategory];
     targetCtx->reticleRadius = 500.0f;
 
-    triangleSet = targetCtx->lockOnReticles;
-    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnReticles); i++, triangleSet++) {
-        Target_SetLockOnPos(targetCtx, i, 0.0f, 0.0f, 0.0f);
+    reticle = targetCtx->lockOnReticles;
+    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnReticles); i++, reticle++) {
+        Target_SetReticlePos(targetCtx, i, 0.0f, 0.0f, 0.0f);
 
-        triangleSet->color.r = tatlColorEntry->inner.r;
-        triangleSet->color.g = tatlColorEntry->inner.g;
-        triangleSet->color.b = tatlColorEntry->inner.b;
+        reticle->color.r = tatlColorEntry->inner.r;
+        reticle->color.g = tatlColorEntry->inner.g;
+        reticle->color.b = tatlColorEntry->inner.b;
     }
 }
 
@@ -499,7 +500,7 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->curReticle = 0;
     targetCtx->fairyMoveProgressFactor = 0.0f;
     Target_SetFairyState(targetCtx, actor, actor->category, play);
-    Target_InitLockOn(targetCtx, actor->category, play);
+    Target_InitReticle(targetCtx, actor->category, play);
 }
 
 void Target_Draw(TargetContext* targetCtx, PlayState* play) {
@@ -516,22 +517,23 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (targetCtx->reticleFadeAlphaControl != 0) {
-        LockOnReticle* entry;
+        LockOnReticle* reticle;
         s16 alpha = 255;
         f32 projectdPosScale = 1.0f;
         Vec3f projectedPos;
-        s32 totalEntries;
+        s32 numReticles;
         f32 invW;
         s32 i;
-        s32 index;
+        s32 curReticle;
         f32 lockOnScaleX;
 
         if (targetCtx->reticleSpinCounter != 0) {
-            totalEntries = 1;
+            // Reticle is spinning so it is active, only need to draw one
+            numReticles = 1;
         } else {
-            // Use multiple entries for the movement effect when the triangles are getting closer to the actor from the
-            // margin of the screen
-            totalEntries = ARRAY_COUNT(targetCtx->lockOnReticles);
+            // Use multiple reticles for the motion blur effect from the reticle
+            // quickly zooming in on an actor from off screen
+            numReticles = ARRAY_COUNT(targetCtx->lockOnReticles);
         }
 
         if (actor != NULL) {
@@ -539,9 +541,14 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
             projectdPosScale = (500.0f - targetCtx->reticleRadius) / 420.0f;
         } else {
             targetCtx->reticleFadeAlphaControl -= 120;
+            // Not locked on, start fading out
+
             if (targetCtx->reticleFadeAlphaControl < 0) {
                 targetCtx->reticleFadeAlphaControl = 0;
             }
+
+            // `reticleFadeAlphaControl` is only used as an alpha when fading out.
+            // Otherwise it defaults to 255, set above.
             alpha = targetCtx->reticleFadeAlphaControl;
         }
 
@@ -556,47 +563,50 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         projectedPos.z *= projectdPosScale;
 
         targetCtx->curReticle--;
+
         if (targetCtx->curReticle < 0) {
             targetCtx->curReticle = ARRAY_COUNT(targetCtx->lockOnReticles) - 1;
         }
 
-        Target_SetLockOnPos(targetCtx, targetCtx->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
+        Target_SetReticlePos(targetCtx, targetCtx->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
 
         if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->focusActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
-            for (i = 0, index = targetCtx->curReticle; i < totalEntries;
-                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnReticles)) {
-                entry = &targetCtx->lockOnReticles[index];
+            for (i = 0, curReticle = targetCtx->curReticle; i < numReticles;
+                 i++, curReticle = (curReticle + 1) % ARRAY_COUNT(targetCtx->lockOnReticles)) {
+                reticle = &targetCtx->lockOnReticles[curReticle];
 
-                if (entry->radius < 500.0f) {
+                if (reticle->radius < 500.0f) {
                     s32 triangleIndex;
 
-                    if (entry->radius <= 120.0f) {
+                    if (reticle->radius <= 120.0f) {
                         lockOnScaleX = 0.15f;
                     } else {
-                        lockOnScaleX = ((entry->radius - 120.0f) * 0.001f) + 0.15f;
+                        lockOnScaleX = ((reticle->radius - 120.0f) * 0.001f) + 0.15f;
                     }
 
-                    Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                    Matrix_Translate(reticle->pos.x, reticle->pos.y, 0.0f, MTXMODE_NEW);
                     Matrix_Scale(lockOnScaleX, 0.15f, 1.0f, MTXMODE_APPLY);
 
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, reticle->color.r, reticle->color.g, reticle->color.b,
+                                    (u8)alpha);
 
                     Matrix_RotateZS(targetCtx->reticleSpinCounter * 0x200, MTXMODE_APPLY);
 
-                    // Draw the 4 lock-on triangles
+                    // Draw the 4 triangles that make up the reticle
                     for (triangleIndex = 0; triangleIndex < 4; triangleIndex++) {
                         Matrix_RotateZS(0x10000 / 4, MTXMODE_APPLY);
                         Matrix_Push();
-                        Matrix_Translate(entry->radius, entry->radius, 0.0f, MTXMODE_APPLY);
+                        Matrix_Translate(reticle->radius, reticle->radius, 0.0f, MTXMODE_APPLY);
                         gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-                        gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
+                        gSPDisplayList(OVERLAY_DISP++, gLockOnReticleTriangleDL);
                         Matrix_Pop();
                     }
                 }
 
                 alpha -= 255 / ARRAY_COUNT(targetCtx->lockOnReticles);
+
                 if (alpha < 0) {
                     alpha = 0;
                 }
@@ -605,6 +615,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     }
 
     actor = targetCtx->arrowPointedActor;
+
     if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
         TatlColor* color = &sTatlColorList[actor->category];
 
@@ -617,7 +628,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-        gSPDisplayList(POLY_XLU_DISP++, gZTargetArrowDL);
+        gSPDisplayList(POLY_XLU_DISP++, gLockOnArrowDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -688,7 +699,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* playerFocusA
             s32 sfxId;
 
             // Lock On entries need to be re-initialized when changing the targeted actor
-            Target_InitLockOn(targetCtx, playerFocusActor->category, play);
+            Target_InitReticle(targetCtx, playerFocusActor->category, play);
 
             targetCtx->reticleActor = playerFocusActor;
 
