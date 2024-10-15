@@ -5038,7 +5038,13 @@ s32 Player_CalcSpeedAndYawFromControlStick(PlayState* play, Player* this, f32* o
     return false;
 }
 
-s32 func_80832F24(Player* this) {
+/**
+ * Steps speed toward zero to at a rate defined by current boot data.
+ * After zero is reached, speed will be held at zero.
+ *
+ * @return true if speed is 0, false otherwise
+ */
+s32 Player_DecelerateToZero(Player* this) {
     return Math_StepToF(&this->linearVelocity, 0.0f, REG(43) / 100.0f);
 }
 
@@ -6981,9 +6987,10 @@ void func_80837134(PlayState* play, Player* this) {
         func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_landing][this->modelAnimType], play);
         this->skelAnime.endFrame = 8.0f;
 
-        // `shakeTimer` is only processed by `Player_Action_Idle`.
-        // If any other action runs instead, by for example being
-        // Z-Targeted when landing, the shake will not occur.
+        // `func_80836A98` above can choose from a few different "idle" action variants.
+        // However `fallDamageStunTimer` is only processed by `Player_Action_Idle`.
+        // This means it is possible for the stun to not take effect
+        // (for example, by holding Z when landing).
         if (temp_v0_2 == 1) {
             this->av2.fallDamageStunTimer = 10;
         } else {
@@ -9959,7 +9966,7 @@ s32 func_8083F190(Player* this, f32* arg1, s16* arg2, PlayState* play) {
     }
 
     if (*arg1 != 0.0f) {
-        if (func_80832F24(this)) {
+        if (Player_DecelerateToZero(this)) {
             *arg1 = 0.0f;
             *arg2 = this->currentYaw;
         } else {
@@ -13983,7 +13990,8 @@ void Player_Action_2(Player* this, PlayState* play) {
         func_8083E958(play, this);
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionChangeList(play, this, sPlayerActionChangeList1, true)) {
         return;
     }
@@ -14039,7 +14047,8 @@ void Player_Action_3(Player* this, PlayState* play) {
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionChangeList(play, this, sPlayerActionChangeList2, true)) {
         return;
     }
@@ -14111,7 +14120,7 @@ void Player_Action_Idle(Player* this, PlayState* play) {
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (this->av2.fallDamageStunTimer != 0) {
         return;
@@ -14282,7 +14291,7 @@ void Player_Action_7(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (Player_TryActionChangeList(play, this, sPlayerActionChangeList4, true)) {
         return;
@@ -14452,7 +14461,9 @@ void Player_Action_11(Player* this, PlayState* play) {
 void Player_Action_12(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
     PlayerAnimation_Update(play, &this->skelAnime);
-    func_80832F24(this);
+
+    Player_DecelerateToZero(this);
+
     if (!func_80847880(play, this)) {
         if (!Player_TryActionChangeList(play, this, sPlayerActionChangeList7, false) ||
             (Player_Action_12 == this->actionFunc)) {
@@ -14542,7 +14553,8 @@ void Player_Action_15(Player* this, PlayState* play) {
     Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
     if ((this->skelAnime.morphWeight == 0.0f) && (this->skelAnime.curFrame > 5.0f)) {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
+
         if ((this->skelAnime.curFrame > 10.0f) && (func_8083E404(this, speedTarget, yawTarget) < 0)) {
             func_8083AF8C(this, yawTarget, play);
         } else if (animFinished) {
@@ -14556,7 +14568,8 @@ void Player_Action_16(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionChangeList(play, this, sPlayerActionChangeList10, true)) {
         return;
     }
@@ -14594,7 +14607,7 @@ void Player_Action_17(Player* this, PlayState* play) {
 
 // Player_Action_Shielding
 void Player_Action_18(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (this->transformation == PLAYER_FORM_GORON) {
         SkelAnime_Update(&this->unk_2C8);
@@ -14700,7 +14713,8 @@ void Player_Action_18(Player* this, PlayState* play) {
 }
 
 void Player_Action_19(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (this->av1.actionVar1 == 0) {
         sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
         if ((Player_UpperAction_3 == this->upperActionFunc) ||
@@ -14729,7 +14743,8 @@ void Player_Action_19(Player* this, PlayState* play) {
 void Player_Action_20(Player* this, PlayState* play) {
     s32 temp_v0;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     temp_v0 = func_808331FC(play, this, &this->skelAnime, 16.0f);
     if (temp_v0 != 0) {
         if (PlayerAnimation_Update(play, &this->skelAnime) || (temp_v0 > 0)) {
@@ -14790,7 +14805,9 @@ void Player_Action_21(Player* this, PlayState* play) {
 void Player_Action_22(Player* this, PlayState* play) {
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
     func_808345A8(this);
-    func_80832F24(this);
+
+    Player_DecelerateToZero(this);
+
     if (PlayerAnimation_Update(play, &this->skelAnime) && (this->linearVelocity == 0.0f)) {
         if (this->stateFlags1 & PLAYER_STATE1_20000000) {
             this->av2.actionVar2++;
@@ -14847,7 +14864,8 @@ void Player_Action_24(Player* this, PlayState* play) {
         }
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this == GET_PLAYER(play)) {
             func_80840770(play, this);
@@ -15132,7 +15150,8 @@ void Player_Action_30(Player* this, PlayState* play) {
         this->av2.actionVar2 = -1;
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (!func_8083FE38(this, play) && (this->av2.actionVar2 != 0)) {
         func_80840F34(this);
         if (this->av2.actionVar2 < 0) {
@@ -15596,7 +15615,7 @@ void Player_Action_36(Player* this, PlayState* play) {
 
 // grab/hold an actor (?)
 void Player_Action_37(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836988(this, play);
@@ -15620,7 +15639,7 @@ void Player_Action_37(Player* this, PlayState* play) {
 
 // grab/hold an actor (?)
 void Player_Action_38(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_silver_wait);
@@ -15673,7 +15692,7 @@ void Player_Action_40(Player* this, PlayState* play) {
 
 // Player_Action_PutDownObject?
 void Player_Action_41(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836988(this, play);
@@ -15696,7 +15715,7 @@ void Player_Action_42(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime) ||
         ((this->skelAnime.curFrame >= 8.0f) &&
@@ -15712,7 +15731,7 @@ void Player_Action_43(Player* this, PlayState* play) {
         func_808475B4(this);
         func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
     } else {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
     }
 
     if (this->unk_AA5 == PLAYER_UNKAA5_3) {
@@ -16819,7 +16838,7 @@ void Player_Action_59(Player* this, PlayState* play) {
             } else if (PlayerAnimation_OnFrame(&this->skelAnime, 20.0f)) {
                 this->actor.velocity.y = -2.0f;
             }
-            func_80832F24(this);
+            Player_DecelerateToZero(this);
         } else {
             func_808477D0(play, this, sPlayerControlInput, this->actor.velocity.y);
             this->unk_AAA = 0x3E80;
@@ -17205,7 +17224,7 @@ void Player_Action_63(Player* this, PlayState* play) {
 }
 
 void Player_Action_64(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836A98(this, &gPlayerAnim_link_normal_light_bom_end, play);
@@ -17486,7 +17505,7 @@ struct_8085D798 D_8085D798[] = {
 void Player_Action_68(Player* this, PlayState* play) {
     struct_8085D200* sp24 = &D_8085D200[this->av2.actionVar2];
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this->av1.actionVar1 != 0) {
@@ -17628,7 +17647,7 @@ void Player_Action_70(Player* this, PlayState* play) {
         }
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
     func_8083249C(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
@@ -18066,7 +18085,7 @@ void Player_Action_84(Player* this, PlayState* play) {
 
 void Player_Action_85(Player* this, PlayState* play) {
     PlayerAnimation_Update(play, &this->skelAnime);
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (this->skelAnime.curFrame >= 6.0f) {
         func_80836988(this, play);
@@ -20429,7 +20448,7 @@ void Player_CsAction_34(PlayState* play, Player* this, CsCmdActorCue* cue) {
         this->av2.actionVar2 = 1;
     }
     if (this->av2.actionVar2 != 0) {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
     }
 }
 
