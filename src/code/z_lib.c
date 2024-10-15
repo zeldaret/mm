@@ -1,12 +1,12 @@
 #include "z64lib.h"
-
-#include "main.h"
 #include "ichain.h"
+
+#include "libc64/qrand.h"
+
+#include "rand.h"
+#include "segmented_address.h"
 #include "sfx.h"
-#include "z64actor.h"
 #include "z64game.h"
-#include "functions.h"
-#include "macros.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {
     bcopy(src, dest, size);
@@ -32,11 +32,11 @@ void* Lib_MemSet(void* buffer, s32 value, size_t size) {
 }
 
 f32 Math_CosS(s16 angle) {
-    return coss(angle) * SHT_MINV;
+    return coss(angle) * (1.0f / SHRT_MAX);
 }
 
 f32 Math_SinS(s16 angle) {
-    return sins(angle) * SHT_MINV;
+    return sins(angle) * (1.0f / SHRT_MAX);
 }
 
 s32 Math_StepToIImpl(s32 start, s32 target, s32 step) {
@@ -76,7 +76,7 @@ s32 Math_ScaledStepToS(s16* pValue, s16 target, s16 step) {
             step = -step;
         }
 
-        *pValue += (s16)(step * f0);
+        *pValue += TRUNCF_BINANG(step * f0);
 
         if (((s16)(*pValue - target) * step) >= 0) {
             *pValue = target;
@@ -453,7 +453,7 @@ void (*sInitChainHandlers[])(u8* ptr, InitChainEntry* ichain) = {
     IChain_Apply_Vec3f, IChain_Apply_Vec3fdiv1000, IChain_Apply_Vec3s,
 };
 
-void Actor_ProcessInitChain(Actor* actor, InitChainEntry* ichain) {
+void Actor_ProcessInitChain(struct Actor* actor, InitChainEntry* ichain) {
     do {
         sInitChainHandlers[ichain->type]((u8*)actor, ichain);
     } while ((ichain++)->cont);

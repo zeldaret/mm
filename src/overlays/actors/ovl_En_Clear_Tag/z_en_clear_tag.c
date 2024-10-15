@@ -5,9 +5,9 @@
  */
 
 #include "z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -31,7 +31,7 @@ void EnClearTag_Draw(Actor* thisx, PlayState* play);
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-ActorInit En_Clear_Tag_InitVars = {
+ActorProfile En_Clear_Tag_Profile = {
     /**/ ACTOR_EN_CLEAR_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -108,7 +108,7 @@ static TexturePtr sWaterSplashTextures[] = {
     NULL,
 };
 
-#include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
+#include "assets/overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
 
 /**
  * Creates a debris effect.
@@ -131,8 +131,8 @@ void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* velocity
             effect->scale = scale;
 
             // Set the debris effects to spawn in a circle.
-            effect->rotationY = Rand_ZeroFloat(M_PI * 2);
-            effect->rotationX = Rand_ZeroFloat(M_PI * 2);
+            effect->rotationY = Rand_ZeroFloat(M_PIf * 2);
+            effect->rotationX = Rand_ZeroFloat(M_PIf * 2);
 
             effect->effectsTimer = effect->bounces = 0;
 
@@ -419,7 +419,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
     f32 lightRayMaxScale;
     u8 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
 
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -439,14 +439,14 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                    Matrix_RotateYF(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
-                    Matrix_RotateXFApply(Rand_ZeroFloat(M_PI * 2));
-                    Matrix_MultVecZ(lightRayMaxScale, &vel);
-                    accel.x = vel.x * -0.03f;
-                    accel.y = vel.y * -0.03f;
-                    accel.z = vel.z * -0.03f;
+                    Matrix_RotateYF(Rand_ZeroFloat(M_PIf * 2), MTXMODE_NEW);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(M_PIf * 2));
+                    Matrix_MultVecZ(lightRayMaxScale, &velocity);
+                    accel.x = velocity.x * -0.03f;
+                    accel.y = velocity.y * -0.03f;
+                    accel.z = velocity.z * -0.03f;
                     EnClearTag_CreateIsolatedLightRayEffect(
-                        this, &pos, &vel, &accel,
+                        this, &pos, &velocity, &accel,
                         sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
                         sLightRayMaxScaleTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
@@ -490,17 +490,17 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                 if (thisx->params != CLEAR_TAG_POP) {
                     pos.y = this->actor.world.pos.y;
                     for (i = 0; i < 18; i++) {
-                        vel.x = sinf(i * (33.0f / 40.0f)) * i * .5f;
-                        vel.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
-                        vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
+                        velocity.x = sinf(i * (33.0f / 40.0f)) * i * .5f;
+                        velocity.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
+                        velocity.y = Rand_ZeroFloat(8.0f) + 7.0f;
 
-                        vel.x += Rand_CenteredFloat(0.5f);
-                        vel.z += Rand_CenteredFloat(0.5f);
+                        velocity.x += Rand_CenteredFloat(0.5f);
+                        velocity.z += Rand_CenteredFloat(0.5f);
 
                         accel.x = 0.0f;
                         accel.y = -1.0f;
                         accel.z = 0.0f;
-                        EnClearTag_CreateDebrisEffect(this, &pos, &vel, &accel,
+                        EnClearTag_CreateDebrisEffect(this, &pos, &velocity, &accel,
                                                       sDebrisScale[thisx->params] +
                                                           Rand_ZeroFloat(sDebrisScale[thisx->params]),
                                                       this->actor.floorHeight);
@@ -512,13 +512,13 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
             pos = this->actor.world.pos;
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-                Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
-                Matrix_MultVecZ(lightRayMaxScale, &vel);
-                accel.x = vel.x * -0.03f;
-                accel.y = vel.y * -0.03f;
-                accel.z = vel.z * -0.03f;
-                EnClearTag_CreateLightRayEffect(this, &pos, &vel, &accel,
+                Matrix_RotateYF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_NEW);
+                Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PIf));
+                Matrix_MultVecZ(lightRayMaxScale, &velocity);
+                accel.x = velocity.x * -0.03f;
+                accel.y = velocity.y * -0.03f;
+                accel.z = velocity.z * -0.03f;
+                EnClearTag_CreateLightRayEffect(this, &pos, &velocity, &accel,
                                                 sLightRayScale[thisx->params] +
                                                     Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
                                                 sLightRayMaxScaleTarget[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);
@@ -750,7 +750,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play) {
                 }
             } else if (effect->type == CLEAR_TAG_EFFECT_LIGHT_RAYS) {
                 // Rotate the light ray effect.
-                effect->rotationZ += Rand_ZeroFloat(M_PI / 2) + (M_PI / 2);
+                effect->rotationZ += Rand_ZeroFloat(M_PIf / 2) + (M_PIf / 2);
 
                 // Fade the light ray effects.
                 effect->lightRayAlpha -= effect->lightRayAlphaDecrementSpeed;
@@ -968,7 +968,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_RotateXFApply(effect->rotationX);
             Matrix_RotateZF(effect->rotationZ, MTXMODE_APPLY);
             Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
-            Matrix_RotateXFApply(M_PI / 2);
+            Matrix_RotateXFApply(M_PIf / 2);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
@@ -988,7 +988,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
 
             // Apply material 16 times along a circle to give the appearance of a splash
             for (j = 0; j < 16; j++) {
-                Matrix_RotateYF(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
+                Matrix_RotateYF(2.0f * (j * M_PIf) * (1.0f / 16.0f), MTXMODE_NEW);
                 Matrix_MultVecZ(effect->maxScale, &vec);
                 /**
                  * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
@@ -1001,7 +1001,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                     if ((effect->pos.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_Translate(effect->pos.x + vec.x, ySurface, effect->pos.z + vec.z, MTXMODE_NEW);
-                        Matrix_RotateYF(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
+                        Matrix_RotateYF(2.0f * (j * M_PIf) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -16,7 +16,7 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
-ActorInit En_Onpuman_InitVars = {
+ActorProfile En_Onpuman_Profile = {
     /**/ ACTOR_EN_ONPUMAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -102,7 +102,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
 void func_80B1202C(EnOnpuman* this, PlayState* play2) {
     PlayState* play = play2;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
                 this->unk_2A4 |= 1;
@@ -141,7 +141,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 }
 
 void func_80B1217C(EnOnpuman* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B121D8;
         Message_CloseTextbox(play);
     }

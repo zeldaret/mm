@@ -5,9 +5,9 @@
  */
 
 #include "z_en_kusa.h"
-#include "objects/object_kusa/object_kusa.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/object_kusa/object_kusa.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
@@ -23,7 +23,7 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play);
 void EnKusa_UpdateVelY(EnKusa* this);
 void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor);
 void EnKusa_SetScaleSmall(EnKusa* this);
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play);
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play);
 void EnKusa_SetupWaitObject(EnKusa* this);
 void EnKusa_WaitObject(EnKusa* this, PlayState* play);
 void EnKusa_WaitForInteract(EnKusa* this, PlayState* play);
@@ -58,7 +58,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-ActorInit En_Kusa_InitVars = {
+ActorProfile En_Kusa_Profile = {
     /**/ ACTOR_EN_KUSA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -337,15 +337,15 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     }
 }
 
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play) {
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
-        (this->actor.world.pos.y < ySurface)) {
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -389,7 +389,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (EnKusa_GetWaterBox(this, play)) {
+    if (EnKusa_IsUnderwater(this, play)) {
         this->isInWater |= 1;
     }
 

@@ -9,7 +9,7 @@
 #include "z64view.h"
 #include "CIC6105.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
+#include "assets/misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
 void ConsoleLogo_UpdateCounters(ConsoleLogoState* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
@@ -155,7 +155,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     uintptr_t segmentSize = SEGMENT_ROM_SIZE(nintendo_rogo_static);
 
     this->staticSegment = THA_AllocTailAlign16(&this->state.tha, segmentSize);
-    DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
+    DmaMgr_RequestSync(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
     GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);

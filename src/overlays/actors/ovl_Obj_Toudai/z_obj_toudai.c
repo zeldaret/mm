@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_toudai.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjToudai_Destroy(Actor* thisx, PlayState* play);
 void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Toudai_InitVars = {
+ActorProfile Obj_Toudai_Profile = {
     /**/ ACTOR_OBJ_TOUDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -118,7 +118,7 @@ void ObjToudai_Update(Actor* thisx, PlayState* play) {
 
     Math_ApproachF(&this->unk_228, (this->unk_236 == 0) ? 0.0f : 1.0f, 0.01f, 1000.0f);
     this->unk_234 += 100;
-    thisx->shape.rot.y = (s16)(Math_SinS(this->unk_234) * 16000.0f) + thisx->world.rot.y;
+    thisx->shape.rot.y = TRUNCF_BINANG(Math_SinS(this->unk_234) * 16000.0f) + thisx->world.rot.y;
 }
 
 void ObjToudai_Draw(Actor* thisx, PlayState* play) {

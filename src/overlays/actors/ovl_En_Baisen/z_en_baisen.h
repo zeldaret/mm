@@ -2,7 +2,7 @@
 #define Z_EN_BAISEN_H
 
 #include "global.h"
-#include "objects/object_bai/object_bai.h"
+#include "assets/objects/object_bai/object_bai.h"
 
 struct EnBaisen;
 
@@ -27,9 +27,9 @@ typedef struct EnBaisen {
     /* 0x29C */ s16 unk29C;
     /* 0x29E */ s16 unk29E;
     /* 0x2A0 */ s16 textIdIndex;
-    /* 0x2A4 */ Actor* unk2A4;
+    /* 0x2A4 */ Actor* targetActor;
     /* 0x2A8 */ Actor* heishiPointer;
-    /* 0x2AC */ s32 unk2AC;
+    /* 0x2AC */ s32 cutsceneState;
     /* 0x2B0 */ ColliderCylinder collider;
 } EnBaisen; // size = 0x2FC
 

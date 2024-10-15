@@ -5,14 +5,17 @@
  */
 
 #include "z_en_egol.h"
-#include "objects/object_eg/object_eg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+
+#include "z64olib.h"
+
+#include "assets/objects/object_eg/object_eg.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnEgol*)thisx)
 
@@ -275,7 +278,7 @@ static Color_RGB8 sLightOrbColors[] = {
     { 255, 255, 255 }, // white
 };
 
-ActorInit En_Egol_InitVars = {
+ActorProfile En_Egol_Profile = {
     /**/ ACTOR_EN_EGOL,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -501,7 +504,7 @@ void EnEgol_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnEgol_SetupWait(EnEgol* this) {
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->action = EYEGORE_ACTION_WAIT;
     this->actionFunc = EnEgol_Wait;
 }
@@ -518,7 +521,7 @@ void EnEgol_Wait(EnEgol* this, PlayState* play) {
 
 void EnEgol_SetupStand(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STAND);
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     this->action = EYEGORE_ACTION_STAND;
     Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_STAND);
     this->actionFunc = EnEgol_Stand;
@@ -788,8 +791,8 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
 
                 /*! @bug The following is supposed to calculate the rotation from vertical to the collision poly normal.
                  * However, the calculation is performed incorrectly. The correct calculation is
-                 * rotToNorm.x = Math_FAtan2F(nz, ny) * 0x8000 / M_PI;
-                 * rotToNorm.z = Math_FAtan2F(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
+                 * rotToNorm.x = RAD_TO_BINANG(Math_FAtan2F(nz, ny));
+                 * rotToNorm.z = RAD_TO_BINANG(Math_FAtan2F(-nx, sqrtf(1.0f - SQ(nx))));
                  */
                 rotToNorm.x = RAD_TO_BINANG_ALT2(-Math_FAtan2F(-nz * ny, 1.0f));
                 rotToNorm.z = RAD_TO_BINANG_ALT2(Math_FAtan2F(-nx * ny, 1.0f));
@@ -957,8 +960,8 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
         this->bodyCollider.elements[1].dim.modelSphere.radius = 20;
         EnEgol_SetupWalk(this);
     } else if (!this->hitPlayer) {
-        if ((this->bodyCollider.elements[0].info.toucherFlags & TOUCH_HIT) ||
-            (this->bodyCollider.elements[1].info.toucherFlags & TOUCH_HIT)) {
+        if ((this->bodyCollider.elements[0].base.toucherFlags & TOUCH_HIT) ||
+            (this->bodyCollider.elements[1].base.toucherFlags & TOUCH_HIT)) {
             this->hitPlayer = true;
             func_800B8D50(play, &this->actor, 10.0f, this->actor.home.rot.y, 10.0f, 0);
         }
@@ -971,7 +974,7 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
 void EnEgol_SetupSlamWait(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_SLAM_WAIT);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
     this->action = EYEGORE_ACTION_SLAM_WAIT;
     this->actionFunc = EnEgol_SlamWait;
 }
@@ -982,7 +985,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 20) {
-            this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
             EnEgol_SetupSlamEnd(this);
         }
     }
@@ -991,7 +994,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
 void EnEgol_SetupStunned(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STUNNED);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].info.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
     this->bodyCollider.elements[0].dim.modelSphere.radius = 0;
     this->bodyCollider.elements[1].dim.modelSphere.radius = 0;
     this->action = EYEGORE_ACTION_STUNNED;
@@ -1004,7 +1007,7 @@ void EnEgol_Stunned(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 80) {
-            this->eyeCollider.elements->info.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
             EnEgol_SetupStunEnd(this);
         }
     }
@@ -1058,7 +1061,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
         } else {
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->actionFunc = EnEgol_StartDeathCutscene;
@@ -1145,7 +1148,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
         EnEgol_SetupWalk(this);
     }
-    if (this->eyeCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+    if (this->eyeCollider.elements[0].base.bumperFlags & BUMP_HIT) {
         reaction = EYEGORE_HIT_IMMUNE;
         switch (this->actor.colChkInfo.damageEffect) {
             case EYEGORE_DMGEFF_LIGHT_ARROW:
@@ -1198,9 +1201,9 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
     } else if (reaction == EYEGORE_HIT_IMMUNE) {
         Vec3f hitPos;
 
-        hitPos.x = this->eyeCollider.elements[0].info.bumper.hitPos.x;
-        hitPos.y = this->eyeCollider.elements[0].info.bumper.hitPos.y;
-        hitPos.z = this->eyeCollider.elements[0].info.bumper.hitPos.z;
+        hitPos.x = this->eyeCollider.elements[0].base.bumper.hitPos.x;
+        hitPos.y = this->eyeCollider.elements[0].base.bumper.hitPos.y;
+        hitPos.z = this->eyeCollider.elements[0].base.bumper.hitPos.z;
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
         CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);

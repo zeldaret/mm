@@ -1,16 +1,16 @@
 ﻿<Root>
     <!-- Assets for Stalchild -->
     <File Name="object_skb" Segment="6">
-        <Animation Name="gStalchildIdleAnim" Offset="0x9E4" />
-        <Animation Name="gStalchildSaluteAnim" Offset="0x15EC" />
-        <Animation Name="gStalchildSwingOnBranchAnim" Offset="0x1D1C" />
-        <Animation Name="gStalchildAttackAnim" Offset="0x2190" />
-        <!-- <Blob Name="object_skb_zeroes_unk_000021A0" Size="0x20" Offset="0x21A0" /> -->
-        <Animation Name="gStalchildCollapseAnim" Offset="0x270C" />
-        <!-- <Blob Name="object_skb_zeroes_unk_00002720" Size="0x20" Offset="0x2720" /> -->
-        <Animation Name="gStalchildStaggerAnim" Offset="0x2AC8" />
-        <!-- <Blob Name="object_skb_zeroes_unk_00002AE0" Size="0x10" Offset="0x2AE0" /> -->
-        <Animation Name="gStalchildStandUpAnim" Offset="0x3584" />
+        <Animation Name="gStalchildIdleAnim" Offset="0x9E4" /> <!-- Original name is "babestl_kaiwa" -->
+        <Animation Name="gStalchildSaluteAnim" Offset="0x15EC" /> <!-- Original name is "babestl_keirei" -->
+        <Animation Name="gStalchildSwingOnBranchAnim" Offset="0x1D1C" /> <!-- Original name is "burasagari_wait" -->
+        <Animation Name="gStalchildAttackAnim" Offset="0x2190" /> <!-- Original name is "stal_baby_attack" -->
+        <Blob Name="gStalchildEmpty1Blob" Size="0x20" Offset="0x21A0" />
+        <Animation Name="gStalchildCollapseAnim" Offset="0x270C" /> <!-- Original name is "stal_baby_down" -->
+        <Blob Name="gStalchildEmpty2Blob" Size="0x20" Offset="0x2720" />
+        <Animation Name="gStalchildStaggerAnim" Offset="0x2AC8" /> <!-- Original name is "stal_baby_hit" -->
+        <Blob Name="gStalchildEmpty3Blob" Size="0x10" Offset="0x2AE0" />
+        <Animation Name="gStalchildStandUpAnim" Offset="0x3584" /> <!-- Original name is "stal_baby_start" -->
         <Texture Name="gStalchildPelvisTex" OutName="stalchild_pelvis" Format="rgba16" Width="16" Height="16" Offset="0x35A0" />
         <Texture Name="gStalchildRibcageTex" OutName="stalchild_ribcage" Format="rgba16" Width="8" Height="16" Offset="0x37A0" />
         <Texture Name="gStalchildSkullTex" OutName="stalchild_skull" Format="rgba16" Width="8" Height="8" Offset="0x38A0" />
@@ -57,9 +57,9 @@
         <Limb Name="gStalchildLeftHandLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEFT_HAND" Offset="0x5E94" />
         <Limb Name="gStalchildSpineLimb" Type="Standard" EnumName="STALCHILD_LIMB_SPINE" Offset="0x5EA0" />
         <Skeleton Name="gStalchildSkel" Type="Normal" LimbType="Standard" LimbNone="STALCHILD_LIMB_NONE" LimbMax="STALCHILD_LIMB_MAX" EnumName="StalchildLimb" Offset="0x5EF8" />
-        <Animation Name="gStalchildWalkAnim" Offset="0x64E0" />
-        <!-- <Blob Name="object_skb_zeroes_unk_000064F0" Size="0x20" Offset="0x64F0" /> -->
-        <Animation Name="gStalchildSitLaughAnim" Offset="0x697C" />
-        <Animation Name="gStalchildSitTapToesAnim" Offset="0x6D90" />
+        <Animation Name="gStalchildWalkAnim" Offset="0x64E0" /> <!-- Original name is "stal_baby_walk" -->
+        <Blob Name="gStalchildEmpty4Blob" Size="0x20" Offset="0x64F0" />
+        <Animation Name="gStalchildSitLaughAnim" Offset="0x697C" /> <!-- Original name is "suwari_wait" -->
+        <Animation Name="gStalchildSitTapToesAnim" Offset="0x6D90" /> <!-- Original name is "yankey_wait" -->
     </File>
 </Root>

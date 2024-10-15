@@ -2,7 +2,7 @@
 #define Z_EN_SYATEKI_OKUTA_H
 
 #include "global.h"
-#include "objects/object_okuta/object_okuta.h"
+#include "assets/objects/object_okuta/object_okuta.h"
 
 typedef enum {
     /* 0 */ SG_OCTO_TYPE_NONE,

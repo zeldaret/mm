@@ -34,7 +34,7 @@
 #include "overlays/actors/ovl_En_Tanron1/z_en_tanron1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss01*)thisx)
 
@@ -204,7 +204,7 @@ static Vec3f sFallingBlockSfxPos = { 0.0f, 1000.0f, 0.0f };
 /**
  * Odolwa's sword trail is a circular arc, and this variable is used to determine the angular range of this arc (and
  * thus the total size of the trail). The trail consists of 10 segments in an arc, and the angle of each of those
- * segments is M_PI / sSwordTrailAngularRangeDivisor; in other words, as this variable decreases, Odolwa's sword trail
+ * segments is M_PIf / sSwordTrailAngularRangeDivisor; in other words, as this variable decreases, Odolwa's sword trail
  * covers a larger angular range, and as it increaes, the sword trail covers a smaller angular range.
  */
 static f32 sSwordTrailAngularRangeDivisor = 10.0f;
@@ -636,7 +636,7 @@ static ColliderCylinderInit sBugATColliderCylinderInit = {
     { 8, 15, 10, { 0, 0, 0 } },
 };
 
-ActorInit Boss_01_InitVars = {
+ActorProfile Boss_01_Profile = {
     /**/ ACTOR_BOSS_01,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -934,7 +934,7 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gOdolwaSkel, &gOdolwaReadyAnim, this->jointTable, this->morphTable,
                            ODOLWA_LIMB_MAX);
 
-        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_54)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA)) {
             Boss01_SetupWait(this, play, ODOLWA_WAIT_READY);
             this->actor.gravity = -2.5f;
             sOdolwaMusicStartTimer = KREG(15) + 20;
@@ -1138,7 +1138,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-                SET_EVENTINF(EVENTINF_54);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
             }
             break;
 
@@ -1722,7 +1722,7 @@ void Boss01_VerticalSlash(Boss01* this, PlayState* play) {
     sOdolwaSwordTrailPosY = 90.0f;
     sOdolwaSwordTrailPosZ = -70.0f;
     sOdolwaSwordTrailRotX = 0.4712388f;
-    sOdolwaSwordTrailRotY = M_PI;
+    sOdolwaSwordTrailRotY = M_PIf;
     sOdolwaSwordTrailRotZ = 1.7278761f;
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
@@ -1951,12 +1951,12 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
     u8 damage;
     s32 i;
 
-    if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.bumperFlags & BUMP_HIT) {
+    if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].base.bumperFlags & BUMP_HIT) {
         this->bodyInvincibilityTimer = 5;
         if (this->damagedTimer == 0) {
-            ColliderInfo* acHitInfo = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitInfo;
+            ColliderElement* acHitElem = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].base.acHitElem;
 
-            if (acHitInfo->toucher.dmgFlags == DMG_SWORD_BEAM) {
+            if (acHitElem->toucher.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
@@ -1965,24 +1965,24 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
         }
     } else if (this->damagedTimer == 0) {
         for (i = 0; i < ODOLWA_SWORD_COLLIDER_MAX; i++) {
-            if (this->swordCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->swordCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->swordCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->swordCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 15.0f;
             }
         }
 
         for (i = 0; i < ODOLWA_KICK_AND_SHIELD_BASH_COLLIDER_MAX; i++) {
-            if (this->kickAndShieldBashCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->kickAndShieldBashCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->kickAndShieldBashCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->kickAndShieldBashCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-            if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
 
                 switch (this->actor.colChkInfo.damageEffect) {
                     case ODOLWA_DMGEFF_FREEZE:
@@ -2408,7 +2408,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
         } else {
             this->bodyInvincibilityTimer--;
             for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-                this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
             }
         }
 
@@ -2428,7 +2428,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->disableCollisionTimer--;
         for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-            this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
         }
     }
 
@@ -2613,13 +2613,13 @@ void Boss01_DrawSwordTrail(Boss01* this, PlayState* play) {
     vtx = Lib_SegmentedToVirtual(&gOdolwaSwordTrailVtx);
 
     for (i = 0; i < ARRAY_COUNT(sSwordTrailOuterVertexIndices); i++) {
-        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[0] = cosf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 200.0f;
+        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[0] = cosf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 200.0f;
         vtx[sSwordTrailOuterVertexIndices[i]].v.ob[1] = 0;
-        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[2] = sinf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 200.0f;
+        vtx[sSwordTrailOuterVertexIndices[i]].v.ob[2] = sinf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 200.0f;
 
-        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[0] = cosf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 100.0f;
+        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[0] = cosf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 100.0f;
         vtx[sSwordTrailInnerVertexIndices[i]].v.ob[1] = 0;
-        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[2] = sinf((i * M_PI) / sSwordTrailAngularRangeDivisor) * 100.0f;
+        vtx[sSwordTrailInnerVertexIndices[i]].v.ob[2] = sinf((i * M_PIf) / sSwordTrailAngularRangeDivisor) * 100.0f;
     }
 
     gSPSegment(
@@ -3017,6 +3017,7 @@ void Boss01_FillShadowTex(Boss01* this, u8* tex, f32 weight) {
     Vec3f startVec;
 
     for (i = 0; i < ODOLWA_BODYPART_MAX; i++) {
+        // TODO: match with a continue
         if ((weight == 0.0f) || (y = sParentShadowBodyParts[i]) > BODYPART_NONE) {
             if (weight > 0.0f) {
                 VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[y], weight);
@@ -3245,16 +3246,16 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
     Vec3f additionalVelocity;
     s32 pad[2];
     u8 damage;
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
     OdolwaEffect* effect = play->specialEffects;
 
     if (this->bugACCollider.base.acFlags & AC_HIT) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
-        acHitInfo = this->bugACCollider.info.acHitInfo;
+        acHitElem = this->bugACCollider.elem.acHitElem;
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-            if (acHitInfo->toucher.dmgFlags & 0x300000) {
+            if (acHitElem->toucher.dmgFlags & 0x300000) {
                 this->damagedTimer = 10;
                 Matrix_MultVecZ(-10.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;
@@ -3569,11 +3570,11 @@ void Boss01_DrawEffects(PlayState* play) {
                        Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0, 0, 32, 64, 1, 0,
                                         ((effect->timer + (i * 10)) * -20) & 0x1FF, 32, 128));
 
-            Matrix_RotateYF(i * (M_PI / 16.0f), MTXMODE_APPLY);
+            Matrix_RotateYF(i * (M_PIf / 16), MTXMODE_APPLY);
             Matrix_Translate(0.0f, 0.0f, KREG(49) + 200.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             if (Boss01_RandZeroOne() < 0.5f) {
-                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
 
             Matrix_Scale(KREG(48) * 0.0001f + 0.018f,

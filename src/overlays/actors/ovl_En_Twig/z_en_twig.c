@@ -4,7 +4,7 @@
  * Description: Beaver Race Ring
  */
 #include "z_en_twig.h"
-#include "objects/object_twig/object_twig.h"
+#include "assets/objects/object_twig/object_twig.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play);
 void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
-ActorInit En_Twig_InitVars = {
+ActorProfile En_Twig_Profile = {
     /**/ ACTOR_EN_TWIG,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,
@@ -186,7 +186,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                        0.01f);
     Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[PLAYER_BODYPART_WAIST].z, 0.5f, 100.0f,
                        0.01f);
-    this->dyna.actor.shape.rot.z += (s16)this->unk_170;
+    this->dyna.actor.shape.rot.z += TRUNCF_BINANG(this->unk_170);
     this->dyna.actor.scale.x -= this->unk_174;
     if (this->dyna.actor.scale.x < 0.0f) {
         Actor_SetScale(&this->dyna.actor, 0.0f);

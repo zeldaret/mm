@@ -4,6 +4,13 @@
 #include "ultra64.h"
 #include "unk.h"
 
+#include "color.h"
+
+#include "z64math.h"
+
+struct Actor;
+struct Camera;
+struct PlayState;
 
 typedef union {
     struct {
@@ -599,10 +606,6 @@ typedef struct {
     /* 0x7 */ u8 spawnFlags; // See `CS_SPAWN_FLAG_`
 } CutsceneScriptEntry; // size = 0x8
 
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-typedef CutsceneScriptEntry CutsceneEntry;
-
 typedef struct {
     /* 0x00 */ u8 scriptListCount;
     /* 0x04 */ CutsceneData* script;
@@ -631,13 +634,11 @@ typedef struct {
     /* 0xC */ s16 hudVisibility; 
     /* 0xE */ u8 endCam;
     /* 0xF */ u8 letterboxSize;
-} ActorCutscene; // size = 0x10
-// TODO: rename `ActorCutscene` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
-// typedef CutsceneEntry ActorCutscene;
+} CutsceneEntry; // size = 0x10
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
-    // CsId's 0 - 119 are sceneLayer-specific and index `ActorCutscene`
+    // CsId's 0 - 119 are sceneLayer-specific and index `CutsceneEntry`
     /* 0x78 */ CS_ID_GLOBAL_78 = 120,
     /* 0x79 */ CS_ID_GLOBAL_79,
     /* 0x7A */ CS_ID_GLOBAL_7A,
@@ -760,7 +761,6 @@ typedef enum CutsceneCamRelativeTo {
     /* 5 */ CS_CAM_REL_5
 } CutsceneCamRelativeTo;
 
-
 // Roll and Fov Data
 typedef struct CsCmdCamMisc {
     /* 0x0 */ s16 unused0; // used only in the unused interp function
@@ -796,7 +796,7 @@ typedef struct CutsceneCamera {
     /* 0x70 */ CsCmdCamPoint* atCmd;
     /* 0x74 */ CsCmdCamPoint* eyeCmd;
     /* 0x78 */ CsCmdCamMisc* miscCmd;
-    /* 0x7C */ Camera* camera;
+    /* 0x7C */ struct Camera* camera;
 } CutsceneCamera; // size = 0x80
 
 typedef enum {
@@ -818,37 +818,37 @@ void Cutscene_UpdateScripted(struct PlayState* play, CutsceneContext* csCtx);
 void Cutscene_HandleEntranceTriggers(struct PlayState* play);
 void func_800EDDB0(struct PlayState* play);
 void Cutscene_StartScripted(struct PlayState* play, u8 scriptIndex);
-void Cutscene_ActorTranslate(Actor* actor, struct PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateAndYaw(Actor* actor, struct PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, struct PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslate(struct Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYaw(struct Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYawSmooth(struct Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateXZAndYawSmooth(struct Actor* actor, struct PlayState* play, s32 cueChannel);
 s32 Cutscene_GetSceneLayer(struct PlayState* play);
 s32 Cutscene_GetCueChannel(struct PlayState* play, u16 cueType);
 s32 Cutscene_IsCueInChannel(struct PlayState* play, u16 cueType);
 u8 Cutscene_IsPlaying(struct PlayState* play);
 
-void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 numEntries);
-void CutsceneManager_StoreCamera(Camera* camera);
+void CutsceneManager_Init(struct PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries);
+void CutsceneManager_StoreCamera(struct Camera* camera);
 void CutsceneManager_ClearWaiting(void);
 s16 CutsceneManager_Update(void);
 void CutsceneManager_Queue(s16 csId);
 s16 CutsceneManager_IsNext(s16 csId);
-s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor);
-s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
-s16 CutsceneManager_Start(s16 csId, Actor* actor);
+s16 CutsceneManager_StartWithPlayerCs(s16 csId, struct Actor* actor);
+s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, struct Actor* actor);
+s16 CutsceneManager_Start(s16 csId, struct Actor* actor);
 s16 CutsceneManager_Stop(s16 csId);
 s16 CutsceneManager_GetCurrentCsId(void);
-ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId);
+CutsceneEntry* CutsceneManager_GetCutsceneEntry(s16 csId);
 s16 CutsceneManager_GetAdditionalCsId(s16 csId);
 s16 CutsceneManager_GetLength(s16 csId);
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);
 s16 CutsceneManager_GetCutsceneCustomValue(s16 csId);
 s16 CutsceneManager_GetCurrentSubCamId(s16 csId);
 s16 CutsceneManager_FindEntranceCsId(void);
-s32 func_800F22C4(s16 csId, Actor* actor);
+s32 func_800F22C4(s16 csId, struct Actor* actor);
 void CutsceneManager_SetReturnCamera(s16 camId);
 
-s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera);
+s32 CutsceneCamera_Init(struct Camera* camera, CutsceneCamera* csCamera);
 s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera);
 void CutsceneCamera_SetState(s16 state);
 void CutsceneCamera_Reset(void);

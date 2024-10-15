@@ -5,7 +5,10 @@
  */
 
 #include "z_en_mag.h"
-#include "objects/object_mag/object_mag.h"
+
+#include "gfxalloc.h"
+
+#include "assets/objects/object_mag/object_mag.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -85,7 +88,7 @@ static s16 sZeldaEffectColorTargetIndex = 0;
 static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
-ActorInit En_Mag_InitVars = {
+ActorProfile En_Mag_Profile = {
     /**/ ACTOR_EN_MAG,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -964,13 +967,13 @@ void EnMag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfxRef = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(gfxRef);
+    gfx = Gfx_Open(gfxRef);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     EnMag_DrawInner(thisx, play, &gfx);
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxRef, gfx);
+    Gfx_Close(gfxRef, gfx);
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -1,6 +1,11 @@
+#include "gfx.h"
+
 #include "global.h"
+#include "gfxalloc.h"
+#include "regs.h"
 #include "sys_cfb.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+#include "z64pause_menu.h"
 
 Gfx gSetupDLs[SETUPDL_MAX][6] = {
     {
@@ -1358,7 +1363,7 @@ void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx) {
 }
 
 Gfx* Gfx_BranchTexScroll(Gfx** gfxP, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* gfx = Graph_DlistAlloc(gfxP, 3 * sizeof(Gfx));
+    Gfx* gfx = Gfx_Alloc(gfxP, 3 * sizeof(Gfx));
 
     gDPTileSync(&gfx[0]);
     gDPSetTileSize(&gfx[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
@@ -1522,7 +1527,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->syncSegments;
 
-    for (i = 0; i < ARRAY_COUNT(gSegments); i++) {
+    for (i = 0; i < NUM_SEGMENTS; i++) {
         if (i == 0x0E) {
             gSPNoOp(&masterGfx[i]);
         } else {

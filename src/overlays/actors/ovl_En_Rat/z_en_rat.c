@@ -5,10 +5,10 @@
  */
 
 #include "z_en_rat.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnRat*)thisx)
 
@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED
 } EnRatHookedState;
 
-ActorInit En_Rat_InitVars = {
+ActorProfile En_Rat_Profile = {
     /**/ ACTOR_EN_RAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -246,7 +246,7 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
         return false;
     }
 
-    Math3D_CrossProduct(&this->axisUp, &normal, &vec);
+    Math3D_Vec3f_Cross(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
     if (magnitude < 0.001f) {
@@ -258,7 +258,7 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
     Matrix_RotateAxisF(angle, &vec, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
-    Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
+    Math3D_Vec3f_Cross(&this->axisLeft, &normal, &this->axisForwards);
 
     magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {
@@ -335,9 +335,9 @@ void EnRat_ChooseDirection(EnRat* this) {
                 angle -= 0x8000;
             }
 
-            angle += (s16)(s32)Rand_CenteredFloat(0x800);
+            angle += TRUNCF_BINANG(Rand_CenteredFloat(0x800));
         } else {
-            angle = (Rand_ZeroOne() < 0.1f) ? (s16)(s32)Rand_CenteredFloat(0x800) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? TRUNCF_BINANG(Rand_CenteredFloat(0x800)) : 0;
         }
     }
 
@@ -345,7 +345,7 @@ void EnRat_ChooseDirection(EnRat* this) {
     Matrix_RotateAxisF(BINANG_TO_RAD(angle), &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &newAxisForwards);
     Math_Vec3f_Copy(&this->axisForwards, &newAxisForwards);
-    Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
+    Math3D_Vec3f_Cross(&this->axisUp, &this->axisForwards, &this->axisLeft);
     this->shouldRotateOntoSurfaces = true;
 }
 
@@ -948,14 +948,14 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
-            redModifier = fabsf(Math_CosF(this->timer * (M_PI / 30.f)));
+            redModifier = fabsf(Math_CosF(this->timer * (M_PIf / 30)));
         } else {
             if (this->timer >= 120) {
-                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PI / 30.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PIf / 30)));
             } else if (this->timer >= 30) {
-                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PI / 6.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PIf / 6)));
             } else {
-                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PI / 3.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PIf / 3)));
             }
         }
 

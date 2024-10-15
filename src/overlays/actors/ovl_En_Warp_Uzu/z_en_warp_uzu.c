@@ -5,7 +5,7 @@
  */
 
 #include "z_en_warp_uzu.h"
-#include "objects/object_warp_uzu/object_warp_uzu.h"
+#include "assets/objects/object_warp_uzu/object_warp_uzu.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -21,7 +21,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play);
 void func_80A66384(EnWarpUzu* this, PlayState* play);
 void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play);
 
-ActorInit En_Warp_Uzu_InitVars = {
+ActorProfile En_Warp_Uzu_Profile = {
     /**/ ACTOR_EN_WARP_UZU,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -106,7 +106,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play) {
 void func_80A66384(EnWarpUzu* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(PIRATES_FORTRESS, 10);
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
-    func_80169EFC(&play->state);
+    func_80169EFC(play);
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }

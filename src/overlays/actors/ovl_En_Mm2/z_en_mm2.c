@@ -18,7 +18,7 @@ void EnMm2_Draw(Actor* thisx, PlayState* play);
 void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-ActorInit En_Mm2_InitVars = {
+ActorProfile En_Mm2_Profile = {
     /**/ ACTOR_EN_MM2,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -30,7 +30,7 @@ ActorInit En_Mm2_InitVars = {
     /**/ EnMm2_Draw,
 };
 
-#include "overlays/ovl_En_Mm2/ovl_En_Mm2.c"
+#include "assets/overlays/ovl_En_Mm2/ovl_En_Mm2.c"
 
 void EnMm2_Init(Actor* thisx, PlayState* play) {
     EnMm2* this = THIS;
@@ -47,7 +47,7 @@ void EnMm2_Destroy(Actor* thisx, PlayState* play) {
  */
 void EnMm2_Reading(EnMm2* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = EnMm2_WaitForRead;

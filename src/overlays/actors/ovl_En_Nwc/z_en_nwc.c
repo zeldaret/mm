@@ -9,7 +9,7 @@
 
 #include "z_en_nwc.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
-#include "objects/object_nwc/object_nwc.h"
+#include "assets/objects/object_nwc/object_nwc.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -40,7 +40,7 @@ typedef enum EnNwcState {
     /*  4 */ NWC_STATE_RUNNING          // running from the player after failed breman march
 } EnNwcState;
 
-ActorInit En_Nwc_InitVars = {
+ActorProfile En_Nwc_Profile = {
     /**/ ACTOR_EN_NWC,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -179,7 +179,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_TURNING:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_Turn;
-            this->fallingRotY = (s16)(s32)Rand_CenteredFloat(0x10000);
+            this->fallingRotY = TRUNCF_BINANG(Rand_CenteredFloat(0x10000));
             break;
 
         case NWC_STATE_HOPPING_FORWARD:
@@ -190,7 +190,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_FOLLOWING:
             this->actionFunc = EnNwc_Follow;
             this->transformTimer = 0;
-            this->randomRot = (s16)(s32)Rand_CenteredFloat(0x2710);
+            this->randomRot = TRUNCF_BINANG(Rand_CenteredFloat(0x2710));
             break;
 
         case NWC_STATE_RUNNING:
@@ -245,14 +245,14 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectSlot)) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }
@@ -305,7 +305,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
     if ((this->grog->actor.home.rot.z >= 20) && // all 10 chicks have been found
         !(this->hasGrownUp & 1)) {
         this->transformTimer += 2;
-        if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
+        if (this->transformTimer >= (s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform
             this->hasGrownUp |= 1;
             this->grog->actor.home.rot.x += 2; // increment grog's adult tranformation counter
@@ -328,7 +328,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
 
     } else { // not too close: keep moving
-        this->randomRot += (s16)(s32)Rand_CenteredFloat(0x5DC);
+        this->randomRot += TRUNCF_BINANG(Rand_CenteredFloat(0x5DC));
         if (this->randomRot > 0x1388) {
             this->randomRot = 0x1388;
         } else if (this->randomRot < -0x1388) {
@@ -489,21 +489,21 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
 void EnNwc_Draw(Actor* thisx, PlayState* play) {
     TexturePtr eyeTextures[] = { gNwcEyeOpenTex, gNwcEyeClosedTex };
     EnNwc* this = THIS;
-    Gfx* dispHead;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    dispHead = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPSegment(&dispHead[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
 
-    gSPMatrix(&dispHead[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(&dispHead[2], &gNwcBodyDL);
+    gSPDisplayList(&gfx[2], &gNwcBodyDL);
 
-    POLY_OPA_DISP = &dispHead[3];
+    POLY_OPA_DISP = &gfx[3];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

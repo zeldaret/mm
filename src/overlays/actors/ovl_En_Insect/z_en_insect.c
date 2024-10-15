@@ -31,7 +31,7 @@ void func_8091B984(EnInsect* this, PlayState* play);
 
 s16 D_8091BD60 = 0;
 
-ActorInit En_Insect_InitVars = {
+ActorProfile En_Insect_Profile = {
     /**/ ACTOR_EN_INSECT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -137,9 +137,9 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     {
-        ColliderJntSphElement* colliderElement = &this->collider.elements[0];
+        ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-        colliderElement->dim.worldSphere.radius = colliderElement->dim.modelSphere.radius * colliderElement->dim.scale;
+        jntSphElem->dim.worldSphere.radius = jntSphElem->dim.modelSphere.radius * jntSphElem->dim.scale;
     }
 
     this->actor.colChkInfo.mass = 30;
@@ -486,11 +486,11 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
             func_8091B274(this);
         } else if ((this->actor.xzDistToPlayer < 50.0f) && (this->actionFunc != func_8091B2D8)) {
             if (!(this->unk_30C & 0x20) && (this->unk_314 < 180)) {
-                ColliderJntSphElement* colliderElement = &this->collider.elements[0];
+                ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-                colliderElement->dim.worldSphere.center.x = this->actor.world.pos.x;
-                colliderElement->dim.worldSphere.center.y = this->actor.world.pos.y;
-                colliderElement->dim.worldSphere.center.z = this->actor.world.pos.z;
+                jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+                jntSphElem->dim.worldSphere.center.y = this->actor.world.pos.y;
+                jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             }
 

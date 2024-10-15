@@ -9,8 +9,8 @@
  */
 
 #include "z_dm_stk.h"
-#include "objects/object_stk2/object_stk2.h"
-#include "objects/object_stk3/object_stk3.h"
+#include "assets/objects/object_stk2/object_stk2.h"
+#include "assets/objects/object_stk3/object_stk3.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -151,7 +151,7 @@ typedef enum {
     /* 4 */ SK_DEKU_PIPES_CS_STATE_END
 } SkullKidDekuPipesCutsceneState;
 
-ActorInit Dm_Stk_InitVars = {
+ActorProfile Dm_Stk_Profile = {
     /**/ ACTOR_DM_STK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -320,7 +320,7 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
     }
 
     if (objectSlot > OBJECT_SLOT_NONE) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 }
 
@@ -1868,7 +1868,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
         if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
-            (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
+            (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(play) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {
             gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
@@ -1967,13 +1967,13 @@ void DmStk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     (this->objectStk2ObjectSlot > OBJECT_SLOT_NONE)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStk2ObjectSlot].segment);
+                    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStk2ObjectSlot].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStk2ObjectSlot].segment);
 
                     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexAnim));
                     Gfx_DrawDListOpa(play, gSkullKidMajorasMaskCurseOverlayDL);
-                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
+                    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
@@ -2094,7 +2094,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
             return;
         }
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
         OPEN_DISPS(play->state.gfxCtx);
 

@@ -2,7 +2,7 @@
 #define Z_EN_DAIKU2_H
 
 #include "global.h"
-#include "objects/object_daiku/object_daiku.h"
+#include "assets/objects/object_daiku/object_daiku.h"
 
 struct EnDaiku2;
 

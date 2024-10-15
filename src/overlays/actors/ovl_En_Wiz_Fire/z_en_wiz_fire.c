@@ -6,9 +6,9 @@
 
 #include "z_en_wiz_fire.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
-#include "objects/object_wiz/object_wiz.h"
+#include "assets/objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -37,7 +37,7 @@ typedef enum {
 
 static s32 sPoolHitByIceArrow = false;
 
-ActorInit En_Wiz_Fire_InitVars = {
+ActorProfile En_Wiz_Fire_Profile = {
     /**/ ACTOR_EN_WIZ_FIRE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -80,21 +80,21 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
-        this->collider.info.toucher.dmgFlags = 0x20000000;
+        this->collider.elem.toucher.dmgFlags = 0x20000000;
     }
 
     switch (this->type) {
         case EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE:
             this->isIceType = true;
-            this->collider.info.toucher.damage = 8;
-            this->collider.info.toucher.effect = 2;
-            this->collider.info.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
+            this->collider.elem.toucher.damage = 8;
+            this->collider.elem.toucher.effect = 2;
+            this->collider.elem.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
             // fallthrough
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
             if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
                 this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
-                this->collider.info.toucher.damage = 8;
+                this->collider.elem.toucher.damage = 8;
             }
             // fallthrough
         case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
@@ -106,7 +106,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->actor.draw = EnWizFire_DrawSmallFlame;
             this->smallFlameScroll = Rand_S16Offset(0, 10000);
             this->action = EN_WIZ_FIRE_ACTION_SMALL_FLAME;
-            this->collider.info.toucher.damage = 2;
+            this->collider.elem.toucher.damage = 2;
             this->actionFunc = EnWiz_SetupSmallFlame;
             break;
 
@@ -223,7 +223,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
-            Matrix_RotateYS((s16)(s32)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_RotateYS(TRUNCF_BINANG(Rand_CenteredFloat(0x100)) + this->actor.world.rot.y, MTXMODE_NEW);
             velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
             Matrix_MultVec3f(&velocity, &this->actor.velocity);
             Matrix_Pop();
@@ -283,7 +283,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     if ((this->type != EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE) && (this->timer != 0)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
+            if (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -294,8 +294,8 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;
-            this->collider.info.toucher.dmgFlags = 0x20;
-            this->collider.info.toucher.damage = 2;
+            this->collider.elem.toucher.dmgFlags = 0x20;
+            this->collider.elem.toucher.damage = 2;
             this->timer = 100;
             this->type = EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE;
             this->actor.velocity.x *= -1.0f;
@@ -342,7 +342,7 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
                 this->timer -= 10;
             }
 
-            if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
+            if (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -409,7 +409,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (!sPoolHitByIceArrow && (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000)) {
+            if (!sPoolHitByIceArrow && (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000)) {
                 sPoolHitByIceArrow = true;
                 this->hitByIceArrow = true;
                 this->poolTimer = 0;
@@ -519,41 +519,47 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
             }
 
             play->envCtx.adjLightSettings.fogNear =
-                (fogNear - (s16)play->envCtx.lightSettings.fogNear) * this->blendScaleFrac;
+                TRUNCF_BINANG((fogNear - play->envCtx.lightSettings.fogNear) * this->blendScaleFrac);
 
             play->envCtx.adjLightSettings.ambientColor[0] =
-                ((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) *
-                this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.ambientColor[1] =
-                ((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.ambientColor[1]) *
-                this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.ambientColor[1]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.ambientColor[2] =
-                ((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.ambientColor[2]) *
-                this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.ambientColor[2]) *
+                              this->blendScaleFrac);
 
             index++;
             play->envCtx.adjLightSettings.light1Color[0] =
-                ((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.light1Color[0]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.light1Color[0]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.light1Color[1] =
-                ((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.light1Color[1]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.light1Color[1]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.light1Color[2] =
-                ((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.light1Color[2]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.light1Color[2]) *
+                              this->blendScaleFrac);
 
             index++;
             play->envCtx.adjLightSettings.light2Color[0] =
-                ((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.light2Color[0]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.light2Color[0]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.light2Color[1] =
-                ((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.light2Color[1]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.light2Color[1]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.light2Color[2] =
-                ((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.light2Color[2]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.light2Color[2]) *
+                              this->blendScaleFrac);
 
             index++;
-            play->envCtx.adjLightSettings.fogColor[0] =
-                ((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.fogColor[0]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.fogColor[1] =
-                ((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.fogColor[1]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.fogColor[2] =
-                ((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.fogColor[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogColor[0] = TRUNCF_BINANG(
+                ((f32)sLightSettingsColors[index].r - play->envCtx.lightSettings.fogColor[0]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.fogColor[1] = TRUNCF_BINANG(
+                ((f32)sLightSettingsColors[index].g - play->envCtx.lightSettings.fogColor[1]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.fogColor[2] = TRUNCF_BINANG(
+                ((f32)sLightSettingsColors[index].b - play->envCtx.lightSettings.fogColor[2]) * this->blendScaleFrac);
         }
     }
 

@@ -3,8 +3,10 @@
 
 #include "ultra64.h"
 
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "unk.h"
+
+#include "romfile.h"
 
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
@@ -49,7 +51,7 @@ typedef struct TransitionTile {
 
 #define TC_SET_PARAMS (1 << 7)
 
-typedef struct TransitionInit {
+typedef struct TransitionProfile {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
     /* 0x08 */ void  (*update)(void* transition, s32 updateRate);
@@ -59,7 +61,7 @@ typedef struct TransitionInit {
     /* 0x18 */ void  (*setColor)(void* transition, u32 color);
     /* 0x1C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x20 */ s32   (*isDone)(void* transition);
-} TransitionInit; // size = 0x24
+} TransitionProfile; // size = 0x24
 
 typedef struct TransitionOverlay {
     union {
@@ -71,9 +73,8 @@ typedef struct TransitionOverlay {
     } loadInfo;
     /* 0x04 */ void* vramStart;
     /* 0x08 */ void* vramEnd;
-    /* 0x0C */ uintptr_t vromStart;
-    /* 0x10 */ uintptr_t vromEnd;
-    /* 0x14 */ TransitionInit* initInfo;
+    /* 0x0C */ RomFile file;
+    /* 0x14 */ TransitionProfile* profile;
     /* 0x18 */ size_t size;
 } TransitionOverlay;
 
@@ -103,7 +104,7 @@ typedef struct TransitionCircle {
     /* 0x14 */ u8 direction; // Direction the circle is transitioning ( In / Out )
     /* 0x15 */ u8 maskType; // Positive / Negative mask type. Value of 0 will create a black circle
     /* 0x16 */ u8 isDone; // Signals when Transition is done updating
-    /* 0x18 */ TexturePtr texture;
+    /* 0x18 */ void const* texture;
     /* 0x1C */ u8 masks;
     /* 0x1D */ u8 maskt;
     /* 0x1E */ s8 unk_1E; // Set to 4 and never used
@@ -243,7 +244,7 @@ void TransitionFade_SetType(void* thisx, s32 type);
 
 // z_fbdemo_circle.c
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
 
 // z_overlay.c
 

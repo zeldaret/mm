@@ -5,8 +5,8 @@
  */
 
 #include "z_en_box.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_box/object_box.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_box/object_box.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000000
@@ -56,7 +56,7 @@ void EnBox_Open(EnBox* this, PlayState* play);
 void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
-ActorInit En_Box_InitVars = {
+ActorProfile En_Box_Profile = {
     /**/ ACTOR_EN_BOX,
     /**/ ACTORCAT_CHEST,
     /**/ FLAGS,
@@ -107,7 +107,7 @@ void func_80867C14(struct_80867BDC_a0* arg0, PlayState* play) {
 void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
     s32 temp_s6 = arg0->unk_18 - arg0->unk_1C;
     s32 i;
-    f32 pad;
+    s32 pad;
 
     if (temp_s6 > 0) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -496,7 +496,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
         Vec3f offset;
 
-        Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
         if ((offset.z > -50.0f) && (offset.z < 0.0f) && (fabsf(offset.y) < 10.0f) && (fabsf(offset.x) < 20.0f) &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, play)) {
             if (((this->getItemId == GI_HEART_PIECE) || (this->getItemId == GI_BOTTLE)) &&

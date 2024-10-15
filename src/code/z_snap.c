@@ -1,5 +1,8 @@
-#include "global.h"
 #include "z64snap.h"
+
+#include "global.h"
+#include "z64olib.h"
+
 #include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
 
 #define PICTO_SEEN_IN_SCENE 1
@@ -171,8 +174,8 @@ s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos,
     // Check in capture region
     Actor_GetProjectedPos(play, pos, &projectedPos, &distance);
     // Convert to projected position to device coordinates, shift to be relative to the capture region's top-left corner
-    x = (s16)PROJECTED_TO_SCREEN_X(projectedPos, distance) - PICTO_VALID_TOPLEFT_X;
-    y = (s16)PROJECTED_TO_SCREEN_Y(projectedPos, distance) - PICTO_VALID_TOPLEFT_Y;
+    x = TRUNCF_BINANG(PROJECTED_TO_SCREEN_X(projectedPos, distance)) - PICTO_VALID_TOPLEFT_X;
+    y = TRUNCF_BINANG(PROJECTED_TO_SCREEN_Y(projectedPos, distance)) - PICTO_VALID_TOPLEFT_Y;
 
     // checks if the coordinates are within the capture region
     if ((x < 0) || (x > PICTO_VALID_WIDTH) || (y < 0) || (y > PICTO_VALID_HEIGHT)) {

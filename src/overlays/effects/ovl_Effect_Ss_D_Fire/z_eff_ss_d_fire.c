@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_d_fire.h"
-#include "objects/object_dodongo/object_dodongo.h"
+#include "assets/objects/object_dodongo/object_dodongo.h"
 
 #define rScale regs[0]
 #define rTexIndex regs[1]
@@ -21,7 +21,7 @@ u32 EffectSsDFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsDFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_D_Fire_InitVars = {
+EffectSsProfile Effect_Ss_D_Fire_Profile = {
     EFFECT_SS_D_FIRE,
     EffectSsDFire_Init,
 };
@@ -73,7 +73,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         OPEN_DISPS(gfxCtx);
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(objectPtr);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(objectPtr);
         gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
         scale = this->rScale / 100.0f;

@@ -15,7 +15,7 @@ void OceffWipe6_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe6_Update(Actor* thisx, PlayState* play);
 void OceffWipe6_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Oceff_Wipe6_InitVars = {
+ActorProfile Oceff_Wipe6_Profile = {
     /**/ ACTOR_OCEFF_WIPE6,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -27,7 +27,7 @@ ActorInit Oceff_Wipe6_InitVars = {
     /**/ OceffWipe6_Draw,
 };
 
-#include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
+#include "assets/overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
 
 void OceffWipe6_Init(Actor* thisx, PlayState* play) {
     OceffWipe6* this = THIS;

@@ -90,7 +90,7 @@ void EnBal_OfferGetItem(EnBal* this, PlayState* play);
 void EnBal_SetupThankYou(EnBal* this);
 void EnBal_ThankYou(EnBal* this, PlayState* play);
 
-ActorInit En_Bal_InitVars = {
+ActorProfile En_Bal_Profile = {
     /**/ ACTOR_EN_BAL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -238,15 +238,15 @@ void EnBal_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnBal_SetMainColliderToBalloon(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_BALLOON;
-    this->collider.elements->dim.modelSphere.radius = 40;
-    this->collider.elements->dim.modelSphere.center.x = 2200;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_BALLOON;
+    this->collider.elements[0].dim.modelSphere.radius = 40;
+    this->collider.elements[0].dim.modelSphere.center.x = 2200;
 }
 
 void EnBal_SetMainColliderToHead(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_HEAD;
-    this->collider.elements->dim.modelSphere.radius = 25;
-    this->collider.elements->dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_HEAD;
+    this->collider.elements[0].dim.modelSphere.radius = 25;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
 }
 
 s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -592,13 +592,13 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
             break;
 
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if (this->textId != 0x1D10) {
                 this->isTalking = true;
             }
@@ -608,7 +608,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             EnBal_TryPurchaseMap(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnBal_HandleConversation(this, play);
             break;
 
@@ -618,7 +618,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             if (Message_ShouldAdvance(play) && (this->textId == 0x1D08)) {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
@@ -986,7 +986,7 @@ void EnBal_SetupOfferGetItem(EnBal* this) {
 void EnBal_OfferGetItem(EnBal* this, PlayState* play) {
     GetItemId mapGetItemId;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         sGetItemPending = true;
     }
@@ -1166,7 +1166,7 @@ void EnBal_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 8, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBal_OverrideLimbDraw, EnBal_PostLimbDraw, &this->picto.actor);
 

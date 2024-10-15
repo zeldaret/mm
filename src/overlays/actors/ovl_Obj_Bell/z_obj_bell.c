@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_bell.h"
-#include "objects/object_f52_obj/object_f52_obj.h"
+#include "assets/objects/object_f52_obj/object_f52_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -19,7 +19,7 @@ void ObjBell_Draw(Actor* thisx, PlayState* play);
 s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
-ActorInit Obj_Bell_InitVars = {
+ActorProfile Obj_Bell_Profile = {
     /**/ ACTOR_OBJ_BELL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -157,7 +157,7 @@ s32 func_80A356D8(ObjBell* this) {
     scaleProjection = Math_SinS(this->unk_20C) * this->unk_21C;
     this->dyna.actor.world.rot.x = this->dyna.actor.home.rot.x;
     this->unk_220 = scaleProjection;
-    this->dyna.actor.world.rot.x += (s16)scaleProjection;
+    this->dyna.actor.world.rot.x += TRUNCF_BINANG(scaleProjection);
     Math_ApproachF(&this->unk_21C, 0.0f, 0.03f, 70.0f);
     if (this->unk_21C > 0.0f) {
         this->unk_20C -= 0x800;

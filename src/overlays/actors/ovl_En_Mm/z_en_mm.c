@@ -5,7 +5,7 @@
  */
 
 #include "z_en_mm.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -21,7 +21,7 @@ void func_80965DB4(EnMm* this, PlayState* play);
 void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
-ActorInit En_Mm_InitVars = {
+ActorProfile En_Mm_Profile = {
     /**/ ACTOR_EN_MM,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -161,7 +161,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
                     direction = BINANG_ROT180(direction);
                 }
                 Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speed * 100.0f);
-                this->unk_190 += (s16)(this->actor.speed * 800.0f);
+                this->unk_190 += TRUNCF_BINANG(this->actor.speed * 800.0f);
             }
 
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {

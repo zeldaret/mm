@@ -25,7 +25,7 @@
  */
 
 #include "z_obj_takaraya_wall.h"
-#include "objects/object_takaraya_objects/object_takaraya_objects.h"
+#include "assets/objects/object_takaraya_objects/object_takaraya_objects.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -38,7 +38,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play);
 
 void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play);
 
-ActorInit Obj_Takaraya_Wall_InitVars = {
+ActorProfile Obj_Takaraya_Wall_Profile = {
     /**/ ACTOR_OBJ_TAKARAYA_WALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

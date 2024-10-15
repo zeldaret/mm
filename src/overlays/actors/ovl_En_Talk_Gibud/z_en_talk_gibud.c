@@ -7,7 +7,7 @@
 #include "z_en_talk_gibud.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnTalkGibud*)thisx)
 
@@ -74,6 +74,29 @@ typedef enum EnTalkGibudRequestedItemIndex {
     /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK
 } EnTalkGibudRequestedItemIndex;
 
+typedef enum EnTalkGibudType {
+    /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
+    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
+} EnTalkGibudType;
+
+typedef enum EnTalkGibudGrabState {
+    /* 0 */ EN_TALK_GIBUD_GRAB_START,
+    /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
+    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE
+} EnTalkGibudGrabState;
+
+ActorProfile En_Talk_Gibud_Profile = {
+    /**/ ACTOR_EN_TALK_GIBUD,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RD,
+    /**/ sizeof(EnTalkGibud),
+    /**/ EnTalkGibud_Init,
+    /**/ EnTalkGibud_Destroy,
+    /**/ EnTalkGibud_Update,
+    /**/ EnTalkGibud_Draw,
+};
+
 typedef enum EnTalkGibudAnimation {
     /*  0 */ EN_TALK_GIBUD_ANIM_GRAB_ATTACK,
     /*  1 */ EN_TALK_GIBUD_ANIM_GRAB_END,
@@ -88,47 +111,25 @@ typedef enum EnTalkGibudAnimation {
     /* 10 */ EN_TALK_GIBUD_ANIM_WALK,
     /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
     /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
-    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP
+    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP,
+    /* 14 */ EN_TALK_GIBUD_ANIM_MAX
 } EnTalkGibudAnimation;
 
-typedef enum EnTalkGibudType {
-    /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
-    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
-} EnTalkGibudType;
-
-typedef enum EnTalkGibudGrabState {
-    /* 0 */ EN_TALK_GIBUD_GRAB_START,
-    /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
-    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE
-} EnTalkGibudGrabState;
-
-ActorInit En_Talk_Gibud_InitVars = {
-    /**/ ACTOR_EN_TALK_GIBUD,
-    /**/ ACTORCAT_ENEMY,
-    /**/ FLAGS,
-    /**/ OBJECT_RD,
-    /**/ sizeof(EnTalkGibud),
-    /**/ EnTalkGibud_Init,
-    /**/ EnTalkGibud_Destroy,
-    /**/ EnTalkGibud_Update,
-    /**/ EnTalkGibud_Draw,
-};
-
-static AnimationInfo sAnimationInfo[] = {
-    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
-    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },
-    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+static AnimationInfo sAnimationInfo[EN_TALK_GIBUD_ANIM_MAX] = {
+    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // EN_TALK_GIBUD_ANIM_GRAB_ATTACK
+    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f }, // EN_TALK_GIBUD_ANIM_GRAB_END
+    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_TALK_GIBUD_ANIM_GRAB_START
+    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // EN_TALK_GIBUD_ANIM_LOOK_BACK
+    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // EN_TALK_GIBUD_ANIM_CROUCH_WIPING_TEARS
+    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // EN_TALK_GIBUD_ANIM_CROUCH_CRYING
+    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // EN_TALK_GIBUD_ANIM_DEATH
+    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // EN_TALK_GIBUD_ANIM_DAMAGE
+    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_TALK_GIBUD_ANIM_CROUCH_END
+    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },        // EN_TALK_GIBUD_ANIM_IDLE
+    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f }, // EN_TALK_GIBUD_ANIM_WALK
+    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // EN_TALK_GIBUD_ANIM_DANCE_SQUAT
+    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },      // EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE
+    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // EN_TALK_GIBUD_ANIM_DANCE_CLAP
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -569,7 +570,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
             (this->type == EN_TALK_GIBUD_TYPE_GIBDO)) {
             this->actor.hintId = TATL_HINT_ID_REDEAD;
             this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
@@ -805,20 +806,20 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_7:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
         case TEXT_STATE_11:
         case TEXT_STATE_12:
         case TEXT_STATE_13:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnTalkGibud_GetNextTextBoxId(this, play);
             break;
 
@@ -842,7 +843,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_16:
+        case TEXT_STATE_PAUSE_MENU:
             EnTalkGibud_CheckPresentedItem(this, play);
             break;
     }
@@ -933,7 +934,7 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
         (this->actionFunc != EnTalkGibud_Damage) && (this->actionFunc != EnTalkGibud_Talk)) {
         if (this->actionFunc != EnTalkGibud_PassiveIdle) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
                 this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
@@ -941,7 +942,7 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {

@@ -1,8 +1,9 @@
 #include "z64transition.h"
 
+#include "main.h"
 #include "sys_cfb.h"
+#include "z64circle_tex.h"
 #include "z64math.h"
-#include "variables.h"
 
 typedef enum TransitionCircleDirection {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
@@ -30,7 +31,7 @@ void TransitionCircle_SetType(void* thisx, s32 type);
 void TransitionCircle_Draw(void* thisx, Gfx** gfxP);
 s32 TransitionCircle_IsDone(void* thisx);
 
-TransitionInit TransitionCircle_InitVars = {
+TransitionProfile TransitionCircle_Profile = {
     TransitionCircle_Init,   TransitionCircle_Destroy, TransitionCircle_Update,   TransitionCircle_Draw,
     TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor, NULL,
     TransitionCircle_IsDone,
@@ -92,7 +93,7 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     }
 }
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
     Gfx* gfx = *gfxP;
     s32 xh = gCfbWidth;

@@ -7,7 +7,7 @@
 #include "z_en_crow.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnCrow*)thisx)
 
@@ -28,7 +28,7 @@ void EnCrow_SetupRespawn(EnCrow* this);
 void EnCrow_TurnAway(EnCrow* this, PlayState* play);
 void EnCrow_Respawn(EnCrow* this, PlayState* play);
 
-ActorInit En_Crow_InitVars = {
+ActorProfile En_Crow_Profile = {
     /**/ ACTOR_EN_CROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -131,7 +131,7 @@ void EnCrow_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                        OBJECT_CROW_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-    this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
@@ -316,9 +316,9 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffFrozenSteamScale = 0.5f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements->info.bumper.hitPos.x,
-                    this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
-                    0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
+                    this->collider.elements[0].base.bumper.hitPos.y, this->collider.elements[0].base.bumper.hitPos.z, 0,
+                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 4.0f;
@@ -424,10 +424,11 @@ void EnCrow_SetupRespawn(EnCrow* this) {
     if (sDeadCount == GUAY_NUMBER_OF_DEAD_TO_SPAWN_MEGAGUAY) {
         this->actor.params = GUAY_TYPE_MEGA;
         sDeadCount = 0;
-        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius * 0.03f * 100.0f;
+        this->collider.elements[0].dim.worldSphere.radius =
+            sJntSphInit.elements[0].dim.modelSphere.radius * 0.03f * 100.0f;
     } else {
         this->actor.params = GUAY_TYPE_NORMAL;
-        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
+        this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     }
     Animation_PlayLoop(&this->skelAnime, &gGuayFlyAnim);
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -468,7 +469,7 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements[0].base);
 
         if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
             EnCrow_SetupTurnAway(this);
@@ -489,7 +490,7 @@ void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_Update(Actor* thisx, PlayState* play) {
-    f32 pad;
+    s32 pad;
     EnCrow* this = THIS;
     f32 height;
     f32 scale;
@@ -549,9 +550,9 @@ s32 EnCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if (this->actor.colChkInfo.health != 0) {
         if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-            rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PIf / 4)));
         } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-            rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PIf / 4)));
         }
     }
     return false;

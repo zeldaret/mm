@@ -5,8 +5,8 @@
  */
 
 #include "z_arms_hook.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -20,7 +20,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play);
 void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
-ActorInit Arms_Hook_InitVars = {
+ActorProfile Arms_Hook_Profile = {
     /**/ ACTOR_ARMS_HOOK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -135,15 +135,15 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         return;
     }
 
-    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
+    Actor_PlaySfx_Flagged2(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
-        (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
+        (this->collider.info.atHitElem->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
 
         if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
-            if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
+            if (this->collider.info.atHitElem->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if (CHECK_FLAG_ALL(touchedActor->flags, ACTOR_FLAG_400)) {
                     func_808C1154(this);

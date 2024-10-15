@@ -33,8 +33,8 @@
         <DList Name="object_kz_DL_008D80" Offset="0x8D80" />
         <DList Name="object_kz_DL_008E80" Offset="0x8E80" />
 
-        <!-- <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="16" Height="16" Offset="0x9100" /> -->
-        <!-- <Blob Name="object_kz_Blob_009300" Size="0x38" Offset="0x9300" /> -->
+        <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="252" Height="1" Offset="0x9100" />
+        <Texture Name="object_kz_Tex_0092F8" OutName="tex_0092F8" Format="ci8" Width="8" Height="8" Offset="0x92F8" />
         <Texture Name="object_kz_Tex_009338" OutName="tex_009338" Format="ci8" Width="8" Height="16" Offset="0x9338" />
         <Texture Name="gKaizokuEyeOpenTex" OutName="kaizoku_eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
         <Texture Name="object_kz_Tex_0097B8" OutName="tex_0097B8" Format="i8" Width="16" Height="16" Offset="0x97B8" />

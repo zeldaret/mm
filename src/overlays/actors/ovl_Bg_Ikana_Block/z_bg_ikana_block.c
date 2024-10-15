@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_block.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void func_80B7F360(BgIkanaBlock* this);
 void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Ikana_Block_InitVars = {
+ActorProfile Bg_Ikana_Block_Profile = {
     /**/ ACTOR_BG_IKANA_BLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

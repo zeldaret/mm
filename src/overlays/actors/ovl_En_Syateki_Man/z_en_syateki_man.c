@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -86,7 +86,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 // the Heart Piece, then this score will be used instead to determine if the player should get a Purple Rupee.
 #define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
-ActorInit En_Syateki_Man_InitVars = {
+ActorProfile En_Syateki_Man_Profile = {
     /**/ ACTOR_EN_SYATEKI_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -98,13 +98,14 @@ ActorInit En_Syateki_Man_InitVars = {
     /**/ EnSyatekiMan_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryManAnimation {
     /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
-    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END,
+    /* 3 */ SG_MAN_ANIM_MAX
 } ShootingGalleryManAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_MAN_ANIM_MAX] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
     { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
     { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END
@@ -421,7 +422,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 player->actor.freezeTimer = 0;
                 Interface_InitMinigame(play);
                 play->interfaceCtx.minigameAmmo = 80;
-                func_80123F2C(play, 80);
+                Player_SetBButtonAmmo(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
@@ -480,7 +481,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Swamp_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Swamp_HandleNormalMessage(this, play);
             break;
 
@@ -497,12 +498,12 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 
@@ -783,7 +784,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
                 Interface_InitMinigame(play);
-                func_80123F2C(play, 0x63);
+                Player_SetBButtonAmmo(play, 99);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
@@ -856,7 +857,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Town_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Town_HandleNormalMessage(this, play);
             break;
 
@@ -871,12 +872,12 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 }
@@ -1181,7 +1182,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
     }
 
     if (this->talkWaitTimer < 5) {
-        play->unk_1887C = -10;
+        play->bButtonAmmoPlusOne = -10;
     }
 }
 
@@ -1454,7 +1455,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
     }
 
     if (this->talkWaitTimer < 5) {
-        play->unk_1887C = -10;
+        play->bButtonAmmoPlusOne = -10;
     }
 }
 

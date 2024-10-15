@@ -23,7 +23,7 @@ void ObjHariko_SetupBobHead(ObjHariko* this);
 void ObjHariko_BobHead(ObjHariko* this, PlayState* play);
 void ObjHariko_CheckForQuakes(ObjHariko* this);
 
-ActorInit Obj_Hariko_InitVars = {
+ActorProfile Obj_Hariko_Profile = {
     /**/ ACTOR_OBJ_HARIKO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

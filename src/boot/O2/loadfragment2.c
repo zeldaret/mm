@@ -41,14 +41,14 @@ s32 gOverlayLogSeverity = 2;
  * @param ovlRelocs Overlay relocation section containing overlay section layout and runtime relocations.
  * @param vramStart Virtual RAM address that the overlay was compiled at.
  */
-void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, uintptr_t vramStart) {
+void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, void* vramStart) {
     u32 sections[RELOC_SECTION_MAX];
     u32* relocDataP;
     u32 reloc;
     uintptr_t relocatedAddress;
     u32 i;
     u32* luiInstRef;
-    uintptr_t allocu32 = (uintptr_t)allocatedRamAddr;
+    u32 isLoNeg;
     u32* regValP;
     //! MIPS ELF relocation does not generally require tracking register values, so at first glance it appears this
     //! register tracking was an unnecessary complication. However there is a bug in the IDO compiler that can cause
@@ -58,9 +58,12 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
     //! due to the incorrect ordering.
     u32* luiRefs[32];
     u32 luiVals[32];
-    u32 isLoNeg;
+    uintptr_t allocu32 = (uintptr_t)allocatedRamAddr;
+    uintptr_t vramu32 = (uintptr_t)vramStart;
 
-    if (gOverlayLogSeverity >= 3) {}
+    if (gOverlayLogSeverity >= 3) {
+        // "DoRelocation(%08x, %08x, %08x)\n"
+    }
 
     sections[RELOC_SECTION_NULL] = 0;
     sections[RELOC_SECTION_TEXT] = allocu32;
@@ -82,8 +85,10 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0x0F000000) == 0) {
-                    *relocDataP = *relocDataP - vramStart + allocu32;
+                    *relocDataP = *relocDataP - vramu32 + allocu32;
                 } else if (gOverlayLogSeverity >= 3) {
+                    // Segment pointer 32 %08x
+                    // "セグメントポインタ32です %08x\n"
                 }
                 break;
 
@@ -95,7 +100,10 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
                 if (1) {
                     *relocDataP =
                         (*relocDataP & 0xFC000000) |
-                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - vramStart + allocu32) & 0x0FFFFFFF) >> 2);
+                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - vramu32 + allocu32) & 0x0FFFFFFF) >> 2);
+                } else if (gOverlayLogSeverity >= 3) {
+                    // Segment pointer 26 %08x
+                    // "セグメントポインタ26です %08x\n"
                 }
                 break;
 
@@ -120,48 +128,72 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vramStart + allocu32;
+                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vramu32 + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
                 } else if (gOverlayLogSeverity >= 3) {
+                    // Segment pointer 16 %08x %08x %08x
+                    // "セグメントポインタ16です %08x %08x %08x"
                 }
                 break;
         }
     }
 }
 
-size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, void* ramStart, void* ramEnd, void* allocatedRamAddr) {
-    uintptr_t vramStart = (uintptr_t)ramStart;
-    uintptr_t vramEnd = (uintptr_t)ramEnd;
+size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, void* vramEnd, void* allocatedRamAddr) {
+    s32 pad[2];
     s32 size = vromEnd - vromStart;
     uintptr_t end;
     OverlayRelocationSection* ovlRelocs;
 
-    if (gOverlayLogSeverity >= 3) {}
-    if (gOverlayLogSeverity >= 3) {}
+    if (gOverlayLogSeverity >= 3) {
+        // Start loading dynamic link function
+        // "\nダイナミックリンクファンクションのロードを開始します\n"
+    }
 
+    size = vromEnd - vromStart;
     end = (uintptr_t)allocatedRamAddr + size;
-    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
 
+    if (gOverlayLogSeverity >= 3) {
+        // DMA transfer TEXT, DATA, RODATA+rel (%08x-%08x)
+        // "TEXT,DATA,RODATA+relをＤＭＡ転送します(%08x-%08x)\n"
+    }
+
+    DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
+
+    // The overlay file is expected to contain a 32-bit offset from the end of the file to the start of the
+    // relocation section.
     ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
-    if (gOverlayLogSeverity >= 3) {}
-    if (gOverlayLogSeverity >= 3) {}
+    if (gOverlayLogSeverity >= 3) {
+        // "TEXT(%08x), DATA(%08x), RODATA(%08x), BSS(%08x)\n"
+    }
+
+    if (gOverlayLogSeverity >= 3) {
+        // I will relocate
+        // "リロケーションします\n"
+    }
 
     Overlay_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
     if (ovlRelocs->bssSize != 0) {
-        if (gOverlayLogSeverity >= 3) {}
+        if (gOverlayLogSeverity >= 3) {
+            // Clear BSS area (%08x-%08x)
+            // "BSS領域をクリアします(%08x-%08x)\n"
+        }
         bzero((void*)end, ovlRelocs->bssSize);
     }
 
-    size = vramEnd - vramStart;
+    size = (uintptr_t)vramEnd - (uintptr_t)vramStart;
 
     osWritebackDCache(allocatedRamAddr, size);
     osInvalICache(allocatedRamAddr, size);
 
-    if (gOverlayLogSeverity >= 3) {}
+    if (gOverlayLogSeverity >= 3) {
+        // Finish loading the dynamic link function
+        // "ダイナミックリンクファンクションのロードを終了します\n\n"
+    }
 
     return size;
 }

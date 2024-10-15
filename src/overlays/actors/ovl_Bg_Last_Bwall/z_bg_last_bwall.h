@@ -2,7 +2,7 @@
 #define Z_BG_LAST_BWALL_H
 
 #include "global.h"
-#include "objects/object_last_obj/object_last_obj.h"
+#include "assets/objects/object_last_obj/object_last_obj.h"
 
 struct BgLastBwall;
 

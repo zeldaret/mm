@@ -9,10 +9,10 @@
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnFu*)thisx)
 
@@ -55,7 +55,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len);
 void func_809647EC(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 
-ActorInit En_Fu_InitVars = {
+ActorProfile En_Fu_Profile = {
     /**/ ACTOR_EN_FU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -127,7 +127,6 @@ void func_809616E0(EnFu* this, PlayState* play) {
     f32 temp_f22;
     s16 atan;
     s16 spA0 = false;
-    Vec3f sp94;
 
     if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
@@ -146,18 +145,19 @@ void func_809616E0(EnFu* this, PlayState* play) {
         }
 
         if (this->unk_546 == 1) {
-            Vec3f sp88 = { 0.0f, 0.0f, 0.0f };
-            Vec3f sp7C = { 0.0f, 0.2f, 0.0f };
-            Color_RGBA8 sp78 = { 255, 255, 255, 255 };
-            Color_RGBA8 sp74 = { 198, 198, 198, 255 };
+            Vec3f pos;
+            Vec3f velocity = { 0.0f, 0.0f, 0.0f };
+            Vec3f accel = { 0.0f, 0.2f, 0.0f };
+            Color_RGBA8 primColor = { 255, 255, 255, 255 };
+            Color_RGBA8 envColor = { 198, 198, 198, 255 };
 
-            sp94.x = this->pathPoints[i].x;
-            sp94.y = this->pathPoints[i].y;
-            sp94.z = this->pathPoints[i].z;
-            func_800B0EB0(play, &sp94, &sp88, &sp7C, &sp78, &sp74, 100, 150, 10);
-            sp94.x -= 0.1f * temp_f20;
-            sp94.z -= 0.1f * temp_f22;
-            func_800B3030(play, &sp94, &sp88, &sp7C, 100, 0, 3);
+            pos.x = this->pathPoints[i].x;
+            pos.y = this->pathPoints[i].y;
+            pos.z = this->pathPoints[i].z;
+            func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 100, 150, 10);
+            pos.x -= 0.1f * temp_f20;
+            pos.z -= 0.1f * temp_f22;
+            func_800B3030(play, &pos, &velocity, &accel, 100, 0, 3);
         }
     }
 }
@@ -601,16 +601,16 @@ void func_809628D0(EnFu* this, PlayState* play) {
 
     switch (talkState) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80962660(this, play);
             break;
 
@@ -640,7 +640,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (talkState != TEXT_STATE_3) {
+    if (talkState != TEXT_STATE_FADING) {
         func_80964190(this, play);
         func_8096426C(this, play);
     }
@@ -866,7 +866,7 @@ void func_80963350(EnFu* this, PlayState* play) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     if ((this->unk_54A == 0) &&
-        (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
+        (((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) ||
          ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
         Message_CloseTextbox(play);
         this->unk_54A = 2;
@@ -903,7 +903,7 @@ void func_80963560(EnFu* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80963610(this);
-    } else if ((this->unk_552 == 0x2880) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80)) {
+    } else if ((this->unk_552 == 0x2880) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -925,8 +925,8 @@ void func_80963630(EnFu* this, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
-            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_22_80);
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE);
                 Message_StartTextbox(play, 0x2882, &this->actor);
                 this->unk_552 = 0x2882;
             } else {

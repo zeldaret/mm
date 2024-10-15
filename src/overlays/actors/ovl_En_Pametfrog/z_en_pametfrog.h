@@ -2,7 +2,7 @@
 #define Z_EN_PAMETFROG_H
 
 #include "global.h"
-#include "objects/object_bigslime/object_bigslime.h"
+#include "assets/objects/object_bigslime/object_bigslime.h"
 
 struct EnPametfrog;
 

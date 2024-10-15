@@ -49,14 +49,15 @@
  * - Seaweed
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_water_effect/object_water_effect.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_water_effect/object_water_effect.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss03*)thisx)
 
@@ -161,7 +162,7 @@ void Boss03_SpawnEffectDroplet(PlayState* play, Vec3f* pos) {
             eff->accel.y = -2.0f;
             eff->unk_34.x = 0.1f;
             eff->unk_34.y = 0.0f;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             eff->velocity.x = Rand_CenteredFloat(25.0f);
             eff->velocity.z = Rand_CenteredFloat(25.0f);
@@ -187,7 +188,7 @@ void Boss03_SpawnEffectSplash(PlayState* play, Vec3f* pos, Vec3f* velocity) {
             temp_f2 = Rand_ZeroFloat(0.02f) + 0.02f;
             eff->unk_34.y = temp_f2;
             eff->unk_34.x = temp_f2;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             return;
         }
@@ -219,14 +220,14 @@ void Boss03_SpawnEffectBubble(PlayState* play, Vec3f* pos) {
 /* End of SpawnEffect section */
 
 void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
     collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
     collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
 
-    sphElement = &collider->elements[index];
-    sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
+    jntSphElem = &collider->elements[index];
+    jntSphElem->dim.worldSphere.radius = jntSphElem->dim.scale * jntSphElem->dim.modelSphere.radius;
 }
 
 /* Start of RNG section */
@@ -275,7 +276,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-ActorInit Boss_03_InitVars = {
+ActorProfile Boss_03_Profile = {
     /**/ ACTOR_BOSS_03,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -489,7 +490,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         f32 rand;
 
         rand = Boss03_RandZeroOne();
-        Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+        Matrix_RotateYF((rand * M_PIf * 0.2f) + ((2 * M_PIf / 5) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
         Matrix_MultVecZ((rand * 800.0f) + 400.0f, &sp70);
@@ -517,8 +518,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
-    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
@@ -585,7 +585,7 @@ void func_809E34B8(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         Matrix_MultVecZ(-500.0f, &this->unk_268);
@@ -673,7 +673,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
@@ -770,7 +770,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
@@ -874,7 +874,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
                        -0.5f,
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
         case 0:
@@ -1038,7 +1038,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
     this->actor.shape.rot = this->actor.world.rot;
 
     Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 3.0f);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speed >= 20.0f) {
@@ -1377,7 +1377,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
 
-                SET_EVENTINF(EVENTINF_56);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
             }
             break;
     }
@@ -1574,11 +1574,13 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speed = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetX = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetX) + 0x8000;
+                        this->shapeRotTargetX =
+                            (TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->shapeRotTargetX) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetZ = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetZ) + 0x8000;
+                        this->shapeRotTargetZ =
+                            (TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->shapeRotTargetZ) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
@@ -1826,7 +1828,7 @@ void Boss03_Damaged(Boss03* this, PlayState* play) {
 /* End of ActionFuncs section */
 
 void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
-    ColliderInfo* hitbox;
+    ColliderElement* acHitElem;
     u8 sp4B = true;
     Player* player = GET_PLAYER(play);
     s32 i;
@@ -1841,16 +1843,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->headCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
+                this->bodyCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1860,16 +1862,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    hitbox = this->bodyCollider.elements[i].info.acHitInfo;
-                    this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                    acHitElem = this->bodyCollider.elements[i].base.acHitElem;
+                    this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].info.acHitInfo->toucher.damage
+                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].base.acHitElem->toucher.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1893,9 +1895,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                hitbox = this->headCollider.elements[i].info.acHitInfo;
-                this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->headCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                acHitElem = this->headCollider.elements[i].base.acHitElem;
+                this->headCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1917,8 +1919,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].info.acHitInfo->toucher.damage)
+                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].base.acHitElem->toucher.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -2129,7 +2131,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
         for (j = 0, i = 0; i < 20; j++) {
             Matrix_RotateYF(yRot, MTXMODE_NEW);
-            Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            Matrix_MultVecZ(Rand_ZeroFloat(60000.0f * 0.001f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + Rand_CenteredFloat(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
             dropletPos.z += this->unk_28C + Rand_CenteredFloat(40.0f);
@@ -2139,7 +2141,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
                 i++;
             }
 
-            yRot += ((2.0f * M_PI) / 50.0f);
+            yRot += ((2.0f * M_PIf) / 50.0f);
             if (j >= 50) {
                 break;
             }
@@ -2156,7 +2158,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
@@ -2359,7 +2361,7 @@ void Boss03_UpdateEffects(PlayState* play) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, MTXMODE_NEW);
+                    Matrix_RotateYF((2.0f * (j * M_PIf)) / 6.0f, MTXMODE_NEW);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
@@ -2488,8 +2490,8 @@ void Boss03_DrawEffects(PlayState* play) {
                 flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
-                            eff->alpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, TRUNCF_BINANG(eff->unk_40),
+                            ((void)0, TRUNCF_BINANG(eff->unk_40) + 55), 225, eff->alpha);
 
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 

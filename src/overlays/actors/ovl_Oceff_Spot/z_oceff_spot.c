@@ -21,7 +21,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play);
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 
-ActorInit Oceff_Spot_InitVars = {
+ActorProfile Oceff_Spot_Profile = {
     /**/ ACTOR_OCEFF_SPOT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -115,7 +115,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     f32 temp;
     OceffSpot* this = THIS;
 
-    temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
+    temp = (1.0f - cosf(this->unk16C * M_PIf)) * 0.5f;
     this->actionFunc(this, play);
 
     switch (GET_PLAYER_FORM) {

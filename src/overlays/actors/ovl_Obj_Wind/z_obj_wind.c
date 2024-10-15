@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_wind.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void ObjWind_Destroy(Actor* thisx, PlayState* play);
 void ObjWind_Update(Actor* thisx, PlayState* play);
 void ObjWind_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Wind_InitVars = {
+ActorProfile Obj_Wind_Profile = {
     /**/ ACTOR_OBJ_WIND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -79,10 +79,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     ObjWind* this = (ObjWind*)thisx;
     ObjWindStruct* entry = &D_80B2448C[OBJ_WIND_GET_TYPE(thisx)];
     Player* player;
-    f32 upZ;
-    f32 upY;
-    f32 upX;
-    Vec3f posCopy;
+    InfiniteLine line;
     Vec3f nearestPoint;
     Vec3f sp54;
     f32 upXZ; // reused temp
@@ -107,12 +104,12 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
 
     if ((OBJ_WIND_GET_SWITCH_FLAG(thisx) == 0x7F) || !Flags_GetSwitch(play, OBJ_WIND_GET_SWITCH_FLAG(thisx))) {
         player = GET_PLAYER(play);
-        Math_Vec3f_Copy(&posCopy, &this->actor.world.pos);
-        upY = Math_CosS(this->actor.shape.rot.x);
+        Math_Vec3f_Copy(&line.point, &this->actor.world.pos);
+        line.dir.y = Math_CosS(this->actor.shape.rot.x);
         upXZ = Math_SinS(this->actor.shape.rot.x);
-        upX = Math_SinS(this->actor.shape.rot.y) * upXZ;
-        upZ = Math_CosS(this->actor.shape.rot.y) * upXZ;
-        distToNearestPoint = func_80179A44(&posCopy, &player->actor.world, &nearestPoint);
+        line.dir.x = Math_SinS(this->actor.shape.rot.y) * upXZ;
+        line.dir.z = Math_CosS(this->actor.shape.rot.y) * upXZ;
+        distToNearestPoint = Math3D_LineClosestToPoint(&line, &player->actor.world.pos, &nearestPoint);
         if ((distToNearestPoint >= 0.0f) && (distToNearestPoint < entry->unk_0)) {
             upXZ = Math_Vec3f_DistXYZAndStoreDiff(&player->actor.world.pos, &nearestPoint, &sp54);
             if (upXZ < entry->unk_2) {
@@ -132,14 +129,14 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 }
                 temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (upXZ / entry->unk_2 * var_fa0);
                 if (upXZ != 0.0f) {
-                    // FAKE:
+                    //! FAKE:
                     if (1) {}
                     upXZ = 1.0f / upXZ;
                 }
                 temp_ft0 *= upXZ;
-                windSpeedX = (upX * windMagnitude) + (sp54.x * temp_ft0);
-                windSpeedY = (upY * windMagnitude) + (sp54.y * temp_ft0);
-                windSpeedZ = (upZ * windMagnitude) + (sp54.z * temp_ft0);
+                windSpeedX = (line.dir.x * windMagnitude) + (sp54.x * temp_ft0);
+                windSpeedY = (line.dir.y * windMagnitude) + (sp54.y * temp_ft0);
+                windSpeedZ = (line.dir.z * windMagnitude) + (sp54.z * temp_ft0);
                 player->windSpeed = sqrtf(SQ(windSpeedX) + SQ(windSpeedY) + SQ(windSpeedZ));
                 player->windAngleY = Math_Atan2S_XY(windSpeedZ, windSpeedX);
 

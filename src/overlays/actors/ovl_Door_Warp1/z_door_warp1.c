@@ -4,9 +4,8 @@
  * Description: Blue warp portal and crystal, and the Majora's Mask-shaped boss warp platform
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_door_warp1.h"
-#include "objects/object_warp1/object_warp1.h"
+#include "assets/objects/object_warp1/object_warp1.h"
 
 #define FLAGS 0x00000000
 
@@ -50,7 +49,7 @@ void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 s16 D_808BC000;
 f32 D_808BC004;
 
-ActorInit Door_Warp1_InitVars = {
+ActorProfile Door_Warp1_Profile = {
     /**/ ACTOR_DOOR_WARP1,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -489,7 +488,7 @@ void func_808B98A8(DoorWarp1* this, PlayState* play) {
                 Scene_SetExitFade(play);
                 play->transitionTrigger = TRANS_TRIGGER_START;
             } else {
-                func_80169FDC(&play->state);
+                func_80169FDC(play);
             }
         }
     }
@@ -772,7 +771,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
-        func_80169FDC(&play->state);
+        func_80169FDC(play);
     }
 }
 
@@ -986,8 +985,9 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(play->state.gfxCtx));
     Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
-                                0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF),
+                                0x100, 0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF), 0x100,
+                                0x100));
 
     Matrix_Translate(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
@@ -1004,8 +1004,8 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
 
         sp94 *= 2;
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100, 1,
-                                    sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100,
+                                    0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
         Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,

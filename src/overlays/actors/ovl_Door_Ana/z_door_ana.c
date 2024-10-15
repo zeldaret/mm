@@ -5,7 +5,7 @@
  */
 
 #include "z_door_ana.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 
@@ -20,7 +20,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
-ActorInit Door_Ana_InitVars = {
+ActorProfile Door_Ana_Profile = {
     /**/ ACTOR_DOOR_ANA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -141,7 +141,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
+                Play_SetupRespawnPoint(play, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
@@ -184,10 +184,10 @@ void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
         }
     }
 
-    if (this->actor.playerHeightRel <= 0.0f && this->actor.xzDistToPlayer > 20.0f) {
+    if ((this->actor.playerHeightRel <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
         player = GET_PLAYER(play);
-        player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.x;
-        player->actor.world.pos.z = Math_CosS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.z;
+        player->actor.world.pos.x = this->actor.world.pos.x + Math_SinS(this->actor.yawTowardsPlayer) * 20.0f;
+        player->actor.world.pos.z = this->actor.world.pos.z + Math_CosS(this->actor.yawTowardsPlayer) * 20.0f;
     }
 }
 

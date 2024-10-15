@@ -1,7 +1,7 @@
 #include "z_obj_boyo.h"
 #include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_boyo/object_boyo.h"
+#include "assets/objects/object_boyo/object_boyo.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -17,7 +17,7 @@ void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor);
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
-ActorInit Obj_Boyo_InitVars = {
+ActorProfile Obj_Boyo_Profile = {
     /**/ ACTOR_OBJ_BOYO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

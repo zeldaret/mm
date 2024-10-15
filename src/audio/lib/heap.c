@@ -1,5 +1,6 @@
 #include "global.h"
 #include "audio/effects.h"
+#include "audio/heap.h"
 
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);
@@ -86,8 +87,8 @@ void AudioHeap_DiscardFont(s32 fontId) {
             }
 
             AudioPlayback_NoteDisable(note);
-            AudioPlayback_AudioListRemove(&note->listItem);
-            AudioScript_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
+            AudioList_Remove(&note->listItem);
+            AudioList_PushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
         }
     }
 }
@@ -1034,7 +1035,7 @@ void AudioHeap_Init(void) {
     // Initialize notes
     gAudioCtx.notes = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.numNotes * sizeof(Note));
     AudioPlayback_NoteInitAll();
-    AudioPlayback_InitNoteFreeList();
+    AudioList_InitNoteFreeList();
     gAudioCtx.sampleStateList =
         AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.audioBufferParameters.updatesPerFrame *
                                                        gAudioCtx.numNotes * sizeof(NoteSampleState));
@@ -1070,7 +1071,7 @@ void AudioHeap_Init(void) {
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     AudioLoad_InitSampleDmaBuffers(gAudioCtx.numNotes);
 
-    // Initalize Loads
+    // Initialize Loads
     gAudioCtx.preloadSampleStackTop = 0;
     AudioLoad_InitSlowLoads();
     AudioLoad_InitScriptLoads();
@@ -1301,7 +1302,7 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry* entry) {
     s32 sampleBankId2;
     s32 fontId;
 
-    numFonts = gAudioCtx.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->header.numEntries;
     for (fontId = 0; fontId < numFonts; fontId++) {
         sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
         sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
@@ -1365,7 +1366,7 @@ void AudioHeap_DiscardSampleCaches(void) {
     s32 fontId;
     s32 j;
 
-    numFonts = gAudioCtx.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->header.numEntries;
     for (fontId = 0; fontId < numFonts; fontId++) {
         sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
         sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
@@ -1394,6 +1395,9 @@ typedef struct {
     /* 0x8 */ size_t size;
     /* 0xC */ u8 newMedium;
 } StorageChange; // size = 0x10
+
+s32 D_801FD120;
+static s32 sBssPad[3];
 
 void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
     if ((sample != NULL) && ((sample->medium == change->newMedium) || (D_801FD120 != 1)) &&
@@ -1440,7 +1444,7 @@ void AudioHeap_ApplySampleBankCacheInternal(s32 apply, s32 sampleBankId) {
     s32 pad[4];
 
     sampleBankTable = gAudioCtx.sampleBankTable;
-    numFonts = gAudioCtx.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->header.numEntries;
     change.oldAddr = (uintptr_t)AudioHeap_SearchCaches(SAMPLE_TABLE, CACHE_EITHER, sampleBankId);
     if (change.oldAddr == 0) {
         return;
@@ -1693,9 +1697,9 @@ void AudioHeap_InitReverb(s32 reverbIndex, ReverbSettings* settings, s32 isFirst
     reverb->sample.medium = MEDIUM_RAM;
     reverb->sample.size = reverb->delayNumSamples * SAMPLE_SIZE;
     reverb->sample.sampleAddr = (u8*)reverb->leftReverbBuf;
-    reverb->loop.start = 0;
-    reverb->loop.count = 1;
-    reverb->loop.loopEnd = reverb->delayNumSamples;
+    reverb->loop.header.start = 0;
+    reverb->loop.header.count = 1;
+    reverb->loop.header.loopEnd = reverb->delayNumSamples;
 
     AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_LEFT, settings->lowPassFilterCutoffLeft, isFirstInit);
     AudioHeap_SetReverbData(reverbIndex, REVERB_DATA_TYPE_FILTER_RIGHT, settings->lowPassFilterCutoffRight,

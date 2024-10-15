@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_haka_bombwall.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play);
 void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
-ActorInit Bg_Haka_Bombwall_InitVars = {
+ActorProfile Bg_Haka_Bombwall_Profile = {
     /**/ ACTOR_BG_HAKA_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -78,9 +78,9 @@ s32 func_80BD5E00(BgHakaBombwall* this) {
 void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     u32 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f posOffset;
-    Vec3f velOffset;
+    Vec3f velocityOffset;
     f32 offsetPosX;
     f32 offsetPosY;
     s16 scale;
@@ -107,12 +107,12 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
         posOffset.y = offsetPosY;
         posOffset.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        velOffset.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
-        velOffset.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
-        velOffset.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
+        velocityOffset.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
+        velocityOffset.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
+        velocityOffset.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
         Matrix_MultVec3f(&posOffset, &pos);
-        Matrix_MultVec3f(&velOffset, &vel);
+        Matrix_MultVec3f(&velocityOffset, &velocity);
 
         pos.x += this->dyna.actor.world.pos.x;
         pos.y += this->dyna.actor.world.pos.y;
@@ -146,7 +146,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
             gravity = -450;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, &pos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
                              OBJECT_HAKA_OBJ, object_haka_obj_DL_001680);
     }
 

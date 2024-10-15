@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_fireshield.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -22,7 +22,7 @@ void func_80A4CC54(ObjFireshield* this);
 void func_80A4CCBC(ObjFireshield* this);
 void func_80A4CD28(ObjFireshield* this);
 
-ActorInit Obj_Fireshield_InitVars = {
+ActorProfile Obj_Fireshield_Profile = {
     /**/ ACTOR_OBJ_FIRESHIELD,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -365,11 +365,11 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         Actor_PlaySfx_Flagged(thisx, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            this->collider.info.toucher.damage = 0;
-            this->collider.info.toucher.effect = 0;
+            this->collider.elem.toucher.damage = 0;
+            this->collider.elem.toucher.effect = 0;
         } else {
-            this->collider.info.toucher.damage = 4;
-            this->collider.info.toucher.effect = 1;
+            this->collider.elem.toucher.damage = 4;
+            this->collider.elem.toucher.effect = 1;
         }
 
         Collider_UpdateCylinder(thisx, &this->collider);

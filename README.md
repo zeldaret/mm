@@ -5,13 +5,13 @@
 [jenkins]: https://jenkins.deco.mp/job/MM/job/main
 [jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmain
 
-[progress]: https://zelda64.dev/games/mm
-[progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/assets/csv/progress-mm-shield.json
+[progress]: https://zelda.deco.mp/games/mm
+[progress-badge]: https://img.shields.io/endpoint?url=https://zelda.deco.mp/assets/csv/progress-mm-shield.json
 
 [contributors]: https://github.com/zeldaret/mm/graphs/contributors
 [contributors-badge]: https://img.shields.io/github/contributors/zeldaret/mm
 
-[discord]: https://discord.zelda64.dev
+[discord]: https://discord.zelda.deco.mp
 [discord-badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
 
 ```diff
@@ -23,20 +23,21 @@ please be aware that the codebase could drastically change at any time. Also not
 parts of the ROM may not be 'shiftable' yet, so modifying them could currently be difficult.
 ```
 
-This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda64.dev/games/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
+This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda.deco.mp/games/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda.deco.mp).
 
 The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
-It currently builds the following ROM:
+It currently builds the following ROM and compressed ROM:
 
-* mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
+* mm-n64-us.z64 `md5: f46493eaa0628827dbd6ad3ecd8d65d6`
+* mm-n64-us-compressed.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
 Please refer to the following for more information:
 
-- [Website](https://zelda64.dev/)
-- [Discord](https://discord.zelda64.dev/)
+- [Website](https://zelda.deco.mp/)
+- [Discord](https://discord.zelda.deco.mp/)
 - [How to Contribute](docs/CONTRIBUTING.md)
 
 ## Installation
@@ -66,15 +67,16 @@ The build process has the following package requirements:
 * build-essential
 * binutils-mips-linux-gnu
 * python3
-* pip3
-* libpng-dev
+* python3-pip
 * python3-venv
+* libpng-dev
+* libxml2-dev
 
 Under Debian / Ubuntu (which we recommend using), you can install them with the following commands:
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev python3-venv
+sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip python3-venv libpng-dev libxml2-dev
 ```
 
 #### 2. Clone the repository
@@ -91,36 +93,13 @@ This will copy the GitHub repository contents into a new folder in the current d
 cd mm
 ```
 
-#### 3. Install python dependencies
+#### 3. Prepare a base ROM
 
-The build process has a few python packages required that are located in `requirements.txt`.
+Place a copy of the US ROM inside the `baseroms/n64-us/` folder.
 
-It is recommend to setup a virtual environment for python to localize all dependencies. To create a virtual environment:
+Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension.
 
-```bash
-python3 -m venv .mm-env
-```
-
-To activate or deactivate the virtual environment run either:
-```bash
-# Activates the mm-env virtual environment
-source .mm-env/bin/activate 
-# Deactivates the active virtual environment
-deactivate
-```
-
-Once activated you can install the required dependencies:
-```bash
-pip install -r requirements.txt  # or python3 -m pip if you want
-```
-
-**Important:** This virtual environment will need to be activated everytime you enter the repo.
-
-#### 4. Prepare a base ROM
-
-Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
-
-#### 5. Make and Build the ROM
+#### 4. Make and Build the ROM
 
 To start the extraction/build process, run the following command:
 
@@ -128,18 +107,43 @@ To start the extraction/build process, run the following command:
 make init
 ```
 
-This will extract all the individual files in the ROM into a newly created baserom folder, as well as decompress the compressed files in a newly created decomp folder. This will create the build folders as well as a new folder with the ASM as well as containing the disassemblies of nearly all the files containing code.
+The extraction/build process:
+1. Prepares build environment:
+    - Creates a Python virtual environment
+    - Downloads necessary tools from pip
+    - Compiles tools for the build process
+2. Extracts ROM contents:
+    - Decompresses the ROM
+    - Extracts individual files
+    - Extracts archive files
+3. Extracts assets:
+    - Extracts assets based on the XML files found in `assets/xml`
+4. Disassembles code:
+    - Disassembles code-containing files
+    - Disassembles data (data, rodata, and bss)
+5. Builds the ROM:
+    - Compiles the code and assets into a new ROM
+    - Generates a compressed version of the ROM
 
-This make target will also build the ROM. If all goes well, a new ROM called "mm.us.rev1.rom.z64" should be built and the following text should be printed:
+If all goes well, the new ROM should be built at `build/n64-us/mm-n64-us.z64`, a compressed version generated at `build/n64-us/mm-n64-us-compressed.z64`, and the following text printed:
 
 ```bash
-mm.us.rev1.rom.z64: OK
+build/n64-us/mm-n64-us.z64: OK
+```
+and
+```bash
+build/n64-us/mm-n64-us-compressed.z64: OK
 ```
 
 If you instead see the following:
 
 ```bash
-mm.us.rev1.rom.z64: FAILED
+build/n64-us/mm-n64-us.z64: FAILED
+md5sum: WARNING: 1 computed checksum did NOT match
+```
+or
+```bash
+build/n64-us/mm-n64-us-compressed.z64: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
 ```
 
@@ -158,6 +162,6 @@ Some work also doesn't require much knowledge to get started.
 
 Please note that is is our strict policy that *Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.*
 
-Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
+Most discussions happen on our [Discord Server](https://discord.zelda.deco.mp), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
 
 For more information on getting started, see our [Contributing Guide](docs/CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.

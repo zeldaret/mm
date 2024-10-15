@@ -18,7 +18,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2);
 void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
-ActorInit En_Sth2_InitVars = {
+ActorProfile En_Sth2_Profile = {
     /**/ ACTOR_EN_STH2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -30,7 +30,7 @@ ActorInit En_Sth2_InitVars = {
     /**/ NULL,
 };
 
-#include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"
+#include "assets/overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
@@ -85,8 +85,8 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     }
     if ((limbIndex == STH_LIMB_CHEST) || (limbIndex == STH_LIMB_LEFT_FOREARM) ||
         (limbIndex == STH_LIMB_RIGHT_FOREARM)) {
-        rot->y += (s16)(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
-        rot->z += (s16)(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);
     }
     return false;
 }

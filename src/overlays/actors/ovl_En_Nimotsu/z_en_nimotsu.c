@@ -16,7 +16,7 @@ void EnNimotsu_Destroy(Actor* thisx, PlayState* play);
 void EnNimotsu_Update(Actor* thisx, PlayState* play);
 void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Nimotsu_InitVars = {
+ActorProfile En_Nimotsu_Profile = {
     /**/ ACTOR_EN_NIMOTSU,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -20,7 +20,7 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-ActorInit En_Sda_InitVars = {
+ActorProfile En_Sda_Profile = {
     /**/ ACTOR_EN_SDA,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -70,7 +70,7 @@ Vec3f D_80947B10[] = {
 
 static s32 sPad = 0;
 
-#include "overlays/ovl_En_Sda/ovl_En_Sda.c"
+#include "assets/overlays/ovl_En_Sda/ovl_En_Sda.c"
 
 void EnSda_Init(Actor* thisx, PlayState* play) {
 }
@@ -123,6 +123,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
     Vec3f sp7C;
 
     for (i = 0; i < 16; i++) {
+        // TODO: match with a continue
         if ((arg2 == 0.0f) || ((j = D_80947ACC[i]) >= 0)) {
             if (arg2 > 0.0f) {
                 lerp.x = D_80947EA0[i].x + (D_80947EA0[j].x - D_80947EA0[i].x) * arg2;

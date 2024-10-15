@@ -10,7 +10,7 @@
 
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -91,7 +91,7 @@ static AnimationSpeedInfo sAnimationSpeedInfo[EN_DNO_ANIM_MAX] = {
     { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                   // EN_DNO_ANIM_GRIEVE
 };
 
-ActorInit En_Dno_InitVars = {
+ActorProfile En_Dno_Profile = {
     /**/ ACTOR_EN_DNO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -438,7 +438,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if (play->msgCtx.currentTextId == 0x80B) {
                 switch (this->animIndex) {
                     case EN_DNO_ANIM_IMPLORE_START:
@@ -466,7 +466,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x80B:
@@ -656,9 +656,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if (((play->msgCtx.currentTextId == 0x800) || (play->msgCtx.currentTextId == 0x801)) &&
                 (this->animIndex == EN_DNO_ANIM_OPEN_PARASOL)) {
                 Math_SmoothStepToF(&this->unk_454, 1.0f, 1.0f, 0.1f, 0.01f);
@@ -682,7 +682,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x800:
@@ -777,7 +777,7 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
 void func_80A72C04(EnDno* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_START_RACE_START,
                                     &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     SubS_ActorPathing_Init(play, &this->unk_334, &this->actor, &this->actorPath, play->setupPathList,
@@ -906,7 +906,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
 }
 
 void func_80A73244(EnDno* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->unk_328 = 2;
     this->actor.speed = 0.0f;

@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_ice_piece.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rLifespan regs[0]
 #define rYaw regs[1]
@@ -19,7 +19,7 @@ u32 EffectSsIcePiece_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsIcePiece_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Ice_Piece_InitVars = {
+EffectSsProfile Effect_Ss_Ice_Piece_Profile = {
     EFFECT_SS_ICE_PIECE,
     EffectSsIcePiece_Init,
 };

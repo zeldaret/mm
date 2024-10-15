@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tree.h"
-#include "objects/object_tree/object_tree.h"
+#include "assets/objects/object_tree/object_tree.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 
@@ -20,7 +20,7 @@ void ObjTree_DoNothing(ObjTree* this, PlayState* play);
 void ObjTree_SetupDoNothing(ObjTree* this);
 void ObjTree_Sway(ObjTree* this, PlayState* play);
 
-ActorInit Obj_Tree_InitVars = {
+ActorProfile Obj_Tree_Profile = {
     /**/ ACTOR_OBJ_TREE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

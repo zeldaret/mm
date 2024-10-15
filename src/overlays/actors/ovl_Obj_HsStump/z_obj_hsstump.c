@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hsstump.h"
-#include "objects/object_hsstump/object_hsstump.h"
+#include "assets/objects/object_hsstump/object_hsstump.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -21,7 +21,7 @@ void ObjHsStump_Idle(ObjHsStump* this, PlayState* play);
 void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play);
 void ObjHsStump_Appear(ObjHsStump* this, PlayState* play);
 
-ActorInit Obj_HsStump_InitVars = {
+ActorProfile Obj_HsStump_Profile = {
     /**/ ACTOR_OBJ_HSSTUMP,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -70,9 +70,6 @@ typedef struct OSThread {
 #define OS_PRIORITY_VIMGR        254
 #define OS_PRIORITY_MAX          255
 
-#define OS_PRIORITY_THREADTAIL -1
-
-
 void osCreateThread(OSThread* thread, OSId id, void* entry, void* arg, void* sp, OSPri p);
 void osDestroyThread(OSThread* t);
 void osYieldThread(void);

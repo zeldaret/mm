@@ -2,7 +2,7 @@
 #define Z_EN_GURUGURU_H
 
 #include "global.h"
-#include "objects/object_fu/object_fu.h"
+#include "assets/objects/object_fu/object_fu.h"
 
 struct EnGuruguru;
 

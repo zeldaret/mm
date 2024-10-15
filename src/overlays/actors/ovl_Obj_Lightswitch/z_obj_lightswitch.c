@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_lightswitch.h"
-#include "objects/object_lightswitch/object_lightswitch.h"
+#include "assets/objects/object_lightswitch/object_lightswitch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-ActorInit Obj_Lightswitch_InitVars = {
+ActorProfile Obj_Lightswitch_Profile = {
     /**/ ACTOR_OBJ_LIGHTSWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,
@@ -97,12 +97,12 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32 set) {
-    if (this) {}
+    Actor* thisx = &this->actor;
 
     if (set) {
-        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     } else {
-        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     }
 }
 
@@ -328,7 +328,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
-        if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
+        if ((this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
         } else if (LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {
@@ -348,7 +348,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     }
 
     // why wouldn't this be in the action func?
-    if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
+    if ((this->cutsceneTimer > 0) && (this->actionFunc != ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
             CutsceneManager_Stop(this->actor.csId);

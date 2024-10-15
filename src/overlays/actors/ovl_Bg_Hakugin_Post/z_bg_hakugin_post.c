@@ -4,11 +4,10 @@
  * Description: Snowhead Temple Central Pillar
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -39,7 +38,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-ActorInit Bg_Hakugin_Post_InitVars = {
+ActorProfile Bg_Hakugin_Post_Profile = {
     /**/ ACTOR_BG_HAKUGIN_POST,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -146,7 +145,7 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
             if ((unkStruct->unk_0000[i].unk_34 == 0) ||
                 (this->dyna.actor.world.pos.y < unkStruct->unk_0000[i].unk_08.y)) {
                 for (j = 10; j >= i; j--) {
-                    bcopy(&unkStruct->unk_0000[j], &unkStruct->unk_0000[j + 1], 0x38);
+                    bcopy(&unkStruct->unk_0000[j], &unkStruct->unk_0000[j + 1], sizeof(BgHakuginPostUnkStruct1));
                 }
                 break;
             }
@@ -485,12 +484,12 @@ void func_80A9BD24(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         }
 
         if (unkStruct->unk_0000[i].unk_34 == 2) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) >
+            if (Math3D_Dist1DSq(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) >
                 SQ(440.0f) + 0.02f) {
                 unkStruct->unk_0000[i].unk_34 = 3;
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
+            if (Math3D_Dist1DSq(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
                 func_80A9B554(this, play, unkStruct, &unkStruct->unk_0000[i]);
                 Audio_PlaySfx_2(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
@@ -543,8 +542,8 @@ void BgHakuginPost_RequestQuakeAndRumble(BgHakuginPost* this, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
     s16 quakeIndex;
 
-    Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
-                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
+    Rumble_Request(Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->dyna.actor.home.pos.x,
+                                   this->dyna.actor.home.pos.z),
                    255, 20, 150);
 
     quakeIndex = Quake_Request(activeCam, QUAKE_TYPE_3);
@@ -576,7 +575,7 @@ void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 spB8.x = Math_SinS(temp_s0) * temp_f20 + spC8->unk_14.x;
                 spB8.z = Math_CosS(temp_s0) * temp_f20 + spC8->unk_14.z;
 
-                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
+                if (Math3D_Dist1DSq(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
                     spB8.x += this->dyna.actor.home.pos.x;
                     spB8.y = spC8->unk_14.y + this->unk_16C + 20.0f;
                     spB8.z += this->dyna.actor.home.pos.z;
@@ -802,7 +801,7 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
         Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
-        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered2(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 
@@ -880,7 +879,7 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
-        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered2(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 
@@ -924,7 +923,7 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 void func_80A9D360(BgHakuginPost* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
-        if (this->additionalCsId >= 0) {
+        if (this->additionalCsId > CS_ID_NONE) {
             func_80A9D3E4(this);
         } else {
             this->unkFunc(this);

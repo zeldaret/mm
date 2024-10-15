@@ -4,10 +4,9 @@
  * Description: Keaton grass
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -54,7 +53,7 @@ s16 D_80A60B0C;
 s16 D_80A60B0E;
 s16 D_80A60B10;
 
-ActorInit En_Kusa2_InitVars = {
+ActorProfile En_Kusa2_Profile = {
     /**/ ACTOR_EN_KUSA2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -86,7 +85,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-u8 D_80A5EAEC = 1;
+u8 D_80A5EAEC = true;
 s16 D_80A5EAF0 = 0;
 Vec3s D_80A5EAF4 = { 0, 0, 0 };
 Vec3s D_80A5EAFC = { 0, 0, 0 };
@@ -379,7 +378,7 @@ s32 func_80A5BFD8(EnKusa2* this, PlayState* play) {
         s32 pad;
 
         func_80A5CF44(this);
-        func_80A5BD14(this, play, (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000000) ? 1 : 0);
+        func_80A5BD14(this, play, (this->collider.elem.acHitElem->toucher.dmgFlags & 0x1000000) ? 1 : 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         func_80A5BD94(this);
         Actor_Kill(&this->actor);
@@ -411,7 +410,9 @@ EnKusa2UnkBssSubStruct2* func_80A5C0B8(EnKusa2UnkBssStruct* arg0) {
     for (i = 1; i < ARRAY_COUNT(D_80A5F1C0.unk_0480); i++) {
         if (phi_v1->unk_2C > arg0->unk_0480[i].unk_2C) {
             phi_v1 = &arg0->unk_0480[i];
+            //! FAKE:
             if (1) {}
+
             if (phi_v1->unk_2C <= 0) {
                 break;
             }
@@ -514,7 +515,7 @@ void func_80A5C410(EnKusa2UnkBssStruct* arg0, EnKusa2UnkBssSubStruct2* arg1, Vec
             s32 phi_s2 = true;
 
             Math_Vec3f_Diff(&arg1->unk_04, &s->unk_00, &sp98);
-            temp_f0 = Math3D_LengthSquared(&sp98);
+            temp_f0 = Math3D_Vec3fMagnitudeSq(&sp98);
 
             phi_v0 = false;
             if (temp_f0 <= s->unk_4C) {
@@ -866,8 +867,8 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_20;
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_BG);
         this->unk_1BE = 0;
-        if (D_80A5EAEC != 0) {
-            D_80A5EAEC = 0;
+        if (D_80A5EAEC) {
+            D_80A5EAEC = false;
             D_80A60900 = play->gameplayFrames;
             func_80A5CAD4(&D_80A5F1C0);
             D_80A60B08 = Rand_Next() >> 0x10;
@@ -921,7 +922,7 @@ void func_80A5D62C(EnKusa2* this, PlayState* play) {
     if (this->unk_1BE != 0) {
         func_80A5B490(this, play);
         func_80A5D754(this);
-    } else if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1600.0f)) {
+    } else if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1600.0f)) {
         func_80A5B160(this, play);
         func_80A5D6B0(this);
     }
@@ -936,7 +937,7 @@ void func_80A5D6C4(EnKusa2* this, PlayState* play) {
     if (this->unk_1BE != 0) {
         func_80A5B490(this, play);
         func_80A5D754(this);
-    } else if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) > SQ(1750.0f)) {
+    } else if (Math3D_Dist1DSq(this->actor.projectedPos.x, this->actor.projectedPos.z) > SQ(1750.0f)) {
         func_80A5B334(this, play);
         func_80A5D618(this);
     }

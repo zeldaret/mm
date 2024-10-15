@@ -8,8 +8,8 @@
 #include "z64voice.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
-#include "objects/object_gs/object_gs.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_gs/object_gs.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -40,7 +40,7 @@ s32 func_809995A4(EnGs* this, PlayState* play);
 void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
-ActorInit En_Gs_InitVars = {
+ActorProfile En_Gs_Profile = {
     /**/ ACTOR_EN_GS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -212,13 +212,13 @@ void func_80997E4C(EnGs* this, PlayState* play) {
             Message_StartTextbox(play, this->unk_210, &this->actor);
             break;
 
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -504,8 +504,8 @@ void func_8099874C(EnGs* this, PlayState* play) {
                         break;
                 }
 
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE);
                     this->getItemId = GI_HEART_PIECE;
                 }
 
@@ -699,15 +699,15 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
         if (sp48 == 0.0f) {
-            this->unk_1DC = 2.0f * M_PI / 9.0000002;
-            this->unk_1E0 = M_PI / 9.0000002;
+            this->unk_1DC = 2.0f * (f32)(M_PI / 9);
+            this->unk_1E0 = (f32)(M_PI / 9);
             this->unk_19D = 4;
         }
     }
 
     if (this->unk_19D == 4) {
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 0.8f, 16384.0f, 3640.0f);
-        this->unk_19E[0].y += (s16)this->unk_1DC;
+        this->unk_19E[0].y += TRUNCF_BINANG(this->unk_1DC);
         if (sp48 == 0.0f) {
             phi_v0_2 = this->unk_19E[0].y;
             if (phi_v0_2 > 0) {
@@ -888,7 +888,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 0.5f, 364.0f, 0.0f);
 
-        this->unk_19E[1].y += (s16)this->unk_1DC;
+        this->unk_19E[1].y += TRUNCF_BINANG(this->unk_1DC);
 
         if ((this->actor.world.pos.y - this->actor.home.pos.y) >= 4000.0f) {
             this->unk_216 = 0;

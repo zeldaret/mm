@@ -2,8 +2,8 @@
 #define Z_EN_SLIME_H
 
 #include "global.h"
-#include "objects/object_slime/object_slime.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_slime/object_slime.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 struct EnSlime;
 
@@ -17,7 +17,8 @@ typedef enum EnSlimeType {
     /* 0 */ EN_SLIME_TYPE_BLUE,
     /* 1 */ EN_SLIME_TYPE_GREEN,
     /* 2 */ EN_SLIME_TYPE_YELLOW,
-    /* 3 */ EN_SLIME_TYPE_RED
+    /* 3 */ EN_SLIME_TYPE_RED,
+    /* 4 */ EN_SLIME_TYPE_MAX
 } EnSlimeType;
 
 typedef enum EnSlimeBodyPart {

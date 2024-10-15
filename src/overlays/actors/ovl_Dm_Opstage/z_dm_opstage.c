@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_opstage.h"
-#include "objects/object_keikoku_demo/object_keikoku_demo.h"
+#include "assets/objects/object_keikoku_demo/object_keikoku_demo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
 void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play);
 
-ActorInit Dm_Opstage_InitVars = {
+ActorProfile Dm_Opstage_Profile = {
     /**/ ACTOR_DM_OPSTAGE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

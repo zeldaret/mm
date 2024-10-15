@@ -5,7 +5,7 @@
  */
 
 #include "z_en_zow.h"
-#include "objects/object_zo/object_zo.h"
+#include "assets/objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -22,7 +22,7 @@ void func_80BDD634(EnZow* this, PlayState* play);
 void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
-ActorInit En_Zow_InitVars = {
+ActorProfile En_Zow_Profile = {
     /**/ ACTOR_EN_ZOW,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -462,7 +462,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x12E8:

@@ -5,8 +5,8 @@
  */
 
 #include "z_en_dnb.h"
-#include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_hanareyama_obj/object_hanareyama_obj.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
 
@@ -21,7 +21,7 @@ s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-ActorInit En_Dnb_InitVars = {
+ActorProfile En_Dnb_Profile = {
     /**/ ACTOR_EN_DNB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -152,7 +152,7 @@ void EnDnb_Update(Actor* thisx, PlayState* play) {
 
 void func_80A50510(EnDnb* this, PlayState* play) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
+    Gfx** dLists = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -166,7 +166,7 @@ void func_80A50510(EnDnb* this, PlayState* play) {
         Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gfx[i]);
+        gSPDisplayList(POLY_XLU_DISP++, dLists[i]);
 
         Matrix_Pop();
     }
@@ -176,7 +176,7 @@ void func_80A50510(EnDnb* this, PlayState* play) {
 
 void func_80A5063C(EnDnb* this, PlayState* play) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
+    Gfx** dLists = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -190,7 +190,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
         Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gfx[i]);
+        gSPDisplayList(POLY_OPA_DISP++, dLists[i]);
 
         Matrix_Pop();
     }

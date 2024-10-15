@@ -73,7 +73,7 @@ static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = {
 
 static s32 sTexturesNotDesegmented = true;
 
-ActorInit En_Honotrap_InitVars = {
+ActorProfile En_Honotrap_Profile = {
     /**/ ACTOR_EN_HONOTRAP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -510,7 +510,7 @@ void EnHonotrap_FlameMove(EnHonotrap* this, PlayState* play) {
         shieldVec.z = -player->shieldMf.zz;
         EnHonotrap_GetNormal(&shieldNorm, &shieldVec);
         tempVel = thisx->velocity;
-        func_80179F64(&tempVel, &shieldNorm, &thisx->velocity);
+        Math3D_Vec3fReflect(&tempVel, &shieldNorm, &thisx->velocity);
         thisx->speed = this->speedMod * 0.5f;
         thisx->world.rot.y = Math_Atan2S_XY(thisx->velocity.z, thisx->velocity.x);
         EnHonotrap_SetupFlameVanish(this);
@@ -639,7 +639,7 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
         flameElem->pos.y = this->actor.world.pos.y;
         flameElem->pos.z = (sp84 * var_fs0) + this->actor.world.pos.z;
 
-        flameElem->unkC = Math_SinS((s16)(s32)(var_fs0 * 25486.223f)) * 1.6f;
+        flameElem->unkC = Math_SinS(TRUNCF_BINANG(var_fs0 * 25486.223f)) * 1.6f;
         if (flameElem->unkC > 1.0f) {
             flameElem->unkC = 1.0f;
         } else if (flameElem->unkC < 0.0f) {
@@ -658,7 +658,7 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
     }
     temp_fs0 = flameGroup->unk0 * 120.0f;
     temp_fs1 = flameGroup->unk4 * 120.0f;
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp68, &GET_PLAYER(play)->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp68, &GET_PLAYER(play)->actor.world.pos);
 
     if (sp68.z < temp_fs1) {
         sp68.z = temp_fs1;
@@ -666,19 +666,19 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
         sp68.z = temp_fs0;
     }
 
-    var_fs0_2 = Math_SinS((s16)(s32)(sp68.z * 212.3852f)) * 1.6f;
+    var_fs0_2 = Math_SinS(TRUNCF_BINANG(sp68.z * 212.3852f)) * 1.6f;
     if (var_fs0_2 > 1.0f) {
         var_fs0_2 = 1.0f;
     }
     sp80 *= ((1.0f - flameGroup->unk4) * 0.8f) + 0.2f;
     if (sp80 > 0.2f) {
         this->collider.cyl.dim.pos.x =
-            (s16)(s32)((Math_SinS(this->actor.shape.rot.y) * sp68.z) + this->actor.world.pos.x);
-        this->collider.cyl.dim.pos.y = (s16)(s32)(this->actor.world.pos.y - (24.0f * var_fs0_2));
+            TRUNCF_BINANG((Math_SinS(this->actor.shape.rot.y) * sp68.z) + this->actor.world.pos.x);
+        this->collider.cyl.dim.pos.y = TRUNCF_BINANG(this->actor.world.pos.y - (24.0f * var_fs0_2));
         this->collider.cyl.dim.pos.z =
-            (s16)(s32)((Math_CosS(this->actor.shape.rot.y) * sp68.z) + this->actor.world.pos.z);
-        this->collider.cyl.dim.radius = (s16)(s32)(15.0f * var_fs0_2);
-        this->collider.cyl.dim.height = (s16)(s32)(37.5f * var_fs0_2);
+            TRUNCF_BINANG((Math_CosS(this->actor.shape.rot.y) * sp68.z) + this->actor.world.pos.z);
+        this->collider.cyl.dim.radius = TRUNCF_BINANG(15.0f * var_fs0_2);
+        this->collider.cyl.dim.height = TRUNCF_BINANG(37.5f * var_fs0_2);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.tris.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.tris.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.tris.base);

@@ -6,10 +6,10 @@
 
 #include "z_en_vm.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_vm/object_vm.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_vm/object_vm.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnVm*)thisx)
 
@@ -29,7 +29,7 @@ void func_808CCB08(EnVm* this);
 void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
-ActorInit En_Vm_InitVars = {
+ActorProfile En_Vm_Profile = {
     /**/ ACTOR_EN_VM,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -408,7 +408,7 @@ void func_808CCDE4(EnVm* this, PlayState* play) {
         this->colliderJntSph.base.acFlags &= ~AC_HIT;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElements); i++) {
-            if (this->colliderJntSph.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->colliderJntSph.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }

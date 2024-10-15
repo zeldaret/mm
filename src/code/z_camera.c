@@ -43,12 +43,17 @@
  *
  */
 
+#include "z64camera.h"
+
 #include "global.h"
-#include "libc/string.h"
-#include "z64malloc.h"
+#include "string.h"
+
+#include "zelda_arena.h"
+#include "z64olib.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 void func_800DDFE0(Camera* camera);
@@ -696,7 +701,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecGeo* arg3, Actor*
 
         sp90.yaw = D_801B9E18[i] + arg3->yaw;
         rand = Rand_ZeroOne();
-        sp90.pitch = D_801B9E34[i] + (s16)(arg3->pitch * rand);
+        sp90.pitch = D_801B9E34[i] + TRUNCF_BINANG(arg3->pitch * rand);
 
         if (sp90.pitch > 0x36B0) { // 76.9 degrees
             sp90.pitch -= 0x3E80;  // -87.9 degrees
@@ -1076,7 +1081,7 @@ Vec3f Camera_CalcUpVec(s16 pitch, s16 yaw, s16 roll) {
     Vec3f rollMtxRow1;
     Vec3f rollMtxRow2;
     Vec3f rollMtxRow3;
-    f32 pad;
+    s32 pad;
 
     // Axis to roll around
     u.x = cosP * sinY;
@@ -1241,7 +1246,7 @@ s32 func_800CD44C(Camera* camera, VecGeo* diffGeo, CameraCollision* camEyeCollis
             // different bgIds for at->eye[Next] and eye[Next]->at
             ret = 3;
         } else {
-            cosEyeAt = Math3D_Parallel(&camEyeCollision->norm, &camAtCollision->norm);
+            cosEyeAt = Math3D_Cos(&camEyeCollision->norm, &camAtCollision->norm);
             if (cosEyeAt < -0.5f) {
                 ret = 6;
             } else if ((cosEyeAt > 0.5f) || (checkEye & 2)) {
@@ -1392,7 +1397,7 @@ s32 Camera_CalcAtForNormal1(Camera* camera, VecGeo* arg1, f32 yOffset, f32 forwa
  */
 s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
                              s16 flags) {
-    f32 pad;
+    s32 pad;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
     f32 fovHeight;
@@ -1536,10 +1541,10 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
             temp_f0_6 = Math_FAtan2F(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
 
-            if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
-                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - 0.34906584f);
-            } else if (temp_f0_6 < -0.17453292f) { // (M_PI / 18)
-                phi_f16 = 1.0f - Math_SinF(-0.17453292f - temp_f0_6);
+            if (temp_f0_6 > (f32)(M_PI / 9)) {
+                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - (f32)(M_PI / 9));
+            } else if (temp_f0_6 < -(f32)(M_PI / 18)) {
+                phi_f16 = 1.0f - Math_SinF(-(f32)(M_PI / 18) - temp_f0_6);
             } else {
                 phi_f16 = 1.0f;
             }
@@ -1616,10 +1621,10 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
 
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
-            if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
-                temp = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
-            } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
-                temp = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
+            if (temp_f0_3 > (f32)(M_PI / 9)) {
+                temp = 1.0f - Math_SinF(temp_f0_3 - (f32)(M_PI / 9));
+            } else if (temp_f0_3 < -(f32)(M_PI / 18)) {
+                temp = 1.0f - Math_SinF(-(f32)(M_PI / 18) - temp_f0_3);
             } else {
                 temp = 1.0f;
             }
@@ -1753,7 +1758,8 @@ s16 Camera_CalcDefaultPitch(Camera* camera, s16 pitch, s16 flatSurfacePitchTarge
     s16 pitchTarget;
 
     // if slopePitchAdj is positive, then it is attenuated by a factor of Math_CosS(slopePitchAdj)
-    slopePitchAdjAttenuated = (slopePitchAdj > 0) ? (s16)(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
+    slopePitchAdjAttenuated =
+        (slopePitchAdj > 0) ? TRUNCF_BINANG(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
     pitchTarget = flatSurfacePitchTarget - slopePitchAdjAttenuated;
 
     if (ABS(pitchTarget) < pitchMag) {
@@ -1802,7 +1808,7 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 yaw, s16 target, f32 attenuationYa
     attenuationSpeedRatio = Camera_QuadraticAttenuation(0.5f, camera->speedRatio);
 
     yawUpdRate = 1.0f / camera->yawUpdateRateInv;
-    return yaw + (s16)(yawDiffToTarget * attenuationYawDiffAdj * attenuationSpeedRatio * yawUpdRate);
+    return yaw + TRUNCF_BINANG(yawDiffToTarget * attenuationYawDiffAdj * attenuationSpeedRatio * yawUpdRate);
 }
 
 void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg3, f32 arg4, SwingAnimation* swing2,
@@ -1822,20 +1828,18 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
     if (swing->unk_64 == 1) {
         if (arg3 < (sp88 = OLib_Vec3fDist(at, &swing->collisionClosePoint))) {
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
-                                                          swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist,
-                                                          at)) > 0.0f) {
+        } else if ((sp88 = Math3D_PlaneF(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
+                                         swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist, at)) > 0.0f) {
             swing->unk_64 = 0;
         } else if ((sp88 = OLib_Vec3fDist(eye, &swing->eyeAtColChk.pos)) < 10.0f) {
             swing->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
-                                                          swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist,
-                                                          eye)) > 0.0f) {
+        } else if ((sp88 = Math3D_PlaneF(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y,
+                                         swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist, eye)) > 0.0f) {
             swing->unk_64 = 0;
         } else if (swing->atEyeColChk.norm.y > 0.50f) {
             swing->unk_64 = 0;
         } else {
-            Math3D_AngleBetweenVectors(&camera->unk_0F0, &swing->eyeAtColChk.norm, &sp88);
+            Math3D_CosOut(&camera->unk_0F0, &swing->eyeAtColChk.norm, &sp88);
             if (sp88 > 0.0f) {
                 swing->unk_64 = 0;
             }
@@ -2219,14 +2223,14 @@ s32 Camera_Normal1(Camera* camera) {
         }
 
         if (!(roData->interfaceFlags & NORMAL1_FLAG_3) || !func_800CB924(camera)) {
-            spB4.yaw = Camera_CalcDefaultYaw(camera, sp9C.yaw, (s16)(focalActorPosRot->rot.y - (s16)(sp72 * sp6C)),
-                                             roData->unk_14, spC0);
+            spB4.yaw = Camera_CalcDefaultYaw(
+                camera, sp9C.yaw, (s16)(focalActorPosRot->rot.y - TRUNCF_BINANG(sp72 * sp6C)), roData->unk_14, spC0);
         }
 
         if (!(roData->interfaceFlags & NORMAL1_FLAG_3) || (camera->speedRatio < 0.01f)) {
-            spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch,
-                                                 roData->unk_20 + (s16)((roData->unk_20 - sp74.pitch) * sp6C * 0.75f),
-                                                 rwData->unk_08);
+            spB4.pitch = Camera_CalcDefaultPitch(
+                camera, sp9C.pitch, roData->unk_20 + TRUNCF_BINANG((roData->unk_20 - sp74.pitch) * sp6C * 0.75f),
+                rwData->unk_08);
         }
     } else if (roData->interfaceFlags & NORMAL1_FLAG_1) {
         VecGeo sp64;
@@ -2477,9 +2481,7 @@ s32 Camera_Normal3(Camera* camera) {
         sp62 = BINANG_SUB(focalActorPosRot->rot.y, BINANG_ROT180(sp68.yaw));
         sp78 = OLib_Vec3fToVecGeo(&camera->unk_0F0);
         phi_v1_2 = focalActorPosRot->rot.y - sp78.yaw;
-        if (phi_v1_2 < 0) {
-            phi_v1_2 *= -1;
-        }
+        phi_v1_2 = ABS_ALT(phi_v1_2);
 
         if (phi_v1_2 < 0x555A) {
             temp_f2 = 1.0f;
@@ -3299,7 +3301,7 @@ s32 Camera_Jump3(Camera* camera) {
     f32 phi_f2_2;
     f32 temp_f0;
     f32 temp1;
-    f32 pad;
+    s32 pad;
     Jump3ReadOnlyData* roData = &camera->paramData.jump3.roData;
     Jump3ReadWriteData* rwData = &camera->paramData.jump3.rwData;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);
@@ -3748,14 +3750,14 @@ s32 Camera_Battle1(Camera* camera) {
     } else {
         sp104 = (1.0f - camera->speedRatio) * 0.05f;
         sp88 = (sp8A >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
-        spBC.yaw = atToEyeNextDir.yaw - (s16)((sp88 - sp8A) * sp104);
+        spBC.yaw = atToEyeNextDir.yaw - TRUNCF_BINANG((sp88 - sp8A) * sp104);
     }
 
     if (!skipEyeAtCalc) {
         spF8 = atToTargetDir.pitch * roData->swingPitchAdj;
         var2 = swingPitchInitial + ((swingPitchFinal - swingPitchInitial) * distRatio);
-        sp8A = CAM_DEG_TO_BINANG(var2) - (s16)((spA4.pitch * (0.5f + (distRatio * (1.0f - 0.5f)))) + 0.5f);
-        sp8A += (s16)spF8;
+        sp8A = CAM_DEG_TO_BINANG(var2) - TRUNCF_BINANG((spA4.pitch * (0.5f + (distRatio * (1.0f - 0.5f)))) + 0.5f);
+        sp8A += TRUNCF_BINANG(spF8);
 
         if (sp8A < -0x2AA8) {
             sp8A = -0x2AA8;
@@ -4102,15 +4104,15 @@ s32 Camera_KeepOn1(Camera* camera) {
         sp104 = (1.0f - camera->speedRatio) * 0.05f;
         spF0 = (spF2 >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
 
-        spE8.yaw = atToEyeNext.yaw - (s16)((spF0 - spF2) * sp104);
+        spE8.yaw = atToEyeNext.yaw - TRUNCF_BINANG((spF0 - spF2) * sp104);
     }
 
     if (!skipEyeAtCalc) {
         spF2 = CAM_DEG_TO_BINANG(F32_LERPIMP(roData->unk_14, roData->unk_18, sp74));
-        spF2 -= (s16)((spD0.pitch * (0.5f + (sp74 * 0.5f))) + 0.5f);
+        spF2 -= TRUNCF_BINANG((spD0.pitch * (0.5f + (sp74 * 0.5f))) + 0.5f);
 
         spF8 = spD8.pitch * roData->unk_1C;
-        spF2 += (s16)spF8;
+        spF2 += TRUNCF_BINANG(spF8);
 
         if (spF2 < -0x3200) {
             spF2 = -0x3200;
@@ -4317,7 +4319,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         }
 
         swingAngle = LERPIMP(roData->unk_14, roData->unk_18, phi_f14);
-        sp98.pitch = CAM_DEG_TO_BINANG(swingAngle) + ((s16) - (spA0.pitch * roData->unk_1C));
+        sp98.pitch = CAM_DEG_TO_BINANG(swingAngle) + TRUNCF_BINANG(-(spA0.pitch * roData->unk_1C));
         swingAngle = LERPIMP(roData->unk_0C, roData->unk_10, phi_f14);
 
         phi_a3 = CAM_DEG_TO_BINANG(swingAngle);
@@ -4425,8 +4427,8 @@ s32 Camera_KeepOn3(Camera* camera) {
         at->z += (rwData->unk_10.z - at->z) / timer;
 
         sp98.r = (rwData->unk_00 * timer) + sp80.r + 1.0f;
-        sp98.yaw = sp80.yaw + (s16)(rwData->unk_04 * timer);
-        sp98.pitch = sp80.pitch + (s16)(rwData->unk_08 * timer);
+        sp98.yaw = sp80.yaw + TRUNCF_BINANG(rwData->unk_04 * timer);
+        sp98.pitch = sp80.pitch + TRUNCF_BINANG(rwData->unk_08 * timer);
         *eyeNext = OLib_AddVecGeoToVec3f(at, &sp98);
         *eye = *eyeNext;
         camera->fov = Camera_ScaledStepToCeilF(roData->unk_20, camera->fov, 0.5f, 0.1f);
@@ -4705,8 +4707,8 @@ s32 Camera_KeepOn4(Camera* camera) {
 
     if (rwData->timer != 0) {
         Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
-        rwData->unk_10 += (s16)rwData->unk_00;
-        rwData->unk_12 += (s16)rwData->unk_04;
+        rwData->unk_10 += TRUNCF_BINANG(rwData->unk_00);
+        rwData->unk_12 += TRUNCF_BINANG(rwData->unk_04);
         rwData->timer--;
     } else {
         Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
@@ -5417,8 +5419,8 @@ s32 Camera_Unique0(Camera* camera) {
     switch (camera->animState) {
         case 0:
             bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-            rwData->unk_1C = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
-            camera->eye = camera->eyeNext = rwData->unk_1C;
+            rwData->unk_1C.point = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
+            camera->eye = camera->eyeNext = rwData->unk_1C.point;
             rwData->unk_34 = bgCamFuncData->rot;
 
             temp_v1 = bgCamFuncData->fov;
@@ -5449,7 +5451,7 @@ s32 Camera_Unique0(Camera* camera) {
             }
             rwData->unk_3A = camera->focalActor->world.rot.y;
             rwData->unk_3E = 0;
-            camera->eye = camera->eyeNext = rwData->unk_1C;
+            camera->eye = camera->eyeNext = rwData->unk_1C.point;
             Camera_UnsetStateFlag(camera, CAM_STATE_2);
             camera->animState++;
             // fallthrough
@@ -5457,8 +5459,8 @@ s32 Camera_Unique0(Camera* camera) {
             sp84.r = OLib_Vec3fDist(&sp8C, &camera->eye);
             sp84.yaw = rwData->unk_34.y;
             sp84.pitch = -rwData->unk_34.x;
-            rwData->unk_28 = OLib_VecGeoToVec3f(&sp84);
-            func_80179A44(&rwData->unk_1C, focalActorPosRot, &rwData->unk_0C);
+            rwData->unk_1C.dir = OLib_VecGeoToVec3f(&sp84);
+            Math3D_LineClosestToPoint(&rwData->unk_1C, &focalActorPosRot->pos, &rwData->unk_0C);
             camera->at = rwData->unk_0C;
 
             if (player->stateFlags1 & PLAYER_STATE1_20000000) {
@@ -6636,9 +6638,9 @@ s32 Camera_Special5(Camera* camera) {
             spA4 = BINANG_SUB(focalActorPosRot->rot.y, sp6C.yaw);
             sp74.r = roData->eyeDist;
             rand = Rand_ZeroOne();
-            sp74.yaw =
-                BINANG_ROT180(focalActorPosRot->rot.y) +
-                (s16)((spA4 < 0) ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
+            sp74.yaw = BINANG_ROT180(focalActorPosRot->rot.y) +
+                       (s16)((spA4 < 0) ? -(s16)(0x1553 + TRUNCF_BINANG(rand * 2730.0f))
+                                        : (s16)(0x1553 + TRUNCF_BINANG(rand * 2730.0f)));
             sp74.pitch = roData->pitch;
             *eyeNext = OLib_AddVecGeoToVec3f(&spA8.pos, &sp74);
             *eye = *eyeNext;
@@ -6840,8 +6842,8 @@ s32 Camera_Special9(Camera* camera) {
                 s16 camEyeSide;
                 s16 randFloat;
 
-                spB0.pitch = ((s16)(Rand_ZeroOne() * 0x280) + 0xBB8);
-                randFloat = ((s16)(Rand_ZeroOne() * 0x4CE) + 0x5DC);
+                spB0.pitch = TRUNCF_BINANG(Rand_ZeroOne() * 0x280) + 0xBB8;
+                randFloat = TRUNCF_BINANG(Rand_ZeroOne() * 0x4CE) + 0x5DC;
 
                 // The camera will either position itself either to the left or to the right
                 // of the door when it jumps behind it. It's effectively 50/50 percent chance

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_ray.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -21,7 +21,7 @@ void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, PlayState* play);
 void BgIkanaRay_SetActivated(BgIkanaRay* this);
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play);
 
-ActorInit Bg_Ikana_Ray_InitVars = {
+ActorProfile Bg_Ikana_Ray_Profile = {
     /**/ ACTOR_BG_IKANA_RAY,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

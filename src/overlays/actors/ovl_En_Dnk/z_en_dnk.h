@@ -2,9 +2,9 @@
 #define Z_EN_DNK_H
 
 #include "global.h"
-#include "objects/object_dnk/object_dnk.h"
-#include "objects/object_hintnuts/object_hintnuts.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
+#include "assets/objects/object_dnk/object_dnk.h"
+#include "assets/objects/object_hintnuts/object_hintnuts.h"
+#include "assets/objects/object_dekunuts/object_dekunuts.h"
 
 struct EnDnk;
 

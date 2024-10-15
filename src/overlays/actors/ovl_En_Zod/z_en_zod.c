@@ -45,7 +45,7 @@ typedef enum {
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
-ActorInit En_Zod_InitVars = {
+ActorProfile En_Zod_Profile = {
     /**/ ACTOR_EN_ZOD,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -226,7 +226,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
-        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
+        this->cymbalRotVels[i] -= TRUNCF_BINANG(this->cymbalRots[i] * 0.1f);
 
         if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
             this->cymbalRotVels[i] *= 0.9f;
@@ -327,7 +327,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x121A:
@@ -418,7 +418,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     talkState = Message_GetState(&play->msgCtx);
     if (talkState != TEXT_STATE_CLOSING) {
-        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80BAFB84;
             EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
@@ -464,7 +464,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
 
 void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = EnZod_Rehearse;

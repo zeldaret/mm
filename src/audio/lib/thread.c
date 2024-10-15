@@ -168,21 +168,21 @@ AudioTask* AudioThread_UpdateImpl(void) {
     task = &gAudioCtx.curTask->task.t;
     task->type = M_AUDTASK;
     task->flags = 0;
-    task->ucodeBoot = aspMainTextStart;
-    task->ucodeBootSize = SP_UCODE_SIZE;
-    task->ucodeDataSize = ((aspMainDataEnd - aspMainDataStart) * sizeof(u64)) - 1;
+    task->ucode_boot = aspMainTextStart;
+    task->ucode_boot_size = SP_UCODE_SIZE;
+    task->ucode_data_size = ((aspMainDataEnd - aspMainDataStart) * sizeof(u64)) - 1;
     task->ucode = aspMainTextStart;
-    task->ucodeData = aspMainDataStart;
-    task->ucodeSize = SP_UCODE_SIZE;
-    task->dramStack = (u64*)D_801D6200;
-    task->dramStackSize = 0;
-    task->outputBuff = NULL;
-    task->outputBuffSize = NULL;
+    task->ucode_data = aspMainDataStart;
+    task->ucode_size = SP_UCODE_SIZE;
+    task->dram_stack = aspMainStack;
+    task->dram_stack_size = 0;
+    task->output_buff = NULL;
+    task->output_buff_size = NULL;
     if (1) {}
-    task->dataPtr = (u64*)gAudioCtx.abiCmdBufs[index];
-    task->dataSize = numAbiCmds * sizeof(Acmd);
-    task->yieldDataPtr = NULL;
-    task->yieldDataSize = 0;
+    task->data_ptr = (u64*)gAudioCtx.abiCmdBufs[index];
+    task->data_size = numAbiCmds * sizeof(Acmd);
+    task->yield_data_ptr = NULL;
+    task->yield_data_size = 0;
 
     if (gAudioCtx.numAbiCmdsMax < numAbiCmds) {
         gAudioCtx.numAbiCmdsMax = numAbiCmds;
@@ -581,7 +581,7 @@ s32 AudioThread_ResetAudioHeap(s32 specId) {
 
 void AudioThread_PreNMIInternal(void) {
     gAudioCtx.resetTimer = 1;
-    if (gAudioCtxInitalized) {
+    if (gAudioCtxInitialized) {
         AudioThread_ResetAudioHeap(0);
         gAudioCtx.resetStatus = 0;
     }
@@ -903,7 +903,7 @@ s32 AudioThread_GetSamplePos(s32 seqPlayerIndex, s32 channelIndex, s32 layerInde
                 if (tunedSample == NULL) {
                     return false;
                 }
-                *loopEnd = tunedSample->sample->loop->loopEnd;
+                *loopEnd = tunedSample->sample->loop->header.loopEnd;
                 *samplePosInt = note->synthesisState.samplePosInt;
                 return true;
             }

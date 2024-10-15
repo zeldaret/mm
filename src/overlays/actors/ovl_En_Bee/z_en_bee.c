@@ -6,7 +6,7 @@
 
 #include "z_en_bee.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBee*)thisx)
 
@@ -22,7 +22,7 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 
 s32 sNumLoadedBees = 0;
 
-ActorInit En_Bee_InitVars = {
+ActorProfile En_Bee_Profile = {
     /**/ ACTOR_EN_BEE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -11,6 +11,7 @@
  */
 
 #include "global.h"
+#include "audio/load.h"
 #include "buffers.h"
 
 /**
@@ -93,7 +94,7 @@ s32 D_801FD1E0;
 
 DmaHandler sDmaHandler = osEPiStartDma;
 void* sUnusedHandler = NULL;
-s32 gAudioCtxInitalized = false;
+s32 gAudioCtxInitialized = false;
 
 void AudioLoad_DecreaseSampleDmaTtls(void) {
     u32 i;
@@ -138,7 +139,7 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
     s32 bufferPos;
     u32 i;
 
-    if ((arg2 != 0) || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
+    if (arg2 || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
         for (i = gAudioCtx.sampleDmaListSize1; i < gAudioCtx.sampleDmaCount; i++) {
             dma = &gAudioCtx.sampleDmas[i];
             bufferPos = devAddr - dma->devAddr;
@@ -161,11 +162,11 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
             }
         }
 
-        if (arg2 == 0) {
+        if (!arg2) {
             goto search_short_lived;
         }
 
-        if (gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos && arg2 != 0) {
+        if ((gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos) && arg2) {
             // Allocate a DMA from reuse queue 2, unless full.
             dmaIndex = gAudioCtx.sampleDmaReuseQueue2[gAudioCtx.sampleDmaReuseQueue2RdPos];
             gAudioCtx.sampleDmaReuseQueue2RdPos++;
@@ -366,10 +367,10 @@ void AudioLoad_SetSampleFontLoadStatus(s32 sampleBankId, s32 loadStatus) {
 void AudioLoad_InitTable(AudioTable* table, uintptr_t romAddr, u16 unkMediumParam) {
     s32 i;
 
-    table->unkMediumParam = unkMediumParam;
-    table->romAddr = romAddr;
+    table->header.unkMediumParam = unkMediumParam;
+    table->header.romAddr = romAddr;
 
-    for (i = 0; i < table->numEntries; i++) {
+    for (i = 0; i < table->header.numEntries; i++) {
         if ((table->entries[i].size != 0) && (table->entries[i].medium == MEDIUM_CART)) {
             table->entries[i].romAddr += romAddr;
         }
@@ -432,7 +433,7 @@ s32 AudioLoad_SyncLoadSample(Sample* sample, s32 fontId) {
 
             if (sample->medium == MEDIUM_UNK) {
                 AudioLoad_SyncDmaUnkMedium((uintptr_t)sample->sampleAddr, sampleAddr, sample->size,
-                                           gAudioCtx.sampleBankTable->unkMediumParam);
+                                           gAudioCtx.sampleBankTable->header.unkMediumParam);
             } else {
                 AudioLoad_SyncDma((uintptr_t)sample->sampleAddr, sampleAddr, sample->size, sample->medium);
             }
@@ -787,7 +788,7 @@ void* AudioLoad_SyncLoad(s32 tableType, u32 id, s32* didAllocate) {
 
             bcopy((void*)romAddr, ramAddr, size);
         } else if (medium2 == mediumUnk) {
-            AudioLoad_SyncDmaUnkMedium(romAddr, ramAddr, size, (s16)table->unkMediumParam);
+            AudioLoad_SyncDmaUnkMedium(romAddr, ramAddr, size, (s16)table->header.unkMediumParam);
         } else {
             AudioLoad_SyncDma(romAddr, ramAddr, size, medium);
         }
@@ -1072,7 +1073,7 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
     s32 loadStatus;
     SoundFont* soundFont;
     u32 realId = AudioLoad_GetRealTableIndex(tableType, id);
-    u32 pad;
+    s32 pad;
 
     switch (tableType) {
         case SEQUENCE_TABLE:
@@ -1157,8 +1158,8 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
         }
 
         if (medium == MEDIUM_UNK) {
-            AudioLoad_StartAsyncLoadUnkMedium((s16)table->unkMediumParam, romAddr, ramAddr, size, medium, nChunks,
-                                              retQueue, MK_ASYNC_MSG(retData, tableType, realId, loadStatus));
+            AudioLoad_StartAsyncLoadUnkMedium((s16)table->header.unkMediumParam, romAddr, ramAddr, size, medium,
+                                              nChunks, retQueue, MK_ASYNC_MSG(retData, tableType, realId, loadStatus));
         } else {
             AudioLoad_StartAsyncLoad(romAddr, ramAddr, size, medium, nChunks, retQueue,
                                      MK_ASYNC_MSG(retData, tableType, realId, loadStatus));
@@ -1263,8 +1264,8 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     gAudioCtx.curAiBufferIndex = 0;
     gAudioCtx.soundMode = SOUNDMODE_STEREO;
     gAudioCtx.curTask = NULL;
-    gAudioCtx.rspTask[0].task.t.dataSize = 0;
-    gAudioCtx.rspTask[1].task.t.dataSize = 0;
+    gAudioCtx.rspTask[0].task.t.data_size = 0;
+    gAudioCtx.rspTask[1].task.t.data_size = 0;
 
     osCreateMesgQueue(&gAudioCtx.syncDmaQueue, &gAudioCtx.syncDmaMesg, 1);
     osCreateMesgQueue(&gAudioCtx.curAudioFrameDmaQueue, gAudioCtx.currAudioFrameDmaMesgBuf,
@@ -1301,11 +1302,11 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
 
     // Connect audio tables to their tables in memory
     gAudioCtx.sequenceTable = (AudioTable*)gSequenceTable;
-    gAudioCtx.soundFontTable = (AudioTable*)gSoundFontTable;
-    gAudioCtx.sampleBankTable = (AudioTable*)gSampleBankTable;
+    gAudioCtx.soundFontTable = &gSoundFontTable;
+    gAudioCtx.sampleBankTable = &gSampleBankTable;
     gAudioCtx.sequenceFontTable = gSequenceFontTable;
 
-    gAudioCtx.numSequences = gAudioCtx.sequenceTable->numEntries;
+    gAudioCtx.numSequences = gAudioCtx.sequenceTable->header.numEntries;
 
     gAudioCtx.specId = 0;
     gAudioCtx.resetStatus = 1; // Set reset to immediately initialize the audio heap
@@ -1316,7 +1317,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     AudioLoad_InitTable(gAudioCtx.soundFontTable, SEGMENT_ROM_START(Audiobank), 0);
     AudioLoad_InitTable(gAudioCtx.sampleBankTable, SEGMENT_ROM_START(Audiotable), 0);
 
-    numFonts = gAudioCtx.soundFontTable->numEntries;
+    numFonts = gAudioCtx.soundFontTable->header.numEntries;
     gAudioCtx.soundFontList = AudioHeap_Alloc(&gAudioCtx.initPool, numFonts * sizeof(SoundFont));
 
     for (i = 0; i < numFonts; i++) {
@@ -1329,7 +1330,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     }
 
     AudioHeap_InitPool(&gAudioCtx.permanentPool, addr, gAudioHeapInitSizes.permanentPoolSize);
-    gAudioCtxInitalized = true;
+    gAudioCtxInitialized = true;
     osSendMesg(gAudioCtx.taskStartQueueP, (void*)gAudioCtx.totalTaskCount, OS_MESG_NOBLOCK);
 }
 
@@ -1382,7 +1383,7 @@ s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* isDone) {
     slowLoad->instId = instId;
 
     if (slowLoad->medium == MEDIUM_UNK) {
-        slowLoad->unkMediumParam = gAudioCtx.sampleBankTable->unkMediumParam;
+        slowLoad->unkMediumParam = gAudioCtx.sampleBankTable->header.unkMediumParam;
     }
 
     gAudioCtx.slowLoadPos ^= 1;
@@ -1526,7 +1527,7 @@ s32 AudioLoad_SlowLoadSeq(s32 seqId, u8* ramAddr, s8* isDone) {
     slowLoad->seqOrFontId = seqId;
 
     if (slowLoad->medium == MEDIUM_UNK) {
-        slowLoad->unkMediumParam = seqTable->unkMediumParam;
+        slowLoad->unkMediumParam = seqTable->header.unkMediumParam;
     }
 
     gAudioCtx.slowLoadPos ^= 1;
@@ -1637,7 +1638,7 @@ void AudioLoad_ProcessAsyncLoadUnkMedium(AudioAsyncLoad* asyncLoad, s32 resetSta
 void AudioLoad_FinishAsyncLoad(AudioAsyncLoad* asyncLoad) {
     u32 retMsg = asyncLoad->retMsg;
     u32 fontId;
-    u32 pad;
+    s32 pad;
     OSMesg doneMsg;
     u32 sampleBankId1;
     u32 sampleBankId2;
@@ -1705,7 +1706,7 @@ void AudioLoad_ProcessAsyncLoad(AudioAsyncLoad* asyncLoad, s32 resetStatus) {
     if (asyncLoad->bytesRemaining < asyncLoad->chunkSize) {
         if (asyncLoad->medium == MEDIUM_UNK) {
             AudioLoad_AsyncDmaUnkMedium(asyncLoad->curDevAddr, asyncLoad->curRamAddr, asyncLoad->bytesRemaining,
-                                        sampleBankTable->unkMediumParam);
+                                        sampleBankTable->header.unkMediumParam);
         } else if (asyncLoad->medium == MEDIUM_RAM_UNLOADED) {
             AudioLoad_AsyncDmaRamUnloaded(asyncLoad, asyncLoad->bytesRemaining);
         } else {
@@ -1717,7 +1718,7 @@ void AudioLoad_ProcessAsyncLoad(AudioAsyncLoad* asyncLoad, s32 resetStatus) {
 
     if (asyncLoad->medium == MEDIUM_UNK) {
         AudioLoad_AsyncDmaUnkMedium(asyncLoad->curDevAddr, asyncLoad->curRamAddr, asyncLoad->chunkSize,
-                                    sampleBankTable->unkMediumParam);
+                                    sampleBankTable->header.unkMediumParam);
     } else if (asyncLoad->medium == MEDIUM_RAM_UNLOADED) {
         AudioLoad_AsyncDmaRamUnloaded(asyncLoad, asyncLoad->chunkSize);
     } else {
@@ -1888,7 +1889,7 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* fontData
             case false:
                 if (sample->medium == MEDIUM_UNK) {
                     AudioLoad_SyncDmaUnkMedium((uintptr_t)sample->sampleAddr, sampleRamAddr, sample->size,
-                                               gAudioCtx.sampleBankTable->unkMediumParam);
+                                               gAudioCtx.sampleBankTable->header.unkMediumParam);
                     sample->sampleAddr = sampleRamAddr;
                     sample->medium = MEDIUM_RAM;
                 } else {
@@ -2152,7 +2153,7 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, SampleBankRelocInfo*
             case false:
                 if (sample->medium == MEDIUM_UNK) {
                     AudioLoad_SyncDmaUnkMedium((uintptr_t)sample->sampleAddr, addr, sample->size,
-                                               gAudioCtx.sampleBankTable->unkMediumParam);
+                                               gAudioCtx.sampleBankTable->header.unkMediumParam);
                     sample->sampleAddr = addr;
                     sample->medium = MEDIUM_RAM;
                 } else {

@@ -6,7 +6,10 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_kakasi.h"
-#include "objects/object_ka/object_ka.h"
+
+#include "z64olib.h"
+
+#include "assets/objects/object_ka/object_ka.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -67,7 +70,7 @@ static ColliderCylinderInit D_80971D80 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-ActorInit En_Kakasi_InitVars = {
+ActorProfile En_Kakasi_Profile = {
     /**/ ACTOR_EN_KAKASI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -92,10 +95,10 @@ Vec3f D_80971E38[] = {
 };
 
 Vec3f D_80971EEC[] = {
-    { 12.0f, 1.0f, 2.0f },    { 12.0f, 1.0f, 2.0f },  { 2.0f, -6.0f, 0.0f },  { 12.0f, -6.0f, -10.0f },
-    { -88.0f, 14.0, -10.0f }, { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },   { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
+    { 12.0f, 1.0f, 2.0f },     { 12.0f, 1.0f, 2.0f },  { 2.0f, -6.0f, 0.0f },  { 12.0f, -6.0f, -10.0f },
+    { -88.0f, 14.0f, -10.0f }, { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },    { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },    { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
 };
 
 Vec3f D_80971FA0[] = {
@@ -321,7 +324,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->picto.actor.textId = 0x1653;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
-                this->talkState = TEXT_STATE_5;
+                this->talkState = TEXT_STATE_EVENT;
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
@@ -393,7 +396,7 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
 
-    this->talkState = TEXT_STATE_5;
+    this->talkState = TEXT_STATE_EVENT;
     this->unkState196 = 1;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
     this->actionFunc = EnKakasi_RegularDialogue;
@@ -430,7 +433,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        if (this->talkState == TEXT_STATE_5) {
+        if (this->talkState == TEXT_STATE_EVENT) {
             // bad song input
             if ((this->unkState196 == 2) && (this->picto.actor.textId == 0x1647)) {
                 Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
@@ -524,7 +527,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 return;
             }
         } else {
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
 
             if (play->msgCtx.choiceIndex == 1) {
                 Audio_PlaySfx_MessageDecide();
@@ -573,7 +576,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_SCARECROW_SPAWN_RECORDING);
         this->unkState1A8 = 0;
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -640,7 +643,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->subCamId = SUB_CAM_ID_DONE;
             this->picto.actor.textId = 0x1647;
             this->unkState1A8 = 2;
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
@@ -672,7 +675,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     this->unkCounter1A4 = 0;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
     this->subCamId = SUB_CAM_ID_DONE;
-    this->talkState = TEXT_STATE_5;
+    this->talkState = TEXT_STATE_EVENT;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
     this->subCamFov = 0.0f;
@@ -751,7 +754,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
         Message_CloseTextbox(play);
 
-        if (this->talkState == TEXT_STATE_5) {
+        if (this->talkState == TEXT_STATE_EVENT) {
             this->unk190++;
             if (this->unk190 > 5) {
                 this->unk190 = 5;
@@ -783,7 +786,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
         } else {
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             if (play->msgCtx.choiceIndex == 1) {
                 Audio_PlaySfx_MessageDecide();
                 this->picto.actor.textId = 0x164A;
@@ -949,9 +952,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
 
                 if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
@@ -1044,9 +1047,9 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
-    this->picto.actor.shape.yOffset = -7000.0;
+    this->picto.actor.shape.yOffset = -7000.0f;
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unkState196 = 5;
     this->actionFunc = EnKakasi_IdleUnderground;
 }
@@ -1054,7 +1057,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && (this->picto.actor.xzDistToPlayer < this->songSummonDist) &&
         ((BREG(1) != 0) || (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SCARECROW_SPAWN))) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->picto.actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
@@ -1120,7 +1123,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
 void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x3E8, 0);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnKakasi_SetupIdleRisen(this);
     }

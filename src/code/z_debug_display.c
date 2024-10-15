@@ -43,7 +43,7 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
     return sDebugObjectListHead;
 }
 
-#include "code/debug_display/debug_display.c"
+#include "assets/code/debug_display/debug_display.c"
 
 DebugDispObjectDrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
 

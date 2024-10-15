@@ -27,7 +27,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play);
 void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
-ActorInit Bg_Kin2_Picture_InitVars = {
+ActorProfile Bg_Kin2_Picture_Profile = {
     /**/ ACTOR_BG_KIN2_PICTURE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

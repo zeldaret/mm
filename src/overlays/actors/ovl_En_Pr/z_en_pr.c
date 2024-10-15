@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPr*)thisx)
 
@@ -74,7 +74,7 @@ f32 D_80A338C0[PLAYER_FORM_MAX] = {
     15.0f, // PLAYER_FORM_HUMAN
 };
 
-ActorInit En_Pr_InitVars = {
+ActorProfile En_Pr_Profile = {
     /**/ ACTOR_EN_PR,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -429,7 +429,7 @@ void func_80A32EA4(EnPr* this, PlayState* play) {
         if (this->actor.colChkInfo.health <= 0) {
             this->unk_206 = 7;
             this->unk_20A = 50;
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->unk_2C4 = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);

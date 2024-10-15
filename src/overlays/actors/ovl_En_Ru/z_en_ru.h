@@ -2,7 +2,7 @@
 #define Z_EN_RU_H
 
 #include "global.h"
-#include "objects/object_ru2/object_ru2.h"
+#include "assets/objects/object_ru2/object_ru2.h"
 
 #define RU_GET_PATH_INDEX(thisx) ((thisx->params & 0x7E00) >> 9)
 

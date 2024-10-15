@@ -2,7 +2,7 @@
 #define Z_EN_FISH2_H
 
 #include "global.h"
-#include "objects/object_fb/object_fb.h"
+#include "assets/objects/object_fb/object_fb.h"
 
 struct EnFish2;
 

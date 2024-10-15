@@ -7,7 +7,7 @@
 #include "z_obj_switch.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -72,7 +72,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 
 static s32 sTexturesDesegmented = false;
 
-ActorInit Obj_Switch_InitVars = {
+ActorProfile Obj_Switch_Profile = {
     /**/ ACTOR_OBJ_SWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,
@@ -652,7 +652,7 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_MultVecZ(1.0f, &sp20);
             Matrix_Pop();
-            if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
+            if ((Math3D_Cos(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
                 return true;
             }
         }
@@ -866,7 +866,7 @@ void ObjSwitch_LargeFloorSwitchPushDownInit(ObjSwitch* this) {
 
 void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.074250005f;
-    if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
+    if (this->dyna.actor.scale.y <= (33.0f / 2000.0f)) {
         ObjSwitch_PlayFootSwitchSfx(this);
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
@@ -968,16 +968,16 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
     s32 pad[2];
 
     if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_ONCE) {
-        Gfx* opa;
+        Gfx* gfx;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        gSPDisplayList(opa++, gSetupDLs[SETUPDL_25]);
-        gSPMatrix(opa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
-        gSPDisplayList(opa++, gFloorSwitch1DL);
-        POLY_OPA_DISP = opa;
+        gfx = POLY_OPA_DISP;
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
+        gSPDisplayList(gfx++, gFloorSwitch1DL);
+        POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {

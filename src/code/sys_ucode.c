@@ -2,7 +2,10 @@
  * File: sys_ucode.c
  * Description: Functions for obtaining locations and sizes of microcode
  */
-#include "global.h"
+
+#include "sys_ucode.h"
+
+#include "stdint.h"
 
 u64* initialgspUcodeText = gspF3DZEX2_NoN_PosLight_fifoTextStart;
 u64* initialgspUcodeData = gspF3DZEX2_NoN_PosLight_fifoDataStart;

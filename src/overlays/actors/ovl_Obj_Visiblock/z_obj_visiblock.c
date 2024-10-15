@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_visiblock.h"
-#include "objects/object_visiblock/object_visiblock.h"
+#include "assets/objects/object_visiblock/object_visiblock.h"
 
 #define FLAGS (ACTOR_FLAG_REACT_TO_LENS)
 
@@ -15,7 +15,7 @@ void ObjVisiblock_Init(Actor* thisx, PlayState* play);
 void ObjVisiblock_Destroy(Actor* thisx, PlayState* play);
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Visiblock_InitVars = {
+ActorProfile Obj_Visiblock_Profile = {
     /**/ ACTOR_OBJ_VISIBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

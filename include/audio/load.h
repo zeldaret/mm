@@ -1,25 +1,30 @@
 #ifndef AUDIO_LOAD_H
 #define AUDIO_LOAD_H
 
-#include "audio/soundfont.h"
-#include "PR/ultratypes.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
-#include "PR/os_message.h"
-#include "unk.h"
+#include "soundfont.h"
 #include "PR/os.h"
-
-struct Sample;
+#include "PR/os_message.h"
+#include "PR/ultratypes.h"
+#include "stddef.h"
+#include "stdint.h"
+#include "unk.h"
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
-typedef enum {
+typedef enum SampleBankTableType {
     /* 0 */ SEQUENCE_TABLE,
     /* 1 */ FONT_TABLE,
     /* 2 */ SAMPLE_TABLE
 } SampleBankTableType;
 
-typedef struct {
+typedef struct AudioTableHeader {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ uintptr_t romAddr;
+    /* 0x08 */ char pad[0x8];
+} AudioTableHeader; // size = 0x10
+
+typedef struct AudioTableEntry {
     /* 0x0 */ uintptr_t romAddr;
     /* 0x4 */ size_t size;
     /* 0x8 */ s8 medium;
@@ -29,15 +34,12 @@ typedef struct {
     /* 0xE */ s16 shortData3;
 } AudioTableEntry; // size = 0x10
 
-typedef struct {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ uintptr_t romAddr;
-    /* 0x08 */ char pad[0x8];
+typedef struct AudioTable {
+    /* 0x00 */ AudioTableHeader header;
     /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
 } AudioTable; // size >= 0x20
 
-typedef enum {
+typedef enum AudioLoadStatus {
     /* 0 */ LOAD_STATUS_NOT_LOADED,
     /* 1 */ LOAD_STATUS_IN_PROGRESS,
     /* 2 */ LOAD_STATUS_COMPLETE,
@@ -46,14 +48,14 @@ typedef enum {
     /* 5 */ LOAD_STATUS_PERMANENT
 } AudioLoadStatus;
 
-typedef enum {
+typedef enum AudioCacheType {
     /* 0 */ CACHE_TEMPORARY,
     /* 1 */ CACHE_PERSISTENT,
     /* 2 */ CACHE_EITHER,
     /* 3 */ CACHE_PERMANENT
 } AudioCacheType;
 
-typedef enum {
+typedef enum AudioCacheLoadType {
     /* 0 */ CACHE_LOAD_PERMANENT,
     /* 1 */ CACHE_LOAD_PERSISTENT,
     /* 2 */ CACHE_LOAD_TEMPORARY,
@@ -61,7 +63,7 @@ typedef enum {
     /* 4 */ CACHE_LOAD_EITHER_NOSYNC
 } AudioCacheLoadType;
 
-typedef struct {
+typedef struct AudioAsyncLoad {
     /* 0x00 */ s8 status;
     /* 0x01 */ s8 delay;
     /* 0x02 */ s8 medium;
@@ -78,7 +80,7 @@ typedef struct {
     /* 0x40 */ OSIoMesg ioMesg;
 } AudioAsyncLoad; // size = 0x58
 
-typedef struct {
+typedef struct AudioSlowLoad {
     /* 0x00 */ u8 medium;
     /* 0x01 */ u8 seqOrFontId;
     /* 0x02 */ u16 instId;
@@ -89,13 +91,13 @@ typedef struct {
     /* 0x14 */ s32 status;
     /* 0x18 */ size_t bytesRemaining;
     /* 0x1C */ s8* isDone; // TODO: rename in OoT and sync up here. This is an external status while (s32 status) is an internal status
-    /* 0x20 */ struct Sample sample;
+    /* 0x20 */ Sample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
     /* 0x48 */ OSMesg msg;
     /* 0x4C */ OSIoMesg ioMesg;
 } AudioSlowLoad; // size = 0x64
 
-typedef struct {
+typedef struct SampleDma {
     /* 0x0 */ u8* ramAddr;
     /* 0x4 */ uintptr_t devAddr;
     /* 0x8 */ u16 sizeUnused;
@@ -105,9 +107,9 @@ typedef struct {
     /* 0xE */ u8 ttl;        // Time To Live: duration after which the DMA can be discarded
 } SampleDma; // size = 0x10
 
-typedef struct {
+typedef struct AudioPreloadReq {
     /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ struct Sample* sample;
+    /* 0x04 */ Sample* sample;
     /* 0x08 */ u8* ramAddr;
     /* 0x0C */ u32 encodedInfo;
     /* 0x10 */ s32 isFree;

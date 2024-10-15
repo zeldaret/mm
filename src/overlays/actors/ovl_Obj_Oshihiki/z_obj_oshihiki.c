@@ -6,7 +6,7 @@
 
 #include "z_obj_oshihiki.h"
 #include "overlays/actors/ovl_Obj_Switch/z_obj_switch.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_SetupFall(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play);
 
-ActorInit Obj_Oshihiki_InitVars = {
+ActorProfile Obj_Oshihiki_Profile = {
     /**/ ACTOR_OBJ_OSHIHIKI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

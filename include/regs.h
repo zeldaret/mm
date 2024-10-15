@@ -7,6 +7,7 @@
 #include "ultra64.h"
 #include "unk.h"
 
+struct PlayState;
 
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
@@ -84,7 +85,7 @@ extern RegEditor* gRegEditor;
 #define R_MOTION_BLUR_ENABLED             SREG(91)
 #define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
 #define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
-#define R_PAUSE_BG_PRERENDER_STATE        SREG(94)
+#define R_PAUSE_BG_PRERENDER_STATE        SREG(94) // PauseBgPreRenderState enum
 
 #define R_PLAY_FILL_SCREEN_ON             MREG(64)
 #define R_PLAY_FILL_SCREEN_R              MREG(65)
@@ -146,7 +147,7 @@ extern RegEditor* gRegEditor;
 #define R_MOON_CRASH_TIMER_X                XREG(81)
 #define R_PAUSE_OWL_WARP_ALPHA              XREG(87)
 #define R_STORY_FILL_SCREEN_ALPHA           XREG(91)
-#define R_REVERSE_FLOOR_INDEX               XREG(94)
+#define R_PLAYER_FLOOR_REVERSE_INDEX        XREG(94) // stores what floor the player is on
 #define R_MINIMAP_DISABLED                  XREG(95)
 
 #define R_ENV_LIGHT1_DIR(i)               cREG(3 + (i))
@@ -181,5 +182,7 @@ extern RegEditor* gRegEditor;
 
 // Name inferred from OoT. Set to true to manually set play->csCtx.script
 #define R_USE_DEBUG_CUTSCENE              dREG(95)
+
+void Regs_InitData(struct PlayState* play);
 
 #endif

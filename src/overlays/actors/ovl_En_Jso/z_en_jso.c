@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount3/z_en_encount3.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnJso*)thisx)
 
@@ -152,7 +152,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_JSO_DMGEFF_NONE),
 };
 
-ActorInit En_Jso_InitVars = {
+ActorProfile En_Jso_Profile = {
     /**/ ACTOR_EN_JSO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -303,7 +303,7 @@ void EnJso_Init(Actor* thisx, PlayState* play) {
 
     this->actor.gravity = -3.0f;
     this->scale = 0.035f;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->hintType = EN_JSO_GET_HINT_TYPE(&this->actor);
     this->introCsType = this->hintType & EN_JSO_INTRO_SCALE_UP;
     EnJso_SetupIntroCutscene(this);
@@ -495,7 +495,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.z = player->actor.world.pos.z;
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Message_ContinueTextbox(play, sTextIds[this->textIndex]);
                 this->cutsceneTimer = 0;
@@ -507,7 +507,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
         case EN_JSO_INTRO_CS_STATE_RAISE_ARM_AND_DRAW_RIGHT_SWORD:
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
 
-            if (Message_GetState(&play->msgCtx) == TEXT_STATE_10) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_AWAITING_NEXT) {
                 this->targetRobeRightRot.x = -0x2710;
                 this->targetRobeRightRot.z = -0x2710;
             }
@@ -532,7 +532,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.y = player->actor.world.pos.y + 30.0f;
             this->subCamAtNext.z = player->actor.world.pos.z - 40.0f;
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->targetRightArmRot.x = this->targetRightArmRot.y = this->targetRightArmRot.z =
                     this->targetRobeRightRot.x = this->targetRobeRightRot.y = this->targetRobeRightRot.z = 0;
@@ -585,7 +585,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
                 this->cutsceneState = EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
-                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 EnJso_SetupJumpBack(this);
@@ -635,7 +635,7 @@ void EnJso_SetupReappear(EnJso* this, PlayState* play) {
     this->actor.floorHeight = this->actor.home.pos.y;
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500,
                              10, true);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_ENTRY);
     this->afterimageCount = 0;
     this->action = EN_JSO_ACTION_REAPPEAR;
@@ -668,7 +668,7 @@ void EnJso_Reappear(EnJso* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actor.gravity = -3.0f;
         if (this->actor.colChkInfo.health > 0) {
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             EnJso_SetupCirclePlayer(this, play);
         } else {
             EnJso_SetupFallDownAndTalk(this, play);
@@ -1128,8 +1128,8 @@ void EnJso_SetupDead(EnJso* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.speed = 0.0f;
     this->disableBlure = true;
     this->timer = 30;
@@ -1167,7 +1167,7 @@ void EnJso_SetupFallDownAndTalk(EnJso* this, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_100000;
     this->action = EN_JSO_ACTION_FALL_DOWN_AND_TALK;
     this->actionFunc = EnJso_FallDownAndTalk;
@@ -1192,7 +1192,7 @@ void EnJso_FallDownAndTalk(EnJso* this, PlayState* play) {
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             player2->stateFlags1 |= PLAYER_STATE1_10000000;
             player2->actor.freezeTimer = 3;
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actionFunc = EnJso_TellHint;
         } else {
             EnJso_SetupReappear(this, play);
@@ -1218,7 +1218,7 @@ void EnJso_TellHint(EnJso* this, PlayState* play) {
         return;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (this->textIndex == 2) {
             u16 textId = 0x139C; // Hint about using Elegy to climb Stone Tower
@@ -1310,7 +1310,7 @@ void EnJso_BurstIntoFlames(EnJso* this, PlayState* play) {
     s32 i;
 
     player->actor.freezeTimer = 3;
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Player* player2 = GET_PLAYER(play);
 
         Message_CloseTextbox(play);

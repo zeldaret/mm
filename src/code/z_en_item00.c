@@ -1,7 +1,7 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
@@ -25,7 +25,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
-ActorInit En_Item00_InitVars = {
+ActorProfile En_Item00_Profile = {
     /**/ ACTOR_EN_ITEM00,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,
@@ -415,7 +415,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
             }
-            this->actor.home.rot.z += (s16)((this->actor.velocity.y + 3.0f) * 1000.0f);
+            this->actor.home.rot.z += TRUNCF_BINANG((this->actor.velocity.y + 3.0f) * 1000.0f);
             this->actor.world.pos.x +=
                 (Math_CosS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
             this->actor.world.pos.z +=

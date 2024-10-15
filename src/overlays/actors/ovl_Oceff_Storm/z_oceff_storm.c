@@ -19,7 +19,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play);
 void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_Draw2(Actor* thisx, PlayState* play);
 
-ActorInit Oceff_Storm_InitVars = {
+ActorProfile Oceff_Storm_Profile = {
     /**/ ACTOR_OCEFF_STORM,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -189,7 +189,7 @@ void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, scroll * 8, scroll * 4, 64,
                                                      64, 1, scroll * 4, scroll * 4, 64, 64));
     gSPTextureRectangle(POLY_XLU_DISP++, 0, 0, SCREEN_WIDTH << 2, SCREEN_HEIGHT << 2, G_TX_RENDERTILE, 0, 0,
-                        (s32)(0.13671875 * (1 << 10)), (s32)(-0.13671875 * (1 << 10)));
+                        (s32)(0.13671875f * (1 << 10)), (s32)(-0.13671875f * (1 << 10)));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

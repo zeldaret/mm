@@ -7,7 +7,7 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnMinislime*)thisx)
 
@@ -41,7 +41,7 @@ void EnMinislime_MoveToGekko(EnMinislime* this, PlayState* play);
 void EnMinislime_SetupGekkoThrow(EnMinislime* this);
 void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play);
 
-ActorInit En_Minislime_InitVars = {
+ActorProfile En_Minislime_Profile = {
     /**/ ACTOR_EN_MINISLIME,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -207,15 +207,15 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
 
 void EnMinislime_AddIceSmokeEffect(EnMinislime* this, PlayState* play) {
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
 
     pos.x = (Rand_CenteredFloat(200.0f) * this->actor.scale.x) + this->actor.world.pos.x;
     pos.y = CLAMP_MIN(this->actor.world.pos.y, GBT_ROOM_5_MIN_Y + 30.0f);
     pos.z = (Rand_CenteredFloat(200.0f) * this->actor.scale.z) + this->actor.world.pos.z;
-    vel.x = Rand_CenteredFloat(1.5f);
-    vel.z = Rand_CenteredFloat(1.5f);
-    vel.y = 2.0f;
-    EffectSsIceSmoke_Spawn(play, &pos, &vel, &gZeroVec3f, 500);
+    velocity.x = Rand_CenteredFloat(1.5f);
+    velocity.z = Rand_CenteredFloat(1.5f);
+    velocity.y = 2.0f;
+    EffectSsIceSmoke_Spawn(play, &pos, &velocity, &gZeroVec3f, 500);
 }
 
 void EnMinislime_SetupDisappear(EnMinislime* this) {
@@ -396,8 +396,8 @@ void EnMinislime_GrowAndShrink(EnMinislime* this, PlayState* play) {
     this->growShrinkTimer--;
     scaleFactor = (this->growShrinkTimer / 6) + 1.0f;
     this->actor.scale.z = this->actor.scale.x =
-        ((Math_CosF(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * (2.0f / 30.0f))) + 1.5f) * 0.1f;
-    this->actor.scale.y = ((Math_SinF(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * 0.05f)) + 0.75f) * 0.1f;
+        ((Math_CosF(this->growShrinkTimer * (M_PIf / 3)) * (scaleFactor * (2.0f / 30.0f))) + 1.5f) * 0.1f;
+    this->actor.scale.y = ((Math_SinF(this->growShrinkTimer * (M_PIf / 3)) * (scaleFactor * 0.05f)) + 0.75f) * 0.1f;
     if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
         EnMinislime_SetupMoveToGekko(this);
     } else if ((this->actor.xzDistToPlayer < 150.0f) && (this->growShrinkTimer < 38)) {
@@ -419,11 +419,11 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
     f32 speedXZ;
 
     this->idleTimer--;
-    speedXZ = Math_SinF(this->idleTimer * (M_PI / 10));
+    speedXZ = Math_SinF(this->idleTimer * (M_PIf / 10));
     this->actor.speed = speedXZ * 1.5f;
     this->actor.speed = CLAMP_MIN(this->actor.speed, 0.0f);
     Math_StepToF(&this->actor.scale.x, ((0.14f * speedXZ) + 1.5f) * 0.1f, 0.010000001f);
-    Math_StepToF(&this->actor.scale.y, ((Math_CosF(this->idleTimer * (M_PI / 10)) * 0.07f) + 0.75f) * 0.1f,
+    Math_StepToF(&this->actor.scale.y, ((Math_CosF(this->idleTimer * (M_PIf / 10)) * 0.07f) + 0.75f) * 0.1f,
                  0.010000001f);
     Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
     if (this->idleTimer == 0) {
@@ -531,13 +531,13 @@ void EnMinislime_Knockback(EnMinislime* this, PlayState* play) {
     this->knockbackTimer--;
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     sqrtFrozenTimer = sqrtf(this->knockbackTimer);
-    this->actor.scale.x = ((Math_CosF(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.15f;
+    this->actor.scale.x = ((Math_CosF(this->knockbackTimer * (M_PIf / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.15f;
     this->actor.scale.z = this->actor.scale.x;
     if (this->knockbackTimer == 15) {
         this->collider.base.acFlags |= AC_ON;
     }
 
-    this->actor.scale.y = ((Math_SinF(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.075f;
+    this->actor.scale.y = ((Math_SinF(this->knockbackTimer * (M_PIf / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.075f;
     if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
         EnMinislime_SetupMoveToGekko(this);
     } else if (this->knockbackTimer == 0) {
@@ -569,9 +569,9 @@ void EnMinislime_DefeatIdle(EnMinislime* this, PlayState* play) {
     f32 xzScale;
 
     this->idleTimer--;
-    xzScale = Math_SinF(this->idleTimer * (M_PI / 10));
+    xzScale = Math_SinF(this->idleTimer * (M_PIf / 10));
     Math_StepToF(&this->actor.scale.x, ((0.14f * xzScale) + 1.5f) * 0.1f, 0.010000001f);
-    Math_StepToF(&this->actor.scale.y, ((0.07f * Math_CosF(this->idleTimer * (M_PI / 10))) + 0.75f) * 0.1f,
+    Math_StepToF(&this->actor.scale.y, ((0.07f * Math_CosF(this->idleTimer * (M_PIf / 10))) + 0.75f) * 0.1f,
                  0.010000001f);
     Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
     if (this->idleTimer == 0) {
@@ -665,9 +665,9 @@ void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play) {
     f32 xzScale;
 
     this->throwTimer--;
-    xzScale = Math_SinF(this->throwTimer * (M_PI / 5));
+    xzScale = Math_SinF(this->throwTimer * (M_PIf / 5));
     this->actor.scale.x = ((0.3f * xzScale) + 1.5f) * 0.1f;
-    this->actor.scale.y = ((Math_CosF(this->throwTimer * (M_PI / 5)) * 0.2f) + 0.75f) * 0.1f;
+    this->actor.scale.y = ((Math_CosF(this->throwTimer * (M_PIf / 5)) * 0.2f) + 0.75f) * 0.1f;
     this->actor.scale.z = 0.3f - this->actor.scale.x;
     if (this->throwTimer == 0) {
         this->throwTimer = 10;

@@ -2,7 +2,7 @@
 #define Z_EN_BUBBLE_H
 
 #include "global.h"
-#include "objects/object_bubble/object_bubble.h"
+#include "assets/objects/object_bubble/object_bubble.h"
 
 struct EnBubble;
 

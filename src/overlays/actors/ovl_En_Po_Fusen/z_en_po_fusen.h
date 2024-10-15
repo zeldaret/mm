@@ -2,7 +2,7 @@
 #define Z_EN_PO_FUSEN_H
 
 #include "global.h"
-#include "objects/object_po_fusen/object_po_fusen.h"
+#include "assets/objects/object_po_fusen/object_po_fusen.h"
 
 struct EnPoFusen;
 

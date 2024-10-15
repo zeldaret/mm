@@ -20,7 +20,7 @@ void EnMs_Talk(EnMs* this, PlayState* play);
 void EnMs_Sell(EnMs* this, PlayState* play);
 void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play);
 
-ActorInit En_Ms_InitVars = {
+ActorProfile En_Ms_Profile = {
     /**/ ACTOR_EN_MS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -103,7 +103,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,

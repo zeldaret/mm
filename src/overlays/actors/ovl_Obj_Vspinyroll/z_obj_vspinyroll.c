@@ -5,7 +5,8 @@
  */
 
 #include "z_obj_vspinyroll.h"
-#include "objects/object_spinyroll/object_spinyroll.h"
+#include "assets/objects/object_spinyroll/object_spinyroll.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +28,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Vspinyroll_InitVars = {
+ActorProfile Obj_Vspinyroll_Profile = {
     /**/ ACTOR_OBJ_VSPINYROLL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -130,7 +131,7 @@ s32 func_80A3C700(ObjVspinyroll* this) {
     this->dyna.actor.world.pos.z += this->dyna.actor.speed * this->unk_3B4.z;
 
     Math_Vec3f_Diff(&this->unk_39C[sp30], &this->dyna.actor.world.pos, &sp24);
-    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
+    return Math3D_Vec3fMagnitudeSq(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
 }
 
 void func_80A3C7E8(ObjVspinyroll* this) {
@@ -207,7 +208,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
                 spB4.y += this->dyna.actor.world.pos.y;
                 spB4.z += this->dyna.actor.world.pos.z;
 
-                EffectSsHitmark_SpawnFixedScale(play, 3, &spB4);
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &spB4);
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
             }
 

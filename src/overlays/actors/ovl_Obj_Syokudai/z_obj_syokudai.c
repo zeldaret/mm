@@ -5,9 +5,9 @@
  */
 
 #include "z_obj_syokudai.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
-#include "objects/object_syokudai/object_syokudai.h"
+#include "assets/objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -18,7 +18,7 @@ void ObjSyokudai_Destroy(Actor* thisx, PlayState* play);
 void ObjSyokudai_Update(Actor* thisx, PlayState* play2);
 void ObjSyokudai_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Syokudai_InitVars = {
+ActorProfile Obj_Syokudai_Profile = {
     /**/ ACTOR_OBJ_SYOKUDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -193,8 +193,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
-                if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
+                flameColliderHurtboxDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
+                if (this->flameCollider.elem.acHitElem->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
@@ -241,7 +241,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == OBJ_SYOKUDAI_SWITCH_FLAG_NONE)) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
-                        } else if (thisx->csId >= 0) {
+                        } else if (thisx->csId > CS_ID_NONE) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Flags_SetSwitch(play, switchFlag);

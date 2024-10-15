@@ -32,7 +32,7 @@ void func_80B5253C(EnGk* this, PlayState* play);
 void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
-ActorInit En_Gk_InitVars = {
+ActorProfile En_Gk_Profile = {
     /**/ ACTOR_EN_GK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -202,7 +202,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_04)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -213,7 +213,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08) || Inventory_HasEmptyBottle()) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_41_04);
@@ -414,7 +414,7 @@ s32 EnGk_HasReachedPoint(EnGk* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -705,7 +705,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
 void func_80B51970(EnGk* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_EVENT)) && Message_ShouldAdvance(play)) {
         if ((this->unk_31C == 0xE84) || (this->unk_31C == 0xE99)) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
@@ -919,7 +919,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 }
 
 void func_80B5216C(EnGk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80B51698;
@@ -1008,7 +1008,7 @@ void func_80B52430(EnGk* this, PlayState* play) {
 void func_80B5253C(EnGk* this, PlayState* play) {
     s32 getItemId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE)) {
         getItemId = GI_GOLD_DUST_2;
     } else {
         getItemId = GI_GOLD_DUST;
@@ -1017,7 +1017,7 @@ void func_80B5253C(EnGk* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (getItemId == GI_GOLD_DUST) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_41_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE);
         }
         this->actionFunc = func_80B525E0;
     } else {

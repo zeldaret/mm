@@ -4,15 +4,19 @@
 #include "ultra64.h"
 #include "z64dma.h"
 
+struct GraphicsContext;
+struct Input;
 struct PlayState;
 
 #define DEFINE_PERSON(enum, _photo, _description, _metEnum, _metMessage, _metFlag) enum,
+#define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage, _completedFlag)
 typedef enum BombersNotebookPerson {
-    #include "tables/bombers_notebook/person_table.h"
+    #include "tables/notebook_table.h"
     /* 0x14 */ BOMBERS_NOTEBOOK_PERSON_MAX
 } BombersNotebookPerson;
 
 #undef DEFINE_PERSON
+#undef DEFINE_EVENT
 
 typedef enum BombersNotebookLoadState {
     /* 0 */ BOMBERS_NOTEBOOK_LOAD_STATE_NONE,
@@ -23,15 +27,14 @@ typedef enum BombersNotebookLoadState {
 #define DEFINE_PERSON(_enum, _photo, _description, metEnum, _metMessage, _metFlag) metEnum,
 #define DEFINE_EVENT(enum, _icon, _colorFlag, _description, _completedMessage, _completedFlag) enum,
 typedef enum BombersNotebookEvent {
-    #include "tables/bombers_notebook/person_table.h"
-    #include "tables/bombers_notebook/event_table.h"
+    #include "tables/notebook_table.h"
     /* 0x37 */ BOMBERS_NOTEBOOK_EVENT_MAX
 } BombersNotebookEvent;
 
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-typedef struct {
+typedef struct BombersNotebook {
     /* 0x00 */ u8 loadState;
     /* 0x01 */ UNK_TYPE1 pad01[0x3F];
     /* 0x40 */ void* scheduleDmaSegment;
@@ -52,7 +55,7 @@ typedef struct {
 } BombersNotebook; // size = 0xAC
 
 void BombersNotebook_Draw(BombersNotebook* this, struct GraphicsContext* gfxCtx);
-void BombersNotebook_Update(struct PlayState* play, BombersNotebook* this, Input* input);
+void BombersNotebook_Update(struct PlayState* play, BombersNotebook* this, struct Input* input);
 void BombersNotebook_Init(BombersNotebook* this);
 void BombersNotebook_Destroy(BombersNotebook* this);
 

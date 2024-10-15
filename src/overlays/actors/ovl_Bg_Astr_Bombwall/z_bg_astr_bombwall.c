@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_astr_bombwall.h"
-#include "objects/object_astr_obj/object_astr_obj.h"
+#include "assets/objects/object_astr_obj/object_astr_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorProfile Bg_Astr_Bombwall_Profile = {
     /**/ ACTOR_BG_ASTR_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -87,8 +87,10 @@ void BgAstrBombwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot,
     Matrix_RotateZS(rot->z, MTXMODE_APPLY);
 
     for (i = 0; i < init->count; i++) {
-        for (j = 0; j < 3; j++) {                                          // https://decomp.me/scratch/JrEnl
-            Matrix_MultVec3f(&(init->elements + i)->dim.vtx[j], &sp54[j]); //! FAKE MATCH:
+        for (j = 0; j < 3; j++) {
+            //! FAKE:
+            // https://decomp.me/scratch/JrEnl
+            Matrix_MultVec3f(&(init->elements + i)->dim.vtx[j], &sp54[j]);
             Math_Vec3f_Sum(&sp54[j], pos, &sp54[j]);
         }
         Collider_SetTrisVertices(collider, i, &sp54[0], &sp54[1], &sp54[2]);

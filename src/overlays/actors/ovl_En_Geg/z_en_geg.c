@@ -7,9 +7,9 @@
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_taisou/object_taisou.h"
-#include "objects/object_hakugin_demo/object_hakugin_demo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_taisou/object_taisou.h"
+#include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -36,7 +36,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-ActorInit En_Geg_InitVars = {
+ActorProfile En_Geg_Profile = {
     /**/ ACTOR_EN_GEG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -240,7 +240,7 @@ void func_80BB178C(EnGeg* this, PlayState* play) {
     if (this->unk_230 & 1) {
         this->colliderSphere.dim.worldSphere.center.x = sp34.x;
         this->colliderSphere.dim.worldSphere.center.y = sp34.y;
-        this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+        this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
         this->colliderSphere.dim.worldSphere.center.z = sp34.z;
         this->colliderSphere.dim.modelSphere.radius = 20;
         this->colliderSphere.dim.worldSphere.radius =
@@ -281,7 +281,7 @@ s32 func_80BB18FC(EnGeg* this, Actor* actor) {
     return false;
 }
 
-Vec3f* func_80BB19C0(Vec3f* arg0, EnGeg* this, PlayState* play) {
+Vec3f func_80BB19C0(EnGeg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp40;
     Vec3f sp34;
@@ -302,13 +302,10 @@ Vec3f* func_80BB19C0(Vec3f* arg0, EnGeg* this, PlayState* play) {
     sp34.z = (Math_CosS(sp30) * 50.0f) + player->actor.world.pos.z;
 
     if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp34) < sp2C) {
-        // clang-format off
-        *arg0 = sp40; return arg0;
-        // clang-format on
+        return sp40;
     } else {
-        *arg0 = sp34;
+        return sp34;
     }
-    return arg0;
 }
 
 u8 func_80BB1B14(EnGeg* this, PlayState* play) {
@@ -416,12 +413,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void EnGeg_UpdateSkelAnime(EnGeg* this, PlayState* play) {
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void EnGeg_ChangeAnim(EnGeg* this, PlayState* play) {
-    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 }
 
@@ -589,7 +586,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB26EC(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (this->unk_496) {
             case 0xD5E:
                 this->nextCsId = this->csIdList[1];
@@ -614,7 +611,7 @@ void func_80BB26EC(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB27D4(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (this->unk_496) {
             case 0xD63:
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -665,7 +662,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
             this->animIndex = ENGEG_ANIM_6;
             EnGeg_ChangeAnim(this, play);
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD67) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
@@ -679,7 +676,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB2A54(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD65) {
             CutsceneManager_Stop(this->csId);
             this->unk_230 &= ~0x10;
@@ -772,7 +769,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
             this->unk_230 |= 1;
             this->actor.shape.yOffset = 14.0f;
             if (this->unk_496 == 0xD69) {
-                func_80BB19C0(&this->unk_4E4, this, play);
+                this->unk_4E4 = func_80BB19C0(this, play);
                 this->actionFunc = func_80BB2F7C;
             } else {
                 this->actionFunc = func_80BB3318;
@@ -998,7 +995,7 @@ void EnGeg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Vec3f sp38 = { 1.0f, 5.0f, -0.5f };
     Vec3f sp2C = { -1.0f, 5.0f, -0.5f };
 
-    if (limbIndex == 17) {
+    if (limbIndex == GORON_LIMB_HEAD) {
         if (!(this->unk_230 & 0x40)) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
@@ -1032,7 +1029,7 @@ void EnGeg_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 phi_v1;
 
     switch (limbIndex) {
-        case 17:
+        case GORON_LIMB_HEAD:
             if (this->unk_230 & 2) {
                 phi_v1 = true;
             } else {
@@ -1057,7 +1054,7 @@ void EnGeg_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_Push();
             break;
 
-        case 10:
+        case GORON_LIMB_BODY:
             if (this->unk_230 & 2) {
                 phi_v1 = true;
             } else {
@@ -1079,6 +1076,9 @@ void EnGeg_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_RotateXS(this->unk_490.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->unk_490.z, MTXMODE_APPLY);
             Matrix_Push();
+            break;
+
+        default:
             break;
     }
 }

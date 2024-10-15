@@ -6,7 +6,7 @@
  */
 
 #include "z_eff_ss_extra.h"
-#include "objects/object_yabusame_point/object_yabusame_point.h"
+#include "assets/objects/object_yabusame_point/object_yabusame_point.h"
 
 #define PARAMS ((EffectSsExtraInitParams*)initParamsx)
 
@@ -16,7 +16,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static s16 sScores[] = { EXTRA_SCORE_30, EXTRA_SCORE_60, EXTRA_SCORE_100 };
 
-EffectSsInit Effect_Ss_Extra_InitVars = {
+EffectSsProfile Effect_Ss_Extra_Profile = {
     EFFECT_SS_EXTRA,
     EffectSsExtra_Init,
 };
@@ -35,9 +35,9 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 
     objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
     if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
-        uintptr_t segBackup = gSegments[6];
+        uintptr_t segBackup = gSegments[0x06];
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -50,7 +50,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rTimer = 5;
         this->rObjectSlot = objectSlot;
 
-        gSegments[6] = segBackup;
+        gSegments[0x06] = segBackup;
         return 1;
     }
     return 0;
@@ -66,7 +66,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = OS_K0_TO_PHYSICAL(objectPtr);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(objectPtr);
 
     gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 

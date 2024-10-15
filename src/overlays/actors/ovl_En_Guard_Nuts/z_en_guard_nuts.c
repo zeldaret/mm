@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-ActorInit En_Guard_Nuts_InitVars = {
+ActorProfile En_Guard_Nuts_Profile = {
     /**/ ACTOR_EN_GUARD_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -230,7 +230,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 0xBB8, 0);
     }
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) {
         this->targetHeadPos.y = 0;
         this->targetHeadPos.x = 0;
         if ((this->guardTextIndex == 3) && (this->animIndex == GUARD_NUTS_ANIM_WAIT_HEAD_TILT)) {
@@ -262,7 +262,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                 EnGuardNuts_SetupWait(this);
             }
         }
-    } else if ((Message_GetState(&play->msgCtx) >= TEXT_STATE_3) && (D_80ABBE20 == 0)) {
+    } else if ((Message_GetState(&play->msgCtx) >= TEXT_STATE_FADING) && (D_80ABBE20 == 0)) {
         if ((this->guardTextIndex == 0) || (this->guardTextIndex == 3) || (this->guardTextIndex >= 7)) {
             if (this->timer == 0) {
                 this->timer = 2;
@@ -283,7 +283,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->targetHeadPos.x = this->targetHeadPos.y;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
@@ -318,7 +318,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
             }
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             EnGuardNuts_SetupWait(this);
         }
     }
@@ -332,7 +332,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
     if ((this->animIndex == GUARD_NUTS_ANIM_WALK) &&
@@ -385,7 +385,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnGuardNuts_OverrideLimbDraw, NULL,
                       &this->actor);
     Matrix_Translate(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
-    Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
+    Matrix_Scale(0.015f, 0.015f, 0.015f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

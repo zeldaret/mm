@@ -14,11 +14,14 @@ src_dir = root_dir / "src"
 # Project-specific
 CPP_FLAGS = [
     "-Iinclude",
+    "-Iinclude/libc",
     "-Isrc",
-    "-Iassets",
-    "-Ibuild",
+    "-Ibuild/n64-us",
     "-I.",
 
+    "-DF3DEX_GBI_2",
+    "-DF3DEX_GBI_PL",
+    "-DGBI_DOWHILE",
     "-D__sgi",
     "-D_LANGUAGE_C",
     "-DNON_MATCHING",

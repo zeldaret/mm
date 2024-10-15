@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_lupygamelift.h"
-#include "objects/object_raillift/object_raillift.h"
+#include "assets/objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -21,7 +21,7 @@ void func_80AF04D8(ObjLupygamelift* this, PlayState* play);
 void func_80AF0514(ObjLupygamelift* this);
 void func_80AF0530(ObjLupygamelift* this, PlayState* play);
 
-ActorInit Obj_Lupygamelift_InitVars = {
+ActorProfile Obj_Lupygamelift_Profile = {
     /**/ ACTOR_OBJ_LUPYGAMELIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

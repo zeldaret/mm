@@ -7,7 +7,7 @@
 #include "z_en_pr2.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -80,7 +80,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 17, 32, -10, { 0, 0, 0 } },
 };
 
-ActorInit En_Pr2_InitVars = {
+ActorProfile En_Pr2_Profile = {
     /**/ ACTOR_EN_PR2,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -532,7 +532,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->unk_1E0 < 10) {
         EnPr2_ChangeAnim(this, ENPR2_ANIM_2);
@@ -650,28 +650,14 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
     f32 rand;
 
-    //! FAKE:
-    if (thisx) {}
-
     Actor_SetScale(&this->actor, this->unk_204);
 
     this->actionFunc(this, play);
 
-    if (this->unk_1DA != 0) {
-        this->unk_1DA--;
-    }
-
-    if (this->unk_1D8 != 0) {
-        this->unk_1D8--;
-    }
-
-    if (this->unk_1DC != 0) {
-        this->unk_1DC--;
-    }
-
-    if (this->unk_1DE != 0) {
-        this->unk_1DE--;
-    }
+    DECR(this->unk_1DA);
+    DECR(this->unk_1D8);
+    DECR(this->unk_1DC);
+    DECR(this->unk_1DE);
 
     Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, play);
@@ -716,7 +702,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;
@@ -742,7 +728,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;

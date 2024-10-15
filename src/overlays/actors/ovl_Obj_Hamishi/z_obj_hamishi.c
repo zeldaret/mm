@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hamishi.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
 void ObjHamishi_Update(Actor* thisx, PlayState* play);
 void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hamishi_InitVars = {
+ActorProfile Obj_Hamishi_Profile = {
     /**/ ACTOR_OBJ_HAMISHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -146,15 +146,15 @@ void func_809A13A0(ObjHamishi* this, PlayState* play) {
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp28);
 }
 
-s32 func_809A1408(ObjHamishi* this, PlayState* play) {
+s32 ObjHamishi_IsUnderwater(ObjHamishi* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -187,7 +187,7 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
 
     this->actor.shape.yOffset = 80.0f;
 
-    if (func_809A1408(this, play)) {
+    if (ObjHamishi_IsUnderwater(this, play)) {
         this->unk_1A2 |= 1;
     }
 }
@@ -212,14 +212,14 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
     }
 
     if (sp24) {
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000500) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x400) {
+        if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000500) {
+            if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x400) {
                 this->unk_1A0 = 26;
             } else {
                 this->unk_1A0 = 11;
             }
 
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000) {
                 this->unk_19E = 2;
             } else {
                 this->unk_19E++;

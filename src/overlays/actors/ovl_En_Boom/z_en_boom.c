@@ -5,7 +5,7 @@
  */
 
 #include "z_en_boom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-ActorInit En_Boom_InitVars = {
+ActorProfile En_Boom_Profile = {
     /**/ ACTOR_EN_BOOM,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -203,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 0x3E8 : (s16)(ABS_ALT(sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 0x3E8 : TRUNCF_BINANG(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);

@@ -18,7 +18,7 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play);
 void func_80973D3C(ObjRoomtimer* this, PlayState* play);
 void func_80973DE0(ObjRoomtimer* this, PlayState* play);
 
-ActorInit Obj_Roomtimer_InitVars = {
+ActorProfile Obj_Roomtimer_Profile = {
     /**/ ACTOR_OBJ_ROOMTIMER,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -68,7 +68,7 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play) {
         this->actionFunc = func_80973DE0;
     } else if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_OFF)) {
         Audio_PlaySfx(NA_SE_OC_ABYSS);
-        func_80169EFC(&play->state);
+        func_80169EFC(play);
         Actor_Kill(&this->actor);
     }
 }

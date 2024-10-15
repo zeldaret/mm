@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_moon_stone.h"
-#include "objects/object_gi_reserve00/object_gi_reserve00.h"
+#include "assets/objects/object_gi_reserve00/object_gi_reserve00.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-ActorInit Obj_Moon_Stone_InitVars = {
+ActorProfile Obj_Moon_Stone_Profile = {
     /**/ ACTOR_OBJ_MOON_STONE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

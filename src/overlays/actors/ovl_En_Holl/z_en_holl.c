@@ -57,7 +57,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play);
 void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play);
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play);
 
-ActorInit En_Holl_InitVars = {
+ActorProfile En_Holl_Profile = {
     /**/ ACTOR_EN_HOLL,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -69,7 +69,7 @@ ActorInit En_Holl_InitVars = {
     /**/ EnHoll_Draw,
 };
 
-#include "overlays/ovl_En_Holl/ovl_En_Holl.c"
+#include "assets/overlays/ovl_En_Holl/ovl_En_Holl.c"
 
 static EnHoll* sInstancePlayingSound = NULL;
 
@@ -108,7 +108,7 @@ void EnHoll_SetupAction(EnHoll* this) {
 void EnHoll_SetPlayerSide(PlayState* play, EnHoll* this, Vec3f* transformedPlayerPos) {
     Player* player = GET_PLAYER(play);
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, transformedPlayerPos, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, transformedPlayerPos, &player->actor.world.pos);
     this->playerSide = (transformedPlayerPos->z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
 }
 
@@ -130,7 +130,7 @@ void EnHoll_Destroy(Actor* thisx, PlayState* play) {
     if (!EN_HOLL_IS_SCENE_CHANGER(this)) {
         u32 enHollId = EN_HOLL_GET_ID(&this->actor);
 
-        play->doorCtx.transitionActorList[enHollId].id = -play->doorCtx.transitionActorList[enHollId].id;
+        play->transitionActors.list[enHollId].id = -play->transitionActors.list[enHollId].id;
         if (this == sInstancePlayingSound) {
             sInstancePlayingSound = NULL;
         }
@@ -142,7 +142,7 @@ void EnHoll_ChangeRooms(PlayState* play) {
 
     play->roomCtx.curRoom = play->roomCtx.prevRoom;
     play->roomCtx.prevRoom = tempRoom;
-    play->roomCtx.activeMemPage ^= 1;
+    play->roomCtx.activeBufPage ^= 1;
 }
 
 void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
@@ -183,11 +183,11 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
                 if ((play->roomCtx.prevRoom.num >= 0) && (play->roomCtx.status == 0)) {
-                    this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
+                    this->actor.room = play->transitionActors.list[enHollId].sides[this->playerSide].room;
                     if (play->roomCtx.prevRoom.num == this->actor.room) {
                         EnHoll_ChangeRooms(play);
                     }
-                    func_8012EBF8(play, &play->roomCtx);
+                    Room_FinishRoomChange(play, &play->roomCtx);
                 }
             } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
                 play->nextEntrance = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
@@ -196,9 +196,9 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->unk_1878C(play);
             } else {
-                this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
+                this->actor.room = play->transitionActors.list[enHollId].sides[this->playerSide ^ 1].room;
                 if (play->roomCtx.prevRoom.num < 0) {
-                    Room_StartRoomTransition(play, &play->roomCtx, this->actor.room);
+                    Room_RequestNewRoom(play, &play->roomCtx, this->actor.room);
                     if (this == sInstancePlayingSound) {
                         sInstancePlayingSound = NULL;
                     }
@@ -225,8 +225,8 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedPlayerPos,
-                                     useViewEye ? &play->view.eye : &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &transformedPlayerPos,
+                             useViewEye ? &play->view.eye : &player->actor.world.pos);
     enHollTop = (play->sceneId == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
@@ -236,13 +236,13 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play) {
                 playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE) {
             s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (transformedPlayerPos.z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
-            TransitionActorEntry* transitionActorEntry = &play->doorCtx.transitionActorList[enHollId];
+            TransitionActorEntry* transitionActorEntry = &play->transitionActors.list[enHollId];
             s8 room = transitionActorEntry->sides[playerSide].room;
 
             this->actor.room = room;
 
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
         }
@@ -264,10 +264,10 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play) {
             s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
-            this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
+            this->actor.room = play->transitionActors.list[enHollId].sides[playerSide].room;
 
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
                 this->bgCoverAlphaActive = true;
             }
@@ -288,9 +288,9 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
             s32 enHollId = EN_HOLL_GET_ID(&this->actor);
             s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
-            this->actor.room = play->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
+            this->actor.room = play->transitionActors.list[enHollId].sides[playerSide].room;
             if ((this->actor.room != play->roomCtx.curRoom.num) &&
-                Room_StartRoomTransition(play, &play->roomCtx, this->actor.room)) {
+                Room_RequestNewRoom(play, &play->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
         }
@@ -299,7 +299,7 @@ void EnHoll_VerticalIdle(EnHoll* this, PlayState* play) {
 
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
     if (play->roomCtx.status == 0) {
-        func_8012EBF8(play, &play->roomCtx);
+        Room_FinishRoomChange(play, &play->roomCtx);
         if (play->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;
         }
@@ -319,30 +319,30 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
 
 void EnHoll_Draw(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
-    Gfx* dList;
+    Gfx* gfx;
     u32 setupDListIndex;
 
     if (this->alpha != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha == 255) {
-            dList = POLY_OPA_DISP;
+            gfx = POLY_OPA_DISP;
             setupDListIndex = SETUPDL_37;
         } else {
-            dList = POLY_XLU_DISP;
+            gfx = POLY_XLU_DISP;
             setupDListIndex = SETUPDL_0;
         }
-        dList = Gfx_SetupDL(dList, setupDListIndex);
+        gfx = Gfx_SetupDL(gfx, setupDListIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
-            Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+            Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
         }
-        gSPMatrix(dList++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(dList++, 0, 0, 0, 0, 0, this->alpha);
-        gSPDisplayList(dList++, gEnHollCentralPlaneDL);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, this->alpha);
+        gSPDisplayList(gfx++, gEnHollCentralPlaneDL);
         if (this->alpha == 255) {
-            POLY_OPA_DISP = dList;
+            POLY_OPA_DISP = gfx;
         } else {
-            POLY_XLU_DISP = dList;
+            POLY_XLU_DISP = gfx;
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

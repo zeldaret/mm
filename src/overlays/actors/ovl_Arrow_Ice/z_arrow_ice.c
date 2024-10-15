@@ -19,11 +19,11 @@ void ArrowIce_Draw(Actor* thisx, PlayState* play);
 void ArrowIce_Charge(ArrowIce* this, PlayState* play);
 void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
+#include "assets/overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
 
 static s32 sBssPad;
 
-ActorInit Arrow_Ice_InitVars = {
+ActorProfile Arrow_Ice_Profile = {
     /**/ ACTOR_ARROW_ICE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_nozoki.h"
-#include "objects/object_secom_obj/object_secom_obj.h"
+#include "assets/objects/object_secom_obj/object_secom_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -32,7 +32,7 @@ s32 D_80BA36B0;
 s32 D_80BA36B4;
 f32 D_80BA36B8;
 
-ActorInit Obj_Nozoki_InitVars = {
+ActorProfile Obj_Nozoki_Profile = {
     /**/ ACTOR_OBJ_NOZOKI,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -147,7 +147,7 @@ s32 func_80BA2708(ObjNozoki* this, PlayState* play) {
     Vec3f sp30;
 
     while (enemy != NULL) {
-        Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &sp30, &enemy->world.pos);
+        Actor_WorldToActorCoords(&this->dyna.actor, &sp30, &enemy->world.pos);
         if (sp30.z >= 0.0f) {
             return false;
         }
@@ -219,7 +219,7 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
                 if (OBJNOZOKI_GET_400(&this->dyna.actor)) {
                     Vec3f sp28;
 
-                    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &sp28, &GET_PLAYER(play)->actor.world.pos);
+                    Actor_WorldToActorCoords(&this->dyna.actor, &sp28, &GET_PLAYER(play)->actor.world.pos);
                     if (sp28.z < -20.0f) {
                         this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
                     }
@@ -350,7 +350,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
                     Actor_Kill(&this->dyna.actor);
                 }
 
-                this->dyna.actor.shape.rot.x = -0x1F40 - (s16)(sp38 * 400.0f);
+                this->dyna.actor.shape.rot.x = -0x1F40 - TRUNCF_BINANG(sp38 * 400.0f);
             }
         }
     }

@@ -5,7 +5,7 @@
  */
 
 #include "z_item_b_heart.h"
-#include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play);
 
-ActorInit Item_B_Heart_InitVars = {
+ActorProfile Item_B_Heart_Profile = {
     /**/ ACTOR_ITEM_B_HEART,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

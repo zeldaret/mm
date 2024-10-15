@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_smork.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjSmork_Destroy(Actor* thisx, PlayState* play);
 void ObjSmork_Update(Actor* thisx, PlayState* play);
 void ObjSmork_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Smork_InitVars = {
+ActorProfile Obj_Smork_Profile = {
     /**/ ACTOR_OBJ_SMORK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -28,7 +28,7 @@ ActorInit Obj_Smork_InitVars = {
     /**/ ObjSmork_Draw,
 };
 
-#include "overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"
+#include "assets/overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"
 
 u8 func_80A3D680(s16 arg0) {
     u8 ret = 0;

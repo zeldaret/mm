@@ -2,7 +2,7 @@
 #define Z_EN_BOM_BOWL_MAN_H
 
 #include "global.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
 
 struct EnBomBowlMan;
 
@@ -49,8 +49,8 @@ typedef struct EnBomBowlMan {
     /* 0x2D2 */ s16 csId2;
     /* 0x2D4 */ s16 unk_2D4;
     /* 0x2D6 */ s16 csId3;
-    /* 0x2D8 */ struct EnBomBowlMan* unk_2D8[5];
-    /* 0x2EC */ UNK_TYPE1 unk2EC[0x4];
+    /* 0x2D8 */ struct EnBomBowlMan* unk_2D8;
+    /* 0x2DC */ struct EnBomBowlMan* unk_2DC[5];
     /* 0x2F0 */ s16 unk_2F0;
     /* 0x2F2 */ s16 unk_2F2;
     /* 0x2F4 */ s16 unk_2F4;

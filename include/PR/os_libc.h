@@ -1,7 +1,7 @@
 #ifndef PR_OS_LIBC_H
 #define PR_OS_LIBC_H
 
-#include "libc/stdarg.h"
+#include "stdarg.h"
 
 
 void bcopy(void* __src, void* __dest, int __n);

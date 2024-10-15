@@ -1,6 +1,6 @@
 #include "z_fireobj.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 ColliderCylinderInit sFireObjCollisionInit = {
     {
@@ -109,12 +109,12 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
 
     if ((fire->flags & FIRE_FLAG_WATER_EXTINGUISHABLE) && (fire->state != FIRE_STATE_NOT_LIT) &&
         WaterBox_GetSurface1_2(play, &play->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
-        (waterY - fire->position.y > 6500.0f * fire->yScale)) {
+        ((waterY - fire->position.y) > (6500.0f * fire->yScale))) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_DEKU_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
-        if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
+        if (Math3D_Vec3fMagnitudeSq(&dist) < SQ(20.0f)) {
             sp40 = true;
         }
     }
@@ -223,7 +223,7 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
     FireObj_UpdateStateTransitions(play, fire);
     if (fire->state == FIRE_STATE_NOT_LIT) {
         if ((fire->collision.base.acFlags & AC_HIT) &&
-            (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
+            (fire->collision.elem.acHitElem->toucher.dmgFlags & DMG_FIRE_ARROW)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&

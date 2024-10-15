@@ -8,9 +8,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWallmas*)thisx)
 
@@ -45,7 +45,7 @@ void EnWallmas_WaitForProximity(EnWallmas* this, PlayState* play);
 void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
-ActorInit En_Wallmas_InitVars = {
+ActorProfile En_Wallmas_Profile = {
     /**/ ACTOR_EN_WALLMAS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -499,7 +499,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
     if (this->timer == 30) {
         Audio_PlaySfx(NA_SE_OC_ABYSS);
-        func_80169FDC(&play->state);
+        func_80169FDC(play);
     }
 }
 
@@ -558,10 +558,10 @@ void EnWallmas_Stun(EnWallmas* this, PlayState* play) {
 void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            (!(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
@@ -603,8 +603,8 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.55f;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                                    this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
                                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
 

@@ -5,7 +5,10 @@
  */
 
 #include "z_kaleido_scope.h"
-#include "interface/parameter_static/parameter_static.h"
+
+#include "gfxalloc.h"
+
+#include "assets/interface/parameter_static/parameter_static.h"
 
 s16 sCurSection = 0;
 s16 sCurRow = 0;
@@ -356,13 +359,13 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
                       PRIMITIVE, 0);
 
     gfxRef = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(gfxRef);
+    gfx = Gfx_Open(gfxRef);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     KaleidoScope_DrawInventoryEditorText(&gfx);
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxRef, gfx);
+    Gfx_Close(gfxRef, gfx);
     POLY_OPA_DISP = gfx;
 
     gDPPipeSync(POLY_OPA_DISP++);
@@ -1006,13 +1009,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
+                    TOGGLE_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
+                    TOGGLE_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_LULLABY_INTRO) {
@@ -1021,7 +1024,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 //! have also been taken
                 slot = sCurSection - INV_EDITOR_SECTION_BOSS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[slot];
+                    TOGGLE_QUEST_ITEM(slot);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {

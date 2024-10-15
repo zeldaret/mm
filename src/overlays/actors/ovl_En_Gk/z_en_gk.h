@@ -2,7 +2,7 @@
 #define Z_EN_GK_H
 
 #include "global.h"
-#include "objects/object_gk/object_gk.h"
+#include "assets/objects/object_gk/object_gk.h"
 
 struct EnGk;
 

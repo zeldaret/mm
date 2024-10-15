@@ -6,7 +6,7 @@
  */
 
 #include "z_eff_en_ice_block.h"
-#include "objects/object_ice_block/object_ice_block.h"
+#include "assets/objects/object_ice_block/object_ice_block.h"
 
 #define PARAMS ((EffectEnIceBlockInitParams*)initParamsx)
 
@@ -14,7 +14,7 @@ u32 EffectEnIceBlock_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectEnIceBlock_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_En_Ice_Block_InitVars = {
+EffectSsProfile Effect_En_Ice_Block_Profile = {
     EFFECT_EN_ICE_BLOCK,
     EffectEnIceBlock_Init,
 };
@@ -62,8 +62,8 @@ void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         OPEN_DISPS(gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x06,
-                   play->objectCtx.slots[this->rObjectSlot].segment); // object: OBJECT_ICE_BLOCK
+        // object: OBJECT_ICE_BLOCK
+        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);

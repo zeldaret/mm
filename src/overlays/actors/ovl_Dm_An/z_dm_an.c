@@ -5,8 +5,8 @@
  */
 
 #include "z_dm_an.h"
-#include "objects/object_an4/object_an4.h"
-#include "objects/object_msmo/object_msmo.h"
+#include "assets/objects/object_an4/object_an4.h"
+#include "assets/objects/object_msmo/object_msmo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -21,7 +21,7 @@ void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_An_InitVars = {
+ActorProfile Dm_An_Profile = {
     /**/ ACTOR_DM_AN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -92,9 +92,9 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     }
 
     if (objectSlot2 > OBJECT_SLOT_NONE) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
@@ -112,10 +112,10 @@ s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, DmAnAnimation animIndex) {
     }
 
     if ((objectSlot2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;
@@ -200,24 +200,26 @@ s32 DmAn_UpdateAttention(DmAn* this, PlayState* play) {
 }
 
 Actor* DmAn_FindAnjusMotherActor(PlayState* play) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, ACTORCAT_NPC, ACTOR_DM_AH);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_DM_AH);
 
-        if ((foundActor == NULL) || (foundActor->update != NULL)) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if ((tempActor == NULL) || false) {
-            foundActor = NULL;
+        if (actorIter->update != NULL) {
             break;
         }
-        foundActor = tempActor;
+
+        if ((actorIter->next == NULL) || false) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 void DmAn_WaitForObject(DmAn* this, PlayState* play) {

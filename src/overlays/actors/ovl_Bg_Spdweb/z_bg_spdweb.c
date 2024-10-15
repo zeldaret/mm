@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spdweb.h"
-#include "objects/object_spdweb/object_spdweb.h"
+#include "assets/objects/object_spdweb/object_spdweb.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-ActorInit Bg_Spdweb_InitVars = {
+ActorProfile Bg_Spdweb_Profile = {
     /**/ ACTOR_BG_SPDWEB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -291,7 +291,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         for (i = 0; i < 2; i++) {
             element = &this->collider.elements[i];
             if (element->info.bumperFlags & BUMP_HIT) {
-                if (this->collider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x800) {
+                if (this->collider.elements[i].info.acHitElem->toucher.dmgFlags & 0x800) {
                     Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &element->info.bumper.hitPos);
                     func_809CEE74(this);
                     return;
@@ -324,7 +324,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     }
 
     this->dyna.actor.world.pos.y =
-        (Math_SinF(this->unk_162 * (M_PI / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
+        (Math_SinF(this->unk_162 * (M_PIf / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {

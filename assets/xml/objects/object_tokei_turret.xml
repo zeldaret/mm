@@ -8,10 +8,10 @@
         <Texture Name="gClockTownFlagsTex" OutName="clock_town_flags" Format="rgba16" Width="128" Height="16" Offset="0x1420" />
         <DList Name="gClockTownTurretEmpty0DL" Offset="0x2500" />
         <DList Name="gClockTownTurretPlatformBaseDL" Offset="0x2508" />
-        <Collision Name="gClockTownTurretBaseCol" Offset="0x26A0" />
+        <Collision Name="gClockTownTurretBaseCol" Offset="0x26A0" /> <!-- Original name is "z2_yagura01_bgdatainfo" -->
         <DList Name="gClockTownTurretEmpty1DL" Offset="0x2A80" />
         <DList Name="gClockTownTurretPlatformTopDL" Offset="0x2A88" />
-        <Collision Name="gClockTownTurretPlatformCol" Offset="0x2D80" />
+        <Collision Name="gClockTownTurretPlatformCol" Offset="0x2D80" /> <!-- Original name is "z2_yagura02_bgdatainfo" -->
         <DList Name="gClockTownTurretEmpty2DL" Offset="0x3030" />
         <DList Name="gClockTownFlagsDL" Offset="0x3038" />
     </File>

@@ -2,7 +2,7 @@
 #define Z_EN_S_GORO_H
 
 #include "global.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "assets/objects/object_oF1d_map/object_oF1d_map.h"
 
 #define EN_S_GORO_GET_MAIN_TYPE(thisx) ((thisx)->params & 0xF)
 #define EN_S_GORO_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
@@ -38,7 +38,7 @@ typedef struct EnSGoro {
     /* 0x302 */ UNK_TYPE1 unk_302[2];
     /* 0x304 */ u16 textId;
     /* 0x306 */ s16 snorePhase;
-    /* 0x308 */ s32 animInfoIndex;
+    /* 0x308 */ s32 animIndex;
     /* 0x30C */ s16 powderKegPrice;
 } EnSGoro; // size = 0x310
 

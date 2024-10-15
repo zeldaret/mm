@@ -38,9 +38,12 @@
  * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
  * (APPLY), or to just overwrite it (NEW).
  */
+#include "sys_matrix.h"
 
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "gfx.h"
+#include "macros.h"
+#include "z64game.h"
+#include "z64skin_matrix.h"
 
 /* data */
 
@@ -445,8 +448,8 @@ void Matrix_RotateXFApply(f32 x) {
     if (x != 0.0f) {
         cmf = sCurrentMatrix;
 
-        sin = sins(RAD_TO_BINANG(x)) * SHT_MINV;
-        cos = coss(RAD_TO_BINANG(x)) * SHT_MINV;
+        sin = sins(RAD_TO_BINANG(x)) * (1.0f / SHRT_MAX);
+        cos = coss(RAD_TO_BINANG(x)) * (1.0f / SHRT_MAX);
 
         tempY = cmf->xy;
         tempZ = cmf->xz;

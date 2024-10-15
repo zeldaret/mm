@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_warpstone.h"
-#include "objects/object_sek/object_sek.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_sek/object_sek.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -22,7 +22,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-ActorInit Obj_Warpstone_InitVars = {
+ActorProfile Obj_Warpstone_Profile = {
     /**/ ACTOR_OBJ_WARPSTONE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

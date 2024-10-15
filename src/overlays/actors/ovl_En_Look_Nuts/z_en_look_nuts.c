@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-ActorInit En_Look_Nuts_InitVars = {
+ActorProfile En_Look_Nuts_Profile = {
     /**/ ACTOR_EN_LOOK_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -111,7 +111,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SWITCH_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
@@ -303,7 +303,7 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
@@ -321,7 +321,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
     this->actionFunc(this, play);
@@ -339,9 +339,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             Vec3f effectVelocity;
 
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
-            effectPos.x += Math_SinS(this->actor.world.rot.y + (s16)this->headRot.y) * 10.0f;
+            effectPos.x += Math_SinS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             effectPos.y += 30.0f;
-            effectPos.z += Math_CosS(this->actor.world.rot.y + (s16)this->headRot.y) * 10.0f;
+            effectPos.z += Math_CosS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelocityOffset.z = 20.0f;

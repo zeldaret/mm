@@ -6,9 +6,9 @@
 
 #include "z_en_baguo.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBaguo*)thisx)
 
@@ -42,7 +42,7 @@ typedef enum {
     /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-ActorInit En_Baguo_InitVars = {
+ActorProfile En_Baguo_Profile = {
     /**/ ACTOR_EN_BAGUO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -145,7 +145,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
@@ -164,7 +164,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
@@ -256,13 +256,13 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
         Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 0.5f);
-        this->actor.world.rot.x += (s16)this->currentRotation.x;
+        this->actor.world.rot.x += TRUNCF_BINANG(this->currentRotation.x);
 
         if (this->currentRotation.z != 0.0f) {
             if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
-                this->actor.world.rot.z += (s16)this->currentRotation.z;
+                this->actor.world.rot.z += TRUNCF_BINANG(this->currentRotation.z);
             } else {
-                this->actor.world.rot.z -= (s16)this->currentRotation.z;
+                this->actor.world.rot.z -= TRUNCF_BINANG(this->currentRotation.z);
             }
         }
 
@@ -292,7 +292,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
@@ -353,11 +353,11 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_SetScale(&this->actor, 0.0f);
-                this->collider.elements->dim.scale = 3.0f;
-                this->collider.elements->info.toucher.damage = 8;
+                this->collider.elements[0].dim.scale = 3.0f;
+                this->collider.elements[0].base.toucher.damage = 8;
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xB0);
                 this->actionFunc = EnBaguo_PostDetonation;
             }
@@ -450,9 +450,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rot.x = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.y = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.z = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.x = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.y = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.z = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
             return;
         }
     }

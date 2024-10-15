@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_comb.h"
-#include "objects/object_comb/object_comb.h"
+#include "assets/objects/object_comb/object_comb.h"
 
 #define FLAGS 0x00000000
 
@@ -22,7 +22,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
-ActorInit Obj_Comb_InitVars = {
+ActorProfile Obj_Comb_Profile = {
     /**/ ACTOR_OBJ_COMB,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -380,12 +380,12 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
     }
 
     if (this->unk_1B3) {
-        if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0182C29C) {
+        if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x0182C29C) {
             func_8098CEAC(this, play);
             func_8098DA74(this, play);
             Actor_Kill(&this->actor);
         } else {
-            s32 dmgFlags = this->collider.elements->info.acHitInfo->toucher.dmgFlags;
+            s32 dmgFlags = this->collider.elements[0].base.acHitElem->toucher.dmgFlags;
 
             if (dmgFlags & 0x13820) {
                 this->unk_1A8 = 0xDAC;
@@ -493,7 +493,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
         return;
     }
 
-    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
+    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId > CS_ID_NONE)) {
         if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
             Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
         }

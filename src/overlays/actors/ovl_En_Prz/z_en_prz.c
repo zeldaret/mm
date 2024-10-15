@@ -7,7 +7,7 @@
 #include "z_en_prz.h"
 #include "overlays/actors/ovl_En_Pr/z_en_pr.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPrz*)thisx)
 
@@ -87,7 +87,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-ActorInit En_Prz_InitVars = {
+ActorProfile En_Prz_Profile = {
     /**/ ACTOR_EN_PRZ,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -118,7 +118,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -306,7 +306,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
     if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->unk_1E4)) < 0x100) {
         if (func_80A762C0(this, play) != 0) {
             this->unk_1E4 += 0x1500;
-            this->unk_1E4 += (s16)Rand_ZeroFloat(5000.0f);
+            this->unk_1E4 += TRUNCF_BINANG(Rand_ZeroFloat(5000.0f));
         } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (player->actor.floorHeight < 30.0f)) {
             this->actionFunc = func_80A763E8;
         } else {
@@ -376,7 +376,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 
 void func_80A76A1C(EnPrz* this) {
     this->unk_1E8 = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
@@ -502,7 +502,7 @@ s32 EnPrz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnPrz* this = THIS;
 
     if (limbIndex == OBJECT_PR_2_LIMB_02) {
-        rot->y += (s16)this->unk_218 * -100;
+        rot->y += TRUNCF_BINANG(this->unk_218) * -100;
     }
     return false;
 }

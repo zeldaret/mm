@@ -6,7 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_test7.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
@@ -36,7 +36,7 @@ void EnTest7_StartArriveCsSkip(EnTest7* this, PlayState* play);
 void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play);
 void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play);
 
-ActorInit En_Test7_InitVars = {
+ActorProfile En_Test7_Profile = {
     /**/ ACTOR_EN_TEST7,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -383,9 +383,9 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     this->playerScaleZ = player->actor.scale.z;
 
     // Keyframe animations
-    func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_085640, &gameplay_keep_Blob_083534, this->unk_18FC,
-                  this->unk_1BA8, NULL);
-    func_801834A8(&this->skeletonInfo, &gameplay_keep_Blob_083534);
+    Keyframe_InitFlex(&this->kfSkelAnime, &gameplay_keep_KFSkel_085640, &gameplay_keep_KFAnim_083534, this->jointTable,
+                      this->morphTable, NULL);
+    Keyframe_FlexPlayOnce(&this->kfSkelAnime, &gameplay_keep_KFAnim_083534);
 
     EnTest7_InitFeathers(this->feathers);
     EnTest7_InitWindCapsule(&this->windCapsule);
@@ -482,20 +482,20 @@ void EnTest7_UpdateGrowingWindCapsule(EnTest7* this, PlayState* play) {
 void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play) {
     Vec3f featherPos;
 
-    if (func_80183DE0(&this->skeletonInfo)) {
+    if (Keyframe_UpdateFlex(&this->kfSkelAnime)) {
         EnTest7_SetupAction(this, EnTest7_WarpCsPart3);
     }
 
-    if (this->skeletonInfo.frameCtrl.unk_10 > 60.0f) {
+    if (this->kfSkelAnime.frameCtrl.curTime > 60.0f) {
         EnTest7_UpdateGrowingWindCapsule(this, play);
     }
 
-    if ((this->skeletonInfo.frameCtrl.unk_10 > 20.0f) && !(this->flags & OWL_WARP_FLAGS_40)) {
+    if ((this->kfSkelAnime.frameCtrl.curTime > 20.0f) && !(this->flags & OWL_WARP_FLAGS_40)) {
         this->flags |= OWL_WARP_FLAGS_40;
         Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
     }
 
-    if (this->skeletonInfo.frameCtrl.unk_10 > 42.0f) {
+    if (this->kfSkelAnime.frameCtrl.curTime > 42.0f) {
         if (!(this->flags & OWL_WARP_FLAGS_80)) {
             this->flags |= OWL_WARP_FLAGS_80;
             Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
@@ -538,7 +538,7 @@ void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play) {
 
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
     EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
-    this->unk_18FC[1].y += 0x2EE0;
+    this->jointTable[1].y += 0x2EE0;
 }
 
 void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play) {
@@ -660,7 +660,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_WARP_TO_ENTRANCE) {
-        func_80169F78(&play->state);
+        func_80169F78(play);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
             PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_6);
         gSaveContext.respawnFlag = -6;
@@ -953,8 +953,8 @@ void EnTest7_Update(Actor* thisx, PlayState* play) {
                            (this->flags & OWL_WARP_FLAGS_10) != 0);
 }
 
-s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags, Actor* thisx,
-                  Vec3f* scale, Vec3s* rot, Vec3f* pos) {
+s32 EnTest7_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
+                             void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     EnTest7* this = THIS;
     Vec3f featherPos;
 
@@ -972,12 +972,12 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
 
     // Draw wings
     if (this->flags & OWL_WARP_FLAGS_DRAW_WINGS) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
+        Mtx* mtxStack = GRAPH_ALLOC(play->state.gfxCtx, this->kfSkelAnime.skeleton->dListCount * sizeof(Mtx));
 
-        if (mtx == NULL) {
+        if (mtxStack == NULL) {
             return;
         }
-        func_8018450C(play, &this->skeletonInfo, mtx, func_80AF31D0, NULL, &this->actor);
+        Keyframe_DrawFlex(play, &this->kfSkelAnime, mtxStack, EnTest7_OverrideLimbDraw, NULL, &this->actor);
     }
 
     // Draw windCapsule encasing that surrounds player after wings

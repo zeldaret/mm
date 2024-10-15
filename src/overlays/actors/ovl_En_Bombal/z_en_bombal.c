@@ -7,7 +7,7 @@
 #include "z_en_bombal.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_fusen/object_fusen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -26,7 +26,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal* this, PlayState* play);
 
-ActorInit En_Bombal_InitVars = {
+ActorProfile En_Bombal_Profile = {
     /**/ ACTOR_EN_BOMBAL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

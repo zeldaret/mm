@@ -2,7 +2,7 @@
 #define Z_EN_GG2_H
 
 #include "global.h"
-#include "objects/object_gg/object_gg.h"
+#include "assets/objects/object_gg/object_gg.h"
 
 struct EnGg2;
 

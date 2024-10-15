@@ -6,9 +6,8 @@
 
 #include "z_en_tite.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_tite/object_tite.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnTite*)thisx)
 
@@ -47,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-ActorInit En_Tite_InitVars = {
+ActorProfile En_Tite_Profile = {
     /**/ ACTOR_EN_TITE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -132,17 +131,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static s32 sTexturesDesegmented = false;
-static Vec3f D_80896B64 = { 0.0f, 0.3f, 0.0f };
-
 void EnTite_Init(Actor* thisx, PlayState* play) {
+    static s32 sTexturesDesegmented = false;
     EnTite* this = THIS;
     s32 i;
     s32 j;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable,
-                   this->morphTable, 25);
+                   this->morphTable, OBJECT_TITE_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     Actor_SetFocus(&this->actor, 20.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -236,7 +233,8 @@ void func_80893B70(EnTite* this) {
 }
 
 void func_80893BCC(EnTite* this, PlayState* play) {
-    Vec3f sp7C;
+    static Vec3f sAccel = { 0.0f, 0.3f, 0.0f };
+    Vec3f pos;
     s32 i;
     s32 j;
 
@@ -254,10 +252,10 @@ void func_80893BCC(EnTite* this, PlayState* play) {
             for (i = ENTITE_BODYPART_5; i < ENTITE_BODYPART_MAX; i++) {
                 for (j = 0; j < 2; j++) {
                     bodyPartPos = &this->bodyPartsPos[i];
-                    sp7C.x = bodyPartPos->x + Rand_CenteredFloat(1.0f);
-                    sp7C.y = bodyPartPos->y + Rand_CenteredFloat(1.0f);
-                    sp7C.z = bodyPartPos->z + Rand_CenteredFloat(1.0f);
-                    func_800B0DE0(play, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
+                    pos.x = bodyPartPos->x + Rand_CenteredFloat(1.0f);
+                    pos.y = bodyPartPos->y + Rand_CenteredFloat(1.0f);
+                    pos.z = bodyPartPos->z + Rand_CenteredFloat(1.0f);
+                    func_800B0DE0(play, &pos, &gZeroVec3f, &sAccel, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
             }
@@ -803,7 +801,7 @@ void func_80895738(EnTite* this, PlayState* play) {
             func_80893A9C(this, play);
         }
     }
-    this->actor.shape.rot.y += (s16)(this->actor.speed * 768.0f);
+    this->actor.shape.rot.y += TRUNCF_BINANG(this->actor.speed * 768.0f);
 }
 
 void func_8089595C(EnTite* this, PlayState* play) {
@@ -909,9 +907,9 @@ void func_80895E28(EnTite* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y += 0x1E00;
 
-    sp44.x = (Math_SinS(this->actor.shape.rot.y) * 25.0f) + this->actor.world.pos.x;
+    sp44.x = this->actor.world.pos.x + Math_SinS(this->actor.shape.rot.y) * 25.0f;
     sp44.y = this->actor.world.pos.y + 15.0f;
-    sp44.z = (Math_CosS(this->actor.shape.rot.y) * 25.0f) + this->actor.world.pos.z;
+    sp44.z = this->actor.world.pos.z + Math_CosS(this->actor.shape.rot.y) * 25.0f;
 
     sp36 = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
 
@@ -949,7 +947,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             func_80893E54(this, play);
             if (this->actor.shape.yOffset < 0.0f) {
                 func_80895DE8(this);
@@ -1188,7 +1186,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
             Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts2[limbIndex]]);
         }
 
-        if (limbIndex == 24) {
+        if (limbIndex == OBJECT_TITE_LIMB_18) {
             this->unk_2BA = -1;
         }
     } else if (sLimbToBodyParts2[limbIndex] != BODYPART_NONE) {

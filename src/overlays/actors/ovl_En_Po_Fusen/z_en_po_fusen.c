@@ -24,7 +24,7 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
 void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 
-ActorInit En_Po_Fusen_InitVars = {
+ActorProfile En_Po_Fusen_Profile = {
     /**/ ACTOR_EN_PO_FUSEN,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -301,8 +301,8 @@ s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     } else if (limbIndex == POE_BALLOON_LEFT_HAND) {
         rot->z += this->limbRotLeftHand;
     } else if (limbIndex == POE_BALLOON_LIMB_CHAIN_AND_LANTERN) {
-        rot->y += (s16)(this->limbRotChainAndLantern * Math_SinS(this->randBaseRotChange));
-        rot->z += (s16)(this->limbRotChainAndLantern * Math_CosS(this->randBaseRotChange));
+        rot->y += TRUNCF_BINANG(this->limbRotChainAndLantern * Math_SinS(this->randBaseRotChange));
+        rot->z += TRUNCF_BINANG(this->limbRotChainAndLantern * Math_CosS(this->randBaseRotChange));
     }
     return false;
 }

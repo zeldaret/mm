@@ -7,7 +7,7 @@
 
 #include "z_en_horse_link_child.h"
 #include "z64horse.h"
-#include "objects/object_horse_link_child/object_horse_link_child.h"
+#include "assets/objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -30,7 +30,7 @@ void EnHorseLinkChild_ActionFunc5(EnHorseLinkChild* this, PlayState* play);
 void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play);
 
-ActorInit En_Horse_Link_Child_InitVars = {
+ActorProfile En_Horse_Link_Child_Profile = {
     /**/ ACTOR_EN_HORSE_LINK_CHILD,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -362,7 +362,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
         s32 newYawDir;
         s32 pad;
 
-        if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
+        if (Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
             newYawDiff = player->actor.shape.rot.y;
             if (Actor_WorldYawTowardActor(&this->actor, &player->actor) > 0) {
                 newYawDir = 1;
@@ -407,10 +407,10 @@ void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
         (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE)) {
         //! @bug: The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
-            f32 distToHome = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            f32 distToHome = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos);
             s32 pad;
 
-            if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) > 250.0f) {
+            if (Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos) > 250.0f) {
                 if (distToHome >= 300.0f) {
                     animIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
                     this->actor.speed = 6.0f;
@@ -544,7 +544,7 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
         if (!this->isReturningHome) {
             distToTargetPos = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
-            distToTargetPos = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            distToTargetPos = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos);
         }
 
         if (!this->isReturningHome) {

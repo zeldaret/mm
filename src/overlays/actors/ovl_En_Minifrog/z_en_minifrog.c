@@ -5,7 +5,7 @@
  */
 
 #include "z_en_minifrog.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-ActorInit En_Minifrog_InitVars = {
+ActorProfile En_Minifrog_Profile = {
     /**/ ACTOR_EN_MINIFROG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -257,7 +257,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         EnMinifrog_SetJumpState(this);
 
         switch (play->msgCtx.currentTextId) {
@@ -344,8 +344,8 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, PlayState* play) {
     if (nextFrog != NULL) {
         missingFrog = nextFrog->frog;
         if (nextFrog->frog != NULL) {
-            this->actor.home.rot.y =
-                (s16)Actor_WorldYawTowardActor(&this->actor, &missingFrog->actor); // Set home to missing frog
+            // Set home to missing frog
+            this->actor.home.rot.y = Actor_WorldYawTowardActor(&this->actor, &missingFrog->actor);
             EnMinifrog_TurnToMissingFrog(this);
         } else {
             EnMinifrog_TurnToPlayer(this);
@@ -517,7 +517,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 EnMinifrog_SetJumpState(this);
                 switch (play->msgCtx.currentTextId) {
@@ -540,11 +540,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
 
                     case 0xD7C:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE)) {
                             Message_ContinueTextbox(play, 0xD7E);
                         } else {
                             Message_ContinueTextbox(play, 0xD7D); // Get Heart Piece
-                            SET_WEEKEVENTREG(WEEKEVENTREG_35_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE);
                         }
                         break;
 

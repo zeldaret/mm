@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 s32 sMatAnimStep;
@@ -24,7 +23,7 @@ static Gfx sSceneDrawDefaultDL[] = {
  * Executes the current scene draw config handler.
  */
 void Scene_Draw(PlayState* play) {
-    static void (*sceneDrawConfigHandlers[])(PlayState*) = {
+    static void (*sSceneDrawConfigHandlers[])(PlayState*) = {
         Scene_DrawConfigDefault,
         Scene_DrawConfigMatAnim,
         Scene_DrawConfigDoNothing,
@@ -35,7 +34,7 @@ void Scene_Draw(PlayState* play) {
         Scene_DrawConfigMatAnimManualStep,
     };
 
-    sceneDrawConfigHandlers[play->sceneConfig](play);
+    sSceneDrawConfigHandlers[play->sceneConfig](play);
 }
 
 /**
@@ -387,7 +386,7 @@ void AnimatedMat_DrawTexCycle(PlayState* play, s32 segment, void* params) {
  * There are six different animated material types, which should be set in the provided `AnimatedMaterial`.
  */
 void AnimatedMat_DrawMain(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step, u32 flags) {
-    static void (*matAnimDrawHandlers[])(PlayState*, s32 segment, void* params) = {
+    static void (*sMatAnimDrawHandlers[])(PlayState*, s32 segment, void* params) = {
         AnimatedMat_DrawTexScroll, AnimatedMat_DrawTwoTexScroll,         AnimatedMat_DrawColor,
         AnimatedMat_DrawColorLerp, AnimatedMat_DrawColorNonLinearInterp, AnimatedMat_DrawTexCycle,
     };
@@ -402,7 +401,7 @@ void AnimatedMat_DrawMain(PlayState* play, AnimatedMaterial* matAnim, f32 alphaR
         do {
             segment = matAnim->segment;
             segmentAbs = ABS_ALT(segment) + 7;
-            matAnimDrawHandlers[matAnim->type](play, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
+            sMatAnimDrawHandlers[matAnim->type](play, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
             matAnim++;
         } while (segment >= 0);
     }
@@ -574,14 +573,14 @@ void Scene_DrawConfigDoNothing(PlayState* play) {
  * Stores a displaylist in the provided segment ID that sets a render mode from the index provided.
  */
 void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags) {
-    static Gfx renderModeSetNoneDL[] = {
+    static Gfx sRenderModeSetNoneDL[] = {
         gsSPEndDisplayList(),
         // These instructions will never get executed
         gsSPEndDisplayList(),
         gsSPEndDisplayList(),
         gsSPEndDisplayList(),
     };
-    static Gfx renderModeSetXluSingleCycleDL[] = {
+    static Gfx sRenderModeSetXluSingleCycleDL[] = {
         gsDPSetRenderMode(AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                               GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
                           G_RM_AA_ZB_XLU_SURF2),
@@ -592,7 +591,7 @@ void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags) {
                           G_RM_AA_ZB_XLU_SURF2),
         gsSPEndDisplayList(),
     };
-    static Gfx renderModeSetXluTwoCycleDL[] = {
+    static Gfx sRenderModeSetXluTwoCycleDL[] = {
         gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                               GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1),
                           AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
@@ -605,12 +604,12 @@ void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags) {
                               GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
         gsSPEndDisplayList(),
     };
-    static Gfx* dLists[] = {
-        renderModeSetNoneDL,
-        renderModeSetXluSingleCycleDL,
-        renderModeSetXluTwoCycleDL,
+    static Gfx* sDLists[] = {
+        sRenderModeSetNoneDL,
+        sRenderModeSetXluSingleCycleDL,
+        sRenderModeSetXluTwoCycleDL,
     };
-    Gfx* dList = dLists[index];
+    Gfx* dList = sDLists[index];
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -630,19 +629,19 @@ void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags) {
  * from the index provided.
  */
 void Scene_SetCullFlag(PlayState* play, s32 index, u32 flags) {
-    static Gfx setBackCullDL[] = {
+    static Gfx sSetBackCullDL[] = {
         gsSPSetGeometryMode(G_CULL_BACK),
         gsSPEndDisplayList(),
     };
-    static Gfx setFrontCullDL[] = {
+    static Gfx sSetFrontCullDL[] = {
         gsSPSetGeometryMode(G_CULL_FRONT),
         gsSPEndDisplayList(),
     };
-    static Gfx* dLists[] = {
-        setBackCullDL,
-        setFrontCullDL,
+    static Gfx* sDLists[] = {
+        sSetBackCullDL,
+        sSetFrontCullDL,
     };
-    Gfx* dList = dLists[index];
+    Gfx* dList = sDLists[index];
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -704,7 +703,7 @@ void Scene_DrawConfigMatAnimManualStep(PlayState* play) {
  * activated.
  */
 void Scene_DrawConfigGreatBayTemple(PlayState* play) {
-    static Gfx greatBayTempleColorSetDL[] = {
+    static Gfx sGreatBayTempleColorSetDL[] = {
         gsDPSetPrimColor(0, 255, 255, 255, 255, 255),
         gsSPEndDisplayList(),
     };
@@ -729,7 +728,7 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
     for (gfx = gfxHead, i = 0; i < 9; i++, gfx += 2) {
         lodFrac = 0;
 
-        bcopy(greatBayTempleColorSetDL, gfx, sizeof(greatBayTempleColorSetDL));
+        bcopy(sGreatBayTempleColorSetDL, gfx, sizeof(sGreatBayTempleColorSetDL));
 
         switch (i) {
             case 0:

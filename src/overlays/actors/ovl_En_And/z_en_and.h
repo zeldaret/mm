@@ -2,7 +2,7 @@
 #define Z_EN_AND_H
 
 #include "global.h"
-#include "objects/object_and/object_and.h"
+#include "assets/objects/object_and/object_and.h"
 
 struct EnAnd;
 

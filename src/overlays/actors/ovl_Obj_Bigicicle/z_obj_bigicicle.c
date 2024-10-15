@@ -7,7 +7,7 @@
 #include "z_obj_bigicicle.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigicicle/object_bigicicle.h"
+#include "assets/objects/object_bigicicle/object_bigicicle.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-ActorInit Obj_Bigicicle_InitVars = {
+ActorProfile Obj_Bigicicle_Profile = {
     /**/ ACTOR_OBJ_BIGICICLE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -180,7 +180,7 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
 
 void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
-        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
+        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.elem.acHitElem->toucher.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
             CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;
@@ -205,8 +205,8 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.shape.yOffset = 2100.0f;
             this->actor.world.pos.y -= temp_f0;
-            this->collider1.dim.yShift += (s16)temp_f0;
-            this->collider2.dim.yShift += (s16)temp_f0;
+            this->collider1.dim.yShift += TRUNCF_BINANG(temp_f0);
+            this->collider2.dim.yShift += TRUNCF_BINANG(temp_f0);
             this->actionFunc = func_80AE9258;
         } else {
             this->unk_14A = 50;

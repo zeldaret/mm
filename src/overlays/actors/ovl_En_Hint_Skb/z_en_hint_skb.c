@@ -39,7 +39,7 @@ s32 func_80C21414(EnHintSkb* this);
 void func_80C21468(EnHintSkb* this, PlayState* play);
 void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2);
 
-ActorInit En_Hint_Skb_InitVars = {
+ActorProfile En_Hint_Skb_Profile = {
     /**/ ACTOR_EN_HINT_SKB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -443,7 +443,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
     this->unk_3DE = 0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if ((play->gameplayFrames % 2) != 0) {
                 this->unk_3DE = 1;
             }
@@ -453,7 +453,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             func_80C20B88(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80C20C24(this, play);
             break;
 
@@ -464,7 +464,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
             break;
@@ -607,7 +607,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
         (this->actionFunc == func_80C1FE80)) {
         if (this->actionFunc != func_80C2077C) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
                 this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
@@ -618,7 +618,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
             this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             if (this->skelAnime.animation == &gStalchildSitLaughAnim) {
@@ -880,7 +880,7 @@ s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         temp_f10 = fabsf(Math_SinS(play->state.frames * 6000) * 95.0f) + 160.0f;
 
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetEnvColor(POLY_OPA_DISP++, (s16)temp_f10, (s16)temp_f10, (s16)temp_f10, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, TRUNCF_BINANG(temp_f10), TRUNCF_BINANG(temp_f10), TRUNCF_BINANG(temp_f10), 255);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (limbIndex == STALCHILD_LIMB_RIBCAGE) {

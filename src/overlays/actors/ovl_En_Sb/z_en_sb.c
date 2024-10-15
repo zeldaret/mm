@@ -5,10 +5,9 @@
  */
 
 #include "z_en_sb.h"
-#include "objects/object_sb/object_sb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSb*)thisx)
 
@@ -26,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-ActorInit En_Sb_InitVars = {
+ActorProfile En_Sb_Profile = {
     /**/ ACTOR_EN_SB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -113,7 +112,7 @@ void EnSb_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 10;
     this->actor.colChkInfo.health = 2;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_sb_Skel_002BF0, &object_sb_Anim_000194, this->jointTable,
-                       this->morphTable, 9);
+                       this->morphTable, OBJECT_SB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -209,7 +208,7 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
 
 void EnSb_Idle(EnSb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer <= 240.0f && this->actor.xzDistToPlayer > 0.0f) {
+    if ((this->actor.xzDistToPlayer <= 240.0f) && (this->actor.xzDistToPlayer > 0.0f)) {
         EnSb_SetupOpen(this);
     }
 }
@@ -223,7 +222,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
         EnSb_SetupWaitOpen(this);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-        if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+        if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
             this->vulnerableTimer = 0;
             EnSb_SetupWaitClosed(this);
         }
@@ -233,7 +232,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
 void EnSb_WaitOpen(EnSb* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+    if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
         this->vulnerableTimer = 0;
         EnSb_SetupWaitClosed(this);
     }
@@ -347,9 +346,9 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
-        hitPoint.x = this->collider.info.bumper.hitPos.x;
-        hitPoint.y = this->collider.info.bumper.hitPos.y;
-        hitPoint.z = this->collider.info.bumper.hitPos.z;
+        hitPoint.x = this->collider.elem.bumper.hitPos.x;
+        hitPoint.y = this->collider.elem.bumper.hitPos.y;
+        hitPoint.z = this->collider.elem.bumper.hitPos.z;
         CollisionCheck_SpawnShieldParticlesMetal2(play, &hitPoint);
         return;
     }
@@ -394,11 +393,11 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnSb* this = THIS;
 
     if (this->isDrawn) {
-        if (limbIndex < 7) {
+        if (limbIndex <= OBJECT_SB_LIMB_06) {
             partParams = (this->actor.depthInWater > 0) ? ENPART_PARAMS(ENPART_TYPE_4) : ENPART_PARAMS(ENPART_TYPE_1);
             Actor_SpawnBodyParts(thisx, play, partParams, dList);
         }
-        if (limbIndex == 6) {
+        if (limbIndex == OBJECT_SB_LIMB_06) {
             this->isDrawn = false;
             this->actor.draw = NULL;
         }

@@ -2,7 +2,7 @@
 #define Z_EN_DODONGO_H
 
 #include "global.h"
-#include "objects/object_dodongo/object_dodongo.h"
+#include "assets/objects/object_dodongo/object_dodongo.h"
 
 struct EnDodongo;
 

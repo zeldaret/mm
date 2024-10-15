@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_fire_wall.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 
 #define FLAGS 0x00000000
@@ -21,7 +21,7 @@ void func_809AC638(BgFireWall* this, PlayState* play);
 void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
-ActorInit Bg_Fire_Wall_InitVars = {
+ActorProfile Bg_Fire_Wall_Profile = {
     /**/ ACTOR_BG_FIRE_WALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -90,7 +90,7 @@ s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp1C;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp1C, &player->actor.world.pos);
     if ((fabsf(sp1C.x) < this->unk_160) && (fabsf(sp1C.z) < (this->unk_160 + 20.0f))) {
         return true;
     }
@@ -143,7 +143,7 @@ void func_809AC7F8(BgFireWall* this, PlayState* play) {
     f32 sin;
     f32 cos;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp38, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp38, &player->actor.world.pos);
     sp38.x = CLAMP(sp38.x, -80.0f, 80.0f);
 
     if (this->step == 0) {

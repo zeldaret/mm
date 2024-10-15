@@ -6,8 +6,8 @@
 
 #include "z_en_butte.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -54,7 +54,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-ActorInit En_Butte_InitVars = {
+ActorProfile En_Butte_Profile = {
     /**/ ACTOR_EN_BUTTE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -221,7 +221,7 @@ void func_8091C6B4(EnButte* this) {
     s16 temp_v0 = temp_a1 - this->actor.shape.rot.y;
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, temp_a1, ABS_ALT(temp_v0) >> 3);
-    this->actor.shape.rot.x = (s16)(Math_SinS(this->unk_258) * 600.0f) - 0x2320;
+    this->actor.shape.rot.x = TRUNCF_BINANG(Math_SinS(this->unk_258) * 600.0f) - 0x2320;
 }
 
 void func_8091C748(EnButte* this) {
@@ -233,8 +233,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
     EnButteStruct* sp4C = &D_8091D324[this->unk_24E];
     f32 distSq;
     Player* player = GET_PLAYER(play);
-    f32 distFromHomeSq = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z,
-                                                  this->actor.home.pos.x, this->actor.home.pos.z);
+    f32 distFromHomeSq = Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
+                                         this->actor.home.pos.z);
     f32 playSpeed;
     f32 sp38;
     s32 pad;
@@ -272,7 +272,7 @@ void func_8091C794(EnButte* this, PlayState* play) {
             sp38 = 0.4f;
         }
     } else {
-        this->actor.world.rot.y += (s16)(Math_SinS(this->unk_254) * 100.0f);
+        this->actor.world.rot.y += TRUNCF_BINANG(Math_SinS(this->unk_254) * 100.0f);
     }
 
     func_8091C6B4(this);
@@ -289,8 +289,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
 
     if ((BUTTERFLY_GET_1(&this->actor) == BUTTERFLY_1) && (player->heldItemAction == PLAYER_IA_DEKU_STICK) &&
         (this->unk_252 <= 0) &&
-        ((Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
-                                   this->actor.home.pos.z) < SQ(120.0f)) ||
+        ((Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
+                          this->actor.home.pos.z) < SQ(120.0f)) ||
          (this->actor.xzDistToPlayer < 60.0f))) {
         func_8091CB68(this);
         this->unk_24F = 2;
@@ -329,7 +329,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &sp48);
         if (Math_ScaledStepToS(&this->actor.world.rot.y, yaw + (s32)(Rand_ZeroOne() * D_8091D3F0), 0x7D0)) {
             if ((play->gameplayFrames & 0x30) == 0x30) {
-                this->actor.world.rot.y += (s16)(Math_SinS(this->unk_254) * 60.0f);
+                this->actor.world.rot.y += TRUNCF_BINANG(Math_SinS(this->unk_254) * 60.0f);
             }
         } else {
             sp40 = 0.3f;
@@ -354,14 +354,14 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         D_8091D3F0 = -D_8091D3F0;
     }
 
-    distSq = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
-                                      this->actor.home.pos.z);
+    distSq = Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
+                             this->actor.home.pos.z);
     if ((player->heldItemAction != PLAYER_IA_DEKU_STICK) || !(fabsf(player->actor.speed) < 1.8f) ||
         (this->unk_252 > 0) || !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
-               (Math3D_XZDistanceSquared(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
-                                         this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
+               (Math3D_Dist2DSq(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
+                                this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
         func_8091CF64(this);
     }
 }
@@ -432,11 +432,11 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_StepToF(&this->actor.world.pos.y, this->unk_25C, 0.6f);
         if (this->actor.xyzDistToPlayerSq < 5000.0f) {
-            ColliderJntSphElement* element = &this->collider.elements[0];
+            ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-            element->dim.worldSphere.center.x = this->actor.world.pos.x;
-            element->dim.worldSphere.center.y = this->actor.world.pos.y;
-            element->dim.worldSphere.center.z = this->actor.world.pos.z;
+            jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+            jntSphElem->dim.worldSphere.center.y = this->actor.world.pos.y;
+            jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
         Actor_SetFocus(&this->actor, this->actor.shape.yOffset * this->actor.scale.y);

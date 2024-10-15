@@ -5,7 +5,7 @@
  */
 
 #include "z_en_dy_extra.h"
-#include "objects/object_dy_obj/object_dy_obj.h"
+#include "assets/objects/object_dy_obj/object_dy_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -19,7 +19,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 void EnDyExtra_WaitForTrigger(EnDyExtra* this, PlayState* play);
 void EnDyExtra_Fall(EnDyExtra* this, PlayState* play);
 
-ActorInit En_Dy_Extra_InitVars = {
+ActorProfile En_Dy_Extra_Profile = {
     /**/ ACTOR_EN_DY_EXTRA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

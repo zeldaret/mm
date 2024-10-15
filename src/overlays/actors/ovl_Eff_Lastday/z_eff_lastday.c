@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_lastday.h"
-#include "objects/object_lastday/object_lastday.h"
+#include "assets/objects/object_lastday/object_lastday.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -28,7 +28,7 @@ typedef enum EffLastDayAction {
     /* 3 */ EFFLASTDAY_ACTION_3
 } EffLastDayAction;
 
-ActorInit Eff_Lastday_InitVars = {
+ActorProfile Eff_Lastday_Profile = {
     /**/ ACTOR_EFF_LASTDAY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -1,6 +1,6 @@
 #include "stackcheck.h"
-#include "libc/stdbool.h"
-#include "libc/stdint.h"
+#include "stdbool.h"
+#include "stdint.h"
 
 StackEntry* sStackInfoListStart = NULL;
 StackEntry* sStackInfoListEnd = NULL;

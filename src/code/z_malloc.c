@@ -1,4 +1,4 @@
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 #include "libc64/os_malloc.h"
 
@@ -54,5 +54,5 @@ void ZeldaArena_Cleanup(void) {
 }
 
 u8 ZeldaArena_IsInitialized(void) {
-    return __osMallocIsInitalized(&sZeldaArena);
+    return __osMallocIsInitialized(&sZeldaArena);
 }

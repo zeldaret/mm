@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_snowball.h"
-#include "objects/object_goroiwa/object_goroiwa.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_goroiwa/object_goroiwa.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -33,7 +33,7 @@ void func_80B04B48(ObjSnowball* this, PlayState* play);
 void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Snowball_InitVars = {
+ActorProfile Obj_Snowball_Profile = {
     /**/ ACTOR_OBJ_SNOWBALL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -139,7 +139,7 @@ void func_80B02EE4(ObjSnowball* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
-    Vec3s* hitPos = &this->collider.elements->info.bumper.hitPos;
+    Vec3s* hitPos = &this->collider.elements[0].base.bumper.hitPos;
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -533,17 +533,17 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
     }
 
     if (flag && (this->unk_211 == 0) &&
-        (this->collider.elements->info.acHitInfo->toucher.dmgFlags &
+        (this->collider.elements[0].base.acHitElem->toucher.dmgFlags &
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
         this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
 
-        if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {
+        if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x4000) {
             this->unk_20A = 1;
         } else {
-            if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x800) {
+            if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x800) {
                 this->unk_210 = 1;
             }
             this->unk_20A = 0;
@@ -563,10 +563,10 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
     }
 
     if (flag &&
-        !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
+        !(this->collider.elements[0].base.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         if (this->unk_209 <= 0) {
             func_80B02EE4(this, play);
-            if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x1000000) {
+            if (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x1000000) {
                 this->unk_209 = 25;
             } else {
                 this->unk_209 = 10;
@@ -691,7 +691,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
 
                 sp84 = this->unk_20C * 60.0f * 0.9f;
                 if (sp88.y > 0.0f) {
-                    if (Math3D_AngleBetweenVectors(&D_80B04FD8, &sp88, &sp7C)) {
+                    if (Math3D_CosOut(&D_80B04FD8, &sp88, &sp7C)) {
                         phi_f2 = 1.0f;
                     } else {
                         phi_f2 = 1.0f - SQ(sp7C);

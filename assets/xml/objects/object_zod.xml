@@ -30,8 +30,6 @@
         <Texture Name="gTijoMouthClosedTex" OutName="tijo_mouth_closed" Format="rgba16" Width="32" Height="32" Offset="0x7650" />
         <Texture Name="gTijoMouthOpenTex" OutName="tijo_mouth_open" Format="rgba16" Width="32" Height="32" Offset="0x7E50" />
 
-        <!-- <Blob Name="object_zod_Blob_008650" Size="0x1E10" Offset="0x8650" /> -->
-
         <!-- Tijo Drums DisplayLists /> -->
         <DList Name="gTijoDrumFrameDL" Offset="0xA460" />
         <DList Name="gTijoRideCymbalDL" Offset="0xA550" />

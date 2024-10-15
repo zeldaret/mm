@@ -2,7 +2,7 @@
 #define Z_EN_THIEFBIRD_H
 
 #include "global.h"
-#include "objects/object_thiefbird/object_thiefbird.h"
+#include "assets/objects/object_thiefbird/object_thiefbird.h"
 
 struct EnThiefbird;
 

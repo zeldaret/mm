@@ -13,7 +13,7 @@ void EnAObj_Draw(Actor* thisx, PlayState* play);
 void EnAObj_Idle(EnAObj* this, PlayState* play);
 void EnAObj_Talk(EnAObj* this, PlayState* play);
 
-ActorInit En_A_Obj_InitVars = {
+ActorProfile En_A_Obj_Profile = {
     /**/ ACTOR_EN_A_OBJ,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

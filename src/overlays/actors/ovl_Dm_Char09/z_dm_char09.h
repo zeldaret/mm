@@ -2,7 +2,7 @@
 #define Z_DM_CHAR09_H
 
 #include "global.h"
-#include "objects/object_bee/object_bee.h"
+#include "assets/objects/object_bee/object_bee.h"
 
 #define DMCHAR09_GET_PATH_INDEX(thisx) (((thisx)->params >> 4) & 0xF)
 #define DMCHAR09_GET_100(thisx) ((thisx)->params & 0x100)

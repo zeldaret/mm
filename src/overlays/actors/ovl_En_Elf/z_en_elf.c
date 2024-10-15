@@ -6,6 +6,8 @@
 
 #include "z_en_elf.h"
 
+#include "z64elf_message.h"
+
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnElf*)thisx)
@@ -32,7 +34,7 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife);
 void func_8089010C(Actor* thisx, PlayState* play);
 void func_808908D0(Vec3f* vec, PlayState* play, u32 action);
 
-ActorInit En_Elf_InitVars = {
+ActorProfile En_Elf_Profile = {
     /**/ ACTOR_EN_ELF,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -1390,7 +1392,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x240:

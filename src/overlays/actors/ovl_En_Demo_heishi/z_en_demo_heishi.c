@@ -20,7 +20,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 
-ActorInit En_Demo_heishi_InitVars = {
+ActorProfile En_Demo_heishi_Profile = {
     /**/ ACTOR_EN_DEMO_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -132,7 +132,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     s32 absYawDiff;
     s16 yawDiff;
 
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
@@ -149,7 +149,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnDemoheishi_SetupIdle(this);
     }

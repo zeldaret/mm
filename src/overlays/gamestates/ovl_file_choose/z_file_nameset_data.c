@@ -1,7 +1,7 @@
 #include "z_file_select.h"
 
 // Vtx Data
-#include "overlays/ovl_file_choose/ovl_file_choose.c"
+#include "assets/overlays/ovl_file_choose/ovl_file_choose.c"
 
 u8 D_808141F0[] = {
     //            'A'   'B'   'C'   'D'   'E'   'F'   'G'   'H'   'I'   'J'   'K'   'L'   'M'

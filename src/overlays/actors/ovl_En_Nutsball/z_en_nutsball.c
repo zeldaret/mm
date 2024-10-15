@@ -6,7 +6,7 @@
 
 #include "z_en_nutsball.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -19,7 +19,7 @@ void EnNutsball_Draw(Actor* thisx, PlayState* play);
 
 void EnNutsball_InitColliderParams(EnNutsball* this);
 
-ActorInit En_Nutsball_InitVars = {
+ActorProfile En_Nutsball_Profile = {
     /**/ ACTOR_EN_NUTSBALL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -82,8 +82,8 @@ void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
 void EnNutsball_InitColliderParams(EnNutsball* this) {
     this->collider.base.atFlags &= ~(AT_HIT | AT_TYPE_ENEMY | AT_BOUNCED);
     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-    this->collider.info.toucher.dmgFlags = 0x400000;
-    this->collider.info.toucher.damage = 2;
+    this->collider.elem.toucher.dmgFlags = 0x400000;
+    this->collider.elem.toucher.damage = 2;
 }
 
 void EnNutsball_Update(Actor* thisx, PlayState* play2) {

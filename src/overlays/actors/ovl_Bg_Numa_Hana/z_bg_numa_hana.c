@@ -5,8 +5,8 @@
  */
 
 #include "z_bg_numa_hana.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_syokudai/object_syokudai.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -30,7 +30,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-ActorInit Bg_Numa_Hana_InitVars = {
+ActorProfile Bg_Numa_Hana_Profile = {
     /**/ ACTOR_BG_NUMA_HANA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -133,7 +133,7 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
 void BgNumaHana_UpdateSettleRotation(s16* settleRotZ, s16* settleAngle, f32* settleScale, f32 scaleStep) {
     *settleAngle += 0x32C8;
     Math_StepToF(settleScale, 0.0f, scaleStep);
-    *settleRotZ += (s16)(Math_SinS(*settleAngle) * *settleScale);
+    *settleRotZ += TRUNCF_BINANG(Math_SinS(*settleAngle) * *settleScale);
 }
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play) {

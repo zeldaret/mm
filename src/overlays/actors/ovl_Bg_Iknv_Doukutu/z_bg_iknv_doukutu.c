@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_iknv_doukutu.h"
-#include "objects/object_iknv_obj/object_iknv_obj.h"
+#include "assets/objects/object_iknv_obj/object_iknv_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -27,7 +27,7 @@ void func_80BD7820(Actor* thisx, PlayState* play);
 void func_80BD78C4(Actor* thisx, PlayState* play);
 void func_80BD7538(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Iknv_Doukutu_InitVars = {
+ActorProfile Bg_Iknv_Doukutu_Profile = {
     /**/ ACTOR_BG_IKNV_DOUKUTU,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

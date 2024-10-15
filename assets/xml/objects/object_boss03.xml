@@ -27,7 +27,7 @@
         <DList Name="gGyorgTailDL" Offset="0x5010" />
 
         <!-- Unused Empty Texture Animation -->
-        <TextureAnimation Name="gGyorgUnused5388TexAnim" Offset="0x5388" />
+        <TextureAnimation Name="gGyorgEmpty1TexAnim" Offset="0x5388" />
 
         <!-- Gyorg Textures -->
         <Texture Name="gGyorgFinsSpikesAndJawTLUT" OutName="gyorg_fins_spikes_and_jaw_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5390" />
@@ -92,7 +92,7 @@
         <Texture Name="gGyorgSeaweedTex" OutName="gyorg_seaweed" Format="ci4" Width="64" Height="64" Offset="0xB300" />
 
         <!-- Unused Empty Texture Animation -->
-        <TextureAnimation Name="gGyorgUnusedBB00TexAnim" Offset="0xBB00" />
+        <TextureAnimation Name="gGyorgEmpty2TexAnim" Offset="0xBB00" />
 
         <!-- Unused Duplicate of Small Fish Limb DisplayLists -->
         <DList Name="gUnusedGyorgSmallFishHeadDL" Offset="0xBD80" />

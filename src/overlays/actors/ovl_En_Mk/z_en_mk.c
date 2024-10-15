@@ -23,7 +23,7 @@ void func_80959C94(EnMk* this, PlayState* play);
 void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
-ActorInit En_Mk_InitVars = {
+ActorProfile En_Mk_Profile = {
     /**/ ACTOR_EN_MK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -185,7 +185,7 @@ void func_809596A0(EnMk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80959774;
@@ -288,7 +288,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xFA1:

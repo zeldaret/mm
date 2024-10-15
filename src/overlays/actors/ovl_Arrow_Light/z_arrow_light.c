@@ -19,9 +19,9 @@ void ArrowLight_Draw(Actor* thisx, PlayState* play);
 void ArrowLight_Charge(ArrowLight* this, PlayState* play);
 void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
+#include "assets/overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
-ActorInit Arrow_Light_InitVars = {
+ActorProfile Arrow_Light_Profile = {
     /**/ ACTOR_ARROW_LIGHT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

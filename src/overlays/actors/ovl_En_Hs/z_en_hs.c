@@ -23,7 +23,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
 void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
-ActorInit En_Hs_InitVars = {
+ActorProfile En_Hs_Profile = {
     /**/ ACTOR_EN_HS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -174,7 +174,7 @@ void func_80953098(EnHs* this, PlayState* play) {
 }
 
 void func_80953180(EnHs* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x33F4: // laughing that they are all roosters (!)
             case 0x33F6: // Grog regrets not being able to see his chicks reach adult hood

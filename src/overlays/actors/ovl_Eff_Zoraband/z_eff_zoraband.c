@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_zoraband.h"
-#include "objects/object_zoraband/object_zoraband.h"
+#include "assets/objects/object_zoraband/object_zoraband.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2);
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play);
 
-ActorInit Eff_Zoraband_InitVars = {
+ActorProfile Eff_Zoraband_Profile = {
     /**/ ACTOR_EFF_ZORABAND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

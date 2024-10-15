@@ -6,7 +6,7 @@
 
 #include "z_obj_ice_poly.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -22,7 +22,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play);
 void func_80931E58(ObjIcePoly* this, PlayState* play);
 void func_80931EEC(ObjIcePoly* this, PlayState* play);
 
-ActorInit Obj_Ice_Poly_InitVars = {
+ActorProfile Obj_Ice_Poly_Profile = {
     /**/ ACTOR_OBJ_ICE_POLY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -191,13 +191,13 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
     if (((this->colliders2[0].base.acFlags & AC_HIT) &&
          ((this->colliders2[0].base.ac == NULL) ||
           ((this->colliders2[0].base.ac->id != ACTOR_OBJ_AQUA) &&
-           (this->colliders2[0].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
+           (this->colliders2[0].elem.acHitElem->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[0].base.ac->id == ACTOR_OBJ_AQUA) &&
            (this->colliders2[0].base.ac->params == AQUA_TYPE_HOT)))) ||
         ((this->colliders2[1].base.acFlags & AC_HIT) &&
          ((this->colliders2[1].base.ac == NULL) ||
           ((this->colliders2[1].base.ac->id != ACTOR_OBJ_AQUA) &&
-           (this->colliders2[1].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
+           (this->colliders2[1].elem.acHitElem->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[1].base.ac->id == ACTOR_OBJ_AQUA) &&
            (this->colliders2[1].base.ac->params == AQUA_TYPE_HOT))))) {
         CutsceneManager_Queue(this->actor.csId);

@@ -35,7 +35,7 @@ void func_80B111AC(EnGb2* this, PlayState* play);
 void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
-ActorInit En_Gb2_InitVars = {
+ActorProfile En_Gb2_Profile = {
     /**/ ACTOR_EN_GB2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -95,24 +95,22 @@ void func_80B0F5E0(EnGb2* this, PlayState* play) {
 }
 
 s32 func_80B0F660(EnGb2* this, PlayState* play) {
-    Actor* temp_v0;
-    Actor* phi_s0 = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        temp_v0 = SubS_FindActor(play, phi_s0, ACTORCAT_NPC, ACTOR_EN_GB2);
-        if (temp_v0 == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_EN_GB2);
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((EnGb2*)temp_v0 != this) {
+        if ((EnGb2*)actorIter != this) {
             return true;
         }
 
-        temp_v0 = temp_v0->next;
-        if (temp_v0 == NULL) {
+        if (actorIter->next == NULL) {
             break;
         }
-        phi_s0 = temp_v0;
+        actorIter = actorIter->next;
     };
 
     return false;
@@ -397,7 +395,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
 void func_80B0FFA8(EnGb2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -565,7 +563,7 @@ void func_80B10584(EnGb2* this, PlayState* play) {
 void func_80B10634(EnGb2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -635,7 +633,7 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 void func_80B10924(EnGb2* this, PlayState* play) {
     s32 getItemId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE)) {
         getItemId = GI_RUPEE_PURPLE;
     } else {
         getItemId = GI_HEART_PIECE;
@@ -644,7 +642,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (getItemId == GI_HEART_PIECE) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE);
         } else {
             Rupees_ChangeBy(50);
         }
@@ -699,9 +697,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10B5C(EnGb2* this, PlayState* play) {
-    s32 mask = Player_GetMask(play);
-
-    if (this->unk_28C != mask) {
+    if (Player_GetMask(play) != this->unk_28C) {
         this->unk_28C = Player_GetMask(play);
         this->unk_26C &= ~0x80;
         this->unk_26C &= ~0x20;
@@ -768,7 +764,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10E98(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
@@ -812,7 +808,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 }
 
 void func_80B110F8(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;

@@ -4,8 +4,9 @@
  * Description: Trees, shrubs
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
-#include "objects/object_wood02/object_wood02.h"
+#include "assets/objects/object_wood02/object_wood02.h"
 
 #define FLAGS 0x00000000
 
@@ -38,7 +39,7 @@ typedef enum {
 f32 sWood02SpawnCos;
 f32 sWood02SpawnSin;
 
-ActorInit En_Wood02_InitVars = {
+ActorProfile En_Wood02_Profile = {
     /**/ ACTOR_EN_WOOD02,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

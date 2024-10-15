@@ -39,7 +39,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-ActorInit En_Bomjimb_InitVars = {
+ActorProfile En_Bomjimb_Profile = {
     /**/ ACTOR_EN_BOMJIMB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -829,7 +829,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
@@ -848,7 +848,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0x1388, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
@@ -924,7 +924,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         this->unk_2C2++;
         if (this->unk_2C2 > 2) {
             this->unk_2C2 = 0;
-            this->unk_2C4 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2C4 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 
@@ -962,7 +962,7 @@ s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-#include "overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
+#include "assets/overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
 
 void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80C03260[] = {

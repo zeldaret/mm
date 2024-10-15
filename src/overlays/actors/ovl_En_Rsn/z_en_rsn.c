@@ -5,7 +5,7 @@
  */
 
 #include "z_en_rsn.h"
-#include "objects/object_rsn/object_rsn.h"
+#include "assets/objects/object_rsn/object_rsn.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void EnRsn_DoNothing(EnRsn* this, PlayState* play);
 
-ActorInit En_Rsn_InitVars = {
+ActorProfile En_Rsn_Profile = {
     /**/ ACTOR_EN_RSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

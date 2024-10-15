@@ -31,7 +31,7 @@ void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
 
-ActorInit En_Takaraya_InitVars = {
+ActorProfile En_Takaraya_Profile = {
     /**/ ACTOR_EN_TAKARAYA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -217,7 +217,9 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_009890);
         }
     }
+
     talkState = Message_GetState(&play->msgCtx);
+
     if ((talkState == TEXT_STATE_CLOSING) || (talkState == TEXT_STATE_DONE)) {
         if (this->actor.textId == 0x778) {
             func_80ADF2D4(this);
@@ -226,7 +228,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             EnTakaraya_SetupWait(this);
         }
-    } else if ((talkState == TEXT_STATE_1) && (this->actor.textId != 0x778)) {
+    } else if ((talkState == TEXT_STATE_NEXT) && (this->actor.textId != 0x778)) {
         if (Message_ShouldAdvance(play)) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         }
@@ -259,7 +261,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF2D4(EnTakaraya* this) {
-    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_SY_FOUND);
+    Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_SY_FOUND);
     Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     this->timer = 145;
     SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
@@ -284,9 +286,9 @@ void func_80ADF338(EnTakaraya* this, PlayState* play) {
         } else {
             sp2C = ((chest->xzDistToPlayer - 250.0f) * (25 - this->timer) * 0.04f) + 250.0f;
         }
-        subCamEye.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
+        subCamEye.x = chest->world.pos.x + (Math_SinS(chest->yawTowardsPlayer) * sp2C);
         subCamEye.y = player->actor.world.pos.y + 120.0f;
-        subCamEye.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
+        subCamEye.z = chest->world.pos.z + (Math_CosS(chest->yawTowardsPlayer) * sp2C);
         subCamAt.x = subCamEye.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
         subCamAt.y = subCamEye.y - 90.0f;
         subCamAt.z = subCamEye.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
@@ -368,7 +370,7 @@ void func_80ADF7B8(EnTakaraya* this) {
 void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->actor.textId == 0x77A) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                 Message_CloseTextbox(play);

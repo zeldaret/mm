@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_shutter.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play);
 void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Shutter_InitVars = {
+ActorProfile Obj_Shutter_Profile = {
     /**/ ACTOR_OBJ_SHUTTER,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -34,11 +34,7 @@ void ObjShutter_Init(Actor* thisx, PlayState* play) {
 void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
-static u8 sScheduleScript[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 20, 0, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(2),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(1),
-};
+#include "src/overlays/actors/ovl_Obj_Shutter/scheduleScripts.schl.inc"
 
 void ObjShutter_Update(Actor* thisx, PlayState* play2) {
     ObjShutter* this = THIS;

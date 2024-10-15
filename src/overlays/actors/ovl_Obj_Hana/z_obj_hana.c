@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hana.h"
-#include "objects/object_hana/object_hana.h"
+#include "assets/objects/object_hana/object_hana.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void ObjHana_Destroy(Actor* thisx, PlayState* play);
 void ObjHana_Update(Actor* thisx, PlayState* play);
 void ObjHana_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hana_InitVars = {
+ActorProfile Obj_Hana_Profile = {
     /**/ ACTOR_OBJ_HANA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

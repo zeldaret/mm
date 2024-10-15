@@ -1,7 +1,7 @@
 #include "z64skin.h"
 
 #include "global.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 void Skin_Setup(Skin* skin) {
     skin->skeletonHeader = NULL;
@@ -31,12 +31,11 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
             for (skinVtxEntry = skinVertices; skinVtxEntry < &skinVertices[modifEntry->vtxCount];) {
                 Vtx* vtx = &vertices[skinVtxEntry->index];
 
-                skinVtxEntry++;
-
                 vtx->n.flag = 0;
-                vtx->n.tc[0] = skinVtxEntry[-1].s;
-                vtx->n.tc[1] = skinVtxEntry[-1].t;
-                vtx->n.a = skinVtxEntry[-1].alpha;
+                vtx->n.tc[0] = skinVtxEntry->s;
+                vtx->n.tc[1] = skinVtxEntry->t;
+                vtx->n.a = skinVtxEntry->alpha;
+                skinVtxEntry++;
             }
         }
     }

@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.h"
-#include "objects/object_dy_obj/object_dy_obj.h"
+#include "assets/objects/object_dy_obj/object_dy_obj.h"
 
 struct BgDyYoseizo;
 

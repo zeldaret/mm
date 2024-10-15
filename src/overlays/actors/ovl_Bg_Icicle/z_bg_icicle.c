@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_icicle.h"
-#include "objects/object_icicle/object_icicle.h"
+#include "assets/objects/object_icicle/object_icicle.h"
 
 #define FLAGS 0x00000000
 
@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 120, 0, { 0, 0, 0 } },
 };
 
-ActorInit Bg_Icicle_InitVars = {
+ActorProfile Bg_Icicle_Profile = {
     /**/ ACTOR_BG_ICICLE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

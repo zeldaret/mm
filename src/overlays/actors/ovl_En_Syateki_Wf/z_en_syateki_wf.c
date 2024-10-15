@@ -7,7 +7,7 @@
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiWf*)thisx)
 
@@ -101,7 +101,7 @@ static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
-ActorInit En_Syateki_Wf_InitVars = {
+ActorProfile En_Syateki_Wf_Profile = {
     /**/ ACTOR_EN_SYATEKI_WF,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -113,17 +113,18 @@ ActorInit En_Syateki_Wf_InitVars = {
     /**/ EnSyatekiWf_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryWolfosAnimation {
     /* 0 */ SG_WOLFOS_ANIM_WAIT, // unused
     /* 1 */ SG_WOLFOS_ANIM_RUN,
     /* 2 */ SG_WOLFOS_ANIM_JUMP,
     /* 3 */ SG_WOLFOS_ANIM_LAND,
     /* 4 */ SG_WOLFOS_ANIM_BACKFLIP, // unused
     /* 5 */ SG_WOLFOS_ANIM_DAMAGED,
-    /* 6 */ SG_WOLFOS_ANIM_REAR_UP_FALL_OVER
+    /* 6 */ SG_WOLFOS_ANIM_REAR_UP_FALL_OVER,
+    /* 7 */ SG_WOLFOS_ANIM_MAX
 } ShootingGalleryWolfosAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_WOLFOS_ANIM_MAX] = {
     { &gWolfosWaitAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },           // SG_WOLFOS_ANIM_WAIT
     { &gWolfosRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },            // SG_WOLFOS_ANIM_RUN
     { &gWolfosRunAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },             // SG_WOLFOS_ANIM_JUMP
@@ -180,7 +181,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->tailCollider, &this->actor, &sTailCylinderInit);
     Collider_InitJntSph(play, &this->headCollider);
     Collider_SetJntSph(play, &this->headCollider, &this->actor, &sJntSphInit, this->headColliderElements);
-    this->headCollider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    this->headCollider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable, this->morphTable,
                        WOLFOS_NORMAL_LIMB_MAX);

@@ -6,8 +6,8 @@
 
 #include "z_en_daiku2.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_daiku/object_daiku.h"
-#include "objects/object_bombiwa/object_bombiwa.h"
+#include "assets/objects/object_daiku/object_daiku.h"
+#include "assets/objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -32,7 +32,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
-ActorInit En_Daiku2_InitVars = {
+ActorProfile En_Daiku2_Profile = {
     /**/ ACTOR_EN_DAIKU2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -333,7 +333,7 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
 
 void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         s32 day = gSaveContext.save.day - 1;
 
         Message_CloseTextbox(play);

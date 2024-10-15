@@ -8,9 +8,9 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnBigpamet*)thisx)
 
@@ -46,7 +46,7 @@ void func_80A28A28(EnBigpamet* this);
 void func_80A28D80(EnBigpamet* this);
 void func_80A28ED4(EnBigpamet* this);
 
-ActorInit En_Bigpamet_InitVars = {
+ActorProfile En_Bigpamet_Profile = {
     /**/ ACTOR_EN_BIGPAMET,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -484,7 +484,7 @@ void func_80A2866C(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A286C0(EnBigpamet* this) {
-    this->collider.info.bumper.dmgFlags = 0xF7CF7FFF;
+    this->collider.elem.bumper.dmgFlags = 0xF7CF7FFF;
     this->collider.base.atFlags |= AT_ON;
     this->actor.shape.rot.z = 0x680;
     this->unk_29E = 15;
@@ -563,7 +563,7 @@ void func_80A28970(EnBigpamet* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
     this->actor.shape.rot.z = 0;
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.bumper.dmgFlags = 0xF7CFFFFF;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A289C8;
 }
@@ -616,7 +616,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     Animation_PlayLoop(&this->snapperSkelAnime, &gSnapperDeathAnim);
 
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.bumper.dmgFlags = 0xF7CFFFFF;
     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
     this->collider.base.acFlags &= ~AC_ON;
 

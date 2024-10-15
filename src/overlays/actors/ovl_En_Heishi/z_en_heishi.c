@@ -20,7 +20,7 @@ void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
-ActorInit En_Heishi_InitVars = {
+ActorProfile En_Heishi_Profile = {
     /**/ ACTOR_EN_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -64,14 +64,16 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
 
     if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
+            !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -79,7 +81,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     EnHeishi_SetupIdle(this);
 }
 

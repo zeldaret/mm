@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_Obj_Moon_Stone/z_obj_moon_stone.h"
-#include "objects/object_bji/object_bji.h"
+#include "assets/objects/object_bji/object_bji.h"
 
 struct EnBji01;
 

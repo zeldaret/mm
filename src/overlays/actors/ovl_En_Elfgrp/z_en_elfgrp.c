@@ -66,7 +66,7 @@ typedef enum ElfgrpSpawnedFairyTypes {
     /* 1 */ SPAWNED_STRAY_FAIRY_TYPE_RETURNING // STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN
 } ElfgrpSpawnedFairyTypes;
 
-ActorInit En_Elfgrp_InitVars = {
+ActorProfile En_Elfgrp_Profile = {
     /**/ ACTOR_EN_ELFGRP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -132,7 +132,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 
                 switch (this->type) {
                     case ENELFGRP_TYPE_POWER:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK)) {
                             EnElfgrp_SetCutscene(this, 1);
                         } else {
                             this->stateFlags |= ELFGRP_STATE_2;
@@ -487,7 +487,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
         }
 
         if (this->stateFlags & ELFGRP_STATE_2) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK);
         }
 
         if (this->stateFlags & ELFGRP_STATE_4) {

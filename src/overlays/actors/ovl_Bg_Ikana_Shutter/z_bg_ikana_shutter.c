@@ -6,7 +6,7 @@
 
 #include "z_bg_ikana_shutter.h"
 #include "z64quake.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -36,7 +36,7 @@ void func_80BD5BD8(BgIkanaShutter* this, PlayState* play);
 void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
-ActorInit Bg_Ikana_Shutter_InitVars = {
+ActorProfile Bg_Ikana_Shutter_Profile = {
     /**/ ACTOR_BG_IKANA_SHUTTER,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

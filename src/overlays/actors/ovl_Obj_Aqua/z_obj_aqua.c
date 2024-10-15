@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_aqua.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-ActorInit Obj_Aqua_InitVars = {
+ActorProfile Obj_Aqua_Profile = {
     /**/ ACTOR_OBJ_AQUA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -106,15 +106,15 @@ void func_80ACB7F4(ObjAqua* this, PlayState* play) {
 void func_80ACB940(ObjAqua* this, PlayState* play) {
     s32 pad;
     Vec3f effectPos;
-    Vec3f effectVel;
+    Vec3f effectVelocity;
 
-    effectVel.x = Rand_ZeroOne() - 0.5f;
-    effectVel.y = 2.0f;
-    effectVel.z = Rand_ZeroOne() - 0.5f;
-    effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
+    effectVelocity.x = Rand_ZeroOne() - 0.5f;
+    effectVelocity.y = 2.0f;
+    effectVelocity.z = Rand_ZeroOne() - 0.5f;
+    effectPos.x = this->actor.world.pos.x + (effectVelocity.x * 40.0f);
     effectPos.y = this->actor.world.pos.y;
-    effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
-    EffectSsIceSmoke_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+    effectPos.z = this->actor.world.pos.z + (effectVelocity.z * 40.0f);
+    EffectSsIceSmoke_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
 }
 
 void func_80ACBA10(ObjAqua* this) {
@@ -126,15 +126,15 @@ void func_80ACBA10(ObjAqua* this) {
     Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, false);
 }
 
-s32 func_80ACBA60(ObjAqua* this, PlayState* play) {
+s32 ObjAqua_IsUnderwater(ObjAqua* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
-        (this->actor.world.pos.y < ySurface)) {
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -157,7 +157,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
 
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
-    if (func_80ACBA60(this, play)) {
+    if (ObjAqua_IsUnderwater(this, play)) {
         for (i = 0; i < 8; i++) {
             EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
         }

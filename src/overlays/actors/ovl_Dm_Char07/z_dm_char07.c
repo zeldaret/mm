@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char07.h"
-#include "objects/object_milkbar/object_milkbar.h"
+#include "assets/objects/object_milkbar/object_milkbar.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play);
 
 void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
-ActorInit Dm_Char07_InitVars = {
+ActorProfile Dm_Char07_Profile = {
     /**/ ACTOR_DM_CHAR07,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

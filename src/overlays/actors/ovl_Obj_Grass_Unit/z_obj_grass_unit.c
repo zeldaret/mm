@@ -21,7 +21,7 @@
 
 void ObjGrassUnit_Init(Actor* this, PlayState* play2);
 
-ActorInit Obj_Grass_Unit_InitVars = {
+ActorProfile Obj_Grass_Unit_Profile = {
     /**/ ACTOR_OBJ_GRASS_UNIT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -91,11 +91,11 @@ s32 ObjGrassUnit_SpawnObjGrassCarry1(Actor* this, PlayState* play) {
 
 s32 ObjGrassUnit_IsUnderwater(PlayState* play, Vec3f* pos) {
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, pos->x, pos->z, &ySurface, &waterBox, &bgId) &&
-        (pos->y < ySurface)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, pos->x, pos->z, &waterSurface, &waterBox, &bgId) &&
+        (pos->y < waterSurface)) {
         return true;
     }
     return false;

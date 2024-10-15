@@ -5,7 +5,7 @@
  */
 
 #include "z_en_cha.h"
-#include "objects/object_cha/object_cha.h"
+#include "assets/objects/object_cha/object_cha.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void EnCha_Draw(Actor* thisx, PlayState* play);
 
 void EnCha_Idle(EnCha* this, PlayState* play);
 
-ActorInit En_Cha_InitVars = {
+ActorProfile En_Cha_Profile = {
     /**/ ACTOR_EN_CHA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -97,7 +97,7 @@ void EnCha_Idle(EnCha* this, PlayState* play) {
         }
     }
     this->actor.home.rot.x += this->actor.home.rot.z;
-    this->actor.home.rot.z -= (s16)(this->actor.home.rot.x * 0.1f);
+    this->actor.home.rot.z -= TRUNCF_BINANG(this->actor.home.rot.x * 0.1f);
     this->actor.home.rot.z *= 0.96f;
 }
 

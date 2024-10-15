@@ -665,40 +665,6 @@
  */
 #define CS_END() { CMD_W(0xFFFFFFFF) }
 
-// TODO: Fix ZAPD and delete these
-#define CS_ACTOR_ACTION_LIST           CS_ACTOR_CUE_LIST
-#define CS_ACTOR_ACTION                CS_ACTOR_CUE
-#define CS_PLAYER_ACTION_LIST          CS_PLAYER_CUE_LIST
-#define CS_PLAYER_ACTION               CS_PLAYER_CUE
-#define CS_LIGHTING_LIST               CS_LIGHT_SETTING_LIST
-#define CS_CAMERA_LIST                 CS_CAM_SPLINE_LIST
-#define CS_TEXT_DISPLAY_TEXTBOX        CS_TEXT
-#define CS_TEXT_LEARN_SONG             CS_TEXT_OCARINA_ACTION
-#define CS_SCENE_TRANS_FX_LIST         CS_TRANSITION_LIST
-#define CS_SCENE_TRANS_FX              CS_TRANSITION
-#define CS_GIVETATL_LIST               CS_GIVE_TATL_LIST
-#define CS_GIVETATL                    CS_GIVE_TATL
-#define CS_PLAYSEQ_LIST                CS_START_SEQ_LIST
-#define CS_STOPSEQ_LIST                CS_STOP_SEQ_LIST
-#define CS_FADESEQ_LIST                CS_FADE_OUT_SEQ_LIST
-#define CS_FADESEQ                     CS_FADE_OUT_SEQ
-#define CS_PLAYAMBIENCE_LIST           CS_START_AMBIENCE_LIST
-#define CS_PLAYAMBIENCE                CS_START_AMBIENCE
-#define CS_FADEAMBIENCE_LIST           CS_FADE_OUT_AMBIENCE_LIST
-#define CS_FADEAMBIENCE                CS_FADE_OUT_AMBIENCE
-#define CS_SCENE_UNK_130_LIST          CS_SFX_REVERB_INDEX_2_LIST
-#define CS_SCENE_UNK_130               CS_SFX_REVERB_INDEX_2
-#define CS_SCENE_UNK_131_LIST          CS_SFX_REVERB_INDEX_1_LIST
-#define CS_SCENE_UNK_131               CS_SFX_REVERB_INDEX_1
-#define CS_SCENE_UNK_132_LIST          CS_MODIFY_SEQ_LIST
-#define CS_SCENE_UNK_132               CS_MODIFY_SEQ
-#define CS_MOTIONBLUR_LIST             CS_MOTION_BLUR_LIST
-#define CS_MOTIONBLUR                  CS_MOTION_BLUR
-#define CS_FADESCREEN_LIST             CS_TRANSITION_GENERAL_LIST
-#define CS_FADESCREEN                  CS_TRANSITION_GENERAL
-#define CS_TERMINATOR_LIST             CS_DESTINATION_LIST
-#define CS_TERMINATOR                  CS_DESTINATION
-
 #define CS_PLAYSEQ(seqId, startFrame, endFrame) \
 CS_START_SEQ((seqId)-1, startFrame, endFrame)
 

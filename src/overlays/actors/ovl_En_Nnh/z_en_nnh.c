@@ -5,7 +5,7 @@
  */
 
 #include "z_en_nnh.h"
-#include "objects/object_nnh/object_nnh.h"
+#include "assets/objects/object_nnh/object_nnh.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -21,7 +21,7 @@ void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play);
 void EnNnh_SetupDialogue(EnNnh* this);
 void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
-ActorInit En_Nnh_InitVars = {
+ActorProfile En_Nnh_Profile = {
     /**/ ACTOR_EN_NNH,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_iceblock.h"
-#include "objects/object_ice_block/object_ice_block.h"
+#include "assets/objects/object_ice_block/object_ice_block.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-ActorInit Obj_Iceblock_InitVars = {
+ActorProfile Obj_Iceblock_Profile = {
     /**/ ACTOR_OBJ_ICEBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -258,13 +258,13 @@ void func_80A23938(ObjIceblock* this) {
         }
 
         Math_StepToF(&ptr->unk_1C, phi_f0, 0.04f);
-        ptr->unk_22 += (s16)(ptr->unk_20 * -0.02f);
+        ptr->unk_22 += TRUNCF_BINANG(ptr->unk_20 * -0.02f);
         ptr->unk_22 = func_80A23090(ptr->unk_22, 50, 800);
         ptr->unk_20 += ptr->unk_22;
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += TRUNCF_BINANG(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 
@@ -436,7 +436,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
 
     spF0 = Math_SinS(sp9E);
     spEC = Math_CosS(sp9E);
-    temp_f20 = Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f20 = Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                (300.0f * this->dyna.actor.scale.z) + arg2;
     temp_f24 = temp_f20 * spF0;
     temp_f26 = temp_f20 * spEC;
@@ -511,7 +511,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
     sp100 = Math_SinS(temp_s6);
     spFC = Math_CosS(temp_s6);
 
-    temp_f0 = ((Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f0 = ((Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                 (300.0f * this->dyna.actor.scale.z)) +
                2.0f);
     temp_f12 = -temp_f0;
@@ -1194,7 +1194,6 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
     s32 pad;
     s32 sp30;
     s32 sp2C;
-    Vec3f sp20;
 
     func_80A23690(this);
     func_80A23F90(this, play);
@@ -1204,16 +1203,18 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 
     if (sp2C == -1) {
         sp30 = false;
-    } else if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, play, 2.0f, &sp20) &&
-               !Player_InCsMode(play)) {
-        func_80A23370(this, sp2C);
-        func_80A260E8(this);
-        sp30 = false;
-        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
-        this->unk_1B0 |= 1;
-    }
+    } else {
+        Vec3f sp20;
 
-    if (this) {}
+        if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, play, 2.0f, &sp20) &&
+            !Player_InCsMode(play)) {
+            func_80A23370(this, sp2C);
+            func_80A260E8(this);
+            sp30 = false;
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
+            this->unk_1B0 |= 1;
+        }
+    }
 
     if (sp30) {
         func_80A2541C(this, play);
@@ -1222,7 +1223,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 }
 
 void func_80A260E8(ObjIceblock* this) {
-    static f32 D_80A26FC0[] = { 14.0, -14.0, 14.0, -14.0 };
+    static f32 D_80A26FC0[] = { 14.0f, -14.0f, 14.0f, -14.0f };
 
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;
@@ -1447,7 +1448,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) ||
+    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->toucher.dmgFlags & 0x800)) ||
         (this->meltTimer == 0)) {
         this->meltTimer = -1;
         this->unk_2B0 = 4;
@@ -1487,7 +1488,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         if (ICEBLOCK_GET_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
             this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
             this->collider.base.ocFlags1 |= (OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER);
-            this->collider.info.bumper.dmgFlags |=
+            this->collider.elem.bumper.dmgFlags |=
                 (0x800000 | 0x400000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x100 | 0x80 | 0x20 | 0x10 | 0x2);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }

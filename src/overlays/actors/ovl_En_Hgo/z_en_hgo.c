@@ -35,7 +35,7 @@ typedef enum {
     /* 2 */ HGO_EYE_CLOSED
 } EyeState;
 
-ActorInit En_Hgo_InitVars = {
+ActorProfile En_Hgo_Profile = {
     /**/ ACTOR_EN_HGO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -190,13 +190,13 @@ void EnHgo_SetupDialogueHandler(EnHgo* this) {
 void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnHgo_HandlePlayerChoice(this, play);
             break;
 

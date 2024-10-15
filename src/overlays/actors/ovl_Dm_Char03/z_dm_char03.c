@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char03.h"
-#include "objects/object_osn/object_osn.h"
+#include "assets/objects/object_osn/object_osn.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -20,7 +20,7 @@ void func_80AAB644(DmChar03* this, PlayState* play);
 void DmChar03_DoNothing(DmChar03* this, PlayState* play);
 void func_80AABA84(PlayState* play, DmChar03* this);
 
-ActorInit Dm_Char03_InitVars = {
+ActorProfile Dm_Char03_Profile = {
     /**/ ACTOR_DM_CHAR03,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -37,7 +37,7 @@ typedef enum {
     /* 1 */ DMCHAR03_ANIM_MAX
 } DmChar03Animation;
 
-AnimationInfo sAnimationInfo[DMCHAR03_ANIM_MAX] = {
+static AnimationInfo sAnimationInfo[DMCHAR03_ANIM_MAX] = {
     { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR03_ANIM_FALL_OVER
 };
 

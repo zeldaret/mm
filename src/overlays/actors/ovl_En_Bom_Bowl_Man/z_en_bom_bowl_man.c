@@ -5,7 +5,7 @@
  */
 
 #include "z_en_bom_bowl_man.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -37,7 +37,7 @@ s32 D_809C6100 = 0;
 
 s32 D_809C6104 = 0;
 
-ActorInit En_Bom_Bowl_Man_InitVars = {
+ActorProfile En_Bom_Bowl_Man_Profile = {
     /**/ ACTOR_EN_BOM_BOWL_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -237,16 +237,16 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
         code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
-            this->unk_2D8[code] = this;
+            this->unk_2DC[code - 1] = this;
         } else {
             Math_Vec3f_Copy(&sp7C, &D_809C61A0[i]);
             bomBowlMan = (EnBomBowlMan*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOM_BOWL_MAN,
                                                            sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
             if (bomBowlMan != NULL) {
                 if (i == 2) {
-                    this->unk_2D8[0] = bomBowlMan;
+                    this->unk_2D8 = bomBowlMan;
                 }
-                this->unk_2D8[code] = bomBowlMan;
+                this->unk_2DC[code - 1] = bomBowlMan;
             }
         }
     }
@@ -296,7 +296,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Player* player = GET_PLAYER(play);
         s32 pad;
         s32 sp28 = false;
@@ -308,7 +308,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csId1)),
-                                      &this->unk_2D8[0]->actor);
+                                      &this->unk_2D8->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
                 EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
@@ -413,7 +413,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
@@ -472,7 +472,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
@@ -642,7 +642,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
                 Player* player = GET_PLAYER(play);
 
                 Message_CloseTextbox(play);
-                Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8->actor);
                 EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -657,7 +657,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2DC[idx]->actor);
             }
         }
     }
@@ -718,7 +718,7 @@ s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     return false;
 }
 
-#include "overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
+#include "assets/overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
 
 TexturePtr D_809C6200[] = {
     gEnBomBowlMan_D_809C61E0, gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,

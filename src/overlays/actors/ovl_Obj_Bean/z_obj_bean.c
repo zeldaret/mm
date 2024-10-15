@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_bean.h"
-#include "objects/object_mamenoki/object_mamenoki.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_mamenoki/object_mamenoki.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_400000)
 
@@ -60,7 +60,7 @@ void func_80938C1C(Actor* thisx, PlayState* play);
 void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bean_InitVars = {
+ActorProfile Obj_Bean_Profile = {
     /**/ ACTOR_OBJ_BEAN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -592,7 +592,7 @@ void func_809381C4(ObjBean* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1E4 = 2;
@@ -749,7 +749,7 @@ void func_8093876C(ObjBean* this) {
 void func_80938780(ObjBean* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1B4 = 36;

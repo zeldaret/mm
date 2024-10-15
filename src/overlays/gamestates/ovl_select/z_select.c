@@ -7,10 +7,13 @@
 #include "z_select.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
-#include "libc/alloca.h"
+#include "alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadConsoleLogo(MapSelectState* this) {
+void MapSelect_LoadConsoleLogo(MapSelectState* this, u32 entrance, s32 spawn) {
+    s32 unused1 = entrance ? 0 : 0;
+    s32 unused2 = spawn ? 0 : 0;
+
     STOP_GAMESTATE(&this->state);
     SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
@@ -496,7 +499,7 @@ static SceneSelectEntry sScenes[] = {
     { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
+    { "title", MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {

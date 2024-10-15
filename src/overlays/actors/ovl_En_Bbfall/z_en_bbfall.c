@@ -6,9 +6,9 @@
 
 #include "z_en_bbfall.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
 #define THIS ((EnBbfall*)thisx)
 
@@ -36,7 +36,7 @@ typedef enum {
     /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD
 } EnBbfallBodyPartDrawStatus;
 
-ActorInit En_Bbfall_InitVars = {
+ActorProfile En_Bbfall_Profile = {
     /**/ ACTOR_EN_BBFALL,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -234,15 +234,15 @@ void EnBbfall_CheckForWall(EnBbfall* this) {
 }
 
 void EnBbfall_EnableColliders(EnBbfall* this) {
-    this->collider.elements[0].info.toucher.effect = ELEMTYPE_UNK1; // Fire
-    this->collider.elements[1].info.toucherFlags |= TOUCH_ON;
-    this->collider.elements[2].info.toucherFlags |= TOUCH_ON;
+    this->collider.elements[0].base.toucher.effect = ELEMTYPE_UNK1; // Fire
+    this->collider.elements[1].base.toucherFlags |= TOUCH_ON;
+    this->collider.elements[2].base.toucherFlags |= TOUCH_ON;
 }
 
 void EnBbfall_DisableColliders(EnBbfall* this) {
-    this->collider.elements[0].info.toucher.effect = ELEMTYPE_UNK0; // Nothing
-    this->collider.elements[1].info.toucherFlags &= ~TOUCH_ON;
-    this->collider.elements[2].info.toucherFlags &= ~TOUCH_ON;
+    this->collider.elements[0].base.toucher.effect = ELEMTYPE_UNK0; // Nothing
+    this->collider.elements[1].base.toucherFlags &= ~TOUCH_ON;
+    this->collider.elements[2].base.toucherFlags &= ~TOUCH_ON;
 }
 
 void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
@@ -325,7 +325,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
+            this->actor.shape.rot.y += TRUNCF_BINANG(Rand_CenteredFloat(0x12000));
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -524,7 +524,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlagJntSph(&this->actor, &this->collider);
             this->flameOpacity = 0;
             this->flameScaleY = 0.0f;
@@ -554,9 +554,9 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
-                            this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
+                            this->collider.elements[0].base.bumper.hitPos.y,
+                            this->collider.elements[0].base.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
@@ -613,7 +613,7 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
         this->collider.elements[0].dim.worldSphere.radius =
             CLAMP_MIN(this->collider.elements[0].dim.worldSphere.radius, 20);
 
-        Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements->dim.worldSphere.center);
+        Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[0].dim.worldSphere.center);
 
         if (this->collider.base.atFlags & AT_ON) {
             this->actor.flags |= ACTOR_FLAG_1000000;
@@ -652,32 +652,30 @@ s32 EnBbfall_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 /**
- * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos/Velocity arrays.
+ * This maps a given limb based on its limbIndex to its appropriate index in the `bodyPartsPos/Velocity` arrays.
  */
 static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
-    BODYPART_NONE,     // BUBBLE_LIMB_NONE
-    BODYPART_NONE,     // BUBBLE_LIMB_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_CRANIUM_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_JAW_ROOT
-    BUBBLE_BODYPART_0, // BUBBLE_LIMB_JAW
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WRAPPER
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
-    BUBBLE_BODYPART_1, // BUBBLE_LIMB_LEFT_WING_WEBBING
-    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_BONE
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_ROOT
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WRAPPER
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
-    BUBBLE_BODYPART_2, // BUBBLE_LIMB_RIGHT_WING_WEBBING
-    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_BONE
-    BUBBLE_BODYPART_3, // BUBBLE_LIMB_CRANIUM
+    BODYPART_NONE,                      // BUBBLE_LIMB_NONE
+    BODYPART_NONE,                      // BUBBLE_LIMB_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_CRANIUM_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_JAW_ROOT
+    BUBBLE_BODYPART_JAW,                // BUBBLE_LIMB_JAW
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_LEFT_WING_WEBBING,  // BUBBLE_LIMB_LEFT_WING_WEBBING
+    BODYPART_NONE,                      // BUBBLE_LIMB_LEFT_WING_BONE
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_ROOT
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_RIGHT_WING_WEBBING, // BUBBLE_LIMB_RIGHT_WING_WEBBING
+    BODYPART_NONE,                      // BUBBLE_LIMB_RIGHT_WING_BONE
+    BUBBLE_BODYPART_CRANIUM,            // BUBBLE_LIMB_CRANIUM
 };
 
 /**
- * The last element of the bodyParts arrays is a duplicate of the cranium
- * limb, which is then offset by a certain amount. There is no display list
- * associated with this, so it is only used for effects.
+ * The last element of the `bodyParts` arrays is not tied to any particular limb and is instead used to control the
+ * placement of effects. The positions of these effects are offset by a certain amount from the Bubble's cranium limb.
  */
 static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
@@ -688,10 +686,10 @@ void EnBbfall_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
-            if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_0) {
-                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_0]);
-            } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_3) {
-                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_3]);
+            if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_JAW) {
+                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_JAW]);
+            } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_CRANIUM) {
+                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_CRANIUM]);
                 Matrix_MultVec3f(&sEffectsBodyPartOffset, &this->bodyPartsPos[BUBBLE_BODYPART_EFFECTS]);
             } else {
                 Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);

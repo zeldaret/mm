@@ -2,7 +2,7 @@
 #define Z_EN_OT_H
 
 #include "global.h"
-#include "objects/object_ot/object_ot.h"
+#include "assets/objects/object_ot/object_ot.h"
 
 struct EnOt;
 

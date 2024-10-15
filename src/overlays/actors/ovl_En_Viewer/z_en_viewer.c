@@ -23,7 +23,7 @@ static u8 D_8089F3E0 = 0;
 
 static u8 D_8089F3E4 = 0;
 
-ActorInit En_Viewer_InitVars = {
+ActorProfile En_Viewer_Profile = {
     /**/ ACTOR_EN_VIEWER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -137,7 +137,7 @@ void func_8089F2C4(EnViewer* this, PlayState* play) {
     Vec3f sp20;
     f32 temp;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp20, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp20, &player->actor.world.pos);
 
     if (this->unk_14C == 0.0f) {
         this->unk_14C = 0.1f;

@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char02.h"
-#include "objects/object_stk2/object_stk2.h"
+#include "assets/objects/object_stk2/object_stk2.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 
 void DmChar02_HandleCutscene(DmChar02* this, PlayState* play);
 
-ActorInit Dm_Char02_InitVars = {
+ActorProfile Dm_Char02_Profile = {
     /**/ ACTOR_DM_CHAR02,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

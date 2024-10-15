@@ -26,7 +26,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-ActorInit En_Guruguru_InitVars = {
+ActorProfile En_Guruguru_Profile = {
     /**/ ACTOR_EN_GURUGURU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -100,7 +100,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnGuruguru_DoNothing;
@@ -208,7 +208,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (Message_GetState(&play->msgCtx) != TEXT_STATE_5) {
+        if (Message_GetState(&play->msgCtx) != TEXT_STATE_EVENT) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -224,7 +224,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
         }
     }
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {

@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_jgame_light.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_syokudai/object_syokudai.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play);
 void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
 void func_80C15718(ObjJgameLight* this, PlayState* play);
 
-ActorInit Obj_Jgame_Light_InitVars = {
+ActorProfile Obj_Jgame_Light_Profile = {
     /**/ ACTOR_OBJ_JGAME_LIGHT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

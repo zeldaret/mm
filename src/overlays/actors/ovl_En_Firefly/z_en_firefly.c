@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -44,7 +44,7 @@ typedef enum {
     /* 2 */ KEESE_AURA_ICE
 } KeeseAuraType;
 
-ActorInit En_Firefly_InitVars = {
+ActorProfile En_Firefly_Profile = {
     /**/ ACTOR_EN_FIREFLY,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -301,7 +301,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y,
                                    Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x300);
             } else if (rand < 0.8f) {
-                this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x600);
+                this->actor.shape.rot.y += TRUNCF_BINANG(Rand_CenteredFloat(0x600));
             }
 
             // Climb if too close to ground
