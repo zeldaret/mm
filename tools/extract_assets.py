@@ -104,6 +104,8 @@ def main():
     baseromSegmentsDir: Path = args.baserom_segments_dir
     outputDir: Path = args.output_dir
 
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+
     global ZAPDArgs
     ZAPDArgs = ""
     if args.Z is not None:

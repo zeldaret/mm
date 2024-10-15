@@ -3,7 +3,7 @@
  * Overlay: ovl_player_actor
  * Description: Player
  */
-
+#include "prevent_bss_reordering.h"
 #include "z64player.h"
 
 #include "global.h"

@@ -3145,6 +3145,8 @@ def main():
     baserom_segments_dir : Path = args.baserom_segments_dir
     output_dir : Path = args.output_dir
 
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+
     # TODO: use version config instead to get code vram
     code_vram = 0x800A5AC0
 
@@ -3171,10 +3173,9 @@ def main():
     message_data = []
 
     for text_id in sorted(messages.keys()):
-        # TODO: Add back when we start extracting assets to extracted
-        # if text_id in (0xFFFC,0xFFFD):
-        #     # Skip committed text ids
-        #     continue
+        if text_id in (0xFFFC,0xFFFD):
+            # Skip committed text ids
+            continue
         message_data.append(messages[text_id].decode())
 
     message_data = "\n".join(message_data)
