@@ -12066,6 +12066,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
     if (this->bodyShockTimer != 0) {
         Player_UpdateBodyShock(play, this);
     }
+
     if (this->bodyIsBurning) {
         Player_UpdateBodyBurn(play, this);
     }
