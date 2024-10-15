@@ -427,10 +427,10 @@ void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos
 }
 
 void Target_SetLockOnPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
-    targetCtx->lockOnTriangleSets[index].pos.x = x;
-    targetCtx->lockOnTriangleSets[index].pos.y = y;
-    targetCtx->lockOnTriangleSets[index].pos.z = z;
-    targetCtx->lockOnTriangleSets[index].radius = targetCtx->lockOnRadius;
+    targetCtx->lockOnReticles[index].pos.x = x;
+    targetCtx->lockOnReticles[index].pos.y = y;
+    targetCtx->lockOnReticles[index].pos.z = z;
+    targetCtx->lockOnReticles[index].radius = targetCtx->reticleRadius;
 }
 
 typedef struct {
@@ -458,15 +458,15 @@ TatlColor sTatlColorList[] = {
 void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
-    LockOnTriangleSet* triangleSet;
+    LockOnReticle* triangleSet;
 
     Math_Vec3f_Copy(&targetCtx->reticlePos, &play->view.eye);
-    targetCtx->lockOnAlpha = 256;
+    targetCtx->reticleFadeAlphaControl = 256;
     tatlColorEntry = &sTatlColorList[type];
-    targetCtx->lockOnRadius = 500.0f;
+    targetCtx->reticleRadius = 500.0f;
 
-    triangleSet = targetCtx->lockOnTriangleSets;
-    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnTriangleSets); i++, triangleSet++) {
+    triangleSet = targetCtx->lockOnReticles;
+    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnReticles); i++, triangleSet++) {
         Target_SetLockOnPos(targetCtx, i, 0.0f, 0.0f, 0.0f);
 
         triangleSet->color.r = tatlColorEntry->inner.r;
@@ -495,8 +495,8 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->forcedTargetActor = NULL;
     targetCtx->reticleActor = NULL;
     targetCtx->fairyActor = NULL;
-    targetCtx->rotZTick = 0;
-    targetCtx->lockOnIndex = 0;
+    targetCtx->reticleSpinCounter = 0;
+    targetCtx->curReticle = 0;
     targetCtx->fairyMoveProgressFactor = 0.0f;
     Target_SetFairyState(targetCtx, actor, actor->category, play);
     Target_InitLockOn(targetCtx, actor->category, play);
@@ -515,8 +515,8 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (targetCtx->lockOnAlpha != 0) {
-        LockOnTriangleSet* entry;
+    if (targetCtx->reticleFadeAlphaControl != 0) {
+        LockOnReticle* entry;
         s16 alpha = 255;
         f32 projectdPosScale = 1.0f;
         Vec3f projectedPos;
@@ -526,23 +526,23 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         s32 index;
         f32 lockOnScaleX;
 
-        if (targetCtx->rotZTick != 0) {
+        if (targetCtx->reticleSpinCounter != 0) {
             totalEntries = 1;
         } else {
             // Use multiple entries for the movement effect when the triangles are getting closer to the actor from the
             // margin of the screen
-            totalEntries = ARRAY_COUNT(targetCtx->lockOnTriangleSets);
+            totalEntries = ARRAY_COUNT(targetCtx->lockOnReticles);
         }
 
         if (actor != NULL) {
             Math_Vec3f_Copy(&targetCtx->reticlePos, &actor->focus.pos);
-            projectdPosScale = (500.0f - targetCtx->lockOnRadius) / 420.0f;
+            projectdPosScale = (500.0f - targetCtx->reticleRadius) / 420.0f;
         } else {
-            targetCtx->lockOnAlpha -= 120;
-            if (targetCtx->lockOnAlpha < 0) {
-                targetCtx->lockOnAlpha = 0;
+            targetCtx->reticleFadeAlphaControl -= 120;
+            if (targetCtx->reticleFadeAlphaControl < 0) {
+                targetCtx->reticleFadeAlphaControl = 0;
             }
-            alpha = targetCtx->lockOnAlpha;
+            alpha = targetCtx->reticleFadeAlphaControl;
         }
 
         Actor_GetProjectedPos(play, &targetCtx->reticlePos, &projectedPos, &invW);
@@ -555,19 +555,19 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         projectedPos.z *= projectdPosScale;
 
-        targetCtx->lockOnIndex--;
-        if (targetCtx->lockOnIndex < 0) {
-            targetCtx->lockOnIndex = ARRAY_COUNT(targetCtx->lockOnTriangleSets) - 1;
+        targetCtx->curReticle--;
+        if (targetCtx->curReticle < 0) {
+            targetCtx->curReticle = ARRAY_COUNT(targetCtx->lockOnReticles) - 1;
         }
 
-        Target_SetLockOnPos(targetCtx, targetCtx->lockOnIndex, projectedPos.x, projectedPos.y, projectedPos.z);
+        Target_SetLockOnPos(targetCtx, targetCtx->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
 
         if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->focusActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
-            for (i = 0, index = targetCtx->lockOnIndex; i < totalEntries;
-                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnTriangleSets)) {
-                entry = &targetCtx->lockOnTriangleSets[index];
+            for (i = 0, index = targetCtx->curReticle; i < totalEntries;
+                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnReticles)) {
+                entry = &targetCtx->lockOnReticles[index];
 
                 if (entry->radius < 500.0f) {
                     s32 triangleIndex;
@@ -583,7 +583,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
 
-                    Matrix_RotateZS(targetCtx->rotZTick * 0x200, MTXMODE_APPLY);
+                    Matrix_RotateZS(targetCtx->reticleSpinCounter * 0x200, MTXMODE_APPLY);
 
                     // Draw the 4 lock-on triangles
                     for (triangleIndex = 0; triangleIndex < 4; triangleIndex++) {
@@ -596,7 +596,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
                     }
                 }
 
-                alpha -= 255 / ARRAY_COUNT(targetCtx->lockOnTriangleSets);
+                alpha -= 255 / ARRAY_COUNT(targetCtx->lockOnReticles);
                 if (alpha < 0) {
                     alpha = 0;
                 }
@@ -675,7 +675,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* playerFocusA
         Target_SetFairyState(targetCtx, actor, category, play);
     }
 
-    if ((playerFocusActor != NULL) && (targetCtx->rotZTick == 0)) {
+    if ((playerFocusActor != NULL) && (targetCtx->reticleSpinCounter == 0)) {
         Actor_GetProjectedPos(play, &playerFocusActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
@@ -694,7 +694,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* playerFocusA
 
             if (playerFocusActor->id == ACTOR_EN_BOOM) {
                 // Avoid drawing the lock on triangles on a zora boomerang
-                targetCtx->lockOnAlpha = 0;
+                targetCtx->reticleFadeAlphaControl = 0;
             }
 
             sfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
@@ -708,23 +708,23 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* playerFocusA
             playerFocusActor->world.pos.y - (playerFocusActor->shape.yOffset * playerFocusActor->scale.y);
         targetCtx->reticlePos.z = playerFocusActor->world.pos.z;
 
-        if (targetCtx->rotZTick == 0) {
-            f32 lockOnStep = (500.0f - targetCtx->lockOnRadius) * 3.0f;
+        if (targetCtx->reticleSpinCounter == 0) {
+            f32 lockOnStep = (500.0f - targetCtx->reticleRadius) * 3.0f;
 
             lockOnStep = CLAMP(lockOnStep, 30.0f, 100.0f);
 
-            if (Math_StepToF(&targetCtx->lockOnRadius, 80.0f, lockOnStep)) {
-                targetCtx->rotZTick++;
+            if (Math_StepToF(&targetCtx->reticleRadius, 80.0f, lockOnStep)) {
+                targetCtx->reticleSpinCounter++;
             }
         } else {
             // 0x80 is or'd to avoid getting this value be set to zero
             // This rotation value gets multiplied by 0x200, which multiplied by 0x80 gives a full turn (0x10000)
-            targetCtx->rotZTick = (targetCtx->rotZTick + 3) | 0x80;
-            targetCtx->lockOnRadius = 120.0f;
+            targetCtx->reticleSpinCounter = (targetCtx->reticleSpinCounter + 3) | 0x80;
+            targetCtx->reticleRadius = 120.0f;
         }
     } else {
         targetCtx->reticleActor = NULL;
-        Math_StepToF(&targetCtx->lockOnRadius, 500.0f, 80.0f);
+        Math_StepToF(&targetCtx->reticleRadius, 500.0f, 80.0f);
     }
 }
 
@@ -2690,8 +2690,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
 
     if ((actor == NULL) || (player->unk_738 < 5)) {
         actor = NULL;
-        if (actorCtx->targetCtx.rotZTick != 0) {
-            actorCtx->targetCtx.rotZTick = 0;
+        if (actorCtx->targetCtx.reticleSpinCounter != 0) {
+            actorCtx->targetCtx.reticleSpinCounter = 0;
             Audio_PlaySfx(NA_SE_SY_LOCK_OFF);
         }
     }
