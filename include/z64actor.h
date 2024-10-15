@@ -289,11 +289,11 @@ typedef struct LockOnTriangleSet {
 
 typedef struct TargetContext {
     /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
-    /* 0x0C */ Vec3f lockOnPos;
+    /* 0x0C */ Vec3f reticlePos;
     /* 0x18 */ Color_RGBAf fairyInnerColor;
     /* 0x28 */ Color_RGBAf fairyOuterColor;
     /* 0x38 */ Actor* fairyActor;
-    /* 0x3C */ Actor* lockOnActor;
+    /* 0x3C */ Actor* reticleActor; // Actor to draw a reticle over
     /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
     /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
     /* 0x48 */ s16 lockOnAlpha;

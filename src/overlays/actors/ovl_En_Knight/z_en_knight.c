@@ -2180,7 +2180,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 player->focusActor = &this->actor;
                 play->actorCtx.targetCtx.fairyActor = &this->actor;
-                play->actorCtx.targetCtx.lockOnActor = &this->actor;
+                play->actorCtx.targetCtx.reticleActor = &this->actor;
             }
 
             if (this->timers[0] == 15) {
@@ -3258,7 +3258,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             sIgosInstance->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             player->focusActor = &this->actor;
             play->actorCtx.targetCtx.fairyActor = &this->actor;
-            play->actorCtx.targetCtx.lockOnActor = &this->actor;
+            play->actorCtx.targetCtx.reticleActor = &this->actor;
             Math_Vec3f_Copy(&this->actor.world.pos, &sIgosInstance->actor.world.pos);
             Math_Vec3s_Copy(&this->actor.world.rot, &sIgosInstance->actor.world.rot);
             Math_Vec3s_Copy(&this->actor.shape.rot, &sIgosInstance->actor.world.rot);

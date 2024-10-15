@@ -460,7 +460,7 @@ void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play
     s32 i;
     LockOnTriangleSet* triangleSet;
 
-    Math_Vec3f_Copy(&targetCtx->lockOnPos, &play->view.eye);
+    Math_Vec3f_Copy(&targetCtx->reticlePos, &play->view.eye);
     targetCtx->lockOnAlpha = 256;
     tatlColorEntry = &sTatlColorList[type];
     targetCtx->lockOnRadius = 500.0f;
@@ -493,7 +493,7 @@ void Target_SetFairyState(TargetContext* targetCtx, Actor* actor, ActorType type
 void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->bgmEnemy = NULL;
     targetCtx->forcedTargetActor = NULL;
-    targetCtx->lockOnActor = NULL;
+    targetCtx->reticleActor = NULL;
     targetCtx->fairyActor = NULL;
     targetCtx->rotZTick = 0;
     targetCtx->lockOnIndex = 0;
@@ -511,7 +511,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         return;
     }
 
-    actor = targetCtx->lockOnActor;
+    actor = targetCtx->reticleActor;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -535,7 +535,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         }
 
         if (actor != NULL) {
-            Math_Vec3f_Copy(&targetCtx->lockOnPos, &actor->focus.pos);
+            Math_Vec3f_Copy(&targetCtx->reticlePos, &actor->focus.pos);
             projectdPosScale = (500.0f - targetCtx->lockOnRadius) / 420.0f;
         } else {
             targetCtx->lockOnAlpha -= 120;
@@ -545,7 +545,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
             alpha = targetCtx->lockOnAlpha;
         }
 
-        Actor_GetProjectedPos(play, &targetCtx->lockOnPos, &projectedPos, &invW);
+        Actor_GetProjectedPos(play, &targetCtx->reticlePos, &projectedPos, &invW);
 
         projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * projectdPosScale;
         projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
@@ -623,8 +623,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-// OoT: func_8002C7BC
-void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor, PlayState* play) {
+void Target_Update(TargetContext* targetCtx, Player* player, Actor* playerFocusActor, PlayState* play) {
     s32 pad;
     Actor* actor = NULL;
     s32 category;
@@ -643,8 +642,8 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
     if (targetCtx->forcedTargetActor != NULL) {
         actor = targetCtx->forcedTargetActor;
         targetCtx->forcedTargetActor = NULL;
-    } else if (lockOnActor != NULL) {
-        actor = lockOnActor;
+    } else if (playerFocusActor != NULL) {
+        actor = playerFocusActor;
     }
 
     if (actor != NULL) {
@@ -676,37 +675,38 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
         Target_SetFairyState(targetCtx, actor, category, play);
     }
 
-    if ((lockOnActor != NULL) && (targetCtx->rotZTick == 0)) {
-        Actor_GetProjectedPos(play, &lockOnActor->focus.pos, &projectedPos, &invW);
+    if ((playerFocusActor != NULL) && (targetCtx->rotZTick == 0)) {
+        Actor_GetProjectedPos(play, &playerFocusActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
-            lockOnActor = NULL;
+            playerFocusActor = NULL;
         }
     }
 
-    if (lockOnActor != NULL) {
-        if (lockOnActor != targetCtx->lockOnActor) {
+    if (playerFocusActor != NULL) {
+        if (playerFocusActor != targetCtx->reticleActor) {
             s32 sfxId;
 
             // Lock On entries need to be re-initialized when changing the targeted actor
-            Target_InitLockOn(targetCtx, lockOnActor->category, play);
+            Target_InitLockOn(targetCtx, playerFocusActor->category, play);
 
-            targetCtx->lockOnActor = lockOnActor;
+            targetCtx->reticleActor = playerFocusActor;
 
-            if (lockOnActor->id == ACTOR_EN_BOOM) {
+            if (playerFocusActor->id == ACTOR_EN_BOOM) {
                 // Avoid drawing the lock on triangles on a zora boomerang
                 targetCtx->lockOnAlpha = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+            sfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
                         ? NA_SE_SY_LOCK_ON
                         : NA_SE_SY_LOCK_ON_HUMAN;
             Audio_PlaySfx(sfxId);
         }
 
-        targetCtx->lockOnPos.x = lockOnActor->world.pos.x;
-        targetCtx->lockOnPos.y = lockOnActor->world.pos.y - (lockOnActor->shape.yOffset * lockOnActor->scale.y);
-        targetCtx->lockOnPos.z = lockOnActor->world.pos.z;
+        targetCtx->reticlePos.x = playerFocusActor->world.pos.x;
+        targetCtx->reticlePos.y =
+            playerFocusActor->world.pos.y - (playerFocusActor->shape.yOffset * playerFocusActor->scale.y);
+        targetCtx->reticlePos.z = playerFocusActor->world.pos.z;
 
         if (targetCtx->rotZTick == 0) {
             f32 lockOnStep = (500.0f - targetCtx->lockOnRadius) * 3.0f;
@@ -723,7 +723,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
             targetCtx->lockOnRadius = 120.0f;
         }
     } else {
-        targetCtx->lockOnActor = NULL;
+        targetCtx->reticleActor = NULL;
         Math_StepToF(&targetCtx->lockOnRadius, 500.0f, 80.0f);
     }
 }

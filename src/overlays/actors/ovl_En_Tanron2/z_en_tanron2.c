@@ -432,7 +432,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 if ((player->focusActor != NULL) && (&this->actor != player->focusActor)) {
                     player->focusActor = &this->actor;
                     play->actorCtx.targetCtx.fairyActor = &this->actor;
-                    play->actorCtx.targetCtx.lockOnActor = &this->actor;
+                    play->actorCtx.targetCtx.reticleActor = &this->actor;
                 }
             } else {
                 this->unk_154 = 15;
