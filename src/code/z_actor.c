@@ -540,8 +540,8 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
             Math_Vec3f_Copy(&targetCtx->reticlePos, &actor->focus.pos);
             projectdPosScale = (500.0f - targetCtx->reticleRadius) / 420.0f;
         } else {
-            targetCtx->reticleFadeAlphaControl -= 120;
             // Not locked on, start fading out
+            targetCtx->reticleFadeAlphaControl -= 120;
 
             if (targetCtx->reticleFadeAlphaControl < 0) {
                 targetCtx->reticleFadeAlphaControl = 0;
