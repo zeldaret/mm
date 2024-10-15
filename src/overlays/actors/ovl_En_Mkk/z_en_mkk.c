@@ -7,7 +7,7 @@
 #include "z_en_mkk.h"
 #include "assets/objects/object_mkk/object_mkk.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnMkk*)thisx)
 

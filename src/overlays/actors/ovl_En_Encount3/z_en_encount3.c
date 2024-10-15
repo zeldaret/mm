@@ -7,7 +7,7 @@
 #include "z_en_encount3.h"
 #include "assets/objects/object_big_fwall/object_big_fwall.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount3*)thisx)
 
@@ -55,7 +55,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_809AD058(this);
 }

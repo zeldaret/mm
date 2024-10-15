@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "assets/objects/object_boss03/object_boss03.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
 

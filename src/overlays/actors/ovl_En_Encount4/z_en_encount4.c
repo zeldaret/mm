@@ -6,7 +6,7 @@
 
 #include "z_en_encount4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount4*)thisx)
 

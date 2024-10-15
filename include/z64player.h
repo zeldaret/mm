@@ -1056,8 +1056,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
-// TARGETING_HOSTILE?
-#define PLAYER_STATE3_80000000   (1 << 31)
+// Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
+#define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
 
 
 #define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
@@ -1372,7 +1372,7 @@ void func_8012301C(Actor* thisx, struct PlayState* play2);
 void func_80123140(struct PlayState* play, Player* player);
 bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
 bool Player_InCsMode(struct PlayState* play);
-bool func_80123420(Player* player);
+bool Player_CheckHostileLockOn(Player* player);
 bool func_80123434(Player* player);
 bool func_80123448(struct PlayState* play);
 bool Player_IsGoronOrDeku(Player* player);

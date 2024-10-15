@@ -474,10 +474,10 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
  */
 void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags |= DOG_FLAG_HELD;
     } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
@@ -486,7 +486,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (!sIsAnyDogHeld) {
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = true;
             this->dogFlags |= DOG_FLAG_HELD;
         }
@@ -1244,7 +1244,7 @@ void EnDg_Held(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (sIsAnyDogHeld) {
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = false;
             this->dogFlags &= ~DOG_FLAG_HELD;
         }

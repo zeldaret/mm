@@ -7,7 +7,7 @@
 #include "z_en_dragon.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnDragon*)thisx)
 
@@ -238,7 +238,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->action = DEEP_PYTHON_ACTION_IDLE;
     this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
 
     EnDragon_SetupRetreatOrIdle(this);
 }
@@ -750,7 +750,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
             } else {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;

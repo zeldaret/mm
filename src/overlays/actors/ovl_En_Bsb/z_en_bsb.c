@@ -15,7 +15,7 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnBsb*)thisx)
 
@@ -534,7 +534,7 @@ void func_80C0BF2C(EnBsb* this) {
         this->collider.elements[i].base.elemType = ELEMTYPE_UNK2;
     }
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_40);
     this->unk_02B4 = 0;
     this->actionFunc = func_80C0BFE8;
@@ -589,7 +589,7 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     } else {
         CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
 
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
 
         Flags_SetSwitch(play, this->switchFlag1);
 
@@ -608,7 +608,7 @@ void func_80C0C238(EnBsb* this, PlayState* play) {
             return;
         }
         CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         Flags_SetSwitch(play, this->switchFlag1);
         this->unk_02A4 = 1;
     }
@@ -816,7 +816,7 @@ void func_80C0CA28(EnBsb* this, PlayState* play) {
     Actor_SpawnFloorDustRing(play, &this->actor, &this->unk_02F8, 5.0f, 10, 8.0f, 1000, 100, true);
     Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unk_02B4 = 5;
     this->actionFunc = func_80C0CB3C;
 }
@@ -859,7 +859,7 @@ void func_80C0CD04(EnBsb* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->animIndex == ENBSB_ANIM_24) && (curFrame >= this->animEndFrame)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.gravity = -2.0f;
         this->unk_0294 = 10;
         func_80C0C86C(this);
@@ -1308,7 +1308,7 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
 }
 
 void func_80C0E178(EnBsb* this) {
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unk_02AE = false;
     this->unk_02A4 = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -1370,7 +1370,7 @@ void func_80C0E3B8(EnBsb* this) {
 
     Math_Vec3s_Copy(&this->unk_031C, &gZeroVec3s);
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Animation_Change(&this->skelAnime, &object_bsb_Anim_004894, 1.0f, D_80C0F8D0,
@@ -1518,7 +1518,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
             if (this->actor.colChkInfo.health <= 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KITA_DEAD);
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
                 func_80C0D3C0(this, play);
