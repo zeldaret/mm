@@ -7,7 +7,7 @@
 #include "z_en_slime.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
 #define THIS ((EnSlime*)thisx)
 
@@ -66,7 +66,7 @@ void EnSlime_WaitForRevive(EnSlime* this, PlayState* play);
 void EnSlime_SetupRevive(EnSlime* this);
 void EnSlime_Revive(EnSlime* this, PlayState* play);
 
-ActorInit En_Slime_InitVars = {
+ActorProfile En_Slime_Profile = {
     /**/ ACTOR_EN_SLIME,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -310,11 +310,11 @@ void EnSlime_Idle(EnSlime* this, PlayState* play) {
     timerFactor = sqrtf(this->timer) * 0.2f;
     EnSlime_Blink(this);
 
-    scale = ((Math_SinF(this->timer * (2.0f * M_PI / 5.0f)) * (0.13f * timerFactor)) + 1.0f) * 0.01f;
+    scale = ((Math_SinF(this->timer * (2 * M_PIf / 5)) * (0.13f * timerFactor)) + 1.0f) * 0.01f;
     this->actor.scale.x = scale;
     this->actor.scale.z = scale;
     if (this->timer < 24) {
-        this->actor.scale.y = ((Math_CosF(this->timer * (2.0f * M_PI / 5.0f)) * (0.05f * timerFactor)) + 1.0f) * 0.01f;
+        this->actor.scale.y = ((Math_CosF(this->timer * (2 * M_PIf / 5)) * (0.05f * timerFactor)) + 1.0f) * 0.01f;
     }
 
     this->actor.shape.rot.x = Rand_CenteredFloat(0x200) * timerFactor;
@@ -372,7 +372,7 @@ void EnSlime_MoveInDirection(EnSlime* this, PlayState* play) {
     }
 
     // Update actor scale, xz speed, and rotation to provide amorphous effect
-    sinFactor = fabsf(Math_SinF(this->timer * (M_PI / 24)));
+    sinFactor = fabsf(Math_SinF(this->timer * (M_PIf / 24)));
     Math_StepToF(&this->actor.scale.z, ((0.15f * sinFactor) + 1.0f) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.x, (1.0f - (0.2f * sinFactor)) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.y, (1.0f - (0.1f * sinFactor)) * 0.01f, 0.0002f);
@@ -425,7 +425,7 @@ void EnSlime_MoveToHome(EnSlime* this, PlayState* play) {
         this->idleRotY = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    timerFactor = fabsf(Math_SinF(this->timer * (M_PI / 24)));
+    timerFactor = fabsf(Math_SinF(this->timer * (M_PIf / 24)));
     Math_StepToF(&this->actor.scale.z, ((0.15f * timerFactor) + 1.0f) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.x, (1.0f - (0.2f * timerFactor)) * 0.01f, 0.0002f);
     Math_StepToF(&this->actor.scale.y, (1.0f - (0.1f * timerFactor)) * 0.01f, 0.0002f);
@@ -549,11 +549,11 @@ void EnSlime_Land(EnSlime* this, PlayState* play) {
     this->timer--;
     scaleY = ((this->timer / 5) + 1) * 1.6f;
     rotXZ = sqrtf(this->timer) * 0.2f;
-    scaleXZ = ((Math_CosF(this->timer * (2.0f * M_PI / 5.0f)) * (0.05f * scaleY)) + 1.0f) * 0.01f;
+    scaleXZ = ((Math_CosF(this->timer * (2 * M_PIf / 5)) * (0.05f * scaleY)) + 1.0f) * 0.01f;
     this->actor.scale.x = scaleXZ;
     this->actor.scale.z = scaleXZ;
     if (this->timer < 15) {
-        this->actor.scale.y = (1.0f - (Math_SinF(this->timer * (2.0f * M_PI / 5.0f)) * (0.04f * scaleY))) * 0.01f;
+        this->actor.scale.y = (1.0f - (Math_SinF(this->timer * (2 * M_PIf / 5)) * (0.04f * scaleY))) * 0.01f;
     }
     this->actor.shape.rot.x = Rand_CenteredFloat(0x200) * rotXZ;
     this->actor.shape.rot.z = Rand_CenteredFloat(0x200) * rotXZ;
@@ -605,14 +605,14 @@ void EnSlime_ReactToBluntHit(EnSlime* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     timerFactor = sqrtf(this->timer);
     if (this->timer < 30) {
-        scale = ((Math_CosF(this->timer * (2.0f * M_PI / 5.0f)) * (0.08f * timerFactor)) + 1.0f) * 0.01f;
+        scale = ((Math_CosF(this->timer * (2 * M_PIf / 5)) * (0.08f * timerFactor)) + 1.0f) * 0.01f;
         this->actor.scale.x = scale;
         this->actor.scale.z = scale;
     }
     if (this->timer == 15) {
         this->collider.base.acFlags |= AC_ON;
     }
-    this->actor.scale.y = ((Math_SinF((f32)this->timer * (2.0f * M_PI / 5.0f)) * (0.07f * timerFactor)) + 1.0f) * 0.01f;
+    this->actor.scale.y = ((Math_SinF((f32)this->timer * (2 * M_PIf / 5)) * (0.07f * timerFactor)) + 1.0f) * 0.01f;
     this->actor.shape.rot.x = Rand_CenteredFloat(0x200) * timerFactor;
     this->actor.shape.rot.z = Rand_CenteredFloat(0x200) * timerFactor;
 
@@ -652,8 +652,8 @@ void EnSlime_SetupDamaged(EnSlime* this, PlayState* play, s32 arg2) {
 
     this->eyeTexIndex = EN_SLIME_EYETEX_OPEN;
     Actor_SetScale(&this->actor, 0.01f);
-    this->wobbleRot.x = Rand_ZeroOne() * (M_PI * 2.0f);
-    this->wobbleRot.z = Rand_ZeroOne() * (M_PI * 2.0f);
+    this->wobbleRot.x = Rand_ZeroOne() * (M_PIf * 2);
+    this->wobbleRot.z = Rand_ZeroOne() * (M_PIf * 2);
     ySin = Math_SinS(this->actor.world.rot.y) * 10.0f;
     yCos = Math_CosS(this->actor.world.rot.y) * 10.0f;
     effectPos.x = this->actor.world.pos.x + ySin;
@@ -691,8 +691,8 @@ void EnSlime_Damaged(EnSlime* this, PlayState* play) {
     this->timer--;
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     if ((this->timer % 5) == 0) {
-        this->wobbleRot.x = Rand_ZeroOne() * (M_PI * 2.0f);
-        this->wobbleRot.z = Rand_ZeroOne() * (M_PI * 2.0f);
+        this->wobbleRot.x = Rand_ZeroOne() * (M_PIf * 2);
+        this->wobbleRot.z = Rand_ZeroOne() * (M_PIf * 2);
     }
     if (this->timer == 0) {
         if (this->actor.colChkInfo.health != 0) {
@@ -983,20 +983,20 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
         EnSlime_SetupMoveInDirection(this);
     } else {
         if (this->timer < 12) {
-            rescaleFactor1 = this->timer * 0.0008333333f; // This is about 1/1200, but (1.0f/1200.0f) does not match
+            rescaleFactor1 = this->timer * (0.01f / 12.0f); // This is about 1/1200, but (1.0f/1200.0f) does not match
             this->reviveScale.x = rescaleFactor1;
             this->reviveScale.z = rescaleFactor1;
             this->reviveScale.y = 2.0f * rescaleFactor1;
             this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 20) {
-            rescaleFactor1 = (this->timer - 12) * (1.0f / 1600.0f);
+            rescaleFactor1 = (this->timer - 12) * (0.01f / 16.0f);
             rescaleFactor2 = 0.01f + rescaleFactor1;
             this->reviveScale.x = rescaleFactor2;
             this->reviveScale.z = rescaleFactor2;
             this->reviveScale.y = 2.0f * (0.01f - rescaleFactor1);
             this->reviveRotY = this->timer * (0x4000 / 10.0f);
         } else if (this->timer < 24) {
-            rescaleFactor1 = (this->timer - 20) * 0.0033333332f; // This is about 1/300
+            rescaleFactor1 = (this->timer - 20) * (0.01f / 3.0f); // This is about 1/300
             rescaleFactor2 = 0.015f - rescaleFactor1;
             this->reviveScale.x = rescaleFactor2;
             this->reviveScale.z = rescaleFactor2;
@@ -1027,7 +1027,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
 
             EnSlime_Thaw(this, play);
             if ((this->actor.params == EN_SLIME_TYPE_BLUE) &&
@@ -1186,9 +1186,9 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->actionFunc == EnSlime_Damaged) {
-        wobbleScale.x = 1.0f - (Math_SinF((f32)this->timer * (M_PI / 2.0f)) * 0.3f);
-        wobbleScale.y = (Math_SinF((f32)this->timer * (M_PI / 2.0f)) * 0.3f) + 1.0f;
-        wobbleScale.z = 1.0f - (Math_CosF((f32)this->timer * (M_PI / 2.0f)) * 0.3f);
+        wobbleScale.x = 1.0f - (Math_SinF((f32)this->timer * (M_PIf / 2)) * 0.3f);
+        wobbleScale.y = (Math_SinF((f32)this->timer * (M_PIf / 2)) * 0.3f) + 1.0f;
+        wobbleScale.z = 1.0f - (Math_CosF((f32)this->timer * (M_PIf / 2)) * 0.3f);
 
         Matrix_RotateXFApply(this->wobbleRot.x);
         Matrix_RotateZF(this->wobbleRot.z, MTXMODE_APPLY);

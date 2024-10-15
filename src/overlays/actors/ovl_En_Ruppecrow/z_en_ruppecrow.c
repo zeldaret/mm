@@ -5,7 +5,7 @@
  */
 
 #include "z_en_ruppecrow.h"
-#include "objects/object_crow/object_crow.h"
+#include "assets/objects/object_crow/object_crow.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000)
 
@@ -27,7 +27,7 @@ void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play);
 
-ActorInit En_Ruppecrow_InitVars = {
+ActorProfile En_Ruppecrow_Profile = {
     /**/ ACTOR_EN_RUPPECROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -111,10 +111,10 @@ static InitChainEntry sInitChain[] = {
 s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     s32 pad;
 
-    this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.elements->dim.worldSphere.center.y =
-        sJntSphInit.elements->dim.modelSphere.center.y + this->actor.world.pos.y;
-    this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.elements[0].dim.worldSphere.center.y =
+        sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
+    this->collider.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f,
@@ -148,7 +148,7 @@ s32 EnRuppecrow_HasReachedPointClockwise(EnRuppecrow* this, Path* path, s32 poin
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -182,7 +182,7 @@ s32 EnRuppecrow_HasReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s
         diffZ = points[index - 1].z - points[index + 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -476,7 +476,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 void EnRuppecrow_UpdateDamage(EnRuppecrow* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements[0].base);
 
         if (this->actor.colChkInfo.damageEffect != 0x1) {
             this->actor.colChkInfo.health = 0;
@@ -633,7 +633,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
 
     Collider_InitJntSph(play, &this->collider);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-    this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
+    this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);

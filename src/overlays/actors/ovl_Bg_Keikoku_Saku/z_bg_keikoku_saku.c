@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_keikoku_saku.h"
-#include "objects/object_keikoku_obj/object_keikoku_obj.h"
+#include "assets/objects/object_keikoku_obj/object_keikoku_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -20,7 +20,7 @@ void func_80A5389C(BgKeikokuSaku* this, PlayState* play);
 void func_80A538E0(BgKeikokuSaku* this, PlayState* play);
 void func_80A53994(BgKeikokuSaku* this, PlayState* play);
 
-ActorInit Bg_Keikoku_Saku_InitVars = {
+ActorProfile Bg_Keikoku_Saku_Profile = {
     /**/ ACTOR_BG_KEIKOKU_SAKU,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

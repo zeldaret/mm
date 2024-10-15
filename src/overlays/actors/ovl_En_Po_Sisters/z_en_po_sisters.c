@@ -6,10 +6,9 @@
 
 #include "z_en_po_sisters.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -63,7 +62,7 @@ static Color_RGBA8 sPoSisterEnvColors[] = {
     { 0, 150, 0, 255 },   // Amy
 };
 
-ActorInit En_Po_Sisters_InitVars = {
+ActorProfile En_Po_Sisters_Profile = {
     /**/ ACTOR_EN_PO_SISTERS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -1236,7 +1235,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc == EnPoSisters_DeathStage2) {
         alpha = ((-this->deathTimer * 255) + 0x1FE0) / 32;
-        scale = (7 / 1.2500 * 0.001f);
+        scale = (7 / 1.25f * 0.001f);
     } else {
         alpha = 0;
         scale = this->actor.scale.x * 0.5f;

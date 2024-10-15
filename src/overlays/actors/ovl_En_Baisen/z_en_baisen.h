@@ -2,7 +2,7 @@
 #define Z_EN_BAISEN_H
 
 #include "global.h"
-#include "objects/object_bai/object_bai.h"
+#include "assets/objects/object_bai/object_bai.h"
 
 struct EnBaisen;
 

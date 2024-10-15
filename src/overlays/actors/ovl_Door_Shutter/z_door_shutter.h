@@ -8,9 +8,21 @@ struct DoorShutter;
 
 typedef void (*DoorShutterActionFunc)(struct DoorShutter*, PlayState*);
 
+typedef enum DoorShutterType {
+    /* 0 */ DOORSHUTTER_TYPE_0,
+    /* 1 */ DOORSHUTTER_TYPE_1,
+    /* 2 */ DOORSHUTTER_TYPE_2,
+    /* 3 */ DOORSHUTTER_TYPE_3,
+    /* 4 */ DOORSHUTTER_TYPE_4,
+    /* 5 */ DOORSHUTTER_TYPE_BOSS_DOOR,
+    /* 6 */ DOORSHUTTER_TYPE_6,
+    /* 7 */ DOORSHUTTER_TYPE_7
+} DoorShutterType;
+
 #define DOORSHUTTER_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define DOORSHUTTER_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
-#define DOORSHUTTER_GET_380(thisx) (((thisx)->params >> 7) & 7)
+#define DOORSHUTTER_GET_TYPE(thisx) (((thisx)->params >> 7) & 7)
+#define DOORSHUTTER_PARAMS_GET_TYPE(params) (((params) >> 7) & 7)
 
 typedef struct DoorShutter {
     /* 0x000 */ SlidingDoorActor slidingDoor;

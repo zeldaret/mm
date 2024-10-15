@@ -24,7 +24,7 @@ void func_80C042F8(EnBombers* this);
 void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
-ActorInit En_Bombers_InitVars = {
+ActorProfile En_Bombers_Profile = {
     /**/ ACTOR_EN_BOMBERS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -118,7 +118,7 @@ static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_16
 };
 
-#include "overlays/ovl_En_Bombers/ovl_En_Bombers.c"
+#include "assets/overlays/ovl_En_Bombers/ovl_En_Bombers.c"
 
 Gfx* D_80C04818[] = {
     ovl_En_Bombers_DL_12C8, ovl_En_Bombers_DL_12D8, ovl_En_Bombers_DL_12D8,

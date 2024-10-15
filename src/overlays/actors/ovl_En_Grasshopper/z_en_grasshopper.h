@@ -2,7 +2,7 @@
 #define Z_EN_GRASSHOPPER_H
 
 #include "global.h"
-#include "objects/object_grasshopper/object_grasshopper.h"
+#include "assets/objects/object_grasshopper/object_grasshopper.h"
 
 #define DRAGONFLY_GET_TYPE(thisx) ((thisx)->params)
 

@@ -4,9 +4,8 @@
  * Description: Seahorse
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_ot.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -62,7 +61,7 @@ EnOt* D_80B5E880;
 EnOt* D_80B5E884;
 EnOt* D_80B5E888;
 
-ActorInit En_Ot_InitVars = {
+ActorProfile En_Ot_Profile = {
     /**/ ACTOR_EN_OT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -147,7 +146,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->type = SEAHORSE_GET_TYPE(&this->actor);
     if (this->type == SEAHORSE_TYPE_0) {
         D_80B5E880 = this;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
@@ -277,7 +276,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
         case SEAHORSE_TYPE_3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
@@ -433,9 +432,9 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_2, &this->animIndex);
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_2,
                                         &this->unk_360->animIndex);
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-        this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->unk_360->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->unk_360->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
@@ -896,7 +895,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
     sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
-    temp = Math3D_Parallel(&sp50, &sp44);
+    temp = Math3D_Cos(&sp50, &sp44);
     if ((actorPath->distSqToCurPointXZ < SQ(thisx->speed)) || (temp <= 0.0f)) {
         ret = true;
     } else {
@@ -927,7 +926,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_1, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     Flags_SetSwitch(play, SEAHORSE_GET_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80B5D750;
@@ -955,7 +954,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         if (D_80B5E884 != NULL) {
             func_80B5C9A8(this, play);
@@ -1086,7 +1085,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-    gDPSetDither(&gfx[0], G_CD_NOISE);
+    gDPSetDither(&gfx[0], G_AD_PATTERN | G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);

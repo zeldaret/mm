@@ -14,8 +14,8 @@
 #include "fault.h"
 #include "segment_symbols.h"
 
-#include "misc/locerrmsg/locerrmsg.h"
-#include "misc/memerrmsg/memerrmsg.h"
+#include "assets/misc/locerrmsg/locerrmsg.h"
+#include "assets/misc/memerrmsg/memerrmsg.h"
 
 #define LOCERRMSG_WIDTH 208
 #define LOCERRMSG_HEIGHT 16

@@ -8,7 +8,7 @@
 
 s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
-#include "code/sub_s/sub_s.c"
+#include "assets/code/sub_s/sub_s.c"
 
 Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 
@@ -578,7 +578,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -1148,12 +1148,12 @@ s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep) {
     f32 distSqBefore;
     f32 distSqAfter;
 
-    Actor_OffsetOfPointInActorCoords(actor, &offsetBefore, point);
+    Actor_WorldToActorCoords(actor, &offsetBefore, point);
     Math_SmoothStepToS(&actor->world.rot.y, SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqBefore), 4,
                        rotStep, 1);
     actor->shape.rot.y = actor->world.rot.y;
     Actor_MoveWithGravity(actor);
-    Actor_OffsetOfPointInActorCoords(actor, &offsetAfter, point);
+    Actor_WorldToActorCoords(actor, &offsetAfter, point);
     SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqAfter);
     return ((offsetBefore.z > 0.0f) && (offsetAfter.z <= 0.0f)) ? true : false;
 }
@@ -1328,8 +1328,8 @@ void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath
     diff.x = actorPath->curPoint.x - actorPath->worldPos->x;
     diff.y = actorPath->curPoint.y - actorPath->worldPos->y;
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
-    actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
-    actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
+    actorPath->distSqToCurPointXZ = Math3D_Dist1DSq(diff.x, diff.z);
+    actorPath->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&diff);
     actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
     actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;

@@ -15,8 +15,9 @@
  * 5. A cow tail
  */
 
-#include "sys_cfb.h"
 #include "z_en_invadepoh_demo.h"
+
+#include "sys_cfb.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -93,7 +94,7 @@ typedef enum {
     /* 4 */ EN_INVADEPOH_DEMO_UFO_CUEID_MAX
 } EnInvadepohDemoUfoCueId;
 
-ActorInit En_Invadepoh_Demo_InitVars = {
+ActorProfile En_Invadepoh_Demo_Profile = {
     /**/ ACTOR_EN_INVADEPOH_DEMO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -671,7 +672,7 @@ void EnInvadepohDemo_Alien_Draw(EnInvadepohDemo* this, PlayState* play) {
         gfx = POLY_XLU_DISP;
         gfx = Gfx_SetupDL20_NoCD(gfx);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_NEW);

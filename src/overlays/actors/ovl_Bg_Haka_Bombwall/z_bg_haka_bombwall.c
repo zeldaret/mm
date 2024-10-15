@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_haka_bombwall.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play);
 void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
-ActorInit Bg_Haka_Bombwall_InitVars = {
+ActorProfile Bg_Haka_Bombwall_Profile = {
     /**/ ACTOR_BG_HAKA_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

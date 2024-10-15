@@ -31,7 +31,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play);
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
-ActorInit En_Hidden_Nuts_InitVars = {
+ActorProfile En_Hidden_Nuts_Profile = {
     /**/ ACTOR_EN_HIDDEN_NUTS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -261,7 +261,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 
 void func_80BDB788(EnHiddenNuts* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
     this->unk_21A = 2;

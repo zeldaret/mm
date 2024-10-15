@@ -30,7 +30,7 @@
  */
 
 #include "z_obj_tokeidai.h"
-#include "objects/object_obj_tokeidai/object_obj_tokeidai.h"
+#include "assets/objects/object_obj_tokeidai/object_obj_tokeidai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -62,7 +62,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokeidai_InitVars = {
+ActorProfile Obj_Tokeidai_Profile = {
     /**/ ACTOR_OBJ_TOKEIDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

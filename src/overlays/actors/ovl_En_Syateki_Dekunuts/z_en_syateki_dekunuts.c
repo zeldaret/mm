@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiDekunuts*)thisx)
 
@@ -39,7 +39,7 @@ typedef enum {
     /* 1 */ SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP
 } ShootingGalleryDekuScrubHeaddressType;
 
-ActorInit En_Syateki_Dekunuts_InitVars = {
+ActorProfile En_Syateki_Dekunuts_Profile = {
     /**/ ACTOR_EN_SYATEKI_DEKUNUTS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

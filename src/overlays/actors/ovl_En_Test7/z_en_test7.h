@@ -53,9 +53,9 @@ typedef struct EnTest7 {
     /* 0x0144 */ s32 flags;
     /* 0x0148 */ OwlWarpWindCapsule windCapsule;
     /* 0x015C */ OwlWarpFeather feathers[OWL_WARP_NUM_FEATHERS];
-    /* 0x18CC */ SkeletonInfo skeletonInfo; // wingsSkeletonInfo
-    /* 0x18FC */ Vec3s unk_18FC[114]; // wingsFrameData
-    /* 0x1BA8 */ Vec3s unk_1BA8[114];
+    /* 0x18CC */ KFSkelAnimeFlex kfSkelAnime;
+    /* 0x18FC */ Vec3s jointTable[114];
+    /* 0x1BA8 */ Vec3s morphTable[114];
     /* 0x1E54 */ s32 timer;
     /* 0x1E58 */ EnTest7ActionFunc actionFunc;
     /* 0x1E5C */ EnTest7PlayerCamFunc playerCamFunc;

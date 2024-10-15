@@ -8,7 +8,7 @@
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -63,7 +63,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-ActorInit Boss_04_InitVars = {
+ActorProfile Boss_04_Profile = {
     /**/ ACTOR_BOSS_04,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -565,11 +565,10 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 }
 
 void func_809ED45C(Boss04* this, PlayState* play) {
-    ColliderJntSphElement* temp_v0;
     u8 damage;
 
-    if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
-        this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
+    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.bumperFlags & BUMP_HIT)) {
+        this->collider1.elements[0].base.bumperFlags &= ~BUMP_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health -= damage;

@@ -1,7 +1,7 @@
 #include "z64skin.h"
 
 #include "global.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 void Skin_Setup(Skin* skin) {
     skin->skeletonHeader = NULL;

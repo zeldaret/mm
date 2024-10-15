@@ -6,10 +6,10 @@
 
 #include "z_en_fz.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
-#include "objects/object_fz/object_fz.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_fz/object_fz.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnFz*)thisx)
 
@@ -49,7 +49,7 @@ void func_809340BC(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5,
 void func_80934178(EnFz* this, PlayState* play);
 void func_80934464(EnFz* this, PlayState* play);
 
-ActorInit En_Fz_InitVars = {
+ActorProfile En_Fz_Profile = {
     /**/ ACTOR_EN_FZ,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

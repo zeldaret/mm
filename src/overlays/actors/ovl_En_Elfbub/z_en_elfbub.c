@@ -6,7 +6,7 @@
 
 #include "z_en_elfbub.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
-#include "objects/object_bubble/object_bubble.h"
+#include "assets/objects/object_bubble/object_bubble.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE)
 
@@ -20,7 +20,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
-ActorInit En_Elfbub_InitVars = {
+ActorProfile En_Elfbub_Profile = {
     /**/ ACTOR_EN_ELFBUB,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,

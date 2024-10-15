@@ -7,7 +7,7 @@
 #include "z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiOkuta*)thisx)
 
@@ -28,7 +28,7 @@ void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this);
 
-ActorInit En_Syateki_Okuta_InitVars = {
+ActorProfile En_Syateki_Okuta_Profile = {
     /**/ ACTOR_EN_SYATEKI_OKUTA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -124,11 +124,11 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
 /**
  * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
  */
-void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
-    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+void EnSyatekiOkuta_SpawnSmoke(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sSmokePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sSmokeEnvColor = { 150, 150, 150, 255 };
 
-    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sSmokePrimColor, &sSmokeEnvColor, 400, scaleStep);
 }
 
 /**
@@ -288,7 +288,7 @@ void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
  * make it do nothing until the Shooting Gallery Man tells it to appear again.
  */
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
-    static Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
     Vec3f velocity;
@@ -308,7 +308,7 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
             velocity.x = 0.0f;
             velocity.y = -0.5f;
             velocity.z = 0.0f;
-            EnSyatekiOkuta_SpawnDust(&pos, &velocity, -20, play);
+            EnSyatekiOkuta_SpawnSmoke(&pos, &velocity, -20, play);
             Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
@@ -469,7 +469,7 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
         }
     } else if (this->actionFunc == EnSyatekiOkuta_Float) {
         this->headScale.x = this->headScale.z = 1.0f;
-        this->headScale.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->headScale.y = (Math_SinF((M_PIf / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Hide) {
         if (curFrame < 3.0f) {
             this->headScale.y = 1.0f;
@@ -502,14 +502,15 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
- * parameter.
+ * Gets the scaling factor for animating the snout limb. If the limb is not being transformed, no scale value is
+ * returned. Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the
+ * `scale` parameter.
  */
 s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnSyatekiOkuta_Appear) {
         scale->y = 1.0f;
         scale->z = 1.0f;
-        scale->x = (Math_SinF((M_PI / 16) * curFrame) * 0.4f) + 1.0f;
+        scale->x = (Math_SinF((M_PIf / 16) * curFrame) * 0.4f) + 1.0f;
     } else if (this->actionFunc == EnSyatekiOkuta_Die) {
         if ((curFrame >= 35.0f) || (curFrame < 25.0f)) {
             return false;

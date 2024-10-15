@@ -6,7 +6,7 @@
 
 #include "z_en_encount4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount4*)thisx)
 
@@ -20,7 +20,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play);
 void func_809C4598(EnEncount4* this, PlayState* play);
 void func_809C464C(EnEncount4* this, PlayState* play);
 
-ActorInit En_Encount4_InitVars = {
+ActorProfile En_Encount4_Profile = {
     /**/ ACTOR_EN_ENCOUNT4,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -99,13 +99,13 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
         }
 
         if ((this->unk_148 != 0) || (this->actor.xzDistToPlayer < 240.0f)) {
-            if ((this->unk_148 == 0) && (captainKeeta->unk2DC != 0)) {
+            if ((this->unk_148 == 0) && captainKeeta->unk_02DC) {
                 Actor_Kill(&this->actor);
                 return;
             }
 
             fireWallParams = BGFIREWALL_PARAM_0;
-            if ((this->unk_148 == 0) || (captainKeeta->unk2DC != 0)) {
+            if ((this->unk_148 == 0) || captainKeeta->unk_02DC) {
                 i = 0;
                 if (this->unk_148 != 0) {
                     fireWallParams = BGFIREWALL_PARAM_1;

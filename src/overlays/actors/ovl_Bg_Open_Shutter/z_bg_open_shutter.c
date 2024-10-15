@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_open_shutter.h"
-#include "objects/object_open_obj/object_open_obj.h"
+#include "assets/objects/object_open_obj/object_open_obj.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 
@@ -27,7 +27,7 @@ typedef enum {
     /* 2 */ BGOPENSHUTTER_DOOR_CLOSED
 } BGOpenShutterDoorState;
 
-ActorInit Bg_Open_Shutter_InitVars = {
+ActorProfile Bg_Open_Shutter_Profile = {
     /**/ ACTOR_BG_OPEN_SHUTTER,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -55,7 +55,7 @@ f32 func_80ACAB10(PlayState* play, Actor* actor, f32 arg2, f32 arg3, f32 arg4) {
     point.y = player->actor.world.pos.y + arg2;
     point.z = player->actor.world.pos.z;
 
-    Actor_OffsetOfPointInActorCoords(actor, &offset, &point);
+    Actor_WorldToActorCoords(actor, &offset, &point);
     if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
         return FLT_MAX;
     } else {
@@ -101,7 +101,7 @@ void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
     BgOpenShutter* this = THIS;
     s32 transition = DOOR_GET_TRANSITION_ID(thisx);
 
-    play->doorCtx.transitionActorList[transition].id = -play->doorCtx.transitionActorList[transition].id;
+    play->transitionActors.list[transition].id = -play->transitionActors.list[transition].id;
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->slidingDoor.dyna.bgId);
 }
 

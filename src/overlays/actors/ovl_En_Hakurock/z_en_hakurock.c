@@ -25,8 +25,8 @@
 
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_boss_hakugin/object_boss_hakugin.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_boss_hakugin/object_boss_hakugin.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -58,7 +58,7 @@ typedef enum EnHakurockEffectType {
     /* 3 */ EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED
 } EnHakurockEffectType;
 
-ActorInit En_Hakurock_InitVars = {
+ActorProfile En_Hakurock_Profile = {
     /**/ ACTOR_EN_HAKUROCK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -325,7 +325,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if ((this->timer % 2) == 0) {
-            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PIf / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }

@@ -46,5 +46,5 @@ void MallocCleanup(void) {
 }
 
 s32 MallocIsInitialized(void) {
-    return __osMallocIsInitalized(&malloc_arena);
+    return __osMallocIsInitialized(&malloc_arena);
 }

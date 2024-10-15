@@ -7,7 +7,7 @@
 #include "z_en_bigokuta.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBigokuta*)thisx)
 
@@ -31,7 +31,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
-ActorInit En_Bigokuta_InitVars = {
+ActorProfile En_Bigokuta_Profile = {
     /**/ ACTOR_EN_BIGOKUTA,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -490,12 +490,12 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
         if (this->bodyCollider.base.acFlags & AC_HIT) {
-            if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x1000) { // Ice Arrow
+            if (this->bodyCollider.info.acHitElem->toucher.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
-            } else if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x2000) { // Light Arrow
+            } else if (this->bodyCollider.info.acHitElem->toucher.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;
@@ -551,7 +551,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 30.0f * 0.001f)) {
             Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -604,7 +604,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +613,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {

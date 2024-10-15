@@ -2,7 +2,7 @@
 #define Z_EN_HIDDEN_NUTS_H
 
 #include "global.h"
-#include "objects/object_hintnuts/object_hintnuts.h"
+#include "assets/objects/object_hintnuts/object_hintnuts.h"
 
 struct EnHiddenNuts;
 

@@ -11,7 +11,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
-#include "objects/object_horse_link_child/object_horse_link_child.h"
+#include "assets/objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -162,7 +162,7 @@ static SkeletonHeader* sSkeletonHeaders[HORSE_TYPE_MAX] = {
     NULL,        // HORSE_TYPE_DONKEY
 };
 
-ActorInit En_Horse_InitVars = {
+ActorProfile En_Horse_Profile = {
     /**/ ACTOR_EN_HORSE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -345,7 +345,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         phi_f14 = pathPoints[this->curRaceWaypoint + 1].z - pathPoints[this->curRaceWaypoint - 1].z;
     }
 
-    func_8017B7F8(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
+    Math3D_RotateXZPlane(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
 
     if (((this->actor.world.pos.x * sp7C) + (sp78 * this->actor.world.pos.z) + sp74) > 0.0f) {
         this->curRaceWaypoint++;
@@ -361,7 +361,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         Math_Vec3s_ToVec3f(&sp80, &pathPoints[this->curRaceWaypoint - 1]);
     }
 
-    func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
+    Math3D_PointDistSqToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_1EC & 4)) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0xC80);
@@ -372,7 +372,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0x320);
         if (sp70 < SQ(100.0f)) {
             if ((this->actor.xzDistToPlayer < 100.0f) ||
-                (this->colliderJntSph.elements[0].info.ocElemFlags & OCELEM_HIT)) {
+                (this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT)) {
                 s32 pad;
 
                 if (Math_SinS(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0.0f) {
@@ -404,7 +404,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
 
     for (i = sp68; i < sp60; i++) {
         Math_Vec3s_ToVec3f(&sp50, &pathPoints[i]);
-        temp_f0 = Math3D_Distance(&this->actor.world.pos, &sp50);
+        temp_f0 = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &sp50);
         if (temp_f0 < sp64) {
             sp64 = temp_f0;
             sp68 = i;
@@ -577,7 +577,7 @@ bool func_8087C38C(PlayState* play, EnHorse* this, Vec3f* arg2) {
         return false;
     }
 
-    eyeDist = Math3D_Distance(arg2, &play->view.eye);
+    eyeDist = Math3D_Vec3f_DistXYZ(arg2, &play->view.eye);
 
     return func_8087C2B8(play, this, &sp24, sp20) || (eyeDist < 100.0f);
 }
@@ -629,7 +629,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
         spawnPos.x = pathPoints[i].x;
         spawnPos.y = pathPoints[i].y;
         spawnPos.z = pathPoints[i].z;
-        dist = Math3D_Distance(&player->actor.world.pos, &spawnPos);
+        dist = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &spawnPos);
 
         if ((minDist < dist) || func_8087C38C(play, this, &spawnPos)) {
             continue;
@@ -655,7 +655,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
         spawnPos.x = pathPoints[i].x;
         spawnPos.y = pathPoints[i].y;
         spawnPos.z = pathPoints[i].z;
-        dist = Math3D_Distance(&player->actor.world.pos, &spawnPos);
+        dist = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &spawnPos);
 
         if (minDist < dist) {
             continue;
@@ -2514,7 +2514,7 @@ void EnHorse_CsMoveToPoint(EnHorse* this, PlayState* play, CsCmdActorCue* cue) {
     endPos.y = cue->endPos.y;
     endPos.z = cue->endPos.z;
 
-    if (Math3D_Distance(&endPos, &this->actor.world.pos) > 8.0f) {
+    if (Math3D_Vec3f_DistXYZ(&endPos, &this->actor.world.pos) > 8.0f) {
         EnHorse_RotateToPoint(this, play, &endPos, 0x320);
         this->actor.speed = 8.0f;
         this->skin.skelAnime.playSpeed = this->actor.speed * 0.3f;
@@ -2695,7 +2695,7 @@ void EnHorse_CsWarpMoveToPoint(EnHorse* this, PlayState* play, CsCmdActorCue* cu
     endPos.y = cue->endPos.y;
     endPos.z = cue->endPos.z;
 
-    if (Math3D_Distance(&endPos, &this->actor.world.pos) > 8.0f) {
+    if (Math3D_Vec3f_DistXYZ(&endPos, &this->actor.world.pos) > 8.0f) {
         EnHorse_RotateToPoint(this, play, &endPos, 0x320);
         this->actor.speed = 8.0f;
         this->skin.skelAnime.playSpeed = this->actor.speed * 0.3f;
@@ -2828,10 +2828,10 @@ s32 EnHorse_UpdateHbaRaceInfo(EnHorse* this, PlayState* play, RaceInfo* raceInfo
     f32 d;
 
     EnHorse_RaceWaypointPos(raceInfo->waypoints, this->curRaceWaypoint, &pos);
-    func_8017B7F8(&pos, raceInfo->waypoints[this->curRaceWaypoint].angle, &px, &pz, &d);
+    Math3D_RotateXZPlane(&pos, raceInfo->waypoints[this->curRaceWaypoint].angle, &px, &pz, &d);
 
     if ((this->curRaceWaypoint >= (raceInfo->numWaypoints - 1)) &&
-        (Math3D_Distance(&pos, &this->actor.world.pos) < DREG(8))) {
+        (Math3D_Vec3f_DistXYZ(&pos, &this->actor.world.pos) < DREG(8))) {
         this->hbaFlags |= 2;
     }
 
@@ -2999,9 +2999,9 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
         }
     }
 
-    distToHome = Math3D_Distance(&this->actor.home.pos, &this->actor.world.pos);
-    playerDistToHome = Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos);
-    distToPlayer = Math3D_Distance(&player->actor.world.pos, &this->actor.world.pos);
+    distToHome = Math3D_Vec3f_DistXYZ(&this->actor.home.pos, &this->actor.world.pos);
+    playerDistToHome = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos);
+    distToPlayer = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.world.pos);
 
     if (playerDistToHome > 300.0f) {
         if (distToHome > 150.0f) {
@@ -3352,7 +3352,7 @@ void func_808848C8(EnHorse* this, PlayState* play) {
     Horse_RotateToPoint(&this->actor, &sp24, 0x7D0);
     this->skin.skelAnime.playSpeed = this->actor.speed * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
-    if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {
+    if (Math3D_Vec3f_DistXYZ(&sp24, &this->actor.world.pos) < 30.0f) {
         this->stateFlags &= ~ENHORSE_UNRIDEABLE;
         EnHorse_StartIdleRidable(this);
     }
@@ -3446,7 +3446,7 @@ void func_80884E0C(EnHorse* this, PlayState* play) {
     this->actor.world.pos.x = this->banditPosition.x;
     this->actor.world.pos.z = this->banditPosition.z;
 
-    this->unk_56C = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
+    this->unk_56C = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.prevPos);
     if (((this->unk_550 == 5) || (this->unk_550 == 7)) && (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER)) {
         this->rider->animIndex2 = ENIN_ANIM2_7;
     } else {
@@ -4018,7 +4018,7 @@ void func_80886C00(EnHorse* this, PlayState* play) {
     if (((this->action == ENHORSE_ACTION_MOUNTED_WALK) || (this->action == ENHORSE_ACTION_MOUNTED_TROT) ||
          (this->action == ENHORSE_ACTION_MOUNTED_GALLOP)) &&
         (CHECK_BTN_ALL(input->press.button, BTN_A) || (AudioVoice_GetWord() == VOICE_WORD_ID_HIYA)) &&
-        (play->interfaceCtx.unk_212 == DO_ACTION_FASTER) && !(this->stateFlags & ENHORSE_BOOST) &&
+        (play->interfaceCtx.aButtonDoActionDelayed == DO_ACTION_FASTER) && !(this->stateFlags & ENHORSE_BOOST) &&
         !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             Rumble_Request(0.0f, 180, 20, 100);
@@ -4121,7 +4121,7 @@ void EnHorse_TiltBody(EnHorse* this, PlayState* play) {
 
     speed = this->actor.speed / this->boostSpeed;
     turnVel = this->actor.shape.rot.y - this->lastYaw;
-    targetRoll = -TRUNCF_BINANG((2730.0f * speed) * (turnVel / 960.00006f));
+    targetRoll = -TRUNCF_BINANG((2730.0f * speed) * (turnVel / (9.6f * 100.0f)));
     rollDiff = targetRoll - this->actor.world.rot.z;
 
     if (fabsf(targetRoll) < 100.0f) {
@@ -4275,7 +4275,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
             }
         }
 
-        if (this->colliderJntSph.elements->info.ocElemFlags & OCELEM_HIT) {
+        if (this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT) {
             if (thisx->speed > 10.0f) {
                 thisx->speed -= 1.0f;
             }
@@ -4295,7 +4295,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
         }
 
         if ((this->playerControlled == false) && (this->unk_1EC & 8)) {
-            if ((this->colliderJntSph.elements->info.ocElemFlags & OCELEM_HIT) &&
+            if ((this->colliderJntSph.elements[0].base.ocElemFlags & OCELEM_HIT) &&
                 (this->colliderJntSph.base.oc->id == ACTOR_EN_IN)) {
                 func_80884868(this);
             }

@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/string.h"
+#include "string.h"
 
 #define ATOI(i, a)                               \
     for (i = 0; (*a >= '0') && (*a <= '9'); a++) \

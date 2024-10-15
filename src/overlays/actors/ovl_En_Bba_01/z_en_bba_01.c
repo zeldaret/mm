@@ -5,15 +5,15 @@
  *
  * Note: This actor was probably written with OOT's object_bba's skeleton in mind, and so this actor is very bugged.
  *
- * The main offender is that gBbaSkel has 18 limbs, while the system used (EnHy) expects 16 (see @bug in FinishInit
- * below).
+ * The main offender is that gBombShopLadySkel has 18 limbs, while the system used (EnHy) expects 16 (see @bug in
+ * FinishInit below).
  *
  * The draw functions also use different limbs than expected, which results in, for example, EnBba01's right arm and bag
  * following the player instead of her head and torso.
  */
 
 #include "z_en_bba_01.h"
-#include "objects/object_bba/object_bba.h"
+#include "assets/objects/object_bba/object_bba.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -28,7 +28,7 @@ void EnBba01_Walk(EnHy* this, PlayState* play);
 void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
-ActorInit En_Bba_01_InitVars = {
+ActorProfile En_Bba_01_Profile = {
     /**/ ACTOR_EN_BBA_01,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -156,9 +156,9 @@ s32 func_809CC270(EnBba01* this, PlayState* play) {
 }
 
 void EnBba01_FinishInit(EnHy* this, PlayState* play) {
-    //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
-    //! Since gBbaSkel has more limbs than expected, joint and morph tables will overflow
-    if (EnHy_Init(this, play, &gBbaSkel, ENHY_ANIM_BBA_6)) {
+    //! @bug: gBombShopLadySkel does not match EnHy's skeleton assumptions.
+    //! Since gBombShopLadySkel has more limbs than expected, joint and morph tables will overflow
+    if (EnHy_Init(this, play, &gBombShopLadySkel, ENHY_ANIM_BBA_6)) {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
@@ -262,7 +262,7 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPartIndex]);
     }
 
-    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
+    if (limbIndex == BOMB_SHOP_LADY_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
@@ -272,23 +272,25 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
+    if (limbIndex == BOMB_SHOP_LADY_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->enHy.headRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->enHy.headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == BBA_LIMB_BAG) {
+    if (limbIndex == BOMB_SHOP_LADY_LIMB_BAG) {
         Matrix_RotateXS(-this->enHy.torsoRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.msgFading && ((play->state.frames % 2) == 0)) {
+    if ((limbIndex == BOMB_SHOP_LADY_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.msgFading &&
+        ((play->state.frames % 2) == 0)) {
         Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
+    if ((limbIndex == BOMB_SHOP_LADY_LIMB_BAG) || (limbIndex == BOMB_SHOP_LADY_LIMB_TORSO) ||
+        (limbIndex == BOMB_SHOP_LADY_LIMB_LEFT_FOREARM)) {
         rot->y += TRUNCF_BINANG(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
         rot->z += TRUNCF_BINANG(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
     }
@@ -301,7 +303,7 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == BBA_LIMB_HEAD) {
+    if (limbIndex == BOMB_SHOP_LADY_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
@@ -310,7 +312,7 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
+    if (limbIndex == BOMB_SHOP_LADY_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_MultVec3f(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }

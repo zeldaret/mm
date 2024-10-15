@@ -18,9 +18,9 @@
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 
@@ -101,7 +101,7 @@ typedef enum GohtShadowSize {
     /* 3 */ GOHT_SHADOW_SIZE_SMALL
 } GohtShadowSize;
 
-ActorInit Boss_Hakugin_InitVars = {
+ActorProfile Boss_Hakugin_Profile = {
     /**/ ACTOR_BOSS_HAKUGIN,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -684,7 +684,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         maxAngle = 0.0f;
     } else {
         // Either the dot product is exactly -1.0f, or a non-unit vector was passed into this function.
-        maxAngle = M_PI;
+        maxAngle = M_PIf;
     }
 
     angleStep = CLAMP_MAX(angleStep, maxAngle);
@@ -692,7 +692,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         return;
     }
 
-    Math3D_CrossProduct(norm, targetNorm, &crossProduct);
+    Math3D_Vec3f_Cross(norm, targetNorm, &crossProduct);
 
     if (BossHakugin_Vec3fNormalize(&crossProduct)) {
         Matrix_RotateAxisF(angleStep, &crossProduct, MTXMODE_NEW);
@@ -1007,12 +1007,12 @@ void BossHakugin_AddLightningSegments(BossHakugin* this, Vec3f* startPos, PlaySt
     targetPos.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
     targetPos.y = player->actor.world.pos.y + 40.0f;
     targetPos.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedTargetPos, &targetPos);
+    Actor_WorldToActorCoords(&this->actor, &transformedTargetPos, &targetPos);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER_THR);
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
         lightningSegment = &this->lightningSegments[i];
-        Actor_OffsetOfPointInActorCoords(&this->actor, &transformedRootPos, &rootPos);
+        Actor_WorldToActorCoords(&this->actor, &transformedRootPos, &rootPos);
 
         if (transformedTargetPos.z < transformedRootPos.z) {
             lightningSegment->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
@@ -1498,9 +1498,9 @@ void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 col
         this->drawDmgEffAlpha = 3.0f;
         this->drawDmgEffScale = 2.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.x,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.y,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.z, 0, 0, 0,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.x,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.y,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -1512,9 +1512,9 @@ void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 col
         this->drawDmgEffScale = 2.5f;
         this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.x,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.y,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.z, 0, 0, 3,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.x,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.y,
+                    this->bodyCollider.elements[colliderIndex].base.bumper.hitPos.z, 0, 0, 3,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
@@ -1617,7 +1617,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     }
 
     if ((this->iceCollider.base.acFlags & AC_HIT) &&
-        (this->iceCollider.info.acHitInfo->toucher.dmgFlags == DMG_FIRE_ARROW)) {
+        (this->iceCollider.info.acHitElem->toucher.dmgFlags == DMG_FIRE_ARROW)) {
         this->iceCollider.base.atFlags &= ~AT_HIT;
         this->iceCollider.base.acFlags &= ~AC_HIT;
         this->iceCollider.base.ocFlags1 &= ~OC1_HIT;
@@ -2390,7 +2390,7 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
     this->actor.shape.rot.y =
-        (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
+        (s32)(Math_SinF(this->timer * (M_PIf / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
 
     if (this->timer == 0) {
         if (this->runOffsetRot > 0) {
@@ -2403,10 +2403,10 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
         this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     }
 
-    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
-    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
+    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PIf / 9));
+    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PIf / 9));
 
-    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->runOffsetRot * 0.3f);
+    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PIf / 18)) * -(this->runOffsetRot * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
@@ -2470,10 +2470,11 @@ void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play)
     BossHakugin_RunUpdateCommon(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
-        ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
+        ((this->distToRightWall <= (189000.0f * 0.001f)) || (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         BossHakugin_SetupDeathCutsceneCrushedByRocks(this);
-    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
-               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
+    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= (189000.0f * 0.001f))) ||
+               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) &&
+                (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         absTargetRotY = ABS_ALT(this->targetRotY);
         if (absTargetRotY < 0x2000) {
             this->actor.world.pos.z = -1389.0f;
@@ -2620,7 +2621,7 @@ void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
     if ((this->bodyCollider.base.atFlags & AT_HIT) &&
         ((this->actionFunc == BossHakugin_Charge) || !(player->stateFlags3 & PLAYER_STATE3_80000))) {
         if ((this->actionFunc == BossHakugin_Charge) &&
-            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].info.toucherFlags & TOUCH_HIT) &&
+            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.toucherFlags & TOUCH_HIT) &&
             !(this->bodyCollider.base.atFlags & AT_BOUNCED) && play->grabPlayer(play, player)) {
             BossHakugin_SetupThrow(this, play);
         } else if (player->stateFlags3 & PLAYER_STATE3_1000) {
@@ -2655,7 +2656,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         s32 i;
 
         for (i = 0; i < GOHT_COLLIDER_BODYPART_MAX; i++) {
-            if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -2667,7 +2668,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyCollider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
+            (this->bodyCollider.elements[i].base.acHitElem->toucher.dmgFlags & 0x000DB0B3)) {
             return false;
         }
 
@@ -2713,7 +2714,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
-            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitInfo->toucher.damage;
+            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].base.acHitElem->toucher.damage;
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -2723,19 +2724,19 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 if ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_EXPLOSIVE) ||
                     ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) &&
                      (this->actionFunc != BossHakugin_Charge) &&
-                     ((this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_THORAX].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_PELVIS].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_RIGHT_UPPER_LEG].info.bumperFlags &
+                     ((this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.bumperFlags & BUMP_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_THORAX].base.bumperFlags & BUMP_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_PELVIS].base.bumperFlags & BUMP_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_RIGHT_UPPER_LEG].base.bumperFlags &
                        BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_LEFT_UPPER_LEG].info.bumperFlags &
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_LEFT_UPPER_LEG].base.bumperFlags &
                        BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_RIGHT_THIGH].info.bumperFlags &
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_RIGHT_THIGH].base.bumperFlags &
                        BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH].info.bumperFlags &
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH].base.bumperFlags &
                        BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].info.bumperFlags & BUMP_HIT)))) {
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].base.bumperFlags & BUMP_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].base.bumperFlags & BUMP_HIT)))) {
                     BossHakugin_SetupDowned(this);
                 } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_NONE) &&
                            (this->electricBallCount == 0) && (this->actionFunc == BossHakugin_Run) &&
@@ -2756,11 +2757,11 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             this->disableBodyCollidersTimer = 20;
             for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
                 Vec3f hitPos;
-                ColliderInfo* colliderInfo = &this->bodyCollider.elements[j].info;
+                ColliderElement* elem = &this->bodyCollider.elements[j].base;
 
-                if ((colliderInfo->bumperFlags & BUMP_HIT) && (colliderInfo->acHitInfo != NULL) &&
-                    !(colliderInfo->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
-                    Math_Vec3s_ToVec3f(&hitPos, &colliderInfo->bumper.hitPos);
+                if ((elem->bumperFlags & BUMP_HIT) && (elem->acHitElem != NULL) &&
+                    !(elem->acHitElem->toucherFlags & TOUCH_SFX_NONE)) {
+                    Math_Vec3s_ToVec3f(&hitPos, &elem->bumper.hitPos);
                     EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
                     CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);
                     break;
@@ -2909,7 +2910,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) {
         angleStep =
             BINANG_TO_RAD(Math3D_Vec3fDistSq(firstBallPos, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
-        angleStep = CLAMP_MAX(angleStep, M_PI / 4.0f);
+        angleStep = CLAMP_MAX(angleStep, M_PIf / 4.0f);
 
         Math_Vec3f_Diff(&player->actor.world.pos, firstBallPos, &targetRot);
 
@@ -2980,7 +2981,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
                     normal.x = COLPOLY_GET_NORMAL(poly->normal.x);
                     normal.y = COLPOLY_GET_NORMAL(poly->normal.y);
                     normal.z = COLPOLY_GET_NORMAL(poly->normal.z);
-                    func_80179F64(&this->electricBallRot, &normal, &targetRot);
+                    Math3D_Vec3fReflect(&this->electricBallRot, &normal, &targetRot);
                     Math_Vec3f_Copy(&this->electricBallRot, &targetRot);
                 }
             } else {
@@ -3011,7 +3012,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     }
 
     BossHakugin_UpdateBaseRot(this, play);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, (89100.0f * 0.001f), 0.0f,
@@ -3777,25 +3778,25 @@ void BossHakugin_SpawnCrushingRocks(BossHakugin* this) {
 void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this) {
     s32 i;
     GohtCrushingRock* crushingRock;
-    ColliderJntSphElement* element;
+    ColliderJntSphElement* jntSphElem;
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT / 2; i++) {
         crushingRock = &this->crushingRocks[i << 1];
-        element = &this->bodyCollider.elements[i];
+        jntSphElem = &this->bodyCollider.elements[i];
 
-        element->dim.worldSphere.center.x = crushingRock->pos.x;
-        element->dim.worldSphere.center.y = crushingRock->pos.y;
-        element->dim.worldSphere.center.z = crushingRock->pos.z;
-        element->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
-        element->info.bumper.dmgFlags = 0xF3CFBBFF;
-        element->info.bumperFlags &= ~BUMP_NO_HITMARK;
-        element->info.elemType = ELEMTYPE_UNK0;
+        jntSphElem->dim.worldSphere.center.x = crushingRock->pos.x;
+        jntSphElem->dim.worldSphere.center.y = crushingRock->pos.y;
+        jntSphElem->dim.worldSphere.center.z = crushingRock->pos.z;
+        jntSphElem->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
+        jntSphElem->base.bumper.dmgFlags = 0xF3CFBBFF;
+        jntSphElem->base.bumperFlags &= ~BUMP_NO_HITMARK;
+        jntSphElem->base.elemType = ELEMTYPE_UNK0;
     }
 
     // This for-loop will update the collider for GOHT_COLLIDER_BODYPART_LEFT_HORN.
     for (; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-        this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_ON;
-        this->bodyCollider.elements[i].info.ocElemFlags &= ~OCELEM_ON;
+        this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_ON;
+        this->bodyCollider.elements[i].base.ocElemFlags &= ~OCELEM_ON;
     }
 
     this->bodyCollider.base.colType = COLTYPE_HARD;

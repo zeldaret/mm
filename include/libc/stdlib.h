@@ -1,7 +1,7 @@
 #ifndef LIBC_STDLIB_H
 #define LIBC_STDLIB_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
 
 typedef struct {
     /* 0x0 */ int quot;

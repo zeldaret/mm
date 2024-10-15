@@ -5,11 +5,10 @@
  */
 
 #include "z_en_rail_skb.h"
-#include "objects/object_skb/object_skb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnRailSkb*)thisx)
 
@@ -51,7 +50,7 @@ void func_80B726B4(EnRailSkb* this, PlayState* play);
 void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
-ActorInit En_Rail_Skb_InitVars = {
+ActorProfile En_Rail_Skb_Profile = {
     /**/ ACTOR_EN_RAIL_SKB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -556,6 +555,9 @@ void func_80B717E0(EnRailSkb* this, PlayState* play) {
                 func_80B71650(this);
             }
             break;
+
+        default:
+            break;
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0x71C, 0xB6);
 }
@@ -766,6 +768,9 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 func_80B71D8C(this, play, func_80B718B0);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -841,7 +846,7 @@ void func_80B72190(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B723F8(EnRailSkb* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actor.flags |= ACTOR_FLAG_100000;
     this->actor.hintId = TATL_HINT_ID_NONE;
@@ -942,7 +947,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
     if ((this->actionFunc == func_80B70FF8) || (this->actionFunc == func_80B716A8)) {
         if (this->actionFunc != func_80B716A8) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
                 this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->actor.hintId = TATL_HINT_ID_NONE;
@@ -952,7 +957,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
             this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
             this->actor.flags &= ~ACTOR_FLAG_100000;
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
             this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             func_80B70FA0(this);
@@ -1106,7 +1111,7 @@ s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     EnRailSkb* this = THIS;
     s16 abs;
 
-    if (limbIndex == 11) {
+    if (limbIndex == STALCHILD_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
         abs = fabsf(Math_SinS(play->state.frames * 6000) * 95.0f) + 160.0f;
@@ -1115,15 +1120,15 @@ s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         gDPSetEnvColor(POLY_OPA_DISP++, abs, abs, abs, 255);
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (limbIndex == 10) {
+    } else if (limbIndex == STALCHILD_LIMB_RIBCAGE) {
         Vec3f sp24 = { 0.0f, 1000.0f, 0.0f };
 
         Matrix_MultVec3f(&sp24, &this->actor.focus.pos);
-    } else if ((limbIndex == 12) && (this->unk_3FA == 1)) {
+    } else if ((limbIndex == STALCHILD_LIMB_LOWER_JAW) && (this->unk_3FA == 1)) {
         Matrix_RotateZS(1820, MTXMODE_APPLY);
     }
 
-    if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_402 & 2)) {
+    if (((limbIndex == STALCHILD_LIMB_HEAD) || (limbIndex == STALCHILD_LIMB_LOWER_JAW)) && (this->unk_402 & 2)) {
         *dList = NULL;
     }
 
@@ -1137,20 +1142,25 @@ void EnRailSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     if (!(this->unk_402 & 0x80)) {
         Collider_UpdateSpheres(limbIndex, &this->collider);
 
-        if ((limbIndex == 11) && (this->unk_402 & 1) && !(this->unk_402 & 2)) {
+        if ((limbIndex == STALCHILD_LIMB_HEAD) && (this->unk_402 & 1) && !(this->unk_402 & 2)) {
             Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
             this->unk_402 |= 2;
-        } else if ((this->unk_402 & 0x40) && ((limbIndex != 11) || !(this->unk_402 & 1)) && (limbIndex != 12)) {
+        } else if ((this->unk_402 & 0x40) && ((limbIndex != STALCHILD_LIMB_HEAD) || !(this->unk_402 & 1)) &&
+                   (limbIndex != STALCHILD_LIMB_LOWER_JAW)) {
             Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
         }
 
         if (this->drawDmgEffTimer != 0) {
-            if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
-                (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
-                (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
+            if ((limbIndex == STALCHILD_LIMB_PELVIS) || (limbIndex == STALCHILD_LIMB_RIGHT_THIGH) ||
+                (limbIndex == STALCHILD_LIMB_RIGHT_SHIN) || (limbIndex == STALCHILD_LIMB_RIGHT_FOOT) ||
+                (limbIndex == STALCHILD_LIMB_LEFT_THIGH) || (limbIndex == STALCHILD_LIMB_LEFT_SHIN) ||
+                (limbIndex == STALCHILD_LIMB_LEFT_FOOT) || (limbIndex == STALCHILD_LIMB_RIGHT_UPPER_ARM) ||
+                (limbIndex == STALCHILD_LIMB_RIGHT_LOWER_ARM) || (limbIndex == STALCHILD_LIMB_RIGHT_HAND) ||
+                (limbIndex == STALCHILD_LIMB_LEFT_UPPER_ARM) || (limbIndex == STALCHILD_LIMB_LEFT_LOWER_ARM) ||
+                (limbIndex == STALCHILD_LIMB_LEFT_HAND)) {
                 Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsCount]);
                 this->bodyPartsCount++;
-            } else if ((limbIndex == 11) && !(this->unk_402 & 2)) {
+            } else if ((limbIndex == STALCHILD_LIMB_HEAD) && !(this->unk_402 & 2)) {
                 Matrix_MultVec3f(&D_80B734D0, &this->bodyPartsPos[this->bodyPartsCount]);
                 this->bodyPartsCount++;
             }

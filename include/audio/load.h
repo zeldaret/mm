@@ -5,8 +5,8 @@
 #include "PR/os.h"
 #include "PR/os_message.h"
 #include "PR/ultratypes.h"
-#include "libc/stddef.h"
-#include "libc/stdint.h"
+#include "stddef.h"
+#include "stdint.h"
 #include "unk.h"
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
@@ -16,6 +16,13 @@ typedef enum SampleBankTableType {
     /* 1 */ FONT_TABLE,
     /* 2 */ SAMPLE_TABLE
 } SampleBankTableType;
+
+typedef struct AudioTableHeader {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ uintptr_t romAddr;
+    /* 0x08 */ char pad[0x8];
+} AudioTableHeader; // size = 0x10
 
 typedef struct AudioTableEntry {
     /* 0x0 */ uintptr_t romAddr;
@@ -28,10 +35,7 @@ typedef struct AudioTableEntry {
 } AudioTableEntry; // size = 0x10
 
 typedef struct AudioTable {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ uintptr_t romAddr;
-    /* 0x08 */ char pad[0x8];
+    /* 0x00 */ AudioTableHeader header;
     /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
 } AudioTable; // size >= 0x20
 

@@ -17,7 +17,7 @@ void EnAnd_Destroy(Actor* thisx, PlayState* play);
 void EnAnd_Update(Actor* thisx, PlayState* play);
 void EnAnd_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_And_InitVars = {
+ActorProfile En_And_Profile = {
     /**/ ACTOR_EN_AND,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

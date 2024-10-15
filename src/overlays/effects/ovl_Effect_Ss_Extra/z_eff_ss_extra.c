@@ -6,7 +6,7 @@
  */
 
 #include "z_eff_ss_extra.h"
-#include "objects/object_yabusame_point/object_yabusame_point.h"
+#include "assets/objects/object_yabusame_point/object_yabusame_point.h"
 
 #define PARAMS ((EffectSsExtraInitParams*)initParamsx)
 
@@ -16,7 +16,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static s16 sScores[] = { EXTRA_SCORE_30, EXTRA_SCORE_60, EXTRA_SCORE_100 };
 
-EffectSsInit Effect_Ss_Extra_InitVars = {
+EffectSsProfile Effect_Ss_Extra_Profile = {
     EFFECT_SS_EXTRA,
     EffectSsExtra_Init,
 };

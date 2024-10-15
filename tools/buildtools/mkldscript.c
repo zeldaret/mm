@@ -85,11 +85,10 @@ static void write_ld_script(FILE* fout) {
         fprintf(fout, "        _%sSegmentDataStart = .;\n", seg->name);
 
         for (j = 0; j < seg->includesCount; j++) {
-            if (!seg->includes[j].dataWithRodata)
-                fprintf(fout,
-                        "            %s (.data)\n"
-                        "        . = ALIGN(0x10);\n",
-                        seg->includes[j].fpath);
+            fprintf(fout,
+                    "            %s (.data)\n"
+                    "        . = ALIGN(0x10);\n",
+                    seg->includes[j].fpath);
         }
 
         /*
@@ -109,12 +108,6 @@ static void write_ld_script(FILE* fout) {
         fprintf(fout, "        _%sSegmentRoDataStart = .;\n", seg->name);
 
         for (j = 0; j < seg->includesCount; j++) {
-            if (seg->includes[j].dataWithRodata)
-                fprintf(fout,
-                        "            %s (.data)\n"
-                        "        . = ALIGN(0x10);\n",
-                        seg->includes[j].fpath);
-
             fprintf(fout,
                     "            %s (.rodata)\n"
                     "        . = ALIGN(0x10);\n",

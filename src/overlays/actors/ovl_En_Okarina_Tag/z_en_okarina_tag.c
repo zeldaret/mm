@@ -6,7 +6,7 @@
 
 #include "z_en_okarina_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnOkarinaTag*)thisx)
 
@@ -17,7 +17,7 @@ void EnOkarinaTag_Update(Actor* thisx, PlayState* play);
 void func_8093E518(EnOkarinaTag* this, PlayState* play);
 void func_8093E68C(EnOkarinaTag* this, PlayState* play);
 
-ActorInit En_Okarina_Tag_InitVars = {
+ActorProfile En_Okarina_Tag_Profile = {
     /**/ ACTOR_EN_OKARINA_TAG,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

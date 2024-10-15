@@ -15,7 +15,7 @@ void EnBoj03_Destroy(Actor* thisx, PlayState* play);
 void EnBoj03_Update(Actor* thisx, PlayState* play);
 void EnBoj03_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Boj_03_InitVars = {
+ActorProfile En_Boj_03_Profile = {
     /**/ ACTOR_EN_BOJ_03,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

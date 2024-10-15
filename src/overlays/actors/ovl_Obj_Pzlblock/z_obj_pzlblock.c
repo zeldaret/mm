@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_pzlblock.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_secom_obj/object_secom_obj.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_secom_obj/object_secom_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
@@ -25,7 +25,7 @@ void func_809A3D38(ObjPzlblock* this, PlayState* play);
 void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Pzlblock_InitVars = {
+ActorProfile Obj_Pzlblock_Profile = {
     /**/ ACTOR_OBJ_PZLBLOCK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

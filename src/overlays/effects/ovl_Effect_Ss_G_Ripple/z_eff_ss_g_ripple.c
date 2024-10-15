@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_g_ripple.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rWaterBoxNum regs[0]
 #define rRadius regs[1]
@@ -27,7 +27,7 @@ u32 EffectSsGRipple_Init(PlayState* play, u32 index, EffectSs* this, void* initP
 void EffectSsGRipple_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGRipple_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_G_Ripple_InitVars = {
+EffectSsProfile Effect_Ss_G_Ripple_Profile = {
     EFFECT_SS_G_RIPPLE,
     EffectSsGRipple_Init,
 };

@@ -8,8 +8,8 @@
 #include "z64voice.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
-#include "objects/object_gs/object_gs.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_gs/object_gs.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -40,7 +40,7 @@ s32 func_809995A4(EnGs* this, PlayState* play);
 void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
-ActorInit En_Gs_InitVars = {
+ActorProfile En_Gs_Profile = {
     /**/ ACTOR_EN_GS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -699,8 +699,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
         if (sp48 == 0.0f) {
-            this->unk_1DC = 2.0f * M_PI / 9.0000002;
-            this->unk_1E0 = M_PI / 9.0000002;
+            this->unk_1DC = 2.0f * (f32)(M_PI / 9);
+            this->unk_1E0 = (f32)(M_PI / 9);
             this->unk_19D = 4;
         }
     }

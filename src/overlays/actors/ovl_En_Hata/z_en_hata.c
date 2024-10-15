@@ -5,7 +5,7 @@
  */
 
 #include "z_en_hata.h"
-#include "objects/object_hata/object_hata.h"
+#include "assets/objects/object_hata/object_hata.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void EnHata_Destroy(Actor* thisx, PlayState* play);
 void EnHata_Update(Actor* thisx, PlayState* play2);
 void EnHata_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Hata_InitVars = {
+ActorProfile En_Hata_Profile = {
     /**/ ACTOR_EN_HATA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

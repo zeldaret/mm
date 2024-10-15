@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Maruta/z_en_maruta.h"
 
 #define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnKendoJs*)thisx)
 
@@ -37,7 +37,7 @@ s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 
-ActorInit En_Kendo_Js_InitVars = {
+ActorProfile En_Kendo_Js_Profile = {
     /**/ ACTOR_EN_KENDO_JS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

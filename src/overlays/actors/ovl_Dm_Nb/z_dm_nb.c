@@ -15,7 +15,7 @@ void DmNb_Destroy(Actor* thisx, PlayState* play);
 void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Nb_InitVars = {
+ActorProfile Dm_Nb_Profile = {
     /**/ ACTOR_DM_NB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

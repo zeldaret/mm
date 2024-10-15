@@ -1,16 +1,19 @@
+#include "prevent_bss_reordering.h"
 #include "z64message.h"
 #include "global.h"
 
+#include "gfxalloc.h"
 #include "message_data_static.h"
 #include "padmgr.h"
 #include "sys_cmpdma.h"
 #include "segment_symbols.h"
+
 #include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
 #include "z64save.h"
 
-#include "interface/parameter_static/parameter_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 
 u8 D_801C6A70 = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
@@ -36,8 +39,7 @@ u8 gPageSwitchNextButtonStatus[][5] = {
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, completedMessage, _completedFlag) completedMessage,
 
 u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
-#include "tables/bombers_notebook/person_table.h"
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON
@@ -47,14 +49,13 @@ u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, _completedMessage, completedFlag) completedFlag,
 
 u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
-#include "tables/bombers_notebook/person_table.h"
-#include "tables/bombers_notebook/event_table.h"
+#include "tables/notebook_table.h"
 };
 
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-#define DEFINE_MESSAGE(textId, typePos, msg) { textId, typePos, _message_##textId },
+#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId },
 
 MessageTableEntry sMessageTableNES[] = {
 #include "assets/text/message_data.h"
@@ -63,10 +64,11 @@ MessageTableEntry sMessageTableNES[] = {
 
 #undef DEFINE_MESSAGE
 
-#define DEFINE_MESSAGE(textId, typePos, msg) { textId, typePos, _message_##textId##_staff },
+#define DEFINE_MESSAGE(textId, type, yPos, msg) \
+    { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId##_staff },
 
 MessageTableEntry sMessageTableCredits[] = {
-#include "assets/text/staff_message_data.h"
+#include "assets/text/message_data_staff.h"
     { 0xFFFF, 0, NULL },
 };
 
@@ -932,21 +934,22 @@ void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
     } else if (msgCtx->itemId == ITEM_STRAY_FAIRIES) {
         msgCtx->unk12016 = 0x18;
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].r,
-                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].g,
-                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].b, msgCtx->textColorAlpha);
-        gDPSetEnvColor(gfx++, sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].r,
-                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].g,
-                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].b, 0);
+        gDPSetPrimColor(gfx++, 0, 0, sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].r,
+                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].g,
+                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].b,
+                        msgCtx->textColorAlpha);
+        gDPSetEnvColor(gfx++, sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].r,
+                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].g,
+                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonSceneSharedIndex)].b, 0);
         gDPLoadTextureBlock_4b(gfx++, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gfx++, msgCtx->unk12010 << 2, msgCtx->unk12012 << 2,
                             (msgCtx->unk12010 + msgCtx->unk12014) << 2, (msgCtx->unk12012 + msgCtx->unk12016) << 2,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, msgCtx->textColorAlpha);
-        gDPLoadTextureBlock(gfx++, sStrayFairyIconTextures[((void)0, gSaveContext.dungeonIndex)], G_IM_FMT_RGBA,
-                            G_IM_SIZ_32b, 32, 24, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, sStrayFairyIconTextures[((void)0, gSaveContext.dungeonSceneSharedIndex)],
+                            G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else if ((msgCtx->itemId >= ITEM_SONG_SONATA) && (msgCtx->itemId <= ITEM_SONG_SUN)) {
         index = msgCtx->itemId - ITEM_SONG_SONATA;
         gDPSetPrimColor(gfx++, 0, 0, D_801CFE04[index], D_801CFE1C[index], D_801CFE34[index], msgCtx->textColorAlpha);
@@ -1266,7 +1269,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -1279,7 +1282,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
@@ -1437,7 +1440,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                             Font_LoadMessageBoxEndIcon(font, 0);
                         }
                         if (play->csCtx.state == CS_STATE_IDLE) {
-                            func_8011552C(play, DO_ACTION_RETURN);
+                            Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                         }
                     } else {
                         Audio_PlaySfx(NA_SE_NONE);
@@ -2136,7 +2139,7 @@ void Message_LoadOwlWarpText(PlayState* play, s32* offset, f32* arg2, s16* decod
     s16 owlWarpId;
     s16 i;
 
-    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+    if (Map_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
         owlWarpId = OWL_WARP_ENTRANCE;
     } else {
         owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
@@ -2465,7 +2468,8 @@ void Message_Decode(PlayState* play) {
                 Message_LoadTime(play, curChar, &charTexIndex, &spC0, &decodedBufPos);
             } else if (curChar == 0x21C) {
                 digits[0] = digits[1] = 0;
-                digits[2] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+                digits[2] =
+                    gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex];
 
                 while (digits[2] >= 100) {
                     digits[0]++;
@@ -3111,7 +3115,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     if (textId == 0xFF) {
-        func_80115844(play, DO_ACTION_STOP);
+        Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
         play->msgCtx.hudVisibility = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
         gSaveContext.save.unk_06 = 20;
@@ -3123,7 +3127,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         if (msgCtx) {}
         textId = 0xC9;
     } else if (textId == 0x11) {
-        if (gSaveContext.save.saveInfo.inventory.strayFairies[((void)0, gSaveContext.dungeonIndex)] == 0xF) {
+        if (gSaveContext.save.saveInfo.inventory.strayFairies[((void)0, gSaveContext.dungeonSceneSharedIndex)] == 0xF) {
             textId = 0xF3;
         }
     } else if ((textId == 0x92) && (play->sceneId == SCENE_KOEPONARACE)) {
@@ -3340,11 +3344,11 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
     msgCtx->stateTimer = 8;
     msgCtx->textDelayTimer = 0;
 
-    if (interfaceCtx->unk_222 == 0) {
+    if (!interfaceCtx->bButtonInterfaceDoActionActive) {
         if (textId != 0x1B93) {
-            func_8011552C(play, DO_ACTION_NEXT);
+            Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
@@ -3571,7 +3575,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget;
 
     if (!noStop) {
-        func_80115844(play, DO_ACTION_STOP);
+        Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
         noStop = gSaveContext.hudVisibility;
         Interface_SetHudVisibility(HUD_VISIBILITY_B_ALT);
         gSaveContext.hudVisibility = noStop;
@@ -5409,9 +5413,9 @@ void Message_Update(PlayState* play) {
             msgCtx->msgMode = MSGMODE_TEXT_NEXT_MSG;
             if (!pauseCtx->itemDescriptionOn) {
                 if (msgCtx->currentTextId == 0xFF) {
-                    func_8011552C(play, DO_ACTION_STOP);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_STOP);
                 } else if (msgCtx->currentTextId != 0xF8) {
-                    func_8011552C(play, DO_ACTION_NEXT);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
                 }
             }
             break;
@@ -5689,7 +5693,7 @@ void Message_Update(PlayState* play) {
 
             if (sLastPlayedSong == OCARINA_SONG_SOARING) {
                 if (interfaceCtx->restrictions.songOfSoaring == 0) {
-                    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+                    if (Map_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
                         Message_StartTextbox(play, 0x1B93, NULL);
                         play->msgCtx.ocarinaMode = OCARINA_MODE_1B;
                         sLastPlayedSong = 0xFF;
@@ -5705,7 +5709,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                             gSaveContext.prevHudVisibility = HUD_VISIBILITY_A_B;
-                            func_80115844(play, DO_ACTION_STOP);
+                            Interface_SetBButtonInterfaceDoAction(play, DO_ACTION_STOP);
                             GameState_SetFramerateDivisor(&play->state, 2);
                             if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                 ShrinkWindow_Letterbox_SetSizeTarget(0);
@@ -5766,7 +5770,7 @@ void Message_Update(PlayState* play) {
             XREG(31) = 0;
 
             if (pauseCtx->itemDescriptionOn) {
-                func_8011552C(play, DO_ACTION_INFO);
+                Interface_SetAButtonDoAction(play, DO_ACTION_INFO);
                 pauseCtx->itemDescriptionOn = false;
             }
 
@@ -5965,7 +5969,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_OWL_SAVE_0:
             play->state.unk_A3 = 1;
             gSaveContext.save.isOwlSave = true;
-            Play_SaveCycleSceneFlags(&play->state);
+            Play_SaveCycleSceneFlags(play);
             func_8014546C(&play->sramCtx);
 
             if (gSaveContext.fileNum != 0xFF) {

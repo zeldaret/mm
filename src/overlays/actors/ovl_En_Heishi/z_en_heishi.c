@@ -20,7 +20,7 @@ void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
-ActorInit En_Heishi_InitVars = {
+ActorProfile En_Heishi_Profile = {
     /**/ ACTOR_EN_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -81,7 +81,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     EnHeishi_SetupIdle(this);
 }
 

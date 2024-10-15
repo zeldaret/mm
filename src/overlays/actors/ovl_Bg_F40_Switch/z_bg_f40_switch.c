@@ -6,7 +6,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_bg_f40_switch.h"
 #include "z64rumble.h"
-#include "objects/object_f40_switch/object_f40_switch.h"
+#include "assets/objects/object_f40_switch/object_f40_switch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play);
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
-ActorInit Bg_F40_Switch_InitVars = {
+ActorProfile Bg_F40_Switch_Profile = {
     /**/ ACTOR_BG_F40_SWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

@@ -1,32 +1,35 @@
-#include "z64.h"
-#include "regs.h"
-#include "z64malloc.h"
-#include "z64vis.h"
-#include "z64visfbuf.h"
+#include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
-Input D_801F6C18;
-TransitionTile sTransitionTile;
+struct Input D_801F6C18;
+struct TransitionTile sTransitionTile;
 s32 gTransitionTileState;
-VisMono sPlayVisMono;
-Color_RGBA8_u32 gPlayVisMonoColor;
-VisFbuf sPlayVisFbuf;
-VisFbuf* sPlayVisFbufInstance;
-BombersNotebook sBombersNotebook;
+struct VisMono sPlayVisMono;
+union Color_RGBA8_u32 gPlayVisMonoColor;
+struct VisFbuf sPlayVisFbuf;
+struct VisFbuf* sPlayVisFbufInstance;
+struct BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
 
-#include "macros.h"
+#include "z64play.h"
+
 #include "buffers.h"
+#include "gfxalloc.h"
 #include "idle.h"
+#include "regs.h"
 #include "sys_cfb.h"
+
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
+#include "zelda_arena.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "z64vis.h"
+#include "z64visfbuf.h"
 
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -972,7 +975,7 @@ void Play_UpdateMain(PlayState* this) {
 
             sp5C = IS_PAUSED(&this->pauseCtx);
 
-            AnimationContext_Reset(&this->animationCtx);
+            AnimTaskQueue_Reset(&this->animTaskQueue);
             Object_UpdateEntries(&this->objectCtx);
 
             if (!sp5C && (IREG(72) == 0)) {
@@ -990,7 +993,7 @@ void Play_UpdateMain(PlayState* this) {
                         this->envCtx.fillScreen = false;
                     }
                 } else {
-                    Room_HandleLoadCallbacks(this, &this->roomCtx);
+                    Room_ProcessRoomRequest(this, &this->roomCtx);
                     CollisionCheck_AT(this, &this->colChkCtx);
                     CollisionCheck_OC(this, &this->colChkCtx);
                     CollisionCheck_Damage(this, &this->colChkCtx);
@@ -1020,7 +1023,7 @@ void Play_UpdateMain(PlayState* this) {
 
             Message_Update(this);
             Interface_Update(this);
-            AnimationContext_Update(this, &this->animationCtx);
+            AnimTaskQueue_Update(this, &this->animTaskQueue);
             SoundSource_UpdateAll(this);
             ShrinkWindow_Update(this->state.framerateDivisor);
             TransitionFade_Update(&this->unk_18E48, this->state.framerateDivisor);
@@ -1575,7 +1578,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->numSetupActors = 0;
     Object_InitContext(&this->state, &this->objectCtx);
     LightContext_Init(this, &this->lightCtx);
-    Door_InitContext(&this->state, &this->doorCtx);
+    Scene_ResetTransitionActorList(&this->state, &this->transitionActors);
     Room_Init(this, &this->roomCtx);
     gSaveContext.worldMapArea = 0;
     Scene_ExecuteCommands(this, this->sceneSegment);
@@ -1594,7 +1597,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     scene->unk_D = 0;
     gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
-    Room_AllocateAndLoad(this, &this->roomCtx);
+    Room_SetupFirstRoom(this, &this->roomCtx);
 }
 
 void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
@@ -1681,7 +1684,7 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     successfullySet <<= 1;
     successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
 
-    camera->dist = Math3D_Distance(at, eye);
+    camera->dist = Math3D_Vec3f_DistXYZ(at, eye);
 
     if (camera->focalActor != NULL) {
         camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
@@ -1710,7 +1713,7 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     successfullySet <<= 1;
     successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
 
-    camera->dist = Math3D_Distance(at, eye);
+    camera->dist = Math3D_Vec3f_DistXYZ(at, eye);
 
     if (camera->focalActor != NULL) {
         camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
@@ -1863,8 +1866,7 @@ s16 Play_GetOriginalSceneId(s16 sceneId) {
  * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags, usually using the original scene
  * number. Exception for Inverted Stone Tower Temple, which uses its own.
  */
-void Play_SaveCycleSceneFlags(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
+void Play_SaveCycleSceneFlags(PlayState* this) {
     CycleSceneFlags* cycleSceneFlags;
 
     cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(this->sceneId)];
@@ -1880,9 +1882,8 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     cycleSceneFlags->clearedRoom = this->actorCtx.sceneFlags.clearedRoom;
 }
 
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
+void Play_SetRespawnData(PlayState* this, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
                          s16 yaw) {
-    PlayState* this = (PlayState*)thisx;
 
     gSaveContext.respawn[respawnMode].entrance = Entrance_Create(entrance >> 9, 0, entrance & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
@@ -1894,12 +1895,11 @@ void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 ro
     gSaveContext.respawn[respawnMode].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
 }
 
-void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams) {
-    PlayState* this = (PlayState*)thisx;
+void Play_SetupRespawnPoint(PlayState* this, s32 respawnMode, s32 playerParams) {
     Player* player = GET_PLAYER(this);
 
     if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, ((void)0, gSaveContext.save.entrance), this->roomCtx.curRoom.num,
+        Play_SetRespawnData(this, respawnMode, ((void)0, gSaveContext.save.entrance), this->roomCtx.curRoom.num,
                             playerParams, &player->actor.world.pos, player->actor.shape.rot.y);
     }
 }
@@ -1914,9 +1914,7 @@ void func_80169ECC(PlayState* this) {
 
 // Gameplay_TriggerVoidOut ?
 // Used by Player, Ikana_Rotaryroom, Bji01, Kakasi, LiftNuts, Test4, Warptag, WarpUzu, Roomtimer
-void func_80169EFC(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+void func_80169EFC(PlayState* this) {
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.sceneFlags.collectible[1];
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
@@ -1929,9 +1927,7 @@ void func_80169EFC(GameState* thisx) {
 
 // Gameplay_LoadToLastEntrance ?
 // Used by game_over and Test7
-void func_80169F78(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+void func_80169F78(PlayState* this) {
     this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
@@ -1941,20 +1937,16 @@ void func_80169F78(GameState* thisx) {
 
 // Gameplay_TriggerRespawn ?
 // Used for void by Wallmaster, Deku Shrine doors. Also used by Player, Kaleido, DoorWarp1
-void func_80169FDC(GameState* thisx) {
-    func_80169F78(thisx);
+void func_80169FDC(PlayState* this) {
+    func_80169F78(this);
 }
 
-s32 Play_CamIsNotFixed(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
+s32 Play_CamIsNotFixed(PlayState* this) {
     return this->roomCtx.curRoom.roomShape->base.type != ROOM_SHAPE_TYPE_IMAGE;
 }
 
-s32 FrameAdvance_IsEnabled(GameState* thisx) {
-    PlayState* this = (PlayState*)thisx;
-
-    return this->frameAdvCtx.enabled != 0;
+s32 FrameAdvance_IsEnabled(PlayState* this) {
+    return this->frameAdvCtx.enabled != false;
 }
 
 // Unused, unchanged from OoT, which uses it only in one Camera function.
@@ -1966,8 +1958,7 @@ s32 FrameAdvance_IsEnabled(GameState* thisx) {
  * @param[out] yaw Facing angle of the actor, or reverse if in the back room.
  * @return true if \p actor is a door and the sides are in different rooms, false otherwise
  */
-s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
-    PlayState* this = (PlayState*)thisx;
+s32 func_8016A02C(PlayState* this, Actor* actor, s16* yaw) {
     TransitionActorEntry* transitionActor;
     s8 frontRoom;
 
@@ -1975,7 +1966,7 @@ s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw) {
         return false;
     }
 
-    transitionActor = &this->doorCtx.transitionActorList[(u16)actor->params >> 10];
+    transitionActor = &this->transitionActors.list[(u16)actor->params >> 10];
     frontRoom = transitionActor->sides[0].room;
     if (frontRoom == transitionActor->sides[1].room) {
         return false;
@@ -2041,8 +2032,7 @@ s16 sPlayerCsIdToCsCamId[] = {
  * Otherwise, if there is an CutsceneEntry where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
  * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
-void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
-    PlayState* this = (PlayState*)thisx;
+void Play_AssignPlayerCsIdsFromScene(PlayState* this, s32 spawnCsId) {
     s32 i;
     s16* curPlayerCsId = this->playerCsIds;
     s16* csCamId = sPlayerCsIdToCsCamId;
@@ -2068,7 +2058,7 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
 }
 
 // Set values to fill screen
-void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
+void Play_FillScreen(PlayState* this, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
     R_PLAY_FILL_SCREEN_ON = fillScreenOn;
     R_PLAY_FILL_SCREEN_R = red;
     R_PLAY_FILL_SCREEN_G = green;
@@ -2193,7 +2183,7 @@ void Play_Init(GameState* thisx) {
     Effect_Init(this);
     EffectSS_Init(this, 100);
     CollisionCheck_InitContext(this, &this->colChkCtx);
-    AnimationContext_Reset(&this->animationCtx);
+    AnimTaskQueue_Reset(&this->animTaskQueue);
     Cutscene_InitContext(this, &this->csCtx);
 
     if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
@@ -2321,7 +2311,8 @@ void Play_Init(GameState* thisx) {
 
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
-    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
+    // Busyloop until the room loads
+    while (!Room_ProcessRoomRequest(this, &this->roomCtx)) {}
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) ||
                                (this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5))) {
@@ -2340,9 +2331,9 @@ void Play_Init(GameState* thisx) {
     CutsceneManager_StoreCamera(&this->mainCamera);
     Interface_SetSceneRestrictions(this);
     Environment_PlaySceneSequence(this);
-    gSaveContext.seqId = this->sequenceCtx.seqId;
-    gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
-    AnimationContext_Update(this, &this->animationCtx);
+    gSaveContext.seqId = this->sceneSequences.seqId;
+    gSaveContext.ambienceId = this->sceneSequences.ambienceId;
+    AnimTaskQueue_Update(this, &this->animTaskQueue);
     Cutscene_HandleEntranceTriggers(this);
     gSaveContext.respawnFlag = 0;
     sBombersNotebookOpen = false;

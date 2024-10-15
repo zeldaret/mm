@@ -6,7 +6,7 @@
 
 #include "z_en_zot.h"
 #include "z64snap.h"
-#include "objects/object_zo/object_zo.h"
+#include "assets/objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -32,7 +32,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-ActorInit En_Zot_InitVars = {
+ActorProfile En_Zot_Profile = {
     /**/ ACTOR_EN_ZOT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -1160,7 +1160,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
         }
 
         if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
-            func_800B874C(&this->actor, play, 120.0, 100.0f);
+            func_800B874C(&this->actor, play, 120.0f, 100.0f);
         }
     }
 

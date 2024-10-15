@@ -16,7 +16,7 @@ void EnTalk_Update(Actor* thisx, PlayState* play);
 void func_80BDE058(EnTalk* this, PlayState* play);
 void func_80BDE090(EnTalk* this, PlayState* play);
 
-ActorInit En_Talk_InitVars = {
+ActorProfile En_Talk_Profile = {
     /**/ ACTOR_EN_TALK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -30,7 +30,7 @@ ActorInit En_Talk_InitVars = {
 
 void EnTalk_Init(Actor* thisx, PlayState* play) {
     EnTalk* this = THIS;
-    s8 targetMode = this->actor.home.rot.x - 0x1;
+    s8 targetMode = ENTALK_GET_TARGET_MODE(&this->actor);
 
     if ((targetMode >= TARGET_MODE_0) && (targetMode < TARGET_MODE_7)) {
         this->actor.targetMode = targetMode;

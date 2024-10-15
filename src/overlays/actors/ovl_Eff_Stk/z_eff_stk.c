@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_stk.h"
-#include "objects/object_stk2/object_stk2.h"
+#include "assets/objects/object_stk2/object_stk2.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play);
 
 void func_80BF0DE0(EffStk* this, PlayState* play);
 
-ActorInit Eff_Stk_InitVars = {
+ActorProfile Eff_Stk_Profile = {
     /**/ ACTOR_EFF_STK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

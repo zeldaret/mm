@@ -20,7 +20,7 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-ActorInit En_Sda_InitVars = {
+ActorProfile En_Sda_Profile = {
     /**/ ACTOR_EN_SDA,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -70,7 +70,7 @@ Vec3f D_80947B10[] = {
 
 static s32 sPad = 0;
 
-#include "overlays/ovl_En_Sda/ovl_En_Sda.c"
+#include "assets/overlays/ovl_En_Sda/ovl_En_Sda.c"
 
 void EnSda_Init(Actor* thisx, PlayState* play) {
 }

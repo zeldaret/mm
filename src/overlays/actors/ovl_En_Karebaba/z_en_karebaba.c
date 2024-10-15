@@ -7,9 +7,9 @@
 #include "z_en_karebaba.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnKarebaba*)thisx)
 
@@ -39,7 +39,7 @@ void EnKarebaba_Retract(EnKarebaba* this, PlayState* play);
 void EnKarebaba_SetupDead(EnKarebaba* this);
 void EnKarebaba_Dead(EnKarebaba* this, PlayState* play);
 
-ActorInit En_Karebaba_InitVars = {
+ActorProfile En_Karebaba_Profile = {
     /**/ ACTOR_EN_KAREBABA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -420,7 +420,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
                 this->actor.speed = 0.0f;
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
                 EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);
             }
@@ -551,7 +551,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
 
     if (this->timer == 20) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
         if (this->actor.params == ENKAREBABA_1) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         }

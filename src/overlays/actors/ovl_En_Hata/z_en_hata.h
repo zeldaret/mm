@@ -2,7 +2,7 @@
 #define Z_EN_HATA_H
 
 #include "global.h"
-#include "objects/object_hata/object_hata.h"
+#include "assets/objects/object_hata/object_hata.h"
 
 struct EnHata;
 

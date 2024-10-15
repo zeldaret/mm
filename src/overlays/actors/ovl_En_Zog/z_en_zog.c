@@ -5,7 +5,7 @@
  */
 
 #include "z_en_zog.h"
-#include "objects/object_zog/object_zog.h"
+#include "assets/objects/object_zog/object_zog.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -33,7 +33,7 @@ void func_80B95240(EnZog* this, PlayState* play);
 
 static u8 sTexturesDesegmented;
 
-ActorInit En_Zog_InitVars = {
+ActorProfile En_Zog_Profile = {
     /**/ ACTOR_EN_ZOG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

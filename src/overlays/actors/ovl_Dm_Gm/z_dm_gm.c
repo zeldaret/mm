@@ -5,8 +5,8 @@
  */
 
 #include "z_dm_gm.h"
-#include "objects/object_an4/object_an4.h"
-#include "objects/object_msmo/object_msmo.h"
+#include "assets/objects/object_an4/object_an4.h"
+#include "assets/objects/object_msmo/object_msmo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -21,7 +21,7 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play);
 void DmGm_DoNothing(DmGm* this, PlayState* play);
 void DmGm_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Gm_InitVars = {
+ActorProfile Dm_Gm_Profile = {
     /**/ ACTOR_DM_GM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

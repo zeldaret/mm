@@ -5,7 +5,7 @@
  */
 
 #include "z_en_gakufu.h"
-#include "interface/parameter_static/parameter_static.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -25,7 +25,7 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play);
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play);
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play);
 
-ActorInit En_Gakufu_InitVars = {
+ActorProfile En_Gakufu_Profile = {
     /**/ ACTOR_EN_GAKUFU,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -96,7 +96,7 @@ TexturePtr sOcarinaBtnWallTextures[] = {
     gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
 };
 
-#include "overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
+#include "assets/overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
 
 void EnGakufu_ProcessNotes(EnGakufu* this) {
     OcarinaStaff* playbackStaff;

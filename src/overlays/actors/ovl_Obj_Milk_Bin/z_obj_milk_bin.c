@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_milk_bin.h"
-#include "objects/object_obj_milk_bin/object_obj_milk_bin.h"
+#include "assets/objects/object_obj_milk_bin/object_obj_milk_bin.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
 void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Milk_Bin_InitVars = {
+ActorProfile Obj_Milk_Bin_Profile = {
     /**/ ACTOR_OBJ_MILK_BIN,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -2,12 +2,11 @@
 #define Z_EN_GO_H
 
 #include "global.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "assets/objects/object_oF1d_map/object_oF1d_map.h"
 
 struct EnGo;
 
 typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
-typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENGO_GET_TYPE(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_SUBTYPE(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
@@ -95,7 +94,7 @@ typedef struct EnGo {
     /* 0x284 */ Path* gatekeeperPath;
     /* 0x288 */ s8 taisouObjectSlot;
     /* 0x289 */ s8 hakuginDemoObjectSlot;
-    /* 0x28C */ s32 msgScriptResumePos;
+    /* 0x28C */ s32 msgScriptPos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;
     /* 0x2A8 */ Vec3s headRot;
@@ -131,7 +130,7 @@ typedef struct EnGo {
     /* 0x3C8 */ s16 fidgetTableZ[ENGO_FIDGET_TABLE_LEN];
     /* 0x3CE */ s16 fidgetTableY[ENGO_FIDGET_TABLE_LEN];
     /* 0x3D4 */ s16 surprisePhase;
-    /* 0x3D8 */ MsgEventFunc msgEventFunc;
+    /* 0x3D8 */ MsgScriptCallback msgScriptCallback;
     /* 0x3DC */ s32 animIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;

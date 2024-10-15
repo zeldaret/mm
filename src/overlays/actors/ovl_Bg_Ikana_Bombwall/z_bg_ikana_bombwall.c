@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_bombwall.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10000000)
 
@@ -25,7 +25,7 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD5118(BgIkanaBombwall* this);
 void func_80BD5134(BgIkanaBombwall* this, PlayState* play);
 
-ActorInit Bg_Ikana_Bombwall_InitVars = {
+ActorProfile Bg_Ikana_Bombwall_Profile = {
     /**/ ACTOR_BG_IKANA_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -355,7 +355,7 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
             CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_Kill(&this->dyna.actor);
         }
-    } else if (this->dyna.actor.csId >= 0) {
+    } else if (this->dyna.actor.csId > CS_ID_NONE) {
         if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
             Actor_Kill(&this->dyna.actor);
         }

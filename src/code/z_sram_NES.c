@@ -444,7 +444,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     sceneId = Play_GetOriginalSceneId(play->sceneId);
-    Play_SaveCycleSceneFlags(&play->state);
+    Play_SaveCycleSceneFlags(play);
 
     play->actorCtx.sceneFlags.chest &= sPersistentCycleSceneFlags[sceneId].chest;
     play->actorCtx.sceneFlags.switches[0] &= sPersistentCycleSceneFlags[sceneId].switch0;

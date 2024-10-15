@@ -28,7 +28,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-ActorInit En_Mm3_InitVars = {
+ActorProfile En_Mm3_Profile = {
     /**/ ACTOR_EN_MM3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -85,7 +85,7 @@ static AnimationInfo sAnimationInfo[ENMM3_ANIM_MAX] = {
     { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f }, // ENMM3_ANIM_7
 };
 
-#include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"
+#include "assets/overlays/ovl_En_Mm3/ovl_En_Mm3.c"
 
 Vec3f D_80A704F0 = { 0.0f, 0.0f, 0.0f };
 

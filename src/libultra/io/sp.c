@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 s32 __osSpDeviceBusy(void) {
     register u32 status = IO_READ(SP_STATUS_REG);

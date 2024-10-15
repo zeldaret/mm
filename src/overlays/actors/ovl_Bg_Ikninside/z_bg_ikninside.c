@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikninside.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +18,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
-ActorInit Bg_Ikninside_InitVars = {
+ActorProfile Bg_Ikninside_Profile = {
     /**/ ACTOR_BG_IKNINSIDE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -104,7 +104,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if ((this->collider.info.acHitInfo != NULL) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
+        if ((this->collider.info.acHitElem != NULL) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
                 azimuth = Rand_Next() >> 0x10;

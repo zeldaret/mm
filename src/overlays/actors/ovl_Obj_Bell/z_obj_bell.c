@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_bell.h"
-#include "objects/object_f52_obj/object_f52_obj.h"
+#include "assets/objects/object_f52_obj/object_f52_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -19,7 +19,7 @@ void ObjBell_Draw(Actor* thisx, PlayState* play);
 s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
-ActorInit Obj_Bell_InitVars = {
+ActorProfile Obj_Bell_Profile = {
     /**/ ACTOR_OBJ_BELL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

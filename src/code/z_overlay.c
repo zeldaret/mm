@@ -8,7 +8,7 @@
 
 #include "loadfragment.h"
 #include "z64lib.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
@@ -31,7 +31,7 @@ TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay* overlayEntry) 
     s32 count;
     void* loadedRamAddr;
 
-    if (overlayEntry->vromStart == 0) {
+    if (overlayEntry->file.vromStart == 0) {
         return TRANSITION_OVERLAY_STATUS_INTERNAL;
     }
 
@@ -42,8 +42,8 @@ TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay* overlayEntry) 
             return TRANSITION_OVERLAY_STATUS_FAILED;
         }
 
-        Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
-                     loadedRamAddr);
+        Overlay_Load(overlayEntry->file.vromStart, overlayEntry->file.vromEnd, overlayEntry->vramStart,
+                     overlayEntry->vramEnd, loadedRamAddr);
         overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
         overlayEntry->loadInfo.count = 1;
         return TRANSITION_OVERLAY_STATUS_LOAD_FREE;
@@ -68,7 +68,7 @@ TransitionOverlayStatus TransitionOverlay_Free(TransitionOverlay* overlayEntry) 
     s32 count;
     void* loadedRamAddr;
 
-    if (overlayEntry->vromStart == 0) {
+    if (overlayEntry->file.vromStart == 0) {
         return TRANSITION_OVERLAY_STATUS_INTERNAL;
     }
 
@@ -98,6 +98,6 @@ void TransitionOverlay_SetSegment(TransitionOverlay* overlayEntry, void* vramSta
                                   uintptr_t vromEnd) {
     overlayEntry->vramStart = vramStart;
     overlayEntry->vramEnd = vramEnd;
-    overlayEntry->vromStart = vromStart;
-    overlayEntry->vromEnd = vromEnd;
+    overlayEntry->file.vromStart = vromStart;
+    overlayEntry->file.vromEnd = vromEnd;
 }

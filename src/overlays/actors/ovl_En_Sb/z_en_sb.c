@@ -7,7 +7,7 @@
 #include "z_en_sb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSb*)thisx)
 
@@ -25,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-ActorInit En_Sb_InitVars = {
+ActorProfile En_Sb_Profile = {
     /**/ ACTOR_EN_SB,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -208,7 +208,7 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
 
 void EnSb_Idle(EnSb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer <= 240.0f && this->actor.xzDistToPlayer > 0.0f) {
+    if ((this->actor.xzDistToPlayer <= 240.0f) && (this->actor.xzDistToPlayer > 0.0f)) {
         EnSb_SetupOpen(this);
     }
 }
@@ -222,7 +222,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
         EnSb_SetupWaitOpen(this);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-        if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+        if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
             this->vulnerableTimer = 0;
             EnSb_SetupWaitClosed(this);
         }
@@ -232,7 +232,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
 void EnSb_WaitOpen(EnSb* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+    if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
         this->vulnerableTimer = 0;
         EnSb_SetupWaitClosed(this);
     }

@@ -10,9 +10,9 @@
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Tanron5/z_en_tanron5.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss02*)thisx)
 
@@ -143,7 +143,7 @@ static DamageTable sRedTwinmoldDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-ActorInit Boss_02_InitVars = {
+ActorProfile Boss_02_Profile = {
     /**/ ACTOR_BOSS_02,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -1030,7 +1030,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 
             Math_Vec3f_Copy(&this->unk_01BC[i], &this->actor.world.pos);
             this->unk_0B1C[i].y += this->unk_0164;
-            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
+            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PIf / 2), 0.1f, 0.07f);
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
 
@@ -1057,13 +1057,13 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         case 23:
             i = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
             Math_Vec3f_Copy(&this->unk_01BC[i], &this->actor.world.pos);
-            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.05f, 0.07f);
+            Math_ApproachF(&this->unk_0B1C[i].x, -(M_PIf / 2), 0.05f, 0.07f);
 
             if (this->unk_0146[0] & 1) {
-                sp9C = Rand_ZeroFloat(M_PI);
+                sp9C = Rand_ZeroFloat(M_PIf);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
+                    Matrix_RotateYF(((2.0f * (i * M_PIf)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_MultVecZ((10 - this->unk_0146[0]) * (sGiantModeScaleFactor * 300.0f) * 0.1f, &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * sGiantModeScaleFactor);
@@ -1107,8 +1107,8 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
         }
 
         for (i = temp; i < ARRAY_COUNT(this->colliderSphere2Elements); i++) {
-            if (this->colliderSphere2.elements[i].info.bumperFlags & BUMP_HIT) {
-                this->colliderSphere2.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->colliderSphere2.elements[i].base.bumperFlags & BUMP_HIT) {
+                this->colliderSphere2.elements[i].base.bumperFlags &= ~BUMP_HIT;
                 this->unk_0154 = 15;
                 this->unk_0156 = 15;
 
@@ -1404,7 +1404,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         sp98 = 3100.0f;
     }
 
-    sp9C = this->unk_0152 * (M_PI / 4) * (1.0f / 15);
+    sp9C = this->unk_0152 * (M_PIf / 4) * (1.0f / 15);
     if (this->unk_0144 < 20) {
         spAC = Math_SinS(this->unk_014C * 0x2200) * sp9C * 0.5f;
         spA8 = Math_CosS(this->unk_014C * 0x3200) * sp9C;
@@ -1450,8 +1450,8 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateXFApply(spA4 - this->unk_0B1C[phi_v0].x);
         Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
-        Matrix_RotateXFApply(-(M_PI / 2));
+        Matrix_RotateYF(M_PIf / 2, MTXMODE_APPLY);
+        Matrix_RotateXFApply(-(M_PIf / 2));
         Matrix_ToMtx(mtx);
 
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

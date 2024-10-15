@@ -5,7 +5,7 @@
  */
 
 #include "z_en_akindonuts.h"
-#include "objects/object_dnt/object_dnt.h"
+#include "assets/objects/object_dnt/object_dnt.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -31,7 +31,7 @@ void func_80BEF9F0(EnAkindonuts* this, PlayState* play);
 void func_80BEFAF0(EnAkindonuts* this, PlayState* play);
 void func_80BEFD74(EnAkindonuts* this, PlayState* play);
 
-ActorInit En_Akindonuts_InitVars = {
+ActorProfile En_Akindonuts_Profile = {
     /**/ ACTOR_EN_AKINDONUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -207,7 +207,7 @@ s32 EnAkindonuts_HasReachedPoint(EnAkindonuts* this, Path* path, s32 pointIndex)
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;

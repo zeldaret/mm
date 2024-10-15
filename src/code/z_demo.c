@@ -440,7 +440,7 @@ void CutsceneCmd_FadeOutSequence(PlayState* play, CutsceneContext* csCtx, CsCmdF
 
 void CutsceneCmd_StartAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdStartAmbience* cmd) {
     if (csCtx->curFrame == cmd->startFrame) {
-        Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+        Audio_PlayAmbience(play->sceneSequences.ambienceId);
     }
 }
 

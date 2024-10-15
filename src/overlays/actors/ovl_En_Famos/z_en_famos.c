@@ -7,9 +7,9 @@
 #include "z_en_famos.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnFamos*)thisx)
 
@@ -47,7 +47,7 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 
-ActorInit En_Famos_InitVars = {
+ActorProfile En_Famos_Profile = {
     /**/ ACTOR_EN_FAMOS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

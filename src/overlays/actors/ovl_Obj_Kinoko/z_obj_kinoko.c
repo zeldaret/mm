@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kinoko.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void ObjKinoko_Destroy(Actor* thisx, PlayState* play);
 void ObjKinoko_Update(Actor* thisx, PlayState* play);
 void ObjKinoko_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Kinoko_InitVars = {
+ActorProfile Obj_Kinoko_Profile = {
     /**/ ACTOR_OBJ_KINOKO,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -28,7 +28,7 @@ typedef struct {
     /* 0x18 */ f32 yScale;
 } CfbInfo; // size = 0x1C
 
-typedef struct {
+typedef struct Scheduler {
     /* 0x000 */ OSMesgQueue interruptQueue;
     /* 0x018 */ OSMesg interruptMsgBuf[64];
     /* 0x118 */ OSMesgQueue cmdQueue;
@@ -57,5 +57,7 @@ void Sched_SendAudioCancelMsg(Scheduler* sched);
 void Sched_SendGfxCancelMsg(Scheduler* sched);
 
 void Sched_Init(Scheduler* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
+
+extern Scheduler gScheduler;
 
 #endif

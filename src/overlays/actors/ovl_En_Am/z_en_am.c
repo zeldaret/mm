@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnAm*)thisx)
 
@@ -36,7 +36,7 @@ void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
 
-ActorInit En_Am_InitVars = {
+ActorProfile En_Am_Profile = {
     /**/ ACTOR_EN_AM,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kendo_kanban.h"
-#include "objects/object_dora/object_dora.h"
+#include "assets/objects/object_dora/object_dora.h"
 
 #define FLAGS 0x00000000
 
@@ -44,7 +44,7 @@ void ObjKendoKanban_Settled(ObjKendoKanban* this, PlayState* play);
 void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play);
 s32 ObjKendoKanban_IsPlayerOnTop(ObjKendoKanban* this, PlayState* play);
 
-ActorInit Obj_Kendo_Kanban_InitVars = {
+ActorProfile Obj_Kendo_Kanban_Profile = {
     /**/ ACTOR_OBJ_KENDO_KANBAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

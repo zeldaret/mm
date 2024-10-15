@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_tokei_step/object_tokei_step.h"
+#include "assets/objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
@@ -28,7 +28,7 @@ void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this);
 void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play);
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokei_Step_InitVars = {
+ActorProfile Obj_Tokei_Step_Profile = {
     /**/ ACTOR_OBJ_TOKEI_STEP,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

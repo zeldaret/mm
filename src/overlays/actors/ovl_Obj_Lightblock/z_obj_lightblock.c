@@ -6,7 +6,7 @@
 
 #include "z_obj_lightblock.h"
 #include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
-#include "objects/object_lightblock/object_lightblock.h"
+#include "assets/objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play);
 void ObjLightblock_SetupFadeAway(ObjLightblock* this);
 void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play);
 
-ActorInit Obj_Lightblock_InitVars = {
+ActorProfile Obj_Lightblock_Profile = {
     /**/ ACTOR_OBJ_LIGHTBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -74,9 +74,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-extern Gfx D_801AEF88[];
-extern Gfx D_801AEFA0[];
-
 void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
 
@@ -126,7 +123,7 @@ void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 13)) {
+        if (this->collider.info.acHitElem->toucher.dmgFlags & (1 << 13)) {
             this->collisionCounter = 8;
         }
         // light ray

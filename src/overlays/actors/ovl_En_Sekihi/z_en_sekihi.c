@@ -5,11 +5,11 @@
  */
 
 #include "z_en_sekihi.h"
-#include "objects/object_sekihil/object_sekihil.h"
-#include "objects/object_sekihig/object_sekihig.h"
-#include "objects/object_sekihin/object_sekihin.h"
-#include "objects/object_sekihiz/object_sekihiz.h"
-#include "objects/object_zog/object_zog.h"
+#include "assets/objects/object_sekihil/object_sekihil.h"
+#include "assets/objects/object_sekihig/object_sekihig.h"
+#include "assets/objects/object_sekihin/object_sekihin.h"
+#include "assets/objects/object_sekihiz/object_sekihiz.h"
+#include "assets/objects/object_zog/object_zog.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
-ActorInit En_Sekihi_InitVars = {
+ActorProfile En_Sekihi_Profile = {
     /**/ ACTOR_EN_SEKIHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

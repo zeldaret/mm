@@ -29,7 +29,7 @@
 
 #include "z_boss_05.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((Boss05*)thisx)
 
@@ -329,7 +329,7 @@ static DamageTable sWalkingHeadDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
 };
 
-ActorInit Boss_05_InitVars = {
+ActorProfile Boss_05_Profile = {
     /**/ ACTOR_BOSS_05,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -468,7 +468,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         s32 i = 0;
 
         while (true) {
-            if (this->lilyPadCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->lilyPadCollider.elements[i].base.bumperFlags & BUMP_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case BIO_BABA_DMGEFF_FIRE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
@@ -486,7 +486,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
 
             i++;
             if (i == BIO_BABA_LILY_PAD_COLLIDER_MAX) {
-                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT) {
+                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
 
                     this->dyna.actor.colChkInfo.health -= damage;
@@ -947,13 +947,13 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     s32 pad[2];
     u8 attackDealsDamage = false;
-    ColliderInfo* acHitInfo;
+    ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) &&
-        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
-        acHitInfo = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
-        if (acHitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
+        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT)) {
+        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags &= ~BUMP_HIT;
+        acHitElem = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acHitElem;
+        if (acHitElem->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
             this->damagedTimer = 6;

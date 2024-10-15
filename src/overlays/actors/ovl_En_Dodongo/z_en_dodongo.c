@@ -8,8 +8,9 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnDodongo*)thisx)
 
@@ -35,7 +36,7 @@ void func_808786C8(EnDodongo* this, PlayState* play);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
-ActorInit En_Dodongo_InitVars = {
+ActorProfile En_Dodongo_Profile = {
     /**/ ACTOR_EN_DODONGO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -314,8 +315,8 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->collider3, &this->actor, &sJntSphInit3, this->collider3Elements);
 
     for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
-        this->collider2.elements[i].info.elemType = ELEMTYPE_UNK2;
-        this->collider2.elements[i].info.bumper.dmgFlags = 0x77C34FE6;
+        this->collider2.elements[i].base.elemType = ELEMTYPE_UNK2;
+        this->collider2.elements[i].base.bumper.dmgFlags = 0x77C34FE6;
     }
 
     Effect_Add(play, &this->unk_338, EFFECT_BLURE2, 0, 0, &D_80879308);
@@ -329,7 +330,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
             this->collider1.elements[i].dim.modelSphere.radius *= 2;
-            this->collider1.elements[i].info.toucher.damage *= 2;
+            this->collider1.elements[i].base.toucher.damage *= 2;
         }
 
         for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
@@ -417,9 +418,9 @@ void func_80876BD0(EnDodongo* this, PlayState* play, s32 arg2) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider1.elements[arg2].info.bumper.hitPos.x,
-                    this->collider1.elements[arg2].info.bumper.hitPos.y,
-                    this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider1.elements[arg2].base.bumper.hitPos.x,
+                    this->collider1.elements[arg2].base.bumper.hitPos.y,
+                    this->collider1.elements[arg2].base.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
@@ -647,7 +648,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
     static Vec3f D_80879348 = { 0.0f, 0.9f, 0.0f };
     static Vec3f D_80879354 = { 0.0f, 0.0f, 0.0f };
     s16 frame;
-    ColliderJntSphElement* element;
+    ColliderJntSphElement* jntSphElem;
     s32 i;
     s32 end;
     f32 temp_f2;
@@ -665,18 +666,18 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
             end = 3;
         }
 
-        element = &this->collider3.elements[0];
+        jntSphElem = &this->collider3.elements[0];
         temp_f2 = Math_SinS(this->actor.shape.rot.y) * this->unk_334;
         temp_f12 = Math_CosS(this->actor.shape.rot.y) * this->unk_334;
 
-        for (i = 0; i < end; i++, element++) {
-            element->dim.worldSphere.center.x =
-                this->bodyPartsPos[DODONGO_BODYPART_0].x + (element->dim.modelSphere.center.z * temp_f2);
-            element->dim.worldSphere.center.y =
-                this->bodyPartsPos[DODONGO_BODYPART_0].y + (element->dim.modelSphere.center.y * this->unk_334);
-            element->dim.worldSphere.center.z =
-                this->bodyPartsPos[DODONGO_BODYPART_0].z + (element->dim.modelSphere.center.z * temp_f12);
-            element->dim.worldSphere.radius = element->dim.modelSphere.radius;
+        for (i = 0; i < end; i++, jntSphElem++) {
+            jntSphElem->dim.worldSphere.center.x =
+                this->bodyPartsPos[DODONGO_BODYPART_0].x + (jntSphElem->dim.modelSphere.center.z * temp_f2);
+            jntSphElem->dim.worldSphere.center.y =
+                this->bodyPartsPos[DODONGO_BODYPART_0].y + (jntSphElem->dim.modelSphere.center.y * this->unk_334);
+            jntSphElem->dim.worldSphere.center.z =
+                this->bodyPartsPos[DODONGO_BODYPART_0].z + (jntSphElem->dim.modelSphere.center.z * temp_f12);
+            jntSphElem->dim.worldSphere.radius = jntSphElem->dim.modelSphere.radius;
         }
 
         D_80879354.y = this->unk_334 * -4.5f;
@@ -876,7 +877,7 @@ void func_808785B0(EnDodongo* this, PlayState* play) {
         func_80876D28(this, play);
         if (this->actor.colChkInfo.health == 0) {
             func_80878724(this);
-        } else if (this->actor.xzDistToPlayer > 100.0f * this->unk_334) {
+        } else if (this->actor.xzDistToPlayer > (100.0f * this->unk_334)) {
             func_80877494(this);
         } else {
             func_80876B08(this, play);
@@ -962,21 +963,21 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
         this->collider1.base.acFlags &= ~AC_HIT;
 
         for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
-            if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->collider2.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
 
         if ((i != ARRAY_COUNT(this->collider2Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider2.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider2.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
-            Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
+            Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].base.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 CollisionCheck_BlueBlood(play, NULL, &sp3C);
-                EffectSsHitmark_SpawnFixedScale(play, 0, &sp3C);
-            } else if (this->actor.colChkInfo.damageEffect != 14) {
-                EffectSsHitmark_SpawnFixedScale(play, 3, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, &sp3C);
+            } else if (this->actor.colChkInfo.damageEffect != 0xE) {
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &sp3C);
                 CollisionCheck_SpawnShieldParticlesMetalSound(play, &sp3C, &this->actor.projectedPos);
             }
         }
@@ -986,14 +987,14 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
         Actor_SetDropFlagJntSph(&this->actor, &this->collider1);
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
-            if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->collider1.elements[i].base.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
 
         if ((i != ARRAY_COUNT(this->collider1Elements)) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->collider1.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, play);
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (!Actor_ApplyDamage(&this->actor)) {

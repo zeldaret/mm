@@ -27,7 +27,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play);
 void func_80BD1F1C(EnZov* this, PlayState* play);
 s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx);
 
-ActorInit En_Zov_InitVars = {
+ActorProfile En_Zov_Profile = {
     /**/ ACTOR_EN_ZOV,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

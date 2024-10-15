@@ -34,7 +34,7 @@ s16 gCfbUpperAdjust;
 u8 gSysCfbHiResEnabled;
 
 #include "sys_cfb.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "buffers.h"
 #include "libc64/malloc.h"
 #include "z64vimode.h"

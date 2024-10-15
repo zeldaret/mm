@@ -7,7 +7,7 @@
 #include "z_en_dragon.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnDragon*)thisx)
 
@@ -44,7 +44,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-ActorInit En_Dragon_InitVars = {
+ActorProfile En_Dragon_Profile = {
     /**/ ACTOR_EN_DRAGON,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -238,7 +238,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->action = DEEP_PYTHON_ACTION_IDLE;
     this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
 
     EnDragon_SetupRetreatOrIdle(this);
 }
@@ -619,9 +619,9 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     }
 
     if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) ||
-        !(player->stateFlags2 & PLAYER_STATE2_80) || (this->collider.elements[0].info.bumperFlags & BUMP_HIT) ||
-        (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
-        (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
+        !(player->stateFlags2 & PLAYER_STATE2_80) || (this->collider.elements[0].base.bumperFlags & BUMP_HIT) ||
+        (this->collider.elements[1].base.bumperFlags & BUMP_HIT) ||
+        (this->collider.elements[2].base.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
@@ -736,12 +736,12 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     PlayerImpactType playerImpactType;
 
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
-        if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
-            (this->collider.elements[7].info.bumperFlags & BUMP_HIT)) {
+        if ((this->collider.elements[2].base.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[3].base.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[4].base.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[5].base.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[6].base.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[7].base.bumperFlags & BUMP_HIT)) {
             Actor_ApplyDamage(&this->actor);
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             if (this->actor.colChkInfo.health > 0) {
@@ -750,7 +750,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
             } else {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
@@ -760,7 +760,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
     }
 
     if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->grabWaitTimer == 0) &&
-        (player->invincibilityTimer == 0) && (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
+        (player->invincibilityTimer == 0) && (this->collider.elements[0].base.ocElemFlags & OCELEM_HIT) &&
         !((Actor_GetPlayerImpact(play, 1000.0f, &this->actor.world.pos, &playerImpactType) >= 0.0f) &&
           (playerImpactType == PLAYER_IMPACT_ZORA_BARRIER))) {
         this->actor.speed = 0.0f;

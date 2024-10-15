@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_usiyane.h"
-#include "objects/object_obj_usiyane/object_obj_usiyane.h"
+#include "assets/objects/object_obj_usiyane/object_obj_usiyane.h"
 
 #define FLAGS (ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjUsiyane_Destroy(Actor* thisx, PlayState* play);
 void ObjUsiyane_Update(Actor* thisx, PlayState* play);
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Usiyane_InitVars = {
+ActorProfile Obj_Usiyane_Profile = {
     /**/ ACTOR_OBJ_USIYANE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

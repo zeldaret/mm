@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_astr_bombwall.h"
-#include "objects/object_astr_obj/object_astr_obj.h"
+#include "assets/objects/object_astr_obj/object_astr_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorProfile Bg_Astr_Bombwall_Profile = {
     /**/ ACTOR_BG_ASTR_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

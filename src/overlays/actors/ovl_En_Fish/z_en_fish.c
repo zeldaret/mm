@@ -67,7 +67,7 @@ static Color_RGB8 D_8091FA94[] = {
     { 215, 97, 7 },
 };
 
-ActorInit En_Fish_InitVars = {
+ActorProfile En_Fish_Profile = {
     /**/ ACTOR_EN_FISH,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -867,12 +867,12 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.xzDistToPlayer < 70.0f) && (this->unkFunc != func_8091EFE8)) {
-            ColliderJntSphElement* element = &this->collider.elements[0];
+            ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-            element->dim.worldSphere.center.x = this->actor.world.pos.x;
-            element->dim.worldSphere.center.y = this->actor.world.pos.y;
-            element->dim.worldSphere.center.z = this->actor.world.pos.z;
-            element->dim.worldSphere.radius = this->unk_25C * 500.0f;
+            jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+            jntSphElem->dim.worldSphere.center.y = this->actor.world.pos.y;
+            jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
+            jntSphElem->dim.worldSphere.radius = this->unk_25C * 500.0f;
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
 

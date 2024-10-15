@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_ice_smoke.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rAlpha regs[0]
 #define rScale regs[1]
@@ -18,7 +18,7 @@ u32 EffectSsIceSmoke_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsIceSmoke_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsIceSmoke_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Ice_Smoke_InitVars = {
+EffectSsProfile Effect_Ss_Ice_Smoke_Profile = {
     EFFECT_SS_ICE_SMOKE,
     EffectSsIceSmoke_Init,
 };

@@ -5,7 +5,7 @@
  */
 
 #include "z_en_jc_mato.h"
-#include "objects/object_tru/object_tru.h"
+#include "assets/objects/object_tru/object_tru.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000)
 
@@ -20,7 +20,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play);
 void EnJcMato_SetupIdle(EnJcMato* this);
 void EnJcMato_Idle(EnJcMato* this, PlayState* play);
 
-ActorInit En_Jc_Mato_InitVars = {
+ActorProfile En_Jc_Mato_Profile = {
     /**/ ACTOR_EN_JC_MATO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

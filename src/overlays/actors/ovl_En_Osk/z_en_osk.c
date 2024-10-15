@@ -5,7 +5,7 @@
  */
 
 #include "z_en_osk.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -21,7 +21,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play);
 void func_80BF656C(EnOsk* this, PlayState* play);
 void func_80BF6A20(EnOsk* this, PlayState* play);
 
-ActorInit En_Osk_InitVars = {
+ActorProfile En_Osk_Profile = {
     /**/ ACTOR_EN_OSK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -630,7 +630,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gDPSetDither(gfx++, G_CD_NOISE);
+    gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
     gDPSetPrimColor(gfx++, 0, 0, 130, 0, 255, 100);

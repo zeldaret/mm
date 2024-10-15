@@ -7,7 +7,7 @@
 #include "z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiCrow*)thisx)
 
@@ -25,7 +25,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-ActorInit En_Syateki_Crow_InitVars = {
+ActorProfile En_Syateki_Crow_Profile = {
     /**/ ACTOR_EN_SYATEKI_CROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -292,9 +292,9 @@ s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-        rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
+        rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PIf / 4)));
     } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-        rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+        rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PIf / 4)));
     }
 
     return false;

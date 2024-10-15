@@ -18,7 +18,7 @@ void DmBal_Draw(Actor* thisx, PlayState* play);
 void DmBal_SetupDoNothing(DmBal* this);
 void DmBal_DoNothing(DmBal* this, PlayState* play);
 
-ActorInit Dm_Bal_InitVars = {
+ActorProfile Dm_Bal_Profile = {
     /**/ ACTOR_DM_BAL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

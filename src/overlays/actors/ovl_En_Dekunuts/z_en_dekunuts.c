@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnDekunuts*)thisx)
 
@@ -40,7 +40,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
-ActorInit En_Dekunuts_InitVars = {
+ActorProfile En_Dekunuts_Profile = {
     /**/ ACTOR_EN_DEKUNUTS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -571,7 +571,7 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, play);
             if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != ENDEKUNUTS_GET_FF00_0)) {
                 if ((this->actor.params != ENDEKUNUTS_GET_FF00_1) && !Actor_ApplyDamage(&this->actor)) {

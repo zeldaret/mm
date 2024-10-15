@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWf*)thisx)
 
@@ -56,7 +56,7 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, PlayState* play);
 s32 func_8099408C(PlayState* play, EnWf* this);
 
-ActorInit En_Wf_InitVars = {
+ActorProfile En_Wf_Profile = {
     /**/ ACTOR_EN_WF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -322,8 +322,8 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
         this->actor.hintId = TATL_HINT_ID_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
-        this->collider1.elements[0].info.toucher.damage = 8;
-        this->collider1.elements[1].info.toucher.damage = 8;
+        this->collider1.elements[0].base.toucher.damage = 8;
+        this->collider1.elements[1].base.toucher.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitAnim, this->jointTable,
@@ -826,7 +826,7 @@ void func_80991C04(EnWf* this) {
 void func_80991C80(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 sp30;
-    s32 sp2C;
+    s32 onAnim15thFrame;
     s16 sp2A;
 
     sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
@@ -843,15 +843,16 @@ void func_80991C80(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
     }
 
-    sp2C = Animation_OnFrame(&this->skelAnime, 15.0f);
-    if (((sp2C != 0) && !Actor_IsTargeted(play, &this->actor) &&
+    onAnim15thFrame = Animation_OnFrame(&this->skelAnime, 15.0f);
+
+    if ((onAnim15thFrame && !Actor_IsTargeted(play, &this->actor) &&
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
-        if ((sp2C == 0) && (this->unk_2A0 != 0)) {
+        if (!onAnim15thFrame && (this->unk_2A0 != 0)) {
             this->actor.shape.rot.y += TRUNCF_BINANG(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, play, 1);
             this->unk_2A0--;
-        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && (sp2C == 0)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && !onAnim15thFrame) {
             func_80991200(this);
             this->unk_2A0 = (s32)Rand_ZeroFloat(5.0f) + 5;
             if (sp30 >= 0x32C9) {
@@ -1418,7 +1419,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
 
         if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(collider->info.acHitInfo->toucher.dmgFlags &
+             !(collider->info.acHitElem->toucher.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
             if (!Actor_ApplyDamage(&this->actor)) {

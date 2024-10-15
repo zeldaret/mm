@@ -5,7 +5,7 @@
  */
 
 #include "z_en_gamelupy.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -23,7 +23,7 @@ void EnGamelupy_SetupFindSharedMemory(EnGamelupy* this);
 void EnGamelupy_SetupIdle(EnGamelupy* this);
 void EnGamelupy_SetupCollected(EnGamelupy* this);
 
-ActorInit En_Gamelupy_InitVars = {
+ActorProfile En_Gamelupy_Profile = {
     /**/ ACTOR_EN_GAMELUPY,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

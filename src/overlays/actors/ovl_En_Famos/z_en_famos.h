@@ -2,7 +2,7 @@
 #define Z_EN_FAMOS_H
 
 #include "global.h"
-#include "objects/object_famos/object_famos.h"
+#include "assets/objects/object_famos/object_famos.h"
 
 struct EnFamos;
 

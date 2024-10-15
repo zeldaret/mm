@@ -20,7 +20,7 @@ void func_80943BC0(EnDaiku* this);
 void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
-ActorInit En_Daiku_InitVars = {
+ActorProfile En_Daiku_Profile = {
     /**/ ACTOR_EN_DAIKU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -113,7 +113,7 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);

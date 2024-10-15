@@ -2,7 +2,7 @@
 #define Z_EN_PO_COMPOSER_H
 
 #include "global.h"
-#include "objects/object_po_composer/object_po_composer.h"
+#include "assets/objects/object_po_composer/object_po_composer.h"
 
 #define POE_COMPOSER_IS_FLAT(thisx) ((thisx)->params & 0x8000)
 #define POE_COMPOSER_4000(thisx)    ((thisx)->params & 0x4000)

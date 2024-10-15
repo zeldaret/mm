@@ -18,7 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Umajump_InitVars = {
+ActorProfile Bg_Umajump_Profile = {
     /**/ ACTOR_BG_UMAJUMP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -72,8 +72,8 @@ void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->horse != NULL) && (player != NULL) &&
-        (Math3D_XZDistance(this->horse->world.pos.x, this->horse->world.pos.z, player->actor.world.pos.x,
-                           player->actor.world.pos.z) < 1400.0f)) {
+        (Math3D_Dist2D(this->horse->world.pos.x, this->horse->world.pos.z, player->actor.world.pos.x,
+                       player->actor.world.pos.z) < 1400.0f)) {
         this->actionFunc = BgUmajump_PlayCutscene;
     }
 }

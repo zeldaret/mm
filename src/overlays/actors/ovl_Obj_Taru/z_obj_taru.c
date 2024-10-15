@@ -8,8 +8,8 @@
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
-#include "objects/object_taru/object_taru.h"
-#include "objects/object_kibako2/object_kibako2.h"
+#include "assets/objects/object_taru/object_taru.h"
+#include "assets/objects/object_kibako2/object_kibako2.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-ActorInit Obj_Taru_InitVars = {
+ActorProfile Obj_Taru_Profile = {
     /**/ ACTOR_OBJ_TARU,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -248,16 +248,16 @@ s32 func_80B9BF7C(ObjTaru* this) {
 
         this->collider.base.acFlags &= ~AC_HIT;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000) {
                 phi_a3 = false;
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+            } else if (this->collider.info.acHitElem->toucher.dmgFlags & 8) {
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
+            } else if (this->collider.info.acHitElem->toucher.dmgFlags & 0x500) {
                 phi_a3 = true;
             }
         }

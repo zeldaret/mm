@@ -6,7 +6,7 @@
 
 #include "z_obj_lift.h"
 #include "z64quake.h"
-#include "objects/object_d_lift/object_d_lift.h"
+#include "assets/objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void func_8093DB70(ObjLift* this);
 void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Lift_InitVars = {
+ActorProfile Obj_Lift_Profile = {
     /**/ ACTOR_OBJ_LIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

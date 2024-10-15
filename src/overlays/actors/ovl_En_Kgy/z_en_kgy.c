@@ -5,7 +5,7 @@
  */
 
 #include "z_en_kgy.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -45,7 +45,7 @@ typedef enum EnKgyAnimation {
     /* 10 */ ENKGY_ANIM_MAX
 } EnKgyAnimation;
 
-ActorInit En_Kgy_InitVars = {
+ActorProfile En_Kgy_Profile = {
     /**/ ACTOR_EN_KGY,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

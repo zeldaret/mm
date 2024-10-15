@@ -54,7 +54,7 @@
         <DList Name="gLinkHumanLeftHandOpenDL" Offset="0xD528" />
 
         <Texture Name="gLinkHumanOcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD680" />
-        <!-- <Blob Name="object_link_child_Blob_00DA80" Size="0x88" Offset="0xDA80" /> -->
+        <Texture Name="object_link_child_TLUT_00DA80" OutName="tlut_00DA80" Format="rgba16" Width="68" Height="1" Offset="0xDA80"/>
         <Texture Name="object_link_child_Tex_00DB08" OutName="tex_00DB08" Format="ci8" Width="16" Height="16" Offset="0xDB08" />
 
         <!-- <Blob Name="object_link_child_Blob_00DC08" Size="0x360" Offset="0xDC08" /> -->

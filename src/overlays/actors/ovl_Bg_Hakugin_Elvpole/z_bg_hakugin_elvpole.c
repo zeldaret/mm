@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_elvpole.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +18,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
-ActorInit Bg_Hakugin_Elvpole_InitVars = {
+ActorProfile Bg_Hakugin_Elvpole_Profile = {
     /**/ ACTOR_BG_HAKUGIN_ELVPOLE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

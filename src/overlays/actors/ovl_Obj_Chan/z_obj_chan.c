@@ -10,9 +10,9 @@
  */
 
 #include "z_obj_chan.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_obj_chan/object_obj_chan.h"
-#include "objects/object_tsubo/object_tsubo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_obj_chan/object_obj_chan.h"
+#include "assets/objects/object_tsubo/object_tsubo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -28,7 +28,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play);
 void ObjChan_ChandelierAction(ObjChan* this, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
-ActorInit Obj_Chan_InitVars = {
+ActorProfile Obj_Chan_Profile = {
     /**/ ACTOR_OBJ_CHAN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -121,16 +121,16 @@ u32 func_80BB9A1C(ObjChan* this, f32 arg1) {
     f32 sp20;
 
     sp20 = Math_SinS(this->unk1D4) * this->unk1D0;
-    temp_f6 = (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000) * this->unk1D0) + arg1;
+    temp_f6 = (Math_CosS(this->unk1D4) * BINANG_TO_RAD_ALT2(400) * this->unk1D0) + arg1;
     if (temp_f6 != 0.0f) {
-        this->unk1D4 = RAD_TO_BINANG(Math_FAtan2F(sp20 * (400 * M_PI / 0x8000), temp_f6));
+        this->unk1D4 = RAD_TO_BINANG(Math_FAtan2F(sp20 * BINANG_TO_RAD_ALT2(400), temp_f6));
     } else if (sp20 >= 0.0f) {
         this->unk1D4 = 0x4000;
     } else {
         this->unk1D4 = -0x4000;
     }
     if (Math_CosS(this->unk1D4) != 0.0f) {
-        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * (400 * M_PI / 0x8000)));
+        this->unk1D0 = (temp_f6 / (Math_CosS(this->unk1D4) * BINANG_TO_RAD_ALT2(400)));
     } else {
         this->unk1D0 = sp20;
     }
@@ -260,7 +260,7 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
             Math_Vec3f_ToVec3s(&pot->collider.dim.pos, &pot->actor.world.pos);
         }
     }
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x800)) {
         Flags_SetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx));
     }
     if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
@@ -296,7 +296,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
     s32 phi_v1;
 
     potBreaks = false;
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x4004000)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x4004000)) {
         potBreaks = true;
     }
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {

@@ -90,7 +90,7 @@ void EnBal_OfferGetItem(EnBal* this, PlayState* play);
 void EnBal_SetupThankYou(EnBal* this);
 void EnBal_ThankYou(EnBal* this, PlayState* play);
 
-ActorInit En_Bal_InitVars = {
+ActorProfile En_Bal_Profile = {
     /**/ ACTOR_EN_BAL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -238,15 +238,15 @@ void EnBal_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnBal_SetMainColliderToBalloon(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_BALLOON;
-    this->collider.elements->dim.modelSphere.radius = 40;
-    this->collider.elements->dim.modelSphere.center.x = 2200;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_BALLOON;
+    this->collider.elements[0].dim.modelSphere.radius = 40;
+    this->collider.elements[0].dim.modelSphere.center.x = 2200;
 }
 
 void EnBal_SetMainColliderToHead(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_HEAD;
-    this->collider.elements->dim.modelSphere.radius = 25;
-    this->collider.elements->dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_HEAD;
+    this->collider.elements[0].dim.modelSphere.radius = 25;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
 }
 
 s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {

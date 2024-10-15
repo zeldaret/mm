@@ -1,8 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "libc/stdint.h"
-#include "PR/os_convert.h"
+#include "PR/ultratypes.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -19,12 +18,6 @@
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
 #define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
-
-#define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
-
-#define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
-
-#define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
@@ -48,9 +41,6 @@
 // To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
 #define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
 
-#define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
-#define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
-
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
 
 #define BIT_FLAG_TO_SHIFT(flag) \
@@ -64,9 +54,6 @@
     (flag & 0x1) ? 0 : \
     0)
 
-#define SQ(x) ((x) * (x))
-#define ABS(x) ((x) >= 0 ? (x) : -(x))
-#define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
 
 //! checks min first

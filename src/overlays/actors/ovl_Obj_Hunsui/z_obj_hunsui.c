@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hunsui.h"
-#include "objects/object_hunsui/object_hunsui.h"
+#include "assets/objects/object_hunsui/object_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -46,7 +46,7 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
-ActorInit Obj_Hunsui_InitVars = {
+ActorProfile Obj_Hunsui_Profile = {
     /**/ ACTOR_OBJ_HUNSUI,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -585,9 +585,9 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
             csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                if ((csId > CS_ID_NONE) && !CutsceneManager_IsNext(csId)) {
                     CutsceneManager_Queue(csId);
-                } else if (csId >= 0) {
+                } else if (csId > CS_ID_NONE) {
                     CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {

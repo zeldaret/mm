@@ -6,7 +6,7 @@
 
 #include "z_en_tanron6.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnTanron6*)thisx)
 
@@ -18,7 +18,7 @@ void EnTanron6_Draw(Actor* thisx, PlayState* play);
 void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
-ActorInit En_Tanron6_InitVars = {
+ActorProfile En_Tanron6_Profile = {
     /**/ ACTOR_EN_TANRON6,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

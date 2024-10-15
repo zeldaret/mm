@@ -7,7 +7,7 @@
 #include "z_boss_07.h"
 #include "z64shrink_window.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss07*)thisx)
 
@@ -234,7 +234,7 @@ static DamageTable D_80A07A00 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xB),
 };
 
-ActorInit Boss_07_InitVars = {
+ActorProfile Boss_07_Profile = {
     /**/ ACTOR_BOSS_07,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,

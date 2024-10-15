@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_rotlift.h"
-#include "objects/object_rotlift/object_rotlift.h"
+#include "assets/objects/object_rotlift/object_rotlift.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS 0x00000000
@@ -25,7 +25,7 @@ typedef struct ObjRotliftModelInfo {
     /* 0x8 */ CollisionHeader* colHeader;
 } ObjRotliftModelInfo; // size = 0xC
 
-ActorInit Obj_Rotlift_InitVars = {
+ActorProfile Obj_Rotlift_Profile = {
     /**/ ACTOR_OBJ_ROTLIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

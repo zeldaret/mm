@@ -5,7 +5,7 @@
  */
 #include "prevent_bss_reordering.h"
 #include "z_en_rg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -20,7 +20,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-ActorInit En_Rg_InitVars = {
+ActorProfile En_Rg_Profile = {
     /**/ ACTOR_EN_RG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -370,8 +370,8 @@ s32 func_80BF43FC(EnRg* this) {
     do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
-        if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
-                                     &sp8C, &sp88, &sp84) &&
+        if (Math3D_PointDistSqToLine2DImpl(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x,
+                                           sp90.z, &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
@@ -604,7 +604,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
  * The range extends a little bit beyond the finish line's in-game visual.
  */
 s32 EnRg_IsInFinishLine(Vec3f* pos) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
 Vec3f D_80BF596C[] = {

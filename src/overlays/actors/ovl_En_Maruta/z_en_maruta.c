@@ -6,7 +6,7 @@
 
 #include "z_en_maruta.h"
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
-#include "objects/object_maruta/object_maruta.h"
+#include "assets/objects/object_maruta/object_maruta.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 
@@ -36,7 +36,7 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1);
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
-ActorInit En_Maruta_InitVars = {
+ActorProfile En_Maruta_Profile = {
     /**/ ACTOR_EN_MARUTA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

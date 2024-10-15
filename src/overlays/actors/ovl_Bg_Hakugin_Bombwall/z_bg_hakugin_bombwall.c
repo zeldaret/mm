@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_bombwall.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -26,7 +26,7 @@ void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
-ActorInit Bg_Hakugin_Bombwall_InitVars = {
+ActorProfile Bg_Hakugin_Bombwall_Profile = {
     /**/ ACTOR_BG_HAKUGIN_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -359,7 +359,7 @@ s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
 
 s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+        if (this->collider.info.acHitElem->toucher.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
                 Actor* thisx = &this->dyna.actor;
 

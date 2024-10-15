@@ -11,7 +11,7 @@
 #include "z_en_paper.h"
 #include "su_mtx.h"
 
-#include "objects/object_bal/object_bal.h"
+#include "assets/objects/object_bal/object_bal.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -29,7 +29,7 @@ void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play);
 void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
-ActorInit En_Paper_InitVars = {
+ActorProfile En_Paper_Profile = {
     /**/ ACTOR_EN_PAPER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

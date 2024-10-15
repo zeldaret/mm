@@ -22,7 +22,7 @@ void func_80AE7E9C(EnStopheishi* this);
 void func_80AE854C(EnStopheishi* this, PlayState* play);
 void func_80AE795C(EnStopheishi* this, PlayState* play);
 
-ActorInit En_Stop_heishi_InitVars = {
+ActorProfile En_Stop_heishi_Profile = {
     /**/ ACTOR_EN_STOP_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

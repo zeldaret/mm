@@ -5,7 +5,7 @@
  */
 
 #include "z_en_gg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
@@ -25,7 +25,7 @@ void func_80B359DC(EnGg* this, PlayState* play);
 void func_80B363E8(EnGgStruct* ptr, PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 void func_80B364D4(EnGgStruct* ptr, PlayState* play);
 
-ActorInit En_Gg_InitVars = {
+ActorProfile En_Gg_Profile = {
     /**/ ACTOR_EN_GG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

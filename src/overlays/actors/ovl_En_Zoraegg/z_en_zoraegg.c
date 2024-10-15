@@ -5,7 +5,7 @@
  */
 
 #include "z_en_zoraegg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -37,7 +37,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play);
 void func_80B32C34(EnZoraegg* this, PlayState* play);
 void func_80B32D08(EnZoraegg* this, PlayState* play);
 
-ActorInit En_Zoraegg_InitVars = {
+ActorProfile En_Zoraegg_Profile = {
     /**/ ACTOR_EN_ZORAEGG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -701,7 +701,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gDPSetDither(gfx++, G_CD_NOISE);
+    gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 

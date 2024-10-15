@@ -24,7 +24,7 @@ void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play);
 void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
 void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play);
 
-ActorInit Bg_Ikana_Dharma_InitVars = {
+ActorProfile Bg_Ikana_Dharma_Profile = {
     /**/ ACTOR_BG_IKANA_DHARMA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

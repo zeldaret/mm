@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kepn_koya.h"
-#include "objects/object_kepn_koya/object_kepn_koya.h"
+#include "assets/objects/object_kepn_koya/object_kepn_koya.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void ObjKepnKoya_Destroy(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Update(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Kepn_Koya_InitVars = {
+ActorProfile Obj_Kepn_Koya_Profile = {
     /**/ ACTOR_OBJ_KEPN_KOYA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

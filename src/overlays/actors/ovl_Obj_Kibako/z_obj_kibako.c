@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_kibako.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_kibako/object_kibako.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_kibako/object_kibako.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
@@ -36,7 +36,7 @@ static s16 D_80927384 = 0;
 static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
-ActorInit Obj_Kibako_InitVars = {
+ActorProfile Obj_Kibako_Profile = {
     /**/ ACTOR_OBJ_KIBAKO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -2,7 +2,7 @@
 #define Z64FONT_H
 
 #include "PR/ultratypes.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 
 struct PlayState;
 

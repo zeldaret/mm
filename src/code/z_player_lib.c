@@ -6,40 +6,40 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 // Assets for each player form
-#include "objects/object_link_boy/object_link_boy.h"
-#include "objects/object_link_goron/object_link_goron.h"
-#include "objects/object_link_zora/object_link_zora.h"
-#include "objects/object_link_nuts/object_link_nuts.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/object_link_boy/object_link_boy.h"
+#include "assets/objects/object_link_goron/object_link_goron.h"
+#include "assets/objects/object_link_zora/object_link_zora.h"
+#include "assets/objects/object_link_nuts/object_link_nuts.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 // Assets for each mask
-#include "objects/object_mask_truth/object_mask_truth.h"
-#include "objects/object_mask_kerfay/object_mask_kerfay.h"
-#include "objects/object_mask_yofukasi/object_mask_yofukasi.h"
-#include "objects/object_mask_rabit/object_mask_rabit.h"
-#include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
-#include "objects/object_mask_json/object_mask_json.h"
-#include "objects/object_mask_romerny/object_mask_romerny.h"
-#include "objects/object_mask_zacho/object_mask_zacho.h"
-#include "objects/object_mask_posthat/object_mask_posthat.h"
-#include "objects/object_mask_meoto/object_mask_meoto.h"
-#include "objects/object_mask_bigelf/object_mask_bigelf.h"
-#include "objects/object_mask_gibudo/object_mask_gibudo.h"
-#include "objects/object_mask_gero/object_mask_gero.h"
-#include "objects/object_mask_dancer/object_mask_dancer.h"
-#include "objects/object_mask_skj/object_mask_skj.h"
-#include "objects/object_mask_stone/object_mask_stone.h"
-#include "objects/object_mask_bree/object_mask_bree.h"
-#include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
-#include "objects/object_mask_bu_san/object_mask_bu_san.h"
-#include "objects/object_mask_kyojin/object_mask_kyojin.h"
-#include "objects/object_mask_boy/object_mask_boy.h"
-#include "objects/object_mask_goron/object_mask_goron.h"
-#include "objects/object_mask_zora/object_mask_zora.h"
-#include "objects/object_mask_nuts/object_mask_nuts.h"
+#include "assets/objects/object_mask_truth/object_mask_truth.h"
+#include "assets/objects/object_mask_kerfay/object_mask_kerfay.h"
+#include "assets/objects/object_mask_yofukasi/object_mask_yofukasi.h"
+#include "assets/objects/object_mask_rabit/object_mask_rabit.h"
+#include "assets/objects/object_mask_ki_tan/object_mask_ki_tan.h"
+#include "assets/objects/object_mask_json/object_mask_json.h"
+#include "assets/objects/object_mask_romerny/object_mask_romerny.h"
+#include "assets/objects/object_mask_zacho/object_mask_zacho.h"
+#include "assets/objects/object_mask_posthat/object_mask_posthat.h"
+#include "assets/objects/object_mask_meoto/object_mask_meoto.h"
+#include "assets/objects/object_mask_bigelf/object_mask_bigelf.h"
+#include "assets/objects/object_mask_gibudo/object_mask_gibudo.h"
+#include "assets/objects/object_mask_gero/object_mask_gero.h"
+#include "assets/objects/object_mask_dancer/object_mask_dancer.h"
+#include "assets/objects/object_mask_skj/object_mask_skj.h"
+#include "assets/objects/object_mask_stone/object_mask_stone.h"
+#include "assets/objects/object_mask_bree/object_mask_bree.h"
+#include "assets/objects/object_mask_bakuretu/object_mask_bakuretu.h"
+#include "assets/objects/object_mask_bu_san/object_mask_bu_san.h"
+#include "assets/objects/object_mask_kyojin/object_mask_kyojin.h"
+#include "assets/objects/object_mask_boy/object_mask_boy.h"
+#include "assets/objects/object_mask_goron/object_mask_goron.h"
+#include "assets/objects/object_mask_zora/object_mask_zora.h"
+#include "assets/objects/object_mask_nuts/object_mask_nuts.h"
 
 // Assets for other actors
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
@@ -81,7 +81,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+        Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
         if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
@@ -353,8 +353,8 @@ s32 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
-                                 PLAYER_STATE1_20000000)) &&
+        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_200000 |
+                                 PLAYER_STATE1_800000 | PLAYER_STATE1_20000000)) &&
         !(player->stateFlags2 & PLAYER_STATE2_1)) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
@@ -393,11 +393,11 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     if (this->av1.actionVar1 == 2) {
         s16 objectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
 
-        gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
+        gActorOverlayTable[ACTOR_PLAYER].profile->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objectSlot, objectId);
         this->actor.objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
     } else if (this->av1.actionVar1 >= 3) {
-        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].profile->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
             this->actor.objectSlot = objectSlot;
@@ -505,8 +505,15 @@ bool Player_InCsMode(PlayState* play) {
     return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
-bool func_80123420(Player* player) {
-    return player->stateFlags3 & PLAYER_STATE3_80000000;
+/**
+ * Checks if Player is currently locked onto a hostile actor.
+ * `PLAYER_STATE3_HOSTILE_LOCK_ON` controls Player's "battle" response to hostile actors.
+ *
+ * Note that within Player, `Player_UpdateHostileLockOn` exists, which updates the flag and also returns the check.
+ * Player can use this function instead if the flag should be checked, but not updated.
+ */
+bool Player_CheckHostileLockOn(Player* player) {
+    return player->stateFlags3 & PLAYER_STATE3_HOSTILE_LOCK_ON;
 }
 
 bool func_80123434(Player* player) {
@@ -540,11 +547,11 @@ bool func_801234D4(PlayState* play) {
 bool func_80123590(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & PLAYER_STATE1_800) && (player->heldActor == actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) && (player->heldActor == actor)) {
         player->interactRangeActor = NULL;
         player->heldActor = NULL;
         player->actor.child = NULL;
-        player->stateFlags1 &= ~PLAYER_STATE1_800;
+        player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
         return true;
     }
 
@@ -581,15 +588,18 @@ ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_EXPLODE)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_EXPLODE)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_MARCH)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_MARCH)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_DANCE)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) &&
+            (play->interfaceCtx.bButtonPlayerDoAction == DO_ACTION_DANCE)) {
             return ITEM_F2;
         }
 
@@ -623,8 +633,8 @@ PlayerItemAction func_80123810(PlayState* play) {
 
     if (gSaveContext.save.unk_06 == 0) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
-            play->interfaceCtx.unk_222 = 0;
-            play->interfaceCtx.unk_224 = 0;
+            play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+            play->interfaceCtx.bButtonInterfaceDoAction = 0;
             Interface_SetHudVisibility(play->msgCtx.hudVisibility);
             return PLAYER_IA_MINUS1;
         }
@@ -637,8 +647,8 @@ PlayerItemAction func_80123810(PlayState* play) {
             i++;
             itemId = Player_GetItemOnButton(play, player, i);
 
-            play->interfaceCtx.unk_222 = 0;
-            play->interfaceCtx.unk_224 = 0;
+            play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+            play->interfaceCtx.bButtonInterfaceDoAction = 0;
             Interface_SetHudVisibility(play->msgCtx.hudVisibility);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
@@ -1360,8 +1370,8 @@ bool func_80123F14(PlayState* play) {
     return player->stateFlags1 & PLAYER_STATE1_800000;
 }
 
-s32 func_80123F2C(PlayState* play, s32 ammo) {
-    play->unk_1887C = ammo + 1;
+s32 Player_SetBButtonAmmo(PlayState* play, s32 ammo) {
+    play->bButtonAmmoPlusOne = ammo + 1;
 
     return 1;
 }
@@ -1383,7 +1393,7 @@ u8 Player_GetStrength(void) {
     return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
-u8 Player_GetMask(PlayState* play) {
+PlayerMask Player_GetMask(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->currentMask;
@@ -1812,9 +1822,9 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
         sp48 = Math_FAtan2F(temp_f20, sp58);
-        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        phi_t1 = RAD_TO_BINANG(M_PIf - (Math_FAtan2F(sp54, temp_f20) + ((M_PIf / 2) - sp48)));
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
-        temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
+        temp_f8 = RAD_TO_BINANG(sp48 - sp4C);
 
         if ((s16)(ABS_ALT(skelAnime->jointTable[shinLimbIndex].x) + ABS_ALT(skelAnime->jointTable[shinLimbIndex].y)) <
             0) {
@@ -3408,7 +3418,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     temp_s1 = &heldActor->world.rot;
                     Matrix_MtxFToYXZRot(&sp230, temp_s1, false);
                     heldActor->shape.rot = *temp_s1;
-                } else if (player->stateFlags1 & PLAYER_STATE1_800) {
+                } else if (player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) {
                     heldActor->world.rot.y = heldActor->shape.rot.y =
                         player->actor.shape.rot.y + player->leftHandWorld.rot.y;
                 }

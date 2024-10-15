@@ -21,7 +21,7 @@ OSViMode osViModeNtscHpf1 = {
       {
           // [0]
           ORIGIN(1280),       // origin
-          SCALE(0.5, 0.5),    // 0x2000800, // yScale
+          SCALE(0.5f, 0.5f),  // 0x2000800, // yScale
           START(35, 509),     // vStart
           BURST(4, 2, 14, 0), // vBurst
           VINTR(2),           // vIntr
@@ -29,7 +29,7 @@ OSViMode osViModeNtscHpf1 = {
       {
           // [1]
           ORIGIN(2560),       // origin
-          SCALE(0.5, 0.5),    // 0x2000800, // yScale
+          SCALE(0.5f, 0.5f),  // 0x2000800, // yScale
           START(37, 511),     // vStart
           BURST(4, 2, 14, 0), // vBurst
           VINTR(2)            // vIntr

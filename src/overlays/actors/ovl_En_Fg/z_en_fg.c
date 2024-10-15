@@ -5,7 +5,7 @@
  */
 
 #include "z_en_fg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
 
@@ -32,7 +32,7 @@ typedef enum {
     /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
 } BetaFrogDamageEffect;
 
-ActorInit En_Fg_InitVars = {
+ActorProfile En_Fg_Profile = {
     /**/ ACTOR_EN_FG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

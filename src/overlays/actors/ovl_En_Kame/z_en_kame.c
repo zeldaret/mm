@@ -7,7 +7,7 @@
 #include "z_en_kame.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnKame*)thisx)
 
@@ -57,7 +57,7 @@ typedef enum {
     /* 4 */ EN_KAME_EYE_MAX
 } EnKameEyeTexture;
 
-ActorInit En_Kame_InitVars = {
+ActorProfile En_Kame_Profile = {
     /**/ ACTOR_EN_KAME,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -764,7 +764,7 @@ void EnKame_UpdateDamage(EnKame* this, PlayState* play) {
 
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            (this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return;
         }
 

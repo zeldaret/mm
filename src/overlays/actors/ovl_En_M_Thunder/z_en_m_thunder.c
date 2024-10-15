@@ -7,7 +7,7 @@
 #include "z_en_m_thunder.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_Eff_Dust/z_eff_dust.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -29,7 +29,7 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 
 #define ENMTHUNDER_TYPE_MAX 4
 
-ActorInit En_M_Thunder_InitVars = {
+ActorProfile En_M_Thunder_Profile = {
     /**/ ACTOR_EN_M_THUNDER,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

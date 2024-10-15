@@ -2,7 +2,7 @@
 #define Z_EN_ATTACK_NIW_H
 
 #include "global.h"
-#include "objects/object_niw/object_niw.h"
+#include "assets/objects/object_niw/object_niw.h"
 
 struct EnAttackNiw;
 

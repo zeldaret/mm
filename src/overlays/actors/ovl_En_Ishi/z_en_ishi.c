@@ -7,9 +7,9 @@
 #include "z_en_ishi.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_ishi/object_ishi.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_ishi/object_ishi.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
@@ -45,7 +45,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-ActorInit En_Ishi_InitVars = {
+ActorProfile En_Ishi_Profile = {
     /**/ ACTOR_EN_ISHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -317,7 +317,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
             Matrix_MultVecY(1.0f, &sp30);
-            sp2C = Math3D_Parallel(&sp30, &D_8095F778);
+            sp2C = Math3D_Cos(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
                 temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - sp3C->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
@@ -362,15 +362,15 @@ void func_8095E204(EnIshi* this, PlayState* play) {
     }
 }
 
-s32 func_8095E2B0(EnIshi* this, PlayState* play) {
+s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -421,7 +421,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (func_8095E2B0(this, play)) {
+    if (EnIshi_IsUnderwater(this, play)) {
         this->unk_197 |= 1;
     }
 
@@ -482,7 +482,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x508)) {
+    if (sp34 && (sp38 == 0) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x508)) {
         if (sp30 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);

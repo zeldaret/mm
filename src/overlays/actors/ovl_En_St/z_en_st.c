@@ -6,11 +6,10 @@
 
 #include "z_en_st.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                          \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
-     ACTOR_FLAG_1000000)
+#define FLAGS \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | ACTOR_FLAG_1000000)
 
 #define THIS ((EnSt*)thisx)
 
@@ -25,7 +24,7 @@ void func_808A6E24(EnSt* this, PlayState* play);
 void func_808A701C(EnSt* this, PlayState* play);
 void func_808A7478(Actor* thisx, PlayState* play);
 
-ActorInit En_St_InitVars = {
+ActorProfile En_St_Profile = {
     /**/ ACTOR_EN_ST,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

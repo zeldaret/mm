@@ -3,17 +3,16 @@
 
 #include "ultra64.h"
 
+#include "stdint.h"
+
 #include "color.h"
 #include "z64math.h"
 
-struct Actor;
-struct InitChainEntry;
 struct Input;
 
 void* Lib_MemCpy(void* dest, void* src, size_t size);
 void* Lib_MemSet(void* buffer, s32 value, size_t size);
 void Lib_GetControlStickData(f32* outMagnitude, s16* outAngle, struct Input* input);
-void Actor_ProcessInitChain(struct Actor* actor, struct InitChainEntry* ichain);
 void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src);
 void Lib_PlaySfx(u16 sfxId);
 void Lib_PlaySfx_2(u16 sfxId);

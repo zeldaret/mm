@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ghaka.h"
-#include "objects/object_ghaka/object_ghaka.h"
+#include "assets/objects/object_ghaka/object_ghaka.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-ActorInit Obj_Ghaka_InitVars = {
+ActorProfile Obj_Ghaka_Profile = {
     /**/ ACTOR_OBJ_GHAKA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

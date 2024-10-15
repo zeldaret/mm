@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hakaisi.h"
-#include "objects/object_hakaisi/object_hakaisi.h"
+#include "assets/objects/object_hakaisi/object_hakaisi.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
@@ -37,7 +37,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play);
 void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hakaisi_InitVars = {
+ActorProfile Obj_Hakaisi_Profile = {
     /**/ ACTOR_OBJ_HAKAISI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -197,7 +197,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
 
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
-    this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->dyna.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;

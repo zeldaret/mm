@@ -5,7 +5,7 @@
 #include "z64.h"
 #include "functions.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 LightsBuffer sLightsBuffer;
 
@@ -428,7 +428,7 @@ void Lights_DrawGlow(PlayState* play) {
 
         gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
 
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);

@@ -2,7 +2,7 @@
 #define Z_EN_HINT_SKB_H
 
 #include "global.h"
-#include "objects/object_skb/object_skb.h"
+#include "assets/objects/object_skb/object_skb.h"
 
 struct EnHintSkb;
 

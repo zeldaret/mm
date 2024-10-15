@@ -138,7 +138,7 @@ typedef struct PauseContext {
     /* 0x238 */ s16 cursorPoint[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x242 */ s16 cursorXIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x24C */ s16 cursorYIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
-    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
+    /* 0x256 */ s16 cursorMapDungeonItem; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
@@ -189,50 +189,12 @@ typedef struct PauseContext {
     (((pauseCtx)->state != PAUSE_STATE_OFF) || ((pauseCtx)->debugEditor != DEBUG_EDITOR_NONE))
 
 
-typedef enum KaleidoMgrOverlayType {
-    /* 0 */ KALEIDO_OVL_KALEIDO_SCOPE,
-    /* 1 */ KALEIDO_OVL_PLAYER_ACTOR,
-    /* 2 */ KALEIDO_OVL_MAX
-} KaleidoMgrOverlayType;
-
-typedef struct KaleidoMgrOverlay {
-    /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ uintptr_t vromStart;
-    /* 0x08 */ uintptr_t vromEnd;
-    /* 0x0C */ void* vramStart;
-    /* 0x10 */ void* vramEnd;
-    /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
-    /* 0x18 */ const char* name;
-} KaleidoMgrOverlay; // size = 0x1C
-
-
 // z_kaleido_setup.c
 
 void func_800F4A10(struct PlayState* play);
 void KaleidoSetup_Update(struct PlayState* play);
 void KaleidoSetup_Init(struct PlayState* play);
 void KaleidoSetup_Destroy(struct PlayState* play);
-
-
-// z_kaleido_manager.c
-
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(struct PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-
-extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEIDO_OVL_MAX];
-extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
-
-
-// z_kaleido_scope_call.c
-
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(struct PlayState* play);
-void KaleidoScopeCall_Destroy(struct PlayState* play);
-void KaleidoScopeCall_Update(struct PlayState* play);
-void KaleidoScopeCall_Draw(struct PlayState* play);
 
 
 // Item macros

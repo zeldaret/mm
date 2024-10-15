@@ -8,7 +8,7 @@
 
 #include "z_obj_grass.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -24,9 +24,9 @@ f32 sNearestGrassGroupsDist[OBJ_GRASS_NEAREST_GROUP_MAX];
 ObjGrassElement* sNearestGrassElements[OBJ_GRASS_NEAREST_ELEM_MAX];
 f32 sNearestGrassElementsDistSq[OBJ_GRASS_NEAREST_ELEM_MAX];
 
-#include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
+#include "assets/overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
-ActorInit Obj_Grass_InitVars = {
+ActorProfile Obj_Grass_Profile = {
     /**/ ACTOR_OBJ_GRASS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

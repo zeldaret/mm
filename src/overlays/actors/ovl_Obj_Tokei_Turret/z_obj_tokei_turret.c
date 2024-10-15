@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_tokei_turret.h"
-#include "objects/object_tokei_turret/object_tokei_turret.h"
+#include "assets/objects/object_tokei_turret/object_tokei_turret.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokei_Turret_InitVars = {
+ActorProfile Obj_Tokei_Turret_Profile = {
     /**/ ACTOR_OBJ_TOKEI_TURRET,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -51,7 +51,7 @@ void ObjTokeiTurret_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTownTurretPlatformCol);
         }
     } else {
-        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0;
+        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0f;
     }
 }
 

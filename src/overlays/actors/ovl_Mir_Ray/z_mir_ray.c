@@ -6,7 +6,7 @@
  */
 
 #include "z_mir_ray.h"
-#include "objects/object_mir_ray/object_mir_ray.h"
+#include "assets/objects/object_mir_ray/object_mir_ray.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -41,7 +41,7 @@ typedef struct {
     /* 0x1F */ u8 params;
 } MirRayDataEntry; // size = 0x20
 
-ActorInit Mir_Ray_InitVars = {
+ActorProfile Mir_Ray_Profile = {
     /**/ ACTOR_MIR_RAY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -247,11 +247,11 @@ void MirRay_SetupCollider(MirRay* this) {
     f32 y = (this->poolPt.y - this->sourcePt.y) * dataEntry->unk_10;
     f32 z = (this->poolPt.z - this->sourcePt.z) * dataEntry->unk_10;
 
-    this->collider1.elements[0].dim.worldSphere.center.x = this->sourcePt.x + x;
-    this->collider1.elements[0].dim.worldSphere.center.y = this->sourcePt.y + y;
-    this->collider1.elements[0].dim.worldSphere.center.z = this->sourcePt.z + z;
+    this->collider1.elements->dim.worldSphere.center.x = this->sourcePt.x + x;
+    this->collider1.elements->dim.worldSphere.center.y = this->sourcePt.y + y;
+    this->collider1.elements->dim.worldSphere.center.z = this->sourcePt.z + z;
 
-    this->collider1.elements[0].dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
+    this->collider1.elements->dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
 }
 
 // Set up a light point between source point and reflection point. Reflection point is the pool point (for windows) or
@@ -383,7 +383,7 @@ void MirRay_Update(Actor* thisx, PlayState* play) {
         MirRay_MakeShieldLight(this, play);
 
         if (this->reflectIntensity > 0.0f) {
-            Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+            Actor_PlaySfx_Flagged2(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
         }
     }
 }
@@ -702,7 +702,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp50.y = pointy - vecA->y;
         sp50.z = pointz - vecA->z;
 
-        if (Math3D_Parallel(&sp5C, &sp50) < 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp50) < 0.0f) {
             return false;
         }
 
@@ -710,7 +710,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp44.y = pointy - vecB->y;
         sp44.z = pointz - vecB->z;
 
-        if (Math3D_Parallel(&sp5C, &sp44) > 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp44) > 0.0f) {
             return false;
         }
         return true;

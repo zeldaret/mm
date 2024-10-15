@@ -6,21 +6,21 @@
 
 #include "z_en_door.h"
 
-#include "libc/assert.h"
+#include "assert.h"
 
-#include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
-#include "objects/object_dor01/object_dor01.h"
-#include "objects/object_dor02/object_dor02.h"
-#include "objects/object_dor03/object_dor03.h"
-#include "objects/object_dor04/object_dor04.h"
-#include "objects/object_wdor01/object_wdor01.h"
-#include "objects/object_wdor02/object_wdor02.h"
-#include "objects/object_wdor03/object_wdor03.h"
-#include "objects/object_wdor04/object_wdor04.h"
-#include "objects/object_wdor05/object_wdor05.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/object_kinsta2_obj/object_kinsta2_obj.h"
+#include "assets/objects/object_dor01/object_dor01.h"
+#include "assets/objects/object_dor02/object_dor02.h"
+#include "assets/objects/object_dor03/object_dor03.h"
+#include "assets/objects/object_dor04/object_dor04.h"
+#include "assets/objects/object_wdor01/object_wdor01.h"
+#include "assets/objects/object_wdor02/object_wdor02.h"
+#include "assets/objects/object_wdor03/object_wdor03.h"
+#include "assets/objects/object_wdor04/object_wdor04.h"
+#include "assets/objects/object_wdor05/object_wdor05.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -85,7 +85,7 @@ ScheduleScript* sDoorSchedules[] = {
 static_assert(ARRAY_COUNT(sDoorSchedules) == ENDOOR_SCH_TYPE_MAX,
               "The entry count of `sDoorSchedules` should match the `EnDoorScheduleType` enum");
 
-ActorInit En_Door_InitVars = {
+ActorProfile En_Door_Profile = {
     /**/ ACTOR_EN_DOOR,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -397,7 +397,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 
     if (this->doorType != ENDOOR_TYPE_FRAMED) {
         TransitionActorEntry* transitionEntry =
-            &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
 
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
@@ -484,7 +484,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
         Vec3f playerPosRelToDoor;
 
         // Check if player is near this door and looking at it
-        Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->knobDoor.dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if (sDoorIsMilkBarMember || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             s16 yawDiff = player->actor.shape.rot.y - this->knobDoor.dyna.actor.shape.rot.y;
@@ -622,7 +622,7 @@ void EnDoor_Open(EnDoor* this, PlayState* play) {
             if (this->knobDoor.skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
-                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0, 100.0f, 50.0f, 0.15f);
+                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0f, 100.0f, 50.0f, 0.15f);
                 }
             }
         } else if (Animation_OnFrame(&this->knobDoor.skelAnime, sAnimCloseFrames[this->knobDoor.animIndex])) {
@@ -646,7 +646,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
         transitionEntry = NULL;
         if (this->doorType != ENDOOR_TYPE_FRAMED) {
-            transitionEntry = &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
+            transitionEntry = &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->knobDoor.dyna.actor)];
         }
 
         rot->z += this->knobDoor.dyna.actor.world.rot.y;

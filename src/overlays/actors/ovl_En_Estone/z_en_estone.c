@@ -5,8 +5,8 @@
  */
 
 #include "z_en_estone.h"
-#include "objects/object_eg/object_eg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_eg/object_eg.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -23,7 +23,7 @@ void EnEstone_SpawnEffect(EnEstone* this, Vec3f* pos, Vec3f* velocity, Vec3f* ac
 void EnEstone_UpdateEffects(EnEstone* this, PlayState* play);
 void EnEstone_DrawEffects(EnEstone* this, PlayState* play);
 
-ActorInit En_Estone_InitVars = {
+ActorProfile En_Estone_Profile = {
     /**/ ACTOR_EN_ESTONE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

@@ -3,11 +3,10 @@
 #include "libc64/malloc.h"
 
 #include "gfx.h"
-#include "main.h"
 #include "regs.h"
 #include "sys_cfb.h"
 #include "z64game.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64view.h"
 
 /**

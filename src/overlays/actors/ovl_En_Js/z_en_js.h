@@ -2,7 +2,7 @@
 #define Z_EN_JS_H
 
 #include "global.h"
-#include "objects/object_ob/object_ob.h"
+#include "assets/objects/object_ob/object_ob.h"
 
 #define ENJS_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define ENJS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)

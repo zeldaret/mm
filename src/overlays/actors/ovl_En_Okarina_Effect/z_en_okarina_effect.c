@@ -18,7 +18,7 @@ void func_8096B104(EnOkarinaEffect* this, PlayState* play);
 void func_8096B174(EnOkarinaEffect* this, PlayState* play);
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play);
 
-ActorInit En_Okarina_Effect_InitVars = {
+ActorProfile En_Okarina_Effect_Profile = {
     /**/ ACTOR_EN_OKARINA_EFFECT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -59,7 +59,7 @@ void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
     DECR(this->timer);
 
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->timer == 0)) {
+        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(play) && (this->timer == 0)) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }

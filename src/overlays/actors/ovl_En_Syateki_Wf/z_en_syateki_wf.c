@@ -7,7 +7,7 @@
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiWf*)thisx)
 
@@ -101,7 +101,7 @@ static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
-ActorInit En_Syateki_Wf_InitVars = {
+ActorProfile En_Syateki_Wf_Profile = {
     /**/ ACTOR_EN_SYATEKI_WF,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -181,7 +181,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->tailCollider, &this->actor, &sTailCylinderInit);
     Collider_InitJntSph(play, &this->headCollider);
     Collider_SetJntSph(play, &this->headCollider, &this->actor, &sJntSphInit, this->headColliderElements);
-    this->headCollider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    this->headCollider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable, this->morphTable,
                        WOLFOS_NORMAL_LIMB_MAX);

@@ -2,7 +2,7 @@
 #define Z_DM_BAL_H
 
 #include "global.h"
-#include "objects/object_bal/object_bal.h"
+#include "assets/objects/object_bal/object_bal.h"
 
 struct DmBal;
 

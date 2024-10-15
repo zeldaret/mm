@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_dt_bubble.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rPrimColorR regs[0]
 #define rPrimColorG regs[1]
@@ -39,7 +39,7 @@ static Color_RGBA8 sEnvColors[] = {
     { 150, 150, 150, 0 },
 };
 
-EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
+EffectSsProfile Effect_Ss_Dt_Bubble_Profile = {
     EFFECT_SS_DT_BUBBLE,
     EffectSsDtBubble_Init,
 };

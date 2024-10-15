@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_kin2_fence.h"
-#include "objects/object_kin2_obj/object_kin2_obj.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void BgKin2Fence_RaiseFence(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
 void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
-ActorInit Bg_Kin2_Fence_InitVars = {
+ActorProfile Bg_Kin2_Fence_Profile = {
     /**/ ACTOR_BG_KIN2_FENCE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -103,7 +103,7 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.bumperFlags & BUMP_HIT) {
             return i;
         }
     }

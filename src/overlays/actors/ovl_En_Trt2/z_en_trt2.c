@@ -5,7 +5,7 @@
  */
 
 #include "z_en_trt2.h"
-#include "objects/object_trt/object_trt.h"
+#include "assets/objects/object_trt/object_trt.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -26,33 +26,34 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
-typedef enum {
-    /* 0 */ TRT2_ANIM_IDLE,
-    /* 1 */ TRT2_ANIM_HALF_AWAKE,
-    /* 2 */ TRT2_ANIM_SLEEPING,
-    /* 3 */ TRT2_ANIM_WAKE_UP,
-    /* 4 */ TRT2_ANIM_SURPRISED,
-    /* 5 */ TRT2_ANIM_HANDS_ON_COUNTER,
-    /* 6 */ TRT2_ANIM_HOVER,
-    /* 7 */ TRT2_ANIM_FLY_LOOK_AROUND,
-    /* 8 */ TRT2_ANIM_FLY_DOWN,
-    /* 9 */ TRT2_ANIM_FLY
+typedef enum Trt2Animation {
+    /*  0 */ TRT2_ANIM_IDLE,
+    /*  1 */ TRT2_ANIM_HALF_AWAKE,
+    /*  2 */ TRT2_ANIM_SLEEPING,
+    /*  3 */ TRT2_ANIM_WAKE_UP,
+    /*  4 */ TRT2_ANIM_SURPRISED,
+    /*  5 */ TRT2_ANIM_HANDS_ON_COUNTER,
+    /*  6 */ TRT2_ANIM_HOVER,
+    /*  7 */ TRT2_ANIM_FLY_LOOK_AROUND,
+    /*  8 */ TRT2_ANIM_FLY_DOWN,
+    /*  9 */ TRT2_ANIM_FLY,
+    /* 10 */ TRT2_ANIM_MAX
 } Trt2Animation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[TRT2_ANIM_MAX] = {
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // TRT2_ANIM_IDLE
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_HALF_AWAKE
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // TRT2_ANIM_SLEEPING
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // TRT2_ANIM_WAKE_UP
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_SURPRISED
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // TRT2_ANIM_HANDS_ON_COUNTER
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // TRT2_ANIM_HOVER
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // TRT2_ANIM_FLY_LOOK_AROUND
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // TRT2_ANIM_FLY_DOWN
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT2_ANIM_FLY
 };
 
-ActorInit En_Trt2_InitVars = {
+ActorProfile En_Trt2_Profile = {
     /**/ ACTOR_EN_TRT2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -590,7 +591,7 @@ s32 EnTrt2_HasReachedPoint(EnTrt2* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -716,7 +717,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD4DB4(EnTrt2* this, PlayState* play) {
-    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0 };
+    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0f };
 
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);

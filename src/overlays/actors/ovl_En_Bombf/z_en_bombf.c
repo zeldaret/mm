@@ -7,7 +7,7 @@
 #include "z_en_bombf.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_bombf/object_bombf.h"
+#include "assets/objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play);
 void func_808AEF68(EnBombf* this, PlayState* play);
 void func_808AEFD4(EnBombf* this, PlayState* play);
 
-ActorInit En_Bombf_InitVars = {
+ActorProfile En_Bombf_Profile = {
     /**/ ACTOR_EN_BOMBF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -164,11 +164,11 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~PLAYER_STATE1_800;
+                player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
-                   ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x13828) ||
-                    ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x200) &&
+                   ((this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0x13828) ||
+                    ((this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0x200) &&
                      (player->transformation == PLAYER_FORM_GORON) && (player->actor.speed > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {
@@ -201,7 +201,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~PLAYER_STATE1_800;
+                player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
                 this->actor.world.pos = this->actor.home.pos;
             }
         }
@@ -218,7 +218,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
             this->actor.parent = NULL;
-            player->stateFlags1 &= ~PLAYER_STATE1_800;
+            player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
             this->actor.world.pos = this->actor.home.pos;
         }
     }
@@ -261,13 +261,13 @@ void func_808AEF68(EnBombf* this, PlayState* play) {
 }
 
 void func_808AEFD4(EnBombf* this, PlayState* play) {
-    if (this->colliderJntSph.elements->dim.modelSphere.radius == 0) {
+    if (this->colliderJntSph.elements[0].dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->colliderJntSph.elements->dim.modelSphere.radius = 100;
-    this->colliderJntSph.elements->dim.worldSphere.radius = 100;
+    this->colliderJntSph.elements[0].dim.modelSphere.radius = 100;
+    this->colliderJntSph.elements[0].dim.worldSphere.radius = 100;
 
     if (ENBOMBF_GET(&this->actor) == ENBOMBF_1) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderJntSph.base);
@@ -300,11 +300,11 @@ void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->timer == 0) {
         Player* player = GET_PLAYER(play);
 
-        if ((player->stateFlags1 & PLAYER_STATE1_800) && (&this->actor == player->heldActor)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) && (&this->actor == player->heldActor)) {
             player->actor.child = NULL;
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
-            player->stateFlags1 &= ~PLAYER_STATE1_800;
+            player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
         }
         Actor_Kill(&this->actor);
     }

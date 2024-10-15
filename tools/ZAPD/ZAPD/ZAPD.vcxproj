@@ -45,6 +45,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -52,6 +53,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -194,6 +196,8 @@ mkdir build\ZAPD
     <ClCompile Include="ZActorList.cpp" />
     <ClCompile Include="ZArray.cpp" />
     <ClCompile Include="ZBackground.cpp" />
+    <ClCompile Include="ZCKeyFrame.cpp" />
+    <ClCompile Include="ZCKeyFrameAnim.cpp" />
     <ClCompile Include="ZCollisionPoly.cpp" />
     <ClCompile Include="ZLimb.cpp" />
     <ClCompile Include="ZMtx.cpp" />
@@ -289,6 +293,8 @@ mkdir build\ZAPD
     <ClInclude Include="ZArray.h" />
     <ClInclude Include="ZBackground.h" />
     <ClInclude Include="ZBlob.h" />
+    <ClInclude Include="ZCKeyFrame.h" />
+    <ClInclude Include="ZCkeyFrameAnim.h" />
     <ClInclude Include="ZCollision.h" />
     <ClInclude Include="ZCollisionPoly.h" />
     <ClInclude Include="ZCutscene.h" />

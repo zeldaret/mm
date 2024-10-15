@@ -5,13 +5,13 @@
  */
 
 #include "z_en_wiz.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                                  \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
-     ACTOR_FLAG_100000 | ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                               \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
+     ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
 
@@ -81,7 +81,7 @@ typedef enum {
     /* 5 */ EN_WIZ_ANIM_DAMAGE
 } EnWizAnimation;
 
-ActorInit En_Wiz_InitVars = {
+ActorProfile En_Wiz_Profile = {
     /**/ ACTOR_EN_WIZ,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -761,8 +761,8 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
                 return;
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
-                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1013A22;
+                this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1013A22;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
 
@@ -880,7 +880,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                 s32 pad;
                 s32 i;
 
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 if (sqrtf(SQ(diffX) + SQ(diffZ)) < 20.0f) {
                     for (i = 0; i < this->platformCount; i++) {
                         Math_Vec3f_Copy(&this->ghostPos[i], &gZeroVec3f);
@@ -1008,7 +1008,7 @@ void EnWiz_SetupDisappear(EnWiz* this) {
     }
 
     this->targetPlatformLightAlpha = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     this->actor.world.rot.y += this->angularVelocity;
@@ -1049,7 +1049,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
             this->alpha = 0;
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
-                this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000202;
+                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1000202;
             }
 
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
@@ -1162,7 +1162,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
             EnWiz_SetupDisappear(this);
         }
 
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     }
 
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
@@ -1281,7 +1281,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
             // in the final game, since EnWiz_Init effectively disables them), then the below code will
             // "destroy" the ghost by turning into a cloud of smoke.
             if ((R_TRANS_FADE_FLASH_ALPHA_STEP != 0) ||
-                (this->ghostColliders.elements[i + 1].info.bumperFlags & BUMP_HIT)) {
+                (this->ghostColliders.elements[i + 1].base.bumperFlags & BUMP_HIT)) {
                 //! @bug: If a single ghost is destroyed, then changing the fight state here will cause
                 //! strange behavior; the ghosts will stand still and pretend to attack the player like
                 //! the real Wizrobe. Since Deku Nuts destroy all ghosts at once, and since the ghost

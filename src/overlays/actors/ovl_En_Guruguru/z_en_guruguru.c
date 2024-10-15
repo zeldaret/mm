@@ -26,7 +26,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-ActorInit En_Guruguru_InitVars = {
+ActorProfile En_Guruguru_Profile = {
     /**/ ACTOR_EN_GURUGURU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -100,7 +100,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnGuruguru_DoNothing;

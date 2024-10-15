@@ -5,7 +5,7 @@
  */
 
 #include "z_en_door_etc.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -20,7 +20,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play);
 void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Door_Etc_InitVars = {
+ActorProfile En_Door_Etc_Profile = {
     /**/ ACTOR_EN_DOOR_ETC,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -175,7 +175,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
     s16 yawDiff;
     s32 yawDiffAbs;
 
-    Actor_OffsetOfPointInActorCoords(&this->knobDoor.dyna.actor, &playerOffsetFromDoor, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->knobDoor.dyna.actor, &playerOffsetFromDoor, &player->actor.world.pos);
     if (!this->knobDoor.requestOpen) {
         if ((!Player_InCsMode(play)) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&

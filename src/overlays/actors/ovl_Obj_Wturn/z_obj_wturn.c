@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-ActorInit Obj_Wturn_InitVars = {
+ActorProfile Obj_Wturn_Profile = {
     /**/ ACTOR_OBJ_WTURN,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -94,7 +94,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->actor.shape.rot.z, -0x8000, 0x200)) {
         func_808A7C04(this, play);
     }
-    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
     Play_SetCameraRoll(play, this->subCamId, this->actor.shape.rot.z);
 }
 

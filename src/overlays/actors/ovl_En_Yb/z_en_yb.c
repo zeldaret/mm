@@ -5,7 +5,7 @@
  */
 
 #include "z_en_yb.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -32,7 +32,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
-ActorInit En_Yb_InitVars = {
+ActorProfile En_Yb_Profile = {
     /**/ ACTOR_EN_YB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -75,7 +75,7 @@ static PlayerAnimationHeader* gPlayerAnimations[] = {
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
-static Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f };
+static Vec3f D_80BFB2F4 = { 500.0f, -500.0f, 0.0f };
 
 static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 

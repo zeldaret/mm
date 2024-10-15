@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_toryo" Segment="6">
-        <Animation Name="object_toryo_Anim_000E50" Offset="0xE50" />
+        <Animation Name="object_toryo_Anim_000E50" Offset="0xE50" /> <!-- Original name is "dk1_matsu" -->
         <Texture Name="object_toryo_TLUT_000E60" OutName="tlut_000E60" Format="rgba16" Width="16" Height="16" Offset="0xE60" />
         <Texture Name="object_toryo_Tex_001060" OutName="tex_001060" Format="ci8" Width="16" Height="16" Offset="0x1060" />
         <Texture Name="object_toryo_Tex_001160" OutName="tex_001160" Format="ci8" Width="8" Height="4" Offset="0x1160" />

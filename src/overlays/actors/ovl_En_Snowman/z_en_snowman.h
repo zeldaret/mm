@@ -2,7 +2,7 @@
 #define Z_EN_SNOWMAN_H
 
 #include "global.h"
-#include "objects/object_snowman/object_snowman.h"
+#include "assets/objects/object_snowman/object_snowman.h"
 
 #define EN_SNOWMAN_GET_TYPE(thisx) ((thisx)->params)
 #define EN_SNOWMAN_GET_ATTACK_RANGE(thisx) (((thisx)->params >> 8) & 0xFF)

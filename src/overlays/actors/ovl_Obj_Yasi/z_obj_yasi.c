@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_yasi.h"
-#include "objects/object_obj_yasi/object_obj_yasi.h"
+#include "assets/objects/object_obj_yasi/object_obj_yasi.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void ObjYasi_Destroy(Actor* thisx, PlayState* play);
 void ObjYasi_Update(Actor* thisx, PlayState* play);
 void ObjYasi_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Yasi_InitVars = {
+ActorProfile Obj_Yasi_Profile = {
     /**/ ACTOR_OBJ_YASI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

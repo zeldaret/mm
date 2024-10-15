@@ -1,6 +1,5 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
-#include "z64pause_menu.h"
+#include "kaleido_manager.h"
 
 #define FLAGS                                                                                          \
     (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
@@ -11,7 +10,7 @@ ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
 
-ActorInit Player_InitVars = {
+ActorProfile Player_Profile = {
     /**/ ACTOR_PLAYER,
     /**/ ACTORCAT_PLAYER,
     /**/ FLAGS,

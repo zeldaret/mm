@@ -7,7 +7,7 @@
 #include "z_en_bom.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -34,7 +34,7 @@ typedef struct {
 
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-ActorInit En_Bom_InitVars = {
+ActorProfile En_Bom_Profile = {
     /**/ ACTOR_EN_BOM,
     /**/ ACTORCAT_EXPLOSIVES,
     /**/ FLAGS,
@@ -162,7 +162,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
+    this->collider2Elements[0].base.toucher.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
@@ -342,12 +342,12 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Color_RGBA8 sp84;
     Color_RGBA8 sp80;
 
-    if (this->collider2.elements->dim.modelSphere.radius == 0) {
+    if (this->collider2.elements[0].dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
+    this->collider2.elements[0].dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
         this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
@@ -386,10 +386,10 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     }
 
     if ((this->timer & 1) == 0) {
-        spCC = Rand_ZeroFloat(M_PI);
+        spCC = Rand_ZeroFloat(M_PIf);
 
         for (i = 0; i < 15; i++) {
-            Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
+            Matrix_RotateYF(((2.0f * (i * M_PIf)) / 15.0f) + spCC, MTXMODE_NEW);
             Matrix_MultVecZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
@@ -611,7 +611,7 @@ static Vec3f D_80872EEC = { -750.0f, 0.0f, 0.0f };
 static Vec3f D_80872EF8 = { -800.0f, 0.0f, 0.0f };
 static Vec3f D_80872F04 = { 0.0f, 0.0f, 0.0f };
 
-#include "overlays/ovl_En_Bom/ovl_En_Bom.c"
+#include "assets/overlays/ovl_En_Bom/ovl_En_Bom.c"
 
 void EnBom_Draw(Actor* thisx, PlayState* play) {
     s32 pad;

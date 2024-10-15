@@ -58,4 +58,5 @@ docs/doxygen/
 # Per-user configuration
 .python-version
 .make_options
+.make_options.mk
 .*env

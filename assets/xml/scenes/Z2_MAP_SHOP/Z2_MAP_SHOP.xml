@@ -4,5 +4,7 @@
     </File>
     <File Name="Z2_MAP_SHOP_room_00" Segment="3" Game="MM">
         <Room Name="Z2_MAP_SHOP_room_00" Offset="0x0"/>
+        <DList Name="Z2_MAP_SHOP_room_00DL_005738" Offset="0x5738"/>
+        <DList Name="Z2_MAP_SHOP_room_00DL_005810" Offset="0x5810"/>
     </File>
 </Root>

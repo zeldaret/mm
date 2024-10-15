@@ -37,7 +37,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-ActorInit En_Dg_InitVars = {
+ActorProfile En_Dg_Profile = {
     /**/ ACTOR_EN_DG,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -289,7 +289,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -474,10 +474,10 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
  */
 void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags |= DOG_FLAG_HELD;
     } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
@@ -486,7 +486,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (!sIsAnyDogHeld) {
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = true;
             this->dogFlags |= DOG_FLAG_HELD;
         }
@@ -1244,7 +1244,7 @@ void EnDg_Held(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (sIsAnyDogHeld) {
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = false;
             this->dogFlags &= ~DOG_FLAG_HELD;
         }

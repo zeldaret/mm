@@ -3,10 +3,12 @@
 
 #include "ultra64.h"
 
-#include "color.h"
-#include "z64math.h"
+#include "stdint.h"
 
+#include "color.h"
+#include "z64dma.h"
 #include "z64eff_ss_dead.h"
+#include "z64math.h"
 
 struct Actor;
 struct PlayState;
@@ -31,18 +33,17 @@ typedef u32 (*EffectSsInitFunc)(struct PlayState* play, u32 index, struct Effect
 typedef void(*EffectSsUpdateFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 typedef void(*EffectSsDrawFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 
-typedef struct EffectSsInit {
+typedef struct EffectSsProfile {
     /* 0x0 */ u32 type;
     /* 0x4 */ EffectSsInitFunc init;
-} EffectSsInit; // size = 0x8
+} EffectSsProfile; // size = 0x8
 
 typedef struct EffectSsOverlay {
-    /* 0x00 */ uintptr_t vromStart;
-    /* 0x04 */ uintptr_t vromEnd;
+    /* 0x00 */ RomFile file;
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;
-    /* 0x14 */ EffectSsInit* initInfo;
+    /* 0x14 */ EffectSsProfile* profile;
     /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 

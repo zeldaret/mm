@@ -35,7 +35,7 @@ typedef enum {
     /* 2 */ HGO_EYE_CLOSED
 } EyeState;
 
-ActorInit En_Hgo_InitVars = {
+ActorProfile En_Hgo_Profile = {
     /**/ ACTOR_EN_HGO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

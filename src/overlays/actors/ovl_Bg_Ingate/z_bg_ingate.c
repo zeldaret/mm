@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ingate.h"
-#include "objects/object_sichitai_obj/object_sichitai_obj.h"
+#include "assets/objects/object_sichitai_obj/object_sichitai_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -26,7 +26,7 @@ void func_809542A0(BgIngate* this, PlayState* play);
 void func_80954340(BgIngate* this, PlayState* play);
 void func_809543D4(BgIngate* this, PlayState* play);
 
-ActorInit Bg_Ingate_InitVars = {
+ActorProfile Bg_Ingate_Profile = {
     /**/ ACTOR_BG_INGATE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -133,7 +133,7 @@ s32 func_80953DA8(BgIngate* this, PlayState* play) {
         SET_EVENTINF(EVENTINF_41);
     }
     Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
-    play->unk_1887C = 0x63;
+    play->bButtonAmmoPlusOne = 99;
 
     return false;
 }
@@ -145,7 +145,7 @@ void func_80953E38(PlayState* play) {
         CLEAR_EVENTINF(EVENTINF_41);
     }
 
-    play->unk_1887C = -1;
+    play->bButtonAmmoPlusOne = -1;
 }
 
 void func_80953EA4(BgIngate* this, PlayState* play) {

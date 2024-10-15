@@ -26,7 +26,7 @@ TexturePtr sTransWipe3Textures[] = {
     fbdemo_tex_001520, fbdemo_tex_000520, fbdemo_tex_000520, fbdemo_tex_000520,
 };
 
-TransitionInit TransitionWipe3_InitVars = {
+TransitionProfile TransitionWipe3_Profile = {
     TransitionWipe3_Init,     TransitionWipe3_Destroy,     TransitionWipe3_Update,
     TransitionWipe3_Draw,     TransitionWipe3_Start,       TransitionWipe3_SetType,
     TransitionWipe3_SetColor, TransitionWipe3_SetEnvColor, TransitionWipe3_IsDone,

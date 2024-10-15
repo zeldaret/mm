@@ -8,7 +8,7 @@
 #include "z_en_poh.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnPoh*)thisx)
 
@@ -47,7 +47,7 @@ void func_80B2E3F8(EnPoh* this, PlayState* play);
 void func_80B2F328(Actor* thisx, PlayState* play);
 void func_80B2F37C(Actor* thisx, PlayState* play);
 
-ActorInit En_Poh_InitVars = {
+ActorProfile En_Poh_Profile = {
     /**/ ACTOR_EN_POH,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -577,7 +577,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
     this->actionFunc = func_80B2DD2C;
 }
 
@@ -598,7 +598,7 @@ void func_80B2DDF8(EnPoh* this, s32 arg1) {
 
     if (arg1 < 0) {
         temp_f2 = this->unk_197 * (1.0f / 255.0f);
-        this->actor.scale.x = this->actor.scale.z = (0.0056000003f * temp_f2) + 0.0014000001f;
+        this->actor.scale.x = this->actor.scale.z = ((5.6f * 0.001f) * temp_f2) + (1.4f * 0.001f);
         this->actor.scale.y = (0.007f - (0.007f * temp_f2)) + 0.007f;
     } else {
         temp_f2 = 1.0f;

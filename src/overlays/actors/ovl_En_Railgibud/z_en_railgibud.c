@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRailgibud*)thisx)
 
@@ -61,7 +61,7 @@ typedef enum {
     /* 2 */ EN_RAILGIBUD_GRAB_RELEASE
 } EnRailgibudGrabState;
 
-ActorInit En_Railgibud_InitVars = {
+ActorProfile En_Railgibud_Profile = {
     /**/ ACTOR_EN_RAILGIBUD,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -750,7 +750,7 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play
         return false;
     }
 
-    if (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 100.0f &&
+    if ((Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 100.0f) &&
         !(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                  PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
         !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
@@ -936,9 +936,9 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
     if ((this->actionFunc != EnRailgibud_Grab) && (this->actionFunc != EnRailgibud_Damage) &&
         (this->actionFunc != EnRailgibud_GrabFail) && (this->actionFunc != EnRailgibud_TurnAwayAndShakeHead) &&
         (this->actionFunc != EnRailgibud_Dead)) {
-        if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY))) {
+        if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE))) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
                 this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
@@ -948,7 +948,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {

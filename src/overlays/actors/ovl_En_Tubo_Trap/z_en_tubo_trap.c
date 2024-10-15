@@ -5,7 +5,7 @@
  */
 
 #include "z_en_tubo_trap.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -39,7 +39,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 11, 28, 0, { 0, 0, 0 } },
 };
 
-ActorInit En_Tubo_Trap_InitVars = {
+ActorProfile En_Tubo_Trap_Profile = {
     /**/ ACTOR_EN_TUBO_TRAP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

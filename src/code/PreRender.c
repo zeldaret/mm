@@ -7,14 +7,15 @@
  */
 #include "z64prerender.h"
 
-#include "libc/alloca.h"
-#include "libc/stdbool.h"
+#include "alloca.h"
+#include "stdbool.h"
 #include "PR/gs2dex.h"
 
 #include "global.h"
 #include "color.h"
 #include "macros.h"
 #include "gfx.h"
+#include "gfxalloc.h"
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"

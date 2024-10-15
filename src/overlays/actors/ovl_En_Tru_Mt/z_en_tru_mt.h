@@ -2,7 +2,7 @@
 #define Z_EN_TRU_MT_H
 
 #include "global.h"
-#include "objects/object_tru/object_tru.h"
+#include "assets/objects/object_tru/object_tru.h"
 
 struct EnTruMt;
 

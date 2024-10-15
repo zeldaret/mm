@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnIk*)thisx)
 
@@ -75,7 +75,7 @@ static Gfx* sIronKnuckleArmorType[3][3] = {
     { gIronKnuckleWhiteArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL },
 };
 
-ActorInit En_Ik_InitVars = {
+ActorProfile En_Ik_Profile = {
     /**/ ACTOR_EN_IK,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -499,7 +499,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
             if (this->drawArmorFlags != 0) {
-                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
+                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PIf / 20)) * 10.0f;
             }
         } else {
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -562,7 +562,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
             } else {
                 phi_f2 = this->skelAnime.curFrame - 1.0f;
             }
-            this->actor.speed = Math_SinF((M_PI / 8) * phi_f2) * 4.5f;
+            this->actor.speed = Math_SinF((M_PIf / 8) * phi_f2) * 4.5f;
         }
         this->colliderQuad.base.atFlags |= AT_ON;
     } else {
@@ -786,7 +786,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if ((this->actor.colChkInfo.damageEffect != DMG_EFF_IMMUNE) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 12);
             this->invincibilityFrames = 12;
             EnIk_Thaw(this, play);

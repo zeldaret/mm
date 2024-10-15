@@ -55,7 +55,17 @@
         <Animation Name="object_gk_Anim_00BD90" Offset="0xBD90" /> <!-- Original name is "gkid_utau" -->
         <Animation Name="object_gk_Anim_00C308" Offset="0xC308" /> <!-- Original name is "gkid_utau_loop" -->
         <Texture Name="object_gk_TLUT_00C320" OutName="tlut_00C320" Format="rgba16" Width="16" Height="16" Offset="0xC320" />
-        <!-- <Blob Name="object_gk_Blob_00C520" Size="0x1900" Offset="0xC520" /> -->
+        <Texture Name="object_gk_Tex_00C520" OutName="tex_00C520" Format="ci8" Width="32" Height="32" Offset="0xC520" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00C920" OutName="tex_00C920" Format="ci8" Width="32" Height="16" Offset="0xC920" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00CB20" OutName="tex_00CB20" Format="ci8" Width="8" Height="8" Offset="0xCB20" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00CB60" OutName="tex_00CB60" Format="rgba16" Width="8" Height="8" Offset="0xCB60" />
+        <Texture Name="object_gk_Tex_00CBE0" OutName="tex_00CBE0" Format="ci8" Width="16" Height="16" Offset="0xCBE0" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00CCE0" OutName="tex_00CCE0" Format="ci8" Width="8" Height="8" Offset="0xCCE0" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00CD20" OutName="tex_00CD20" Format="ci8" Width="32" Height="64" Offset="0xCD20" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00D520" OutName="tex_00D520" Format="rgba16" Width="16" Height="16" Offset="0xD520" />
+        <Texture Name="object_gk_Tex_00D720" OutName="tex_00D720" Format="ci8" Width="16" Height="16" Offset="0xD720" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00D820" OutName="tex_00D820" Format="ci8" Width="16" Height="32" Offset="0xD820" TlutOffset="00C320" />
+        <Texture Name="object_gk_Tex_00DA20" OutName="tex_00DA20" Format="ci8" Width="32" Height="32" Offset="0xDA20" TlutOffset="00C320" />
         <Texture Name="object_gk_Tex_00DE20" OutName="tex_00DE20" Format="ci8" Width="8" Height="8" Offset="0xDE20" />
         <Texture Name="object_gk_Tex_00DE60" OutName="tex_00DE60" Format="ci8" Width="16" Height="16" Offset="0xDE60" />
         <Texture Name="object_gk_Tex_00DF60" OutName="tex_00DF60" Format="ci8" Width="16" Height="32" Offset="0xDF60" />

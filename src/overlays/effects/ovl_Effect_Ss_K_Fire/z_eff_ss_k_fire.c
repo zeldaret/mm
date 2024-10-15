@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_k_fire.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rAlpha regs[0]
 #define rScroll regs[2]
@@ -20,7 +20,7 @@ u32 EffectSsKFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsKFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_K_Fire_InitVars = {
+EffectSsProfile Effect_Ss_K_Fire_Profile = {
     EFFECT_SS_K_FIRE,
     EffectSsKFire_Init,
 };
@@ -72,7 +72,7 @@ void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     if ((index % 2) != 0) {
-        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
     }
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

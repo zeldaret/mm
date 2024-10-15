@@ -2,7 +2,7 @@
 #define Z64EFFECT_H
 
 #include "PR/ultratypes.h"
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "color.h"
 #include "z64light.h"
 #include "z64math.h"

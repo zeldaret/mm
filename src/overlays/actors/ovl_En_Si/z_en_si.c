@@ -17,7 +17,7 @@ void EnSi_Draw(Actor* thisx, PlayState* play);
 
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play);
 
-ActorInit En_Si_InitVars = {
+ActorProfile En_Si_Profile = {
     /**/ ACTOR_EN_SI,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

@@ -7,9 +7,9 @@
 #include "z_en_rr.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_rr/object_rr.h"
+#include "assets/objects/object_rr/object_rr.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -29,7 +29,7 @@ void func_808FB710(EnRr* this, PlayState* play);
 void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
-ActorInit En_Rr_InitVars = {
+ActorProfile En_Rr_Profile = {
     /**/ ACTOR_EN_RR,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -459,7 +459,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
         this->collider2.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (sp2C->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            (sp2C->info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 

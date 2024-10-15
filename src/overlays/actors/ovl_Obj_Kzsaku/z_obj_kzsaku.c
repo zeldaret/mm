@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kzsaku.h"
-#include "objects/object_kzsaku/object_kzsaku.h"
+#include "assets/objects/object_kzsaku/object_kzsaku.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -23,7 +23,7 @@ void ObjKzsaku_Idle(ObjKzsaku* this, PlayState* play);
 void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play);
 void func_80C08CB0(ObjKzsaku* this, PlayState* play);
 
-ActorInit Obj_Kzsaku_InitVars = {
+ActorProfile Obj_Kzsaku_Profile = {
     /**/ ACTOR_OBJ_KZSAKU,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

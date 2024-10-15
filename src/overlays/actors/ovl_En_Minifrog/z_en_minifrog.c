@@ -5,7 +5,7 @@
  */
 
 #include "z_en_minifrog.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-ActorInit En_Minifrog_InitVars = {
+ActorProfile En_Minifrog_Profile = {
     /**/ ACTOR_EN_MINIFROG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_f40_flift.h"
-#include "objects/object_f40_obj/object_f40_obj.h"
+#include "assets/objects/object_f40_obj/object_f40_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -19,7 +19,7 @@ void BgF40Flift_Draw(Actor* thisx, PlayState* play);
 void func_808D75F0(BgF40Flift* this, PlayState* play);
 void func_808D7714(BgF40Flift* this, PlayState* play);
 
-ActorInit Bg_F40_Flift_InitVars = {
+ActorProfile Bg_F40_Flift_Profile = {
     /**/ ACTOR_BG_F40_FLIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -64,11 +64,10 @@ void func_808D75F0(BgF40Flift* this, PlayState* play) {
         }
         this->timer--;
         if (this->dyna.actor.params == 1) {
-            this->dyna.actor.world.pos.y =
-                (Math_SinF(this->timer * (M_PI / 24.0f)) * 5.0f) + this->dyna.actor.home.pos.y;
+            this->dyna.actor.world.pos.y = (Math_SinF(this->timer * (M_PIf / 24)) * 5.0f) + this->dyna.actor.home.pos.y;
         } else {
             this->dyna.actor.world.pos.y =
-                (Math_SinF(this->timer * (M_PI / 24.0f)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
+                (Math_SinF(this->timer * (M_PIf / 24)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
         }
     }
 }
@@ -77,7 +76,7 @@ void func_808D7714(BgF40Flift* this, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
         this->dyna.actor.world.pos.y =
-            (((Math_CosF(this->timer * (M_PI / 96.0f)) * this->dyna.actor.params) + 1.0f) * 463.4f) +
+            (((Math_CosF(this->timer * (M_PIf / 96)) * this->dyna.actor.params) + 1.0f) * 463.4f) +
             this->dyna.actor.home.pos.y;
     } else {
         this->dyna.actor.params = -this->dyna.actor.params;

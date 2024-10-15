@@ -24,7 +24,7 @@ void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play);
 void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play);
 
-ActorInit Bg_Dkjail_Ivy_InitVars = {
+ActorProfile Bg_Dkjail_Ivy_Profile = {
     /**/ ACTOR_BG_DKJAIL_IVY,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

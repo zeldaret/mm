@@ -35,7 +35,7 @@ typedef enum {
     /* 0xF */ DORA_DMGEFF_LIGHT
 } ObjDoraDamageEffect;
 
-ActorInit Obj_Dora_InitVars = {
+ActorProfile Obj_Dora_Profile = {
     /**/ ACTOR_OBJ_DORA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

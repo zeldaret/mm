@@ -9,7 +9,7 @@
 
 #include "z_en_dt.h"
 
-#include "objects/object_dt/object_dt.h"
+#include "assets/objects/object_dt/object_dt.h"
 #include "overlays/actors/ovl_En_Baisen/z_en_baisen.h"
 #include "overlays/actors/ovl_En_Muto/z_en_muto.h"
 
@@ -96,7 +96,7 @@ typedef enum {
     /* 3 */ EN_DT_BROW_TEXTURE_MAX
 } EnDtBrowTextures;
 
-ActorInit En_Dt_InitVars = {
+ActorProfile En_Dt_Profile = {
     /**/ ACTOR_EN_DT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

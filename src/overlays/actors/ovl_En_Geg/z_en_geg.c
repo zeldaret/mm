@@ -7,9 +7,9 @@
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_taisou/object_taisou.h"
-#include "objects/object_hakugin_demo/object_hakugin_demo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_taisou/object_taisou.h"
+#include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -36,7 +36,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-ActorInit En_Geg_InitVars = {
+ActorProfile En_Geg_Profile = {
     /**/ ACTOR_EN_GEG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

@@ -5,7 +5,7 @@
  * into a Deku Scrub.
  */
 #include "z_bg_open_spot.h"
-#include "objects/object_open_obj/object_open_obj.h"
+#include "assets/objects/object_open_obj/object_open_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
 void BgOpenSpot_Update(Actor* thisx, PlayState* play);
 void BgOpenSpot_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Open_Spot_InitVars = {
+ActorProfile Bg_Open_Spot_Profile = {
     /**/ ACTOR_BG_OPEN_SPOT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

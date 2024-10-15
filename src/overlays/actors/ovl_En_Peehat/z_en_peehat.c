@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -38,7 +38,7 @@ void func_80898594(EnPeehat* this, PlayState* play);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
-ActorInit En_Peehat_InitVars = {
+ActorProfile En_Peehat_Profile = {
     /**/ ACTOR_EN_PEEHAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -690,7 +690,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     if (this->colliderSphere.base.acFlags & AC_HIT) {
         this->colliderSphere.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->colliderSphere.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->colliderSphere.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             if (!Actor_ApplyDamage(&this->actor)) {
                 Enemy_StartFinishingBlow(play, &this->actor);
             }
@@ -739,7 +739,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
                (this->colliderCylinder.base.acFlags & AC_HIT) &&
                ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                !(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+                !(this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
         func_808971DC(this, play);
         this->actor.colorFilterTimer = 0;
         func_80897648(this);

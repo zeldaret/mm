@@ -1,8 +1,11 @@
 #ifndef SEGMENT_SYMBOLS_H
 #define SEGMENT_SYMBOLS_H
 
-#include "libc/stddef.h"
+#include "stddef.h"
+#include "stdint.h"
 #include "PR/ultratypes.h"
+
+#include "romfile.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \
@@ -33,13 +36,6 @@
 #define SEGMENT_BSS_START(segment) (_ ## segment ## SegmentBssStart)
 #define SEGMENT_BSS_END(segment) (_ ## segment ## SegmentBssEnd)
 #define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
-
-#define ROM_FILE(name) \
-    { SEGMENT_ROM_START(name), SEGMENT_ROM_END(name) }
-#define ROM_FILE_EMPTY(name) \
-    { SEGMENT_ROM_START(name), SEGMENT_ROM_START(name) }
-#define ROM_FILE_UNSET \
-    { 0, 0 }
 
 DECLARE_SEGMENT(framebuffer_lo)
 

@@ -48,7 +48,7 @@ static u16 D_80ADD938[] = { 0x0615, 0x060F, 0x060F };
 
 static u8 D_80ADD940 = 0;
 
-ActorInit En_Sellnuts_InitVars = {
+ActorProfile En_Sellnuts_Profile = {
     /**/ ACTOR_EN_SELLNUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -954,7 +954,7 @@ s32 EnSellnuts_HasReachedPoint(EnSellnuts* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;

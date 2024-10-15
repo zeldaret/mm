@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_tsn" Segment="6">
-        <Animation Name="object_tsn_Anim_000964" Offset="0x964" />
-        <Animation Name="object_tsn_Anim_001198" Offset="0x1198" />
+        <Animation Name="object_tsn_Anim_000964" Offset="0x964" /> <!-- Original name is "tsn_talk02" -->
+        <Animation Name="object_tsn_Anim_001198" Offset="0x1198" /> <!-- Original name is "tsn_talk03" -->
         <DList Name="object_tsn_DL_0043A0" Offset="0x43A0" />
         <DList Name="object_tsn_DL_0044F0" Offset="0x44F0" />
         <DList Name="object_tsn_DL_0047C0" Offset="0x47C0" />
@@ -48,6 +48,6 @@
         <Limb Name="object_tsn_Standardlimb_008A60" Type="Standard" EnumName="OBJECT_TSN_LIMB_0F" Offset="0x8A60" />
         <Limb Name="object_tsn_Standardlimb_008A6C" Type="Standard" EnumName="OBJECT_TSN_LIMB_10" Offset="0x8A6C" />
         <Skeleton Name="object_tsn_Skel_008AB8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TSN_LIMB_NONE" LimbMax="OBJECT_TSN_LIMB_MAX" EnumName="ObjectTsnLimb" Offset="0x8AB8" />
-        <Animation Name="object_tsn_Anim_0092FC" Offset="0x92FC" />
+        <Animation Name="object_tsn_Anim_0092FC" Offset="0x92FC" /> <!-- Original name is "tsn_waitnew" -->
     </File>
 </Root>

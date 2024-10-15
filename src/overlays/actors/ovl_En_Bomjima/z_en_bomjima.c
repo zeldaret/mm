@@ -4,8 +4,9 @@
  * Description: Bombers - Jim
  */
 
-#include "overlays/actors/ovl_En_Bombal/z_en_bombal.h"
 #include "z_en_bomjima.h"
+
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -52,7 +53,7 @@ typedef enum EnBomjimaAction {
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
 
-ActorInit En_Bomjima_InitVars = {
+ActorProfile En_Bomjima_Profile = {
     /**/ ACTOR_EN_BOMJIMA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -485,7 +486,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->bombal->actor.world.pos.z;
 
                 SoundSource_PlaySfxAtFixedWorldPos(play, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
-                EffectSsHitmark_SpawnFixedScale(play, 0, &sp40);
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_WHITE, &sp40);
                 this->unk_2BC++;
 
                 if ((TRUNCF_BINANG(Rand_ZeroFloat(2.0f)) + 3) < this->unk_2BC) {
@@ -1144,7 +1145,7 @@ s32 EnBomjima_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-#include "overlays/ovl_En_Bomjima/ovl_En_Bomjima.c"
+#include "assets/overlays/ovl_En_Bomjima/ovl_En_Bomjima.c"
 
 void EnBomjima_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80C00B28[] = {

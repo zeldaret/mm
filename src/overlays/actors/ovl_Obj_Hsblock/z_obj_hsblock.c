@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hsblock.h"
-#include "objects/object_d_hsblock/object_d_hsblock.h"
+#include "assets/objects/object_d_hsblock/object_d_hsblock.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS 0x00000000
@@ -24,7 +24,7 @@ void func_8093E05C(ObjHsblock* this);
 void func_8093E0E8(ObjHsblock* this);
 void func_8093E10C(ObjHsblock* this, PlayState* play);
 
-ActorInit Obj_Hsblock_InitVars = {
+ActorProfile Obj_Hsblock_Profile = {
     /**/ ACTOR_OBJ_HSBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

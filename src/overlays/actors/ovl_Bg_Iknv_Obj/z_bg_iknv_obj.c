@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_iknv_obj.h"
-#include "objects/object_iknv_obj/object_iknv_obj.h"
+#include "assets/objects/object_iknv_obj/object_iknv_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -21,7 +21,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, PlayState* play);
 
-ActorInit Bg_Iknv_Obj_InitVars = {
+ActorProfile Bg_Iknv_Obj_Profile = {
     /**/ ACTOR_BG_IKNV_OBJ,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

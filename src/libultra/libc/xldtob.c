@@ -1,6 +1,6 @@
 #include "ultra64.h"
-#include "libc/stdlib.h"
-#include "libc/string.h"
+#include "stdlib.h"
+#include "string.h"
 
 #define BUFF_LEN 0x20
 

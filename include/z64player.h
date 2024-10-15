@@ -1,6 +1,8 @@
 #ifndef Z64PLAYER_H
 #define Z64PLAYER_H
 
+#include "stdbool.h"
+
 #include "alignment.h"
 #include "PR/os.h"
 #include "z64actor.h"
@@ -552,6 +554,9 @@ typedef enum PlayerLedgeClimbType {
 
 #define LEDGE_DIST_MAX 399.96002f
 
+// TODO: less dumb name
+#define SFX_VOICE_BANK_SIZE 0x20
+
 typedef struct PlayerAgeProperties {
     /* 0x00 */ f32 ceilingCheckHeight;
     /* 0x04 */ f32 shadowScale;
@@ -879,8 +884,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_200        (1 << 9)
 // 
 #define PLAYER_STATE1_400        (1 << 10)
-// 
-#define PLAYER_STATE1_800        (1 << 11)
+// Currently carrying an actor
+#define PLAYER_STATE1_CARRYING_ACTOR (1 << 11)
 // charging spin attack
 #define PLAYER_STATE1_1000       (1 << 12)
 // 
@@ -1051,8 +1056,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
-// TARGETING_HOSTILE?
-#define PLAYER_STATE3_80000000   (1 << 31)
+// Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
+#define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
 
 
 #define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
@@ -1091,7 +1096,7 @@ typedef enum PlayerUnkAA5 {
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
-typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
+typedef void (*AfterPutAwayFunc)(struct PlayState* play, struct Player* this);
 
 
 typedef struct Player {
@@ -1301,7 +1306,7 @@ typedef struct Player {
     /* 0xD44 */ u8 bodyIsBurning;
     /* 0xD45 */ u8 bodyFlameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
-    /* 0xD58 */ PlayerFuncD58 unk_D58;
+    /* 0xD58 */ AfterPutAwayFunc afterPutAwayFunc; // See `Player_SetupWaitForPutAway` and `Player_Action_WaitForPutAway`
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0xD5D */ u8 floorTypeTimer; // Unused remnant of OoT
     /* 0xD5E */ u8 floorProperty; // FloorProperty enum
@@ -1345,7 +1350,7 @@ void func_800B8DD4(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32
 void func_800B8E1C(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void Player_PlaySfx(Player* player, u16 sfxId);
 
-// z_player_lib.c functions
+// z_player_lib.c
 
 s32 func_801226E0(struct PlayState* play, s32 arg1);
 s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints, Vec3s* targetPosList);
@@ -1367,7 +1372,7 @@ void func_8012301C(Actor* thisx, struct PlayState* play2);
 void func_80123140(struct PlayState* play, Player* player);
 bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
 bool Player_InCsMode(struct PlayState* play);
-bool func_80123420(Player* player);
+bool Player_CheckHostileLockOn(Player* player);
 bool func_80123434(Player* player);
 bool func_80123448(struct PlayState* play);
 bool Player_IsGoronOrDeku(Player* player);
@@ -1385,10 +1390,10 @@ void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId item
 void Player_Untarget(Player* player);
 void func_80123DC0(Player* player);
 void func_80123E90(struct PlayState* play, Actor* actor);
-s32 func_80123F2C(struct PlayState* play, s32 ammo);
+s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
-u8 Player_GetMask(struct PlayState* play);
+PlayerMask Player_GetMask(struct PlayState* play);
 void Player_RemoveMask(struct PlayState* play);
 bool Player_HasMirrorShieldEquipped(struct PlayState* play);
 bool Player_IsHoldingMirrorShield(struct PlayState* play);

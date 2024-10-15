@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_toudai.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjToudai_Destroy(Actor* thisx, PlayState* play);
 void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Toudai_InitVars = {
+ActorProfile Obj_Toudai_Profile = {
     /**/ ACTOR_OBJ_TOUDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

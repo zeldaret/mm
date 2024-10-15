@@ -3,8 +3,10 @@
 
 #include "ultra64.h"
 
-#include "libc/stdint.h"
+#include "stdint.h"
 #include "unk.h"
+
+#include "romfile.h"
 
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
@@ -49,7 +51,7 @@ typedef struct TransitionTile {
 
 #define TC_SET_PARAMS (1 << 7)
 
-typedef struct TransitionInit {
+typedef struct TransitionProfile {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
     /* 0x08 */ void  (*update)(void* transition, s32 updateRate);
@@ -59,7 +61,7 @@ typedef struct TransitionInit {
     /* 0x18 */ void  (*setColor)(void* transition, u32 color);
     /* 0x1C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x20 */ s32   (*isDone)(void* transition);
-} TransitionInit; // size = 0x24
+} TransitionProfile; // size = 0x24
 
 typedef struct TransitionOverlay {
     union {
@@ -71,9 +73,8 @@ typedef struct TransitionOverlay {
     } loadInfo;
     /* 0x04 */ void* vramStart;
     /* 0x08 */ void* vramEnd;
-    /* 0x0C */ uintptr_t vromStart;
-    /* 0x10 */ uintptr_t vromEnd;
-    /* 0x14 */ TransitionInit* initInfo;
+    /* 0x0C */ RomFile file;
+    /* 0x14 */ TransitionProfile* profile;
     /* 0x18 */ size_t size;
 } TransitionOverlay;
 

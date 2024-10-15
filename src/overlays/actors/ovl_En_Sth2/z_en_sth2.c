@@ -18,7 +18,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2);
 void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
-ActorInit En_Sth2_InitVars = {
+ActorProfile En_Sth2_Profile = {
     /**/ ACTOR_EN_STH2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -30,7 +30,7 @@ ActorInit En_Sth2_InitVars = {
     /**/ NULL,
 };
 
-#include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"
+#include "assets/overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;

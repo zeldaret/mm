@@ -37,7 +37,7 @@ void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play);
 
-ActorInit En_Time_Tag_InitVars = {
+ActorProfile En_Time_Tag_Profile = {
     /**/ ACTOR_EN_TIME_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

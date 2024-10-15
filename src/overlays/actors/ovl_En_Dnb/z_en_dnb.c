@@ -5,8 +5,8 @@
  */
 
 #include "z_en_dnb.h"
-#include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_hanareyama_obj/object_hanareyama_obj.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
 
@@ -21,7 +21,7 @@ s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-ActorInit En_Dnb_InitVars = {
+ActorProfile En_Dnb_Profile = {
     /**/ ACTOR_EN_DNB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

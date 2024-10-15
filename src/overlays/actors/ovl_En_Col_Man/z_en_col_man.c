@@ -7,7 +7,7 @@
 #include "z_en_col_man.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
 
@@ -48,7 +48,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-ActorInit En_Col_Man_InitVars = {
+ActorProfile En_Col_Man_Profile = {
     /**/ ACTOR_EN_COL_MAN,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,

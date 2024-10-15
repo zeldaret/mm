@@ -40,7 +40,7 @@ typedef enum {
     /* 0x10 */ KOUME_MT_ANIM_MAX
 } KoumeMtAnimation;
 
-ActorInit En_Tru_Mt_InitVars = {
+ActorProfile En_Tru_Mt_Profile = {
     /**/ ACTOR_EN_TRU_MT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -299,7 +299,7 @@ s32 EnTruMt_HasReachedPoint(EnTruMt* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;

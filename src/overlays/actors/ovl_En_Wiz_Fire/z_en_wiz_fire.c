@@ -6,9 +6,9 @@
 
 #include "z_en_wiz_fire.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
-#include "objects/object_wiz/object_wiz.h"
+#include "assets/objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -37,7 +37,7 @@ typedef enum {
 
 static s32 sPoolHitByIceArrow = false;
 
-ActorInit En_Wiz_Fire_InitVars = {
+ActorProfile En_Wiz_Fire_Profile = {
     /**/ ACTOR_EN_WIZ_FIRE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -283,7 +283,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     if ((this->type != EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE) && (this->timer != 0)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -342,7 +342,7 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
                 this->timer -= 10;
             }
 
-            if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
+            if (this->collider.info.acHitElem->toucher.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -409,7 +409,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (!sPoolHitByIceArrow && (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000)) {
+            if (!sPoolHitByIceArrow && (this->collider.info.acHitElem->toucher.dmgFlags == 0x1000)) {
                 sPoolHitByIceArrow = true;
                 this->hitByIceArrow = true;
                 this->poolTimer = 0;

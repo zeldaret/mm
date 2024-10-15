@@ -32,7 +32,7 @@ typedef enum {
     /* 4 */ DEKU_PRINCESS_EYE_MAX
 } EnDnpEyeIndex;
 
-ActorInit En_Dnp_InitVars = {
+ActorProfile En_Dnp_Profile = {
     /**/ ACTOR_EN_DNP,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -126,8 +126,22 @@ static AnimationInfoS sAnimationInfo[DEKU_PRINCESS_ANIM_MAX] = {
     { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_GLARE_LOOP
 };
 
-static s32 D_80B3DE58[] = {
-    0x00172000, 0x0D040005, 0x0E09670C, 0x100E0968, 0x0C100E09, 0x6F0C0F09, 0x700C1000,
+static MsgScript sMsgScript[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_23_20, 0x0012 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_CHECK_HUMAN(0x000D - 0x0008),
+    /* 0x0008 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0967),
+    /* 0x000B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000D 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0968),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0012 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x096F),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0970),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 s32 func_80B3CA20(EnDnp* this) {
@@ -367,7 +381,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D3F8(EnDnp* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, D_80B3DE58, NULL, &this->unk_328)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, NULL, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;

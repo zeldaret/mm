@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spout_fire.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 
 #define FLAGS 0x00000000
 
@@ -22,7 +22,7 @@ void func_80A60CDC(BgSpoutFire* this, PlayState* play);
 void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
-ActorInit Bg_Spout_Fire_InitVars = {
+ActorProfile Bg_Spout_Fire_Profile = {
     /**/ ACTOR_BG_SPOUT_FIRE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -94,7 +94,7 @@ s32 func_80A60C24(BgSpoutFire* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp18;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp18, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp18, &player->actor.world.pos);
     if ((fabsf(sp18.x) < 100.0f) && (fabsf(sp18.z) < 120.0f)) {
         return true;
     } else {
@@ -147,7 +147,7 @@ void func_80A60E08(BgSpoutFire* this, PlayState* play) {
     f32 cos;
     f32 sin;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp30, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp30, &player->actor.world.pos);
     sp30.x = CLAMP(sp30.x, -74.25f, 74.25f);
     if (this->timer == 0) {
         if (sp30.z > 0.0f) {

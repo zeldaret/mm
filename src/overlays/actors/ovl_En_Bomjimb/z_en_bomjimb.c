@@ -39,7 +39,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-ActorInit En_Bomjimb_InitVars = {
+ActorProfile En_Bomjimb_Profile = {
     /**/ ACTOR_EN_BOMJIMB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -962,7 +962,7 @@ s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-#include "overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
+#include "assets/overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
 
 void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80C03260[] = {

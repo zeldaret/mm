@@ -19,7 +19,7 @@ void EnBubble_Wait(EnBubble* this, PlayState* play);
 void EnBubble_Pop(EnBubble* this, PlayState* play);
 void EnBubble_Regrow(EnBubble* this, PlayState* play);
 
-ActorInit En_Bubble_InitVars = {
+ActorProfile En_Bubble_Profile = {
     /**/ ACTOR_EN_BUBBLE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -96,12 +96,12 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
 }
 
 s32 func_8089F59C(EnBubble* this) {
-    ColliderInfo* info = &this->colliderSphere.elements[0].info;
+    ColliderElement* elem = &this->colliderSphere.elements[0].base;
 
-    info->toucher.dmgFlags = DMG_EXPLOSIVES;
-    info->toucher.effect = 0;
-    info->toucher.damage = 4;
-    info->toucherFlags = TOUCH_ON;
+    elem->toucher.dmgFlags = DMG_EXPLOSIVES;
+    elem->toucher.effect = 0;
+    elem->toucher.damage = 4;
+    elem->toucherFlags = TOUCH_ON;
     this->actor.velocity.y = 0.0f;
     return 6;
 }
@@ -112,7 +112,7 @@ s32 func_8089F5D0(EnBubble* this) {
 }
 
 void EnBubble_DamagePlayer(EnBubble* this, PlayState* play) {
-    play->damagePlayer(play, -this->colliderSphere.elements[0].info.toucher.damage);
+    play->damagePlayer(play, -this->colliderSphere.elements[0].base.toucher.damage);
     func_800B8E1C(play, &this->actor, 6.0f, this->actor.yawTowardsPlayer, 6.0f);
 }
 
@@ -170,7 +170,7 @@ s32 func_8089F908(EnBubble* this) {
 void EnBubble_Vec3fNormalizedReflect(Vec3f* vec1, Vec3f* vec2, Vec3f* dest) {
     f32 norm;
 
-    func_80179F64(vec1, vec2, dest);
+    Math3D_Vec3fReflect(vec1, vec2, dest);
     norm = sqrtf(SQ(dest->x) + SQ(dest->y) + SQ(dest->z));
     if (norm != 0.0f) {
         dest->x /= norm;
@@ -205,7 +205,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
     s32 bgId;
     u8 bounceCount;
 
-    if (this->colliderSphere.elements[1].info.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.bumperFlags & BUMP_HIT) {
         bumpActor = this->colliderSphere.base.ac;
         this->normalizedBumpVelocity = bumpActor->velocity;
         EnBubble_Vec3fNormalize(&this->normalizedBumpVelocity);
@@ -283,7 +283,7 @@ s32 func_8089FF30(EnBubble* this) {
         return false;
     }
     this->colliderSphere.base.acFlags &= ~AC_HIT;
-    if (this->colliderSphere.elements[1].info.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.bumperFlags & BUMP_HIT) {
         this->unk1F4.x = this->colliderSphere.base.ac->velocity.x / 10.0f;
         this->unk1F4.y = this->colliderSphere.base.ac->velocity.y / 10.0f;
         this->unk1F4.z = this->colliderSphere.base.ac->velocity.z / 10.0f;

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_keikoku_spr.h"
-#include "objects/object_keikoku_obj/object_keikoku_obj.h"
+#include "assets/objects/object_keikoku_obj/object_keikoku_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Keikoku_Spr_InitVars = {
+ActorProfile Bg_Keikoku_Spr_Profile = {
     /**/ ACTOR_BG_KEIKOKU_SPR,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

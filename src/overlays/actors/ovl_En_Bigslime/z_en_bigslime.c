@@ -9,10 +9,10 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigslime/object_bigslime.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bigslime/object_bigslime.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnBigslime*)thisx)
 
@@ -130,22 +130,22 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play);
 
 // Reference data: used to store the original vertices
 static Vtx sBigslimeStaticVtx[BIGSLIME_NUM_VTX] = {
-#include "overlays/ovl_En_Bigslime/sBigslimeStaticVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeStaticVtx.vtx.inc"
 };
 
 // Dynamic data: used to draw the real shape and has 2 states
 static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = {
     {
-#include "overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
     },
     {
-#include "overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
     },
 };
 
 // Target data: used to define the shape the dynamic vertices morph to
 static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
-#include "overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
 };
 
 /*
@@ -212,7 +212,7 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 142, 126, 127 }, { 130, 111, 145 },
 };
 
-ActorInit En_Bigslime_InitVars = {
+ActorProfile En_Bigslime_Profile = {
     /**/ ACTOR_EN_BIGSLIME,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -447,7 +447,7 @@ void EnBigslime_UpdateSurfaceNorm(EnBigslime* this) {
         vecTriEdge2.y = dynamicVtx12->n.ob[1] - dynamicVtx0->n.ob[1];
         vecTriEdge2.z = dynamicVtx12->n.ob[2] - dynamicVtx0->n.ob[2];
 
-        Math3D_CrossProduct(&vecTriEdge1, &vecTriEdge2, &vecTriNorm);
+        Math3D_Vec3f_Cross(&vecTriEdge1, &vecTriEdge2, &vecTriNorm);
         EnBigslime_Vec3fNormalize(&vecTriNorm);
 
         Math_Vec3f_Sum(&vtxNorm[sBigslimeTri[i].v[0]], &vecTriNorm, &vtxNorm[sBigslimeTri[i].v[0]]);
@@ -658,7 +658,7 @@ void EnBigslime_AddWavySurface(EnBigslime* this) {
             randFloat = (Rand_ZeroOne() * 40.0f) + 50.0f;
         }
 
-        this->vtxSurfacePerturbation[i] = Math_SinF((randInt + i) * (M_PI / 3)) * randFloat * 0.001f;
+        this->vtxSurfacePerturbation[i] = Math_SinF((randInt + i) * (M_PIf / 3)) * randFloat * 0.001f;
     }
 }
 
@@ -674,7 +674,7 @@ void EnBigslime_UpdateWavySurface(EnBigslime* this) {
     }
 
     this->wavySurfaceTimer--;
-    vtxSurfaceWave = Math_SinF(this->wavySurfaceTimer * (M_PI / 12));
+    vtxSurfaceWave = Math_SinF(this->wavySurfaceTimer * (M_PIf / 12));
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         staticVtx = &sBigslimeStaticVtx[i];
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
@@ -1170,7 +1170,7 @@ void EnBigslime_SetTargetVtxToWideCone(EnBigslime* this) {
     s32 j;
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        vtxY = (((Math_CosF(i * (M_PI / 6)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
+        vtxY = (((Math_CosF(i * (M_PIf / 6)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1189,7 +1189,7 @@ void EnBigslime_SetTargetVtxToWideCone(EnBigslime* this) {
     }
 
     for (; i < BIGSLIME_NUM_RING_VTX; i++) {
-        vtxY = ((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 16)) * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F;
+        vtxY = ((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PIf / 16)) * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1302,7 +1302,7 @@ void EnBigslime_SetTargetVtxToThinCone(EnBigslime* this) {
     sBigslimeTargetVtx[0].n.ob[2] = 0;
 
     for (i = 1; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        upperSphereCos = (((Math_CosF((i - 1) * (M_PI / 5)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
+        upperSphereCos = (((Math_CosF((i - 1) * (M_PIf / 5)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1319,7 +1319,7 @@ void EnBigslime_SetTargetVtxToThinCone(EnBigslime* this) {
     }
 
     for (; i < BIGSLIME_NUM_RING_FACES; i++) {
-        lowerSphereCos = Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / BIGSLIME_NUM_RING_FACES));
+        lowerSphereCos = Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PIf / BIGSLIME_NUM_RING_FACES));
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1362,7 +1362,7 @@ void EnBigslime_SetTargetVtxToInverseCone(EnBigslime* this) {
     sBigslimeTargetVtx[0].n.ob[2] = 0;
 
     for (i = 1; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        upperSphereCos = Math_CosF((i - 1) * (M_PI / 10));
+        upperSphereCos = Math_CosF((i - 1) * (M_PIf / 10));
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1375,7 +1375,7 @@ void EnBigslime_SetTargetVtxToInverseCone(EnBigslime* this) {
 
     for (; i < BIGSLIME_NUM_RING_FACES; i++) {
         lowerSphereCos =
-            (((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 5)) + 1) * 0.925f) + -1.0f) * BIGSLIME_RADIUS_F;
+            (((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PIf / 5)) + 1) * 0.925f) + -1.0f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1646,7 +1646,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
  * This unit vector has the following spherical coordinates:
  *     - radius = 1
  *     - yaw (azimuthal angle) = this->actor.world.rot.y
- *     - pitch (polar/zenith angle) = M_PI / 4
+ *     - pitch (polar/zenith angle) = M_PIf / 4
  *
  * This unit normal vector is converted into x-y-z coordinates and dot-producted with
  * the model coordinates of each individual vertex. The surface perturbation is then
@@ -1657,15 +1657,15 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
 void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     Vtx* dynamicVtx;
     f32 dotXYZ;
-    f32 unitVecX = Math_SinS(this->actor.world.rot.y) * M_SQRT1_2;
-    f32 unitVecZ = Math_CosS(this->actor.world.rot.y) * M_SQRT1_2;
+    f32 unitVecX = Math_SinS(this->actor.world.rot.y) * M_SQRT1_2f;
+    f32 unitVecZ = Math_CosS(this->actor.world.rot.y) * M_SQRT1_2f;
     s32 i;
 
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
 
         // vector dot product between each dynamicVtx and the unit normal vector describing player's thrown direction
-        dotXYZ = (dynamicVtx->n.ob[0] * unitVecX + dynamicVtx->n.ob[1] * M_SQRT1_2 + dynamicVtx->n.ob[2] * unitVecZ) *
+        dotXYZ = (dynamicVtx->n.ob[0] * unitVecX + dynamicVtx->n.ob[1] * M_SQRT1_2f + dynamicVtx->n.ob[2] * unitVecZ) *
                  0.001f;
         if (dotXYZ < 0.01f) {
             this->vtxSurfacePerturbation[i] = 0.0f;
@@ -1693,7 +1693,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     if (this->windupPunchTimer > 0) {
         invWindupPunchTimer = 1.0f / this->windupPunchTimer;
-        scale = Math_CosF(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
+        scale = Math_CosF(this->windupPunchTimer * (M_PIf / 27)) + 1.0f;
         player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
 
         // Linearly interpolate gekkoRot.y --> this->actor.world.rot.y
@@ -1706,7 +1706,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
             EnBigslime_GekkoSfxInsideBigslime(this, NA_SE_EN_FROG_PUNCH1);
         }
 
-        scale = 0.5f - Math_CosF(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
+        scale = 0.5f - Math_CosF(-this->windupPunchTimer * (M_PIf / 5)) * 0.5f;
         if (this->windupPunchTimer == -5) {
             if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
@@ -1842,12 +1842,12 @@ void EnBigslime_SetupFreeze(EnBigslime* this) {
         targetVtx->n.a = 0;
     }
 
-    // Initalizes frozen effect alpha near bottom of sphere by increasing levels of alpha
+    // Initializes frozen effect alpha near bottom of sphere by increasing levels of alpha
     for (i = 0; i < 20; i++) {
         sBigslimeTargetVtx[i + 138].n.a = 10 * i;
     }
 
-    // Initalizes/seeds frozen effect alpha in bottom 4 nodes in vtx sphere to highest level of alpha
+    // Initializes/seeds frozen effect alpha in bottom 4 nodes in vtx sphere to highest level of alpha
     for (i = 0; i < 4; i++) {
         sBigslimeTargetVtx[i + 158].n.a = 200;
     }
@@ -2405,7 +2405,7 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, PlayState* play) {
     Camera* subCam;
 
     this->despawnTimer--;
-    this->gekkoScale = this->despawnTimer * 0.00035000002f;
+    this->gekkoScale = this->despawnTimer * (0.35f * 0.001f);
     if (this->despawnTimer == 0) {
         EnBigslime_SetupFrogSpawn(this, play);
     } else {
@@ -2467,7 +2467,7 @@ void EnBigslime_FrogSpawn(EnBigslime* this, PlayState* play) {
 
     // Zoom the camera in and out at the newly spawned red frog
     subCamZoom =
-        Math_SinF(this->spawnFrogTimer * (M_PI / 5)) * ((0.04f * (this->spawnFrogTimer * 0.1f)) + 0.02f) + 1.0f;
+        Math_SinF(this->spawnFrogTimer * (M_PIf / 5)) * ((0.04f * (this->spawnFrogTimer * 0.1f)) + 0.02f) + 1.0f;
     subCamEye.x = subCam->at.x + (this->subCamDistToFrog.x * subCamZoom);
     subCamEye.z = subCam->at.z + (this->subCamDistToFrog.z * subCamZoom);
     subCamEye.y = subCam->at.y + (this->subCamDistToFrog.y * subCamZoom);
@@ -2620,7 +2620,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
         if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->gekkoCollider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->gekkoCollider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {

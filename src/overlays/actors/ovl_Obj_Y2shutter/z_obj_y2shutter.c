@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_y2shutter.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -29,7 +29,7 @@ typedef struct ShutterInfo {
     /* 0x1E */ u8 openTimer;
 } ShutterInfo; // size = 0x20
 
-ActorInit Obj_Y2shutter_InitVars = {
+ActorProfile Obj_Y2shutter_Profile = {
     /**/ ACTOR_OBJ_Y2SHUTTER,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -108,9 +108,9 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             s16 csId = this->dyna.actor.csId;
 
             if (this->openTimer == 0) {
-                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                if ((csId > CS_ID_NONE) && !CutsceneManager_IsNext(csId)) {
                     CutsceneManager_Queue(csId);
-                } else if (csId >= 0) {
+                } else if (csId > CS_ID_NONE) {
                     CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->openTimer = -1;
                 } else {

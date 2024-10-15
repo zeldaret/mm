@@ -10,7 +10,7 @@
  */
 
 #include "z_bg_ikana_mirror.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -26,7 +26,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play);
 void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play);
 
-ActorInit Bg_Ikana_Mirror_InitVars = {
+ActorProfile Bg_Ikana_Mirror_Profile = {
     /**/ ACTOR_BG_IKANA_MIRROR,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

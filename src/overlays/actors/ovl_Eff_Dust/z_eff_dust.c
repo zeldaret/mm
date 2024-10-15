@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_dust.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "libc64/malloc.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -24,7 +24,7 @@ void func_80919230(EffDust* this, PlayState* play);
 void func_80919768(Actor* thisx, PlayState* play2);
 void func_809199FC(Actor* thisx, PlayState* play2);
 
-ActorInit Eff_Dust_InitVars = {
+ActorProfile Eff_Dust_Profile = {
     /**/ ACTOR_EFF_DUST,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

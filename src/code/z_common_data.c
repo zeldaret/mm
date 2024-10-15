@@ -2,7 +2,7 @@
 
 #include "alignment.h"
 #include "sequence.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "z64environment.h"
 #include "z64transition.h"
 

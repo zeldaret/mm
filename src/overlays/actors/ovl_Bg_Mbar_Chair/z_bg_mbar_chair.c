@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_mbar_chair.h"
-#include "objects/object_mbar_obj/object_mbar_obj.h"
+#include "assets/objects/object_mbar_obj/object_mbar_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +16,7 @@ void BgMbarChair_Destroy(Actor* thisx, PlayState* play);
 void BgMbarChair_Update(Actor* thisx, PlayState* play);
 void BgMbarChair_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Mbar_Chair_InitVars = {
+ActorProfile Bg_Mbar_Chair_Profile = {
     /**/ ACTOR_BG_MBAR_CHAIR,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

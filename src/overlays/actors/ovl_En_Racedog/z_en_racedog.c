@@ -70,7 +70,7 @@ typedef struct {
     /* 0xE */ s16 textId;                    // Used to determine the dog's condition
 } RaceDogInfo;                               // size = 0x10
 
-ActorInit En_Racedog_InitVars = {
+ActorProfile En_Racedog_Profile = {
     /**/ ACTOR_EN_RACEDOG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -134,7 +134,7 @@ static RaceDogInfo sDogInfo[] = {
  * Stores the RacedogInfo for the dog that is selected by the player. These values are just
  * placeholders, and the actual value gets grabbed from sDogInfo in EnRacedog_Init.
  */
-static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
+static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0f, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
 
 /**
  * The XZ-coordinates used to determine if the dog is inside the finish line.

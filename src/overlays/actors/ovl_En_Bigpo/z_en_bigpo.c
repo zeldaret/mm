@@ -6,10 +6,10 @@
 
 #include "z_en_bigpo.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_bigpo/object_bigpo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bigpo/object_bigpo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -83,7 +83,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play);
 void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
-ActorInit En_Bigpo_InitVars = {
+ActorProfile En_Bigpo_Profile = {
     /**/ ACTOR_EN_BIGPO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -562,7 +562,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     // flight position calculations
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
-    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
+    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PIf / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -749,7 +749,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
@@ -834,7 +834,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
-        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PIf / 20)) * 5.0f) + this->savedHeight;
     }
 }
 

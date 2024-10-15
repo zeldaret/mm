@@ -5,7 +5,7 @@
  */
 
 #include "z_en_baisen.h"
-#include "objects/object_bai/object_bai.h"
+#include "assets/objects/object_bai/object_bai.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-ActorInit En_Baisen_InitVars = {
+ActorProfile En_Baisen_Profile = {
     /**/ ACTOR_EN_BAISEN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

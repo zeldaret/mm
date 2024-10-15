@@ -2,7 +2,7 @@
 #define Z_EN_EGOL_H
 
 #include "global.h"
-#include "objects/object_eg/object_eg.h"
+#include "assets/objects/object_eg/object_eg.h"
 
 struct EnEgol;
 

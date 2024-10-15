@@ -5,9 +5,9 @@
  */
 
 #include "z_en_neo_reeba.h"
-#include "objects/object_rb/object_rb.h"
+#include "assets/objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -36,7 +36,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this);
 void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
-ActorInit En_Neo_Reeba_InitVars = {
+ActorProfile En_Neo_Reeba_Profile = {
     /**/ ACTOR_EN_NEO_REEBA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -282,7 +282,7 @@ void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
-    } else if (remainingDist < 40.0f && this->actor.speed > 3.0f) {
+    } else if ((remainingDist < 40.0f) && (this->actor.speed > 3.0f)) {
         this->actor.speed -= 2.0f;
     }
 
@@ -312,12 +312,12 @@ void EnNeoReeba_ReturnHome(EnNeoReeba* this, PlayState* play) {
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
-    } else if (remainingDist < 40.0f && this->actor.speed > 3.0f) {
+    } else if ((remainingDist < 40.0f) && (this->actor.speed > 3.0f)) {
         this->actor.speed -= 1.0f;
     }
 
-    if (Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) > 200.0f ||
-        fabsf(this->actor.playerHeightRel) > 100.0f) {
+    if ((Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) > 200.0f) ||
+        (fabsf(this->actor.playerHeightRel) > 100.0f)) {
         EnNeoReeba_SetupSink(this);
     }
 }
@@ -410,7 +410,9 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) {
     this->actionFunc = EnNeoReeba_DamageAnim;
 }
 
-static f32 sDamageAnimXZScales[] = { 0.04, 0.04, 0.039, 0.042, 0.045, 0.043, 0.04, 0.035, 0.03, 0.033, 0.04 };
+static f32 sDamageAnimXZScales[] = {
+    0.04f, 0.04f, 0.039f, 0.042f, 0.045f, 0.043f, 0.04f, 0.035f, 0.03f, 0.033f, 0.04f
+};
 static f32 sDamageAnimYScales[] = { 0.04f, 0.04f, 0.041f, 0.038f, 0.035f, 0.037f, 0.04f, 0.045f, 0.05f, 0.047f, 0.04f };
 
 void EnNeoReeba_DamageAnim(EnNeoReeba* this, PlayState* play) {
@@ -443,7 +445,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
 
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);

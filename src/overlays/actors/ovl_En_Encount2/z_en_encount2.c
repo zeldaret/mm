@@ -6,8 +6,8 @@
 
 #include "z_en_encount2.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_fusen/object_fusen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_fusen/object_fusen.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -26,7 +26,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-ActorInit En_Encount2_InitVars = {
+ActorProfile En_Encount2_Profile = {
     /**/ ACTOR_EN_ENCOUNT2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -126,11 +126,11 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->collider.elements->dim.modelSphere.radius = 57;
-    this->collider.elements->dim.scale = 1.0f;
-    this->collider.elements->dim.modelSphere.center.x = 0;
-    this->collider.elements->dim.modelSphere.center.y = -4;
-    this->collider.elements->dim.modelSphere.center.z = 0;
+    this->collider.elements[0].dim.modelSphere.radius = 57;
+    this->collider.elements[0].dim.scale = 1.0f;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.modelSphere.center.y = -4;
+    this->collider.elements[0].dim.modelSphere.center.z = 0;
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetupIdle(this);

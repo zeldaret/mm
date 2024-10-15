@@ -7,7 +7,7 @@
 #include "z_obj_hugebombiwa.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_bombiwa/object_bombiwa.h"
+#include "assets/objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -28,7 +28,7 @@ void func_80A55310(ObjHugebombiwa* this);
 void func_80A55564(ObjHugebombiwa* this, PlayState* play);
 void func_80A55B34(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hugebombiwa_InitVars = {
+ActorProfile Obj_Hugebombiwa_Profile = {
     /**/ ACTOR_OBJ_HUGEBOMBIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -311,7 +311,7 @@ s32 func_80A54A0C(ObjHugebombiwa* this) {
     s32 params;
     Vec3f sp20;
 
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x80000000)) {
         ac = this->collider.base.ac;
         params = ENHUGEBOMBIWA_GET_100(&this->actor);
 

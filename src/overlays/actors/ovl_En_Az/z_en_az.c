@@ -94,7 +94,7 @@ static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
     { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
-ActorInit En_Az_InitVars = {
+ActorProfile En_Az_Profile = {
     /**/ ACTOR_EN_AZ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -433,7 +433,7 @@ f32 func_80A954AC(EnAz* this) {
     sp1C.x = pathing->curPoint.x - pathing->prevPoint.x;
     sp1C.y = pathing->curPoint.y - pathing->prevPoint.y;
     sp1C.z = pathing->curPoint.z - pathing->prevPoint.z;
-    return Math3D_Parallel(&sp28, &sp1C);
+    return Math3D_Cos(&sp28, &sp1C);
 }
 
 s32 func_80A95534(PlayState* play, ActorPathing* actorPathing) {
@@ -1621,7 +1621,7 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     this->actor.velocity.y = 6.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
@@ -1633,10 +1633,8 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
 void func_80A97F9C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    D_80A99E8C =
-        Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
-    if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >=
-        SQ(1000.0f)) {
+    D_80A99E8C = Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
+    if (Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >= SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.flags & ACTOR_PATHING_REACHED_END_PERMANENT)) {
@@ -1704,8 +1702,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.x = actorPathing->curPoint.x - actorPathing->worldPos->x;
     sp28.y = actorPathing->curPoint.y - actorPathing->worldPos->y;
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
-    actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
-    actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
+    actorPathing->distSqToCurPointXZ = Math3D_Dist1DSq(sp28.x, sp28.z);
+    actorPathing->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&sp28);
     actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
     actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;

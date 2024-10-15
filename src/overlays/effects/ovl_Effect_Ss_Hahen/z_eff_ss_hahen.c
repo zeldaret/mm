@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_hahen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rPitch regs[0]
 #define rYaw regs[1]
@@ -21,7 +21,7 @@ u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Hahen_InitVars = {
+EffectSsProfile Effect_Ss_Hahen_Profile = {
     EFFECT_SS_HAHEN,
     EffectSsHahen_Init,
 };

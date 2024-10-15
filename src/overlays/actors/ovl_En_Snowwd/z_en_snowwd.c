@@ -5,7 +5,7 @@
  */
 
 #include "z_en_snowwd.h"
-#include "objects/object_snowwd/object_snowwd.h"
+#include "assets/objects/object_snowwd/object_snowwd.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
 void EnSnowwd_Idle(EnSnowwd* this, PlayState* play);
 
-ActorInit En_Snowwd_InitVars = {
+ActorProfile En_Snowwd_Profile = {
     /**/ ACTOR_EN_SNOWWD,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

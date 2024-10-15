@@ -113,6 +113,8 @@
         <Texture Name="gBeaverYoungerBrotherBeltGreenTex" OutName="beaver_younger_brother_belt_green" Format="rgba16" Width="32" Height="32" Offset="0x16818" />
         <Texture Name="gBeaverYoungerBrotherBeltBlueTex" OutName="beaver_younger_brother_belt_blue" Format="rgba16" Width="32" Height="32" Offset="0x17018" />
 
+        <TextureAnimation Name="gBeaverYoungerBrotherEmptyTexAnim" Offset="0x17818" />
+
         <!-- Younger Beaver Limbs -->
         <Limb Name="gBeaverYoungerBrotherRootLimb" Type="Standard" EnumName="BEAVER_YOUNGER_BROTHER_LIMB_ROOT" Offset="0x17820" />
         <Limb Name="gBeaverYoungerBrotherPelvisRootLimb" Type="Standard" EnumName="BEAVER_YOUNGER_BROTHER_LIMB_PELVIS_ROOT" Offset="0x1782C" />

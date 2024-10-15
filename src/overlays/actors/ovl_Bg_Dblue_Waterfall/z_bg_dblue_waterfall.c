@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_dblue_waterfall.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play);
 void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
-ActorInit Bg_Dblue_Waterfall_InitVars = {
+ActorProfile Bg_Dblue_Waterfall_Profile = {
     /**/ ACTOR_BG_DBLUE_WATERFALL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -61,10 +61,10 @@ Color_RGBA8 D_80B8539C = { 200, 255, 255, 255 };
 Color_RGBA8 D_80B853A0 = { 200, 200, 200, 0 };
 
 s32 func_80B83C80(Vec3f* arg0, Vec3f* arg1) {
-    f32 temp_f0 = Math3D_LengthSquared(arg0);
+    f32 temp_f0 = Math3D_Vec3fMagnitudeSq(arg0);
     f32 temp_f2;
 
-    if (temp_f0 < 0.0000010000001f) {
+    if (temp_f0 < SQ(0.001f)) {
         return false;
     }
 
@@ -419,13 +419,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
         if (sp2C) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
-                if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
+                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x800) {
                     this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
-                if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
+                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x1000) {
                     this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }

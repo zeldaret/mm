@@ -1,19 +1,13 @@
-#include "audiomgr.h"
-#include "fault.h"
-#include "idle.h"
-#include "irqmgr.h"
-#include "padmgr.h"
-#include "scheduler.h"
-#include "CIC6105.h"
+#include "prevent_bss_reordering.h"
+#include "ultra64.h"
 #include "stack.h"
-#include "stackcheck.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 OSMesgQueue sSerialEventQueue;
 OSMesg sSerialMsgBuf[1];
 u32 gSegments[NUM_SEGMENTS];
-Scheduler gScheduler;
-IrqMgrClient sIrqClient;
+struct Scheduler gScheduler;
+struct IrqMgrClient sIrqClient;
 OSMesgQueue sIrqMgrMsgQueue;
 OSMesg sIrqMgrMsgBuf[60];
 OSThread gGraphThread;
@@ -21,17 +15,28 @@ STACK(sGraphStack, 0x1800);
 STACK(sSchedStack, 0x600);
 STACK(sAudioStack, 0x800);
 STACK(sPadMgrStack, 0x500);
-StackEntry sGraphStackInfo;
-StackEntry sSchedStackInfo;
-StackEntry sAudioStackInfo;
-StackEntry sPadMgrStackInfo;
-AudioMgr sAudioMgr;
+struct StackEntry sGraphStackInfo;
+struct StackEntry sSchedStackInfo;
+struct StackEntry sAudioStackInfo;
+struct StackEntry sPadMgrStackInfo;
+struct AudioMgr sAudioMgr;
 static s32 sBssPad;
-PadMgr gPadMgr;
+struct PadMgr gPadMgr;
 
 #include "main.h"
+
+#include "audiomgr.h"
 #include "buffers.h"
-#include "global.h"
+#include "CIC6105.h"
+#include "fault.h"
+#include "idle.h"
+#include "irqmgr.h"
+#include "padmgr.h"
+#include "regs.h"
+#include "segment_symbols.h"
+#include "stack.h"
+#include "stackcheck.h"
+#include "scheduler.h"
 #include "sys_initial_check.h"
 #include "system_heap.h"
 #include "z64nmi_buff.h"
@@ -42,8 +47,8 @@ s32 gScreenHeight = SCREEN_HEIGHT;
 size_t gSystemHeapSize = 0;
 
 void Main(void* arg) {
-    intptr_t fb;
-    intptr_t sysHeap;
+    uintptr_t fb;
+    uintptr_t sysHeap;
     s32 exit;
     s16* msg;
 
@@ -55,7 +60,7 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = (intptr_t)SEGMENT_START(system_heap);
+    sysHeap = (uintptr_t)SEGMENT_START(system_heap);
     fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
     SystemHeap_Init((void*)sysHeap, gSystemHeapSize);

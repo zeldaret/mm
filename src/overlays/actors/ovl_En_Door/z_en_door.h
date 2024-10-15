@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "z64door.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 /**
  * Actor Parameters
@@ -25,7 +25,7 @@
  * |             |
  * | Text offset | Half day bit index
  * |-------------|--------------------
- * | 0 0 0 0     | 0 0 0 
+ * | 0 0 0 0     | 0 0 0
  * | 4           | 3
  * |
  *

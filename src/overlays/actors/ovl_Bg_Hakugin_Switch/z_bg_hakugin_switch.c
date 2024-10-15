@@ -7,7 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_switch.h"
 #include "z64rumble.h"
-#include "objects/object_goronswitch/object_goronswitch.h"
+#include "assets/objects/object_goronswitch/object_goronswitch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -39,7 +39,7 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play);
 
 u32 D_80B16AF0;
 
-ActorInit Bg_Hakugin_Switch_InitVars = {
+ActorProfile Bg_Hakugin_Switch_Profile = {
     /**/ ACTOR_BG_HAKUGIN_SWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

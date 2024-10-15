@@ -28,7 +28,7 @@ typedef enum {
     /* 2 */ GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND
 } PlayerCheatStatus;
 
-ActorInit En_Mt_tag_InitVars = {
+ActorProfile En_Mt_tag_Profile = {
     /**/ ACTOR_EN_MT_TAG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -69,7 +69,7 @@ static Vec3f sCheckpointPositions[] = {
  * The range extends a little bit beyond the finish line's in-game visual.
  */
 s32 EnMttag_IsInFinishLine(Vec3f* pos) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
 /**
@@ -78,11 +78,11 @@ s32 EnMttag_IsInFinishLine(Vec3f* pos) {
  */
 s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!CHECK_EVENTINF(EVENTINF_10)) {
-        if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
+        if (Math3D_PointInSquare2D(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
             return GORON_RACE_CHEAT_FALSE_START;
         }
-    } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
+    } else if (Math3D_PointInSquare2D(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
         // The goal is actually quite close to the start, just behind a large wall.
         // This checks if the player is in an area "behind" the goal that is not accessible
         // in normal play; it can only be reached by climbing the wall somehow. Perhaps they
@@ -133,7 +133,7 @@ s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, PlayState* play) {
  */
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingCheckpoint, f32* outPerpendicularPointX,
                                  f32* outPerpendicularPointZ) {
-    s32 curentCheckpoint = -1;
+    s32 currentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
     f32 minLineLengthSq = 0.0f;
     s32 sceneExitIndex;
@@ -145,6 +145,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
     // The Goron Racetrack is configured such that the sceneExitIndex for any given floor polygon
     // gradually increases as you move forward through the racetrack.
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&play->colCtx, actor->floorPoly, actor->floorBgId);
+    //! @bug - sStartingCheckpointPerSceneExitIndex is indexed out of bounds when sceneExitIndex is 18, due to the
+    //! `sceneExitIndex + 1` access.
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         //! @bug - upcomingCheckpoint is not initialized here
         return -1;
@@ -154,15 +156,15 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
     do {
-        if (Math3D_PointDistToLine2D(
-                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
-                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
+        if (Math3D_PointDistSqToLine2DImpl(
+                actor->world.pos.x, actor->world.pos.z, sCheckpointPositions[checkpointIterator - 1].x,
+                sCheckpointPositions[checkpointIterator - 1].z, sCheckpointPositions[checkpointIterator + 1].x,
+                sCheckpointPositions[checkpointIterator + 1].z, &perpendicularPointX, &perpendicularPointZ,
                 &lineLenSq) &&
-            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
+            (!hasSetCurrentCheckpointOnce || ((currentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
-            curentCheckpoint = checkpointIterator;
+            currentCheckpoint = checkpointIterator;
             *outPerpendicularPointX = perpendicularPointX;
             *outPerpendicularPointZ = perpendicularPointZ;
             hasSetCurrentCheckpointOnce = true;
@@ -170,8 +172,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
         checkpointIterator++;
     } while (checkpointIterator < sStartingCheckpointPerSceneExitIndex[sceneExitIndex + 1]);
 
-    *upcomingCheckpoint = curentCheckpoint + 1;
-    return curentCheckpoint;
+    *upcomingCheckpoint = currentCheckpoint + 1;
+    return currentCheckpoint;
 }
 
 /**

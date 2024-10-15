@@ -26,7 +26,7 @@ void func_80B3B5D4(EnGg2* this, PlayState* play);
 s32 EnGg2_HasReachedPoint(EnGg2* this, Path* path, s32 pointIndex);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-ActorInit En_Gg2_InitVars = {
+ActorProfile En_Gg2_Profile = {
     /**/ ACTOR_EN_GG2,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -338,7 +338,7 @@ s32 EnGg2_HasReachedPoint(EnGg2* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;

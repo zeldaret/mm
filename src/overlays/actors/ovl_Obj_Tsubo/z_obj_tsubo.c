@@ -6,9 +6,9 @@
 
 #include "z_obj_tsubo.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_tsubo/object_tsubo.h"
-#include "objects/object_racetsubo/object_racetsubo.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_tsubo/object_tsubo.h"
+#include "assets/objects/object_racetsubo/object_racetsubo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
@@ -41,7 +41,7 @@ s16 D_80929504 = 0;
 s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
-ActorInit Obj_Tsubo_InitVars = {
+ActorProfile Obj_Tsubo_Profile = {
     /**/ ACTOR_OBJ_TSUBO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -474,7 +474,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
+               (acHit && (this->cylinderCollider.info.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_kin2_shelf.h"
-#include "objects/object_kin2_obj/object_kin2_obj.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play);
 void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
-ActorInit Bg_Kin2_Shelf_InitVars = {
+ActorProfile Bg_Kin2_Shelf_Profile = {
     /**/ ACTOR_BG_KIN2_SHELF,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

@@ -3,13 +3,6 @@
  */
 
 beginseg
-    name "makerom"
-    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
-    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
-    include "$(BUILD_DIR)/asm/makerom/entry.o"
-endseg
-
-beginseg
     name "framebuffer_lo"
     address 0x80000500
     flags NOLOAD
@@ -17,7 +10,16 @@ beginseg
 endseg
 
 beginseg
+    name "makerom"
+    address 0x8007F000
+    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
+    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
+    include "$(BUILD_DIR)/asm/makerom/entry.o"
+endseg
+
+beginseg
     name "boot"
+    address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
     include "$(BUILD_DIR)/data/boot/rspboot.data.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
@@ -36,7 +38,6 @@ beginseg
     include "$(BUILD_DIR)/src/boot/O2/padutils.o"
     include "$(BUILD_DIR)/src/boot/O2/stackcheck.o"
     include "$(BUILD_DIR)/src/boot/O2/gfxprint.o"
-    include "$(BUILD_DIR)/data/boot/gfxprint.data.o"
     include "$(BUILD_DIR)/src/boot/O2/mtxuty-cvt.o"
     include "$(BUILD_DIR)/src/boot/O2/debug.o"
     include "$(BUILD_DIR)/src/boot/O2/system_heap.o"
@@ -252,18 +253,183 @@ endseg
 
 beginseg
     name "Audiobank"
-    address 0x10 # fake address to avoid map lookup inaccuracies
-    include "$(BUILD_DIR)/baserom/Audiobank.o"
+    address 0
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_0.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_1.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_2.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_3.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_4.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_5.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_6.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_7.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_8.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_9.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_10.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_11.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_12.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_13.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_14.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_15.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_16.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_17.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_18.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_19.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_20.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_21.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_22.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_23.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_24.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_25.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_26.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_27.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_28.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_29.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_30.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_31.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_32.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_33.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_34.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_35.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_36.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_37.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_38.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_39.o"
+    include "$(BUILD_DIR)/assets/audio/soundfonts/Soundfont_40.o"
 endseg
 
 beginseg
     name "Audioseq"
-    include "$(BUILD_DIR)/baserom/Audioseq.o"
+    address 0
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_0.prg.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_1.prg.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_2.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_3.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_4.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_5.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_6.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_7.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_8.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_9.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_10.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_11.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_12.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_13.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_14.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_15.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_16.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_17.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_18.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_19.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_20.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_21.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_22.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_23.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_24.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_25.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_26.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_27.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_28.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_29.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_30.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_31.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_32.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_33.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_34.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_36.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_37.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_38.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_39.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_41.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_42.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_43.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_44.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_45.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_46.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_47.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_48.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_49.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_50.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_51.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_52.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_53.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_54.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_55.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_56.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_57.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_58.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_59.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_60.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_61.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_62.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_63.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_64.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_65.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_66.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_67.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_68.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_69.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_70.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_71.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_72.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_73.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_74.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_75.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_76.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_77.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_78.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_79.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_80.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_81.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_82.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_83.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_84.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_85.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_87.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_88.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_89.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_90.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_91.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_92.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_93.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_94.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_95.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_98.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_99.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_100.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_101.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_102.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_103.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_104.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_105.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_106.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_107.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_108.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_109.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_110.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_111.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_112.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_113.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_114.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_115.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_116.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_117.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_118.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_119.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_120.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_121.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_122.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_123.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_124.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_125.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_126.o"
+    include "$(BUILD_DIR)/assets/audio/sequences/seq_127.o"
 endseg
 
 beginseg
     name "Audiotable"
-    include "$(BUILD_DIR)/baserom/Audiotable.o"
+    address 0
+    include "$(BUILD_DIR)/assets/audio/samplebanks/SampleBank_0.o"
+    include "$(BUILD_DIR)/assets/audio/samplebanks/SampleBank_2.o"
 endseg
 
 beginseg
@@ -493,12 +659,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_lights.o"
     include "$(BUILD_DIR)/src/code/z_malloc.o"
     include "$(BUILD_DIR)/src/code/z_map_disp.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.data.o"
-    include "$(BUILD_DIR)/data/code/z_map_disp.bss.o"
     include "$(BUILD_DIR)/src/code/z_map_data.o"
     include "$(BUILD_DIR)/src/code/z_map_exp.o"
     include "$(BUILD_DIR)/src/code/z_msgevent.o"
-    include "$(BUILD_DIR)/data/code/z_msgevent.data.o"
     include "$(BUILD_DIR)/src/code/z_nmi_buff.o"
     include "$(BUILD_DIR)/src/code/z_nulltask.o"
     include "$(BUILD_DIR)/src/code/z_olib.o"
@@ -572,26 +735,23 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_initial_check.o"
     include "$(BUILD_DIR)/src/code/sys_math.o"
     include "$(BUILD_DIR)/src/code/sys_math3d.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.data.o"
-    include "$(BUILD_DIR)/data/code/sys_math3d.bss.o"
     include "$(BUILD_DIR)/src/code/sys_math_atan.o"
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
     include "$(BUILD_DIR)/src/code/sys_rumble.o"
-    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     include "$(BUILD_DIR)/src/code/code_80183070.o"
     include "$(BUILD_DIR)/src/code/c_keyframe.o"
     include "$(BUILD_DIR)/src/code/sys_slowly.o"
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
     include "$(BUILD_DIR)/asm/code/kanread.text.o" // handwritten
     include "$(BUILD_DIR)/src/code/osFlash.o"
+    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     pad_text
     pad_text
     pad_text
     include "$(BUILD_DIR)/src/audio/lib/data.o"
     include "$(BUILD_DIR)/src/audio/lib/synthesis.o"
     include "$(BUILD_DIR)/src/audio/lib/heap.o"
-    include "$(BUILD_DIR)/data/code/audio_heap.bss.o"
     include "$(BUILD_DIR)/src/audio/lib/load.o"
     include "$(BUILD_DIR)/src/audio/lib/thread.o"
     include "$(BUILD_DIR)/src/audio/lib/dcache.o"
@@ -610,13 +770,15 @@ beginseg
     include "$(BUILD_DIR)/src/audio/sfx_params.o"
     include "$(BUILD_DIR)/src/audio/sfx.o"
     include "$(BUILD_DIR)/src/audio/sequence.o"
-    include "$(BUILD_DIR)/data/code/sequence.bss.o"
     include "$(BUILD_DIR)/src/audio/session_config.o"
     include "$(BUILD_DIR)/src/code/jpegutils.o"
     include "$(BUILD_DIR)/src/code/jpegdecoder.o"
-    include_data_with_rodata "$(BUILD_DIR)/src/code/z_game_over.o"
+    include "$(BUILD_DIR)/src/code/z_game_over.o"
     include "$(BUILD_DIR)/src/code/z_construct.o"
-    include "$(BUILD_DIR)/data/code/audio_tables.rodata.o"
+    include "$(BUILD_DIR)/src/audio/tables/soundfont_table.o"
+    include "$(BUILD_DIR)/assets/audio/sequence_font_table.o"
+    include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
+    include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
     include "$(BUILD_DIR)/data/code/aspMain.rodata.o"
     include "$(BUILD_DIR)/data/code/gspF3DZEX2.NoN.PosLight.fifo.rodata.o"
     include "$(BUILD_DIR)/data/code/gspS2DEX2.fifo.rodata.o"
@@ -761,8 +923,7 @@ beginseg
     name "ovl_En_Okuta"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/z_en_okuta.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Okuta/ovl_En_Okuta.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Okuta/ovl_En_Okuta_reloc.o"
 endseg
 
 beginseg
@@ -1049,17 +1210,14 @@ beginseg
     name "ovl_En_Death"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/z_en_death.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Death/ovl_En_Death.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Death/ovl_En_Death_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Minideath"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/z_en_minideath.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Minideath/ovl_En_Minideath.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Minideath/ovl_En_Minideath_reloc.o"
 endseg
 
 beginseg
@@ -2081,8 +2239,7 @@ beginseg
     name "ovl_En_Zl4"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Zl4/z_en_zl4.o"
-    include "$(BUILD_DIR)/data/ovl_En_Zl4/ovl_En_Zl4.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Zl4/ovl_En_Zl4.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Zl4/ovl_En_Zl4_reloc.o"
 endseg
 
 beginseg
@@ -2194,9 +2351,7 @@ beginseg
     name "ovl_En_Knight"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Knight/z_en_knight.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.bss.o"
-    include "$(BUILD_DIR)/data/ovl_En_Knight/ovl_En_Knight.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Knight/ovl_En_Knight_reloc.o"
 endseg
 
 beginseg
@@ -3430,8 +3585,7 @@ beginseg
     name "ovl_En_Wdhand"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/z_en_wdhand.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/ovl_En_Wdhand_reloc.o"
 endseg
 
 beginseg
@@ -3445,8 +3599,7 @@ beginseg
     name "ovl_Bg_Danpei_Movebg"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Danpei_Movebg/ovl_Bg_Danpei_Movebg_reloc.o"
 endseg
 
 beginseg
@@ -3985,8 +4138,7 @@ beginseg
     name "ovl_Bg_Dblue_Elevator"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/z_bg_dblue_elevator.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.data.o"
-    include "$(BUILD_DIR)/data/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Dblue_Elevator/ovl_Bg_Dblue_Elevator_reloc.o"
 endseg
 
 beginseg
@@ -4749,8 +4901,7 @@ beginseg
     name "ovl_En_Bsb"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Bsb/z_en_bsb.o"
-    include "$(BUILD_DIR)/data/ovl_En_Bsb/ovl_En_Bsb.data.o"
-    include "$(BUILD_DIR)/data/ovl_En_Bsb/ovl_En_Bsb.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Bsb/ovl_En_Bsb_reloc.o"
 endseg
 
 beginseg
