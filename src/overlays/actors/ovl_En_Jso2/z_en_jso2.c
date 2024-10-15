@@ -12,8 +12,8 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Col_Man/z_en_col_man.h"
 
-#define FLAGS                                                                                            \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
+#define FLAGS                                                                                         \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
      ACTOR_FLAG_80000000)
 
 #define THIS ((EnJso2*)thisx)
@@ -396,7 +396,7 @@ void EnJso2_Init(Actor* thisx, PlayState* play) {
 
     if (this->type == EN_JSO2_TYPE_LIGHT_ARROW_ROOM) {
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.shape.yOffset = 0.0f;
         EnJso2_SetupIntroCutscene(this);
@@ -736,7 +736,7 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
                 this->actor.gravity = -3.0f;
-                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 EnJso2_SetupCirclePlayer(this, play);
             }
@@ -993,7 +993,7 @@ void EnJso2_SetupTeleport(EnJso2* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 10.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_JUMP);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->action = EN_JSO2_ACTION_TELEPORT;
     this->actionFunc = EnJso2_Teleport;
 }
@@ -1036,7 +1036,7 @@ void EnJso2_FallFromTeleport(EnJso2* this, PlayState* play) {
         this->isTeleporting = false;
         this->scale = 0.042f;
         this->actor.shape.shadowScale = 17.0f;
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         EnJso2_SetupSlash(this, play);
     }
 }
@@ -1289,8 +1289,8 @@ void EnJso2_SetupDead(EnJso2* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
     this->actor.speed = 0.0f;
     this->disableBlure = true;
     this->timer = 30;

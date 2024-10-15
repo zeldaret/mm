@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount3/z_en_encount3.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnJso*)thisx)
 
@@ -303,7 +303,7 @@ void EnJso_Init(Actor* thisx, PlayState* play) {
 
     this->actor.gravity = -3.0f;
     this->scale = 0.035f;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->hintType = EN_JSO_GET_HINT_TYPE(&this->actor);
     this->introCsType = this->hintType & EN_JSO_INTRO_SCALE_UP;
     EnJso_SetupIntroCutscene(this);
@@ -585,7 +585,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
                 this->cutsceneState = EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
-                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+                this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 EnJso_SetupJumpBack(this);
@@ -635,7 +635,7 @@ void EnJso_SetupReappear(EnJso* this, PlayState* play) {
     this->actor.floorHeight = this->actor.home.pos.y;
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500,
                              10, true);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_ENTRY);
     this->afterimageCount = 0;
     this->action = EN_JSO_ACTION_REAPPEAR;
@@ -668,7 +668,7 @@ void EnJso_Reappear(EnJso* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actor.gravity = -3.0f;
         if (this->actor.colChkInfo.health > 0) {
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             EnJso_SetupCirclePlayer(this, play);
         } else {
             EnJso_SetupFallDownAndTalk(this, play);
@@ -1128,8 +1128,8 @@ void EnJso_SetupDead(EnJso* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.speed = 0.0f;
     this->disableBlure = true;
     this->timer = 30;
@@ -1167,7 +1167,7 @@ void EnJso_SetupFallDownAndTalk(EnJso* this, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_100000;
     this->action = EN_JSO_ACTION_FALL_DOWN_AND_TALK;
     this->actionFunc = EnJso_FallDownAndTalk;
@@ -1192,7 +1192,7 @@ void EnJso_FallDownAndTalk(EnJso* this, PlayState* play) {
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             player2->stateFlags1 |= PLAYER_STATE1_10000000;
             player2->actor.freezeTimer = 3;
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actionFunc = EnJso_TellHint;
         } else {
             EnJso_SetupReappear(this, play);
