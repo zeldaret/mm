@@ -1172,7 +1172,7 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
             return;
         }
 
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
 
         if (player->unk_ADC != 0) {
             this->unk_3F1 = player->unk_ADD;

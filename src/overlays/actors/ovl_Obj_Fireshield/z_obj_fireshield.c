@@ -365,11 +365,11 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         Actor_PlaySfx_Flagged(thisx, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            this->collider.info.toucher.damage = 0;
-            this->collider.info.toucher.effect = 0;
+            this->collider.elem.toucher.damage = 0;
+            this->collider.elem.toucher.effect = 0;
         } else {
-            this->collider.info.toucher.damage = 4;
-            this->collider.info.toucher.effect = 1;
+            this->collider.elem.toucher.damage = 4;
+            this->collider.elem.toucher.effect = 1;
         }
 
         Collider_UpdateCylinder(thisx, &this->collider);

@@ -1101,7 +1101,7 @@ void func_80B87C7C(EnKaizoku* this) {
     this->picto.actor.velocity.y = 15.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
-    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.elem.elemType = ELEMTYPE_UNK4;
     this->bodyCollider.base.colType = COLTYPE_NONE;
     this->swordCollider.info.elemType = ELEMTYPE_UNK4;
     this->action = KAIZOKU_ACTION_6;
@@ -1130,7 +1130,7 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
     this->unk_2D8 = 0;
     if ((curFrame >= this->animEndFrame) &&
         (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
-        this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+        this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
         this->bodyCollider.base.colType = COLTYPE_HIT3;
         this->swordCollider.info.elemType = ELEMTYPE_UNK2;
         this->picto.actor.shape.rot.x = 0;
@@ -1146,7 +1146,7 @@ void func_80B87E28(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_8);
     this->picto.actor.speed = -8.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
-    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.elem.elemType = ELEMTYPE_UNK4;
     this->bodyCollider.base.colType = COLTYPE_NONE;
     this->swordCollider.info.elemType = ELEMTYPE_UNK4;
     this->action = KAIZOKU_ACTION_7;
@@ -1823,7 +1823,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->unk_2D0 < 2) &&
         (this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_12) &&
         (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
-        Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
+        Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.elem);
         AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
         switch (this->picto.actor.colChkInfo.damageEffect) {
@@ -1841,7 +1841,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->unk_2B8 == 0) {
                     Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
                                          40);
-                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+                    this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK2;
                     func_80B891B8(this);
@@ -1881,7 +1881,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->unk_2B8 == 0)) {
                     Actor_ApplyDamage(&this->picto.actor);
-                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+                    this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK4;
                     this->unk_2B8 = 80;
@@ -1922,7 +1922,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 return;
             }
 
-            this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+            this->bodyCollider.elem.elemType = ELEMTYPE_UNK1;
             this->bodyCollider.base.colType = COLTYPE_HIT3;
             this->swordCollider.info.elemType = ELEMTYPE_UNK4;
             Math_Vec3f_Copy(&sp58, &this->picto.actor.focus.pos);
@@ -1939,9 +1939,9 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             Vec3f pos;
             Player* player = GET_PLAYER(play);
 
-            pos.x = this->bodyCollider.info.bumper.hitPos.x;
-            pos.y = this->bodyCollider.info.bumper.hitPos.y;
-            pos.z = this->bodyCollider.info.bumper.hitPos.z;
+            pos.x = this->bodyCollider.elem.bumper.hitPos.x;
+            pos.y = this->bodyCollider.elem.bumper.hitPos.y;
+            pos.z = this->bodyCollider.elem.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->pushedYaw = this->picto.actor.yawTowardsPlayer;

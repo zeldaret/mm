@@ -194,12 +194,12 @@ void EnSsh_InitColliders(EnSsh* this, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider1[i], &this->actor, cylinders[i]);
     }
 
-    this->collider1[0].info.bumper.dmgFlags = 0x38A9;
-    this->collider1[1].info.bumper.dmgFlags = ~0x83038A9;
+    this->collider1[0].elem.bumper.dmgFlags = 0x38A9;
+    this->collider1[1].elem.bumper.dmgFlags = ~0x83038A9;
     this->collider1[2].base.colType = COLTYPE_METAL;
-    this->collider1[2].info.bumperFlags = (BUMP_NO_AT_INFO | BUMP_HOOKABLE | BUMP_ON);
-    this->collider1[2].info.elemType = ELEMTYPE_UNK2;
-    this->collider1[2].info.bumper.dmgFlags = ~0x83038A9;
+    this->collider1[2].elem.bumperFlags = (BUMP_NO_AT_INFO | BUMP_HOOKABLE | BUMP_ON);
+    this->collider1[2].elem.elemType = ELEMTYPE_UNK2;
+    this->collider1[2].elem.bumper.dmgFlags = ~0x83038A9;
 
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(2), &sColChkInfoInit);
     Collider_InitJntSph(play, &this->collider2);
@@ -470,16 +470,16 @@ void EnSsh_Sway(EnSsh* this) {
 
 void EnSsh_CheckBodyStickHit(EnSsh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    ColliderElement* elem = &this->collider1[0].info;
+    ColliderElement* elem = &this->collider1[0].elem;
 
     if (player->unk_B28 != 0) {
         elem->bumper.dmgFlags |= 2;
-        this->collider1[1].info.bumper.dmgFlags &= ~2;
-        this->collider1[2].info.bumper.dmgFlags &= ~2;
+        this->collider1[1].elem.bumper.dmgFlags &= ~2;
+        this->collider1[2].elem.bumper.dmgFlags &= ~2;
     } else {
         elem->bumper.dmgFlags &= ~2;
-        this->collider1[1].info.bumper.dmgFlags |= 2;
-        this->collider1[2].info.bumper.dmgFlags |= 2;
+        this->collider1[1].elem.bumper.dmgFlags |= 2;
+        this->collider1[2].elem.bumper.dmgFlags |= 2;
     }
 }
 

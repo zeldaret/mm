@@ -3251,7 +3251,7 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
 
     if (this->bugACCollider.base.acFlags & AC_HIT) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
-        acHitElem = this->bugACCollider.info.acHitElem;
+        acHitElem = this->bugACCollider.elem.acHitElem;
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);

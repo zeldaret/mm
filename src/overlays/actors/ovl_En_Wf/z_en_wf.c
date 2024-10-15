@@ -1407,10 +1407,10 @@ void func_8099386C(EnWf* this, PlayState* play) {
         }
 
         if (this->collider2.base.acFlags & AC_HIT) {
-            Actor_SetDropFlag(&this->actor, &this->collider2.info);
+            Actor_SetDropFlag(&this->actor, &this->collider2.elem);
             collider = &this->collider2;
         } else {
-            Actor_SetDropFlag(&this->actor, &this->collider3.info);
+            Actor_SetDropFlag(&this->actor, &this->collider3.elem);
             collider = &this->collider3;
         }
 
@@ -1419,7 +1419,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
 
         if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(collider->info.acHitElem->toucher.dmgFlags &
+             !(collider->elem.acHitElem->toucher.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
             if (!Actor_ApplyDamage(&this->actor)) {
@@ -1457,8 +1457,8 @@ void func_8099386C(EnWf* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->drawDmgEffScale = 0.75f;
                     this->drawDmgEffAlpha = 4.0f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
-                                collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.bumper.hitPos.x,
+                                collider->elem.bumper.hitPos.y, collider->elem.bumper.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 

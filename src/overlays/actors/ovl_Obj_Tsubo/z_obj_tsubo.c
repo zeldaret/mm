@@ -474,7 +474,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.info.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
+               (acHit && (this->cylinderCollider.elem.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {

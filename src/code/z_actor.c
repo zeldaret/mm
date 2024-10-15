@@ -4789,12 +4789,12 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
     }
 }
 
-void func_800BE504(Actor* actor, ColliderCylinder* collider) {
+void func_800BE504(Actor* actor, ColliderCylinder* cyl) {
     // Checks if was hit by either DMG_NORMAL_ARROW, DMG_FIRE_ARROW, DMG_ICE_ARROW, DMG_LIGHT_ARROW or DMG_DEKU_BUBBLE
-    if ((collider->info.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
-        actor->world.rot.y = collider->base.ac->shape.rot.y;
+    if ((cyl->elem.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
+        actor->world.rot.y = cyl->base.ac->shape.rot.y;
     } else {
-        actor->world.rot.y = Actor_WorldYawTowardActor(collider->base.ac, actor);
+        actor->world.rot.y = Actor_WorldYawTowardActor(cyl->base.ac, actor);
     }
 }
 
