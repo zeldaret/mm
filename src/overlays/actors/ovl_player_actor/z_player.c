@@ -6053,8 +6053,8 @@ void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     this->av1.actionVar1 = 1;
     this->av2.actionVar2 = 1;
 
-    this->unk_3A0.x = Math_SinS(arg3) * arg2 + this->actor.world.pos.x;
-    this->unk_3A0.z = Math_CosS(arg3) * arg2 + this->actor.world.pos.z;
+    this->unk_3A0.x = this->actor.world.pos.x + Math_SinS(arg3) * arg2;
+    this->unk_3A0.z = this->actor.world.pos.z + Math_CosS(arg3) * arg2;
 
     Player_Anim_PlayOnce(play, this, func_8082ED20(this));
 }

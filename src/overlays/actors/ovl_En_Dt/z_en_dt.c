@@ -630,7 +630,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
 }
 
 void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
-    f32 currFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
     if (this->timer != 0) {
         if (this->timer == 1) {
@@ -643,7 +643,7 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
                 this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
             }
         }
-    } else if (this->animEndFrame <= currFrame) {
+    } else if (curFrame >= this->animEndFrame) {
         Camera* subCam;
         s32 index;
         s32 csIdIndex = sStringIdCsIndexTable[this->csIdIndex + 1];
