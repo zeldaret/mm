@@ -127,7 +127,7 @@ wordReplace = {
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_80123D50": "Player_UpdateBottleHeld",
-    "func_80123DA4": "Player_Untarget",
+    "func_80123DA4": "Player_ReleaseLockOn",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
     "func_80123AA4": "Player_SetModels",
@@ -1219,8 +1219,8 @@ wordReplace = {
     "player->unk_B84": "player->pushedYaw",
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
-    "player->unk_730": "player->lockOnActor",
-    "player->targetedActor": "player->lockOnActor",
+    "player->unk_730": "player->focusActor",
+    "player->targetedActor": "player->focusActor",
 
     "ageProperties->unk_04": "ageProperties->shadowScale",
     "ageProperties->unk_92": "ageProperties->voiceSfxOffset",

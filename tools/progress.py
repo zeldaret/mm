@@ -108,11 +108,7 @@ def CalculateNonNamedAssets(mapFileList, assetsTracker):
         if not mapFile["name"].startswith("build/n64-us/assets/"):
             continue
 
-        if mapFile["name"].startswith("build/n64-us/assets/c"):
-            assetCat = mapFile["name"].split("/")[4]
-        else:
-            assetCat = mapFile["name"].split("/")[3]
-
+        assetCat = mapFile["name"].split("/")[3]
 
         for symbol in mapFile["symbols"]:
             symbolName = symbol["name"]
@@ -234,10 +230,8 @@ for line in map_file:
 
         if section == ".data" or section == ".rodata":
             if obj_file.startswith("build/n64-us/assets/"):
-                if obj_file.startswith("build/n64-us/assets/c"):
-                    assetCat = obj_file.split("/")[4]
-                else:
-                    assetCat = obj_file.split("/")[3]
+
+                assetCat = obj_file.split("/")[3]
 
                 if objFileName in fileSectionFixer:
                     assetCat = fileSectionFixer[objFileName]
