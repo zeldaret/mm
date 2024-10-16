@@ -306,10 +306,7 @@ typedef struct Attention {
     /* 0x94 */ Actor* arrowPointedActor;
 } Attention; // size = 0x98
 
-// It is difficult to give each type a name because it is numerically based
-// and there are so many different combinations.
-// Each type has a comment of the form "attention range / lock-on leash range"
-typedef enum AttentionRangeType {
+typedef enum TargetMode {
     /*  0 */ TARGET_MODE_0,
     /*  1 */ TARGET_MODE_1,
     /*  2 */ TARGET_MODE_2,
@@ -322,7 +319,7 @@ typedef enum AttentionRangeType {
     /*  9 */ TARGET_MODE_9,
     /* 10 */ TARGET_MODE_10,
     /* 11 */ TARGET_MODE_MAX
-} AttentionRangeType;
+} TargetMode;
 
 typedef struct {
     /* 0x0 */ TexturePtr texture;
