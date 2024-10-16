@@ -661,8 +661,8 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
             if (this->playerStunWaitTimer == 0) {
                 if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
                     player->actor.freezeTimer = 40;
-                    func_80123E90(play, &this->actor);
-                    GET_PLAYER(play)->unk_A78 = &this->actor;
+                    Player_SetAutoLockOnActor(play, &this->actor);
+                    GET_PLAYER(play)->autoLockOnActor = &this->actor;
                     Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->playerStunWaitTimer = 60;
@@ -925,7 +925,7 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
         if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
             player->actor.freezeTimer = 60;
             Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
-            func_80123E90(play, &this->actor);
+            Player_SetAutoLockOnActor(play, &this->actor);
         }
         Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnRd_SetupWalkToPlayer(this, play);

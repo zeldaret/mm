@@ -280,27 +280,27 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
-// A set of 4 triangles which appear around an actor when the player Z-Targets it
-typedef struct LockOnTriangleSet {
+// A set of 4 triangles which appear as a ring around an actor when locked-on
+typedef struct LockOnReticle {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ f32 radius; // distance towards the center of the locked on
+    /* 0x0C */ f32 radius; // distance towards the center of the locked-on actor
     /* 0x10 */ Color_RGBA8 color;
-} LockOnTriangleSet; // size = 0x14
+} LockOnReticle; // size = 0x14
 
 typedef struct TargetContext {
     /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
-    /* 0x0C */ Vec3f lockOnPos;
+    /* 0x0C */ Vec3f reticlePos; // Main reticle pos which each `LockOnReticle` instance can reference
     /* 0x18 */ Color_RGBAf fairyInnerColor;
     /* 0x28 */ Color_RGBAf fairyOuterColor;
     /* 0x38 */ Actor* fairyActor;
-    /* 0x3C */ Actor* lockOnActor;
+    /* 0x3C */ Actor* reticleActor; // Actor to draw a reticle over
     /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
-    /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
-    /* 0x48 */ s16 lockOnAlpha;
+    /* 0x44 */ f32 reticleRadius; // Main reticle radius value which each `LockOnReticle` instance can reference
+    /* 0x48 */ s16 reticleFadeAlphaControl; // Set and fade the reticle alpha; Non-zero values control if it should draw
     /* 0x4A */ u8 fairyActorCategory;
-    /* 0x4B */ u8 rotZTick;
-    /* 0x4C */ s8 lockOnIndex;
-    /* 0x50 */ LockOnTriangleSet lockOnTriangleSets[3];
+    /* 0x4B */ u8 reticleSpinCounter; // Counts up when a reticle is active, used for the spinning animation
+    /* 0x4C */ s8 curReticle; // Indexes lockOnReticles[]
+    /* 0x50 */ LockOnReticle lockOnReticles[3]; // Multiple reticles are used for a motion-blur effect
     /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* arrowPointedActor;

@@ -894,8 +894,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_4000       (1 << 14)
 // 
 #define PLAYER_STATE1_8000       (1 << 15)
-// 
-#define PLAYER_STATE1_10000      (1 << 16)
+// Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
+#define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
 // 
 #define PLAYER_STATE1_20000      (1 << 17)
 // 
@@ -954,8 +954,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_800        (1 << 11)
 // 
 #define PLAYER_STATE2_1000       (1 << 12)
-// 
-#define PLAYER_STATE2_2000       (1 << 13)
+// Actor lock-on is active, specifically with Switch Targeting. Hold Targeting checks the state of the Z button instead of this flag.
+#define PLAYER_STATE2_LOCK_ON_WITH_SWITCH       (1 << 13)
 // 
 #define PLAYER_STATE2_4000       (1 << 14)
 // 
@@ -1193,7 +1193,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* lockOnActor; // Z/L-Targeted actor
+    /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -1207,7 +1207,7 @@ typedef struct Player {
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
-    /* 0xA78 */ Actor* unk_A78;
+    /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
@@ -1396,9 +1396,9 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
 void Player_SetEquipmentData(struct PlayState* play, Player* player);
 void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
-void Player_Untarget(Player* player);
-void func_80123DC0(Player* player);
-void func_80123E90(struct PlayState* play, Actor* actor);
+void Player_ReleaseLockOn(Player* player);
+void Player_ClearZTargeting(Player* player);
+void Player_SetAutoLockOnActor(struct PlayState* play, Actor* actor);
 s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
