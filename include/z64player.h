@@ -1098,6 +1098,15 @@ typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*AfterPutAwayFunc)(struct PlayState* play, struct Player* this);
 
+#define UNKAA6_ROT_FOCUS_X (1 << 0)
+#define UNKAA6_ROT_FOCUS_Y (1 << 1)
+#define UNKAA6_ROT_FOCUS_Z (1 << 2)
+#define UNKAA6_ROT_HEAD_X (1 << 3)
+#define UNKAA6_ROT_HEAD_Y (1 << 4)
+#define UNKAA6_ROT_HEAD_Z (1 << 5)
+#define UNKAA6_ROT_UPPER_X (1 << 6)
+#define UNKAA6_ROT_UPPER_Y (1 << 7)
+#define UNKAA6_ROT_UPPER_Z (1 << 8)
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
@@ -1213,8 +1222,8 @@ typedef struct Player {
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 unk_AA4;
     /* 0xAA5 */ u8 unk_AA5; // PlayerUnkAA5 enum
-    /* 0xAA6 */ u16 unk_AA6; // flags of some kind
-    /* 0xAA8 */ s16 unk_AA8;
+    /* 0xAA6 */ u16 unk_AA6_rotFlags; // See `UNKAA6_ROT_` macros. If its flag isn't set, a rot steps to 0.
+    /* 0xAA8 */ s16 upperLimbYawSecondary;
     /* 0xAAA */ s16 unk_AAA;
     /* 0xAAC */ Vec3s headLimbRot;
     /* 0xAB2 */ Vec3s upperLimbRot;
