@@ -1284,7 +1284,7 @@ typedef struct Player {
     /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
-    /* 0xB65 */ u8 shockTimer;
+    /* 0xB65 */ u8 bodyShockTimer;
     /* 0xB66 */ u8 unk_B66;
     /* 0xB67 */ u8 remainingHopsCounter; // Deku hopping on water
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
@@ -1312,8 +1312,8 @@ typedef struct Player {
     /* 0xBEC */ Vec3f bodyPartsPos[PLAYER_BODYPART_MAX];
     /* 0xCC4 */ MtxF leftHandMf;
     /* 0xD04 */ MtxF shieldMf;
-    /* 0xD44 */ u8 isBurning;
-    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
+    /* 0xD44 */ u8 bodyIsBurning;
+    /* 0xD45 */ u8 bodyFlameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ AfterPutAwayFunc afterPutAwayFunc; // See `Player_SetupWaitForPutAway` and `Player_Action_WaitForPutAway`
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
