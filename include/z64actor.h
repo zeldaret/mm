@@ -102,7 +102,7 @@ typedef struct Actor {
     /* 0x008 */ PosRot home; // Initial position/rotation when spawned. Can be used for other purposes
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objectSlot; // Object slot (in ObjectContext) corresponding to the actor's object; original name: "bank"
-    /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
+    /* 0x01F */ s8 attentionRangeType; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 csId; // CutsceneEntry index, see `CutsceneId`
@@ -287,7 +287,7 @@ typedef struct LockOnReticle {
     /* 0x10 */ Color_RGBA8 color;
 } LockOnReticle; // size = 0x14
 
-typedef struct TargetContext {
+typedef struct Attention {
     /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
     /* 0x0C */ Vec3f reticlePos; // Main reticle pos which each `LockOnReticle` instance can reference
     /* 0x18 */ Color_RGBAf fairyInnerColor;
@@ -304,22 +304,25 @@ typedef struct TargetContext {
     /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* arrowPointedActor;
-} TargetContext; // size = 0x98
+} Attention; // size = 0x98
 
-typedef enum TargetMode {
-    /*  0 */ TARGET_MODE_0,
-    /*  1 */ TARGET_MODE_1,
-    /*  2 */ TARGET_MODE_2,
-    /*  3 */ TARGET_MODE_3,
-    /*  4 */ TARGET_MODE_4,
-    /*  5 */ TARGET_MODE_5,
-    /*  6 */ TARGET_MODE_6,
-    /*  7 */ TARGET_MODE_7,
-    /*  8 */ TARGET_MODE_8,
-    /*  9 */ TARGET_MODE_9,
-    /* 10 */ TARGET_MODE_10,
-    /* 11 */ TARGET_MODE_MAX
-} TargetMode;
+// It is difficult to give each type a name because it is numerically based
+// and there are so many different combinations.
+// Each type has a comment of the form "attention range / lock-on leash range"
+typedef enum AttentionRangeType {
+    /*  0 */ ATTENTION_RANGE_0,
+    /*  1 */ ATTENTION_RANGE_1,
+    /*  2 */ ATTENTION_RANGE_2,
+    /*  3 */ ATTENTION_RANGE_3,
+    /*  4 */ ATTENTION_RANGE_4,
+    /*  5 */ ATTENTION_RANGE_5,
+    /*  6 */ ATTENTION_RANGE_6,
+    /*  7 */ ATTENTION_RANGE_7,
+    /*  8 */ ATTENTION_RANGE_8,
+    /*  9 */ ATTENTION_RANGE_9,
+    /* 10 */ ATTENTION_RANGE_10,
+    /* 11 */ ATTENTION_RANGE_MAX
+} AttentionRangeType;
 
 typedef struct {
     /* 0x0 */ TexturePtr texture;
@@ -407,7 +410,7 @@ typedef struct ActorContext {
     /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
-    /* 0x120 */ TargetContext targetCtx;
+    /* 0x120 */ Attention attention;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ PlayerImpact playerImpact;
@@ -440,14 +443,15 @@ typedef enum DoorLockType {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Allows Tatl to fly over the actor and lock-on it (using the Z-target)
-#define ACTOR_FLAG_TARGETABLE    (1 << 0)
+// Actor is discoverable by the Attention System. This enables Navi to hover over the actor when it is in range.
+// The actor can also be locked onto (as long as `ACTOR_FLAG_LOCK_ON_DISABLED` is not set).
+#define ACTOR_FLAG_ATTENTION_ENABLED    (1 << 0)
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)
 
 // Actor is hostile toward the Player. Player has specific "battle" behavior when locked onto hostile actors.
 // Enemy background music will also be played when the player is close enough to a hostile actor.
-// Note: This must be paired with `ACTOR_FLAG_TARGETABLE` to have any effect.
+// Note: This must be paired with `ACTOR_FLAG_ATTENTION_ENABLED` to have any effect.
 #define ACTOR_FLAG_HOSTILE    (1 << 2)
 
 // Actor is considered "friendly"; Opposite flag of `ACTOR_FLAG_HOSTILE`.
@@ -504,7 +508,7 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
 
 // Player is not able to lock onto the actor.
-// Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_TARGETABLE` is set.
+// Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
 #define ACTOR_FLAG_LOCK_ON_DISABLED  (1 << 27)
 // 
 #define ACTOR_FLAG_10000000      (1 << 28)
@@ -676,7 +680,7 @@ typedef struct BlinkInfo {
     /* 0x2 */ s16 blinkTimer;
 } BlinkInfo; // size = 0x4
 
-extern TargetRangeParams gTargetRanges[TARGET_MODE_MAX];
+extern TargetRangeParams gTargetRanges[ATTENTION_RANGE_MAX];
 extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
@@ -696,7 +700,7 @@ void func_800B4AEC(struct PlayState* play, Actor* actor, f32 y);
 void func_800B4B50(Actor* actor, struct Lights* mapper, struct PlayState* play);
 void Actor_GetProjectedPos(struct PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW);
 
-void Target_Draw(TargetContext* targetCtx, struct PlayState* play);
+void Attention_Draw(Attention* attention, struct PlayState* play);
 
 s32 Flags_GetSwitch(struct PlayState* play, s32 flag);
 void Flags_SetSwitch(struct PlayState* play, s32 flag);
@@ -770,7 +774,7 @@ PosRot Actor_GetFocus(Actor* actor);
 PosRot Actor_GetWorld(Actor* actor);
 PosRot Actor_GetWorldPosShapeRot(Actor* actor);
 
-s32 Target_OutsideLeashRange(Actor* actor, struct Player* player, s32 ignoreLeash);
+s32 Attention_OutsideLeashRange(Actor* actor, struct Player* player, s32 ignoreLeash);
 s32 Actor_TalkOfferAccepted(Actor* actor, struct GameState* gameState);
 s32 Actor_OfferTalk(Actor* actor, struct PlayState* play, f32 radius);
 s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
