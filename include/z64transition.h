@@ -244,7 +244,7 @@ void TransitionFade_SetType(void* thisx, s32 type);
 
 // z_fbdemo_circle.c
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, void const* texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
 
 // z_overlay.c
 

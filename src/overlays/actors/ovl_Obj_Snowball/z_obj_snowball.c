@@ -452,7 +452,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     Sphere16* sphere;
     ColliderJntSphElementDim* elementDim;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     s32 sp40 = this->actor.home.rot.y;
     f32 phi_f20;
     s32 sp34;
@@ -500,7 +500,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     sp48.z = this->actor.home.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp48);
     if (this->actor.floorHeight < (this->actor.home.pos.y - 10.0f)) {
         this->actor.floorPoly = NULL;
     } else {
@@ -653,7 +653,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
     s32 pad;
     ObjSnowballStruct* ptr;
     Vec3f sp9C;
-    s32 sp98;
+    s32 bgId;
     s32 i;
     Vec3f sp88;
     f32 sp84;
@@ -683,7 +683,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
             sp9C.y = ptr->unk_00.y + 25.0f;
             sp9C.z = ptr->unk_00.z;
 
-            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &bgId, &this->actor, &sp9C);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_RotateZYX(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);

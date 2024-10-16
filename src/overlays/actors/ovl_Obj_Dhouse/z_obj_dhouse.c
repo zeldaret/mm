@@ -174,7 +174,7 @@ void func_80B12B38(ObjDhouse* this, PlayState* play) {
     CollisionPoly* sp90;
     s32 phi_s3;
     Vec3f sp80;
-    s32 sp7C;
+    s32 bgId;
     ObjDhouseStruct1* ptr;
     ObjDhouseStruct3* ptr3;
 
@@ -201,7 +201,7 @@ void func_80B12B38(ObjDhouse* this, PlayState* play) {
             phi_s3 = false;
             if (ptr->unk_0C.y < 0.0f) {
                 func_80B12A50(ptr, ptr3, &sp80);
-                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, thisx, &sp80);
+                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &bgId, thisx, &sp80);
                 if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > (BGCHECK_Y_MIN + 1.0f))) {
                     phi_s3 = true;
                 }
@@ -385,7 +385,7 @@ void func_80B13724(ObjDhouse* this, PlayState* play) {
     CollisionPoly* sp80;
     ObjDhouseStruct2* ptr2;
     Vec3f sp70;
-    s32 sp6C;
+    s32 bgId;
 
     for (i = 0, ptr2 = &this->unk_240[0]; i < ARRAY_COUNT(this->unk_240); i++, ptr2++) {
         if (ptr2->unk_28 > 0) {
@@ -407,7 +407,7 @@ void func_80B13724(ObjDhouse* this, PlayState* play) {
 
                 if (ptr2->unk_29 & 1) {
                     temp_f0 =
-                        BgCheck_EntityRaycastFloor5(&play->colCtx, &sp80, &sp6C, &this->dyna.actor, &ptr2->unk_00);
+                        BgCheck_EntityRaycastFloor5(&play->colCtx, &sp80, &bgId, &this->dyna.actor, &ptr2->unk_00);
                     if (((ptr2->unk_00.y - 20.0f) < temp_f0) && (temp_f0 > BGCHECK_Y_MIN + 1.0f)) {
                         Math_Vec3f_Copy(&sp70, &ptr2->unk_00);
                         ptr2->unk_28 = 0;

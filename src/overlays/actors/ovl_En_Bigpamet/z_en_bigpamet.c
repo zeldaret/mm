@@ -227,7 +227,7 @@ void func_80A2778C(EnBigpamet* this) {
 void func_80A27970(EnBigpamet* this, PlayState* play2) {
     Vec3f sp9C;
     f32 temp_fs1 = this->actor.depthInWater + this->actor.world.pos.y;
-    s32 sp94;
+    s32 bgId;
     s32 i;
     s16 temp_s0;
     f32 temp_fs0;
@@ -242,7 +242,7 @@ void func_80A27970(EnBigpamet* this, PlayState* play2) {
         sp9C.y = Rand_ZeroFloat(10.0f) + this->actor.floorHeight + 8.0f;
         sp9C.z = (Math_CosS(temp_s0) * temp_fs0) + this->actor.world.pos.z;
 
-        if (BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp84, &sp94, &this->actor, &sp9C) < temp_fs1) {
+        if (BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp84, &bgId, &this->actor, &sp9C) < temp_fs1) {
             sp9C.y = temp_fs1;
             EffectSsGSplash_Spawn(play, &sp9C, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         } else {

@@ -335,7 +335,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Vec3f spC0;
     Vec3f spB4;
     CollisionPoly* spB0;
-    s32 spAC;
+    s32 bgId;
     Vec3f spA0;
     Vec3f sp94;
     Vec3f sp88;
@@ -394,8 +394,8 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
-            if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &spAC, &spB4) != BGCHECK_Y_MIN) {
-                floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
+            if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &bgId, &spB4) != BGCHECK_Y_MIN) {
+                floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, bgId);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
@@ -706,7 +706,7 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
     for (i = 0; i < spB0; i++, fuseSegmentPtr++, fuseSegmentPtr2++, arg4 -= 240) {
         f32 phi_f22;
         CollisionPoly* spA0;
-        s32 sp9C;
+        s32 bgId;
         Vec3f sp90;
 
         if (arg4 >= 240) {
@@ -756,7 +756,7 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
 
         sp90.y += 50.0f;
 
-        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &sp9C, &sp90) - fuseSegmentPtr2->pos.y;
+        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &bgId, &sp90) - fuseSegmentPtr2->pos.y;
         if (temp_f2 >= 0.0f) {
             spC0.y += temp_f2;
             if (phi_f22 < spC0.y) {

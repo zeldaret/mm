@@ -256,8 +256,11 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
                 DynaPolyActor* dynaPolyActor;
 
-                if ((bgId != BGCHECK_SCENE) && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
-                    ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                if (bgId != BGCHECK_SCENE) {
+                    dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId);
+                    if (dynaPolyActor != NULL) {
+                        ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                    }
                 }
                 func_808C1154(this);
                 Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);

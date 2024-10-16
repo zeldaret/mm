@@ -1022,10 +1022,10 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 fov;
-    /* 0x0C */ s16 interfaceFlags;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ f32 fov;
+    /* 0xC */ s16 interfaceFlags;
 } Fixed1ReadOnlyData; // size = 0x10
 
 typedef struct {
@@ -1162,8 +1162,8 @@ typedef struct {
 } Unique2ReadOnlyData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04;
 } Unique2ReadWriteData; // size = 0x8
 
 typedef struct {
@@ -1205,8 +1205,8 @@ typedef struct {
 } Unique0ReadWriteData; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ Unique0ReadOnlyData roData;
-    /* 0x0C */ Unique0ReadWriteData rwData;
+    /* 0x0 */ Unique0ReadOnlyData roData;
+    /* 0xC */ Unique0ReadWriteData rwData;
 } Unique0; // size = 0x4C
 
 #define UNIQUE0_FLAG_0 (1 << 0)
@@ -1220,11 +1220,11 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Unique6ReadOnlyData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Unique6ReadOnlyData roData;
+    /* 0x0 */ Unique6ReadOnlyData roData;
 } Unique6; // size = 0x4
 
 #define UNIQUE6_FLAG_0 (1 << 0)
@@ -1246,7 +1246,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo1ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1257,8 +1257,8 @@ typedef struct {
 } Demo1ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Demo1ReadOnlyData roData;
-    /* 0x04 */ Demo1ReadWriteData rwData;
+    /* 0x0 */ Demo1ReadOnlyData roData;
+    /* 0x4 */ Demo1ReadWriteData rwData;
 } Demo1; // size = 0x24
 
 
@@ -1273,9 +1273,9 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 fov;
-    /* 0x04 */ f32 unk_04; // unused
-    /* 0x08 */ s16 interfaceFlags;
+    /* 0x0 */ f32 fov;
+    /* 0x4 */ f32 unk_04; // unused
+    /* 0x8 */ s16 interfaceFlags;
 } Demo2ReadOnlyData; // size = 0xC
 
 typedef struct {
@@ -1286,8 +1286,8 @@ typedef struct {
 } Demo2ReadWriteData; // size = 0x14
 
 typedef struct {
-    /* 0x08 */ Demo2ReadOnlyData roData;
-    /* 0x0C */ Demo2ReadWriteData rwData;
+    /* 0x8 */ Demo2ReadOnlyData roData;
+    /* 0xC */ Demo2ReadWriteData rwData;
 } Demo2; // size = 0x20
 
 
@@ -1297,18 +1297,18 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo3ReadOnlyData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 timer;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04;
+    /* 0x6 */ s16 timer;
 } Demo3ReadWriteData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Demo3ReadOnlyData roData;
-    /* 0x04 */ Demo3ReadWriteData rwData;
+    /* 0x0 */ Demo3ReadOnlyData roData;
+    /* 0x4 */ Demo3ReadWriteData rwData;
 } Demo3; // size = 0xC
 
 
@@ -1318,7 +1318,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo4ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1332,8 +1332,8 @@ typedef struct {
 } Demo4ReadWriteData; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ Demo4ReadOnlyData roData;
-    /* 0x04 */ Demo4ReadWriteData rwData;
+    /* 0x0 */ Demo4ReadOnlyData roData;
+    /* 0x4 */ Demo4ReadWriteData rwData;
 } Demo4; // size = 0x28
 
 
@@ -1343,7 +1343,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo5ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1358,8 +1358,8 @@ typedef struct {
 } Demo5ReadWriteData; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ Demo5ReadOnlyData roData;
-    /* 0x04 */ Demo5ReadWriteData rwData;
+    /* 0x0 */ Demo5ReadOnlyData roData;
+    /* 0x4 */ Demo5ReadWriteData rwData;
 } Demo5; // size = 0x2C
 
 
@@ -1369,7 +1369,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo0ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1383,8 +1383,8 @@ typedef struct {
 } Demo0ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Demo0ReadOnlyData roData;
-    /* 0x04 */ Demo0ReadWriteData rwData;
+    /* 0x0 */ Demo0ReadOnlyData roData;
+    /* 0x4 */ Demo0ReadWriteData rwData;
 } Demo0; // size = 0x20
 
 
@@ -1415,7 +1415,7 @@ typedef struct {
 } Special5ReadOnlyData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ s16 animTimer;
+    /* 0x0 */ s16 animTimer;
 } Special5ReadWriteData; // size = 0x4
 
 typedef struct {
@@ -1432,9 +1432,9 @@ typedef struct {
 // For functions that deal with doors, an extra struct is added to the paramData
 
 typedef struct {
-    /* 0x00 */ Actor* doorActor;
-    /* 0x04 */ s16 bgCamIndex;
-    /* 0x06 */ union {
+    /* 0x0 */ Actor* doorActor;
+    /* 0x4 */ s16 bgCamIndex;
+    /* 0x6 */ union {
         Vec3s eye; // position of the camera while exiting a spiral staircase
         struct {
             s16 timer1; // timer while camera is fixed in front of the door
@@ -1470,9 +1470,9 @@ typedef struct {
 } Special8ReadOnlyData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Vec3f eye;
-    /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
-    /* 0x0E */ s16 fov;
+    /* 0x0 */ Vec3f eye;
+    /* 0xC */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
+    /* 0xE */ s16 fov;
 } Special8ReadWriteData; // size = 0x10
 
 typedef struct {
@@ -1495,18 +1495,18 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 fov;
-    /* 0x08 */ s16 interfaceFlags;
+    /* 0x0 */ f32 yOffset;
+    /* 0x4 */ f32 fov;
+    /* 0x8 */ s16 interfaceFlags;
 } Special9ReadOnlyData; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
+    /* 0x0 */ s16 unk_00;
 } Special9ReadWriteData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Special9ReadOnlyData roData;
-    /* 0x0C */ Special9ReadWriteData rwData;
+    /* 0x0 */ Special9ReadOnlyData roData;
+    /* 0xC */ Special9ReadWriteData rwData;
 } Special9; // size = 0x10
 
 #define SPECIAL9_FLAG_0 (1 << 0)

@@ -304,7 +304,7 @@ void func_80AE795C(EnStopheishi* this, PlayState* play) {
             break;
 
         case 2:
-            if (this->animEndFrame <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
                 this->unk_274 = 3;
             }

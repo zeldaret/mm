@@ -712,7 +712,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
     f32 sp9C;
     Vec3f sp90;
     CollisionPoly* sp8C;
-    s32 sp88;
+    s32 bgId;
     Vec3f sp7C;
     Vec3f sp70;
     Vec3f sp64;
@@ -1068,7 +1068,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * sGiantModeScaleFactor);
                     spD0.z = this->unk_0170.z + sp90.z;
-                    if (BgCheck_EntityRaycastFloor3(&play->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
+                    if (BgCheck_EntityRaycastFloor3(&play->colCtx, &sp8C, &bgId, &spD0) != BGCHECK_Y_MIN) {
                         spA0 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp8C, &spD0);
                         Matrix_MultVecZ(5.0f * sGiantModeScaleFactor, &sp70);
                         sp70.y = 2.0f * sGiantModeScaleFactor;
@@ -1129,11 +1129,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                 damage = this->actor.colChkInfo.damage;
 
                 if (otherTwinmold->unk_0144 < 20) {
-                    do {
-                        do {
-                            this->actor.colChkInfo.health -= damage;
-                        } while (0);
-                    } while (0);
+                    this->actor.colChkInfo.health -= damage;
 
                     if ((s8)this->actor.colChkInfo.health <= 0) {
                         Actor_Kill(this->actor.child);
