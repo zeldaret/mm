@@ -1069,7 +1069,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     //! FAKE:
     if (1) {}
 
-    phi_a0 = (this->unk_262 * 50) & 511;
+    phi_a0 = (this->unk_262 * 50) % 512U;
     if (phi_a0 >= 256) {
         phi_a0 = 511 - phi_a0;
     }
