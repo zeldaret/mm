@@ -4384,7 +4384,7 @@
     0x80832F24:("func_80832F24",),
     0x80832F78:("Player_GetMovementSpeedAndYaw",),
     0x80833058:("Player_TryActionChangeList",),
-    0x808331FC:("func_808331FC",),
+    0x808331FC:("Player_TryActionInterrupt",),
     0x808332A0:("func_808332A0",),
     0x808333CC:("func_808333CC",),
     0x808334D4:("func_808334D4",),
