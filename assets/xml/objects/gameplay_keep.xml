@@ -910,7 +910,7 @@
 
         <DList Name="gCompassArrowDL" Offset="0x1ED00" />
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
-        <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
+        <DList Name="gLockOnArrowDL" Offset="0x1F0F0" />
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
         <DList Name="gEffFragments2DL" Offset="0x1F300" />
         <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
@@ -1408,7 +1408,7 @@
         <DList Name="gSunSparkleMaterialDL" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
         <DList Name="gSunSparkleModelDL" Offset="0x7AB58" />
         <DList Name="gSunDL" Offset="0x7AB70" />
-        <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
+        <DList Name="gLockOnReticleTriangleDL" Offset="0x7AE00" />
 
         <!-- The clock that appears when the player is moving through, slowing down, or speeding up time with the Song of Time -->
         <DList Name="gSongOfTimeClockDL" Offset="0x7AFB0" /> <!-- Original name is "disk_modelT" -->

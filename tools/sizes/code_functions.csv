@@ -183,8 +183,8 @@ asm/non_matchings/code/z_actor/Actor_SetFeetPos.s,Actor_SetFeetPos,0x800B4A98,0x
 asm/non_matchings/code/z_actor/func_800B4AEC.s,func_800B4AEC,0x800B4AEC,0x19
 asm/non_matchings/code/z_actor/func_800B4B50.s,func_800B4B50,0x800B4B50,0xE3
 asm/non_matchings/code/z_actor/Actor_GetProjectedPos.s,Actor_GetProjectedPos,0x800B4EDC,0x19
-asm/non_matchings/code/z_actor/Target_SetLockOnPos.s,Target_SetLockOnPos,0x800B4F40,0xE
-asm/non_matchings/code/z_actor/Target_InitLockOn.s,Target_InitLockOn,0x800B4F78,0x32
+asm/non_matchings/code/z_actor/Target_SetReticlePos.s,Target_SetReticlePos,0x800B4F40,0xE
+asm/non_matchings/code/z_actor/Target_InitReticle.s,Target_InitReticle,0x800B4F78,0x32
 asm/non_matchings/code/z_actor/Target_SetFairyState.s,Target_SetFairyState,0x800B5040,0x59
 asm/non_matchings/code/z_actor/Target_Init.s,Target_Init,0x800B51A4,0x19
 asm/non_matchings/code/z_actor/Target_Draw.s,Target_Draw,0x800B5208,0x183
@@ -1722,9 +1722,9 @@ asm/non_matchings/code/z_player_lib/Player_SetModelGroup.s,Player_SetModelGroup,
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE
 asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s,Player_SetEquipmentData,0x80123C90,0x30
 asm/non_matchings/code/z_player_lib/Player_UpdateBottleHeld.s,Player_UpdateBottleHeld,0x80123D50,0x15
-asm/non_matchings/code/z_player_lib/Player_Untarget.s,Player_Untarget,0x80123DA4,0x7
-asm/non_matchings/code/z_player_lib/func_80123DC0.s,func_80123DC0,0x80123DC0,0x34
-asm/non_matchings/code/z_player_lib/func_80123E90.s,func_80123E90,0x80123E90,0x21
+asm/non_matchings/code/z_player_lib/Player_ReleaseLockOn.s,Player_ReleaseLockOn,0x80123DA4,0x7
+asm/non_matchings/code/z_player_lib/Player_ClearZTargeting.s,Player_ClearZTargeting,0x80123DC0,0x34
+asm/non_matchings/code/z_player_lib/Player_SetAutoLockOnActor.s,Player_SetAutoLockOnActor,0x80123E90,0x21
 asm/non_matchings/code/z_player_lib/func_80123F14.s,func_80123F14,0x80123F14,0x6
 asm/non_matchings/code/z_player_lib/Player_SetBButtonAmmo.s,Player_SetBButtonAmmo,0x80123F2C,0x7
 asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s,Player_IsBurningStickInRange,0x80123F48,0x36

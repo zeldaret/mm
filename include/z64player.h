@@ -900,8 +900,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_4000       (1 << 14)
 // 
 #define PLAYER_STATE1_8000       (1 << 15)
-// 
-#define PLAYER_STATE1_10000      (1 << 16)
+// Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
+#define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
 // 
 #define PLAYER_STATE1_20000      (1 << 17)
 // 
@@ -960,8 +960,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_800        (1 << 11)
 // 
 #define PLAYER_STATE2_1000       (1 << 12)
-// 
-#define PLAYER_STATE2_2000       (1 << 13)
+// Actor lock-on is active, specifically with Switch Targeting. Hold Targeting checks the state of the Z button instead of this flag.
+#define PLAYER_STATE2_LOCK_ON_WITH_SWITCH       (1 << 13)
 // 
 #define PLAYER_STATE2_4000       (1 << 14)
 // 
@@ -1104,6 +1104,15 @@ typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
 typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*AfterPutAwayFunc)(struct PlayState* play, struct Player* this);
 
+#define UNKAA6_ROT_FOCUS_X (1 << 0)
+#define UNKAA6_ROT_FOCUS_Y (1 << 1)
+#define UNKAA6_ROT_FOCUS_Z (1 << 2)
+#define UNKAA6_ROT_HEAD_X (1 << 3)
+#define UNKAA6_ROT_HEAD_Y (1 << 4)
+#define UNKAA6_ROT_HEAD_Z (1 << 5)
+#define UNKAA6_ROT_UPPER_X (1 << 6)
+#define UNKAA6_ROT_UPPER_Y (1 << 7)
+#define UNKAA6_ROT_UPPER_Z (1 << 8)
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
@@ -1190,7 +1199,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* lockOnActor; // Z/L-Targeted actor
+    /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -1204,7 +1213,7 @@ typedef struct Player {
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
-    /* 0xA78 */ Actor* unk_A78;
+    /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
@@ -1219,8 +1228,8 @@ typedef struct Player {
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 idleType;
     /* 0xAA5 */ u8 unk_AA5; // PlayerUnkAA5 enum
-    /* 0xAA6 */ u16 unk_AA6; // flags of some kind
-    /* 0xAA8 */ s16 unk_AA8;
+    /* 0xAA6 */ u16 unk_AA6_rotFlags; // See `UNKAA6_ROT_` macros. If its flag isn't set, a rot steps to 0.
+    /* 0xAA8 */ s16 upperLimbYawSecondary;
     /* 0xAAA */ s16 unk_AAA;
     /* 0xAAC */ Vec3s headLimbRot;
     /* 0xAB2 */ Vec3s upperLimbRot;
@@ -1282,7 +1291,7 @@ typedef struct Player {
     /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
     /* 0xB64 */ u8 unk_B64;
-    /* 0xB65 */ u8 shockTimer;
+    /* 0xB65 */ u8 bodyShockTimer;
     /* 0xB66 */ u8 unk_B66;
     /* 0xB67 */ u8 remainingHopsCounter; // Deku hopping on water
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
@@ -1310,8 +1319,8 @@ typedef struct Player {
     /* 0xBEC */ Vec3f bodyPartsPos[PLAYER_BODYPART_MAX];
     /* 0xCC4 */ MtxF leftHandMf;
     /* 0xD04 */ MtxF shieldMf;
-    /* 0xD44 */ u8 isBurning;
-    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
+    /* 0xD44 */ u8 bodyIsBurning;
+    /* 0xD45 */ u8 bodyFlameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ AfterPutAwayFunc afterPutAwayFunc; // See `Player_SetupWaitForPutAway` and `Player_Action_WaitForPutAway`
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
@@ -1394,9 +1403,9 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
 void Player_SetEquipmentData(struct PlayState* play, Player* player);
 void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
-void Player_Untarget(Player* player);
-void func_80123DC0(Player* player);
-void func_80123E90(struct PlayState* play, Actor* actor);
+void Player_ReleaseLockOn(Player* player);
+void Player_ClearZTargeting(Player* player);
+void Player_SetAutoLockOnActor(struct PlayState* play, Actor* actor);
 s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
