@@ -98,7 +98,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
 
     fu = (EnFu*)this->dyna.actor.parent;
     if (fu->unk_542 == 2) {
-        this->collider.info.elemType = ELEMTYPE_UNK0;
+        this->collider.elem.elemType = ELEMTYPE_UNK0;
         this->collider.dim.worldSphere.radius = 30;
     } else {
         this->collider.dim.worldSphere.radius = 17;

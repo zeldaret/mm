@@ -617,7 +617,7 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
     ObjSpidertentStruct* ptr2 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     Vec3f sp70;
     Vec3s* hitPos;
-    ColliderTrisElement* ptr;
+    ColliderTrisElement* trisElem;
     f32 temp_f0;
     s32 phi_s1;
     Vec3f sp54;
@@ -633,12 +633,12 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
         phi_f20 = FLT_MAX;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            ptr = &this->collider.elements[i];
+            trisElem = &this->collider.elements[i];
 
-            if (ptr->info.bumperFlags & BUMP_HIT) {
-                sp54.x = ptr->info.bumper.hitPos.x;
-                sp54.y = ptr->info.bumper.hitPos.y;
-                sp54.z = ptr->info.bumper.hitPos.z;
+            if (trisElem->base.bumperFlags & BUMP_HIT) {
+                sp54.x = trisElem->base.bumper.hitPos.x;
+                sp54.y = trisElem->base.bumper.hitPos.y;
+                sp54.z = trisElem->base.bumper.hitPos.z;
 
                 temp_f0 = Math3D_Vec3fDistSq(&sp54, &player->actor.world.pos);
                 if (temp_f0 < phi_f20) {
@@ -649,7 +649,7 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
         }
 
         if (phi_s4 >= 0) {
-            hitPos = &this->collider.elements[phi_s4].info.bumper.hitPos;
+            hitPos = &this->collider.elements[phi_s4].base.bumper.hitPos;
 
             sp70.x = hitPos->x;
             sp70.y = hitPos->y;

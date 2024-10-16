@@ -331,8 +331,8 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffScale = 0.45f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                    this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -426,7 +426,7 @@ void EnBat_UpdateDamage(EnBat* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         this->collider.base.atFlags &= ~AT_ON;
 
         if (this->actionFunc == EnBat_DiveAttack) {

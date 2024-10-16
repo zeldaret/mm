@@ -690,13 +690,13 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     if (this->colliderSphere.base.acFlags & AC_HIT) {
         this->colliderSphere.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->colliderSphere.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->colliderSphere.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             if (!Actor_ApplyDamage(&this->actor)) {
                 Enemy_StartFinishingBlow(play, &this->actor);
             }
 
             this->colliderTris.base.atFlags &= ~(AT_HIT | AT_ON);
-            Actor_SetDropFlag(&this->actor, &this->colliderSphere.info);
+            Actor_SetDropFlag(&this->actor, &this->colliderSphere.elem);
             func_808971DC(this, play);
 
             if (this->actor.colChkInfo.damageEffect == 5) {
@@ -728,8 +728,8 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 1.1f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
-                                this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.elem.bumper.hitPos.x,
+                                this->colliderSphere.elem.bumper.hitPos.y, this->colliderSphere.elem.bumper.hitPos.z, 0,
                                 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);

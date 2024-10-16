@@ -5399,13 +5399,13 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
 }
 
 void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
-    this->meleeWeaponQuads[index].info.toucher.dmgFlags = dmgFlags;
-    this->meleeWeaponQuads[index].info.toucher.damage = damage;
+    this->meleeWeaponQuads[index].elem.toucher.dmgFlags = dmgFlags;
+    this->meleeWeaponQuads[index].elem.toucher.damage = damage;
 
     if (dmgFlags == DMG_DEKU_STICK) {
-        this->meleeWeaponQuads[index].info.toucherFlags = (TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_WOOD);
+        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_WOOD);
     } else {
-        this->meleeWeaponQuads[index].info.toucherFlags = (TOUCH_ON | TOUCH_NEAREST);
+        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST);
     }
 }
 

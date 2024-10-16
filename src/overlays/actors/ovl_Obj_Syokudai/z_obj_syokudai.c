@@ -170,7 +170,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
             }
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
-            u32 flameColliderHurtboxDmgFlags = 0;
+            u32 flameColliderACDmgFlags = 0;
 
             player = GET_PLAYER(play);
 
@@ -193,7 +193,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderHurtboxDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
+                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
                 if (this->flameCollider.elem.acHitElem->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
@@ -215,14 +215,13 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
-                    } else if (flameColliderHurtboxDmgFlags & 0x20) {
-                        Actor* flameColliderHurtboxActor = this->flameCollider.base.ac;
+                    } else if (flameColliderACDmgFlags & 0x20) {
+                        Actor* flameColliderACActor = this->flameCollider.base.ac;
 
-                        if ((flameColliderHurtboxActor->update != NULL) &&
-                            (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
+                        if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
-                            flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
+                            flameColliderACActor->params = 0;
+                            ((EnArrow*)flameColliderACActor)->collider.elem.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
@@ -232,8 +231,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
-                             (flameColliderHurtboxDmgFlags & 0x800)) ||
+                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) && (flameColliderACDmgFlags & 0x800)) ||
                             ((interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) && (player->unk_B28 != 0)))) {
                     if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
