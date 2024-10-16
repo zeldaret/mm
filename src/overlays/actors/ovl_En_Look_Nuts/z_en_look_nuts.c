@@ -109,7 +109,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.attentionRangeType = ATTENTION_RANGE_1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
@@ -368,7 +368,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_FOUND);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = true;
-                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {

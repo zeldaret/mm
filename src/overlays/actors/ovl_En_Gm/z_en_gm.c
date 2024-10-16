@@ -7,7 +7,7 @@
 #include "z_en_gm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGm*)thisx)
 
@@ -1165,7 +1165,7 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_3B8 = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_3BA = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->unk_3A4 |= 0x100;
             this->unk_3A4 |= 0x200;
             EnGm_ChangeAnim(this, play, ENGM_ANIM_7);
@@ -1358,14 +1358,14 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DD0);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DDC);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    this->actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->actor.targetMode = TARGET_MODE_6;
     SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x1000 | 0x100);
     this->unk_3A4 |= 0x200;
     this->unk_3C8 = 3;
     this->unk_3CA = 3;
     this->unk_3CC = 8;
-    this->actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_3B4 = 60.0f;
     EnGm_ChangeAnim(this, play, ENGM_ANIM_10);
     return true;
@@ -1374,8 +1374,8 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80950280(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 phi_v1;
 
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.attentionRangeType = ATTENTION_RANGE_0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_3A4 = 0;
     this->unk_3C8 = 0;
     this->unk_3CA = 0;
@@ -1721,11 +1721,11 @@ void func_80950CDC(EnGm* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80951820, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) && !func_80950280(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
     this->unk_268 = func_8094F074(this, play);

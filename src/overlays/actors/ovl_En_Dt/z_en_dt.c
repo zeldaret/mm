@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Baisen/z_en_baisen.h"
 #include "overlays/actors/ovl_En_Muto/z_en_muto.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDt*)thisx)
 
@@ -241,7 +241,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &gDotourWaitAnim, this->jointTable,
                        this->morphTable, OBJECT_DT_LIMB_MAX);
 
-    this->actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->npcEnMuto = NULL;
     this->npcEnBaisen = NULL;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

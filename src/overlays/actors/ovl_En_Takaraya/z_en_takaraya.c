@@ -7,7 +7,7 @@
 #include "z_en_takaraya.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 
@@ -58,7 +58,7 @@ TexturePtr sEyesDownTextures[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 

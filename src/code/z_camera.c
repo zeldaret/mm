@@ -1273,8 +1273,7 @@ f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adj
 }
 
 f32 func_800CD6CC(Actor* actor) {
-    return sqrtf(gTargetRanges[actor->attentionRangeType].rangeSq /
-                 gTargetRanges[actor->attentionRangeType].leashScale);
+    return sqrtf(gTargetRanges[actor->targetMode].rangeSq / gTargetRanges[actor->targetMode].leashScale);
 }
 
 /**

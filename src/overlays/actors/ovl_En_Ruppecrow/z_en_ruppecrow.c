@@ -480,7 +480,7 @@ void EnRuppecrow_UpdateDamage(EnRuppecrow* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect != 0x1) {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Enemy_StartFinishingBlow(play, &this->actor);
             EnRuppecrow_HandleDeath(this);
         }

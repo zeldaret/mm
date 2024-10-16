@@ -7,7 +7,7 @@
 #include "z_en_akindonuts.h"
 #include "assets/objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAkindonuts*)thisx)
 
@@ -152,7 +152,7 @@ static u16 D_80BF04AC[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -1342,7 +1342,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
                 this->unk_32C &= ~0x20;
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_32C &= ~0x4;
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;

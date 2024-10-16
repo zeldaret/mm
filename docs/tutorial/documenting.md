@@ -64,7 +64,7 @@ static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, objec
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C106C0[] = {
-    ICHAIN_U8(attentionRangeType, 6, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 

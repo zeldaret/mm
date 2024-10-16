@@ -6,8 +6,7 @@
 
 #include "z_en_po_composer.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnPoComposer*)thisx)
 
@@ -195,7 +194,7 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                             255, 255, 255, 0);
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->lightColor = sLightColorInit;
     this->envColor = sEnvColorInit;
     this->cueId = POE_COMPOSER_CUEID_NONE;
@@ -284,7 +283,7 @@ void EnPoComposer_StartedCutscene(EnPoComposer* this, PlayState* play) {
 
 void EnPoComposer_SetupPlayCurse(EnPoComposer* this) {
     this->actionTimer = 0;
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, POE_COMPOSER_ANIM_PLAYING_CURSE);
     this->actionFunc = EnPoComposer_PlayCurse;
 }

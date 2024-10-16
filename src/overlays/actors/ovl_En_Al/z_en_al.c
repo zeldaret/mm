@@ -6,7 +6,7 @@
 
 #include "z_en_al.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAl*)thisx)
 
@@ -992,8 +992,8 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.attentionRangeType = ATTENTION_RANGE_0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_4F0 = PLAYER_IA_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
@@ -1077,11 +1077,11 @@ void func_80BDF5E8(EnAl* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BDFC70, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) && !func_80BDF390(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
     this->unk_368 = func_80BDE384(this, play);

@@ -7,7 +7,7 @@
 #include "z_en_sw.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSw*)thisx)
 
@@ -683,7 +683,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (!ENSW_GET_3(&this->actor)) {
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_3);
             }
@@ -1175,7 +1175,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
 
             case 1:
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
@@ -1192,7 +1192,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);

@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -1173,7 +1173,7 @@ void EnDinofos_EndBreatheFire(EnDinofos* this, PlayState* play) {
 
 void EnDinofos_SetupDie(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;

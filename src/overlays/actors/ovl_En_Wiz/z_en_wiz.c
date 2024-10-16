@@ -9,8 +9,8 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                                      \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
+#define FLAGS                                                                                               \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
      ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
@@ -330,7 +330,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     this->platformLightAlpha = 0;
     this->alpha = 255;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.attentionRangeType = ATTENTION_RANGE_3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_450 = 1.0f;
     this->actor.shape.yOffset = 700.0f;
     Collider_InitAndSetJntSph(play, &this->ghostColliders, &this->actor, &sJntSphInit, this->ghostColliderElements);
@@ -1012,7 +1012,7 @@ void EnWiz_SetupDisappear(EnWiz* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     this->actor.world.rot.y += this->angularVelocity;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnWiz_Disappear;
 }
 
@@ -1052,7 +1052,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
                 this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1000202;
             }
 
-            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnWiz_SetupAppear;
         }
     }
@@ -1067,7 +1067,7 @@ void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->actor);
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DEAD);
         this->timer = 0;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DAMAGE);
     }

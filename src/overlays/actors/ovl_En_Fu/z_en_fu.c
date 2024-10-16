@@ -11,9 +11,8 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                  \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | \
-     ACTOR_FLAG_LOCK_ON_DISABLED)
+#define FLAGS \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnFu*)thisx)
 
@@ -219,7 +218,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -232,7 +231,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         this->unk_54E = 0;
         this->unk_550 = 0;
         func_809622FC(this);
-        this->actor.attentionRangeType = ATTENTION_RANGE_6;
+        this->actor.targetMode = TARGET_MODE_6;
         func_809619D0(this, play);
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;
@@ -759,7 +758,7 @@ void func_80962EBC(EnFu* this, PlayState* play) {
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = func_80962F4C;
 }
@@ -858,7 +857,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80963350;
 }
 

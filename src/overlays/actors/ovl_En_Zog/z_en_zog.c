@@ -7,7 +7,7 @@
 #include "z_en_zog.h"
 #include "assets/objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZog*)thisx)
 

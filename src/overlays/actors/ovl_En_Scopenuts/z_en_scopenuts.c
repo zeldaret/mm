@@ -7,7 +7,7 @@
 #include "z_en_scopenuts.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -122,7 +122,7 @@ Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -353,7 +353,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 this->unk_328 &= ~1;
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_328 &= ~4;
                 this->animIndex = ENSCOPENUTS_ANIM_8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_8);

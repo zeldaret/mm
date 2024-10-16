@@ -6,7 +6,7 @@
 
 #include "z_en_ge1.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGe1*)thisx)
 
@@ -87,7 +87,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GERUDO_WHITE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->picto.actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->picto.actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->picto.actor, 0.01f);
     this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
@@ -113,7 +113,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnGe1_PerformCutsceneActions;
             this->picto.actor.draw = NULL;
             this->picto.actor.flags |= ACTOR_FLAG_20 | ACTOR_FLAG_10;
-            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             break;
     }
 

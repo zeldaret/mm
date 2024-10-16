@@ -56,7 +56,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_809AD058(this);
 }
 

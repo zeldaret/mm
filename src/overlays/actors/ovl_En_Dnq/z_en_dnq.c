@@ -9,7 +9,7 @@
 
 #include "z_en_dnq.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnq*)thisx)
 
@@ -184,7 +184,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
-            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->cueId = 255;
             this->unk_37C |= 0x20;
         }
@@ -192,7 +192,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+            this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -498,7 +498,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->picto.actor, 0.02f);
-    this->picto.actor.attentionRangeType = ATTENTION_RANGE_1;
+    this->picto.actor.targetMode = TARGET_MODE_1;
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);

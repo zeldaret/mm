@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnBigpamet*)thisx)
 
@@ -127,7 +127,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 4333, ICHAIN_CONTINUE),
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
 static s32 sTexturesDesegmented = false;
@@ -366,7 +366,7 @@ void func_80A2811C(EnBigpamet* this, PlayState* play) {
 
 void func_80A281B4(EnBigpamet* this) {
     this->actor.draw = NULL;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80A281DC;
 }
 
@@ -631,7 +631,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.params = ENBIGPAMET_0;
 
     if ((this->actor.parent->params == GEKKO_ON_SNAPPER) || (this->actor.parent->params == GEKKO_REAR_ON_SNAPPER) ||
@@ -683,7 +683,7 @@ void func_80A28DC0(EnBigpamet* this, PlayState* play) {
 
 void func_80A28E40(EnBigpamet* this) {
     Animation_MorphToPlayOnce(&this->snapperSkelAnime, &gSnapperRearUpAnim, -2.0f);
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A28E98;
 }

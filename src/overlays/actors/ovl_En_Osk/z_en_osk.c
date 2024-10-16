@@ -7,7 +7,7 @@
 #include "z_en_osk.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOsk*)thisx)
 
@@ -123,7 +123,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BF5F60;
     this->animIndex = -1;
     this->cueId = -1;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (ENOSK_GET_TYPE(&this->actor)) {
         case ENOSK_TYPE_1:

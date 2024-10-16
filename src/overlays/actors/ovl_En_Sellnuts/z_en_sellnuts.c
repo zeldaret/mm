@@ -6,7 +6,7 @@
 
 #include "z_en_sellnuts.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSellnuts*)thisx)
 
@@ -134,7 +134,7 @@ static AnimationInfoS sAnimationInfo[ENSELLNUTS_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -556,7 +556,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->animIndex = ENSELLNUTS_ANIM_8;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSELLNUTS_ANIM_8);
         this->actionFunc = func_80ADBE80;
@@ -913,7 +913,7 @@ void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = -1.0f;
         this->actor.draw = EnSellnuts_Draw;
         this->unk_34A = 50;
@@ -1042,7 +1042,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->animIndex = ENSELLNUTS_ANIM_20;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_35C = 1.0f;
         this->unk_358 = 1.0f;
         this->unk_354 = 1.0f;
@@ -1052,7 +1052,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_338 |= 2;
         this->unk_338 &= ~1;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->animIndex = ENSELLNUTS_ANIM_4;

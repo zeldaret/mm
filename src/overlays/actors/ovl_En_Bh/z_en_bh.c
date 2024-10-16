@@ -32,7 +32,7 @@ ActorProfile En_Bh_Profile = {
 void EnBh_Init(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
                        OBJECT_BH_LIMB_MAX);

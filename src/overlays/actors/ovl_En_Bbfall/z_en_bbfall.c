@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
 #define THIS ((EnBbfall*)thisx)
 
@@ -269,7 +269,7 @@ void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
     }
 
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBbfall_WaitForPlayer;
 }
 
@@ -290,7 +290,7 @@ void EnBbfall_SetupEmerge(EnBbfall* this) {
     this->collider.base.ocFlags1 |= OC1_ON;
     this->actor.velocity.y = 17.0f;
     EnBbfall_EnableColliders(this);
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
     this->actionFunc = EnBbfall_Emerge;
 }

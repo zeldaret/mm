@@ -6,7 +6,7 @@
 
 #include "z_en_gg2.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnGg2*)thisx)
 
@@ -157,7 +157,7 @@ void func_80B3AE60(EnGg2* this, PlayState* play) {
             case ENGG2_ANIM_1:
             case ENGG2_ANIM_8:
                 this->animIndex = ENGG2_ANIM_5;
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_5);
                 this->actionFunc = func_80B3B120;
                 break;
@@ -452,13 +452,13 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if ((this->animIndex == ENGG2_ANIM_5) && (this->animIndex == ENGG2_ANIM_7)) {
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     } else {
         this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 
     this->actionFunc(this, play);

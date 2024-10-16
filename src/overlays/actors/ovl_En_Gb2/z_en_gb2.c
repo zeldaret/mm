@@ -6,7 +6,7 @@
 
 #include "z_en_gb2.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGb2*)thisx)
 
@@ -686,7 +686,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
                 break;
 
@@ -861,7 +861,7 @@ void func_80B11268(EnGb2* this, PlayState* play) {
         if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) && Flags_GetClear(play, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
-            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.draw = EnGb2_Draw;
             this->unk_26E = 0x14F9;
             this->actionFunc = func_80B11048;
@@ -878,7 +878,7 @@ void func_80B11344(EnGb2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_4, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2200, ICHAIN_STOP),
 };
 
@@ -960,7 +960,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_80)) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
-                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
             } else {
                 this->unk_28A = 255;

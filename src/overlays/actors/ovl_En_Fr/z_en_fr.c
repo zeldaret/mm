@@ -34,7 +34,7 @@ void EnFr_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.attentionRangeType = ENFR_GET_TARGETMODE(&this->actor);
+    this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
 }
 
 void EnFr_Destroy(Actor* thisx, PlayState* play) {

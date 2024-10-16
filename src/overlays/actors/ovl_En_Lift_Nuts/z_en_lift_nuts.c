@@ -7,7 +7,7 @@
 #include "z_en_lift_nuts.h"
 #include "overlays/actors/ovl_En_Gamelupy/z_en_gamelupy.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnLiftNuts*)thisx)
 
@@ -287,7 +287,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
             this->actor.home.pos = bgActor->actor.world.pos;
         }
     }
-    this->actor.attentionRangeType = ATTENTION_RANGE_0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->timer = 0;
     this->autotalk = false;
     this->isFirstTimeHiding = false;
@@ -1069,7 +1069,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     EnLiftNuts_TryHide(this, play);
 
     if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_RUNNING)) {
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

@@ -6,7 +6,7 @@
 
 #include "z_en_mk.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMk*)thisx)
 
@@ -108,7 +108,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80959E18;
     this->unk_27A = 0;
-    this->actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     if (func_80959524(play) < 7) {
         this->unk_27A |= 2;

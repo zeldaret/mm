@@ -6,7 +6,7 @@
 
 #include "z_en_baba.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBaba*)thisx)
 
@@ -504,7 +504,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 
     this->actor.draw = EnBaba_Draw;
     this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
     if (play->sceneId == SCENE_BOMYA) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
@@ -549,7 +549,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     } else {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
         if (BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_SWAY) {
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
@@ -663,11 +663,11 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
         ((this->scheduleResult != scheduleOutput.result) &&
          !EnBaba_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->stateFlags &= ~BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = BOMB_SHOP_LADY_SCH_NONE;
     } else {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
 
@@ -735,7 +735,7 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.attentionRangeType = ATTENTION_RANGE_0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.gravity = -4.0f;
     this->actionFunc = EnBaba_FinishInit;
 }

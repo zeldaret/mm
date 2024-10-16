@@ -7,7 +7,7 @@
 #include "z_en_trt2.h"
 #include "assets/objects/object_trt/object_trt.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt2*)thisx)
 
@@ -241,7 +241,7 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->actor.world.pos.y -= 50.0f;
             this->unk_3D9 = 0;
             this->unk_3B2 = 0;
-            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
@@ -800,7 +800,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_3, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 

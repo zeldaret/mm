@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnBb*)thisx)
 
@@ -370,7 +370,7 @@ void EnBb_SetupDead(EnBb* this, PlayState* play) {
     }
 
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBb_Dead;
 }
 
@@ -488,7 +488,7 @@ void EnBb_Revive(EnBb* this, PlayState* play) {
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->collider.base.acFlags |= AC_ON;
         this->collider.base.atFlags |= AT_ON;
         this->actor.world.rot.y = this->actor.shape.rot.y;

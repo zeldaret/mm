@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPr*)thisx)
 
@@ -149,7 +149,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.attentionRangeType = ATTENTION_RANGE_3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_2B8 = this->actor.world.pos.y;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;

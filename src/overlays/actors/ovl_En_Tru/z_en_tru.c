@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -1106,7 +1106,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
         this->msgScriptCallback = NULL;
         this->unk_34E = 0;
@@ -1204,7 +1204,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
         this->unk_384 = 1;
     }
 
-    this->actor.attentionRangeType = ATTENTION_RANGE_0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 

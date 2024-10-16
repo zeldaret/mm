@@ -8,7 +8,7 @@
 #include "z_en_shn.h"
 #include "z64snap.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnShn*)thisx)
 
@@ -713,7 +713,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
         EnShn_ChangeAnim(this, ENSHN_ANIM_2);
     }
 
-    this->actor.attentionRangeType = ATTENTION_RANGE_6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_2E0 = 0;
     this->msgScriptCallback = NULL;
