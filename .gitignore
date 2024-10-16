@@ -25,6 +25,7 @@ docs/doxygen/
 # Tools
 .venv/
 ctx.c
+*.c.m2c
 tools/*dSYM/
 graphs/
 
