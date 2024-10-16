@@ -9,7 +9,7 @@
 #include "assets/objects/object_bigpo/object_bigpo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -583,7 +583,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
 void EnBigpo_SetupSpinUp(EnBigpo* this) {
     this->collider.base.colType = COLTYPE_METAL;
     this->collider.base.acFlags |= AC_HARD;
-    this->collider.info.bumper.dmgFlags &= ~0x8000;
+    this->collider.elem.bumper.dmgFlags &= ~0x8000;
     this->collider.base.atFlags |= AT_ON;
     this->angularVelocity = 0x800;
     this->actionFunc = EnBigpo_SpinningUp;
@@ -640,7 +640,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
         // spin down complete, re-allow hittable
         this->collider.base.colType = COLTYPE_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
-        this->collider.info.bumper.dmgFlags |= 0x8000;
+        this->collider.elem.bumper.dmgFlags |= 0x8000;
         EnBigpo_SetupIdleFlying(this);
     }
     EnBigpo_UpdateSpin(this);
@@ -749,7 +749,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
@@ -1143,8 +1143,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == 4) {
             this->drawDmgEffAlpha = 4.0f;
             this->drawDmgEffScale = 1.0f;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                        this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnBigpo_HitStun(this);

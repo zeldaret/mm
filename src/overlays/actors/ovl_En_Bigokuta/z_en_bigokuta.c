@@ -7,7 +7,7 @@
 #include "z_en_bigokuta.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBigokuta*)thisx)
 
@@ -490,17 +490,17 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
         if (this->bodyCollider.base.acFlags & AC_HIT) {
-            if (this->bodyCollider.info.acHitElem->toucher.dmgFlags & 0x1000) { // Ice Arrow
+            if (this->bodyCollider.elem.acHitElem->toucher.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
-            } else if (this->bodyCollider.info.acHitElem->toucher.dmgFlags & 0x2000) { // Light Arrow
+            } else if (this->bodyCollider.elem.acHitElem->toucher.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
-                            this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.elem.bumper.hitPos.x,
+                            this->bodyCollider.elem.bumper.hitPos.y, this->bodyCollider.elem.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }

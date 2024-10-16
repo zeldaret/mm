@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnIk*)thisx)
 
@@ -327,8 +327,8 @@ void EnIk_HitArmor(EnIk* this, PlayState* play) {
     this->drawDmgEffAlpha = 4.0f;
     this->drawDmgEffScale = 0.65f;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
-                this->colliderCylinder.info.bumper.hitPos.y, this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.elem.bumper.hitPos.x,
+                this->colliderCylinder.elem.bumper.hitPos.y, this->colliderCylinder.elem.bumper.hitPos.z, 0, 0, 0,
                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
 }
 
@@ -782,11 +782,11 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
     } else if (this->colliderCylinder.base.acFlags & AC_HIT) {
         s32 isArmorBroken = false;
 
-        Actor_SetDropFlag(&this->actor, &this->colliderCylinder.info);
+        Actor_SetDropFlag(&this->actor, &this->colliderCylinder.elem);
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if ((this->actor.colChkInfo.damageEffect != DMG_EFF_IMMUNE) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+             !(this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 12);
             this->invincibilityFrames = 12;
             EnIk_Thaw(this, play);

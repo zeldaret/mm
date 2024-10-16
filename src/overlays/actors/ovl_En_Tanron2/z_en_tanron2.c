@@ -10,7 +10,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_boss04/object_boss04.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron2*)thisx)
 
@@ -424,15 +424,15 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
     if (this->unk_154 == 0) {
         if (this->collider1.base.acFlags & AC_HIT) {
             this->collider1.base.acFlags &= ~AC_HIT;
-            acHitElem = this->collider1.info.acHitElem;
+            acHitElem = this->collider1.elem.acHitElem;
             if (acHitElem->toucher.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
-                if ((player->lockOnActor != NULL) && (&this->actor != player->lockOnActor)) {
-                    player->lockOnActor = &this->actor;
+                if ((player->focusActor != NULL) && (&this->actor != player->focusActor)) {
+                    player->focusActor = &this->actor;
                     play->actorCtx.targetCtx.fairyActor = &this->actor;
-                    play->actorCtx.targetCtx.lockOnActor = &this->actor;
+                    play->actorCtx.targetCtx.reticleActor = &this->actor;
                 }
             } else {
                 this->unk_154 = 15;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnGrasshopper*)thisx)
 
@@ -802,7 +802,7 @@ void EnGrasshopper_Damaged(EnGrasshopper* this, PlayState* play) {
 
 void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
     EnGrasshopper_ChangeAnim(this, DRAGONFLY_ANIM_DEAD);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.speed = 0.0f;
     this->approachSpeed = 0.0f;
     this->actor.velocity.y = 5.0f;

@@ -1091,10 +1091,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((targetFairyActor == NULL) || (player->lockOnActor == NULL)) {
+        if ((targetFairyActor == NULL) || (player->focusActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((targetFairyActor != NULL) && (player->lockOnActor != NULL)) {
+    } else if ((targetFairyActor != NULL) && (player->focusActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1287,8 +1287,8 @@ void func_8088FA38(EnElf* this, PlayState* play) {
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->lockOnActor == NULL) || (&player->actor == player->lockOnActor) ||
-                (&this->actor == player->lockOnActor) || (this->unk_264 & 4)) {
+            if ((player->focusActor == NULL) || (&player->actor == player->focusActor) ||
+                (&this->actor == player->focusActor) || (this->unk_264 & 4)) {
                 refPos.x =
                     player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 5.0f;
@@ -1464,7 +1464,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->lockOnActor == NULL)) {
+    if ((player->tatlTextId == 0) && (player->focusActor == NULL)) {
         if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
             (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);

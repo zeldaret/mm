@@ -502,8 +502,8 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
-        if ((this->collider.info.acHitElem != NULL) &&
-            (this->collider.info.acHitElem->toucher.dmgFlags & DMG_DEKU_NUT)) {
+        if ((this->collider.elem.acHitElem != NULL) &&
+            (this->collider.elem.acHitElem->toucher.dmgFlags & DMG_DEKU_NUT)) {
             Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 400);
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_Stunned;

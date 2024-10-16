@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_rr/object_rr.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -179,8 +179,8 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
         this->drawDmgEffScale = 0.85f;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
-                    collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.bumper.hitPos.x,
+                    collider->elem.bumper.hitPos.y, collider->elem.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 5) {
         this->drawDmgEffScale = 0.85f;
@@ -192,7 +192,7 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
 void func_808FA11C(EnRr* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider1.base.colType = COLTYPE_HIT3;
-    this->collider1.info.elemType = ELEMTYPE_UNK0;
+    this->collider1.elem.elemType = ELEMTYPE_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
     this->drawDmgEffFrozenSteamScale = 1275.0f * 0.001f;
@@ -206,7 +206,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider1.base.colType = COLTYPE_HIT0;
-        this->collider1.info.elemType = ELEMTYPE_UNK1;
+        this->collider1.elem.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,
                               this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);
@@ -459,7 +459,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
         this->collider2.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (sp2C->info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            (sp2C->elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 
@@ -467,7 +467,7 @@ s32 func_808FAA94(EnRr* this, PlayState* play) {
             return false;
         }
 
-        Actor_SetDropFlag(&this->actor, &sp2C->info);
+        Actor_SetDropFlag(&this->actor, &sp2C->elem);
         func_808FA4F4(this, play);
         func_808FA19C(this, play);
 

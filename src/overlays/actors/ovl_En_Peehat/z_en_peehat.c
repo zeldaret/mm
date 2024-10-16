@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -739,7 +739,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
                (this->colliderCylinder.base.acFlags & AC_HIT) &&
                ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                !(this->colliderCylinder.info.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+                !(this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
         func_808971DC(this, play);
         this->actor.colorFilterTimer = 0;
         func_80897648(this);

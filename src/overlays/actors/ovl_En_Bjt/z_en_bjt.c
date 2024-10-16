@@ -447,7 +447,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         }
         this->scheduleResult = scheduleOutput.result;
     } else {
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         Actor_SetScale(&this->actor, 0.0f);
         this->stateFlags = 0;
         this->msgScriptCallback = NULL;
@@ -467,7 +467,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_SetScale(&this->actor, 0.0f);
 
     this->scheduleResult = TOILET_HAND_SCH_NONE;

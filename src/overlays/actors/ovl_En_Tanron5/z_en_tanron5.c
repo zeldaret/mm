@@ -354,7 +354,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
     if (this->timer == 0) {
         if (this->collider.base.acFlags & AC_HIT) {
-            ColliderElement* acHitElem = this->collider.info.acHitElem;
+            ColliderElement* acHitElem = this->collider.elem.acHitElem;
             Actor* ac = this->collider.base.ac;
 
             this->collider.base.acFlags &= ~AC_HIT;
@@ -460,7 +460,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 // Something hit the ruin, but it wasn't Twinmold, and it wasn't the player while in giant
                 // mode. Play the reflect sound effect and spawn some sparks instead of breaking.
                 Vec3f hitPos;
-                ColliderElement* acHitElem = this->collider.info.acHitElem;
+                ColliderElement* acHitElem = this->collider.elem.acHitElem;
 
                 hitPos.x = acHitElem->bumper.hitPos.x;
                 hitPos.y = acHitElem->bumper.hitPos.y;

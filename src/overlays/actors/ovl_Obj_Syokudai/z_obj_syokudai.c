@@ -193,8 +193,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitElem->toucher.dmgFlags;
-                if (this->flameCollider.info.acHitElem->toucher.dmgFlags & 0x820) {
+                flameColliderHurtboxDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
+                if (this->flameCollider.elem.acHitElem->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {

@@ -11,7 +11,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -184,10 +184,10 @@ void Boss06_UpdateDamage(Boss06* this) {
                 Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
-                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.info.bumper.hitPos.x);
+                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.bumper.hitPos.x);
                 this->arrowHitPosScaled.x = this->arrowHitPos.x * 0.35f;
 
-                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.info.bumper.hitPos.y);
+                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.bumper.hitPos.y);
                 this->arrowHitPosScaled.y = this->arrowHitPos.y * -0.35f;
             }
         }

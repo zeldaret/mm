@@ -326,7 +326,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->collider.dim.radius = ptr->unk_14;
     this->collider.dim.height = ptr->unk_16;
-    this->collider.info.bumper.dmgFlags = ptr->unk_18;
+    this->collider.elem.bumper.dmgFlags = ptr->unk_18;
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     Actor_SetFocus(&this->dyna.actor, ptr->unk_08);
@@ -359,7 +359,7 @@ s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
 
 s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.info.acHitElem->toucher.dmgFlags & 8) {
+        if (this->collider.elem.acHitElem->toucher.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
                 Actor* thisx = &this->dyna.actor;
 

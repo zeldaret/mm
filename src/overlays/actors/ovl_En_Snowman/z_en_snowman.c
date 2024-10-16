@@ -7,7 +7,7 @@
 #include "z_en_snowman.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSnowman*)thisx)
 
@@ -269,7 +269,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             this->collider.dim.radius = 50;
             this->collider.dim.height = 122;
             this->collider.dim.yShift = -8;
-            this->collider.info.toucher.damage = 16;
+            this->collider.elem.toucher.damage = 16;
             thisx->world.pos.y -= 32.0f;
             Actor_SetScale(thisx, 0.006f);
             ActorShape_Init(&thisx->shape, 16000.0f / 3.0f, ActorShadow_DrawCircle, 170.0f);
@@ -970,7 +970,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
 void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         if ((this->actor.colChkInfo.damageEffect != EN_SNOWMAN_DMGEFF_HOOKSHOT) ||
             (EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE)) {
             if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_MELT) {
@@ -1011,8 +1011,8 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 this->drawDmgEffScale = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                            this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                            this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }

@@ -127,7 +127,7 @@ wordReplace = {
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_80123D50": "Player_UpdateBottleHeld",
-    "func_80123DA4": "Player_Untarget",
+    "func_80123DA4": "Player_ReleaseLockOn",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
     "func_80123AA4": "Player_SetModels",
@@ -1219,8 +1219,8 @@ wordReplace = {
     "player->unk_B84": "player->pushedYaw",
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
-    "player->unk_730": "player->lockOnActor",
-    "player->targetedActor": "player->lockOnActor",
+    "player->unk_730": "player->focusActor",
+    "player->targetedActor": "player->focusActor",
 
     "ageProperties->unk_04": "ageProperties->shadowScale",
     "ageProperties->unk_92": "ageProperties->voiceSfxOffset",
@@ -1390,11 +1390,11 @@ wordReplace = {
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
-    "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
+    "ACTOR_FLAG_4": "ACTOR_FLAG_HOSTILE",
     "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
     "ACTOR_FLAG_100": "ACTOR_FLAG_TALK",
     "ACTOR_FLAG_TALK_REQUESTED": "ACTOR_FLAG_TALK",
-    "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
+    "ACTOR_FLAG_8000000": "ACTOR_FLAG_LOCK_ON_DISABLED",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
     "EXCH_ITEM_NONE": "PLAYER_IA_NONE",

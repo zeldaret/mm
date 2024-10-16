@@ -7,7 +7,7 @@
 #include "z_en_floormas.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnFloormas*)thisx)
 
@@ -197,14 +197,14 @@ void EnFloormas_Destroy(Actor* thisx, PlayState* play) {
 void func_808D08D0(EnFloormas* this) {
     this->collider.base.colType = COLTYPE_HARD;
     this->collider.base.acFlags |= AC_HARD;
-    this->collider.info.bumper.dmgFlags &= ~0x8000;
+    this->collider.elem.bumper.dmgFlags &= ~0x8000;
     this->unk_190 = 40;
 }
 
 void func_808D0908(EnFloormas* this) {
     this->collider.base.colType = COLTYPE_HIT0;
     this->collider.base.acFlags &= ~AC_HARD;
-    this->collider.info.bumper.dmgFlags |= 0x8000;
+    this->collider.elem.bumper.dmgFlags |= 0x8000;
     this->unk_190 = 0;
 }
 
@@ -1003,9 +1003,9 @@ void func_808D2DC0(EnFloormas* this, PlayState* play) {
 void func_808D2E34(EnFloormas* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.colChkInfo.damageEffect == 0xE) {
                 func_808D0908(this);
                 this->actor.colorFilterTimer = 0;
@@ -1064,8 +1064,8 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             this->drawDmgEffAlpha = 4.0f;
                             this->drawDmgEffScale = 0.55f;
                             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
+                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
+                                        this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0,
                                         0,
                                         (this->actor.scale.x > 0.009f) ? CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS)
                                                                        : CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));

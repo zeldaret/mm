@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnAm*)thisx)
 
@@ -180,8 +180,8 @@ void func_808AFF9C(EnAm* this) {
     f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
     Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_LOOP, 0.0f);
-    this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
-    this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
+    this->enemyCollider.elem.bumper.dmgFlags = 0x80000088;
+    this->interactCollider.elem.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
         this->enemyCollider.base.atFlags &= ~AT_ON;
     }
@@ -221,8 +221,8 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
     if (this->textureBlend + 20 >= 255) {
         this->textureBlend = 255;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        this->enemyCollider.info.bumper.dmgFlags = 0x81C2C788;
-        this->interactCollider.info.bumper.dmgFlags = 0x760D3877;
+        this->enemyCollider.elem.bumper.dmgFlags = 0x81C2C788;
+        this->interactCollider.elem.bumper.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= AT_ON;
         this->actor.shape.yOffset = 0.0f;
         func_808B0358(this);
@@ -444,7 +444,7 @@ void func_808B0B4C(EnAm* this, PlayState* play) {
 s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
     if (this->enemyCollider.base.acFlags & AC_HIT) {
         this->enemyCollider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->enemyCollider.info);
+        Actor_SetDropFlag(&this->actor, &this->enemyCollider.elem);
         if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(play, &this->actor);
         }
@@ -458,8 +458,8 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == 0x4) {
             this->drawDmgEffScale = 0.7f;
             this->drawDmgEffAlpha = 4.0f;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
-                        this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.elem.bumper.hitPos.x,
+                        this->enemyCollider.elem.bumper.hitPos.y, this->enemyCollider.elem.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnAm_TakeDamage(this, play);

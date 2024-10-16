@@ -936,12 +936,12 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     if (this->unk_1EC & 0x100) {
         this->colliderCylinder1.base.colType = COLTYPE_HIT3;
         this->colliderCylinder1.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder1.info.bumperFlags |= BUMP_ON;
-        this->colliderCylinder1.info.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder1.elem.bumperFlags |= BUMP_ON;
+        this->colliderCylinder1.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
         this->colliderCylinder2.base.colType = COLTYPE_HIT3;
         this->colliderCylinder2.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder2.info.bumperFlags |= BUMP_ON;
-        this->colliderCylinder2.info.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder2.elem.bumperFlags |= BUMP_ON;
+        this->colliderCylinder2.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
     }
 }
 

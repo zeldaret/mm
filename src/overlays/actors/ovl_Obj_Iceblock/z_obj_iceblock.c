@@ -1448,7 +1448,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x800)) ||
+    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->toucher.dmgFlags & 0x800)) ||
         (this->meltTimer == 0)) {
         this->meltTimer = -1;
         this->unk_2B0 = 4;
@@ -1488,7 +1488,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         if (ICEBLOCK_GET_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
             this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
             this->collider.base.ocFlags1 |= (OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER);
-            this->collider.info.bumper.dmgFlags |=
+            this->collider.elem.bumper.dmgFlags |=
                 (0x800000 | 0x400000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x100 | 0x80 | 0x20 | 0x10 | 0x2);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }

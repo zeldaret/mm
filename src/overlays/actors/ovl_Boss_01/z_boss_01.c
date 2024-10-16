@@ -34,7 +34,7 @@
 #include "overlays/actors/ovl_En_Tanron1/z_en_tanron1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss01*)thisx)
 
@@ -3251,7 +3251,7 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
 
     if (this->bugACCollider.base.acFlags & AC_HIT) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
-        acHitElem = this->bugACCollider.info.acHitElem;
+        acHitElem = this->bugACCollider.elem.acHitElem;
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
@@ -3448,10 +3448,10 @@ void Boss01_UpdateEffects(Boss01* this, PlayState* play) {
                         if (player->invincibilityTimer == 0) {
                             if ((temp2 < (KREG(49) + 210.0f)) && ((KREG(49) + 190.0f) < temp2)) {
                                 for (j = 0; j < PLAYER_BODYPART_MAX; j++) {
-                                    player->flameTimers[j] = Rand_S16Offset(0, 200);
+                                    player->bodyFlameTimers[j] = Rand_S16Offset(0, 200);
                                 }
 
-                                player->isBurning = true;
+                                player->bodyIsBurning = true;
                                 temp = Math_Atan2S_XY(diffZ, diffX);
                                 if ((KREG(49) + 100.0f) < temp2) {
                                     temp += 0x8000;

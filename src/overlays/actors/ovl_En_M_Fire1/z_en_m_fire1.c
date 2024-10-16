@@ -53,7 +53,7 @@ void EnMFire1_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->actor.params != 0) {
-        this->collider.info.toucher.dmgFlags = 0x40000;
+        this->collider.elem.toucher.dmgFlags = 0x40000;
     }
 }
 

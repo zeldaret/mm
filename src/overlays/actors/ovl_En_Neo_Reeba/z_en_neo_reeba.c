@@ -7,7 +7,7 @@
 #include "z_en_neo_reeba.h"
 #include "assets/objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -445,7 +445,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
 
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);
