@@ -8,7 +8,7 @@
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnKusa2*)thisx)
 

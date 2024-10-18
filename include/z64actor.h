@@ -494,8 +494,9 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_200000        (1 << 21)
 // 
 #define ACTOR_FLAG_400000        (1 << 22)
-// 
-#define ACTOR_FLAG_800000        (1 << 23)
+// When Player is carrying this actor, it can only be thrown, not dropped/placed.
+// Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
+#define ACTOR_FLAG_THROW_ONLY    (1 << 23)
 // 
 #define ACTOR_FLAG_1000000       (1 << 24)
 // 
