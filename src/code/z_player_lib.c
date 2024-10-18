@@ -224,7 +224,7 @@ void func_801229FC(Player* player) {
         s32 i;
 
         for (i = 0; i < D_801F59B0_LEN; i++) {
-            D_801F59C8[i] += Rand_S16Offset(4, 23) + (s32)(fabsf(player->linearVelocity) * 50.0f);
+            D_801F59C8[i] += Rand_S16Offset(4, 23) + (s32)(fabsf(player->speedXZ) * 50.0f);
         }
     }
 }
@@ -564,7 +564,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     if (player->stateFlags3 & PLAYER_STATE3_1000) {
         player->unk_B08 = arg1;
         player->unk_B0C += arg1 * 0.05f;
-        player->currentYaw = arg2;
+        player->yaw = arg2;
         player->actor.home.rot.y = arg2;
         player->actor.shape.rot.y = arg2;
         player->unk_B8C = 4;
