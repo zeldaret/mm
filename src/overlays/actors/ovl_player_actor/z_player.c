@@ -2596,7 +2596,7 @@ typedef enum FidgetType {
     /* 0xB */ FIDGET_TAP_FEET,
     /* 0xC */ FIDGET_ADJUST_SHIELD,
     /* 0xD */ FIDGET_SWORD_SWING_TWO_HAND,
-    /* 0xE */ FIDGET_SNIFF // for mask of scents
+    /* 0xE */ FIDGET_SNIFF // for mask of scents. Only used for animSfx
 } FidgetType;
 
 PlayerAnimationHeader* sFidgetAnimations[][2] = {
@@ -5198,7 +5198,7 @@ s8 sActionHandlerList6[] = {
     /* 0 */ -PLAYER_ACTION_HANDLER_7,
 };
 
-s8 sActionHandlerList7[] = {
+s8 sActionHandlerListIdle[] = {
     /*  0 */ PLAYER_ACTION_HANDLER_0,
     /*  1 */ PLAYER_ACTION_HANDLER_11,
     /*  2 */ PLAYER_ACTION_HANDLER_1,
@@ -5350,14 +5350,14 @@ typedef enum PlayerActionInterruptResult {
 /**
  * An Action Interrupt allows for ending an action early, toward the end of an animation.
  *
- * First, `sActionHandlerList7` will be checked to see if any of those actions should be used.
+ * First, `sActionHandlerListIdle` will be checked to see if any of those actions should be used.
  * It should be noted that the `updateUpperBody` argument passed to `Player_TryActionHandlerList`
  * is `true`. This means that an item can be used during the interrupt window.
  *
  * If no actions from the Action Handler List are used, then the control stick is checked to see if
  * any movement should occur.
  *
- * Note that while this function can set up a new action with `sActionHandlerList7`, this function
+ * Note that while this function can set up a new action with `sActionHandlerListIdle`, this function
  * will not set up an appropriate action for moving.
  * It is the callers responsibility to react accordingly to `PLAYER_INTERRUPT_MOVE`.
  *
@@ -5370,7 +5370,7 @@ PlayerActionInterruptResult Player_TryActionInterrupt(PlayState* play, Player* t
         f32 speedTarget;
         s16 yawTarget;
 
-        if (Player_TryActionHandlerList(play, this, sActionHandlerList7, true)) {
+        if (Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true)) {
             return PLAYER_INTERRUPT_NEW_ACTION;
         }
 
@@ -14196,7 +14196,7 @@ void Player_Action_Idle(Player* this, PlayState* play) {
         return;
     }
 
-    if (Player_TryActionHandlerList(play, this, sActionHandlerList7, true)) {
+    if (Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true)) {
         return;
     }
 
@@ -14488,7 +14488,7 @@ void Player_Action_11(Player* this, PlayState* play) {
     }
     PlayerAnimation_Update(play, &this->skelAnime);
 
-    if (!func_80847880(play, this) && (!Player_TryActionHandlerList(play, this, sActionHandlerList7, true) ||
+    if (!func_80847880(play, this) && (!Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true) ||
                                        (Player_Action_11 == this->actionFunc))) {
         f32 speedTarget;
         f32 temp_fv0;
@@ -14531,7 +14531,7 @@ void Player_Action_12(Player* this, PlayState* play) {
     Player_DecelerateToZero(this);
 
     if (!func_80847880(play, this)) {
-        if (!Player_TryActionHandlerList(play, this, sActionHandlerList7, false) ||
+        if (!Player_TryActionHandlerList(play, this, sActionHandlerListIdle, false) ||
             (Player_Action_12 == this->actionFunc)) {
             if (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
                 func_80839E74(this, play);

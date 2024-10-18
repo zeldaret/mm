@@ -4855,7 +4855,7 @@
     0x8085D004:("sActionHandlerList4","UNK_TYPE1","",0x1),
     0x8085D00C:("sActionHandlerList5","UNK_TYPE1","",0x1),
     0x8085D018:("sActionHandlerList6","UNK_TYPE1","",0x1),
-    0x8085D01C:("sActionHandlerList7","UNK_TYPE1","",0x1),
+    0x8085D01C:("sActionHandlerListIdle","UNK_TYPE1","",0x1),
     0x8085D028:("sActionHandlerList8","UNK_TYPE1","",0x1),
     0x8085D034:("sActionHandlerList9","UNK_TYPE1","",0x1),
     0x8085D044:("sActionHandlerList10","UNK_TYPE1","",0x1),
