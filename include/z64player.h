@@ -982,7 +982,7 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_2000000    (1 << 25)
 // 
 #define PLAYER_STATE2_4000000    (1 << 26)
- // Playing the ocarina
+// Playing the ocarina
 #define PLAYER_STATE2_USING_OCARINA    (1 << 27)
 // 
 #define PLAYER_STATE2_10000000   (1 << 28)
