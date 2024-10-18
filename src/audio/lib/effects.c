@@ -11,6 +11,7 @@
  */
 #include "global.h"
 #include "audio/effects.h"
+#include "attributes.h"
 
 void AudioScript_SequenceChannelProcessSound(SequenceChannel* channel, s32 recalculateVolume, s32 applyBend) {
     f32 channelVolume;
@@ -266,11 +267,11 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
                 adsr->action.s.status = ADSR_STATUS_HANG;
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case ADSR_STATUS_START_LOOP:
             adsr->envelopeIndex = 0;
             adsr->action.s.status = ADSR_STATUS_LOOP;
-            // fallthrough
+            FALLTHROUGH;
         retry:
         case ADSR_STATUS_LOOP:
             adsr->delay = adsr->envelope[adsr->envelopeIndex].delay;
@@ -306,14 +307,15 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
             if (adsr->action.s.status != ADSR_STATUS_FADE) {
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case ADSR_STATUS_FADE:
             adsr->current += adsr->velocity;
             adsr->delay--;
             if (adsr->delay <= 0) {
                 adsr->action.s.status = ADSR_STATUS_LOOP;
             }
-            // fallthrough
+            break;
+
         case ADSR_STATUS_HANG:
             break;
 

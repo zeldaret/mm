@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tk.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
@@ -583,8 +584,8 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x1413, &this->actor);
                 }
-                break;
             }
+            break;
 
         case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
@@ -898,7 +899,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
 
                     case 0x140A:
                         SET_WEEKEVENTREG(WEEKEVENTREG_52_80);
-
+                        FALLTHROUGH;
                     case 0x140B:
                         func_80AEE784(this, play);
                         break;

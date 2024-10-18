@@ -5,6 +5,7 @@
  */
 
 #include "z_demo_effect.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_efc_tw/object_efc_tw.h"
 
@@ -72,7 +73,7 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
         case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
         case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
             this->actor.flags |= ACTOR_FLAG_2000000;
-        // FALLTHROUGH
+            FALLTHROUGH;
         case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
         case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:
             this->initDrawFunc = DemoEffect_DrawTimewarp;

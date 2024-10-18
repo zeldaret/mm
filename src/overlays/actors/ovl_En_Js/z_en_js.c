@@ -763,6 +763,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 }
             }
             break;
+
         case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -985,6 +986,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                             default:
                                 break;
                         }
+                        break;
 
                     default:
                         break;

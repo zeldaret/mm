@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tru.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -837,7 +838,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
                 this->unk_364++;
                 break;
             }
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -894,7 +895,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
-        // Fallthrough
+            FALLTHROUGH;
         case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
@@ -929,7 +930,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -1061,7 +1062,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -1090,13 +1091,13 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
                 break;
-            } else {
-                EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-                this->unk_362 = 20;
-                this->unk_364++;
             }
 
+            EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            this->unk_362 = 20;
+            this->unk_364++;
+            FALLTHROUGH;
         case 4:
             if (func_80A87400(this, play) || (DECR(this->unk_362) == 0)) {
                 ret = true;

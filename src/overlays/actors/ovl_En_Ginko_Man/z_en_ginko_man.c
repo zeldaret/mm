@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ginko_man.h"
+#include "attributes.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -290,7 +291,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
 
         case 0x476:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            // fallthrough
+            FALLTHROUGH;
         case 0x475:
         case 0x47C:
         case 0x47D:

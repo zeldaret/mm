@@ -412,6 +412,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
             SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
                                                 *waypoint, points, knots);
             break;
+
         case SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END:
             endX = points[path->count - 1].x;
             endZ = points[path->count - 1].z;

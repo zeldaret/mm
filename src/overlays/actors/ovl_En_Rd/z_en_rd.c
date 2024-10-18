@@ -24,6 +24,7 @@
 
 #include "z_en_rd.h"
 #include "z64rumble.h"
+#include "attributes.h"
 #include "assets/objects/object_rd/object_rd.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
@@ -835,11 +836,11 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             play->damagePlayer(play, -8);
             Rumble_Request(this->actor.xzDistToPlayer, 255, 1, 12);
             this->grabDamageTimer = 20;
-
+            FALLTHROUGH;
         case EN_RD_GRAB_START:
             Math_SmoothStepToS(&this->headRotY, 0, 1, 0x5DC, 0);
             Math_SmoothStepToS(&this->torsoRotY, 0, 1, 0x5DC, 0);
-
+            FALLTHROUGH;
         case EN_RD_GRAB_ATTACK:
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {

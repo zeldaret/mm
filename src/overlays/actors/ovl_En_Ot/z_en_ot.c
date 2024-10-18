@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ot.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
@@ -833,7 +834,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 
                     case 0x1069:
                         this->unk_32C |= 4;
-
+                        FALLTHROUGH;
                     case 0x106A:
                         func_80B5CE6C(this, play);
                         break;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gm.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
@@ -578,7 +579,7 @@ s32 func_8094E52C(Actor* thisx, PlayState* play) {
             if (!func_8094E454(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40) && (this->unk_3E0 == 2)) {
                 CutsceneManager_Stop(csId);
@@ -768,7 +769,7 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
             EnGm_ChangeAnim(this, play, ENGM_ANIM_2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
-
+            FALLTHROUGH;
         case 1:
             oldYaw = this->actor.yawTowardsPlayer;
             this->unk_3E2++;
@@ -787,7 +788,7 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             this->unk_3E2 = 0;
             this->unk_3E0++;
-
+            FALLTHROUGH;
         case 3:
             oldYaw = this->actor.world.rot.y;
             this->unk_3E2++;

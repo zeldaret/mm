@@ -174,6 +174,7 @@ s32 EnDns_ChangeAnim(EnDns* this, s32 animIndex) {
             if (this->animIndex != animIndex) {
                 changeAnim = true;
             }
+            break;
     }
 
     if (changeAnim) {

@@ -1333,6 +1333,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.5f);
                 } else {
+                    // FAKE:
                     if (1) {}
                     if (1) {}
                     if (1) {}

@@ -137,6 +137,7 @@ void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play) {
                     play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
+
             case OCARINA_SONG_SUNS:
                 if (type == SHOTSUN_FAIRY_SPAWNER_SUNS) {
                     this->actionFunc = ShotSun_TriggerFairy;

@@ -6,6 +6,7 @@
 
 #include "z_boss_04.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -318,7 +319,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->actor.gravity = 0.0f;
                 break;
             }
-
+            FALLTHROUGH;
         case 12:
             Actor_PlaySfx(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
             Math_ApproachF(&this->subCamAt.x, this->actor.world.pos.x, 0.5f, 1000.0f);

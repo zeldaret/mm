@@ -3,6 +3,7 @@
 #include "sys_cmpdma.h"
 #include "z64bombers_notebook.h"
 #include "zelda_arena.h"
+#include "attributes.h"
 
 #include "assets/interface/schedule_static/schedule_static.h"
 #include "assets/archives/schedule_dma_static/schedule_dma_static_yar.h"
@@ -1117,7 +1118,7 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             DmaMgr_RequestAsync(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
                                 this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
             this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_STARTED;
-            // fallthrough
+            FALLTHROUGH;
         case BOMBERS_NOTEBOOK_LOAD_STATE_STARTED:
             if (osRecvMesg(&this->loadQueue, NULL, flag) == 0) {
                 this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_DONE;

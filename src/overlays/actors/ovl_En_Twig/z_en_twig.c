@@ -241,6 +241,7 @@ void EnTwig_Draw(Actor* thisx, PlayState* play) {
         case 1:
             Gfx_DrawDListOpa(play, object_twig_DL_001C38);
             break;
+
         case 2:
             Gfx_DrawDListOpa(play, object_twig_DL_0014C8);
             break;

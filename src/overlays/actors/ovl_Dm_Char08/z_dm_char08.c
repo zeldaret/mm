@@ -631,8 +631,8 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
 
             case 0x103B: // Going to the temple again
                 this->unk_207 = 6;
-
                 break;
+
             case 0x1030: // Return to sleep
                 this->unk_207 = 4;
                 break;

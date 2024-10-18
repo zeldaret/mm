@@ -249,6 +249,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
             }
+            break;
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -308,6 +309,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             } else {
                 Actor_MoveWithGravity(&this->actor);
             }
+            break;
     }
 }
 

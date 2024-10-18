@@ -162,6 +162,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 50;
             this->rEnvColorB = 0;
             break;
+
         case 1:
             this->rPrimColorR = 200;
             this->rPrimColorG = 50;
@@ -170,6 +171,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 0;
             this->rEnvColorB = 0;
             break;
+
         case 2:
             this->rPrimColorR = 50;
             this->rPrimColorG = 0;
@@ -178,6 +180,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 0;
             this->rEnvColorB = 0;
             break;
+
         case 3:
             this->rPrimColorR = 50;
             this->rEnvColorR = this->rPrimColorG = this->rEnvColorG = this->rPrimColorB = this->rEnvColorB = 0;

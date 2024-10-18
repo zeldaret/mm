@@ -367,6 +367,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
                             this->stateFlags |= ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG;
                             this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                         }
+                        break;
                 }
             } else {
                 this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;

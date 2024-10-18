@@ -125,9 +125,11 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
         case 0:
             this->unk_21C += ((this->unk_21C > 1000.0f) ? 250.0f : 1000.0f);
             break;
+
         case 1:
             this->unk_21C += ((this->unk_21C > 3000.0f) ? 750.0f : 3000.0f);
             break;
+
         case 2:
             this->unk_21C += 9000.0f;
             break;
@@ -191,10 +193,12 @@ s32 func_80A357A8(ObjBell* this, PlayState* play) {
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 1);
                 break;
+
             case 14:
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 2);
                 break;
+
             default:
                 func_80A35510(this, 0);
                 break;

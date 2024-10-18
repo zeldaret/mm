@@ -5,6 +5,7 @@
  */
 
 #include "z_en_al.h"
+#include "attributes.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -631,7 +632,7 @@ s32 func_80BDE7FC(Actor* thisx, PlayState* play) {
             if (!func_80BDE408(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:

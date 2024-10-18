@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
+#include "attributes.h"
 #include "assets/objects/object_wood02/object_wood02.h"
 
 #define FLAGS 0x00000000
@@ -214,11 +215,11 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_BUSH_GREEN_LARGE_SPAWNER:
         case WOOD_BUSH_BLACK_LARGE_SPAWNER:
             spawnType = 1;
-            // fallthrough
+            FALLTHROUGH;
         case WOOD_BUSH_GREEN_LARGE_SPAWNED:
         case WOOD_BUSH_BLACK_LARGE_SPAWNED:
             spawnType++;
-            // fallthrough
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_LARGE:
         case WOOD_BUSH_GREEN_LARGE:
         case WOOD_BUSH_BLACK_LARGE:
@@ -235,14 +236,14 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_BUSH_GREEN_SMALL_SPAWNER:
         case WOOD_BUSH_BLACK_SMALL_SPAWNER:
             spawnType = 1;
-            // fallthrough
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_SPAWNED:
         case WOOD_TREE_OVAL_YELLOW_SPAWNED:
         case WOOD_TREE_OVAL_GREEN_SPAWNED:
         case WOOD_BUSH_GREEN_SMALL_SPAWNED:
         case WOOD_BUSH_BLACK_SMALL_SPAWNED:
             spawnType++;
-            // fallthrough
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_MEDIUM:
         case WOOD_TREE_OVAL_GREEN:
         case WOOD_TREE_KAKARIKO_ADULT:

@@ -8,6 +8,7 @@
 
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
@@ -1439,7 +1440,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         var_s0 = 1;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case 15:
                     var_s0 = -1;
                     break;

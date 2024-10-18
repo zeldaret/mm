@@ -1,6 +1,7 @@
 #include "global.h"
 #include "message_data_fmt_staff.h"
 #include "message_data_static.h"
+#include "attributes.h"
 
 void Message_FindCreditsMessage(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -137,7 +138,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     i = j - 1;
                     msgCtx->textDrawPos = i + 1;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case MESSAGE_QUICKTEXT_DISABLE:
                 break;
 

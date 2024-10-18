@@ -5,6 +5,7 @@
  */
 
 #include "z_en_fz.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "assets/objects/object_fz/object_fz.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
@@ -417,7 +418,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
                 case 4:
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffAlpha = 1.0f;
-
+                    FALLTHROUGH;
                 case 15:
                     Actor_ApplyDamage(&this->actor);
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);

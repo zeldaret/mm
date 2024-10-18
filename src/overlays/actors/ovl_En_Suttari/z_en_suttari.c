@@ -239,6 +239,7 @@ void func_80BAA9B4(EnSuttari* this) {
                 this->animIndex = SUTTARI_ANIM_1;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
+            break;
     }
 }
 

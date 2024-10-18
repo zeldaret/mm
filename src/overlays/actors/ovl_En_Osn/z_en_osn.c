@@ -685,6 +685,7 @@ void EnOsn_HandleConversation(EnOsn* this, PlayState* play) {
         case 0x1FFE:
             this->textId = 0x1FD5;
             this->stateFlags |= OSN_STATE_END_CONVERSATION;
+            break;
     }
 
     Message_StartTextbox(play, this->textId, &this->actor);

@@ -104,6 +104,7 @@ void viMgrMain(void* arg) {
                 addTime = __osBaseCounter - addTime;
                 __osCurrentTime = __osCurrentTime + addTime;
                 break;
+
             case OS_MESG_TYPE_COUNTER:
                 __osTimerInterrupt();
                 break;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kgy.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
@@ -764,7 +765,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC4D:
                         case 0xC58:
                             this->unk_29C |= 0x10;
-
+                            FALLTHROUGH;
                         case 0xC45:
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 3);

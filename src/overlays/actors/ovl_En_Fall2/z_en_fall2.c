@@ -118,6 +118,7 @@ void func_80C1B8F0(EnFall2* this) {
                 }
                 this->actor.scale.z = this->actor.scale.x;
             }
+            break;
 
         default:
             break;

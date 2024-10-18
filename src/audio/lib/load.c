@@ -13,6 +13,7 @@
 #include "global.h"
 #include "audio/load.h"
 #include "buffers.h"
+#include "attributes.h"
 
 /**
  * SoundFont Notes:
@@ -542,9 +543,11 @@ void func_8018FA60(u32 tableType, u32 id, s32 type, s32 data) {
             case 0:
                 table->entries[id].romAddr = data;
                 break;
+
             case 1:
                 table->entries[id].size = data;
                 break;
+
             default:
                 break;
         }
@@ -752,6 +755,7 @@ void* AudioLoad_SyncLoad(s32 tableType, u32 id, s32* didAllocate) {
                     return ramAddr;
                 }
                 break;
+
             case CACHE_LOAD_TEMPORARY:
                 ramAddr = AudioHeap_AllocCached(tableType, size, CACHE_TEMPORARY, realId);
                 if (ramAddr == NULL) {
@@ -800,12 +804,15 @@ void* AudioLoad_SyncLoad(s32 tableType, u32 id, s32* didAllocate) {
         case SEQUENCE_TABLE:
             AudioLoad_SetSeqLoadStatus(realId, loadStatus);
             break;
+
         case FONT_TABLE:
             AudioLoad_SetFontLoadStatus(realId, loadStatus);
             break;
+
         case SAMPLE_TABLE:
             AudioLoad_SetSampleFontLoadStatusAndApplyCaches(realId, loadStatus);
             break;
+
         default:
             break;
     }
@@ -846,12 +853,15 @@ AudioTable* AudioLoad_GetLoadTable(s32 tableType) {
         case SEQUENCE_TABLE:
             table = gAudioCtx.sequenceTable;
             break;
+
         case FONT_TABLE:
             table = gAudioCtx.soundFontTable;
             break;
+
         default:
             table = NULL;
             break;
+
         case SAMPLE_TABLE:
             table = gAudioCtx.sampleBankTable;
             break;
@@ -1172,12 +1182,15 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
         case SEQUENCE_TABLE:
             AudioLoad_SetSeqLoadStatus(realId, loadStatus);
             break;
+
         case FONT_TABLE:
             AudioLoad_SetFontLoadStatus(realId, loadStatus);
             break;
+
         case SAMPLE_TABLE:
             AudioLoad_SetSampleFontLoadStatusAndApplyCaches(realId, loadStatus);
             break;
+
         default:
             break;
     }
@@ -1251,6 +1264,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
         default:
             gAudioCtx.unk_2960 = 16.713f;
             gAudioCtx.refreshRate = 60;
+            break;
     }
 
     AudioThread_InitMesgQueues();
@@ -1455,6 +1469,7 @@ void AudioLoad_ProcessSlowLoads(s32 resetStatus) {
                     slowLoad->status = LOAD_STATUS_DONE;
                     continue;
                 }
+                FALLTHROUGH;
             case LOAD_STATUS_START:
                 slowLoad->status = LOAD_STATUS_LOADING;
                 if (slowLoad->bytesRemaining == 0) {

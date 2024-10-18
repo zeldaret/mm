@@ -1106,6 +1106,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->clockColorGray = 38;
                 this->clockSpeed = 150.0f;
                 this->clockDist = 480.0f;
+                break;
 
             case SOTCS_CUEID_DOUBLE_WAIT:
                 break;

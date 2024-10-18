@@ -737,41 +737,49 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
                     lodFrac = 255;
                 }
                 break;
+
             case 1:
                 if (Flags_GetSwitch(play, 0x37)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 2:
                 if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 3:
                 if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38) && Flags_GetSwitch(play, 0x39)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 4:
                 if (!(Flags_GetSwitch(play, 0x33))) {
                     lodFrac = 68;
                 }
                 break;
+
             case 5:
                 if (Flags_GetSwitch(play, 0x34)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 6:
                 if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 7:
                 if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) && Flags_GetSwitch(play, 0x36)) {
                     lodFrac = 68;
                 }
                 break;
+
             case 8:
                 if (Flags_GetSwitch(play, 0x3A)) {
                     lodFrac = 68;

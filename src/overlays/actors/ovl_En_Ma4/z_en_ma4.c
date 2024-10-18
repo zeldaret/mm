@@ -674,6 +674,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
                     EnMa4_SetupWait(this);
                 }
             }
+            break;
 
         case TEXT_STATE_NONE:
         case TEXT_STATE_NEXT:

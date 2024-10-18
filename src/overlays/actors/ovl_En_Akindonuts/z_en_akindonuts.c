@@ -1493,6 +1493,7 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
         case 19:
             this->unk_344 += 0.27f;
             break;
+
         case 20:
             this->unk_33E = 2;
             this->unk_344 = 1.8f;

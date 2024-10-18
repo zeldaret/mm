@@ -14,6 +14,7 @@
  */
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "assets/objects/object_taisou/object_taisou.h"
@@ -1504,7 +1505,7 @@ s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play)
                     if (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN) {
                         this->attentionTarget = this->actor.child;
                     }
-
+                    FALLTHROUGH;
                 case 0xE16: // Surprised, questioning if player is Darmani
                 case 0xE1E: // Surprised, seeing Darmani
                     this->graveyardDialogActionFunc = EnGo_UpdateShiverSurprisedAnimation;
@@ -1842,20 +1843,20 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             }
             this->gatekeeperAnimState = 1;
             this->cutsceneState = 1;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 break;
             }
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->cutsceneState = 2;
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (!EnGo_ChangeCutscene(this, this->csId)) {
                 break;
             }
             this->cutsceneState = 3;
-            // fallthrough
+            FALLTHROUGH;
         case 3:
             if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
                 CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
@@ -1863,7 +1864,8 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             } else if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
             }
-            // fallthrough
+            break;
+
         default:
             break;
     }
@@ -1972,7 +1974,7 @@ s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play) {
         case 1:
             EnGo_ChangeAnim(this, play, ENGO_ANIM_DROPKEG);
             this->cutsceneState++;
-
+            FALLTHROUGH;
         case 2:
             if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_HAND_HIT);

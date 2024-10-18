@@ -7,6 +7,7 @@
 #include "PR/controller_voice.h"
 #include "PR/os_voice.h"
 #include "PR/controller.h"
+#include "attributes.h"
 
 s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     static u8 sHandleStatus;
@@ -36,7 +37,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             if ((sHandleStatus != VOICE_STATUS_READY) && (sHandleStatus != VOICE_STATUS_END)) {
                 return CONT_ERR_NOT_READY;
             }
-            // fallthrough
+            FALLTHROUGH;
         case VOICE_HANDLE_MODE_2:
             hd->__mode = VOICE_HANDLE_MODE_2;
 
@@ -54,7 +55,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             if (errorCode != 0) {
                 return errorCode;
             }
-            // fallthrough
+            FALLTHROUGH;
         case VOICE_HANDLE_MODE_3:
             hd->__mode = VOICE_HANDLE_MODE_3;
 
@@ -91,7 +92,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             if ((sHandleStatus == VOICE_STATUS_READY) || (hd->cmd_status == VOICE_STATUS_READY)) {
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case VOICE_HANDLE_MODE_4:
             hd->__mode = VOICE_HANDLE_MODE_4;
 

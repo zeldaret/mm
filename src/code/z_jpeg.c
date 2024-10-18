@@ -136,46 +136,46 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* jpegCtx) {
         // 0xFF indicates the start of a JPEG marker, so look for the next.
         if (*ptr++ == 0xFF) {
             switch (*ptr++) {
-                case MARKER_ESCAPE: {
+                case MARKER_ESCAPE:
                     // Compressed value 0xFF is stored as 0xFF00 to escape it, so ignore it.
                     break;
-                }
-                case MARKER_SOI: {
+
+                case MARKER_SOI:
                     // Start of Image
                     break;
-                }
-                case MARKER_APP0: {
+
+                case MARKER_APP0:
                     // Application marker for JFIF
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_APP1: {
+
+                case MARKER_APP1:
                     // Application marker for EXIF
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_APP2: {
+
+                case MARKER_APP2:
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DQT: {
+
+                case MARKER_DQT:
                     // Define Quantization Table, stored for later processing
                     jpegCtx->dqtPtr[jpegCtx->dqtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DHT: {
+
+                case MARKER_DHT:
                     // Define Huffman Table, stored for later processing
                     jpegCtx->dhtPtr[jpegCtx->dhtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DRI: {
+
+                case MARKER_DRI:
                     // Define Restart Interval
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_SOF: {
+
+                case MARKER_SOF:
                     // Start of Frame, stores important metadata of the image.
                     // Only used for extracting the sampling factors (jpegCtx->mode).
 
@@ -188,22 +188,21 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* jpegCtx) {
                     }
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_SOS: {
+
+                case MARKER_SOS:
                     // Start of Scan marker, indicates the start of the image data.
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     jpegCtx->imageData = ptr;
                     break;
-                }
-                case MARKER_EOI: {
+
+                case MARKER_EOI:
                     // End of Image
                     exit = true;
                     break;
-                }
-                default: {
+
+                default:
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
             }
         }
     }

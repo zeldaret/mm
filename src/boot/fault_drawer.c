@@ -244,6 +244,7 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
 
                     FaultDrawer_DrawChar(*str);
                     sFaultDrawerInstance->cursorX += sFaultDrawerInstance->charW + sFaultDrawerInstance->charWPad;
+                    break;
             }
         }
 
