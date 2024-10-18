@@ -709,7 +709,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
                 attention->reticleFadeAlphaControl = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+            sfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
                         ? NA_SE_SY_LOCK_ON
                         : NA_SE_SY_LOCK_ON_HUMAN;
             Audio_PlaySfx(sfxId);
@@ -1082,7 +1082,7 @@ void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id) {
 void Actor_Kill(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
-    actor->flags &= ~ACTOR_FLAG_TARGETABLE;
+    actor->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Actor_SetWorldToHome(Actor* actor) {
@@ -1123,7 +1123,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     Actor_SetFocus(actor, 0.0f);
     Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
     Actor_SetScale(actor, 0.01f);
-    actor->targetMode = TARGET_MODE_3;
+    actor->attentionRangeType = ATTENTION_RANGE_3;
     actor->terminalVelocity = -20.0f;
 
     actor->xyzDistToPlayerSq = FLT_MAX;
@@ -1884,28 +1884,28 @@ f32 Attention_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw
     return actor->xyzDistToPlayerSq;
 }
 
-#define TARGET_RANGE(range, leash) \
+#define ATTENTION_RANGES(range, leash) \
     { SQ(range), (f32)(range) / (leash) }
 
-TargetRangeParams gTargetRanges[TARGET_MODE_MAX] = {
-    TARGET_RANGE(70, 140),        // TARGET_MODE_0
-    TARGET_RANGE(170, 255),       // TARGET_MODE_1
-    TARGET_RANGE(280, 5600),      // TARGET_MODE_2
-    TARGET_RANGE(350, 525),       // TARGET_MODE_3
-    TARGET_RANGE(700, 1050),      // TARGET_MODE_4
-    TARGET_RANGE(1000, 1500),     // TARGET_MODE_5
-    TARGET_RANGE(100, 105.36842), // TARGET_MODE_6
-    TARGET_RANGE(140, 163.33333), // TARGET_MODE_7
-    TARGET_RANGE(240, 576),       // TARGET_MODE_8
-    TARGET_RANGE(280, 280000),    // TARGET_MODE_9
-    TARGET_RANGE(2500, 3750),     // TARGET_MODE_10
+AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX] = {
+    ATTENTION_RANGES(70, 140),        // ATTENTION_RANGE_0
+    ATTENTION_RANGES(170, 255),       // ATTENTION_RANGE_1
+    ATTENTION_RANGES(280, 5600),      // ATTENTION_RANGE_2
+    ATTENTION_RANGES(350, 525),       // ATTENTION_RANGE_3
+    ATTENTION_RANGES(700, 1050),      // ATTENTION_RANGE_4
+    ATTENTION_RANGES(1000, 1500),     // ATTENTION_RANGE_5
+    ATTENTION_RANGES(100, 105.36842), // ATTENTION_RANGE_6
+    ATTENTION_RANGES(140, 163.33333), // ATTENTION_RANGE_7
+    ATTENTION_RANGES(240, 576),       // ATTENTION_RANGE_8
+    ATTENTION_RANGES(280, 280000),    // ATTENTION_RANGE_9
+    ATTENTION_RANGES(2500, 3750),     // ATTENTION_RANGE_10
 };
 
 /**
- * Checks if an actor at distance `distSq` is inside the range specified by its targetMode
+ * Checks if an actor at distance `distSq` is inside the range specified by its attentionRangeType
  */
 s32 Attention_IsActorInRange(Actor* actor, f32 distSq) {
-    return distSq < gTargetRanges[actor->targetMode].rangeSq;
+    return distSq < gAttentionRanges[actor->attentionRangeType].rangeSq;
 }
 
 /**
@@ -1914,7 +1914,7 @@ s32 Attention_IsActorInRange(Actor* actor, f32 distSq) {
  * Passing true to ignoreLeash avoids the distance and yaw checks, and considers the actor inside the leash distance.
  */
 s32 Attention_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
-    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE) ||
+    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) ||
         (actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
         return true;
     }
@@ -1932,7 +1932,7 @@ s32 Attention_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
             distSq = actor->xyzDistToPlayerSq;
         }
 
-        return !Attention_IsActorInRange(actor, gTargetRanges[actor->targetMode].leashScale * distSq);
+        return !Attention_IsActorInRange(actor, gAttentionRanges[actor->attentionRangeType].leashScale * distSq);
     }
 
     return false;
@@ -3532,7 +3532,7 @@ bool Attention_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  * Search for targetable actors of the `actorCategory` category.
  *
  * Looks for the actor of said category with higher targetPriority and the one that is nearest to player. This actor
- * must be within the range (relative to player) speicified by its targetMode.
+ * must be within the range (relative to player) speicified by its attentionRangeType.
  *
  * The actor must be on-screen
  *
@@ -3548,7 +3548,7 @@ bool Attention_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  * - Not be Player itself.
  * - It must be targetable or ACTOR_FLAG_40000000
  * - Not be the already targeted actor, unless it has the ACTOR_FLAG_80000 flag
- * - Be withing the range specified by its targetMode.
+ * - Be withing the range specified by its attentionRangeType.
  * - It must be on-screen (within a margin)
  * - Must not be blocked by a surface (?)
  *
@@ -3572,13 +3572,13 @@ void Attention_FindTargetableActorForCategory(PlayState* play, ActorContext* act
         }
 
         // Actor must be at least either targetable or ACTOR_FLAG_40000000
-        if (!(actor->flags & (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000000))) {
+        if (!(actor->flags & (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000000))) {
             continue;
         }
 
         // Determine the closest enemy actor to player within a range. Used for playing enemy background music.
         if ((actorCategory == ACTORCAT_ENEMY) &&
-            CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+            CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
             if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
                 actorCtx->attention.bgmEnemy = actor;
                 sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
@@ -3592,7 +3592,8 @@ void Attention_FindTargetableActorForCategory(PlayState* play, ActorContext* act
 
         distSq = Attention_GetAdjustedDistSq(actor, player, sTargetPlayerRotY);
 
-        isNearestTargetableActor = (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistSq);
+        isNearestTargetableActor =
+            (actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) && (distSq < sTargetableNearestActorDistSq);
         phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
 
         if (!isNearestTargetableActor && !phi_s2_2) {
@@ -4620,10 +4621,10 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     }
 
     if (arg3 < phi_f2) {
-        actor->flags &= ~ACTOR_FLAG_TARGETABLE;
+        actor->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
     } else {
-        actor->flags |= ACTOR_FLAG_TARGETABLE;
+        actor->flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         Math_SmoothStepToS(&arg2, 0xFF, 6, 0x14, 1);
     }
 

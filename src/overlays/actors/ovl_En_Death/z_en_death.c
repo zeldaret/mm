@@ -9,7 +9,8 @@
 #include "overlays/actors/ovl_Arrow_Light/z_arrow_light.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnDeath*)thisx)
 
@@ -221,7 +222,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_STOP),
 };
 
 void EnDeath_Init(Actor* thisx, PlayState* play2) {
@@ -284,7 +285,7 @@ void EnDeath_Init(Actor* thisx, PlayState* play2) {
     } else {
         // Start intro cutscene
         this->inEarlyIntro = true;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnDeath_SetupPlayCutscene(this);
     }
 }
@@ -605,7 +606,7 @@ void EnDeath_IntroCutscenePart5(EnDeath* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         CutsceneManager_Stop(this->actor.csId);
         Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->coreCollider.base.acFlags |= AC_ON;
         EnDeath_SetupApproachPlayer(this);
     }
@@ -805,7 +806,7 @@ void EnDeath_SetupDeathCutscenePart1(EnDeath* this, PlayState* play) {
     Vec3f at;
     s32 i;
 
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_IGNORE_QUAKE);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_IGNORE_QUAKE);
     Animation_PlayOnce(&this->skelAnime, &gGomessBeginDeathAnim);
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
