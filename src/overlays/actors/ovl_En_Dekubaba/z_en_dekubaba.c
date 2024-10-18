@@ -58,77 +58,77 @@ ActorProfile En_Dekubaba_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 100, 1000 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 51, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 52, { { 0, 0, 500 }, 8 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 53, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 54, { { 0, 0, 500 }, 8 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 55, { { 0, 0, 1500 }, 8 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 56, { { 0, 0, 500 }, 8 }, 100 },
@@ -137,7 +137,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -248,7 +248,7 @@ void EnDekubaba_DisableHitboxes(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.bumperFlags &= ~BUMP_ON;
+        this->collider.elements[i].base.acElemFlags &= ~ACELEM_ON;
     }
 }
 
@@ -279,8 +279,8 @@ void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
         jntSphElem = &this->collider.elements[index];
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.bumper.hitPos.x,
-                    jntSphElem->base.bumper.hitPos.y, jntSphElem->base.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.acDmgInfo.hitPos.x,
+                    jntSphElem->base.acDmgInfo.hitPos.y, jntSphElem->base.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     }
 }
@@ -290,7 +290,7 @@ void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -299,7 +299,7 @@ void EnDekubaba_SetFrozenEffects(EnDekubaba* this) {
 void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT6;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX, 4, this->size * 0.3f,
                               this->size * 0.2f);
@@ -320,7 +320,7 @@ void EnDekubaba_SetupWait(EnDekubaba* this) {
 
     Actor_SetScale(&this->actor, this->size * 0.01f * 0.5f);
 
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
     this->collider.base.acFlags |= AC_HARD;
     this->timer = 45;
 
@@ -362,7 +362,7 @@ void EnDekubaba_SetupGrow(EnDekubaba* this) {
         this->collider.elements[i].base.ocElemFlags |= OCELEM_ON;
     }
 
-    this->collider.base.colType = COLTYPE_HIT6;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT6;
     this->collider.base.acFlags &= ~AC_HARD;
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = EnDekubaba_Grow;
@@ -936,7 +936,7 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].base.bumperFlags |= BUMP_ON;
+        this->collider.elements[i].base.acElemFlags |= ACELEM_ON;
     }
 
     if (this->timer == 1) {
@@ -1074,18 +1074,18 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlagJntSph(&this->actor, &this->collider);
 
-        if ((this->collider.base.colType != COLTYPE_HARD) &&
+        if ((this->collider.base.colMaterial != COL_MATERIAL_HARD) &&
             (this->actor.colChkInfo.damageEffect != DEKUBABA_DMGEFF_HOOKSHOT)) {
             jntSphElem = &this->collider.elements[0];
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++, jntSphElem++) {
-                if (jntSphElem->base.bumperFlags & BUMP_HIT) {
+                if (jntSphElem->base.acElemFlags & ACELEM_HIT) {
                     break;
                 }
             }
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 !(jntSphElem->base.acHitElem->toucher.dmgFlags & 0xDB0B3))) {
+                 !(jntSphElem->base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 
@@ -1140,8 +1140,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
             return;
         }
     } else if ((play->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < SQ(200.0f)) &&
-               (this->collider.base.colType != COLTYPE_HARD) && (this->actionFunc != EnDekubaba_StunnedVertical) &&
-               (this->actionFunc != EnDekubaba_Hit) && (this->actor.colChkInfo.health != 0)) {
+               (this->collider.base.colMaterial != COL_MATERIAL_HARD) &&
+               (this->actionFunc != EnDekubaba_StunnedVertical) && (this->actionFunc != EnDekubaba_Hit) &&
+               (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
         EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_OTHER);

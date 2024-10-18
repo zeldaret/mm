@@ -32,7 +32,7 @@ ActorProfile Obj_Syokudai_Profile = {
 
 static ColliderCylinderInit sStandColliderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -40,11 +40,11 @@ static ColliderCylinderInit sStandColliderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xF6CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 12, 45, 0, { 0, 0, 0 } },
@@ -52,7 +52,7 @@ static ColliderCylinderInit sStandColliderInit = {
 
 static ColliderCylinderInit sFlameColliderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -60,11 +60,11 @@ static ColliderCylinderInit sFlameColliderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 15, 45, 45, { 0, 0, 0 } },
@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
+static u8 sColMaterials[] = { COL_MATERIAL_METAL, COL_MATERIAL_WOOD, COL_MATERIAL_WOOD };
 
 static Gfx* sDLists[] = {
     gObjectSyokudaiTypeSwitchCausesFlameDL,
@@ -97,7 +97,7 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     func_800B4AEC(play, thisx, 50.0f);
     ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
     Collider_InitAndSetCylinder(play, &this->standCollider, thisx, &sStandColliderInit);
-    this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
+    this->standCollider.base.colMaterial = sColMaterials[OBJ_SYOKUDAI_GET_TYPE(thisx)];
     Collider_InitAndSetCylinder(play, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + OBJ_SYOKUDAI_GLOW_HEIGHT,
@@ -193,8 +193,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->toucher.dmgFlags;
-                if (this->flameCollider.elem.acHitElem->toucher.dmgFlags & 0x820) {
+                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags;
+                if (this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
@@ -221,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderACActor->params = 0;
-                            ((EnArrow*)flameColliderACActor)->collider.elem.toucher.dmgFlags = 0x800;
+                            ((EnArrow*)flameColliderACActor)->collider.elem.atDmgInfo.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&

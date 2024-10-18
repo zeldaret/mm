@@ -50,7 +50,7 @@ ActorProfile En_Am_Profile = {
 
 static ColliderCylinderInit sEnemyCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -58,11 +58,11 @@ static ColliderCylinderInit sEnemyCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0x81C2C788, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 23, 98, 0, { 0, 0, 0 } },
@@ -70,7 +70,7 @@ static ColliderCylinderInit sEnemyCylinderInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -78,11 +78,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x760D3877, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 23, 98, 0, { 0, 0, 0 } },
@@ -180,8 +180,8 @@ void func_808AFF9C(EnAm* this) {
     f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
     Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_LOOP, 0.0f);
-    this->enemyCollider.elem.bumper.dmgFlags = 0x80000088;
-    this->interactCollider.elem.bumper.dmgFlags = 0x77CFFF77;
+    this->enemyCollider.elem.acDmgInfo.dmgFlags = 0x80000088;
+    this->interactCollider.elem.acDmgInfo.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
         this->enemyCollider.base.atFlags &= ~AT_ON;
     }
@@ -221,8 +221,8 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
     if (this->textureBlend + 20 >= 255) {
         this->textureBlend = 255;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        this->enemyCollider.elem.bumper.dmgFlags = 0x81C2C788;
-        this->interactCollider.elem.bumper.dmgFlags = 0x760D3877;
+        this->enemyCollider.elem.acDmgInfo.dmgFlags = 0x81C2C788;
+        this->interactCollider.elem.acDmgInfo.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= AT_ON;
         this->actor.shape.yOffset = 0.0f;
         func_808B0358(this);
@@ -458,9 +458,9 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
         if (this->actor.colChkInfo.damageEffect == 0x4) {
             this->drawDmgEffScale = 0.7f;
             this->drawDmgEffAlpha = 4.0f;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.elem.bumper.hitPos.x,
-                        this->enemyCollider.elem.bumper.hitPos.y, this->enemyCollider.elem.bumper.hitPos.z, 0, 0, 0,
-                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.elem.acDmgInfo.hitPos.x,
+                        this->enemyCollider.elem.acDmgInfo.hitPos.y, this->enemyCollider.elem.acDmgInfo.hitPos.z, 0, 0,
+                        0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnAm_TakeDamage(this, play);
         return true;

@@ -80,7 +80,7 @@ ActorProfile En_Slime_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -88,11 +88,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 22, 35, 0, { 0, 0, 0 } },
@@ -227,7 +227,7 @@ void EnSlime_Destroy(Actor* thisx, PlayState* play) {
 void EnSlime_Freeze(EnSlime* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.4f;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->drawDmgEffFrozenSteamScale = 0.6f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
@@ -242,7 +242,7 @@ void EnSlime_Freeze(EnSlime* this) {
 void EnSlime_Thaw(EnSlime* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = 0; // So it's not triggered again until Freeze has been called again.
-        this->collider.base.colType = COLTYPE_NONE;
+        this->collider.base.colMaterial = COL_MATERIAL_NONE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_SLIME_BODYPART_MAX, 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
@@ -1027,7 +1027,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
 
             EnSlime_Thaw(this, play);
             if ((this->actor.params == EN_SLIME_TYPE_BLUE) &&
@@ -1066,9 +1066,9 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.4f;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                                    this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
-                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                                    this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0,
+                                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_ELECTRIC) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                         this->drawDmgEffAlpha = 4.0f;

@@ -53,7 +53,7 @@ ActorProfile En_Karebaba_Profile = {
 
 static ColliderCylinderInit sHurtCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -61,11 +61,11 @@ static ColliderCylinderInit sHurtCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 7, 25, 0, { 0, 0, 0 } },
@@ -73,7 +73,7 @@ static ColliderCylinderInit sHurtCylinderInit = {
 
 static ColliderCylinderInit sAttackCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -81,11 +81,11 @@ static ColliderCylinderInit sAttackCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_WOOD,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_WOOD,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 4, 25, 0, { 0, 0, 0 } },
@@ -202,8 +202,8 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 3.0f;
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.elem.bumper.hitPos.x,
-                    this->hurtCollider.elem.bumper.hitPos.y, this->hurtCollider.elem.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.elem.acDmgInfo.hitPos.x,
+                    this->hurtCollider.elem.acDmgInfo.hitPos.y, this->hurtCollider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KAREBABA_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -220,7 +220,7 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_ResetColliders(EnKarebaba* this) {
     this->hurtCollider.dim.radius = 7;
     this->hurtCollider.dim.height = 25;
-    this->hurtCollider.base.colType = COLTYPE_HARD;
+    this->hurtCollider.base.colMaterial = COL_MATERIAL_HARD;
     this->hurtCollider.base.acFlags |= AC_HARD;
     this->attackCollider.dim.height = 25;
 }
@@ -287,7 +287,7 @@ void EnKarebaba_SetupUpright(EnKarebaba* this) {
     if (this->actionFunc != EnKarebaba_Spin) {
         Actor_SetScale(&this->actor, 0.01f);
 
-        this->hurtCollider.base.colType = COLTYPE_HIT6;
+        this->hurtCollider.base.colMaterial = COL_MATERIAL_HIT6;
         this->hurtCollider.base.acFlags &= ~AC_HARD;
         this->hurtCollider.dim.radius = 15;
 

@@ -92,7 +92,7 @@ ActorProfile Boss_06_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -100,11 +100,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 90, 140, 10, { 0, 0, 0 } },
@@ -184,10 +184,10 @@ void Boss06_UpdateDamage(Boss06* this) {
                 Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
-                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.bumper.hitPos.x);
+                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.acDmgInfo.hitPos.x);
                 this->arrowHitPosScaled.x = this->arrowHitPos.x * 0.35f;
 
-                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.bumper.hitPos.y);
+                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.acDmgInfo.hitPos.y);
                 this->arrowHitPosScaled.y = this->arrowHitPos.y * -0.35f;
             }
         }

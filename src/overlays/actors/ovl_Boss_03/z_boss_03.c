@@ -292,22 +292,22 @@ ActorProfile Boss_03_Profile = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_ROOT, { { 0, 0, 0 }, 50 }, 100 },
@@ -316,7 +316,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -331,55 +331,55 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_HEAD, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_LOWER_TRUNK, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_TAIL, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_RIGHT_FIN_ROOT, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_UPPER_RIGHT_FIN, { { 0, 0, 0 }, 30 }, 100 },
@@ -388,7 +388,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -1843,16 +1843,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->headCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].base.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].base.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->bodyCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1862,16 +1862,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+                if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                     acHitElem = this->bodyCollider.elements[i].base.acHitElem;
-                    this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+                    this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].base.acHitElem->toucher.damage
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1895,9 +1895,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->headCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 acHitElem = this->headCollider.elements[i].base.acHitElem;
-                this->headCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+                this->headCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1919,8 +1919,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].base.acHitElem->toucher.damage)
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].base.acHitElem->atDmgInfo.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -2025,9 +2025,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     if (this->actionFunc != Boss03_DeathCutscene) {
         if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
         } else {
-            this->bodyCollider.base.colType = COLTYPE_METAL;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_METAL;
         }
 
         Boss03_UpdateCollision(this, play);

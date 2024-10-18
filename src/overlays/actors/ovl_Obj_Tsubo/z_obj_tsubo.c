@@ -77,7 +77,7 @@ ObjTsuboData sPotTypeData[4] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -85,11 +85,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00400000, 0x00, 0x02 },
         { 0x05CBFFBE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 12, 30, 0, { 0, 0, 0 } },
@@ -474,7 +474,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.elem.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
+               (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {

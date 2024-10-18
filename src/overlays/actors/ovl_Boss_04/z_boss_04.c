@@ -78,11 +78,11 @@ ActorProfile Boss_04_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 50 }, 100 },
@@ -91,7 +91,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
 
 static ColliderJntSphInit sJntSphInit1 = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -105,11 +105,11 @@ static ColliderJntSphInit sJntSphInit1 = {
 static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 70 }, 100 },
@@ -118,7 +118,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
 
 static ColliderJntSphInit sJntSphInit2 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -567,8 +567,8 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 void func_809ED45C(Boss04* this, PlayState* play) {
     u8 damage;
 
-    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.bumperFlags & BUMP_HIT)) {
-        this->collider1.elements[0].base.bumperFlags &= ~BUMP_HIT;
+    if ((this->unk_1FE == 0) && (this->collider1.elements[0].base.acElemFlags & ACELEM_HIT)) {
+        this->collider1.elements[0].base.acElemFlags &= ~ACELEM_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health -= damage;

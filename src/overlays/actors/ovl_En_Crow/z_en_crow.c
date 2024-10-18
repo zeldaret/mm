@@ -43,11 +43,11 @@ ActorProfile En_Crow_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 20 }, 100 },
@@ -56,7 +56,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -316,9 +316,10 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffFrozenSteamScale = 0.5f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
-                    this->collider.elements[0].base.bumper.hitPos.y, this->collider.elements[0].base.bumper.hitPos.z, 0,
-                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.acDmgInfo.hitPos.x,
+                    this->collider.elements[0].base.acDmgInfo.hitPos.y,
+                    this->collider.elements[0].base.acDmgInfo.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 4.0f;

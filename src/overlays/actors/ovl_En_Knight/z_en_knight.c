@@ -209,11 +209,11 @@ static DamageTable sDamageTableFallenOver = {
 static ColliderJntSphElementInit sKnightSwordColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 27 }, 100 },
@@ -223,11 +223,11 @@ static ColliderJntSphElementInit sKnightSwordColliderJntSphElementsInit[1] = {
 static ColliderJntSphElementInit sIgosSwordColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 32 }, 100 },
@@ -236,7 +236,7 @@ static ColliderJntSphElementInit sIgosSwordColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sKnightSwordColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -249,7 +249,7 @@ static ColliderJntSphInit sKnightSwordColliderJntSphInit = {
 
 static ColliderJntSphInit sIgosSwordColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -263,11 +263,11 @@ static ColliderJntSphInit sIgosSwordColliderJntSphInit = {
 static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 27 }, 100 },
@@ -276,7 +276,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sShieldColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -290,22 +290,22 @@ static ColliderJntSphInit sShieldColliderJntSphInit = {
 static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7EFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 17 }, 100 },
@@ -314,7 +314,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sBodyColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1,
@@ -327,7 +327,7 @@ static ColliderJntSphInit sBodyColliderJntSphInit = {
 
 static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -335,11 +335,11 @@ static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 15, 20, -10, { 0, 0, 0 } },
@@ -347,7 +347,7 @@ static ColliderCylinderInit sHeadAttackColliderCylinderInit = {
 
 static ColliderCylinderInit sHeadColliderCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ALL,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -355,11 +355,11 @@ static ColliderCylinderInit sHeadColliderCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, 0, { 0, 0, 0 } },
@@ -1349,7 +1349,7 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
             goto common_case;
 
         common_case:
-            this->bodyCollider.base.colType = COLTYPE_NONE;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
             Math_ApproachZeroF(&this->actor.speed, 1.0f, 1.0f);
 
             if (this->animLastFrame > 10.0f) {
@@ -1586,8 +1586,8 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
         } else {
             this->actor.colChkInfo.health = 6 - BREG(40);
         }
-        this->bodyCollider.elements[0].base.bumperFlags &= ~BUMP_HIT;
-        this->bodyCollider.elements[1].base.bumperFlags &= ~BUMP_HIT;
+        this->bodyCollider.elements[0].base.acElemFlags &= ~ACELEM_HIT;
+        this->bodyCollider.elements[1].base.acElemFlags &= ~ACELEM_HIT;
         this->actor.colChkInfo.damageTable = &sDamageTableStanding;
         this->invincibilityTimer = 25;
     }
@@ -3059,8 +3059,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
     Vec3f translation;
     Player* player = GET_PLAYER(play);
 
-    if (this->shieldCollider.elements[0].base.bumperFlags & BUMP_HIT) {
-        this->shieldCollider.elements[0].base.bumperFlags &= ~BUMP_HIT;
+    if (this->shieldCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
+        this->shieldCollider.elements[0].base.acElemFlags &= ~ACELEM_HIT;
         this->shieldingInvulnerabilityTimer = 5;
 
         if ((player->meleeWeaponState != PLAYER_MWA_FORWARD_SLASH_1H) &&
@@ -3081,8 +3081,8 @@ void EnKnight_UpdateDamage(EnKnight* this, PlayState* play) {
             continue;
         }
 
-        if (this->bodyCollider.elements[i].base.bumperFlags & BUMP_HIT) {
-            this->bodyCollider.elements[i].base.bumperFlags &= ~BUMP_HIT;
+        if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+            this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case KNIGHT_DMGEFF_ICE:
@@ -3162,13 +3162,13 @@ void EnKnight_UpdateDamageFallenOver(EnKnight* this, PlayState* play) {
         ColliderJntSphElement* jntSphElem = &this->bodyCollider.elements[i];
         ColliderElement* acHitElem;
 
-        if (jntSphElem->base.bumperFlags & BUMP_HIT) {
-            jntSphElem->base.bumperFlags &= ~BUMP_HIT;
+        if (jntSphElem->base.acElemFlags & ACELEM_HIT) {
+            jntSphElem->base.acElemFlags &= ~ACELEM_HIT;
 
             acHitElem = jntSphElem->base.acHitElem;
 
             this->invincibilityTimer = 10;
-            if (acHitElem->toucher.dmgFlags & DMG_LIGHT_RAY) {
+            if (acHitElem->atDmgInfo.dmgFlags & DMG_LIGHT_RAY) {
                 this->damageFlashTimer = 15;
                 this->invincibilityTimer = 1000;
                 EnKnight_SetupDie(this, play);
@@ -3656,7 +3656,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
     this->swordColliderActive = false;
     this->shieldColliderActive = false;
     this->canRetreat = false;
-    this->bodyCollider.base.colType = COLTYPE_HIT3;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
 
     if (((KREG(63) == 0) && (this != sIgosInstance)) || ((KREG(63) != 2) && (this == sIgosInstance))) {
         for (i = 0; i < ARRAY_COUNT(this->timers); i++) {
