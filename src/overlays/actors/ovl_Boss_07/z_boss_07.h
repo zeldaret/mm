@@ -246,9 +246,9 @@ typedef struct Boss07 {
     /* 0x1820 */ ColliderCylinder generalCollider;
     /* 0x186C */ s16 maskShakeTimer;
     /* 0x1870 */ f32 tentacleLengthScale;
-    /* 0x1874 */ u8 tentacleState; // see `TentacleState`
+    /* 0x1874 */ u8 tentacleState; // see `MajorasMaskTentacleState`
     /* 0x1878 */ Vec3f tentacleBasePos;
-    /* 0x1884 */ s32 maskEyeTexIndex;
+    /* 0x1884 */ s32 maskEyeTexIndex; // see `MajorasMaskEyeTexture`
     /* 0x1888 */ u8 bgCheckTimer;
     /* 0x188C */ f32 eyeBeamsLengthScale; // also used as a scale for the light orbs that surround the Remains during the intro cutscene
     /* 0x1890 */ f32 eyeBeamsFocusOrbScale;

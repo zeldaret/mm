@@ -4,7 +4,7 @@
         <!-- Majora's Incarnation Animations -->
         <Animation Name="gMajorasIncarnationPirouetteAnim" Offset="0x194" /> <!-- Original name is "last2_bd" (probably short for "ballet dance") -->
         <Animation Name="gMajorasIncarnationEnergyBallAttackAnim" Offset="0x428" /> <!-- Original name is "last2_beam02" -->
-        <Animation Name="gMajorasIncarnationDamageAnim" Offset="0xD0C" /> <!-- Original name is "last2_dam" -->
+        <Animation Name="gMajorasIncarnationDamagedAnim" Offset="0xD0C" /> <!-- Original name is "last2_dam" -->
         <Animation Name="gMajorasIncarnationIntroDanceAnim" Offset="0x2C40" /> <!-- Original name is "last2_hensin" ("metamorphosis/transformation") -->
         <Animation Name="gMajorasIncarnationJerkingAnim" Offset="0x2D84" /> <!-- Original name is "last2_hensin2" -->
         <Animation Name="gMajorasIncarnationPumpingUpAnim" Offset="0x31E4" /> <!-- Original name is "last2_hensin3" -->
@@ -154,7 +154,7 @@
         <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Unused. Original name is "last_ac02" -->
         <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Unused. Original name is "last_ac03" -->
         <Animation Name="gMajorasWrathHighKickAnim" Offset="0x1D974" /> <!-- Unused and almost identical to gMajorasWrathKickAnim. Original name is "last_ac04" -->
-        <Animation Name="gMajorasWrathDamageAnim" Offset="0x1DEB4" /> <!-- Original name is "last_dam" -->
+        <Animation Name="gMajorasWrathDamagedAnim" Offset="0x1DEB4" /> <!-- Original name is "last_dam" -->
         <Animation Name="gMajorasWrathDeathAnim" Offset="0x22BB4" /> <!-- Original name is "last_dead" -->
         <Animation Name="gMajorasWrathTiptoeWhipAttackAnim" Offset="0x23A44" /> <!-- Unused. Original name is "last_def" -->
         <Animation Name="gMajorasWrathHeavyBreathingAnim" Offset="0x23DAC" /> <!-- Original name is "last_hen" (short for "metamorphosis/transformation") -->
