@@ -522,6 +522,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                         EnNeoReeba_SpawnIce(this, play);
                     }
                     this->stunTimer = 0;
+                    break;
             }
         }
 
@@ -543,7 +544,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 }
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 0.0f;
-                // fallthrough
+                FALLTHROUGH;
             case EN_NEO_REEBA_DMGEFF_NONE:
             case EN_NEO_REEBA_DMGEFF_SHATTER:
                 if ((this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_SHATTER) ||

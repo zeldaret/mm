@@ -233,7 +233,7 @@ void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
                     Actor_Kill(searchArrow);
                 }
             }
-
+            FALLTHROUGH;
         case BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS:
             if (this->csFrameCount >= 10) {
                 Math_ApproachF(&this->lensFlareScale, 30.0f, 0.2f, 1.0f);

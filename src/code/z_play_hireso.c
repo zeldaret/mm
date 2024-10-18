@@ -1117,7 +1117,7 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             DmaMgr_RequestAsync(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
                                 this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
             this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_STARTED;
-            // fallthrough
+            FALLTHROUGH;
         case BOMBERS_NOTEBOOK_LOAD_STATE_STARTED:
             if (osRecvMesg(&this->loadQueue, NULL, flag) == 0) {
                 this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_DONE;

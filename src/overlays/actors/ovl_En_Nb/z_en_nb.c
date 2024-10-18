@@ -377,7 +377,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
             if (!func_80BBFFD4(this, csId)) {
                 break;
             }
-        // fallthrough
+            FALLTHROUGH;
         case ENNB_BEHAVIOUR_2:
         case ENNB_BEHAVIOUR_4:
         case ENNB_BEHAVIOUR_6:
@@ -461,7 +461,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
         case ENNB_BEHAVIOUR_4:
             play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
             this->behaviour++;
-            // fallthrough
+            FALLTHROUGH;
         case ENNB_BEHAVIOUR_5:
             if (!CHECK_EVENTINF(EVENTINF_42)) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);

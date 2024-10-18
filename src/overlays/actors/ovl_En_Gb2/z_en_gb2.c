@@ -291,7 +291,7 @@ u16 func_80B0FB24(EnGb2* this) {
             if (this->unk_26C & 8) {
                 return 0x14E9;
             }
-
+            FALLTHROUGH;
         case 0x14E7:
             this->unk_26C |= 2;
             return 0x14E8;

@@ -67,6 +67,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.flags |= ACTOR_FLAG_100000;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
             break;
+
         case IKNV_OBJ_RAISED_DOOR:
             this->dList = object_iknv_obj_DL_011880;
             DynaPolyActor_Init(&this->dyna, 0);
@@ -75,6 +76,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
+
         case IKNV_OBJ_SAKON_DOOR:
             this->dList = object_iknv_obj_DL_0129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
@@ -87,8 +89,10 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_10);
             Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
+
         default:
             Actor_Kill(&this->dyna.actor);
+            return;
     }
 }
 

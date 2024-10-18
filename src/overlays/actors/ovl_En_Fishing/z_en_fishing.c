@@ -5205,7 +5205,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_8090CD4C = 2;
             Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
             sSubCamVelFactor = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             ShrinkWindow_Letterbox_SetSizeTarget(27);
 
@@ -5335,7 +5335,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             Message_StartTextbox(play, 0x409E, NULL);
             D_8090CD4C = 11;
             Rumble_Override(0.0f, 150, 10, 10);
-            // fallthrough
+            FALLTHROUGH;
         case 11:
             player->actor.world.pos.z = 1360.0f;
             player->actor.speed = 0.0f;
@@ -5376,7 +5376,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_8090CD4C = 21;
             D_80911F48 = 45.0f;
             D_8090CD50 = 10;
-            // fallthrough
+            FALLTHROUGH;
         case 21:
             if ((D_8090CD50 == 0) && Message_ShouldAdvance(play)) {
                 D_8090CD4C = 22;

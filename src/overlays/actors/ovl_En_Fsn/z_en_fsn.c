@@ -1195,7 +1195,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
         case CANBUY_RESULT_SUCCESS_2:
             Audio_PlaySfx_MessageDecide();
             SET_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM);
-            // fallthrough
+            FALLTHROUGH;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);

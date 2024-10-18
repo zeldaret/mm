@@ -356,7 +356,7 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
         case GERUDO_RED_LIMB_HEAD:
             rot->x += this->headRot.y;
-            // fallthrough
+            FALLTHROUGH;
         default:
             // This is required since EnGe3 shares a skeleton with EnKaizoku; it avoids stale colours being used in the
             // displaylists.

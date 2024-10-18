@@ -631,7 +631,7 @@ s32 func_80BDE7FC(Actor* thisx, PlayState* play) {
             if (!func_80BDE408(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:

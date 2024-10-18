@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "z64olib.h"
+#include "attributes.h"
 
 #include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
 
@@ -52,7 +53,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                         seen |= PICTO_SEEN_ANYWHERE;
                         break; //! @bug break is inside conditional, meaning it falls through if it is false
                     }
-                    // FALLTHROUGH
+                    FALLTHROUGH;
                 case ACTOR_EN_ZOV:
                     seen |= PICTO_SEEN_ANYWHERE;
                     break;

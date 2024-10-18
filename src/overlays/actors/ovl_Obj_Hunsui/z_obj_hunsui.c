@@ -279,7 +279,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_2:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_1:
             this->dyna.actor.draw = func_80B9DA60;
             if ((this->unk_172 & 1) && func_80B9C450(play, this->switchFlag, this->unk_164)) {
@@ -298,7 +298,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_4:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_3:
         case OBJHUNSUI_F000_5:
         case OBJHUNSUI_F000_6:

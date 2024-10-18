@@ -194,6 +194,7 @@ void func_80C184EC(BgLastBwall* this, PlayState* play) {
                 Matrix_MultVec3f(&spD0, &effectPosAndAccel);
                 Math_Vec3f_Sum(&this->dyna.actor.world.pos, &effectPosAndAccel, &effectPosAndAccel);
                 break;
+
             case BGLASTBWALL_TYPE_1:
                 spD0.x = Rand_Centered() * 160.0f;
                 spD0.y = 400.0f;

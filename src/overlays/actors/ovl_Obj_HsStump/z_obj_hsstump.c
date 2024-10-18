@@ -56,7 +56,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
                 Actor_SetScale(&this->dyna.actor, 0.0f);
                 DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
-            // fallthrough
+            FALLTHROUGH;
         case false:
             ObjHsStump_SetupIdle(this, play);
             break;

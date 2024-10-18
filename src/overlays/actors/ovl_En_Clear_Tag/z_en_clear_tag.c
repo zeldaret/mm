@@ -555,6 +555,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 }
             }
             break;
+
         case 1:
             Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
@@ -571,6 +572,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
             Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+            FALLTHROUGH;
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;

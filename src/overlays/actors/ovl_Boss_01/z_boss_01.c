@@ -1011,7 +1011,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
             this->subCamUp.x = 0.0f;
             this->subCamUp.y = 1.0f;
             this->subCamUp.z = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_INTRO_CS_STATE_LOOK_AT_PLAYER:
             player->actor.world.rot.y = -0x8000;
             player->actor.shape.rot.y = -0x8000;
@@ -1200,7 +1200,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
             this->actor.world.pos.x = 0.0f;
             this->subCamVelocity = 0.0f;
             this->subCamEyeNext.y = 100.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_BUG_SUMMONING_CS_STATE_PLAYING_OR_DONE:
             Actor_PlaySfx(&this->actor, NA_SE_EN_MIBOSS_VOICE1_OLD - SFX_FLAG);
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -2151,7 +2151,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
             diffZ = this->subCamEye.z - this->actor.world.pos.z;
             this->deathCsInitialSubCamRot = Math_Atan2F_XY(diffZ, diffX);
             this->deathCsSubCamRot = -0.5f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DEATH_CS_STATE_PLAY_ANIM_AND_FALL_FORWARD:
             if (this->cutsceneTimer < 15) {
                 Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.1f, 5.0f);
@@ -2167,7 +2167,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 this->cutsceneState = ODOLWA_DEATH_CS_STATE_BURST_INTO_FLAMES_AND_SHRINK;
                 this->cutsceneTimer = 0;
             }
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DEATH_CS_STATE_BURST_INTO_FLAMES_AND_SHRINK:
             Math_ApproachF(&this->deathCsSubCamRot, 1.3f, 0.1f, 0.008f);
             subCamOffset.x = 0.0f;
@@ -2516,7 +2516,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffTimer = 40;
             this->drawDmgEffState++;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 60);
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
@@ -2535,7 +2535,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffFrozenSteamScale = 1.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss01_Thaw(this, play);
@@ -2564,7 +2564,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
         lightOrbInitCommon:
             this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE;
             this->drawDmgEffAlpha = 1.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
@@ -2583,7 +2583,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = (KREG(18) * 0.1f) + 1.0f;
             this->drawDmgEffState++;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.05f);

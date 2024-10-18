@@ -1224,7 +1224,7 @@ void func_80B98F94(EnZot* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x12BB:
                 this->unk_2F2 &= ~4;
-
+                FALLTHROUGH;
             case 0x12BC:
             case 0x12C0:
             case 0x12C3:

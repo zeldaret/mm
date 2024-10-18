@@ -291,6 +291,7 @@ s32 MsgEvent_AwaitTextJump(Actor* actor, PlayState* play, u8** script, MsgScript
             if (!Message_ShouldAdvance(play)) {
                 return true;
             }
+            FALLTHROUGH;
         case TEXT_STATE_CLOSING:
             skip = SCRIPT_PACK_16(cmd->offsetH, cmd->offsetL);
             break;
@@ -345,6 +346,7 @@ s32 MsgEvent_AwaitTextEnd(Actor* actor, PlayState* play, u8** script, MsgScriptC
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
+            FALLTHROUGH;
         case TEXT_STATE_CLOSING:
             *endScript = true;
             break;
@@ -614,6 +616,7 @@ s32 MsgEvent_CheckItemAction(Actor* actor, PlayState* play, u8** script, MsgScri
             if (!Message_ShouldAdvance(play)) {
                 return true;
             }
+            FALLTHROUGH;
         case TEXT_STATE_PAUSE_MENU:
             curItemAction = func_80123810(play);
 
@@ -975,7 +978,7 @@ s32 MsgEvent_AwaitTextDone(Actor* actor, PlayState* play, u8** script, MsgScript
             if (!Message_ShouldAdvance(play)) {
                 return true;
             }
-
+            FALLTHROUGH;
         case TEXT_STATE_DONE:
             if (!Message_ShouldAdvance(play)) {
                 return true;

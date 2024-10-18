@@ -1439,7 +1439,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         var_s0 = 1;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case 15:
                     var_s0 = -1;
                     break;

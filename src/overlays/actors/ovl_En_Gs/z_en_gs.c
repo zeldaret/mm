@@ -345,7 +345,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
         case OCARINA_MODE_NONE:
         case OCARINA_MODE_END:
             func_80998300(this, play);
-
+            FALLTHROUGH;
         case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;

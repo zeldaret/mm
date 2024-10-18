@@ -1188,7 +1188,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
 
             case 0xA:
                 msgCtx->textPosY += msgCtx->unk11FFC;
-                // fallthrough
+                FALLTHROUGH;
             case 0xC:
                 sp130++;
                 msgCtx->textPosX = msgCtx->unk11F1A[sp130] + msgCtx->unk11FF8;
@@ -4510,7 +4510,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_OCARINA_FAIL:
             case MSGMODE_SONG_PROMPT_FAIL:
                 Message_DrawText(play, &gfx);
-                // fallthrough
+                FALLTHROUGH;
             case MSGMODE_OCARINA_FAIL_NO_TEXT:
                 msgCtx->stateTimer--;
                 if (msgCtx->stateTimer == 0) {
@@ -4696,7 +4696,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         sOcarinaButtonIndexBufPos++;
                     }
                 }
-                // fallthrough
+                FALLTHROUGH;
             case MSGMODE_SONG_DEMONSTRATION_DONE:
                 Message_DrawText(play, &gfx);
                 break;

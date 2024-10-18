@@ -510,7 +510,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->unk_598 = 0;
             Audio_SetMainBgmVolume(0, 0xA);
             this->unk_59C++;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -1834,7 +1834,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->unk_2B8 = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case KAIZOKU_DMGEFF_1:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||

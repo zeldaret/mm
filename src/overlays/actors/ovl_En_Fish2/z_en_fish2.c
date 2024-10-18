@@ -665,12 +665,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 2:
             phi_f0 = 0.1f;
-            // fallthrough
+            FALLTHROUGH;
         case 4:
             if (phi_f0 == 0) {
                 phi_f0 = 0.3f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 6:
             if (phi_f0 == 0) {
                 phi_f0 = 0.5f;
@@ -696,12 +696,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 3:
             phi_f0 = 1.3f;
-            // fallthrough
+            FALLTHROUGH;
         case 5:
             if (phi_f0 == 0) {
                 phi_f0 = 1.5f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 7:
             if (phi_f0 == 0) {
                 phi_f0 = 1.7f;

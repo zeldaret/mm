@@ -417,7 +417,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
                 case 4:
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffAlpha = 1.0f;
-
+                    FALLTHROUGH;
                 case 15:
                     Actor_ApplyDamage(&this->actor);
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);

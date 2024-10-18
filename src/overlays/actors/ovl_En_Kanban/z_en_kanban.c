@@ -674,7 +674,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
         }
         nextCase:
-        // fallthrough
+            FALLTHROUGH;
         case ENKANBAN_GROUND:
         case ENKANBAN_WATER:
             signpost = (EnKanban*)this->actor.parent;

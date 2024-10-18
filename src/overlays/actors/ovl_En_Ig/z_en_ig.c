@@ -399,7 +399,7 @@ s32 func_80BF17BC(Actor* thisx, PlayState* play) {
             if (!func_80BF16C8(this, csId)) {
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
         case 4:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {

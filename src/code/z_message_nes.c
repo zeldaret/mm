@@ -536,7 +536,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
             case MESSAGE_NEWLINE:
                 msgCtx->textPosY += msgCtx->unk11FFC;
-                // fallthrough
+                FALLTHROUGH;
             case MESSAGE_CARRIAGE_RETURN:
                 sp130++;
 

@@ -833,7 +833,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 
                     case 0x1069:
                         this->unk_32C |= 4;
-
+                        FALLTHROUGH;
                     case 0x106A:
                         func_80B5CE6C(this, play);
                         break;

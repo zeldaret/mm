@@ -287,7 +287,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     if (!Message_ShouldAdvance(play)) {
                         break;
                     }
-                    // Fallthrough
+                    FALLTHROUGH;
                 case TEXT_STATE_PAUSE_MENU:
                     itemAction = func_80123810(play);
 

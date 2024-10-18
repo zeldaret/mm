@@ -234,7 +234,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             case ARROW_TYPE_ICE:
             case ARROW_TYPE_LIGHT:
                 Player_PlaySfx(player, NA_SE_IT_MAGIC_ARROW_SHOT);
-
+                FALLTHROUGH;
             case ARROW_TYPE_DEKU_BUBBLE:
                 Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
                 break;

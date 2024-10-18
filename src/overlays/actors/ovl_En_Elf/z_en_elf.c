@@ -417,7 +417,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
         case FAIRY_TYPE_9:
             this->fairyFlags |= 0x1000;
-
+            FALLTHROUGH;
         case FAIRY_TYPE_10:
             colorConfig = -2;
             func_8088CC48(this, play);

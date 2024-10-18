@@ -1432,12 +1432,12 @@ s32 EnMaYto_HasSpokenToPlayer(void) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;

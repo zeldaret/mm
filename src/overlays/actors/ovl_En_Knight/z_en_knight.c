@@ -7,6 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Mir_Ray3/z_mir_ray3.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
@@ -2187,7 +2188,8 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 EnKnight_SetupWait(this, play);
                 this->timers[2] = Rand_ZeroFloat(100.0f) + 150.0f;
             }
-            FALLTHROUGH;
+            break;
+
         case KNIGHT_SUB_ACTION_FLYING_HEAD_DONE_0:
             // Wait for head
             break;

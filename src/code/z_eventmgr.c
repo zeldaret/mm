@@ -215,7 +215,7 @@ void CutsceneManager_End(void) {
     switch (sCutsceneMgr.startMethod) {
         case CS_START_2:
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
-            // fallthrough
+            FALLTHROUGH;
         case CS_START_1:
             Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_END);
             sCutsceneMgr.startMethod = CS_START_0;

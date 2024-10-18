@@ -643,7 +643,7 @@ s32 func_80AF81E8(Actor* thisx, PlayState* play) {
             if (!func_80AF80F4(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:
@@ -686,7 +686,7 @@ s32 func_80AF8348(Actor* thisx, PlayState* play) {
             if (!func_80AF80F4(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:
@@ -1148,7 +1148,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 90:
                 this->unk_356 |= 0x9000;
                 this->unk_356 |= 0x200;
-
+                FALLTHROUGH;
             case 82:
                 func_80AF7E98(this, 0);
                 break;
@@ -1281,7 +1281,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                     this->unk_356 |= 0x800;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_60_04);
-
+                FALLTHROUGH;
             default:
                 if (scheduleOutput->result == 29) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
@@ -1618,7 +1618,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
             if (CURRENT_TIME >= CLOCK_TIME(1, 39)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
-
+            FALLTHROUGH;
         case 16:
         case 17:
         case 18:

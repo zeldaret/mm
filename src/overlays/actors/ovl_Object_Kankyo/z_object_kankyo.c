@@ -407,7 +407,6 @@ void func_808DCDB4(ObjectKankyo* this, PlayState* play) {
                 break;
 
             case 1:
-
                 temp_f26 = play->view.eye.x + (spAC * 120.0f);
                 temp_f28 = play->view.eye.y + (spA8 * 120.0f);
                 temp_f18 = play->view.eye.z + (spA4 * 120.0f);

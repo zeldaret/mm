@@ -588,7 +588,7 @@ s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 300.0f) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
                 return true;

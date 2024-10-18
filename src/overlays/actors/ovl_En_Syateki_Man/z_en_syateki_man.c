@@ -1471,7 +1471,7 @@ void EnSyatekiMan_Blink(EnSyatekiMan* this) {
 
         case 40:
             this->blinkTimer = 0;
-
+            FALLTHROUGH;
         default:
             this->eyeIndex = 0;
             break;

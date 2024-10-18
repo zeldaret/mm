@@ -5,6 +5,7 @@
  */
 
 #include "z_en_an.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #include "assets/objects/object_an2/object_an2.h"
@@ -1646,7 +1647,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
             if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
-                // fallthrough
+                FALLTHROUGH;
             } else {
                 ret = true;
                 this->stateFlags |= ENAN_STATE_DRAW_KAFEIS_MASK;

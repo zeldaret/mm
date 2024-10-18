@@ -57,6 +57,7 @@ u32 EffectSsKakera_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
             case GAMEPLAY_DANGEON_KEEP:
                 this->rObjectId = KAKERA_OBJECT_DEFAULT;
                 break;
+
             default:
                 this->rObjectId = initParams->objectId;
                 EffectSsKakera_CheckForObject(this, play);
@@ -329,6 +330,7 @@ void func_8097E7E0(EffectSs* this, PlayState* play) {
             case 0:
                 this->rReg8 = 0;
                 break;
+
             case 1:
                 if ((this->velocity.y < 0.0f) &&
                     (BgCheck_SphVsFirstPoly(&play->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3]))) {
@@ -340,6 +342,7 @@ void func_8097E7E0(EffectSs* this, PlayState* play) {
                     }
                 }
                 break;
+
             case 2:
                 if (BgCheck_SphVsFirstPoly(&play->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3])) {
                     this->rReg8 = 0;
@@ -355,10 +358,12 @@ void EffectSsKakera_Update(PlayState* play, u32 index, EffectSs* this) {
             this->rPitch += 0x47B;
             this->rYaw += 0x139;
             break;
+
         case 0x40:
             this->rPitch += 0x1A7C;
             this->rYaw += 0x47B;
             break;
+
         case 0x60:
             this->rPitch += 0x3F27;
             this->rYaw += 0xCA1;

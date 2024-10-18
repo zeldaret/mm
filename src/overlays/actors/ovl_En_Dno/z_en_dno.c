@@ -350,7 +350,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
             }
-
+            FALLTHROUGH;
         case EN_DNO_ANIM_PRAYER_LOOP:
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->unk_460), 2,
                                0xE38, 0x222);

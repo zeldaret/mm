@@ -137,7 +137,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     i = j - 1;
                     msgCtx->textDrawPos = i + 1;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case MESSAGE_QUICKTEXT_DISABLE:
                 break;
 

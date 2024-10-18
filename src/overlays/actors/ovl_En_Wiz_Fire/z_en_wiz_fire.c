@@ -90,13 +90,13 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->collider.elem.toucher.effect = 2;
             this->collider.elem.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
-            // fallthrough
+            FALLTHROUGH;
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
             if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
                 this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
                 this->collider.elem.toucher.damage = 8;
             }
-            // fallthrough
+            FALLTHROUGH;
         case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
         case EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE:
             this->actionFunc = EnWiz_SetupMoveMagicProjectile;
