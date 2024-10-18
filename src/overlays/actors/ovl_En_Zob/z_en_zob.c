@@ -110,7 +110,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.csId = this->csIdList[0];
-    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
 
     switch (ENZOB_GET_F(&this->actor)) {
         case ENZOB_F_1:
