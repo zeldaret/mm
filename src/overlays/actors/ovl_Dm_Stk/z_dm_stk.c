@@ -12,7 +12,7 @@
 #include "assets/objects/object_stk2/object_stk2.h"
 #include "assets/objects/object_stk3/object_stk3.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((DmStk*)thisx)
 
@@ -1321,7 +1321,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, PlayState* play) {
     this->deflectCount++;
     if (this->deflectCount >= 3) {
         this->deflectCount = 0;
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             // That won't do you any good
             Message_StartTextbox(play, 0x2013, &this->actor);
         }
@@ -1772,7 +1772,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
             this->tatlMessageTimer = 0;
-            if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+            if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
                 // Why are you just standing around?
                 Message_StartTextbox(play, 0x2014, &this->actor);
             }

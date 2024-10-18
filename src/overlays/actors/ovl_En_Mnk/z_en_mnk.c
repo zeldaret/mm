@@ -248,7 +248,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
-    this->picto.actor.flags |= ACTOR_FLAG_2000000;
+    this->picto.actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
     SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkel, &object_mnk_Anim_003584,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;

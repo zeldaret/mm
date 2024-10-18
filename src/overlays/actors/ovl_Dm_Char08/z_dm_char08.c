@@ -7,7 +7,7 @@
 #include "z_dm_char08.h"
 #include "assets/objects/object_kamejima/object_kamejima.h"
 
-#define FLAGS (ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((DmChar08*)thisx)
 
@@ -256,7 +256,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
-    if ((player2->stateFlags2 & PLAYER_STATE2_8000000) &&
+    if ((player2->stateFlags2 & PLAYER_STATE2_USING_OCARINA) &&
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
         if (!sSuccessSoundAlreadyPlayed) {

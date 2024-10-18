@@ -6,7 +6,8 @@
 
 #include "z_en_dai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnDai*)thisx)
 
@@ -451,7 +452,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         EnDai_ChangeAnim(this, ENDAI_ANIM_1);
         this->actionFunc = func_80B3EE8C;
-    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
         func_80B3E96C(this, play);
         this->unk_A6C = 0;
     } else if (this->unk_A6C == 0) {
@@ -600,7 +601,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
         func_80B3E460(this);
     } else {
         this->actionFunc(this, play);
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
