@@ -408,7 +408,7 @@ void func_80B39F60(ObjSnowball2* this) {
 void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     func_80B39B28(this, play);
 
@@ -431,7 +431,7 @@ void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 

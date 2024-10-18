@@ -497,7 +497,7 @@ void func_8099556C(EnSkb* this, PlayState* play) {
         this->unk_3D4 = Rand_Next() % 0x7D0;
     }
 
-    this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
+    this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 0x4E20;
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);

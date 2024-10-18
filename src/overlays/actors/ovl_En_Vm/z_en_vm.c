@@ -154,13 +154,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_BEAMOS, ICHAIN_STOP),
 };
 
-static s32 sTexturesDesegmented = false;
-
-Color_RGBA8 D_808CD5BC = { 0, 0, 255, 0 };
-
-Color_RGBA8 D_808CD5C0 = { 255, 255, 255, 255 };
-
 void EnVm_Init(Actor* thisx, PlayState* play) {
+    static s32 sTexturesDesegmented = false;
     EnVm* this = THIS;
     s32 i;
     s32 params;
@@ -198,9 +193,9 @@ void EnVm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808CC420(EnVm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&gBeamosAnim);
+    f32 endFrame = Animation_GetLastFrame(&gBeamosAnim);
 
-    Animation_Change(&this->skelAnime, &gBeamosAnim, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, 1.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_808CC490;
 }
 
@@ -236,6 +231,8 @@ void func_808CC5C4(EnVm* this) {
 }
 
 void func_808CC610(EnVm* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 0, 0, 255, 0 };
+    static Color_RGBA8 sEnvColor = { 255, 255, 255, 255 };
     Player* player = GET_PLAYER(play);
     s16 sp3A;
     s16 sp38;
@@ -256,7 +253,7 @@ void func_808CC610(EnVm* this, PlayState* play) {
                                   sp3A)) {
         this->unk_214--;
         if (this->unk_214 == 0) {
-            EffectSsDeadDd_Spawn(play, &this->unk_228, &gZeroVec3f, &gZeroVec3f, &D_808CD5BC, &D_808CD5C0, 150, -25, 16,
+            EffectSsDeadDd_Spawn(play, &this->unk_228, &gZeroVec3f, &gZeroVec3f, &sPrimColor, &sEnvColor, 150, -25, 16,
                                  20);
             func_808CC788(this);
         }
@@ -475,20 +472,20 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnVm* this = THIS;
     Vec3f sp5C;
     Vec3f sp50;
-    CollisionPoly* sp4C;
-    s32 sp48;
+    CollisionPoly* poly;
+    s32 bgId;
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
 
     if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
-        sp4C = NULL;
+        poly = NULL;
 
         Matrix_MultZero(&this->actor.focus.pos);
         Matrix_MultVecZ(1600.0f, &this->unk_228);
         Matrix_MultVecZ(this->unk_224 * 71.428566f, &this->unk_234);
 
-        if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &sp4C, true, true,
-                                    false, true, &sp48)) {
+        if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &poly, true, true,
+                                    false, true, &bgId)) {
             this->unk_224 = Math_Vec3f_DistXYZ(&this->actor.focus.pos, &sp5C) - 5.0f;
             this->unk_210 = 2;
             Math_Vec3f_Copy(&this->unk_234, &sp5C);

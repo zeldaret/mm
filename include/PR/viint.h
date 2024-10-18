@@ -49,7 +49,7 @@ typedef struct {
     /* 0x0 */ f32 factor;
     /* 0x4 */ u16 offset;
     /* 0x8 */ u32 scale;
-} __OSViScale; // size = 0x0C
+} __OSViScale; // size = 0xC
 
 typedef struct {
     /* 0x00 */ u16 state;

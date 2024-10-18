@@ -318,12 +318,12 @@ s32 func_80BF416C(EnRg* this, PlayState* play) {
 
 s32 func_80BF4220(EnRg* this, PlayState* play, Actor* arg2) {
     CollisionPoly* sp44 = NULL;
-    s32 sp40;
+    s32 bgId;
     Vec3f sp34;
 
     if (Actor_ActorAIsFacingAndNearActorB(&this->actor, arg2, 400.0f, 0x2000) &&
         !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &arg2->world.pos, &sp34, &sp44, true, false,
-                                 false, true, &sp40)) {
+                                 false, true, &bgId)) {
         return true;
     }
     return false;

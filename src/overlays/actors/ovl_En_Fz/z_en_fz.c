@@ -252,7 +252,7 @@ void func_80932784(EnFz* this, PlayState* play) {
     Vec3f sp5C;
     Vec3f sp50;
     Vec3f sp44;
-    s32 sp40;
+    s32 bgId;
     CollisionPoly* sp3C;
 
     sp5C.x = this->actor.world.pos.x;
@@ -266,7 +266,7 @@ void func_80932784(EnFz* this, PlayState* play) {
     sp44.z = 440.0f;
 
     Matrix_MultVec3f(&sp44, &this->unk_22C);
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true, &sp40)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true, &bgId)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
     }
 

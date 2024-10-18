@@ -1110,7 +1110,7 @@ s32 func_80AEEA4C(EnTk* this, PlayState* play) {
         ret = 3;
     } else if (this->actor.xyzDistToPlayerSq < SQ(60.0f)) {
         ret = 0;
-    } else if (this->actor.isLockedOn || (play->actorCtx.targetCtx.arrowPointedActor == &this->actor) ||
+    } else if (this->actor.isLockedOn || (play->actorCtx.attention.arrowPointedActor == &this->actor) ||
                (this->actor.xyzDistToPlayerSq < SQ(80.0f))) {
         ret = 1;
     } else {
@@ -1152,7 +1152,7 @@ void func_80AEEAD4(EnTk* this, PlayState* play) {
 }
 
 void func_80AEEB88(EnTk* this, PlayState* play) {
-    s32 sp74;
+    s32 bgId;
     Vec3f sp68;
     s32 i;
     f32 temp;
@@ -1166,7 +1166,7 @@ void func_80AEEB88(EnTk* this, PlayState* play) {
         sp68.z += this->actor.world.pos.z;
 
         temp =
-            BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &sp74, &sp68) - this->actor.world.pos.y;
+            BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &bgId, &sp68) - this->actor.world.pos.y;
         if (temp <= -80.0f) {
             break;
         }

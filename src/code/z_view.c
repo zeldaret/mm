@@ -129,24 +129,24 @@ void View_GetViewport(View* view, Viewport* viewport) {
 }
 
 void View_SetScissor(Gfx** gfx, s32 ulx, s32 uly, s32 lrx, s32 lry) {
-    Gfx* gfxp = *gfx;
+    Gfx* gfxP = *gfx;
 
-    gDPSetScissor(gfxp++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
+    gDPSetScissor(gfxP++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
 
-    *gfx = gfxp;
+    *gfx = gfxP;
 }
 
 void View_ClearScissor(View* view, Gfx** gfx) {
-    Gfx* gfxp = *gfx;
+    Gfx* gfxP = *gfx;
     s32 ulx = view->viewport.leftX;
     s32 uly = view->viewport.topY;
     s32 lrx = view->viewport.rightX;
     s32 lry = view->viewport.bottomY;
 
-    gDPPipeSync(gfxp++);
-    View_SetScissor(&gfxp, ulx, uly, lrx, lry);
+    gDPPipeSync(gfxP++);
+    View_SetScissor(&gfxP, ulx, uly, lrx, lry);
 
-    *gfx = gfxp;
+    *gfx = gfxP;
 }
 
 void View_ApplyLetterbox(View* view) {
@@ -523,8 +523,8 @@ s32 View_UpdateViewingMatrix(View* view) {
     return 1;
 }
 
-s32 View_ApplyTo(View* view, Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+s32 View_ApplyTo(View* view, Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
     GraphicsContext* gfxCtx = view->gfxCtx;
     Viewport* viewport = &view->viewport;
     Mtx* projection;
@@ -547,7 +547,7 @@ s32 View_ApplyTo(View* view, Gfx** gfxp) {
     view->projection = *projection;
 
     gSPMatrix(gfx++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    *gfxp = gfx;
+    *gfxP = gfx;
 
     return 1;
 }

@@ -121,19 +121,19 @@ static Vec2f D_80938FF8[4] = {
 
 void func_80936CF0(ObjBean* this, PlayState* play) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->dyna.actor.world.pos.x;
     sp24.y = this->dyna.actor.world.pos.y + 29.999998f;
     sp24.z = this->dyna.actor.world.pos.z;
     this->dyna.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp20, &this->dyna.actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId, &this->dyna.actor, &sp24);
 }
 
 s32 func_80936D58(ObjBean* this, PlayState* play) {
     static Vec3f D_80939018 = { 0.0f, 30.0f, 0.0f };
     s32 pad;
-    s32 spB8;
+    s32 bgId;
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -148,7 +148,7 @@ s32 func_80936D58(ObjBean* this, PlayState* play) {
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
     if (BgCheck_EntityLineTest2(&play->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true, true,
-                                &spB8, &this->dyna.actor)) {
+                                &bgId, &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;

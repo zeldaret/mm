@@ -395,7 +395,7 @@ void func_80A4E84C(EnMkk* this) {
 void func_80A4EBBC(EnMkk* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         Enemy_StartFinishingBlow(play, &this->actor);
         func_80A4E67C(this);
     }

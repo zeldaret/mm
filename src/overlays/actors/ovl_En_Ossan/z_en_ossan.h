@@ -65,7 +65,7 @@ typedef struct EnOssan {
 * Items on shelves are indexed as:
 * 7 5  3 1
 * 6 4  2 0 
-*/    
+*/
 
 typedef enum {
     /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,

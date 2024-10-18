@@ -151,16 +151,16 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
 
     if (ARROW_IS_ARROW(this->actor.params)) {
-        this->collider.info.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
-        this->collider.info.toucherFlags |= 0;
+        this->collider.elem.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
+        this->collider.elem.toucherFlags |= 0;
     }
 
     if (this->actor.params < ARROW_TYPE_NORMAL_LIT) {
         this->collider.base.atFlags = (AT_TYPE_ENEMY | AT_ON);
     } else {
-        this->collider.info.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
+        this->collider.elem.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
         if (this->actor.params == ARROW_TYPE_DEKU_NUT) {
-            this->collider.info.toucher.damage = 1;
+            this->collider.elem.toucher.damage = 1;
         }
 
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
@@ -286,7 +286,7 @@ void func_8088A894(EnArrow* this, PlayState* play) {
     Vec3f sp50;
     f32 sp4C;
     f32 temp_f0;
-    s32 sp44;
+    s32 bgId;
 
     Math_Vec3f_Diff(&this->actor.world.pos, &this->unk_228, &sp68);
     sp4C = ((this->actor.world.pos.x - this->unk_264->world.pos.x) * sp68.x) +
@@ -305,7 +305,7 @@ void func_8088A894(EnArrow* this, PlayState* play) {
     Math_Vec3f_Scale(&sp68, temp_f0);
     Math_Vec3f_Sum(&this->unk_264->world.pos, &sp68, &sp5C);
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_264->world.pos, &sp5C, &sp50, &sp74, true, true, true, true,
-                                &sp44)) {
+                                &bgId)) {
         this->unk_264->world.pos.x = ((sp5C.x <= sp50.x) ? 1.0f : -1.0f) + sp50.x;
         this->unk_264->world.pos.y = ((sp5C.y <= sp50.y) ? 1.0f : -1.0f) + sp50.y;
         this->unk_264->world.pos.z = ((sp5C.z <= sp50.z) ? 1.0f : -1.0f) + sp50.z;
@@ -351,7 +351,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             }
 
             this->actor.params = ARROW_TYPE_NORMAL;
-            this->collider.info.toucher.dmgFlags = 0x20;
+            this->collider.elem.toucher.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
                 Actor_Kill(this->actor.child);
@@ -365,7 +365,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
 
 void func_8088ACE0(EnArrow* this, PlayState* play) {
     CollisionPoly* spAC;
-    s32 spA8;
+    s32 bgId;
     Vec3f sp9C;
     s32 phi_a2 = 0;
     EffectSsSbnInitParams sp84;
@@ -380,7 +380,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         ((this->actor.params == ARROW_TYPE_DEKU_BUBBLE) &&
          ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
-            if (phi_a2 && (this->collider.info.atHitElem->elemType != ELEMTYPE_UNK4) &&
+            if (phi_a2 && (this->collider.elem.atHitElem->elemType != ELEMTYPE_UNK4) &&
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
@@ -434,7 +434,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         } else {
             EffectSsHitmark_SpawnCustomScale(play, EFFECT_HITMARK_WHITE, 150, &this->actor.world.pos);
 
-            if (sp50 && (this->collider.info.atHitElem->elemType != ELEMTYPE_UNK4)) {
+            if (sp50 && (this->collider.elem.atHitElem->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
 
                 if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
@@ -515,11 +515,11 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
 
         if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
-                                                        &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
+                                                        &sp9C, &this->actor.wallPoly, true, true, true, true, &bgId))) {
             // `func_800B90AC` only returns a boolean, and does not process any code
-            func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
+            func_800B90AC(play, &this->actor, this->actor.wallPoly, bgId, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
-            this->actor.wallBgId = spA8;
+            this->actor.wallBgId = bgId;
         }
 
         if (ARROW_IS_ARROW(this->actor.params)) {
@@ -535,7 +535,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Math_Vec3f_Sum(&this->unk_228, &this->unk_268, &sp60);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &sp54);
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &sp54, &sp9C, &spAC, true, true, true, true, &spA8)) {
+            if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &sp54, &sp9C, &spAC, true, true, true, true, &bgId)) {
                 this->unk_264->world.pos.x = ((sp54.x <= sp9C.x) ? 1.0f : -1.0f) + sp9C.x;
                 this->unk_264->world.pos.y = ((sp54.y <= sp9C.y) ? 1.0f : -1.0f) + sp9C.y;
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
