@@ -64,6 +64,7 @@ extern RegEditor* gRegEditor;
 
 #define R_ENV_DISABLE_DBG                 REG(9)
 #define R_TIME_SPEED                      REG(15)
+#define R_DECELERATE_RATE                 REG(43)
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
