@@ -9,7 +9,8 @@
 #include "assets/objects/object_bigpo/object_bigpo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -289,7 +290,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
@@ -488,7 +489,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->angularVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -549,7 +550,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -749,7 +750,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
@@ -817,7 +818,7 @@ void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
     Actor_SetFocus(&this->actor, -10.0f);
     this->idleTimer = 400; // 20 seconds
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnBigpo_ScoopSoulIdle;
 }
 
@@ -839,7 +840,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10000); // unknown OFF
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10000); // unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
 
@@ -851,7 +852,7 @@ void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitDampeMainPo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnBigpo_SelectRandomFireLocations;
 }
 
@@ -897,7 +898,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
                     Actor_ChangeCategory(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
-                    randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    randomFirePo->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                     // make invisible by size: 0
                     Actor_SetScale(&randomFirePo->actor, 0);
 
@@ -1129,7 +1130,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == BIG_POE_TYPE_SUMMONED) { // dampe type

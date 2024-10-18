@@ -6,7 +6,7 @@
 
 #include "z_en_wdhand.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnWdhand*)thisx)
 
@@ -596,7 +596,7 @@ s32 EnWdhand_ShrinkLimb(EnWdhand* this, s32 limbIndex) {
 void EnWdhand_SetupDie(EnWdhand* this) {
     s32 i;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.flags |= ACTOR_FLAG_10;
 
     // Finds the particular collider that was hit

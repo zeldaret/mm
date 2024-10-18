@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount3/z_en_encount3.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnJso*)thisx)
 
@@ -265,7 +265,7 @@ void EnJso_Init(Actor* thisx, PlayState* play) {
     EffectBlureInit1 leftSwordBlureInit;
 
     this->actor.hintId = TATL_HINT_ID_GARO;
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = 80;
     this->actor.colChkInfo.health = 3;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
@@ -376,7 +376,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
             player->actor.world.pos.x = this->actor.home.pos.x + 30.0f;
             player->actor.world.pos.z = this->actor.home.pos.z + 30.0f;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->subCamEyeNext.x = player->actor.world.pos.x;
             this->subCamEyeNext.y = player->actor.world.pos.y;
             this->subCamEyeNext.z = player->actor.world.pos.z;
@@ -586,7 +586,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
                 this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer;
                 EnJso_SetupJumpBack(this);
             }
@@ -1128,7 +1128,7 @@ void EnJso_SetupDead(EnJso* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.speed = 0.0f;
     this->disableBlure = true;
@@ -1165,7 +1165,7 @@ void EnJso_SetupFallDownAndTalk(EnJso* this, PlayState* play) {
     EnJso_ChangeAnim(this, EN_JSO_ANIM_FALL_DOWN);
     this->textIndex = 2;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_100000;

@@ -8,7 +8,7 @@
 #include "assets/objects/object_an4/object_an4.h"
 #include "assets/objects/object_msmo/object_msmo.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmGm*)thisx)
 
@@ -231,7 +231,7 @@ void DmGm_WaitForObject(DmGm* this, PlayState* play) {
 
         this->animIndex = DMGM_ANIM_NONE;
         DmGm_ChangeAnim(this, play, DMGM_ANIM_SITTING_IN_DISBELIEF);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_SetScale(&this->actor, 0.01f);
         this->stateFlags |= 1;
         this->actor.draw = DmGm_Draw;

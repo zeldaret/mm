@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Death/z_en_death.h"
 #include "assets/objects/object_death/object_death.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnMinideath*)thisx)
 
@@ -167,7 +167,7 @@ void EnMinideath_Init(Actor* thisx, PlayState* play) {
 
     thisx->shape.rot.y = thisx->parent->shape.rot.y;
     thisx->world.rot.y = thisx->parent->shape.rot.y;
-    thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+    thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Collider_InitAndSetJntSph(play, &this->collider, thisx, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);

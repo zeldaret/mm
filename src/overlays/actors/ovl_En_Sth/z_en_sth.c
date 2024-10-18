@@ -9,7 +9,7 @@
 
 #include "z_en_sth.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth*)thisx)
 
@@ -168,7 +168,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnSth_MoonLookingIdle;
             this->sthFlags |= STH_FLAG_DISABLE_HEAD_TRACK;
-            this->actor.targetMode = TARGET_MODE_3;
+            this->actor.attentionRangeType = ATTENTION_RANGE_3;
             this->actor.uncullZoneForward = 800.0f;
             break;
 
@@ -614,7 +614,7 @@ void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play
     if (Inventory_GetSkullTokenCount(play->sceneId) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
         this->actor.update = EnSth_Update;
         this->actor.draw = EnSth_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -672,7 +672,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
             (Inventory_GetSkullTokenCount(play->sceneId) < SPIDER_HOUSE_TOKENS_REQUIRED)) {
             this->actor.update = EnSth_UpdateOceansideSpiderHouseWaitForTokens;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         }
     }
 }

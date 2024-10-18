@@ -69,7 +69,7 @@ ActorProfile En_Box_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_STOP),
 };
 
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {

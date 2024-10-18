@@ -20,7 +20,7 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 
@@ -549,7 +549,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     static InitChainEntry sInitChain[] = {
         ICHAIN_S8(hintId, TATL_HINT_ID_GOHT, ICHAIN_CONTINUE),
         ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
-        ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
+        ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
     };
     PlayState* play = play2;
@@ -620,7 +620,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         this->iceScaleY = 2.7f;
         BossHakugin_SpawnLargeStalactiteWalls(this);
         Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         BossHakugin_SetupFrozenBeforeFight(this);
     } else {
         this->iceAlpha = 255;
@@ -1550,7 +1550,7 @@ void BossHakugin_SetupEntranceCutscene(BossHakugin* this, PlayState* play) {
     Vec3f subCamAt;
 
     Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
 
@@ -1839,7 +1839,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
         this->subCamEye.y = subCam->eye.y;
         this->subCamEye.z = subCam->eye.z + 450.0f;
     } else if (this->timer == 62) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         CutsceneManager_Stop(this->actor.csId);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
@@ -2362,7 +2362,7 @@ void BossHakugin_SetupDeathCutsceneRun(BossHakugin* this) {
     this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     this->headRot.y = 0;
     this->headRot.z = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = CLAMP_MIN(this->actor.speed, 16.0f);
     this->actionFunc = BossHakugin_DeathCutsceneRun;
 }

@@ -8,7 +8,7 @@
 #include "z_en_poh.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnPoh*)thisx)
 
@@ -363,7 +363,7 @@ void func_80B2D07C(EnPoh* this, PlayState* play) {
 
 void func_80B2D0E8(EnPoh* this) {
     this->unk_197 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gPoeAppearAnim, 0.0f);
     this->actionFunc = func_80B2D140;
 }
@@ -372,7 +372,7 @@ void func_80B2D140(EnPoh* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk_197 = 255;
         this->unk_190 = Rand_S16Offset(700, 300);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         func_80B2CB60(this);
     } else if (this->skelAnime.curFrame > 10.0f) {
         this->unk_197 = (this->skelAnime.curFrame - 10.0f) * 0.05f * 255.0f;
@@ -389,7 +389,7 @@ void func_80B2D2C0(EnPoh* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
     this->actor.hintId = TATL_HINT_ID_NONE;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B2D300;
 }
 
@@ -577,7 +577,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     this->actionFunc = func_80B2DD2C;
 }
 
@@ -646,7 +646,7 @@ void func_80B2E1D8(EnPoh* this) {
     Actor_SetFocus(&this->actor, -10.0f);
     this->unk_18E = 200;
     this->unk_18D = 32;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B2E230;
 }
 

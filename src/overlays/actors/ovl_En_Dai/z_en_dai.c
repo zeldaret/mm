@@ -6,7 +6,7 @@
 
 #include "z_en_dai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDai*)thisx)
 
@@ -559,7 +559,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->animIndex = ENDAI_ANIM_NONE;
     EnDai_ChangeAnim(this, ENDAI_ANIM_0);
     Actor_SetScale(&this->actor, 0.2f);
-    this->actor.targetMode = TARGET_MODE_10;
+    this->actor.attentionRangeType = ATTENTION_RANGE_10;
     this->unk_1F0 = D_80B3FBF0;
     this->unk_1FC = D_80B3FBF0;
     this->unk_1CE = 0;
@@ -579,7 +579,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;

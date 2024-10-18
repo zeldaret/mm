@@ -238,7 +238,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10); // always update and can target
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10); // always update and can target
 
             transformationHeight = sTransformationHeight[player->transformation];
 

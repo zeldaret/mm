@@ -13,7 +13,7 @@
 #include "z_en_okuta.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnOkuta*)thisx)
 
@@ -181,11 +181,11 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
             this->collider.base.acFlags |= AC_HARD;
         }
 
-        thisx->targetMode = TARGET_MODE_5;
+        thisx->attentionRangeType = ATTENTION_RANGE_5;
         EnOkuta_SetupWaitToAppear(this);
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
-        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+        thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         thisx->flags |= ACTOR_FLAG_10;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
@@ -314,7 +314,7 @@ void EnOkuta_SpawnProjectile(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupWaitToAppear(EnOkuta* this) {
     this->actor.draw = NULL;
     this->actor.world.pos.y = this->actor.home.pos.y;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnOkuta_WaitToAppear;
 }
 
@@ -337,7 +337,7 @@ void EnOkuta_WaitToAppear(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
     this->actor.draw = EnOkuta_Draw;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Animation_PlayOnce(&this->skelAnime, &gOctorokAppearAnim);
     EnOkuta_SpawnBubbles(this, play);
     this->actionFunc = EnOkuta_Appear;
@@ -576,7 +576,7 @@ void EnOkuta_Damaged(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupDie(EnOkuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gOctorokDieAnim, -3.0f);
     this->timer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnOkuta_Die;
 }
 
@@ -656,7 +656,7 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
         this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, 3);
 
     if (this->actor.child != NULL) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.child->csId = this->actor.csId;
         this->actionFunc = EnOkuta_FrozenInIceBlock;
@@ -681,7 +681,7 @@ void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
     this->actor.colorFilterTimer = 10;
 
     if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 10.0f)) {
             this->actor.flags &= ~ACTOR_FLAG_10;

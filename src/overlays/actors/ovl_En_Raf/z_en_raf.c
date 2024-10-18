@@ -201,7 +201,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = TARGET_MODE_3;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
@@ -553,7 +553,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->timer = 5;
     if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ENEMY);
-        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+        this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     }
 
     this->actionFunc = EnRaf_PostDetonation;
@@ -567,7 +567,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_PROP);
-        this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;

@@ -11,7 +11,7 @@
 
 #include "assets/objects/object_ka/object_ka.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnKakasi*)thisx)
 
@@ -173,9 +173,9 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
     this->unkHeight = (this->picto.actor.world.rot.z * 20.0f) + 60.0f;
     this->picto.actor.world.rot.z = 0;
-    this->picto.actor.targetMode = TARGET_MODE_0;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_0;
     if ((this->picto.actor.world.rot.x > 0) && (this->picto.actor.world.rot.x < 8)) {
-        this->picto.actor.targetMode = KAKASI_GET_TARGETMODE(thisx);
+        this->picto.actor.attentionRangeType = KAKASI_GET_TARGETMODE(thisx);
     }
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
 

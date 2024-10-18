@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
 #include "assets/objects/object_maruta/object_maruta.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
 
 #define THIS ((EnMaruta*)thisx)
 
@@ -214,7 +214,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
@@ -322,7 +322,7 @@ void func_80B37428(EnMaruta* this, PlayState* play) {
 }
 
 void func_80B374B8(EnMaruta* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->actionFunc != func_80B37428) {
         this->unk_21E = 0;
         this->actor.gravity = -2.0f;
@@ -422,7 +422,7 @@ void func_80B37590(EnMaruta* this, PlayState* play) {
         this->unk_21A |= 0xFF;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B37950;
 }
 

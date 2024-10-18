@@ -15,7 +15,7 @@
 #include "z_en_bba_01.h"
 #include "assets/objects/object_bba/object_bba.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBba01*)thisx)
 
@@ -159,7 +159,7 @@ void EnBba01_FinishInit(EnHy* this, PlayState* play) {
     //! @bug: gBombShopLadySkel does not match EnHy's skeleton assumptions.
     //! Since gBombShopLadySkel has more limbs than expected, joint and morph tables will overflow
     if (EnHy_Init(this, play, &gBombShopLadySkel, ENHY_ANIM_BBA_6)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
         if (ENBBA01_GET_PATH_INDEX(&this->actor) == ENBBA01_PATH_INDEX_NONE) {
@@ -229,7 +229,7 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->enHy.collider);
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->enHy.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->enHy.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH_INDEX(&this->enHy.actor), ENBBA01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
