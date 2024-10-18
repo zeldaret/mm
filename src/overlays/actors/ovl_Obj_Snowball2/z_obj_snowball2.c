@@ -7,7 +7,7 @@
 #include "z_obj_snowball2.h"
 #include "assets/objects/object_goroiwa/object_goroiwa.h"
 
-#define FLAGS (ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((ObjSnowball2*)thisx)
 
