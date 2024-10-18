@@ -6,7 +6,7 @@
 #include "main.h"
 #include "segment_symbols.h"
 #include "stack.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "viconfig.h"
 #include "z64dma.h"
 #include "z64thread.h"

@@ -22,7 +22,7 @@
 #include "z64frameadvance.h"
 
 #include "controller.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 #include "stdbool.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {

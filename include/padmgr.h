@@ -6,7 +6,7 @@
 #include "stdbool.h"
 
 #include "irqmgr.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 
 typedef enum {
     /*  0 */ PADMGR_CONT_NONE,
@@ -54,7 +54,6 @@ typedef struct PadMgr {
 
 // Initialization
 
-s32 PadSetup_Init(OSMesgQueue* mq, u8* outMask, OSContStatus* status);
 void PadMgr_Init(OSMesgQueue* siEvtQ, IrqMgr* irqMgr, OSId threadId, OSPri pri, void* stack);
 
 // Fetching inputs

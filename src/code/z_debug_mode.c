@@ -3,7 +3,7 @@
 #include "color.h"
 #include "gfx.h"
 #include "gfxalloc.h"
-#include "gfxprint.h"
+#include "libu64/gfxprint.h"
 #include "macros.h"
 
 typedef struct {

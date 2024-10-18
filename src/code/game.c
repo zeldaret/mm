@@ -2,7 +2,7 @@
 
 #include "global.h"
 #include "audiomgr.h"
-#include "debug.h"
+#include "libu64/debug.h"
 #include "gfx.h"
 #include "gfxalloc.h"
 #include "idle.h"
