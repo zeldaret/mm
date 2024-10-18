@@ -20,6 +20,7 @@ u8 sMotionBlurStatus;
 #include "idle.h"
 #include "regs.h"
 #include "sys_cfb.h"
+#include "attributes.h"
 
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"

@@ -7,6 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"

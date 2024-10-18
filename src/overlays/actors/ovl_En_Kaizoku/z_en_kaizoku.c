@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kaizoku.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 

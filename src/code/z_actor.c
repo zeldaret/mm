@@ -4,6 +4,7 @@
  */
 
 #include "fault.h"
+#include "attributes.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 

@@ -9,6 +9,7 @@
  */
 
 #include "z_en_dno.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

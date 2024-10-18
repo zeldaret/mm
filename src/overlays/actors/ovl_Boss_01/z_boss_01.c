@@ -28,6 +28,7 @@
 #include "z_boss_01.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"

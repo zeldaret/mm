@@ -15,6 +15,7 @@
  */
 #include "global.h"
 #include "audio/seqplayer.h"
+#include "attributes.h"
 
 #define PROCESS_SCRIPT_END -1
 

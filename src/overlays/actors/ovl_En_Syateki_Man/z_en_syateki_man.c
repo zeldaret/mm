@@ -8,6 +8,7 @@
  */
 
 #include "z_en_syateki_man.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ig.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)

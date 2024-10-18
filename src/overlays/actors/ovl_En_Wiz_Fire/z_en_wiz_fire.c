@@ -5,6 +5,7 @@
  */
 
 #include "z_en_wiz_fire.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "assets/objects/object_wiz/object_wiz.h"
 

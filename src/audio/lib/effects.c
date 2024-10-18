@@ -10,8 +10,8 @@
  * - Multi-Point ADSR Envelope: volume changing over time through Attack, Decay, Sustain, Release
  */
 #include "global.h"
-#include "attributes.h"
 #include "audio/effects.h"
+#include "attributes.h"
 
 void AudioScript_SequenceChannelProcessSound(SequenceChannel* channel, s32 recalculateVolume, s32 applyBend) {
     f32 channelVolume;
@@ -314,7 +314,8 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
             if (adsr->delay <= 0) {
                 adsr->action.s.status = ADSR_STATUS_LOOP;
             }
-            FALLTHROUGH;
+            break;
+
         case ADSR_STATUS_HANG:
             break;
 

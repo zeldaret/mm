@@ -28,6 +28,7 @@
  */
 
 #include "z_boss_05.h"
+#include "attributes.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
 

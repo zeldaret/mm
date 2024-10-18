@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pm.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "assets/objects/object_mm/object_mm.h"
 

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "message_data_fmt_nes.h"
 #include "message_data_static.h"
+#include "attributes.h"
 
 f32 sNESFontWidths[160] = {
     8.0f,  8.0f,  6.0f,  9.0f,  9.0f,  14.0f, 12.0f, 3.0f,  7.0f,  7.0f,  7.0f,  9.0f,  4.0f,  6.0f,  4.0f,  9.0f,

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hsstump.h"
+#include "attributes.h"
 #include "assets/objects/object_hsstump/object_hsstump.h"
 
 #define FLAGS (ACTOR_FLAG_10)

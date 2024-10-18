@@ -24,6 +24,7 @@
 
 #include "z_en_rd.h"
 #include "z64rumble.h"
+#include "attributes.h"
 #include "assets/objects/object_rd/object_rd.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 

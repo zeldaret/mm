@@ -3,6 +3,7 @@
 #include "sys_cmpdma.h"
 #include "z64bombers_notebook.h"
 #include "zelda_arena.h"
+#include "attributes.h"
 
 #include "assets/interface/schedule_static/schedule_static.h"
 #include "assets/archives/schedule_dma_static/schedule_dma_static_yar.h"

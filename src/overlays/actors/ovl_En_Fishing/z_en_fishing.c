@@ -7,6 +7,7 @@
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "assets/objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 

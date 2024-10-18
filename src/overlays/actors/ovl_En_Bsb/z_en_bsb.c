@@ -8,6 +8,7 @@
 
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"

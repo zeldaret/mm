@@ -6,6 +6,7 @@
 
 #include "z_en_gs.h"
 #include "z64voice.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "assets/objects/object_gs/object_gs.h"

@@ -1647,7 +1647,6 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
             if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
-                FALLTHROUGH;
             } else {
                 ret = true;
                 this->stateFlags |= ENAN_STATE_DRAW_KAFEIS_MASK;

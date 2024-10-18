@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kanban.h"
+#include "attributes.h"
 #include "assets/objects/object_kanban/object_kanban.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

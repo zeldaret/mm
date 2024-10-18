@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ginko_man.h"
+#include "attributes.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 

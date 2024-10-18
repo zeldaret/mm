@@ -47,6 +47,7 @@
 
 #include "global.h"
 #include "string.h"
+#include "attributes.h"
 
 #include "zelda_arena.h"
 #include "z64olib.h"

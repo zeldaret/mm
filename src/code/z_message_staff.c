@@ -1,6 +1,7 @@
 #include "global.h"
 #include "message_data_fmt_staff.h"
 #include "message_data_static.h"
+#include "attributes.h"
 
 void Message_FindCreditsMessage(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;

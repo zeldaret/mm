@@ -14,6 +14,7 @@
  */
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "assets/objects/object_taisou/object_taisou.h"

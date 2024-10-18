@@ -8,6 +8,7 @@
 #include "z64snap.h"
 #include "z64view.h"
 #include "z64voice.h"
+#include "attributes.h"
 
 #include "assets/archives/icon_item_static/icon_item_static_yar.h"
 #include "assets/interface/parameter_static/parameter_static.h"

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tk.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 

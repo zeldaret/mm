@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attributes.h"
 
 /**
  * Branch forward if the provided weekEventReg flag is set

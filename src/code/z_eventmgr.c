@@ -7,6 +7,7 @@
 #include "z64cutscene.h"
 
 #include "string.h"
+#include "attributes.h"
 
 #include "global.h"
 #include "z64olib.h"

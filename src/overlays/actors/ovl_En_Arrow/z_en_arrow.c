@@ -5,6 +5,7 @@
  */
 
 #include "z_en_arrow.h"
+#include "attributes.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
