@@ -1884,8 +1884,8 @@ f32 Attention_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw
     return actor->xyzDistToPlayerSq;
 }
 
-#define ATTENTION_RANGES(range, leash) \
-    { SQ(range), (f32)(range) / (leash) }
+#define ATTENTION_RANGES(range, lockOnLeashRange) \
+    { SQ(range), (f32)(range) / (lockOnLeashRange) }
 
 AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX] = {
     ATTENTION_RANGES(70, 140),        // ATTENTION_RANGE_0
