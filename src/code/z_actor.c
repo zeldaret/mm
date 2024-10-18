@@ -2541,7 +2541,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
             Actor_Kill(actor);
-        } else if ((params->freezeExceptionFlag && !(actor->flags & params->freezeExceptionFlag)) ||
+        } else if (((params->freezeExceptionFlag != 0) && !(actor->flags & params->freezeExceptionFlag)) ||
                    (((!params->freezeExceptionFlag) != 0) &&
                     (!(actor->flags & ACTOR_FLAG_100000) ||
                      ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
