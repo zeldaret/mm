@@ -56,7 +56,7 @@ typedef enum {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -64,11 +64,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x038BFBB3, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 60, 0, { 0, 0, 0 } },
@@ -503,7 +503,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
         if ((this->collider.elem.acHitElem != NULL) &&
-            (this->collider.elem.acHitElem->toucher.dmgFlags & DMG_DEKU_NUT)) {
+            (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & DMG_DEKU_NUT)) {
             Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 400);
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_Stunned;

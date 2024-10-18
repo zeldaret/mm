@@ -51,7 +51,7 @@ ActorProfile En_Wiz_Fire_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -59,11 +59,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x09, 0x10 },
         { 0x01001202, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -80,21 +80,21 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
-        this->collider.elem.toucher.dmgFlags = 0x20000000;
+        this->collider.elem.atDmgInfo.dmgFlags = 0x20000000;
     }
 
     switch (this->type) {
         case EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE:
             this->isIceType = true;
-            this->collider.elem.toucher.damage = 8;
-            this->collider.elem.toucher.effect = 2;
-            this->collider.elem.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
+            this->collider.elem.atDmgInfo.damage = 8;
+            this->collider.elem.atDmgInfo.effect = 2;
+            this->collider.elem.acDmgInfo.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
             // fallthrough
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
             if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
                 this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
-                this->collider.elem.toucher.damage = 8;
+                this->collider.elem.atDmgInfo.damage = 8;
             }
             // fallthrough
         case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
@@ -106,7 +106,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->actor.draw = EnWizFire_DrawSmallFlame;
             this->smallFlameScroll = Rand_S16Offset(0, 10000);
             this->action = EN_WIZ_FIRE_ACTION_SMALL_FLAME;
-            this->collider.elem.toucher.damage = 2;
+            this->collider.elem.atDmgInfo.damage = 2;
             this->actionFunc = EnWiz_SetupSmallFlame;
             break;
 
@@ -283,7 +283,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
     if ((this->type != EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE) && (this->timer != 0)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -294,8 +294,8 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;
-            this->collider.elem.toucher.dmgFlags = 0x20;
-            this->collider.elem.toucher.damage = 2;
+            this->collider.elem.atDmgInfo.dmgFlags = 0x20;
+            this->collider.elem.atDmgInfo.damage = 2;
             this->timer = 100;
             this->type = EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE;
             this->actor.velocity.x *= -1.0f;
@@ -342,7 +342,7 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
                 this->timer -= 10;
             }
 
-            if (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags == 0x1000) {
                 this->timer = 0;
                 this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
@@ -409,7 +409,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (!sPoolHitByIceArrow && (this->collider.elem.acHitElem->toucher.dmgFlags == 0x1000)) {
+            if (!sPoolHitByIceArrow && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags == 0x1000)) {
                 sPoolHitByIceArrow = true;
                 this->hitByIceArrow = true;
                 this->poolTimer = 0;

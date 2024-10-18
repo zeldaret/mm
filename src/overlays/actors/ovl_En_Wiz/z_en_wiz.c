@@ -96,110 +96,110 @@ ActorProfile En_Wiz_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[10] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x01000202, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { WIZROBE_LIMB_PELVIS, { { 0, 0, 0 }, 0 }, 0 },
@@ -208,7 +208,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[10] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT2,
+        COL_MATERIAL_HIT2,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -221,7 +221,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -229,11 +229,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0xF7CFFFFF, 0x08, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 35, 130, 0, { 0, 0, 0 } },
@@ -762,7 +762,7 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
             } else {
                 this->action = EN_WIZ_ACTION_RUN_IN_CIRCLES;
                 this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
-                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1013A22;
+                this->ghostColliders.elements[0].base.acDmgInfo.dmgFlags = 0x1013A22;
                 Math_Vec3f_Copy(&this->staffTargetFlameScale, &staffTargetFlameScale);
                 this->targetPlatformLightAlpha = 0;
 
@@ -1049,7 +1049,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
             this->alpha = 0;
             if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {
-                this->ghostColliders.elements[0].base.bumper.dmgFlags = 0x1000202;
+                this->ghostColliders.elements[0].base.acDmgInfo.dmgFlags = 0x1000202;
             }
 
             this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -1281,7 +1281,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
             // in the final game, since EnWiz_Init effectively disables them), then the below code will
             // "destroy" the ghost by turning into a cloud of smoke.
             if ((R_TRANS_FADE_FLASH_ALPHA_STEP != 0) ||
-                (this->ghostColliders.elements[i + 1].base.bumperFlags & BUMP_HIT)) {
+                (this->ghostColliders.elements[i + 1].base.acElemFlags & ACELEM_HIT)) {
                 //! @bug: If a single ghost is destroyed, then changing the fight state here will cause
                 //! strange behavior; the ghosts will stand still and pretend to attack the player like
                 //! the real Wizrobe. Since Deku Nuts destroy all ghosts at once, and since the ghost

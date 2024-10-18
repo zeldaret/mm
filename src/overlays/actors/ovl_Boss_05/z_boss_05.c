@@ -108,22 +108,22 @@ typedef enum BioDekuBabaLilyPadWithHeadMovementState {
 static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -132,7 +132,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sLilyPadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -147,11 +147,11 @@ static ColliderJntSphInit sLilyPadJntSphInit = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
@@ -160,7 +160,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -175,11 +175,11 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7FFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -188,7 +188,7 @@ static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sWalkingHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -468,7 +468,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         s32 i = 0;
 
         while (true) {
-            if (this->lilyPadCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->lilyPadCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case BIO_BABA_DMGEFF_FIRE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
@@ -486,7 +486,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
 
             i++;
             if (i == BIO_BABA_LILY_PAD_COLLIDER_MAX) {
-                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT) {
+                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
 
                     this->dyna.actor.colChkInfo.health -= damage;
@@ -950,10 +950,10 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) &&
-        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags &= ~BUMP_HIT;
+        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT)) {
+        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags &= ~ACELEM_HIT;
         acHitElem = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acHitElem;
-        if (acHitElem->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
+        if (acHitElem->atDmgInfo.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
             this->damagedTimer = 6;

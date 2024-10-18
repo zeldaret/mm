@@ -39,7 +39,7 @@ ActorProfile En_Bombf_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00013A28, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 9, 18, 10, { 0, 0, 0 } },
@@ -60,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000008, 0x00, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,
@@ -167,8 +167,8 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
-                   ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x13828) ||
-                    ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x200) &&
+                   ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x13828) ||
+                    ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x200) &&
                      (player->transformation == PLAYER_FORM_GORON) && (player->actor.speed > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {

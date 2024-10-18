@@ -76,7 +76,7 @@ ActorProfile En_Snowman_Profile = {
 
 static ColliderCylinderInit sEenoCylinderInit = {
     {
-        COLTYPE_HIT4,
+        COL_MATERIAL_HIT4,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -84,11 +84,11 @@ static ColliderCylinderInit sEenoCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0.0f, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 60, 80, 0, { 0, 0, 0 } },
@@ -96,7 +96,7 @@ static ColliderCylinderInit sEenoCylinderInit = {
 
 static ColliderCylinderInit sSnowballCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE | OC1_TYPE_ALL,
@@ -104,11 +104,11 @@ static ColliderCylinderInit sSnowballCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 60, 80, 0, { 0, 0, 0 } },
@@ -269,7 +269,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             this->collider.dim.radius = 50;
             this->collider.dim.height = 122;
             this->collider.dim.yShift = -8;
-            this->collider.elem.toucher.damage = 16;
+            this->collider.elem.atDmgInfo.damage = 16;
             thisx->world.pos.y -= 32.0f;
             Actor_SetScale(thisx, 0.006f);
             ActorShape_Init(&thisx->shape, 16000.0f / 3.0f, ActorShadow_DrawCircle, 170.0f);
@@ -1011,8 +1011,8 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 this->drawDmgEffScale = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                            this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                            this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }

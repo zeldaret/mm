@@ -4,7 +4,7 @@
 
 ColliderCylinderInit sFireObjCollisionInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -12,11 +12,11 @@ ColliderCylinderInit sFireObjCollisionInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 18, 67, 0, { 0, 0, 0 } },
@@ -223,13 +223,13 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
     FireObj_UpdateStateTransitions(play, fire);
     if (fire->state == FIRE_STATE_NOT_LIT) {
         if ((fire->collision.base.acFlags & AC_HIT) &&
-            (fire->collision.elem.acHitElem->toucher.dmgFlags & DMG_FIRE_ARROW)) {
+            (fire->collision.elem.acHitElem->atDmgInfo.dmgFlags & DMG_FIRE_ARROW)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->collider.elem.toucher.dmgFlags = DMG_FIRE_ARROW;
+        arrow->collider.elem.atDmgInfo.dmgFlags = DMG_FIRE_ARROW;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;

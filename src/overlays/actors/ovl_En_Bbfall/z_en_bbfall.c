@@ -51,33 +51,33 @@ ActorProfile En_Bbfall_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x01, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x01, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x01, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
@@ -86,7 +86,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -234,15 +234,15 @@ void EnBbfall_CheckForWall(EnBbfall* this) {
 }
 
 void EnBbfall_EnableColliders(EnBbfall* this) {
-    this->collider.elements[0].base.toucher.effect = ELEMTYPE_UNK1; // Fire
-    this->collider.elements[1].base.toucherFlags |= TOUCH_ON;
-    this->collider.elements[2].base.toucherFlags |= TOUCH_ON;
+    this->collider.elements[0].base.atDmgInfo.effect = ELEM_MATERIAL_UNK1; // Fire
+    this->collider.elements[1].base.atElemFlags |= ATELEM_ON;
+    this->collider.elements[2].base.atElemFlags |= ATELEM_ON;
 }
 
 void EnBbfall_DisableColliders(EnBbfall* this) {
-    this->collider.elements[0].base.toucher.effect = ELEMTYPE_UNK0; // Nothing
-    this->collider.elements[1].base.toucherFlags &= ~TOUCH_ON;
-    this->collider.elements[2].base.toucherFlags &= ~TOUCH_ON;
+    this->collider.elements[0].base.atDmgInfo.effect = ELEM_MATERIAL_UNK0; // Nothing
+    this->collider.elements[1].base.atElemFlags &= ~ATELEM_ON;
+    this->collider.elements[2].base.atElemFlags &= ~ATELEM_ON;
 }
 
 void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
@@ -524,7 +524,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlagJntSph(&this->actor, &this->collider);
             this->flameOpacity = 0;
             this->flameScaleY = 0.0f;
@@ -554,9 +554,10 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].base.bumper.hitPos.x,
-                            this->collider.elements[0].base.bumper.hitPos.y,
-                            this->collider.elements[0].base.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                            this->collider.elements[0].base.acDmgInfo.hitPos.x,
+                            this->collider.elements[0].base.acDmgInfo.hitPos.y,
+                            this->collider.elements[0].base.acDmgInfo.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }

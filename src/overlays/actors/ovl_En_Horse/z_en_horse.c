@@ -176,7 +176,7 @@ ActorProfile En_Horse_Profile = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -184,11 +184,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000004, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 70, 0, { 0, 0, 0 } },
@@ -196,7 +196,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -204,11 +204,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 70, 0, { 0, 0, 0 } },
@@ -217,11 +217,11 @@ static ColliderCylinderInit sCylinderInit2 = {
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00013820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_AT_INFO | ACELEM_NO_DAMAGE | ACELEM_NO_SWORD_SFX | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { 13, { { 0, 0, 0 }, 20 }, 100 },
@@ -230,7 +230,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -934,14 +934,14 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     this->unk_538 = OBJ_UM_ANIM_TROT;
 
     if (this->unk_1EC & 0x100) {
-        this->colliderCylinder1.base.colType = COLTYPE_HIT3;
+        this->colliderCylinder1.base.colMaterial = COL_MATERIAL_HIT3;
         this->colliderCylinder1.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder1.elem.bumperFlags |= BUMP_ON;
-        this->colliderCylinder1.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
-        this->colliderCylinder2.base.colType = COLTYPE_HIT3;
+        this->colliderCylinder1.elem.acElemFlags |= ACELEM_ON;
+        this->colliderCylinder1.elem.acDmgInfo.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder2.base.colMaterial = COL_MATERIAL_HIT3;
         this->colliderCylinder2.base.acFlags |= (AC_TYPE_PLAYER | AC_ON);
-        this->colliderCylinder2.elem.bumperFlags |= BUMP_ON;
-        this->colliderCylinder2.elem.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
+        this->colliderCylinder2.elem.acElemFlags |= ACELEM_ON;
+        this->colliderCylinder2.elem.acDmgInfo.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
     }
 }
 

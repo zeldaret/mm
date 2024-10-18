@@ -80,7 +80,7 @@ static DamageTable sDamageTable = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -88,11 +88,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xFFFFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 30, 50, -25, { 0, 0, 0 } },
@@ -100,7 +100,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -108,11 +108,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 22, 42, -21, { 0, 0, 0 } },
@@ -425,7 +425,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
         if (this->collider1.base.acFlags & AC_HIT) {
             this->collider1.base.acFlags &= ~AC_HIT;
             acHitElem = this->collider1.elem.acHitElem;
-            if (acHitElem->toucher.dmgFlags & 0x80) {
+            if (acHitElem->atDmgInfo.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
@@ -438,7 +438,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 this->unk_154 = 15;
                 if (this->actionFunc != func_80BB69FC) {
                     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-                    if ((acHitElem->toucher.dmgFlags & 0x300000) != 0) {
+                    if ((acHitElem->atDmgInfo.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
                         Matrix_MultVecZ(-10.0f, &this->actor.velocity);
                     } else {
