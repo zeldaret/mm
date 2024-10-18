@@ -1235,9 +1235,9 @@ typedef struct Player {
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
     /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
-    /* 0xAD0 */ f32 linearVelocity;
-    /* 0xAD4 */ s16 currentYaw;
-    /* 0xAD6 */ s16 targetYaw;
+    /* 0xAD0 */ f32 speedXZ; // Controls horizontal speed, used for `actor.speed`. Current or target value depending on context.
+    /* 0xAD4 */ s16 yaw; // General yaw value, used both for world and shape rotation. Current or target value depending on context.
+    /* 0xAD6 */ s16 parallelYaw; // yaw in "parallel" mode, Z-Target without an actor lock-on
     /* 0xAD8 */ u16 underwaterTimer;
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;

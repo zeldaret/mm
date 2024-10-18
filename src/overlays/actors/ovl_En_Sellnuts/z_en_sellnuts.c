@@ -735,7 +735,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        player->linearVelocity = 0.0f;
+        player->speedXZ = 0.0f;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {

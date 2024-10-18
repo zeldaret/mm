@@ -448,10 +448,10 @@ s32 func_80BF47AC(EnRg* this, PlayState* play) {
     f32 phi_f0;
     f32 phi_f2;
 
-    if (player->linearVelocity < 20.0f) {
+    if (player->speedXZ < 20.0f) {
         phi_f2 = 20.0f;
     } else {
-        phi_f2 = player->linearVelocity;
+        phi_f2 = player->speedXZ;
     }
 
     if ((this->unk_310 & 0x400) || (this->unk_310 & 0x1000)) {
@@ -574,13 +574,13 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } else if (this->collider2.base.at->id == ACTOR_PLAYER) {
                 this->unk_326 = 0x28;
                 if (player->stateFlags3 & PLAYER_STATE3_1000) {
-                    player->linearVelocity *= 0.5f;
-                    player->unk_B08 = player->linearVelocity;
-                    player->unk_B0C += player->linearVelocity * 0.05f;
-                    if (BINANG_SUB(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
-                        player->currentYaw += 0x2000;
+                    player->speedXZ *= 0.5f;
+                    player->unk_B08 = player->speedXZ;
+                    player->unk_B0C += player->speedXZ * 0.05f;
+                    if (BINANG_SUB(this->actor.yawTowardsPlayer, player->yaw) > 0) {
+                        player->yaw += 0x2000;
                     } else {
-                        player->currentYaw -= 0x2000;
+                        player->yaw -= 0x2000;
                     }
                     player->unk_B8C = 4;
                     player->invincibilityTimer = 20;

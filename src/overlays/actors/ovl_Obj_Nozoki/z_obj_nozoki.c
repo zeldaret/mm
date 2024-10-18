@@ -192,7 +192,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
                 play->actorCtx.flags |= ACTORCTX_FLAG_4;
             }
         }
-        GET_PLAYER(play)->linearVelocity = 0.0f;
+        GET_PLAYER(play)->speedXZ = 0.0f;
     }
 }
 

@@ -606,7 +606,7 @@ void ObjUm_SetPlayerPosition(ObjUm* this, PlayState* play) {
 void ObjUm_RotatePlayer(ObjUm* this, PlayState* play, s16 angle) {
     Player* player = GET_PLAYER(play);
 
-    player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + angle;
+    player->actor.shape.rot.y = player->actor.world.rot.y = player->yaw = this->dyna.actor.shape.rot.y + angle;
 }
 
 void func_80B78EBC(ObjUm* this, PlayState* play) {
@@ -624,7 +624,7 @@ void func_80B78EBC(ObjUm* this, PlayState* play) {
     player->upperLimbRot.y = 0;
     player->upperLimbRot.z = 0;
 
-    player->currentYaw = player->actor.focus.rot.y;
+    player->yaw = player->actor.focus.rot.y;
 }
 
 void ObjUm_RotatePlayerView(ObjUm* this, PlayState* play, s16 angle) {

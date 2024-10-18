@@ -324,7 +324,7 @@ void ObjSwitch_FloorSwitchSnapPlayerToSwitchEdge(ObjSwitch* this, PlayState* pla
                 player->actor.world.pos.z =
                     Math_CosS(this->dyna.actor.yawTowardsPlayer) * centerDisplacement + this->dyna.actor.world.pos.z;
             }
-            player->linearVelocity = 0.0f;
+            player->speedXZ = 0.0f;
         }
     }
 }

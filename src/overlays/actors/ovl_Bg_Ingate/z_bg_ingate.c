@@ -164,7 +164,7 @@ void func_80953F14(BgIngate* this, PlayState* play) {
 
     player->actor.shape.rot.y = this->dyna.actor.shape.rot.y;
     player->actor.world.rot.y = player->actor.shape.rot.y;
-    player->currentYaw = player->actor.shape.rot.y;
+    player->yaw = player->actor.shape.rot.y;
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
     func_80953DA8(this, play);
