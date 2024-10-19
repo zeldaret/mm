@@ -34,7 +34,7 @@ u8 sMotionBlurStatus;
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
-#include "debug.h"
+#include "libu64/debug.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;

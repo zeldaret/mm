@@ -1,5 +1,5 @@
-#ifndef PADUTILS_H
-#define PADUTILS_H
+#ifndef LIBU64_PAD_H
+#define LIBU64_PAD_H
 
 #include "PR/os_cont.h"
 

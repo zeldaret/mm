@@ -50,7 +50,7 @@
 #include "macros.h"
 #include "main.h"
 #include "vt.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "z64thread.h"
 
 FaultMgr* sFaultInstance;

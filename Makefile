@@ -376,7 +376,7 @@ $(BUILD_DIR)/src/libultra/libc/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/libultra/gu/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/libultra/rmon/%.o: OPTFLAGS := -O2
 
-$(BUILD_DIR)/src/boot/O2/%.o: OPTFLAGS := -O2
+$(BUILD_DIR)/src/boot/libu64/%.o: OPTFLAGS := -O2
 
 $(BUILD_DIR)/src/boot/libc/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/boot/libm/%.o: OPTFLAGS := -O2

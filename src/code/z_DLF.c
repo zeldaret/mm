@@ -2,7 +2,7 @@
 #include "global.h"
 
 #include "libc64/malloc.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
     void* vramStart;
