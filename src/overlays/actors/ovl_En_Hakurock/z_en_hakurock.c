@@ -340,7 +340,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
         } else if ((&player->actor == this->collider.base.oc) &&
                    (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) && (player->speedXZ > 8.0f)) {
             player->unk_B08 = player->speedXZ = -5.0f;
-            player->unk_B0C += (player->speedXZ * 0.05f);
+            player->unk_B0C += player->speedXZ * 0.05f;
             player->actor.velocity.y = 5.0f;
             player->yaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;
