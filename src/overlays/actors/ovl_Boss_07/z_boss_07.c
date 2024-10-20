@@ -431,17 +431,17 @@ void Boss07_BattleHandler_UpdateEffects(PlayState* play);
 void Boss07_BattleHandler_DrawEffects(PlayState* play);
 
 static s16 sProjectileEnvColors[4][3] = {
-    { 255, 255, 100 }, // light yellow
-    { 255, 100, 100 }, // light red
-    { 100, 255, 100 }, // light green
-    { 100, 100, 255 }, // light blue
+    { 255, 255, 100 },
+    { 255, 100, 100 },
+    { 100, 255, 100 },
+    { 100, 100, 255 },
 };
 
 static s16 sProjectilePrimColors[4][3] = {
-    { 255, 255, 255 }, // white
-    { 255, 255, 255 }, // white
-    { 255, 255, 255 }, // white
-    { 255, 255, 255 }, // white
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 255, 255, 255 },
 };
 
 static DamageTable sMajorasMaskDamageTable = {
@@ -631,7 +631,8 @@ ActorInit Boss_07_InitVars = {
     /**/ Boss07_Wrath_Draw,
 };
 
-static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
+// The limbs referenced here are not used. The spheres are positioned manually by Boss07_Wrath_PostLimbDraw.
+static ColliderJntSphElementInit sWrathBodyColliderJntSphElementsInit[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -641,7 +642,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 0, { { 0, 0, 0 }, 20 }, 100 },
+        { MAJORAS_WRATH_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
@@ -652,7 +653,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 30 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
         {
@@ -663,7 +664,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 25 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
         {
@@ -674,7 +675,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -685,7 +686,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -696,7 +697,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -707,7 +708,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -718,7 +719,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -729,7 +730,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -740,7 +741,7 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -751,11 +752,11 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit1[MAJORAS_WRATH_COLLIDE
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
 };
 
-static ColliderJntSphInit sWrathJntSphInit1 = {
+static ColliderJntSphInit sWrathBodyColliderJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -764,8 +765,8 @@ static ColliderJntSphInit sWrathJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(sWrathJntSphElementsInit1),
-    sWrathJntSphElementsInit1,
+    ARRAY_COUNT(sWrathBodyColliderJntSphElementsInit),
+    sWrathBodyColliderJntSphElementsInit,
 };
 
 static ColliderCylinderInit sWrathCylinderInit = {
@@ -788,7 +789,8 @@ static ColliderCylinderInit sWrathCylinderInit = {
     { 80, 200, 0, { 0, 0, 0 } },
 };
 
-static ColliderJntSphElementInit sWrathJntSphElementsInit2[1] = {
+// The limbs referenced here are not used. The spheres are positioned manually by Boss07_Wrath_PostLimbDraw.
+static ColliderJntSphElementInit sWrathKickColliderJntSphElementsInit[MAJORAS_WARTH_KICK_COLLIDER_MAX] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -798,11 +800,11 @@ static ColliderJntSphElementInit sWrathJntSphElementsInit2[1] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 0, { { 0, 0, 0 }, 36 }, 200 },
+        { MAJORAS_WRATH_LIMB_NONE, { { 0, 0, 0 }, 36 }, 200 },
     },
 };
 
-static ColliderJntSphInit sWrathJntSphInit2 = {
+static ColliderJntSphInit sWrathKickColliderJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -811,8 +813,8 @@ static ColliderJntSphInit sWrathJntSphInit2 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(sWrathJntSphElementsInit2),
-    sWrathJntSphElementsInit2,
+    ARRAY_COUNT(sWrathKickColliderJntSphElementsInit),
+    sWrathKickColliderJntSphElementsInit,
 };
 
 static ColliderQuadInit sMaskFrontQuadInit = {
@@ -855,7 +857,8 @@ static ColliderQuadInit sMaskBackQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
+// The limbs referenced here are not used. The spheres are positioned manually by Boss07_Incarnation_PostLimbDraw.
+static ColliderJntSphElementInit sIncarnationBodyJntSphElementsInit[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -865,7 +868,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 0, { { 0, 0, 0 }, 25 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_NONE, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
         {
@@ -876,7 +879,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 40 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 40 }, 100 },
     },
     {
         {
@@ -887,7 +890,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 0 }, 0 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
@@ -898,7 +901,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -909,7 +912,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -920,7 +923,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -931,7 +934,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 100 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
@@ -942,7 +945,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -953,7 +956,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -964,7 +967,7 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
@@ -975,11 +978,11 @@ static ColliderJntSphElementInit sIncarnationJntSphElementsInit[MAJORAS_INCARNAT
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 15 }, 150 },
+        { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
 };
 
-static ColliderJntSphInit sIncarnationJntSphInit1 = {
+static ColliderJntSphInit sIncarnationBodyColliderJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -988,8 +991,8 @@ static ColliderJntSphInit sIncarnationJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(sIncarnationJntSphElementsInit),
-    sIncarnationJntSphElementsInit,
+    ARRAY_COUNT(sIncarnationBodyJntSphElementsInit),
+    sIncarnationBodyJntSphElementsInit,
 };
 
 static ColliderCylinderInit sProjectileCylinderInit = {
@@ -1062,7 +1065,7 @@ Boss07* sMajoraBattleHandler;
 Boss07* sMajorasMask;
 Boss07* sMajoraRemains[MAJORA_REMAINS_TYPE_MAX];
 
-static u8 sKillProjectiles;
+static u8 sKillAllProjectiles;
 static u8 sMusicStartTimer;
 
 MajoraEffect sMajoraEffects[MAJORA_EFFECT_COUNT];
@@ -1302,19 +1305,20 @@ void Boss07_Wrath_BombWhips(Boss07* this, PlayState* play) {
     }
 }
 
-static Vec3f sRemainsStart[MAJORA_REMAINS_TYPE_MAX] = {
-    { 70.0f, 70.0f, -70.0f },
-    { 24.0f, 88.0f, -70.0f },
-    { -24.0f, 88.0f, -70.0f },
-    { -70.0f, 70.0f, -70.0f },
+static Vec3f sRemainsStartTargetOffset[MAJORA_REMAINS_TYPE_MAX] = {
+    { 70.0f, 70.0f, -70.0f },  // MAJORA_REMAINS_TYPE_ODOLWA
+    { 24.0f, 88.0f, -70.0f },  // MAJORA_REMAINS_TYPE_GYORG
+    { -24.0f, 88.0f, -70.0f }, // MAJORA_REMAINS_TYPE_GOHT
+    { -70.0f, 70.0f, -70.0f }, // MAJORA_REMAINS_TYPE_TWINMOLD
 };
 
-static Vec3s sRemainsEnd[MAJORA_REMAINS_TYPE_MAX] = {
-    { 712, 0xD500, -416 },
-    { -712, 0x2B00, -420 },
-    { 702, 0xAB00, 415 },
-    { -712, 0x5500, 416 },
-}; // y value here is y rotation, not position
+// y value here is y-rotation, not position
+static Vec3s sRemainsEndTarget[MAJORA_REMAINS_TYPE_MAX] = {
+    { 712, 0xD500, -416 },  // MAJORA_REMAINS_TYPE_ODOLWA
+    { -712, 0x2B00, -420 }, // MAJORA_REMAINS_TYPE_GYORG
+    { 702, 0xAB00, 415 },   // MAJORA_REMAINS_TYPE_GOHT
+    { -712, 0x5500, 416 },  // MAJORA_REMAINS_TYPE_TWINMOLD
+};
 
 void Boss07_Init(Actor* thisx, PlayState* play2) {
     static s16 sMajoraRemainsParams[MAJORA_REMAINS_TYPE_MAX] = {
@@ -1332,7 +1336,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.draw = Boss07_BattleHandler_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sMajoraBattleHandler = this;
-        sKillProjectiles = false;
+        sKillAllProjectiles = false;
         play->envCtx.lightSettingOverride = 0;
         play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_FULL_CONTROL;
         return;
@@ -1365,10 +1369,10 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
 
         if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA)) {
             Actor_SetScale(&this->actor, 0.03f);
-            this->actor.world.pos.x = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x;
+            this->actor.world.pos.x = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x;
             this->actor.world.pos.y = 370.0f;
-            this->actor.world.pos.z = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z;
-            this->actor.shape.rot.y = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y;
+            this->actor.world.pos.z = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z;
+            this->actor.shape.rot.y = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y;
             Boss07_Remains_SetupMove(this, play);
         } else {
             Boss07_Remains_SetupIntroCutscene(this, play);
@@ -1464,7 +1468,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             this->actor.colChkInfo.health = 30;
             this->actor.update = Boss07_Incarnation_Update;
             this->actor.draw = Boss07_Incarnation_Draw;
-            Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sIncarnationJntSphInit1,
+            Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sIncarnationBodyColliderJntSphInit,
                                       this->bodyColliderElements);
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
             this->subCamId = this->actor.shape.rot.z;
@@ -1502,8 +1506,10 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasWrathSkel, &gMajorasWrathIdleAnim, this->jointTable,
                        this->morphTable, MAJORAS_WRATH_LIMB_MAX);
-    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sWrathJntSphInit1, this->bodyColliderElements);
-    Collider_InitAndSetJntSph(play, &this->kickCollider, &this->actor, &sWrathJntSphInit2, this->kickColliderElements);
+    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sWrathBodyColliderJntSphInit,
+                              this->bodyColliderElements);
+    Collider_InitAndSetJntSph(play, &this->kickCollider, &this->actor, &sWrathKickColliderJntSphInit,
+                              this->kickColliderElements);
     Collider_InitAndSetCylinder(play, &this->unusedCollider, &this->actor, &sWrathCylinderInit);
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
@@ -1543,15 +1549,15 @@ void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->incarnationWrathTransitionScale = 0x1400;
 }
 
-typedef struct {
+typedef struct MajorasWrathIntroCutsceneCamPoints {
     /* 0x0 */ f32 eyeY;
     /* 0x4 */ f32 eyeZ;
     /* 0x8 */ f32 atY;
-} MajoraWrathIntroCutsceneCamPoints; // size = 0xC
+} MajorasWrathIntroCutsceneCamPoints; // size = 0xC
 
 void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
     // sCamPoints reads playerForm in a different order than the enum
-    static MajoraWrathIntroCutsceneCamPoints sCamPoints[PLAYER_FORM_MAX] = {
+    static MajorasWrathIntroCutsceneCamPoints sCamPoints[PLAYER_FORM_MAX] = {
         { 40.0f, 400.0f, 110.0f },  // PLAYER_FORM_HUMAN
         { 80.0f, 450.0f, 110.0f },  // PLAYER_FORM_GORON
         { 100.0f, 400.0f, 110.0f }, // PLAYER_FORM_FIERCE_DEITY
@@ -3444,105 +3450,110 @@ s32 Boss07_Wrath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
         rot->y += this->cutsceneHeadRot.x;
         rot->z += this->cutsceneHeadRot.z;
     }
+
     return false;
 }
 
+static s8 sWrathLimbToColliderBodyParts[] = {
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_NONE
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_PELVIS,          // MAJORAS_WRATH_LIMB_PELVIS
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_THIGH,      // MAJORAS_WRATH_LIMB_LEFT_THIGH
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_SHIN,       // MAJORAS_WRATH_LIMB_LEFT_SHIN
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_FOOT
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_THIGH,     // MAJORAS_WRATH_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_SHIN,      // MAJORAS_WRATH_LIMB_RIGHT_SHIN
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_TORSO_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_TORSO,           // MAJORAS_WRATH_LIMB_TORSO
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_FOREARM,   // MAJORAS_WRATH_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_HAND
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_FOREARM,    // MAJORAS_WRATH_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_HAND
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_HEAD_ROOT
+    MAJORAS_WRATH_COLLIDER_BODYPART_HEAD,            // MAJORAS_WRATH_LIMB_HEAD
+    BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_THIRD_EYE
+    BODYPART_NONE,                                   // Doesn't correspond to a real limb on Majora's Wrath
+    BODYPART_NONE,                                   // Doesn't correspond to a real limb on Majora's Wrath
+};
+
+static Vec3f sWrathLimbColliderOffsets[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
+    { 1000.0f, 0.0f, 500.0f }, // MAJORAS_WRATH_COLLIDER_BODYPART_HEAD
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_TORSO
+    { 1000.0f, 0.0f, 500.0f }, // MAJORAS_WRATH_COLLIDER_BODYPART_PELVIS
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_UPPER_ARM
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_FOREARM
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_UPPER_ARM
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_FOREARM
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_THIGH
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_SHIN
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_THIGH
+    { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_SHIN
+};
+
+static s8 sWrathLimbToBodyParts[] = {
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_NONE
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_ROOT
+    MAJORAS_WRATH_BODYPART_PELVIS,               // MAJORAS_WRATH_LIMB_PELVIS
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT
+    MAJORAS_WRATH_BODYPART_LEFT_THIGH,           // MAJORAS_WRATH_LIMB_LEFT_THIGH
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT
+    MAJORAS_WRATH_BODYPART_LEFT_SHIN,            // MAJORAS_WRATH_LIMB_LEFT_SHIN
+    MAJORAS_WRATH_BODYPART_LEFT_FOOT,            // MAJORAS_WRATH_LIMB_LEFT_FOOT
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT
+    MAJORAS_WRATH_BODYPART_RIGHT_THIGH,          // MAJORAS_WRATH_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT
+    MAJORAS_WRATH_BODYPART_RIGHT_SHIN,           // MAJORAS_WRATH_LIMB_RIGHT_SHIN
+    MAJORAS_WRATH_BODYPART_RIGHT_FOOT,           // MAJORAS_WRATH_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_TORSO_ROOT
+    MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_LIMB_TORSO
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM,      // MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM
+    MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT, // MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_RIGHT_FOREARM,        // MAJORAS_WRATH_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_HAND
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM,       // MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM
+    MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT,  // MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT
+    MAJORAS_WRATH_BODYPART_LEFT_FOREARM,         // MAJORAS_WRATH_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_HAND
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_HEAD_ROOT
+    MAJORAS_WRATH_BODYPART_HEAD,                 // MAJORAS_WRATH_LIMB_HEAD
+    BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_THIRD_EYE
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Wrath
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Wrath
+};
+
 void Boss07_Wrath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 sLimbToColliderBodyParts[] = {
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_NONE
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_PELVIS,          // MAJORAS_WRATH_LIMB_PELVIS
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_THIGH,      // MAJORAS_WRATH_LIMB_LEFT_THIGH
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_SHIN,       // MAJORAS_WRATH_LIMB_LEFT_SHIN
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_FOOT
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_THIGH,     // MAJORAS_WRATH_LIMB_RIGHT_THIGH
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_SHIN,      // MAJORAS_WRATH_LIMB_RIGHT_SHIN
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_FOOT
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_TORSO_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_TORSO,           // MAJORAS_WRATH_LIMB_TORSO
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_FOREARM,   // MAJORAS_WRATH_LIMB_RIGHT_FOREARM
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_RIGHT_HAND
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_FOREARM,    // MAJORAS_WRATH_LIMB_LEFT_FOREARM
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_LEFT_HAND
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_HEAD_ROOT
-        MAJORAS_WRATH_COLLIDER_BODYPART_HEAD,            // MAJORAS_WRATH_LIMB_HEAD
-        BODYPART_NONE,                                   // MAJORAS_WRATH_LIMB_THIRD_EYE
-        BODYPART_NONE,                                   // Doesn't correspond to a real limb on Majora's Wrath
-        BODYPART_NONE,                                   // Doesn't correspond to a real limb on Majora's Wrath
-    };
-    static Vec3f sLimbColliderOffsets[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
-        { 1000.0f, 0.0f, 500.0f }, // MAJORAS_WRATH_COLLIDER_BODYPART_HEAD
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_TORSO
-        { 1000.0f, 0.0f, 500.0f }, // MAJORAS_WRATH_COLLIDER_BODYPART_PELVIS
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_UPPER_ARM
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_FOREARM
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_UPPER_ARM
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_FOREARM
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_THIGH
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_LEFT_SHIN
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_THIGH
-        { 2000.0f, 0.0f, 0.0f },   // MAJORAS_WRATH_COLLIDER_BODYPART_RIGHT_SHIN
-    };
-    static s8 sLimbToBodyParts[] = {
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_NONE
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_ROOT
-        MAJORAS_WRATH_BODYPART_PELVIS,               // MAJORAS_WRATH_LIMB_PELVIS
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT
-        MAJORAS_WRATH_BODYPART_LEFT_THIGH,           // MAJORAS_WRATH_LIMB_LEFT_THIGH
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT
-        MAJORAS_WRATH_BODYPART_LEFT_SHIN,            // MAJORAS_WRATH_LIMB_LEFT_SHIN
-        MAJORAS_WRATH_BODYPART_LEFT_FOOT,            // MAJORAS_WRATH_LIMB_LEFT_FOOT
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT
-        MAJORAS_WRATH_BODYPART_RIGHT_THIGH,          // MAJORAS_WRATH_LIMB_RIGHT_THIGH
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT
-        MAJORAS_WRATH_BODYPART_RIGHT_SHIN,           // MAJORAS_WRATH_LIMB_RIGHT_SHIN
-        MAJORAS_WRATH_BODYPART_RIGHT_FOOT,           // MAJORAS_WRATH_LIMB_RIGHT_FOOT
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_TORSO_ROOT
-        MAJORAS_WRATH_BODYPART_TORSO,                // MAJORAS_WRATH_LIMB_TORSO
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT
-        MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM,      // MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM
-        MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT, // MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT
-        MAJORAS_WRATH_BODYPART_RIGHT_FOREARM,        // MAJORAS_WRATH_LIMB_RIGHT_FOREARM
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_RIGHT_HAND
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT
-        MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM,       // MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM
-        MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT,  // MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT
-        MAJORAS_WRATH_BODYPART_LEFT_FOREARM,         // MAJORAS_WRATH_LIMB_LEFT_FOREARM
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_LEFT_HAND
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_HEAD_ROOT
-        MAJORAS_WRATH_BODYPART_HEAD,                 // MAJORAS_WRATH_LIMB_HEAD
-        BODYPART_NONE,                               // MAJORAS_WRATH_LIMB_THIRD_EYE
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Wrath
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Wrath
-    };
     static Vec3f sWhipOffset = { 1000.0f, 100.0f, 0.0f };
     Boss07* this = THIS;
     s8 index;
     Vec3f colliderPos;
     MtxF curMtxF;
 
-    index = sLimbToBodyParts[limbIndex];
+    index = sWrathLimbToBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[index]);
     }
 
-    index = sLimbToColliderBodyParts[limbIndex];
+    index = sWrathLimbToColliderBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
         if (this->disableCollisionTimer != 0) {
             Matrix_MultVecZ(100000.0f, &colliderPos);
         } else {
-            Matrix_MultVec3f(&sLimbColliderOffsets[index], &colliderPos);
+            Matrix_MultVec3f(&sWrathLimbColliderOffsets[index], &colliderPos);
         }
+
         Boss07_SetColliderSphere(index, &this->bodyCollider, &colliderPos);
     }
 
@@ -4783,8 +4794,8 @@ void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2) {
 }
 
 void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
-    static u8 D_80A08198[] = { 1, 0, 3, 0, 4, 0, 5, 0 };
-    static u8 D_80A081A0[] = { 0, 3, 0, 4, 0, 5, 0, 1 };
+    static u8 sPrevLightSettings[] = { 1, 0, 3, 0, 4, 0, 5, 0 };
+    static u8 sLightSettings[] = { 0, 3, 0, 4, 0, 5, 0, 1 };
     PlayState* play = play2;
     Boss07* this = THIS;
     s32 i;
@@ -4805,8 +4816,9 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
                 this->lightSettingsIndex = 0;
             }
         }
-        play->envCtx.prevLightSetting = D_80A08198[this->lightSettingsIndex];
-        play->envCtx.lightSetting = D_80A081A0[this->lightSettingsIndex];
+
+        play->envCtx.prevLightSetting = sPrevLightSettings[this->lightSettingsIndex];
+        play->envCtx.lightSetting = sLightSettings[this->lightSettingsIndex];
     }
 
     Math_ApproachF(&play->envCtx.lightBlend, 0.0f, 1.0f, 0.03f);
@@ -4898,116 +4910,120 @@ s32 Boss07_Incarnation_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     return false;
 }
 
+static s8 sIncarnationLimbToColliderBodyParts[] = {
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_NONE
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_ROOT
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_WRAPPER
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK,            // MAJORAS_INCARNATION_LIMB_MASK
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_THIGH,     // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_SHIN,      // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_FOREARM,   // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK,            // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_FOREARM,    // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_HAND
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_THIGH,      // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_SHIN,       // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
+    BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
+    MAJORAS_INCARNATION_COLLIDER_BODYPART_EYESTALK,        // MAJORAS_INCARNATION_LIMB_EYESTALK
+    BODYPART_NONE,                                         // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                         // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                         // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                         // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                         // Doesn't correspond to a real limb on Majora's Incarnation
+};
+
+static s8 sIncarnationLimbToPumpBodyParts[] = {
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_NONE
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_WRAPPER
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_MASK
+    MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG, // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
+    MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
+    MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_HAND
+    MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG,  // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
+    BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_EYESTALK
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
+};
+
+static Vec3f sIncarnationLimbColliderOffsets[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
+    { 2000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_EYESTALK
+    { 3500.0f, -1000.0f, 0.0f },         // MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK
+    { 100000.0f, 100000.0f, 100000.0f }, // MAJORAS_INCARNATION_COLLIDER_BODYPART_ROOM_ORIGIN
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_UPPER_ARM
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_FOREARM
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_UPPER_ARM
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_FOREARM
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_THIGH
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_SHIN
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_THIGH
+    { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_SHIN
+};
+
+static s8 sIncarnationLimbToBodyParts[] = {
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_NONE
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_ROOT
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_WRAPPER
+    MAJORAS_INCARNATION_BODYPART_LEFT_ARM_ROOT,   // MAJORAS_INCARNATION_LIMB_MASK
+    MAJORAS_INCARNATION_BODYPART_RIGHT_LEG_ROOT,  // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
+    MAJORAS_INCARNATION_BODYPART_RIGHT_THIGH,     // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
+    MAJORAS_INCARNATION_BODYPART_RIGHT_SHIN,      // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
+    MAJORAS_INCARNATION_BODYPART_RIGHT_FOOT,      // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
+    MAJORAS_INCARNATION_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
+    MAJORAS_INCARNATION_BODYPART_RIGHT_FOREARM,   // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
+    MAJORAS_INCARNATION_BODYPART_RIGHT_HAND,      // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
+    MAJORAS_INCARNATION_BODYPART_LEFT_ARM_ROOT,   // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
+    MAJORAS_INCARNATION_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
+    MAJORAS_INCARNATION_BODYPART_LEFT_FOREARM,    // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
+    MAJORAS_INCARNATION_BODYPART_LEFT_HAND,       // MAJORAS_INCARNATION_LIMB_LEFT_HAND
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
+    MAJORAS_INCARNATION_BODYPART_LEFT_THIGH,      // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
+    BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
+    MAJORAS_INCARNATION_BODYPART_LEFT_SHIN,       // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
+    MAJORAS_INCARNATION_BODYPART_LEFT_FOOT,       // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
+    MAJORAS_INCARNATION_BODYPART_EYESTALK,        // MAJORAS_INCARNATION_LIMB_EYESTALK
+    BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
+    BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
+};
+
 void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 sLimbToColliderBodyParts[] = {
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_NONE
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_ROOT
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_WRAPPER
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK,            // MAJORAS_INCARNATION_LIMB_MASK
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_THIGH,     // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_SHIN,      // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_FOREARM,   // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK,            // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_FOREARM,    // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_HAND
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_THIGH,      // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_SHIN,       // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
-        BODYPART_NONE,                                         // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
-        MAJORAS_INCARNATION_COLLIDER_BODYPART_EYESTALK,        // MAJORAS_INCARNATION_LIMB_EYESTALK
-        BODYPART_NONE, // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE, // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE, // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE, // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE, // Doesn't correspond to a real limb on Majora's Incarnation
-    };
-    static s8 sLimbToPumpBodyParts[] = {
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_NONE
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_WRAPPER
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_MASK
-        MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_LEG, // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
-        MAJORAS_INCARNATION_GROW_BODYPART_RIGHT_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
-        MAJORAS_INCARNATION_GROW_BODYPART_LEFT_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_HAND
-        MAJORAS_INCARNATION_GROW_BODYPART_LEFT_LEG,  // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
-        BODYPART_NONE,                               // MAJORAS_INCARNATION_LIMB_EYESTALK
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                               // Doesn't correspond to a real limb on Majora's Incarnation
-    };
-    static Vec3f sLimbColliderOffsets[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
-        { 2000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_EYESTALK
-        { 3500.0f, -1000.0f, 0.0f },         // MAJORAS_INCARNATION_COLLIDER_BODYPART_MASK
-        { 100000.0f, 100000.0f, 100000.0f }, // MAJORAS_INCARNATION_COLLIDER_BODYPART_ROOM_ORIGIN
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_UPPER_ARM
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_FOREARM
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_UPPER_ARM
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_FOREARM
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_THIGH
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_LEFT_SHIN
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_THIGH
-        { 4000.0f, 0.0f, 0.0f },             // MAJORAS_INCARNATION_COLLIDER_BODYPART_RIGHT_SHIN
-    };
-    static s8 sLimbToBodyParts[] = {
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_NONE
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_ROOT
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_WRAPPER
-        MAJORAS_INCARNATION_BODYPART_LEFT_ARM_ROOT,   // MAJORAS_INCARNATION_LIMB_MASK
-        MAJORAS_INCARNATION_BODYPART_RIGHT_LEG_ROOT,  // MAJORAS_INCARNATION_LIMB_RIGHT_LEG_ROOT
-        MAJORAS_INCARNATION_BODYPART_RIGHT_THIGH,     // MAJORAS_INCARNATION_LIMB_RIGHT_THIGH
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_LEG_ROOT
-        MAJORAS_INCARNATION_BODYPART_RIGHT_SHIN,      // MAJORAS_INCARNATION_LIMB_RIGHT_SHIN
-        MAJORAS_INCARNATION_BODYPART_RIGHT_FOOT,      // MAJORAS_INCARNATION_LIMB_RIGHT_FOOT
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_ARM_ROOT
-        MAJORAS_INCARNATION_BODYPART_RIGHT_UPPER_ARM, // MAJORAS_INCARNATION_LIMB_RIGHT_UPPER_ARM
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_RIGHT_LOWER_ARM_ROOT
-        MAJORAS_INCARNATION_BODYPART_RIGHT_FOREARM,   // MAJORAS_INCARNATION_LIMB_RIGHT_FOREARM
-        MAJORAS_INCARNATION_BODYPART_RIGHT_HAND,      // MAJORAS_INCARNATION_LIMB_RIGHT_HAND
-        MAJORAS_INCARNATION_BODYPART_LEFT_ARM_ROOT,   // MAJORAS_INCARNATION_LIMB_LEFT_ARM_ROOT
-        MAJORAS_INCARNATION_BODYPART_LEFT_UPPER_ARM,  // MAJORAS_INCARNATION_LIMB_LEFT_UPPER_ARM
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_ARM_ROOT
-        MAJORAS_INCARNATION_BODYPART_LEFT_FOREARM,    // MAJORAS_INCARNATION_LIMB_LEFT_FOREARM
-        MAJORAS_INCARNATION_BODYPART_LEFT_HAND,       // MAJORAS_INCARNATION_LIMB_LEFT_HAND
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LEG_ROOT
-        MAJORAS_INCARNATION_BODYPART_LEFT_THIGH,      // MAJORAS_INCARNATION_LIMB_LEFT_THIGH
-        BODYPART_NONE,                                // MAJORAS_INCARNATION_LIMB_LEFT_LOWER_LEG_ROOT
-        MAJORAS_INCARNATION_BODYPART_LEFT_SHIN,       // MAJORAS_INCARNATION_LIMB_LEFT_SHIN
-        MAJORAS_INCARNATION_BODYPART_LEFT_FOOT,       // MAJORAS_INCARNATION_LIMB_LEFT_FOOT
-        MAJORAS_INCARNATION_BODYPART_EYESTALK,        // MAJORAS_INCARNATION_LIMB_EYESTALK
-        BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
-        BODYPART_NONE,                                // Doesn't correspond to a real limb on Majora's Incarnation
-    };
     Boss07* this = THIS;
     Vec3f sp28;
     s8 index;
@@ -5016,17 +5032,17 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         Matrix_MultZero(&this->actor.focus.pos);
     }
 
-    index = sLimbToBodyParts[limbIndex];
+    index = sIncarnationLimbToBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[index]);
     }
 
-    index = sLimbToColliderBodyParts[limbIndex];
+    index = sIncarnationLimbToColliderBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
         if (this->disableCollisionTimer != 0) {
             Matrix_MultVecZ(100000.0f, &sp28);
         } else {
-            Matrix_MultVec3f(&sLimbColliderOffsets[index], &sp28);
+            Matrix_MultVec3f(&sIncarnationLimbColliderOffsets[index], &sp28);
         }
 
         Boss07_SetColliderSphere(index, &this->bodyCollider, &sp28);
@@ -5048,7 +5064,7 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         Matrix_MultZero(&this->incarnationLeftHandPos);
     }
 
-    index = sLimbToPumpBodyParts[limbIndex];
+    index = sIncarnationLimbToPumpBodyParts[limbIndex];
     if (index > BODYPART_NONE) {
         Matrix_Scale(this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index],
                      this->incarnationIntroBodyPartsScale[index], MTXMODE_APPLY);
@@ -5747,18 +5763,18 @@ void Boss07_Mask_SetupIntroCutscene(Boss07* this, PlayState* play) {
     Play_EnableMotionBlur(this->motionBlurAlpha);
 }
 
-static Vec3s sIntroCamEyes[4] = {
-    { 616, 402, -46 },
-    { -622, 380, -86 },
-    { 400, 300, 463 },
-    { -400, 470, 496 },
+static Vec3s sRemainsAttachSubCamEyes[MAJORA_REMAINS_TYPE_MAX] = {
+    { 616, 402, -46 },  // MAJORA_REMAINS_TYPE_ODOLWA
+    { -622, 380, -86 }, // MAJORA_REMAINS_TYPE_GYORG
+    { 400, 300, 463 },  // MAJORA_REMAINS_TYPE_GOHT
+    { -400, 470, 496 }, // MAJORA_REMAINS_TYPE_TWINMOLD
 };
 
-static Vec3s sIntroCamAts[4] = {
-    { 646, 394, -150 },
-    { -648, 380, -190 },
-    { 502, 321, 438 },
-    { -500, 445, 468 },
+static Vec3s sRemainsAttachSubCamAts[MAJORA_REMAINS_TYPE_MAX] = {
+    { 646, 394, -150 },  // MAJORA_REMAINS_TYPE_ODOLWA
+    { -648, 380, -190 }, // MAJORA_REMAINS_TYPE_GYORG
+    { 502, 321, 438 },   // MAJORA_REMAINS_TYPE_GOHT
+    { -500, 445, 468 },  // MAJORA_REMAINS_TYPE_TWINMOLD
 };
 
 void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
@@ -5874,12 +5890,12 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     sMajoraRemains[this->sfxTimer]->subAction = REMAINS_INTRO_CS_SUB_ACTION_ATTACH_TO_WALL;
                 }
 
-                this->subCamEye.x = sIntroCamEyes[this->sfxTimer].x;
-                this->subCamEye.y = sIntroCamEyes[this->sfxTimer].y;
-                this->subCamEye.z = sIntroCamEyes[this->sfxTimer].z;
-                this->subCamAt.x = sIntroCamAts[this->sfxTimer].x;
-                this->subCamAt.y = sIntroCamAts[this->sfxTimer].y;
-                this->subCamAt.z = sIntroCamAts[this->sfxTimer].z;
+                this->subCamEye.x = sRemainsAttachSubCamEyes[this->sfxTimer].x;
+                this->subCamEye.y = sRemainsAttachSubCamEyes[this->sfxTimer].y;
+                this->subCamEye.z = sRemainsAttachSubCamEyes[this->sfxTimer].z;
+                this->subCamAt.x = sRemainsAttachSubCamAts[this->sfxTimer].x;
+                this->subCamAt.y = sRemainsAttachSubCamAts[this->sfxTimer].y;
+                this->subCamAt.z = sRemainsAttachSubCamAts[this->sfxTimer].z;
 
                 if (this->cutsceneTimer == 250) {
                     this->cutsceneState = MAJORAS_MASK_INTRO_CS_STATE_WAKE_UP;
@@ -6543,7 +6559,7 @@ void Boss07_Mask_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
-    static TexturePtr D_80A082E0[] = { gMajorasMaskWithNormalEyesTex, gMajorasMaskWithDullEyesTex };
+    static TexturePtr sMaskEyeTextures[] = { gMajorasMaskWithNormalEyesTex, gMajorasMaskWithDullEyesTex };
     PlayState* play = play2;
     Boss07* this = THIS;
     f32 shakeScale;
@@ -6572,7 +6588,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A082E0[this->maskEyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sMaskEyeTextures[this->maskEyeTexIndex]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, Boss07_Mask_PostLimbDraw,
                       &this->actor);
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
@@ -6672,7 +6688,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
 
         if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL | BGCHECKFLAG_CEILING)) ||
             (this->generalCollider.base.atFlags & AT_HIT) || (this->generalCollider.base.atFlags & AT_HIT) ||
-            sKillProjectiles) {
+            sKillAllProjectiles) {
             Actor_Kill(&this->actor);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, this->projectileColorIndex,
@@ -6771,12 +6787,14 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
                 this->actor.world.pos.y += 30.0f + KREG(48);
             }
-            this->targetPos.x =
-                sRemainsStart[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x + player->actor.world.pos.x;
-            this->targetPos.y =
-                sRemainsStart[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y + player->actor.world.pos.y;
-            this->targetPos.z =
-                sRemainsStart[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z + player->actor.world.pos.z;
+
+            this->targetPos.x = sRemainsStartTargetOffset[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x +
+                                player->actor.world.pos.x;
+            this->targetPos.y = sRemainsStartTargetOffset[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y +
+                                player->actor.world.pos.y;
+            this->targetPos.z = sRemainsStartTargetOffset[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z +
+                                player->actor.world.pos.z;
+
             sp54 = this->targetPos.x - this->actor.world.pos.x;
             sp50 = this->targetPos.y - this->actor.world.pos.y;
             sp4C = this->targetPos.z - this->actor.world.pos.z;
@@ -6792,10 +6810,11 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
             Math_ApproachF(&this->eyeBeamsLengthScale, 1.2f, 1.0f, 0.1f);
             Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
             this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
+
             if (this->cutsceneTimer > 90) {
-                this->targetPos.x = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x;
+                this->targetPos.x = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x;
                 this->targetPos.y = 370.0f;
-                this->targetPos.z = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z;
+                this->targetPos.z = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z;
                 sp38 = 20.0f;
                 sp34 = 0.5f;
                 sp40 = 0x1000;
@@ -6808,6 +6827,7 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
                 sp40 = 0x5DC;
                 sp3C = 0x64;
             }
+
             sp54 = this->targetPos.x - this->actor.world.pos.x;
             sp50 = this->targetPos.y - this->actor.world.pos.y + phi_f2;
             sp4C = this->targetPos.z - this->actor.world.pos.z;
@@ -6826,10 +6846,10 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
             Actor_SetScale(&this->actor, 0.0f);
             this->eyeBeamsLengthScale = 0.0f;
             this->actor.speed = 0.0f;
-            this->actor.world.pos.x = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x * 0.6f;
+            this->actor.world.pos.x = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x * 0.6f;
             this->actor.world.pos.y = 370.0f;
-            this->actor.world.pos.z = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z * 0.6f;
-            this->actor.shape.rot.y = sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y;
+            this->actor.world.pos.z = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z * 0.6f;
+            this->actor.shape.rot.y = sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].y;
             this->sfxTimer = 0;
             break;
 
@@ -6838,11 +6858,12 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
             if (this->sfxTimer == 10) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_STAY);
             }
+
             Actor_SetScale(&this->actor, 0.03f);
-            Math_ApproachF(&this->actor.world.pos.x, sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x,
-                           0.5f, 40.0f);
-            Math_ApproachF(&this->actor.world.pos.z, sRemainsEnd[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z,
-                           0.5f, 22.0f);
+            Math_ApproachF(&this->actor.world.pos.x,
+                           sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].x, 0.5f, 40.0f);
+            Math_ApproachF(&this->actor.world.pos.z,
+                           sRemainsEndTarget[MAJORA_GET_TYPE(&this->actor) - MAJORA_TYPE_REMAINS].z, 0.5f, 22.0f);
             break;
 
         default:
