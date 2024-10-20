@@ -7,7 +7,7 @@
 #include "z_en_encount3.h"
 #include "assets/objects/object_big_fwall/object_big_fwall.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount3*)thisx)
 
@@ -22,7 +22,7 @@ void func_809AD084(EnEncount3* this, PlayState* play);
 void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
-ActorInit En_Encount3_InitVars = {
+ActorProfile En_Encount3_Profile = {
     /**/ ACTOR_EN_ENCOUNT3,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -55,8 +55,8 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     func_809AD058(this);
 }
 
@@ -140,9 +140,9 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
             s16 i;
 
             for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
-                player->flameTimers[i] = Rand_S16Offset(0, 200);
+                player->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
             }
-            player->isBurning = true;
+            player->bodyIsBurning = true;
 
             sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
             sp38 = this->actor.world.pos.z - player->actor.world.pos.z;

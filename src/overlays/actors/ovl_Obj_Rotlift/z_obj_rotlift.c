@@ -25,7 +25,7 @@ typedef struct ObjRotliftModelInfo {
     /* 0x8 */ CollisionHeader* colHeader;
 } ObjRotliftModelInfo; // size = 0xC
 
-ActorInit Obj_Rotlift_InitVars = {
+ActorProfile Obj_Rotlift_Profile = {
     /**/ ACTOR_OBJ_ROTLIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

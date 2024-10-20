@@ -9,7 +9,7 @@
 
 #include "z_en_ds2n.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDs2n*)thisx)
 
@@ -20,7 +20,7 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
-ActorInit En_Ds2n_InitVars = {
+ActorProfile En_Ds2n_Profile = {
     /**/ ACTOR_EN_DS2N,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

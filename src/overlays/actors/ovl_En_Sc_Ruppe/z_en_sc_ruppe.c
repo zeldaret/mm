@@ -23,7 +23,7 @@ typedef struct {
     /* 0x4 */ s16 amount;
 } RuppeInfo; // size = 0x8
 
-ActorInit En_Sc_Ruppe_InitVars = {
+ActorProfile En_Sc_Ruppe_Profile = {
     /**/ ACTOR_EN_SC_RUPPE,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -46,7 +46,7 @@ RuppeInfo sRupeeInfo[] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_PLAYER,
@@ -54,11 +54,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 10, 30, 0, { 0, 0, 0 } },

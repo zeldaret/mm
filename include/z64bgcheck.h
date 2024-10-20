@@ -250,7 +250,7 @@ typedef struct {
 
 } SurfaceType; // size = 0x8
 
-typedef struct {
+typedef struct CollisionHeader {
     /* 0x00 */ Vec3s minBounds; // minimum coordinates of poly bounding box
     /* 0x06 */ Vec3s maxBounds; // maximum coordinates of poly bounding box
     /* 0x0C */ u16 numVertices;

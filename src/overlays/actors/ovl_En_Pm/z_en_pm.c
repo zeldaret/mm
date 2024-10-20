@@ -5,10 +5,11 @@
  */
 
 #include "z_en_pm.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "assets/objects/object_mm/object_mm.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnPm*)thisx)
 
@@ -293,7 +294,7 @@ static MsgScript D_80AFB764[] = {
     /* 0x000B 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Pm_InitVars = {
+ActorProfile En_Pm_Profile = {
     /**/ ACTOR_EN_PM,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -307,7 +308,7 @@ ActorInit En_Pm_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -315,11 +316,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 14, 62, 0, { 0, 0, 0 } },
@@ -327,7 +328,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -335,11 +336,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 26 }, 100 },
@@ -643,7 +644,7 @@ s32 func_80AF81E8(Actor* thisx, PlayState* play) {
             if (!func_80AF80F4(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:
@@ -686,7 +687,7 @@ s32 func_80AF8348(Actor* thisx, PlayState* play) {
             if (!func_80AF80F4(this, csId)) {
                 break;
             }
-
+            FALLTHROUGH;
         case 2:
         case 4:
         case 6:
@@ -1080,7 +1081,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                 this->unk_356 |= 0x800;
             }
@@ -1148,7 +1149,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 90:
                 this->unk_356 |= 0x9000;
                 this->unk_356 |= 0x200;
-
+                FALLTHROUGH;
             case 82:
                 func_80AF7E98(this, 0);
                 break;
@@ -1281,7 +1282,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                     this->unk_356 |= 0x800;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_60_04);
-
+                FALLTHROUGH;
             default:
                 if (scheduleOutput->result == 29) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
@@ -1316,7 +1317,7 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80AFB8F8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
     if (scheduleOutput->result == 14) {
@@ -1386,8 +1387,8 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->unk_394 = PLAYER_IA_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
@@ -1618,7 +1619,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
             if (CURRENT_TIME >= CLOCK_TIME(1, 39)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
-
+            FALLTHROUGH;
         case 16:
         case 17:
         case 18:
@@ -1819,11 +1820,11 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80AFB900[this->unk_38C], &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) && !func_80AF9BF8(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 
     this->scheduleResult = scheduleOutput.result;

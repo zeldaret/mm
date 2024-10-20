@@ -6,7 +6,7 @@
 
 #include "z_en_tanron6.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnTanron6*)thisx)
 
@@ -18,7 +18,7 @@ void EnTanron6_Draw(Actor* thisx, PlayState* play);
 void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
-ActorInit En_Tanron6_InitVars = {
+ActorProfile En_Tanron6_Profile = {
     /**/ ACTOR_EN_TANRON6,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -72,7 +72,7 @@ void EnTanron6_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 19.0f);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     EnTanron6_DoNothing(this);
 }
 

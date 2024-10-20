@@ -555,6 +555,7 @@ void AudioSeq_UpdateActiveSequences(void) {
                     // Queue the same command that was stored previously, but without the 0x8000
                     AudioSeq_ProcessSeqCmd(gActiveSeqs[seqPlayerIndex].startAsyncSeqCmd);
                     break;
+
                 case 0xFF:
                     // There was an error in loading the fonts
                     gActiveSeqs[seqPlayerIndex].isWaitingForFonts = false;

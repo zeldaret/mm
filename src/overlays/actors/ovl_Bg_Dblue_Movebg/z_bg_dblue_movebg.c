@@ -44,7 +44,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorProfile Bg_Dblue_Movebg_Profile = {
     /**/ ACTOR_BG_DBLUE_MOVEBG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

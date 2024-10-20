@@ -7,7 +7,7 @@
 #include "z_en_raf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnRaf*)thisx)
 
@@ -59,7 +59,7 @@ typedef enum CarnivorousLilyPetalScaleType {
     /* 3 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } CarnivorousLilyPetalScaleType;
 
-ActorInit En_Raf_InitVars = {
+ActorProfile En_Raf_Profile = {
     /**/ ACTOR_EN_RAF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -73,7 +73,7 @@ ActorInit En_Raf_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -81,11 +81,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 50, 10, -10, { 0, 0, 0 } },
@@ -201,7 +201,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = TARGET_MODE_3;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
@@ -553,7 +553,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->timer = 5;
     if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ENEMY);
-        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     }
 
     this->actionFunc = EnRaf_PostDetonation;
@@ -567,7 +567,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_PROP);
-        this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;

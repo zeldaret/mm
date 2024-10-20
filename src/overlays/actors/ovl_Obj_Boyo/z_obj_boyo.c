@@ -17,7 +17,7 @@ void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor);
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
-ActorInit Obj_Boyo_InitVars = {
+ActorProfile Obj_Boyo_Profile = {
     /**/ ACTOR_OBJ_BOYO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ typedef struct ObjBoyoUnkStruct {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_TYPE_PLAYER | AC_HARD | AC_ON,
         OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER | OC1_ON,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x01CBFFBE, 0x00, 0x00 },
-        TOUCH_NONE,
-        BUMP_ON,
+        ATELEM_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     {

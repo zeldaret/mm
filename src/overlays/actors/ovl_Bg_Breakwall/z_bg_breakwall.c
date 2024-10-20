@@ -45,7 +45,7 @@ void func_808B7B54(Actor* thisx, PlayState* play);
 void func_808B7D34(Actor* thisx, PlayState* play);
 void BgBreakwall_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Breakwall_InitVars = {
+ActorProfile Bg_Breakwall_Profile = {
     /**/ ACTOR_BG_BREAKWALL,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

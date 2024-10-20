@@ -95,14 +95,14 @@ typedef struct {
 
 typedef union {
     struct {
-        /* 0x00 */ u8 bank;
-        /* 0x01 */ u8 page;
+        /* 0x0 */ u8 bank;
+        /* 0x1 */ u8 page;
     } inode_t;
-    /* 0x00 */ u16 ipage;
-} __OSInodeUnit; // size = 0x02
+    /* 0x0 */ u16 ipage;
+} __OSInodeUnit; // size = 0x2
 
 typedef struct {
-    /* 0x00 */ __OSInodeUnit inodePage[128];
+    /* 0x0 */ __OSInodeUnit inodePage[128];
 } __OSInode; // size = 0x100
 
 typedef struct {

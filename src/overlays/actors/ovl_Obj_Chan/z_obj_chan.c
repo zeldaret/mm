@@ -28,7 +28,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play);
 void ObjChan_ChandelierAction(ObjChan* this, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
-ActorInit Obj_Chan_InitVars = {
+ActorProfile Obj_Chan_Profile = {
     /**/ ACTOR_OBJ_CHAN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -42,7 +42,7 @@ ActorInit Obj_Chan_InitVars = {
 
 static ColliderCylinderInit sObjChanCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -50,11 +50,11 @@ static ColliderCylinderInit sObjChanCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 48, 76, -60, { 0, 0, 0 } },
@@ -161,15 +161,16 @@ void ObjChan_InitChandelier(ObjChan* this, PlayState* play) {
     Vec3f childPos;
     Vec3s childRot;
     CollisionPoly* sp94;
-    s32 sp90;
+    s32 bgId;
     Vec3f sp84;
 
     Math_Vec3f_Copy(&this->unk1C0, &thisx->world.pos);
 
     Math_Vec3f_Copy(&sp84, &thisx->world.pos);
     sp84.y += 1600.0f;
+
     if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &sp84, &this->unk1C0, &sp94, false, false, true, true,
-                                &sp90)) {
+                                &bgId)) {
         this->unk1CC = thisx->world.pos.y - this->unk1C0.y;
     } else {
         Actor_Kill(thisx);
@@ -260,7 +261,7 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
             Math_Vec3f_ToVec3s(&pot->collider.dim.pos, &pot->actor.world.pos);
         }
     }
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x800)) {
         Flags_SetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx));
     }
     if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
@@ -296,7 +297,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
     s32 phi_v1;
 
     potBreaks = false;
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x4004000)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x4004000)) {
         potBreaks = true;
     }
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {

@@ -6,7 +6,7 @@
 
 #include "z_en_wdhand.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnWdhand*)thisx)
 
@@ -32,7 +32,7 @@ void EnWdhand_SetupDie(EnWdhand* this);
 void EnWdhand_GetInitVelocity(EnWdhand* this, Vec3f* dst);
 void EnWdhand_Vec3fToVec3s(Vec3s* dst, Vec3f* src);
 
-ActorInit En_Wdhand_InitVars = {
+ActorProfile En_Wdhand_Profile = {
     /**/ ACTOR_EN_WDHAND,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -47,77 +47,77 @@ ActorInit En_Wdhand_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEMENTS] = {
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 575, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1725, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 50, { { 0, 1000, 0 }, 15 }, 100 },
@@ -126,7 +126,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[EN_WDHAND_NUM_COLLIDER_ELEM
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -209,10 +209,10 @@ void EnWdhand_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        ColliderJntSphElement* elem = &this->collider.elements[i];
+        ColliderJntSphElement* jntSphElem = &this->collider.elements[i];
 
-        elem->dim.worldSphere.radius = elem->dim.modelSphere.radius;
-        EnWdhand_Vec3fToVec3s(&elem->dim.worldSphere.center, &this->actor.world.pos);
+        jntSphElem->dim.worldSphere.radius = jntSphElem->dim.modelSphere.radius;
+        EnWdhand_Vec3fToVec3s(&jntSphElem->dim.worldSphere.center, &this->actor.world.pos);
     }
 
     for (i = 0; i < EN_WDHAND_NUM_SEGMENTS; i++) {
@@ -596,12 +596,12 @@ s32 EnWdhand_ShrinkLimb(EnWdhand* this, s32 limbIndex) {
 void EnWdhand_SetupDie(EnWdhand* this) {
     s32 i;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.flags |= ACTOR_FLAG_10;
 
     // Finds the particular collider that was hit
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
             break;
         }
     }

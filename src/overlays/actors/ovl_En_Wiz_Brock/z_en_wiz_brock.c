@@ -7,7 +7,7 @@
 #include "z_en_wiz_brock.h"
 #include "assets/objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWizBrock*)thisx)
 
@@ -21,7 +21,7 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
 s16 sPlatformIndex = 0;
 
-ActorInit En_Wiz_Brock_InitVars = {
+ActorProfile En_Wiz_Brock_Profile = {
     /**/ ACTOR_EN_WIZ_BROCK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

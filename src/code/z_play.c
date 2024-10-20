@@ -20,10 +20,11 @@ u8 sMotionBlurStatus;
 #include "idle.h"
 #include "regs.h"
 #include "sys_cfb.h"
+#include "attributes.h"
 
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -339,6 +340,7 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
             default:
                 fbdemoType = -1;
                 _dbg_hungup("../z_play.c", 1420);
+                break;
         }
     } else {
         fbdemoType = -1;
@@ -614,7 +616,7 @@ void Play_UpdateTransition(PlayState* this) {
                 // non-instance modes break out of this switch
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case TRANS_MODE_INSTANCE_INIT: {
             s32 transWipeSpeed;
             s32 transFadeDuration;

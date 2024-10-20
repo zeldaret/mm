@@ -56,7 +56,7 @@ void EnBox_Open(EnBox* this, PlayState* play);
 void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
-ActorInit En_Box_InitVars = {
+ActorProfile En_Box_Profile = {
     /**/ ACTOR_EN_BOX,
     /**/ ACTORCAT_CHEST,
     /**/ FLAGS,
@@ -69,7 +69,7 @@ ActorInit En_Box_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_STOP),
 };
 
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {

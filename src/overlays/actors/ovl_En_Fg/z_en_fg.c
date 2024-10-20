@@ -7,7 +7,7 @@
 #include "z_en_fg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
 
 #define THIS ((EnFg*)thisx)
 
@@ -32,7 +32,7 @@ typedef enum {
     /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
 } BetaFrogDamageEffect;
 
-ActorInit En_Fg_InitVars = {
+ActorProfile En_Fg_Profile = {
     /**/ ACTOR_EN_FG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -46,7 +46,7 @@ ActorInit En_Fg_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -54,11 +54,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x000010AA, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 8, 10, 0, { 0, 0, 0 } },
@@ -197,7 +197,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case BETAFROG_DMGEFFECT_DEKUSTICK:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
@@ -212,7 +212,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
 
         case BETAFROG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
             rotX = this->collider.base.ac->world.rot.x;
@@ -226,7 +226,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             break;
 
         case BETAFROG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -249,6 +249,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
             }
+            break;
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -261,7 +262,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case BETAFROG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             rotY = ac->world.rot.y;
@@ -279,7 +280,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             break;
 
         case BETAFROG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
             this->actor.params = BETAFROG_BLACK;
@@ -308,6 +309,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             } else {
                 Actor_MoveWithGravity(&this->actor);
             }
+            break;
     }
 }
 

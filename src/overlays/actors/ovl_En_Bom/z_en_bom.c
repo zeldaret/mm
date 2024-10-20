@@ -34,7 +34,7 @@ typedef struct {
 
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-ActorInit En_Bom_InitVars = {
+ActorProfile En_Bom_Profile = {
     /**/ ACTOR_EN_BOM,
     /**/ ACTORCAT_EXPLOSIVES,
     /**/ FLAGS,
@@ -50,7 +50,7 @@ static f32 enBomScales[] = { 0.01f, 0.03f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -58,11 +58,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00013828, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 6, 11, 14, { 0, 0, 0 } },
@@ -71,11 +71,11 @@ static ColliderCylinderInit sCylinderInit = {
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000008, 0x00, 0x02 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
 
 static ColliderJntSphInit sJntSphInit1 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,
@@ -98,11 +98,11 @@ static ColliderJntSphInit sJntSphInit1 = {
 static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x80000008, 0x00, 0x04 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -111,7 +111,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
 
 static ColliderJntSphInit sJntSphInit2 = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,
@@ -162,7 +162,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
+    this->collider2Elements[0].base.atDmgInfo.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
@@ -335,19 +335,19 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Vec3f spC0;
     Vec3f spB4;
     CollisionPoly* spB0;
-    s32 spAC;
+    s32 bgId;
     Vec3f spA0;
     Vec3f sp94;
     Vec3f sp88;
     Color_RGBA8 sp84;
     Color_RGBA8 sp80;
 
-    if (this->collider2.elements->dim.modelSphere.radius == 0) {
+    if (this->collider2.elements[0].dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
+    this->collider2.elements[0].dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
         this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
@@ -394,8 +394,8 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
-            if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &spAC, &spB4) != BGCHECK_Y_MIN) {
-                floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
+            if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &bgId, &spB4) != BGCHECK_Y_MIN) {
+                floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, bgId);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
@@ -706,7 +706,7 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
     for (i = 0; i < spB0; i++, fuseSegmentPtr++, fuseSegmentPtr2++, arg4 -= 240) {
         f32 phi_f22;
         CollisionPoly* spA0;
-        s32 sp9C;
+        s32 bgId;
         Vec3f sp90;
 
         if (arg4 >= 240) {
@@ -756,7 +756,7 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
 
         sp90.y += 50.0f;
 
-        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &sp9C, &sp90) - fuseSegmentPtr2->pos.y;
+        temp_f2 = BgCheck_EntityRaycastFloor3(&play->colCtx, &spA0, &bgId, &sp90) - fuseSegmentPtr2->pos.y;
         if (temp_f2 >= 0.0f) {
             spC0.y += temp_f2;
             if (phi_f22 < spC0.y) {

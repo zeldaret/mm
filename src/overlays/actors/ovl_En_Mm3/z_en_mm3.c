@@ -6,7 +6,7 @@
 
 #include "z_en_mm3.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMm3*)thisx)
 
@@ -28,7 +28,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-ActorInit En_Mm3_InitVars = {
+ActorProfile En_Mm3_Profile = {
     /**/ ACTOR_EN_MM3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -42,7 +42,7 @@ ActorInit En_Mm3_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -50,11 +50,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 63, 0, { 0, 0, 0 } },
@@ -105,7 +105,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.parent = NULL;
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->unk_1DC = 1;
     this->unk_2B4 = 0;
     this->unk_2AE = 0;
@@ -430,7 +430,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         func_80A6F9C8(this);
     } else {
         Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
-        func_80123E90(play, &this->actor);
+        Player_SetAutoLockOnActor(play, &this->actor);
         if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
             Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
         } else {

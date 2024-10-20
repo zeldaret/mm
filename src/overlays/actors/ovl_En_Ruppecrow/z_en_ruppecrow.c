@@ -27,7 +27,7 @@ void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play);
 
-ActorInit En_Ruppecrow_InitVars = {
+ActorProfile En_Ruppecrow_Profile = {
     /**/ ACTOR_EN_RUPPECROW,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -42,11 +42,11 @@ ActorInit En_Ruppecrow_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 20 }, 100 },
@@ -55,7 +55,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -111,10 +111,10 @@ static InitChainEntry sInitChain[] = {
 s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     s32 pad;
 
-    this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.elements->dim.worldSphere.center.y =
-        sJntSphInit.elements->dim.modelSphere.center.y + this->actor.world.pos.y;
-    this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.elements[0].dim.worldSphere.center.y =
+        sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
+    this->collider.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 25.0f, 50.0f,
@@ -476,11 +476,11 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 void EnRuppecrow_UpdateDamage(EnRuppecrow* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements[0].base);
 
         if (this->actor.colChkInfo.damageEffect != 0x1) {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Enemy_StartFinishingBlow(play, &this->actor);
             EnRuppecrow_HandleDeath(this);
         }
@@ -633,7 +633,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
 
     Collider_InitJntSph(play, &this->collider);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-    this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
+    this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);

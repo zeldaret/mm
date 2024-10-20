@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Wallmas/z_en_wallmas.h"
 #include "overlays/actors/ovl_En_Pr2/z_en_pr2.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount1*)thisx)
 
@@ -18,7 +18,7 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 
 void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play);
 
-ActorInit En_Encount1_InitVars = {
+ActorProfile En_Encount1_Profile = {
     /**/ ACTOR_EN_ENCOUNT1,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -71,7 +71,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
         this->spawnTotalMax = -1;
         this->spawnDistanceMax = -1.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnEncount1_SpawnActor;
 }
 

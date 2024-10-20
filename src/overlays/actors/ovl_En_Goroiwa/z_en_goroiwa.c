@@ -33,7 +33,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-ActorInit En_Goroiwa_InitVars = {
+ActorProfile En_Goroiwa_Profile = {
     /**/ ACTOR_EN_GOROIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -48,11 +48,11 @@ ActorInit En_Goroiwa_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x00, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 58 }, 100 },
@@ -61,7 +61,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -137,12 +137,12 @@ void func_8093E91C(EnGoroiwa* this) {
 }
 
 void func_8093E938(EnGoroiwa* this) {
-    Sphere16* worldSphere = &this->collider.elements->dim.worldSphere;
+    Sphere16* worldSphere = &this->collider.elements[0].dim.worldSphere;
 
     worldSphere->center.x = this->actor.world.pos.x;
     worldSphere->center.y = this->actor.world.pos.y + this->unk_1DC;
     worldSphere->center.z = this->actor.world.pos.z;
-    this->collider.elements->dim.worldSphere.radius = this->unk_1DC - 1.0f;
+    this->collider.elements[0].dim.worldSphere.radius = this->unk_1DC - 1.0f;
 }
 
 void func_8093E9B0(EnGoroiwa* this, PlayState* play) {
@@ -155,13 +155,13 @@ void func_8093E9B0(EnGoroiwa* this, PlayState* play) {
     this->collider.elements[0].dim.worldSphere.radius = this->unk_1DC - 1.0f;
 
     if ((params == ENGOROIWA_C000_1) || (params == ENGOROIWA_C000_2)) {
-        this->collider.elements[0].info.bumper.dmgFlags |= (0x4000 | 0x400 | 0x100);
+        this->collider.elements[0].base.acDmgInfo.dmgFlags |= (0x4000 | 0x400 | 0x100);
         if (params == ENGOROIWA_C000_1) {
-            this->collider.base.colType = COLTYPE_WOOD;
+            this->collider.base.colMaterial = COL_MATERIAL_WOOD;
         } else {
-            this->collider.elements[0].info.bumper.dmgFlags &= ~(0x400000 | 0x200 | 0x2);
-            this->collider.elements[0].info.bumper.dmgFlags |= (0x80000000 | 0x800 | 0x8);
-            this->collider.base.colType = COLTYPE_NONE;
+            this->collider.elements[0].base.acDmgInfo.dmgFlags &= ~(0x400000 | 0x200 | 0x2);
+            this->collider.elements[0].base.acDmgInfo.dmgFlags |= (0x80000000 | 0x800 | 0x8);
+            this->collider.base.colMaterial = COL_MATERIAL_NONE;
         }
     }
 }
@@ -923,7 +923,7 @@ void func_80941060(EnGoroiwa* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
-    Vec3s* vec = &this->collider.elements[0].info.bumper.hitPos;
+    Vec3s* vec = &this->collider.elements[0].base.acDmgInfo.hitPos;
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1028,7 +1028,7 @@ s32 func_8094156C(EnGoroiwa* this, PlayState* play) {
     Vec3f sp80;
 
     if ((this->collider.base.acFlags & AC_HIT) && ((params == ENGOROIWA_C000_1) || (params == ENGOROIWA_C000_2))) {
-        if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {
+        if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x4000) {
             s16 sp7E = BINANG_SUB(actor->yawTowardsPlayer, this->actor.world.rot.y);
             f32 temp;
             f32 temp2;
@@ -1082,11 +1082,12 @@ s32 func_8094156C(EnGoroiwa* this, PlayState* play) {
             func_80941274(this, play);
             phi_s0_2 = true;
         } else if (((params == ENGOROIWA_C000_1) &&
-                    (this->collider.elements->info.acHitInfo->toucher.dmgFlags & (0x400 | 0x100))) ||
-                   ((params == ENGOROIWA_C000_2) && (this->collider.elements->info.acHitInfo->toucher.dmgFlags &
+                    (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & (0x400 | 0x100))) ||
+                   ((params == ENGOROIWA_C000_2) && (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags &
                                                      (0x80000000 | 0x800 | 0x400 | 0x100 | 0x8)))) {
             this->unk_1CC = 50;
-            if ((params == ENGOROIWA_C000_2) && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x800)) {
+            if ((params == ENGOROIWA_C000_2) &&
+                (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x800)) {
                 this->unk_1E6 = true;
             }
             func_80940090(this, play);
@@ -1318,7 +1319,7 @@ void func_8094220C(EnGoroiwa* this, PlayState* play) {
     s32 pad;
     EnGoroiwaStruct* ptr;
     s32 i;
-    s32 spD0;
+    s32 bgId;
     Vec3f spC4;
     Vec3f spB8;
     f32 phi_f12;
@@ -1348,7 +1349,7 @@ void func_8094220C(EnGoroiwa* this, PlayState* play) {
             spC4.y = ptr->unk_00.y + 25.0f;
             spC4.z = ptr->unk_00.z;
 
-            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &bgId, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_RotateZYX(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);

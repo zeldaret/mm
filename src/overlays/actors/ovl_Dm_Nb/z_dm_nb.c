@@ -6,7 +6,7 @@
 
 #include "z_dm_nb.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmNb*)thisx)
 
@@ -15,7 +15,7 @@ void DmNb_Destroy(Actor* thisx, PlayState* play);
 void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Nb_InitVars = {
+ActorProfile Dm_Nb_Profile = {
     /**/ ACTOR_DM_NB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -83,7 +83,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
     this->animIndex = DMNB_ANIM_NONE;
     DmNb_ChangeAnim(this, DMNB_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmNb_HandleCutscene;
 }

@@ -16,7 +16,7 @@ void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokei_Turret_InitVars = {
+ActorProfile Obj_Tokei_Turret_Profile = {
     /**/ ACTOR_OBJ_TOKEI_TURRET,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

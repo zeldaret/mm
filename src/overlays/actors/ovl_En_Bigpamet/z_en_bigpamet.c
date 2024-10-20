@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnBigpamet*)thisx)
 
@@ -46,7 +46,7 @@ void func_80A28A28(EnBigpamet* this);
 void func_80A28D80(EnBigpamet* this);
 void func_80A28ED4(EnBigpamet* this);
 
-ActorInit En_Bigpamet_InitVars = {
+ActorProfile En_Bigpamet_Profile = {
     /**/ ACTOR_EN_BIGPAMET,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -60,7 +60,7 @@ ActorInit En_Bigpamet_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -68,11 +68,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x04 },
         { 0xF7CF7FFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 53, 50, 0, { 0, 0, 0 } },
@@ -127,7 +127,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 4333, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_STOP),
 };
 
 static s32 sTexturesDesegmented = false;
@@ -227,7 +227,7 @@ void func_80A2778C(EnBigpamet* this) {
 void func_80A27970(EnBigpamet* this, PlayState* play2) {
     Vec3f sp9C;
     f32 temp_fs1 = this->actor.depthInWater + this->actor.world.pos.y;
-    s32 sp94;
+    s32 bgId;
     s32 i;
     s16 temp_s0;
     f32 temp_fs0;
@@ -242,7 +242,7 @@ void func_80A27970(EnBigpamet* this, PlayState* play2) {
         sp9C.y = Rand_ZeroFloat(10.0f) + this->actor.floorHeight + 8.0f;
         sp9C.z = (Math_CosS(temp_s0) * temp_fs0) + this->actor.world.pos.z;
 
-        if (BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp84, &sp94, &this->actor, &sp9C) < temp_fs1) {
+        if (BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp84, &bgId, &this->actor, &sp9C) < temp_fs1) {
             sp9C.y = temp_fs1;
             EffectSsGSplash_Spawn(play, &sp9C, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         } else {
@@ -366,7 +366,7 @@ void func_80A2811C(EnBigpamet* this, PlayState* play) {
 
 void func_80A281B4(EnBigpamet* this) {
     this->actor.draw = NULL;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80A281DC;
 }
 
@@ -484,7 +484,7 @@ void func_80A2866C(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A286C0(EnBigpamet* this) {
-    this->collider.info.bumper.dmgFlags = 0xF7CF7FFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CF7FFF;
     this->collider.base.atFlags |= AT_ON;
     this->actor.shape.rot.z = 0x680;
     this->unk_29E = 15;
@@ -563,7 +563,7 @@ void func_80A28970(EnBigpamet* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
     this->actor.shape.rot.z = 0;
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A289C8;
 }
@@ -616,7 +616,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     Animation_PlayLoop(&this->snapperSkelAnime, &gSnapperDeathAnim);
 
     this->collider.base.atFlags &= ~AT_ON;
-    this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
+    this->collider.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
     this->collider.base.acFlags &= ~AC_ON;
 
@@ -631,7 +631,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.params = ENBIGPAMET_0;
 
     if ((this->actor.parent->params == GEKKO_ON_SNAPPER) || (this->actor.parent->params == GEKKO_REAR_ON_SNAPPER) ||
@@ -683,7 +683,7 @@ void func_80A28DC0(EnBigpamet* this, PlayState* play) {
 
 void func_80A28E40(EnBigpamet* this) {
     Animation_MorphToPlayOnce(&this->snapperSkelAnime, &gSnapperRearUpAnim, -2.0f);
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A28E98;
 }

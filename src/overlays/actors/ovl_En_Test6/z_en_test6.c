@@ -7,7 +7,7 @@
 #include "z_en_test6.h"
 
 #include "z64cutscene_commands.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64quake.h"
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
@@ -54,7 +54,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play);
 
 SoTCsAmmoDrops sSoTCsAmmoDrops[12];
 
-ActorInit En_Test6_InitVars = {
+ActorProfile En_Test6_Profile = {
     /**/ ACTOR_EN_TEST6,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -1106,6 +1106,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->clockColorGray = 38;
                 this->clockSpeed = 150.0f;
                 this->clockDist = 480.0f;
+                break;
 
             case SOTCS_CUEID_DOUBLE_WAIT:
                 break;

@@ -22,7 +22,7 @@ void func_80A4CC54(ObjFireshield* this);
 void func_80A4CCBC(ObjFireshield* this);
 void func_80A4CD28(ObjFireshield* this);
 
-ActorInit Obj_Fireshield_InitVars = {
+ActorProfile Obj_Fireshield_Profile = {
     /**/ ACTOR_OBJ_FIRESHIELD,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -36,7 +36,7 @@ ActorInit Obj_Fireshield_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x01, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 28, 144, 0, { 0, 0, 0 } },
@@ -365,11 +365,11 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         Actor_PlaySfx_Flagged(thisx, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            this->collider.info.toucher.damage = 0;
-            this->collider.info.toucher.effect = 0;
+            this->collider.elem.atDmgInfo.damage = 0;
+            this->collider.elem.atDmgInfo.effect = 0;
         } else {
-            this->collider.info.toucher.damage = 4;
-            this->collider.info.toucher.effect = 1;
+            this->collider.elem.atDmgInfo.damage = 4;
+            this->collider.elem.atDmgInfo.effect = 1;
         }
 
         Collider_UpdateCylinder(thisx, &this->collider);

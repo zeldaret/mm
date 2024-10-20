@@ -6,9 +6,10 @@
 
 #include "z_en_zot.h"
 #include "z64snap.h"
+#include "attributes.h"
 #include "assets/objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -32,7 +33,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-ActorInit En_Zot_InitVars = {
+ActorProfile En_Zot_Profile = {
     /**/ ACTOR_EN_ZOT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -46,7 +47,7 @@ ActorInit En_Zot_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -54,11 +55,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -96,7 +97,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F4 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.world.rot.z = this->actor.shape.rot.z = 0;
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
 
@@ -1224,7 +1225,7 @@ void func_80B98F94(EnZot* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x12BB:
                 this->unk_2F2 &= ~4;
-
+                FALLTHROUGH;
             case 0x12BC:
             case 0x12C0:
             case 0x12C3:

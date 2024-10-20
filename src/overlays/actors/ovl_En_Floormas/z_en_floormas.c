@@ -7,7 +7,7 @@
 #include "z_en_floormas.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
 
 #define THIS ((EnFloormas*)thisx)
 
@@ -60,7 +60,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play);
 void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
-ActorInit En_Floormas_InitVars = {
+ActorProfile En_Floormas_Profile = {
     /**/ ACTOR_EN_FLOORMAS,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -74,7 +74,7 @@ ActorInit En_Floormas_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -82,11 +82,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0xF7EFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 25, 40, 0, { 0, 0, 0 } },
@@ -159,7 +159,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     if (this->actor.params == ENFLOORMAS_GET_7FFF_10) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = func_808D2AA8;
         return;
     }
@@ -195,16 +195,16 @@ void EnFloormas_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808D08D0(EnFloormas* this) {
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
     this->collider.base.acFlags |= AC_HARD;
-    this->collider.info.bumper.dmgFlags &= ~0x8000;
+    this->collider.elem.acDmgInfo.dmgFlags &= ~0x8000;
     this->unk_190 = 40;
 }
 
 void func_808D0908(EnFloormas* this) {
-    this->collider.base.colType = COLTYPE_HIT0;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT0;
     this->collider.base.acFlags &= ~AC_HARD;
-    this->collider.info.bumper.dmgFlags |= 0x8000;
+    this->collider.elem.acDmgInfo.dmgFlags |= 0x8000;
     this->unk_190 = 0;
 }
 
@@ -226,7 +226,7 @@ void func_808D09CC(EnFloormas* this) {
     this->drawDmgEffScale = 0.55f;
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -235,7 +235,7 @@ void func_808D09CC(EnFloormas* this) {
 void func_808D0A48(EnFloormas* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider.base.colType = COLTYPE_HIT0;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
                               this->actor.scale.x * (30000.0f * 0.001f), this->actor.scale.x * 20.0f);
@@ -573,7 +573,7 @@ void func_808D19D4(EnFloormas* this) {
 void func_808D1B44(EnFloormas* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (SkelAnime_Update(&this->skelAnime)) {
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->unk_194 = 50;
             func_808D0C14(this);
         }
@@ -713,7 +713,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
 
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
@@ -756,7 +756,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
 
         this->actor.shape.rot.x = 0;
         this->actor.velocity.y = 6.0f;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.speed = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
@@ -899,7 +899,7 @@ void func_808D2A20(EnFloormas* this) {
         Actor_Kill(&this->actor);
     } else {
         this->actor.draw = NULL;
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
         this->actionFunc = func_808D2AA8;
     }
 }
@@ -1003,9 +1003,9 @@ void func_808D2DC0(EnFloormas* this, PlayState* play) {
 void func_808D2E34(EnFloormas* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             if (this->actor.colChkInfo.damageEffect == 0xE) {
                 func_808D0908(this);
                 this->actor.colorFilterTimer = 0;
@@ -1017,7 +1017,7 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             }
 
-            if (this->collider.base.colType != COLTYPE_HARD) {
+            if (this->collider.base.colMaterial != COL_MATERIAL_HARD) {
                 if (!Actor_ApplyDamage(&this->actor)) {
                     if (this->actor.scale.x > 0.009f) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
@@ -1025,7 +1025,7 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_DEAD);
                     }
                     Enemy_StartFinishingBlow(play, &this->actor);
-                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 } else if (this->actor.colChkInfo.damage != 0) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_DAMAGE);
                 }
@@ -1064,9 +1064,9 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             this->drawDmgEffAlpha = 4.0f;
                             this->drawDmgEffScale = 0.55f;
                             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
-                                        0,
+                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                        this->collider.elem.acDmgInfo.hitPos.x, this->collider.elem.acDmgInfo.hitPos.y,
+                                        this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                         (this->actor.scale.x > 0.009f) ? CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS)
                                                                        : CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                         }
@@ -1123,7 +1123,7 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
             }
 
             Actor_SetFocus(&this->actor, this->actor.scale.x * 2500.0f);
-            if (this->collider.base.colType == COLTYPE_HARD) {
+            if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
                 if (this->unk_190 != 0) {
                     this->unk_190--;
                 }
@@ -1217,14 +1217,14 @@ void EnFloormas_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    if (this->collider.base.colType == COLTYPE_HARD) {
+    if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
         func_800AE2A0(play, &D_808D3958, this->unk_190 % 40, 40);
     }
 
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnFloormas_OverrideLimbDraw, EnFloormas_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    if (this->collider.base.colType == COLTYPE_HARD) {
+    if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
         func_800AE5A0(play);
     }
 
@@ -1242,14 +1242,14 @@ void func_808D3754(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    if (this->collider.base.colType == COLTYPE_HARD) {
+    if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
         func_800AE5E4(play, &D_808D3958, this->unk_190 % 40, 40);
     }
 
     POLY_XLU_DISP =
         SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnFloormas_OverrideLimbDraw, EnFloormas_PostLimbDraw, &this->actor, POLY_XLU_DISP);
-    if (this->collider.base.colType == COLTYPE_HARD) {
+    if (this->collider.base.colMaterial == COL_MATERIAL_HARD) {
         func_800AE8EC(play);
     }
 

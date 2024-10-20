@@ -14,7 +14,7 @@ void EnFr_Init(Actor* thisx, PlayState* play);
 void EnFr_Destroy(Actor* thisx, PlayState* play);
 void EnFr_Update(Actor* thisx, PlayState* play);
 
-ActorInit En_Fr_InitVars = {
+ActorProfile En_Fr_Profile = {
     /**/ ACTOR_EN_FR,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ void EnFr_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
+    this->actor.attentionRangeType = ENFR_GET_TARGETMODE(&this->actor);
 }
 
 void EnFr_Destroy(Actor* thisx, PlayState* play) {

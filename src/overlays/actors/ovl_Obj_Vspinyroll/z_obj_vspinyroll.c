@@ -28,7 +28,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Vspinyroll_InitVars = {
+ActorProfile Obj_Vspinyroll_Profile = {
     /**/ ACTOR_OBJ_VSPINYROLL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -48,7 +48,7 @@ s16 D_80A3D478[] = { 1, 10, 20, 30, 40, 50, 60, 70 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -56,11 +56,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x04 },
         { 0x01C37BB6, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 30, 120, 0, { 0, 0, 0 } },

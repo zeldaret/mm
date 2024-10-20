@@ -9,7 +9,7 @@
 
 #include "z_en_dnq.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnq*)thisx)
 
@@ -61,7 +61,7 @@ static MsgScript D_80A53438[] = {
     /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Dnq_InitVars = {
+ActorProfile En_Dnq_Profile = {
     /**/ ACTOR_EN_DNQ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -75,7 +75,7 @@ ActorInit En_Dnq_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -83,11 +83,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 34, 80, 0, { 0, 0, 0 } },
@@ -184,7 +184,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->cueId = 255;
             this->unk_37C |= 0x20;
         }
@@ -192,7 +192,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -498,7 +498,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->picto.actor, 0.02f);
-    this->picto.actor.targetMode = TARGET_MODE_1;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_1;
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);

@@ -7,7 +7,7 @@
 #include "z_en_rsn.h"
 #include "assets/objects/object_rsn/object_rsn.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnRsn*)thisx)
 
@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void EnRsn_DoNothing(EnRsn* this, PlayState* play);
 
-ActorInit En_Rsn_InitVars = {
+ActorProfile En_Rsn_Profile = {
     /**/ ACTOR_EN_RSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -52,7 +52,7 @@ void EnRsn_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBombShopkeeperSkel, &gBombShopkeeperWalkAnim, NULL, NULL, 0);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     func_80C25D40(this);
 }
 

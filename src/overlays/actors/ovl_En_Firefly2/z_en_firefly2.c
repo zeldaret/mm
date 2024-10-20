@@ -7,7 +7,7 @@
 #include "z_en_firefly2.h"
 
 #define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly2*)thisx)
 
@@ -16,7 +16,7 @@ void EnFirefly2_Destroy(Actor* thisx, PlayState* play);
 void EnFirefly2_Update(Actor* thisx, PlayState* play);
 void EnFirefly2_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Firefly2_InitVars = {
+ActorProfile En_Firefly2_Profile = {
     /**/ ACTOR_EN_FIREFLY2,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

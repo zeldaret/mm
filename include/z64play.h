@@ -19,6 +19,7 @@
 #include "z64light.h"
 #include "z64math.h"
 #include "z64message.h"
+#include "z64object.h"
 #include "z64pause_menu.h"
 #include "z64player.h"
 #include "z64prerender.h"

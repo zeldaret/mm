@@ -6,7 +6,7 @@
 
 #include "z_en_stone_heishi.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnStoneheishi*)thisx)
 
@@ -27,7 +27,7 @@ void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi*);
 void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
-ActorInit En_Stone_heishi_InitVars = {
+ActorProfile En_Stone_heishi_Profile = {
     /**/ ACTOR_EN_STONE_HEISHI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -41,7 +41,7 @@ ActorInit En_Stone_heishi_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -49,11 +49,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 15, 70, 0, { 0, 0, 0 } },
@@ -123,7 +123,7 @@ void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
                        SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.gravity = -3.0f;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -198,13 +198,13 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) && (play->actorCtx.lensMaskSize != 100)) {
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         return;
     }
 
     SkelAnime_Update(&this->skelAnime);
 
-    this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
 
     yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
@@ -478,7 +478,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                                   Gfx** gfxp) {
+                                   Gfx** gfxP) {
     EnStoneheishi* this = THIS;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
@@ -490,13 +490,13 @@ s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfxp) {
+void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfxP) {
     static Vec3f sLeftHandPos = { 0.0f, 0.0f, 0.0f };
     EnStoneheishi* this = THIS;
     Gfx* gfx;
 
     if ((limbIndex == SOLDIER_LIMB_LEFT_HAND) && (this->bottleDisplay != EN_STONE_BOTTLE_NONE)) {
-        gfx = Gfx_SetupDL71(*gfxp);
+        gfx = Gfx_SetupDL71(*gfxP);
 
         sLeftHandPos.x = 320.0f;
         sLeftHandPos.y = 210.0f;
@@ -523,7 +523,7 @@ void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, gSoldierBottleDL);
 
-        *gfxp = gfx++;
+        *gfxP = gfx++;
     }
 }
 

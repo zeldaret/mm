@@ -7,7 +7,7 @@
 #include "z_en_cne_01.h"
 #include "assets/objects/object_cne/object_cne.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnCne01*)thisx)
 
@@ -20,7 +20,7 @@ void EnCne01_Walk(EnHy* this, PlayState* play);
 void EnCne01_FaceForward(EnHy* this, PlayState* play);
 void EnCne01_Talk(EnHy* this, PlayState* play);
 
-ActorInit En_Cne_01_InitVars = {
+ActorProfile En_Cne_01_Profile = {
     /**/ ACTOR_EN_CNE_01,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ ActorInit En_Cne_01_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -149,7 +149,7 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
 
 void EnCne01_FinishInit(EnHy* this, PlayState* play) {
     if (EnHy_Init(this, play, &gHylianYoungWomanSkel, ENHY_ANIM_OS_ANIME_11)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
         if (ENCNE01_GET_PATH_INDEX(&this->actor) == ENCNE01_PATH_INDEX_NONE) {
@@ -219,7 +219,7 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->enHy.collider);
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->enHy.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->enHy.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->enHy.path = SubS_GetPathByIndex(play, ENCNE01_GET_PATH_INDEX(&this->enHy.actor), ENCNE01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);

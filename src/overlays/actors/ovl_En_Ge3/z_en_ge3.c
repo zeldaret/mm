@@ -5,8 +5,9 @@
  */
 
 #include "z_en_ge3.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe3*)thisx)
 
@@ -35,7 +36,7 @@ typedef enum GerudoAveilAnimation {
     /*  9 */ GERUDO_AVEIL_ANIM_MAX
 } GerudoAveilAnimation;
 
-ActorInit En_Ge3_InitVars = {
+ActorProfile En_Ge3_Profile = {
     /**/ ACTOR_EN_GE3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -49,7 +50,7 @@ ActorInit En_Ge3_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -57,11 +58,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x01000222, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -99,7 +100,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.attentionRangeType = 6;
     this->picto.actor.terminalVelocity = -4.0f;
     this->picto.actor.gravity = -1.0f;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);
@@ -356,7 +357,7 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
         case GERUDO_RED_LIMB_HEAD:
             rot->x += this->headRot.y;
-            // fallthrough
+            FALLTHROUGH;
         default:
             // This is required since EnGe3 shares a skeleton with EnKaizoku; it avoids stale colours being used in the
             // displaylists.

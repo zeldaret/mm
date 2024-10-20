@@ -24,7 +24,7 @@ void func_8093E05C(ObjHsblock* this);
 void func_8093E0E8(ObjHsblock* this);
 void func_8093E10C(ObjHsblock* this, PlayState* play);
 
-ActorInit Obj_Hsblock_InitVars = {
+ActorProfile Obj_Hsblock_Profile = {
     /**/ ACTOR_OBJ_HSBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -79,6 +79,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
         case 2:
             func_8093E03C(this);
             break;
+
         case 1:
             if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(thisx))) {
                 func_8093E03C(this);
@@ -86,6 +87,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
                 func_8093E05C(this);
             }
             break;
+
         default:
             break;
     }

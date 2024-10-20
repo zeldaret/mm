@@ -6,7 +6,7 @@
 
 #include "z_en_si.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_200)
 
 #define THIS ((EnSi*)thisx)
 
@@ -17,7 +17,7 @@ void EnSi_Draw(Actor* thisx, PlayState* play);
 
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play);
 
-ActorInit En_Si_InitVars = {
+ActorProfile En_Si_Profile = {
     /**/ ACTOR_EN_SI,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -31,7 +31,7 @@ ActorInit En_Si_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
@@ -39,11 +39,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 10 }, 100 },

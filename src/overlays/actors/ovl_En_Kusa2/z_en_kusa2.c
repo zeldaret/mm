@@ -53,7 +53,7 @@ s16 D_80A60B0C;
 s16 D_80A60B0E;
 s16 D_80A60B10;
 
-ActorInit En_Kusa2_InitVars = {
+ActorProfile En_Kusa2_Profile = {
     /**/ ACTOR_EN_KUSA2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -67,7 +67,7 @@ ActorInit En_Kusa2_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2,
@@ -75,11 +75,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x0580C71C, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 6, 44, 0, { 0, 0, 0 } },
@@ -252,15 +252,15 @@ void func_80A5B954(MtxF* matrix, f32 arg1) {
 
 s32 func_80A5BA58(EnKusa2* this, PlayState* play) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->actor.world.pos.x;
     sp24.y = this->actor.world.pos.y + 30.0f;
     sp24.z = this->actor.world.pos.z;
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp20, &this->actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp24);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
-        this->actor.floorBgId = sp20;
+        this->actor.floorBgId = bgId;
         this->actor.world.pos.y = this->actor.floorHeight;
         Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
         return true;
@@ -378,7 +378,7 @@ s32 func_80A5BFD8(EnKusa2* this, PlayState* play) {
         s32 pad;
 
         func_80A5CF44(this);
-        func_80A5BD14(this, play, (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000000) ? 1 : 0);
+        func_80A5BD14(this, play, (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000000) ? 1 : 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         func_80A5BD94(this);
         Actor_Kill(&this->actor);
@@ -1018,7 +1018,7 @@ void func_80A5D964(EnKusa2* this) {
 void func_80A5D9C8(EnKusa2* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     D_80A5EAF4.x += 11000;
     D_80A5EAF4.y += 17000;
@@ -1063,7 +1063,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
         }
 
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 

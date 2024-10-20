@@ -16,7 +16,7 @@ void EnHitTag_Update(Actor* thisx, PlayState* play);
 
 void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
-ActorInit En_Hit_Tag_InitVars = {
+ActorProfile En_Hit_Tag_Profile = {
     /**/ ACTOR_EN_HIT_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -30,7 +30,7 @@ ActorInit En_Hit_Tag_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -38,11 +38,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 16, 32, 0, { 0, 0, 0 } },

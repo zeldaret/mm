@@ -18,7 +18,7 @@ void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-ActorInit En_Scopecrow_InitVars = {
+ActorProfile En_Scopecrow_Profile = {
     /**/ ACTOR_EN_SCOPECROW,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -33,11 +33,11 @@ ActorInit En_Scopecrow_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 60, 0 }, 50 }, 100 },
@@ -46,7 +46,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -58,10 +58,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 void func_80BCD000(EnScopecrow* this, PlayState* play) {
-    this->collider.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.elements->dim.worldSphere.center.y =
+    this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.elements[0].dim.worldSphere.center.y =
         sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
-    this->collider.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->collider.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
@@ -316,7 +316,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
 
         Collider_InitJntSph(play, &this->collider);
         Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+        this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
         Actor_SetScale(&this->actor, 0.03f);
         this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);

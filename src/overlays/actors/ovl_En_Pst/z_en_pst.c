@@ -6,7 +6,7 @@
 
 #include "z_en_pst.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
 #define THIS ((EnPst*)thisx)
 
@@ -354,7 +354,7 @@ MsgScript D_80B2C490[] = {
     /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Pst_InitVars = {
+ActorProfile En_Pst_Profile = {
     /**/ ACTOR_EN_PST,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -368,7 +368,7 @@ ActorInit En_Pst_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -376,11 +376,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 28, 72, 0, { 0, 0, 0 } },
@@ -618,11 +618,11 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
         ((this->scheduleResult != scheduleOutput.result) &&
          !EnPst_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = POSTBOX_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
     this->scheduleResult = scheduleOutput.result;
     EnPst_HandleSchedule(this, play);
@@ -666,7 +666,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, POSTBOX_ANIM_IDLE);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

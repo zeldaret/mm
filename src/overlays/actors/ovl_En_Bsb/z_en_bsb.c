@@ -8,6 +8,7 @@
 
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
@@ -15,7 +16,7 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnBsb*)thisx)
 
@@ -67,77 +68,77 @@ f32 D_80C0F8D0 = 0.0f;
 static ColliderJntSphElementInit sJntSphElementsInit[7] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 10, { { 1000, 400, 0 }, 40 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 9, { { 0, 700, 200 }, 35 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 6, { { 100, 600, 0 }, 35 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 3, { { 400, 200, 0 }, 40 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 13, { { 700, -100, 0 }, 35 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 16, { { 200, 300, 0 }, 30 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 19, { { 200, 300, 0 }, 30 }, 100 },
@@ -146,7 +147,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -192,7 +193,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xD),
 };
 
-ActorInit En_Bsb_InitVars = {
+ActorProfile En_Bsb_Profile = {
     /**/ ACTOR_EN_BSB,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -385,7 +386,7 @@ void EnBsb_Init(Actor* thisx, PlayState* play) {
     while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
     // clang-format on
 
-    this->actor.targetMode = TARGET_MODE_10;
+    this->actor.attentionRangeType = ATTENTION_RANGE_10;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_04)) {
         Actor_Kill(&this->actor);
@@ -528,13 +529,13 @@ void func_80C0BF2C(EnBsb* this) {
     this->collider.elements[0].dim.modelSphere.radius = 110;
     this->collider.elements[0].dim.modelSphere.center.x = 300;
     this->collider.elements[0].dim.modelSphere.center.y = 400;
-    this->collider.base.colType = COLTYPE_HARD;
+    this->collider.base.colMaterial = COL_MATERIAL_HARD;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.elemType = ELEMTYPE_UNK2;
+        this->collider.elements[i].base.elemMaterial = ELEM_MATERIAL_UNK2;
     }
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_40);
     this->unk_02B4 = 0;
     this->actionFunc = func_80C0BFE8;
@@ -570,10 +571,10 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     this->collider.elements[0].dim.modelSphere.radius = 40;
     this->collider.elements[0].dim.modelSphere.center.x = 1000;
     this->collider.elements[0].dim.modelSphere.center.y = 400;
-    this->collider.base.colType = COLTYPE_NONE;
+    this->collider.base.colMaterial = COL_MATERIAL_NONE;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        this->collider.elements[i].info.elemType = ELEMTYPE_UNK0;
+        this->collider.elements[i].base.elemMaterial = ELEM_MATERIAL_UNK0;
     }
 
     this->unk_02AE = false;
@@ -589,7 +590,7 @@ void func_80C0C0F4(EnBsb* this, PlayState* play) {
     } else {
         CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
 
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
 
         Flags_SetSwitch(play, this->switchFlag1);
 
@@ -608,7 +609,7 @@ void func_80C0C238(EnBsb* this, PlayState* play) {
             return;
         }
         CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         Flags_SetSwitch(play, this->switchFlag1);
         this->unk_02A4 = 1;
     }
@@ -816,7 +817,7 @@ void func_80C0CA28(EnBsb* this, PlayState* play) {
     Actor_SpawnFloorDustRing(play, &this->actor, &this->unk_02F8, 5.0f, 10, 8.0f, 1000, 100, true);
     Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unk_02B4 = 5;
     this->actionFunc = func_80C0CB3C;
 }
@@ -859,7 +860,7 @@ void func_80C0CD04(EnBsb* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->animIndex == ENBSB_ANIM_24) && (curFrame >= this->animEndFrame)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actor.gravity = -2.0f;
         this->unk_0294 = 10;
         func_80C0C86C(this);
@@ -886,9 +887,9 @@ void func_80C0CDE4(EnBsb* this, PlayState* play) {
     f32 dy;
     f32 dz;
 
-    hitPos.x = this->collider.elements[1].info.bumper.hitPos.x;
-    hitPos.y = this->collider.elements[1].info.bumper.hitPos.y;
-    hitPos.z = this->collider.elements[1].info.bumper.hitPos.z;
+    hitPos.x = this->collider.elements[1].base.acDmgInfo.hitPos.x;
+    hitPos.y = this->collider.elements[1].base.acDmgInfo.hitPos.y;
+    hitPos.z = this->collider.elements[1].base.acDmgInfo.hitPos.z;
 
     dx = hitPos.x - player->actor.world.pos.x;
     dy = hitPos.y - player->actor.world.pos.y;
@@ -1308,10 +1309,10 @@ void func_80C0DB18(EnBsb* this, PlayState* play) {
 }
 
 void func_80C0E178(EnBsb* this) {
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unk_02AE = false;
     this->unk_02A4 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_02B4 = 14;
     this->actionFunc = func_80C0E1C0;
     this->actor.speed = 0.0f;
@@ -1370,8 +1371,8 @@ void func_80C0E3B8(EnBsb* this) {
 
     Math_Vec3s_Copy(&this->unk_031C, &gZeroVec3s);
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Animation_Change(&this->skelAnime, &object_bsb_Anim_004894, 1.0f, D_80C0F8D0,
                      Animation_GetLastFrame(&object_bsb_Anim_004894), 2, 0.0f);
@@ -1425,8 +1426,8 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
     if ((this->unk_02B4 != 0) && (this->unk_02B4 != 1) && (this->unk_02B4 != 9) && (this->unk_02B4 != 12) &&
         (this->unk_02B4 != 13) && (this->unk_02B4 != 5) && ((this->unk_02B4 != 8) || !this->unk_02DC)) {
         if (!(this->collider.base.atFlags & AT_BOUNCED)) {
-            if (this->collider.elements[1].info.toucherFlags & TOUCH_HIT) {
-                this->collider.elements[1].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->collider.elements[1].base.atElemFlags & ATELEM_HIT) {
+                this->collider.elements[1].base.atElemFlags &= ~ATELEM_HIT;
                 if ((this->unk_02B4 != 11) && (this->unk_02B4 != 7)) {
                     func_80C0D334(this);
                 }
@@ -1439,7 +1440,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         var_s0 = 1;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case 15:
                     var_s0 = -1;
                     break;
@@ -1518,16 +1519,16 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
             if (this->actor.colChkInfo.health <= 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KITA_DEAD);
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
                 func_80C0D3C0(this, play);
             } else {
                 for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-                    if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
-                        sp48.x = this->collider.elements[i].info.bumper.hitPos.x;
-                        sp48.y = this->collider.elements[i].info.bumper.hitPos.y;
-                        sp48.z = this->collider.elements[i].info.bumper.hitPos.z;
+                    if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                        sp48.x = this->collider.elements[i].base.acDmgInfo.hitPos.x;
+                        sp48.y = this->collider.elements[i].base.acDmgInfo.hitPos.y;
+                        sp48.z = this->collider.elements[i].base.acDmgInfo.hitPos.z;
                         CollisionCheck_BlueBlood(play, NULL, &sp48);
                     }
                 }

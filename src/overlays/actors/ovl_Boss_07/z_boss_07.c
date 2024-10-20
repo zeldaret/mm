@@ -12,7 +12,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss07*)thisx)
 
@@ -619,7 +619,7 @@ static DamageTable sTopDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(2, TOP_DMGEFF_BOUNCE_BACK_FROM_DAMAGE),
 };
 
-ActorInit Boss_07_InitVars = {
+ActorProfile Boss_07_Profile = {
     /**/ ACTOR_BOSS_07,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -635,121 +635,121 @@ ActorInit Boss_07_InitVars = {
 static ColliderJntSphElementInit sWrathBodyColliderJntSphElementsInit[MAJORAS_WRATH_COLLIDER_BODYPART_MAX] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
@@ -758,7 +758,7 @@ static ColliderJntSphElementInit sWrathBodyColliderJntSphElementsInit[MAJORAS_WR
 
 static ColliderJntSphInit sWrathBodyColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -771,7 +771,7 @@ static ColliderJntSphInit sWrathBodyColliderJntSphInit = {
 
 static ColliderCylinderInit sWrathCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -779,11 +779,11 @@ static ColliderCylinderInit sWrathCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x00, 0x10 },
         { 0xF7CEFFFE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 80, 200, 0, { 0, 0, 0 } },
@@ -793,11 +793,11 @@ static ColliderCylinderInit sWrathCylinderInit = {
 static ColliderJntSphElementInit sWrathKickColliderJntSphElementsInit[MAJORAS_WARTH_KICK_COLLIDER_MAX] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_WRATH_LIMB_NONE, { { 0, 0, 0 }, 36 }, 200 },
@@ -806,7 +806,7 @@ static ColliderJntSphElementInit sWrathKickColliderJntSphElementsInit[MAJORAS_WA
 
 static ColliderJntSphInit sWrathKickColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -819,7 +819,7 @@ static ColliderJntSphInit sWrathKickColliderJntSphInit = {
 
 static ColliderQuadInit sMaskFrontQuadInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -827,11 +827,11 @@ static ColliderQuadInit sMaskFrontQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x04, 0x00 },
         { 0xF7CEFFFE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -839,7 +839,7 @@ static ColliderQuadInit sMaskFrontQuadInit = {
 
 static ColliderQuadInit sMaskBackQuadInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -847,11 +847,11 @@ static ColliderQuadInit sMaskBackQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0xF7CEFFFE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -861,121 +861,121 @@ static ColliderQuadInit sMaskBackQuadInit = {
 static ColliderJntSphElementInit sIncarnationBodyJntSphElementsInit[MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_NONE, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 40 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CEFFFE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { MAJORAS_INCARNATION_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 150 },
@@ -984,7 +984,7 @@ static ColliderJntSphElementInit sIncarnationBodyJntSphElementsInit[MAJORAS_INCA
 
 static ColliderJntSphInit sIncarnationBodyColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -997,7 +997,7 @@ static ColliderJntSphInit sIncarnationBodyColliderJntSphInit = {
 
 static ColliderCylinderInit sProjectileCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -1005,11 +1005,11 @@ static ColliderCylinderInit sProjectileCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0x00300000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 15, 30, -15, { 0, 0, 0 } },
@@ -1017,7 +1017,7 @@ static ColliderCylinderInit sProjectileCylinderInit = {
 
 static ColliderCylinderInit sRemainsCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -1025,11 +1025,11 @@ static ColliderCylinderInit sRemainsCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 50, 100, -50, { 0, 0, 0 } },
@@ -1037,7 +1037,7 @@ static ColliderCylinderInit sRemainsCylinderInit = {
 
 static ColliderCylinderInit sTopCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -1045,11 +1045,11 @@ static ColliderCylinderInit sTopCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x10 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 40, 20, 15, { 0, 0, 0 } },
@@ -1334,7 +1334,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_BATTLE_HANDLER) {
         this->actor.update = Boss07_BattleHandler_Update;
         this->actor.draw = Boss07_BattleHandler_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         sMajoraBattleHandler = this;
         sKillAllProjectiles = false;
         play->envCtx.lightSettingOverride = 0;
@@ -1357,7 +1357,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         }
     }
 
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.gravity = -2.5f;
 
@@ -1377,7 +1377,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         } else {
             Boss07_Remains_SetupIntroCutscene(this, play);
         }
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.colChkInfo.damageTable = &sRemainsDamageTable;
         return;
     }
@@ -1393,7 +1393,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         this->actor.shape.shadowAlpha = 180;
         Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sTopCylinderInit);
         Effect_Add(play, &this->effectIndex, EFFECT_TIRE_MARK, 0, 0, &sTopTireMarkInit);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         return;
     }
 
@@ -1401,7 +1401,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_PROJECTILE_INCARNATION)) {
         this->actor.update = Boss07_Projectile_Update;
         this->actor.draw = Boss07_Projectile_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Collider_InitAndSetCylinder(play, &this->generalCollider, &this->actor, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         this->projectileColorIndex = Rand_ZeroFloat(ARRAY_COUNT(sProjectileEnvColors) - 0.01f);
@@ -1435,7 +1435,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                 this->timers[0] = 50;
                 this->timers[2] = 200;
                 this->bgCheckTimer = 50;
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 sMusicStartTimer = 20;
             } else {
                 Boss07_Mask_SetupIntroCutscene(this, play);
@@ -1462,7 +1462,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
             this->actor.world.rot.z = 0;
             this->actor.update = Boss07_Afterimage_Update;
             this->actor.draw = Boss07_Afterimage_Draw;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         } else {
             this->actor.colChkInfo.damageTable = &sMajorasIncarnationDamageTable;
             this->actor.colChkInfo.health = 30;
@@ -1530,7 +1530,7 @@ void Boss07_Destroy(Actor* thisx, PlayState* play2) {
         case MAJORA_TYPE_WRATH:
             Collider_DestroyQuad(play, &this->maskFrontCollider);
             Collider_DestroyQuad(play, &this->maskBackCollider);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORA_TYPE_TOP:
             Effect_Destroy(play, this->effectIndex);
             break;
@@ -1543,7 +1543,7 @@ void Boss07_Destroy(Actor* thisx, PlayState* play2) {
 void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasWrathHeavyBreathingAnim, 0.0f);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneHeadRot.x = 0x7F00;
     this->damagedTimer = 20;
     this->incarnationWrathTransitionScale = 0x1400;
@@ -1581,7 +1581,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
             this->subCamEyeNext.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
             this->subCamAtNext.x = 0.0f;
             this->subCamAtNext.y = 180.0f;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_WRATH_INTRO_CS_STATE_PLAYING:
             if (this->cutsceneTimer < 40) {
                 sHeartbeatTimer = 3;
@@ -1668,7 +1668,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                     this->subCamId = SUB_CAM_ID_DONE;
                     Cutscene_StopManual(play, &play->csCtx);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                     Play_DisableMotionBlur();
 
                     if (sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA] != NULL) {
@@ -1704,7 +1704,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDeathAnim, 0.0f);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneState = MAJORAS_WRATH_DEATH_CS_STATE_STARTED;
     this->cutsceneTimer = 0;
 
@@ -1742,7 +1742,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_DEAD_ROD);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_WRATH_DEATH_CS_STATE_UPDATE_SUBCAM:
             this->cutsceneTimer = 0;
             this->cutsceneState = MAJORAS_WRATH_DEATH_CS_STATE_SPIN_AROUND;
@@ -1761,7 +1761,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             }
 
             Play_EnableMotionBlur(150);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_WRATH_DEATH_CS_STATE_SPIN_AROUND:
             if (this->cutsceneTimer == 20) {
                 Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST2_WALK2_OLD);
@@ -1826,7 +1826,7 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             this->cutsceneState = MAJORAS_WRATH_DEATH_CS_STATE_FLOAT;
             this->subCamEyeModY = sREG(16) + 270.0f + 50.0f;
             Audio_PlaySfx_AtPos(&sMajoraSfxPos, NA_SE_EN_LAST3_DEAD_FLOAT);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_WRATH_DEATH_CS_STATE_FLOAT:
             if ((this->cutsceneTimer >= (u32)(sREG(90) + 260)) && (this->cutsceneTimer < (u32)(sREG(91) + 370))) {
                 spC0 = KREG(14) + 1;
@@ -1994,7 +1994,7 @@ void Boss07_Wrath_SetupIdle(Boss07* this, PlayState* play, s16 delay) {
         this->timers[0] = Rand_ZeroFloat(30.0f);
     }
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
@@ -2458,7 +2458,7 @@ void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 2.0f);
     player->actor.world.pos = this->whipGrabPos;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->whipCollisionTimer = 20;
     this->whipWrapStartIndex++;
 
@@ -2547,7 +2547,7 @@ void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 2.0f);
     player->actor.world.pos = this->whipGrabPos;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->whipCollisionTimer = 20;
 
     // TODO: use MAJORA_WHIP_LENGTH?
@@ -2853,8 +2853,8 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
         return;
     }
 
-    if (this->kickCollider.elements[MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT].info.toucherFlags & TOUCH_HIT) {
-        this->kickCollider.elements[MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT].info.toucherFlags &= ~TOUCH_HIT;
+    if (this->kickCollider.elements[MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT].base.atElemFlags & ATELEM_HIT) {
+        this->kickCollider.elements[MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT].base.atElemFlags &= ~ATELEM_HIT;
         player->pushedYaw = this->actor.yawTowardsPlayer;
         player->pushedSpeed = 20.0f;
         Boss07_SpawnDustAtPos(play, &player->actor.world.pos, 12);
@@ -2862,12 +2862,12 @@ void Boss07_Wrath_CollisionCheck(Boss07* this, PlayState* play) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-        if (!(this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT)) {
+        if (!(this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT)) {
             continue;
         }
 
         for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
-            this->bodyCollider.elements[j].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[j].base.acElemFlags &= ~ACELEM_HIT;
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -2978,7 +2978,7 @@ void Boss07_DamageEffects(Boss07* this, PlayState* play) {
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffState++;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 60);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
@@ -2997,7 +2997,7 @@ void Boss07_DamageEffects(Boss07* this, PlayState* play) {
             this->drawDmgEffFrozenSteamScale = 1.0f;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffState++;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss07_Wrath_Thaw(this, play);
@@ -3026,7 +3026,7 @@ void Boss07_DamageEffects(Boss07* this, PlayState* play) {
         lightOrbInitCommon:
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState = MAJORA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
@@ -3045,7 +3045,7 @@ void Boss07_DamageEffects(Boss07* this, PlayState* play) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = (KREG(18) * 0.1f) + 1.0f;
             this->drawDmgEffState++;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.05f);
@@ -3115,7 +3115,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
 
     if (this->disableCollisionTimer != 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-            this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
         }
     }
 
@@ -4008,7 +4008,7 @@ void Boss07_Incarnation_AvoidPlayer(Boss07* this) {
 void Boss07_Incarnation_SetupIntroCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Incarnation_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationJerkingAnim, 0.0f);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneHeadRot.x = 0x6E00;
 }
 
@@ -4028,7 +4028,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             this->cutsceneTimer = 0;
             this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_UPDATE_SUBCAM;
             this->subCamAtNext.z = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_INCARNATION_INTRO_CS_STATE_UPDATE_SUBCAM:
             this->cutsceneState = MAJORAS_INCARNATION_INTRO_CS_STATE_GROW_LEFT_LEG;
             this->cutsceneTimer = 0;
@@ -4197,7 +4197,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             }
             break;
     }
@@ -4225,7 +4225,7 @@ void Boss07_Incarnation_SetupTaunt(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Incarnation_Taunt;
     this->subAction = Rand_ZeroFloat(MAJORAS_INCARNATION_TAUNT_SUB_ACTION_MAX - 0.001f);
     Animation_MorphToLoop(&this->skelAnime, sTauntAnimations[this->subAction], -10.0f);
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
 }
 
@@ -4560,7 +4560,7 @@ void Boss07_Incarnation_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->animEndFrame = Animation_GetLastFrame(&gMajorasIncarnationDamagedAnim);
     this->cutsceneState = MAJORAS_INCARNATION_DEATH_CS_STATE_STARTED;
     this->cutsceneTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->damagedTimer = 20;
 }
 
@@ -4587,7 +4587,7 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
             this->cutsceneTimer = 0;
             this->cutsceneState = MAJORAS_INCARNATION_DEATH_CS_STATE_PLAY_DAMAGED_ANIM;
             Play_EnableMotionBlur(150);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_INCARNATION_DEATH_CS_STATE_PLAY_DAMAGED_ANIM:
             sHeartbeatTimer = 5;
             this->subCamEyeNext.x = 0.0f;
@@ -4728,12 +4728,12 @@ void Boss07_Incarnation_CollisionCheck(Boss07* this, PlayState* play) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-        if (!(this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT)) {
+        if (!(this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT)) {
             continue;
         }
 
         for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
-            this->bodyCollider.elements[j].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[j].base.acElemFlags &= ~ACELEM_HIT;
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -4854,7 +4854,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
 
     if (this->disableCollisionTimer != 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-            this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
         }
     }
 
@@ -5438,7 +5438,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, 300.0f, 0.05f, 1.0f);
     Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x400);
 
-    if ((player->lockOnActor != NULL) && (player->stateFlags1 & PLAYER_STATE1_400000)) {
+    if ((player->focusActor != NULL) && (player->stateFlags1 & PLAYER_STATE1_400000)) {
         phi_f24 = (player->transformation == PLAYER_FORM_HUMAN) ? 20 : 30.0f;
     } else {
         phi_f24 = (player->transformation == PLAYER_FORM_HUMAN) ? 8.0f : 15.0f;
@@ -5489,7 +5489,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
         case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE:
         case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_REFLECTED:
             Audio_PlaySfx(NA_SE_EN_LAST1_BEAM_OLD - SFX_FLAG);
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END:
             Math_ApproachF(&this->eyeBeamsFocusOrbScale, 1.0f, 0.2f, 0.2f);
             temp_f20 = player->actor.world.pos.x - this->beamStartPos.x;
@@ -5709,16 +5709,16 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                                Rand_ZeroFloat(10.0f) + 25.0f);
                         }
                     }
-                } else if (!player->isBurning && (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
+                } else if (!player->bodyIsBurning && (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                     s32 i;
 
                     func_800B8D50(play, &this->actor, 5.0f, this->actor.shape.rot.y, 0.0f, 0x10);
 
-                    for (i = 0; i < ARRAY_COUNT(player->flameTimers); i++) {
-                        player->flameTimers[i] = Rand_S16Offset(0, 200);
+                    for (i = 0; i < ARRAY_COUNT(player->bodyFlameTimers); i++) {
+                        player->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
                     }
 
-                    player->isBurning = true;
+                    player->bodyIsBurning = true;
                     Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                 }
             }
@@ -5803,7 +5803,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
             this->cutsceneTimer = 0;
             this->cutsceneState = MAJORAS_MASK_INTRO_CS_STATE_LOOK_AT_PLAYER;
             this->motionBlurAlpha = KREG(76) + 150;
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_MASK_INTRO_CS_STATE_LOOK_AT_PLAYER:
             if (this->cutsceneTimer >= 20) {
                 Audio_PlaySfx_2(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
@@ -6021,7 +6021,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                     this->subCamId = SUB_CAM_ID_DONE;
                     Cutscene_StopManual(play, &play->csCtx);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                     SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA);
                     Play_DisableMotionBlur();
                 }
@@ -6056,7 +6056,7 @@ void Boss07_Mask_SetupDeathCutscene(Boss07* this, PlayState* play) {
         Math_Atan2F_XY(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PIf);
     this->cutsceneState = MAJORAS_MASK_DEATH_CS_STATE_STARTED;
     this->cutsceneTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->damagedTimer = 20;
 }
 
@@ -6099,7 +6099,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             } else {
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_MASK_DEATH_CS_STATE_PLAYING:
             player->actor.world.pos.x = 0.0f;
             player->actor.world.pos.z = BREG(87) + 250.0f;
@@ -6122,7 +6122,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             } else {
                 break;
             }
-            // fallthrough
+            FALLTHROUGH;
         case MAJORAS_MASK_DEATH_CS_STATE_SPAWN_INCARNATION:
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
                         this->subCamId, MAJORA_TYPE_INCARNATION);
@@ -6152,7 +6152,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
 
 void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    ColliderInfo* hitbox;
+    ColliderElement* acHitElem;
     u8 damage;
     Actor* hitActor;
 
@@ -6168,8 +6168,8 @@ void Boss07_Mask_CollisionCheck(Boss07* this, PlayState* play) {
 
             if ((this->actionFunc == Boss07_Mask_Stunned) || (player->stateFlags3 & PLAYER_STATE3_200)) {
                 hitActor = this->maskBackCollider.base.ac;
-                hitbox = this->maskBackCollider.info.acHitInfo;
-                damage = (hitbox->toucher.dmgFlags & ~0x8300000) ? this->actor.colChkInfo.damage : 0;
+                acHitElem = this->maskBackCollider.elem.acHitElem;
+                damage = (acHitElem->atDmgInfo.dmgFlags & ~0x8300000) ? this->actor.colChkInfo.damage : 0;
                 this->damagedTimer = 50;
                 this->damagedFlashTimer = 15;
                 AudioSfx_StopByPos(&this->actor.projectedPos);
@@ -6728,13 +6728,13 @@ void Boss07_Projectile_Draw(Actor* thisx, PlayState* play2) {
 
 void Boss07_Remains_CollisionCheck(Boss07* this, PlayState* play) {
     Vec3f sp2C;
-    ColliderInfo* hitbox;
+    ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) && (this->generalCollider.base.acFlags & AC_HIT)) {
         this->generalCollider.base.acFlags &= ~AC_HIT;
         this->damagedTimer = 15;
-        hitbox = this->generalCollider.info.acHitInfo;
-        if (hitbox->toucher.dmgFlags & DMG_HOOKSHOT) {
+        acHitElem = this->generalCollider.elem.acHitElem;
+        if (acHitElem->atDmgInfo.dmgFlags & DMG_HOOKSHOT) {
             Boss07_Remains_SetupStunned(this, play);
         } else {
             u8 damage = this->actor.colChkInfo.damage;
@@ -6899,8 +6899,8 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
             this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
             this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
             this->bgCheckTimer = 100;
-            this->generalCollider.base.colType = COLTYPE_HIT3;
-            this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_TARGETABLE);
+            this->generalCollider.base.colMaterial = COL_MATERIAL_HIT3;
+            this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_ATTENTION_ENABLED);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
 
@@ -6971,7 +6971,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
                 if (this->actor.scale.z == 0.0f) {
                     this->subAction = REMAINS_MOVE_SUB_ACTION_DEAD;
                     this->actor.draw = NULL;
-                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 }
 
                 Boss07_SmoothStop(this, 2.0f);
@@ -7520,7 +7520,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.y * 0.7f;
             this->subCamEye.z = sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->actor.world.pos.z * 0.7f;
-            // fallthrough
+            FALLTHROUGH;
         case BATTLE_HANDLER_REMAINS_CS_STATE_ACTIVATE_ODOLWA:
             if (this->cutsceneTimer == 20) {
                 sMajoraRemains[MAJORA_REMAINS_TYPE_ODOLWA]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
@@ -7539,7 +7539,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.y * 0.7f;
             this->subCamEye.z = sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->actor.world.pos.z * 0.7f;
-            // fallthrough
+            FALLTHROUGH;
         case BATTLE_HANDLER_REMAINS_CS_STATE_ACTIVATE_GYORG:
             if (this->cutsceneTimer == 20) {
                 sMajoraRemains[MAJORA_REMAINS_TYPE_GYORG]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
@@ -7558,7 +7558,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.y * 0.7f;
             this->subCamEye.z = sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->actor.world.pos.z * 0.7f;
-            // fallthrough
+            FALLTHROUGH;
         case BATTLE_HANDLER_REMAINS_CS_STATE_ACTIVATE_GOHT:
             if (this->cutsceneTimer == 20) {
                 sMajoraRemains[MAJORA_REMAINS_TYPE_GOHT]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;
@@ -7577,7 +7577,7 @@ void Boss07_BattleHandler_Update(Actor* thisx, PlayState* play2) {
             this->subCamEye.x = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.x * 0.7f;
             this->subCamEye.y = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.y * 0.7f;
             this->subCamEye.z = sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->actor.world.pos.z * 0.7f;
-            // fallthrough
+            FALLTHROUGH;
         case BATTLE_HANDLER_REMAINS_CS_STATE_ACTIVATE_TWINMOLD:
             if (this->cutsceneTimer == 20) {
                 sMajoraRemains[MAJORA_REMAINS_TYPE_TWINMOLD]->subAction = REMAINS_MOVE_SUB_ACTION_DETACH_FROM_WALL;

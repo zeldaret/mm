@@ -8,7 +8,7 @@
 #include "assets/objects/object_trt/object_trt.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -91,7 +91,7 @@ static AnimationInfoS sAnimationInfo[TRT_ANIM_MAX] = {
     { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT_ANIM_FLY
 };
 
-ActorInit En_Trt_InitVars = {
+ActorProfile En_Trt_Profile = {
     /**/ ACTOR_EN_TRT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -1581,7 +1581,7 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, PlayState* play) {

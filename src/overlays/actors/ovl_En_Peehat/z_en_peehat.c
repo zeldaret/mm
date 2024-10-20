@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -38,7 +38,7 @@ void func_80898594(EnPeehat* this, PlayState* play);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
-ActorInit En_Peehat_InitVars = {
+ActorProfile En_Peehat_Profile = {
     /**/ ACTOR_EN_PEEHAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -52,7 +52,7 @@ ActorInit En_Peehat_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_WOOD,
+        COL_MATERIAL_WOOD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -60,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 50, 120, -20, { 0, 0, 0 } },
@@ -72,7 +72,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -80,11 +80,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 40 }, 100 },
@@ -93,22 +93,22 @@ static ColliderSphereInit sSphereInit = {
 static ColliderTrisElementInit sTrisElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -117,7 +117,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -232,7 +232,7 @@ void func_80897170(EnPeehat* this) {
     this->drawDmgEffScale = 1.1f;
     this->drawDmgEffFrozenSteamScale = 1650.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->colliderSphere.base.colType = COLTYPE_HIT3;
+    this->colliderSphere.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_2B0 = 80;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
@@ -240,7 +240,7 @@ void func_80897170(EnPeehat* this) {
 void func_808971DC(EnPeehat* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->colliderSphere.base.colType = COLTYPE_HIT6;
+        this->colliderSphere.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, 2, 0.5f, 0.35f);
     }
@@ -297,7 +297,7 @@ void func_80897498(EnPeehat* this) {
 
 void func_80897520(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->colliderSphere.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < 740.0f) {
             func_80897648(this);
@@ -305,7 +305,7 @@ void func_80897520(EnPeehat* this, PlayState* play) {
             Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 10.0f);
         }
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->colliderSphere.base.acFlags &= ~AC_ON;
         Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
         if (this->unk_2B0 != 0) {
@@ -690,13 +690,13 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     if (this->colliderSphere.base.acFlags & AC_HIT) {
         this->colliderSphere.base.acFlags &= ~AC_HIT;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->colliderSphere.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->colliderSphere.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             if (!Actor_ApplyDamage(&this->actor)) {
                 Enemy_StartFinishingBlow(play, &this->actor);
             }
 
             this->colliderTris.base.atFlags &= ~(AT_HIT | AT_ON);
-            Actor_SetDropFlag(&this->actor, &this->colliderSphere.info);
+            Actor_SetDropFlag(&this->actor, &this->colliderSphere.elem);
             func_808971DC(this, play);
 
             if (this->actor.colChkInfo.damageEffect == 5) {
@@ -728,9 +728,10 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 1.1f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
-                                this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.elem.acDmgInfo.hitPos.x,
+                                this->colliderSphere.elem.acDmgInfo.hitPos.y,
+                                this->colliderSphere.elem.acDmgInfo.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);
                 func_808984E0(this);
@@ -739,7 +740,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
     } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
                (this->colliderCylinder.base.acFlags & AC_HIT) &&
                ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                !(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+                !(this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3))) {
         func_808971DC(this, play);
         this->actor.colorFilterTimer = 0;
         func_80897648(this);

@@ -11,7 +11,7 @@
 #include "assets/objects/object_sekihiz/object_sekihiz.h"
 #include "assets/objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSekihi*)thisx)
 
@@ -24,7 +24,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
-ActorInit En_Sekihi_InitVars = {
+ActorProfile En_Sekihi_Profile = {
     /**/ ACTOR_EN_SEKIHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

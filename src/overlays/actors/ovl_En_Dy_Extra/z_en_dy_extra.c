@@ -19,7 +19,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 void EnDyExtra_WaitForTrigger(EnDyExtra* this, PlayState* play);
 void EnDyExtra_Fall(EnDyExtra* this, PlayState* play);
 
-ActorInit En_Dy_Extra_InitVars = {
+ActorProfile En_Dy_Extra_Profile = {
     /**/ ACTOR_EN_DY_EXTRA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

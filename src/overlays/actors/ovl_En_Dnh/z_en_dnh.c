@@ -6,7 +6,7 @@
 
 #include "z_en_dnh.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnh*)thisx)
 
@@ -217,7 +217,7 @@ MsgScript D_80A5138C[] = {
     /* 0x007D 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Dnh_InitVars = {
+ActorProfile En_Dnh_Profile = {
     /**/ ACTOR_EN_DNH,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,

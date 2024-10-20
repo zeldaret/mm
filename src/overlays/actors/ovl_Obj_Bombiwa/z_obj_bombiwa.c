@@ -24,7 +24,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play);
 void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bombiwa_InitVars = {
+ActorProfile Obj_Bombiwa_Profile = {
     /**/ ACTOR_OBJ_BOMBIWA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit Obj_Bombiwa_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37FBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 55, 70, 0, { 0, 0, 0 } },
@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +66,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37BBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 75, 130, 0, { 0, 0, 0 } },
@@ -111,15 +111,15 @@ s32 func_809393B0(Actor* thisx) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* ac = this->collider.base.ac;
 
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(150.0f))) {
                 return true;
             }
-        } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(95.0f))) {
                 return true;
             }
-        } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x500) {
             return true;
         }
     }
@@ -133,11 +133,11 @@ s32 func_80939470(Actor* thisx) {
         Actor* temp_v0 = this->collider.base.ac;
 
         if (temp_v0 != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
                 if (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(175.0f)) {
                     return true;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 8) &&
+            } else if ((this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) &&
                        (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(115.0f))) {
                 return true;
             }
@@ -163,14 +163,14 @@ s32 ObjBombiwa_IsUnderwater(ObjBombiwa* this, PlayState* play) {
 void func_80939594(ObjBombiwa* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
-    s32 sp24;
+    s32 bgId;
 
     sp28.x = this->actor.world.pos.x;
     sp28.y = this->actor.world.pos.y + 30.0f;
     sp28.z = this->actor.world.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp28);
 }
 
 void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
@@ -363,9 +363,9 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
             if (this->unk_202 > 0) {
                 this->unk_202--;
                 if (this->unk_202 == 0) {
-                    this->collider.base.colType = COLTYPE_HARD;
+                    this->collider.base.colMaterial = COL_MATERIAL_HARD;
                 } else {
-                    this->collider.base.colType = COLTYPE_NONE;
+                    this->collider.base.colMaterial = COL_MATERIAL_NONE;
                 }
             }
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -406,7 +406,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
     Vec3f sp9C;
     ObjBombiwaStruct* ptr;
     CollisionPoly* sp94;
-    s32 sp90;
+    s32 bgId;
     f32 temp_f0;
     s16 phi_s1;
 
@@ -429,7 +429,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
         sp9C.y = ptr->unk_04.y + 30.0f;
         sp9C.z = ptr->unk_04.z;
 
-        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp94, &sp90, &this->actor, &sp9C);
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp94, &bgId, &this->actor, &sp9C);
         if ((temp_f0 <= (BGCHECK_Y_MIN + 10.0f)) || ((ptr->unk_04.y - (200.0f * ptr->unk_00)) < temp_f0)) {
             this->unk_200++;
             ptr->unk_1A = 1;

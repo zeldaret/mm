@@ -6,7 +6,7 @@
 
 #include "z_en_encount4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount4*)thisx)
 
@@ -20,7 +20,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play);
 void func_809C4598(EnEncount4* this, PlayState* play);
 void func_809C464C(EnEncount4* this, PlayState* play);
 
-ActorInit En_Encount4_InitVars = {
+ActorProfile En_Encount4_Profile = {
     /**/ ACTOR_EN_ENCOUNT4,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -53,7 +53,7 @@ void EnEncount4_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_809C3FD8;
 }
 

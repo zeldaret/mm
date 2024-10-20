@@ -26,7 +26,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-ActorInit En_Encount2_InitVars = {
+ActorProfile En_Encount2_Profile = {
     /**/ ACTOR_EN_ENCOUNT2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -41,11 +41,11 @@ ActorInit En_Encount2_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
@@ -54,7 +54,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -112,7 +112,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
-    this->dyna.actor.targetMode = TARGET_MODE_6;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_6;
     this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
@@ -126,11 +126,11 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->collider.elements->dim.modelSphere.radius = 57;
-    this->collider.elements->dim.scale = 1.0f;
-    this->collider.elements->dim.modelSphere.center.x = 0;
-    this->collider.elements->dim.modelSphere.center.y = -4;
-    this->collider.elements->dim.modelSphere.center.z = 0;
+    this->collider.elements[0].dim.modelSphere.radius = 57;
+    this->collider.elements[0].dim.scale = 1.0f;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.modelSphere.center.y = -4;
+    this->collider.elements[0].dim.modelSphere.center.z = 0;
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetupIdle(this);

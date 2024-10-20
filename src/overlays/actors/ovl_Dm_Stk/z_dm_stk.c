@@ -151,7 +151,7 @@ typedef enum {
     /* 4 */ SK_DEKU_PIPES_CS_STATE_END
 } SkullKidDekuPipesCutsceneState;
 
-ActorInit Dm_Stk_InitVars = {
+ActorProfile Dm_Stk_Profile = {
     /**/ ACTOR_DM_STK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -165,7 +165,7 @@ ActorInit Dm_Stk_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -173,11 +173,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 14, 38, 0, { 0, 0, 0 } },
@@ -1102,10 +1102,10 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                     }
 
                     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                        sCylinderInit.base.colType = COLTYPE_WOOD;
+                        sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                         this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion1;
                     } else {
-                        sCylinderInit.base.colType = COLTYPE_WOOD;
+                        sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                         this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion2;
                     }
 
@@ -1120,7 +1120,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                     }
 
                     this->actor.world.pos.y = 120.0f;
-                    sCylinderInit.base.colType = COLTYPE_WOOD;
+                    sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
                     this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
@@ -1130,7 +1130,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
                 this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_READY;
                 this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
-                sCylinderInit.base.colType = COLTYPE_WOOD;
+                sCylinderInit.base.colMaterial = COL_MATERIAL_WOOD;
                 this->actionFunc = DmStk_ClockTower_Idle;
             }
 
@@ -1768,7 +1768,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
             this->tatlMessageTimer = 0;
@@ -1793,7 +1793,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;

@@ -30,7 +30,7 @@ void func_80AFE650(Actor* thisx, PlayState* play);
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON,
@@ -38,17 +38,17 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-ActorInit En_Col_Man_InitVars = {
+ActorProfile En_Col_Man_Profile = {
     /**/ ACTOR_EN_COL_MAN,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,
@@ -64,7 +64,7 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->scale = (BREG(55) / 1000.0f) + 0.01f;
 
     switch (this->actor.params) {

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hunsui.h"
+#include "attributes.h"
 #include "assets/objects/object_hunsui/object_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -46,7 +47,7 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
-ActorInit Obj_Hunsui_InitVars = {
+ActorProfile Obj_Hunsui_Profile = {
     /**/ ACTOR_OBJ_HUNSUI,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -279,7 +280,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_2:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_1:
             this->dyna.actor.draw = func_80B9DA60;
             if ((this->unk_172 & 1) && func_80B9C450(play, this->switchFlag, this->unk_164)) {
@@ -298,7 +299,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_4:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_3:
         case OBJHUNSUI_F000_5:
         case OBJHUNSUI_F000_6:

@@ -36,7 +36,7 @@ void func_80BD5BD8(BgIkanaShutter* this, PlayState* play);
 void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
-ActorInit Bg_Ikana_Shutter_InitVars = {
+ActorProfile Bg_Ikana_Shutter_Profile = {
     /**/ ACTOR_BG_IKANA_SHUTTER,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,

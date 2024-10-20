@@ -37,7 +37,7 @@ void func_80C18884(BgLastBwall* this, PlayState* play);
 void func_80C188C4(BgLastBwall* this, PlayState* play);
 void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play);
 
-ActorInit Bg_Last_Bwall_InitVars = {
+ActorProfile Bg_Last_Bwall_Profile = {
     /**/ ACTOR_BG_LAST_BWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -52,22 +52,22 @@ ActorInit Bg_Last_Bwall_InitVars = {
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 0.0f, 3.0f }, { 70.0f, 0.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 0.0f, 3.0f }, { 70.0f, 200.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
@@ -76,7 +76,7 @@ static ColliderTrisElementInit sTrisElementsInit[] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -194,6 +194,7 @@ void func_80C184EC(BgLastBwall* this, PlayState* play) {
                 Matrix_MultVec3f(&spD0, &effectPosAndAccel);
                 Math_Vec3f_Sum(&this->dyna.actor.world.pos, &effectPosAndAccel, &effectPosAndAccel);
                 break;
+
             case BGLASTBWALL_TYPE_1:
                 spD0.x = Rand_Centered() * 160.0f;
                 spD0.y = 400.0f;

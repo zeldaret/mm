@@ -37,11 +37,11 @@ void func_8091F994(Actor* thisx, PlayState* play);
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 5 }, 100 },
@@ -50,7 +50,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -67,7 +67,7 @@ static Color_RGB8 D_8091FA94[] = {
     { 215, 97, 7 },
 };
 
-ActorInit En_Fish_InitVars = {
+ActorProfile En_Fish_Profile = {
     /**/ ACTOR_EN_FISH,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -867,12 +867,12 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.xzDistToPlayer < 70.0f) && (this->unkFunc != func_8091EFE8)) {
-            ColliderJntSphElement* element = &this->collider.elements[0];
+            ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-            element->dim.worldSphere.center.x = this->actor.world.pos.x;
-            element->dim.worldSphere.center.y = this->actor.world.pos.y;
-            element->dim.worldSphere.center.z = this->actor.world.pos.z;
-            element->dim.worldSphere.radius = this->unk_25C * 500.0f;
+            jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+            jntSphElem->dim.worldSphere.center.y = this->actor.world.pos.y;
+            jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
+            jntSphElem->dim.worldSphere.radius = this->unk_25C * 500.0f;
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
 

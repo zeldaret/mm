@@ -1,180 +1,102 @@
 #ifndef MESSAGE_DATA_FMT_STAFF_H
 #define MESSAGE_DATA_FMT_STAFF_H
-
-/*
- * Macros to create both a constant and a string literal from a magic value
- *   The constants are used in code files when parsing text for various purposes
- *   The strings are used in the message_data_static files themselves, as you can only concat strings with other strings
- */
-
-#ifndef GLUE
-#define GLUE(a, b) a##b
-#endif
-
-#define STRINGIFY(s) #s
-#define EXPAND_AND_STRINGIFY(s) STRINGIFY(s)
-
-#define HEX(N) GLUE(0x, N)
-#define STR(N) EXPAND_AND_STRINGIFY(GLUE(\x, N))
-
 /*
  * Text control characters
  */
 
-// Control character magic values, in 2-digit hex without prefix
+#define MESSAGE_NEWLINE 0x01
+#define MESSAGE_END 0x02
+#define MESSAGE_BOX_BREAK 0x04
+#define MESSAGE_COLOR 0x05
+#define MESSAGE_SHIFT 0x06
+#define MESSAGE_TEXTID 0x07
+#define MESSAGE_QUICKTEXT_ENABLE 0x08
+#define MESSAGE_QUICKTEXT_DISABLE 0x09
+#define MESSAGE_PERSISTENT 0x0A
+#define MESSAGE_EVENT 0x0B
+#define MESSAGE_BOX_BREAK_DELAYED 0x0C
+#define MESSAGE_AWAIT_BUTTON_PRESS 0x0D
+#define MESSAGE_FADE 0x0E
+#define MESSAGE_NAME 0x0F
+#define MESSAGE_OCARINA 0x10
+#define MESSAGE_FADE2 0x11
+#define MESSAGE_SFX 0x12
+#define MESSAGE_ITEM_ICON 0x13
+#define MESSAGE_TEXT_SPEED 0x14
+#define MESSAGE_BACKGROUND 0x15
+#define MESSAGE_MARATHON_TIME 0x16
+#define MESSAGE_RACE_TIME 0x17
+#define MESSAGE_POINTS 0x18
+#define MESSAGE_TOKENS 0x19
+#define MESSAGE_UNSKIPPABLE 0x1A
+#define MESSAGE_TWO_CHOICE 0x1B
+#define MESSAGE_THREE_CHOICE 0x1C
+#define MESSAGE_FISH_INFO 0x1D
+#define MESSAGE_HIGHSCORE 0x1E
+#define MESSAGE_TIME 0x1F
 
-#define CTRL_NEWLINE                 01
-#define CTRL_END                     02
-#define CTRL_BOX_BREAK               04
-#define CTRL_COLOR                   05
-#define CTRL_SHIFT                   06
-#define CTRL_TEXTID                  07
-#define CTRL_QUICKTEXT_ENABLE        08
-#define CTRL_QUICKTEXT_DISABLE       09
-#define CTRL_PERSISTENT              0A
-#define CTRL_EVENT                   0B
-#define CTRL_BOX_BREAK_DELAYED       0C
-#define CTRL_AWAIT_BUTTON_PRESS      0D
-#define CTRL_FADE                    0E
-#define CTRL_NAME                    0F
-#define CTRL_OCARINA                 10
-#define CTRL_FADE2                   11
-#define CTRL_SFX                     12
-#define CTRL_ITEM_ICON               13
-#define CTRL_TEXT_SPEED              14
-#define CTRL_BACKGROUND              15
-#define CTRL_MARATHON_TIME           16
-#define CTRL_RACE_TIME               17
-#define CTRL_POINTS                  18
-#define CTRL_TOKENS                  19
-#define CTRL_UNSKIPPABLE             1A
-#define CTRL_TWO_CHOICE              1B
-#define CTRL_THREE_CHOICE            1C
-#define CTRL_FISH_INFO               1D
-#define CTRL_HIGHSCORE               1E
-#define CTRL_TIME                    1F
-
-/*
- *  Colors
- */
-
-#define COLOR_STR(N) EXPAND_AND_STRINGIFY(GLUE(\x4, N))
-
-// Color magic values, in single-digit hex without prefix
-
-#define CTRL_DEFAULT    0
-#define CTRL_RED        1
-#define CTRL_ADJUSTABLE 2
-#define CTRL_BLUE       3
-#define CTRL_LIGHTBLUE  4
-#define CTRL_PURPLE     5
-#define CTRL_YELLOW     6
-#define CTRL_BLACK      7
+typedef enum TextColor {
+    /* 0 */ TEXT_COLOR_DEFAULT,
+    /* 1 */ TEXT_COLOR_RED,
+    /* 2 */ TEXT_COLOR_ADJUSTABLE,
+    /* 3 */ TEXT_COLOR_BLUE,
+    /* 4 */ TEXT_COLOR_LIGHTBLUE,
+    /* 5 */ TEXT_COLOR_PURPLE,
+    /* 6 */ TEXT_COLOR_YELLOW,
+    /* 7 */ TEXT_COLOR_BLACK
+} TextColor;
 
 #ifdef MESSAGE_DATA_STATIC
 // For use in message_data_static files
 
-#define ARG(x) x
+// Encoded text consists of an array of bytes. Since it's in a macro it must be wrapped in a varargs macro so that each
+// byte is not treated as a separate macro argument to DEFINE_MESSAGE. IDO doesn't support varargs macros, however we
+// preprocess the message_data_static files with modern cpp instead. See the makefile rule for assets/text/
+#define MSG(...) \
+    { __VA_ARGS__ END }
+
+#define ARG1(x) (x),
+#define ARG2(x) (((x) >> 8) & 0xFF), (((x) >> 0) & 0xFF),
+#define ARGC(x) (0x40 | (TEXT_COLOR_##x)),
+#define CTRL_BASE(name) ARG1(MESSAGE_##name)
+#define ARGB1(x) ARG1(TEXTBOX_BG_##x)
+#define ARGB2(a, b, c, d) \
+    (((TEXTBOX_BG_FGCOL_##a) << 4) | ((TEXTBOX_BG_BGCOL_##b) << 0)), (((TEXTBOX_BG_Y_OFFSET_##c) << 4) | ((d) << 0)),
 
 // while a control character, newlines are handled in the charmap conversion
 // stage to allow normal newline \n usage in message_data_static files
-#define CMD_NEWLINE                 STR(CTRL_NEWLINE)
-#define CMD_END                     STR(CTRL_END)
-#define CMD_BOX_BREAK               STR(CTRL_BOX_BREAK)
-#define CMD_COLOR(x)                STR(CTRL_COLOR)                ARG(x) // 1
-#define CMD_SHIFT(x)                STR(CTRL_SHIFT)                ARG(x) // 1
-#define CMD_TEXTID(x)               STR(CTRL_TEXTID)               ARG(x) // 2
-#define CMD_QUICKTEXT_ENABLE        STR(CTRL_QUICKTEXT_ENABLE)
-#define CMD_QUICKTEXT_DISABLE       STR(CTRL_QUICKTEXT_DISABLE)
-#define CMD_PERSISTENT              STR(CTRL_PERSISTENT)
-#define CMD_EVENT                   STR(CTRL_EVENT)
-#define CMD_BOX_BREAK_DELAYED(x)    STR(CTRL_BOX_BREAK_DELAYED)    ARG(x) // 1
-#define CMD_AWAIT_BUTTON_PRESS      STR(CTRL_AWAIT_BUTTON_PRESS)
-#define CMD_FADE(x)                 STR(CTRL_FADE)                 ARG(x) // 1
-#define CMD_NAME                    STR(CTRL_NAME)
-#define CMD_OCARINA                 STR(CTRL_OCARINA)
-#define CMD_FADE2(x)                STR(CTRL_FADE2)                ARG(x) // 2
-#define CMD_SFX(x)                  STR(CTRL_SFX)                  ARG(x) // 2
-#define CMD_ITEM_ICON(x)            STR(CTRL_ITEM_ICON)            ARG(x) // 1
-#define CMD_TEXT_SPEED(x)           STR(CTRL_TEXT_SPEED)           ARG(x) // 1
-#define CMD_BACKGROUND(x,y,z)       STR(CTRL_BACKGROUND)           ARG(x) ARG(y) ARG(z)
-#define CMD_MARATHON_TIME           STR(CTRL_MARATHON_TIME)
-#define CMD_RACE_TIME               STR(CTRL_RACE_TIME)
-#define CMD_POINTS                  STR(CTRL_POINTS)
-#define CMD_TOKENS                  STR(CTRL_TOKENS)
-#define CMD_UNSKIPPABLE             STR(CTRL_UNSKIPPABLE)
-#define CMD_TWO_CHOICE              STR(CTRL_TWO_CHOICE)
-#define CMD_THREE_CHOICE            STR(CTRL_THREE_CHOICE)
-#define CMD_FISH_INFO               STR(CTRL_FISH_INFO)
-#define CMD_HIGHSCORE(x)            STR(CTRL_HIGHSCORE)            ARG(x) // 1
-#define CMD_TIME                    STR(CTRL_TIME)
+#define NEWLINE CTRL_BASE(NEWLINE)
+#define END CTRL_BASE(END)
+#define BOX_BREAK CTRL_BASE(BOX_BREAK)
+#define COLOR(color) CTRL_BASE(COLOR) ARGC(color)
+#define SHIFT(amount) CTRL_BASE(SHIFT) ARG1(amount)
+#define TEXTID(textId) CTRL_BASE(TEXTID) ARG2(textId)
+#define QUICKTEXT_ENABLE CTRL_BASE(QUICKTEXT_ENABLE)
+#define QUICKTEXT_DISABLE CTRL_BASE(QUICKTEXT_DISABLE)
+#define PERSISTENT CTRL_BASE(PERSISTENT)
+#define EVENT CTRL_BASE(EVENT)
+#define BOX_BREAK_DELAYED(delay) CTRL_BASE(BOX_BREAK_DELAYED) ARG1(delay)
+#define AWAIT_BUTTON_PRESS CTRL_BASE(AWAIT_BUTTON_PRESS)
+#define FADE(delay) CTRL_BASE(FADE) ARG1(delay)
+#define NAME CTRL_BASE(NAME)
+#define OCARINA CTRL_BASE(OCARINA)
+#define FADE2(delay) CTRL_BASE(FADE2) ARG2(delay)
+#define SFX(sfxId) CTRL_BASE(SFX) ARG2(sfxId)
+#define ITEM_ICON(itemId) CTRL_BASE(ITEM_ICON) ARG1(itemId)
+#define TEXT_SPEED(amount) CTRL_BASE(TEXT_SPEED) ARG1(amount)
+#define BACKGROUND(bgIdx, fgColor, bgColor, yOffset, unk) \
+    CTRL_BASE(BACKGROUND) ARGB1(bgIdx) ARGB2(fgColor, bgColor, yOffset, unk)
+#define MARATHON_TIME CTRL_BASE(MARATHON_TIME)
+#define RACE_TIME CTRL_BASE(RACE_TIME)
+#define POINTS CTRL_BASE(POINTS)
+#define TOKENS CTRL_BASE(TOKENS)
+#define UNSKIPPABLE CTRL_BASE(UNSKIPPABLE)
+#define TWO_CHOICE CTRL_BASE(TWO_CHOICE)
+#define THREE_CHOICE CTRL_BASE(THREE_CHOICE)
+#define FISH_INFO CTRL_BASE(FISH_INFO)
+#define HIGHSCORE(highscore) CTRL_BASE(HIGHSCORE) ARG1(x)
+#define TIME CTRL_BASE(TIME)
 
-/*
- * Highscore values as strings, for code references the HighScores
- * enum should be used.
- */
-
-#define HS_BANK_RUPEES        "\x00"
-#define HS_UNK_1              "\x01"
-#define HS_FISHING            "\x02"
-#define HS_BOAT_ARCHERY       "\x03"
-#define HS_HORSE_BACK_BALLOON "\x04"
-#define HS_SHOOTING_GALLERY   "\x06"
-
-/*
- * Color values as strings
- */
-
-#define DEFAULT     COLOR_STR(CTRL_DEFAULT)
-#define RED         COLOR_STR(CTRL_RED)
-#define ADJUSTABLE  COLOR_STR(CTRL_ADJUSTABLE)
-#define BLUE        COLOR_STR(CTRL_BLUE)
-#define LIGHTBLUE   COLOR_STR(CTRL_LIGHTBLUE)
-#define PURPLE      COLOR_STR(CTRL_PURPLE)
-#define YELLOW      COLOR_STR(CTRL_YELLOW)
-#define BLACK       COLOR_STR(CTRL_BLACK)
-
-#else
-// For use in code files
-#define MSGCOL_DEFAULT      HEX(CTRL_DEFAULT)
-#define MSGCOL_RED          HEX(CTRL_RED)
-#define MSGCOL_ADJUSTABLE   HEX(CTRL_ADJUSTABLE)
-#define MSGCOL_BLUE         HEX(CTRL_BLUE)
-#define MSGCOL_LIGHTBLUE    HEX(CTRL_LIGHTBLUE)
-#define MSGCOL_PURPLE       HEX(CTRL_PURPLE)
-#define MSGCOL_YELLOW       HEX(CTRL_YELLOW)
-#define MSGCOL_BLACK        HEX(CTRL_BLACK)
-
-#define MESSAGE_NEWLINE                 HEX(CTRL_NEWLINE)
-#define MESSAGE_END                     HEX(CTRL_END)
-#define MESSAGE_BOX_BREAK               HEX(CTRL_BOX_BREAK)
-#define MESSAGE_COLOR                   HEX(CTRL_COLOR)
-#define MESSAGE_SHIFT                   HEX(CTRL_SHIFT)
-#define MESSAGE_TEXTID                  HEX(CTRL_TEXTID)
-#define MESSAGE_QUICKTEXT_ENABLE        HEX(CTRL_QUICKTEXT_ENABLE)
-#define MESSAGE_QUICKTEXT_DISABLE       HEX(CTRL_QUICKTEXT_DISABLE)
-#define MESSAGE_PERSISTENT              HEX(CTRL_PERSISTENT)
-#define MESSAGE_EVENT                   HEX(CTRL_EVENT)
-#define MESSAGE_BOX_BREAK_DELAYED       HEX(CTRL_BOX_BREAK_DELAYED)
-#define MESSAGE_AWAIT_BUTTON_PRESS      HEX(CTRL_AWAIT_BUTTON_PRESS)
-#define MESSAGE_FADE                    HEX(CTRL_FADE)
-#define MESSAGE_NAME                    HEX(CTRL_NAME)
-#define MESSAGE_OCARINA                 HEX(CTRL_OCARINA)
-#define MESSAGE_FADE2                   HEX(CTRL_FADE2)
-#define MESSAGE_SFX                     HEX(CTRL_SFX)
-#define MESSAGE_ITEM_ICON               HEX(CTRL_ITEM_ICON)
-#define MESSAGE_TEXT_SPEED              HEX(CTRL_TEXT_SPEED)
-#define MESSAGE_BACKGROUND              HEX(CTRL_BACKGROUND)
-#define MESSAGE_MARATHON_TIME           HEX(CTRL_MARATHON_TIME)
-#define MESSAGE_RACE_TIME               HEX(CTRL_RACE_TIME)
-#define MESSAGE_POINTS                  HEX(CTRL_POINTS)
-#define MESSAGE_TOKENS                  HEX(CTRL_TOKENS)
-#define MESSAGE_UNSKIPPABLE             HEX(CTRL_UNSKIPPABLE)
-#define MESSAGE_TWO_CHOICE              HEX(CTRL_TWO_CHOICE)
-#define MESSAGE_THREE_CHOICE            HEX(CTRL_THREE_CHOICE)
-#define MESSAGE_FISH_INFO               HEX(CTRL_FISH_INFO)
-#define MESSAGE_HIGHSCORE               HEX(CTRL_HIGHSCORE)
-#define MESSAGE_TIME                    HEX(CTRL_TIME)
 #endif
 
 #endif

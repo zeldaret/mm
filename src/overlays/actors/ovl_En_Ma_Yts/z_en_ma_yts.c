@@ -6,7 +6,7 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYts*)thisx)
 
@@ -29,7 +29,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
-ActorInit En_Ma_Yts_InitVars = {
+ActorProfile En_Ma_Yts_Profile = {
     /**/ ACTOR_EN_MA_YTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -55,7 +55,7 @@ void EnMaYts_UpdateEyes(EnMaYts* this) {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -63,11 +63,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 46, 0, { 0, 0, 0 } },
@@ -164,12 +164,12 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = TARGET_MODE_6;
+            this->actor.attentionRangeType = ATTENTION_RANGE_6;
             // Day 1 or "Winning" the alien invasion
             if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 EnMaYts_ChangeAnim(this, ENMATYS_ANIM_14);
@@ -179,13 +179,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 

@@ -18,7 +18,7 @@ void func_80C258A0(EnInvisibleRuppe* this, PlayState* play);
 void func_80C2590C(EnInvisibleRuppe* this, PlayState* play);
 void func_80C259E8(EnInvisibleRuppe* this, PlayState* play);
 
-ActorInit En_Invisible_Ruppe_InitVars = {
+ActorProfile En_Invisible_Ruppe_Profile = {
     /**/ ACTOR_EN_INVISIBLE_RUPPE,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -32,7 +32,7 @@ ActorInit En_Invisible_Ruppe_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_PLAYER,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
     },
 
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
 

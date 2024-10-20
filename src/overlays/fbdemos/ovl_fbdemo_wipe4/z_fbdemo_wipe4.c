@@ -31,7 +31,7 @@ void TransitionWipe4_SetColor(void* thisx, u32 color);
 void TransitionWipe4_SetEnvColor(void* thisx, u32 color);
 s32 TransitionWipe4_IsDone(void* thisx);
 
-TransitionInit TransitionWipe4_InitVars = {
+TransitionProfile TransitionWipe4_Profile = {
     TransitionWipe4_Init,     TransitionWipe4_Destroy,     TransitionWipe4_Update,
     TransitionWipe4_Draw,     TransitionWipe4_Start,       TransitionWipe4_SetType,
     TransitionWipe4_SetColor, TransitionWipe4_SetEnvColor, TransitionWipe4_IsDone,

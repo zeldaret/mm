@@ -6,7 +6,7 @@
 
 #include "z_en_js.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJs*)thisx)
 
@@ -27,7 +27,7 @@ void func_8096A104(EnJs* this, PlayState* play);
 void func_8096A38C(EnJs* this, PlayState* play);
 void func_8096A6F4(EnJs* this, PlayState* play);
 
-ActorInit En_Js_InitVars = {
+ActorProfile En_Js_Profile = {
     /**/ ACTOR_EN_JS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -41,7 +41,7 @@ ActorInit En_Js_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -49,11 +49,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, 0, { 0, 0, 0 } },
@@ -763,6 +763,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 }
             }
             break;
+
         case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -985,6 +986,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                             default:
                                 break;
                         }
+                        break;
 
                     default:
                         break;

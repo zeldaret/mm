@@ -18,7 +18,7 @@ void EnMm2_Draw(Actor* thisx, PlayState* play);
 void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-ActorInit En_Mm2_InitVars = {
+ActorProfile En_Mm2_Profile = {
     /**/ ACTOR_EN_MM2,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

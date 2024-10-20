@@ -85,7 +85,7 @@ ScheduleScript* sDoorSchedules[] = {
 static_assert(ARRAY_COUNT(sDoorSchedules) == ENDOOR_SCH_TYPE_MAX,
               "The entry count of `sDoorSchedules` should match the `EnDoorScheduleType` enum");
 
-ActorInit En_Door_InitVars = {
+ActorProfile En_Door_Profile = {
     /**/ ACTOR_EN_DOOR,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -248,7 +248,7 @@ static_assert(ARRAY_COUNT(sObjectInfo) == DOOR_OBJINFO_MAX,
               "The entry count of `sObjectInfo` should match the `EnDoorObjectInfoIndex` enum");
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),

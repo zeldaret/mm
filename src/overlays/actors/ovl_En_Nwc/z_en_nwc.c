@@ -40,7 +40,7 @@ typedef enum EnNwcState {
     /*  4 */ NWC_STATE_RUNNING          // running from the player after failed breman march
 } EnNwcState;
 
-ActorInit En_Nwc_InitVars = {
+ActorProfile En_Nwc_Profile = {
     /**/ ACTOR_EN_NWC,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

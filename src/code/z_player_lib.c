@@ -353,8 +353,8 @@ s32 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
-                                 PLAYER_STATE1_20000000)) &&
+        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_200000 |
+                                 PLAYER_STATE1_800000 | PLAYER_STATE1_20000000)) &&
         !(player->stateFlags2 & PLAYER_STATE2_1)) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
@@ -393,11 +393,11 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     if (this->av1.actionVar1 == 2) {
         s16 objectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
 
-        gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
+        gActorOverlayTable[ACTOR_PLAYER].profile->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objectSlot, objectId);
         this->actor.objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
     } else if (this->av1.actionVar1 >= 3) {
-        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].profile->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
             this->actor.objectSlot = objectSlot;
@@ -416,21 +416,173 @@ FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
 
 s16 D_801BFE14[PLAYER_BOOTS_MAX][18] = {
     // PLAYER_BOOTS_FIERCE_DEITY
-    { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
+    {
+        200,  // REG(19)
+        666,  // REG(30)
+        200,  // REG(32)
+        700,  // REG(34)
+        366,  // REG(35)
+        200,  // REG(36)
+        600,  // REG(37)
+        175,  // REG(38)
+        60,   // REG(39)
+        800,  // R_DECELERATE_RATE
+        1000, // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        800,  // IREG(67)
+        125,  // IREG(68)
+        300,  // IREG(69)
+        65,   // MREG(95)
+    },
     // PLAYER_BOOTS_HYLIAN
-    { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        800,  // REG(34)
+        500,  // REG(35)
+        400,  // REG(36)
+        800,  // REG(37)
+        400,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        550,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        540,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        400,  // IREG(69)
+        200,  // MREG(95)
+    },
     // PLAYER_BOOTS_GIANT
-    { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
+    {
+        100,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        800,  // REG(34)
+        250,  // REG(35)
+        200,  // REG(36)
+        800,  // REG(37)
+        200,  // REG(38)
+        90,   // REG(39)
+        800,  // R_DECELERATE_RATE
+        350,  // R_RUN_SPEED_LIMIT
+        -80,  // REG(68)
+        600,  // REG(69)
+        540,  // IREG(66)
+        750,  // IREG(67)
+        60,   // IREG(68)
+        200,  // IREG(69)
+        200,  // MREG(95)
+    },
     // PLAYER_BOOTS_DEKU
-    { 200, 1000, 300, 700, 550, 270, 600, 1000, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        600,  // REG(37)
+        1000, // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_ZORA_LAND
-    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        300,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_ZORA_UNDERWATER
-    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        300,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_GORON
-    { 200, 1000, 300, 700, 550, 270, 700, 200, 120, 800, 600, -140, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        200,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -140, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_7
-    { 80, 800, 150, 700, 480, 270, 600, 50, 120, 800, 300, -40, 400, 540, 270, 25, 0, 80 },
+    {
+        80,  // REG(19)
+        800, // REG(30)
+        150, // REG(32)
+        700, // REG(34)
+        480, // REG(35)
+        270, // REG(36)
+        600, // REG(37)
+        50,  // REG(38)
+        120, // REG(39)
+        800, // R_DECELERATE_RATE
+        300, // R_RUN_SPEED_LIMIT
+        -40, // REG(68)
+        400, // REG(69)
+        540, // IREG(66)
+        270, // IREG(67)
+        25,  // IREG(68)
+        0,   // IREG(69)
+        80,  // MREG(95)
+    },
 };
 
 // OoT's Player_SetBootData
@@ -469,7 +621,7 @@ void func_80123140(PlayState* play, Player* player) {
     REG(37) = bootRegs[6];
     REG(38) = bootRegs[7];
     REG(39) = bootRegs[8];
-    REG(43) = bootRegs[9];
+    R_DECELERATE_RATE = bootRegs[9];
     R_RUN_SPEED_LIMIT = bootRegs[10];
     REG(68) = bootRegs[11]; // gravity
     REG(69) = bootRegs[12];
@@ -505,12 +657,19 @@ bool Player_InCsMode(PlayState* play) {
     return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
-bool func_80123420(Player* player) {
-    return player->stateFlags3 & PLAYER_STATE3_80000000;
+/**
+ * Checks if Player is currently locked onto a hostile actor.
+ * `PLAYER_STATE3_HOSTILE_LOCK_ON` controls Player's "battle" response to hostile actors.
+ *
+ * Note that within Player, `Player_UpdateHostileLockOn` exists, which updates the flag and also returns the check.
+ * Player can use this function instead if the flag should be checked, but not updated.
+ */
+bool Player_CheckHostileLockOn(Player* player) {
+    return player->stateFlags3 & PLAYER_STATE3_HOSTILE_LOCK_ON;
 }
 
 bool func_80123434(Player* player) {
-    return player->stateFlags1 & (PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+    return player->stateFlags1 & (PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
 }
 
 // Unused
@@ -518,13 +677,13 @@ bool func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->lockOnActor == NULL));
+           ((player->transformation != PLAYER_FORM_HUMAN) || (!func_80123434(player) && player->focusActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
 // Hypothesis: this function checks if the current form would crouch when he tries to use the shield
 bool Player_IsGoronOrDeku(Player* player) {
-    return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
+    return (player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU);
 }
 
 bool func_801234D4(PlayState* play) {
@@ -540,11 +699,11 @@ bool func_801234D4(PlayState* play) {
 bool func_80123590(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & PLAYER_STATE1_800) && (player->heldActor == actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) && (player->heldActor == actor)) {
         player->interactRangeActor = NULL;
         player->heldActor = NULL;
         player->actor.child = NULL;
-        player->stateFlags1 &= ~PLAYER_STATE1_800;
+        player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
         return true;
     }
 
@@ -1324,35 +1483,53 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
     player->itemAction = itemAction;
 }
 
-void Player_Untarget(Player* player) {
-    player->lockOnActor = NULL;
-    player->stateFlags2 &= ~PLAYER_STATE2_2000;
+void Player_ReleaseLockOn(Player* player) {
+    player->focusActor = NULL;
+    player->stateFlags2 &= ~PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
 }
 
-void func_80123DC0(Player* player) {
+/**
+ * This function aims to clear Z-Target related state when it isn't in use.
+ * It also handles setting a specific free fall related state that is interntwined with Z-Targeting.
+ */
+void Player_ClearZTargeting(Player* player) {
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
         (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
-        player->stateFlags1 &= ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000 |
-                                 PLAYER_STATE1_80000 | PLAYER_STATE1_40000000);
+        player->stateFlags1 &= ~(PLAYER_STATE1_8000 | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 |
+                                 PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_40000000);
     } else if (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_200000))) {
         player->stateFlags1 |= PLAYER_STATE1_80000;
     } else if ((player->stateFlags1 & PLAYER_STATE1_40000) && (player->transformation == PLAYER_FORM_DEKU)) {
         player->stateFlags1 &=
-            ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+            ~(PLAYER_STATE1_8000 | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
     }
 
-    Player_Untarget(player);
+    Player_ReleaseLockOn(player);
 }
 
-void func_80123E90(PlayState* play, Actor* actor) {
-    Player* player = GET_PLAYER(play);
+/**
+ * Sets the "auto lock-on actor" to lock onto an actor without Player's input.
+ * This function will first release any existing lock-on or (try to) release parallel.
+ *
+ * When using Switch Targeting, it is not possible to carry an auto lock-on actor into a normal
+ * lock-on when the auto lock-on is finished.
+ * This is because the `PLAYER_STATE2_LOCK_ON_WITH_SWITCH` flag is never set with an auto lock-on.
+ * With Hold Targeting it is possible to keep the auto lock-on going by keeping the Z button held down.
+ *
+ * The auto lock-on is considered "friendly" even if the actor is actually hostile. If the auto lock-on is hostile,
+ * Player's battle response will not occur (if he is actionable) and the camera behaves differently.
+ * When transitioning from auto lock-on to normal lock-on (with Hold Targeting) there will be a noticeable change
+ * when it switches from "friendly" mode to "hostile" mode.
+ */
+void Player_SetAutoLockOnActor(PlayState* play, Actor* actor) {
+    Player* this = GET_PLAYER(play);
 
-    func_80123DC0(player);
-    player->lockOnActor = actor;
-    player->unk_A78 = actor;
-    player->stateFlags1 |= PLAYER_STATE1_10000;
+    Player_ClearZTargeting(this);
+    this->focusActor = actor;
+    this->autoLockOnActor = actor;
+    this->stateFlags1 |= PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
     Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
@@ -2159,9 +2336,9 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             s16 rotX;
             s16 rotZ = 0x44C;
 
-            if (player->unk_AA8 != 0) {
+            if (player->upperLimbYawSecondary != 0) {
                 Matrix_RotateZS(rotZ, MTXMODE_APPLY);
-                Matrix_RotateYS(player->unk_AA8, MTXMODE_APPLY);
+                Matrix_RotateYS(player->upperLimbYawSecondary, MTXMODE_APPLY);
             }
 
             if (player->upperLimbRot.y != 0) {
@@ -2390,17 +2567,17 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
     return true;
 }
 
-u8 sPlayerShieldCollisionTypes[PLAYER_SHIELD_MAX] = {
-    COLTYPE_METAL, // PLAYER_SHIELD_NONE
-    COLTYPE_METAL, // PLAYER_SHIELD_HEROS_SHIELD
-    COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
+u8 sPlayerShieldColMaterials[PLAYER_SHIELD_MAX] = {
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_NONE
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_HEROS_SHIELD
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
 };
 
 void Player_UpdateShieldCollider(PlayState* play, Player* player, ColliderQuad* collider, Vec3f quadSrc[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f quadDest[4];
 
-        player->shieldQuad.base.colType = sPlayerShieldCollisionTypes[player->currentShield];
+        player->shieldQuad.base.colMaterial = sPlayerShieldColMaterials[player->currentShield];
         Matrix_MultVec3f(&quadSrc[0], &quadDest[0]);
         Matrix_MultVec3f(&quadSrc[1], &quadDest[1]);
         Matrix_MultVec3f(&quadSrc[2], &quadDest[2]);
@@ -3411,7 +3588,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     temp_s1 = &heldActor->world.rot;
                     Matrix_MtxFToYXZRot(&sp230, temp_s1, false);
                     heldActor->shape.rot = *temp_s1;
-                } else if (player->stateFlags1 & PLAYER_STATE1_800) {
+                } else if (player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) {
                     heldActor->world.rot.y = heldActor->shape.rot.y =
                         player->actor.shape.rot.y + player->leftHandWorld.rot.y;
                 }

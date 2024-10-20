@@ -25,7 +25,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play);
 void func_80C173B4(Actor* thisx, PlayState* play);
 void func_80C17690(Actor* thisx, PlayState* play);
 
-ActorInit Demo_Syoten_InitVars = {
+ActorProfile Demo_Syoten_Profile = {
     /**/ ACTOR_DEMO_SYOTEN,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -281,10 +281,6 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
         if (this->cueId != cueId) {
             this->cueId = cueId;
             switch (cueId) {
-                default:
-                    this->actor.draw = NULL;
-                    break;
-
                 case 1:
                 case 2:
                     this->actor.draw = NULL;
@@ -303,6 +299,10 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
                     func_80C16760(this, play);
                     this->unk_3E4 |= 4;
                     this->unk_3E4 &= ~1;
+                    break;
+
+                default:
+                    this->actor.draw = NULL;
                     break;
             }
         }

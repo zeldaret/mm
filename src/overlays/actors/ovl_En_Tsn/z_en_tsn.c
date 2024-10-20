@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "assets/objects/object_tsn/object_tsn.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnTsn*)thisx)
 
@@ -29,7 +29,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play);
 void func_80AE0D78(EnTsn* this, PlayState* play);
 void func_80AE0F84(Actor* thisx, PlayState* play);
 
-ActorInit En_Tsn_InitVars = {
+ActorProfile En_Tsn_Profile = {
     /**/ ACTOR_EN_TSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -43,7 +43,7 @@ ActorInit En_Tsn_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -51,11 +51,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -79,7 +79,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->actor.update = func_80AE0F84;
     this->actor.destroy = NULL;
     this->actor.draw = NULL;
-    this->actor.targetMode = TARGET_MODE_7;
+    this->actor.attentionRangeType = ATTENTION_RANGE_7;
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:

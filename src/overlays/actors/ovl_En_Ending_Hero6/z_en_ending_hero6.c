@@ -6,7 +6,7 @@
 
 #include "z_en_ending_hero6.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero6*)thisx)
 
@@ -18,7 +18,7 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
-ActorInit En_Ending_Hero6_InitVars = {
+ActorProfile En_Ending_Hero6_Profile = {
     /**/ ACTOR_EN_ENDING_HERO6,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -84,7 +84,7 @@ void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, sSkeletons[this->type], sAnimations[this->type], this->jointTable,
                        this->morphTable, sLimbCounts[this->type]);

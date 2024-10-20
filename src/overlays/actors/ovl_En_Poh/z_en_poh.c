@@ -8,7 +8,7 @@
 #include "z_en_poh.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnPoh*)thisx)
 
@@ -47,7 +47,7 @@ void func_80B2E3F8(EnPoh* this, PlayState* play);
 void func_80B2F328(Actor* thisx, PlayState* play);
 void func_80B2F37C(Actor* thisx, PlayState* play);
 
-ActorInit En_Poh_InitVars = {
+ActorProfile En_Poh_Profile = {
     /**/ ACTOR_EN_POH,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -61,7 +61,7 @@ ActorInit En_Poh_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE,
         AC_NONE | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -69,11 +69,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CBFFFE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 40, 20, { 0, 0, 0 } },
@@ -82,11 +82,11 @@ static ColliderCylinderInit sCylinderInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 18, { { 0, 1400, 0 }, 10 }, 100 },
@@ -95,7 +95,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -363,7 +363,7 @@ void func_80B2D07C(EnPoh* this, PlayState* play) {
 
 void func_80B2D0E8(EnPoh* this) {
     this->unk_197 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gPoeAppearAnim, 0.0f);
     this->actionFunc = func_80B2D140;
 }
@@ -372,7 +372,7 @@ void func_80B2D140(EnPoh* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk_197 = 255;
         this->unk_190 = Rand_S16Offset(700, 300);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         func_80B2CB60(this);
     } else if (this->skelAnime.curFrame > 10.0f) {
         this->unk_197 = (this->skelAnime.curFrame - 10.0f) * 0.05f * 255.0f;
@@ -389,7 +389,7 @@ void func_80B2D2C0(EnPoh* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
     this->actor.hintId = TATL_HINT_ID_NONE;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B2D300;
 }
 
@@ -505,7 +505,7 @@ void func_80B2D7D4(EnPoh* this, PlayState* play) {
     this->unk_197 = this->unk_18C * (255.0f / 32.0f);
     if (this->unk_18C == 0) {
         this->unk_190 = Rand_S16Offset(100, 50);
-        this->colliderCylinder.info.bumper.dmgFlags = 0x40001;
+        this->colliderCylinder.elem.acDmgInfo.dmgFlags = 0x40001;
         func_80B2CB60(this);
     }
 }
@@ -532,7 +532,7 @@ void func_80B2D980(EnPoh* this, PlayState* play) {
     if (this->unk_18C == 32) {
         this->unk_190 = Rand_S16Offset(700, 300);
         this->unk_18C = 0;
-        this->colliderCylinder.info.bumper.dmgFlags = ~0x8340001;
+        this->colliderCylinder.elem.acDmgInfo.dmgFlags = ~0x8340001;
         func_80B2CB60(this);
     }
 }
@@ -577,7 +577,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     this->actionFunc = func_80B2DD2C;
 }
 
@@ -646,7 +646,7 @@ void func_80B2E1D8(EnPoh* this) {
     Actor_SetFocus(&this->actor, -10.0f);
     this->unk_18E = 200;
     this->unk_18D = 32;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B2E230;
 }
 
@@ -708,10 +708,10 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
                 if (this->actor.colChkInfo.damageEffect == 4) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.45f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
-                                this->colliderCylinder.info.bumper.hitPos.y,
-                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                    Actor_Spawn(
+                        &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.elem.acDmgInfo.hitPos.x,
+                        this->colliderCylinder.elem.acDmgInfo.hitPos.y, this->colliderCylinder.elem.acDmgInfo.hitPos.z,
+                        0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_80B2CFF8(this);
             }

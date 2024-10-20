@@ -25,7 +25,7 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
-ActorInit Bg_Sinkai_Kabe_InitVars = {
+ActorProfile Bg_Sinkai_Kabe_Profile = {
     /**/ ACTOR_BG_SINKAI_KABE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

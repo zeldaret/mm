@@ -20,7 +20,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play);
 void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
-ActorInit Bg_Ladder_InitVars = {
+ActorProfile Bg_Ladder_Profile = {
     /**/ ACTOR_BG_LADDER,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

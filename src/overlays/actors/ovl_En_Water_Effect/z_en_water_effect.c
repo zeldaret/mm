@@ -17,7 +17,7 @@
 #include "assets/objects/object_water_effect/object_water_effect.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnWaterEffect*)thisx)
 
@@ -31,7 +31,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2);
 void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-ActorInit En_Water_Effect_InitVars = {
+ActorProfile En_Water_Effect_Profile = {
     /**/ ACTOR_EN_WATER_EFFECT,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -90,7 +90,7 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
     if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {
@@ -476,12 +476,12 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                         (fabsf(ptr->unk_04.z - player->actor.world.pos.z) < 20.0f) &&
                         (fabsf(ptr->unk_04.y - (player->actor.world.pos.y + 25.0f)) < 30.0f)) {
                         phi_s5 = true;
-                        if ((player->transformation != PLAYER_FORM_GORON) && !player->isBurning) {
+                        if ((player->transformation != PLAYER_FORM_GORON) && !player->bodyIsBurning) {
                             func_800B8D50(play, &this->actor, 2.0f, Rand_ZeroFloat(0x10000), 0.0f, 0x10);
-                            for (j = 0; j < ARRAY_COUNT(player->flameTimers); j++) {
-                                player->flameTimers[j] = Rand_S16Offset(0, 200);
+                            for (j = 0; j < ARRAY_COUNT(player->bodyFlameTimers); j++) {
+                                player->bodyFlameTimers[j] = Rand_S16Offset(0, 200);
                             }
-                            player->isBurning = true;
+                            player->bodyIsBurning = true;
                             Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }

@@ -44,7 +44,7 @@ typedef enum TwinmoldPropItemDropType {
 
 s32 sFragmentAndItemDropCount = 0;
 
-ActorInit En_Tanron5_InitVars = {
+ActorProfile En_Tanron5_Profile = {
     /**/ ACTOR_EN_TANRON5,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -58,7 +58,7 @@ ActorInit En_Tanron5_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ALL,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +66,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 70, 450, 0, { 0, 0, 0 } },
@@ -354,7 +354,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
     if (this->timer == 0) {
         if (this->collider.base.acFlags & AC_HIT) {
-            ColliderInfo* acHitInfo = this->collider.info.acHitInfo;
+            ColliderElement* acHitElem = this->collider.elem.acHitElem;
             Actor* ac = this->collider.base.ac;
 
             this->collider.base.acFlags &= ~AC_HIT;
@@ -370,7 +370,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 fragmentAndItemCount = (s32)Rand_ZeroFloat(2.99f) + 10;
             }
 
-            if ((KREG(19) != 0) || ((acHitInfo->toucher.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
+            if ((KREG(19) != 0) || ((acHitElem->atDmgInfo.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
                 (ac->id == ACTOR_BOSS_02)) {
                 if (this->dList == gTwinmoldRuinPillarDL) {
                     // To create the appearance of the pillar shrinking after being hit, push it further into the floor,
@@ -460,11 +460,11 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 // Something hit the ruin, but it wasn't Twinmold, and it wasn't the player while in giant
                 // mode. Play the reflect sound effect and spawn some sparks instead of breaking.
                 Vec3f hitPos;
-                ColliderInfo* info = this->collider.info.acHitInfo;
+                ColliderElement* acHitElem = this->collider.elem.acHitElem;
 
-                hitPos.x = info->bumper.hitPos.x;
-                hitPos.y = info->bumper.hitPos.y;
-                hitPos.z = info->bumper.hitPos.z;
+                hitPos.x = acHitElem->acDmgInfo.hitPos.x;
+                hitPos.y = acHitElem->acDmgInfo.hitPos.y;
+                hitPos.z = acHitElem->acDmgInfo.hitPos.z;
 
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
                 CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);

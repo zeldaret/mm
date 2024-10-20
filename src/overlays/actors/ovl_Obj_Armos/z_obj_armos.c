@@ -23,7 +23,7 @@ void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
-ActorInit Obj_Armos_InitVars = {
+ActorProfile Obj_Armos_Profile = {
     /**/ ACTOR_OBJ_ARMOS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -317,7 +317,7 @@ void func_809A57F4(ObjArmos* this, PlayState* play) {
 void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjArmos* this = THIS;
-    s32 sp2C;
+    s32 bgId;
 
     this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
@@ -334,7 +334,7 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
         this->unk_250.y = this->dyna.actor.world.pos.y + 20.0f;
         this->unk_250.z = (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z;
 
-        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId,
                                                                    &this->dyna.actor, &this->unk_250);
     }
 }

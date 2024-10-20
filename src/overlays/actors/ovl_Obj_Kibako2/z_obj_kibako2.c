@@ -19,7 +19,7 @@ void ObjKibako2_Draw(Actor* thisx, PlayState* play);
 void ObjKibako2_Idle(ObjKibako2* this, PlayState* play);
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play);
 
-ActorInit Obj_Kibako2_InitVars = {
+ActorProfile Obj_Kibako2_Profile = {
     /**/ ACTOR_OBJ_KIBAKO2,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -33,7 +33,7 @@ ActorInit Obj_Kibako2_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x80000508, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 31, 48, 0, { 0, 0, 0 } },
@@ -185,17 +185,17 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
         Actor* ac = this->collider.base.ac;
         this->collider.base.acFlags = acFlags & ~AC_HIT;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 31)) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & (1 << 31)) {
                 // Powder Keg
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     shouldBreak = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 3)) {
+            } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & (1 << 3)) {
                 // Explosives
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     shouldBreak = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10)) {
+            } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & (1 << 8 | 1 << 10)) {
                 // Goron Punch/Pound
                 shouldBreak = true;
             }

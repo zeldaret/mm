@@ -4,12 +4,13 @@
  * Description: Marine Research Lab Fish
  */
 
+#include "z_en_fish2.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
-#include "z_en_fish2.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFish2*)thisx)
 
@@ -48,7 +49,7 @@ static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
-ActorInit En_Fish2_InitVars = {
+ActorProfile En_Fish2_Profile = {
     /**/ ACTOR_EN_FISH2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -63,22 +64,22 @@ ActorInit En_Fish2_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 17, { { 0, 0, 0 }, 0 }, 1 },
@@ -87,7 +88,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -231,7 +232,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -665,12 +666,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 2:
             phi_f0 = 0.1f;
-            // fallthrough
+            FALLTHROUGH;
         case 4:
             if (phi_f0 == 0) {
                 phi_f0 = 0.3f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 6:
             if (phi_f0 == 0) {
                 phi_f0 = 0.5f;
@@ -696,12 +697,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 3:
             phi_f0 = 1.3f;
-            // fallthrough
+            FALLTHROUGH;
         case 5:
             if (phi_f0 == 0) {
                 phi_f0 = 1.5f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 7:
             if (phi_f0 == 0) {
                 phi_f0 = 1.7f;

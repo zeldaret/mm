@@ -7,7 +7,7 @@
 #include "z_en_zov.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZov*)thisx)
 
@@ -27,7 +27,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play);
 void func_80BD1F1C(EnZov* this, PlayState* play);
 s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx);
 
-ActorInit En_Zov_InitVars = {
+ActorProfile En_Zov_Profile = {
     /**/ ACTOR_EN_ZOV,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -41,7 +41,7 @@ ActorInit En_Zov_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -49,11 +49,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, 0, { 0, 0, 0 } },

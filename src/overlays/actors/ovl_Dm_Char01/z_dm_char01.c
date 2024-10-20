@@ -35,7 +35,7 @@ s16 D_80AAAE26;
 
 #include "assets/overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
-ActorInit Dm_Char01_InitVars = {
+ActorProfile Dm_Char01_Profile = {
     /**/ ACTOR_DM_CHAR01,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

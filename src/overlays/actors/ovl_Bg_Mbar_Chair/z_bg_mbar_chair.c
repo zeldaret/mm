@@ -16,7 +16,7 @@ void BgMbarChair_Destroy(Actor* thisx, PlayState* play);
 void BgMbarChair_Update(Actor* thisx, PlayState* play);
 void BgMbarChair_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Mbar_Chair_InitVars = {
+ActorProfile Bg_Mbar_Chair_Profile = {
     /**/ ACTOR_BG_MBAR_CHAIR,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

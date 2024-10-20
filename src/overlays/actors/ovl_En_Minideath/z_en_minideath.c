@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Death/z_en_death.h"
 #include "assets/objects/object_death/object_death.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnMinideath*)thisx)
 
@@ -39,7 +39,7 @@ void EnMinideath_SetupReturn(EnMinideath* this);
 void EnMinideath_SetupIntro3(EnMinideath* this);
 void EnMinideath_SetupDead(EnMinideath* this);
 
-ActorInit En_Minideath_InitVars = {
+ActorProfile En_Minideath_Profile = {
     /**/ ACTOR_EN_MINIDEATH,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -54,33 +54,33 @@ ActorInit En_Minideath_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
@@ -89,7 +89,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE | OC1_TYPE_ALL,
@@ -167,7 +167,7 @@ void EnMinideath_Init(Actor* thisx, PlayState* play) {
 
     thisx->shape.rot.y = thisx->parent->shape.rot.y;
     thisx->world.rot.y = thisx->parent->shape.rot.y;
-    thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+    thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Collider_InitAndSetJntSph(play, &this->collider, thisx, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -301,8 +301,8 @@ void EnMinideath_UpdateEffects(EnMinideath* this, PlayState* play) {
             } else if (this->actionFunc == EnMinideath_CrowdParent) {
                 Math_Vec3f_Diff(&this->actor.parent->focus.pos, &this->actor.world.pos, &effect->vel);
                 effect->state = 0;
-                this->collider.elements[i].info.bumperFlags |= BUMP_ON;
-                this->collider.elements[i].info.toucherFlags |= TOUCH_ON;
+                this->collider.elements[i].base.acElemFlags |= ACELEM_ON;
+                this->collider.elements[i].base.atElemFlags |= ATELEM_ON;
                 phi_s7 = 1;
                 phi_s3++;
             }
@@ -754,9 +754,9 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
             s32 phi_a0;
 
             for (i = 0; i < MINIDEATH_NUM_EFFECTS; i++) {
-                if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    this->collider.elements[i].info.bumperFlags &= ~(BUMP_ON | BUMP_HIT);
-                    this->collider.elements[i].info.toucherFlags &= ~(TOUCH_ON | TOUCH_HIT);
+                if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                    this->collider.elements[i].base.acElemFlags &= ~(ACELEM_ON | ACELEM_HIT);
+                    this->collider.elements[i].base.atElemFlags &= ~(ATELEM_ON | ATELEM_HIT);
                     this->effects[i].vel.y = -1.0f;
                     this->effects[i].state = 1;
                     this->effects[i].angle.y = this->actor.shape.rot.y;
@@ -791,7 +791,7 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
 void EnMinideath_Update(Actor* thisx, PlayState* play) {
     EnMinideath* this = THIS;
     s32 pad;
-    ColliderJntSphElement* elem;
+    ColliderJntSphElement* jntSphElem;
     s32 temp;
     s32 i;
     MiniDeathEffect* effect;
@@ -834,8 +834,8 @@ void EnMinideath_Update(Actor* thisx, PlayState* play) {
 
         Actor_SetFocus(&this->actor, 0.0f);
 
-        effect = this->effects;
-        elem = this->collider.elements;
+        effect = &this->effects[0];
+        jntSphElem = &this->collider.elements[0];
         for (i = 0; i != MINIDEATH_NUM_EFFECTS; i++) {
             if (effect->state == 0) {
                 Math_Vec3f_Sum(&this->actor.world.pos, &effect->vel, &effect->pos);
@@ -847,12 +847,12 @@ void EnMinideath_Update(Actor* thisx, PlayState* play) {
                     }
                 }
 
-                elem->dim.worldSphere.center.x = effect->pos.x;
-                elem->dim.worldSphere.center.y = effect->pos.y;
-                elem->dim.worldSphere.center.z = effect->pos.z;
+                jntSphElem->dim.worldSphere.center.x = effect->pos.x;
+                jntSphElem->dim.worldSphere.center.y = effect->pos.y;
+                jntSphElem->dim.worldSphere.center.z = effect->pos.z;
             }
             effect++;
-            elem++;
+            jntSphElem++;
         }
 
         if (this->collider.base.atFlags & AT_HIT) {

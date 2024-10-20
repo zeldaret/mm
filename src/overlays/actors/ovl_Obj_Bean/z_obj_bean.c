@@ -60,7 +60,7 @@ void func_80938C1C(Actor* thisx, PlayState* play);
 void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bean_InitVars = {
+ActorProfile Obj_Bean_Profile = {
     /**/ ACTOR_OBJ_BEAN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -74,7 +74,7 @@ ActorInit Obj_Bean_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -82,11 +82,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 64, 30, -31, { 0, 0, 0 } },
@@ -94,7 +94,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_OTHER,
         OC1_NONE,
@@ -102,11 +102,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 10, 10, 0, { 0, 0, 0 } },
@@ -121,19 +121,19 @@ static Vec2f D_80938FF8[4] = {
 
 void func_80936CF0(ObjBean* this, PlayState* play) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->dyna.actor.world.pos.x;
     sp24.y = this->dyna.actor.world.pos.y + 29.999998f;
     sp24.z = this->dyna.actor.world.pos.z;
     this->dyna.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp20, &this->dyna.actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId, &this->dyna.actor, &sp24);
 }
 
 s32 func_80936D58(ObjBean* this, PlayState* play) {
     static Vec3f D_80939018 = { 0.0f, 30.0f, 0.0f };
     s32 pad;
-    s32 spB8;
+    s32 bgId;
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -148,7 +148,7 @@ s32 func_80936D58(ObjBean* this, PlayState* play) {
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
     if (BgCheck_EntityLineTest2(&play->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true, true,
-                                &spB8, &this->dyna.actor)) {
+                                &bgId, &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;

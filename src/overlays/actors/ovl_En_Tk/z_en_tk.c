@@ -5,10 +5,11 @@
  */
 
 #include "z_en_tk.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTk*)thisx)
 
@@ -63,7 +64,7 @@ static s32 D_80AF0050;
 
 #include "src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
 
-ActorInit En_Tk_InitVars = {
+ActorProfile En_Tk_Profile = {
     /**/ ACTOR_EN_TK,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -77,7 +78,7 @@ ActorInit En_Tk_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -85,11 +86,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 30, 52, 0, { 0, 0, 0 } },
@@ -229,7 +230,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_2B0 == 1) || (this->unk_2B0 == 3)) {
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         this->actor.update = func_80AEF2C8;
         this->actor.draw = NULL;
         return;
@@ -243,7 +244,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     this->unk_318 = 0;
     this->animIndex = ENTK_ANIM_NONE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->unk_2B0 == 2) {
@@ -370,9 +371,9 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
     if (!scheduleResult && (this->scheduleResult != 0)) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     } else if (scheduleResult && (this->scheduleResult == 0)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = EnTk_Draw;
     }
 
@@ -380,7 +381,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     func_80AECE0C(this, play);
 
     if (this->unk_3CE & 8) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = NULL;
     }
 }
@@ -583,8 +584,8 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x1413, &this->actor);
                 }
-                break;
             }
+            break;
 
         case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
@@ -898,7 +899,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
 
                     case 0x140A:
                         SET_WEEKEVENTREG(WEEKEVENTREG_52_80);
-
+                        FALLTHROUGH;
                     case 0x140B:
                         func_80AEE784(this, play);
                         break;
@@ -1110,7 +1111,7 @@ s32 func_80AEEA4C(EnTk* this, PlayState* play) {
         ret = 3;
     } else if (this->actor.xyzDistToPlayerSq < SQ(60.0f)) {
         ret = 0;
-    } else if (this->actor.isLockedOn || (play->actorCtx.targetCtx.arrowPointedActor == &this->actor) ||
+    } else if (this->actor.isLockedOn || (play->actorCtx.attention.arrowPointedActor == &this->actor) ||
                (this->actor.xyzDistToPlayerSq < SQ(80.0f))) {
         ret = 1;
     } else {
@@ -1152,7 +1153,7 @@ void func_80AEEAD4(EnTk* this, PlayState* play) {
 }
 
 void func_80AEEB88(EnTk* this, PlayState* play) {
-    s32 sp74;
+    s32 bgId;
     Vec3f sp68;
     s32 i;
     f32 temp;
@@ -1166,7 +1167,7 @@ void func_80AEEB88(EnTk* this, PlayState* play) {
         sp68.z += this->actor.world.pos.z;
 
         temp =
-            BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &sp74, &sp68) - this->actor.world.pos.y;
+            BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &bgId, &sp68) - this->actor.world.pos.y;
         if (temp <= -80.0f) {
             break;
         }

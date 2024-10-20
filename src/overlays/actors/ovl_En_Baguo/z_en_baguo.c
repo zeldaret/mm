@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBaguo*)thisx)
 
@@ -42,7 +42,7 @@ typedef enum {
     /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-ActorInit En_Baguo_InitVars = {
+ActorProfile En_Baguo_Profile = {
     /**/ ACTOR_EN_BAGUO,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -57,11 +57,11 @@ ActorInit En_Baguo_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
@@ -70,7 +70,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -133,7 +133,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_2;
+    this->actor.attentionRangeType = ATTENTION_RANGE_2;
 
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements[0].dim.modelSphere.radius = 30;
@@ -145,8 +145,8 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
 }
@@ -164,8 +164,8 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -292,8 +292,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
 }
@@ -353,11 +353,11 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 Actor_SetScale(&this->actor, 0.0f);
-                this->collider.elements->dim.scale = 3.0f;
-                this->collider.elements->info.toucher.damage = 8;
+                this->collider.elements[0].dim.scale = 3.0f;
+                this->collider.elements[0].base.atDmgInfo.damage = 8;
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xB0);
                 this->actionFunc = EnBaguo_PostDetonation;
             }

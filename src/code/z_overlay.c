@@ -8,7 +8,7 @@
 
 #include "loadfragment.h"
 #include "z64lib.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);

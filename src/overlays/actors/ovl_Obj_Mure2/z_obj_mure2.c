@@ -34,7 +34,7 @@ void ObjMure2_SetupWaitForPlayerInRange(ObjMure2* this);
 void ObjMure2_SetupWaitForPlayerOutOfRange(ObjMure2* this);
 void ObjMure2_GetChildParams(s16*, ObjMure2*);
 
-ActorInit Obj_Mure2_InitVars = {
+ActorProfile Obj_Mure2_Profile = {
     /**/ ACTOR_OBJ_MURE2,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

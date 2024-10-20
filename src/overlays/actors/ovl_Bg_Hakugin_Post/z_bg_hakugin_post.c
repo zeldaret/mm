@@ -38,7 +38,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-ActorInit Bg_Hakugin_Post_InitVars = {
+ActorProfile Bg_Hakugin_Post_Profile = {
     /**/ ACTOR_BG_HAKUGIN_POST,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -62,7 +62,7 @@ static BgHakuginPostUnkStruct3 D_80A9D880[] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -70,11 +70,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000100, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 276, 0, 20, { 0, 0, 0 } },

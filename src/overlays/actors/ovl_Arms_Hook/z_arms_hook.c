@@ -20,7 +20,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play);
 void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
-ActorInit Arms_Hook_InitVars = {
+ActorProfile Arms_Hook_Profile = {
     /**/ ACTOR_ARMS_HOOK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ ActorInit Arms_Hook_InitVars = {
 
 static ColliderQuadInit D_808C1BC0 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -42,11 +42,11 @@ static ColliderQuadInit D_808C1BC0 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000080, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -139,11 +139,11 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     ArmsHook_CheckForCancel(this);
 
     if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
-        (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
+        (this->collider.elem.atHitElem->elemMaterial != ELEM_MATERIAL_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
 
         if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
-            if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
+            if (this->collider.elem.atHitElem->acElemFlags & ACELEM_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if (CHECK_FLAG_ALL(touchedActor->flags, ACTOR_FLAG_400)) {
                     func_808C1154(this);
@@ -256,8 +256,11 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
                 DynaPolyActor* dynaPolyActor;
 
-                if ((bgId != BGCHECK_SCENE) && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
-                    ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                if (bgId != BGCHECK_SCENE) {
+                    dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId);
+                    if (dynaPolyActor != NULL) {
+                        ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                    }
                 }
                 func_808C1154(this);
                 Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);

@@ -41,7 +41,7 @@ typedef struct {
     /* 0x1F */ u8 params;
 } MirRayDataEntry; // size = 0x20
 
-ActorInit Mir_Ray_InitVars = {
+ActorProfile Mir_Ray_Profile = {
     /**/ ACTOR_MIR_RAY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -57,7 +57,7 @@ u8 D_808E3BF0 = false;
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -65,11 +65,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00200000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -78,11 +78,11 @@ static ColliderQuadInit sQuadInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00200000, 0x00, 0x00 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 50 }, 100 },
@@ -91,7 +91,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -247,11 +247,11 @@ void MirRay_SetupCollider(MirRay* this) {
     f32 y = (this->poolPt.y - this->sourcePt.y) * dataEntry->unk_10;
     f32 z = (this->poolPt.z - this->sourcePt.z) * dataEntry->unk_10;
 
-    this->collider1.elements[0].dim.worldSphere.center.x = this->sourcePt.x + x;
-    this->collider1.elements[0].dim.worldSphere.center.y = this->sourcePt.y + y;
-    this->collider1.elements[0].dim.worldSphere.center.z = this->sourcePt.z + z;
+    this->collider1.elements->dim.worldSphere.center.x = this->sourcePt.x + x;
+    this->collider1.elements->dim.worldSphere.center.y = this->sourcePt.y + y;
+    this->collider1.elements->dim.worldSphere.center.z = this->sourcePt.z + z;
 
-    this->collider1.elements[0].dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
+    this->collider1.elements->dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
 }
 
 // Set up a light point between source point and reflection point. Reflection point is the pool point (for windows) or
@@ -455,7 +455,7 @@ void MirRay_SetupReflectionPolys(MirRay* this, PlayState* play, MirRayShieldRefl
         posB.y = sp60[1] + posA.y;
         posB.z = sp60[2] + posA.z;
 
-        if (BgCheck_AnyLineTest1(&play->colCtx, &posA, &posB, &sp70, &outPoly, 1)) {
+        if (BgCheck_AnyLineTest1(&play->colCtx, &posA, &posB, &sp70, &outPoly, true)) {
             reflection[i].reflectionPoly = outPoly;
         } else {
             reflection[i].reflectionPoly = NULL;

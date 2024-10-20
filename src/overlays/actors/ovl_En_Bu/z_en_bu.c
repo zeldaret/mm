@@ -6,7 +6,7 @@
 
 #include "z_en_bu.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
 #define THIS ((EnBu*)thisx)
 
@@ -17,7 +17,7 @@ void EnBu_Draw(Actor* thisx, PlayState* play);
 
 void EnBu_DoNothing(EnBu* this, PlayState* play);
 
-ActorInit En_Bu_InitVars = {
+ActorProfile En_Bu_Profile = {
     /**/ ACTOR_EN_BU,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,

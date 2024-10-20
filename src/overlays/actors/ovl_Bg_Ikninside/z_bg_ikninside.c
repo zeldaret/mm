@@ -18,7 +18,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
-ActorInit Bg_Ikninside_InitVars = {
+ActorProfile Bg_Ikninside_Profile = {
     /**/ ACTOR_BG_IKNINSIDE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ static Gfx* D_80C076A0[] = { object_ikninside_obj_DL_00A748, object_ikninside_ob
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x80000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 32, 32, 0, { 0, 0, 0 } },
@@ -104,7 +104,8 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if ((this->collider.info.acHitInfo != NULL) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
+        if ((this->collider.elem.acHitElem != NULL) &&
+            (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
                 azimuth = Rand_Next() >> 0x10;

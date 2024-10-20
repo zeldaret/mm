@@ -66,7 +66,7 @@ typedef enum ElfgrpSpawnedFairyTypes {
     /* 1 */ SPAWNED_STRAY_FAIRY_TYPE_RETURNING // STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN
 } ElfgrpSpawnedFairyTypes;
 
-ActorInit En_Elfgrp_InitVars = {
+ActorProfile En_Elfgrp_Profile = {
     /**/ ACTOR_EN_ELFGRP,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -106,7 +106,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
     this->unk_148 = 0;
     this->stateFlags = 0;
     this->actor.focus.pos.y += 40.0f;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     switch (this->type) {
         case ENELFGRP_TYPE_POWER:
@@ -216,7 +216,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                 } else {
                     this->actor.textId = 0x578;
                 }
-                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
             }
             break;
     }

@@ -6,12 +6,13 @@
 
 #include "z_en_gs.h"
 #include "z64voice.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "assets/objects/object_gs/object_gs.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -40,7 +41,7 @@ s32 func_809995A4(EnGs* this, PlayState* play);
 void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
-ActorInit En_Gs_InitVars = {
+ActorProfile En_Gs_Profile = {
     /**/ ACTOR_EN_GS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -54,7 +55,7 @@ ActorInit En_Gs_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -62,11 +63,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 21, 48, 0, { 0, 0, 0 } },
@@ -149,7 +150,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->unk_216 = 0;
     this->unk_218 = 0;
     this->unk_200 = 1.0f;
@@ -345,7 +346,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
         case OCARINA_MODE_NONE:
         case OCARINA_MODE_END:
             func_80998300(this, play);
-
+            FALLTHROUGH;
         case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;

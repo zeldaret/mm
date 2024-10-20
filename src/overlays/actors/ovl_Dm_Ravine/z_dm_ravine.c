@@ -16,7 +16,7 @@ void DmRavine_DoNothing(DmRavine* this, PlayState* play);
 void DmRavine_Update(Actor* thisx, PlayState* play);
 void DmRavine_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Ravine_InitVars = {
+ActorProfile Dm_Ravine_Profile = {
     /**/ ACTOR_DM_RAVINE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
