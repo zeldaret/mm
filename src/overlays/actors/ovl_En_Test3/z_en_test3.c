@@ -4,6 +4,7 @@
  * Description: Kafei
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 
 #include "zelda_arena.h"
