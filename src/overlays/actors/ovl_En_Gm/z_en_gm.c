@@ -419,7 +419,7 @@ s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
 }
 
 s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {
-    s8 tmp = this->objectSlot;
+    s8 objectSlot = this->objectSlot;
     s32 changeAnim = false;
     s32 didAnimChange = false;
 
@@ -432,7 +432,7 @@ s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {
     }
 
     if (changeAnim) {
-        if (tmp >= 0) {
+        if (objectSlot > OBJECT_SLOT_NONE) {
             this->animIndex = animIndex;
             didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
             this->animPlaySpeed = this->skelAnime.playSpeed;

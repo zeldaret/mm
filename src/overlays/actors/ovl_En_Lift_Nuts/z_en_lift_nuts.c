@@ -210,7 +210,7 @@ typedef enum {
  *
  * @return boolean, based on the mode
  *  ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK: true if the current minigame state equals the provided state, false otherwise
- *  ENLIFTNUTS_MINIGAME_STATE_MODE_SET: true if the minigame state was set succesfully to the provided state, false
+ *  ENLIFTNUTS_MINIGAME_STATE_MODE_SET: true if the minigame state was set successfully to the provided state, false
  * otherwise
  */
 s32 EnLiftNuts_MinigameState(EnLiftNutsMiniGameStateMode mode, EnLiftNutsMiniGameState state) {

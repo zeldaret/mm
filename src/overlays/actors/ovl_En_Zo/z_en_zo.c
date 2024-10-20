@@ -158,17 +158,17 @@ static u8 sShadowSizes[ZORA_BODYPART_MAX] = {
 };
 
 s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
+    s16 endFrame;
     s32 didChange = false;
 
     if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
         didChange = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
     return didChange;

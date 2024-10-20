@@ -55,7 +55,7 @@ typedef struct EnPr {
     /* 0x23C */ Vec3f bodyPartsPos[ENPR_BODYPART_MAX];
     /* 0x2B4 */ f32 unk_2B4;
     /* 0x2B8 */ f32 unk_2B8;
-    /* 0x2BC */ f32 unk_2BC;
+    /* 0x2BC */ f32 animEndFrame;
     /* 0x2C0 */ f32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;
     /* 0x2C8 */ f32 unk_2C8;

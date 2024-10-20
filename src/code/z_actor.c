@@ -3548,7 +3548,7 @@ bool Attention_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  * - Not be Player itself.
  * - It must be targetable or ACTOR_FLAG_40000000
  * - Not be the already targeted actor, unless it has the ACTOR_FLAG_80000 flag
- * - Be withing the range specified by its targetMode.
+ * - Be within the range specified by its targetMode.
  * - It must be on-screen (within a margin)
  * - Must not be blocked by a surface (?)
  *
@@ -4231,7 +4231,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
-        // srcPos is somewhere withing the bend of the path
+        // srcPos is somewhere within the bend of the path
         if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
             // srcPos is not inside a loop
             if (!Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
