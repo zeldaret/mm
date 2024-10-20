@@ -5,8 +5,9 @@
  */
 
 #include "z_en_zos.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
 
 #define THIS ((EnZos*)thisx)
 
@@ -421,7 +422,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
     switch (play->msgCtx.currentTextId) {
         case 0x1237:
             player->exchangeItemAction = PLAYER_IA_NONE;
-            // fallthrough
+            FALLTHROUGH;
         case 0x1238:
         case 0x123A:
         case 0x123B:
@@ -440,7 +441,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         case 0x1232:
         case 0x1241:
             player->exchangeItemAction = PLAYER_IA_NONE;
-            // fallthrough
+            FALLTHROUGH;
         case 0x1239:
         case 0x1246:
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);

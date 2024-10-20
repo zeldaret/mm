@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "assets/objects/object_bubble/object_bubble.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -84,7 +84,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnElfbub_Destroy(Actor* thisx, PlayState* play) {

@@ -967,6 +967,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[1] = elem->p2.y;
                                 vtx[j + 1].v.ob[2] = elem->p2.z;
                                 break;
+
                             case 2:
                                 vtx[j].v.ob[0] = elem->p1.x;
                                 vtx[j].v.ob[1] = elem->p1.y;
@@ -975,6 +976,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[1] = func_800B09D0(elem->p2.y, elem->p1.y, ratio);
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
                                 break;
+
                             case 3:
                                 ratio *= 0.5f;
                                 vtx[j].v.ob[0] = func_800B09D0(elem->p1.x, elem->p2.x, ratio);
@@ -985,6 +987,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
                                 ratio *= 2.0f;
                                 break;
+
                             case 0:
                             default:
                                 vtx[j].v.ob[0] = elem->p1.x;

@@ -6,12 +6,13 @@
 
 #include "z_en_gs.h"
 #include "z64voice.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "assets/objects/object_gs/object_gs.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -149,7 +150,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->unk_216 = 0;
     this->unk_218 = 0;
     this->unk_200 = 1.0f;
@@ -345,7 +346,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
         case OCARINA_MODE_NONE:
         case OCARINA_MODE_END:
             func_80998300(this, play);
-
+            FALLTHROUGH;
         case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;

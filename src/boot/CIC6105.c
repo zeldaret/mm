@@ -16,7 +16,7 @@ void CIC6105_Noop2(void) {
 
 void CIC6105_PrintRomInfo(void) {
     FaultDrawer_DrawText(80, 200, "SP_STATUS %08x", IO_READ(SP_STATUS_REG));
-    FaultDrawer_DrawText(40, 184, "ROM_F [Creator:%s]", gBuildTeam);
+    FaultDrawer_DrawText(40, 184, "ROM_F [Creator:%s]", gBuildCreator);
     FaultDrawer_DrawText(56, 192, "[Date:%s]", gBuildDate);
 }
 

@@ -6,7 +6,7 @@
 
 #include "z_en_zod.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZod*)thisx)
 
@@ -372,6 +372,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 }
 

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnPp*)thisx)
 
@@ -210,7 +210,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
 
-    this->actor.targetMode = TARGET_MODE_4;
+    this->actor.attentionRangeType = ATTENTION_RANGE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 3;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -1013,7 +1013,7 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
     Enemy_StartFinishingBlow(play, &this->actor);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_HIPLOOP_DEAD);
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->action = EN_PP_ACTION_DEAD;
     this->actionFunc = EnPp_Dead;
 }
@@ -1108,7 +1108,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
 
         this->actor.gravity = 0.0f;
         this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_START;
         EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
         SkelAnime_Update(&this->skelAnime);

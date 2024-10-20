@@ -8,6 +8,7 @@
 
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
@@ -15,7 +16,7 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnBsb*)thisx)
 
@@ -385,7 +386,7 @@ void EnBsb_Init(Actor* thisx, PlayState* play) {
     while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
     // clang-format on
 
-    this->actor.targetMode = TARGET_MODE_10;
+    this->actor.attentionRangeType = ATTENTION_RANGE_10;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_04)) {
         Actor_Kill(&this->actor);
@@ -1311,7 +1312,7 @@ void func_80C0E178(EnBsb* this) {
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->unk_02AE = false;
     this->unk_02A4 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_02B4 = 14;
     this->actionFunc = func_80C0E1C0;
     this->actor.speed = 0.0f;
@@ -1371,7 +1372,7 @@ void func_80C0E3B8(EnBsb* this) {
     Math_Vec3s_Copy(&this->unk_031C, &gZeroVec3s);
 
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Animation_Change(&this->skelAnime, &object_bsb_Anim_004894, 1.0f, D_80C0F8D0,
                      Animation_GetLastFrame(&object_bsb_Anim_004894), 2, 0.0f);
@@ -1439,7 +1440,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                         var_s0 = 1;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case 15:
                     var_s0 = -1;
                     break;
@@ -1519,7 +1520,7 @@ void func_80C0E618(EnBsb* this, PlayState* play) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KITA_DEAD);
                 this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
                 func_80C0D3C0(this, play);
             } else {

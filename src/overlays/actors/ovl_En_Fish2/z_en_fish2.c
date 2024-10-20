@@ -4,12 +4,13 @@
  * Description: Marine Research Lab Fish
  */
 
+#include "z_en_fish2.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
-#include "z_en_fish2.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFish2*)thisx)
 
@@ -665,12 +666,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 2:
             phi_f0 = 0.1f;
-            // fallthrough
+            FALLTHROUGH;
         case 4:
             if (phi_f0 == 0) {
                 phi_f0 = 0.3f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 6:
             if (phi_f0 == 0) {
                 phi_f0 = 0.5f;
@@ -696,12 +697,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 3:
             phi_f0 = 1.3f;
-            // fallthrough
+            FALLTHROUGH;
         case 5:
             if (phi_f0 == 0) {
                 phi_f0 = 1.5f;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 7:
             if (phi_f0 == 0) {
                 phi_f0 = 1.7f;

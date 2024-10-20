@@ -28,8 +28,9 @@
  */
 
 #include "z_boss_05.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((Boss05*)thisx)
 
@@ -346,7 +347,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
     Boss05* this = THIS;
     CollisionHeader* colHeader = NULL;
 
-    this->dyna.actor.targetMode = TARGET_MODE_3;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->dyna.actor.colChkInfo.mass = MASS_HEAVY;
     this->dyna.actor.colChkInfo.health = 2;
     this->frameCounter = Rand_ZeroFloat(1000.0f);
@@ -387,7 +388,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
             this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
             this->actionFunc = Boss05_LilyPad_Idle;
-            this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD) {
@@ -398,7 +399,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         SkelAnime_InitFlex(play, &this->lilyPadSkelAnime, &gBioDekuBabaLilyPadSkel, &gBioDekuBabaLilyPadIdleAnim,
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_FALLING_HEAD) {
         this->actionFunc = Boss05_FallingHead_Fall;
@@ -443,7 +444,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->fragmentAngularVelocity.y = Rand_CenteredFloat(1500.0f);
         this->timers[TIMER_CURRENT_ACTION] = Rand_ZeroFloat(30.0f) + 50.0f;
 
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = Boss05_Fragment_Move;
     }
 }
@@ -780,7 +781,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
 
         this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
         this->actionFunc = Boss05_LilyPad_Idle;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->forceDetachTimer != 0) {
             hitReaction = BIO_BABA_HEAD_HIT_REACTION_DEATCH;
@@ -1352,7 +1353,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case BIO_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
@@ -1371,7 +1372,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffFrozenSteamScale = 2.0f;
-            // fallthrough
+            FALLTHROUGH;
         case BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss05_WalkingHead_Thaw(this, play);

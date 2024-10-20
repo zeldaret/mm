@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_gi_hearts/object_gi_hearts.h"
@@ -738,7 +739,7 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
                     }
                     break;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case ITEM00_BOMBS_A:
             case ITEM00_ARROWS_10:
             case ITEM00_ARROWS_30:

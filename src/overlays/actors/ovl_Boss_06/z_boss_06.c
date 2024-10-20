@@ -7,11 +7,12 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -169,7 +170,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
         this->curtainTexture[i] = curtainTexture[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
@@ -233,7 +234,7 @@ void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
                     Actor_Kill(searchArrow);
                 }
             }
-
+            FALLTHROUGH;
         case BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS:
             if (this->csFrameCount >= 10) {
                 Math_ApproachF(&this->lensFlareScale, 30.0f, 0.2f, 1.0f);

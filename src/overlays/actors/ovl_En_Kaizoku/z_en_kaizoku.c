@@ -5,10 +5,11 @@
  */
 
 #include "z_en_kaizoku.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((EnKaizoku*)thisx)
 
@@ -254,7 +255,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     EffectBlureInit1 blureInit;
 
     this->picto.actor.hintId = TATL_HINT_ID_PIRATE;
-    this->picto.actor.targetMode = TARGET_MODE_3;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->picto.actor.colChkInfo.mass = 80;
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawFeet, 0.0f);
     this->unk_2CA = this->picto.actor.world.rot.z;
@@ -287,7 +288,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
     this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->switchFlag == KAIZOKU_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
@@ -500,7 +501,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
             Message_StartTextbox(play, D_80B8A8D0[sp54], &this->picto.actor);
             this->unk_2C8++;
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
             Math_Vec3f_Copy(&this->subCamEye, &this->unk_5C8);
@@ -510,7 +511,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->unk_598 = 0;
             Audio_SetMainBgmVolume(0, 0xA);
             this->unk_59C++;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -616,7 +617,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
                 this->picto.actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
-                this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 func_80B872A4(this);
             }
             break;
@@ -678,7 +679,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_96);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     this->unk_2B2 = 30;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_598 = 0;
     this->unk_59C = 0;
     this->unk_2D8 = 0;
@@ -1686,7 +1687,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->unk_598 = 0;
     this->unk_59C = 0;
@@ -1834,7 +1835,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->unk_2B8 = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case KAIZOKU_DMGEFF_1:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||

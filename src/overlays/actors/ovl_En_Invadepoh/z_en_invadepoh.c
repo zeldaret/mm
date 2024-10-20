@@ -2068,9 +2068,9 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
 
     if ((type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) || (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3)) {
-        this->actor.targetMode = TARGET_MODE_3;
+        this->actor.attentionRangeType = ATTENTION_RANGE_3;
     } else {
-        this->actor.targetMode = TARGET_MODE_6;
+        this->actor.attentionRangeType = ATTENTION_RANGE_6;
     }
 
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
@@ -2086,7 +2086,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
         this->actor.update = EnInvadepoh_SilentRomani_WaitForObject;
-        this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE;
+        this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_BARN) {
@@ -2151,9 +2151,12 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
 }
 
 static InitChainEntry sDogInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),  ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),   ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),
+    ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_4, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
 };
 
 void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
@@ -2173,9 +2176,12 @@ void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
 }
 
 static InitChainEntry sCremiaInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_3, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
@@ -2689,7 +2695,7 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienDeathAnim);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->timer = 10;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
@@ -3647,10 +3653,10 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
             }
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
@@ -3797,7 +3803,7 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     modelInfo->headRotMaxStep = 0x5DC;
     this->timer = Rand_S16Offset(200, 200);
     this->angle = this->actor.shape.rot.y;
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_Idle;
 }
 
@@ -3859,7 +3865,7 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
     modelInfo->headRotTarget.z = 0;
     modelInfo->headRotStepScale = 0.1f;
     modelInfo->headRotMaxStep = 0x320;
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_LookAround;
 }
 
@@ -3908,10 +3914,10 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
             this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
@@ -4060,7 +4066,7 @@ void EnInvadepoh_RewardRomani_SetupWaitForSuccess(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         EnInvadepoh_RewardRomani_SetupStartTalking(this);
     }
 }
@@ -4154,7 +4160,7 @@ void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* pl
 }
 
 void EnInvadepoh_RewardRomani_SetupFinish(EnInvadepoh* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_RewardRomani_Finish;
 }
 
@@ -4389,7 +4395,7 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         EnInvadepoh_Dog_SetupWalk(this);
     } else if (sInvasionState == INVASION_STATE_WAIT) {
         this->actor.update = EnInvadepoh_Dog_WaitForInvasion;
@@ -4409,7 +4415,7 @@ void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2) {
     if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         EnInvadepoh_Dog_SetupWalk(this);
     }
 }
@@ -4517,16 +4523,16 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
             // Romani is opening the door to the barn
             this->distanceToRomani = 40.0f;
             this->angle = -0x8000;
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         } else if (romani->currentPoint < (romani->endPoint - 1)) {
             this->distanceToRomani = 40.0f;
             Math_ScaledStepToS(&this->angle, -0x4800, 0xC8);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         } else {
             // Romani is opening the door to the house
             Math_StepToF(&this->distanceToRomani, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->angle, -0x8000, 0x12C);
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         }
 
         angleToRomani = this->angle + romani->actor.world.rot.y;
@@ -4769,10 +4775,10 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
             }
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     tempFrames = play->gameplayFrames % 0x80;

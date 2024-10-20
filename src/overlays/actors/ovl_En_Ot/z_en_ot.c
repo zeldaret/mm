@@ -5,9 +5,10 @@
  */
 
 #include "z_en_ot.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOt*)thisx)
 
@@ -147,7 +148,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     if (this->type == SEAHORSE_TYPE_0) {
         D_80B5E880 = this;
         this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
         return;
@@ -277,7 +278,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
         case SEAHORSE_TYPE_3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                 this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
                 this->collider.dim.height *= 0.5f;
@@ -433,9 +434,9 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_2,
                                         &this->unk_360->animIndex);
         this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         this->unk_360->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-        this->unk_360->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->unk_360->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
     }
@@ -833,7 +834,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 
                     case 0x1069:
                         this->unk_32C |= 4;
-
+                        FALLTHROUGH;
                     case 0x106A:
                         func_80B5CE6C(this, play);
                         break;
@@ -927,7 +928,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     Flags_SetSwitch(play, SEAHORSE_GET_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80B5D750;
 }
@@ -955,7 +956,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
         this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         if (D_80B5E884 != NULL) {
             func_80B5C9A8(this, play);
         } else {

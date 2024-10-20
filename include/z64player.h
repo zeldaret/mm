@@ -57,6 +57,12 @@ typedef enum {
     /* 4 */ PLAYER_ENV_HAZARD_UNDERWATER_FREE
 } PlayerEnvHazard;
 
+typedef enum PlayerIdleType {
+    /* -0x1 */ PLAYER_IDLE_CRIT_HEALTH = -1,
+    /*  0x0 */ PLAYER_IDLE_DEFAULT,
+    /*  0x1 */ PLAYER_IDLE_FIDGET
+} PlayerIdleType;
+
 /*
  * Current known usages for PLAYER_IA_MINUS1:
  *  1. With TalkExchange requests, used to continue a current conversation after a textbox is closed
@@ -984,8 +990,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_4000000    (1 << 26)
 // 
 #define PLAYER_STATE2_8000000    (1 << 27)
-// 
-#define PLAYER_STATE2_10000000   (1 << 28)
+// Playing a fidget idle animation (under typical circumstances, see `Player_ChooseNextIdleAnim` for more info)
+#define PLAYER_STATE2_IDLE_FIDGET   (1 << 28)
 // Disable drawing player
 #define PLAYER_STATE2_20000000   (1 << 29)
 // Lunge: small forward boost at the end of certain attack animations
@@ -1220,7 +1226,7 @@ typedef struct Player {
     /* 0xA98 */ Actor* unk_A98;
     /* 0xA9C */ f32 secretRumbleCharge; // builds per frame until discharges with a rumble request
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
-    /* 0xAA4 */ s8 unk_AA4;
+    /* 0xAA4 */ s8 idleType;
     /* 0xAA5 */ u8 unk_AA5; // PlayerUnkAA5 enum
     /* 0xAA6 */ u16 unk_AA6_rotFlags; // See `UNKAA6_ROT_` macros. If its flag isn't set, a rot steps to 0.
     /* 0xAA8 */ s16 upperLimbYawSecondary;
@@ -1251,6 +1257,7 @@ typedef struct Player {
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAE8 */ union {
         s16 actionVar2;
+        s16 fallDamageStunTimer; // Player_Action_Idle: Prevents any movement and shakes model up and down quickly to indicate fall damage stun
     } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {

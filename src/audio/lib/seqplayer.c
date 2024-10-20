@@ -15,6 +15,7 @@
  */
 #include "global.h"
 #include "audio/seqplayer.h"
+#include "attributes.h"
 
 #define PROCESS_SCRIPT_END -1
 
@@ -761,7 +762,7 @@ s32 AudioScript_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
             case 0xCB: // layer: set envelope and decay index
                 cmdArg16 = AudioScript_ScriptReadS16(state);
                 layer->adsr.envelope = (EnvelopePoint*)(seqPlayer->seqData + cmdArg16);
-                // fallthrough
+                FALLTHROUGH;
             case 0xCF: // layer: set decay index
                 layer->adsr.decayIndex = AudioScript_ScriptReadU8(state);
                 break;
@@ -799,6 +800,7 @@ s32 AudioScript_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                         layer->gateTime = seqPlayer->shortNoteGateTimeTable[cmd & 0xF];
                         break;
                 }
+                break;
         }
     }
 }
@@ -1296,7 +1298,7 @@ void AudioScript_SequenceChannelProcessScript(SequenceChannel* channel) {
                     }
 
                     cmdArgs[0] = cmdArgs[1];
-                    // fallthrough
+                    FALLTHROUGH;
                 case 0xC1: // channel: set instrument
                     cmd = (u8)cmdArgs[0];
                     AudioScript_SetInstrument(channel, cmd);
@@ -1923,7 +1925,7 @@ void AudioScript_SequencePlayerProcessSequence(SequencePlayer* seqPlayer) {
 
                     case 0xDF: // seqPlayer: transpose
                         seqPlayer->transposition = 0;
-                        // fallthrough
+                        FALLTHROUGH;
                     case 0xDE: // seqPlayer: transpose relative
                         seqPlayer->transposition += (s8)AudioScript_ScriptReadU8(seqScript);
                         break;
@@ -1969,7 +1971,7 @@ void AudioScript_SequencePlayerProcessSequence(SequencePlayer* seqPlayer) {
                             case SEQPLAYER_STATE_FADE_IN:
                                 seqPlayer->state = SEQPLAYER_STATE_0;
                                 seqPlayer->fadeVolume = 0.0f;
-                                // fallthrough
+                                FALLTHROUGH;
                             case SEQPLAYER_STATE_0:
                                 seqPlayer->fadeTimer = seqPlayer->storedFadeTimer;
                                 if (seqPlayer->storedFadeTimer != 0) {

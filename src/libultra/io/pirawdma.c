@@ -15,9 +15,11 @@ s32 __osPiRawStartDma(s32 direction, uintptr_t devAddr, void* dramAddr, size_t s
         case OS_READ:
             IO_WRITE(PI_WR_LEN_REG, size - 1);
             break;
+
         case OS_WRITE:
             IO_WRITE(PI_RD_LEN_REG, size - 1);
             break;
+
         default:
             return -1;
     }

@@ -5,10 +5,11 @@
  */
 
 #include "z_en_wiz_fire.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "assets/objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -74,10 +75,10 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->type = EN_WIZ_FIRE_GET_TYPE(&this->actor);
-    this->actor.targetMode = TARGET_MODE_3;
+    this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->wallCheckTimer = 10;
     this->alpha = 255.0f;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
         this->collider.elem.atDmgInfo.dmgFlags = 0x20000000;
@@ -90,13 +91,13 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
             this->collider.elem.atDmgInfo.effect = 2;
             this->collider.elem.acDmgInfo.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
             this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
-            // fallthrough
+            FALLTHROUGH;
         case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
             if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
                 this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
                 this->collider.elem.atDmgInfo.damage = 8;
             }
-            // fallthrough
+            FALLTHROUGH;
         case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
         case EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE:
             this->actionFunc = EnWiz_SetupMoveMagicProjectile;

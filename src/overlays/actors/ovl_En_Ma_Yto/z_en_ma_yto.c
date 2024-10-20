@@ -5,9 +5,10 @@
  */
 
 #include "z_en_ma_yto.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYto*)thisx)
 
@@ -176,7 +177,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     EnMaYto* this = THIS;
     s32 pad;
 
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->unk200 = 0;
     this->unk310 = 0;
     this->unk320 = 0;
@@ -297,7 +298,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_DINNER:
-            this->actor.targetMode = TARGET_MODE_6;
+            this->actor.attentionRangeType = ATTENTION_RANGE_6;
             EnMaYto_SetupDinnerWait(this);
             break;
 
@@ -1432,12 +1433,12 @@ s32 EnMaYto_HasSpokenToPlayer(void) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;

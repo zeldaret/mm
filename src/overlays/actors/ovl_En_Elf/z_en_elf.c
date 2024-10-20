@@ -5,7 +5,7 @@
  */
 
 #include "z_en_elf.h"
-
+#include "attributes.h"
 #include "z64elf_message.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
@@ -417,7 +417,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
         case FAIRY_TYPE_9:
             this->fairyFlags |= 0x1000;
-
+            FALLTHROUGH;
         case FAIRY_TYPE_10:
             colorConfig = -2;
             func_8088CC48(this, play);

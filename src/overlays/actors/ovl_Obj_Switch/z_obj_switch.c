@@ -384,7 +384,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         ObjSwitch_InitJntSphCollider(this, play, &sJntSphInit);
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
-        this->dyna.actor.targetMode = TARGET_MODE_4;
+        this->dyna.actor.attentionRangeType = ATTENTION_RANGE_4;
         this->dyna.actor.flags |= 1;
     }
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -474,6 +474,7 @@ void ObjSwitch_Destroy(Actor* thisx, PlayState* play) {
         case OBJSWITCH_TYPE_EYE:
             Collider_DestroyTris(play, &this->colliderTris);
             break;
+
         case OBJSWITCH_TYPE_CRYSTAL:
         case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
             Collider_DestroyJntSph(play, &this->colliderJntSph);
@@ -525,6 +526,7 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
+
             case OBJSWITCH_SUBTYPE_SYNC:
                 if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
@@ -533,6 +535,7 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                     ObjSwitch_FloorSwitchPushDownInit(this);
                 }
                 break;
+
             case OBJSWITCH_SUBTYPE_TOGGLE:
                 if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     s32 isSwitchFlagNotSet =
@@ -542,12 +545,14 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, isSwitchFlagNotSet);
                 }
                 break;
+
             case OBJSWITCH_SUBTYPE_RESET:
                 if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
+
             case OBJSWITCH_SUBTYPE_RESET_INVERTED:
                 if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 2);
@@ -594,6 +599,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
                 }
             }
             break;
+
         case OBJSWITCH_SUBTYPE_TOGGLE:
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
@@ -710,6 +716,7 @@ void ObjSwitch_EyeSwitchClosed(ObjSwitch* this, PlayState* play) {
                 ObjSwitch_EyeSwitchOpeningInit(this);
             }
             break;
+
         case OBJSWITCH_SUBTYPE_TOGGLE:
             if (ObjSwitch_IsEyeSwitchHit(this) || OBJ_SWITCH_IS_FROZEN(&this->dyna.actor)) {
                 OBJ_SWITCH_UNSET_FROZEN(&this->dyna.actor);
@@ -752,6 +759,7 @@ void ObjSwitch_CrystalSwitchOff(ObjSwitch* this, PlayState* play) {
                 ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_CrystalSwitchTurnOnInit, true);
             }
             break;
+
         case OBJSWITCH_SUBTYPE_SYNC:
             if (canActivate) {
                 ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_CrystalSwitchTurnOnInit, true);
@@ -761,6 +769,7 @@ void ObjSwitch_CrystalSwitchOff(ObjSwitch* this, PlayState* play) {
                 ObjSwitch_CrystalSwitchTurnOnInit(this);
             }
             break;
+
         case OBJSWITCH_SUBTYPE_TOGGLE:
             if (canActivate) {
                 ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_CrystalSwitchTurnOnInit, true);
@@ -811,10 +820,12 @@ void ObjSwitch_CrystalSwitchOn(ObjSwitch* this, PlayState* play) {
                 ObjSwitch_CrystalSwitchTurnOffInit(this);
             }
             break;
+
         case OBJSWITCH_SUBTYPE_TOGGLE:
             if (canActivate) {
                 ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_CrystalSwitchTurnOffInit, false);
             }
+            break;
     }
     ObjSwitch_CrystalUpdateTimer(this);
 }
@@ -929,23 +940,27 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
     if (this->floorSwitchPlayerSnapState != 0) {
         s32 pad;
 
+    //! FAKE:
     dummy:
         ObjSwitch_FloorSwitchSnapPlayerToSwitchEdge(this, play);
         if (this->floorSwitchPlayerSnapState == 2) {
             this->floorSwitchPlayerSnapState = 0;
         }
     }
+
     switch (OBJ_SWITCH_GET_TYPE(&this->dyna.actor)) {
         case OBJSWITCH_TYPE_FLOOR:
         case OBJSWITCH_TYPE_FLOOR_RUSTY:
         case OBJSWITCH_TYPE_FLOOR_LARGE:
             this->collisionFlags = this->dyna.interactFlags;
             break;
+
         case OBJSWITCH_TYPE_EYE:
             this->collisionFlags = this->colliderTris.base.acFlags;
             this->colliderTris.base.acFlags &= ~AC_HIT;
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
             break;
+
         case OBJSWITCH_TYPE_CRYSTAL:
         case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
             if (!Player_InCsMode(play)) {
@@ -961,6 +976,7 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
             this->collisionFlags = this->colliderJntSph.base.acFlags;
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderJntSph.base);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderJntSph.base);
+            break;
     }
 }
 

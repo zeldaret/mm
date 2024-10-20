@@ -7,12 +7,13 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_Mir_Ray3/z_mir_ray3.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnKnight*)thisx)
 
@@ -555,7 +556,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
 
     // Common init
 
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.damageTable = &sDamageTableStanding;
     this->bodyAlpha = 255.0f;
@@ -581,7 +582,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
 
         this->actor.update = EnKnight_UpdateAfterImage;
         this->actor.draw = EnKnight_DrawAfterImage;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (1) {} //! FAKE:
 
@@ -678,7 +679,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
             this->actor.world.pos.z = BREG(28) + 2864.0f;
             EnKnight_SetupIgosSitting(this, play);
             this->skelAnime.curFrame = 25.0f;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             sKnightMusicStartTimer = KREG(83) + 40;
         } else {
             EnKnight_SetupWait(this, play);
@@ -1571,14 +1572,14 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
 
     if (timerTarget == this->timers[0]) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->drawDmgEffDuration = 0;
         }
     }
 
     if ((this->timers[1] == 0) && (sIgosInstance->actionFunc != EnKnight_CaptainsHatCS)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         EnKnight_SetupGetBackUp(this, play);
 
         if (this == sIgosInstance) {
@@ -1641,7 +1642,7 @@ void EnKnight_Die(EnKnight* this, PlayState* play) {
     }
 
     if (this->timers[2] == 0) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (this == sIgosInstance) {
             if (CutsceneManager_IsNext(this->actor.csId)) {
@@ -2177,7 +2178,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 this->isHeadless = false;
                 Actor_Kill(&sIgosHeadInstance->actor);
                 sIgosHeadInstance = NULL;
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 player->focusActor = &this->actor;
                 play->actorCtx.attention.fairyActor = &this->actor;
                 play->actorCtx.attention.reticleActor = &this->actor;
@@ -2187,7 +2188,8 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 EnKnight_SetupWait(this, play);
                 this->timers[2] = Rand_ZeroFloat(100.0f) + 150.0f;
             }
-            FALLTHROUGH;
+            break;
+
         case KNIGHT_SUB_ACTION_FLYING_HEAD_DONE_0:
             // Wait for head
             break;
@@ -2282,7 +2284,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->csTimer = 0;
             this->csState = KNIGHT_CS_1_STATE_1;
             this->subCamEye.x = 1342.0f;
@@ -2350,7 +2352,7 @@ void EnKnight_IgosStandCS(EnKnight* this, PlayState* play) {
 
                 this->timers[2] = 300;
                 this->doBgChecks = true;
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 this->actor.gravity = -1.5f;
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
@@ -2451,7 +2453,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->csTimer = 0;
             this->csState = KNIGHT_CS_2_STATE_1;
             this->subCamFov = 60.0f;
@@ -2628,7 +2630,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
                     this->skelAnime.curFrame = 25.0f;
                 } else {
                     EnKnight_SetupWait(this, play);
-                    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 }
 
                 mainCam->eye = this->subCamEye;
@@ -2675,7 +2677,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->csTimer = 0;
             this->csState = KNIGHT_INTRO_CS_STATE_1;
             this->subCamFov = 60.0f;
@@ -3229,7 +3231,7 @@ void EnKnight_SetupFlyingHead(EnKnight* this, PlayState* play) {
     this->actionFunc = EnKnight_FlyingHead;
     this->subAction = KNIGHT_SUB_ACTION_FLYING_HEAD_0;
     this->timers[1] = KREG(77) + 200;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
@@ -3255,7 +3257,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             this->retreatTowards.z += this->actor.world.pos.z;
             this->actor.world.rot.x = KREG(39) * 0x1000 + 0x2000;
             this->timers[0] = 20;
-            sIgosInstance->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            sIgosInstance->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->focusActor = &this->actor;
             play->actorCtx.attention.fairyActor = &this->actor;
             play->actorCtx.attention.reticleActor = &this->actor;
@@ -3450,7 +3452,7 @@ void EnKnight_FlyingHeadAttack(EnKnight* this, PlayState* play) {
                     player->actor.parent = &this->actor;
                     AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                                      &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                     this->subAction = KNIGHT_SUB_ACTION_FLYING_HEAD_ATTACK_2;
                     this->timers[0] = 80;
                 } else {
