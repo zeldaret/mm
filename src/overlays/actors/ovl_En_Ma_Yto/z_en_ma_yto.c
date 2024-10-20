@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ma_yto.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
@@ -1432,12 +1433,12 @@ s32 EnMaYto_HasSpokenToPlayer(void) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kanban.h"
+#include "attributes.h"
 #include "assets/objects/object_kanban/object_kanban.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
@@ -673,8 +674,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 this->actionState = ENKANBAN_GROUND;
             }
         }
+            FALLTHROUGH;
         nextCase:
-        // fallthrough
         case ENKANBAN_GROUND:
         case ENKANBAN_WATER:
             signpost = (EnKanban*)this->actor.parent;

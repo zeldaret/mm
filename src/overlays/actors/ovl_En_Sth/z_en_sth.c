@@ -8,6 +8,7 @@
  */
 
 #include "z_en_sth.h"
+#include "attributes.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -574,7 +575,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
-
+                FALLTHROUGH;
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
             case 0x90E: // (does not exist)
@@ -582,7 +583,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x918: // I have had enough, going home
             case 0x91B: // As soon as I calm down, getting rid of it
                 EnSth_ChangeAnim(this, STH_ANIM_WAIT);
-
+                FALLTHROUGH;
             default:
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 Message_CloseTextbox(play);

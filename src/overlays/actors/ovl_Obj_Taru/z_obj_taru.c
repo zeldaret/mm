@@ -323,6 +323,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
                         this->unk_1AD = 8;
                     }
                     break;
+
                 default:
                     this->unk_1AD--;
                     break;

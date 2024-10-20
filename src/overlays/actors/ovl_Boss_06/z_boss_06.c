@@ -7,6 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
@@ -233,7 +234,7 @@ void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
                     Actor_Kill(searchArrow);
                 }
             }
-
+            FALLTHROUGH;
         case BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS:
             if (this->csFrameCount >= 10) {
                 Math_ApproachF(&this->lensFlareScale, 30.0f, 0.2f, 1.0f);

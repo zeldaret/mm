@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rail_skb.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
@@ -1057,7 +1058,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
             case 12:
             case 14:
                 this->unk_402 |= 1;
-
+                FALLTHROUGH;
             case 15:
                 if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
                     (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
@@ -1065,7 +1066,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                     (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                     this->unk_402 |= 1;
                 }
-
+                FALLTHROUGH;
             case 13:
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);

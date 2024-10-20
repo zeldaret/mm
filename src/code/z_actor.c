@@ -4,6 +4,7 @@
  */
 
 #include "fault.h"
+#include "attributes.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 
@@ -4532,12 +4533,12 @@ void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex
             rotLimits.maxHeadYaw = 0;
             rotLimits.maxHeadPitch = 0;
             rotLimits.minHeadPitch = 0;
-            // fallthrough
+            FALLTHROUGH;
         case NPC_TRACKING_HEAD:
             rotLimits.maxTorsoYaw = 0;
             rotLimits.maxTorsoPitch = 0;
             rotLimits.minTorsoPitch = 0;
-            // fallthrough
+            FALLTHROUGH;
         case NPC_TRACKING_HEAD_AND_TORSO:
             rotLimits.rotateYaw = false;
             break;

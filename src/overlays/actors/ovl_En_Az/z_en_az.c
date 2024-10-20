@@ -959,7 +959,6 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                                 case 9:
                                 default:
                                     this->unk_2FA = 8;
-
                                     break;
                             }
                             ret = 0;
@@ -1548,6 +1547,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                 }
             }
+            break;
+
         case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:

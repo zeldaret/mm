@@ -367,6 +367,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 }
 

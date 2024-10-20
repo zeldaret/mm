@@ -6,6 +6,7 @@
 
 #include "z_en_gs.h"
 #include "z64voice.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "assets/objects/object_gs/object_gs.h"
@@ -345,7 +346,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
         case OCARINA_MODE_NONE:
         case OCARINA_MODE_END:
             func_80998300(this, play);
-
+            FALLTHROUGH;
         case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;

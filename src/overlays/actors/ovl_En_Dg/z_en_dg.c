@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dg.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
@@ -588,7 +589,7 @@ s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 300.0f) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
                 return true;
