@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_bombf/object_bombf.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
 
 #define THIS ((EnBombf*)thisx)
 
@@ -39,7 +39,7 @@ ActorProfile En_Bombf_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00013A28, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 9, 18, 10, { 0, 0, 0 } },
@@ -60,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000008, 0x00, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ALL,
         AC_NONE,
         OC1_NONE,
@@ -110,7 +110,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
     thisx->focus.pos = thisx->world.pos;
     thisx->colChkInfo.cylRadius = 10;
     thisx->colChkInfo.cylHeight = 10;
-    thisx->targetMode = TARGET_MODE_0;
+    thisx->attentionRangeType = ATTENTION_RANGE_0;
 
     if (ENBOMBF_GET(thisx) == ENBOMBF_0) {
         this->timer = 140;
@@ -118,7 +118,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
         thisx->gravity = -1.5f;
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_EXPLOSIVES);
         thisx->colChkInfo.mass = 200;
-        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+        thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnBombf_SetupAction(this, func_808AEE3C);
     } else {
         thisx->colChkInfo.mass = MASS_IMMOVABLE;
@@ -158,7 +158,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 this->timer = 180;
                 this->unk_204 = 0.0f;
                 Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             } else {
                 player->actor.child = NULL;
                 player->heldActor = NULL;
@@ -167,8 +167,8 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_CARRYING_ACTOR;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
-                   ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x13828) ||
-                    ((this->colliderCylinder.elem.acHitElem->toucher.dmgFlags & 0x200) &&
+                   ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x13828) ||
+                    ((this->colliderCylinder.elem.acHitElem->atDmgInfo.dmgFlags & 0x200) &&
                      (player->transformation == PLAYER_FORM_GORON) && (player->actor.speed > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {
@@ -178,7 +178,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                     bombf->unk_1F8 = 1;
                     bombf->timer = 0;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                     this->unk_204 = 0.0f;
                 }
             }
@@ -189,7 +189,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 if (bombf != NULL) {
                     bombf->timer = 100;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                     this->unk_204 = 0.0f;
                 }
             } else {
@@ -209,7 +209,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
         if (this->timer == 0) {
             this->unk_204 += 0.05f;
             if (this->unk_204 >= 1.0f) {
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             }
         }
 

@@ -33,7 +33,7 @@ ActorProfile En_Nutsball_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_WOOD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_WOOD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 13, 13, 0, { 0, 0, 0 } },
@@ -82,8 +82,8 @@ void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
 void EnNutsball_InitColliderParams(EnNutsball* this) {
     this->collider.base.atFlags &= ~(AT_HIT | AT_TYPE_ENEMY | AT_BOUNCED);
     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-    this->collider.elem.toucher.dmgFlags = 0x400000;
-    this->collider.elem.toucher.damage = 2;
+    this->collider.elem.atDmgInfo.dmgFlags = 0x400000;
+    this->collider.elem.atDmgInfo.damage = 2;
 }
 
 void EnNutsball_Update(Actor* thisx, PlayState* play2) {

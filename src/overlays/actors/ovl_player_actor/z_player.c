@@ -117,7 +117,7 @@ void Player_Action_0(Player* this, PlayState* play);
 void Player_Action_1(Player* this, PlayState* play);
 void Player_Action_2(Player* this, PlayState* play);
 void Player_Action_3(Player* this, PlayState* play);
-void Player_Action_4(Player* this, PlayState* play);
+void Player_Action_Idle(Player* this, PlayState* play);
 void Player_Action_5(Player* this, PlayState* play);
 void Player_Action_6(Player* this, PlayState* play);
 void Player_Action_7(Player* this, PlayState* play);
@@ -1677,7 +1677,7 @@ struct_8085C2A4 D_8085C2A4[] = {
 // sCylinderInit
 ColliderCylinderInit D_8085C2EC = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -1685,11 +1685,11 @@ ColliderCylinderInit D_8085C2EC = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 12, 60, 0, { 0, 0, 0 } },
@@ -1698,7 +1698,7 @@ ColliderCylinderInit D_8085C2EC = {
 // sShieldCylinderInit
 ColliderCylinderInit D_8085C318 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_HARD | AC_TYPE_ENEMY,
         OC1_NONE,
@@ -1706,11 +1706,11 @@ ColliderCylinderInit D_8085C318 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x02 },
         { 0xD7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 25, 60, 0, { 0, 0, 0 } },
@@ -1719,7 +1719,7 @@ ColliderCylinderInit D_8085C318 = {
 // sMeleeWeaponQuadInit
 ColliderQuadInit D_8085C344 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -1727,11 +1727,11 @@ ColliderQuadInit D_8085C344 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -1740,7 +1740,7 @@ ColliderQuadInit D_8085C344 = {
 // sShieldQuadInit
 ColliderQuadInit D_8085C394 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_HARD | AC_TYPE_ENEMY,
         OC1_NONE,
@@ -1748,18 +1748,18 @@ ColliderQuadInit D_8085C394 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xD7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-f32 sPlayerWaterSpeedScale = 1.0f;
-f32 D_8085C3E8 = 1.0f;
+f32 sWaterSpeedFactor = 1.0f;    // Set to 0.5f in water, 1.0f otherwise. Influences different speed values.
+f32 sInvWaterSpeedFactor = 1.0f; // Inverse of `sWaterSpeedFactor` (1.0f / sWaterSpeedFactor)
 
 // ANIMSFX_TYPE_VOICE
 void Player_AnimSfx_PlayVoice(Player* this, u16 sfxId) {
@@ -2061,7 +2061,7 @@ void Player_ProcessControlStick(PlayState* play, Player* this) {
 }
 
 void Player_Anim_PlayOnceWaterAdjustment(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, sPlayerWaterSpeedScale);
+    PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, sWaterSpeedFactor);
 }
 
 s32 func_8082ECCC(Player* this) {
@@ -2581,7 +2581,202 @@ void func_8082ECE0(Player* this) {
     this->getItemDrawIdPlusOne = ABS_ALT(giEntry->gid);
 }
 
-PlayerAnimationHeader* func_8082ED20(Player* this) {
+typedef enum FidgetType {
+    /* 0x0 */ FIDGET_LOOK_AROUND,
+    /* 0x1 */ FIDGET_COLD,
+    /* 0x2 */ FIDGET_WARM,
+    /* 0x3 */ FIDGET_HOT, // same animations as FIDGET_WARM
+    /* 0x4 */ FIDGET_STRETCH_1,
+    /* 0x5 */ FIDGET_STRETCH_2, // same animations as FIDGET_STRETCH_1
+    /* 0x6 */ FIDGET_STRETCH_3, // same animations as FIDGET_STRETCH_1
+    /* 0x7 */ FIDGET_CRIT_HEALTH_START,
+    /* 0x8 */ FIDGET_CRIT_HEALTH_LOOP,
+    /* 0x9 */ FIDGET_SWORD_SWING,
+    /* 0xA */ FIDGET_ADJUST_TUNIC,
+    /* 0xB */ FIDGET_TAP_FEET,
+    /* 0xC */ FIDGET_ADJUST_SHIELD,
+    /* 0xD */ FIDGET_SWORD_SWING_TWO_HAND,
+    /* 0xE */ FIDGET_SNIFF // for mask of scents. Only used for animSfx
+} FidgetType;
+
+PlayerAnimationHeader* sFidgetAnimations[][2] = {
+    // FIDGET_LOOK_AROUND
+    { &gPlayerAnim_link_normal_wait_typeA_20f, &gPlayerAnim_link_normal_waitF_typeA_20f },
+
+    // FIDGET_COLD
+    { &gPlayerAnim_link_normal_wait_typeC_20f, &gPlayerAnim_link_normal_waitF_typeC_20f },
+
+    // FIDGET_WARM
+    { &gPlayerAnim_link_normal_wait_typeB_20f, &gPlayerAnim_link_normal_waitF_typeB_20f },
+
+    // FIDGET_HOT
+    { &gPlayerAnim_link_normal_wait_typeB_20f, &gPlayerAnim_link_normal_waitF_typeB_20f },
+
+    // FIDGET_STRETCH_1
+    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },
+
+    // FIDGET_STRETCH_2
+    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },
+
+    // FIDGET_STRETCH_3
+    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },
+
+    // FIDGET_CRIT_HEALTH_START
+    { &gPlayerAnim_link_wait_heat1_20f, &gPlayerAnim_link_waitF_heat1_20f },
+
+    // FIDGET_CRIT_HEALTH_LOOP
+    { &gPlayerAnim_link_wait_heat2_20f, &gPlayerAnim_link_waitF_heat2_20f },
+
+    // FIDGET_SWORD_SWING
+    { &gPlayerAnim_link_wait_itemD1_20f, &gPlayerAnim_link_wait_itemD1_20f },
+
+    // FIDGET_ADJUST_TUNIC
+    { &gPlayerAnim_link_wait_itemA_20f, &gPlayerAnim_link_waitF_itemA_20f },
+
+    // FIDGET_TAP_FEET
+    { &gPlayerAnim_link_wait_itemB_20f, &gPlayerAnim_link_waitF_itemB_20f },
+
+    // FIDGET_ADJUST_SHIELD
+    { &gPlayerAnim_link_wait_itemC_20f, &gPlayerAnim_link_wait_itemC_20f },
+
+    // FIDGET_SWORD_SWING_TWO_HAND
+    { &gPlayerAnim_link_wait_itemD2_20f, &gPlayerAnim_link_wait_itemD2_20f },
+
+    // FIDGET_SNIFF
+    { &gPlayerAnim_cl_msbowait, &gPlayerAnim_cl_msbowait },
+};
+
+AnimSfxEntry sFidgetAnimSfxSneeze[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 8, NA_SE_VO_LI_SNEEZE, STOP),
+};
+AnimSfxEntry sFidgetAnimSfxSweat[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 18, NA_SE_VO_LI_SWEAT, STOP),
+};
+AnimSfxEntry sFidgetAnimSfxCritHealthStart[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 13, NA_SE_VO_LI_BREATH_REST, STOP),
+};
+AnimSfxEntry sFidgetAnimSfxCritHealthLoop[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 10, NA_SE_VO_LI_BREATH_REST, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxTunic[] = {
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 44, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 48, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 52, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 56, NA_SE_PL_CALM_HIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 60, NA_SE_PL_CALM_HIT, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxTapFeet[] = {
+    ANIMSFX(ANIMSFX_TYPE_8, 25, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 30, NA_SE_NONE, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 44, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 48, NA_SE_NONE, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_8, 52, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 56, NA_SE_NONE, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxShield[] = {
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 16, NA_SE_IT_SHIELD_SWING, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 20, NA_SE_IT_SHIELD_SWING, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 70, NA_SE_IT_SHIELD_SWING, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxSword[] = {
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 10, NA_SE_IT_HAMMER_SWING, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 10, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 22, NA_SE_IT_SWORD_SWING, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 22, NA_SE_VO_LI_SWORD_N, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxSwordTwoHand[] = {
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 39, NA_SE_IT_SWORD_SWING, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 39, NA_SE_VO_LI_SWORD_N, STOP),
+};
+AnimSfxEntry sFidgetAnimSfxStretch[] = {
+    ANIMSFX(ANIMSFX_TYPE_VOICE, 20, NA_SE_VO_LI_RELAX, STOP),
+};
+
+AnimSfxEntry sFidgetAnimSfxPigGrunt[] = {
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 4, NA_SE_VO_LI_POO_WAIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 12, NA_SE_VO_LI_POO_WAIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 30, NA_SE_VO_LI_POO_WAIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 61, NA_SE_VO_LI_POO_WAIT, CONTINUE),
+    ANIMSFX(ANIMSFX_TYPE_GENERAL, 68, NA_SE_VO_LI_POO_WAIT, STOP),
+};
+
+typedef enum FidgetAnimSfxType {
+    /* 0x0 */ FIDGET_ANIMSFX_NONE,
+    /* 0x1 */ FIDGET_ANIMSFX_SNEEZE,
+    /* 0x2 */ FIDGET_ANIMSFX_SWEAT,
+    /* 0x3 */ FIDGET_ANIMSFX_CRIT_HEALTH_START,
+    /* 0x4 */ FIDGET_ANIMSFX_CRIT_HEALTH_LOOP,
+    /* 0x5 */ FIDGET_ANIMSFX_TUNIC,
+    /* 0x6 */ FIDGET_ANIMSFX_TAP_FEET,
+    /* 0x7 */ FIDGET_ANIMSFX_SHIELD,
+    /* 0x8 */ FIDGET_ANIMSFX_SWORD,
+    /* 0x9 */ FIDGET_ANIMSFX_SWORD_TWO_HAND,
+    /* 0xA */ FIDGET_ANIMSFX_STRETCH,
+    /* 0xB */ FIDGET_ANIMSFX_PIG_GRUNT
+} FidgetAnimSfxType;
+
+AnimSfxEntry* sFidgetAnimSfxLists[] = {
+    sFidgetAnimSfxSneeze,          // FIDGET_ANIMSFX_SNEEZE
+    sFidgetAnimSfxSweat,           // FIDGET_ANIMSFX_SWEAT
+    sFidgetAnimSfxCritHealthStart, // FIDGET_ANIMSFX_CRIT_HEALTH_START
+    sFidgetAnimSfxCritHealthLoop,  // FIDGET_ANIMSFX_CRIT_HEALTH_LOOP
+    sFidgetAnimSfxTunic,           // FIDGET_ANIMSFX_TUNIC
+    sFidgetAnimSfxTapFeet,         // FIDGET_ANIMSFX_TAP_FEET
+    sFidgetAnimSfxShield,          // FIDGET_ANIMSFX_SHIELD
+    sFidgetAnimSfxSword,           // FIDGET_ANIMSFX_SWORD
+    sFidgetAnimSfxSwordTwoHand,    // FIDGET_ANIMSFX_SWORD_TWO_HAND
+    sFidgetAnimSfxStretch,         // FIDGET_ANIMSFX_STRETCH
+    sFidgetAnimSfxPigGrunt,        // FIDGET_ANIMSFX_PIG_GRUNT
+    NULL,                          // unused entry
+};
+
+/**
+ * The indices in this array correspond 1 to 1 with the entries of sFidgetAnimations.
+ */
+u8 sFidgetAnimSfxTypes[] = {
+    FIDGET_ANIMSFX_NONE,              // FIDGET_LOOK_AROUND
+    FIDGET_ANIMSFX_NONE,              // FIDGET_LOOK_AROUND (sword/shield in hand)
+    FIDGET_ANIMSFX_SNEEZE,            // FIDGET_COLD
+    FIDGET_ANIMSFX_SNEEZE,            // FIDGET_COLD (sword/shield in hand)
+    FIDGET_ANIMSFX_SWEAT,             // FIDGET_WARM
+    FIDGET_ANIMSFX_SWEAT,             // FIDGET_WARM (sword/shield in hand)
+    FIDGET_ANIMSFX_SWEAT,             // FIDGET_HOT
+    FIDGET_ANIMSFX_SWEAT,             // FIDGET_HOT (sword/shield in hand)
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_1
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_1 (sword/shield in hand)
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_2
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_2 (sword/shield in hand)
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_3
+    FIDGET_ANIMSFX_STRETCH,           // FIDGET_STRETCH_3 (sword/shield in hand)
+    FIDGET_ANIMSFX_CRIT_HEALTH_START, // FIDGET_CRIT_HEALTH_START
+    FIDGET_ANIMSFX_CRIT_HEALTH_START, // FIDGET_CRIT_HEALTH_START (sword/shield in hand)
+    FIDGET_ANIMSFX_CRIT_HEALTH_LOOP,  // FIDGET_CRIT_HEALTH_LOOP
+    FIDGET_ANIMSFX_CRIT_HEALTH_LOOP,  // FIDGET_CRIT_HEALTH_LOOP (sword/shield in hand)
+    FIDGET_ANIMSFX_SWORD,             // FIDGET_SWORD_SWING
+    FIDGET_ANIMSFX_SWORD,             // FIDGET_SWORD_SWING (sword/shield in hand)
+    FIDGET_ANIMSFX_TUNIC,             // FIDGET_ADJUST_TUNIC
+    FIDGET_ANIMSFX_TUNIC,             // FIDGET_ADJUST_TUNIC (sword/shield in hand)
+    FIDGET_ANIMSFX_TAP_FEET,          // FIDGET_TAP_FEET
+    FIDGET_ANIMSFX_TAP_FEET,          // FIDGET_TAP_FEET (sword/shield in hand)
+    FIDGET_ANIMSFX_SHIELD,            // FIDGET_ADJUST_SHIELD
+    FIDGET_ANIMSFX_SHIELD,            // FIDGET_ADJUST_SHIELD (sword/shield in hand)
+    FIDGET_ANIMSFX_SWORD_TWO_HAND,    // FIDGET_SWORD_SWING_TWO_HAND
+    FIDGET_ANIMSFX_SWORD_TWO_HAND,    // FIDGET_SWORD_SWING_TWO_HAND (sword/shield in hand)
+    FIDGET_ANIMSFX_PIG_GRUNT,         // FIDGET_SNIFF
+    FIDGET_ANIMSFX_PIG_GRUNT,         // FIDGET_SNIFF (sword/shield in hand)
+};
+
+/**
+ * Get the appropriate Idle animation based on either current `modelAnimType`,
+ * or special cases for zora, non-player (kafei), goron, or while wearing mask of scents.
+ * This is the default idle animation.
+ *
+ * For fidget idle animations (which can for example, change based on environment)
+ * see `sFidgetAnimations`.
+ */
+PlayerAnimationHeader* Player_GetIdleAnim(Player* this) {
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->actor.id != ACTOR_PLAYER)) {
         return &gPlayerAnim_pz_wait;
     }
@@ -2594,117 +2789,45 @@ PlayerAnimationHeader* func_8082ED20(Player* this) {
     return D_8085BE84[PLAYER_ANIMGROUP_wait][this->modelAnimType];
 }
 
-PlayerAnimationHeader* sPlayerIdleAnimations[][2] = {
-    { &gPlayerAnim_link_normal_wait_typeA_20f, &gPlayerAnim_link_normal_waitF_typeA_20f }, // ROOM_BEHAVIOR_TYPE2_0
-    { &gPlayerAnim_link_normal_wait_typeC_20f, &gPlayerAnim_link_normal_waitF_typeC_20f }, // ROOM_BEHAVIOR_TYPE2_1
-    { &gPlayerAnim_link_normal_wait_typeB_20f, &gPlayerAnim_link_normal_waitF_typeB_20f }, // ROOM_BEHAVIOR_TYPE2_2
-    { &gPlayerAnim_link_normal_wait_typeB_20f, &gPlayerAnim_link_normal_waitF_typeB_20f }, // ROOM_BEHAVIOR_TYPE2_HOT
-    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },               // ROOM_BEHAVIOR_TYPE2_4
-    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },               // ROOM_BEHAVIOR_TYPE2_5
-    { &gPlayerAnim_link_wait_typeD_20f, &gPlayerAnim_link_waitF_typeD_20f },               // ROOM_BEHAVIOR_TYPE2_6
-    { &gPlayerAnim_link_wait_heat1_20f, &gPlayerAnim_link_waitF_heat1_20f },
-    { &gPlayerAnim_link_wait_heat2_20f, &gPlayerAnim_link_waitF_heat2_20f },
-    { &gPlayerAnim_link_wait_itemD1_20f, &gPlayerAnim_link_wait_itemD1_20f },
-    { &gPlayerAnim_link_wait_itemA_20f, &gPlayerAnim_link_waitF_itemA_20f },
-    { &gPlayerAnim_link_wait_itemB_20f, &gPlayerAnim_link_waitF_itemB_20f },
-    { &gPlayerAnim_link_wait_itemC_20f, &gPlayerAnim_link_wait_itemC_20f },
-    { &gPlayerAnim_link_wait_itemD2_20f, &gPlayerAnim_link_wait_itemD2_20f },
-    { &gPlayerAnim_cl_msbowait, &gPlayerAnim_cl_msbowait },
-};
+/**
+ * Return values for `Player_CheckForIdleAnim`
+ */
+#define IDLE_ANIM_DEFAULT -1
+#define IDLE_ANIM_NONE 0
+// Fidget idle anims are returned by index. See `sFidgetAnimations` and `FidgetType`.
 
-AnimSfxEntry D_8085C8C4[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 8, NA_SE_VO_LI_SNEEZE, STOP),
-};
-AnimSfxEntry D_8085C8C8[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 18, NA_SE_VO_LI_SWEAT, STOP),
-};
-AnimSfxEntry D_8085C8CC[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 13, NA_SE_VO_LI_BREATH_REST, STOP),
-};
-AnimSfxEntry D_8085C8D0[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 10, NA_SE_VO_LI_BREATH_REST, STOP),
-};
-
-AnimSfxEntry D_8085C8D4[] = {
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 44, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 48, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 52, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 56, NA_SE_PL_CALM_HIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 60, NA_SE_PL_CALM_HIT, STOP),
-};
-
-AnimSfxEntry D_8085C8E8[] = {
-    ANIMSFX(ANIMSFX_TYPE_8, 25, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 30, NA_SE_NONE, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 44, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 48, NA_SE_NONE, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_8, 52, NA_SE_NONE, CONTINUE), ANIMSFX(ANIMSFX_TYPE_8, 56, NA_SE_NONE, STOP),
-};
-
-AnimSfxEntry D_8085C900[] = {
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 16, NA_SE_IT_SHIELD_SWING, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 20, NA_SE_IT_SHIELD_SWING, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 70, NA_SE_IT_SHIELD_SWING, STOP),
-};
-
-AnimSfxEntry D_8085C90C[] = {
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 10, NA_SE_IT_HAMMER_SWING, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 10, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 22, NA_SE_IT_SWORD_SWING, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 22, NA_SE_VO_LI_SWORD_N, STOP),
-};
-
-AnimSfxEntry D_8085C91C[] = {
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 39, NA_SE_IT_SWORD_SWING, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 39, NA_SE_VO_LI_SWORD_N, STOP),
-};
-AnimSfxEntry D_8085C924[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 20, NA_SE_VO_LI_RELAX, STOP),
-};
-
-AnimSfxEntry D_8085C928[] = {
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 4, NA_SE_VO_LI_POO_WAIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 12, NA_SE_VO_LI_POO_WAIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 30, NA_SE_VO_LI_POO_WAIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 61, NA_SE_VO_LI_POO_WAIT, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_GENERAL, 68, NA_SE_VO_LI_POO_WAIT, STOP),
-};
-
-AnimSfxEntry* D_8085C93C[] = {
-    D_8085C8C4, D_8085C8C8, D_8085C8CC, D_8085C8D0, D_8085C8D4, D_8085C8E8,
-    D_8085C900, D_8085C90C, D_8085C91C, D_8085C924, D_8085C928, NULL,
-};
-
-// Used to index into D_8085C93C
-u8 D_8085C96C[] = {
-    0, 0, 1, 1, 2, 2, 2, 2, 10, 10, 10, 10, 10, 10, 3, 3, 4, 4, 8, 8, 5, 5, 6, 6, 7, 7, 9, 9, 11, 11,
-};
-
-s32 func_8082ED94(Player* this) {
-    PlayerAnimationHeader** entry;
-    s32 i;
-
+/**
+ * Checks if the current animation is an idle animation.
+ * If the current animation is a fidget animation, the index into
+ * `sFidgetAnimations` is returned (plus one).
+ * If the current animation is a default idle animation, -1 is returned.
+ * Lastly if the current animation is neither of these, 0 is returned.
+ */
+s32 Player_CheckForIdleAnim(Player* this) {
     if ((this->skelAnime.animation != &gPlayerAnim_link_normal_newroll_jump_end_20f) &&
         (this->skelAnime.animation != &gPlayerAnim_link_normal_newside_jump_end_20f)) {
-        if ((this->skelAnime.animation != func_8082ED20(this)) ||
+        if ((this->skelAnime.animation != Player_GetIdleAnim(this)) ||
             (this->skelAnime.animation == &gPlayerAnim_cl_msbowait)) {
-            for (i = 0, entry = &sPlayerIdleAnimations[0][0]; i < ARRAY_COUNT_2D(sPlayerIdleAnimations); i++) {
-                if (this->skelAnime.animation == *entry) {
+            PlayerAnimationHeader** fidgetAnim;
+            s32 i;
+
+            for (i = 0, fidgetAnim = &sFidgetAnimations[0][0]; i < ARRAY_COUNT_2D(sFidgetAnimations); i++) {
+                if (this->skelAnime.animation == *fidgetAnim) {
                     return i + 1;
                 }
-                entry++;
+                fidgetAnim++;
             }
 
-            return 0;
+            return IDLE_ANIM_NONE;
         }
     }
 
-    return -1;
+    return IDLE_ANIM_DEFAULT;
 }
 
-void func_8082EEA4(Player* this, s32 arg1) {
-    u8 temp_v0 = D_8085C96C[arg1];
-
-    if (temp_v0 != 0) {
-        Player_PlayAnimSfx(this, D_8085C93C[temp_v0 - 1]);
+void Player_ProcessFidgetAnimSfxList(Player* this, s32 fidgetAnimIndex) {
+    if (sFidgetAnimSfxTypes[fidgetAnimIndex] != FIDGET_ANIMSFX_NONE) {
+        Player_PlayAnimSfx(this, sFidgetAnimSfxLists[sFidgetAnimSfxTypes[fidgetAnimIndex] - 1]);
     }
 }
 
@@ -2755,14 +2878,14 @@ void Player_LerpEnvLighting(PlayState* play, PlayerEnvLighting* lighting, f32 le
  * Revert cylinder to normal properties
  */
 void Player_ResetCylinder(Player* this) {
-    this->cylinder.base.colType = COLTYPE_HIT5;
+    this->cylinder.base.colMaterial = COL_MATERIAL_HIT5;
     this->cylinder.base.atFlags = AT_NONE;
     this->cylinder.base.acFlags = AC_ON | AC_TYPE_ENEMY;
     this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
-    this->cylinder.elem.elemType = ELEMTYPE_UNK1;
-    this->cylinder.elem.toucher.dmgFlags = 0;
-    this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
-    this->cylinder.elem.toucherFlags = TOUCH_NONE | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.elemMaterial = ELEM_MATERIAL_UNK1;
+    this->cylinder.elem.atDmgInfo.dmgFlags = 0;
+    this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
+    this->cylinder.elem.atElemFlags = ATELEM_NONE | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = 12;
 }
 
@@ -2789,17 +2912,17 @@ void Player_SetCylinderForAttack(Player* this, u32 dmgFlags, s32 damage, s32 rad
         this->cylinder.base.ocFlags1 = OC1_ON | OC1_TYPE_ALL;
     }
 
-    this->cylinder.elem.elemType = ELEMTYPE_UNK2;
-    this->cylinder.elem.toucherFlags = TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL;
+    this->cylinder.elem.elemMaterial = ELEM_MATERIAL_UNK2;
+    this->cylinder.elem.atElemFlags = ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL;
     this->cylinder.dim.radius = radius;
-    this->cylinder.elem.toucher.dmgFlags = dmgFlags;
-    this->cylinder.elem.toucher.damage = damage;
+    this->cylinder.elem.atDmgInfo.dmgFlags = dmgFlags;
+    this->cylinder.elem.atDmgInfo.damage = damage;
 
     if (dmgFlags & DMG_GORON_POUND) {
         this->cylinder.base.acFlags = AC_NONE;
     } else {
-        this->cylinder.base.colType = COLTYPE_NONE;
-        this->cylinder.elem.bumper.dmgFlags = 0xF7CFFFFF;
+        this->cylinder.base.colMaterial = COL_MATERIAL_NONE;
+        this->cylinder.elem.acDmgInfo.dmgFlags = 0xF7CFFFFF;
 
         if (dmgFlags & DMG_ZORA_BARRIER) {
             this->cylinder.base.acFlags = AC_NONE;
@@ -3589,7 +3712,7 @@ void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWe
  */
 s32 Player_UpdateHostileLockOn(Player* this) {
     if ((this->focusActor != NULL) &&
-        CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+        CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
         this->stateFlags3 |= PLAYER_STATE3_HOSTILE_LOCK_ON;
         return true;
     }
@@ -3963,7 +4086,7 @@ void func_808309CC(PlayState* play, Player* this) {
 
     Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
     this->unk_ACC = 0;
-    this->unk_AA4 = 0;
+    this->idleType = PLAYER_IDLE_DEFAULT;
     Player_DetachHeldActor(play, this);
     this->stateFlags3 &= ~PLAYER_STATE3_START_CHANGING_HELD_ITEM;
 }
@@ -4106,7 +4229,7 @@ s32 func_80830E30(Player* this, PlayState* play) {
     if (this->stateFlags1 & PLAYER_STATE1_800000) {
         Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_uma_anim_walk);
     } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->transformation != PLAYER_FORM_ZORA)) {
-        Player_Anim_PlayLoop(play, this, func_8082ED20(this));
+        Player_Anim_PlayLoop(play, this, Player_GetIdleAnim(this));
     }
 
     return true;
@@ -4275,7 +4398,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 
     if (!(arg3 & 1) && !(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
         func_808309CC(play, this);
-        PlayerAnimation_PlayLoop(play, &this->skelAnimeUpper, func_8082ED20(this));
+        PlayerAnimation_PlayLoop(play, &this->skelAnimeUpper, Player_GetIdleAnim(this));
         this->stateFlags1 &= ~PLAYER_STATE1_400000;
     }
 
@@ -4285,7 +4408,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     this->stateFlags1 &= ~(PLAYER_STATE1_40 | PLAYER_STATE1_4000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000 |
                            PLAYER_STATE1_80000000);
     this->stateFlags2 &= ~(PLAYER_STATE2_80000 | PLAYER_STATE2_800000 | PLAYER_STATE2_2000000 | PLAYER_STATE2_8000000 |
-                           PLAYER_STATE2_10000000);
+                           PLAYER_STATE2_IDLE_FIDGET);
     this->stateFlags3 &=
         ~(PLAYER_STATE3_2 | PLAYER_STATE3_8 | PLAYER_STATE3_80 | PLAYER_STATE3_200 | PLAYER_STATE3_2000 |
           PLAYER_STATE3_8000 | PLAYER_STATE3_10000 | PLAYER_STATE3_20000 | PLAYER_STATE3_40000 | PLAYER_STATE3_80000 |
@@ -4293,7 +4416,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 
     this->av1.actionVar1 = 0;
     this->av2.actionVar2 = 0;
-    this->unk_AA4 = 0;
+    this->idleType = PLAYER_IDLE_DEFAULT;
     this->unk_B86[0] = 0;
     this->unk_B86[1] = 0;
     this->unk_B8A = 0;
@@ -4578,7 +4701,7 @@ bool Player_UpdateUpperBody(Player* this, PlayState* play) {
     }
 
     if (this->skelAnimeUpperBlendWeight != 0.0f) {
-        if ((func_8082ED94(this) == 0) || (this->linearVelocity != 0.0f)) {
+        if ((Player_CheckForIdleAnim(this) == IDLE_ANIM_NONE) || (this->linearVelocity != 0.0f)) {
             AnimTaskQueue_AddCopyUsingMapInverted(play, this->skelAnime.limbCount, this->skelAnimeUpper.jointTable,
                                                   this->skelAnime.jointTable, sPlayerUpperBodyLimbCopyMap);
         }
@@ -4587,7 +4710,7 @@ bool Player_UpdateUpperBody(Player* this, PlayState* play) {
             AnimTaskQueue_AddInterp(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
                                     this->skelAnimeUpper.jointTable, 1.0f - this->skelAnimeUpperBlendWeight);
         }
-    } else if ((func_8082ED94(this) == 0) || (this->linearVelocity != 0.0f) ||
+    } else if ((Player_CheckForIdleAnim(this) == IDLE_ANIM_NONE) || (this->linearVelocity != 0.0f) ||
                (this->skelAnime.moveFlags & ANIM_FLAG_8)) {
         AnimTaskQueue_AddCopyUsingMap(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
                                       this->skelAnimeUpper.jointTable, sPlayerUpperBodyLimbCopyMap);
@@ -4840,7 +4963,7 @@ void func_80832888(Player* this, PlayState* play) {
         if ((this->focusActor != NULL) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
             this->stateFlags1 &= ~(PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000);
             if ((this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) ||
-                !CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+                !CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
                 this->stateFlags1 |= PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS;
             }
         } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
@@ -4941,8 +5064,14 @@ s32 Player_CalcSpeedAndYawFromControlStick(PlayState* play, Player* this, f32* o
     return false;
 }
 
-s32 func_80832F24(Player* this) {
-    return Math_StepToF(&this->linearVelocity, 0.0f, REG(43) / 100.0f);
+/**
+ * Steps speed toward zero to at a rate defined by current boot data.
+ * After zero is reached, speed will be held at zero.
+ *
+ * @return true if speed is 0, false otherwise
+ */
+s32 Player_DecelerateToZero(Player* this) {
+    return Math_StepToF(&this->linearVelocity, 0.0f, R_DECELERATE_RATE / 100.0f);
 }
 
 /**
@@ -5069,7 +5198,7 @@ s8 sActionHandlerList6[] = {
     /* 0 */ -PLAYER_ACTION_HANDLER_7,
 };
 
-s8 sActionHandlerList7[] = {
+s8 sActionHandlerListIdle[] = {
     /*  0 */ PLAYER_ACTION_HANDLER_0,
     /*  1 */ PLAYER_ACTION_HANDLER_11,
     /*  2 */ PLAYER_ACTION_HANDLER_1,
@@ -5221,14 +5350,14 @@ typedef enum PlayerActionInterruptResult {
 /**
  * An Action Interrupt allows for ending an action early, toward the end of an animation.
  *
- * First, `sActionHandlerList7` will be checked to see if any of those actions should be used.
+ * First, `sActionHandlerListIdle` will be checked to see if any of those actions should be used.
  * It should be noted that the `updateUpperBody` argument passed to `Player_TryActionHandlerList`
  * is `true`. This means that an item can be used during the interrupt window.
  *
  * If no actions from the Action Handler List are used, then the control stick is checked to see if
  * any movement should occur.
  *
- * Note that while this function can set up a new action with `sActionHandlerList7`, this function
+ * Note that while this function can set up a new action with `sActionHandlerListIdle`, this function
  * will not set up an appropriate action for moving.
  * It is the callers responsibility to react accordingly to `PLAYER_INTERRUPT_MOVE`.
  *
@@ -5241,7 +5370,7 @@ PlayerActionInterruptResult Player_TryActionInterrupt(PlayState* play, Player* t
         f32 speedTarget;
         s16 yawTarget;
 
-        if (Player_TryActionHandlerList(play, this, sActionHandlerList7, true)) {
+        if (Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true)) {
             return PLAYER_INTERRUPT_NEW_ACTION;
         }
 
@@ -5403,13 +5532,13 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
 }
 
 void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
-    this->meleeWeaponQuads[index].elem.toucher.dmgFlags = dmgFlags;
-    this->meleeWeaponQuads[index].elem.toucher.damage = damage;
+    this->meleeWeaponQuads[index].elem.atDmgInfo.dmgFlags = dmgFlags;
+    this->meleeWeaponQuads[index].elem.atDmgInfo.damage = damage;
 
     if (dmgFlags == DMG_DEKU_STICK) {
-        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_WOOD);
+        this->meleeWeaponQuads[index].elem.atElemFlags = (ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_WOOD);
     } else {
-        this->meleeWeaponQuads[index].elem.toucherFlags = (TOUCH_ON | TOUCH_NEAREST);
+        this->meleeWeaponQuads[index].elem.atElemFlags = (ATELEM_ON | ATELEM_NEAREST);
     }
 }
 
@@ -5865,7 +5994,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     } else if ((this->shieldQuad.base.acFlags & AC_BOUNCED) || (this->shieldCylinder.base.acFlags & AC_BOUNCED) ||
                ((this->invincibilityTimer < 0) && (this->cylinder.base.acFlags & AC_HIT) &&
                 (this->cylinder.elem.acHitElem != NULL) &&
-                (this->cylinder.elem.acHitElem->toucher.dmgFlags != DMG_UNBLOCKABLE))) {
+                (this->cylinder.elem.acHitElem->atDmgInfo.dmgFlags != DMG_UNBLOCKABLE))) {
         PlayerAnimationHeader* var_a2;
         s32 sp64;
 
@@ -5970,7 +6099,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 }
 
 void func_80834CD0(Player* this, f32 arg1, u16 sfxId) {
-    this->actor.velocity.y = arg1 * sPlayerWaterSpeedScale;
+    this->actor.velocity.y = arg1 * sWaterSpeedFactor;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
     if (sfxId != NA_SE_NONE) {
@@ -6111,7 +6240,7 @@ void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     this->unk_3A0.x = this->actor.world.pos.x + Math_SinS(arg3) * arg2;
     this->unk_3A0.z = this->actor.world.pos.z + Math_CosS(arg3) * arg2;
 
-    Player_Anim_PlayOnce(play, this, func_8082ED20(this));
+    Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
 }
 
 void func_808353DC(PlayState* play, Player* this) {
@@ -6423,7 +6552,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
 
     if (this->doorTimer != 0) {
         this->av2.actionVar2 = 0;
-        Player_Anim_PlayOnceMorph(play, this, func_8082ED20(this));
+        Player_Anim_PlayOnceMorph(play, this, Player_GetIdleAnim(this));
         this->skelAnime.endFrame = 0.0f;
     } else {
         this->linearVelocity = 0.1f;
@@ -6470,7 +6599,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
 
     if (this->doorTimer != 0) {
         this->av2.actionVar2 = 0;
-        Player_Anim_PlayOnceMorph(play, this, func_8082ED20(this));
+        Player_Anim_PlayOnceMorph(play, this, Player_GetIdleAnim(this));
         this->skelAnime.endFrame = 0.0f;
     } else {
         this->linearVelocity = 0.1f;
@@ -6572,14 +6701,15 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
             } else if (enDoorType != ENDOOR_TYPE_FRAMED) {
                 Camera* mainCam;
 
-                this->av1.actionVar1 = 38.0f * D_8085C3E8;
+                this->av1.actionVar1 = 38.0f * sInvWaterSpeedFactor;
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
                 Camera_ChangeDoorCam(mainCam, &knobDoor->dyna.actor,
                                      play->transitionActors.list[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamIndex,
-                                     0.0f, this->av1.actionVar1, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
+                                     0.0f, this->av1.actionVar1, 26.0f * sInvWaterSpeedFactor,
+                                     10.0f * sInvWaterSpeedFactor);
             }
         }
     }
@@ -6665,7 +6795,7 @@ void func_80836888(Player* this, PlayState* play) {
 
 void func_8083692C(Player* this, PlayState* play) {
     Player_SetAction(play, this, Player_Action_3, 1);
-    Player_Anim_PlayOnceMorph(play, this, func_8082ED20(this));
+    Player_Anim_PlayOnceMorph(play, this, Player_GetIdleAnim(this));
     this->currentYaw = this->actor.shape.rot.y;
 }
 
@@ -6687,7 +6817,7 @@ void func_808369F4(Player* this, PlayState* play) {
     } else if (func_80123434(this)) {
         actionFunc = Player_Action_3;
     } else {
-        actionFunc = Player_Action_4;
+        actionFunc = Player_Action_Idle;
     }
     Player_SetAction(play, this, actionFunc, 1);
 }
@@ -6723,12 +6853,12 @@ void func_80836B3C(PlayState* play, Player* this, f32 arg2) {
     if (this->transformation == PLAYER_FORM_GORON) {
         func_80836AD8(play, this);
         PlayerAnimation_Change(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_landing_roll][this->modelAnimType],
-                               1.5f * sPlayerWaterSpeedScale, 0.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
+                               1.5f * sWaterSpeedFactor, 0.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
     } else {
         PlayerAnimationHeader* anim = D_8085BE84[PLAYER_ANIMGROUP_landing_roll][this->modelAnimType];
 
         Player_SetAction(play, this, Player_Action_26, 0);
-        PlayerAnimation_Change(play, &this->skelAnime, anim, 1.25f * sPlayerWaterSpeedScale, arg2,
+        PlayerAnimation_Change(play, &this->skelAnime, anim, 1.25f * sWaterSpeedFactor, arg2,
                                Animation_GetLastFrame(anim), ANIMMODE_ONCE, 0.0f);
     }
 }
@@ -6912,10 +7042,14 @@ void func_80837134(PlayState* play, Player* this) {
         func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_landing][this->modelAnimType], play);
         this->skelAnime.endFrame = 8.0f;
 
+        // `func_80836A98` above can choose from a few different "idle" action variants.
+        // However `fallDamageStunTimer` is only processed by `Player_Action_Idle`.
+        // This means it is possible for the stun to not take effect
+        // (for example, by holding Z when landing).
         if (temp_v0_2 == 1) {
-            this->av2.actionVar2 = 0xA;
+            this->av2.fallDamageStunTimer = 10;
         } else {
-            this->av2.actionVar2 = 0x14;
+            this->av2.fallDamageStunTimer = 20;
         }
     } else if (temp_v0_2 == 0) {
         func_80836A98(this, anim, play);
@@ -7757,7 +7891,7 @@ s32 Player_ActionHandler_4(Player* this, PlayState* play) {
 
         if (this->tatlActor != NULL) {
             var_t2 = (lockOnActor != NULL) &&
-                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
+                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
                       (lockOnActor->hintId != TATL_HINT_ID_NONE));
 
             if (var_t2 || (this->tatlTextId != 0)) {
@@ -7838,7 +7972,7 @@ s32 Player_ActionHandler_0(Player* this, PlayState* play) {
         Player_ActionHandler_13(this, play);
         return true;
     } else if ((this->focusActor != NULL) &&
-               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
+               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
                 (this->focusActor->hintId != TATL_HINT_ID_NONE))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
     } else if ((this->tatlTextId == 0) && !Player_CheckHostileLockOn(this) &&
@@ -8032,8 +8166,8 @@ void func_80839E3C(Player* this, PlayState* play) {
 }
 
 void func_80839E74(Player* this, PlayState* play) {
-    Player_SetAction(play, this, Player_Action_4, 1);
-    Player_Anim_PlayOnce(play, this, func_8082ED20(this));
+    Player_SetAction(play, this, Player_Action_Idle, 1);
+    Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
     this->currentYaw = this->actor.shape.rot.y;
 }
 
@@ -8166,13 +8300,13 @@ s32 Player_ActionHandler_11(Player* this, PlayState* play) {
     return false;
 }
 
-s32 func_8083A4A4(Player* this, f32* arg1, s16* arg2, f32 arg3) {
-    s16 yaw = this->currentYaw - *arg2;
+s32 func_8083A4A4(Player* this, f32* speedTarget, s16* yawTarget, f32 decelerationRate) {
+    s16 yawDiff = this->currentYaw - *yawTarget;
 
-    if (ABS_ALT(yaw) > 0x6000) {
-        if (Math_StepToF(&this->linearVelocity, 0.0f, arg3)) {
-            *arg1 = 0.0f;
-            *arg2 = this->currentYaw;
+    if (ABS_ALT(yawDiff) > 0x6000) {
+        if (Math_StepToF(&this->linearVelocity, 0.0f, decelerationRate)) {
+            *speedTarget = 0.0f;
+            *yawTarget = this->currentYaw;
         } else {
             return true;
         }
@@ -8462,7 +8596,7 @@ void func_8083B0E4(PlayState* play, Player* this, s16 currentYaw) {
     this->currentYaw = currentYaw;
     Player_SetAction(play, this, Player_Action_10, 1);
     this->unk_B4E = 1200;
-    this->unk_B4E *= sPlayerWaterSpeedScale;
+    this->unk_B4E *= sWaterSpeedFactor;
     PlayerAnimation_Change(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_45_turn][this->modelAnimType],
                            PLAYER_ANIM_NORMAL_SPEED, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f);
 }
@@ -8470,7 +8604,7 @@ void func_8083B0E4(PlayState* play, Player* this, s16 currentYaw) {
 void func_8083B1A0(Player* this, PlayState* play) {
     PlayerAnimationHeader* anim;
 
-    Player_SetAction(play, this, Player_Action_4, 1);
+    Player_SetAction(play, this, Player_Action_Idle, 1);
     if (this->unk_B40 < 0.5f) {
         anim = D_8085BE84[PLAYER_ANIMGROUP_waitR2wait][this->modelAnimType];
     } else {
@@ -9743,12 +9877,12 @@ void func_8083EA44(Player* this, f32 arg1) {
     }
 }
 
-void Player_ChooseIdleAnim(PlayState* play, Player* this) {
+void Player_ChooseNextIdleAnim(PlayState* play, Player* this) {
     PlayerAnimationHeader* anim;
     u32 healthIsCritical;
-    PlayerAnimationHeader** animPtr;
-    s32 animIndex;
-    s32 rand;
+    PlayerAnimationHeader** fidgetAnimPtr;
+    s32 fidgetType;
+    s32 commonType;
     f32 morphFrames;
     s16 endFrame;
 
@@ -9757,43 +9891,73 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
          (((this->focusActor != NULL) ||
            ((this->transformation != PLAYER_FORM_FIERCE_DEITY) && (this->transformation != PLAYER_FORM_HUMAN)) ||
            (this->currentMask == PLAYER_MASK_SCENTS)) ||
-          (!(healthIsCritical = LifeMeter_IsCritical()) && (this->unk_AA4 = ((this->unk_AA4 + 1) & 1)))))) {
-        this->stateFlags2 &= ~PLAYER_STATE2_10000000;
-        anim = func_8082ED20(this);
+          (!(healthIsCritical = LifeMeter_IsCritical()) && (this->idleType = ((this->idleType + 1) & 1)))))) {
+        this->stateFlags2 &= ~PLAYER_STATE2_IDLE_FIDGET;
+        anim = Player_GetIdleAnim(this);
     } else {
-        this->stateFlags2 |= PLAYER_STATE2_10000000;
+        this->stateFlags2 |= PLAYER_STATE2_IDLE_FIDGET;
 
         if (this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) {
-            anim = func_8082ED20(this);
+            // Default idle animation will play if carrying an actor.
+            // Note that in this case, `PLAYER_STATE2_IDLE_FIDGET` is still set even though the
+            // animation that plays isn't a fidget animation.
+            anim = Player_GetIdleAnim(this);
         } else {
-            animIndex = play->roomCtx.curRoom.behaviorType2;
+            // Pick fidget type based on room behavior.
+            // This may be changed below.
+            fidgetType = play->roomCtx.curRoom.behaviorType2;
 
             if (healthIsCritical) {
-                if (this->unk_AA4 >= 0) {
-                    animIndex = 7;
-                    this->unk_AA4 = -1;
+                if (this->idleType >= PLAYER_IDLE_DEFAULT) {
+                    fidgetType = FIDGET_CRIT_HEALTH_START;
+
+                    // When health is critical, `idleType` will not be updated.
+                    // It will stay as `PLAYER_IDLE_CRIT_HEALTH` until health is no longer critical.
+                    this->idleType = PLAYER_IDLE_CRIT_HEALTH;
                 } else {
-                    animIndex = 8;
+                    // Keep looping the critical health animation until critical health ends
+                    fidgetType = FIDGET_CRIT_HEALTH_LOOP;
                 }
             } else {
-                rand = Rand_ZeroOne() * 5.0f;
-                if (rand < 4) {
-                    if (((rand != 0) && (rand != 3)) ||
+                commonType = Rand_ZeroOne() * 5;
+
+                // There is a 4/5 chance that a common fidget type will be considered.
+                // However it may get rejected by the conditions below.
+                // The type determined by `curRoom.behaviorType2` will be used if a common type is rejected.
+                if (commonType < 4) {
+                    // `FIDGET_ADJUST_TUNIC` and `FIDGET_TAP_FEET` are accepted unconditionally.
+                    // The sword and shield related common types have extra restrictions.
+                    //
+                    // Note that `FIDGET_SWORD_SWING` is the first common fidget type, which is why
+                    // all operations are done relative to this type.
+                    if ((((commonType + FIDGET_SWORD_SWING) != FIDGET_SWORD_SWING) &&
+                         ((commonType + FIDGET_SWORD_SWING) != FIDGET_ADJUST_SHIELD)) ||
                         ((this->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
-                         ((rand == 3) || (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)))) {
-                        if ((rand == 0) && Player_IsHoldingTwoHandedWeapon(this)) {
-                            rand = 4;
+                         (((commonType + FIDGET_SWORD_SWING) == FIDGET_ADJUST_SHIELD) ||
+                          (Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE)))) {
+                        //! @bug It is possible for `FIDGET_ADJUST_SHIELD` to be used even if
+                        //! a shield is not currently equipped. This is because of how being shieldless
+                        //! is implemented. There is no sword-only model type, only
+                        //! `PLAYER_MODELGROUP_SWORD_AND_SHIELD` exists. Therefore, the right hand type will be
+                        //! `PLAYER_MODELTYPE_RH_SHIELD` if sword is in hand, even if no shield is equipped.
+                        if (((commonType + FIDGET_SWORD_SWING) == FIDGET_SWORD_SWING) &&
+                            Player_IsHoldingTwoHandedWeapon(this)) {
+                            //! @bug This code is unreachable.
+                            //! The check above groups the `Player_GetMeleeWeaponHeld` check and
+                            //! `PLAYER_MODELTYPE_RH_SHIELD` conditions together, meaning sword and shield must be
+                            //! in hand. However shield is not in hand when using a two handed melee weapon.
+                            commonType = FIDGET_SWORD_SWING_TWO_HAND - FIDGET_SWORD_SWING;
                         }
-                        animIndex = rand + 9;
+                        fidgetType = FIDGET_SWORD_SWING + commonType;
                     }
                 }
             }
 
-            animPtr = &sPlayerIdleAnimations[animIndex][0];
+            fidgetAnimPtr = &sFidgetAnimations[fidgetType][0];
             if (this->modelAnimType != PLAYER_ANIMTYPE_1) {
-                animPtr = &sPlayerIdleAnimations[animIndex][1];
+                fidgetAnimPtr = &sFidgetAnimations[fidgetType][1];
             }
-            anim = *animPtr;
+            anim = *fidgetAnimPtr;
         }
     }
 
@@ -9806,8 +9970,8 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         morphFrames = -6.0f;
     }
 
-    PlayerAnimation_Change(play, &this->skelAnime, anim, PLAYER_ANIM_ADJUSTED_SPEED * sPlayerWaterSpeedScale, 0.0f,
-                           endFrame, ANIMMODE_ONCE, morphFrames);
+    PlayerAnimation_Change(play, &this->skelAnime, anim, PLAYER_ANIM_ADJUSTED_SPEED * sWaterSpeedFactor, 0.0f, endFrame,
+                           ANIMMODE_ONCE, morphFrames);
 }
 
 void func_8083EE60(Player* this, PlayState* play) {
@@ -9866,7 +10030,7 @@ s32 func_8083F190(Player* this, f32* arg1, s16* arg2, PlayState* play) {
     }
 
     if (*arg1 != 0.0f) {
-        if (func_80832F24(this)) {
+        if (Player_DecelerateToZero(this)) {
             *arg1 = 0.0f;
             *arg2 = this->currentYaw;
         } else {
@@ -10648,7 +10812,7 @@ void Player_InitMode_6(PlayState* play, Player* this) {
         this->av2.actionVar2 = 0x28;
         gSaveContext.save.isOwlSave = false;
     } else {
-        Player_SetAction(play, this, Player_Action_4, 0);
+        Player_SetAction(play, this, Player_Action_Idle, 0);
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_nwait][this->modelAnimType]);
         this->stateFlags1 |= PLAYER_STATE1_20000000;
         this->stateFlags2 |= PLAYER_STATE2_20000000;
@@ -10691,7 +10855,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
                              1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
         this->skelAnime.baseTransl = sPlayerSkeletonBaseTransl;
 
-        SkelAnime_InitPlayer(play, &this->skelAnimeUpper, skelHeader, func_8082ED20(this), 1 | 8,
+        SkelAnime_InitPlayer(play, &this->skelAnimeUpper, skelHeader, Player_GetIdleAnim(this), 1 | 8,
                              this->jointTableUpperBuffer, this->morphTableUpperBuffer, PLAYER_LIMB_MAX);
         this->skelAnimeUpper.baseTransl = sPlayerSkeletonBaseTransl;
 
@@ -12342,8 +12506,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         func_808425B4(this);
         Player_ProcessControlStick(play, this);
 
-        sPlayerWaterSpeedScale = (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 1.0f;
-        D_8085C3E8 = 1.0f / sPlayerWaterSpeedScale;
+        sWaterSpeedFactor = (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 1.0f;
+        sInvWaterSpeedFactor = 1.0f / sWaterSpeedFactor;
 
         sPlayerUseHeldItem = sPlayerHeldItemButtonIsHeldDown = false;
 
@@ -12406,7 +12570,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
              0.5f);
         temp_fv0 += this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 10.0f;
 
-        if (this->cylinder.elem.toucher.dmgFlags == 0x80000) {
+        if (this->cylinder.elem.atDmgInfo.dmgFlags == 0x80000) {
             this->cylinder.dim.height = 80;
             var_fv1_2 = ((temp_fv0 + var_fv1_2) * 0.5f) - 40.0f;
         } else {
@@ -12424,9 +12588,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         if (this->unk_B62 != 0) {
             this->shieldCylinder.base.acFlags = AC_NONE;
-            this->shieldCylinder.elem.toucher.dmgFlags = 0x80000;
-            this->shieldCylinder.elem.toucherFlags = TOUCH_ON;
-            this->shieldCylinder.elem.bumperFlags = BUMP_NONE;
+            this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x80000;
+            this->shieldCylinder.elem.atElemFlags = ATELEM_ON;
+            this->shieldCylinder.elem.acElemFlags = ACELEM_NONE;
             this->shieldCylinder.dim.height = 80;
             this->shieldCylinder.dim.radius = 50;
             this->shieldCylinder.dim.yShift = ((temp_fv0 + var_fv1_2) * 0.5f - 40.0f) - this->actor.world.pos.y;
@@ -12436,9 +12600,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         } else if (this->stateFlags1 & PLAYER_STATE1_400000) {
             if ((this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU)) {
                 this->shieldCylinder.base.acFlags = AC_ON | AC_HARD | AC_TYPE_ENEMY;
-                this->shieldCylinder.elem.toucher.dmgFlags = 0x100000;
-                this->shieldCylinder.elem.toucherFlags = TOUCH_NONE;
-                this->shieldCylinder.elem.bumperFlags = BUMP_ON;
+                this->shieldCylinder.elem.atDmgInfo.dmgFlags = 0x100000;
+                this->shieldCylinder.elem.atElemFlags = ATELEM_NONE;
+                this->shieldCylinder.elem.acElemFlags = ACELEM_ON;
 
                 if (this->transformation == PLAYER_FORM_GORON) {
                     this->shieldCylinder.dim.height = 35;
@@ -13047,7 +13211,7 @@ s32 func_80847880(PlayState* play, Player* this) {
         if (!func_800B7118(this) || Player_IsHoldingHookshot(this)) {
             Player_UseItem(play, this, ITEM_BOW);
         }
-        Player_Anim_PlayOnce(play, this, func_8082ED20(this));
+        Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
         this->csAction = PLAYER_CSACTION_NONE;
         this->stateFlags1 |= PLAYER_STATE1_100000;
         Player_StopHorizontalMovement(this);
@@ -13439,15 +13603,15 @@ s32 Player_UpperAction_ChangeHeldItem(Player* this, PlayState* play) {
                                                        (play->bButtonAmmoPlusOne == 0)))))) {
         Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
         this->unk_ACC = 0;
-        this->unk_AA4 = 0;
+        this->idleType = PLAYER_IDLE_DEFAULT;
         sPlayerHeldItemButtonIsHeldDown = sPlayerUseHeldItem;
         return this->upperActionFunc(this, play);
     }
 
-    if (func_8082ED94(this) != 0) {
+    if (Player_CheckForIdleAnim(this) != IDLE_ANIM_NONE) {
         Player_WaitToFinishItemChange(play, this);
-        Player_Anim_PlayOnce(play, this, func_8082ED20(this));
-        this->unk_AA4 = 0;
+        Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
+        this->idleType = PLAYER_IDLE_DEFAULT;
     } else {
         Player_WaitToFinishItemChange(play, this);
     }
@@ -13490,7 +13654,7 @@ s32 Player_UpperAction_5(Player* this, PlayState* play) {
     if (sPlayerUseHeldItem || PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
         Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
         PlayerAnimation_PlayLoop(play, &this->skelAnimeUpper, D_8085BE84[PLAYER_ANIMGROUP_wait][this->modelAnimType]);
-        this->unk_AA4 = 0;
+        this->idleType = PLAYER_IDLE_DEFAULT;
         this->upperActionFunc(this, play);
         return false;
     }
@@ -13545,7 +13709,7 @@ s32 Player_UpperAction_7(Player* this, PlayState* play) {
         this->unk_AA6_rotFlags |= UNKAA6_ROT_UPPER_Z;
     }
 
-    if ((this->unk_ACE == 0) && (func_8082ED94(this) == 0) &&
+    if ((this->unk_ACE == 0) && (Player_CheckForIdleAnim(this) == IDLE_ANIM_NONE) &&
         (this->skelAnime.animation == &gPlayerAnim_link_bow_side_walk)) {
         PlayerAnimation_PlayOnce(play, &this->skelAnimeUpper, D_8085D5E4[index]);
         this->unk_ACE = -1;
@@ -13800,7 +13964,7 @@ void Player_Action_0(Player* this, PlayState* play) {
     if (DECR(this->av2.actionVar2) == 0) {
         if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Player_StopCutscene(this);
-            Player_SetAction(play, this, Player_Action_4, 0);
+            Player_SetAction(play, this, Player_Action_Idle, 0);
             this->stateFlags1 &= ~PLAYER_STATE1_20000000;
         }
     } else if (this->av2.actionVar2 == 30) {
@@ -13848,7 +14012,7 @@ void Player_Action_1(Player* this, PlayState* play) {
                 this->linearVelocity = 0.0f;
                 this->currentYaw = this->actor.shape.rot.y;
                 this->actor.velocity.y = 0.0f;
-                Player_Anim_PlayOnce(play, this, func_8082ED20(this));
+                Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
 
                 if ((play->roomCtx.curRoom.num == this->unk_3CE) && (play->roomCtx.prevRoom.num < 0)) {
                     this->av2.actionVar2 = 5;
@@ -13901,7 +14065,8 @@ void Player_Action_2(Player* this, PlayState* play) {
         func_8083E958(play, this);
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionHandlerList(play, this, sActionHandlerList1, true)) {
         return;
     }
@@ -13953,11 +14118,12 @@ void Player_Action_3(Player* this, PlayState* play) {
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         Player_Anim_ResetMove(this);
-        Player_Anim_PlayOnce(play, this, func_8082ED20(this));
+        Player_Anim_PlayOnce(play, this, Player_GetIdleAnim(this));
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionHandlerList(play, this, sActionHandlerList2, true)) {
         return;
     }
@@ -13967,7 +14133,7 @@ void Player_Action_3(Player* this, PlayState* play) {
         return;
     }
     if (!func_80123434(this)) {
-        Player_SetAction_PreserveMoveFlags(play, this, Player_Action_4, 1);
+        Player_SetAction_PreserveMoveFlags(play, this, Player_Action_Idle, 1);
         this->currentYaw = this->actor.shape.rot.y;
         return;
     }
@@ -13997,63 +14163,78 @@ void Player_Action_3(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_4(Player* this, PlayState* play) {
-    s32 temp_v0 = func_8082ED94(this);
-    s32 animFinished = PlayerAnimation_Update(play, &this->skelAnime);
+void Player_Action_Idle(Player* this, PlayState* play) {
+    s32 idleAnimResult = Player_CheckForIdleAnim(this);
+    s32 animDone = PlayerAnimation_Update(play, &this->skelAnime);
     f32 speedTarget;
     s16 yawTarget;
-    s16 temp_v1_2;
+    s16 yawDiff;
 
     func_8083C85C(this);
-    if (temp_v0 > 0) {
-        func_8082EEA4(this, temp_v0 - 1);
+
+    if (idleAnimResult > IDLE_ANIM_NONE) {
+        Player_ProcessFidgetAnimSfxList(this, idleAnimResult - 1);
     }
 
-    if (animFinished ||
+    if (animDone ||
         ((this->currentMask == PLAYER_MASK_SCENTS) && (this->skelAnime.animation != &gPlayerAnim_cl_msbowait)) ||
         ((this->currentMask != PLAYER_MASK_SCENTS) && (this->skelAnime.animation == &gPlayerAnim_cl_msbowait))) {
-        if (this->av2.actionVar2 != 0) {
-            if (DECR(this->av2.actionVar2) == 0) {
+        if (this->av2.fallDamageStunTimer != 0) {
+            if (DECR(this->av2.fallDamageStunTimer) == 0) {
                 this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
             }
 
+            // Offset model y position.
+            // Depending on if the timer is even or odd, the offset will be 40 or -40 model space units.
             this->skelAnime.jointTable[LIMB_ROOT_POS].y =
-                (this->skelAnime.jointTable[LIMB_ROOT_POS].y + ((this->av2.actionVar2 & 1) * 0x50)) - 0x28;
+                (this->skelAnime.jointTable[LIMB_ROOT_POS].y + ((this->av2.fallDamageStunTimer & 1) * 0x50)) - 0x28;
         } else {
             Player_Anim_ResetMove(this);
-            Player_ChooseIdleAnim(play, this);
+            Player_ChooseNextIdleAnim(play, this);
         }
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
 
-    func_80832F24(this);
-    if ((this->av2.actionVar2 == 0) && !func_80847880(play, this) &&
-        !Player_TryActionHandlerList(play, this, sActionHandlerList7, true)) {
-        if (Player_UpdateHostileLockOn(this)) {
-            func_8083B23C(this, play);
-            return;
-        }
-        if (func_80123434(this)) {
-            func_8083692C(this, play);
-            return;
-        }
+    Player_DecelerateToZero(this);
 
-        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+    if (this->av2.fallDamageStunTimer != 0) {
+        return;
+    }
 
-        if (speedTarget != 0.0f) {
-            func_8083A844(this, play, yawTarget);
-            return;
-        }
-        temp_v1_2 = yawTarget - this->actor.shape.rot.y;
+    if (func_80847880(play, this)) {
+        return;
+    }
 
-        if (ABS_ALT(temp_v1_2) > 0x320) {
-            func_8083B0E4(play, this, yawTarget);
-        } else {
-            Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, 0x4B0);
-            this->currentYaw = this->actor.shape.rot.y;
-            if (func_8082ED20(this) == this->skelAnime.animation) {
-                func_8083C6E8(this, play);
-            }
+    if (Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true)) {
+        return;
+    }
+
+    if (Player_UpdateHostileLockOn(this)) {
+        func_8083B23C(this, play);
+        return;
+    }
+
+    if (func_80123434(this)) {
+        func_8083692C(this, play);
+        return;
+    }
+
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+
+    if (speedTarget != 0.0f) {
+        func_8083A844(this, play, yawTarget);
+        return;
+    }
+
+    yawDiff = yawTarget - this->actor.shape.rot.y;
+
+    if (ABS_ALT(yawDiff) > 0x320) {
+        func_8083B0E4(play, this, yawTarget);
+    } else {
+        Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, 0x4B0);
+        this->currentYaw = this->actor.shape.rot.y;
+        if (Player_GetIdleAnim(this) == this->skelAnime.animation) {
+            func_8083C6E8(this, play);
         }
     }
 }
@@ -14185,7 +14366,7 @@ void Player_Action_7(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (Player_TryActionHandlerList(play, this, sActionHandlerList4, true)) {
         return;
@@ -14281,7 +14462,7 @@ void Player_Action_10(Player* this, PlayState* play) {
 
     PlayerAnimation_Update(play, &this->skelAnime);
     if (Player_IsHoldingTwoHandedWeapon(this)) {
-        AnimTaskQueue_AddLoadPlayerFrame(play, func_8082ED20(this), 0, this->skelAnime.limbCount,
+        AnimTaskQueue_AddLoadPlayerFrame(play, Player_GetIdleAnim(this), 0, this->skelAnime.limbCount,
                                          this->skelAnime.morphTable);
         AnimTaskQueue_AddCopyUsingMap(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
                                       this->skelAnime.morphTable, sPlayerUpperBodyLimbCopyMap);
@@ -14316,7 +14497,7 @@ void Player_Action_11(Player* this, PlayState* play) {
     }
     PlayerAnimation_Update(play, &this->skelAnime);
 
-    if (!func_80847880(play, this) && (!Player_TryActionHandlerList(play, this, sActionHandlerList7, true) ||
+    if (!func_80847880(play, this) && (!Player_TryActionHandlerList(play, this, sActionHandlerListIdle, true) ||
                                        (Player_Action_11 == this->actionFunc))) {
         f32 speedTarget;
         f32 temp_fv0;
@@ -14333,7 +14514,7 @@ void Player_Action_11(Player* this, PlayState* play) {
         Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
         sp30 = yawTarget;
 
-        if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+        if (!func_8083A4A4(this, &speedTarget, &yawTarget, R_DECELERATE_RATE / 100.0f)) {
             func_8083CB04(this, speedTarget, yawTarget, REG(19) / 100.0f, 1.5f, 0x3E8);
             func_8083C8E8(this, play);
             if ((this->linearVelocity == 0.0f) && (speedTarget == 0.0f)) {
@@ -14355,9 +14536,11 @@ void Player_Action_11(Player* this, PlayState* play) {
 void Player_Action_12(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
     PlayerAnimation_Update(play, &this->skelAnime);
-    func_80832F24(this);
+
+    Player_DecelerateToZero(this);
+
     if (!func_80847880(play, this)) {
-        if (!Player_TryActionHandlerList(play, this, sActionHandlerList7, false) ||
+        if (!Player_TryActionHandlerList(play, this, sActionHandlerListIdle, false) ||
             (Player_Action_12 == this->actionFunc)) {
             if (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
                 func_80839E74(this, play);
@@ -14387,7 +14570,7 @@ void Player_Action_13(Player* this, PlayState* play) {
         speedTarget *= 1.5f;
     }
 
-    if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+    if (!func_8083A4A4(this, &speedTarget, &yawTarget, R_DECELERATE_RATE / 100.0f)) {
         func_8083CB58(this, speedTarget, yawTarget);
         func_8083C8E8(this, play);
         if ((this->linearVelocity == 0.0f) && (speedTarget == 0.0f)) {
@@ -14414,7 +14597,7 @@ void Player_Action_14(Player* this, PlayState* play) {
 
     Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-    if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+    if (!func_8083A4A4(this, &speedTarget, &yawTarget, R_DECELERATE_RATE / 100.0f)) {
         if ((func_80123434(this) && (speedTarget != 0) && (func_8083E514(this, &speedTarget, &yawTarget, play) <= 0)) ||
             (!func_80123434(this) && (func_8083E404(this, speedTarget, yawTarget) <= 0))) {
             func_80836988(this, play);
@@ -14445,7 +14628,8 @@ void Player_Action_15(Player* this, PlayState* play) {
     Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
     if ((this->skelAnime.morphWeight == 0.0f) && (this->skelAnime.curFrame > 5.0f)) {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
+
         if ((this->skelAnime.curFrame > 10.0f) && (func_8083E404(this, speedTarget, yawTarget) < 0)) {
             func_8083AF8C(this, yawTarget, play);
         } else if (animFinished) {
@@ -14459,7 +14643,8 @@ void Player_Action_16(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (Player_TryActionHandlerList(play, this, sActionHandlerList10, true)) {
         return;
     }
@@ -14497,7 +14682,7 @@ void Player_Action_17(Player* this, PlayState* play) {
 
 // Player_Action_Shielding
 void Player_Action_18(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (this->transformation == PLAYER_FORM_GORON) {
         SkelAnime_Update(&this->unk_2C8);
@@ -14603,7 +14788,8 @@ void Player_Action_18(Player* this, PlayState* play) {
 }
 
 void Player_Action_19(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (this->av1.actionVar1 == 0) {
         sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
         if ((Player_UpperAction_3 == this->upperActionFunc) ||
@@ -14635,7 +14821,7 @@ void Player_Action_19(Player* this, PlayState* play) {
 void Player_Action_20(Player* this, PlayState* play) {
     PlayerActionInterruptResult interruptResult;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     interruptResult = Player_TryActionInterrupt(play, this, &this->skelAnime, 16.0f);
 
@@ -14698,7 +14884,9 @@ void Player_Action_21(Player* this, PlayState* play) {
 void Player_Action_22(Player* this, PlayState* play) {
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
     func_808345A8(this);
-    func_80832F24(this);
+
+    Player_DecelerateToZero(this);
+
     if (PlayerAnimation_Update(play, &this->skelAnime) && (this->linearVelocity == 0.0f)) {
         if (this->stateFlags1 & PLAYER_STATE1_20000000) {
             this->av2.actionVar2++;
@@ -14755,7 +14943,8 @@ void Player_Action_24(Player* this, PlayState* play) {
         }
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this == GET_PLAYER(play)) {
             func_80840770(play, this);
@@ -15042,7 +15231,8 @@ void Player_Action_30(Player* this, PlayState* play) {
         this->av2.actionVar2 = -1;
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
+
     if (!func_8083FE38(this, play) && (this->av2.actionVar2 != 0)) {
         func_80840F34(this);
         if (this->av2.actionVar2 < 0) {
@@ -15302,7 +15492,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                 this->av2.actionVar2 = 1;
             }
         } else if (this->av1.actionVar1 == 0) {
-            f32 sp6C = 5.0f * sPlayerWaterSpeedScale;
+            f32 sp6C = 5.0f * sWaterSpeedFactor;
             s32 var_t0 = func_808411D4(play, this, &sp6C, -1);
 
             if (this->unk_397 == 4) {
@@ -15508,7 +15698,7 @@ void Player_Action_36(Player* this, PlayState* play) {
 
 // grab/hold an actor (?)
 void Player_Action_37(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836988(this, play);
@@ -15532,7 +15722,7 @@ void Player_Action_37(Player* this, PlayState* play) {
 
 // grab/hold an actor (?)
 void Player_Action_38(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_silver_wait);
@@ -15585,7 +15775,7 @@ void Player_Action_40(Player* this, PlayState* play) {
 
 // Player_Action_PutDownObject?
 void Player_Action_41(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836988(this, play);
@@ -15608,7 +15798,7 @@ void Player_Action_42(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime) ||
         ((this->skelAnime.curFrame >= 8.0f) &&
@@ -15624,7 +15814,7 @@ void Player_Action_43(Player* this, PlayState* play) {
         func_808475B4(this);
         func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
     } else {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
     }
 
     if (this->unk_AA5 == PLAYER_UNKAA5_3) {
@@ -15667,7 +15857,7 @@ void Player_Action_44(Player* this, PlayState* play) {
     Player_UpdateUpperBody(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
             this->stateFlags2 &= ~PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
         }
 
@@ -15705,7 +15895,7 @@ void Player_Action_44(Player* this, PlayState* play) {
             if ((this->talkActor->category == ACTORCAT_NPC) && (this->heldItemAction != PLAYER_IA_FISHING_ROD)) {
                 Player_Anim_PlayOnceAdjusted(play, this, &gPlayerAnim_link_normal_talk_free);
             } else {
-                Player_Anim_PlayLoop(play, this, func_8082ED20(this));
+                Player_Anim_PlayLoop(play, this, Player_GetIdleAnim(this));
             }
         } else {
             Player_Anim_PlayLoopAdjusted(play, this, &gPlayerAnim_link_normal_talk_free_wait);
@@ -16733,7 +16923,7 @@ void Player_Action_59(Player* this, PlayState* play) {
             } else if (PlayerAnimation_OnFrame(&this->skelAnime, 20.0f)) {
                 this->actor.velocity.y = -2.0f;
             }
-            func_80832F24(this);
+            Player_DecelerateToZero(this);
         } else {
             func_808477D0(play, this, sPlayerControlInput, this->actor.velocity.y);
             this->unk_AAA = 0x3E80;
@@ -17119,7 +17309,7 @@ void Player_Action_63(Player* this, PlayState* play) {
 }
 
 void Player_Action_64(Player* this, PlayState* play) {
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80836A98(this, &gPlayerAnim_link_normal_light_bom_end, play);
@@ -17400,7 +17590,7 @@ struct_8085D798 D_8085D798[] = {
 void Player_Action_68(Player* this, PlayState* play) {
     struct_8085D200* sp24 = &D_8085D200[this->av2.actionVar2];
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this->av1.actionVar1 != 0) {
@@ -17542,7 +17732,7 @@ void Player_Action_70(Player* this, PlayState* play) {
         }
     }
 
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
     func_8083249C(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
@@ -17962,7 +18152,7 @@ void Player_Action_84(Player* this, PlayState* play) {
                 }
 
                 this->skelAnime.moveFlags = 0;
-                Player_SetAction(play, this, Player_Action_4, 1);
+                Player_SetAction(play, this, Player_Action_Idle, 1);
                 Player_Anim_PlayOnceWaterAdjustment(play, this, anim);
                 this->currentYaw = this->actor.shape.rot.y;
                 this->skelAnime.moveFlags = moveFlags;
@@ -17980,7 +18170,7 @@ void Player_Action_84(Player* this, PlayState* play) {
 
 void Player_Action_85(Player* this, PlayState* play) {
     PlayerAnimation_Update(play, &this->skelAnime);
-    func_80832F24(this);
+    Player_DecelerateToZero(this);
 
     if (this->skelAnime.curFrame >= 6.0f) {
         func_80836988(this, play);
@@ -18285,8 +18475,8 @@ void Player_Action_87(Player* this, PlayState* play) {
 
     if (this->av1.actionVar1++ < 4) {
         if ((this->prevMask == PLAYER_MASK_NONE) && (this->av1.actionVar1 == 4)) {
-            PlayerAnimation_Change(play, &this->skelAnime, func_8082ED20(this), PLAYER_ANIM_NORMAL_SPEED, 0.0f, 20.0f,
-                                   ANIMMODE_ONCE, 20.0f);
+            PlayerAnimation_Change(play, &this->skelAnime, Player_GetIdleAnim(this), PLAYER_ANIM_NORMAL_SPEED, 0.0f,
+                                   20.0f, ANIMMODE_ONCE, 20.0f);
         }
     } else {
         s32 pad;
@@ -18870,7 +19060,7 @@ void Player_Action_95(Player* this, PlayState* play) {
         Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
         speedTarget *= 1.0f - (0.9f * ((11100.0f - this->unk_B10[0]) / 11100.0f));
 
-        if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+        if (!func_8083A4A4(this, &speedTarget, &yawTarget, R_DECELERATE_RATE / 100.0f)) {
             func_8083CB58(this, speedTarget, yawTarget);
         }
 
@@ -18884,7 +19074,7 @@ void Player_Action_95(Player* this, PlayState* play) {
             this->stateFlags3 |= PLAYER_STATE3_100000;
 
             if (this->unk_B10[1] < 0.0f) {
-                Player_Anim_PlayOnceMorph(play, this, func_8082ED20(this));
+                Player_Anim_PlayOnceMorph(play, this, Player_GetIdleAnim(this));
             }
         }
 
@@ -18957,7 +19147,7 @@ void func_808577E0(Player* this) {
 s32 func_80857950(PlayState* play, Player* this) {
     if (((this->unk_B86[1] == 0) && !CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) ||
         ((this->av1.actionVar1 == 3) && (this->actor.velocity.y < 0.0f))) {
-        Player_SetAction(play, this, Player_Action_4, 1);
+        Player_SetAction(play, this, Player_Action_Idle, 1);
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
         PlayerAnimation_Change(play, &this->skelAnime, &gPlayerAnim_pg_maru_change, -PLAYER_ANIM_ADJUSTED_SPEED, 7.0f,
                                0.0f, ANIMMODE_ONCE, 0.0f);
@@ -20343,7 +20533,7 @@ void Player_CsAction_34(PlayState* play, Player* this, CsCmdActorCue* cue) {
         this->av2.actionVar2 = 1;
     }
     if (this->av2.actionVar2 != 0) {
-        func_80832F24(this);
+        Player_DecelerateToZero(this);
     }
 }
 
@@ -20678,8 +20868,8 @@ s32 Player_TryCsAction(PlayState* play, Player* this, PlayerCsAction csAction) {
 }
 
 void func_8085B384(Player* this, PlayState* play) {
-    Player_SetAction(play, this, Player_Action_4, 1);
-    Player_Anim_PlayOnceMorph(play, this, func_8082ED20(this));
+    Player_SetAction(play, this, Player_Action_Idle, 1);
+    Player_Anim_PlayOnceMorph(play, this, Player_GetIdleAnim(this));
     this->currentYaw = this->actor.shape.rot.y;
 }
 
@@ -20706,7 +20896,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     func_808323C0(player, CS_ID_GLOBAL_TALK);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
-        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000)) {
+        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000)) {
         actor->flags |= ACTOR_FLAG_TALK;
     }
 
@@ -20743,7 +20933,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
                     if ((actor != player->tatlActor) && (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))) {
                         Player_Anim_PlayOnceAdjusted(play, player, &gPlayerAnim_link_normal_backspace);
                     } else {
-                        Player_Anim_PlayLoop(play, player, func_8082ED20(player));
+                        Player_Anim_PlayLoop(play, player, Player_GetIdleAnim(player));
                     }
                 }
             } else {
@@ -20831,10 +21021,10 @@ s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMod
         return false;
     }
 
-    //! @bug When func_8082ED20 is used to get a wait animation, NULL is still passed to Animation_GetLastFrame,
+    //! @bug When Player_GetIdleAnim is used to get a wait animation, NULL is still passed to Animation_GetLastFrame,
     // causing it to read the frame count from address 0x80000000 casted to AnimationHeaderCommon via
     // Lib_SegmentedToVirtual operating on NULL, which ends up returning 15385 as the last frame
-    PlayerAnimation_Change(play, &player->skelAnime, (talkAnim == NULL) ? func_8082ED20(player) : talkAnim,
+    PlayerAnimation_Change(play, &player->skelAnime, (talkAnim == NULL) ? Player_GetIdleAnim(player) : talkAnim,
                            PLAYER_ANIM_ADJUSTED_SPEED, 0.0f, Animation_GetLastFrame(talkAnim), animMode, -6.0f);
     return true;
 }

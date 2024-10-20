@@ -34,7 +34,7 @@ ActorProfile Obj_Etcetera_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x01000202, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 20, 14, 0, { 0, 0, 0 } },
@@ -298,7 +298,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = TARGET_MODE_3;
+                this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
                 break;
 
             case DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE:
@@ -311,7 +311,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->oscillationTimer = 30;
                 this->bounceOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = TARGET_MODE_3;
+                this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
                 break;
 
             default:

@@ -38,7 +38,7 @@ ActorProfile Obj_Bombiwa_Profile = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37FBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 55, 70, 0, { 0, 0, 0 } },
@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +66,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x81C37BBE, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 75, 130, 0, { 0, 0, 0 } },
@@ -111,15 +111,15 @@ s32 func_809393B0(Actor* thisx) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* ac = this->collider.base.ac;
 
-        if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(150.0f))) {
                 return true;
             }
-        } else if (this->collider.elem.acHitElem->toucher.dmgFlags & 8) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
             if ((ac != NULL) && (Math3D_Vec3fDistSq(&this->actor.world.pos, &ac->world.pos) < SQ(95.0f))) {
                 return true;
             }
-        } else if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x500) {
+        } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x500) {
             return true;
         }
     }
@@ -133,11 +133,11 @@ s32 func_80939470(Actor* thisx) {
         Actor* temp_v0 = this->collider.base.ac;
 
         if (temp_v0 != NULL) {
-            if (this->collider.elem.acHitElem->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
                 if (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(175.0f)) {
                     return true;
                 }
-            } else if ((this->collider.elem.acHitElem->toucher.dmgFlags & 8) &&
+            } else if ((this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) &&
                        (Math3D_Vec3fDistSq(&this->actor.world.pos, &temp_v0->world.pos) < SQ(115.0f))) {
                 return true;
             }
@@ -363,9 +363,9 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
             if (this->unk_202 > 0) {
                 this->unk_202--;
                 if (this->unk_202 == 0) {
-                    this->collider.base.colType = COLTYPE_HARD;
+                    this->collider.base.colMaterial = COL_MATERIAL_HARD;
                 } else {
-                    this->collider.base.colType = COLTYPE_NONE;
+                    this->collider.base.colMaterial = COL_MATERIAL_NONE;
                 }
             }
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

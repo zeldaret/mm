@@ -13,7 +13,7 @@
 #include "z_en_okuta.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnOkuta*)thisx)
 
@@ -57,7 +57,7 @@ ActorProfile En_Okuta_Profile = {
 
 static ColliderCylinderInit sProjectileCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -65,11 +65,11 @@ static ColliderCylinderInit sProjectileCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 13, 20, 0, { 0, 0, 0 } },
@@ -77,7 +77,7 @@ static ColliderCylinderInit sProjectileCylinderInit = {
 
 static ColliderCylinderInit sOctorokCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -85,11 +85,11 @@ static ColliderCylinderInit sOctorokCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, -30, { 0, 0, 0 } },
@@ -177,15 +177,15 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
         }
 
         if (EN_OKUTA_GET_TYPE(thisx) == EN_OKUTA_TYPE_BLUE_OCTOROK) {
-            this->collider.base.colType = COLTYPE_HARD;
+            this->collider.base.colMaterial = COL_MATERIAL_HARD;
             this->collider.base.acFlags |= AC_HARD;
         }
 
-        thisx->targetMode = TARGET_MODE_5;
+        thisx->attentionRangeType = ATTENTION_RANGE_5;
         EnOkuta_SetupWaitToAppear(this);
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
-        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+        thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         thisx->flags |= ACTOR_FLAG_10;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
@@ -214,7 +214,7 @@ void EnOkuta_Freeze(EnOkuta* this) {
     this->drawDmgEffFrozenSteamScale = 9.0f * 0.1f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->collider.base.colType = COLTYPE_HIT3;
+    this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -227,7 +227,7 @@ void EnOkuta_Thaw(EnOkuta* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_OKUTA_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->collider.base.colType = COLTYPE_HIT0;
+        this->collider.base.colMaterial = COL_MATERIAL_HIT0;
     }
 }
 
@@ -314,7 +314,7 @@ void EnOkuta_SpawnProjectile(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupWaitToAppear(EnOkuta* this) {
     this->actor.draw = NULL;
     this->actor.world.pos.y = this->actor.home.pos.y;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnOkuta_WaitToAppear;
 }
 
@@ -337,7 +337,7 @@ void EnOkuta_WaitToAppear(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupAppear(EnOkuta* this, PlayState* play) {
     this->actor.draw = EnOkuta_Draw;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Animation_PlayOnce(&this->skelAnime, &gOctorokAppearAnim);
     EnOkuta_SpawnBubbles(this, play);
     this->actionFunc = EnOkuta_Appear;
@@ -576,7 +576,7 @@ void EnOkuta_Damaged(EnOkuta* this, PlayState* play) {
 void EnOkuta_SetupDie(EnOkuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gOctorokDieAnim, -3.0f);
     this->timer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnOkuta_Die;
 }
 
@@ -656,7 +656,7 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
         this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, 3);
 
     if (this->actor.child != NULL) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.child->csId = this->actor.csId;
         this->actionFunc = EnOkuta_FrozenInIceBlock;
@@ -681,7 +681,7 @@ void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
     this->actor.colorFilterTimer = 10;
 
     if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 10.0f)) {
             this->actor.flags &= ~ACTOR_FLAG_10;
@@ -766,8 +766,8 @@ void EnOkuta_Projectile_Fly(EnOkuta* this, PlayState* play) {
                 if (this->collider.base.atFlags & AT_BOUNCED) {
                     this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED | AT_TYPE_ENEMY);
                     this->collider.base.atFlags |= AT_TYPE_PLAYER;
-                    this->collider.elem.toucher.dmgFlags = DMG_THROWN_OBJECT;
-                    this->collider.elem.toucher.damage = 2;
+                    this->collider.elem.atDmgInfo.dmgFlags = DMG_THROWN_OBJECT;
+                    this->collider.elem.atDmgInfo.damage = 2;
                     Matrix_MtxFToYXZRot(&player->shieldMf, &shieldRot, false);
                     this->actor.world.rot.y = shieldRot.y + 0x8000;
                     this->timer = 22;
@@ -855,7 +855,7 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
     this->collider.base.acFlags &= ~AC_HIT;
 
     if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX ||
-        !(this->collider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+        !(this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
         Actor_SetDropFlag(&this->actor, &this->collider.elem);
         EnOkuta_Thaw(this, play);
 
@@ -868,8 +868,8 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
             this->drawDmgEffAlpha = 4.0f;
             this->drawDmgEffScale = 0.6f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.bumper.hitPos.x,
-                        this->collider.elem.bumper.hitPos.y, this->collider.elem.bumper.hitPos.z, 0, 0, 0,
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                        this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 

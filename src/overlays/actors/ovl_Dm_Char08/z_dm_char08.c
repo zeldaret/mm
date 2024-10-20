@@ -146,7 +146,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DmChar08* this = THIS;
 
-    thisx->targetMode = TARGET_MODE_5;
+    thisx->attentionRangeType = ATTENTION_RANGE_5;
     this->eyeMode = TURTLE_EYEMODE_CLOSED;
     thisx->targetArrowOffset = 120.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -201,7 +201,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
-                thisx->flags |= ACTOR_FLAG_TARGETABLE;
+                thisx->flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
                     this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->actionFunc = func_80AAFAC4;
@@ -220,7 +220,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            thisx->flags |= ACTOR_FLAG_TARGETABLE;
+            thisx->flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->actionFunc = func_80AAFAE4;
             this->unk_1F0 = 1.0f;
             break;
@@ -300,7 +300,7 @@ void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
-        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = func_80AAF8F4;
     }
 }
@@ -631,8 +631,8 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
 
             case 0x103B: // Going to the temple again
                 this->unk_207 = 6;
-
                 break;
+
             case 0x1030: // Return to sleep
                 this->unk_207 = 4;
                 break;

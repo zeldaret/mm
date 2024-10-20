@@ -5,9 +5,10 @@
  */
 
 #include "z_en_clear_tag.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -422,7 +423,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
     Vec3f velocity;
     Vec3f accel;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -555,6 +556,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 }
             }
             break;
+
         case 1:
             Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
@@ -571,6 +573,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
             Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+            FALLTHROUGH;
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;

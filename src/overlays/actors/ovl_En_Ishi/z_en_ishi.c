@@ -76,7 +76,7 @@ static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
 static ColliderCylinderInit sCylinderInit[] = {
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -84,18 +84,18 @@ static ColliderCylinderInit sCylinderInit[] = {
             COLSHAPE_CYLINDER,
         },
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37FBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 10, 18, -2, { 0, 0, 0 } },
     },
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -103,11 +103,11 @@ static ColliderCylinderInit sCylinderInit[] = {
             COLSHAPE_CYLINDER,
         },
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 55, 70, 0, { 0, 0, 0 } },
@@ -482,7 +482,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->toucher.dmgFlags & 0x508)) {
+    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (sp30 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);
@@ -504,9 +504,9 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         if (this->unk_195 > 0) {
             this->unk_195--;
             if (this->unk_195 == 0) {
-                this->collider.base.colType = sCylinderInit[sp38].base.colType;
+                this->collider.base.colMaterial = sCylinderInit[sp38].base.colMaterial;
             } else {
-                this->collider.base.colType = COLTYPE_NONE;
+                this->collider.base.colMaterial = COL_MATERIAL_NONE;
             }
         }
 

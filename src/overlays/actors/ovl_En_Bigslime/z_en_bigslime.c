@@ -12,7 +12,7 @@
 #include "assets/objects/object_bigslime/object_bigslime.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnBigslime*)thisx)
 
@@ -226,7 +226,7 @@ ActorProfile En_Bigslime_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
@@ -234,11 +234,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 30, 60, 0, { 0, 0, 0 } },
@@ -308,7 +308,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_GIANT_SLIME, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_STOP),
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
@@ -333,8 +333,8 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     Collider_InitAndSetCylinder(play, &this->gekkoCollider, &this->actor, &sCylinderInit);
-    this->gekkoCollider.base.colType = COLTYPE_HIT6;
-    this->gekkoCollider.elem.elemType = ELEMTYPE_UNK1;
+    this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT6;
+    this->gekkoCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
     this->gekkoCollider.base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
     this->actor.params = CLAMP(this->actor.params, 1, 4);
@@ -372,7 +372,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
     this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
     this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.shape.shadowAlpha = 255;
     this->gekkoScale = 0.007f;
     this->actor.shape.rot.y = 0;
@@ -765,7 +765,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     EnBigslime_SetPlayerParams(this, play);
     EnBigslime_EndCutscene(this, play);
     this->actor.colChkInfo.mass = 50;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_400);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_400);
     this->actor.flags |= ACTOR_FLAG_200;
     this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
@@ -908,8 +908,8 @@ void EnBigslime_GekkoSfxInsideBigslime(EnBigslime* this, u16 sfxId) {
 
 void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->gekkoCollider.base.colType = COLTYPE_HIT3;
-    this->gekkoCollider.elem.elemType = ELEMTYPE_UNK0;
+    this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT3;
+    this->gekkoCollider.elem.elemMaterial = ELEM_MATERIAL_UNK0;
     this->stunTimer = 2;
     this->gekkoDrawDmgEffScale = 0.75f;
     this->gekkoDrawDmgEffFrozenSteamScale = 1.125f;
@@ -920,8 +920,8 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
 void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
     if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->gekkoCollider.base.colType = COLTYPE_HIT6;
-        this->gekkoCollider.elem.elemType = ELEMTYPE_UNK1;
+        this->gekkoCollider.base.colMaterial = COL_MATERIAL_HIT6;
+        this->gekkoCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
@@ -1001,7 +1001,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         if (this->callTimer == 0) {
             EnBigslime_EndCutscene(this, play);
             this->formBigslimeTimer = 2;
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             EnBigslime_SetupIdleNoticePlayer(this);
         }
     } else if (this->isAnimFinished) {
@@ -2041,7 +2041,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->gekkoCollider.base.acFlags |= AC_ON;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 
     this->jumpTimer--;
@@ -2353,7 +2353,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_IDLE;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     EnBigslime_GekkoThaw(this, play);
     this->actionFunc = EnBigslime_CutsceneDefeat;
 }
@@ -2620,7 +2620,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
         if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            !(this->gekkoCollider.elem.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            !(this->gekkoCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -2637,10 +2637,11 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(
-                                &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->gekkoCollider.elem.bumper.hitPos.x,
-                                this->gekkoCollider.elem.bumper.hitPos.y, this->gekkoCollider.elem.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.x,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.y,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
+                                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         }
                     } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ICE) {
                         EnBigslime_GekkoFreeze(this);
@@ -2672,10 +2673,11 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(
-                                &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->gekkoCollider.elem.bumper.hitPos.x,
-                                this->gekkoCollider.elem.bumper.hitPos.y, this->gekkoCollider.elem.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.x,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.y,
+                                        this->gekkoCollider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
+                                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         }
                     }
                     EnBigslime_SetupDamageGekko(this, true);

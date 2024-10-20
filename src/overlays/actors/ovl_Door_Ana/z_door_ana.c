@@ -34,7 +34,7 @@ ActorProfile Door_Ana_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 50, 10, 0, { 0, 0, 0 } },
@@ -82,7 +82,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
     }
 
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
 }
 
 void DoorAna_Destroy(Actor* thisx, PlayState* play) {
@@ -130,7 +130,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if ((this->actor.targetMode != TARGET_MODE_0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+        if ((this->actor.attentionRangeType != ATTENTION_RANGE_0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
             (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & PLAYER_STATE1_80000000) &&
             (player->av1.actionVar1 == 0)) {
 
@@ -162,10 +162,10 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
                    (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
                    (this->actor.playerHeightRel <= 15.0f)) {
             player->stateFlags1 |= PLAYER_STATE1_80000000;
-            this->actor.targetMode = TARGET_MODE_1;
+            this->actor.attentionRangeType = ATTENTION_RANGE_1;
 
         } else {
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
         }
     }
 

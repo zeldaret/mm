@@ -38,11 +38,11 @@ ActorProfile Obj_Spidertent_Profile = {
 static ColliderTrisElementInit sTrisElementsInit1[] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 68.80000305175781f, 0.0f, 18.799999237060547f },
@@ -51,11 +51,11 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 76.30000305175781f, 0.0f, -63.79999923706055f },
@@ -64,11 +64,11 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 23.799999237060547f, 0.0f, -116.30000305175781f },
@@ -77,11 +77,11 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -111.30000305175781f, 0.0f, -26.299999237060547f },
@@ -90,11 +90,11 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -81.30000305175781f, 0.0f, 78.80000305175781f },
@@ -103,11 +103,11 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 23.799999237060547f, 0.0f, 108.80000305175781f },
@@ -118,7 +118,7 @@ static ColliderTrisElementInit sTrisElementsInit1[] = {
 
 static ColliderTrisInit sTrisInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -132,11 +132,11 @@ static ColliderTrisInit sTrisInit1 = {
 static ColliderTrisElementInit sTrisElementsInit2[] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 17.799999237060547f, 0.0f, 81.5999984741211f },
@@ -145,11 +145,11 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -60.900001525878906f, 0.0f, 59.099998474121094f },
@@ -158,11 +158,11 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -83.4000015258789f, 0.0f, -19.700000762939453f },
@@ -171,11 +171,11 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 17.799999237060547f, 0.0f, -87.19999694824219f },
@@ -184,11 +184,11 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 57.20000076293945f, 0.0f, -47.79999923706055f },
@@ -197,11 +197,11 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 51.599998474121094f, 0.0f, 14.100000381469727f },
@@ -212,7 +212,7 @@ static ColliderTrisElementInit sTrisElementsInit2[] = {
 
 static ColliderTrisInit sTrisInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -635,10 +635,10 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
             trisElem = &this->collider.elements[i];
 
-            if (trisElem->base.bumperFlags & BUMP_HIT) {
-                sp54.x = trisElem->base.bumper.hitPos.x;
-                sp54.y = trisElem->base.bumper.hitPos.y;
-                sp54.z = trisElem->base.bumper.hitPos.z;
+            if (trisElem->base.acElemFlags & ACELEM_HIT) {
+                sp54.x = trisElem->base.acDmgInfo.hitPos.x;
+                sp54.y = trisElem->base.acDmgInfo.hitPos.y;
+                sp54.z = trisElem->base.acDmgInfo.hitPos.z;
 
                 temp_f0 = Math3D_Vec3fDistSq(&sp54, &player->actor.world.pos);
                 if (temp_f0 < phi_f20) {
@@ -649,7 +649,7 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
         }
 
         if (phi_s4 >= 0) {
-            hitPos = &this->collider.elements[phi_s4].base.bumper.hitPos;
+            hitPos = &this->collider.elements[phi_s4].base.acDmgInfo.hitPos;
 
             sp70.x = hitPos->x;
             sp70.y = hitPos->y;

@@ -47,6 +47,7 @@
 
 #include "global.h"
 #include "string.h"
+#include "attributes.h"
 
 #include "zelda_arena.h"
 #include "z64olib.h"
@@ -1274,7 +1275,8 @@ f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adj
 }
 
 f32 func_800CD6CC(Actor* actor) {
-    return sqrtf(gTargetRanges[actor->targetMode].rangeSq / gTargetRanges[actor->targetMode].leashScale);
+    return sqrtf(gAttentionRanges[actor->attentionRangeType].rangeSq /
+                 gAttentionRanges[actor->attentionRangeType].leashScale);
 }
 
 /**
@@ -1873,7 +1875,7 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
         case 1:
             swing->collisionClosePoint =
                 Camera_BgCheckCorner(&camera->at, &camera->eyeNext, &swing->atEyeColChk, &swing->eyeAtColChk);
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             peekAroundPoint.x = swing->collisionClosePoint.x + (swing->atEyeColChk.norm.x + swing->eyeAtColChk.norm.x);
             peekAroundPoint.y = swing->collisionClosePoint.y + (swing->atEyeColChk.norm.y + swing->eyeAtColChk.norm.y);
@@ -1995,13 +1997,13 @@ s32 Camera_Normal1(Camera* camera) {
     switch (camera->animState) {
         case 20:
             Camera_SetUpdateRatesFastYaw(camera);
-            // fallthrough
+            FALLTHROUGH;
         case 0:
             rwData->unk_0C = 1;
             if (!(roData->interfaceFlags & NORMAL1_FLAG_3) && (camera->animState != 20)) {
                 rwData->unk_0C |= 0x1000;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 10:
             if (camera->animState == 10) {
                 rwData->unk_0C = 0;
@@ -2787,7 +2789,7 @@ s32 Camera_Parallel1(Camera* camera) {
             if ((roData->interfaceFlags & (PARALLEL1_FLAG_3 | PARALLEL1_FLAG_2 | PARALLEL1_FLAG_1)) == 0) {
                 Camera_SetUpdateRatesFastYaw(camera);
             }
-            // fallthrough
+            FALLTHROUGH;
         case 0:
         case 10:
             if ((roData->interfaceFlags & (PARALLEL1_FLAG_3 | PARALLEL1_FLAG_2 | PARALLEL1_FLAG_1)) ==
@@ -3369,7 +3371,7 @@ s32 Camera_Jump3(Camera* camera) {
     switch (camera->animState) {
         case 0:
             rwData->unk_10 = 0x1000;
-            // fallthrough
+            FALLTHROUGH;
         case 10:
         case 20:
             rwData->unk_00 = camera->focalActorFloorHeight;
@@ -4641,7 +4643,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                         sp9C++;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case (KEEPON4_FLAG_3 | KEEPON4_FLAG_1):
                     if (camera->target != 0) {
                         sp4C = Actor_GetWorld(camera->target);
@@ -4653,7 +4655,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                         sp9C++;
                         break;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case (KEEPON4_FLAG_3 | KEEPON4_FLAG_2 | KEEPON4_FLAG_1):
                     spA2 = CAM_DEG_TO_BINANG(roData->unk_08);
                     spA0 = spA8.yaw;
@@ -5454,7 +5456,7 @@ s32 Camera_Unique0(Camera* camera) {
             camera->eye = camera->eyeNext = rwData->unk_1C.point;
             Camera_UnsetStateFlag(camera, CAM_STATE_2);
             camera->animState++;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             sp84.r = OLib_Vec3fDist(&sp8C, &camera->eye);
             sp84.yaw = rwData->unk_34.y;
@@ -5987,7 +5989,7 @@ s32 Camera_Demo2(Camera* camera) {
             if (camera->stateFlags & CAM_STATE_3) {
                 camera->animState = 4;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 10:
         case 20:
             // Taken on the 1st and 158th animation frame
@@ -6013,7 +6015,7 @@ s32 Camera_Demo2(Camera* camera) {
                   (camera->stateFlags & CAM_STATE_3))) {
                 goto skipeyeUpdate;
             }
-            // fallthrough
+            FALLTHROUGH;
         default:
             Camera_SetStateFlag(camera, CAM_STATE_4 | CAM_STATE_2);
             Camera_UnsetStateFlag(camera, CAM_STATE_3);
@@ -6196,7 +6198,7 @@ s32 Camera_Demo4(Camera* camera) {
 
             camera->fov = 80.0f;
             rwData->unk_10 = (Rand_ZeroOne() - 0.5f) * 40.0f;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             // Camera fixed on human player as the mask moves from the pocket to the face
             // Camera rolls left and right
@@ -6356,7 +6358,7 @@ s32 Camera_Demo5(Camera* camera) {
             focalActorFocus.pos.x = focalActorPosRot->pos.x;
             focalActorFocus.pos.z = focalActorPosRot->pos.z;
             *at = focalActorFocus.pos;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             // Camera remains still as player moves hands to face
             rwData->timer--;
@@ -6823,7 +6825,7 @@ s32 Camera_Special9(Camera* camera) {
             } else {
                 rwData->unk_00 = sp84.rot.y;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             // Camera is fixed in front of the door
             doorParams->timer1--;
@@ -6862,7 +6864,7 @@ s32 Camera_Special9(Camera* camera) {
                     *eye = *eyeNext;
                 }
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             // Camera is behind the door looking at player
             spB8 = focalActorPosRot->pos;
@@ -6878,7 +6880,7 @@ s32 Camera_Special9(Camera* camera) {
             // Setup for the camera turning around to look in front of player
             camera->animState++;
             rwData->unk_00 = BINANG_ROT180(rwData->unk_00);
-            // fallthrough
+            FALLTHROUGH;
         case 3:
             // Camera turns around to look in front of player
             spB8 = focalActorPosRot->pos;
@@ -6897,10 +6899,10 @@ s32 Camera_Special9(Camera* camera) {
             }
 
             camera->animState++;
-            // fallthrough
+            FALLTHROUGH;
         case 4:
             camera->animState++;
-            // fallthrough
+            FALLTHROUGH;
         case 999:
         default:
             // Door is closed and is waiting for user input to toggle to a new setting
