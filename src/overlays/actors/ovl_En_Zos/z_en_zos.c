@@ -5,8 +5,9 @@
  */
 
 #include "z_en_zos.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnZos*)thisx)
 
@@ -64,7 +65,7 @@ ActorProfile En_Zos_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -72,11 +73,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 60, 40, 0, { 0, 0, 0 } },
@@ -421,7 +422,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
     switch (play->msgCtx.currentTextId) {
         case 0x1237:
             player->exchangeItemAction = PLAYER_IA_NONE;
-            // fallthrough
+            FALLTHROUGH;
         case 0x1238:
         case 0x123A:
         case 0x123B:
@@ -440,7 +441,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         case 0x1232:
         case 0x1241:
             player->exchangeItemAction = PLAYER_IA_NONE;
-            // fallthrough
+            FALLTHROUGH;
         case 0x1239:
         case 0x1246:
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);

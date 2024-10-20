@@ -15,7 +15,7 @@
 #include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnEgol*)thisx)
 
@@ -93,11 +93,11 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play);
 static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_EYE_COLLIDER, { { 0, 0, 0 }, 0 }, 1 },
@@ -107,66 +107,66 @@ static ColliderJntSphElementInit sEyeJntSphElementsInit[1] = {
 static ColliderJntSphElementInit sBodySphElementsInit[6] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_LEFT_HAND, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_RIGHT_HAND, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_HEAD, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_LEFT_SHOULDER, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { EYEGORE_LIMB_RIGHT_SHOULDER, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { EYEGORE_LIMB_FAULDS, { { 0, 0, 0 }, 0 }, 1 },
@@ -175,7 +175,7 @@ static ColliderJntSphElementInit sBodySphElementsInit[6] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -188,7 +188,7 @@ static ColliderJntSphInit sBodyJntSphInit = {
 
 static ColliderJntSphInit sEyeJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -201,7 +201,7 @@ static ColliderJntSphInit sEyeJntSphInit = {
 
 static ColliderQuadInit sLaserQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -209,11 +209,11 @@ static ColliderQuadInit sLaserQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x07, 0x10 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -960,8 +960,8 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
         this->bodyCollider.elements[1].dim.modelSphere.radius = 20;
         EnEgol_SetupWalk(this);
     } else if (!this->hitPlayer) {
-        if ((this->bodyCollider.elements[0].base.toucherFlags & TOUCH_HIT) ||
-            (this->bodyCollider.elements[1].base.toucherFlags & TOUCH_HIT)) {
+        if ((this->bodyCollider.elements[0].base.atElemFlags & ATELEM_HIT) ||
+            (this->bodyCollider.elements[1].base.atElemFlags & ATELEM_HIT)) {
             this->hitPlayer = true;
             func_800B8D50(play, &this->actor, 10.0f, this->actor.home.rot.y, 10.0f, 0);
         }
@@ -974,7 +974,7 @@ void EnEgol_Punch(EnEgol* this, PlayState* play) {
 void EnEgol_SetupSlamWait(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_SLAM_WAIT);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK1;
     this->action = EYEGORE_ACTION_SLAM_WAIT;
     this->actionFunc = EnEgol_SlamWait;
 }
@@ -985,7 +985,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 20) {
-            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK2;
             EnEgol_SetupSlamEnd(this);
         }
     }
@@ -994,7 +994,7 @@ void EnEgol_SlamWait(EnEgol* this, PlayState* play) {
 void EnEgol_SetupStunned(EnEgol* this) {
     EnEgol_ChangeAnim(this, EYEGORE_ANIM_STUNNED);
     this->actionTimer = 0;
-    this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK1;
+    this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK1;
     this->bodyCollider.elements[0].dim.modelSphere.radius = 0;
     this->bodyCollider.elements[1].dim.modelSphere.radius = 0;
     this->action = EYEGORE_ACTION_STUNNED;
@@ -1007,7 +1007,7 @@ void EnEgol_Stunned(EnEgol* this, PlayState* play) {
     if (curFrame >= this->animEndFrame) {
         this->actionTimer++;
         if (this->actionTimer > 80) {
-            this->eyeCollider.elements[0].base.elemType = ELEMTYPE_UNK2;
+            this->eyeCollider.elements[0].base.elemMaterial = ELEM_MATERIAL_UNK2;
             EnEgol_SetupStunEnd(this);
         }
     }
@@ -1062,7 +1062,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
             this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->actionFunc = EnEgol_StartDeathCutscene;
         }
@@ -1148,7 +1148,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
         EnEgol_SetupWalk(this);
     }
-    if (this->eyeCollider.elements[0].base.bumperFlags & BUMP_HIT) {
+    if (this->eyeCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
         reaction = EYEGORE_HIT_IMMUNE;
         switch (this->actor.colChkInfo.damageEffect) {
             case EYEGORE_DMGEFF_LIGHT_ARROW:
@@ -1201,9 +1201,9 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
     } else if (reaction == EYEGORE_HIT_IMMUNE) {
         Vec3f hitPos;
 
-        hitPos.x = this->eyeCollider.elements[0].base.bumper.hitPos.x;
-        hitPos.y = this->eyeCollider.elements[0].base.bumper.hitPos.y;
-        hitPos.z = this->eyeCollider.elements[0].base.bumper.hitPos.z;
+        hitPos.x = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.x;
+        hitPos.y = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.y;
+        hitPos.z = this->eyeCollider.elements[0].base.acDmgInfo.hitPos.z;
         Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
         EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
         CollisionCheck_SpawnShieldParticlesMetal(play, &hitPos);

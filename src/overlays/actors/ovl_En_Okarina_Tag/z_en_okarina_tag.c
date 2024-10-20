@@ -37,7 +37,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     f32 zRot = 0.0f;
     s32 i = 0;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk148 = ENOKARINATAG_GET_F800(thisx);
     this->unk14A = ENOKARINATAG_GET_780(thisx);
     this->switchFlag = ENOKARINATAG_GET_SWITCH_FLAG(thisx);
@@ -56,7 +56,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     if (this->unk14A == 0xF) {
         this->unk14A = -1;
     }
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->actionFunc = func_8093E518;
 }
 

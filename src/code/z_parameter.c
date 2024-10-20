@@ -8,6 +8,7 @@
 #include "z64snap.h"
 #include "z64view.h"
 #include "z64voice.h"
+#include "attributes.h"
 
 #include "assets/archives/icon_item_static/icon_item_static_yar.h"
 #include "assets/interface/parameter_static/parameter_static.h"
@@ -3774,7 +3775,7 @@ void Magic_Update(PlayState* play) {
                 gSaveContext.magicState = MAGIC_STATE_METER_FLASH_1;
                 sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
             }
-            // fallthrough (flash border while magic is being consumed)
+            FALLTHROUGH; // (flash border while magic is being consumed)
         case MAGIC_STATE_METER_FLASH_1:
         case MAGIC_STATE_METER_FLASH_2:
         case MAGIC_STATE_METER_FLASH_3:
@@ -3830,7 +3831,7 @@ void Magic_Update(PlayState* play) {
                 gSaveContext.save.saveInfo.playerData.magic = 0;
             }
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
-            // fallthrough
+            FALLTHROUGH;
         case MAGIC_STATE_CONSUME_GORON_ZORA:
             if (!IS_PAUSED(&play->pauseCtx) && (msgCtx->msgMode == MSGMODE_NONE) &&
                 (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
@@ -5816,7 +5817,7 @@ void Interface_DrawTimers(PlayState* play) {
                         gSaveContext.timerStopTimes[sTimerId] = SECONDS_TO_TIMER(0);
                         gSaveContext.timerPausedOsTimes[sTimerId] = 0;
                     }
-                    // fallthrough
+                    FALLTHROUGH;
                 case TIMER_STATE_COUNTING:
                     if ((gSaveContext.timerStates[sTimerId] == TIMER_STATE_COUNTING) &&
                         (sTimerId == TIMER_ID_MOON_CRASH)) {
@@ -5829,7 +5830,7 @@ void Interface_DrawTimers(PlayState* play) {
                     D_801BF8F8[sTimerId] = osGetTime();
                     D_801BF930[sTimerId] = 0;
                     gSaveContext.timerStates[sTimerId] = TIMER_STATE_ALT_COUNTING;
-                    // fallthrough
+                    FALLTHROUGH;
                 case TIMER_STATE_ALT_COUNTING:
                     D_801BF930[sTimerId] = osGetTime() - D_801BF8F8[sTimerId];
                     break;
@@ -6580,7 +6581,7 @@ void Interface_Draw(PlayState* play) {
         Map_DrawMinimap(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
-            Target_Draw(&play->actorCtx.targetCtx, play);
+            Attention_Draw(&play->actorCtx.attention, play);
         }
 
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
@@ -6764,7 +6765,7 @@ void Interface_LoadStory(PlayState* play, s32 osMesgFlag) {
             DmaMgr_RequestAsync(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
                                 interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
             interfaceCtx->storyDmaStatus = STORY_DMA_LOADING;
-            // fallthrough
+            FALLTHROUGH;
         case STORY_DMA_LOADING:
             if (osRecvMesg(&interfaceCtx->storyMsgQueue, NULL, osMesgFlag) == 0) {
                 interfaceCtx->storyDmaStatus = STORY_DMA_DONE;
@@ -6907,7 +6908,7 @@ void Interface_Update(PlayState* play) {
             gSaveContext.nextHudVisibility = HUD_VISIBILITY_NONE;
             Interface_UpdateHudAlphas(play, 0);
             gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
-            // fallthrough
+            FALLTHROUGH;
         default:
             break;
     }

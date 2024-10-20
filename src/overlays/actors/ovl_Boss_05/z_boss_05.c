@@ -28,8 +28,9 @@
  */
 
 #include "z_boss_05.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((Boss05*)thisx)
 
@@ -108,22 +109,22 @@ typedef enum BioDekuBabaLilyPadWithHeadMovementState {
 static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_LILY_PAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -132,7 +133,7 @@ static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sLilyPadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -147,11 +148,11 @@ static ColliderJntSphInit sLilyPadJntSphInit = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
@@ -160,7 +161,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -175,11 +176,11 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7FFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { BIO_DEKU_BABA_HEAD_LIMB_NONE, { { 0, 0, 0 }, 15 }, 100 },
@@ -188,7 +189,7 @@ static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sWalkingHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -346,7 +347,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
     Boss05* this = THIS;
     CollisionHeader* colHeader = NULL;
 
-    this->dyna.actor.targetMode = TARGET_MODE_3;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->dyna.actor.colChkInfo.mass = MASS_HEAVY;
     this->dyna.actor.colChkInfo.health = 2;
     this->frameCounter = Rand_ZeroFloat(1000.0f);
@@ -387,7 +388,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
             this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
             this->actionFunc = Boss05_LilyPad_Idle;
-            this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD) {
@@ -398,7 +399,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         SkelAnime_InitFlex(play, &this->lilyPadSkelAnime, &gBioDekuBabaLilyPadSkel, &gBioDekuBabaLilyPadIdleAnim,
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_FALLING_HEAD) {
         this->actionFunc = Boss05_FallingHead_Fall;
@@ -443,7 +444,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->fragmentAngularVelocity.y = Rand_CenteredFloat(1500.0f);
         this->timers[TIMER_CURRENT_ACTION] = Rand_ZeroFloat(30.0f) + 50.0f;
 
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc = Boss05_Fragment_Move;
     }
 }
@@ -468,7 +469,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         s32 i = 0;
 
         while (true) {
-            if (this->lilyPadCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->lilyPadCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case BIO_BABA_DMGEFF_FIRE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
@@ -486,7 +487,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
 
             i++;
             if (i == BIO_BABA_LILY_PAD_COLLIDER_MAX) {
-                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT) {
+                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
 
                     this->dyna.actor.colChkInfo.health -= damage;
@@ -780,7 +781,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
 
         this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
         this->actionFunc = Boss05_LilyPad_Idle;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->forceDetachTimer != 0) {
             hitReaction = BIO_BABA_HEAD_HIT_REACTION_DEATCH;
@@ -797,8 +798,8 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
 
                 if (player2->focusActor == &this->dyna.actor) {
                     player2->focusActor = &child->dyna.actor;
-                    play->actorCtx.targetCtx.fairyActor = &child->dyna.actor;
-                    play->actorCtx.targetCtx.reticleActor = &child->dyna.actor;
+                    play->actorCtx.attention.fairyActor = &child->dyna.actor;
+                    play->actorCtx.attention.reticleActor = &child->dyna.actor;
                 }
 
                 for (i = 0; i < BIO_DEKU_BABA_LILY_PAD_LIMB_MAX; i++) {
@@ -928,8 +929,8 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 
                 if (player->focusActor == &this->dyna.actor) {
                     player->focusActor = &walkingHead->dyna.actor;
-                    play->actorCtx.targetCtx.fairyActor = &walkingHead->dyna.actor;
-                    play->actorCtx.targetCtx.reticleActor = &walkingHead->dyna.actor;
+                    play->actorCtx.attention.fairyActor = &walkingHead->dyna.actor;
+                    play->actorCtx.attention.reticleActor = &walkingHead->dyna.actor;
                 }
 
                 for (i = 0; i < BIO_DEKU_BABA_HEAD_LIMB_MAX; i++) {
@@ -950,10 +951,10 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     ColliderElement* acHitElem;
 
     if ((this->damagedTimer == 0) &&
-        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.bumperFlags &= ~BUMP_HIT;
+        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags & ACELEM_HIT)) {
+        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acElemFlags &= ~ACELEM_HIT;
         acHitElem = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].base.acHitElem;
-        if (acHitElem->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
+        if (acHitElem->atDmgInfo.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
             this->damagedTimer = 6;
@@ -1352,7 +1353,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case BIO_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
@@ -1371,7 +1372,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffFrozenSteamScale = 2.0f;
-            // fallthrough
+            FALLTHROUGH;
         case BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss05_WalkingHead_Thaw(this, play);

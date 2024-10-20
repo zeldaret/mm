@@ -14,13 +14,14 @@
  */
 #include "z_en_go.h"
 #include "z64quake.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "assets/objects/object_taisou/object_taisou.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnGo*)thisx)
 
@@ -588,7 +589,7 @@ ActorProfile En_Go_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -596,11 +597,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -609,7 +610,7 @@ static ColliderSphereInit sSphereInit = {
 // Collider for the frozen solid Gorons.
 static ColliderCylinderInit sCylinderInitFrozen = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -617,11 +618,11 @@ static ColliderCylinderInit sCylinderInitFrozen = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x02, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -630,7 +631,7 @@ static ColliderCylinderInit sCylinderInitFrozen = {
 // Collider for normal Gorons.
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -638,11 +639,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -1339,7 +1340,7 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
         (this->actor.draw != NULL) && (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
         if (!this->springArrivalCutsceneActive) {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->springArrivalCueId = 255;
             this->springArrivalCutsceneActive = true;
             this->interruptedActionFunc = this->actionFunc;
@@ -1347,7 +1348,7 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
         SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = EnGo_HandleSpringArrivalCutscene;
     } else if (this->springArrivalCutsceneActive) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->springArrivalCueId = 255;
         this->springArrivalCutsceneActive = false;
         SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -1504,7 +1505,7 @@ s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play)
                     if (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN) {
                         this->attentionTarget = this->actor.child;
                     }
-
+                    FALLTHROUGH;
                 case 0xE16: // Surprised, questioning if player is Darmani
                 case 0xE1E: // Surprised, seeing Darmani
                     this->graveyardDialogActionFunc = EnGo_UpdateShiverSurprisedAnimation;
@@ -1842,20 +1843,20 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             }
             this->gatekeeperAnimState = 1;
             this->cutsceneState = 1;
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 break;
             }
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->cutsceneState = 2;
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (!EnGo_ChangeCutscene(this, this->csId)) {
                 break;
             }
             this->cutsceneState = 3;
-            // fallthrough
+            FALLTHROUGH;
         case 3:
             if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
                 CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
@@ -1863,7 +1864,8 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
             } else if (CutsceneManager_GetCurrentCsId() == this->csId) {
                 CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
             }
-            // fallthrough
+            break;
+
         default:
             break;
     }
@@ -1972,7 +1974,7 @@ s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play) {
         case 1:
             EnGo_ChangeAnim(this, play, ENGO_ANIM_DROPKEG);
             this->cutsceneState++;
-
+            FALLTHROUGH;
         case 2:
             if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_GORON_HAND_HIT);
@@ -2043,7 +2045,7 @@ void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
         Math_Vec3f_Copy(&this->actor.world.pos, &newSittingStretcherPos);
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags = 0;
@@ -2067,7 +2069,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
     animFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = animFrame;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags = 0;
@@ -2261,8 +2263,8 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_LYINGDOWNIDLE);
     this->scaleFactor *= ENGO_MEDIGORON_SCALE_MULTIPLIER;
     Actor_SetScale(&this->actor, this->scaleFactor);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->actor.targetMode = TARGET_MODE_3;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
     SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -2293,7 +2295,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         Effect_Add(play, &this->indexEffect, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
 
-        this->actor.targetMode = TARGET_MODE_1;
+        this->actor.attentionRangeType = ATTENTION_RANGE_1;
         this->scaleFactor = ENGO_NORMAL_SCALE;
         this->msgScriptCallback = NULL;
 

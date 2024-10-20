@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -72,99 +72,99 @@ ActorProfile En_Dinofos_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[9] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_LOWER_BODY, { { 200, 300, 0 }, 19 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_UPPER_BODY, { { 200, 200, 0 }, 17 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_HEAD, { { 600, 200, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_NECK, { { 700, 100, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_LEFT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { DINOLFOS_LIMB_RIGHT_UPPER_LEG, { { 1300, 100, 0 }, 12 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -10, 35 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -10, 70 }, 28 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x09, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { DINOLFOS_LIMB_MAX, { { 0, -5, 110 }, 30 }, 100 },
@@ -173,7 +173,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[9] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -186,7 +186,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -194,11 +194,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -401,7 +401,7 @@ void EnDinofos_EndCutscene(EnDinofos* this, PlayState* play) {
 void EnDinofos_Freeze(EnDinofos* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->bodyAndFireCollider.base.colType = COLTYPE_HIT3;
+    this->bodyAndFireCollider.base.colMaterial = COL_MATERIAL_HIT3;
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->stunTimer = 80;
@@ -412,7 +412,7 @@ void EnDinofos_Freeze(EnDinofos* this) {
 void EnDinofos_ThawIfFrozen(EnDinofos* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->bodyAndFireCollider.base.colType = COLTYPE_HIT0;
+        this->bodyAndFireCollider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
@@ -427,7 +427,7 @@ void EnDinofos_EnableBumperCollision(EnDinofos* this) {
 
     if (this->isDodgingGoronPound) {
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags |= 0x400;
+            this->bodyAndFireCollider.elements[i].base.acDmgInfo.dmgFlags |= 0x400;
         }
         this->isDodgingGoronPound = false;
     }
@@ -482,7 +482,7 @@ s32 EnDinofos_Dodge(EnDinofos* this, PlayState* play) {
         (!this->isDodgingGoronPound)) {
         this->isDodgingGoronPound = true;
         for (i = 0; i < DINOFOS_COLLIDER_FIRE_START_INDEX; i++) {
-            this->bodyAndFireCollider.elements[i].base.bumper.dmgFlags &= ~0x400;
+            this->bodyAndFireCollider.elements[i].base.acDmgInfo.dmgFlags &= ~0x400;
         }
     }
 
@@ -1173,7 +1173,7 @@ void EnDinofos_EndBreatheFire(EnDinofos* this, PlayState* play) {
 
 void EnDinofos_SetupDie(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1296,7 +1296,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         Actor_SetDropFlagJntSph(&this->actor, &this->bodyAndFireCollider);
 
         for (i = 0; i < ARRAY_COUNT(this->bodyAndFireColliderElements); i++) {
-            if (this->bodyAndFireCollider.elements[i].base.bumperFlags & BUMP_HIT) {
+            if (this->bodyAndFireCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 break;
             }
         }
@@ -1306,7 +1306,7 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
         }
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyAndFireCollider.elements[i].base.acHitElem->toucher.dmgFlags & 0xDB0B3)) {
+            (this->bodyAndFireCollider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0xDB0B3)) {
             return false;
         }
 
@@ -1374,9 +1374,9 @@ s32 EnDinofos_UpdateDamage(EnDinofos* this, PlayState* play) {
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.x,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.y,
-                        this->bodyAndFireCollider.elements[i].base.bumper.hitPos.z, 0, 0, 0,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.x,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.y,
+                        this->bodyAndFireCollider.elements[i].base.acDmgInfo.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnDinofos_SetupDamaged(this, i);
