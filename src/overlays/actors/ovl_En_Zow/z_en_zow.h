@@ -32,7 +32,7 @@ typedef struct EnZow {
     /* 0x24C */ Vec3s morphTable[ZORA_LIMB_MAX];
     /* 0x2C4 */ s16 unk_2C4;
     /* 0x2C6 */ s16 unk_2C6;
-    /* 0x2C8 */ s16 unk_2C8;
+    /* 0x2C8 */ s16 animIndex;
     /* 0x2CA */ u16 unk_2CA;
     /* 0x2CC */ s16 unk_2CC;
     /* 0x2CE */ s16 unk_2CE;

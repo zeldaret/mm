@@ -821,7 +821,7 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (this->animLoopCounter < 10) {
             this->animLoopCounter++;
         }
@@ -936,7 +936,7 @@ void EnWiz_WindUp(EnWiz* this, PlayState* play) {
         }
     }
 
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->animLoopCounter++;
         if (this->animLoopCounter >= 2) {
             EnWiz_SetupAttack(this);
@@ -991,7 +991,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
             this->shouldStartTimer = true;
         }
 
-        if (this->animEndFrame <= curFrame) {
+        if (curFrame >= this->animEndFrame) {
             EnWiz_SetupDisappear(this);
         }
     }

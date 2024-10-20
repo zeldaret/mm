@@ -305,6 +305,20 @@ void func_80BDCDA8(EnZow* this, EnZowStruct* ptr) {
     }
 }
 
+typedef enum EnZowAnimation {
+    /* -1 */ ENZOT_ANIM_NONE = -1,
+    /*  0 */ ENZOT_ANIM_0,
+    /*  1 */ ENZOT_ANIM_1,
+    /*  2 */ ENZOT_ANIM_2,
+    /*  3 */ ENZOT_ANIM_MAX,
+} EnZowAnimation;
+
+static AnimationHeader* sAnimations[ENZOT_ANIM_MAX] = {
+    &gZoraTreadingWaterAnim, // ENZOT_ANIM_0
+    &gZoraSurfacingAnim,     // ENZOT_ANIM_1
+    &gZoraSurfacingAnim,     // ENZOT_ANIM_2
+};
+
 void EnZow_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnZow* this = THIS;
@@ -315,7 +329,7 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable,
                        ZORA_LIMB_MAX);
     Animation_PlayOnce(&this->skelAnime, &gZoraSurfacingAnim);
-    this->unk_2C8 = 1;
+    this->animIndex = ENZOT_ANIM_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.z = 0;
     this->unk_2CA = 0;
@@ -333,18 +347,16 @@ void EnZow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-static AnimationHeader* sAnimations[] = { &gZoraTreadingWaterAnim, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
-
-void func_80BDD04C(EnZow* this, s16 arg1, u8 arg2) {
-    if ((arg1 >= 0) && (arg1 < 3)) {
-        if (arg1 < 2) {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
-                             arg2, -5.0f);
+void EnZow_ChangeAnim(EnZow* this, s16 animIndex, u8 animMode) {
+    if ((animIndex > ENZOT_ANIM_NONE) && (animIndex < ENZOT_ANIM_MAX)) {
+        if (animIndex <= ENZOT_ANIM_1) {
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimations[animIndex]), animMode, -5.0f);
         } else {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], -1.0f, Animation_GetLastFrame(sAnimations[arg1]),
-                             0.0f, arg2, 0.0f);
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], -1.0f,
+                             Animation_GetLastFrame(sAnimations[animIndex]), 0.0f, animMode, 0.0f);
         }
-        this->unk_2C8 = arg1;
+        this->animIndex = animIndex;
     }
 }
 
@@ -442,9 +454,9 @@ void func_80BDD490(EnZow* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     if (this->actor.xzDistToPlayer > 440.0f) {
         this->actionFunc = func_80BDD350;
-        func_80BDD04C(this, 2, ANIMMODE_ONCE);
+        EnZow_ChangeAnim(this, ENZOT_ANIM_2, ANIMMODE_ONCE);
     } else if (this->unk_2CA & 2) {
-        func_80BDD04C(this, 0, ANIMMODE_LOOP);
+        EnZow_ChangeAnim(this, ENZOT_ANIM_0, ANIMMODE_LOOP);
     }
 
     if ((play->gameplayFrames & 7) == 0) {
@@ -516,7 +528,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
     if (this->actor.depthInWater < 54.0f) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
-        func_80BDD04C(this, 1, ANIMMODE_ONCE);
+        EnZow_ChangeAnim(this, ENZOT_ANIM_1, ANIMMODE_ONCE);
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD634;
