@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnDekunuts*)thisx)
 
@@ -131,12 +131,12 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->collider.base.colMaterial = COL_MATERIAL_NONE;
         this->collider.elem.acElemFlags |=
             (ACELEM_NO_HITMARK | ACELEM_NO_SWORD_SFX | ACELEM_NO_DAMAGE | ACELEM_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
-        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.attentionRangeType = ATTENTION_RANGE_0;
     }
 
     func_808BD428(this);

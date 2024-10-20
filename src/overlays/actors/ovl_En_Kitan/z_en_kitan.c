@@ -7,7 +7,7 @@
 #include "z_en_kitan.h"
 #include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKitan*)thisx)
 
@@ -78,7 +78,7 @@ void EnKitan_Init(Actor* thisx, PlayState* play) {
     }
 
     this->timer = 120;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnKitan_Destroy(Actor* thisx, PlayState* play) {
@@ -338,7 +338,7 @@ void EnKitan_Appear(EnKitan* this, PlayState* play) {
     // Done scaling, continue
     Actor_SetScale(&this->actor, 0.015f);
     this->actionFunc = EnKitan_WaitForPlayer;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->timer = 600;
 }
 

@@ -3589,7 +3589,7 @@ void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWe
  */
 s32 Player_UpdateHostileLockOn(Player* this) {
     if ((this->focusActor != NULL) &&
-        CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+        CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
         this->stateFlags3 |= PLAYER_STATE3_HOSTILE_LOCK_ON;
         return true;
     }
@@ -4840,7 +4840,7 @@ void func_80832888(Player* this, PlayState* play) {
         if ((this->focusActor != NULL) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
             this->stateFlags1 &= ~(PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000);
             if ((this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) ||
-                !CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+                !CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
                 this->stateFlags1 |= PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS;
             }
         } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
@@ -7757,7 +7757,7 @@ s32 Player_ActionHandler_4(Player* this, PlayState* play) {
 
         if (this->tatlActor != NULL) {
             var_t2 = (lockOnActor != NULL) &&
-                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
+                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
                       (lockOnActor->hintId != TATL_HINT_ID_NONE));
 
             if (var_t2 || (this->tatlTextId != 0)) {
@@ -7838,7 +7838,7 @@ s32 Player_ActionHandler_0(Player* this, PlayState* play) {
         Player_ActionHandler_13(this, play);
         return true;
     } else if ((this->focusActor != NULL) &&
-               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
+               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
                 (this->focusActor->hintId != TATL_HINT_ID_NONE))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
     } else if ((this->tatlTextId == 0) && !Player_CheckHostileLockOn(this) &&
@@ -15658,7 +15658,7 @@ void Player_Action_44(Player* this, PlayState* play) {
     Player_UpdateUpperBody(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)) {
+        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
             this->stateFlags2 &= ~PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
         }
 
@@ -20697,7 +20697,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     func_808323C0(player, CS_ID_GLOBAL_TALK);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
-        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000)) {
+        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000)) {
         actor->flags |= ACTOR_FLAG_TALK;
     }
 

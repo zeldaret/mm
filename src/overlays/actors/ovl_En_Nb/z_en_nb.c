@@ -8,7 +8,7 @@
 #include "attributes.h"
 #include "assets/objects/object_nb/object_nb.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnNb*)thisx)
 
@@ -703,8 +703,8 @@ s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success;
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->stateFlags = EN_NB_FLAG_NONE;
     this->unk_274 = 40.0f;
 
@@ -748,16 +748,16 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
         scheduleOutput.result = EN_NB_SCH_1;
         EnNb_ProcessScheduleOutput(this, play, &scheduleOutput);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
                ((this->scheduleResult != scheduleOutput.result) &&
                 !EnNb_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = EN_NB_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 
     this->scheduleResult = scheduleOutput.result;

@@ -28,7 +28,7 @@
 #include "assets/objects/object_rd/object_rd.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRd*)thisx)
 
@@ -190,7 +190,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->torsoRotY = this->headRotY = 0;
@@ -690,7 +690,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                 EnRd_SetupWalkToHome(this, play);
             }
         } else if (play->grabPlayer(play, player)) {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             EnRd_SetupGrab(this);
         }
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
@@ -743,7 +743,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
         !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000)) &&
         (player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
-        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.attentionRangeType = ATTENTION_RANGE_0;
         EnRd_SetupWalkToPlayer(this, play);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
         if (this->actor.parent != NULL) {
@@ -899,8 +899,8 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
-            this->actor.targetMode = TARGET_MODE_0;
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->playerStunWaitTimer = 10;
             this->grabWaitTimer = 15;
             EnRd_SetupWalkToPlayer(this, play);
@@ -1014,7 +1014,7 @@ void EnRd_SetupDamage(EnRd* this) {
         this->actor.speed = -2.0f;
     }
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_DAMAGE;
     this->actionFunc = EnRd_Damage;
@@ -1048,7 +1048,7 @@ void EnRd_SetupDead(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f);
     this->action = EN_RD_ACTION_DEAD;
     this->deathTimer = 300;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;

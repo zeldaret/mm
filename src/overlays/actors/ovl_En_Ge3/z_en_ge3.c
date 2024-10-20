@@ -7,7 +7,7 @@
 #include "z_en_ge3.h"
 #include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe3*)thisx)
 
@@ -100,7 +100,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.attentionRangeType = 6;
     this->picto.actor.terminalVelocity = -4.0f;
     this->picto.actor.gravity = -1.0f;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);

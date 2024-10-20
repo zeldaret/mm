@@ -6,7 +6,7 @@
 
 #include "z_en_mnk.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMnk*)thisx)
 
@@ -231,7 +231,7 @@ void EnMnk_Monkey_SetupWaitToRunAndWaitAtEachPoint(EnMnk* this, PlayState* play)
 
 void EnMnk_Monkey_StartInvisible(EnMnk* this, PlayState* play) {
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.dim.radius = 100;
     this->flags |= MONKEY_FLAGS_8;
     this->flags |= MONKEY_FLAGS_20;
@@ -421,7 +421,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMnk_Monkey_WaitToFollowPath;
             this->unk_3C8 = 0;
             this->flags |= MONKEY_FLAGS_2;
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->picto.actor.velocity.y = 0.0f;
             this->picto.actor.terminalVelocity = 0.0f;
             this->picto.actor.gravity = 0.0f;
@@ -1141,7 +1141,7 @@ void EnMnk_Monkey_SetupDrop(EnMnk* this) {
     this->actionFunc = EnMnk_Monkey_Drop;
     this->picto.actor.velocity.y = -10.0f;
     this->picto.actor.terminalVelocity = -10.0f;
-    this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->picto.actor.draw = EnMnk_Draw;
     Animation_Change(&this->skelAnime, &object_mnk_Anim_008814, 1.0f, 10.0f,
                      Animation_GetLastFrame(&object_mnk_Anim_008814), ANIMMODE_ONCE, 0.0f);
