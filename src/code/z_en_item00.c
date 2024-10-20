@@ -1,4 +1,5 @@
 #include "global.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_gi_hearts/object_gi_hearts.h"
@@ -39,7 +40,7 @@ ActorProfile En_Item00_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AT_TYPE_PLAYER,
         OC1_NONE,
@@ -47,11 +48,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000010, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 10, 30, 0, { 0, 0, 0 } },
@@ -738,7 +739,7 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
                     }
                     break;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case ITEM00_BOMBS_A:
             case ITEM00_ARROWS_10:
             case ITEM00_ARROWS_30:

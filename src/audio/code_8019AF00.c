@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64voice.h"
+#include "attributes.h"
 
 typedef struct {
     /* 0x0 */ s8 x;
@@ -3893,7 +3894,7 @@ void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex) {
             if (sSoundMode == SOUNDMODE_SURROUND_EXTERNAL) {
                 combFilterGain = AudioSfx_ComputeCombFilter(*entry->posY, entry->sfxParams);
             }
-            // fallthrough
+            FALLTHROUGH;
         case BANK_OCARINA:
             entry->dist = sqrtf(entry->dist * 10.0f);
             volume = AudioSfx_ComputeVolume(bankId, entryIndex) * *entry->volume;

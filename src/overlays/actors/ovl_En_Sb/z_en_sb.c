@@ -7,7 +7,7 @@
 #include "z_en_sb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSb*)thisx)
 
@@ -39,18 +39,18 @@ ActorProfile En_Sb_Profile = {
 
 static ColliderCylinderInitType1 sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -93,7 +93,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_SHELLBLADE, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -346,9 +346,9 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
-        hitPoint.x = this->collider.elem.bumper.hitPos.x;
-        hitPoint.y = this->collider.elem.bumper.hitPos.y;
-        hitPoint.z = this->collider.elem.bumper.hitPos.z;
+        hitPoint.x = this->collider.elem.acDmgInfo.hitPos.x;
+        hitPoint.y = this->collider.elem.acDmgInfo.hitPos.y;
+        hitPoint.z = this->collider.elem.acDmgInfo.hitPos.z;
         CollisionCheck_SpawnShieldParticlesMetal2(play, &hitPoint);
         return;
     }

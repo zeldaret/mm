@@ -45,22 +45,22 @@ ActorProfile Obj_Flowerpot_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x05CBFFBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 100, 0 }, 12 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x0580C71C, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 1, { { 0, 300, 0 }, 12 }, 100 },
@@ -69,7 +69,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -465,8 +465,8 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1BD80(this, play);
         func_80A1B994(this, play);
         Actor_Kill(&this->actor);
-    } else if ((this->collider.elements[0].base.bumperFlags & BUMP_HIT) &&
-               (this->collider.elements[0].base.acHitElem->toucher.dmgFlags & 0x058BFFBC)) {
+    } else if ((this->collider.elements[0].base.acElemFlags & ACELEM_HIT) &&
+               (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C0FC(this, play);
@@ -477,10 +477,10 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1B994(this, play);
         Actor_Kill(&this->actor);
     } else {
-        if (this->collider.elements[1].base.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[1].base.acElemFlags & ACELEM_HIT) {
             if (!(this->unk_1EA & 2)) {
                 this->unk_1EA |= 2;
-                this->collider.elements[1].base.bumperFlags &= ~BUMP_ON;
+                this->collider.elements[1].base.acElemFlags &= ~ACELEM_ON;
                 func_80A1C0FC(this, play);
                 func_80A1B914(this, play);
                 func_80A1B9CC(this, play);
@@ -589,10 +589,10 @@ void func_80A1CD10(ObjFlowerpot* this) {
 
 void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
     Actor* thisx = &this->actor;
-    s32 sp28 = this->collider.elements[0].base.toucherFlags & TOUCH_HIT;
+    s32 sp28 = this->collider.elements[0].base.atElemFlags & ATELEM_HIT;
 
     if (sp28) {
-        this->collider.elements[0].base.toucherFlags &= ~TOUCH_ON;
+        this->collider.elements[0].base.atElemFlags &= ~ATELEM_ON;
     }
 
     if (this->unk_1E8 > 0) {

@@ -46,7 +46,7 @@ ActorProfile Obj_Nozoki_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_STOP),
 };
 
 static s16 sObjectIds[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
@@ -413,10 +413,10 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
 
         if ((test3 != NULL) && (test3->draw != NULL)) {
             if ((play->curSpawn == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
-                this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
+                this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
                 this->dyna.actor.textId = 0x297A;
             } else {
-                this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
                     this->dyna.actor.textId = 0;
                 } else {

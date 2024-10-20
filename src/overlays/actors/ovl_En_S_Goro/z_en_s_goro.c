@@ -36,7 +36,7 @@ Week Event Flags:
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
 #include "assets/objects/object_taisou/object_taisou.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)
 
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
@@ -86,7 +86,7 @@ ActorProfile En_S_Goro_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -94,11 +94,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON,
-        BUMP_ON,
+        ATELEM_ON,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -1029,7 +1029,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actor.targetMode = TARGET_MODE_1;
+        this->actor.attentionRangeType = ATTENTION_RANGE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
             case EN_S_GORO_TYPE_SHRINE_WINTER_A:

@@ -36,7 +36,7 @@ ActorProfile Obj_Ice_Poly_Profile = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x02, 0x00 },
         { 0xF7CFF7FF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 50, 105, 0, { 0, 0, 0 } },
@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_NONE,
@@ -64,11 +64,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK5,
+        ELEM_MATERIAL_UNK5,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000800, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 65, 105, 0, { 0, 0, 0 } },
@@ -191,13 +191,13 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
     if (((this->colliders2[0].base.acFlags & AC_HIT) &&
          ((this->colliders2[0].base.ac == NULL) ||
           ((this->colliders2[0].base.ac->id != ACTOR_OBJ_AQUA) &&
-           (this->colliders2[0].elem.acHitElem->toucher.dmgFlags == 0x800)) ||
+           (this->colliders2[0].elem.acHitElem->atDmgInfo.dmgFlags == 0x800)) ||
           ((this->colliders2[0].base.ac->id == ACTOR_OBJ_AQUA) &&
            (this->colliders2[0].base.ac->params == AQUA_TYPE_HOT)))) ||
         ((this->colliders2[1].base.acFlags & AC_HIT) &&
          ((this->colliders2[1].base.ac == NULL) ||
           ((this->colliders2[1].base.ac->id != ACTOR_OBJ_AQUA) &&
-           (this->colliders2[1].elem.acHitElem->toucher.dmgFlags == 0x800)) ||
+           (this->colliders2[1].elem.acHitElem->atDmgInfo.dmgFlags == 0x800)) ||
           ((this->colliders2[1].base.ac->id == ACTOR_OBJ_AQUA) &&
            (this->colliders2[1].base.ac->params == AQUA_TYPE_HOT))))) {
         CutsceneManager_Queue(this->actor.csId);

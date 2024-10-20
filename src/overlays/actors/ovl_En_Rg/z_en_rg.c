@@ -34,7 +34,7 @@ ActorProfile En_Rg_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -42,11 +42,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 20 }, 100 },
@@ -54,7 +54,7 @@ static ColliderSphereInit sSphereInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -62,11 +62,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 62, 0, { 0, 0, 0 } },
@@ -750,7 +750,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
             this->unk_33C = 1;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
 

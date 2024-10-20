@@ -73,24 +73,29 @@ void __osDevMgrMain(void* arg) {
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->piDmaCallback(OS_READ, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
                     break;
+
                 case 12:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->piDmaCallback(OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
                     break;
+
                 case 15:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_READ, ioMesg->devAddr, ioMesg->dramAddr,
                                                  ioMesg->size);
                     break;
+
                 case 16:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr,
                                                  ioMesg->size);
                     break;
+
                 case 10:
                     osSendMesg(ioMesg->hdr.retQueue, ioMesg, OS_MESG_NOBLOCK);
                     ret = -1;
                     break;
+
                 default:
                     ret = -1;
                     break;

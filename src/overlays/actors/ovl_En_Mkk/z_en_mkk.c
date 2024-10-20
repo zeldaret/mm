@@ -7,7 +7,7 @@
 #include "z_en_mkk.h"
 #include "assets/objects/object_mkk/object_mkk.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_HOSTILE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnMkk*)thisx)
 
@@ -49,7 +49,7 @@ ActorProfile En_Mkk_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE | AT_TYPE_ENEMY,
         AC_NONE | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -57,11 +57,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 1, { { 0, 0, 0 }, 15 }, 100 },
@@ -195,7 +195,7 @@ void EnMkk_Destroy(Actor* thisx, PlayState* play) {
 void func_80A4E0CC(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80A4E100;
 }
 
@@ -211,7 +211,7 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
         this->primColorSelect = 3;
         this->collider.base.acFlags |= AC_ON;
         this->alpha = 255;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->unk_14B &= ~4;
         func_80A4E190(this);
@@ -310,7 +310,7 @@ void func_80A4E60C(EnMkk* this, PlayState* play) {
 
 void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
@@ -442,7 +442,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
 void func_80A4EDF0(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.draw = NULL;
     this->actor.update = func_80A4F16C;
     this->actor.gravity = -0.5f;

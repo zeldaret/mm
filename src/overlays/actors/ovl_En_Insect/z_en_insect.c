@@ -46,11 +46,11 @@ ActorProfile En_Insect_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 5 }, 100 },
@@ -59,7 +59,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1,

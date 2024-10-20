@@ -416,21 +416,173 @@ FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
 
 s16 D_801BFE14[PLAYER_BOOTS_MAX][18] = {
     // PLAYER_BOOTS_FIERCE_DEITY
-    { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
+    {
+        200,  // REG(19)
+        666,  // REG(30)
+        200,  // REG(32)
+        700,  // REG(34)
+        366,  // REG(35)
+        200,  // REG(36)
+        600,  // REG(37)
+        175,  // REG(38)
+        60,   // REG(39)
+        800,  // R_DECELERATE_RATE
+        1000, // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        800,  // IREG(67)
+        125,  // IREG(68)
+        300,  // IREG(69)
+        65,   // MREG(95)
+    },
     // PLAYER_BOOTS_HYLIAN
-    { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        800,  // REG(34)
+        500,  // REG(35)
+        400,  // REG(36)
+        800,  // REG(37)
+        400,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        550,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        540,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        400,  // IREG(69)
+        200,  // MREG(95)
+    },
     // PLAYER_BOOTS_GIANT
-    { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
+    {
+        100,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        800,  // REG(34)
+        250,  // REG(35)
+        200,  // REG(36)
+        800,  // REG(37)
+        200,  // REG(38)
+        90,   // REG(39)
+        800,  // R_DECELERATE_RATE
+        350,  // R_RUN_SPEED_LIMIT
+        -80,  // REG(68)
+        600,  // REG(69)
+        540,  // IREG(66)
+        750,  // IREG(67)
+        60,   // IREG(68)
+        200,  // IREG(69)
+        200,  // MREG(95)
+    },
     // PLAYER_BOOTS_DEKU
-    { 200, 1000, 300, 700, 550, 270, 600, 1000, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        600,  // REG(37)
+        1000, // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_ZORA_LAND
-    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        300,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_ZORA_UNDERWATER
-    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        300,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -100, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_GORON
-    { 200, 1000, 300, 700, 550, 270, 700, 200, 120, 800, 600, -140, 600, 590, 750, 125, 200, 130 },
+    {
+        200,  // REG(19)
+        1000, // REG(30)
+        300,  // REG(32)
+        700,  // REG(34)
+        550,  // REG(35)
+        270,  // REG(36)
+        700,  // REG(37)
+        200,  // REG(38)
+        120,  // REG(39)
+        800,  // R_DECELERATE_RATE
+        600,  // R_RUN_SPEED_LIMIT
+        -140, // REG(68)
+        600,  // REG(69)
+        590,  // IREG(66)
+        750,  // IREG(67)
+        125,  // IREG(68)
+        200,  // IREG(69)
+        130,  // MREG(95)
+    },
     // PLAYER_BOOTS_7
-    { 80, 800, 150, 700, 480, 270, 600, 50, 120, 800, 300, -40, 400, 540, 270, 25, 0, 80 },
+    {
+        80,  // REG(19)
+        800, // REG(30)
+        150, // REG(32)
+        700, // REG(34)
+        480, // REG(35)
+        270, // REG(36)
+        600, // REG(37)
+        50,  // REG(38)
+        120, // REG(39)
+        800, // R_DECELERATE_RATE
+        300, // R_RUN_SPEED_LIMIT
+        -40, // REG(68)
+        400, // REG(69)
+        540, // IREG(66)
+        270, // IREG(67)
+        25,  // IREG(68)
+        0,   // IREG(69)
+        80,  // MREG(95)
+    },
 };
 
 // OoT's Player_SetBootData
@@ -469,7 +621,7 @@ void func_80123140(PlayState* play, Player* player) {
     REG(37) = bootRegs[6];
     REG(38) = bootRegs[7];
     REG(39) = bootRegs[8];
-    REG(43) = bootRegs[9];
+    R_DECELERATE_RATE = bootRegs[9];
     R_RUN_SPEED_LIMIT = bootRegs[10];
     REG(68) = bootRegs[11]; // gravity
     REG(69) = bootRegs[12];
@@ -2415,17 +2567,17 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
     return true;
 }
 
-u8 sPlayerShieldCollisionTypes[PLAYER_SHIELD_MAX] = {
-    COLTYPE_METAL, // PLAYER_SHIELD_NONE
-    COLTYPE_METAL, // PLAYER_SHIELD_HEROS_SHIELD
-    COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
+u8 sPlayerShieldColMaterials[PLAYER_SHIELD_MAX] = {
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_NONE
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_HEROS_SHIELD
+    COL_MATERIAL_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
 };
 
 void Player_UpdateShieldCollider(PlayState* play, Player* player, ColliderQuad* collider, Vec3f quadSrc[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f quadDest[4];
 
-        player->shieldQuad.base.colType = sPlayerShieldCollisionTypes[player->currentShield];
+        player->shieldQuad.base.colMaterial = sPlayerShieldColMaterials[player->currentShield];
         Matrix_MultVec3f(&quadSrc[0], &quadDest[0]);
         Matrix_MultVec3f(&quadSrc[1], &quadDest[1]);
         Matrix_MultVec3f(&quadSrc[2], &quadDest[2]);

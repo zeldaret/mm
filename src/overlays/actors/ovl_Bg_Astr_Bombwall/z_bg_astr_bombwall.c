@@ -38,22 +38,22 @@ ActorProfile Bg_Astr_Bombwall_Profile = {
 static ColliderTrisElementInit sTrisElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 0.0f, 3.0f }, { 70.0f, 0.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 0.0f, 3.0f }, { 70.0f, 200.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
@@ -62,7 +62,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,

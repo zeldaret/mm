@@ -6,7 +6,7 @@
 
 #include "z_en_ja.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJa*)thisx)
 
@@ -122,7 +122,7 @@ Vec3f D_80BC36D0 = { 0.0f, 58.0f, 20.0f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -130,11 +130,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 12, 64, 0, { 0, 0, 0 } },
@@ -377,11 +377,11 @@ void func_80BC21A8(EnJa* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BC35F0, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) && !func_80BC20D0(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
     this->scheduleResult = scheduleOutput.result;
     func_80BC2150(this, play);
@@ -429,7 +429,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
     SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);

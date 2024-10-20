@@ -7,8 +7,9 @@
 #include "z_en_kendo_js.h"
 #include "overlays/actors/ovl_En_Maruta/z_en_maruta.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | \
+     ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnKendoJs*)thisx)
 
@@ -51,7 +52,7 @@ ActorProfile En_Kendo_Js_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -59,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 30, 0, { 0, 0, 0 } },
@@ -141,7 +142,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->actor.child = NULL;
@@ -266,6 +267,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                 Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x2717, &this->actor);
                 this->unk_288 = 0x2717;
+                break;
 
             default:
                 break;
@@ -355,6 +357,7 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80B26538(this);
             }
+            break;
 
         case TEXT_STATE_NONE:
         case TEXT_STATE_NEXT:

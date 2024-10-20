@@ -201,33 +201,39 @@ void DmZl_UpdateFace(DmZl* this) {
                 this->blinkTimer = Rand_S16Offset(30, 30);
             }
             break;
+
         case ZELDA_EYE_STATE_CLOSED:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_CLOSED;
             }
             break;
+
         case ZELDA_EYE_STATE_LOOKING_LEFT:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_LEFT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_RIGHT;
             }
             break;
+
         case ZELDA_EYE_STATE_LOOKING_RIGHT:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_RIGHT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_LEFT;
             }
             break;
+
         case ZELDA_EYE_STATE_WIDE:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_WIDE;
             }
             break;
+
         case ZELDA_EYE_STATE_HAPPY:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_HAPPY;
             }
             break;
+
         case ZELDA_EYE_STATE_CLOSED2:
             if (this->blinkTimer >= 3) {
                 this->blinkTimer = 0;
@@ -240,12 +246,15 @@ void DmZl_UpdateFace(DmZl* this) {
         default:
             this->mouthTextureIndex = ZELDA_MOUTH_NEUTRAL;
             break;
+
         case ZELDA_MOUTH_SMILING:
             this->mouthTextureIndex = ZELDA_MOUTH_SMILING;
             break;
+
         case ZELDA_MOUTH_FROWNING:
             this->mouthTextureIndex = ZELDA_MOUTH_FROWNING;
             break;
+
         case ZELDA_MOUTH_OPEN:
             this->mouthTextureIndex = ZELDA_MOUTH_OPEN;
             break;

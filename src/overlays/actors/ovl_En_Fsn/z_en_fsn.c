@@ -5,9 +5,10 @@
  */
 
 #include "z_en_fsn.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -99,7 +100,7 @@ static AnimationInfoS sAnimationInfo[FSN_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -107,11 +108,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -1195,7 +1196,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
         case CANBUY_RESULT_SUCCESS_2:
             Audio_PlaySfx_MessageDecide();
             SET_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM);
-            // fallthrough
+            FALLTHROUGH;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);
@@ -1480,7 +1481,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
 
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
@@ -1492,8 +1493,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.attentionRangeType = ATTENTION_RANGE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;

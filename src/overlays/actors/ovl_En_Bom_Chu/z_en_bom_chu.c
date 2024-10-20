@@ -39,7 +39,7 @@ ActorProfile En_Bom_Chu_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_1 | OC1_TYPE_2,
@@ -47,18 +47,18 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 1, { { 0, 0, 0 }, 13 }, 100 },
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000 * BOMBCHU_SCALE, ICHAIN_STOP),
 };
 
@@ -191,7 +191,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_PlaySfx_SurfaceBomb(play, &this->actor);
 
         this->isMoving = true;
