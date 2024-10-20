@@ -1365,19 +1365,19 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 objectSlot = this->actor.objectSlot;
-    s8 extraObjIndex = -1;
+    s8 extraObjectSlot = OBJECT_SLOT_NONE;
     s32 isAnimFinished = false;
 
     if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->hakuginDemoObjectSlot;
+        extraObjectSlot = this->hakuginDemoObjectSlot;
     } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->taisouObjectSlot;
+        extraObjectSlot = this->taisouObjectSlot;
     } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objectSlot;
+        extraObjectSlot = this->actor.objectSlot;
     }
 
-    if (extraObjIndex >= 0) {
-        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+    if (extraObjectSlot > OBJECT_SLOT_NONE) {
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjectSlot].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
@@ -1425,19 +1425,19 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  */
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     s8 objectSlot = this->actor.objectSlot;
-    s8 extraObjIndex = -1;
+    s8 extraObjectSlot = OBJECT_SLOT_NONE;
     s32 didAnimChange = false;
 
     if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->hakuginDemoObjectSlot;
+        extraObjectSlot = this->hakuginDemoObjectSlot;
     } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->taisouObjectSlot;
+        extraObjectSlot = this->taisouObjectSlot;
     } else if (animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objectSlot;
+        extraObjectSlot = this->actor.objectSlot;
     }
 
-    if (extraObjIndex >= 0) {
-        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+    if (extraObjectSlot > OBJECT_SLOT_NONE) {
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjectSlot].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
