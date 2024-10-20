@@ -269,7 +269,7 @@ Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actor
     return actorIter;
 }
 
-void func_80BE0590(EnTab* this) {
+void EnTab_UpdateSkelAnime(EnTab* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -281,7 +281,7 @@ typedef enum EnTabAnimation {
     /*  2 */ ENTAB_ANIM_MAX
 } EnTabAnimation;
 
-AnimationInfoS sAnimationInfo[ENTAB_ANIM_MAX] = {
+static AnimationInfoS sAnimationInfo[ENTAB_ANIM_MAX] = {
     { &gBartenIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // ENTAB_ANIM_0
     { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENTAB_ANIM_1
 };
@@ -686,7 +686,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->scheduleResult != 0) {
-        func_80BE0590(this);
+        EnTab_UpdateSkelAnime(this);
         func_80BE0664(this);
         func_80BE09A8(this, play);
 

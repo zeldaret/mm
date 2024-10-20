@@ -6,7 +6,6 @@
 
 #include "z_en_pm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
-#include "assets/objects/object_mm/object_mm.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -1896,7 +1895,8 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
+                       OBJECT_MM_LIMB_MAX);
     this->animIndex = ENPM_ANIM_NONE;
     EnPm_ChangeAnim(this, ENPM_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1943,7 +1943,7 @@ s32 EnPm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
                           Gfx** gfx) {
     EnPm* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_MM_LIMB_0F) {
         func_80AF8C68(this, play);
     }
     return false;
@@ -1955,7 +1955,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp2C;
 
     switch (limbIndex) {
-        case 15:
+        case OBJECT_MM_LIMB_0F:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
@@ -1965,13 +1965,13 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             }
             break;
 
-        case 11:
+        case OBJECT_MM_LIMB_0B:
             if (this->unk_356 & 0x800) {
                 func_80AF8890(this, gfx, 0);
             }
             break;
 
-        case 8:
+        case OBJECT_MM_LIMB_08:
             if ((this->scheduleResult == 9) || (this->scheduleResult == 20) || (this->scheduleResult == 21) ||
                 (this->scheduleResult == 22)) {
                 Matrix_MultVec3f(&gZeroVec3f, &sp2C);
@@ -1981,6 +1981,9 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);
+            break;
+
+        default:
             break;
     }
 }
@@ -2002,7 +2005,7 @@ void EnPm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** 
         stepRot = false;
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_MM_LIMB_0F) {
         SubS_UpdateLimb(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
                         &this->unk_290, stepRot, overrideRot);
         Matrix_Pop();

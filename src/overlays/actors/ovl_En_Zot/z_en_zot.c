@@ -6,7 +6,6 @@
 
 #include "z_en_zot.h"
 #include "z64snap.h"
-#include "assets/objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -87,7 +86,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable,
+                       ZORA_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gZoraStandAnim);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -1362,20 +1362,21 @@ s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnZot* this = THIS;
     s32 pad;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == ZORA_LIMB_TORSO) {
         Matrix_RotateXS(this->torsoRot.y * -1, MTXMODE_APPLY);
         Matrix_RotateZS(this->torsoRot.x * -1, MTXMODE_APPLY);
     }
 
     if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&
-        ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13))) {
+        ((limbIndex == ZORA_LIMB_TORSO) || (limbIndex == ZORA_LIMB_LEFT_FOREARM) ||
+         (limbIndex == ZORA_LIMB_RIGHT_FOREARM))) {
         rot->y += TRUNCF_BINANG(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
         rot->z += TRUNCF_BINANG(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);
     }
@@ -1386,7 +1387,7 @@ void EnZot_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     static Vec3f D_80B99934 = { 400.0f, 0.0f, 0.0f };
     EnZot* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B99934, &this->actor.focus.pos);
     }
 }

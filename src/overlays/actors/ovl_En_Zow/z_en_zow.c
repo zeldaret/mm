@@ -5,7 +5,6 @@
  */
 
 #include "z_en_zow.h"
-#include "assets/objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -313,7 +312,8 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80BDD79C;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable,
+                       ZORA_LIMB_MAX);
     Animation_PlayOnce(&this->skelAnime, &gZoraSurfacingAnim);
     this->unk_2C8 = 1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -603,7 +603,7 @@ Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
 Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
 void EnZow_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 15) {
+    if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BDDD4C, &thisx->focus.pos);
     }
 }

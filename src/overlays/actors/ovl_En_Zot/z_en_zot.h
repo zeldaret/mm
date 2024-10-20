@@ -2,6 +2,7 @@
 #define Z_EN_ZOT_H
 
 #include "global.h"
+#include "assets/objects/object_zo/object_zo.h"
 
 struct EnZot;
 
@@ -17,8 +18,8 @@ typedef struct EnZot {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ ColliderCylinder collider;
-    /* 0x1D4 */ Vec3s jointTable[20];
-    /* 0x24C */ Vec3s morphTable[20];
+    /* 0x1D4 */ Vec3s jointTable[ZORA_LIMB_MAX];
+    /* 0x24C */ Vec3s morphTable[ZORA_LIMB_MAX];
     /* 0x2C4 */ Vec3s headRot;
     /* 0x2CA */ Vec3s torsoRot;
     /* 0x2D0 */ Path* path;
