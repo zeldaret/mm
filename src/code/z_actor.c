@@ -482,7 +482,7 @@ void Attention_SetTatlState(Attention* attention, Actor* actor, ActorType actorC
     AttentionColor* attentionColor = &sAttentionColors[actorCategory];
 
     attention->tatlHoverPos.x = actor->focus.pos.x;
-    attention->tatlHoverPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
+    attention->tatlHoverPos.y = actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y);
     attention->tatlHoverPos.z = actor->focus.pos.z;
 
     attention->tatlInnerColor.r = attentionColor->primary.r;
@@ -618,19 +618,20 @@ void Attention_Draw(Attention* attention, PlayState* play) {
         }
     }
 
-    actor = attention->arrowPointedActor;
+    actor = attention->arrowHoverActor;
 
     if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
-        AttentionColor* color = &sAttentionColors[actor->category];
+        AttentionColor* attentionColor = &sAttentionColors[actor->category];
 
         POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
 
-        Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+        Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y) + 17.0f,
                          actor->focus.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(play->gameplayFrames * 0xBB8, MTXMODE_APPLY);
         Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
 
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->primary.r, color->primary.g, color->primary.b, 255);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, attentionColor->primary.r, attentionColor->primary.g,
+                        attentionColor->primary.b, 255);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
         gSPDisplayList(POLY_XLU_DISP++, gLockOnArrowDL);
     }
@@ -651,11 +652,11 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         // Holding backward on the control stick prevents an arrow appearing over the next lock-on actor.
         // This helps escape a lock-on loop when using Switch Targeting, but note that this still works for
         // Hold Targeting as well.
-        attention->arrowPointedActor = NULL;
+        attention->arrowHoverActor = NULL;
     } else {
         // Find the next attention actor so Tatl and an arrow can hover over it (if applicable)
         Attention_FindActor(play, &play->actorCtx, &actor, &gCameraDriftActor, player);
-        attention->arrowPointedActor = actor;
+        attention->arrowHoverActor = actor;
     }
 
     if (attention->forcedLockOnActor != NULL) {
@@ -690,7 +691,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
     if (!Math_StepToF(&attention->tatlMoveProgressFactor, 0.0f, 0.25f)) {
         f32 moveScale = 0.25f / attention->tatlMoveProgressFactor;
         f32 x = actor->focus.pos.x - attention->tatlHoverPos.x;
-        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - attention->tatlHoverPos.y;
+        f32 y = (actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y)) - attention->tatlHoverPos.y;
         f32 z = actor->focus.pos.z - attention->tatlHoverPos.z;
 
         attention->tatlHoverPos.x += x * moveScale;
@@ -725,7 +726,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
             attention->reticleActor = playerFocusActor;
 
             if (playerFocusActor->id == ACTOR_EN_BOOM) {
-                // Don't draw the reticle when locked onto the zora boomerang.
+                // Don't draw the reticle when locked onto the zora fin boomerang.
                 // Note that it isn't possible to lock onto the boomerang, so this code doesn't do anything.
                 // This implies that the boomerang camera lock may have been implemented with Z-Targeting at one point,
                 // but was eventually implemented as its own camera mode instead.
@@ -1933,12 +1934,12 @@ AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX] = {
  * Checks if an actor at `distSq` is inside the range specified by its `attentionRangeType`.
  *
  * Note that this gets used for both the attention range check and for the lock-on leash range check.
- * Despite how the data is presented in `sAttentionRanges`, the leash range is stored as a scale factor value.
+ * Despite how the data is presented in `gAttentionRanges`, the leash range is stored as a scale factor value.
  * When checking the leash range, this scale factor is applied to the input distance and checked against
  * the base `attentionRangeSq` value, which was used to initiate the lock-on in the first place.
  */
 s32 Attention_ActorIsInRange(Actor* actor, f32 distSq) {
-    return distSq < gAttentionRanges[actor->attentionRangeType].rangeSq;
+    return distSq < gAttentionRanges[actor->attentionRangeType].attentionRangeSq;
 }
 
 /**
@@ -3570,7 +3571,8 @@ bool Attention_ActorOnScreen(PlayState* play, Actor* actor) {
 #define X_LEEWAY 20
 #define Y_LEEWAY 160
 
-    return (x > -X_LEEWAY) && (x < gScreenWidth + X_LEEWAY) && (y > -Y_LEEWAY) && (y < gScreenHeight + Y_LEEWAY);
+    return (x > (0 - X_LEEWAY)) && (x < (gScreenWidth + X_LEEWAY)) && (y > (0 - Y_LEEWAY)) &&
+           (y < (gScreenHeight + Y_LEEWAY));
 }
 
 /**

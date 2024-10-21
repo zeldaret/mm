@@ -86,7 +86,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     static InitChainEntry sInitChain[] = {
         ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-        ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+        ICHAIN_F32(lockOnArrowOffset, 0, ICHAIN_STOP),
     };
     EnNiw* this = THIS;
     Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f };

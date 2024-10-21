@@ -139,7 +139,7 @@ static Vec3f sSelectedItemPositions[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 static EnSob1ActionFunc sInitFuncs[] = {

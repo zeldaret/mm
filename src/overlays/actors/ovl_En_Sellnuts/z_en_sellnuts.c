@@ -135,7 +135,7 @@ static AnimationInfoS sAnimationInfo[ENSELLNUTS_ANIM_MAX] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void func_80ADADD0(EnSellnuts* this, PlayState* play) {

@@ -276,7 +276,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 3, 100, 100, 80 };
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_DODONGO, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1400, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 1400, ICHAIN_STOP),
 };
 
 void EnDodongo_Init(Actor* thisx, PlayState* play) {

@@ -4926,7 +4926,7 @@ void func_80832888(Player* this, PlayState* play) {
                     !(var_v1_2->flags & ACTOR_FLAG_LOCK_ON_DISABLED) &&
                     !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->focusActor) && (this == GET_PLAYER(play))) {
-                        var_v1_2 = play->actorCtx.attention.arrowPointedActor;
+                        var_v1_2 = play->actorCtx.attention.arrowHoverActor;
                     }
 
                     if ((var_v1_2 != NULL) &&
@@ -10838,7 +10838,7 @@ void func_80841744(PlayState* play, Player* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 Vec3s sPlayerSkeletonBaseTransl = { -57, 3377, 0 };

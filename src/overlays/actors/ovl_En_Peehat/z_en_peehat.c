@@ -171,7 +171,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1800, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 700, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 700, ICHAIN_STOP),
 };
 
 void EnPeehat_Init(Actor* thisx, PlayState* play) {

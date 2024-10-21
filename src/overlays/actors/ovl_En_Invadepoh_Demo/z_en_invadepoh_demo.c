@@ -116,7 +116,7 @@ static s32 sCueTypes[EN_INVADEPOH_DEMO_TYPE_MAX] = {
 
 static InitChainEntry sAlienInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),  ICHAIN_F32(lockOnArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
@@ -124,7 +124,7 @@ static InitChainEntry sRomaniInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };

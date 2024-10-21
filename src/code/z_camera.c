@@ -1274,8 +1274,11 @@ f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adj
     return (Camera_fabsf(tmp) * adjAmt) * Math_CosS(playerYRot - eyeAtYaw);
 }
 
-f32 func_800CD6CC(Actor* actor) {
-    return sqrtf(gAttentionRanges[actor->attentionRangeType].rangeSq /
+/**
+ * Gets the distance that the attention actor is in range.
+ */
+f32 Camera_GetAttentionActorRange(Actor* actor) {
+    return sqrtf(gAttentionRanges[actor->attentionRangeType].attentionRangeSq /
                  gAttentionRanges[actor->attentionRangeType].lockOnLeashScale);
 }
 
@@ -3683,7 +3686,7 @@ s32 Camera_Battle1(Camera* camera) {
     sp120.y += focalActorHeight;
     spA4 = OLib_Vec3fDiffToVecGeo(&sp120, &camera->targetPosRot.pos);
 
-    sp104 = func_800CD6CC(camera->target);
+    sp104 = Camera_GetAttentionActorRange(camera->target);
     if (sp104 > (PREG(86) + 800.0f)) {
         sp104 = PREG(86) + 800.0f;
     }

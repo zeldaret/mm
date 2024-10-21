@@ -180,7 +180,7 @@ static Gfx* sSnowballFragmentDLs[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_EENO, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 

@@ -151,7 +151,7 @@ static AnimatedMaterial* sEmblemAnimatedMats[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_DEATH_ARMOS, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 3500, ICHAIN_STOP),
 };
 
 static s32 sAnimatedMaterialsDesgmented = false;

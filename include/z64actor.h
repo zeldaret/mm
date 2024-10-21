@@ -109,7 +109,7 @@ typedef struct Actor {
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
-    /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
+    /* 0x054 */ f32 lockOnArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
     /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
@@ -280,6 +280,20 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
+/**
+ * Attention System
+ *
+ * The Attention System's responsibility is to bring specific actors to the player's attention.
+ * This includes:
+ *     - Making Tatl fly over to certain actors of interest (can be lock-on actors, but may also not be)
+ *     - Displaying an arrow over an actor that can be locked onto
+ *     - Displaying a reticle over the current lock-on actor
+ *     - Playing enemy background music if a hostile actor is nearby
+ *
+ * This system does not handle the actual lock-on implementation.
+ * That is the responsibility of Player via `player->focusActor` and the camera.
+ */
+
 // A set of 4 triangles which appear as a ring around an actor when locked-on
 typedef struct LockOnReticle {
     /* 0x00 */ Vec3f pos;
@@ -303,7 +317,7 @@ typedef struct Attention {
     /* 0x50 */ LockOnReticle lockOnReticles[3]; // Multiple reticles are used for a motion-blur effect
     /* 0x8C */ Actor* forcedLockOnActor; // Forces lock-on to this actor when set (never used in practice)
     /* 0x90 */ Actor* bgmEnemy; // The nearest actor which can trigger enemy background music
-    /* 0x94 */ Actor* arrowPointedActor; // Actor to draw an arrow over
+    /* 0x94 */ Actor* arrowHoverActor; // Actor to draw an arrow over
 } Attention; // size = 0x98
 
 // It is difficult to give each type a name because it is numerically based
@@ -325,7 +339,7 @@ typedef enum AttentionRangeType {
 } AttentionRangeType;
 
 typedef struct AttentionRangeParams {
-    /* 0x0 */ f32 rangeSq;
+    /* 0x0 */ f32 attentionRangeSq;
     /* 0x4 */ f32 lockOnLeashScale;
 } AttentionRangeParams; // size = 0x8
 

@@ -1169,7 +1169,7 @@
     0x800CD3E4:("Camera_BgCheckCorner",),
     0x800CD44C:("func_800CD44C",),
     0x800CD634:("Camera_CalcSlopeYAdj",),
-    0x800CD6CC:("func_800CD6CC",),
+    0x800CD6CC:("Camera_GetAttentionActorRange",),
     0x800CD6F8:("Camera_CalcAtDefault",),
     0x800CD834:("Camera_CalcAtForScreen",),
     0x800CDA14:("Camera_CalcAtForNormal1",),

@@ -683,7 +683,7 @@ asm/non_matchings/code/z_camera/Camera_UpdateInterface.s,Camera_UpdateInterface,
 asm/non_matchings/code/z_camera/Camera_BgCheckCorner.s,Camera_BgCheckCorner,0x800CD3E4,0x1A
 asm/non_matchings/code/z_camera/func_800CD44C.s,func_800CD44C,0x800CD44C,0x7A
 asm/non_matchings/code/z_camera/Camera_CalcSlopeYAdj.s,Camera_CalcSlopeYAdj,0x800CD634,0x26
-asm/non_matchings/code/z_camera/func_800CD6CC.s,func_800CD6CC,0x800CD6CC,0xB
+asm/non_matchings/code/z_camera/Camera_GetAttentionActorRange.s,Camera_GetAttentionActorRange,0x800CD6CC,0xB
 asm/non_matchings/code/z_camera/Camera_CalcAtDefault.s,Camera_CalcAtDefault,0x800CD6F8,0x4F
 asm/non_matchings/code/z_camera/Camera_CalcAtForScreen.s,Camera_CalcAtForScreen,0x800CD834,0x78
 asm/non_matchings/code/z_camera/Camera_CalcAtForNormal1.s,Camera_CalcAtForNormal1,0x800CDA14,0x56
