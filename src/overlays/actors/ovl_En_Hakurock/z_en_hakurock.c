@@ -338,12 +338,11 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
             EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED);
             EnHakurock_SetupWaitForSignal(this);
         } else if ((&player->actor == this->collider.base.oc) &&
-                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
-                   (player->linearVelocity > 8.0f)) {
-            player->unk_B08 = player->linearVelocity = -5.0f;
-            player->unk_B0C += (player->linearVelocity * 0.05f);
+                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) && (player->speedXZ > 8.0f)) {
+            player->unk_B08 = player->speedXZ = -5.0f;
+            player->unk_B0C += player->speedXZ * 0.05f;
             player->actor.velocity.y = 5.0f;
-            player->currentYaw = player->actor.world.rot.y;
+            player->yaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;
             player->actor.shape.rot.y = player->actor.world.rot.y;
             player->unk_B8C = 4;

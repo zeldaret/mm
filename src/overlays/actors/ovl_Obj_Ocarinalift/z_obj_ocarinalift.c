@@ -199,7 +199,8 @@ void func_80AC9A7C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9AB8(ObjOcarinalift* this) {
-    this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED);
+    this->dyna.actor.flags |=
+        (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED);
     this->actionFunc = func_80AC9AE0;
 }
 
@@ -236,7 +237,8 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9C20(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_2000000 | ACTOR_FLAG_LOCK_ON_DISABLED);
+    this->dyna.actor.flags &=
+        ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED);
     this->actionFunc = func_80AC9C48;
 }
 

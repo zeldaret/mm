@@ -783,7 +783,7 @@ void BossHakugin_ApplyGoronSpikeBoost(BossHakugin* this, Player* player) {
     if (!this->hasAppliedGoronSpikeBoost && (player->stateFlags3 & PLAYER_STATE3_80000) &&
         !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.velocity.y > 5.0f)) {
         player->actor.velocity.y *= 1.3f;
-        player->linearVelocity *= 1.3f;
+        player->speedXZ *= 1.3f;
         this->hasAppliedGoronSpikeBoost = true;
     } else if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->hasAppliedGoronSpikeBoost = false;
@@ -1724,7 +1724,7 @@ void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     player->actor.world.pos.x = 250.0f;
     player->actor.world.pos.z = -1560.0f;
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
-    player->currentYaw = player->actor.world.rot.y = player->actor.shape.rot.y;
+    player->yaw = player->actor.world.rot.y = player->actor.shape.rot.y;
     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_131);
     this->actionFunc = BossHakugin_IntroCutsceneWakeUp;
 }
@@ -2628,11 +2628,11 @@ void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
             //! @bug This block is unreachable. This is trying to check if the player curled up as a Goron without
             //! spikes, but if the player gets hit in this state, they will be forcibly uncurled before this function
             //! gets called; it's impossible to have the state flags necessary to end up here in the final game.
-            player->unk_B08 = player->linearVelocity = -5.0f;
+            player->unk_B08 = player->speedXZ = -5.0f;
             player->unk_B0C += player->unk_B08 * 0.05f;
             player->actor.velocity.y = 10.0f;
             player->unk_B8C = 4;
-            player->actor.shape.rot.y = player->actor.home.rot.y = player->currentYaw = player->actor.world.rot.y;
+            player->actor.shape.rot.y = player->actor.home.rot.y = player->yaw = player->actor.world.rot.y;
         } else if (!(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
             s16 knockbackYaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
