@@ -109,7 +109,7 @@ typedef struct Actor {
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
-    /* 0x054 */ f32 lockOnArrowOffset; // Height offset of the target arrow relative to `focus` position
+    /* 0x054 */ f32 lockOnArrowOffset; // Height offset of the lock-on arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
     /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
@@ -289,6 +289,7 @@ typedef enum {
  *     - Displaying an arrow over an actor that can be locked onto
  *     - Displaying a reticle over the current lock-on actor
  *     - Playing enemy background music if a hostile actor is nearby
+ *     - Drift the camera towards an actor (unused)
  *
  * This system does not handle the actual lock-on implementation.
  * That is the responsibility of Player via `player->focusActor` and the camera.
