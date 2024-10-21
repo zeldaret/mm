@@ -495,8 +495,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
-// 
-#define ACTOR_FLAG_80000         (1 << 19)
+// Allows for the attention system to refind the focus actor in the search for the next attention actor.
+// Also allows for the next lockOn actor to be the focus actor again.
+// When chosen as the next lock on actor, this flag is unset.
+#define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
 // 
 #define ACTOR_FLAG_100000        (1 << 20)
 // 
@@ -519,8 +521,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_10000000      (1 << 28)
 // 
 #define ACTOR_FLAG_20000000      (1 << 29)
-// 
-#define ACTOR_FLAG_40000000      (1 << 30)
+
+// Camera will slowly drift to the actor while approaching it.
+// Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
+#define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
 // 
 #define ACTOR_FLAG_80000000      (1 << 31)
 
@@ -685,7 +689,7 @@ extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
 
-extern Actor* D_801ED920;
+extern Actor* gCameraDriftActor;
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
 void ActorShadow_DrawCircle(Actor* actor, struct Lights* lights, struct PlayState* play);

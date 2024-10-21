@@ -16,19 +16,19 @@ s32 D_801ED8B4;                   // 2 funcs
 
 struct Actor* sNearestAttentionActor;
 struct Actor* sPrioritizedAttentionActor;
-struct Actor* D_801ED8C0;
-struct Actor* D_801ED8C4;
+struct Actor* sNearestCameraDriftActor;
+struct Actor* sPrioritizedCameraDriftActor;
 
 f32 sNearestAttentionActorDistSq;
 f32 sBgmEnemyDistSq;
-f32 D_801ED8D0;
+f32 sNearestCameraDriftActorDistSq;
 s32 sHighestAttentionPriority;
-s32 D_801ED8D8;
-s16 sTargetPlayerRotY;
+s32 sHighestCameraDriftPriority;
+s16 sAttentionPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
-struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+struct Actor* gCameraDriftActor; // 2 funcs. 1 out of z_actor
 
 #include "z64actor.h"
 
@@ -64,7 +64,8 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
-void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player);
+void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
+                         Player* player);
 s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
@@ -653,7 +654,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         attention->arrowPointedActor = NULL;
     } else {
         // Find the next attention actor so Navi and an arrow can hover over it (if applicable)
-        Attention_FindActor(play, &play->actorCtx, &actor, &D_801ED920, player);
+        Attention_FindActor(play, &play->actorCtx, &actor, &gCameraDriftActor, player);
         attention->arrowPointedActor = actor;
     }
 
@@ -3573,49 +3574,37 @@ bool Attention_ActorOnScreen(PlayState* play, Actor* actor) {
 }
 
 /**
- * Search for targetable actors of the `actorCategory` category.
+ * Search for attention actors or camera drift actors within the specified category.
  *
- * Looks for the actor of said category with higher targetPriority and the one that is nearest to player. This actor
- * must be within the range (relative to player) speicified by its attentionRangeType.
+ * To be considered an attention actor the actor needs to:
+ * - Have a non-NULL update function (still active)
+ * - Not be player (this is technically a redundant check because the PLAYER category is never searched)
+ * - Have `ACTOR_FLAG_ATTENTION_ENABLED` or `ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE` set
+ * - Not be the current focus actor unless `ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE` is set
+ * - Be the closest attention actor found so far
+ * - Be within range, specified by attentionRangeType
+ * - Be roughly on-screen
+ * - Not be blocked by a surface
  *
- * The actor must be on-screen
- *
- * The highest priority actor is stored in `sPrioritizedAttentionActor`, while the nearest actor is stored in
- * `sNearestAttentionActor`. The higher priority / smaller distance of those actors are stored in
- * `sHighestAttentionPriority` and `sNearestAttentionActorDistSq`.
- *
- * There is not much info to infer anything about ACTOR_FLAG_40000000, D_801ED8C4/D_801ED8C0, D_801ED8D8/D_801ED8D0.
- * All appear unused in any meaningful way.
- *
- * For an actor to be taken in consideration by this function it needs:
- * - Non-NULL update function (maybe obvious?)
- * - Not be Player itself.
- * - It must be targetable or ACTOR_FLAG_40000000
- * - Not be the already targeted actor, unless it has the ACTOR_FLAG_80000 flag
- * - Be withing the range specified by its attentionRangeType.
- * - It must be on-screen (within a margin)
- * - Must not be blocked by a surface (?)
- *
- * This function also checks for the nearest enemy actor, which allows determining if enemy background music should be
- * played. This actor is stored in `attention.bgmEnemy` and its distance is stored in `sBgmEnemyDistSq`
+ * If an actor has a priority value set and the value is the lowest found so far, it will be set as the prioritized
+ * attention actor. Otherwise, it is set as the nearest attention actor or camera drift actor.
  *
  * This function is expected to be called with almost every actor category in each cycle. On a new cycle its global
- * variables must be reset by the caller, otherwise the information of the previous cycle will be retained on this one.
+ * variables must be reset by the caller, otherwise the information of the previous cycle will be retained.
  */
 void Attention_FindActorInCategory(PlayState* play, ActorContext* actorCtx, Player* player, ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* playerFocusActor = player->focusActor;
     s32 isNearestAttentionActor;
-    s32 phi_s2_2;
+    s32 isNearestCameraDriftActor;
 
     for (; actor != NULL; actor = actor->next) {
         if ((actor->update == NULL) || ((Player*)actor == player)) {
             continue;
         }
 
-        // Actor must be at least either targetable or ACTOR_FLAG_40000000
-        if (!(actor->flags & (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000000))) {
+        if (!(actor->flags & (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_CAMERA_DRIFT_ENABLED))) {
             continue;
         }
 
@@ -3628,19 +3617,20 @@ void Attention_FindActorInCategory(PlayState* play, ActorContext* actorCtx, Play
             }
         }
 
-        // If this actor is the currently targeted one, then ignore it unless it has the ACTOR_FLAG_80000 flag
-        if ((actor == playerFocusActor) && !(actor->flags & ACTOR_FLAG_80000)) {
+        // Ignore the current focus actor unless it is refindable
+        if ((actor == playerFocusActor) && !(actor->flags & ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE)) {
             continue;
         }
 
-        distSq = Attention_WeightedDistToPlayerSq(actor, player, sTargetPlayerRotY);
+        distSq = Attention_WeightedDistToPlayerSq(actor, player, sAttentionPlayerRotY);
 
         isNearestAttentionActor =
             (actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) && (distSq < sNearestAttentionActorDistSq);
 
-        phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
+        isNearestCameraDriftActor =
+            (actor->flags & ACTOR_FLAG_CAMERA_DRIFT_ENABLED) && (distSq < sNearestCameraDriftActorDistSq);
 
-        if (!isNearestAttentionActor && !phi_s2_2) {
+        if (!isNearestAttentionActor && !isNearestCameraDriftActor) {
             continue;
         }
 
@@ -3661,74 +3651,76 @@ void Attention_FindActorInCategory(PlayState* play, ActorContext* actorCtx, Play
                     sPrioritizedAttentionActor = actor;
                     sHighestAttentionPriority = actor->targetPriority;
                 }
-                if (phi_s2_2 && (actor->targetPriority < D_801ED8D8)) {
-                    D_801ED8C4 = actor;
-                    D_801ED8D8 = actor->targetPriority;
+                if (isNearestCameraDriftActor && (actor->targetPriority < sHighestCameraDriftPriority)) {
+                    sPrioritizedCameraDriftActor = actor;
+                    sHighestCameraDriftPriority = actor->targetPriority;
                 }
             } else {
                 if (isNearestAttentionActor) {
                     sNearestAttentionActor = actor;
                     sNearestAttentionActorDistSq = distSq;
                 }
-                if (phi_s2_2) {
-                    D_801ED8C0 = actor;
-                    D_801ED8D0 = distSq;
+                if (isNearestCameraDriftActor) {
+                    sNearestCameraDriftActor = actor;
+                    sNearestCameraDriftActorDistSq = distSq;
                 }
             }
         }
     }
 }
 
-u8 sTargetableActorCategories[] = {
+u8 sAttentionCategorySearchOrder[] = {
     ACTORCAT_BOSS,  ACTORCAT_ENEMY,  ACTORCAT_BG,   ACTORCAT_EXPLOSIVES, ACTORCAT_NPC,  ACTORCAT_ITEMACTION,
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
 /**
- * Search for the nearest targetable actor.
+ * Search for the nearest attention actor and camera drift actor by iterating through most actor categories.
+ * See `Attention_FindActorInCategory` for more details on search criteria.
  *
- * The specific criteria is specified in Attention_FindActorInCategory.
- *
- * The actor found is stored in the targetableP parameter. It may be NULL if no actor that fulfills the criteria is
- * found.
+ * The attention actor found is stored in the `attentionActorP` parameter, while the camera drift actor is stored in
+ * `cameraDriftActorP` They may be NULL if no actor that fulfills the criteria is found.
  */
-void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player) {
-    u8* actorCategories;
+void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
+                         Player* player) {
+    u8* category;
     s32 i;
 
-    sNearestAttentionActor = sPrioritizedAttentionActor = D_801ED8C0 = D_801ED8C4 = NULL;
-    sNearestAttentionActorDistSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
-    sHighestAttentionPriority = D_801ED8D8 = INT32_MAX;
+    sNearestAttentionActor = sPrioritizedAttentionActor = sNearestCameraDriftActor = sPrioritizedCameraDriftActor =
+        NULL;
+    sNearestAttentionActorDistSq = sNearestCameraDriftActorDistSq = sBgmEnemyDistSq = FLT_MAX;
+    sHighestAttentionPriority = sHighestCameraDriftPriority = INT32_MAX;
 
     actorCtx->attention.bgmEnemy = NULL;
-    sTargetPlayerRotY = player->actor.shape.rot.y;
+    sAttentionPlayerRotY = player->actor.shape.rot.y;
 
-    actorCategories = sTargetableActorCategories;
+    category = sAttentionCategorySearchOrder;
 
-    // Try to search for a targetable actor that's a Boss, Enemy or Bg first
+    // Search the first 3 actor categories first for an attention actor
+    // These are Boss, Enemy, and Bg, in order.
     for (i = 0; i < 3; i++) {
-        Attention_FindActorInCategory(play, actorCtx, player, *actorCategories);
-        actorCategories++;
+        Attention_FindActorInCategory(play, actorCtx, player, *category);
+        category++;
     }
 
-    // If no actor in the above categories was found then try to search for one in every other category
+    // If no actor in the above categories was found, then try searching in the remaining categories
     if (sNearestAttentionActor == NULL) {
-        for (; i < ARRAY_COUNT(sTargetableActorCategories); i++) {
-            Attention_FindActorInCategory(play, actorCtx, player, *actorCategories);
-            actorCategories++;
+        for (; i < ARRAY_COUNT(sAttentionCategorySearchOrder); i++) {
+            Attention_FindActorInCategory(play, actorCtx, player, *category);
+            category++;
         }
     }
 
     if (sNearestAttentionActor == NULL) {
-        *targetableP = sPrioritizedAttentionActor;
+        *attentionActorP = sPrioritizedAttentionActor;
     } else {
-        *targetableP = sNearestAttentionActor;
+        *attentionActorP = sNearestAttentionActor;
     }
 
-    if (D_801ED8C0 == NULL) {
-        *arg3 = D_801ED8C4;
+    if (sNearestCameraDriftActor == NULL) {
+        *cameraDriftActorP = sPrioritizedCameraDriftActor;
     } else {
-        *arg3 = D_801ED8C0;
+        *cameraDriftActorP = sNearestCameraDriftActor;
     }
 }
 

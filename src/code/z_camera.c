@@ -1950,7 +1950,7 @@ s32 Camera_Normal1(Camera* camera) {
     Vec3f spD8;
     f32 spD4;
     f32 spD0;
-    Vec3f* temp;
+    Vec3f* cameraDriftActorPos;
     f32 spC8;
     f32 spC4;
     f32 spC0;
@@ -2095,7 +2095,7 @@ s32 Camera_Normal1(Camera* camera) {
             camera->yawUpdateRateInv, phi_f2, 0.1f);
         if ((roData->interfaceFlags & NORMAL1_FLAG_3) && (camera->speedRatio > 0.01f)) {
             camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(100.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
-        } else if (D_801ED920 != NULL) {
+        } else if (gCameraDriftActor != NULL) {
             camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(32.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         } else {
             camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(16.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
@@ -2202,7 +2202,7 @@ s32 Camera_Normal1(Camera* camera) {
         spB4.yaw = sp9C.yaw;
         spB4.pitch = sp9C.pitch;
         camera->animState = 20;
-    } else if (D_801ED920 != NULL) {
+    } else if (gCameraDriftActor != NULL) {
         VecGeo sp74;
         s16 sp72;
         f32 sp6C;
@@ -2210,8 +2210,8 @@ s32 Camera_Normal1(Camera* camera) {
         //! FAKE:
         if (1) {}
 
-        temp = &D_801ED920->world.pos;
-        sp74 = OLib_Vec3fDiffToVecGeo(&focalActorPosRot->pos, temp);
+        cameraDriftActorPos = &gCameraDriftActor->world.pos;
+        sp74 = OLib_Vec3fDiffToVecGeo(&focalActorPosRot->pos, cameraDriftActorPos);
         sp72 = focalActorPosRot->rot.y - sp74.yaw;
         // Interface and shrink-window flags
         if ((roData->interfaceFlags & 0xFF00) == 0xFF00) {

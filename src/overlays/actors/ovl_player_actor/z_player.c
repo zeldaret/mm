@@ -4930,8 +4930,8 @@ void func_80832888(Player* this, PlayState* play) {
                     }
 
                     if ((var_v1_2 != NULL) &&
-                        (((var_v1_2 != this->focusActor)) || (var_v1_2->flags & ACTOR_FLAG_80000))) {
-                        var_v1_2->flags &= ~ACTOR_FLAG_80000;
+                        (((var_v1_2 != this->focusActor)) || (var_v1_2->flags & ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE))) {
+                        var_v1_2->flags &= ~ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE;
                         if (!var_a1) {
                             this->stateFlags2 |= PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
                         }
