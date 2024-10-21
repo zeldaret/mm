@@ -173,7 +173,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                     sp38 = sp34;
                 }
 
-                player->linearVelocity *= sp38;
+                player->speedXZ *= sp38;
 
                 if ((this->unk_160 == OBJHUNSUI_F000_5) || (this->unk_160 == OBJHUNSUI_F000_6)) {
                     Math_ApproachF(&this->unk_1A0, 4.5f, 2.0f, 1.0f);
@@ -184,7 +184,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 }
             } else {
                 this->unk_1A4 = player->actor.world.rot.y;
-                player->linearVelocity *= 0.5f;
+                player->speedXZ *= 0.5f;
                 Math_ApproachF(&this->unk_1A0, 3.0f, 1.0f, 1.0f);
                 Math_ApproachF(&this->unk_19C, this->unk_1A0, 1.0f, 0.1f);
             }
@@ -193,8 +193,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
         }
     } else {
         if (this->unk_172 & 8) {
-            player->linearVelocity = this->unk_19C + player->linearVelocity;
-            player->currentYaw = this->unk_1A4;
+            player->speedXZ = this->unk_19C + player->speedXZ;
+            player->yaw = this->unk_1A4;
         }
         this->unk_1A0 = 0.0f;
         this->unk_19C = 0.0f;
