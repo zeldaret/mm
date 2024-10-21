@@ -1155,7 +1155,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
     if ((this->actionFunc == EnPoSisters_DeathStage1) && (this->deathTimer >= 8) &&
         (limbIndex == POE_SISTERS_LIMB_MAIN_BODY)) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, gPoeSistersBurnBodyDL);
     }
 
@@ -1225,7 +1225,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
     if (!(this->poSisterFlags & POE_SISTERS_FLAG_DRAW_TORCH)) {
         Matrix_Put(&this->mtxf);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gPoeSistersTorchDL);
     }
 
@@ -1259,7 +1259,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         }
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 

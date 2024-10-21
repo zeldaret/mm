@@ -990,7 +990,7 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
         gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
         gSPDisplayList(gfx++, gFloorSwitch1DL);
         POLY_OPA_DISP = gfx;
@@ -1012,7 +1012,7 @@ void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_OPA_DISP++, sEyeSwitchDL[subType]);
 
@@ -1026,7 +1026,7 @@ void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_XLU_DISP++, sEyeSwitchDL[subType]);
 
@@ -1051,11 +1051,11 @@ void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchBaseDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
     gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchCoreDL);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gCrystalSwitchDiamondDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

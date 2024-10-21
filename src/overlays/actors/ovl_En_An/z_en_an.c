@@ -1330,8 +1330,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
                 this->trayTexScrollTimer2 -= 2;
                 Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
                            Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 0, 16, 16, 1, 0,
                                             this->trayTexScrollTimer2, 16, 16));
@@ -1352,8 +1351,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, gKafeisMaskDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
@@ -1393,8 +1391,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
                 Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);

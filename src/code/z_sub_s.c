@@ -1013,7 +1013,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);

@@ -828,7 +828,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateXFApply(effect->rotationX);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectDL);
         }
     }
@@ -845,7 +845,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                 func_800C0094(this->actor.floorPoly, effect->pos.x, effect->pos.y, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
             }
         }
@@ -869,7 +869,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                 func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectGroundDL);
             }
         }
@@ -898,7 +898,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
@@ -922,7 +922,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
@@ -944,7 +944,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
         }
     }
@@ -972,7 +972,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_RotateZF(effect->rotationZ, MTXMODE_APPLY);
             Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
             Matrix_RotateXFApply(M_PIf / 2);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
     }
@@ -1007,7 +1007,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                         Matrix_RotateYF(2.0f * (j * M_PIf) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-                        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                         gSPDisplayList(POLY_XLU_DISP++, gEffWaterSplashDL);
                     }
                 }
