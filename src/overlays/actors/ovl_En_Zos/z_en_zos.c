@@ -34,7 +34,8 @@ void func_80BBC24C(EnZos* this, PlayState* play);
 void func_80BBC298(EnZos* this, PlayState* play);
 void func_80BBC37C(EnZos* this, PlayState* play);
 
-typedef enum {
+typedef enum EnZosAnimation {
+    /* -1 */ EN_ZOS_ANIM_NONE = -1,
     /*  0 */ EN_ZOS_ANIM_LEAN_ON_KEYBOARD,
     /*  1 */ EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH,
     /*  2 */ EN_ZOS_ANIM_HANDS_ON_HIPS,
@@ -135,7 +136,7 @@ void EnZos_Destroy(Actor* thisx, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
 }
 
-static AnimationHeader* sAnimations[] = {
+static AnimationHeader* sAnimations[EN_ZOS_ANIM_MAX] = {
     &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
     &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
     &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
@@ -154,8 +155,7 @@ static AnimationHeader* sAnimations[] = {
 void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode) {
     f32 endFrame;
 
-    if ((animIndex != this->animIndex) && (animIndex >= EN_ZOS_ANIM_LEAN_ON_KEYBOARD) &&
-        (animIndex < EN_ZOS_ANIM_MAX)) {
+    if ((animIndex != this->animIndex) && (animIndex > EN_ZOS_ANIM_NONE) && (animIndex < EN_ZOS_ANIM_MAX)) {
         if (animIndex > EN_ZOS_ANIM_SLOW_PLAY) {
             endFrame = 29.0f;
         } else {

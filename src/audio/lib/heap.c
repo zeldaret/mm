@@ -189,7 +189,7 @@ void* AudioHeap_AllocDmaMemoryZeroed(AudioAllocPool* pool, size_t size) {
 }
 
 /**
- * Allocates space on a pool contained withing the heap and sets all the allocated space to 0
+ * Allocates space on a pool contained within the heap and sets all the allocated space to 0
  */
 void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size) {
     u8* addr = AudioHeap_Alloc(pool, size);
@@ -223,7 +223,7 @@ void* AudioHeap_TestAlloc(AudioAllocPool* pool, size_t size) {
 }
 
 /**
- * Allocates space on the pool contained withing the heap. If there is not enough space on the pool, return NULL
+ * Allocates space on the pool contained within the heap. If there is not enough space on the pool, return NULL
  */
 void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size) {
     size_t alignedSize = ALIGN16(size);

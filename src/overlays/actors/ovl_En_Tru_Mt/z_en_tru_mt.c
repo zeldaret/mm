@@ -20,26 +20,6 @@ void func_80B76A64(EnTruMt* this, PlayState* play);
 void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
-typedef enum {
-    /* 0x00 */ KOUME_MT_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_MT_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_MT_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_MT_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_MT_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_MT_ANIM_TAKE,
-    /* 0x08 */ KOUME_MT_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_MT_ANIM_DRINK,
-    /* 0x0A */ KOUME_MT_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_MT_ANIM_HEALED,
-    /* 0x0C */ KOUME_MT_ANIM_HOVER1,
-    /* 0x0D */ KOUME_MT_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_MT_ANIM_FLY,
-    /* 0x0F */ KOUME_MT_ANIM_HOVER2,
-    /* 0x10 */ KOUME_MT_ANIM_MAX
-} KoumeMtAnimation;
-
 ActorProfile En_Tru_Mt_Profile = {
     /**/ ACTOR_EN_TRU_MT,
     /**/ ACTORCAT_NPC,
@@ -107,28 +87,44 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum KoumeMtAnimation {
+    /* 0x00 */ KOUME_MT_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_MT_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_MT_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_MT_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_MT_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_MT_ANIM_TAKE,
+    /* 0x08 */ KOUME_MT_ANIM_SHAKE,
+    /* 0x09 */ KOUME_MT_ANIM_DRINK,
+    /* 0x0A */ KOUME_MT_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_MT_ANIM_HEALED,
+    /* 0x0C */ KOUME_MT_ANIM_HOVER1,
+    /* 0x0D */ KOUME_MT_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_MT_ANIM_FLY,
+    /* 0x0F */ KOUME_MT_ANIM_HOVER2,
+    /* 0x10 */ KOUME_MT_ANIM_MAX
+} KoumeMtAnimation;
+
+static AnimationInfoS sAnimationInfo[KOUME_MT_ANIM_MAX] = {
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // KOUME_MT_ANIM_INJURED_LYING_DOWN
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH
+    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },         // KOUME_MT_ANIM_TRY_GET_UP
+    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // KOUME_MT_ANIM_INJURED_RAISE_HEAD
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // KOUME_MT_ANIM_INJURED_TALK
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // KOUME_MT_ANIM_INJURED_HEAD_UP
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH
+    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // KOUME_MT_ANIM_TAKE
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // KOUME_MT_ANIM_SHAKE
+    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },            // KOUME_MT_ANIM_DRINK
+    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_MT_ANIM_FINISHED_DRINKING
+    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // KOUME_MT_ANIM_HEALED
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_MT_ANIM_HOVER1
+    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // KOUME_MT_ANIM_TAKE_OFF
+    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // KOUME_MT_ANIM_FLY
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_MT_ANIM_HOVER2
 };
-
-Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
-
-Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
 
 s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 endFrame;
@@ -490,6 +486,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 }
 
 s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
     EnTruMt* this = THIS;
 
     if (limbIndex == KOUME_LIMB_HEAD) {
@@ -503,6 +500,7 @@ s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
     s32 pad;
     EnTruMt* this = THIS;
     MtxF* sp54;

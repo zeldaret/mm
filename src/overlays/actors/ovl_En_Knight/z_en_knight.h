@@ -90,7 +90,7 @@ typedef struct EnKnight {
     /* 0x192 */ u8 canRetreat;
     /* 0x193 */ u8 shieldingInvulnerabilityTimer;
     /* 0x194 */ SkelAnime skelAnime;
-    /* 0x1D8 */ f32 animLastFrame;
+    /* 0x1D8 */ f32 animEndFrame;
     /* 0x1DC */ Vec3f bodyPartsPos[15];
     /* 0x290 */ u8 igosCurtainReaction;
     /* 0x291 */ u8 lightRayDamageTimer;

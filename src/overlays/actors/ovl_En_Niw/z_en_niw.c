@@ -154,12 +154,12 @@ void EnNiw_Destroy(Actor* thisx, PlayState* play) {
  *
  * AttackNiw has a copy of this function that it barely uses
  */
-void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState) {
+void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animIndex) {
     f32 tempOne = 1.0f; // hopefully fake match, but no luck
 
     if (this->unkTimer24C == 0) {
         // targetLimbRots[0] is bodyRotY
-        if (animationState == NIW_ANIM_STILL) {
+        if (animIndex == NIW_ANIM_STILL) {
             this->targetLimbRots[0] = 0.0f;
         } else {
             this->targetLimbRots[0] = -10000.0f * tempOne;
@@ -169,7 +169,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState) {
         this->unkTimer24C = 3;
         if ((this->unk292 % 2) == 0) {
             this->targetLimbRots[0] = 0.0f;
-            if (animationState == NIW_ANIM_STILL) {
+            if (animIndex == NIW_ANIM_STILL) {
                 this->unkTimer24C = Rand_ZeroFloat(30.0f);
             }
         }
@@ -179,7 +179,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState) {
         this->unkToggle296++;
         this->unkToggle296 &= 1;
 
-        switch (animationState) {
+        switch (animIndex) {
             case NIW_ANIM_STILL:
                 this->targetLimbRots[2] = 0.0f; // both wingRotZ
                 this->targetLimbRots[1] = 0.0f;

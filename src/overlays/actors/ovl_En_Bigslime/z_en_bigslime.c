@@ -95,7 +95,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play);
  *              --- See below (variants) for the uses of these copies
  *
  * Vtx Rings:
- *     - The vtx mesh was designed to be seperated into distint "rings" of vertices and faces
+ *     - The vtx mesh was designed to be separated into distint "rings" of vertices and faces
  *       from top to bottom at discrete y-intervals
  *     - These different rings of vertices lie in the xzPlane along discrete y-direction steps of the sphere
  *          -- There are the single apex nodes at the top (vertex 0 y-coordiante 1000) and bottom (vertex 161

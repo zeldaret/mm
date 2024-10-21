@@ -861,9 +861,6 @@ void AudioSfx_SetBankLerp(u8 bankId, u8 target, u16 delay) {
     sSfxBankLerp[bankId].step = ((sSfxBankLerp[bankId].value - sSfxBankLerp[bankId].target) / delay);
 }
 
-/**
- * Unused
- */
 void AudioSfx_StepBankLerp(u8 bankId) {
     if (sSfxBankLerp[bankId].remainingFrames != 0) {
         sSfxBankLerp[bankId].remainingFrames--;

@@ -31,16 +31,15 @@ ActorProfile Obj_Jg_Gakki_Profile = {
 void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjJgGakki* this = THIS;
-    f32 frameCount = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
+    f32 endFrame = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
 
     if (((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7)) && (play->csCtx.scriptIndex == 0)) {
-        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, ANIMMODE_ONCE,
-                         0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     } else if ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_10YUKIYAMANOMURA)) {
-        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, endFrame, ANIMMODE_ONCE, 0.0f);
     } else {
         Actor_Kill(&this->actor);
     }

@@ -429,7 +429,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
         // `prevTimeUntilTransition` will be slightly negative (behind transition time)
         // Only when the signs are different will this condition pass
         if ((curTimeUntilTransition * prevTimeUntilTransition) <= 0) {
-            // day-night transition is occuring
+            // day-night transition is occurring
             gSaveContext.unk_3CA7 = 1;
             if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
                 play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;

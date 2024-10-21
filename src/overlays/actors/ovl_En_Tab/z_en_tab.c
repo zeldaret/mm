@@ -6,7 +6,6 @@
 
 #include "z_en_tab.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
-#include "assets/objects/object_tab/object_tab.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -246,28 +245,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-AnimationInfoS D_80BE1AD0[] = {
-    { &gBartenIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-};
-
-Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
-
-Vec3s D_80BE1AFC = { 0, 0, 0 };
-
-Vec3f D_80BE1B04 = { 161.0f, 0.0f, -10.0f };
-
-Vec3s D_80BE1B10 = { 0, 0xC000, 0 };
-
-Vec3f D_80BE1B18 = { 800.0f, 0.0f, 0.0f };
-
-static TexturePtr sEyeTextures[] = {
-    gBartenEyeOpenTex,
-    gBartenEyeHalfOpenTex,
-    gBartenEyeClosedTex,
-    gBartenEyeHalfOpenTex,
-};
-
 Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
 
@@ -292,25 +269,37 @@ Actor* EnTab_FindActor(EnTab* this, PlayState* play, u8 actorCategory, s16 actor
     return actorIter;
 }
 
-void func_80BE0590(EnTab* this) {
-    this->skelAnime.playSpeed = this->unk_300;
+void EnTab_UpdateSkelAnime(EnTab* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BE05BC(EnTab* this, s32 arg1) {
-    s32 phi_v0 = false;
-    s32 ret = false;
+typedef enum EnTabAnimation {
+    /* -1 */ ENTAB_ANIM_NONE = -1,
+    /*  0 */ ENTAB_ANIM_0,
+    /*  1 */ ENTAB_ANIM_1,
+    /*  2 */ ENTAB_ANIM_MAX
+} EnTabAnimation;
 
-    if (arg1 != this->unk_32C) {
-        phi_v0 = true;
+static AnimationInfoS sAnimationInfo[ENTAB_ANIM_MAX] = {
+    { &gBartenIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // ENTAB_ANIM_0
+    { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENTAB_ANIM_1
+};
+
+s32 EnTab_ChangeAnim(EnTab* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
+
+    if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v0) {
-        this->unk_32C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BE1AD0, arg1);
-        this->unk_300 = this->skelAnime.playSpeed;
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BE0620(EnTab* this, PlayState* play) {
@@ -515,6 +504,8 @@ MsgScript* EnTab_GetMsgScript(EnTab* this, PlayState* play) {
 }
 
 s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    static Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
+    static Vec3s D_80BE1AFC = { 0, 0, 0 };
     s32 ret = false;
     EnGm* sp28 = (EnGm*)EnTab_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
@@ -527,13 +518,15 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
         this->unk_1E4 = sp28;
-        func_80BE05BC(this, 0);
+        EnTab_ChangeAnim(this, ENTAB_ANIM_0);
         ret = true;
     }
     return ret;
 }
 
 s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    static Vec3f D_80BE1B04 = { 161.0f, 0.0f, -10.0f };
+    static Vec3s D_80BE1B10 = { 0, 0xC000, 0 };
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
@@ -543,7 +536,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
-    func_80BE05BC(this, 1);
+    EnTab_ChangeAnim(this, ENTAB_ANIM_1);
     return true;
 }
 
@@ -661,8 +654,8 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBartenSkel, NULL, this->jointTable, this->morphTable, BARTEN_LIMB_MAX);
-    this->unk_32C = -1;
-    func_80BE05BC(this, 0);
+    this->animIndex = ENTAB_ANIM_NONE;
+    EnTab_ChangeAnim(this, ENTAB_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -693,7 +686,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->scheduleResult != 0) {
-        func_80BE0590(this);
+        EnTab_UpdateSkelAnime(this);
         func_80BE0664(this);
         func_80BE09A8(this, play);
 
@@ -710,20 +703,21 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
 s32 EnTab_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTab* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == BARTEN_LIMB_HEAD) {
         func_80BE0A98(this, play);
     }
 
-    if ((this->unk_32C == 1) && (limbIndex == 18)) {
+    if ((this->animIndex == ENTAB_ANIM_1) && (limbIndex == BARTEN_LIMB_LEFT_BROOM)) {
         *dList = NULL;
     }
     return false;
 }
 
 void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80BE1B18 = { 800.0f, 0.0f, 0.0f };
     EnTab* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == BARTEN_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BE1B18, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
@@ -746,7 +740,7 @@ void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         rotStep = false;
     }
 
-    if (limbIndex == 9) {
+    if (limbIndex == BARTEN_LIMB_HEAD) {
         SubS_UpdateLimb(BINANG_ADD(this->unk_312 + this->unk_316, 0x4000),
                         BINANG_ADD(this->unk_314 + this->unk_318 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
                         this->unk_200, rotStep, overrideStep);
@@ -761,6 +755,12 @@ void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTab_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sEyeTextures[] = {
+        gBartenEyeOpenTex,
+        gBartenEyeHalfOpenTex,
+        gBartenEyeClosedTex,
+        gBartenEyeHalfOpenTex,
+    };
     EnTab* this = THIS;
 
     if (this->scheduleResult != 0) {

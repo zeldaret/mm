@@ -830,7 +830,7 @@ void EnKnight_TelegraphHeavyAttack(EnKnight* this, PlayState* play) {
 
 void EnKnight_SetupHeavyAttack(EnKnight* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightHeavyAttackAnim, 0.0f);
-    this->animLastFrame = Animation_GetLastFrame(&gKnightHeavyAttackAnim);
+    this->animEndFrame = Animation_GetLastFrame(&gKnightHeavyAttackAnim);
     this->actionFunc = EnKnight_HeavyAttack;
 }
 
@@ -862,7 +862,7 @@ void EnKnight_HeavyAttack(EnKnight* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, this->attackSfx);
     }
 
-    if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+    if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 100.0f)) {
             EnKnight_SetupLowSwing(this, play);
         } else {
@@ -875,7 +875,7 @@ void EnKnight_HeavyAttack(EnKnight* this, PlayState* play) {
 
 void EnKnight_SetupLowSwing(EnKnight* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightLowSwingAnim, -5.0f);
-    this->animLastFrame = Animation_GetLastFrame(&gKnightLowSwingAnim);
+    this->animEndFrame = Animation_GetLastFrame(&gKnightLowSwingAnim);
     this->actionFunc = EnKnight_LowSwing;
 }
 
@@ -912,7 +912,7 @@ void EnKnight_LowSwing(EnKnight* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, this->attackSfx);
     }
 
-    if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+    if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         EnKnight_SetupLowSwingEnd(this, play);
     }
 
@@ -945,10 +945,10 @@ void EnKnight_LowSwingEnd(EnKnight* this, PlayState* play) {
 void EnKnight_SetupBasicSwing(EnKnight* this, PlayState* play) {
     if (Rand_ZeroOne() < 0.5f) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightRightSwingAnim, -2.0f);
-        this->animLastFrame = Animation_GetLastFrame(&gKnightRightSwingAnim);
+        this->animEndFrame = Animation_GetLastFrame(&gKnightRightSwingAnim);
     } else {
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightLeftSwingAnim, -2.0f);
-        this->animLastFrame = Animation_GetLastFrame(&gKnightLeftSwingAnim);
+        this->animEndFrame = Animation_GetLastFrame(&gKnightLeftSwingAnim);
     }
 
     this->actionFunc = EnKnight_BasicSwing;
@@ -958,7 +958,7 @@ void EnKnight_SetupBasicSwing(EnKnight* this, PlayState* play) {
 void EnKnight_BasicSwing(EnKnight* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+    if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         if ((Rand_ZeroOne() < 0.6f) && (this->actor.xzDistToPlayer <= 100.0f)) {
             if (Rand_ZeroOne() < 0.5f) {
                 EnKnight_SetupBasicSwing(this, play);
@@ -984,7 +984,7 @@ void EnKnight_SetupJumpAttack(EnKnight* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer <= 200.0f) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightJumpAttackBeginAnim, -3.0f);
-        this->animLastFrame = Animation_GetLastFrame(&gKnightJumpAttackBeginAnim);
+        this->animEndFrame = Animation_GetLastFrame(&gKnightJumpAttackBeginAnim);
         this->actionFunc = EnKnight_JumpAttack;
         Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
         Matrix_MultVecZ(KREG(49) + 7.0f, &translation);
@@ -1012,10 +1012,10 @@ void EnKnight_JumpAttack(EnKnight* this, PlayState* play) {
     }
 
     SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+    if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightJumpAttackEndAnim, 0.0f);
         Actor_PlaySfx(&this->actor, this->attackSfx);
-        this->animLastFrame = 1000.0f;
+        this->animEndFrame = 1000.0f;
     }
 
     this->actor.speed = 0.0f;
@@ -1041,7 +1041,7 @@ void EnKnight_SetupBlocking(EnKnight* this, PlayState* play) {
     if (this->actionFunc != EnKnight_Blocking) {
         this->prevActionFunc = this->actionFunc;
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightFastBlockStandingAnim, -2.0f);
-        this->animLastFrame = Animation_GetLastFrame(&gKnightFastBlockStandingAnim);
+        this->animEndFrame = Animation_GetLastFrame(&gKnightFastBlockStandingAnim);
         this->actionFunc = EnKnight_Blocking;
     }
     this->timers[0] = 5;
@@ -1312,12 +1312,12 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
                     this->subAction = KNIGHT_SUB_ACTION_RETREAT_3;
                     this->drawDmgEffState = KNIGHT_DMGEFF_STATE_30;
                     Animation_MorphToLoop(&this->skelAnime, &gKnightStruckByLightRayAnim, -2.0f);
-                    this->animLastFrame = Animation_GetLastFrame(&gKnightStruckByLightRayAnim);
+                    this->animEndFrame = Animation_GetLastFrame(&gKnightStruckByLightRayAnim);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STAL_FREEZE_LIGHTS);
                 } else {
                     this->subAction = KNIGHT_SUB_ACTION_RETREAT_1;
                     Animation_MorphToLoop(&this->skelAnime, &gKnightIdleAnim, -5.0f);
-                    this->animLastFrame = 1000.0f;
+                    this->animEndFrame = 1000.0f;
                 }
             }
             break;
@@ -1342,10 +1342,10 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
             goto common_case;
 
         case KNIGHT_SUB_ACTION_RETREAT_3:
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 this->subAction = KNIGHT_SUB_ACTION_RETREAT_2;
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightFastBlockStandingAnim, -2.0f);
-                this->animLastFrame = 1000.0f;
+                this->animEndFrame = 1000.0f;
             }
             goto common_case;
 
@@ -1353,7 +1353,7 @@ void EnKnight_Retreat(EnKnight* this, PlayState* play) {
             this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
             Math_ApproachZeroF(&this->actor.speed, 1.0f, 1.0f);
 
-            if (this->animLastFrame > 10.0f) {
+            if (this->animEndFrame > 10.0f) {
                 Math_ApproachS(&this->actor.world.rot.y, this->yawToPlayer, 2, 0xE00);
             }
 
@@ -1499,11 +1499,11 @@ void EnKnight_SetupFallOver(EnKnight* this, PlayState* play) {
     if (ABS_ALT(yawDiff) < 0x4000) {
         // Fall over backwards
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightFallBackwardsAnim, 0.0f);
-        this->animLastFrame = 1.0f;
+        this->animEndFrame = 1.0f;
     } else {
         // Fall over forwards
         Animation_MorphToPlayOnce(&this->skelAnime, &gKnightFallForwardsAnim, 0.0f);
-        this->animLastFrame = -1.0f;
+        this->animEndFrame = -1.0f;
     }
 
     Matrix_RotateYS(this->yawToPlayer, MTXMODE_NEW);
@@ -1535,7 +1535,7 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
             scale = -65.0f;
         }
 
-        Matrix_MultVecZ((KREG(9) + 1.0f) * (scale * this->animLastFrame), &raycastPos);
+        Matrix_MultVecZ((KREG(9) + 1.0f) * (scale * this->animEndFrame), &raycastPos);
         raycastPos.x += this->actor.world.pos.x;
         raycastPos.y += this->actor.world.pos.y + 300.0f;
         raycastPos.z += this->actor.world.pos.z;
@@ -1545,7 +1545,7 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
             dx = raycastPos.x - this->actor.world.pos.x;
             dy = floorHeight - this->actor.world.pos.y;
             dz = raycastPos.z - this->actor.world.pos.z;
-            Math_ApproachS(&this->actor.shape.rot.x, Math_Atan2S(dy, sqrtf(SQ(dx) + SQ(dz))) * (s32)this->animLastFrame,
+            Math_ApproachS(&this->actor.shape.rot.x, Math_Atan2S(dy, sqrtf(SQ(dx) + SQ(dz))) * (s32)this->animEndFrame,
                            1, 0x800);
         } else {
             Math_ApproachS(&this->actor.shape.rot.x, 0, 1, 0x800);
@@ -1564,7 +1564,7 @@ void EnKnight_FallOver(EnKnight* this, PlayState* play) {
 
     Math_ApproachZeroF(&this->actor.speed, 1.0f, 1.0f);
     Math_ApproachZeroF(&this->shadowAlphaFactor, 1.0f, 10.0f);
-    if (this->animLastFrame > 0.0f) {
+    if (this->animEndFrame > 0.0f) {
         timerTarget = 20;
     } else {
         timerTarget = KREG(8) + 8;
@@ -2029,7 +2029,7 @@ void EnKnight_IgosSitting(EnKnight* this, PlayState* play) {
                 // fast block
                 this->subAction = KNIGHT_SUB_ACTION_IGOS_SITTING_10;
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightFastBlockSittingAnim, 0.0f);
-                this->animLastFrame = Animation_GetLastFrame(&gKnightFastBlockSittingAnim);
+                this->animEndFrame = Animation_GetLastFrame(&gKnightFastBlockSittingAnim);
             }
             break;
 
@@ -2080,16 +2080,16 @@ void EnKnight_IgosSitting(EnKnight* this, PlayState* play) {
             break;
 
         case KNIGHT_SUB_ACTION_IGOS_SITTING_10:
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 // return to idle
                 this->subAction = KNIGHT_SUB_ACTION_IGOS_SITTING_11;
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightEndBlockAndSitAnim, 0.0f);
-                this->animLastFrame = Animation_GetLastFrame(&gKnightEndBlockAndSitAnim);
+                this->animEndFrame = Animation_GetLastFrame(&gKnightEndBlockAndSitAnim);
             }
             break;
 
         case KNIGHT_SUB_ACTION_IGOS_SITTING_11:
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosSitDownAnim, -15.0f);
                 this->subAction = KNIGHT_SUB_ACTION_IGOS_SITTING_0;
             }
@@ -2198,7 +2198,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
 
 void EnKnight_SetupBreathAttack(EnKnight* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosBreathAttackStartAnim, -5.0f);
-    this->animLastFrame = Animation_GetLastFrame(&gKnightIgosBreathAttackStartAnim);
+    this->animEndFrame = Animation_GetLastFrame(&gKnightIgosBreathAttackStartAnim);
     this->actionFunc = EnKnight_BreathAttack;
     this->subAction = KNIGHT_SUB_ACTION_BREATH_ATTACK_0;
     this->timers[0] = KREG(57) + 150;
@@ -2225,7 +2225,7 @@ void EnKnight_BreathAttack(EnKnight* this, PlayState* play) {
 
     switch (this->subAction) {
         case KNIGHT_SUB_ACTION_BREATH_ATTACK_0:
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 this->subAction = KNIGHT_SUB_ACTION_BREATH_ATTACK_1;
                 Animation_MorphToLoop(&this->skelAnime, &gKnightIgosBreathAttackAnim, 0.0f);
             }
@@ -2244,14 +2244,14 @@ void EnKnight_BreathAttack(EnKnight* this, PlayState* play) {
             if (this->timers[0] == 0) {
                 this->subAction = KNIGHT_SUB_ACTION_BREATH_ATTACK_2;
                 Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosBreathAttackStopAnim, -5.0f);
-                this->animLastFrame = Animation_GetLastFrame(&gKnightIgosBreathAttackStopAnim);
+                this->animEndFrame = Animation_GetLastFrame(&gKnightIgosBreathAttackStopAnim);
             }
             break;
 
         case KNIGHT_SUB_ACTION_BREATH_ATTACK_2:
             EnKnight_SpawnBreathEffects(this, play, 0x1600);
 
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 EnKnight_SetupWait(this, play);
                 this->timers[2] = Rand_ZeroFloat(150.0f) + 150.0f;
             }
@@ -2514,7 +2514,7 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             if (this->csTimer == (u32)(KREG(48) + 85)) {
                 this->csState = KNIGHT_CS_2_STATE_3;
                 this->csTimer = 0;
-                this->animLastFrame = 1000.0f;
+                this->animEndFrame = 1000.0f;
             }
             break;
 
@@ -2522,11 +2522,11 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
             if (this->csTimer == 7) {
                 if (this->prevActionFunc == EnKnight_IgosSitting) {
                     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightCaptainsHatCSIgosShockedSittingAnim, 0.0f);
-                    this->animLastFrame = Animation_GetLastFrame(&gKnightCaptainsHatCSIgosShockedSittingAnim);
+                    this->animEndFrame = Animation_GetLastFrame(&gKnightCaptainsHatCSIgosShockedSittingAnim);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_STAND_RAPID);
                 } else {
                     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightCaptainsHatCSIgosShockedStandingAnim, 0.0f);
-                    this->animLastFrame = Animation_GetLastFrame(&gKnightCaptainsHatCSIgosShockedStandingAnim);
+                    this->animEndFrame = Animation_GetLastFrame(&gKnightCaptainsHatCSIgosShockedStandingAnim);
                 }
                 Message_StartTextbox(play, 0x153E, NULL);
             }
@@ -2544,9 +2544,9 @@ void EnKnight_CaptainsHatCS(EnKnight* this, PlayState* play) {
                 this->subCamAt.z = this->actor.focus.pos.z;
             }
 
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Animation_MorphToLoop(&this->skelAnime, &gKnightCaptainsHatCSIgosShockedAnim, 0.0f);
-                this->animLastFrame = 1000.0f;
+                this->animEndFrame = 1000.0f;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_HAND);
             }
 
@@ -2788,7 +2788,7 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             this->csState = KNIGHT_INTRO_CS_STATE_4;
             this->csTimer = 0;
             Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIntroSitDownAnim, 0.0f);
-            this->animLastFrame = Animation_GetLastFrame(&gKnightIntroSitDownAnim);
+            this->animEndFrame = Animation_GetLastFrame(&gKnightIntroSitDownAnim);
 
             FALLTHROUGH;
         case KNIGHT_INTRO_CS_STATE_4:
@@ -2830,9 +2830,9 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
                 this->jawRotationAmplitudeTarget = KREG(42) + 200.0f;
             }
 
-            if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+            if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                 Animation_MorphToLoop(&this->skelAnime, &gKnightIgosSittingAnim, 0.0f);
-                this->animLastFrame = 1000.0f;
+                this->animEndFrame = 1000.0f;
             }
 
             this->subCamEye.x = 1349.0f;
@@ -2912,13 +2912,13 @@ void EnKnight_IntroCutscene(EnKnight* this, PlayState* play) {
             if (this->csTimer >= (u32)(BREG(37) + 20)) {
                 if (this->csTimer == (u32)(BREG(37) + 20)) {
                     Animation_MorphToPlayOnce(&this->skelAnime, &gKnightIgosStandAndDrawAnim, 0.0f);
-                    this->animLastFrame = Animation_GetLastFrame(&gKnightIgosStandAndDrawAnim);
+                    this->animEndFrame = Animation_GetLastFrame(&gKnightIgosStandAndDrawAnim);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_STAND);
                 }
 
-                if (Animation_OnFrame(&this->skelAnime, this->animLastFrame)) {
+                if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
                     Animation_MorphToLoop(&this->skelAnime, &gKnightIgosLaughAnim, 0.0f);
-                    this->animLastFrame = 1000.0f;
+                    this->animEndFrame = 1000.0f;
                 }
             }
 

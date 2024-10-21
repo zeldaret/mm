@@ -55,7 +55,7 @@ f32 __sinf(f32 x) {
         return x;
     }
 
-    // |x| < 2^{28} (beyond this range, floats are too sparse to make the trig functions useable)
+    // |x| < 2^{28} (beyond this range, floats are too sparse to make the trig functions usable)
     if (xpt < 310) {
         dx = x;
         dn = dx * rpi.d;

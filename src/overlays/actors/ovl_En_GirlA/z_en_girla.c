@@ -15,7 +15,7 @@ void EnGirlA_Destroy(Actor* thisx, PlayState* play);
 void EnGirlA_Update(Actor* thisx, PlayState* play);
 void EnGirlA_Draw(Actor* thisx, PlayState* play);
 
-void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play);
+void EnGirlA_InitialUpdate(EnGirlA* this, PlayState* play);
 void EnGirlA_Update2(EnGirlA* this, PlayState* play);
 
 s32 EnGirlA_CanBuyPotionRed(PlayState* play, EnGirlA* this);
@@ -172,7 +172,7 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     }
 
     this->actor.params = params;
-    this->mainActionFunc = EnGirlA_InitalUpdate;
+    this->mainActionFunc = EnGirlA_InitialUpdate;
 }
 
 void EnGirlA_Init(Actor* thisx, PlayState* play) {
@@ -560,7 +560,7 @@ s32 EnGirlA_TrySetMaskItemDescription(EnGirlA* this, PlayState* play) {
     return false;
 }
 
-void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play) {
+void EnGirlA_InitialUpdate(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 

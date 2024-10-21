@@ -60,7 +60,7 @@ typedef struct EnWiz {
     /* 0x3CA */ u8 shouldStartTimer;
     /* 0x3CB */ u8 introCutsceneState;
     /* 0x3CC */ s32 musicStartTimer;
-    /* 0x3D0 */ f32 endFrame;
+    /* 0x3D0 */ f32 animEndFrame;
     /* 0x3D4 */ f32 scale;
     /* 0x3D8 */ Vec3f staffFlamePos;
     /* 0x3E4 */ Vec3f staffFlameScale;

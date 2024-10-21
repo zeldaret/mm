@@ -202,13 +202,13 @@ void EnPr_ChangeAnim(EnPr* this, s32 animIndex) {
 
     this->animIndex = animIndex;
     playSpeed = 1.0f;
-    this->unk_2BC = Animation_GetLastFrame(sAnimations[animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
 
     if (this->animIndex == ENPR_ANIM_2) {
         playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->unk_2BC,
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -2.0f);
 }
 
@@ -425,7 +425,7 @@ void func_80A32E60(EnPr* this) {
 void func_80A32EA4(EnPr* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->unk_2BC <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (this->actor.colChkInfo.health <= 0) {
             this->unk_206 = 7;
             this->unk_20A = 50;

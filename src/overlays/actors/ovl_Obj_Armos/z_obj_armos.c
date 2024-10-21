@@ -181,7 +181,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
     ObjArmos* this = THIS;
     s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
     s32 sp40 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
-    f32 sp3C = Animation_GetLastFrame(&gArmosPushedBackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
@@ -194,7 +194,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
                    this->morphTable, OBJECT_AM_LIMB_MAX);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, sp3C, sp3C, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
 
     if (sp40 == 0) {
         func_809A57D8(this);

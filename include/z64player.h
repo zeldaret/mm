@@ -71,7 +71,7 @@ typedef enum PlayerIdleType {
  */
 
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into seperate values (see known usages above)
+    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into separate values (see known usages above)
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
