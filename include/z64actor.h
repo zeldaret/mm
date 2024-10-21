@@ -516,8 +516,8 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_40000         (1 << 18)
 
 // Allows for the attention system to refind the focus actor in the search for the next attention actor.
-// Also allows for the next lockOn actor to be the focus actor again.
-// When chosen as the next lock on actor, this flag is unset.
+// Also allows for the next lock-on actor to be the focus actor again.
+// When chosen as the next lock-on actor, this flag is unset.
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
 // 
 #define ACTOR_FLAG_100000        (1 << 20)
