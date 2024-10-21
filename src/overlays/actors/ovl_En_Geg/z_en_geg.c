@@ -485,10 +485,10 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
             }
             Message_StartTextbox(play, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->unk_230 |= 4;
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 300.0f);
         }
     } else {
@@ -510,9 +510,9 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
             Message_StartTextbox(play, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->unk_230 &= ~8;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 300.0f);
             this->unk_230 |= 8;
         }
@@ -820,9 +820,9 @@ void func_80BB30B4(EnGeg* this, PlayState* play) {
         }
         Message_StartTextbox(play, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 150.0f);
     }
 }

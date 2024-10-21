@@ -922,10 +922,10 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 }
 
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
             Message_StartTextbox(play, 0x33C1, &this->actor);

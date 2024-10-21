@@ -7165,7 +7165,7 @@ s32 func_8083784C(Player* this) {
             ((this->ageProperties->unk_2C - this->actor.depthInWater) < sPlayerYDistToFloor)) {
             if ((this->remainingHopsCounter != 0) && (gSaveContext.save.saveInfo.playerData.health != 0) &&
                 !(this->stateFlags1 & PLAYER_STATE1_4000000)) {
-                if (((this->talkActor == NULL) || !(this->talkActor->flags & ACTOR_FLAG_10000))) {
+                if (((this->talkActor == NULL) || !(this->talkActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED))) {
                     return true;
                 }
             }
@@ -7891,7 +7891,7 @@ s32 Player_ActionHandler_4(Player* this, PlayState* play) {
 
         if (this->tatlActor != NULL) {
             var_t2 = (lockOnActor != NULL) &&
-                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
+                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP) ||
                       (lockOnActor->hintId != TATL_HINT_ID_NONE));
 
             if (var_t2 || (this->tatlTextId != 0)) {
@@ -7915,7 +7915,7 @@ s32 Player_ActionHandler_4(Player* this, PlayState* play) {
                 if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) ||
                     ((this->heldActor != NULL) &&
                      (var_t1 || (talkActor == this->heldActor) || (var_a1 == this->heldActor) ||
-                      ((talkActor != NULL) && (talkActor->flags & ACTOR_FLAG_10000))))) {
+                      ((talkActor != NULL) && (talkActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED))))) {
                     if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
                          (this->stateFlags1 & PLAYER_STATE1_800000) || func_801242B4(this))) {
                         if (talkActor != NULL) {
@@ -7928,7 +7928,7 @@ s32 Player_ActionHandler_4(Player* this, PlayState* play) {
                             }
 
                             if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) ||
-                                (talkActor->flags & ACTOR_FLAG_10000)) {
+                                (talkActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) {
                                 var_a1 = NULL;
                             } else if (var_a1 == NULL) {
                                 return false;
@@ -7972,7 +7972,7 @@ s32 Player_ActionHandler_0(Player* this, PlayState* play) {
         Player_ActionHandler_13(this, play);
         return true;
     } else if ((this->focusActor != NULL) &&
-               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000) ||
+               (CHECK_FLAG_ALL(this->focusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP) ||
                 (this->focusActor->hintId != TATL_HINT_ID_NONE))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
     } else if ((this->tatlTextId == 0) && !Player_CheckHostileLockOn(this) &&
@@ -20892,7 +20892,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     func_808323C0(player, CS_ID_GLOBAL_TALK);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
-        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000)) {
+        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP)) {
         actor->flags |= ACTOR_FLAG_TALK;
     }
 

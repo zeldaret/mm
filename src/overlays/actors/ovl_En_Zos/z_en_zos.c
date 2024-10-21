@@ -253,7 +253,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x124F, &this->actor);
         this->actionFunc = func_80BBB8AC;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
@@ -266,7 +266,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BBB2C4;
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE);
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE)) {
@@ -499,7 +499,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
 void func_80BBBB84(EnZos* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
@@ -523,7 +523,7 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
 
 void func_80BBBCBC(EnZos* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
@@ -536,7 +536,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     func_80BBB414(this, play);
     if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBCBC;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
@@ -559,7 +559,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_FULL_EVAN_SONG) {
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80BBBB84;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 120.0f);
         return;
     }

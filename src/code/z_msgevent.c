@@ -175,7 +175,7 @@ s32 MsgEvent_Autotalk(Actor* actor, PlayState* play, u8** script, MsgScriptCallb
     if (Actor_TalkOfferAccepted(actor, &play->state)) {
         *script += skip;
     } else {
-        actor->flags |= ACTOR_FLAG_10000;
+        actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         xzDist = actor->xzDistToPlayer;
         actor->xzDistToPlayer = 0.0f;
         Actor_OfferTalkExchange(actor, play, xzRange, yRange, PLAYER_IA_NONE);
@@ -471,14 +471,14 @@ s32 MsgEvent_Pause(Actor* actor, PlayState* play, u8** script, MsgScriptCallback
 }
 
 /**
- * Unsets ACTOR_FLAG_10000 for the actor executing the cmd
+ * Unsets ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED for the actor executing the cmd
  *
  * Command structure:
  *  0:(u8)  cmd
  * Command size: 1
  */
 s32 MsgEvent_UnsetAutotalk(Actor* actor, PlayState* play, u8** script, MsgScriptCallback callback, s32* endScript) {
-    actor->flags &= ~ACTOR_FLAG_10000;
+    actor->flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     return false;
 }
 

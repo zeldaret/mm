@@ -349,7 +349,7 @@ void func_808F395C(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
@@ -389,7 +389,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
         }
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     }
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
@@ -401,7 +401,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
 
 void func_808F3AD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -414,7 +414,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F3AD4;
         textId = (gSaveContext.save.day != 3) ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
@@ -425,7 +425,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 
 void func_808F3BD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -438,7 +438,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F3BD4;
         textId = gSaveContext.save.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
@@ -449,7 +449,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 
 void func_808F3CD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -465,7 +465,7 @@ void func_808F3D40(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F3CD4;
         textId = gSaveContext.save.day != 3 ? 0x347D : 0x34A0;
         this->actor.textId = textId;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
     }
