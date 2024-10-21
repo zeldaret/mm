@@ -296,7 +296,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 snuffTimerInitial = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
@@ -319,7 +319,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - thisx->shape.rot.y), MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 

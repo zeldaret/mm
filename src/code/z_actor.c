@@ -134,7 +134,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dList,
             shadowScale *= actor->shape.shadowScale;
             Matrix_Scale(actor->scale.x * shadowScale, 1.0f, actor->scale.z * shadowScale, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, dList);
 
             CLOSE_DISPS(play->state.gfxCtx);
@@ -188,7 +188,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
     Matrix_RotateYS(sp58, MTXMODE_APPLY);
     Matrix_Scale(shadowScaleX, 1.0f, shadowScaleX * shadowScaleZ, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gFootShadowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -601,7 +601,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
                         Matrix_RotateZS(0x10000 / 4, MTXMODE_APPLY);
                         Matrix_Push();
                         Matrix_Translate(reticle->radius, reticle->radius, 0.0f, MTXMODE_APPLY);
-                        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+                        MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
                         gSPDisplayList(OVERLAY_DISP++, gLockOnReticleTriangleDL);
                         Matrix_Pop();
                     }
@@ -629,7 +629,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
         Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLockOnArrowDL);
     }
 
@@ -3996,7 +3996,7 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
 
     Matrix_Scale(scale->x, 1.0f, scale->z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4073,7 +4073,7 @@ void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type) {
             Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, entry->chainDL);
 
         if ((i % 2) != 0) {
@@ -4088,7 +4088,7 @@ void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type) {
     Matrix_Put(&baseMtxF);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, entry->lockDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4923,8 +4923,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                         Matrix_RotateZF(M_PIf, MTXMODE_APPLY);
                     }
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2ModelDL);
                 }
@@ -4955,8 +4954,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     Matrix_ReplaceRotation(&play->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
                 }
@@ -5003,8 +5001,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
@@ -5045,8 +5042,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
@@ -5085,8 +5081,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
@@ -5097,8 +5092,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
                 }

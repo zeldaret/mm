@@ -178,7 +178,7 @@ void func_80BF3920(EnRgStruct* ptr, PlayState* play2) {
         Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(temp_f20 * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
@@ -821,7 +821,7 @@ void func_80BF547C(EnRg* this, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

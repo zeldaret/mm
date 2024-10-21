@@ -346,7 +346,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->dList);
 

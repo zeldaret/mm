@@ -589,7 +589,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     if (this->unk_19E > 0) {
         s32 sp38 = this->unk_19E * 0.49803922f;
@@ -610,7 +610,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         }
 

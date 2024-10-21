@@ -315,7 +315,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(ptr->unk_2C.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
         }
     }
@@ -341,7 +341,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
             Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
             Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
         }
     }
@@ -555,7 +555,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
                 Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0043E8);
 
             if ((ptr->unk_2A & 1) == 0) {
@@ -563,8 +563,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
                 Matrix_RotateXS(ptr->unk_28, MTXMODE_APPLY);
                 Matrix_Scale(ptr->unk_2C.z, ptr->unk_2C.z, ptr->unk_2C.z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
             }
         }
@@ -638,7 +637,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
             Matrix_Scale(this->unk_DC8[1].y, this->unk_DC8[1].z, this->unk_DC8[1].y, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E2C);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000420);
         }
@@ -650,7 +649,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E0C));
             Matrix_Scale(this->unk_DC8[2].y, this->unk_DC8[2].z, this->unk_DC8[2].y, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E30);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000730);
         }
@@ -665,7 +664,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E34);
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000A48);
     }
@@ -678,7 +677,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E38);
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000CD8);
     }
@@ -704,8 +703,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
                 Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
                 Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
             }
         }

@@ -561,7 +561,7 @@ void EnGiant_Draw(Actor* thisx, PlayState* play) {
                 SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
             Matrix_Mult(&this->headDrawMtxF, MTXMODE_NEW);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);
         }
 

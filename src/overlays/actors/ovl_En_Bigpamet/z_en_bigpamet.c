@@ -802,7 +802,7 @@ void func_80A292A8(EnBigpamet* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &ptr->unk_18);
             Matrix_Scale(ptr->unk_20, ptr->unk_20, ptr->unk_20, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
         }
 

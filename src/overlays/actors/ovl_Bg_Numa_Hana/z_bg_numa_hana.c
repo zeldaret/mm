@@ -384,7 +384,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 
     for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
@@ -394,13 +394,13 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
         Matrix_SetTranslateRotateYXZ(innerPetalPosRot->pos.x, innerPetalPosRot->pos.y, innerPetalPosRot->pos.z,
                                      &innerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerInnerPetalDL);
 
         Matrix_SetTranslateRotateYXZ(outerPetalPosRot->pos.x, outerPetalPosRot->pos.y, outerPetalPosRot->pos.z,
                                      &outerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerOuterPetalDL);
     }
 
@@ -409,7 +409,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
         gSPDisplayList(POLY_OPA_DISP++, gObjectSyokudaiTypeNoSwitchDL);
     }

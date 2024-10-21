@@ -612,7 +612,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(1.0f, 1.0f, this->reflectIntensity, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(s8)(this->reflectIntensity * 100.0f));
 
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_mir_ray_Matanimheader_0003F8));
@@ -641,8 +641,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
                 Matrix_Mult(&reflection[i].mtx, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_DECAL2);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, reflection[0].opacity);
                 gSPDisplayList(POLY_XLU_DISP++, object_mir_ray_DL_0004B0);

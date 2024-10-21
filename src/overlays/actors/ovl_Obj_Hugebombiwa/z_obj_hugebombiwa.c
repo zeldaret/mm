@@ -642,13 +642,13 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0xFF, 255, 255, 255, 255);
             gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_002F60);
 
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_003110);
 
         } else if (this->actor.projectedPos.z < 4500.0f) {
@@ -656,7 +656,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, (s32)sp38);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_002F60);
         }
@@ -674,7 +674,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
                 Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y, ptr->unk_0C.z, &ptr->unk_1C);
                 Matrix_Scale(ptr->unk_00.x, ptr->unk_00.x, ptr->unk_00.x, MTXMODE_APPLY);
 
-                gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
                 gSPDisplayList(gfx++, object_bombiwa_DL_001990);
             }
         }
@@ -714,7 +714,7 @@ void func_80A55B34(Actor* thisx, PlayState* play) {
         Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
 
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gSPDisplayList(gfx++, object_bombiwa_DL_0009E0);
     }
 

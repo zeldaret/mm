@@ -746,8 +746,7 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     Matrix_RotateZS(0x3A98, MTXMODE_APPLY);
                     Matrix_Translate(0.0f, 190.0f, 0.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                     gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[this->maskOfTruthObjectSlot].segment);
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_truth_DL_0001A0);
 

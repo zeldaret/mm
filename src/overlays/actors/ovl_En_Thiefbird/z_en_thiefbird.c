@@ -1101,7 +1101,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
         gfx = POLY_OPA_DISP;
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], this->unk_3E4);
         POLY_OPA_DISP = &gfx[2];
 
@@ -1116,7 +1116,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
                 gfx = POLY_OPA_DISP;
             }
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], this->unk_3E8);
 
             if (this->unk_3E8 == gTakkuriStolenBottleDL) {
@@ -1164,7 +1164,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
             Matrix_Translate(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], gTakkuriFeatherModelDL);
             gfx = &gfx[2];
         }

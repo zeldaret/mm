@@ -687,7 +687,7 @@ void ObjSkateblock_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_DrawStep(play, D_80A22A18, 0);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, sp2C->r, sp2C->g, sp2C->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 

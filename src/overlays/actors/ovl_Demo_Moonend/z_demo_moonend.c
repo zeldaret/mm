@@ -210,7 +210,7 @@ void func_80C17FCC(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_moonend_Matanimheader_0129F0));
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_moonend_DL_010C40);
 
     CLOSE_DISPS(play->state.gfxCtx);

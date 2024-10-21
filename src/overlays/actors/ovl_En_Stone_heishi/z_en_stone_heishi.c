@@ -516,11 +516,11 @@ void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             } else {
                 gDPSetEnvColor(gfx++, 200, 0, 0, 0); // Red Potion
             }
-            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
             gSPDisplayList(gfx++, gSoldierBottleContentsDL);
         }
 
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gSPDisplayList(gfx++, gSoldierBottleDL);
 
         *gfxP = gfx++;

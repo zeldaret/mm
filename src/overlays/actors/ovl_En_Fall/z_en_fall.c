@@ -759,7 +759,7 @@ void EnFall_Moon_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Matrix_MultVec3f(sFocusOffset, &this->actor.focus.pos);
 
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
@@ -777,7 +777,7 @@ void EnFall_OpenMouthMoon_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
@@ -795,7 +795,7 @@ void EnFall_LodMoon_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 20, 25, 30, 0, 0x3E7, 0x3200);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
@@ -847,7 +847,7 @@ void EnFall_Fireball_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     this->fireballYTexScroll1 += (s32)(4.0f + (this->fireballIntensity * 12.0f));
@@ -896,7 +896,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, PlayState* play) {
             Matrix_Translate(debrisEffects[i].pos.x, debrisEffects[i].pos.y, debrisEffects[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             Matrix_RotateZYX(debrisEffects[i].rot.x, debrisEffects[i].rot.y, debrisEffects[i].rot.z, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisEffects[i].modelIndex]);
         }
     }
@@ -916,7 +916,7 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
@@ -936,13 +936,13 @@ void EnFall_MoonsTear_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gFallingMoonsTearTexAnim));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gFallingMoonsTearDL);
 
     Matrix_Scale(3.0f, 3.0f, 6.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, gFallingMoonsTearFireDL);

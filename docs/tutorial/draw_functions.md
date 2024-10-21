@@ -222,7 +222,7 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     temp_s0->polyOpa.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDA380003;
     sp28 = temp_v0;
-    sp28->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+    sp28->words.w1 = Matrix_Finalize(play->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_2 + 8;
     temp_v0_2->words.w1 = (u32) &D_06000680;
@@ -232,7 +232,7 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
-    sp20->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+    sp20->words.w1 = Matrix_Finalize(play->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_4 + 8;
     temp_v0_4->words.w1 = (u32) &D_060007C8;
@@ -247,7 +247,7 @@ We can see there are four blocks here, although only two different macros:
     temp_s0->polyOpa.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDA380003;
     sp28 = temp_v0;
-    sp28->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+    sp28->words.w1 = Matrix_Finalize(play->state.gfxCtx);
 ```
 
 gfxdis gives
@@ -260,7 +260,7 @@ gSPMatrix(POLY_OPA_DISP++, 0x12345678, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVI
 so it becomes
 
 ```C
-gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 ```
 
 ```C
@@ -286,7 +286,7 @@ gSPDisplayList(POLY_OPA_DISP++, D_06000680);
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
-    sp20->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+    sp20->words.w1 = Matrix_Finalize(play->state.gfxCtx);
 ```
 
 This is the same as the first one. Indeed, it's identical.
@@ -310,11 +310,11 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
     Matrix_RotateZYX(sp36, 0, sp34, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 
     CLOSE_DISPS(play->state.gfxCtx);

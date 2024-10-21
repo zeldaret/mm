@@ -74,7 +74,7 @@ void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->rAlpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 155, 0);
     Matrix_RotateZS(this->rXZRot, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
 

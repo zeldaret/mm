@@ -1637,7 +1637,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_Mult(&mtxF, MTXMODE_NEW);
             Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
             CLOSE_DISPS(play->state.gfxCtx);

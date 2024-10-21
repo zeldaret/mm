@@ -153,7 +153,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
                                  this->actor.focus.pos.z + sp4C.z, &sp40);
     Matrix_Scale(D_8091D39C, D_8091D39C, D_8091D39C, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 180, sp48);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 210, 255);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);

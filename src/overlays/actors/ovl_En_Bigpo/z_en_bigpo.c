@@ -1252,7 +1252,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2) &&
         (limbIndex == BIG_POE_LIMB_HAT_AND_CLOAK)) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, &gBigPoeCrispyBodyDL);
     }
 
@@ -1356,7 +1356,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, &gBigPoeSoulDL);
 
@@ -1402,7 +1402,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
 
     gDPSetEnvColor(&gfx[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->mainColor.a);
 
-    gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[3], play->state.gfxCtx);
 
     gSPDisplayList(&gfx[4], &gBigPoeLanternMainDL);
 
@@ -1454,7 +1454,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
         mtfxPtr->yw = firePtr->pos.y;
         mtfxPtr->zw = firePtr->pos.z;
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
@@ -1481,7 +1481,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
     Lights_PointNoGlowSetInfo(&parent->fires[this->unk20C].info, thisx->world.pos.x, thisx->world.pos.y,
                               thisx->world.pos.z, 170, 255, 255, (s32)(thisx->scale.x * 500.0f * 100.0f));
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 

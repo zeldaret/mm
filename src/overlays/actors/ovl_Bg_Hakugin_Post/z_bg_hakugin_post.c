@@ -1024,7 +1024,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;
             func_80A9B384(&sp68);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, D_80A9D900[unkStruct1->unk_00]);
         }
     }
@@ -1037,8 +1037,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
                                              &unkStruct2->unk_20);
                 Matrix_Scale(unkStruct2->unk_00, unkStruct2->unk_00, unkStruct2->unk_00, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, D_80A9D91C[unkStruct2->unk_2D]);
             }
         }

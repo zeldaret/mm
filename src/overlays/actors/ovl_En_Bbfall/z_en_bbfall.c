@@ -713,7 +713,7 @@ void EnBbfall_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
             currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].y;
             currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].z;
             Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
 
             CLOSE_DISPS(play->state.gfxCtx);
@@ -757,7 +757,7 @@ void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
             currentMatrixState->mf[3][0] = pos->x;
             currentMatrixState->mf[3][1] = pos->y;
             currentMatrixState->mf[3][2] = pos->z;
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
             opacity -= 35;

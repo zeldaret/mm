@@ -1879,7 +1879,7 @@ void EnBsb_DrawEffects(EnBsb* this, PlayState* play) {
             Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
 

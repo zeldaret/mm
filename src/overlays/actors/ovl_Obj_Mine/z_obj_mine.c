@@ -1104,7 +1104,7 @@ void ObjMine_Path_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, true);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, object_ny_DL_002068);
@@ -1123,7 +1123,7 @@ void ObjMine_DrawExplosion(Actor* thisx, PlayState* play) {
 
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 75);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_ny_DL_002068);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1147,7 +1147,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
-    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
     ObjMine_SetMatrixRotation(&airChain->basis);
@@ -1167,7 +1167,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
             linkPos.z += linkOffset.z;
             ObjMine_SetMatrixTranslation(&linkPos);
 
-            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
             gSPDisplayList(gfx++, object_ny_DL_000030);
         }
     }
@@ -1175,7 +1175,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(0x2000, MTXMODE_APPLY);
     ObjMine_SetMatrixTranslation(&this->actor.world.pos);
 
-    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);
@@ -1203,7 +1203,7 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
-    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
     for (i = 0, waterLink = waterChain->links; i < linkCount; i++, waterLink++) {
@@ -1215,14 +1215,14 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
         }
         ObjMine_SetMatrixTranslation(&waterLink->pos);
 
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gSPDisplayList(gfx++, object_ny_DL_000030);
     }
 
     Matrix_RotateXS(0x2000, MTXMODE_APPLY);
     ObjMine_SetMatrixTranslation(&this->actor.world.pos);
 
-    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
     gDPPipeSync(gfx++);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gDPSetEnvColor(gfx++, 0, 0, 0, 255);

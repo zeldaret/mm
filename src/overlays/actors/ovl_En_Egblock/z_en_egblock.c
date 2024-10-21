@@ -115,7 +115,7 @@ void EnEgblock_Draw(Actor* thisx, PlayState* play2) {
     if (this->inactive != true) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gEyegoreBlockDL);
@@ -208,7 +208,7 @@ void EnEgblock_DrawEffects(EnEgblock* this, PlayState* play) {
                     Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
                     Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
                     gDPSetPrimColor(POLY_OPA_DISP++, 0x00, 0x80, 255, 255, 255, 255);
                     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, effect->alpha);
 

@@ -440,7 +440,7 @@ void func_8092D108(EnDns* this, PlayState* play) {
                                  &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlowerDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -680,7 +680,7 @@ void EnDns_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_1E4[limbIndex]);
 
     CLOSE_DISPS(play->state.gfxCtx);

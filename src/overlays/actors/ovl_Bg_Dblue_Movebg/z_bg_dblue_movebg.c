@@ -753,7 +753,7 @@ void func_80A2B308(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -779,7 +779,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         if ((this->opaDList != NULL) || (this->unk_160 == 6)) {
             gfx2 = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
-            gSPMatrix(&gfx2[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx2[0], play->state.gfxCtx);
 
             if (this->unk_160 == 6) {
                 gSPDisplayList(&gfx2[1], gGreatBayTempleObjectGearShaftDL);
@@ -798,7 +798,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         if (this->xluDList != NULL) {
             gfx = Gfx_SetupDL71(POLY_XLU_DISP);
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], this->xluDList);
 
             POLY_XLU_DISP = &gfx[2];
@@ -840,7 +840,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.y,
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.z, MTXMODE_APPLY);
 
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
                     gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
 

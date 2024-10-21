@@ -1518,7 +1518,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->type == MA_YTO_TYPE_BARN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

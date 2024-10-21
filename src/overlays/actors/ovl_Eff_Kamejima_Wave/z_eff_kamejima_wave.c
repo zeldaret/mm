@@ -161,7 +161,7 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Scale(6.0f, 5.0f, 5.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     AnimatedMat_Draw(play, D_80BCF1C4);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, primColor.r, primColor.g, primColor.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, envColor.r, envColor.g, envColor.b, 255);

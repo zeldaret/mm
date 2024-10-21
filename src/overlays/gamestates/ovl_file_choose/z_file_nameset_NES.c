@@ -938,21 +938,21 @@ void FileSelect_DrawOptionsImpl(GameState* thisx) {
 
     Matrix_Push();
     Matrix_Translate(0.0f, 0.1f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, this->state.gfxCtx);
     gSPVertex(POLY_OPA_DISP++, gOptionsDividerTopVtx, 4, 0);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
     Matrix_Pop();
 
     Matrix_Push();
     Matrix_Translate(0.0f, 0.2f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, this->state.gfxCtx);
     gSPVertex(POLY_OPA_DISP++, gOptionsDividerMiddleVtx, 4, 0);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
     Matrix_Pop();
 
     Matrix_Push();
     Matrix_Translate(0.0f, 0.4f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, this->state.gfxCtx);
     gSPVertex(POLY_OPA_DISP++, gOptionsDividerBottomVtx, 4, 0);
     gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
     Matrix_Pop();

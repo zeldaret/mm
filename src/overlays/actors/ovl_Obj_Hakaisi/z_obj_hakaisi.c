@@ -344,17 +344,17 @@ void ObjHakaisi_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_194 == 0) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_002650);
     } else if (this->unk_194 == 1) {
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_0029C0);
     } else {
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_002CC0);
     }
 
@@ -425,10 +425,10 @@ void func_80B154A0(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (OBJHAKAISI_GET_FF(thisx) == 4) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_001F10);
     } else {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_0021B0);
     }
 

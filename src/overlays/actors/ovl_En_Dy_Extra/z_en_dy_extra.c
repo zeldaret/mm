@@ -123,7 +123,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 2, 0, 0x20, 0x40, 1, play->state.frames,
                                 play->state.frames * -8, 0x10, 0x10));
     gDPPipeSync(POLY_XLU_DISP++);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sPrimColors[this->type].r, sPrimColors[this->type].g,
                     sPrimColors[this->type].b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[this->type].r, sEnvColors[this->type].g, sEnvColors[this->type].b, 128);

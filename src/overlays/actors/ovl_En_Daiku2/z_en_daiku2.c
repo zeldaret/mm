@@ -512,7 +512,7 @@ void EnDaiku2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     if (limbIndex == OBJECT_DAIKU_LIMB_0E) {
         Matrix_Scale(this->unk_260, this->unk_260, this->unk_260, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_009638);
     }
 
@@ -602,7 +602,7 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
                 Matrix_RotateZS(effect->unk_28.z, MTXMODE_APPLY);
                 Matrix_Scale(effect->unk_30, effect->unk_30, effect->unk_30, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_0009E0);
 
                 Matrix_Pop();

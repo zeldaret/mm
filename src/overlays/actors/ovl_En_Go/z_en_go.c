@@ -801,7 +801,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(effect->scaleXY, effect->scaleXY, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
 
         Matrix_Pop();
@@ -896,7 +896,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
         Matrix_Scale(effect->scaleXY, effect->scaleXY, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(alpha * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
@@ -1057,7 +1057,7 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
         Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
         Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, model);
 
         Matrix_Pop();
@@ -1793,7 +1793,7 @@ void EnGo_DrawIceBlockWhenFrozen(EnGo* this, PlayState* play, f32 scale, f32 alp
         Matrix_Scale(scale * 0.7f, scale * 0.8f, scale, MTXMODE_APPLY);
         func_800B8118(&this->actor, play, 0);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         y1 = play->gameplayFrames % 256;
         y2 = (play->gameplayFrames * 2) % 256;
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -2879,7 +2879,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, (this->actionFlags & ENGO_FLAG_SNOWBALLED) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

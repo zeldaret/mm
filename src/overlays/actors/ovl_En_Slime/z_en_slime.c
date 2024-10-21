@@ -1197,7 +1197,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateXFApply(-this->wobbleRot.x);
     }
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gChuchuBodyDL);
 
     if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
@@ -1206,13 +1206,13 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
 
         gSPSegment(POLY_OPA_DISP++, 0x09, sEyeTextures[this->eyeTexIndex]);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 30, 70, 255);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gChuchuEyesDL);
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gSPSegment(POLY_XLU_DISP++, 0x09, sEyeTextures[this->eyeTexIndex]);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gChuchuEyesDL);
     }
 
@@ -1225,7 +1225,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateYS(this->reviveRotY, MTXMODE_APPLY);
         Matrix_Scale(this->reviveScale.x, this->reviveScale.y, this->reviveScale.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gChuchuPuddleDL);
     }
 
@@ -1238,7 +1238,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, this->itemDropTex);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 

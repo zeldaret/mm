@@ -75,7 +75,7 @@ void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this) {
         Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
     }
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(gfxCtx);

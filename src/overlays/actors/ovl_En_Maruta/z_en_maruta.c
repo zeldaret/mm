@@ -703,7 +703,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_210 == 0) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_maruta_DL_002EC0);
     } else {
         sp50 = D_80B387E4[this->unk_210];
@@ -713,7 +713,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateAxisS(this->unk_218, &this->unk_194, MTXMODE_APPLY);
         Matrix_Translate(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         for (i = 0; i < 8; i++) {
             if (D_80B386C0[this->unk_210] & (1 << i)) {

@@ -110,7 +110,7 @@ void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_RotateYS(this->rYaw, MTXMODE_APPLY);
     Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800BCC68(&this->pos, play);

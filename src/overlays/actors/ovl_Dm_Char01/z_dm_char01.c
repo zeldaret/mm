@@ -431,8 +431,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x96, 255, 255, 255, 255);
                         gSPSegment(POLY_OPA_DISP++, 0x0B,
                                    Lib_SegmentedToVirtual(gWoodfallSceneryDynamicPoisonWaterVtx));
-                        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                         gSPDisplayList(POLY_OPA_DISP++, gWoodfallSceneryDynamicPoisonWaterDL);
                     } else {
                         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -443,8 +442,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x96, 255, 255, 255, (u8)this->unk_348);
                         gSPSegment(POLY_XLU_DISP++, 0x0B,
                                    Lib_SegmentedToVirtual(gWoodfallSceneryDynamicPoisonWaterVtx));
-                        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                         gSPDisplayList(POLY_XLU_DISP++, gWoodfallSceneryDynamicPoisonWaterDL);
                     }
 
@@ -487,8 +485,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (u8)this->unk_348);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (u8)this->unk_348);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gWoodfallSceneryWaterFlowingOverTempleDL);
 
                 CLOSE_DISPS(play->state.gfxCtx);

@@ -1091,7 +1091,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);
     gDPSetPrimColor(&gfx[3], 0, 0, this->unk_747.r, this->unk_747.g, this->unk_747.b, 50);
-    gSPMatrix(&gfx[4], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[4], play->state.gfxCtx);
     gSPDisplayList(&gfx[5], gameplay_keep_DL_029CF0);
 
     POLY_XLU_DISP = &gfx[6];
@@ -1196,7 +1196,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
         Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
     }
 

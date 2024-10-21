@@ -502,12 +502,12 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         Gfx_DrawDListOpa(play, D_808C4D54[this->drawType & 0xF]);
 
         gDPSetEnvColor(POLY_XLU_DISP++, red, green, blue, 0);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
         Gfx_SetupDL25_Xlu(gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);
     }
 

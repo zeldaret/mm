@@ -1539,7 +1539,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
                                      this->dyna.actor.world.pos.z, &sp70);
         Matrix_Scale(ptr->unk_04, ptr->unk_08, ptr->unk_0C, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gIceBlockCubeDL);
     }
 
@@ -1549,7 +1549,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gIceBlockIceBergDL);
     }
 

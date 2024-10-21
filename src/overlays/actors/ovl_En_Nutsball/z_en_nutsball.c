@@ -177,7 +177,7 @@ void EnNutsball_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);
 
     CLOSE_DISPS(play->state.gfxCtx);

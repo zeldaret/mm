@@ -1210,7 +1210,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(this->unk_3D8 - 0x4000, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -500.0f, MTXMODE_APPLY);
     if (this->unk_3DC >= 0x20) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
@@ -1218,7 +1218,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         gSPDisplayList(POLY_OPA_DISP++, gOwlFeatherDL);
     } else {
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 

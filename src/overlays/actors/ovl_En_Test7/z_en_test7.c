@@ -348,7 +348,7 @@ void EnTest7_DrawFeathers(PlayState* play2, OwlWarpFeather* feathers) {
             Matrix_Translate(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
         }
 
-        mtx = Matrix_NewMtx(play->state.gfxCtx);
+        mtx = Matrix_Finalize(play->state.gfxCtx);
         if (mtx == NULL) {
             continue;
         }

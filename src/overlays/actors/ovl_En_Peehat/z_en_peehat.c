@@ -856,7 +856,7 @@ s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
         Matrix_RotateYF(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
         Matrix_RotateXFApply(-(this->unk_2BC * 0.115f));
 
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], *dList);
 
         Matrix_Pop();
@@ -939,7 +939,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_RotateYF(3.2f, MTXMODE_APPLY);
         Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
 
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], *dList);
 
         POLY_OPA_DISP = &gfx[2];

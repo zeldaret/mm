@@ -358,7 +358,7 @@ void EnDnk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -437,7 +437,7 @@ void EnDnk_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
     CLOSE_DISPS(play->state.gfxCtx);

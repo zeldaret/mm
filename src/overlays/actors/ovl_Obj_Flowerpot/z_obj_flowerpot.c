@@ -668,7 +668,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_flowerpot_DL_0012E0);
 
     if ((this->actionFunc != func_80A1C838) || (this->unk_1EA & 1)) {
@@ -683,8 +683,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 func_80A1B840(&D_80A1D838[this->unk_1EB]);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             }
         }
 

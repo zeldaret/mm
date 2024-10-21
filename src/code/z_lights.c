@@ -446,7 +446,7 @@ void Lights_DrawGlow(PlayState* play) {
                     Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
 
                     gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
                 }

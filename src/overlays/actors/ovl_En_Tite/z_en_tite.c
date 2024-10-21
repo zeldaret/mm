@@ -1198,7 +1198,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         matrix->zw = this->bodyPartsPos[sLimbToBodyParts2[limbIndex]].z;
         Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_3A8);
 
         CLOSE_DISPS(play->state.gfxCtx);

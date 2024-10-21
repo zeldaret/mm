@@ -135,7 +135,7 @@ void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
         Matrix_Pop();
@@ -631,7 +631,7 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnBox* this = THIS;
 
     if (limbIndex == OBJECT_BOX_CHEST_LIMB_01) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestBaseOrnateDL);
         } else if (Actor_IsSmallChest(this)) {
@@ -644,7 +644,7 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             gSPDisplayList((*gfx)++, &gBoxChestBaseGildedDL);
         }
     } else if (limbIndex == OBJECT_BOX_CHEST_LIMB_03) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestLidOrnateDL);
         } else if (Actor_IsSmallChest(this)) {

@@ -1333,7 +1333,7 @@ void func_80A5E6F0(Actor* thisx, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
             Matrix_Scale(s->unk_00, s->unk_00, s->unk_00, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, D_80A5EB68[i & 1]);
         }
     }
@@ -1346,7 +1346,7 @@ void func_80A5E80C(PlayState* play, s32 arg1) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
     gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 

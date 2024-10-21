@@ -211,8 +211,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     Matrix_Translate(-83.0f, -29.0f, -128.0f, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
                     // QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
                     pauseCtx->mapPageVtx[76].v.ob[0] = pauseCtx->mapPageVtx[78].v.ob[0] = -16;

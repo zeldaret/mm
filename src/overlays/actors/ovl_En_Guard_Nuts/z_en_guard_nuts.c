@@ -387,7 +387,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
     Matrix_Translate(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
     Matrix_Scale(0.015f, 0.015f, 0.015f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlowerDL);
 

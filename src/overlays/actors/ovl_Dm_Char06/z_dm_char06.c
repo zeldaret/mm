@@ -82,7 +82,7 @@ void DmChar06_Draw(Actor* thisx, PlayState* play) {
     Scene_SetRenderModeXlu(play, 1, 2);
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_yukiyama_DL_0013A8);
 
     CLOSE_DISPS(play->state.gfxCtx);

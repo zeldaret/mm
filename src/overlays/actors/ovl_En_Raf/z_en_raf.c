@@ -978,7 +978,7 @@ void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
             Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
             Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);
         }
     }

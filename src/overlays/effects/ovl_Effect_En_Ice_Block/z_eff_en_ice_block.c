@@ -71,7 +71,7 @@ void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->rRot, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
         gSPDisplayList(POLY_XLU_DISP++, &gIceBlockShardEffectDL);
 

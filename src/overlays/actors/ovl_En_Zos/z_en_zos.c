@@ -752,7 +752,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(this->actor.home.rot.y - this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
 
-    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
     gSPDisplayList(&gfx[2], gEvanUnknownWhiteTriangleDL);
     gSPDisplayList(&gfx[3], gEvanKeyboardDL);
 

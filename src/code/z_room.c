@@ -22,14 +22,14 @@ void Room_DrawNormal(PlayState* play, Room* room, u32 flags) {
         func_800BCBF4(&sZeroVec, play);
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
         func_8012C268(&play->state);
-        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
 
     if (flags & ROOM_DRAW_XLU) {
         func_800BCC68(&sZeroVec, play);
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
 
     roomShape = &room->roomShape->normal;
@@ -89,7 +89,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
         }
         func_8012C268(&play->state);
-        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
 
     if (flags & ROOM_DRAW_XLU) {
@@ -99,7 +99,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             gSPSegment(POLY_XLU_DISP++, 0x06, play->roomCtx.unk74);
         }
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
 
     if (room->enablePosLights || (MREG(93) != 0)) {
@@ -321,7 +321,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
 
         if (drawOpa) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
-            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, entry->opa);
         }
 
@@ -351,7 +351,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
     if (drawXlu) {
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, entry->xlu);
     }
 
@@ -420,7 +420,7 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
 
         if (drawOpa) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
-            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, dListsEntry->opa);
         }
 
@@ -450,7 +450,7 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
     if (drawXlu) {
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, dListsEntry->xlu);
     }
 

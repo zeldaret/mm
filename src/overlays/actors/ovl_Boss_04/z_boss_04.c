@@ -843,7 +843,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gWartShadowModelDL);
     }
 

@@ -89,7 +89,7 @@ void func_80B3E168(EnDaiEffect* effect, PlayState* play2) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_0002E8);
 
             Matrix_Pop();
@@ -712,7 +712,7 @@ void func_80B3F78C(EnDai* this, PlayState* play) {
     if (this->unk_1CE & 0x40) {
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
     }
 
@@ -743,7 +743,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
                                                EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -762,7 +762,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
                                                EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
 
         CLOSE_DISPS(play->state.gfxCtx);

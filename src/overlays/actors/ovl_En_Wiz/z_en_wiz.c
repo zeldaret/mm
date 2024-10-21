@@ -1550,7 +1550,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 0, 255, 255);
         }
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gWizrobePlatformLightDL);
 
         Matrix_Pop();
@@ -1573,7 +1573,7 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
     }
 
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);

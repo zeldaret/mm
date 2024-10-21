@@ -472,7 +472,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
                 mtx->yw = sTakarayaWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
                 mtx->zw = (j * 120) + 60;
 
-                gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
 
                 if (((i + j) % 2) != 0) {
                     gSPDisplayList(gfx++, gTreasureChestShopWallWhiteDL);

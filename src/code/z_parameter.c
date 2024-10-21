@@ -4386,7 +4386,7 @@ void Interface_DrawAButton(PlayState* play) {
     Matrix_RotateXFApply(interfaceCtx->aButtonRoll / 10000.0f);
 
     // Draw A button Shadow
-    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
     gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[4], 4, 0);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, aAlpha);
@@ -4413,7 +4413,7 @@ void Interface_DrawAButton(PlayState* play) {
     Matrix_Translate(0.0f, 0.0f, sAButtonDoActionTexScales[gSaveContext.options.language] / 10.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateXFApply(interfaceCtx->aButtonRoll / 10000.0f);
-    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
     gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[8], 4, 0);
 
     // Draw Action Label
@@ -4791,8 +4791,7 @@ void Interface_DrawClock(PlayState* play) {
                 Matrix_Scale(1.0f, 1.0f, sThreeDayClockStarMinuteScale, MTXMODE_APPLY);
                 Matrix_RotateZF(-(timeInSeconds * 0.0175f) / 10.0f, MTXMODE_APPLY);
 
-                gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
                 gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[12], 4, 0);
                 gDPLoadTextureBlock_4b(OVERLAY_DISP++, gThreeDayClockStarMinuteTex, G_IM_FMT_I, 16, 16, 0,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -4832,7 +4831,7 @@ void Interface_DrawClock(PlayState* play) {
             Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[16], 4, 0);
 
             OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockSunHourTex, 24, 24, 0);
@@ -4849,7 +4848,7 @@ void Interface_DrawClock(PlayState* play) {
 
             Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[20], 4, 0);
 
             OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockMoonHourTex, 24, 24, 0);
@@ -4870,7 +4869,7 @@ void Interface_DrawClock(PlayState* play) {
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(-(sp1CC - 3.15f), MTXMODE_APPLY);
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
 
             // Draws Three-Day Clock's Hour Digit Above the Sun
             gDPPipeSync(OVERLAY_DISP++);
@@ -4895,7 +4894,7 @@ void Interface_DrawClock(PlayState* play) {
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(-sp1CC, MTXMODE_APPLY);
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
 
             // Draws Three-Day Clock's Hour Digit Above the Moon
             gDPPipeSync(OVERLAY_DISP++);
@@ -5582,7 +5581,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
             Matrix_Translate(letterX, letterY, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[44 + vtxOffset], 4, 0);
 
             OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sPerfectLettersTextures[i], G_IM_FMT_I, 32, 33, 0);
@@ -5596,7 +5595,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
             Matrix_Translate(letterX, letterY, 0.0f, MTXMODE_NEW);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
             gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[76 + vtxOffset], 4, 0);
 
             OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sPerfectLettersTextures[i], G_IM_FMT_I, 32, 33, 0);
@@ -6627,8 +6626,7 @@ void Interface_Draw(PlayState* play) {
                     Matrix_Translate(0.0f, -40.0f, 0.0f, MTXMODE_NEW);
                     Matrix_Scale(minigameCountdownScale, minigameCountdownScale, 0.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
                     gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[40], 4, 0);
 
                     OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, sMinigameCountdownTextures[sp2CE],

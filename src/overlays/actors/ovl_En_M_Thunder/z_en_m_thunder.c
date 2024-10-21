@@ -491,7 +491,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     switch (this->subtype) {
         case ENMTHUNDER_SUBTYPE_SPIN_GREAT:
@@ -567,7 +567,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
 
     Matrix_Scale(1.0f, scale, scale, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, (play->gameplayFrames * 5) & 0xFF, 0, 32, 32, 1,
                                 (play->gameplayFrames * 20) & 0xFF, (play->gameplayFrames * y2Scroll) & 0xFF, 8, 8));

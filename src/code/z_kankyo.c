@@ -1798,7 +1798,7 @@ void Environment_DrawSun(PlayState* play) {
                 gDPSetEnvColor(POLY_OPA_DISP++, 180, (u8)(sSunColor * 255.0f), (u8)(sSunColor * 200.0f), sSunEnvAlpha);
             }
             Matrix_Scale(sSunScale, sSunScale, sSunScale, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             Gfx_SetupDL54_Opa(play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gSunDL);
         }
@@ -1977,7 +1977,7 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
             POLY_XLU_DISP = Gfx_SetupDL65_NoCD(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sLensFlareColors[i].r, sLensFlareColors[i].g, sLensFlareColors[i].b,
                             alpha * envCtx->lensFlareAlphaScale);
-            mtx = Matrix_NewMtx(gfxCtx);
+            mtx = Matrix_Finalize(gfxCtx);
             if (mtx != NULL) {
                 gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
@@ -2121,7 +2121,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
         Matrix_RotateYS(yaw + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_RotateXS(pitch + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_Scale(0.3f, 1.0f, 0.3f, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gFallingRainDropDL);
     }
 
@@ -2138,7 +2138,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
                              (Environment_RandCentered() * 220.0f) + spE0, MTXMODE_NEW);
             scale = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
         }
     }
@@ -2410,7 +2410,7 @@ void Environment_DrawLightning(PlayState* play, s32 unused) {
             Matrix_Scale(22.0f, 100.0f, 22.0f, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 128);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 128);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Lib_SegmentedToVirtual(sLightningTextures[sLightningBolts[i].textureIndex]));
             Gfx_SetupDL61_Xlu(play->state.gfxCtx);

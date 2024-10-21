@@ -600,7 +600,7 @@ void ObjOshihiki_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_DrawStep(play, this->texture, this->textureStep);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, this->color.r, this->color.g, this->color.b, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 

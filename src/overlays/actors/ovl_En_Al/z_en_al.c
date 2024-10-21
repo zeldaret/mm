@@ -1247,7 +1247,7 @@ void EnAl_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             Matrix_Put(&this->unk_190[i]);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, D_80BE007C[i]);
         }
 

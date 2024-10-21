@@ -1109,7 +1109,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play) {
                                                EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_Put(&this->unk_190);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);
 
         CLOSE_DISPS(play->state.gfxCtx);

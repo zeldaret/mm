@@ -461,7 +461,7 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherGibdoEyebrowsDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

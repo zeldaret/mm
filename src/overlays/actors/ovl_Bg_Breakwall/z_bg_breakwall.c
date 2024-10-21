@@ -362,7 +362,7 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Environment_LerpSandstormColors(D_808B8310, &sp50);
     Environment_LerpSandstormColors(D_808B8330, &sp4C);
@@ -430,14 +430,14 @@ void BgBreakwall_Draw(Actor* thisx, PlayState* play) {
     if (temp_s2->unk_04 != NULL) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_04);
     }
 
     if (temp_s2->unk_08 != NULL) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, temp_s2->unk_08);
     }
 
