@@ -70,12 +70,12 @@ static ColliderCylinderInit sCylinderInit = {
 
 typedef enum EnZodAnimation {
     /* -1 */ ENZOD_ANIM_NONE = -1,
-    /* 0  */ ENZOD_ANIM_PLAYING_VIVACE,
-    /* 1  */ ENZOD_ANIM_READY_TO_PLAY,
-    /* 2  */ ENZOD_ANIM_ARMS_FOLDED,
-    /* 3  */ ENZOD_ANIM_PLAYING_LENTO,
-    /* 4  */ ENZOD_ANIM_PLAYING_ANDANTINO,
-    /* 5  */ ENZOD_ANIM_MAX
+    /*  0 */ ENZOD_ANIM_PLAYING_VIVACE,
+    /*  1 */ ENZOD_ANIM_READY_TO_PLAY,
+    /*  2 */ ENZOD_ANIM_ARMS_FOLDED,
+    /*  3 */ ENZOD_ANIM_PLAYING_LENTO,
+    /*  4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
+    /*  5 */ ENZOD_ANIM_MAX
 } EnZodAnimation;
 
 static AnimationHeader* sAnimations[ENZOD_ANIM_MAX] = {
