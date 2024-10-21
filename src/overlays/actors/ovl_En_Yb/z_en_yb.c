@@ -7,7 +7,7 @@
 #include "z_en_yb.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnYb*)thisx)
 
@@ -379,10 +379,10 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     }
 
     if (this->playerOcarinaOut & 1) {
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 180.0f) &&
+    } else if ((player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) && (this->actor.xzDistToPlayer < 180.0f) &&
                (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);

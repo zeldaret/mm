@@ -8,7 +8,7 @@
 #include "z64voice.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnHiddenNuts*)thisx)
 
@@ -175,7 +175,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
-    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
         if (!this->unk_20A) {
             Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             this->unk_20A = true;

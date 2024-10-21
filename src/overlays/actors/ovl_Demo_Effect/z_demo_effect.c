@@ -72,7 +72,7 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
     switch (type) {
         case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
         case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
             FALLTHROUGH;
         case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
         case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:

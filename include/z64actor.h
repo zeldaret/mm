@@ -510,12 +510,15 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_200000        (1 << 21)
 // 
 #define ACTOR_FLAG_400000        (1 << 22)
-// 
-#define ACTOR_FLAG_800000        (1 << 23)
+// When Player is carrying this actor, it can only be thrown, not dropped/placed.
+// Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
+#define ACTOR_FLAG_THROW_ONLY    (1 << 23)
 // 
 #define ACTOR_FLAG_1000000       (1 << 24)
-// 
-#define ACTOR_FLAG_2000000       (1 << 25)
+// Actor can update even if Player is currently using the ocarina.
+// Typically an actor will halt while the ocarina is active (depending on category).
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_UPDATE_DURING_OCARINA       (1 << 25)
 // actor can press and hold down switches
 #define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
 

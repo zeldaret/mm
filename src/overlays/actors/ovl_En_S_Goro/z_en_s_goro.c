@@ -1028,7 +1028,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         this->actor.attentionRangeType = ATTENTION_RANGE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {

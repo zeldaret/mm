@@ -12,7 +12,7 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnTest6*)thisx)
 
@@ -891,7 +891,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             player->actor.world.pos = player->actor.home.pos = this->actor.home.pos;
             player->actor.shape.rot = this->actor.home.rot;
             player->actor.focus.rot.y = player->actor.shape.rot.y;
-            player->currentYaw = player->actor.shape.rot.y;
+            player->yaw = player->actor.shape.rot.y;
             player->unk_ABC = 0.0f;
             player->unk_AC0 = 0.0f;
             player->actor.shape.yOffset = 0.0f;

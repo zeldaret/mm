@@ -67,12 +67,12 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
         case TIMETAG_ROOFTOP_OATH:
             this->actionFunc = EnTimeTag_RooftopOath_Wait;
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
             break;
 
         case TIMETAG_SOARING_ENGRAVING:
             this->actionFunc = EnTimeTag_SoaringEngraving_Wait;
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
             if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
                 this->actor.textId = 0xC02;
             } else {
