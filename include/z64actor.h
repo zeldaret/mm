@@ -507,8 +507,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_800000        (1 << 23)
 // 
 #define ACTOR_FLAG_1000000       (1 << 24)
-// 
-#define ACTOR_FLAG_2000000       (1 << 25)
+// Actor can update even if Player is currently using the ocarina.
+// Typically an actor will halt while the ocarina is active (depending on category).
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_UPDATE_DURING_OCARINA       (1 << 25)
 // actor can press and hold down switches
 #define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
 

@@ -156,7 +156,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
 
         case 8:
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
             this->actionFunc = func_80B98CA8;
             func_80B96BEC(this, 5, ANIMMODE_LOOP);
             break;

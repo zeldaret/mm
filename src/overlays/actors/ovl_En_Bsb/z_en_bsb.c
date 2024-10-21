@@ -16,7 +16,9 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS                                                                            \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnBsb*)thisx)
 
@@ -546,7 +548,7 @@ void func_80C0BFE8(EnBsb* this, PlayState* play) {
     s16 yaw = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
 
     if ((yaw < 0x4300) && !(this->actor.xzDistToPlayer > 300.0f)) {
-        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
             if (!this->playedSfx) {
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                 this->playedSfx = true;
@@ -566,7 +568,7 @@ void func_80C0BFE8(EnBsb* this, PlayState* play) {
 void func_80C0C0F4(EnBsb* this, PlayState* play) {
     s32 i;
 
-    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
     this->unk_02A4 = 0;
     this->collider.elements[0].dim.modelSphere.radius = 40;
     this->collider.elements[0].dim.modelSphere.center.x = 1000;
@@ -674,7 +676,7 @@ void func_80C0C484(EnBsb* this, PlayState* play) {
     func_80C0BC30(this);
 
     if (func_80C0B888(this, play)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000000;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_DURING_OCARINA;
         func_80C0C86C(this);
         return;
     }
@@ -682,7 +684,7 @@ void func_80C0C484(EnBsb* this, PlayState* play) {
     var_a1 = this->actor.yawTowardsPlayer;
 
     if (this->unk_0294 == 1) {
-        this->actor.flags &= ~ACTOR_FLAG_2000000;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_DURING_OCARINA;
     }
 
     if (this->path != NULL) {

@@ -4407,8 +4407,8 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 
     this->stateFlags1 &= ~(PLAYER_STATE1_40 | PLAYER_STATE1_4000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000 |
                            PLAYER_STATE1_80000000);
-    this->stateFlags2 &= ~(PLAYER_STATE2_80000 | PLAYER_STATE2_800000 | PLAYER_STATE2_2000000 | PLAYER_STATE2_8000000 |
-                           PLAYER_STATE2_IDLE_FIDGET);
+    this->stateFlags2 &= ~(PLAYER_STATE2_80000 | PLAYER_STATE2_800000 | PLAYER_STATE2_2000000 |
+                           PLAYER_STATE2_USING_OCARINA | PLAYER_STATE2_IDLE_FIDGET);
     this->stateFlags3 &=
         ~(PLAYER_STATE3_2 | PLAYER_STATE3_8 | PLAYER_STATE3_80 | PLAYER_STATE3_200 | PLAYER_STATE3_2000 |
           PLAYER_STATE3_8000 | PLAYER_STATE3_10000 | PLAYER_STATE3_20000 | PLAYER_STATE3_40000 | PLAYER_STATE3_80000 |
@@ -7842,7 +7842,7 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                              (this->skelAnime.animation != D_8085D190[this->transformation]))) {
                             Player_Anim_PlayOnceAdjusted(play, this, D_8085D17C[this->transformation]);
                         }
-                        this->stateFlags2 |= PLAYER_STATE2_8000000;
+                        this->stateFlags2 |= PLAYER_STATE2_USING_OCARINA;
                         if (actorUnkA90 != NULL) {
                             this->actor.flags |= ACTOR_FLAG_20000000;
                             if (actorUnkA90->id == ACTOR_EN_ZOT) {
@@ -12449,7 +12449,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_5);
                         Player_StopHorizontalMovement(this);
                     } else if (((u32)this->csAction == PLAYER_CSACTION_NONE) &&
-                               !(this->stateFlags2 & (PLAYER_STATE2_400 | PLAYER_STATE2_8000000)) &&
+                               !(this->stateFlags2 & (PLAYER_STATE2_400 | PLAYER_STATE2_USING_OCARINA)) &&
                                (play->csCtx.state != CS_STATE_STOP)) {
                         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_20);
                         Player_StopHorizontalMovement(this);

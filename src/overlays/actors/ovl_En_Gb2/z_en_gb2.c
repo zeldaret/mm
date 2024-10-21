@@ -917,7 +917,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
             this->unk_28A = 255;
             this->actor.flags |= ACTOR_FLAG_10;
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
 
             if (CHECK_EVENTINF(EVENTINF_46)) {
                 func_80B0F728(this, play);

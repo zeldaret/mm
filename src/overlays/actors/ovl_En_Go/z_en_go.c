@@ -21,7 +21,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnGo*)thisx)
 
@@ -2111,7 +2111,7 @@ void EnGo_ChangeToSnowballAnimation(EnGo* this, PlayState* play) {
 
     Math_Vec3f_Copy(&currentPos, &this->actor.world.pos);
     if (this->gatekeeperPath != NULL) {
-        this->actor.flags &= ~ACTOR_FLAG_2000000;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_DURING_OCARINA;
         SubS_CopyPointFromPathCheckBounds(this->gatekeeperPath, 0, &startingPathPoint);
         yawToPathPoint = Math_Vec3f_Yaw(&currentPos, &startingPathPoint);
         this->actor.shape.rot.y = yawToPathPoint;
@@ -2654,7 +2654,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
         // Stop the Gatekeeper when hit by an appropriate effect
         Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         EnGo_InitSnow(this->effectTable, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
         this->actor.speed = 0.0f;

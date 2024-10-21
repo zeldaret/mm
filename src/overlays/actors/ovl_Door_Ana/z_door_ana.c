@@ -7,7 +7,7 @@
 #include "z_door_ana.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS (ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((DoorAna*)thisx)
 

@@ -988,8 +988,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_2000000    (1 << 25)
 // 
 #define PLAYER_STATE2_4000000    (1 << 26)
-// 
-#define PLAYER_STATE2_8000000    (1 << 27)
+// Playing the ocarina
+#define PLAYER_STATE2_USING_OCARINA  (1 << 27)
 // Playing a fidget idle animation (under typical circumstances, see `Player_ChooseNextIdleAnim` for more info)
 #define PLAYER_STATE2_IDLE_FIDGET   (1 << 28)
 // Disable drawing player
