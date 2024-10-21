@@ -288,22 +288,22 @@ typedef struct LockOnReticle {
 } LockOnReticle; // size = 0x14
 
 typedef struct Attention {
-    /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
+    /* 0x00 */ Vec3f tatlHoverPos;  // Tatl's current hover position
     /* 0x0C */ Vec3f reticlePos; // Main reticle pos which each `LockOnReticle` instance can reference
-    /* 0x18 */ Color_RGBAf fairyInnerColor;
-    /* 0x28 */ Color_RGBAf fairyOuterColor;
-    /* 0x38 */ Actor* fairyActor;
+    /* 0x18 */ Color_RGBAf tatlInnerColor; // Tatl inner color, based on actor category
+    /* 0x28 */ Color_RGBAf tatlOuterColor; // Tatl outer color, based on actor category
+    /* 0x38 */ Actor* tatlHoverActor; // The actor that Tatl hovers over
     /* 0x3C */ Actor* reticleActor; // Actor to draw a reticle over
-    /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
+    /* 0x40 */ f32 tatlMoveProgressFactor; // Controls Tatl so she can smootly transition to an actor
     /* 0x44 */ f32 reticleRadius; // Main reticle radius value which each `LockOnReticle` instance can reference
     /* 0x48 */ s16 reticleFadeAlphaControl; // Set and fade the reticle alpha; Non-zero values control if it should draw
-    /* 0x4A */ u8 fairyActorCategory;
+    /* 0x4A */ u8 tatlHoverActorCategory; // Category of the actor Tatl is currently hovering over
     /* 0x4B */ u8 reticleSpinCounter; // Counts up when a reticle is active, used for the spinning animation
     /* 0x4C */ s8 curReticle; // Indexes lockOnReticles[]
     /* 0x50 */ LockOnReticle lockOnReticles[3]; // Multiple reticles are used for a motion-blur effect
-    /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
-    /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* arrowPointedActor;
+    /* 0x8C */ Actor* forcedLockOnActor; // Forces lock-on to this actor when set (never used in practice)
+    /* 0x90 */ Actor* bgmEnemy; // The nearest actor which can trigger enemy background music
+    /* 0x94 */ Actor* arrowPointedActor; // Actor to draw an arrow over
 } Attention; // size = 0x98
 
 // It is difficult to give each type a name because it is numerically based
@@ -326,7 +326,7 @@ typedef enum AttentionRangeType {
 
 typedef struct AttentionRangeParams {
     /* 0x0 */ f32 rangeSq;
-    /* 0x4 */ f32 leashScale;
+    /* 0x4 */ f32 lockOnLeashScale;
 } AttentionRangeParams; // size = 0x8
 
 typedef struct {
@@ -774,7 +774,7 @@ PosRot Actor_GetFocus(Actor* actor);
 PosRot Actor_GetWorld(Actor* actor);
 PosRot Actor_GetWorldPosShapeRot(Actor* actor);
 
-s32 Attention_OutsideLeashRange(Actor* actor, struct Player* player, s32 ignoreLeash);
+s32 Attention_ShouldReleaseLockOn(Actor* actor, struct Player* player, s32 ignoreLeash);
 s32 Actor_TalkOfferAccepted(Actor* actor, struct GameState* gameState);
 s32 Actor_OfferTalk(Actor* actor, struct PlayState* play, f32 radius);
 s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);

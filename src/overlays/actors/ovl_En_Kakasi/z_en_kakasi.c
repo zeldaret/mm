@@ -175,7 +175,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.world.rot.z = 0;
     this->picto.actor.attentionRangeType = ATTENTION_RANGE_0;
     if ((this->picto.actor.world.rot.x > 0) && (this->picto.actor.world.rot.x < 8)) {
-        this->picto.actor.attentionRangeType = KAKASI_GET_TARGETMODE(thisx);
+        this->picto.actor.attentionRangeType = KAKASI_GET_ATTENTION_RANGE_TYPE(thisx);
     }
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
 

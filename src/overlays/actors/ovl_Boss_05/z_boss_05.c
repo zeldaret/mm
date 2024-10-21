@@ -798,7 +798,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
 
                 if (player2->focusActor == &this->dyna.actor) {
                     player2->focusActor = &child->dyna.actor;
-                    play->actorCtx.attention.fairyActor = &child->dyna.actor;
+                    play->actorCtx.attention.tatlHoverActor = &child->dyna.actor;
                     play->actorCtx.attention.reticleActor = &child->dyna.actor;
                 }
 
@@ -929,7 +929,7 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 
                 if (player->focusActor == &this->dyna.actor) {
                     player->focusActor = &walkingHead->dyna.actor;
-                    play->actorCtx.attention.fairyActor = &walkingHead->dyna.actor;
+                    play->actorCtx.attention.tatlHoverActor = &walkingHead->dyna.actor;
                     play->actorCtx.attention.reticleActor = &walkingHead->dyna.actor;
                 }
 

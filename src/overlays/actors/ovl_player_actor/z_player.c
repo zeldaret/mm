@@ -4918,7 +4918,8 @@ void func_80832888(Player* this, PlayState* play) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
-                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.attention.fairyActor : &GET_PLAYER(play)->actor;
+                var_v1_2 =
+                    (this == GET_PLAYER(play)) ? play->actorCtx.attention.tatlHoverActor : &GET_PLAYER(play)->actor;
                 var_a1 = (gSaveContext.options.zTargetSetting != 0) || (this != GET_PLAYER(play));
                 this->stateFlags1 |= PLAYER_STATE1_8000;
                 if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
@@ -4949,7 +4950,7 @@ void func_80832888(Player* this, PlayState* play) {
 
             if (this->focusActor != NULL) {
                 if ((this == GET_PLAYER(play)) && (this->focusActor != this->autoLockOnActor) &&
-                    Attention_OutsideLeashRange(this->focusActor, this, ignoreLeash)) {
+                    Attention_ShouldReleaseLockOn(this->focusActor, this, ignoreLeash)) {
                     Player_ReleaseLockOn(this);
                     this->stateFlags1 |= PLAYER_STATE1_40000000;
                 } else if (this->focusActor != NULL) {
@@ -11404,7 +11405,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                             (this->transformation == PLAYER_FORM_ZORA)) &&
                            ((this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) ||
                             ((this->stateFlags2 & PLAYER_STATE2_100000) &&
-                             (play->actorCtx.attention.fairyActor == NULL)))) {
+                             (play->actorCtx.attention.tatlHoverActor == NULL)))) {
                     doActionA = DO_ACTION_PUTAWAY;
 
                     if (play->msgCtx.currentTextId == 0) {} //! FAKE

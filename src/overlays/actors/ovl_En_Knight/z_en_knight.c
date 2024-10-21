@@ -2180,7 +2180,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 sIgosHeadInstance = NULL;
                 this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 player->focusActor = &this->actor;
-                play->actorCtx.attention.fairyActor = &this->actor;
+                play->actorCtx.attention.tatlHoverActor = &this->actor;
                 play->actorCtx.attention.reticleActor = &this->actor;
             }
 
@@ -3259,7 +3259,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             this->timers[0] = 20;
             sIgosInstance->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->focusActor = &this->actor;
-            play->actorCtx.attention.fairyActor = &this->actor;
+            play->actorCtx.attention.tatlHoverActor = &this->actor;
             play->actorCtx.attention.reticleActor = &this->actor;
             Math_Vec3f_Copy(&this->actor.world.pos, &sIgosInstance->actor.world.pos);
             Math_Vec3s_Copy(&this->actor.world.rot, &sIgosInstance->actor.world.rot);
