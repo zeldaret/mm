@@ -810,7 +810,7 @@ void EnPoh_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     if ((this->actionFunc == func_80B2CF28) && (this->unk_18E < 10)) {
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderSph.base);
     }
 

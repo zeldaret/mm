@@ -860,7 +860,7 @@ void func_80878424(EnDodongo* this, PlayState* play) {
     sp20.z = this->collider1Elements[2].dim.worldSphere.center.z;
     func_80876930(this, play, &sp20);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider1.base);
-    this->actor.flags |= ACTOR_FLAG_1000000;
+    this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
 }
 
 void func_80878594(EnDodongo* this) {

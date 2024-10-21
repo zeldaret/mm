@@ -793,7 +793,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->colliderTris.base.atFlags & AT_ON) {
-        thisx->flags |= ACTOR_FLAG_1000000;
+        thisx->flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderTris.base);
         if (thisx->params == 0) {
             Vec3f sp74;

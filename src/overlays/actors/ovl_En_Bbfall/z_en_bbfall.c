@@ -617,7 +617,7 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
         Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[0].dim.worldSphere.center);
 
         if (this->collider.base.atFlags & AT_ON) {
-            this->actor.flags |= ACTOR_FLAG_1000000;
+            this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         }
 

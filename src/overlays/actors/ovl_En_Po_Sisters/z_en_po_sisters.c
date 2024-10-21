@@ -1016,7 +1016,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc == EnPoSisters_SpinAttack) {
-            this->actor.flags |= ACTOR_FLAG_1000000;
+            this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         }
 

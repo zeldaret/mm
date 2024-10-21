@@ -2557,7 +2557,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
             actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &params->player->actor);
-            actor->flags &= ~ACTOR_FLAG_1000000;
+            actor->flags &= ~ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
 
             if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
                 if (actor == params->player->focusActor) {
