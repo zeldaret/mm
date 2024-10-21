@@ -222,7 +222,7 @@ s32 Player_UpperAction_6(Player* this, PlayState* play);
 s32 Player_UpperAction_7(Player* this, PlayState* play);
 s32 Player_UpperAction_8(Player* this, PlayState* play);
 s32 Player_UpperAction_9(Player* this, PlayState* play);
-s32 Player_UpperAction_10(Player* this, PlayState* play);
+s32 Player_UpperAction_CarryActor(Player* this, PlayState* play);
 s32 Player_UpperAction_11(Player* this, PlayState* play);
 s32 Player_UpperAction_12(Player* this, PlayState* play);
 s32 Player_UpperAction_13(Player* this, PlayState* play);
@@ -3123,89 +3123,89 @@ PlayerItemAction Player_ItemToItemAction(Player* this, ItemId item) {
 }
 
 PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
-    Player_UpperAction_0,  // PLAYER_IA_NONE
-    Player_UpperAction_0,  // PLAYER_IA_LAST_USED
-    Player_UpperAction_0,  // PLAYER_IA_FISHING_ROD
-    Player_UpperAction_1,  // PLAYER_IA_SWORD_KOKIRI
-    Player_UpperAction_1,  // PLAYER_IA_SWORD_RAZOR
-    Player_UpperAction_1,  // PLAYER_IA_SWORD_GILDED
-    Player_UpperAction_1,  // PLAYER_IA_SWORD_TWO_HANDED
-    Player_UpperAction_0,  // PLAYER_IA_DEKU_STICK
-    Player_UpperAction_0,  // PLAYER_IA_ZORA_FINS
-    Player_UpperAction_6,  // PLAYER_IA_BOW
-    Player_UpperAction_6,  // PLAYER_IA_BOW_FIRE
-    Player_UpperAction_6,  // PLAYER_IA_BOW_ICE
-    Player_UpperAction_6,  // PLAYER_IA_BOW_LIGHT
-    Player_UpperAction_6,  // PLAYER_IA_HOOKSHOT
-    Player_UpperAction_10, // PLAYER_IA_BOMB
-    Player_UpperAction_10, // PLAYER_IA_POWDER_KEG
-    Player_UpperAction_10, // PLAYER_IA_BOMBCHU
-    Player_UpperAction_11, // PLAYER_IA_11
-    Player_UpperAction_6,  // PLAYER_IA_DEKU_NUT
-    Player_UpperAction_0,  // PLAYER_IA_PICTOGRAPH_BOX
-    Player_UpperAction_0,  // PLAYER_IA_OCARINA
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_EMPTY
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_FISH
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_SPRING_WATER
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_ZORA_EGG
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_GOLD_DUST
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_1C
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_SEA_HORSE
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_MUSHROOM
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_BUG
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_POE
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_BIG_POE
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_POTION_RED
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_POTION_BLUE
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_POTION_GREEN
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_MILK
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_MILK_HALF
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_CHATEAU
-    Player_UpperAction_0,  // PLAYER_IA_BOTTLE_FAIRY
-    Player_UpperAction_0,  // PLAYER_IA_MOONS_TEAR
-    Player_UpperAction_0,  // PLAYER_IA_DEED_LAND
-    Player_UpperAction_0,  // PLAYER_IA_ROOM_KEY
-    Player_UpperAction_0,  // PLAYER_IA_LETTER_TO_KAFEI
-    Player_UpperAction_0,  // PLAYER_IA_MAGIC_BEANS
-    Player_UpperAction_0,  // PLAYER_IA_DEED_SWAMP
-    Player_UpperAction_0,  // PLAYER_IA_DEED_MOUNTAIN
-    Player_UpperAction_0,  // PLAYER_IA_DEED_OCEAN
-    Player_UpperAction_0,  // PLAYER_IA_32
-    Player_UpperAction_0,  // PLAYER_IA_LETTER_MAMA
-    Player_UpperAction_0,  // PLAYER_IA_34
-    Player_UpperAction_0,  // PLAYER_IA_35
-    Player_UpperAction_0,  // PLAYER_IA_PENDANT_MEMORIES
-    Player_UpperAction_0,  // PLAYER_IA_37
-    Player_UpperAction_0,  // PLAYER_IA_38
-    Player_UpperAction_0,  // PLAYER_IA_39
-    Player_UpperAction_0,  // PLAYER_IA_MASK_TRUTH
-    Player_UpperAction_0,  // PLAYER_IA_MASK_KAFEIS_MASK
-    Player_UpperAction_0,  // PLAYER_IA_MASK_ALL_NIGHT
-    Player_UpperAction_0,  // PLAYER_IA_MASK_BUNNY
-    Player_UpperAction_0,  // PLAYER_IA_MASK_KEATON
-    Player_UpperAction_0,  // PLAYER_IA_MASK_GARO
-    Player_UpperAction_0,  // PLAYER_IA_MASK_ROMANI
-    Player_UpperAction_0,  // PLAYER_IA_MASK_CIRCUS_LEADER
-    Player_UpperAction_0,  // PLAYER_IA_MASK_POSTMAN
-    Player_UpperAction_0,  // PLAYER_IA_MASK_COUPLE
-    Player_UpperAction_0,  // PLAYER_IA_MASK_GREAT_FAIRY
-    Player_UpperAction_0,  // PLAYER_IA_MASK_GIBDO
-    Player_UpperAction_0,  // PLAYER_IA_MASK_DON_GERO
-    Player_UpperAction_0,  // PLAYER_IA_MASK_KAMARO
-    Player_UpperAction_0,  // PLAYER_IA_MASK_CAPTAIN
-    Player_UpperAction_0,  // PLAYER_IA_MASK_STONE
-    Player_UpperAction_0,  // PLAYER_IA_MASK_BREMEN
-    Player_UpperAction_0,  // PLAYER_IA_MASK_BLAST
-    Player_UpperAction_0,  // PLAYER_IA_MASK_SCENTS
-    Player_UpperAction_0,  // PLAYER_IA_MASK_GIANT
-    Player_UpperAction_0,  // PLAYER_IA_MASK_FIERCE_DEITY
-    Player_UpperAction_0,  // PLAYER_IA_MASK_GORON
-    Player_UpperAction_0,  // PLAYER_IA_MASK_ZORA
-    Player_UpperAction_0,  // PLAYER_IA_MASK_DEKU
-    Player_UpperAction_0,  // PLAYER_IA_LENS_OF_TRUTH
+    Player_UpperAction_0,          // PLAYER_IA_NONE
+    Player_UpperAction_0,          // PLAYER_IA_LAST_USED
+    Player_UpperAction_0,          // PLAYER_IA_FISHING_ROD
+    Player_UpperAction_1,          // PLAYER_IA_SWORD_KOKIRI
+    Player_UpperAction_1,          // PLAYER_IA_SWORD_RAZOR
+    Player_UpperAction_1,          // PLAYER_IA_SWORD_GILDED
+    Player_UpperAction_1,          // PLAYER_IA_SWORD_TWO_HANDED
+    Player_UpperAction_0,          // PLAYER_IA_DEKU_STICK
+    Player_UpperAction_0,          // PLAYER_IA_ZORA_FINS
+    Player_UpperAction_6,          // PLAYER_IA_BOW
+    Player_UpperAction_6,          // PLAYER_IA_BOW_FIRE
+    Player_UpperAction_6,          // PLAYER_IA_BOW_ICE
+    Player_UpperAction_6,          // PLAYER_IA_BOW_LIGHT
+    Player_UpperAction_6,          // PLAYER_IA_HOOKSHOT
+    Player_UpperAction_CarryActor, // PLAYER_IA_BOMB
+    Player_UpperAction_CarryActor, // PLAYER_IA_POWDER_KEG
+    Player_UpperAction_CarryActor, // PLAYER_IA_BOMBCHU
+    Player_UpperAction_11,         // PLAYER_IA_11
+    Player_UpperAction_6,          // PLAYER_IA_DEKU_NUT
+    Player_UpperAction_0,          // PLAYER_IA_PICTOGRAPH_BOX
+    Player_UpperAction_0,          // PLAYER_IA_OCARINA
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_EMPTY
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_FISH
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_SPRING_WATER
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_ZORA_EGG
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_GOLD_DUST
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_1C
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_SEA_HORSE
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_MUSHROOM
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_BUG
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_POE
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_BIG_POE
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_POTION_RED
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_POTION_BLUE
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_POTION_GREEN
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_MILK
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_MILK_HALF
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_CHATEAU
+    Player_UpperAction_0,          // PLAYER_IA_BOTTLE_FAIRY
+    Player_UpperAction_0,          // PLAYER_IA_MOONS_TEAR
+    Player_UpperAction_0,          // PLAYER_IA_DEED_LAND
+    Player_UpperAction_0,          // PLAYER_IA_ROOM_KEY
+    Player_UpperAction_0,          // PLAYER_IA_LETTER_TO_KAFEI
+    Player_UpperAction_0,          // PLAYER_IA_MAGIC_BEANS
+    Player_UpperAction_0,          // PLAYER_IA_DEED_SWAMP
+    Player_UpperAction_0,          // PLAYER_IA_DEED_MOUNTAIN
+    Player_UpperAction_0,          // PLAYER_IA_DEED_OCEAN
+    Player_UpperAction_0,          // PLAYER_IA_32
+    Player_UpperAction_0,          // PLAYER_IA_LETTER_MAMA
+    Player_UpperAction_0,          // PLAYER_IA_34
+    Player_UpperAction_0,          // PLAYER_IA_35
+    Player_UpperAction_0,          // PLAYER_IA_PENDANT_MEMORIES
+    Player_UpperAction_0,          // PLAYER_IA_37
+    Player_UpperAction_0,          // PLAYER_IA_38
+    Player_UpperAction_0,          // PLAYER_IA_39
+    Player_UpperAction_0,          // PLAYER_IA_MASK_TRUTH
+    Player_UpperAction_0,          // PLAYER_IA_MASK_KAFEIS_MASK
+    Player_UpperAction_0,          // PLAYER_IA_MASK_ALL_NIGHT
+    Player_UpperAction_0,          // PLAYER_IA_MASK_BUNNY
+    Player_UpperAction_0,          // PLAYER_IA_MASK_KEATON
+    Player_UpperAction_0,          // PLAYER_IA_MASK_GARO
+    Player_UpperAction_0,          // PLAYER_IA_MASK_ROMANI
+    Player_UpperAction_0,          // PLAYER_IA_MASK_CIRCUS_LEADER
+    Player_UpperAction_0,          // PLAYER_IA_MASK_POSTMAN
+    Player_UpperAction_0,          // PLAYER_IA_MASK_COUPLE
+    Player_UpperAction_0,          // PLAYER_IA_MASK_GREAT_FAIRY
+    Player_UpperAction_0,          // PLAYER_IA_MASK_GIBDO
+    Player_UpperAction_0,          // PLAYER_IA_MASK_DON_GERO
+    Player_UpperAction_0,          // PLAYER_IA_MASK_KAMARO
+    Player_UpperAction_0,          // PLAYER_IA_MASK_CAPTAIN
+    Player_UpperAction_0,          // PLAYER_IA_MASK_STONE
+    Player_UpperAction_0,          // PLAYER_IA_MASK_BREMEN
+    Player_UpperAction_0,          // PLAYER_IA_MASK_BLAST
+    Player_UpperAction_0,          // PLAYER_IA_MASK_SCENTS
+    Player_UpperAction_0,          // PLAYER_IA_MASK_GIANT
+    Player_UpperAction_0,          // PLAYER_IA_MASK_FIERCE_DEITY
+    Player_UpperAction_0,          // PLAYER_IA_MASK_GORON
+    Player_UpperAction_0,          // PLAYER_IA_MASK_ZORA
+    Player_UpperAction_0,          // PLAYER_IA_MASK_DEKU
+    Player_UpperAction_0,          // PLAYER_IA_LENS_OF_TRUTH
 };
 
 typedef void (*PlayerInitItemActionFunc)(PlayState*, Player*);
@@ -4344,7 +4344,7 @@ bool func_808313A8(PlayState* play, Player* this, Actor* actor) {
 
 void func_808313F0(Player* this, PlayState* play) {
     if (!func_808313A8(play, this, this->heldActor)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_10);
+        Player_SetUpperAction(play, this, Player_UpperAction_CarryActor);
         PlayerAnimation_PlayLoop(play, &this->skelAnimeUpper, &gPlayerAnim_link_normal_carryB_wait);
     }
 }
@@ -9417,12 +9417,21 @@ void func_8083D6DC(Player* this, PlayState* play) {
     Player_Anim_PlayOnce(play, this, D_8085BE84[PLAYER_ANIMGROUP_throw][this->modelAnimType]);
 }
 
-// Determines whether a held actor should be dropped or thrown: false implies droppable.
-s32 func_8083D738(Player* this, Actor* heldActor) {
-    if ((heldActor != NULL) && !(heldActor->flags & ACTOR_FLAG_800000) &&
+/**
+ * Checks if an actor can be thrown or dropped.
+ * It is assumed that the `actor` argument is the actor currently being carried.
+ *
+ * @return true if it can be thrown, false if it can be dropped.
+ */
+s32 Player_CanThrowCarriedActor(Player* this, Actor* heldActor) {
+    // If the actor arg is null, true will be returned.
+    // It doesn't make sense for a non-existent actor to be thrown or dropped, so
+    // the safety check should happen before this function is even called.
+    if ((heldActor != NULL) && !(heldActor->flags & ACTOR_FLAG_THROW_ONLY) &&
         ((this->speedXZ < 1.1f) || (heldActor->id == ACTOR_EN_BOM_CHU))) {
         return false;
     }
+
     return true;
 }
 
@@ -9431,7 +9440,7 @@ s32 Player_ActionHandler_9(Player* this, PlayState* play) {
         if ((this->heldActor != NULL) &&
             CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_B | BTN_A)) {
             if (!func_808313A8(play, this, this->heldActor)) {
-                if (!func_8083D738(this, this->heldActor)) {
+                if (!Player_CanThrowCarriedActor(this, this->heldActor)) {
                     Player_SetAction(play, this, Player_Action_41, 1);
                     Player_Anim_PlayOnce(play, this, D_8085BE84[PLAYER_ANIMGROUP_put][this->modelAnimType]);
                     return true;
@@ -11349,7 +11358,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         } else if ((this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) && (this->getItemId == GI_NONE) &&
                    (heldActor != NULL)) {
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (heldActor->id == ACTOR_EN_NIW)) {
-                if (!func_8083D738(this, heldActor)) {
+                if (!Player_CanThrowCarriedActor(this, heldActor)) {
                     doActionA = DO_ACTION_DROP;
                 } else {
                     doActionA = DO_ACTION_THROW;
@@ -13796,7 +13805,7 @@ s32 Player_UpperAction_9(Player* this, PlayState* play) {
     return true;
 }
 
-s32 Player_UpperAction_10(Player* this, PlayState* play) {
+s32 Player_UpperAction_CarryActor(Player* this, PlayState* play) {
     Actor* heldActor = this->heldActor;
 
     if (heldActor == NULL) {
