@@ -6031,7 +6031,7 @@ s32 func_80834600(Player* this, PlayState* play) {
         Actor* sp60 = this->cylinder.base.ac;
         s32 var_a2_2;
 
-        if (sp60->flags & ACTOR_FLAG_1000000) {
+        if (sp60->flags & ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT) {
             Player_PlaySfx(this, NA_SE_PL_BODY_HIT);
         }
 

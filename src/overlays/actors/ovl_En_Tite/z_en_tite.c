@@ -385,7 +385,7 @@ void func_808942B4(EnTite* this, PlayState* play) {
             }
         }
     } else if (!(this->collider.base.atFlags & AT_HIT)) {
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     } else {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -784,7 +784,7 @@ void func_80895738(EnTite* this, PlayState* play) {
     } else if (this->unk_2BC > 0) {
         this->unk_2BC--;
         Math_StepToF(&this->actor.speed, 10.0f, 0.3f);
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         if (!func_80893A34(this, play)) {
             this->unk_2BC = 0;

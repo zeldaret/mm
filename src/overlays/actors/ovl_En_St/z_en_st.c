@@ -10,7 +10,7 @@
 
 #define FLAGS                                                                                              \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
-     ACTOR_FLAG_1000000)
+     ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
 
 #define THIS ((EnSt*)thisx)
 
