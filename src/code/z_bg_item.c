@@ -51,12 +51,12 @@ void DynaPoly_SetPlayerAbove(CollisionContext* colCtx, s32 bgId) {
     }
 }
 
-void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor) {
-    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_SWITCH;
+void DynaPolyActor_SetSwitchPressed(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_SWITCH_PRESSED;
 }
 
-void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor) {
-    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH;
+void DynaPolyActor_SetHeavySwitchPressed(DynaPolyActor* dynaActor) {
+    dynaActor->interactFlags |= DYNA_INTERACT_ACTOR_HEAVY_SWITCH_PRESSED;
 }
 
 s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor) {
@@ -84,7 +84,7 @@ s32 DynaPolyActor_IsPlayerAbove(DynaPolyActor* dynaActor) {
 }
 
 s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor) {
-    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_SWITCH) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_SWITCH_PRESSED) {
         return true;
     } else {
         return false;
@@ -92,7 +92,7 @@ s32 DynaPolyActor_IsSwitchPressed(DynaPolyActor* dynaActor) {
 }
 
 s32 DynaPolyActor_IsHeavySwitchPressed(DynaPolyActor* dynaActor) {
-    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH) {
+    if (dynaActor->interactFlags & DYNA_INTERACT_ACTOR_HEAVY_SWITCH_PRESSED) {
         return true;
     } else {
         return false;
