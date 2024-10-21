@@ -448,7 +448,7 @@ typedef enum DoorLockType {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Actor is discoverable by the Attention System. This enables Navi to hover over the actor when it is in range.
+// Actor is discoverable by the Attention System. This enables Tatl to hover over the actor when it is in range.
 // The actor can also be locked onto (as long as `ACTOR_FLAG_LOCK_ON_DISABLED` is not set).
 #define ACTOR_FLAG_ATTENTION_ENABLED    (1 << 0)
 // Unused

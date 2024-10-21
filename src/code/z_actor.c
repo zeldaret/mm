@@ -28,7 +28,7 @@ s16 sAttentionPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
-struct Actor* gCameraDriftActor; // 2 funcs. 1 out of z_actor
+struct Actor* gCameraDriftActor;
 
 #include "z64actor.h"
 
@@ -640,7 +640,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
 void Attention_Update(Attention* attention, Player* player, Actor* playerFocusActor, PlayState* play) {
     s32 pad;
-    Actor* actor; // used for both the Navi hover actor and reticle actor
+    Actor* actor; // used for both the Tatl hover actor and reticle actor
     s32 category;
     Vec3f projectedPos;
     f32 invW;
@@ -653,7 +653,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         // Hold Targeting as well.
         attention->arrowPointedActor = NULL;
     } else {
-        // Find the next attention actor so Navi and an arrow can hover over it (if applicable)
+        // Find the next attention actor so Tatl and an arrow can hover over it (if applicable)
         Attention_FindActor(play, &play->actorCtx, &actor, &gCameraDriftActor, player);
         attention->arrowPointedActor = actor;
     }
@@ -665,7 +665,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         attention->forcedLockOnActor = NULL;
     } else if (playerFocusActor != NULL) {
         // Stay locked-on to the same actor, if there is one.
-        // This also makes Navi fly over to the current focus actor, if there is one.
+        // This also makes Tatl fly over to the current focus actor, if there is one.
         actor = playerFocusActor;
     }
 
@@ -697,7 +697,7 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         attention->tatlHoverPos.y += y * moveScale;
         attention->tatlHoverPos.z += z * moveScale;
     } else {
-        // Set Navi pos and color after reaching destination
+        // Set Tatl pos and color after reaching destination
         Attention_SetTatlState(attention, actor, category, play);
     }
 
