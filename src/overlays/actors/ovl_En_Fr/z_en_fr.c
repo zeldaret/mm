@@ -1,8 +1,8 @@
 /*
  * File: z_en_fr.c
  * Overlay: ovl_En_Fr
- * Description: Invisible spot that triggers a slow camera drift towards the spot
- *              while walking towards the spot. Unused in game.
+ * Description: Invisible spot that triggers a slow camera drift towards the spot while walking.
+ *              Unused in game.
  */
 
 #include "z_en_fr.h"

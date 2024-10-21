@@ -451,6 +451,7 @@ typedef enum DoorLockType {
 // Actor is discoverable by the Attention System. This enables Tatl to hover over the actor when it is in range.
 // The actor can also be locked onto (as long as `ACTOR_FLAG_LOCK_ON_DISABLED` is not set).
 #define ACTOR_FLAG_ATTENTION_ENABLED    (1 << 0)
+
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)
 
@@ -469,8 +470,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
+
 // hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
+
 // Signals that player has accepted an offer to talk to an actor
 // Player will retain this flag until the player is finished talking
 // Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
@@ -481,6 +484,7 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
+
 // Actor will not shake when a quake occurs
 #define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
@@ -495,6 +499,7 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
+
 // Allows for the attention system to refind the focus actor in the search for the next attention actor.
 // Also allows for the next lockOn actor to be the focus actor again.
 // When chosen as the next lock on actor, this flag is unset.
