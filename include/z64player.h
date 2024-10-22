@@ -882,8 +882,9 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_20         (1 << 5)
 // 
 #define PLAYER_STATE1_40         (1 << 6)
-// 
-#define PLAYER_STATE1_80         (1 << 7)
+// Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
+// This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
+#define PLAYER_STATE1_DEAD         (1 << 7)
 // 
 #define PLAYER_STATE1_100        (1 << 8)
 // 

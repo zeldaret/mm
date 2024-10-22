@@ -4634,7 +4634,7 @@ void func_80831F34(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
         this->skelAnime.endFrame = 84.0f;
     }
 
-    this->stateFlags1 |= PLAYER_STATE1_80;
+    this->stateFlags1 |= PLAYER_STATE1_DEAD;
 
     func_8082DAD4(this);
     Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DOWN);
@@ -4894,7 +4894,7 @@ void func_80832888(Player* this, PlayState* play) {
     }
 
     if ((play->csCtx.state != CS_STATE_IDLE) || (this->csAction != PLAYER_CSACTION_NONE) ||
-        (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
+        (this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
         this->unk_738 = 0;
     } else if (heldZ || (this->stateFlags2 & PLAYER_STATE2_LOCK_ON_WITH_SWITCH) || (this->autoLockOnActor != NULL)) {
         if (this->unk_738 <= 5) {
@@ -5302,7 +5302,8 @@ s32 (*sActionHandlerFuncs[PLAYER_ACTION_HANDLER_MAX])(Player* this, PlayState* p
  *
  */
 s32 Player_TryActionHandlerList(PlayState* play, Player* this, s8* actionHandlerList, s32 updateUpperBody) {
-    if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) && !func_8082DA90(play)) {
+    if (!(this->stateFlags1 & (PLAYER_STATE1_1 | PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) &&
+        !func_8082DA90(play)) {
         if (updateUpperBody) {
             sUpperBodyIsBusy = Player_UpdateUpperBody(this, play);
             if (Player_Action_64 == this->actionFunc) {
@@ -5837,12 +5838,12 @@ void func_80834104(PlayState* play, Player* this) {
 }
 
 void func_80834140(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    if (!(this->stateFlags1 & PLAYER_STATE1_80)) {
+    if (!(this->stateFlags1 & PLAYER_STATE1_DEAD)) {
         func_80834104(play, this);
         if (func_8082DA90(play)) {
             this->av2.actionVar2 = -30;
         }
-        this->stateFlags1 |= PLAYER_STATE1_80;
+        this->stateFlags1 |= PLAYER_STATE1_DEAD;
         PlayerAnimation_Change(play, &this->skelAnime, anim, PLAYER_ANIM_NORMAL_SPEED, 0.0f, 84.0f, ANIMMODE_ONCE,
                                -6.0f);
         this->av1.actionVar1 = 1;
@@ -5914,7 +5915,7 @@ s32 Player_UpdateBodyBurn(PlayState* play, Player* this) {
         this->bodyIsBurning = false;
     }
 
-    return this->stateFlags1 & PLAYER_STATE1_80;
+    return this->stateFlags1 & PLAYER_STATE1_DEAD;
 }
 
 s32 func_808344C0(PlayState* play, Player* this) {
@@ -6325,7 +6326,7 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
     s32 sp34;
     s32 sp30;
 
-    if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_80) && !func_8082DA90(play) &&
+    if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_DEAD) && !func_8082DA90(play) &&
         (this->csAction == PLAYER_CSACTION_NONE) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
         exitIndexPlusOne = 0;
 
@@ -10514,7 +10515,7 @@ void func_80840770(PlayState* play, Player* this) {
         } else if (gSaveContext.healthAccumulator == 0) {
             Player_StopCutscene(this);
 
-            this->stateFlags1 &= ~PLAYER_STATE1_80;
+            this->stateFlags1 &= ~PLAYER_STATE1_DEAD;
             if (this->stateFlags1 & PLAYER_STATE1_8000000) {
                 func_808353DC(play, this);
             } else {
@@ -11489,7 +11490,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
     ceilingCheckHeight = this->ageProperties->ceilingCheckHeight;
 
     if (this->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000)) {
-        if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE2_4000) &&
+        if ((!(this->stateFlags1 & PLAYER_STATE1_DEAD) && !(this->stateFlags2 & PLAYER_STATE2_4000) &&
              (this->stateFlags1 & PLAYER_STATE1_80000000)) ||
             spAC) {
             updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
@@ -12412,7 +12413,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         } else if (this->pushedSpeed != 0.0f) {
             Math_StepToF(&this->pushedSpeed, 0.0f, (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
         }
-        if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) &&
+        if (!(this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) &&
             !(this->stateFlags3 & PLAYER_STATE3_80) && (Player_Action_80 != this->actionFunc)) {
             func_8083BB4C(play, this);
             if (!Play_InCsMode(play)) {
@@ -12627,7 +12628,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         Collider_UpdateCylinder(&this->actor, &this->cylinder);
         if (!(this->stateFlags2 & PLAYER_STATE2_4000)) {
-            if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+            if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_DEAD | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
                                        PLAYER_STATE1_800000)) &&
                 !(this->stateFlags3 & PLAYER_STATE3_10000000)) {
                 if ((Player_Action_93 != this->actionFunc) && (Player_Action_73 != this->actionFunc) &&
@@ -12638,7 +12639,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                     CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinder.base);
                 }
             }
-            if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000)) && (this->invincibilityTimer <= 0)) {
+            if (!(this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_4000000)) &&
+                (this->invincibilityTimer <= 0)) {
                 if ((Player_Action_93 != this->actionFunc) &&
                     ((Player_Action_96 != this->actionFunc) || (this->av1.actionVar1 != 1))) {
                     if (this->cylinder.base.atFlags != AT_NONE) {
@@ -12655,7 +12657,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
     func_801229FC(this);
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
 
-    if ((this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) ||
+    if ((this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) ||
         (this != GET_PLAYER(play))) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     } else {
@@ -13156,7 +13158,7 @@ void func_808475B4(Player* this) {
         temp_fv0 = CLAMP(temp_fv0, -0.4f, -0.1f);
         sp4 = temp_fv0 - ((this->actor.velocity.y <= 0.0f) ? 0.0f : this->actor.velocity.y * 0.5f);
     } else {
-        if (!(this->stateFlags1 & PLAYER_STATE1_80) && (this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
+        if (!(this->stateFlags1 & PLAYER_STATE1_DEAD) && (this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (this->actor.velocity.y >= -5.0f)) {
             sp4 = -0.3f;
         } else if ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.velocity.y < 0.0f)) {
@@ -20818,7 +20820,7 @@ void func_8085B170(PlayState* play, Player* this) {
 
 s32 Player_GrabPlayer(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && (this->invincibilityTimer >= 0) && !func_801240DC(this)) {
-        if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 |
+        if (!(this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 |
                                    PLAYER_STATE1_200000 | PLAYER_STATE1_800000))) {
             if (!(this->stateFlags2 & PLAYER_STATE2_80) && !(this->stateFlags3 & PLAYER_STATE3_80)) {
                 func_8085B170(play, this);

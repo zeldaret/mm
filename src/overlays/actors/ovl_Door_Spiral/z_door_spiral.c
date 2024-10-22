@@ -233,7 +233,7 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
         (this->actionFunc == func_809A2DB0)) {
         this->actionFunc(this, play);
     }

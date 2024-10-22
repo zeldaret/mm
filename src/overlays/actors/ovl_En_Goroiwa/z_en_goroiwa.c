@@ -1438,7 +1438,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     CollisionPoly* tmp;
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
+          (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }

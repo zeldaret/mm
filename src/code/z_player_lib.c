@@ -645,7 +645,7 @@ void func_80123140(PlayState* play, Player* player) {
 }
 
 bool Player_InBlockingCsMode(PlayState* play, Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
+    return (player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || play->actorCtx.isOverrideInputOn;
@@ -1943,7 +1943,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
     f32 sp7C;
 
     if ((player->stateFlags3 & PLAYER_STATE3_1) || !(player->actor.scale.y >= 0.0f) ||
-        (player->stateFlags1 & PLAYER_STATE1_80) || play->unk_18844) {
+        (player->stateFlags1 & PLAYER_STATE1_DEAD) || play->unk_18844) {
         return;
     }
 
