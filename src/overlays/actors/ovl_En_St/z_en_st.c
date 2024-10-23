@@ -10,7 +10,7 @@
 
 #define FLAGS                                                                                              \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
-     ACTOR_FLAG_1000000)
+     ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
 
 #define THIS ((EnSt*)thisx)
 
@@ -266,7 +266,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.06f, 0.12f, 0.06f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 195, 0, 0x40, 0x20, 1, 215, 0, 8, 8));
 
         temp_f0 = (f32)this->unk_310 / 8;

@@ -1240,7 +1240,7 @@ typedef struct Player {
     /* 0xAC8 */ f32 skelAnimeUpperBlendWeight;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
-    /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
+    /* 0xACF */ u8 putAwayCooldownTimer; // Frames to wait before showing "Put Away" on A
     /* 0xAD0 */ f32 speedXZ; // Controls horizontal speed, used for `actor.speed`. Current or target value depending on context.
     /* 0xAD4 */ s16 yaw; // General yaw value, used both for world and shape rotation. Current or target value depending on context.
     /* 0xAD6 */ s16 parallelYaw; // yaw in "parallel" mode, Z-Target without an actor lock-on
@@ -1280,7 +1280,7 @@ typedef struct Player {
     /* 0xB44 */ f32 unk_B44;
     /* 0xB48 */ f32 unk_B48;
     /* 0xB4C */ s16 unk_B4C;
-    /* 0xB4E */ s16 unk_B4E;
+    /* 0xB4E */ s16 turnRate; // Amount angle is changed every frame when turning in place
     /* 0xB50 */ f32 unk_B50;
     /* 0xB54 */ f32 yDistToLedge; // y distance to ground above an interact wall. LEDGE_DIST_MAX if no ground if found
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall

@@ -123,7 +123,7 @@ void Player_Action_6(Player* this, PlayState* play);
 void Player_Action_7(Player* this, PlayState* play);
 void Player_Action_8(Player* this, PlayState* play);
 void Player_Action_9(Player* this, PlayState* play);
-void Player_Action_10(Player* this, PlayState* play);
+void Player_Action_TurnInPlace(Player* this, PlayState* play);
 void Player_Action_11(Player* this, PlayState* play);
 void Player_Action_12(Player* this, PlayState* play);
 void Player_Action_13(Player* this, PlayState* play);
@@ -5195,7 +5195,7 @@ s8 sActionHandlerList5[] = {
     /* 8 */ -PLAYER_ACTION_HANDLER_7,
 };
 
-s8 sActionHandlerList6[] = {
+s8 sActionHandlerListTurnInPlace[] = {
     /* 0 */ -PLAYER_ACTION_HANDLER_7,
 };
 
@@ -6032,7 +6032,7 @@ s32 func_80834600(Player* this, PlayState* play) {
         Actor* sp60 = this->cylinder.base.ac;
         s32 var_a2_2;
 
-        if (sp60->flags & ACTOR_FLAG_1000000) {
+        if (sp60->flags & ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT) {
             Player_PlaySfx(this, NA_SE_PL_BODY_HIT);
         }
 
@@ -8239,7 +8239,7 @@ s32 Player_ActionHandler_6(Player* this, PlayState* play) {
                 return true;
             }
 
-            if ((this->putAwayCountdown == 0) && (this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) &&
+            if ((this->putAwayCooldownTimer == 0) && (this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) &&
                 (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 Player_UseItem(play, this, ITEM_NONE);
             } else {
@@ -8384,8 +8384,8 @@ void func_8083A794(Player* this, PlayState* play) {
     Player_SetAction(play, this, func_8082FBE8(this) ? Player_Action_14 : Player_Action_13, 1);
 }
 
-void func_8083A844(Player* this, PlayState* play, s16 currentYaw) {
-    this->yaw = currentYaw;
+void func_8083A844(Player* this, PlayState* play, s16 yaw) {
+    this->yaw = yaw;
     this->actor.shape.rot.y = this->yaw;
     func_8083A794(this, play);
 }
@@ -8561,12 +8561,12 @@ void Player_InitMode_F(PlayState* play, Player* this) {
     }
 }
 
-void func_8083AECC(Player* this, s16 currentYaw, PlayState* play) {
+void func_8083AECC(Player* this, s16 yaw, PlayState* play) {
     Player_SetAction(play, this, Player_Action_6, 1);
     PlayerAnimation_CopyJointToMorph(play, &this->skelAnime);
     this->unk_B38 = 0.0f;
     this->unk_B34 = 0.0f;
-    this->yaw = currentYaw;
+    this->yaw = yaw;
 }
 
 void func_8083AF30(Player* this, PlayState* play) {
@@ -8574,12 +8574,12 @@ void func_8083AF30(Player* this, PlayState* play) {
     Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType]);
 }
 
-void func_8083AF8C(Player* this, s16 currentYaw, PlayState* play) {
+void func_8083AF8C(Player* this, s16 yaw, PlayState* play) {
     Player_SetAction(play, this, Player_Action_15, 1);
     PlayerAnimation_Change(play, &this->skelAnime, &gPlayerAnim_link_anchor_back_walk, PLAYER_ANIM_NORMAL_SPEED, 0.0f,
                            Animation_GetLastFrame(&gPlayerAnim_link_anchor_back_walk), ANIMMODE_ONCE, -6.0f);
     this->speedXZ = 8.0f;
-    this->yaw = currentYaw;
+    this->yaw = yaw;
 }
 
 void func_8083B030(Player* this, PlayState* play) {
@@ -8593,11 +8593,14 @@ void func_8083B090(Player* this, PlayState* play) {
     PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, &gPlayerAnim_link_anchor_back_brake, 6.0f / 3.0f);
 }
 
-void func_8083B0E4(PlayState* play, Player* this, s16 currentYaw) {
-    this->yaw = currentYaw;
-    Player_SetAction(play, this, Player_Action_10, 1);
-    this->unk_B4E = 1200;
-    this->unk_B4E *= sWaterSpeedFactor;
+void Player_SetupTurnInPlace(PlayState* play, Player* this, s16 yaw) {
+    this->yaw = yaw;
+
+    Player_SetAction(play, this, Player_Action_TurnInPlace, 1);
+
+    this->turnRate = 0x4B0;
+    this->turnRate *= sWaterSpeedFactor; // slow turn rate by half when in water
+
     PlayerAnimation_Change(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_45_turn][this->modelAnimType],
                            PLAYER_ANIM_NORMAL_SPEED, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f);
 }
@@ -8724,11 +8727,11 @@ s32 func_8083B3B4(PlayState* play, Player* this, Input* input) {
     return false;
 }
 
-void func_8083B73C(PlayState* play, Player* this, s16 currentYaw) {
+void func_8083B73C(PlayState* play, Player* this, s16 yaw) {
     Player_SetAction(play, this, Player_Action_57, 0);
     Player_Anim_PlayLoopSlowMorph(play, this, &gPlayerAnim_link_swimer_swim);
-    this->actor.shape.rot.y = currentYaw;
-    this->yaw = currentYaw;
+    this->actor.shape.rot.y = yaw;
+    this->yaw = yaw;
 }
 
 void func_8083B798(PlayState* play, Player* this) {
@@ -8871,7 +8874,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                    (((Player_Action_56 != this->actionFunc) && !(this->stateFlags3 & PLAYER_STATE3_8000)) ||
                     (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
             if (this->skelAnime.moveFlags == 0) {
-                func_8083B0E4(play, this, this->actor.shape.rot.y);
+                Player_SetupTurnInPlace(play, this, this->actor.shape.rot.y);
             }
             func_8083B32C(play, this, this->actor.velocity.y);
         }
@@ -11009,11 +11012,11 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH | ACTOR_FLAG_CAN_PRESS_SWITCH);
+    this->actor.flags &= ~(ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES | ACTOR_FLAG_CAN_PRESS_SWITCHES);
     if (this->transformation != PLAYER_FORM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
         if (this->transformation == PLAYER_FORM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES;
         }
     }
 
@@ -11422,10 +11425,12 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         }
 
         if (doActionA != DO_ACTION_PUTAWAY) {
-            this->putAwayCountdown = 20;
-        } else if (this->putAwayCountdown != 0) {
+            this->putAwayCooldownTimer = 20;
+        } else if (this->putAwayCooldownTimer != 0) {
+            // Replace the "Put Away" Do Action label with a blank label while
+            // the cooldown timer is counting down
             doActionA = DO_ACTION_NONE;
-            this->putAwayCountdown--;
+            this->putAwayCooldownTimer--;
         }
 
         Interface_SetAButtonDoAction(play, doActionA);
@@ -12884,7 +12889,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             Matrix_Push();
             func_80124618(*spE4, spE0, &this->unk_AF0[1]);
             Matrix_Scale(this->unk_AF0[1].x, this->unk_AF0[1].y, this->unk_AF0[1].z, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, *spDC);
 
             Matrix_Pop();
@@ -12933,15 +12938,14 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
             gDPSetEnvColor(POLY_OPA_DISP++, spBC.r, spBC.g, spBC.b, 255);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gLinkGoronCurledDL);
 
             if (this->unk_B86[1] != 0) {
                 if (this->unk_B86[1] < 3) {
                     func_80124618(D_8085D540, this->unk_B86[1], this->unk_AF0);
                     Matrix_Scale(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, MTXMODE_APPLY);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 }
 
                 gSPDisplayList(POLY_OPA_DISP++, object_link_goron_DL_00C540);
@@ -12971,8 +12975,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
                     Matrix_Scale(1.0f, var_fa1, var_fa1, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
                     gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
                     gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_0127B0);
@@ -13047,7 +13050,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                                         ((s32)play->gameplayFrames * -2) & 0x7F, 0x20, 0x20));
 
             Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, 255);
 
@@ -14158,7 +14161,7 @@ void Player_Action_3(Player* this, PlayState* play) {
         s16 temp_v0_2 = yawTarget - this->actor.shape.rot.y;
 
         if (ABS_ALT(temp_v0_2) > 0x320) {
-            func_8083B0E4(play, this, yawTarget);
+            Player_SetupTurnInPlace(play, this, yawTarget);
         }
     }
 }
@@ -14229,7 +14232,7 @@ void Player_Action_Idle(Player* this, PlayState* play) {
     yawDiff = yawTarget - this->actor.shape.rot.y;
 
     if (ABS_ALT(yawDiff) > 0x320) {
-        func_8083B0E4(play, this, yawTarget);
+        Player_SetupTurnInPlace(play, this, yawTarget);
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, 0x4B0);
         this->yaw = this->actor.shape.rot.y;
@@ -14456,7 +14459,14 @@ void Player_Action_9(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_10(Player* this, PlayState* play) {
+/**
+ * Turn in place until the angle pointed to by the control stick is reached.
+ *
+ * This is the state that the speedrunning community refers to as "ESS" or "ESS Position".
+ * See the bug comment below and https://www.zeldaspeedruns.com/mm/tech/ess-and-hess
+ * for more information.
+ */
+void Player_Action_TurnInPlace(Player* this, PlayState* play) {
     f32 speedTarget;
     s16 yawTarget;
 
@@ -14470,18 +14480,26 @@ void Player_Action_10(Player* this, PlayState* play) {
 
     Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
 
+    //! @bug This action does not handle xzSpeed in any capacity.
+    //! Player's current speed value will be maintained the entire time this action is running.
+    //! This is the core bug that allows many different glitches to manifest.
+    //!
+    //! One possible fix is to kill all speed instantly in `Player_SetupTurnInPlace`.
+    //! Another possible fix is to gradually kill speed by calling `Player_DecelerateToZero`
+    //! here, which plenty of other "standing" actions do.
+
     if ((this != GET_PLAYER(play)) && (this->focusActor == NULL)) {
         yawTarget = this->actor.home.rot.y;
     }
 
-    if (Player_TryActionHandlerList(play, this, sActionHandlerList6, true)) {
+    if (Player_TryActionHandlerList(play, this, sActionHandlerListTurnInPlace, true)) {
         return;
     }
 
     if (speedTarget != 0.0f) {
         this->actor.shape.rot.y = yawTarget;
         func_8083A794(this, play);
-    } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, this->unk_B4E)) {
+    } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, this->turnRate)) {
         func_80839E74(this, play);
     }
     this->yaw = this->actor.shape.rot.y;
@@ -20842,7 +20860,7 @@ s32 Player_TryCsAction(PlayState* play, Player* this, PlayerCsAction csAction) {
         // Specific to Kafei, any negative csAction works
         if ((this->actor.id == ACTOR_EN_TEST3) && (csAction < 0)) {
             // PLAYER_CSACTION_NEG1
-            func_8083B0E4(play, this, this->actor.home.rot.y);
+            Player_SetupTurnInPlace(play, this, this->actor.home.rot.y);
             return false;
         }
 
