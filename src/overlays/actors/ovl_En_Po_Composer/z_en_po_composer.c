@@ -6,8 +6,9 @@
 
 #include "z_en_po_composer.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnPoComposer*)thisx)
 
@@ -301,7 +302,7 @@ void EnPoComposer_PlayCurse(EnPoComposer* this, PlayState* play) {
     }
 
     // Ocarina check
-    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
         if (!sPlayerIsPlayingOcarina) {
             // Play sound whenever the player begins playing the Ocarina
             Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
@@ -717,7 +718,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(&gfx[1], this->envColor.r, this->envColor.g, this->envColor.b, this->lightColor.a);
 
         Matrix_Put(&this->lanternMtxF);
-        gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[2], play->state.gfxCtx);
 
         gSPDisplayList(&gfx[3], gPoeComposerLanternBaseDL);
         gSPDisplayList(&gfx[4], gPoeComposerLanternGlassDL);

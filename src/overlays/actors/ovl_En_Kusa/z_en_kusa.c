@@ -10,7 +10,7 @@
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnKusa*)thisx)
 
@@ -724,7 +724,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
         alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f;
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
         gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 

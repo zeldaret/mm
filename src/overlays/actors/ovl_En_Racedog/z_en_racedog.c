@@ -764,7 +764,7 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 255, this->selectionArrowGreenEnvColor, 0, 255);
         Matrix_Scale(this->selectionArrowScale * 2.0f, this->selectionArrowScale * 2.0f,
                      this->selectionArrowScale * 2.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowEmptyDL);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowDL);
 

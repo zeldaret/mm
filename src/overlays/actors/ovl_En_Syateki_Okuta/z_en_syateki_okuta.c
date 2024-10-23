@@ -581,7 +581,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->hitResultAlpha);
         }
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         if (this->type == SG_OCTO_TYPE_BLUE) {
             gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCrossDL);

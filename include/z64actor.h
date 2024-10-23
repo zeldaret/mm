@@ -166,8 +166,8 @@ typedef enum {
 #define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
-#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
-#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
+#define DYNA_INTERACT_ACTOR_SWITCH_PRESSED (1 << 3) // An actor that is capable of pressing switches is on top of the dynapoly actor
+#define DYNA_INTERACT_ACTOR_HEAVY_SWITCH_PRESSED (1 << 4) // An actor that is capable of pressing heavy switches is on top of the dynapoly actor
 
 typedef struct DynaPolyActor {
     /* 0x000 */ Actor actor;
@@ -491,8 +491,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)
-// actor can press and hold down heavy switches
-#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
+
+// Actor can press and hold down heavy switches.
+// See usages of `DynaPolyActor_SetHeavySwitchPressed` and `DynaPolyActor_IsHeavySwitchPressed` for more context on how switches work.
+#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
 // 
@@ -503,14 +505,19 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_200000        (1 << 21)
 // 
 #define ACTOR_FLAG_400000        (1 << 22)
-// 
-#define ACTOR_FLAG_800000        (1 << 23)
-// 
-#define ACTOR_FLAG_1000000       (1 << 24)
-// 
-#define ACTOR_FLAG_2000000       (1 << 25)
-// actor can press and hold down switches
-#define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
+// When Player is carrying this actor, it can only be thrown, not dropped/placed.
+// Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
+#define ACTOR_FLAG_THROW_ONLY    (1 << 23)
+// When colliding with Player's body AC collider, a "thump" sound will play indicating his body has been hit
+#define ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT       (1 << 24)
+// Actor can update even if Player is currently using the ocarina.
+// Typically an actor will halt while the ocarina is active (depending on category).
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_UPDATE_DURING_OCARINA       (1 << 25)
+
+// Actor can press and hold down switches.
+// See usages of `DynaPolyActor_SetSwitchPressed` and `DynaPolyActor_IsSwitchPressed` for more context on how switches work.
+#define ACTOR_FLAG_CAN_PRESS_SWITCHES (1 << 26)
 
 // Player is not able to lock onto the actor.
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
@@ -888,8 +895,8 @@ void DynaPolyActor_SetPlayerOnTop(DynaPolyActor* dynaActor);
 void DynaPoly_SetPlayerOnTop(struct CollisionContext* colCtx, s32 bgId);
 void DynaPolyActor_SetPlayerAbove(DynaPolyActor* dynaActor);
 void DynaPoly_SetPlayerAbove(struct CollisionContext* colCtx, s32 bgId);
-void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor);
-void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor);
+void DynaPolyActor_SetSwitchPressed(DynaPolyActor* dynaActor);
+void DynaPolyActor_SetHeavySwitchPressed(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsPlayerOnTop(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsPlayerAbove(DynaPolyActor* dynaActor);

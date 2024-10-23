@@ -169,8 +169,8 @@ void BgIknvDoukutu_Draw(Actor* thisx, PlayState* play) {
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_iknv_obj_Matanimheader_00F1C0));
     Scene_SetRenderModeXlu(play, 0, 1);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -203,7 +203,7 @@ void func_80BD7538(Actor* thisx, PlayState* play) {
     sp54 = this->unk_160;
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_iknv_obj_Matanimheader_00F1C0));
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Gfx_SetupDL72(POLY_XLU_DISP++);
     Scene_SetRenderModeXlu(play, 1, 2);
@@ -224,7 +224,7 @@ void func_80BD7768(Actor* thisx, PlayState* play) {
 
     Scene_SetRenderModeXlu(play, 0, 1);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
@@ -241,7 +241,7 @@ void func_80BD7820(Actor* thisx, PlayState* play) {
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_iknv_obj_Matanimheader_012728));
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
@@ -259,7 +259,7 @@ void func_80BD78C4(Actor* thisx, PlayState* play) {
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_iknv_obj_Matanimheader_0117A0));
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 

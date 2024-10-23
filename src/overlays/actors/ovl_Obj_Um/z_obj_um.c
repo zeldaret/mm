@@ -606,7 +606,7 @@ void ObjUm_SetPlayerPosition(ObjUm* this, PlayState* play) {
 void ObjUm_RotatePlayer(ObjUm* this, PlayState* play, s16 angle) {
     Player* player = GET_PLAYER(play);
 
-    player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + angle;
+    player->actor.shape.rot.y = player->actor.world.rot.y = player->yaw = this->dyna.actor.shape.rot.y + angle;
 }
 
 void func_80B78EBC(ObjUm* this, PlayState* play) {
@@ -624,7 +624,7 @@ void func_80B78EBC(ObjUm* this, PlayState* play) {
     player->upperLimbRot.y = 0;
     player->upperLimbRot.z = 0;
 
-    player->currentYaw = player->actor.focus.rot.y;
+    player->yaw = player->actor.focus.rot.y;
 }
 
 void ObjUm_RotatePlayerView(ObjUm* this, PlayState* play, s16 angle) {
@@ -1879,7 +1879,7 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
 void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Mtx* mtx_s3;
+    Mtx* mtx;
     Gfx* spFC[] = {
         NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0
     };
@@ -1933,7 +1933,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
             Matrix_Push();
             Matrix_TranslateRotateZYX(&sp88, &sp80);
-            mtx_s3 = Matrix_NewMtx(gfxCtx);
+            mtx = Matrix_Finalize(gfxCtx);
             potPos = &this->potPos[i];
             Matrix_MultVec3f(&spC0, &calcPotPos);
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
@@ -1948,7 +1948,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             }
             Matrix_Pop();
 
-            if (mtx_s3 == NULL) {
+            if (mtx == NULL) {
                 //! @bug skips CLOSE_DISPS
                 return;
             }
@@ -1956,7 +1956,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             //! FAKE:
             if (play) {}
 
-            gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (spFC[this->potsLife[i]] != NULL) {
                 gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);

@@ -286,11 +286,11 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!(this->unk_1E4 & 0x40)) {
-        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
             this->unk_1E4 |= 0x40;
             Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
-    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
         this->unk_1E4 &= ~0x40;
     }
 
@@ -1107,7 +1107,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         this->animIndex = ENGK_ANIM_0;
         this->csId = this->actor.csId;
         this->actor.flags |= ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGK_ANIM_0);
         this->actionFunc = func_80B5202C;
     } else {
@@ -1293,7 +1293,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
     if ((ENGK_GET_F(&this->actor) == ENGK_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_gk_DL_006688);
         gSPDisplayList(POLY_OPA_DISP++, object_gk_DL_006680);
 

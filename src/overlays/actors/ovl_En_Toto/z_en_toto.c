@@ -503,7 +503,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
         if (func_80BA44D4(temp_s0, player)) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);
             player->actor.shape.rot.y = 0;
-            player->currentYaw = 0;
+            player->yaw = 0;
             return func_80BA407C(this, play);
         }
         if (!ENTOTO_WEEK_EVENT_FLAGS) {

@@ -248,7 +248,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
-    this->picto.actor.flags |= ACTOR_FLAG_2000000;
+    this->picto.actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
     SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkel, &object_mnk_Anim_003584,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;
@@ -2146,8 +2146,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
 
                 Matrix_Push();
                 Matrix_RotateZS(this->cueId, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
                 Matrix_Pop();
 
@@ -2160,8 +2159,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(this->approachPlayerRadius + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
 
                 CLOSE_DISPS(play->state.gfxCtx);
@@ -2173,8 +2171,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(1.0f, 1.0f / (this->approachPlayerRadius + 1.0f), 1.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
 
                 CLOSE_DISPS(play->state.gfxCtx);

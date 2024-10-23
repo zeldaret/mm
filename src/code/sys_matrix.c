@@ -1253,7 +1253,7 @@ Mtx* Matrix_ToMtx(Mtx* dest) {
  *
  * @remark original name: "_Matrix_to_Mtx_new"
  */
-Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
+Mtx* Matrix_Finalize(GraphicsContext* gfxCtx) {
     return Matrix_ToMtx(GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 

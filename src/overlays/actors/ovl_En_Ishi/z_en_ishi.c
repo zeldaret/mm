@@ -12,7 +12,7 @@
 #include "assets/objects/object_ishi/object_ishi.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnIshi*)thisx)
 
@@ -716,7 +716,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp28);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_006760);
 
@@ -735,7 +735,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
     } else if (this->actor.projectedPos.z < 2250.0f) {
@@ -746,7 +746,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp20);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
     } else {

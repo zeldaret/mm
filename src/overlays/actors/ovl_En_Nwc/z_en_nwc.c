@@ -499,7 +499,7 @@ void EnNwc_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
 
-    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
 
     gSPDisplayList(&gfx[2], &gNwcBodyDL);
 
