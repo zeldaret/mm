@@ -72,11 +72,11 @@ void DynaPolyActor_AttachCarriedActor(CollisionContext* colCtx, Actor* carriedAc
     if (dynaActor != NULL) {
         DynaPolyActor_SetActorOnTop(dynaActor);
 
-        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_SWITCH)) {
-            DynaPolyActor_SetActorOnSwitch(dynaActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_SWITCHES)) {
+            DynaPolyActor_SetSwitchPressed(dynaActor);
         }
-        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH)) {
-            DynaPolyActor_SetActorOnHeavySwitch(dynaActor);
+        if (CHECK_FLAG_ALL(carriedActor->flags, ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES)) {
+            DynaPolyActor_SetHeavySwitchPressed(dynaActor);
         }
     }
 }

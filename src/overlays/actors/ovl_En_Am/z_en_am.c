@@ -499,7 +499,7 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->interactCollider.base);
     if (this->enemyCollider.base.atFlags & AT_ON) {
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->enemyCollider.base);
     }
     Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);

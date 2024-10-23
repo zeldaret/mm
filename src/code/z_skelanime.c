@@ -51,7 +51,7 @@ void SkelAnime_DrawLimbLod(PlayState* play, s32 limbIndex, void** skeleton, Vec3
         if (dList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
 
             gSPDisplayList(&gfx[1], dList);
             POLY_OPA_DISP = &gfx[2];
@@ -108,7 +108,7 @@ void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, Over
         if (dList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
 
             gSPDisplayList(&gfx[1], dList);
 
@@ -161,7 +161,7 @@ void SkelAnime_DrawFlexLimbLod(PlayState* play, s32 limbIndex, void** skeleton, 
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (newDList != NULL) {
             Matrix_ToMtx(*mtx);
-            gSPMatrix(POLY_OPA_DISP++, *mtx, G_MTX_LOAD);
+            gSPMatrix(POLY_OPA_DISP++, *mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, newDList);
             (*mtx)++;
         } else if (limbDList != NULL) {
@@ -228,7 +228,7 @@ void SkelAnime_DrawFlexLod(PlayState* play, void** skeleton, Vec3s* jointTable, 
         if (newDList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             POLY_OPA_DISP = &gfx[2];
             mtx++;
@@ -279,7 +279,8 @@ void SkelAnime_DrawLimbOpa(PlayState* play, s32 limbIndex, void** skeleton, Vec3
         if (dList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
+
             gSPDisplayList(&gfx[1], dList);
             POLY_OPA_DISP = &gfx[2];
         }
@@ -334,7 +335,8 @@ void SkelAnime_DrawOpa(PlayState* play, void** skeleton, Vec3s* jointTable, Over
         if (dList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
+
             gSPDisplayList(&gfx[1], dList);
             POLY_OPA_DISP = &gfx[2];
         }
@@ -380,7 +382,7 @@ void SkelAnime_DrawFlexLimbOpa(PlayState* play, s32 limbIndex, void** skeleton, 
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (newDList != NULL) {
             Matrix_ToMtx(*limbMatricies);
-            gSPMatrix(POLY_OPA_DISP++, *limbMatricies, G_MTX_LOAD);
+            gSPMatrix(POLY_OPA_DISP++, *limbMatricies, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, newDList);
             (*limbMatricies)++;
         } else if (limbDList != NULL) {
@@ -447,7 +449,7 @@ void SkelAnime_DrawFlexOpa(PlayState* play, void** skeleton, Vec3s* jointTable, 
         if (newDList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             POLY_OPA_DISP = &gfx[2];
             mtx++;
@@ -505,7 +507,7 @@ void SkelAnime_DrawTransformFlexLimbOpa(PlayState* play, s32 limbIndex, void** s
         if (newDList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_ToMtx(*mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(*mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             POLY_OPA_DISP = &gfx[2];
             (*mtx)++;
@@ -587,7 +589,7 @@ void SkelAnime_DrawTransformFlexOpa(PlayState* play, void** skeleton, Vec3s* joi
         if (newDList != NULL) {
             Gfx* gfx = POLY_OPA_DISP;
 
-            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             POLY_OPA_DISP = &gfx[2];
             mtx++;
@@ -675,7 +677,7 @@ Gfx* SkelAnime_DrawLimb(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, limbIndex, &dList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (dList != NULL) {
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], dList);
             gfx = &gfx[2];
         }
@@ -729,7 +731,7 @@ Gfx* SkelAnime_Draw(PlayState* play, void** skeleton, Vec3s* jointTable, Overrid
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &dList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (dList != NULL) {
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], dList);
             gfx = &gfx[2];
         }
@@ -776,7 +778,7 @@ Gfx* SkelAnime_DrawFlexLimb(PlayState* play, s32 limbIndex, void** skeleton, Vec
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (newDList != NULL) {
-            gSPMatrix(&gfx[0], Matrix_ToMtx(*mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(*mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             gfx = &gfx[2];
             (*mtx)++;
@@ -845,7 +847,7 @@ Gfx* SkelAnime_DrawFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         if (newDList != NULL) {
-            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], newDList);
             gfx = &gfx[2];
             mtx++;

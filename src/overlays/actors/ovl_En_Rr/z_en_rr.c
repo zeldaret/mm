@@ -902,7 +902,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
 
     bodyPartPos = &this->bodyPartsPos[0];
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     // LIKE_LIKE_BODYPART_0 - LIKE_LIKE_BODYPART_3
     Matrix_MultVecZ(1842.1053f, bodyPartPos++);

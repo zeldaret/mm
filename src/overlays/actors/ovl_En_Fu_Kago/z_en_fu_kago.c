@@ -374,7 +374,7 @@ void func_80AD0340(EnFuKago* this, PlayState* play) {
         Matrix_Translate(-ptr->unk_24.x, -ptr->unk_24.y, -ptr->unk_24.z, MTXMODE_APPLY);
         Matrix_Scale(scale->x, scale->y, scale->z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, D_80AD061C[i]);
 
         Matrix_Pop();
@@ -392,7 +392,7 @@ void EnFuKago_Draw(Actor* thisx, PlayState* play) {
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0006A0);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_000740);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0007E0);

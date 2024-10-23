@@ -1199,7 +1199,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     }
 
     gfx = POLY_OPA_DISP;
-    gSPMatrix(gfx, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx, play->state.gfxCtx);
 
     if (func_80B40D8C(play)) {
         gSPDisplayList(&gfx[1], gRazorSwordHandleDL);

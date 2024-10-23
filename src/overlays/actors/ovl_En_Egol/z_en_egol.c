@@ -1500,7 +1500,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Translate(this->laserBase.x, this->laserBase.y, this->laserBase.z, MTXMODE_NEW);
         Matrix_RotateZYX(this->laserRot.x, this->laserRot.y, 0, MTXMODE_APPLY);
         Matrix_Scale(this->laserScale.x, this->laserScale.y, this->laserScale.z, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gEyegoreLaserDL);
     }
     if (((this->action == EYEGORE_ACTION_LASER) && (this->laserState >= EYEGORE_LASER_FIRE)) || this->chargingLaser) {
@@ -1523,8 +1523,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
                 Matrix_ReplaceRotation(&play->billboardMtxF);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sLightOrbColors[i].r, sLightOrbColors[i].g, sLightOrbColors[i].b,
                                 laserLightAlpha);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 Matrix_Pop();
                 laserLightScaleMod = 3.0f;
@@ -1539,7 +1538,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateZS(this->chargeLightRot, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
             Matrix_Pop();
         }
@@ -1642,7 +1641,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play) {
                 case EYEGORE_EFFECT_IMPACT:
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 155, 155, 155, 255);
                     Matrix_Translate(0.0f, 50.0f, 0.0f, MTXMODE_APPLY);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
                     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, effect->alpha);
                     gSPDisplayList(POLY_OPA_DISP++, gEyegoreEffectImpactDL);
                     break;
@@ -1651,7 +1650,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play) {
                 case EYEGORE_EFFECT_PIECE_SMALL:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
                     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, effect->alpha);
                     if (effect->type == EYEGORE_EFFECT_PIECE_LARGE) {
                         gSPDisplayList(POLY_OPA_DISP++, gEyegoreEffectLargeBodyPieceDL);
@@ -1663,7 +1662,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play) {
                 case EYEGORE_EFFECT_DEBRIS:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
                     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
                     gSPDisplayList(POLY_OPA_DISP++, gEyegoreEffectSolidDebrisDL);
                     break;
