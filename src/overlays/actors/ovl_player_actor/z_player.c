@@ -3708,7 +3708,7 @@ void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWe
  * Note that `Player_CheckHostileLockOn` also exists to check if there is currently a hostile lock-on actor.
  * This function differs in that it first updates the flag if appropriate, then returns the same information.
  *
- * @return  true if there is curerntly a hostile lock-on actor, false otherwise
+ * @return  true if there is currently a hostile lock-on actor, false otherwise
  */
 s32 Player_UpdateHostileLockOn(Player* this) {
     if ((this->focusActor != NULL) &&
@@ -4897,6 +4897,29 @@ s16 func_80832754(Player* this, s32 arg1) {
     return yaw;
 }
 
+/**
+ * Updates state related to Z-Targeting.
+ *
+ * Z-Targeting is an umbrella term for two main states:
+ * - Actor Lock-on: Player has locked onto an actor, a reticle appears, both Player and the camera focus on the actor.
+ * - Parallel: Player and the camera keep facing the same angle from when Z was pressed. Can snap to walls.
+ *             This state occurs when there are no actors available to lock onto.
+ *
+ * First this function updates `zTargetActiveTimer`. For most Z-Target related states to update, this
+ * timer has to have a non-zero value. Additionally, the timer must have a value of 5 or greater
+ * for the Attention system to recognize that an actor lock-on is active.
+ *
+ * Following this, a next lock-on actor is chosen. If there is currently no actor lock-on active, the actor
+ * Navi is hovering over will be chosen. If there is an active lock-on, the next available
+ * lock-on will be the actor with an arrow hovering above it.
+ *
+ * If the above regarding actor lock-on does not occur, then Z-Parallel can begin.
+ *
+ * Lastly, the function handles updating general "actor focus" state. This applies to non Z-Target states
+ * like talking to an actor. If the current focus actor is not considered "hostile", then
+ * `PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS` can be set. This flag being set will trigger `Player_UpdateCamAndSeqModes`
+ * to make the camera focus on the current focus actor.
+ */
 void Player_UpdateZTargeting(Player* this, PlayState* play) {
     s32 ignoreLeash = false;
     Actor* nextLockOnActor;
@@ -12355,7 +12378,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
         Math_StepToF(&this->unk_B10[0], var_v0, D_8085D3FC[var_v0]);
     }
+
     Player_UpdateZTargeting(this, play);
+
     if (play->roomCtx.curRoom.enablePosLights) {
         Lights_PointSetColorAndRadius(&this->lightInfo, 255, 255, 255, 60);
     } else {
