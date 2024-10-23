@@ -638,14 +638,14 @@ void EnInvadepohDemo_Alien_Draw(EnInvadepohDemo* this, PlayState* play) {
         gDPSetEnvColor(gfx++, 255, 255, 255, 150);
         Matrix_Mult(&sInvadepohDemoAlienLeftEyeBeamMtxF, MTXMODE_NEW);
 
-        mtx = Matrix_NewMtx(play->state.gfxCtx);
+        mtx = Matrix_Finalize(play->state.gfxCtx);
 
         if (mtx != NULL) {
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gfx++, gAlienEyeBeamDL);
             Matrix_Mult(&sInvadepohDemoAlienRightEyeBeamMtxF, MTXMODE_NEW);
 
-            mtx = Matrix_NewMtx(play->state.gfxCtx);
+            mtx = Matrix_Finalize(play->state.gfxCtx);
 
             if (mtx != NULL) {
                 gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -686,7 +686,7 @@ void EnInvadepohDemo_Alien_Draw(EnInvadepohDemo* this, PlayState* play) {
         gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
         gDPSetPrimColor(gfx++, 0, 0, 240, 180, 100, 100);
 
-        mtx = Matrix_NewMtx(play->state.gfxCtx);
+        mtx = Matrix_Finalize(play->state.gfxCtx);
 
         if (mtx != NULL) {
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -745,7 +745,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    mtx = Matrix_NewMtx(play->state.gfxCtx);
+    mtx = Matrix_Finalize(play->state.gfxCtx);
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);

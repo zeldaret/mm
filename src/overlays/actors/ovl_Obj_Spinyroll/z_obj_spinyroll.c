@@ -688,7 +688,7 @@ void ObjSpinyroll_Draw(Actor* thisx, PlayState* play) {
         Matrix_SetTranslateRotateYXZ(phi_f22, temp_f30, phi_f24, &sp84);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_spinyroll_DL_000460);
 
         phi_f22 += temp_f26;

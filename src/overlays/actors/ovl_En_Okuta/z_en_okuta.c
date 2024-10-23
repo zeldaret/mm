@@ -1120,7 +1120,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
     } else {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
-        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
         gSPDisplayList(&gfx[2], gOctorokProjectileDL);
         POLY_OPA_DISP = &gfx[3];
     }

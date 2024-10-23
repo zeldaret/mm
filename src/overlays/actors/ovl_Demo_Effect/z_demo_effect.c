@@ -325,13 +325,13 @@ void DemoEffect_DrawLight(Actor* thisx, PlayState* play2) {
     Matrix_Push();
     Matrix_RotateZS(zRot, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     Matrix_Pop();
     Matrix_RotateZS(-zRot, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -366,7 +366,7 @@ void func_809A3F0C(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sp28->r, sp28->g, sp28->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, sp2C->unk_08);
 

@@ -3376,7 +3376,7 @@
     0x80181650:("Matrix_SetTranslateRotateYXZ",),
     0x801817FC:("Matrix_MtxFToMtx",),
     0x80181A18:("Matrix_ToMtx",),
-    0x80181A40:("Matrix_NewMtx",),
+    0x80181A40:("Matrix_Finalize",),
     0x80181A6C:("Matrix_MtxFToNewMtx",),
     0x80181A98:("Matrix_MultVec3f",),
     0x80181B50:("Matrix_MultZero",),

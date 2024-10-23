@@ -12888,7 +12888,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             Matrix_Push();
             func_80124618(*spE4, spE0, &this->unk_AF0[1]);
             Matrix_Scale(this->unk_AF0[1].x, this->unk_AF0[1].y, this->unk_AF0[1].z, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, *spDC);
 
             Matrix_Pop();
@@ -12937,15 +12937,14 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
             gDPSetEnvColor(POLY_OPA_DISP++, spBC.r, spBC.g, spBC.b, 255);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gLinkGoronCurledDL);
 
             if (this->unk_B86[1] != 0) {
                 if (this->unk_B86[1] < 3) {
                     func_80124618(D_8085D540, this->unk_B86[1], this->unk_AF0);
                     Matrix_Scale(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, MTXMODE_APPLY);
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 }
 
                 gSPDisplayList(POLY_OPA_DISP++, object_link_goron_DL_00C540);
@@ -12975,8 +12974,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
                     Matrix_Scale(1.0f, var_fa1, var_fa1, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
                     gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
                     gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_0127B0);
@@ -13051,7 +13049,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                                         ((s32)play->gameplayFrames * -2) & 0x7F, 0x20, 0x20));
 
             Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, 255);
 

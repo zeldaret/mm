@@ -726,7 +726,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_ReplaceRotation(&gIdentityMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F9F0);
         } else {
@@ -736,7 +736,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,
                               COMBINED, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x7F, 230, 225, 150, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06FAE0);
         }
 
@@ -775,7 +775,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(phi_v0, MTXMODE_APPLY);
         Matrix_Scale(sp5C, sp5C, sp5C, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
 
         Matrix_Pop();
@@ -788,7 +788,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);
 
         CLOSE_DISPS(play->state.gfxCtx);

@@ -1165,13 +1165,13 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     }
     if (this->unk_1FF == 0) {
         Scene_SetRenderModeXlu(play, 0, 1);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gTurtleAsleepDL);
     } else if (this->unk_1FF == 1) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
 

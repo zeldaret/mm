@@ -1020,7 +1020,7 @@ void EnOsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_RotateYS(leftHandRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(leftHandRot.z, MTXMODE_APPLY);
 
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, &gHappyMaskSalesmanMajorasMaskDL);
         Matrix_Pop();
     }

@@ -634,7 +634,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
     gDPSetPrimColor(gfx++, 0, 0, 130, 0, 255, 100);
-    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
 
     POLY_XLU_DISP = gfx;

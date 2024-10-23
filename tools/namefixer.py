@@ -74,7 +74,7 @@ wordReplace = {
     # "SysMatrix_SetStateRotationAndTranslation":     "Matrix_SetStateRotationAndTranslation",
     # "SysMatrix_ToRSPMatrix":                        "Matrix_ToRSPMatrix",
     # "SysMatrix_ToMtx":                              "Matrix_ToMtx",
-    # "SysMatrix_NewMtx":                             "Matrix_NewMtx",
+    # "SysMatrix_NewMtx":                             "Matrix_Finalize",
     # "SysMatrix_AppendToPolyOpaDisp":                "Matrix_AppendToPolyOpaDisp",
     # "SysMatrix_MultiplyVector3fByState":            "Matrix_MultiplyVector3fByState",
     # "SysMatrix_GetStateTranslation":                "Matrix_GetStateTranslation",

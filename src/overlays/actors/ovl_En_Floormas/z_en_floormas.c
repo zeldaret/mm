@@ -1202,7 +1202,7 @@ void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_RotateZF(M_PIf / 12, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, gWallmasterLittleFingerDL);
 
         Matrix_Pop();

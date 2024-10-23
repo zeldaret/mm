@@ -2911,7 +2911,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     }
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * zx));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, shadowDList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -2955,14 +2955,14 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
                                      minislime->actor.world.pos.z, &minislime->actor.shape.rot);
         Matrix_Scale(minislime->actor.scale.x, minislime->actor.scale.y, minislime->actor.scale.z, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->actor.shape.shadowAlpha);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, &gMinislimeNormalDL);
         if (minislime->frozenAlpha > 0) {
             Matrix_Translate(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(0.1f, minislime->frozenScale, 0.1f, MTXMODE_APPLY);
             AnimatedMat_Draw(play, this->minislimeFrozenTexAnim);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->frozenAlpha);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, &gMinislimeFrozenDL);
         }
 
@@ -2996,7 +2996,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
 
     // Draw Bigslime
     gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeDynamicVtx[this->dynamicVtxState]);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gBigslimeNormalMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, gBigslimeModelDL);
 
@@ -3024,7 +3024,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
                 dynamicVtx->n.ob[1] * this->actor.scale.y * bubblesInfoPtr->scaleVtx + this->actor.world.pos.y;
             billboardMtxF->zw =
                 dynamicVtx->n.ob[2] * this->actor.scale.z * bubblesInfoPtr->scaleVtx + this->actor.world.pos.z;
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
@@ -3113,7 +3113,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
     Matrix_SetTranslateRotateYXZ(gekkoPos.x, gekkoPos.y, gekkoPos.z, &this->gekkoRot);
     Matrix_Scale(this->gekkoScale, this->gekkoScale, this->gekkoScale, MTXMODE_APPLY);
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &gekkoPos, &this->gekkoProjectedPos);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnBigslime_PostLimbDraw, &this->actor);
 
@@ -3155,7 +3155,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
                                     32, 64, 1, (-play->gameplayFrames * 2) % 64, 0, 16, 16));
         Matrix_Translate(this->frozenPos.x, this->frozenPos.y, this->frozenPos.z, MTXMODE_NEW);
         Matrix_Scale(this->shockwaveScale, this->shockwaveScale, this->shockwaveScale, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gBigslimeShockwaveDL);
     }
 
@@ -3169,7 +3169,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(iceShardEffect->pos.x, iceShardEffect->pos.y, iceShardEffect->pos.z,
                                          &iceShardEffect->rot);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gBigslimeIceShardVtxDL);
         }
     }

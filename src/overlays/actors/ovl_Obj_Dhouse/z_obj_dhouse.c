@@ -507,7 +507,7 @@ void func_80B13C08(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_004928);
 
     for (i = 0, ptr = &this->unk_160[0], ptr3 = &D_80B13E90[0]; i < ARRAY_COUNT(this->unk_160); i++, ptr3++, ptr++) {
@@ -517,7 +517,7 @@ void func_80B13C08(Actor* thisx, PlayState* play) {
             Matrix_Translate(-ptr3->unk_08.x, -ptr3->unk_08.y, -ptr3->unk_08.z, MTXMODE_APPLY);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, ptr3->unk_00);
             gSPDisplayList(POLY_OPA_DISP++, ptr3->unk_04);
         }
@@ -528,7 +528,7 @@ void func_80B13C08(Actor* thisx, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &ptr2->unk_1C);
             Matrix_Scale(ptr2->unk_18, ptr2->unk_18, ptr2->unk_18, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_0081D8);
         }
     }
