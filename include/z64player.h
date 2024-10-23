@@ -898,8 +898,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_2000       (1 << 13)
 // 
 #define PLAYER_STATE1_4000       (1 << 14)
-// 
-#define PLAYER_STATE1_8000       (1 << 15)
+// Either lock-on or parallel is active. This flag is never checked for and is practically unused.
+#define PLAYER_STATE1_Z_TARGETING       (1 << 15)
 // Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
 // "Parallel" mode, Z-Target without an actor lock-on
@@ -1201,7 +1201,7 @@ typedef struct Player {
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
     /* 0x734 */ char unk_734[4];
-    /* 0x738 */ s32 unk_738;
+    /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
