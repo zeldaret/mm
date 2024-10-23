@@ -902,8 +902,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_8000       (1 << 15)
 // Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
-// 
-#define PLAYER_STATE1_20000      (1 << 17)
+// "Parallel" mode, Z-Target without an actor lock-on
+#define PLAYER_STATE1_PARALLEL   (1 << 17)
 // 
 #define PLAYER_STATE1_40000      (1 << 18)
 // 
@@ -928,8 +928,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10000000   (1 << 28)
 // Time is stopped but Link & NPC animations continue
 #define PLAYER_STATE1_20000000   (1 << 29)
-// 
-#define PLAYER_STATE1_40000000   (1 << 30)
+// Lock-on was released automatically, for example by leaving the lock-on leash range
+#define PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE   (1 << 30)
 // Related to exit a grotto
 #define PLAYER_STATE1_80000000   (1 << 31)
 
@@ -1389,7 +1389,7 @@ void func_80123140(struct PlayState* play, Player* player);
 bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
 bool Player_InCsMode(struct PlayState* play);
 bool Player_CheckHostileLockOn(Player* player);
-bool func_80123434(Player* player);
+bool Player_FriendlyLockOnOrParallel(Player* player);
 bool func_80123448(struct PlayState* play);
 bool Player_IsGoronOrDeku(Player* player);
 bool func_801234D4(struct PlayState* play);
