@@ -11011,11 +11011,11 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH | ACTOR_FLAG_CAN_PRESS_SWITCH);
+    this->actor.flags &= ~(ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES | ACTOR_FLAG_CAN_PRESS_SWITCHES);
     if (this->transformation != PLAYER_FORM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
         if (this->transformation == PLAYER_FORM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES;
         }
     }
 
