@@ -479,7 +479,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     if (sp34) {
         this->actor.textId = 0x238;
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-        this->actor.targetArrowOffset = 1400.0f / 3.0f;
+        this->actor.lockOnArrowOffset = 1400.0f / 3.0f;
         Actor_SetFocus(&this->actor, 24.0f);
         this->actor.attentionRangeType = ATTENTION_RANGE_3;
     }

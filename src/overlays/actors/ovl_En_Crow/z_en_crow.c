@@ -121,7 +121,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GUAY, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
 
 void EnCrow_Init(Actor* thisx, PlayState* play) {
@@ -301,7 +301,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
-    this->actor.targetArrowOffset = 0.0f;
+    this->actor.lockOnArrowOffset = 0.0f;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     scale = (this->actor.scale.x * 100.0f);
     this->actor.world.pos.y += 20.0f * scale;
@@ -438,7 +438,7 @@ void EnCrow_SetupRespawn(EnCrow* this) {
     this->timer = 300;
     this->actor.draw = NULL;
     this->actor.shape.yOffset = 2000.0f;
-    this->actor.targetArrowOffset = 2000.0;
+    this->actor.lockOnArrowOffset = 2000.0;
     this->drawDmgEffAlpha = 0.0f;
     this->actionFunc = EnCrow_Respawn;
 }

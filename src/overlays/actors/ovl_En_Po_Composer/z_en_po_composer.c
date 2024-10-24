@@ -176,7 +176,7 @@ static Color_RGBA8 sSharpClothingColor2 = { 90, 85, 50, 255 };
 static Color_RGBA8 sFlatClothingColor2 = { 100, 90, 100, 255 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 3200, ICHAIN_STOP),
 };
 
 static s32 sPlayerIsPlayingOcarina = false;

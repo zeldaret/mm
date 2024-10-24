@@ -246,7 +246,7 @@ static DamageTable sDamageTableNoArmor = {
 static CollisionCheckInfoInit sColChkInfoInit = { 18, 25, 80, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2916, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2916, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 12, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };

@@ -107,7 +107,7 @@ static DamageTable sDamageTable = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -5, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 3000, ICHAIN_STOP),
 };
 
 static Color_RGBA8 D_80A4F780 = { 250, 250, 250, 255 };

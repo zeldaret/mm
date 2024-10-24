@@ -880,7 +880,7 @@ void func_80B11344(EnGb2* this, PlayState* play) {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_4, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2200, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2200, ICHAIN_STOP),
 };
 
 void EnGb2_Init(Actor* thisx, PlayState* play) {

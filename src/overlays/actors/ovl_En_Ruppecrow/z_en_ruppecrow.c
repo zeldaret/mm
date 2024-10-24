@@ -105,7 +105,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
 
 s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
@@ -442,7 +442,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
-    this->actor.targetArrowOffset = 0.0f;
+    this->actor.lockOnArrowOffset = 0.0f;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
     scale = this->actor.scale.x * 100.0f;

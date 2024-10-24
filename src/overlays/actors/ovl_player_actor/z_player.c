@@ -4918,19 +4918,20 @@ void func_80832888(Player* this, PlayState* play) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
-                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.attention.fairyActor : &GET_PLAYER(play)->actor;
+                var_v1_2 =
+                    (this == GET_PLAYER(play)) ? play->actorCtx.attention.tatlHoverActor : &GET_PLAYER(play)->actor;
                 var_a1 = (gSaveContext.options.zTargetSetting != 0) || (this != GET_PLAYER(play));
                 this->stateFlags1 |= PLAYER_STATE1_8000;
                 if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
                     !(var_v1_2->flags & ACTOR_FLAG_LOCK_ON_DISABLED) &&
                     !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->focusActor) && (this == GET_PLAYER(play))) {
-                        var_v1_2 = play->actorCtx.attention.arrowPointedActor;
+                        var_v1_2 = play->actorCtx.attention.arrowHoverActor;
                     }
 
                     if ((var_v1_2 != NULL) &&
-                        (((var_v1_2 != this->focusActor)) || (var_v1_2->flags & ACTOR_FLAG_80000))) {
-                        var_v1_2->flags &= ~ACTOR_FLAG_80000;
+                        (((var_v1_2 != this->focusActor)) || (var_v1_2->flags & ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE))) {
+                        var_v1_2->flags &= ~ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE;
                         if (!var_a1) {
                             this->stateFlags2 |= PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
                         }
@@ -4949,7 +4950,7 @@ void func_80832888(Player* this, PlayState* play) {
 
             if (this->focusActor != NULL) {
                 if ((this == GET_PLAYER(play)) && (this->focusActor != this->autoLockOnActor) &&
-                    Attention_OutsideLeashRange(this->focusActor, this, ignoreLeash)) {
+                    Attention_ShouldReleaseLockOn(this->focusActor, this, ignoreLeash)) {
                     Player_ReleaseLockOn(this);
                     this->stateFlags1 |= PLAYER_STATE1_40000000;
                 } else if (this->focusActor != NULL) {
@@ -10840,7 +10841,7 @@ void func_80841744(PlayState* play, Player* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 Vec3s sPlayerSkeletonBaseTransl = { -57, 3377, 0 };
@@ -11415,7 +11416,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                             (this->transformation == PLAYER_FORM_ZORA)) &&
                            ((this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) ||
                             ((this->stateFlags2 & PLAYER_STATE2_100000) &&
-                             (play->actorCtx.attention.fairyActor == NULL)))) {
+                             (play->actorCtx.attention.tatlHoverActor == NULL)))) {
                     doActionA = DO_ACTION_PUTAWAY;
 
                     if (play->msgCtx.currentTextId == 0) {} //! FAKE
