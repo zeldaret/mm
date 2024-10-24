@@ -149,14 +149,14 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
         temp = this->actor.child;
         if (temp != NULL) {
             temp->parent = NULL;
-            player->boomerangActor = temp;
+            player->zoraBoomerangActor = temp;
         } else {
             temp = this->actor.parent;
             if (temp != NULL) {
                 temp->child = NULL;
             } else {
-                player->boomerangActor = NULL;
-                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
+                player->zoraBoomerangActor = NULL;
+                player->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
             }
         }
         player->stateFlags3 |= PLAYER_STATE3_800000;

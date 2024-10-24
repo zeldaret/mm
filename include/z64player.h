@@ -81,7 +81,7 @@ typedef enum PlayerItemAction {
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
     /* 0x07 */ PLAYER_IA_DEKU_STICK,
-    /* 0x08 */ PLAYER_IA_ZORA_FINS,
+    /* 0x08 */ PLAYER_IA_ZORA_BOOMERANG,
     /* 0x09 */ PLAYER_IA_BOW,
     /* 0x0A */ PLAYER_IA_BOW_FIRE,
     /* 0x0B */ PLAYER_IA_BOW_ICE,
@@ -185,7 +185,7 @@ typedef enum PlayerMeleeWeapon {
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
     /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
     /* 5 */ PLAYER_MELEEWEAPON_DEKU_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_DEKU_STICK),
-    /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
+    /* 6 */ PLAYER_MELEEWEAPON_ZORA_BOOMERANG = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_BOOMERANG),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
 
@@ -444,7 +444,7 @@ typedef enum PlayerModelGroup {
     /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
-    /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
+    /* 14 */ PLAYER_MODELGROUP_ZORA_BOOMERANG,
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
@@ -917,10 +917,10 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_400000     (1 << 22)
 // 
 #define PLAYER_STATE1_800000     (1 << 23)
-// 
-#define PLAYER_STATE1_1000000    (1 << 24)
-// 
-#define PLAYER_STATE1_2000000    (1 << 25)
+// Currently using the zora boomerang. This includes all phases (aiming, throwing, and catching).
+#define PLAYER_STATE1_USING_ZORA_BOOMERANG (1 << 24)
+// Zora boomerang has been thrown and is flying in the air
+#define PLAYER_STATE1_ZORA_BOOMERANG_THROWN (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
 // Swimming?
@@ -1215,7 +1215,7 @@ typedef struct Player {
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
     /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
-    /* 0xA7C */ Actor* boomerangActor;
+    /* 0xA7C */ Actor* zoraBoomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;
