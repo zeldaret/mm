@@ -126,7 +126,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             }
 
             this->actor.home.rot.x = this->actor.home.rot.z = 0;
@@ -486,7 +486,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
@@ -523,7 +523,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xD76:
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         SET_WEEKEVENTREG(WEEKEVENTREG_34_01);
                         break;
 
@@ -559,7 +559,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                     default:
                         Message_CloseTextbox(play);
                         this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         break;
                 }
             }
@@ -585,7 +585,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Player_IsFacingActor(&this->actor, 0x3000, play) ||
-                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) &&
+                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) &&
                Player_GetMask(play) == PLAYER_MASK_DON_GERO) {
         Actor_OfferTalk(&this->actor, play, 160.0f);
     }

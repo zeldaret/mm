@@ -326,13 +326,13 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->talkState = TEXT_STATE_EVENT;
                 player->stateFlags1 |= PLAYER_STATE1_20;
-                this->picto.actor.flags |= ACTOR_FLAG_10000;
+                this->picto.actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             }
 
             if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
-                this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
                 Actor_OfferTalkExchange(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);

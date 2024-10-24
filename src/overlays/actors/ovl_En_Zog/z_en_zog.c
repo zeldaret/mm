@@ -230,7 +230,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actor.home.rot.z = 0;
     if (ENZOG_GET_F(&this->actor) != ENZOG_F_2) {
         for (i = 0; i < 5; i++) {
@@ -243,7 +243,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
         this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk_31C = 2;
         this->unk_31E = 0;
 
@@ -911,7 +911,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
                 break;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
         Actor_OfferTalk(&this->actor, play, 150.0f);

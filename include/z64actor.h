@@ -508,14 +508,20 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_4000          (1 << 14)
 //! Carried by arrow
 #define ACTOR_FLAG_8000          (1 << 15)
-// 
-#define ACTOR_FLAG_10000         (1 << 16)
+
+// Player automatically accepts a Talk Offer without needing to press the A button.
+// Player still has to meet all conditions to be able to receive a talk offer (for example, being in range).
+#define ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED (1 << 16)
 
 // Actor can press and hold down heavy switches.
 // See usages of `DynaPolyActor_SetHeavySwitchPressed` and `DynaPolyActor_IsHeavySwitchPressed` for more context on how switches work.
 #define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES  (1 << 17)
-// 
-#define ACTOR_FLAG_40000         (1 << 18)
+
+// When locked onto an actor with this flag set, the C-Up button can be used to talk to this actor.
+// A C-Up button labeled "Tatl" will appear on the HUD when locked on which indicates the actor can be checked with Tatl.
+// With this flag Player talks directly to the actor with C-Up. It is expected that the resulting dialog should appear
+// to be coming from Tatl, even though she is not involved at all with this interaction.
+#define ACTOR_FLAG_TALK_WITH_C_UP (1 << 18)
 
 // Allows for the attention system to refind the focus actor in the search for the next attention actor.
 // Also allows for the next lock-on actor to be the focus actor again.
