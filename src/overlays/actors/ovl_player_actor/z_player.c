@@ -13892,32 +13892,32 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
             (this->focusActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : untargetedRotY, 0, ZORA_BOOMERANG_LEFT);
 
         if (this->zoraBoomerangActor != NULL) {
-            EnBoom* leftBoomerang = (EnBoom*)this->zoraBoomerangActor;
-            EnBoom* rightBoomerang;
+            EnBoom* leftZoraBoomerang = (EnBoom*)this->zoraBoomerangActor;
+            EnBoom* rightZoraBoomerang;
 
-            leftBoomerang->moveTo = this->focusActor;
-            if (leftBoomerang->moveTo != NULL) {
-                leftBoomerang->unk_1CF = 0x10;
+            leftZoraBoomerang->moveTo = this->focusActor;
+            if (leftZoraBoomerang->moveTo != NULL) {
+                leftZoraBoomerang->unk_1CF = 0x10;
             }
-            leftBoomerang->unk_1CC = leftBoomerang->unk_1CF + 0x24;
+            leftZoraBoomerang->unk_1CC = leftZoraBoomerang->unk_1CF + 0x24;
 
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
             untargetedRotY = (this->actor.shape.rot.y + 0x190);
-            rightBoomerang =
+            rightZoraBoomerang =
                 (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
                                      (this->focusActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY, 0,
                                      ZORA_BOOMERANG_RIGHT);
 
-            if (rightBoomerang != NULL) {
-                rightBoomerang->moveTo = this->focusActor;
-                if (rightBoomerang->moveTo != NULL) {
-                    rightBoomerang->unk_1CF = 0x10;
+            if (rightZoraBoomerang != NULL) {
+                rightZoraBoomerang->moveTo = this->focusActor;
+                if (rightZoraBoomerang->moveTo != NULL) {
+                    rightZoraBoomerang->unk_1CF = 0x10;
                 }
 
-                rightBoomerang->unk_1CC = rightBoomerang->unk_1CF + 0x24;
-                leftBoomerang->actor.child = &rightBoomerang->actor;
-                rightBoomerang->actor.parent = &leftBoomerang->actor;
+                rightZoraBoomerang->unk_1CC = rightZoraBoomerang->unk_1CF + 0x24;
+                leftZoraBoomerang->actor.child = &rightZoraBoomerang->actor;
+                rightZoraBoomerang->actor.parent = &leftZoraBoomerang->actor;
             }
 
             this->stateFlags1 |= PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
