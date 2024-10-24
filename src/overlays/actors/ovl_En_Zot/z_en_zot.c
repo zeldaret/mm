@@ -487,7 +487,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
             case 0x1279:
                 Message_CloseTextbox(play);
                 func_80B965D0(this, play);
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
                 if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
@@ -564,7 +564,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
 
     if (phi_v1 != 0) {
         SET_WEEKEVENTREG(WEEKEVENTREG_29_10);
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (phi_v1 == 5) {
             if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
@@ -946,7 +946,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
@@ -1060,7 +1060,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
                     default:
                         Message_CloseTextbox(play);
                         this->actionFunc = func_80B98998;
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         break;
                 }
             }
@@ -1132,7 +1132,7 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
 
 void func_80B98BF4(EnZot* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_20)) {
             Message_StartTextbox(play, 0x12B7, &this->actor);
             this->actionFunc = func_80B98AD0;
@@ -1150,7 +1150,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B98AD0;

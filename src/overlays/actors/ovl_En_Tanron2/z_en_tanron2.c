@@ -431,7 +431,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                 if ((player->focusActor != NULL) && (&this->actor != player->focusActor)) {
                     player->focusActor = &this->actor;
-                    play->actorCtx.attention.fairyActor = &this->actor;
+                    play->actorCtx.attention.tatlHoverActor = &this->actor;
                     play->actorCtx.attention.reticleActor = &this->actor;
                 }
             } else {

@@ -186,7 +186,7 @@ static u16 sBuySuccessTextIds[] = { 0x06BF, 0x06DC };
 static u16 sCannotGetNowTextIds[] = { 0x06C0, 0x06DD };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {

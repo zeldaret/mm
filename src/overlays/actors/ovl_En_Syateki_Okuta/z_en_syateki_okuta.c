@@ -83,7 +83,7 @@ static AnimationInfo sAnimationInfo[SG_OCTO_ANIM_MAX] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 6500, ICHAIN_STOP),
 };
 
 void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {

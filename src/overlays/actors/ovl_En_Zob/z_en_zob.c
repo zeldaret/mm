@@ -536,7 +536,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
 void func_80BA0610(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_StartTextbox(play, 0x120D, &this->actor);
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, ANIMMODE_ONCE);
@@ -551,7 +551,7 @@ void func_80BA06BC(EnZob* this, PlayState* play) {
     func_80B9FD24(this, play);
     if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->actionFunc = func_80BA0610;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80BA0610(this, play);
     }
 }

@@ -1167,7 +1167,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->fadeOutState = SK_FADE_OUT_STATE_NONE;
         this->fadeOutTimer = 0;
         this->alpha = this->alpha; // Set to itself
-        this->actor.targetArrowOffset = 1100.0f;
+        this->actor.lockOnArrowOffset = 1100.0f;
         this->cueId = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
@@ -1796,9 +1796,9 @@ void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) {
-            this->actor.targetArrowOffset = 3100.0f;
+            this->actor.lockOnArrowOffset = 3100.0f;
         } else {
-            this->actor.targetArrowOffset = 200.0f;
+            this->actor.lockOnArrowOffset = 200.0f;
         }
 
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {

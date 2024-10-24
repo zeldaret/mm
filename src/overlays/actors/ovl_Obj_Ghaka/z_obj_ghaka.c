@@ -40,7 +40,7 @@ static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };
 
 static InitChainEntry D_80B3C96C[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void func_80B3C260(ObjGhaka* this) {

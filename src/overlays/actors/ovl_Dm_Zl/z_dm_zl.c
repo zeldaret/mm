@@ -116,7 +116,7 @@ void DmZl_Init(Actor* thisx, PlayState* play) {
 
     this->animIndex = ZELDA_ANIM_FACING_AWAY;
     this->unk_2BA = 0;
-    this->actor.targetArrowOffset = 1000.0f;
+    this->actor.lockOnArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
     SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skel, NULL, NULL, NULL, 0);

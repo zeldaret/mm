@@ -59,7 +59,7 @@ void DmChar03_Init(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
     this->animIndex = DMCHAR03_ANIM_FALL_OVER;
-    this->actor.targetArrowOffset = 3000.0f;
+    this->actor.lockOnArrowOffset = 3000.0f;
     this->unk_18E = false;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);

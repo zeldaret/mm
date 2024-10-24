@@ -673,7 +673,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     this->unk_240 = D_80AA77A8[DMCHAR00_GET(thisx)];
     this->unk_250 = D_80AA77D8[DMCHAR00_GET(thisx)];
 
-    thisx->targetArrowOffset = 3000.0f;
+    thisx->lockOnArrowOffset = 3000.0f;
     this->cueId = 99;
     this->unk_262 = DMCHAR00_GET_F800(thisx);
 

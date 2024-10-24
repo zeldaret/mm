@@ -166,7 +166,7 @@ void EnKitan_TalkAfterGivingPrize(EnKitan* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnKitan_Talk;
         Message_ContinueTextbox(play, 0x04B5);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Animation_MorphToLoop(&this->skelAnime, &gKeatonChuckleAnim, -5.0f);
     } else {
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
@@ -177,7 +177,7 @@ void EnKitan_WaitForPrizeTextboxClosed(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = EnKitan_TalkAfterGivingPrize;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }

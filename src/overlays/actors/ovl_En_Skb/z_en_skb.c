@@ -222,7 +222,7 @@ void func_80994A9C(EnSkb* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
@@ -482,7 +482,7 @@ void func_809954F8(EnSkb* this) {
     this->actor.shape.shadowScale = 0.0f;
     this->actor.speed = 0.0f;
     this->actor.shape.yOffset = 0.0f;
-    this->actor.targetArrowOffset = 4000.0f;
+    this->actor.lockOnArrowOffset = 4000.0f;
 }
 
 void func_8099556C(EnSkb* this, PlayState* play) {
@@ -507,7 +507,7 @@ void func_8099556C(EnSkb* this, PlayState* play) {
                (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
         this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
-        this->actor.targetArrowOffset = 2000.0f;
+        this->actor.lockOnArrowOffset = 2000.0f;
         func_8099571C(this);
     }
 }
