@@ -4910,7 +4910,7 @@ s16 func_80832754(Player* this, s32 arg1) {
  * for the Attention system to recognize that an actor lock-on is active.
  *
  * Following this, a next lock-on actor is chosen. If there is currently no actor lock-on active, the actor
- * Navi is hovering over will be chosen. If there is an active lock-on, the next available
+ * Tatl is hovering over will be chosen. If there is an active lock-on, the next available
  * lock-on will be the actor with an arrow hovering above it.
  *
  * If the above regarding actor lock-on does not occur, then Z-Parallel can begin.
@@ -4974,11 +4974,11 @@ void Player_UpdateZTargeting(Player* this, PlayState* play) {
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
 
                 if (this == GET_PLAYER(play)) {
-                    // The next lock-on actor defaults to the actor Navi is hovering over.
+                    // The next lock-on actor defaults to the actor Tatl is hovering over.
                     // This may change to the arrow hover actor below.
                     nextLockOnActor = play->actorCtx.attention.tatlHoverActor;
                 } else {
-                    // Dark Link will always lock onto the player.
+                    // Kafei will always lock onto the player.
                     nextLockOnActor = &GET_PLAYER(play)->actor;
                 }
 
@@ -14428,7 +14428,7 @@ void Player_Action_6(Player* this, PlayState* play) {
         return;
     }
 
-    if (Player_IsZTargetingWithHostileUpdate(this) == 0) {
+    if (!Player_IsZTargetingWithHostileUpdate(this)) {
         func_8083A844(this, play, this->yaw);
         return;
     }
