@@ -4072,7 +4072,7 @@ void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play)
 }
 
 void EnInvadepoh_RewardRomani_SetupStartTalking(EnInvadepoh* this) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = EnInvadepoh_RewardRomani_StartTalking;
 }
 

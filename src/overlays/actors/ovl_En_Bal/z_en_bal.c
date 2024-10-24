@@ -1043,7 +1043,7 @@ void EnBal_ThankYou(EnBal* this, PlayState* play) {
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         Message_StartTextbox(play, 0x1D17, &this->picto.actor);
         this->textId = 0x1D17;
-        this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnBal_SetupTalk(this);
     } else {
         Actor_OfferTalkExchangeEquiCylinder(&this->picto.actor, play, 200.0f, PLAYER_IA_MINUS1);

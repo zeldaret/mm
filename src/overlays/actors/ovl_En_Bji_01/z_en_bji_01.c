@@ -95,9 +95,9 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == SHIKASHI_TYPE_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         }
     }
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -228,7 +228,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -266,7 +266,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
@@ -313,7 +313,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F7:
                     case 0x5F8:
                         Message_CloseTextbox(play);
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);
                         break;
@@ -326,7 +326,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             func_809CCE98(this, play);
             break;
 
@@ -397,7 +397,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENTRANCE(ASTRAL_OBSERVATORY, 2): /* Telescope entrance */
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             AudioSfx_MuteBanks(0);
             SEQCMD_DISABLE_PLAY_SEQUENCES(false);
             this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;

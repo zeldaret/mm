@@ -964,9 +964,9 @@ void func_80B52340(EnGk* this, PlayState* play) {
             this->actionFunc = func_80B52430;
         }
         Message_StartTextbox(play, this->unk_31C, &this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);

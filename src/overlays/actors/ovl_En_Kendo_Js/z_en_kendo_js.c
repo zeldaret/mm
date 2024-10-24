@@ -515,9 +515,9 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
     sp20.z += 200.0f;
 
     if (EnKendoJs_MovePlayerToPos(play, sp20)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             func_80B279F0(this, play, 0);
             Message_StartTextbox(play, 0x271A, &this->actor);
