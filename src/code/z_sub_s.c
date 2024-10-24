@@ -861,7 +861,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= ACTOR_FLAG_10000;
+            actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
@@ -871,7 +871,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
                 ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
                 (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
-                actor->flags |= ACTOR_FLAG_10000;
+                actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -881,7 +881,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
                 ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
                 (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= ACTOR_FLAG_10000;
+                actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -1013,7 +1013,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);

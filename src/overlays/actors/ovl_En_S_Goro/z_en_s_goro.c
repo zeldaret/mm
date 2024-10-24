@@ -1028,7 +1028,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         this->actor.attentionRangeType = ATTENTION_RANGE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
@@ -1451,7 +1451,7 @@ void EnSGoro_DrawRolledUp(EnSGoro* this, PlayState* play) {
     Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

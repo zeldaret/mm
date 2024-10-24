@@ -126,7 +126,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 3, 30, 40, 150 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_WALLMASTER, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 5500, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 5500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
@@ -682,7 +682,7 @@ void EnWallmas_DrawShadow(EnWallmas* this, PlayState* play) {
         }
 
         Matrix_Scale(xzScale, 1.0f, xzScale, MTXMODE_APPLY);
-        gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[2], play->state.gfxCtx);
         gSPDisplayList(&gfx[3], gCircleShadowDL);
 
         POLY_OPA_DISP = &gfx[4];
@@ -759,7 +759,7 @@ void EnWallmas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_RotateZS(0xAAA, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], gWallmasterLittleFingerDL);
 
         POLY_OPA_DISP = &gfx[2];

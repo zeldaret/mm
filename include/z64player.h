@@ -882,8 +882,9 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_20         (1 << 5)
 // 
 #define PLAYER_STATE1_40         (1 << 6)
-// 
-#define PLAYER_STATE1_80         (1 << 7)
+// Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
+// This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
+#define PLAYER_STATE1_DEAD         (1 << 7)
 // 
 #define PLAYER_STATE1_100        (1 << 8)
 // 
@@ -988,8 +989,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE2_2000000    (1 << 25)
 // 
 #define PLAYER_STATE2_4000000    (1 << 26)
-// 
-#define PLAYER_STATE2_8000000    (1 << 27)
+// Playing the ocarina
+#define PLAYER_STATE2_USING_OCARINA  (1 << 27)
 // Playing a fidget idle animation (under typical circumstances, see `Player_ChooseNextIdleAnim` for more info)
 #define PLAYER_STATE2_IDLE_FIDGET   (1 << 28)
 // Disable drawing player
@@ -1240,10 +1241,10 @@ typedef struct Player {
     /* 0xAC8 */ f32 skelAnimeUpperBlendWeight;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
-    /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
-    /* 0xAD0 */ f32 linearVelocity;
-    /* 0xAD4 */ s16 currentYaw;
-    /* 0xAD6 */ s16 targetYaw;
+    /* 0xACF */ u8 putAwayCooldownTimer; // Frames to wait before showing "Put Away" on A
+    /* 0xAD0 */ f32 speedXZ; // Controls horizontal speed, used for `actor.speed`. Current or target value depending on context.
+    /* 0xAD4 */ s16 yaw; // General yaw value, used both for world and shape rotation. Current or target value depending on context.
+    /* 0xAD6 */ s16 parallelYaw; // yaw in "parallel" mode, Z-Target without an actor lock-on
     /* 0xAD8 */ u16 underwaterTimer;
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;
@@ -1280,7 +1281,7 @@ typedef struct Player {
     /* 0xB44 */ f32 unk_B44;
     /* 0xB48 */ f32 unk_B48;
     /* 0xB4C */ s16 unk_B4C;
-    /* 0xB4E */ s16 unk_B4E;
+    /* 0xB4E */ s16 turnRate; // Amount angle is changed every frame when turning in place
     /* 0xB50 */ f32 unk_B50;
     /* 0xB54 */ f32 yDistToLedge; // y distance to ground above an interact wall. LEDGE_DIST_MAX if no ground if found
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall

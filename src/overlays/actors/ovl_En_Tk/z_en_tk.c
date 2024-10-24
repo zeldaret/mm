@@ -710,7 +710,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2CA &= ~0x80;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
@@ -763,7 +763,7 @@ void func_80AEDD4C(EnTk* this, PlayState* play) {
 void func_80AEDDA0(EnTk* this, PlayState* play) {
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, ENTK_ANIM_2, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->unk_2CA |= 0x80;
     this->actionFunc = func_80AED940;
 }
@@ -1111,7 +1111,7 @@ s32 func_80AEEA4C(EnTk* this, PlayState* play) {
         ret = 3;
     } else if (this->actor.xyzDistToPlayerSq < SQ(60.0f)) {
         ret = 0;
-    } else if (this->actor.isLockedOn || (play->actorCtx.attention.arrowPointedActor == &this->actor) ||
+    } else if (this->actor.isLockedOn || (play->actorCtx.attention.arrowHoverActor == &this->actor) ||
                (this->actor.xyzDistToPlayerSq < SQ(80.0f))) {
         ret = 1;
     } else {

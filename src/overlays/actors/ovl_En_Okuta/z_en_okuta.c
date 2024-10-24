@@ -140,7 +140,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 6500, ICHAIN_STOP),
 };
 
 void EnOkuta_Init(Actor* thisx, PlayState* play2) {
@@ -946,7 +946,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
     Vec3f prevPos;
     s32 canRestorePrevPos = false;
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                  PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->actionFunc(this, play);
         Actor_MoveWithoutGravity(&this->actor);
@@ -971,7 +971,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
         }
 
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -1120,7 +1120,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
     } else {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
-        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
         gSPDisplayList(&gfx[2], gOctorokProjectileDL);
         POLY_OPA_DISP = &gfx[3];
     }

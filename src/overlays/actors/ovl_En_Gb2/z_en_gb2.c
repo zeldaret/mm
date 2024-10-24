@@ -553,10 +553,10 @@ void func_80B10344(EnGb2* this, PlayState* play) {
 void func_80B10584(EnGb2* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_80B10634;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
@@ -722,7 +722,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
     } else {
         this->unk_26C &= ~0x40;
         if (Actor_TalkOfferAccepted(&this->actor, &play->state) && (this->unk_26C & 0x20)) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Message_StartTextbox(play, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_80_40);
@@ -735,7 +735,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->actionFunc = func_80B10DAC;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             if (!(this->unk_26C & 0x80)) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 this->unk_26C |= 0x20;
                 Actor_OfferTalk(&this->actor, play, 300.0f);
             }
@@ -799,11 +799,11 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
 
 void func_80B11048(EnGb2* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10DAC;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
@@ -880,7 +880,7 @@ void func_80B11344(EnGb2* this, PlayState* play) {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_4, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2200, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2200, ICHAIN_STOP),
 };
 
 void EnGb2_Init(Actor* thisx, PlayState* play) {
@@ -917,7 +917,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
             this->unk_28A = 255;
             this->actor.flags |= ACTOR_FLAG_10;
-            this->actor.flags |= ACTOR_FLAG_2000000;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
 
             if (CHECK_EVENTINF(EVENTINF_46)) {
                 func_80B0F728(this, play);

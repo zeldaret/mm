@@ -14,7 +14,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_mask_ki_tan/object_mask_ki_tan.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((EnTest3*)thisx)
 
@@ -532,11 +532,11 @@ s32 func_80A3F15C(EnTest3* this, PlayState* play, struct_80A41828* arg2) {
             Math_Vec3f_Copy(&this->player.actor.world.pos, &curPathPos);
             Math_Vec3f_Copy(&this->player.actor.home.pos, &curPathPos);
             Math_Vec3f_Copy(&this->player.actor.prevPos, &curPathPos);
-            this->player.currentYaw = Math_Vec3f_Yaw(&this->player.actor.world.pos, &nextPathPos);
+            this->player.yaw = Math_Vec3f_Yaw(&this->player.actor.world.pos, &nextPathPos);
             if (arg2->unk_1_0 < 0) {
-                this->player.currentYaw += 0x8000;
+                this->player.yaw += 0x8000;
             }
-            this->player.actor.shape.rot.y = this->player.currentYaw;
+            this->player.actor.shape.rot.y = this->player.yaw;
             return true;
         }
     }
@@ -671,7 +671,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 
 s32 func_80A3F9A4(EnTest3* this, PlayState* play) {
     Math_ScaledStepToS(&this->player.actor.shape.rot.y, this->player.actor.home.rot.y, 0x320);
-    this->player.currentYaw = this->player.actor.shape.rot.y;
+    this->player.yaw = this->player.actor.shape.rot.y;
     return false;
 }
 
@@ -806,7 +806,7 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 
         this->player.actor.home.rot.y = -0x2AAB;
         this->player.actor.shape.rot.y = -0x2AAB;
-        this->player.currentYaw = -0x2AAB;
+        this->player.yaw = -0x2AAB;
         //! FAKE:
         if (1) {}
         return true;
@@ -925,9 +925,9 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     Math_Vec3f_Copy(&D_80A41D50, &this->player.actor.world.pos);
     dx = this->player.actor.world.pos.x - this->player.actor.prevPos.x;
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
-    this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
-    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
-    sKafeiControlStickMagnitude = (this->player.linearVelocity * 10.0f) + 20.0f;
+    this->player.speedXZ = sqrtf(SQ(dx) + SQ(dy));
+    this->player.speedXZ *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
+    sKafeiControlStickMagnitude = (this->player.speedXZ * 10.0f) + 20.0f;
     sKafeiControlStickMagnitude = CLAMP_MAX(sKafeiControlStickMagnitude, 60.0f);
     sKafeiControlStickAngle = this->player.actor.world.rot.y;
     this->player.actor.world.pos.x = this->player.actor.prevPos.x;
@@ -1068,7 +1068,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     if (D_80A41D48) {
         this->player.actor.world.pos.x = D_80A41D50.x;
         this->player.actor.world.pos.z = D_80A41D50.z;
-        this->player.linearVelocity = 0.0f;
+        this->player.speedXZ = 0.0f;
     }
 }
 

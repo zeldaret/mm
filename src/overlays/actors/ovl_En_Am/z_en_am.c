@@ -129,7 +129,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 14, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
 
 void EnAm_Init(Actor* thisx, PlayState* play) {
@@ -499,7 +499,7 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->interactCollider.base);
     if (this->enemyCollider.base.atFlags & AT_ON) {
-        this->actor.flags |= ACTOR_FLAG_1000000;
+        this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->enemyCollider.base);
     }
     Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);

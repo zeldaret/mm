@@ -246,7 +246,7 @@ static DamageTable sDamageTableNoArmor = {
 static CollisionCheckInfoInit sColChkInfoInit = { 18, 25, 80, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2916, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2916, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 12, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
@@ -1080,7 +1080,7 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
         gfx = POLY_XLU_DISP;
 
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], sIronKnuckleArmorMarkings[armorBodyPart].unk00);
         POLY_XLU_DISP = &gfx[2];
 
@@ -1109,11 +1109,11 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
                 Matrix_SetTranslateRotateYXZ(ikEffect->pos.x, ikEffect->pos.y, ikEffect->pos.z, &ikEffect->rot);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
 
-                gSPMatrix(gfxOpa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(gfxOpa++, play->state.gfxCtx);
                 gSPDisplayList(gfxOpa++, ikEffect->dList);
 
                 if (sIronKnuckleArmorMarkings[i].unk00 != NULL) {
-                    gSPMatrix(gfxXlu++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfxXlu++, play->state.gfxCtx);
                     gSPDisplayList(gfxXlu++, sIronKnuckleArmorMarkings[i].unk00);
                 }
             } else {

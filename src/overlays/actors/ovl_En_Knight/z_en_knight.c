@@ -2180,7 +2180,7 @@ void EnKnight_FlyingHeadDone(EnKnight* this, PlayState* play) {
                 sIgosHeadInstance = NULL;
                 this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 player->focusActor = &this->actor;
-                play->actorCtx.attention.fairyActor = &this->actor;
+                play->actorCtx.attention.tatlHoverActor = &this->actor;
                 play->actorCtx.attention.reticleActor = &this->actor;
             }
 
@@ -3259,7 +3259,7 @@ void EnKnight_FlyingHead(EnKnight* this, PlayState* play) {
             this->timers[0] = 20;
             sIgosInstance->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->focusActor = &this->actor;
-            play->actorCtx.attention.fairyActor = &this->actor;
+            play->actorCtx.attention.tatlHoverActor = &this->actor;
             play->actorCtx.attention.reticleActor = &this->actor;
             Math_Vec3f_Copy(&this->actor.world.pos, &sIgosInstance->actor.world.pos);
             Math_Vec3s_Copy(&this->actor.world.rot, &sIgosInstance->actor.world.rot);
@@ -3974,7 +3974,7 @@ void EnKnight_DrawEffectBlure(EnKnight* this, PlayState* play) {
     scale = (this == sIgosInstance) ? (17.0f / 13) : 1.0f;
     Matrix_Scale(0.021f * scale, 0.021f * scale, 0.021f * scale, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     switch (this->blureState) {
         case 0:
@@ -4262,7 +4262,7 @@ void EnKnight_Draw(Actor* thisx, PlayState* play) {
             scale = (sREG(17) + 600) * 0.01f * this->shieldLightReflectionScale;
             Matrix_Scale(scale, scale, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
         }
     }
@@ -4417,7 +4417,7 @@ void EnKnight_DrawEffects(EnKnight* this, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(eff->scale, eff->scale, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
     }
 

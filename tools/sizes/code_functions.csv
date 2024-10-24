@@ -185,7 +185,7 @@ asm/non_matchings/code/z_actor/func_800B4B50.s,func_800B4B50,0x800B4B50,0xE3
 asm/non_matchings/code/z_actor/Actor_GetProjectedPos.s,Actor_GetProjectedPos,0x800B4EDC,0x19
 asm/non_matchings/code/z_actor/Attention_SetReticlePos.s,Attention_SetReticlePos,0x800B4F40,0xE
 asm/non_matchings/code/z_actor/Attention_InitReticle.s,Attention_InitReticle,0x800B4F78,0x32
-asm/non_matchings/code/z_actor/Attention_SetFairyState.s,Attention_SetFairyState,0x800B5040,0x59
+asm/non_matchings/code/z_actor/Attention_SetTatlState.s,Attention_SetTatlState,0x800B5040,0x59
 asm/non_matchings/code/z_actor/Attention_Init.s,Attention_Init,0x800B51A4,0x19
 asm/non_matchings/code/z_actor/Attention_Draw.s,Attention_Draw,0x800B5208,0x183
 asm/non_matchings/code/z_actor/Attention_Update.s,Attention_Update,0x800B5814,0xE7
@@ -280,9 +280,9 @@ asm/non_matchings/code/z_actor/func_800B8118.s,func_800B8118,0x800B8118,0x32
 asm/non_matchings/code/z_actor/Actor_GetFocus.s,Actor_GetFocus,0x800B81E0,0xD
 asm/non_matchings/code/z_actor/Actor_GetWorld.s,Actor_GetWorld,0x800B8214,0xD
 asm/non_matchings/code/z_actor/Actor_GetWorldPosShapeRot.s,Actor_GetWorldPosShapeRot,0x800B8248,0x29
-asm/non_matchings/code/z_actor/Attention_GetAdjustedDistSq.s,Attention_GetAdjustedDistSq,0x800B82EC,0x34
-asm/non_matchings/code/z_actor/Attention_IsActorInRange.s,Attention_IsActorInRange,0x800B83BC,0xF
-asm/non_matchings/code/z_actor/Attention_OutsideLeashRange.s,Attention_OutsideLeashRange,0x800B83F8,0x36
+asm/non_matchings/code/z_actor/Attention_WeightedDistToPlayerSq.s,Attention_WeightedDistToPlayerSq,0x800B82EC,0x34
+asm/non_matchings/code/z_actor/Attention_ActorIsInRange.s,Attention_ActorIsInRange,0x800B83BC,0xF
+asm/non_matchings/code/z_actor/Attention_ShouldReleaseLockOn.s,Attention_ShouldReleaseLockOn,0x800B83F8,0x36
 asm/non_matchings/code/z_actor/Actor_TalkOfferAccepted.s,Actor_TalkOfferAccepted,0x800B84D0,0xC
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchange.s,Actor_OfferTalkExchange,0x800B8500,0x38
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchangeEquiCylinder.s,Actor_OfferTalkExchangeEquiCylinder,0x800B85E0,0xD
@@ -354,9 +354,9 @@ asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s,Actor_SpawnAsChild,0x800BB0C
 asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s,Actor_SpawnTransitionActors,0x800BB140,0x64
 asm/non_matchings/code/z_actor/Actor_SpawnEntry.s,Actor_SpawnEntry,0x800BB2D0,0x72
 asm/non_matchings/code/z_actor/Actor_Delete.s,Actor_Delete,0x800BB498,0x41
-asm/non_matchings/code/z_actor/Attention_InTargetableScreenRegion.s,Attention_InTargetableScreenRegion,0x800BB59C,0x1A
-asm/non_matchings/code/z_actor/Attention_FindTargetableActorForCategory.s,Attention_FindTargetableActorForCategory,0x800BB604,0xBA
-asm/non_matchings/code/z_actor/Attention_GetTargetActor.s,Attention_GetTargetActor,0x800BB8EC,0x67
+asm/non_matchings/code/z_actor/Attention_ActorOnScreen.s,Attention_ActorOnScreen,0x800BB59C,0x1A
+asm/non_matchings/code/z_actor/Attention_FindActorInCategory.s,Attention_FindActorInCategory,0x800BB604,0xBA
+asm/non_matchings/code/z_actor/Attention_FindActor.s,Attention_FindActor,0x800BB8EC,0x67
 asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s,Enemy_StartFinishingBlow,0x800BBA88,0xE
 asm/non_matchings/code/z_actor/func_800BBAC0.s,func_800BBAC0,0x800BBAC0,0x2D
 asm/non_matchings/code/z_actor/func_800BBB74.s,func_800BBB74,0x800BBB74,0x2B
@@ -683,7 +683,7 @@ asm/non_matchings/code/z_camera/Camera_UpdateInterface.s,Camera_UpdateInterface,
 asm/non_matchings/code/z_camera/Camera_BgCheckCorner.s,Camera_BgCheckCorner,0x800CD3E4,0x1A
 asm/non_matchings/code/z_camera/func_800CD44C.s,func_800CD44C,0x800CD44C,0x7A
 asm/non_matchings/code/z_camera/Camera_CalcSlopeYAdj.s,Camera_CalcSlopeYAdj,0x800CD634,0x26
-asm/non_matchings/code/z_camera/func_800CD6CC.s,func_800CD6CC,0x800CD6CC,0xB
+asm/non_matchings/code/z_camera/Camera_GetAttentionActorRange.s,Camera_GetAttentionActorRange,0x800CD6CC,0xB
 asm/non_matchings/code/z_camera/Camera_CalcAtDefault.s,Camera_CalcAtDefault,0x800CD6F8,0x4F
 asm/non_matchings/code/z_camera/Camera_CalcAtForScreen.s,Camera_CalcAtForScreen,0x800CD834,0x78
 asm/non_matchings/code/z_camera/Camera_CalcAtForNormal1.s,Camera_CalcAtForNormal1,0x800CDA14,0x56
@@ -2890,7 +2890,7 @@ asm/non_matchings/code/sys_matrix/Matrix_RotateAndTranslateState.s,Matrix_Rotate
 asm/non_matchings/code/sys_matrix/Matrix_SetTranslateRotateYXZ.s,Matrix_SetTranslateRotateYXZ,0x80181650,0x6B
 asm/non_matchings/code/sys_matrix/Matrix_MtxFToMtx.s,Matrix_MtxFToMtx,0x801817FC,0x87
 asm/non_matchings/code/sys_matrix/Matrix_ToMtx.s,Matrix_ToMtx,0x80181A18,0xA
-asm/non_matchings/code/sys_matrix/Matrix_NewMtx.s,Matrix_NewMtx,0x80181A40,0xB
+asm/non_matchings/code/sys_matrix/Matrix_Finalize.s,Matrix_Finalize,0x80181A40,0xB
 asm/non_matchings/code/sys_matrix/Matrix_MtxFToNewMtx.s,Matrix_MtxFToNewMtx,0x80181A6C,0xB
 asm/non_matchings/code/sys_matrix/Matrix_MultVec3f.s,Matrix_MultVec3f,0x80181A98,0x2E
 asm/non_matchings/code/sys_matrix/Matrix_MultZero.s,Matrix_MultZero,0x80181B50,0xA

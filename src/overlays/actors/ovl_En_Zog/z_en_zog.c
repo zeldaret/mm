@@ -266,7 +266,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actor.home.rot.z = 0;
     if (ENZOG_GET_F(&this->actor) != ENZOG_F_2) {
         for (i = 0; i < 5; i++) {
@@ -278,8 +278,8 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
-        this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk_31C = 2;
         this->unk_31E = 0;
 
@@ -633,10 +633,10 @@ void func_80B943EC(EnZog* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_30A & 0x10) {
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             this->unk_30A &= ~0x10;
         }
-    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) && (this->actor.xzDistToPlayer < 120.0f)) {
         this->unk_30A |= 0x10;
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
@@ -675,7 +675,7 @@ void func_80B9461C(EnZog* this, PlayState* play) {
     if (!func_80B93EA0(this, play)) {
         this->actor.textId = 0x103C;
         this->actionFunc = func_80B9451C;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_02);
     }
 
@@ -777,7 +777,7 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if (func_80B93BE0(this, play)) {
         this->actionFunc = func_80B948A8;
-        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_20)) {
             this->actor.textId = 0x1009;
         } else {
@@ -969,7 +969,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
                 break;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
         Actor_OfferTalk(&this->actor, play, 150.0f);

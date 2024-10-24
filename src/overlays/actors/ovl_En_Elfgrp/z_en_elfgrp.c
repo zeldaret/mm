@@ -602,7 +602,7 @@ void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
 
         EnElfgrp_SetFountainFairiesCount(play, this->type, curTotalFairies);
     } else if (this->actor.xzDistToPlayer < 280.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
@@ -626,18 +626,18 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 30.0f) {
         if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->actor.freezeTimer = 100;
             player->stateFlags1 |= PLAYER_STATE1_20000000;
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             this->actionFunc = func_80A3A77C;
             gSaveContext.save.saveInfo.weekEventReg[9] |= this->talkedOnceFlag;
         } else {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 }
 

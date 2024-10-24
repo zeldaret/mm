@@ -151,7 +151,7 @@ static AnimatedMaterial* sEmblemAnimatedMats[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_DEATH_ARMOS, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 3500, ICHAIN_STOP),
 };
 
 static s32 sAnimatedMaterialsDesgmented = false;
@@ -841,7 +841,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
-            gSPMatrix(&gfx[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[3 + i * 2], play->state.gfxCtx);
 
             gSPDisplayList(&gfx[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
         }

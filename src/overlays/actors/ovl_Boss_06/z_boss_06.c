@@ -670,7 +670,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, lightRayGreenFactor, (u8)(140.0f * lightRayBlueFactor + 115.0f),
                         lightRayAlpha);
         gSPDisplayList(POLY_XLU_DISP++, gIkanaThroneRoomLightRayDL);
@@ -690,7 +690,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gIkanaThroneRoomCurtainDL);
 
         if (this->fireEffectScale > 0.0f) {
@@ -721,8 +721,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     Matrix_Scale(-0.02f / 10.0f, -this->fireEffectScale, 1.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
@@ -747,7 +746,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->lightOrbScale, this->lightOrbScale, 1.0f, MTXMODE_APPLY);
         Matrix_RotateZS(play->gameplayFrames * 64, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
 

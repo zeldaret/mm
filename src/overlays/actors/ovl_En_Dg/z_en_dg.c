@@ -8,7 +8,7 @@
 #include "attributes.h"
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnDg*)thisx)
 
@@ -496,7 +496,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 100.0f);
             this->actionFunc = EnDg_SetupTalk;
         } else {
@@ -997,7 +997,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
         this->actionFunc = EnDg_SitNextToPlayer;
     } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
-        if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
+        if ((this->actor.xzDistToPlayer > 40.0f) && (player->speedXZ == 0.0f)) {
             Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speed, player->actor.speed, 0.2f, 1.0f);
@@ -1286,7 +1286,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
 
 void EnDg_SetupTalk(EnDg* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnDg_StartTextBox(this, play);
         this->actionFunc = EnDg_Talk;
     } else {

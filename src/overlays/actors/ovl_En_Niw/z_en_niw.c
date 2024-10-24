@@ -7,7 +7,7 @@
 #include "z_en_niw.h"
 #include "overlays/actors/ovl_En_Attack_Niw/z_en_attack_niw.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnNiw*)thisx)
 
@@ -86,7 +86,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
     static InitChainEntry sInitChain[] = {
         ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-        ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+        ICHAIN_F32(lockOnArrowOffset, 0, ICHAIN_STOP),
     };
     EnNiw* this = THIS;
     Vec3f D_808934C4 = { 90000.0f, 90000.0f, 90000.0f };
@@ -1010,7 +1010,7 @@ void EnNiw_DrawFeathers(EnNiw* this, PlayState* play) {
             Matrix_RotateZF(feather->zRot, MTXMODE_APPLY);
             Matrix_Translate(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
             gSPDisplayList(POLY_XLU_DISP++, gNiwFeatherDL);
         }

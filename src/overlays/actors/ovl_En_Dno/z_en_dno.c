@@ -1089,7 +1089,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         }
 
         gfxOpa = POLY_OPA_DISP;
-        gSPMatrix(gfxOpa, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfxOpa, play->state.gfxCtx);
         gSPDisplayList(&gfxOpa[1], *dList);
 
         POLY_OPA_DISP = &gfxOpa[2];
@@ -1110,7 +1110,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = Gfx_SetupDL71(POLY_XLU_DISP);
 
-        gSPMatrix(gfxXlu, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfxXlu, play->state.gfxCtx);
         gSPSegment(&gfxXlu[1], 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);

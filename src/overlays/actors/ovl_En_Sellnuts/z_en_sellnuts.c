@@ -135,7 +135,7 @@ static AnimationInfoS sAnimationInfo[ENSELLNUTS_ANIM_MAX] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void func_80ADADD0(EnSellnuts* this, PlayState* play) {
@@ -735,8 +735,8 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        player->linearVelocity = 0.0f;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        player->speedXZ = 0.0f;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_StartTextbox(play, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
@@ -749,7 +749,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
             this->actionFunc = func_80ADC6D0;
         }
     } else if (func_80ADB08C(play) < 80.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer);
     }
 }
@@ -896,7 +896,7 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
         func_80ADAFC0(this);
         if (curFrame == 0) {
             if (func_80ADB08C(play) < 9999.0f) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Actor_OfferTalk(&this->actor, play, 9999.0f);
             }
             this->unk_340 = 0x626;

@@ -105,7 +105,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
 
 s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
@@ -442,7 +442,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
-    this->actor.targetArrowOffset = 0.0f;
+    this->actor.lockOnArrowOffset = 0.0f;
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
 
     scale = this->actor.scale.x * 100.0f;
@@ -506,7 +506,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
-    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
         Math_ApproachF(&this->actor.speed, 0.0f, 0.1f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speed, 6.0f, 0.1f, 0.1f);
@@ -637,7 +637,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
 
     this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH_INDEX(&this->actor), ENRUPPECROW_PATH_INDEX_NONE);
     if (this->path != NULL) {

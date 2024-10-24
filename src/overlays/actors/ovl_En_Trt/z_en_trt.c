@@ -1702,7 +1702,7 @@ void EnTrt_DrawStickDirectionPrompt(PlayState* play, EnTrt* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 void EnTrt_Init(Actor* thisx, PlayState* play) {
