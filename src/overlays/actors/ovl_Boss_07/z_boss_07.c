@@ -26,7 +26,7 @@
 
 typedef struct MajoraEffect {
     /* 0x00 */ u8 type;
-    /* 0x02 */ s16 scroll;
+    /* 0x02 */ s16 texScroll;
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
@@ -1115,7 +1115,7 @@ void Boss07_SpawnFlameEffect(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f
             effect->scale = scale / 1000.0f;
             effect->isFadingAway = 0;
             effect->alpha = 0;
-            effect->scroll = Rand_ZeroFloat(1000.0f);
+            effect->texScroll = Rand_ZeroFloat(1000.0f);
             break;
         }
     }
@@ -7659,7 +7659,7 @@ void Boss07_BattleHandler_UpdateEffects(PlayState* play) {
 
     for (i = 0; i < MAJORA_EFFECT_COUNT; i++, effect++) {
         if (effect->type != MAJORA_EFFECT_NONE) {
-            effect->scroll++;
+            effect->texScroll++;
 
             effect->pos.x += effect->velocity.x;
             effect->pos.y += effect->velocity.y;
@@ -7703,8 +7703,8 @@ void Boss07_BattleHandler_DrawEffects(PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (3 * effect->scroll) % 128U,
-                                        (15 * -effect->scroll) % 256U, 32, 64, 1, 0, 0, 32, 32));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (3 * effect->texScroll) % 128U,
+                                        (15 * -effect->texScroll) % 256U, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
