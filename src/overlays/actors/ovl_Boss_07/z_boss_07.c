@@ -5140,7 +5140,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     f32 diffToTargetX;
     f32 diffToTargetY;
     f32 diffToTargetZ;
-    s32 pad;
+    f32 distToTargetXZ;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
@@ -5170,7 +5170,8 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     diffToTargetY = this->targetPos.y - this->actor.world.pos.y;
     diffToTargetZ = this->targetPos.z - this->actor.world.pos.z;
     targetRotY = Math_Atan2S(diffToTargetX, diffToTargetZ);
-    targetRotX = Math_Atan2S(diffToTargetY, sqrtf(SQ(diffToTargetX) + SQ(diffToTargetZ)));
+    distToTargetXZ = sqrtf(SQ(diffToTargetX) + SQ(diffToTargetZ));
+    targetRotX = Math_Atan2S(diffToTargetY, distToTargetXZ);
     targetRotX += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
 
     Math_ApproachS(&this->actor.world.rot.y, targetRotY, 0xA, this->speedToTarget);
