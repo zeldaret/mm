@@ -5730,7 +5730,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                     func_800B8D50(play, &this->actor, 5.0f, this->actor.shape.rot.y, 0.0f, 0x10);
 
                     for (j = 0; j < ARRAY_COUNT(player->bodyFlameTimers); j++) {
-                        player->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
+                        player->bodyFlameTimers[j] = Rand_S16Offset(0, 200);
                     }
 
                     player->bodyIsBurning = true;
@@ -6342,11 +6342,11 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
             Vec3f flamePos;
             Vec3f flameVelocity;
             Vec3f flameAccel;
-            f32 flamePosRandBase = (this->actionFunc == Boss07_Mask_DeathCutscene) ? 130.0f : 80.0f;
+            f32 flamePosRandScale = (this->actionFunc == Boss07_Mask_DeathCutscene) ? 130.0f : 80.0f;
 
-            flamePos.x = Rand_CenteredFloat(flamePosRandBase) + this->actor.world.pos.x;
-            flamePos.y = Rand_CenteredFloat(flamePosRandBase) + this->actor.world.pos.y;
-            flamePos.z = Rand_CenteredFloat(flamePosRandBase) + this->actor.world.pos.z;
+            flamePos.x = Rand_CenteredFloat(flamePosRandScale) + this->actor.world.pos.x;
+            flamePos.y = Rand_CenteredFloat(flamePosRandScale) + this->actor.world.pos.y;
+            flamePos.z = Rand_CenteredFloat(flamePosRandScale) + this->actor.world.pos.z;
 
             flameVelocity.x = 0.0f;
             flameVelocity.y = 5.0f;
@@ -6790,8 +6790,8 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
     f32 speedToTargetMaxStep;
     f32 speedTarget;
     f32 speedMaxStep;
-    s16 rotTargetX;
-    s16 rotTargetY;
+    s16 targetRotX;
+    s16 targetRotY;
     Player* player = GET_PLAYER(play);
 
     switch (this->subAction) {
@@ -6847,10 +6847,10 @@ void Boss07_Remains_IntroCutscene(Boss07* this, PlayState* play) {
             dx = this->targetPos.x - this->actor.world.pos.x;
             dy = this->targetPos.y - this->actor.world.pos.y + yOffset;
             dz = this->targetPos.z - this->actor.world.pos.z;
-            rotTargetY = Math_Atan2S(dx, dz);
-            rotTargetX = Math_Atan2S(dy, sqrtf(SQ(dx) + SQ(dz)));
-            Math_ApproachS(&this->actor.world.rot.y, rotTargetY, 5, this->speedToTarget);
-            Math_ApproachS(&this->actor.world.rot.x, rotTargetX, 5, this->speedToTarget);
+            targetRotY = Math_Atan2S(dx, dz);
+            targetRotX = Math_Atan2S(dy, sqrtf(SQ(dx) + SQ(dz)));
+            Math_ApproachS(&this->actor.world.rot.y, targetRotY, 5, this->speedToTarget);
+            Math_ApproachS(&this->actor.world.rot.x, targetRotX, 5, this->speedToTarget);
             Math_ApproachF(&this->speedToTarget, speedToTargetTarget, 1.0f, speedToTargetMaxStep);
             Math_ApproachF(&this->actor.speed, speedTarget, 1.0f, speedMaxStep);
             Actor_UpdateVelocityWithoutGravity(&this->actor);
