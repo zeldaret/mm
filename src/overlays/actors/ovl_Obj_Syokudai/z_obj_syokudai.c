@@ -32,7 +32,7 @@ ActorProfile Obj_Syokudai_Profile = {
 
 static ColliderCylinderInit sStandColliderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -40,11 +40,11 @@ static ColliderCylinderInit sStandColliderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0x00, 0x00 },
         { 0xF6CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 12, 45, 0, { 0, 0, 0 } },
@@ -52,7 +52,7 @@ static ColliderCylinderInit sStandColliderInit = {
 
 static ColliderCylinderInit sFlameColliderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -60,11 +60,11 @@ static ColliderCylinderInit sFlameColliderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 15, 45, 45, { 0, 0, 0 } },
@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
+static u8 sColMaterials[] = { COL_MATERIAL_METAL, COL_MATERIAL_WOOD, COL_MATERIAL_WOOD };
 
 static Gfx* sDLists[] = {
     gObjectSyokudaiTypeSwitchCausesFlameDL,
@@ -97,7 +97,7 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     func_800B4AEC(play, thisx, 50.0f);
     ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
     Collider_InitAndSetCylinder(play, &this->standCollider, thisx, &sStandColliderInit);
-    this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
+    this->standCollider.base.colMaterial = sColMaterials[OBJ_SYOKUDAI_GET_TYPE(thisx)];
     Collider_InitAndSetCylinder(play, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + OBJ_SYOKUDAI_GLOW_HEIGHT,
@@ -170,7 +170,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
             }
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
-            u32 flameColliderHurtboxDmgFlags = 0;
+            u32 flameColliderACDmgFlags = 0;
 
             player = GET_PLAYER(play);
 
@@ -193,8 +193,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
-                flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitElem->toucher.dmgFlags;
-                if (this->flameCollider.info.acHitElem->toucher.dmgFlags & 0x820) {
+                flameColliderACDmgFlags = this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags;
+                if (this->flameCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
@@ -215,14 +215,13 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
-                    } else if (flameColliderHurtboxDmgFlags & 0x20) {
-                        Actor* flameColliderHurtboxActor = this->flameCollider.base.ac;
+                    } else if (flameColliderACDmgFlags & 0x20) {
+                        Actor* flameColliderACActor = this->flameCollider.base.ac;
 
-                        if ((flameColliderHurtboxActor->update != NULL) &&
-                            (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
+                        if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
-                            flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
+                            flameColliderACActor->params = 0;
+                            ((EnArrow*)flameColliderACActor)->collider.elem.atDmgInfo.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
@@ -232,8 +231,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
-                             (flameColliderHurtboxDmgFlags & 0x800)) ||
+                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) && (flameColliderACDmgFlags & 0x800)) ||
                             ((interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) && (player->unk_B28 != 0)))) {
                     if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
@@ -298,7 +296,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 snuffTimerInitial = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
@@ -321,7 +319,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - thisx->shape.rot.y), MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 

@@ -69,6 +69,7 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
                 this->rgEnvColorA = 200;
                 this->rType = EFFSSGSPLASH_TYPE_0;
                 break;
+
             case EFFSSGSPLASH_TYPE_1:
                 this->rgPrimColorR = 255;
                 this->rgPrimColorG = 255;
@@ -80,6 +81,7 @@ u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initP
                 this->rgEnvColorA = 255;
                 this->rType = EFFSSGSPLASH_TYPE_1;
                 break;
+
             case EFFSSGSPLASH_TYPE_2:
                 this->rgPrimColorR = 255;
                 this->rgPrimColorG = 255;

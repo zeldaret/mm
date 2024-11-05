@@ -7,7 +7,7 @@
 #include "z_en_wiz_brock.h"
 #include "assets/objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWizBrock*)thisx)
 
@@ -131,7 +131,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, TRUNCF_BINANG(this->alpha));
         }
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, &gWizrobePlatformCenterDL);
 
         CLOSE_DISPS(play->state.gfxCtx);

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPr*)thisx)
 
@@ -88,7 +88,7 @@ ActorProfile En_Pr_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -96,11 +96,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x20000000, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 18, 20, 5, { 0, 0, 0 } },
@@ -149,7 +149,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = TARGET_MODE_3;
+    this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->unk_2B8 = this->actor.world.pos.y;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -215,11 +215,11 @@ void EnPr_ChangeAnim(EnPr* this, s32 animIndex) {
 s32 func_80A324E0(EnPr* this, PlayState* play) {
     CollisionPoly* sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     WaterBox* waterBox;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &this->unk_2E0, &sp48, &sp54, 1, 0, 0, 1,
-                                &sp44)) {
+                                &bgId)) {
         return 1;
     }
 
@@ -429,7 +429,7 @@ void func_80A32EA4(EnPr* this, PlayState* play) {
         if (this->actor.colChkInfo.health <= 0) {
             this->unk_206 = 7;
             this->unk_20A = 50;
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->unk_2C4 = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);

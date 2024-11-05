@@ -7,11 +7,12 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -92,7 +93,7 @@ ActorProfile Boss_06_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -100,11 +101,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 90, 140, 10, { 0, 0, 0 } },
@@ -169,7 +170,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
         this->curtainTexture[i] = curtainTexture[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
@@ -184,10 +185,10 @@ void Boss06_UpdateDamage(Boss06* this) {
                 Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
-                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.info.bumper.hitPos.x);
+                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.acDmgInfo.hitPos.x);
                 this->arrowHitPosScaled.x = this->arrowHitPos.x * 0.35f;
 
-                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.info.bumper.hitPos.y);
+                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.acDmgInfo.hitPos.y);
                 this->arrowHitPosScaled.y = this->arrowHitPos.y * -0.35f;
             }
         }
@@ -233,7 +234,7 @@ void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
                     Actor_Kill(searchArrow);
                 }
             }
-
+            FALLTHROUGH;
         case BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS:
             if (this->csFrameCount >= 10) {
                 Math_ApproachF(&this->lensFlareScale, 30.0f, 0.2f, 1.0f);
@@ -669,7 +670,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, lightRayGreenFactor, (u8)(140.0f * lightRayBlueFactor + 115.0f),
                         lightRayAlpha);
         gSPDisplayList(POLY_XLU_DISP++, gIkanaThroneRoomLightRayDL);
@@ -689,7 +690,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gIkanaThroneRoomCurtainDL);
 
         if (this->fireEffectScale > 0.0f) {
@@ -720,8 +721,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     Matrix_Scale(-0.02f / 10.0f, -this->fireEffectScale, 1.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
@@ -746,7 +746,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->lightOrbScale, this->lightOrbScale, 1.0f, MTXMODE_APPLY);
         Matrix_RotateZS(play->gameplayFrames * 64, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
 

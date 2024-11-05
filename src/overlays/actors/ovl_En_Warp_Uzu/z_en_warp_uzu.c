@@ -7,7 +7,7 @@
 #include "z_en_warp_uzu.h"
 #include "assets/objects/object_warp_uzu/object_warp_uzu.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnWarpUzu*)thisx)
 
@@ -35,7 +35,7 @@ ActorProfile En_Warp_Uzu_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -43,11 +43,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 25, 43, -20, { 0, 0, 0 } },
@@ -65,7 +65,7 @@ void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
-    thisx->targetMode = TARGET_MODE_0;
+    thisx->attentionRangeType = ATTENTION_RANGE_0;
     func_80A66208(this, play);
 }
 
@@ -75,8 +75,8 @@ void EnWarpUzu_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
 void func_80A66208(EnWarpUzu* this, PlayState* play) {
+    static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
     Vec3f sp24;
 
     this->actor.textId = 0;
@@ -88,26 +88,19 @@ void func_80A66208(EnWarpUzu* this, PlayState* play) {
 }
 
 void func_80A66278(EnWarpUzu* this, PlayState* play) {
-    Player* player;
-    s16 temp_v0;
-    s16 phi_a0;
-    s16 phi_v1;
+    Player* player = GET_PLAYER(play);
 
-    do {
-        player = GET_PLAYER(play);
-        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-            func_80A66384(this, play);
-        } else {
-            phi_a0 = ABS((s16)(Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.shape.rot.y));
-            temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
-            phi_v1 = ABS(temp_v0);
-            if (phi_a0 >= 0x2AAB) {
-                if (phi_v1 < 0x238E) {
-                    Actor_OfferTalk(&this->actor, play, 70.0f);
-                }
-            }
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        func_80A66384(this, play);
+    } else {
+        s16 phi_a0 = ABS((s16)(Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.shape.rot.y));
+        s16 temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
+        s16 phi_v1 = ABS(temp_v0);
+
+        if ((phi_a0 >= 0x2AAB) && (phi_v1 < 0x238E)) {
+            Actor_OfferTalk(&this->actor, play, 70.0f);
         }
-    } while (0);
+    }
 }
 
 void func_80A66384(EnWarpUzu* this, PlayState* play) {

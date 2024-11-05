@@ -164,7 +164,7 @@ void func_80953F14(BgIngate* this, PlayState* play) {
 
     player->actor.shape.rot.y = this->dyna.actor.shape.rot.y;
     player->actor.world.rot.y = player->actor.shape.rot.y;
-    player->currentYaw = player->actor.shape.rot.y;
+    player->yaw = player->actor.shape.rot.y;
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
     func_80953DA8(this, play);
@@ -280,6 +280,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                 this->dyna.actor.textId = 0x9E5;
                 Message_ContinueTextbox(play, this->dyna.actor.textId);
                 break;
+
             case 0x9E5:
                 if (play->msgCtx.choiceIndex == 0) {
                     Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_END);
@@ -297,6 +298,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                 }
                 Message_CloseTextbox(play);
                 break;
+
             case 0x9E6:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, play);
@@ -387,7 +389,7 @@ void BgIngate_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoatDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

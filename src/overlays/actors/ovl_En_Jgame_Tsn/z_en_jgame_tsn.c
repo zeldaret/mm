@@ -7,7 +7,7 @@
 #include "z_en_jgame_tsn.h"
 #include "overlays/actors/ovl_Obj_Jgame_Light/z_obj_jgame_light.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnJgameTsn*)thisx)
 
@@ -64,7 +64,7 @@ static AnimationInfo sAnimationInfo[ENJGAMETSN_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -72,11 +72,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -98,12 +98,12 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 
     if (gSaveContext.save.entrance == ENTRANCE(GREAT_BAY_COAST, 13)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 
     this->unk_2F8 = 0;
@@ -161,8 +161,8 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if (this->actor.flags & ACTOR_FLAG_10000) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+        if (this->actor.flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED) {
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
@@ -191,7 +191,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
             this->unk_300 = 0x1096;
         }
         func_80C14030(this);
-    } else if (this->actor.flags & ACTOR_FLAG_10000) {
+    } else if (this->actor.flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED) {
         Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
         Actor_OfferTalk(&this->actor, play, 80.0f);
@@ -210,13 +210,13 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
 }
 
 void func_80C13E6C(EnJgameTsn* this) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = func_80C13E90;
 }
 
 void func_80C13E90(EnJgameTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (((CURRENT_TIME > CLOCK_TIME(4, 0)) && (CURRENT_TIME < CLOCK_TIME(7, 0))) ||
             ((CURRENT_TIME > CLOCK_TIME(16, 0)) && (CURRENT_TIME < CLOCK_TIME(19, 0)))) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_2);

@@ -5,9 +5,10 @@
  */
 
 #include "z_en_ot.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOt*)thisx)
 
@@ -75,7 +76,7 @@ ActorProfile En_Ot_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -83,11 +84,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 5, 33, -20, { 0, 0, 0 } },
@@ -146,8 +147,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->type = SEAHORSE_GET_TYPE(&this->actor);
     if (this->type == SEAHORSE_TYPE_0) {
         D_80B5E880 = this;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
         return;
@@ -276,8 +277,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
         case SEAHORSE_TYPE_3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
-                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
                 this->collider.dim.height *= 0.5f;
@@ -432,10 +433,10 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_2, &this->animIndex);
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_2,
                                         &this->unk_360->animIndex);
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-        this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->unk_360->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
+        this->unk_360->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->unk_360->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
     }
@@ -628,7 +629,7 @@ void func_80B5CB0C(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CBA0(EnOt* this, PlayState* play) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                             PLAYER_IA_NONE);
     this->actionFunc = func_80B5CBEC;
@@ -636,7 +637,7 @@ void func_80B5CBA0(EnOt* this, PlayState* play) {
 
 void func_80B5CBEC(EnOt* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80B5CC88(this, play);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
@@ -724,11 +725,11 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
 
     if (this->unk_32C & 0x800) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                 PLAYER_IA_NONE);
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
             (this->actor.xzDistToPlayer < 130.0f)) {
             Actor_OfferTalk(&this->actor, play, 130.0f);
@@ -833,7 +834,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
 
                     case 0x1069:
                         this->unk_32C |= 4;
-
+                        FALLTHROUGH;
                     case 0x106A:
                         func_80B5CE6C(this, play);
                         break;
@@ -926,8 +927,8 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SEAHORSE_ANIM_1, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     Flags_SetSwitch(play, SEAHORSE_GET_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80B5D750;
 }
@@ -954,8 +955,8 @@ void func_80B5D750(EnOt* this, PlayState* play) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         if (D_80B5E884 != NULL) {
             func_80B5C9A8(this, play);
         } else {
@@ -1090,7 +1091,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);
     gDPSetPrimColor(&gfx[3], 0, 0, this->unk_747.r, this->unk_747.g, this->unk_747.b, 50);
-    gSPMatrix(&gfx[4], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[4], play->state.gfxCtx);
     gSPDisplayList(&gfx[5], gameplay_keep_DL_029CF0);
 
     POLY_XLU_DISP = &gfx[6];
@@ -1195,7 +1196,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
         Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
     }
 

@@ -90,22 +90,22 @@ static Vec3f sPointBR = { 300.0f, 10.0f, 40.0f };
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x01000202, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -300.0f, 850.0f, 40.0f }, { -300.0f, 10.0f, 40.0f }, { 300.0f, 850.0f, 40.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x00000000, 0x00, 0x00 },
             { 0x01000202, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 300.0f, 850.0f, 40.0f }, { 300.0f, 10.0f, 40.0f }, { -300.0f, 10.0f, 40.0f } } },
@@ -114,7 +114,7 @@ static ColliderTrisElementInit sTrisElementsInit[] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_TREE,
+        COL_MATERIAL_TREE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -127,7 +127,7 @@ static ColliderTrisInit sTrisInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_TREE,
+        COL_MATERIAL_TREE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -135,11 +135,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 33, 80, 0, { 0, 0, 0 } },
@@ -502,12 +502,12 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
         Matrix_RotateAxisS(this->rotAngle, &this->rotAxis, MTXMODE_APPLY);
         Matrix_Translate(-this->rootCornerPos.x, -this->rootCornerPos.y, -this->rootCornerPos.z, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         // Display only the fragments of the board which are present
         for (i = 0; i < ARRAY_COUNT(sDisplayLists); i++) {

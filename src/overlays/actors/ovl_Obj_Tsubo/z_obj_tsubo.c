@@ -10,7 +10,7 @@
 #include "assets/objects/object_tsubo/object_tsubo.h"
 #include "assets/objects/object_racetsubo/object_racetsubo.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((ObjTsubo*)thisx)
 
@@ -77,7 +77,7 @@ ObjTsuboData sPotTypeData[4] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -85,11 +85,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00400000, 0x00, 0x02 },
         { 0x05CBFFBE, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 12, 30, 0, { 0, 0, 0 } },
@@ -474,7 +474,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.info.acHitElem->toucher.dmgFlags & 0x058BFFBC))) {
+               (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
@@ -536,7 +536,7 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
+        this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCHES;
         Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
                                     UPDBGCHECKINFO_FLAG_80);
@@ -651,7 +651,7 @@ void func_8092926C(ObjTsubo* this, PlayState* play) {
     } else {
         scale = sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)].scale;
         if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f)) {
-            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
             func_809289B4(this);
         }
         this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;

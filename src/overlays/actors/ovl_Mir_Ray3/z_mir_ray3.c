@@ -30,7 +30,7 @@ ActorProfile Mir_Ray3_Profile = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -38,11 +38,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00200000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -50,7 +50,7 @@ static ColliderQuadInit sQuadInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_NONE,
@@ -58,11 +58,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00200000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 10, 10, 0, { 0, 0, 0 } },
@@ -322,7 +322,7 @@ void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
     {
         CollisionPoly* spC4;
 
-        if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
+        if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, true)) {
             Math_Vec3f_Copy(&sp128, &sp134);
         }
 
@@ -364,7 +364,7 @@ void MirRay3_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(1.0f, 1.0f, this->unk_214, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
             time = CURRENT_TIME;
@@ -408,8 +408,7 @@ void MirRay3_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
                 Matrix_Mult(&sp8C[i].unk_0C, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, sp8C[0].unk_50);
                 gSPDisplayList(POLY_XLU_DISP++, object_mir_ray_DL_0004B0);

@@ -76,14 +76,14 @@ void ElfMsg2_Init(Actor* thisx, PlayState* play) {
 
     if (!func_8096EC4C(this, play)) {
         if ((this->actor.home.rot.x > 0) && (this->actor.home.rot.x < 8)) {
-            this->actor.targetMode = this->actor.home.rot.x - 1;
+            this->actor.attentionRangeType = this->actor.home.rot.x - 1;
         }
         Actor_ProcessInitChain(&this->actor, sInitChain);
         if (this->actor.home.rot.y < 0) {
             ElfMsg2_SetupAction(this, func_8096EFD0);
         } else {
             ElfMsg2_SetupAction(this, func_8096EF98);
-            this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP);
             this->actor.textId = func_8096EE50(this);
         }
         this->actor.shape.rot.z = 0;
@@ -137,7 +137,7 @@ void func_8096EFD0(ElfMsg2* this, PlayState* play) {
     if ((this->actor.home.rot.y < 0) && (this->actor.home.rot.y >= -0x80) &&
         Flags_GetSwitch(play, -this->actor.home.rot.y - 1)) {
         ElfMsg2_SetupAction(this, func_8096EF98);
-        this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP);
         this->actor.textId = func_8096EE50(this);
     }
 }

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "assets/objects/object_boss03/object_boss03.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
 
@@ -45,7 +45,7 @@ ActorProfile En_Tanron3_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -53,11 +53,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 7, 10, -5, { 0, 0, 0 } },
@@ -67,7 +67,7 @@ static ColliderCylinderInit sCylinderInit = {
 // ColliderCylinderInit for both of them, leaving this one totally unused.
 static ColliderCylinderInit sUnusedCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -75,11 +75,11 @@ static ColliderCylinderInit sUnusedCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 20, -10, { 0, 0, 0 } },
@@ -117,7 +117,7 @@ void EnTanron3_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, play);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;

@@ -48,11 +48,11 @@ ActorProfile Obj_Snowball_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x81837FBE, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 73 }, 100 },
@@ -61,7 +61,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -139,7 +139,7 @@ void func_80B02EE4(ObjSnowball* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
-    Vec3s* hitPos = &this->collider.elements->info.bumper.hitPos;
+    Vec3s* hitPos = &this->collider.elements[0].base.acDmgInfo.hitPos;
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -452,7 +452,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     Sphere16* sphere;
     ColliderJntSphElementDim* elementDim;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     s32 sp40 = this->actor.home.rot.y;
     f32 phi_f20;
     s32 sp34;
@@ -478,10 +478,10 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
 
     if (sp34) {
         this->actor.textId = 0x238;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        this->actor.targetArrowOffset = 1400.0f / 3.0f;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.lockOnArrowOffset = 1400.0f / 3.0f;
         Actor_SetFocus(&this->actor, 24.0f);
-        this->actor.targetMode = TARGET_MODE_3;
+        this->actor.attentionRangeType = ATTENTION_RANGE_3;
     }
 
     Collider_InitJntSph(play, &this->collider);
@@ -500,7 +500,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     sp48.z = this->actor.home.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp48);
     if (this->actor.floorHeight < (this->actor.home.pos.y - 10.0f)) {
         this->actor.floorPoly = NULL;
     } else {
@@ -533,17 +533,17 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
     }
 
     if (flag && (this->unk_211 == 0) &&
-        (this->collider.elements->info.acHitElem->toucher.dmgFlags &
+        (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags &
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
         this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         }
 
-        if (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x4000) {
+        if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x4000) {
             this->unk_20A = 1;
         } else {
-            if (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x800) {
+            if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x800) {
                 this->unk_210 = 1;
             }
             this->unk_20A = 0;
@@ -563,10 +563,10 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
     }
 
     if (flag &&
-        !(this->collider.elements->info.acHitElem->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
+        !(this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         if (this->unk_209 <= 0) {
             func_80B02EE4(this, play);
-            if (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x1000000) {
+            if (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x1000000) {
                 this->unk_209 = 25;
             } else {
                 this->unk_209 = 10;
@@ -653,7 +653,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
     s32 pad;
     ObjSnowballStruct* ptr;
     Vec3f sp9C;
-    s32 sp98;
+    s32 bgId;
     s32 i;
     Vec3f sp88;
     f32 sp84;
@@ -683,7 +683,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
             sp9C.y = ptr->unk_00.y + 25.0f;
             sp9C.z = ptr->unk_00.z;
 
-            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &bgId, &this->actor, &sp9C);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_RotateZYX(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
@@ -828,8 +828,7 @@ void func_80B04D34(Actor* thisx, PlayState* play) {
                 Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
                 CLOSE_DISPS(play->state.gfxCtx);

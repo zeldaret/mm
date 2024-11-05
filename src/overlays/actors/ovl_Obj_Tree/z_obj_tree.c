@@ -7,7 +7,7 @@
 #include "z_obj_tree.h"
 #include "assets/objects/object_tree/object_tree.h"
 
-#define FLAGS (ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((ObjTree*)thisx)
 
@@ -34,7 +34,7 @@ ActorProfile Obj_Tree_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_TREE,
+        COL_MATERIAL_TREE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x0100020A, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 28, 120, 0, { 0, 0, 0 } },
@@ -186,11 +186,11 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gTreeBodyDL);
 
     Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gTreeLeavesDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

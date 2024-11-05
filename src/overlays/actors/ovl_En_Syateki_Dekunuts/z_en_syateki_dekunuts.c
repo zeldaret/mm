@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiDekunuts*)thisx)
 
@@ -53,7 +53,7 @@ ActorProfile En_Syateki_Dekunuts_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -61,11 +61,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 48, 80, 0, { 0, 0, 0 } },
@@ -97,7 +97,7 @@ static AnimationInfo sAnimationInfo[SG_DEKU_ANIM_MAX] = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_MAD_SCRUB, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2600, ICHAIN_STOP),
 };
 
 void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
@@ -479,7 +479,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
             Matrix_Translate(flowerPos.x, flowerPos.y, flowerPos.z, MTXMODE_NEW);
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gDekuScrubFlowerDL);
 
             CLOSE_DISPS(play->state.gfxCtx);

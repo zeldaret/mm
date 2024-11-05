@@ -7,7 +7,7 @@
 #include "z_en_encount3.h"
 #include "assets/objects/object_big_fwall/object_big_fwall.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount3*)thisx)
 
@@ -55,8 +55,8 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     func_809AD058(this);
 }
 
@@ -140,9 +140,9 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
             s16 i;
 
             for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
-                player->flameTimers[i] = Rand_S16Offset(0, 200);
+                player->bodyFlameTimers[i] = Rand_S16Offset(0, 200);
             }
-            player->isBurning = true;
+            player->bodyIsBurning = true;
 
             sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
             sp38 = this->actor.world.pos.z - player->actor.world.pos.z;
@@ -198,7 +198,7 @@ void EnEncount3_Draw(Actor* thisx, PlayState* play) {
                          MTXMODE_NEW);
         Matrix_Scale(this->unk168, this->unk174, this->unk168, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gRingOfFireDL);
 
         Matrix_Pop();

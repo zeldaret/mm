@@ -5,11 +5,12 @@
  */
 
 #include "z_en_fz.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "assets/objects/object_fz/object_fz.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnFz*)thisx)
 
@@ -65,18 +66,18 @@ static s16 D_809346F0[] = { 0, 0x2000, 0x4000, 0 };
 
 static ColliderCylinderInitType1 sCylinderInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFEFDD, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 30, 80, 0, { 0, 0, 0 } },
@@ -84,18 +85,18 @@ static ColliderCylinderInitType1 sCylinderInit1 = {
 
 static ColliderCylinderInitType1 sCylinderInit2 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00001022, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 35, 80, 0, { 0, 0, 0 } },
@@ -103,18 +104,18 @@ static ColliderCylinderInitType1 sCylinderInit2 = {
 
 static ColliderCylinderInitType1 sCylinderInit3 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x02, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { 20, 30, -15, { 0, 0, 0 } },
@@ -157,9 +158,9 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_FREEZARD, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void EnFz_Init(Actor* thisx, PlayState* play) {
@@ -180,7 +181,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_BC8 = 0;
     this->unk_BCF = 0;
     this->unk_BCC = 1;
@@ -252,7 +253,7 @@ void func_80932784(EnFz* this, PlayState* play) {
     Vec3f sp5C;
     Vec3f sp50;
     Vec3f sp44;
-    s32 sp40;
+    s32 bgId;
     CollisionPoly* sp3C;
 
     sp5C.x = this->actor.world.pos.x;
@@ -266,7 +267,7 @@ void func_80932784(EnFz* this, PlayState* play) {
     sp44.z = 440.0f;
 
     Matrix_MultVec3f(&sp44, &this->unk_22C);
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true, &sp40)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true, &bgId)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
     }
 
@@ -417,7 +418,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
                 case 4:
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffAlpha = 1.0f;
-
+                    FALLTHROUGH;
                 case 15:
                     Actor_ApplyDamage(&this->actor);
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);
@@ -472,7 +473,7 @@ void func_80933014(EnFz* this) {
 void func_809330D4(EnFz* this) {
     this->unk_BD6 = 2;
     this->unk_BCE = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80933104;
 }
 
@@ -543,7 +544,7 @@ void func_80933324(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933368;
 }
@@ -653,7 +654,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->unk_BCC = 1;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
@@ -671,7 +672,7 @@ void func_80933790(EnFz* this) {
     this->unk_BD6 = 3;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     this->unk_BBC = 0.0f;
     this->actionFunc = func_809337D4;
@@ -702,7 +703,7 @@ void func_8093389C(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_809338E0;
 }
@@ -763,7 +764,7 @@ void func_80933AF4(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933B38;
 }
@@ -851,7 +852,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->state.frames % 128, 0x20, 0x20, 1, 0,
                                     (play->state.frames * 2) % 128, 0x20, 0x20));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetCombineLERP(POLY_XLU_DISP++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0,
                           PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, ENVIRONMENT, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 155, 255, 255, 255);
@@ -1016,7 +1017,7 @@ void func_80934464(EnFz* this, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
         }
     }

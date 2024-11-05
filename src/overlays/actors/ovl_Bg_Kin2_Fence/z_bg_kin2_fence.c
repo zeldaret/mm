@@ -42,44 +42,44 @@ ActorProfile Bg_Kin2_Fence_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { -2040, 1400, 350 }, 28 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { -1140, 1400, 350 }, 28 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { 1140, 1400, 350 }, 28 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00003820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { 2040, 1400, 350 }, 28 }, 100 },
@@ -88,7 +88,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -103,7 +103,7 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+        if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
             return i;
         }
     }

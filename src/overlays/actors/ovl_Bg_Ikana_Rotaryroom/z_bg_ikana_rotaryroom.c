@@ -49,22 +49,22 @@ ActorProfile Bg_Ikana_Rotaryroom_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { -3450, 450, 0 }, 60 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { 3450, 450, 0 }, 60 }, 100 },
@@ -73,7 +73,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
 
 static ColliderJntSphInit sJntSphInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -87,11 +87,11 @@ static ColliderJntSphInit sJntSphInit1 = {
 static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
     {
         {
-            ELEMTYPE_UNK4,
+            ELEM_MATERIAL_UNK4,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { 0, { { -3750, 1200, 0 }, 60 }, 100 },
@@ -100,7 +100,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
 
 static ColliderJntSphInit sJntSphInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -513,7 +513,7 @@ void func_80B81010(BgIkanaRotaryroom* this, PlayState* play) {
     Vec3f sp84;
     BgIkanaRotaryroomStruct2* ptr2;
     CollisionPoly* sp7C;
-    s32 sp78;
+    s32 bgId;
 
     if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         phi_s7 = true;
@@ -540,7 +540,7 @@ void func_80B81010(BgIkanaRotaryroom* this, PlayState* play) {
                 sp84.y = ptr->prevPos.y + 50.0f;
                 sp84.z = ptr->prevPos.z;
 
-                temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp7C, &sp78, NULL, &sp84);
+                temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp7C, &bgId, NULL, &sp84);
                 if (ptr->world.pos.y <= temp_f0) {
                     ptr->world.pos.y = temp_f0;
                 } else {
@@ -580,7 +580,7 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
     f32 temp_f0;
     f32 sp44 = D_80B82200[player->transformation] * 0.5f;
     CollisionPoly* sp40;
-    s32 sp3C;
+    s32 bgId;
 
     if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         if (player == NULL) {
@@ -614,7 +614,7 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
 
             Matrix_Pop();
 
-            temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp40, &sp3C, NULL, &sp58);
+            temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp40, &bgId, NULL, &sp58);
             if (ptr->unk_4C.y <= temp_f0) {
                 ptr->unk_4C.y = temp_f0;
             } else {

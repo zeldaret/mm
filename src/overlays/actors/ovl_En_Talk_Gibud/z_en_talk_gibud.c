@@ -7,7 +7,7 @@
 #include "z_en_talk_gibud.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnTalkGibud*)thisx)
 
@@ -134,7 +134,7 @@ static AnimationInfo sAnimationInfo[EN_TALK_GIBUD_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -142,11 +142,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7EFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 70, 0, { 0, 0, 0 } },
@@ -214,7 +214,7 @@ static EnTalkGibudRequestedItem sRequestedItemTable[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
@@ -229,7 +229,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->actor.hintId = TATL_HINT_ID_GIBDO;
     this->actor.textId = 0;
 
@@ -313,7 +313,7 @@ void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, PlayState* play) {
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
-        func_80123E90(play, &this->actor);
+        Player_SetAutoLockOnActor(play, &this->actor);
         Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnTalkGibud_SetupWalkToPlayer(this);
     }
@@ -358,7 +358,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
                 player->actor.freezeTimer = 40;
                 this->playerStunWaitTimer = 60;
                 Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
-                func_80123E90(play, &this->actor);
+                Player_SetAutoLockOnActor(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
                 this->playerStunWaitTimer--;
@@ -384,7 +384,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_START);
     this->grabDamageTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->actionFunc = EnTalkGibud_Grab;
 }
@@ -426,7 +426,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
                 }
 
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_END);
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 this->grabState = EN_TALK_GIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
@@ -569,8 +569,8 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
         if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
             (this->type == EN_TALK_GIBUD_TYPE_GIBDO)) {
             this->actor.hintId = TATL_HINT_ID_REDEAD;
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
@@ -586,7 +586,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupDead(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DEATH);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
     this->actionFunc = EnTalkGibud_Dead;
@@ -612,7 +612,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
                      0.0f, ANIMMODE_ONCE, -8.0f);
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->deathTimer = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -852,7 +852,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->disappearanceTimer = 40;
     this->actionFunc = EnTalkGibud_Disappear;
 }
@@ -904,7 +904,7 @@ s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, PlayState* play
     Player* player = GET_PLAYER(play);
 
     if ((Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f) &&
-        !(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+        !(player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
                                  PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
         !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
         return true;
@@ -934,15 +934,15 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
         (this->actionFunc != EnTalkGibud_Damage) && (this->actionFunc != EnTalkGibud_Talk)) {
         if (this->actionFunc != EnTalkGibud_PassiveIdle) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
-                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
+                this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
+                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 EnTalkGibud_SetupPassiveIdle(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {

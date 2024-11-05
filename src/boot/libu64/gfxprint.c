@@ -1,4 +1,5 @@
 #include "libu64/gfxprint.h"
+#include "attributes.h"
 
 #define GFXP_FLAG_HIRAGANA (1 << 0)
 #define GFXP_FLAG_RAINBOW (1 << 1)
@@ -139,6 +140,7 @@ void GfxPrint_PrintChar(GfxPrint* this, u8 c) {
 
             case '\n':
                 this->posY += 32;
+                FALLTHROUGH;
             case '\r':
                 this->posX = this->baseX;
                 break;

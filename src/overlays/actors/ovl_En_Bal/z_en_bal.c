@@ -7,7 +7,7 @@
 #include "z_en_bal.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBal*)thisx)
 
@@ -142,11 +142,11 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { TINGLE_LIMB_BALLOON, { { 2400, 0, 0 }, 50 }, 100 },
@@ -155,7 +155,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -198,7 +198,7 @@ void EnBal_Init(Actor* thisx, PlayState* play) {
     f32 endFrame = Animation_GetLastFrame(&gTingleFloatIdleAnim);
 
     this->locationMapId = TINGLE_GET_MAP_ID(&this->picto.actor);
-    this->picto.actor.targetMode = 1;
+    this->picto.actor.attentionRangeType = 1;
     this->picto.actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->picto.actor, 0.02f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
@@ -238,15 +238,15 @@ void EnBal_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnBal_SetMainColliderToBalloon(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_BALLOON;
-    this->collider.elements->dim.modelSphere.radius = 40;
-    this->collider.elements->dim.modelSphere.center.x = 2200;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_BALLOON;
+    this->collider.elements[0].dim.modelSphere.radius = 40;
+    this->collider.elements[0].dim.modelSphere.center.x = 2200;
 }
 
 void EnBal_SetMainColliderToHead(EnBal* this) {
-    this->collider.elements->dim.limb = TINGLE_LIMB_HEAD;
-    this->collider.elements->dim.modelSphere.radius = 25;
-    this->collider.elements->dim.modelSphere.center.x = 0;
+    this->collider.elements[0].dim.limb = TINGLE_LIMB_HEAD;
+    this->collider.elements[0].dim.modelSphere.radius = 25;
+    this->collider.elements[0].dim.modelSphere.center.x = 0;
 }
 
 s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -1043,7 +1043,7 @@ void EnBal_ThankYou(EnBal* this, PlayState* play) {
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         Message_StartTextbox(play, 0x1D17, &this->picto.actor);
         this->textId = 0x1D17;
-        this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnBal_SetupTalk(this);
     } else {
         Actor_OfferTalkExchangeEquiCylinder(&this->picto.actor, play, 200.0f, PLAYER_IA_MINUS1);

@@ -59,8 +59,8 @@ static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x6010
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C106C0[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, 6, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1000, ICHAIN_STOP),
 };
 
 static s32 D_80C106C8 = 0;
@@ -115,8 +115,8 @@ static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x6010
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C106C0[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, 6, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1000, ICHAIN_STOP),
 };
 
 static s32 D_80C106C8 = 0;

@@ -7,7 +7,7 @@
 #include "z_en_yb.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnYb*)thisx)
 
@@ -46,7 +46,7 @@ ActorProfile En_Yb_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -54,11 +54,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 40, 0, { 0, 0, 0 } },
@@ -121,7 +121,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
@@ -262,7 +262,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
         Message_StartTextbox(play, 0x147D, &this->actor);
@@ -279,7 +279,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
@@ -331,7 +331,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
         Message_StartTextbox(play, 0x147C, &this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
@@ -347,7 +347,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
     } else {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
@@ -379,10 +379,10 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     }
 
     if (this->playerOcarinaOut & 1) {
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 180.0f) &&
+    } else if ((player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) && (this->actor.xzDistToPlayer < 180.0f) &&
                (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
@@ -397,7 +397,7 @@ void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->actionFunc = EnYb_Idle;
         }
         EnYb_EnableProximityMusic(this);
@@ -408,11 +408,11 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnYb* this = THIS;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTENTION_ENABLED)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTENTION_ENABLED)) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }

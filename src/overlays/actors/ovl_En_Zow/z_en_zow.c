@@ -7,7 +7,7 @@
 #include "z_en_zow.h"
 #include "assets/objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZow*)thisx)
 
@@ -36,7 +36,7 @@ ActorProfile En_Zow_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -201,7 +201,7 @@ void func_80BDC830(EnZowStruct* ptr, PlayState* play) {
         Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
     }
 
@@ -233,7 +233,7 @@ void func_80BDC9DC(EnZowStruct* ptr, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
     }
 
@@ -266,7 +266,7 @@ void func_80BDCB84(EnZowStruct* ptr, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
     }
 
@@ -324,7 +324,7 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.textId = 0;
     this->actor.world.rot.z = this->actor.shape.rot.z;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnZow_Destroy(Actor* thisx, PlayState* play) {
@@ -410,7 +410,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
     if (this->unk_2CA & 2) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_WATER);
         func_80BDCDA8(this, this->unk_2D0);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->skelAnime.playSpeed = 0.0f;
         this->actor.velocity.y = -4.0f;
     }
@@ -517,7 +517,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         func_80BDD04C(this, 1, ANIMMODE_ONCE);
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD634;
     } else if (this->actor.depthInWater < 80.0f) {

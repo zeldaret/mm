@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "assets/objects/object_bubble/object_bubble.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -34,7 +34,7 @@ ActorProfile En_Elfbub_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -42,11 +42,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 16, 32, 0, { 0, 0, 0 } },
@@ -84,7 +84,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnElfbub_Destroy(Actor* thisx, PlayState* play) {
@@ -163,7 +163,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
     Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateZS(this->zRot * -1, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

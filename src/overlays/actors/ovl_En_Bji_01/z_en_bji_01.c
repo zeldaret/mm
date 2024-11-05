@@ -6,7 +6,7 @@
 
 #include "z_en_bji_01.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBji01*)thisx)
 
@@ -38,7 +38,7 @@ ActorProfile En_Bji_01_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -95,9 +95,9 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == SHIKASHI_TYPE_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         }
     }
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -228,7 +228,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -266,7 +266,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
@@ -313,7 +313,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F7:
                     case 0x5F8:
                         Message_CloseTextbox(play);
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);
                         break;
@@ -326,7 +326,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             func_809CCE98(this, play);
             break;
 
@@ -381,7 +381,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->actor.child = NULL;
     this->animIndex = SHIKASHI_ANIM_NONE;
 
@@ -397,7 +397,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENTRANCE(ASTRAL_OBSERVATORY, 2): /* Telescope entrance */
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             AudioSfx_MuteBanks(0);
             SEQCMD_DISABLE_PLAY_SEQUENCES(false);
             this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;

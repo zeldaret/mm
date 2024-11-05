@@ -7,7 +7,7 @@
 #include "z_en_scopenuts.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -46,18 +46,18 @@ ActorProfile En_Scopenuts_Profile = {
 
 static ColliderCylinderInitType1 sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 27, 32, 0, { 0, 0, 0 } },
@@ -122,8 +122,8 @@ Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 s16 func_80BCABF0(Path* path) {
@@ -353,7 +353,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 this->unk_328 &= ~1;
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->unk_328 &= ~4;
                 this->animIndex = ENSCOPENUTS_ANIM_8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_8);

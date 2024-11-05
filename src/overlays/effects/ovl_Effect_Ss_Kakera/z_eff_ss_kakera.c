@@ -57,6 +57,7 @@ u32 EffectSsKakera_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
             case GAMEPLAY_DANGEON_KEEP:
                 this->rObjectId = KAKERA_OBJECT_DEFAULT;
                 break;
+
             default:
                 this->rObjectId = initParams->objectId;
                 EffectSsKakera_CheckForObject(this, play);
@@ -107,7 +108,7 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
     if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         if (colorIndex >= 0) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, D_8097EAD8[colorIndex].lod, D_8097EAD8[colorIndex].color.r,
@@ -115,7 +116,7 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
         }
         gSPDisplayList(POLY_XLU_DISP++, this->gfx);
     } else {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (colorIndex >= 0) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, D_8097EAD8[colorIndex].lod, D_8097EAD8[colorIndex].color.r,
@@ -329,6 +330,7 @@ void func_8097E7E0(EffectSs* this, PlayState* play) {
             case 0:
                 this->rReg8 = 0;
                 break;
+
             case 1:
                 if ((this->velocity.y < 0.0f) &&
                     (BgCheck_SphVsFirstPoly(&play->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3]))) {
@@ -340,6 +342,7 @@ void func_8097E7E0(EffectSs* this, PlayState* play) {
                     }
                 }
                 break;
+
             case 2:
                 if (BgCheck_SphVsFirstPoly(&play->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3])) {
                     this->rReg8 = 0;
@@ -355,10 +358,12 @@ void EffectSsKakera_Update(PlayState* play, u32 index, EffectSs* this) {
             this->rPitch += 0x47B;
             this->rYaw += 0x139;
             break;
+
         case 0x40:
             this->rPitch += 0x1A7C;
             this->rYaw += 0x47B;
             break;
+
         case 0x60:
             this->rPitch += 0x3F27;
             this->rYaw += 0xCA1;

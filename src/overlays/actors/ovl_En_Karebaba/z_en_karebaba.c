@@ -9,7 +9,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnKarebaba*)thisx)
 
@@ -53,7 +53,7 @@ ActorProfile En_Karebaba_Profile = {
 
 static ColliderCylinderInit sHurtCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -61,11 +61,11 @@ static ColliderCylinderInit sHurtCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 7, 25, 0, { 0, 0, 0 } },
@@ -73,7 +73,7 @@ static ColliderCylinderInit sHurtCylinderInit = {
 
 static ColliderCylinderInit sAttackCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -81,11 +81,11 @@ static ColliderCylinderInit sAttackCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_WOOD,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_WOOD,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 4, 25, 0, { 0, 0, 0 } },
@@ -137,8 +137,8 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 2500, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_1, ICHAIN_STOP),
 };
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {
@@ -202,8 +202,8 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 3.0f;
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.info.bumper.hitPos.x,
-                    this->hurtCollider.info.bumper.hitPos.y, this->hurtCollider.info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.elem.acDmgInfo.hitPos.x,
+                    this->hurtCollider.elem.acDmgInfo.hitPos.y, this->hurtCollider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KAREBABA_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -220,7 +220,7 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_ResetColliders(EnKarebaba* this) {
     this->hurtCollider.dim.radius = 7;
     this->hurtCollider.dim.height = 25;
-    this->hurtCollider.base.colType = COLTYPE_HARD;
+    this->hurtCollider.base.colMaterial = COL_MATERIAL_HARD;
     this->hurtCollider.base.acFlags |= AC_HARD;
     this->attackCollider.dim.height = 25;
 }
@@ -287,7 +287,7 @@ void EnKarebaba_SetupUpright(EnKarebaba* this) {
     if (this->actionFunc != EnKarebaba_Spin) {
         Actor_SetScale(&this->actor, 0.01f);
 
-        this->hurtCollider.base.colType = COLTYPE_HIT6;
+        this->hurtCollider.base.colMaterial = COL_MATERIAL_HIT6;
         this->hurtCollider.base.acFlags &= ~AC_HARD;
         this->hurtCollider.dim.radius = 15;
 
@@ -420,7 +420,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
                 this->actor.speed = 0.0f;
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
                 EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);
             }
@@ -452,7 +452,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_SetupShrinkDie(EnKarebaba* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->timer = 3;
     }
@@ -551,7 +551,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
 
     if (this->timer == 20) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
         if (this->actor.params == ENKAREBABA_1) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         }
@@ -638,7 +638,7 @@ void EnKarebaba_DrawShadow(EnKarebaba* this, PlayState* play) {
     func_800C0094(this->boundFloor, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &mf);
     Matrix_Mult(&mf, MTXMODE_NEW);
     Matrix_Scale(0.15f, 1.0f, 0.15f, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -661,7 +661,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc == EnKarebaba_DeadItemDrop) {
         if ((this->timer > 40) || (this->timer & 1)) {
             Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStickDropDL);
         }
     } else if (this->actionFunc != EnKarebaba_Dead) {
@@ -687,7 +687,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
 
         for (i = 0; i < stemSections; i++) {
             Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, sStemDLists[i]);
 
             Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_1 + i]);
@@ -708,12 +708,12 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
 
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gDekuBabaBaseLeavesDL);
 
     if (this->actionFunc == EnKarebaba_Dying) {
         Matrix_RotateZYX(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemBaseDL);
 
         Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_3]);

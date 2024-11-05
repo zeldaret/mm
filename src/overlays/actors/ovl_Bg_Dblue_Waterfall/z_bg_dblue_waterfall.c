@@ -39,7 +39,7 @@ ActorProfile Bg_Dblue_Waterfall_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0x00CBFBB0, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 50, 740, -740, { 0, 0, 0 } },
@@ -150,13 +150,13 @@ void func_80B83EA4(BgDblueWaterfall* this, PlayState* play) {
     Vec3f sp98;
     s32 phi_s3;
 
-    if (this->collider.info.bumperFlags & BUMP_HIT) {
+    if (this->collider.elem.acElemFlags & ACELEM_HIT) {
         f32 temp_f0_2;
         f32 temp_f20;
 
-        spB0.x = this->collider.info.bumper.hitPos.x;
-        spB0.y = this->collider.info.bumper.hitPos.y;
-        spB0.z = this->collider.info.bumper.hitPos.z;
+        spB0.x = this->collider.elem.acDmgInfo.hitPos.x;
+        spB0.y = this->collider.elem.acDmgInfo.hitPos.y;
+        spB0.z = this->collider.elem.acDmgInfo.hitPos.z;
 
         sp98.x = spB0.x - this->actor.world.pos.x;
         sp98.y = 0.0f;
@@ -206,10 +206,10 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
     s32 temp_s3;
     s32 phi_s2;
 
-    if (this->collider.info.bumperFlags & BUMP_HIT) {
-        temp_f22 = this->collider.info.bumper.hitPos.x;
-        temp_f24 = this->collider.info.bumper.hitPos.y;
-        temp_f26 = this->collider.info.bumper.hitPos.z;
+    if (this->collider.elem.acElemFlags & ACELEM_HIT) {
+        temp_f22 = this->collider.elem.acDmgInfo.hitPos.x;
+        temp_f24 = this->collider.elem.acDmgInfo.hitPos.y;
+        temp_f26 = this->collider.elem.acDmgInfo.hitPos.z;
 
         for (i = 0, phi_s2 = 0; i < 10; i++, phi_s2 += 0x1999) {
             temp_s3 = (s32)(Rand_ZeroOne() * 6553.0f) + phi_s2;
@@ -271,8 +271,8 @@ void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     CollisionPoly* sp40;
     WaterBox* waterBox;
-    s32 sp38;
-    f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
+    s32 bgId;
+    f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &bgId, &this->actor, &this->actor.world.pos);
     f32 sp30;
 
     if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
@@ -419,13 +419,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
         if (sp2C) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
-                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x800) {
+                if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x800) {
                     this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
-                if (this->collider.info.acHitElem->toucher.dmgFlags & 0x1000) {
+                if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) {
                     this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }
@@ -589,7 +589,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     if (this->unk_19E > 0) {
         s32 sp38 = this->unk_19E * 0.49803922f;
@@ -610,7 +610,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         }
 

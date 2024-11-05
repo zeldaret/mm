@@ -28,13 +28,14 @@
 #include "z_boss_01.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Tanron1/z_en_tanron1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss01*)thisx)
 
@@ -345,33 +346,33 @@ static DamageTable sBugDamageTable = {
 static ColliderJntSphElementInit sSwordColliderJntSphElementsInit[3] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 35 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 35 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
@@ -380,7 +381,7 @@ static ColliderJntSphElementInit sSwordColliderJntSphElementsInit[3] = {
 
 static ColliderJntSphInit sSwordColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -395,11 +396,11 @@ static ColliderJntSphInit sSwordColliderJntSphInit = {
 static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 36 }, 100 },
@@ -408,7 +409,7 @@ static ColliderJntSphElementInit sShieldColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sShieldColliderJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -423,121 +424,121 @@ static ColliderJntSphInit sShieldColliderJntSphInit = {
 static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_ROOT, { { 0, 0, 0 }, 15 }, 100 },
@@ -546,7 +547,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[11] = {
 
 static ColliderJntSphInit sBodyColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -561,22 +562,22 @@ static ColliderJntSphInit sBodyColliderJntSphInit = {
 static ColliderJntSphElementInit sKickAndShieldBashColliderJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 36 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { ODOLWA_LIMB_NONE, { { 0, 0, 0 }, 36 }, 100 },
@@ -585,7 +586,7 @@ static ColliderJntSphElementInit sKickAndShieldBashColliderJntSphElementsInit[2]
 
 static ColliderJntSphInit sKickAndShieldBashColliderJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -598,7 +599,7 @@ static ColliderJntSphInit sKickAndShieldBashColliderJntSphInit = {
 
 static ColliderCylinderInit sBugACColliderCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -606,11 +607,11 @@ static ColliderCylinderInit sBugACColliderCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 15, 15, 10, { 0, 0, 0 } },
@@ -618,7 +619,7 @@ static ColliderCylinderInit sBugACColliderCylinderInit = {
 
 static ColliderCylinderInit sBugATColliderCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -626,11 +627,11 @@ static ColliderCylinderInit sBugATColliderCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 8, 15, 10, { 0, 0, 0 } },
@@ -895,7 +896,7 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         this->timers[TIMER_AFTERIMAGE_DESPAWN] = ODOLWA_GET_AFTERIMAGE_DESPAWN_TIMER(&this->actor);
         this->actor.world.rot.z = 0;
         this->actor.draw = Boss01_Afterimage_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 0.0f, 0.0f, 0, 0, 0,
@@ -917,7 +918,7 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         }
 
         this->actor.hintId = TATL_HINT_ID_ODOLWA_PHASE_ONE;
-        this->actor.targetMode = TARGET_MODE_5;
+        this->actor.attentionRangeType = ATTENTION_RANGE_5;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.colChkInfo.damageTable = &sOdolwaDamageTable;
         this->actor.colChkInfo.health = 20;
@@ -1005,13 +1006,13 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->cutsceneTimer = 0;
             this->cutsceneState = ODOLWA_INTRO_CS_STATE_LOOK_AT_PLAYER;
             this->subCamUp.x = 0.0f;
             this->subCamUp.y = 1.0f;
             this->subCamUp.z = 0.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_INTRO_CS_STATE_LOOK_AT_PLAYER:
             player->actor.world.rot.y = -0x8000;
             player->actor.shape.rot.y = -0x8000;
@@ -1137,7 +1138,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
             }
             break;
@@ -1193,14 +1194,14 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->cutsceneState = ODOLWA_BUG_SUMMONING_CS_STATE_PLAYING_OR_DONE;
             this->actor.shape.rot.y = 0;
             this->actor.world.pos.z = 0.0f;
             this->actor.world.pos.x = 0.0f;
             this->subCamVelocity = 0.0f;
             this->subCamEyeNext.y = 100.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_BUG_SUMMONING_CS_STATE_PLAYING_OR_DONE:
             Actor_PlaySfx(&this->actor, NA_SE_EN_MIBOSS_VOICE1_OLD - SFX_FLAG);
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -1233,7 +1234,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
                 player->actor.world.pos.x = 0.0f;
                 player->actor.world.pos.z = -600.0f;
@@ -1951,12 +1952,12 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
     u8 damage;
     s32 i;
 
-    if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.bumperFlags & BUMP_HIT) {
+    if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].base.acElemFlags & ACELEM_HIT) {
         this->bodyInvincibilityTimer = 5;
         if (this->damagedTimer == 0) {
-            ColliderElement* acHitElem = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitElem;
+            ColliderElement* acHitElem = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].base.acHitElem;
 
-            if (acHitElem->toucher.dmgFlags == DMG_SWORD_BEAM) {
+            if (acHitElem->atDmgInfo.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
@@ -1965,24 +1966,24 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
         }
     } else if (this->damagedTimer == 0) {
         for (i = 0; i < ODOLWA_SWORD_COLLIDER_MAX; i++) {
-            if (this->swordCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->swordCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->swordCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->swordCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 15.0f;
             }
         }
 
         for (i = 0; i < ODOLWA_KICK_AND_SHIELD_BASH_COLLIDER_MAX; i++) {
-            if (this->kickAndShieldBashCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->kickAndShieldBashCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->kickAndShieldBashCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->kickAndShieldBashCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.yawTowardsPlayer;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-            if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
 
                 switch (this->actor.colChkInfo.damageEffect) {
                     case ODOLWA_DMGEFF_FREEZE:
@@ -2101,7 +2102,7 @@ void Boss01_SetupDeathCutscene(Boss01* this, PlayState* play) {
     this->animEndFrame = Animation_GetLastFrame(&gOdolwaDeathAnim);
     this->actionFunc = Boss01_DeathCutscene;
     Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_DAMAGE);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->disableCollisionTimer = 1000;
     this->cutsceneTimer = 0;
     this->cutsceneState = ODOLWA_DEATH_CS_STATE_STARTED;
@@ -2123,7 +2124,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
     Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     this->disableCollisionTimer = 1000;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     SkelAnime_Update(&this->skelAnime);
     this->cutsceneTimer++;
     Math_ApproachZeroF(&this->actor.speed, 1.0f, 1.0f);
@@ -2151,7 +2152,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
             diffZ = this->subCamEye.z - this->actor.world.pos.z;
             this->deathCsInitialSubCamRot = Math_Atan2F_XY(diffZ, diffX);
             this->deathCsSubCamRot = -0.5f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DEATH_CS_STATE_PLAY_ANIM_AND_FALL_FORWARD:
             if (this->cutsceneTimer < 15) {
                 Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.1f, 5.0f);
@@ -2167,7 +2168,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 this->cutsceneState = ODOLWA_DEATH_CS_STATE_BURST_INTO_FLAMES_AND_SHRINK;
                 this->cutsceneTimer = 0;
             }
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DEATH_CS_STATE_BURST_INTO_FLAMES_AND_SHRINK:
             Math_ApproachF(&this->deathCsSubCamRot, 1.3f, 0.1f, 0.008f);
             subCamOffset.x = 0.0f;
@@ -2253,7 +2254,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             }
             break;
 
@@ -2385,7 +2386,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
         DECR(this->damagedTimer);
         DECR(this->damagedFlashTimer);
 
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionFunc(this, play);
         Actor_MoveWithGravity(&this->actor);
         this->actor.world.pos.x += this->additionalVelocityX;
@@ -2408,7 +2409,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
         } else {
             this->bodyInvincibilityTimer--;
             for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-                this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
             }
         }
 
@@ -2428,7 +2429,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->disableCollisionTimer--;
         for (i = 0; i < ODOLWA_COLLIDER_BODYPART_MAX; i++) {
-            this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
         }
     }
 
@@ -2516,7 +2517,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffTimer = 40;
             this->drawDmgEffState++;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 60);
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
@@ -2535,7 +2536,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffFrozenSteamScale = 1.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss01_Thaw(this, play);
@@ -2564,7 +2565,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
         lightOrbInitCommon:
             this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE;
             this->drawDmgEffAlpha = 1.0f;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
@@ -2583,7 +2584,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = (KREG(18) * 0.1f) + 1.0f;
             this->drawDmgEffState++;
-            // fallthrough
+            FALLTHROUGH;
         case ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.05f);
@@ -2635,7 +2636,7 @@ void Boss01_DrawSwordTrail(Boss01* this, PlayState* play) {
     Matrix_RotateZF(sOdolwaSwordTrailRotZ, MTXMODE_APPLY);
     Matrix_RotateYF(sOdolwaSwordTrailRotY, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gOdolwaSwordTrailDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -2863,7 +2864,7 @@ void Boss01_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Translate(1470.0f, 400.0f, 450.0f, MTXMODE_APPLY);
         Matrix_Scale(0.35f, 0.35f, 0.35f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gOdolwaEyeDL);
         Matrix_Pop();
 
@@ -2871,7 +2872,7 @@ void Boss01_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Translate(1470.0f, -360.0f, 450.0f, MTXMODE_APPLY);
         Matrix_Scale(0.35f, 0.35f, 0.35f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gOdolwaEyeDL);
         Matrix_Pop();
 
@@ -3115,7 +3116,7 @@ void Boss01_DrawShadowTex(u8* tex, Boss01* this, PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z - 20.0f, MTXMODE_NEW);
     Matrix_Scale(1.65f, 1.0f, 1.65f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gOdolwaShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, ODOLWA_SHADOW_TEX_WIDTH,
                         ODOLWA_SHADOW_TEX_HEIGHT, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6,
@@ -3196,7 +3197,7 @@ void Boss01_Bug_SetupDead(Boss01* this, PlayState* play) {
     this->actor.speed = -15.0f;
     this->actor.velocity.y = 12.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss01_Bug_SetupStunned(Boss01* this, PlayState* play) {
@@ -3251,11 +3252,11 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
 
     if (this->bugACCollider.base.acFlags & AC_HIT) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
-        acHitElem = this->bugACCollider.info.acHitElem;
+        acHitElem = this->bugACCollider.elem.acHitElem;
 
         if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-            if (acHitElem->toucher.dmgFlags & 0x300000) {
+            if (acHitElem->atDmgInfo.dmgFlags & 0x300000) {
                 this->damagedTimer = 10;
                 Matrix_MultVecZ(-10.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;
@@ -3448,10 +3449,10 @@ void Boss01_UpdateEffects(Boss01* this, PlayState* play) {
                         if (player->invincibilityTimer == 0) {
                             if ((temp2 < (KREG(49) + 210.0f)) && ((KREG(49) + 190.0f) < temp2)) {
                                 for (j = 0; j < PLAYER_BODYPART_MAX; j++) {
-                                    player->flameTimers[j] = Rand_S16Offset(0, 200);
+                                    player->bodyFlameTimers[j] = Rand_S16Offset(0, 200);
                                 }
 
-                                player->isBurning = true;
+                                player->bodyIsBurning = true;
                                 temp = Math_Atan2S_XY(diffZ, diffX);
                                 if ((KREG(49) + 100.0f) < temp2) {
                                     temp += 0x8000;
@@ -3532,7 +3533,7 @@ void Boss01_DrawEffects(PlayState* play) {
             Matrix_RotateYS(effect->rotY, MTXMODE_APPLY);
             Matrix_RotateXS(effect->rotX, MTXMODE_APPLY);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gOdolwaFallingBlockDL);
         }
     }
@@ -3545,7 +3546,7 @@ void Boss01_DrawEffects(PlayState* play) {
         if (effect->type == ODOLWA_EFFECT_FALLING_BLOCK) {
             Matrix_Translate(effect->pos.x, 0.0f, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale * 50.0f, 1.0f, effect->scale * 50.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_K0(gCircleShadowDL));
         }
     }
@@ -3581,7 +3582,7 @@ void Boss01_DrawEffects(PlayState* play) {
                          ((0.007f + KREG(54) * 0.0001f) + (Boss01_RandZeroOne() * 30.0f * 0.0001f)) * effect->scale,
                          1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
             Matrix_Pop();
         }

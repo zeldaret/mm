@@ -6,7 +6,7 @@
 
 #include "z_en_tanron4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnTanron4*)thisx)
 
@@ -50,7 +50,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
                        SEAGULL_LIMB_RIGHT_WING_MAX);
 
-    thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+    thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     thisx->speed = 3.0f + KREG(48);
     thisx->uncullZoneForward = 10000.0f + KREG(70);
     this->randRollTimer = Rand_ZeroFloat(10.0f);

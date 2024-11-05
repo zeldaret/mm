@@ -33,7 +33,7 @@ ActorProfile En_Boom_Profile = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -41,18 +41,18 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000010, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
+    ICHAIN_S8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
@@ -226,21 +226,21 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     }
 
     if (DECR(this->unk_1CC) != 0) {
-        s32 sp5C;
+        s32 bgId;
         Vec3f sp50;
         s32 pad;
 
         sp74 = BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp50,
-                                       &this->actor.wallPoly, true, true, true, true, &sp5C);
-        if (sp74 != 0) {
-            if (func_800B90AC(play, &this->actor, this->actor.wallPoly, sp5C, &sp50)) {
-                sp74 = 0;
+                                       &this->actor.wallPoly, true, true, true, true, &bgId);
+        if (sp74) {
+            if (func_800B90AC(play, &this->actor, this->actor.wallPoly, bgId, &sp50)) {
+                sp74 = false;
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(play, &sp50);
             }
         }
 
-        if (sp74 != 0) {
+        if (sp74) {
             this->actor.world.rot.x = -this->actor.world.rot.x;
             this->actor.world.rot.y += 0x8000;
             this->moveTo = &player->actor;
@@ -339,7 +339,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, sp58->unk_00);
 
     CLOSE_DISPS(play->state.gfxCtx);

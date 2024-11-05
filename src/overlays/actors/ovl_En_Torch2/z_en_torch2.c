@@ -33,7 +33,7 @@ ActorProfile En_Torch2_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0, 0 },
         { 0xF7CFFFFF, 0, 0 },
-        TOUCH_NONE,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 60, 0, { 0, 0, 0 } },
@@ -68,9 +68,9 @@ void EnTorch2_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (this->actor.params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
         if (this->actor.params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES;
         }
     }
     this->framesUntilNextState = 20;

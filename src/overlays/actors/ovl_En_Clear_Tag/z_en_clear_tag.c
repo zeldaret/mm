@@ -5,9 +5,10 @@
  */
 
 #include "z_en_clear_tag.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -422,7 +423,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
     Vec3f velocity;
     Vec3f accel;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -555,6 +556,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 }
             }
             break;
+
         case 1:
             Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
@@ -571,6 +573,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
             Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+            FALLTHROUGH;
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;
@@ -825,7 +828,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateXFApply(effect->rotationX);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectDL);
         }
     }
@@ -842,7 +845,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                 func_800C0094(this->actor.floorPoly, effect->pos.x, effect->pos.y, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
             }
         }
@@ -866,7 +869,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                 func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectGroundDL);
             }
         }
@@ -895,7 +898,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
@@ -919,7 +922,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
     }
@@ -941,7 +944,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
         }
     }
@@ -969,7 +972,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             Matrix_RotateZF(effect->rotationZ, MTXMODE_APPLY);
             Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
             Matrix_RotateXFApply(M_PIf / 2);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
     }
@@ -1004,7 +1007,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                         Matrix_RotateYF(2.0f * (j * M_PIf) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-                        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
                         gSPDisplayList(POLY_XLU_DISP++, gEffWaterSplashDL);
                     }
                 }

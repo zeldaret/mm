@@ -7,7 +7,7 @@
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiWf*)thisx)
 
@@ -33,11 +33,11 @@ void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play);
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { WOLFOS_NORMAL_LIMB_HEAD, { { 800, 0, 0 }, 25 }, 100 },
@@ -46,7 +46,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderCylinderInit sBodyCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -54,11 +54,11 @@ static ColliderCylinderInit sBodyCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 40, 60, 0, { 0, 0, 0 } },
@@ -66,7 +66,7 @@ static ColliderCylinderInit sBodyCylinderInit = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -79,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderCylinderInit sTailCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -87,11 +87,11 @@ static ColliderCylinderInit sTailCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 15, 20, -15, { 0, 0, 0 } },
@@ -135,7 +135,7 @@ static AnimationInfo sAnimationInfo[SG_WOLFOS_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
@@ -181,7 +181,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->tailCollider, &this->actor, &sTailCylinderInit);
     Collider_InitJntSph(play, &this->headCollider);
     Collider_SetJntSph(play, &this->headCollider, &this->actor, &sJntSphInit, this->headColliderElements);
-    this->headCollider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
+    this->headCollider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitAnim, this->jointTable, this->morphTable,
                        WOLFOS_NORMAL_LIMB_MAX);

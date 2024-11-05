@@ -46,11 +46,11 @@ ActorProfile En_Mushi2_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 5 }, 100 },
@@ -59,7 +59,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1,
@@ -125,9 +125,9 @@ void func_80A68808(EnMushi2* this) {
 
 s32 func_80A68860(EnMushi2* this, PlayState* play) {
     s32 pad;
-    s32 sp40;
+    s32 bgId;
     CollisionPoly* sp3C;
-    f32 temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
+    f32 temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp3C, &bgId, &this->actor, &this->actor.world.pos);
     WaterBox* waterBox;
     f32 sp30;
 
@@ -1217,11 +1217,11 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
                 }
 
                 if (phi_v0) {
-                    ColliderJntSphElement* element = &this->collider.elements[0];
+                    ColliderJntSphElement* jntSphElem = &this->collider.elements[0];
 
-                    element->dim.worldSphere.center.x = this->actor.world.pos.x;
-                    element->dim.worldSphere.center.y = this->actor.world.pos.y;
-                    element->dim.worldSphere.center.z = this->actor.world.pos.z;
+                    jntSphElem->dim.worldSphere.center.x = this->actor.world.pos.x;
+                    jntSphElem->dim.worldSphere.center.y = this->actor.world.pos.y;
+                    jntSphElem->dim.worldSphere.center.z = this->actor.world.pos.z;
                     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 }
             }

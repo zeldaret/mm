@@ -1,0 +1,21 @@
+# Determines how certain text sequences should be encoded. The text sequence is
+# converted to one of the tuple elements based on the chosen encoding:
+#   Element 1: Non-wide encoding, for text other than Japanese text and the credits.
+#   Element 2: For Japanese text.
+#   Element 3: For credits text.
+{
+    '\n'            : (0x11, 0x000A, 0x01),
+
+    '[A]'           : (0xB0, 0x839F, None),
+    '[B]'           : (0xB1, 0x83A0, None),
+    '[C]'           : (0xB2, 0x83A1, None),
+    '[L]'           : (0xB3, 0x83A2, None),
+    '[R]'           : (0xB4, 0x83A3, None),
+    '[Z]'           : (0xB5, 0x83A4, None),
+    '[C-Up]'        : (0xB6, 0x83A5, None),
+    '[C-Down]'      : (0xB7, 0x83A6, None),
+    '[C-Left]'      : (0xB8, 0x83A7, None),
+    '[C-Right]'     : (0xB9, 0x83A8, None),
+    '▼'             : (0xBA, 0x83A9, None),
+    '[Control-Pad]' : (0xBB, 0x83AA, None),
+}

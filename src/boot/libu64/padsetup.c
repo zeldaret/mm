@@ -26,6 +26,7 @@ s32 PadSetup_Init(OSMesgQueue* mq, u8* outMask, OSContStatus* status) {
                         *outMask |= 1 << i;
                     }
                     break;
+
                 default:
                     break;
             }

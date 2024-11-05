@@ -9,7 +9,7 @@
 #include "assets/objects/object_masterzoora/object_masterzoora.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSob1*)thisx)
 
@@ -139,7 +139,7 @@ static Vec3f sSelectedItemPositions[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 static EnSob1ActionFunc sInitFuncs[] = {
@@ -1488,7 +1488,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnSob1_WaitForBlink;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -1736,7 +1736,7 @@ void EnSob1_BombShopkeeper_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -frames * 20, 32, 128));
     gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 0, 255);

@@ -7,7 +7,7 @@
 #include "z_en_sw.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSw*)thisx)
 
@@ -42,7 +42,7 @@ ActorProfile En_Sw_Profile = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -50,11 +50,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 16 }, 100 },
@@ -683,7 +683,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             if (!ENSW_GET_3(&this->actor)) {
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_3);
             }
@@ -1155,11 +1155,11 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
         if (!ENSW_GET_3(&this->actor)) {
             this->actor.hintId = TATL_HINT_ID_SKULLWALLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-            this->collider.info.toucher.damage = 8;
+            this->collider.elem.atDmgInfo.damage = 8;
         } else {
             this->actor.hintId = TATL_HINT_ID_GOLD_SKULLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit2);
-            this->collider.info.toucher.damage = 16;
+            this->collider.elem.atDmgInfo.damage = 16;
         }
 
         this->path =
@@ -1175,7 +1175,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
 
             case 1:
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
@@ -1192,7 +1192,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);

@@ -5,9 +5,10 @@
  */
 
 #include "z_en_tru.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -153,7 +154,7 @@ static TexturePtr sDustTextures[] = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -161,11 +162,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 32 }, 100 },
@@ -264,7 +265,7 @@ void func_80A85788(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_80A890A8);
     }
 
@@ -320,7 +321,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_80A8A108);
     }
 
@@ -386,7 +387,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         index = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
         gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
@@ -574,7 +575,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gKoumePotionDL);
 
         Matrix_Pop();
@@ -592,7 +593,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gKoumeBottleDL);
 
         Matrix_Pop();
@@ -837,7 +838,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
                 this->unk_364++;
                 break;
             }
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -894,7 +895,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
-        // Fallthrough
+            FALLTHROUGH;
         case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
@@ -929,7 +930,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -1061,7 +1062,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -1090,13 +1091,13 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
                 break;
-            } else {
-                EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-                this->unk_362 = 20;
-                this->unk_364++;
             }
 
+            EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            this->unk_362 = 20;
+            this->unk_364++;
+            FALLTHROUGH;
         case 4:
             if (func_80A87400(this, play) || (DECR(this->unk_362) == 0)) {
                 ret = true;
@@ -1106,7 +1107,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = NULL;
         this->msgScriptCallback = NULL;
         this->unk_34E = 0;
@@ -1204,7 +1205,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
         this->unk_384 = 1;
     }
 
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 

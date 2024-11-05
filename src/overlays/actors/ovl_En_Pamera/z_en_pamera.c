@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPamera*)thisx)
 
@@ -83,7 +83,7 @@ ActorProfile En_Pamera_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -91,11 +91,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 12, 46, 0, { 0, 0, 0 } },
@@ -158,7 +158,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit2);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->unk_312 = 0;
     this->unk_310 = 0;
     this->unk_314 = 0;
@@ -251,7 +251,7 @@ void EnPamera_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BD8700(EnPamera* this) {
     this->hideInisdeTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_0);
     this->actionFunc = func_80BD8758;
 }
@@ -293,7 +293,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
 
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
     this->actionFunc = func_80BD8964;
 }
@@ -585,7 +585,7 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
 
 void func_80BD9840(EnPamera* this, PlayState* play) {
     this->actor.update = func_80BDA344;
-    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
     this->actor.flags |= ACTOR_FLAG_100000;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         func_80BD9E60(this);
@@ -603,7 +603,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9904(EnPamera* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80BD9928;
 }
 
@@ -734,7 +734,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                 case 2:
                     if (this->actor.draw == NULL) {
                         this->actor.draw = EnPamera_Draw;
-                        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                     }
                     func_80BD9EE0(this);
                     break;

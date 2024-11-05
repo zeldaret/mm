@@ -5,9 +5,10 @@
  */
 
 #include "z_en_kgy.h"
+#include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKgy*)thisx)
 
@@ -114,7 +115,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
                               this->actor.world.pos.z, 255, 64, 64, -1);
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     this->unk_300 = -1;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnKgy_Destroy(Actor* thisx, PlayState* play) {
@@ -612,7 +613,7 @@ void func_80B41C54(EnKgy* this, PlayState* play) {
 void func_80B41CBC(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80B40E18(this, this->actor.textId);
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, play, 4);
@@ -625,7 +626,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_HasParent(&this->actor, play)) {
         this->actionFunc = func_80B41CBC;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, this->getItemId, 2000.0f, 1000.0f);
@@ -764,7 +765,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC4D:
                         case 0xC58:
                             this->unk_29C |= 0x10;
-
+                            FALLTHROUGH;
                         case 0xC45:
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 3);
@@ -994,9 +995,9 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
         }
         func_80B411DC(this, play, 0);
         func_80B40E18(this, this->actor.textId);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     }
 }
@@ -1198,7 +1199,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     }
 
     gfx = POLY_OPA_DISP;
-    gSPMatrix(gfx, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(gfx, play->state.gfxCtx);
 
     if (func_80B40D8C(play)) {
         gSPDisplayList(&gfx[1], gRazorSwordHandleDL);

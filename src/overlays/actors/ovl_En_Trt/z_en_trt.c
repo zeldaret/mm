@@ -8,7 +8,7 @@
 #include "assets/objects/object_trt/object_trt.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -1581,7 +1581,7 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, PlayState* play) {
@@ -1702,7 +1702,7 @@ void EnTrt_DrawStickDirectionPrompt(PlayState* play, EnTrt* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 void EnTrt_Init(Actor* thisx, PlayState* play) {

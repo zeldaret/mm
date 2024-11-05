@@ -7,7 +7,7 @@
 #include "z_en_prz.h"
 #include "overlays/actors/ovl_En_Pr/z_en_pr.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPrz*)thisx)
 
@@ -69,7 +69,7 @@ f32 D_80A771E0[PLAYER_FORM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -77,11 +77,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x20000000, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 10, 10, 0, { 0, 0, 0 } },
@@ -107,7 +107,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = TARGET_MODE_3;
+    this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->unk_1E8 = 255;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -118,8 +118,8 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Math_Vec3f_Copy(&this->unk_1D8, &this->actor.world.pos);
@@ -217,7 +217,7 @@ void func_80A76070(EnPrz* this, s16 arg1, PlayState* play) {
 s32 func_80A762C0(EnPrz* this, PlayState* play) {
     CollisionPoly* sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     Vec3f sp38;
 
     Math_Vec3f_Copy(&sp38, &this->actor.world.pos);
@@ -226,7 +226,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
     sp38.z += Math_CosS(this->actor.world.rot.y) * 40.0f;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp38, &sp48, &sp54, true, false, false, true,
-                                &sp44)) {
+                                &bgId)) {
         return true;
     }
     return false;
@@ -376,8 +376,8 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 
 void func_80A76A1C(EnPrz* this) {
     this->unk_1E8 = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
 

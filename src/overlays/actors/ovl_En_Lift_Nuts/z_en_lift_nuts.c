@@ -7,7 +7,7 @@
 #include "z_en_lift_nuts.h"
 #include "overlays/actors/ovl_En_Gamelupy/z_en_gamelupy.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnLiftNuts*)thisx)
 
@@ -113,7 +113,7 @@ static s32 sPad = 0;
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -121,11 +121,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 25, 75, 0, { 0, 0, 0 } },
@@ -287,7 +287,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
             this->actor.home.pos = bgActor->actor.world.pos;
         }
     }
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->timer = 0;
     this->autotalk = false;
     this->isFirstTimeHiding = false;
@@ -379,7 +379,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
     if ((EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_AFTER) ||
          EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_STARTING)) &&
         (this->autotalk == true)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         EnLiftNuts_SetupBurrow(this);
     }
@@ -473,7 +473,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                     }
                 }
                 Flags_UnsetSwitch(play, 0x41);
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             } else if (!Flags_GetSwitch(play, 0x42)) { // Explain Rules
                 Flags_SetSwitch(play, 0x42);
                 Message_StartTextbox(play, 0x27E6, &this->actor);
@@ -954,7 +954,7 @@ void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
             Message_StartTextbox(play, 0x27F1, &this->actor);
             this->textId = 0x27F1;
         }
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnLiftNuts_SetupStartConversation(this);
         switch (CURRENT_DAY) {
             case 1:
@@ -1069,7 +1069,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     EnLiftNuts_TryHide(this, play);
 
     if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_RUNNING)) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 

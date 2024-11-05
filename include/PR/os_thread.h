@@ -11,10 +11,10 @@ typedef s32 OSId;
 
 typedef union {
     struct {
-        /* 0x00 */ f32 f_odd;
-        /* 0x04 */ f32 f_even;
+        /* 0x0 */ f32 f_odd;
+        /* 0x4 */ f32 f_even;
     } f;
-} __OSfp; // size = 0x08
+} __OSfp; // size = 0x8
 
 typedef struct {
     /* 0x000 */ u64 at, v0, v1, a0, a1, a2, a3;
@@ -29,9 +29,9 @@ typedef struct {
 } __OSThreadContext; // size = 0x190
 
 typedef struct {
-    /* 0x00 */ u32 flag;
-    /* 0x04 */ u32 count;
-    /* 0x08 */ u64 time;
+    /* 0x0 */ u32 flag;
+    /* 0x4 */ u32 count;
+    /* 0x8 */ u64 time;
 } __OSThreadprofile; // size = 0x10
 
 typedef struct OSThread {

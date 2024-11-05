@@ -42,7 +42,7 @@ ActorProfile Obj_Chan_Profile = {
 
 static ColliderCylinderInit sObjChanCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -50,11 +50,11 @@ static ColliderCylinderInit sObjChanCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 48, 76, -60, { 0, 0, 0 } },
@@ -161,15 +161,16 @@ void ObjChan_InitChandelier(ObjChan* this, PlayState* play) {
     Vec3f childPos;
     Vec3s childRot;
     CollisionPoly* sp94;
-    s32 sp90;
+    s32 bgId;
     Vec3f sp84;
 
     Math_Vec3f_Copy(&this->unk1C0, &thisx->world.pos);
 
     Math_Vec3f_Copy(&sp84, &thisx->world.pos);
     sp84.y += 1600.0f;
+
     if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &sp84, &this->unk1C0, &sp94, false, false, true, true,
-                                &sp90)) {
+                                &bgId)) {
         this->unk1CC = thisx->world.pos.y - this->unk1C0.y;
     } else {
         Actor_Kill(thisx);
@@ -260,7 +261,7 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
             Math_Vec3f_ToVec3s(&pot->collider.dim.pos, &pot->actor.world.pos);
         }
     }
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x800)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x800)) {
         Flags_SetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx));
     }
     if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
@@ -296,7 +297,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
     s32 phi_v1;
 
     potBreaks = false;
-    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitElem->toucher.dmgFlags & 0x4004000)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x4004000)) {
         potBreaks = true;
     }
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
@@ -381,12 +382,12 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
 
     gfxOpa = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
-    gSPMatrix(&gfxOpa[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(&gfxOpa[0], play->state.gfxCtx);
     gSPDisplayList(&gfxOpa[1], gChandelierCenterDL);
     POLY_OPA_DISP = &gfxOpa[2];
 
     gfxXlu = Gfx_SetupDL71(POLY_XLU_DISP);
-    gSPMatrix(&gfxXlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(&gfxXlu[0], play->state.gfxCtx);
     gSPDisplayList(&gfxXlu[1], gChandelierPotHolderDL);
     POLY_XLU_DISP = &gfxXlu[2];
 
@@ -407,7 +408,7 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
-    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
     gSPDisplayList(&gfx[1], gChandelierPotDL);
     POLY_OPA_DISP = &gfx[2];
 
@@ -433,7 +434,7 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
     Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
     gfx = Gfx_SetupDL71(POLY_XLU_DISP);
-    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
     gSPSegment(&gfx[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
     gDPSetPrimColor(&gfx[2], 128, 128, 255, 255, 0, 255);
     gDPSetEnvColor(&gfx[3], 255, 0, 0, 0);

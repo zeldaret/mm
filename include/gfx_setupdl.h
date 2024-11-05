@@ -85,7 +85,7 @@ typedef enum SetupDL {
 
 Gfx* Gfx_SetupDLImpl(Gfx* gfx, u32 i);
 Gfx* Gfx_SetupDL(Gfx* gfx, u32 i);
-void Gfx_SetupDLAtPtr(Gfx** gfxp, u32 i);
+void Gfx_SetupDLAtPtr(Gfx** gfxP, u32 i);
 Gfx* Gfx_SetupDL57(Gfx* gfx);
 Gfx* Gfx_SetupDL57_b(Gfx* gfx);
 Gfx* Gfx_SetupDL52_NoCD(Gfx* gfx);
@@ -128,7 +128,7 @@ void Gfx_SetupDL2_Opa(GraphicsContext* gfxCtx);
 Gfx* Gfx_SetupDL39(Gfx* gfx);
 void Gfx_SetupDL39_Opa(GraphicsContext* gfxCtx);
 void Gfx_SetupDL39_Overlay(GraphicsContext* gfxCtx);
-void Gfx_SetupDL39_Ptr(Gfx** gfxp);
+void Gfx_SetupDL39_Ptr(Gfx** gfxP);
 void Gfx_SetupDL40_Opa(GraphicsContext* gfxCtx);
 void Gfx_SetupDL41_Opa(GraphicsContext* gfxCtx);
 void Gfx_SetupDL47_Xlu(GraphicsContext* gfxCtx);
@@ -147,7 +147,7 @@ void Gfx_SetupDL27_Xlu(GraphicsContext* gfxCtx);
 void Gfx_SetupDL60_XluNoCD(GraphicsContext* gfxCtx);
 void Gfx_SetupDL61_Xlu(GraphicsContext* gfxCtx);
 void Gfx_SetupDL56_Opa(GraphicsContext* gfxCtx);
-void Gfx_SetupDL56_Ptr(Gfx** gfxp);
+void Gfx_SetupDL56_Ptr(Gfx** gfxP);
 void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx);
 
 extern Gfx gSetupDLs[SETUPDL_MAX][6];

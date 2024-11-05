@@ -7,7 +7,7 @@
 #include "z_en_takaraya.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 
@@ -58,8 +58,8 @@ TexturePtr sEyesDownTextures[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1000, ICHAIN_STOP),
 };
 
 static s32 sTexturesDesegmented = false;
@@ -348,14 +348,14 @@ void func_80ADF654(EnTakaraya* this, PlayState* play) {
 void func_80ADF6DC(EnTakaraya* this) {
     Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
     this->eyeTexIndex = 0;
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = func_80ADF730;
 }
 
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80ADF7B8(this);
     } else {
         this->formSwitchFlag = GET_PLAYER_FORM + this->switchFlag;

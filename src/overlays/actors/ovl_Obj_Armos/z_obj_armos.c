@@ -7,7 +7,7 @@
 #include "z_obj_armos.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((ObjArmos*)thisx)
 
@@ -317,7 +317,7 @@ void func_809A57F4(ObjArmos* this, PlayState* play) {
 void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjArmos* this = THIS;
-    s32 sp2C;
+    s32 bgId;
 
     this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
@@ -334,7 +334,7 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
         this->unk_250.y = this->dyna.actor.world.pos.y + 20.0f;
         this->unk_250.z = (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z;
 
-        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId,
                                                                    &this->dyna.actor, &this->unk_250);
     }
 }
@@ -377,7 +377,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
         Matrix_Put(&sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
         CLOSE_DISPS(play->state.gfxCtx);

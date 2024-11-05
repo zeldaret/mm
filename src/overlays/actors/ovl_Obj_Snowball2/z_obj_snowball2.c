@@ -7,7 +7,7 @@
 #include "z_obj_snowball2.h"
 #include "assets/objects/object_goroiwa/object_goroiwa.h"
 
-#define FLAGS (ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((ObjSnowball2*)thisx)
 
@@ -41,11 +41,11 @@ ActorProfile Obj_Snowball2_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x0583FFBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
@@ -54,7 +54,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -273,8 +273,8 @@ void func_80B39908(ObjSnowball2* this, PlayState* play) {
     Vec3f sp94;
     s32 i;
 
-    if (this->collider.elements[0].info.bumperFlags & BUMP_HIT) {
-        Vec3s* hitPos = &this->collider.elements[0].info.bumper.hitPos;
+    if (this->collider.elements[0].base.acElemFlags & ACELEM_HIT) {
+        Vec3s* hitPos = &this->collider.elements[0].base.acDmgInfo.hitPos;
 
         for (i = 0; i < 4; i++) {
             sp94.x = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->x;
@@ -361,14 +361,14 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
     } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
         func_80B3A498(this);
-    } else if (sp38 && (this->collider.elements->info.acHitElem->toucher.dmgFlags & 0x0583FFBC)) {
+    } else if (sp38 && (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x0583FFBC)) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
         Actor_Kill(&this->actor);
         return;
     } else {
-        if (sp38 && (this->collider.elements->info.acHitElem->toucher.dmgFlags & 2)) {
+        if (sp38 && (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 2)) {
             func_80B39908(this, play);
         }
 
@@ -408,7 +408,7 @@ void func_80B39F60(ObjSnowball2* this) {
 void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     func_80B39B28(this, play);
 
@@ -431,7 +431,7 @@ void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 

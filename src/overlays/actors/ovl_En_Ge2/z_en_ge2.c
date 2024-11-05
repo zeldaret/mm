@@ -6,7 +6,7 @@
 
 #include "z_en_ge2.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe2*)thisx)
 
@@ -56,7 +56,7 @@ typedef enum {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -64,11 +64,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x038BFBB3, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 60, 0, { 0, 0, 0 } },
@@ -97,7 +97,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.world.rot.x = this->picto.actor.shape.rot.x = 0;
     this->picto.actor.world.rot.z = this->picto.actor.shape.rot.z = 0;
 
-    this->picto.actor.targetMode = TARGET_MODE_6;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_6;
     this->stateFlags = 0;
     this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
     this->cueId = -1;
@@ -464,7 +464,7 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
-        this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -502,8 +502,8 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
-        if ((this->collider.info.acHitElem != NULL) &&
-            (this->collider.info.acHitElem->toucher.dmgFlags & DMG_DEKU_NUT)) {
+        if ((this->collider.elem.acHitElem != NULL) &&
+            (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & DMG_DEKU_NUT)) {
             Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 400);
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_Stunned;
@@ -515,7 +515,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
     } else if (this->picto.actor.home.rot.x == 0) {

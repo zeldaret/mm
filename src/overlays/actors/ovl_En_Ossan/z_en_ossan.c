@@ -7,7 +7,7 @@
 #include "z_en_ossan.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOssan*)thisx)
 
@@ -186,7 +186,7 @@ static u16 sBuySuccessTextIds[] = { 0x06BF, 0x06DC };
 static u16 sCannotGetNowTextIds[] = { 0x06C0, 0x06DD };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {
@@ -1578,7 +1578,7 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnOssan_WaitForBlink;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnOssan_SetupAction(this, EnOssan_Idle);
     }
 }

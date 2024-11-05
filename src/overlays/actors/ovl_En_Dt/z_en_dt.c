@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Baisen/z_en_baisen.h"
 #include "overlays/actors/ovl_En_Muto/z_en_muto.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDt*)thisx)
 
@@ -170,7 +170,7 @@ static s16 sUnused[] = { 777, 777 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -178,11 +178,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 25, 70, 0, { 0, 0, 0 } },
@@ -241,7 +241,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &gDotourWaitAnim, this->jointTable,
                        this->morphTable, OBJECT_DT_LIMB_MAX);
 
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->npcEnMuto = NULL;
     this->npcEnBaisen = NULL;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -630,7 +630,7 @@ void EnDt_UpdateMeetingCutscene(EnDt* this, PlayState* play) {
 }
 
 void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
-    f32 currFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
     if (this->timer != 0) {
         if (this->timer == 1) {
@@ -643,7 +643,7 @@ void EnDt_FinishMeetingCutscene(EnDt* this, PlayState* play) {
                 this->appearancePhase = EN_DT_APPEARANCE_RESOLVED_MEETING;
             }
         }
-    } else if (this->animEndFrame <= currFrame) {
+    } else if (curFrame >= this->animEndFrame) {
         Camera* subCam;
         s32 index;
         s32 csIdIndex = sStringIdCsIndexTable[this->csIdIndex + 1];

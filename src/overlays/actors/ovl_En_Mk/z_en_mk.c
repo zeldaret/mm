@@ -6,7 +6,7 @@
 
 #include "z_en_mk.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMk*)thisx)
 
@@ -37,7 +37,7 @@ ActorProfile En_Mk_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -45,11 +45,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -108,7 +108,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80959E18;
     this->unk_27A = 0;
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
 
     if (func_80959524(play) < 7) {
         this->unk_27A |= 2;
@@ -357,7 +357,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
                     case 0xFB4:
                         Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         break;
 
                     case 0xFB5:
@@ -381,7 +381,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
         this->unk_27A &= ~2;
         Message_StartTextbox(play, 0xFB3, &this->actor);
     } else {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }

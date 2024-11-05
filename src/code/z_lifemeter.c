@@ -388,7 +388,7 @@ void LifeMeter_Draw(PlayState* play) {
             mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
             Mtx_SetTranslateScaleMtx(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
                                      1.0f - (0.32f * lifesize), -130.0f + offsetX, 94.5f - offsetY, 0.0f);
-            gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPVertex(OVERLAY_DISP++, beatingHeartVtx, 4, 0);
             gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
         }

@@ -44,66 +44,66 @@ ActorProfile Obj_Spinyroll_Profile = {
 static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x00, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -60.0f, 0.0f, 17.0f }, { 60.0f, 0.0f, 17.0f }, { 60.0f, 40.0f, 17.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x00, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -60.0f, 0.0f, 17.0f }, { 60.0f, 40.0f, 17.0f }, { -60.0f, 40.0f, 17.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x00, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 60.0f, 0.0f, -17.0f }, { -60.0f, 0.0f, -17.0f }, { -60.0f, 40.0f, -17.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x20000000, 0x00, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 60.0f, 0.0f, -17.0f }, { -60.0f, 40.0f, -17.0f }, { 60.0f, 40.0f, -17.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 60.0f, 20.0f, -12.0f }, { -60.0f, 20.0f, -12.0f }, { -60.0f, 20.0f, 12.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 60.0f, 20.0f, -12.0f }, { -60.0f, 20.0f, 12.0f }, { 60.0f, 20.0f, 12.0f } } },
@@ -112,7 +112,7 @@ static ColliderTrisElementInit sTrisElementsInit[] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -313,7 +313,7 @@ s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
             spBC.x = temp_f22 + spC8.x;
             spBC.z = temp_f24 + spC8.z;
 
-            if (BgCheck_EntityLineTest3(&play->colCtx, &spC8, &spBC, &spB0, &temp_s1->unk_04, 1, 0, 0, 1,
+            if (BgCheck_EntityLineTest3(&play->colCtx, &spC8, &spBC, &spB0, &temp_s1->unk_04, true, false, false, true,
                                         &temp_s1->bgId, &this->dyna.actor, 0.0f)) {
                 if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
                     func_80A1DA50(play, this, &spC8, &spB0);
@@ -688,7 +688,7 @@ void ObjSpinyroll_Draw(Actor* thisx, PlayState* play) {
         Matrix_SetTranslateRotateYXZ(phi_f22, temp_f30, phi_f24, &sp84);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_spinyroll_DL_000460);
 
         phi_f22 += temp_f26;

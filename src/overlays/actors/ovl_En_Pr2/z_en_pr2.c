@@ -7,7 +7,7 @@
 #include "z_en_pr2.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -62,7 +62,7 @@ static DamageTable sDamageTable = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_1,
@@ -70,11 +70,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x08, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 17, 32, -10, { 0, 0, 0 } },
@@ -118,7 +118,7 @@ s16 D_80A75C3C[] = {
 void EnPr2_Init(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
 
-    this->actor.targetMode = TARGET_MODE_3;
+    this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->unk_1EC = 255;
     this->actor.colChkInfo.health = 1;
@@ -532,8 +532,8 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->unk_1E0 < 10) {
         EnPr2_ChangeAnim(this, ENPR2_ANIM_2);
     } else {

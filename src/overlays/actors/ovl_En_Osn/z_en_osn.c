@@ -7,7 +7,7 @@
 #include "z_en_osn.h"
 #include "assets/objects/object_osn/object_osn.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOsn*)thisx)
 
@@ -121,7 +121,7 @@ static AnimationInfo sAnimationInfo[OSN_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -129,11 +129,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -177,7 +177,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_STOP),
 };
 
 void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
@@ -685,6 +685,7 @@ void EnOsn_HandleConversation(EnOsn* this, PlayState* play) {
         case 0x1FFE:
             this->textId = 0x1FD5;
             this->stateFlags |= OSN_STATE_END_CONVERSATION;
+            break;
     }
 
     Message_StartTextbox(play, this->textId, &this->actor);
@@ -947,7 +948,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         case OSN_TYPE_CUTSCENE:
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->actionFunc = EnOsn_HandleCutscene;
             break;
 
@@ -975,12 +976,12 @@ void EnOsn_Update(Actor* thisx, PlayState* play) {
 
     if (ENOSN_GET_TYPE(&this->actor) == OSN_TYPE_CHOOSE) {
         if (isSwitchFlagSet) {
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             EnOsn_UpdateCollider(this, play);
             this->actor.draw = EnOsn_Draw;
         } else {
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         }
     }
 
@@ -1019,7 +1020,7 @@ void EnOsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_RotateYS(leftHandRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(leftHandRot.z, MTXMODE_APPLY);
 
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, &gHappyMaskSalesmanMajorasMaskDL);
         Matrix_Pop();
     }

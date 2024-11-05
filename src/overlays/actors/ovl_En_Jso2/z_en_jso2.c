@@ -12,8 +12,8 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Col_Man/z_en_col_man.h"
 
-#define FLAGS                                                                                            \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
+#define FLAGS                                                                                                \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
      ACTOR_FLAG_80000000)
 
 #define THIS ((EnJso2*)thisx)
@@ -228,7 +228,7 @@ ActorProfile En_Jso2_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -236,11 +236,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x08, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 22, 70, 0, { 0, 0, 0 } },
@@ -248,7 +248,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -256,11 +256,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x09, 0x10 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -348,7 +348,7 @@ void EnJso2_Init(Actor* thisx, PlayState* play) {
     EffectBlureInit1 leftSwordBlureInit;
 
     this->actor.hintId = TATL_HINT_ID_GARO_MASTER;
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = 80;
     this->actor.colChkInfo.health = 14;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
@@ -396,8 +396,8 @@ void EnJso2_Init(Actor* thisx, PlayState* play) {
 
     if (this->type == EN_JSO2_TYPE_LIGHT_ARROW_ROOM) {
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.shape.yOffset = 0.0f;
         EnJso2_SetupIntroCutscene(this);
     } else {
@@ -736,8 +736,8 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
                 this->actor.gravity = -3.0f;
-                this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 EnJso2_SetupCirclePlayer(this, play);
             }
             break;
@@ -993,7 +993,7 @@ void EnJso2_SetupTeleport(EnJso2* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 10.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_JUMP);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->action = EN_JSO2_ACTION_TELEPORT;
     this->actionFunc = EnJso2_Teleport;
 }
@@ -1036,7 +1036,7 @@ void EnJso2_FallFromTeleport(EnJso2* this, PlayState* play) {
         this->isTeleporting = false;
         this->scale = 0.042f;
         this->actor.shape.shadowScale = 17.0f;
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         EnJso2_SetupSlash(this, play);
     }
 }
@@ -1289,8 +1289,8 @@ void EnJso2_SetupDead(EnJso2* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     this->actor.speed = 0.0f;
     this->disableBlure = true;
     this->timer = 30;
@@ -1828,7 +1828,7 @@ void EnJso2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gGaroMasterEyesDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -1909,7 +1909,7 @@ void EnJso2_Draw(Actor* thisx, PlayState* play2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 255);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
             Matrix_Pop();
         }

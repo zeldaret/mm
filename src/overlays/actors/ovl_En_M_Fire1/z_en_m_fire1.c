@@ -28,7 +28,7 @@ ActorProfile En_M_Fire1_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -36,11 +36,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000001, 0x00, 0x01 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { 100, 100, 0, { 0, 0, 0 } },
@@ -53,7 +53,7 @@ void EnMFire1_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->actor.params != 0) {
-        this->collider.info.toucher.dmgFlags = 0x40000;
+        this->collider.elem.atDmgInfo.dmgFlags = 0x40000;
     }
 }
 

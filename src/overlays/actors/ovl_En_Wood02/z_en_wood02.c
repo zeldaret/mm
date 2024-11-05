@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
+#include "attributes.h"
 #include "assets/objects/object_wood02/object_wood02.h"
 
 #define FLAGS 0x00000000
@@ -53,7 +54,7 @@ ActorProfile En_Wood02_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_TREE,
+        COL_MATERIAL_TREE,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -61,11 +62,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK5,
+        ELEM_MATERIAL_UNK5,
         { 0x00000000, 0x00, 0x00 },
         { 0x0100020A, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 60, 0, { 0, 0, 0 } },
@@ -76,7 +77,7 @@ f32 sWood02SpawnDistance[] = { 707.0f, 525.0f, 510.0f, 500.0f, 566.0f, 141.0f };
 s16 sWood02SpawnAngle[] = { 0x1FFF, 0x4C9E, 0x77F5, 0xA5C9, -0x293D, 0xA000 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 5600, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 5600, ICHAIN_STOP),
 };
 
 Gfx* D_808C4D54[] = {
@@ -214,11 +215,11 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_BUSH_GREEN_LARGE_SPAWNER:
         case WOOD_BUSH_BLACK_LARGE_SPAWNER:
             spawnType = 1;
-
+            FALLTHROUGH;
         case WOOD_BUSH_GREEN_LARGE_SPAWNED:
         case WOOD_BUSH_BLACK_LARGE_SPAWNED:
             spawnType++;
-
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_LARGE:
         case WOOD_BUSH_GREEN_LARGE:
         case WOOD_BUSH_BLACK_LARGE:
@@ -235,14 +236,14 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_BUSH_GREEN_SMALL_SPAWNER:
         case WOOD_BUSH_BLACK_SMALL_SPAWNER:
             spawnType = 1;
-
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_SPAWNED:
         case WOOD_TREE_OVAL_YELLOW_SPAWNED:
         case WOOD_TREE_OVAL_GREEN_SPAWNED:
         case WOOD_BUSH_GREEN_SMALL_SPAWNED:
         case WOOD_BUSH_BLACK_SMALL_SPAWNED:
             spawnType++;
-
+            FALLTHROUGH;
         case WOOD_TREE_CONICAL_MEDIUM:
         case WOOD_TREE_OVAL_GREEN:
         case WOOD_TREE_KAKARIKO_ADULT:
@@ -267,6 +268,9 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
             this->actor.velocity.x = Rand_CenteredFloat(6.0f);
             this->actor.velocity.z = Rand_CenteredFloat(6.0f);
             this->actor.velocity.y = (Rand_ZeroOne() * 1.25f) + -3.1f;
+            break;
+
+        default:
             break;
     }
 
@@ -434,10 +438,10 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
     } else if ((thisx->params < WOOD_LEAF_GREEN) || (thisx->params == WOOD_TREE_SPECIAL)) { // not leaves
         Player* player = GET_PLAYER(play);
 
-        if ((this->unk_146 >= -1) && (((player->rideActor == NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 20.0f) &&
-                                       (player->linearVelocity != 0.0f)) ||
-                                      ((player->rideActor != NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 60.0f) &&
-                                       (player->rideActor->speed != 0.0f)))) {
+        if ((this->unk_146 >= -1) &&
+            (((player->rideActor == NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 20.0f) && (player->speedXZ != 0.0f)) ||
+             ((player->rideActor != NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 60.0f) &&
+              (player->rideActor->speed != 0.0f)))) {
             func_808C4458(this, play, &thisx->world.pos, 1);
             this->unk_146 = -0x15;
             Actor_PlaySfx(thisx, NA_SE_EV_TREE_SWING);
@@ -498,12 +502,12 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         Gfx_DrawDListOpa(play, D_808C4D54[this->drawType & 0xF]);
 
         gDPSetEnvColor(POLY_XLU_DISP++, red, green, blue, 0);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
         Gfx_SetupDL25_Xlu(gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);
     }
 

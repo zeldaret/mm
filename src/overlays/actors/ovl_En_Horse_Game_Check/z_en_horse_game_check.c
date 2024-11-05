@@ -99,7 +99,7 @@ s32 func_808F8C5C(EnHorseGameCheck* this, PlayState* play) {
 }
 
 s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play) {
-    if (Matrix_NewMtx(play->state.gfxCtx) == NULL) {
+    if (Matrix_Finalize(play->state.gfxCtx) == NULL) {
         return true;
     } else {
         Gfx_DrawDListXlu(play, object_horse_game_check_DL_003030);

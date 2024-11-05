@@ -7,7 +7,7 @@
 #include "z_en_gg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnGg*)thisx)
 
@@ -39,7 +39,7 @@ ActorProfile En_Gg_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 24, 72, 0, { 0, 0, 0 } },
@@ -421,11 +421,11 @@ void func_80B359DC(EnGg* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (this->unk_306 == 0) {
-            if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+            if (player->stateFlags2 & PLAYER_STATE2_USING_OCARINA) {
                 this->unk_306 = 1;
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             }
-        } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        } else if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             this->unk_306 = 0;
         }
 
@@ -554,7 +554,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
@@ -578,7 +578,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
@@ -631,7 +631,7 @@ void func_80B3610C(EnGgStruct* ptr, PlayState* play) {
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
 
@@ -691,7 +691,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_310 = this->actor.home.pos.y;
     this->csId = this->actor.csId;
-    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
     this->unk_308 = 0;
     this->unk_309 = 0;
     this->unk_304 = 0;
@@ -709,17 +709,17 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     } else {
         this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
         if (play->csCtx.state == CS_STATE_IDLE) {
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         }
     }
 

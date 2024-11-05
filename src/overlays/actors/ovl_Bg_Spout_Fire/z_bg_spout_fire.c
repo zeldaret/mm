@@ -36,7 +36,7 @@ ActorProfile Bg_Spout_Fire_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x01, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 30, 83, 0, { 0, 0, 0 } },
@@ -196,7 +196,7 @@ void BgSpoutFire_Draw(Actor* thisx, PlayState* play) {
     gDPSetPrimColor(&gfx[1], 0, 1, 255, 255, 0, 150);
     gDPSetEnvColor(&gfx[2], 255, 0, 0, 255);
     Matrix_Translate(-55.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[3], play->state.gfxCtx);
     gSPDisplayList(&gfx[4], object_fwall_DL_000040);
     POLY_XLU_DISP = &gfx[5];
 

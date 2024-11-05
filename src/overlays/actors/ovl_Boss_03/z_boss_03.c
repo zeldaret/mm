@@ -57,7 +57,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_water_effect/object_water_effect.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss03*)thisx)
 
@@ -220,14 +220,14 @@ void Boss03_SpawnEffectBubble(PlayState* play, Vec3f* pos) {
 /* End of SpawnEffect section */
 
 void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
     collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
     collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
 
-    sphElement = &collider->elements[index];
-    sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
+    jntSphElem = &collider->elements[index];
+    jntSphElem->dim.worldSphere.radius = jntSphElem->dim.scale * jntSphElem->dim.modelSphere.radius;
 }
 
 /* Start of RNG section */
@@ -292,22 +292,22 @@ ActorProfile Boss_03_Profile = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_ROOT, { { 0, 0, 0 }, 50 }, 100 },
@@ -316,7 +316,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -331,55 +331,55 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_HEAD, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_LOWER_TRUNK, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_TAIL, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_RIGHT_FIN_ROOT, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_UPPER_RIGHT_FIN, { { 0, 0, 0 }, 30 }, 100 },
@@ -388,7 +388,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -477,7 +477,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
             this->jointTable[i].z = Math_SinS(this->unk_240 * 0x10 + i * 19000) * 4000.0f;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         return;
     }
 
@@ -508,7 +508,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         sGyorgEffects[i].type = GYORG_EFFECT_NONE;
     }
 
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 
@@ -545,7 +545,7 @@ void func_809E344C(Boss03* this, PlayState* play) {
         this->actionFunc = func_809E34B8;
         Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
         this->unk_274 = 0;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -755,7 +755,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
     this->unk_276 = 0x1000;
     this->unk_2BD = true;
     this->unk_278 = 15.0f;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -1168,7 +1168,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->subCamAt.y = player->actor.world.pos.y + 30.0f;
                 this->csState = 1;
                 this->csTimer = 0;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->unk_2D5 = true;
 
                 this->subCamFov = KREG(14) + 60.0f;
@@ -1333,6 +1333,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.5f);
                 } else {
+                    // FAKE:
                     if (1) {}
                     if (1) {}
                     if (1) {}
@@ -1422,7 +1423,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, PlayState* play) {
     this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
@@ -1843,16 +1844,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->headCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->bodyCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1862,16 +1863,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    acHitElem = this->bodyCollider.elements[i].info.acHitElem;
-                    this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                    acHitElem = this->bodyCollider.elements[i].base.acHitElem;
+                    this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].info.acHitElem->toucher.damage
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1895,9 +1896,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                acHitElem = this->headCollider.elements[i].info.acHitElem;
-                this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->headCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                acHitElem = this->headCollider.elements[i].base.acHitElem;
+                this->headCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1919,8 +1920,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (acHitElem->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].info.acHitElem->toucher.damage)
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].base.acHitElem->atDmgInfo.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -2025,9 +2026,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     if (this->actionFunc != Boss03_DeathCutscene) {
         if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
         } else {
-            this->bodyCollider.base.colType = COLTYPE_METAL;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_METAL;
         }
 
         Boss03_UpdateCollision(this, play);
@@ -2432,7 +2433,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleModelDL);
         }
     }
@@ -2469,7 +2470,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(eff->unk_34.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
         }
     }
@@ -2498,7 +2499,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
             Matrix_RotateYF(eff->unk_34.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
         }
     }

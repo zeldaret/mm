@@ -10,7 +10,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjUm*)thisx)
 
@@ -89,7 +89,7 @@ static TexturePtr sMouthTextures[] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -97,11 +97,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000020, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 40, 64, 0, { 0, 0, 0 } },
@@ -606,7 +606,7 @@ void ObjUm_SetPlayerPosition(ObjUm* this, PlayState* play) {
 void ObjUm_RotatePlayer(ObjUm* this, PlayState* play, s16 angle) {
     Player* player = GET_PLAYER(play);
 
-    player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + angle;
+    player->actor.shape.rot.y = player->actor.world.rot.y = player->yaw = this->dyna.actor.shape.rot.y + angle;
 }
 
 void func_80B78EBC(ObjUm* this, PlayState* play) {
@@ -624,7 +624,7 @@ void func_80B78EBC(ObjUm* this, PlayState* play) {
     player->upperLimbRot.y = 0;
     player->upperLimbRot.z = 0;
 
-    player->currentYaw = player->actor.focus.rot.y;
+    player->yaw = player->actor.focus.rot.y;
 }
 
 void ObjUm_RotatePlayerView(ObjUm* this, PlayState* play, s16 angle) {
@@ -705,7 +705,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            this->dyna.actor.targetMode = TARGET_MODE_6;
+            this->dyna.actor.attentionRangeType = ATTENTION_RANGE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
@@ -992,7 +992,7 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->dyna.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
@@ -1879,7 +1879,7 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
 void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Mtx* mtx_s3;
+    Mtx* mtx;
     Gfx* spFC[] = {
         NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0
     };
@@ -1933,7 +1933,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
             Matrix_Push();
             Matrix_TranslateRotateZYX(&sp88, &sp80);
-            mtx_s3 = Matrix_NewMtx(gfxCtx);
+            mtx = Matrix_Finalize(gfxCtx);
             potPos = &this->potPos[i];
             Matrix_MultVec3f(&spC0, &calcPotPos);
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
@@ -1948,7 +1948,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             }
             Matrix_Pop();
 
-            if (mtx_s3 == NULL) {
+            if (mtx == NULL) {
                 //! @bug skips CLOSE_DISPS
                 return;
             }
@@ -1956,7 +1956,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             //! FAKE:
             if (play) {}
 
-            gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (spFC[this->potsLife[i]] != NULL) {
                 gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);

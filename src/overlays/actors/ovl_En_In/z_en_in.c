@@ -8,7 +8,7 @@
 #include "z64horse.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnIn*)thisx)
 
@@ -36,7 +36,7 @@ ActorProfile En_In_Profile = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -57,11 +57,11 @@ static ColliderCylinderInit sCylinderInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 12, { { 1600, 0, 0 }, 5 }, 200 },
@@ -70,7 +70,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -349,7 +349,7 @@ void func_808F395C(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
@@ -389,7 +389,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
         }
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     }
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
@@ -401,7 +401,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
 
 void func_808F3AD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -414,7 +414,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F3AD4;
         textId = (gSaveContext.save.day != 3) ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
@@ -425,7 +425,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 
 void func_808F3BD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -438,7 +438,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_808F3BD4;
         textId = gSaveContext.save.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
@@ -449,7 +449,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 
 void func_808F3CD4(EnIn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
@@ -465,7 +465,7 @@ void func_808F3D40(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F3CD4;
         textId = gSaveContext.save.day != 3 ? 0x347D : 0x34A0;
         this->actor.textId = textId;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
     }

@@ -248,7 +248,7 @@ ActorProfile En_Invadepoh_Profile = {
 
 static ColliderCylinderInit sAlienCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -256,11 +256,11 @@ static ColliderCylinderInit sAlienCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0x00003820, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 40, 95, 10, { 0, 0, 0 } },
@@ -268,7 +268,7 @@ static ColliderCylinderInit sAlienCylinderInit = {
 
 static ColliderCylinderInit sRomaniAndCremiaCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -276,11 +276,11 @@ static ColliderCylinderInit sRomaniAndCremiaCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 46, 0, { 0, 0, 0 } },
@@ -288,7 +288,7 @@ static ColliderCylinderInit sRomaniAndCremiaCylinderInit = {
 
 static ColliderCylinderInit sDogCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -296,11 +296,11 @@ static ColliderCylinderInit sDogCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 13, 19, 0, { 0, 0, 0 } },
@@ -2057,7 +2057,7 @@ void EnInvadepoh_CowTail_Init(EnInvadepoh* this, PlayState* play) {
 
 static InitChainEntry sRomaniInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(lockOnArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
@@ -2068,9 +2068,9 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
 
     if ((type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) || (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_3)) {
-        this->actor.targetMode = TARGET_MODE_3;
+        this->actor.attentionRangeType = ATTENTION_RANGE_3;
     } else {
-        this->actor.targetMode = TARGET_MODE_6;
+        this->actor.attentionRangeType = ATTENTION_RANGE_6;
     }
 
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
@@ -2086,7 +2086,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
         this->actor.update = EnInvadepoh_SilentRomani_WaitForObject;
-        this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE;
+        this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_BARN) {
@@ -2151,9 +2151,12 @@ void EnInvadepoh_Ufo_Init(EnInvadepoh* this, PlayState* play) {
 }
 
 static InitChainEntry sDogInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),  ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),   ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 50, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 50, ICHAIN_CONTINUE),
+    ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_4, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_STOP),
 };
 
 void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
@@ -2173,9 +2176,12 @@ void EnInvadepoh_Dog_Init(EnInvadepoh* this, PlayState* play) {
 }
 
 static InitChainEntry sCremiaInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_3, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 void EnInvadepoh_Cremia_Init(EnInvadepoh* this, PlayState* play) {
@@ -2689,7 +2695,7 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienDeathAnim);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->timer = 10;
     this->alpha = 255;
     this->actor.draw = EnInvadepoh_Alien_Draw;
@@ -3647,10 +3653,10 @@ void EnInvadepoh_Night1Romani_Walk(EnInvadepoh* this, PlayState* play) {
             }
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
@@ -3797,7 +3803,7 @@ void EnInvadepoh_BarnRomani_SetupIdle(EnInvadepoh* this) {
     modelInfo->headRotMaxStep = 0x5DC;
     this->timer = Rand_S16Offset(200, 200);
     this->angle = this->actor.shape.rot.y;
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_Idle;
 }
 
@@ -3859,7 +3865,7 @@ void EnInvadepoh_BarnRomani_SetupLookAround(EnInvadepoh* this) {
     modelInfo->headRotTarget.z = 0;
     modelInfo->headRotStepScale = 0.1f;
     modelInfo->headRotMaxStep = 0x320;
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_BarnRomani_LookAround;
 }
 
@@ -3908,10 +3914,10 @@ void EnInvadepoh_BarnRomani_Walk(EnInvadepoh* this, PlayState* play) {
             this->doorOpened = EnInvadepoh_Romani_OpenDoor(this, play, SQ(80.0f), -15);
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_40) &&
@@ -4060,13 +4066,13 @@ void EnInvadepoh_RewardRomani_SetupWaitForSuccess(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_WaitForSuccess(EnInvadepoh* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         EnInvadepoh_RewardRomani_SetupStartTalking(this);
     }
 }
 
 void EnInvadepoh_RewardRomani_SetupStartTalking(EnInvadepoh* this) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = EnInvadepoh_RewardRomani_StartTalking;
 }
 
@@ -4154,7 +4160,7 @@ void EnInvadepoh_RewardRomani_AfterGivingBottle(EnInvadepoh* this, PlayState* pl
 }
 
 void EnInvadepoh_RewardRomani_SetupFinish(EnInvadepoh* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actionFunc = EnInvadepoh_RewardRomani_Finish;
 }
 
@@ -4389,7 +4395,7 @@ void EnInvadepoh_Dog_WaitForObject(Actor* thisx, PlayState* play2) {
     if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         EnInvadepoh_Dog_SetupWalk(this);
     } else if (sInvasionState == INVASION_STATE_WAIT) {
         this->actor.update = EnInvadepoh_Dog_WaitForInvasion;
@@ -4409,7 +4415,7 @@ void EnInvadepoh_Dog_WaitForInvasion(Actor* thisx, PlayState* play2) {
     if (sInvasionState == INVASION_STATE_ACTIVE) {
         this->actor.update = EnInvadepoh_Dog_Update;
         this->actor.draw = EnInvadepoh_Dog_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         EnInvadepoh_Dog_SetupWalk(this);
     }
 }
@@ -4517,16 +4523,16 @@ void EnInvadepoh_Night3Cremia_Walk(EnInvadepoh* this, PlayState* play) {
             // Romani is opening the door to the barn
             this->distanceToRomani = 40.0f;
             this->angle = -0x8000;
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         } else if (romani->currentPoint < (romani->endPoint - 1)) {
             this->distanceToRomani = 40.0f;
             Math_ScaledStepToS(&this->angle, -0x4800, 0xC8);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         } else {
             // Romani is opening the door to the house
             Math_StepToF(&this->distanceToRomani, 5.0f, 3.0f);
             Math_ScaledStepToS(&this->angle, -0x8000, 0x12C);
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         }
 
         angleToRomani = this->angle + romani->actor.world.rot.y;
@@ -4769,10 +4775,10 @@ void EnInvadepoh_Night3Romani_Walk(EnInvadepoh* this, PlayState* play) {
             }
         }
 
-        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     } else {
         this->doorOpened = false;
-        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
 
     tempFrames = play->gameplayFrames % 0x80;
@@ -5152,7 +5158,7 @@ void EnInvadepoh_DrawWarpEffects(PlayState* play) {
             gSPSegment(POLY_XLU_DISP++, 0x8,
                        Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, warpScrollX1, 0, 32, 64, 1, 0,
                                         warpScrollY2, 32, 64));
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_02E510);
         }
     }
@@ -5235,11 +5241,11 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
             gDPSetEnvColor(gfx++, 255, 255, 255, 100.0f / 170.0f * this->eyeBeamAlpha);
 
             Matrix_Mult(&sInvadepohAlienLeftEyeBeamMtxF, MTXMODE_NEW);
-            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
             gSPDisplayList(gfx++, gAlienEyeBeamDL);
 
             Matrix_Mult(&sInvadepohAlienRightEyeBeamMtxF, MTXMODE_NEW);
-            gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
             gSPDisplayList(gfx++, gAlienEyeBeamDL);
 
             POLY_XLU_DISP = gfx;
@@ -5252,7 +5258,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_Scale(this->deathFlashScale.x, this->deathFlashScale.y, this->deathFlashScale.z, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gAlienDeathFlashDL);
     }
 
@@ -5285,7 +5291,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
         gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
         gDPSetPrimColor(gfx++, 0, 0, 240, 180, 100, glowAlpha);
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
 
         POLY_XLU_DISP = gfx;
@@ -5399,7 +5405,7 @@ void EnInvadepoh_Ufo_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
     gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);

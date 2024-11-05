@@ -104,6 +104,8 @@ def main():
     baseromSegmentsDir: Path = args.baserom_segments_dir
     outputDir: Path = args.output_dir
 
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+
     global ZAPDArgs
     ZAPDArgs = ""
     if args.Z is not None:
@@ -133,42 +135,19 @@ def main():
         with extractedAssetsFile.open(encoding='utf-8') as f:
             extractedAssetsTracker.update(json.load(f, object_hook=manager.dict))
 
-    extract_text_path = outputDir / "text/message_data.h"
-    extract_staff_text_path = outputDir / "text/staff_message_data.h"
-
     asset_path = args.single
     if asset_path is not None:
-        if "text/" in asset_path:
-            from msg.nes import msgdisNES
-            print("Extracting message_data")
-            msgdisNES.main(extract_text_path)
+        fullPath = os.path.join("assets", "xml", asset_path + ".xml")
+        if not os.path.exists(fullPath):
+            print(f"Error. File {fullPath} does not exist.", file=os.sys.stderr)
+            exit(1)
 
-            from msg.staff import msgdisStaff
-            print("Extracting staff_message_data")
-            msgdisStaff.main(extract_staff_text_path)
-        else:
-            fullPath = os.path.join("assets", "xml", asset_path + ".xml")
-            if not os.path.exists(fullPath):
-                print(f"Error. File {fullPath} does not exist.", file=os.sys.stderr)
-                exit(1)
-
-            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)
-            # Always extract if -s is used.
-            if fullPath in extractedAssetsTracker:
-                del extractedAssetsTracker[fullPath]
-            ExtractFunc(fullPath)
+        initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)
+        # Always extract if -s is used.
+        if fullPath in extractedAssetsTracker:
+            del extractedAssetsTracker[fullPath]
+        ExtractFunc(fullPath)
     else:
-        # Only extract text if the header does not already exist, or if --force was passed
-        if args.force or not os.path.isfile(extract_text_path):
-            from msg.nes import msgdisNES
-            print("Extracting message_data")
-            msgdisNES.main(baseromSegmentsDir, extract_text_path)
-
-        if args.force or not os.path.isfile(extract_staff_text_path):
-            from msg.staff import msgdisStaff
-            print("Extracting staff_message_data")
-            msgdisStaff.main(baseromSegmentsDir, extract_staff_text_path)
-
         xmlFiles = []
         for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
             for file in files:

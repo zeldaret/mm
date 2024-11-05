@@ -3,12 +3,12 @@
  * Overlay: ovl_En_Thiefbird
  * Description: Takkuri
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
 
 #define THIS ((EnThiefbird*)thisx)
 
@@ -49,33 +49,33 @@ ActorProfile En_Thiefbird_Profile = {
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 24 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 9, { { 900, -600, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_HARD,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_HARD,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 12, { { 1200, 0, 0 }, 9 }, 100 },
@@ -84,7 +84,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -140,7 +140,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_TAKKURI, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 Vec3f D_80C13920;
@@ -642,7 +642,7 @@ void func_80C11D14(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C11DC0(EnThiefbird* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80C11DF0;
     this->actor.gravity = -0.5f;
 }
@@ -837,7 +837,7 @@ void func_80C124B0(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C126A8(EnThiefbird* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80C126D8;
 }
@@ -928,18 +928,18 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C12B1C(EnThiefbird* this, PlayState* play) {
-    ColliderJntSphElement* sph;
+    ColliderJntSphElement* jntSphElem;
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~AT_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements[0].base);
         func_80C114C0(this, play);
         this->unk_194 = 0;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->collider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 break;
             }
         }
@@ -951,9 +951,9 @@ void func_80C12B1C(EnThiefbird* this, PlayState* play) {
             this->drawDmgEffScale = 0.5f;
             this->drawDmgEffAlpha = 4.0f;
             if (i != ARRAY_COUNT(this->colliderElements)) {
-                sph = &this->collider.elements[i];
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0,
+                jntSphElem = &this->collider.elements[i];
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, jntSphElem->base.acDmgInfo.hitPos.x,
+                            jntSphElem->base.acDmgInfo.hitPos.y, jntSphElem->base.acDmgInfo.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
@@ -1101,7 +1101,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
         gfx = POLY_OPA_DISP;
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], this->unk_3E4);
         POLY_OPA_DISP = &gfx[2];
 
@@ -1116,7 +1116,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
                 gfx = POLY_OPA_DISP;
             }
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], this->unk_3E8);
 
             if (this->unk_3E8 == gTakkuriStolenBottleDL) {
@@ -1164,7 +1164,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
             Matrix_Translate(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], gTakkuriFeatherModelDL);
             gfx = &gfx[2];
         }

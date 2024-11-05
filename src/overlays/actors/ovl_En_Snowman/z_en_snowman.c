@@ -7,7 +7,7 @@
 #include "z_en_snowman.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnSnowman*)thisx)
 
@@ -76,7 +76,7 @@ ActorProfile En_Snowman_Profile = {
 
 static ColliderCylinderInit sEenoCylinderInit = {
     {
-        COLTYPE_HIT4,
+        COL_MATERIAL_HIT4,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -84,11 +84,11 @@ static ColliderCylinderInit sEenoCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0.0f, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 60, 80, 0, { 0, 0, 0 } },
@@ -96,7 +96,7 @@ static ColliderCylinderInit sEenoCylinderInit = {
 
 static ColliderCylinderInit sSnowballCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE | OC1_TYPE_ALL,
@@ -104,11 +104,11 @@ static ColliderCylinderInit sSnowballCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 60, 80, 0, { 0, 0, 0 } },
@@ -180,7 +180,7 @@ static Gfx* sSnowballFragmentDLs[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_EENO, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
@@ -244,7 +244,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
+        thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sSnowballCylinderInit);
         thisx->world.rot.y = Actor_WorldYawTowardActor(thisx, &player->actor);
         thisx->velocity.y = (Actor_WorldDistXZToActor(thisx, &player->actor) * 0.035f) + -5.0f;
@@ -269,7 +269,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             this->collider.dim.radius = 50;
             this->collider.dim.height = 122;
             this->collider.dim.yShift = -8;
-            this->collider.info.toucher.damage = 16;
+            this->collider.elem.atDmgInfo.damage = 16;
             thisx->world.pos.y -= 32.0f;
             Actor_SetScale(thisx, 0.006f);
             ActorShape_Init(&thisx->shape, 16000.0f / 3.0f, ActorShadow_DrawCircle, 170.0f);
@@ -606,7 +606,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 50);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speed = 0.0f;
@@ -790,7 +790,7 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
@@ -825,7 +825,7 @@ void EnSnowman_Kill(EnSnowman* this, PlayState* play) {
  * Creates a small split Eeno with a certain Y-rotation and at a certain offset from basePos.
  */
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -970,7 +970,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
 void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
         if ((this->actor.colChkInfo.damageEffect != EN_SNOWMAN_DMGEFF_HOOKSHOT) ||
             (EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE)) {
             if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_MELT) {
@@ -1011,8 +1011,8 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 this->drawDmgEffScale = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                            this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                            this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
@@ -1185,7 +1185,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
         }
 
-        gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
         gSPDisplayList(&gfx[1], sSnowballDLs[EN_SNOWMAN_GET_TYPE(&this->actor)]);
 
         POLY_OPA_DISP = &gfx[2];
