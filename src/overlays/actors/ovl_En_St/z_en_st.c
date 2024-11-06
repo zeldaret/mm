@@ -8,9 +8,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                              \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
-     ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
+#define FLAGS                                                                            \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW | ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
 
 #define THIS ((EnSt*)thisx)
 
@@ -877,7 +877,7 @@ void EnSt_Destroy(Actor* thisx, PlayState* play) {
 void EnSt_Update(Actor* thisx, PlayState* play) {
     EnSt* this = THIS;
 
-    if (this->actor.flags & ACTOR_FLAG_8000) {
+    if (this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW) {
         SkelAnime_Update(&this->skelAnime);
         this->unk_18C |= 0x80;
         return;

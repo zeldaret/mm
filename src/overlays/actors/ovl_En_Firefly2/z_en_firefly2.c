@@ -6,8 +6,9 @@
 
 #include "z_en_firefly2.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS                                                                                      \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnFirefly2*)thisx)
 
