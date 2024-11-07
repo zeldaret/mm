@@ -1669,7 +1669,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
         animIndex = OBJ_UM_ANIM_MINUS_1;
     }
 
-    changeAnim = (animIndex != this->animIndex);
+    changeAnim = (this->animIndex != animIndex);
     if (SkelAnime_Update(&this->skelAnime) || changeAnim) {
         this->animIndex = animIndex;
 

@@ -4269,7 +4269,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
-        // srcPos is somewhere withing the bend of the path
+        // srcPos is somewhere within the bend of the path
         if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
             // srcPos is not inside a loop
             if (!Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
