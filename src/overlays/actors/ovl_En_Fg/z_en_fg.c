@@ -362,20 +362,12 @@ void EnFg_Destroy(Actor* thisx, PlayState* play) {
 
 void EnFg_Update(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
-    s32 flag;
-    s32 flagSet;
 
-    flag = this->actor.flags;
-    flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_2000);
-    if (1) {}
-    if (!flagSet) {
-        flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_ATTACHED_TO_ARROW);
-        if (1) {}
-        if (!flagSet) {
-            this->actionFunc(this, play);
-            Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
-                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-        }
+    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) == 0) &&
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTACHED_TO_ARROW) == 0)) {
+        this->actionFunc(this, play);
+        Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     EnFg_UpdateSkelAnime(this, play);
