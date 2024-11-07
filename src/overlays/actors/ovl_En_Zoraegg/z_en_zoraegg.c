@@ -788,7 +788,7 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     switch (this->unk_1EC) {
         case 1:
             switch (limbIndex) {
-                case 2:
+                case ZORA_BABY_LIMB_TAIL1:
                     temp_f20 = this->unk_1EE * 0.01f;
                     Matrix_Push();
                     Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
@@ -801,12 +801,12 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                     CLOSE_DISPS(play->state.gfxCtx);
                     break;
 
-                case 4:
+                case ZORA_BABY_LIMB_TAIL_FIN:
                     Matrix_Pop();
                     break;
 
-                case 5:
-                case 6:
+                case ZORA_BABY_LIMB_RIGHT_PECTORAL_FIN:
+                case ZORA_BABY_LIMB_LEFT_PECTORAL_FIN:
                     temp_f20 = this->unk_1EF * 0.01f;
                     func_80B333DC(play, dList, temp_f20);
                     break;
@@ -815,7 +815,7 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 
         case 2:
             switch (limbIndex) {
-                case 2:
+                case ZORA_BABY_LIMB_TAIL1:
                     temp_f20 = (this->unk_1EE * 0.005f) + 0.5f;
                     Matrix_Push();
                     Matrix_Scale(1.0f, temp_f20, temp_f20, MTXMODE_APPLY);
@@ -828,7 +828,7 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                     CLOSE_DISPS(play->state.gfxCtx);
                     break;
 
-                case 4:
+                case ZORA_BABY_LIMB_TAIL_FIN:
                     temp_f2 = 1.0f / ((this->unk_1EE * 0.005f) + 0.5f);
                     temp_f20 = (this->unk_1EE * 0.0035f) + 0.65f;
                     Matrix_Scale(1.0f, temp_f20 * temp_f2, temp_f2, MTXMODE_APPLY);
@@ -843,8 +843,8 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                     Matrix_Pop();
                     break;
 
-                case 5:
-                case 6:
+                case ZORA_BABY_LIMB_RIGHT_PECTORAL_FIN:
+                case ZORA_BABY_LIMB_LEFT_PECTORAL_FIN:
                     temp_f20 = this->unk_1EE * 0.01f;
                     func_80B333DC(play, dList, temp_f20);
                     break;

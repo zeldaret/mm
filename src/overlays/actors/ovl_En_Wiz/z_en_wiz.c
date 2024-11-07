@@ -72,15 +72,6 @@ typedef enum {
     /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND
 } EnWizFightState;
 
-typedef enum {
-    /* 0 */ EN_WIZ_ANIM_IDLE,
-    /* 1 */ EN_WIZ_ANIM_RUN,
-    /* 2 */ EN_WIZ_ANIM_DANCE,
-    /* 3 */ EN_WIZ_ANIM_WIND_UP,
-    /* 4 */ EN_WIZ_ANIM_ATTACK,
-    /* 5 */ EN_WIZ_ANIM_DAMAGE
-} EnWizAnimation;
-
 ActorProfile En_Wiz_Profile = {
     /**/ ACTOR_EN_WIZ,
     /**/ ACTORCAT_ENEMY,
@@ -381,7 +372,17 @@ void EnWiz_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-static AnimationHeader* sAnimations[] = {
+typedef enum EnWizAnimation {
+    /* 0 */ EN_WIZ_ANIM_IDLE,
+    /* 1 */ EN_WIZ_ANIM_RUN,
+    /* 2 */ EN_WIZ_ANIM_DANCE,
+    /* 3 */ EN_WIZ_ANIM_WIND_UP,
+    /* 4 */ EN_WIZ_ANIM_ATTACK,
+    /* 5 */ EN_WIZ_ANIM_DAMAGE,
+    /* 6 */ EN_WIZ_ANIM_MAX
+} EnWizAnimation;
+
+static AnimationHeader* sAnimations[EN_WIZ_ANIM_MAX] = {
     &gWizrobeIdleAnim,   // EN_WIZ_ANIM_IDLE
     &gWizrobeRunAnim,    // EN_WIZ_ANIM_RUN
     &gWizrobeDanceAnim,  // EN_WIZ_ANIM_DANCE
@@ -390,7 +391,7 @@ static AnimationHeader* sAnimations[] = {
     &gWizrobeDamageAnim, // EN_WIZ_ANIM_DAMAGE
 };
 
-static u8 sAnimationModes[] = {
+static u8 sAnimationModes[EN_WIZ_ANIM_MAX] = {
     ANIMMODE_LOOP, // EN_WIZ_ANIM_IDLE
     ANIMMODE_LOOP, // EN_WIZ_ANIM_RUN
     ANIMMODE_LOOP, // EN_WIZ_ANIM_DANCE
@@ -400,11 +401,11 @@ static u8 sAnimationModes[] = {
 };
 
 void EnWiz_ChangeAnim(EnWiz* this, s32 animIndex, s32 updateGhostAnim) {
-    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex],
-                     -2.0f);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->animEndFrame,
+                     sAnimationModes[animIndex], -2.0f);
     if (updateGhostAnim) {
-        Animation_Change(&this->ghostSkelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame,
+        Animation_Change(&this->ghostSkelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->animEndFrame,
                          sAnimationModes[animIndex], -2.0f);
     }
 }
@@ -820,7 +821,7 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (this->animLoopCounter < 10) {
             this->animLoopCounter++;
         }
@@ -935,7 +936,7 @@ void EnWiz_WindUp(EnWiz* this, PlayState* play) {
         }
     }
 
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->animLoopCounter++;
         if (this->animLoopCounter >= 2) {
             EnWiz_SetupAttack(this);
@@ -990,7 +991,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
             this->shouldStartTimer = true;
         }
 
-        if (this->endFrame <= curFrame) {
+        if (curFrame >= this->animEndFrame) {
             EnWiz_SetupDisappear(this);
         }
     }
