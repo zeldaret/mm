@@ -2738,7 +2738,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         Player_ReleaseLockOn(player);
     }
 
-    if ((actor == NULL) || (player->unk_738 < 5)) {
+    if ((actor == NULL) || (player->zTargetActiveTimer < 5)) {
         actor = NULL;
         if (actorCtx->attention.reticleSpinCounter != 0) {
             actorCtx->attention.reticleSpinCounter = 0;
