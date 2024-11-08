@@ -7,7 +7,7 @@
 #include "z_en_fg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnFg*)thisx)
 
@@ -348,7 +348,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    this->actor.flags |= ACTOR_FLAG_4000;
+    this->actor.flags |= ACTOR_FLAG_CAN_ATTACH_TO_ARROW;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = -1.6f;
     this->actionFunc = EnFg_Idle;
@@ -362,20 +362,12 @@ void EnFg_Destroy(Actor* thisx, PlayState* play) {
 
 void EnFg_Update(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
-    s32 flag;
-    s32 flagSet;
 
-    flag = this->actor.flags;
-    flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_2000);
-    if (1) {}
-    if (!flagSet) {
-        flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_8000);
-        if (1) {}
-        if (!flagSet) {
-            this->actionFunc(this, play);
-            Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
-                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-        }
+    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) == 0) &&
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTACHED_TO_ARROW) == 0)) {
+        this->actionFunc(this, play);
+        Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     EnFg_UpdateSkelAnime(this, play);

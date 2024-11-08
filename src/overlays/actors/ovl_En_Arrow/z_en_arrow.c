@@ -181,7 +181,7 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyQuad(play, &this->collider);
 
     if ((this->unk_264 != NULL) && (this->unk_264->update != NULL)) {
-        this->unk_264->flags &= ~ACTOR_FLAG_8000;
+        this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
     }
 
     if (ARROW_IS_MAGICAL(this->actor.params) && (this->actor.child == NULL)) {
@@ -439,11 +439,11 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 sp7C = this->collider.base.at;
 
                 if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
-                    (sp7C->flags & ACTOR_FLAG_4000)) {
+                    (sp7C->flags & ACTOR_FLAG_CAN_ATTACH_TO_ARROW)) {
                     this->unk_264 = sp7C;
                     func_8088A894(this, play);
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
-                    sp7C->flags |= ACTOR_FLAG_8000;
+                    sp7C->flags |= ACTOR_FLAG_ATTACHED_TO_ARROW;
                     this->collider.base.atFlags &= ~AT_HIT;
                     this->actor.speed *= 0.5f;
                     this->actor.velocity.y *= 0.5f;
@@ -542,14 +542,14 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
 
                 Math_Vec3f_Diff(&this->unk_264->world.pos, &this->actor.world.pos, &this->unk_268);
-                this->unk_264->flags &= ~ACTOR_FLAG_8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
                 this->unk_264 = NULL;
             } else {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &this->unk_264->world.pos);
             }
 
             if ((this->unk_262 != 0) && (this->unk_264 != NULL)) {
-                this->unk_264->flags &= ~ACTOR_FLAG_8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
                 this->unk_264 = NULL;
             }
         } else {

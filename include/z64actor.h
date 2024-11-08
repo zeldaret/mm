@@ -504,10 +504,12 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
-// 
-#define ACTOR_FLAG_4000          (1 << 14)
-//! Carried by arrow
-#define ACTOR_FLAG_8000          (1 << 15)
+
+// When hit by an arrow, the actor will be able to attach to the arrow and fly with it in the air
+#define ACTOR_FLAG_CAN_ATTACH_TO_ARROW (1 << 14)
+
+// Actor is currently attached to an arrow and flying with it in the air
+#define ACTOR_FLAG_ATTACHED_TO_ARROW (1 << 15)
 
 // Player automatically accepts a Talk Offer without needing to press the A button.
 // Player still has to meet all conditions to be able to receive a talk offer (for example, being in range).
