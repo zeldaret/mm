@@ -1315,8 +1315,8 @@ wordReplace = {
     "play->unk_1887F": "play->transitionType",
     "play->playerActorCsIds": "play->playerCsIds",
     "play->envFlags": "play->cutsceneFlags",
-    "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
-    "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
+    "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.type",
+    "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.environmentType",
     "play->roomCtx.unk31": "play->roomCtx.status",
     "play->objectCtx.status": "play->objectCtx.slots",
 

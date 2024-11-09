@@ -311,31 +311,30 @@ typedef union {
     RoomShapeCullable cullable;
 } RoomShape; // "Ground Shape"
 
-// TODO: Check which ones don't exist
-typedef enum {
-    /* 0 */ ROOM_BEHAVIOR_TYPE1_0,
-    /* 1 */ ROOM_BEHAVIOR_TYPE1_1,
-    /* 2 */ ROOM_BEHAVIOR_TYPE1_2,
-    /* 3 */ ROOM_BEHAVIOR_TYPE1_3, // unused
-    /* 4 */ ROOM_BEHAVIOR_TYPE1_4,
-    /* 5 */ ROOM_BEHAVIOR_TYPE1_5
-} RoomBehaviorType1;
+typedef enum RoomType {
+    /* 0 */ ROOM_TYPE_NORMAL,
+    /* 1 */ ROOM_TYPE_DUNGEON,
+    /* 2 */ ROOM_TYPE_INDOORS,
+    /* 3 */ ROOM_TYPE_3,
+    /* 4 */ ROOM_TYPE_4,
+    /* 5 */ ROOM_TYPE_BOSS
+} RoomType;
 
-typedef enum {
-    /* 0 */ ROOM_BEHAVIOR_TYPE2_0,
-    /* 1 */ ROOM_BEHAVIOR_TYPE2_1,
-    /* 2 */ ROOM_BEHAVIOR_TYPE2_2,
-    /* 3 */ ROOM_BEHAVIOR_TYPE2_HOT,
-    /* 4 */ ROOM_BEHAVIOR_TYPE2_4,
-    /* 5 */ ROOM_BEHAVIOR_TYPE2_5,
-    /* 6 */ ROOM_BEHAVIOR_TYPE2_6
-} RoomBehaviorType2;
+typedef enum RoomEnvironmentType {
+    /* 0 */ ROOM_ENV_DEFAULT,
+    /* 1 */ ROOM_ENV_COLD,
+    /* 2 */ ROOM_ENV_WARM, // Unused.
+    /* 3 */ ROOM_ENV_HOT, // Unused.
+    /* 4 */ ROOM_ENV_UNK_STRETCH_1,
+    /* 5 */ ROOM_ENV_UNK_STRETCH_2, // Unused.
+    /* 6 */ ROOM_ENV_UNK_STRETCH_3
+} RoomEnvironmentType;
 
 typedef struct {
     /* 0x00 */ s8 num; // -1 is invalid room
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 behaviorType2;
-    /* 0x03 */ u8 behaviorType1;
+    /* 0x02 */ u8 environmentType;
+    /* 0x03 */ u8 type;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
@@ -802,12 +801,12 @@ typedef enum {
 #define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
     { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
-#define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
-                                kankyoContextUnkE2)                                                         \
+#define SCENE_CMD_ROOM_BEHAVIOR(type, environment, lensMode, msgCtxunk12044, enablePosLights,  \
+                                stormState)                                                         \
     {                                                                                                       \
-        SCENE_CMD_ID_ROOM_BEHAVIOR, curRoomUnk3,                                                           \
-            curRoomUnk2 | _SHIFTL(curRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
-                _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, type,                                                           \
+            environment | _SHIFTL(lensMode, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+                _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(stormState, 12, 1)                        \
     }
 
 #define SCENE_CMD_UNK_09() \

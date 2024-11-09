@@ -251,8 +251,8 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_CommandRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.curRoom.behaviorType1 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.curRoom.behaviorType2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    play->roomCtx.curRoom.type = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.environmentType = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.curRoom.lensMode = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
     play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
