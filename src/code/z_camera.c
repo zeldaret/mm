@@ -452,10 +452,10 @@ s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
         // Charging Sword
-        ret = !!(((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK);
+        ret = (((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) != 0;
         if (!ret) {
             // Deku Flower Dive
-            ret = !!(((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100);
+            ret = (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100) != 0;
         }
         return ret;
     } else {
