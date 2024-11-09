@@ -140,20 +140,20 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
 void EnBoom_Destroy(Actor* thisx, PlayState* play) {
     EnBoom* this = THIS;
     Player* player = GET_PLAYER(play);
-    Actor* temp;
+    Actor* otherZoraBoomerangActor;
 
     if (player != NULL) {
         Effect_Destroy(play, this->effectIndex);
         Collider_DestroyQuad(play, &this->collider);
 
-        temp = this->actor.child;
-        if (temp != NULL) {
-            temp->parent = NULL;
-            player->zoraBoomerangActor = temp;
+        otherZoraBoomerangActor = this->actor.child;
+        if (otherZoraBoomerangActor != NULL) {
+            otherZoraBoomerangActor->parent = NULL;
+            player->zoraBoomerangActor = otherZoraBoomerangActor;
         } else {
-            temp = this->actor.parent;
-            if (temp != NULL) {
-                temp->child = NULL;
+            otherZoraBoomerangActor = this->actor.parent;
+            if (otherZoraBoomerangActor != NULL) {
+                otherZoraBoomerangActor->child = NULL;
             } else {
                 player->zoraBoomerangActor = NULL;
                 player->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;

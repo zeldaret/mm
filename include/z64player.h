@@ -1047,7 +1047,7 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_200000     (1 << 21)
 // 
 #define PLAYER_STATE3_400000     (1 << 22)
-// Signals that a zora boomerang has been caught on this frame
+// A Zora boomerang has been caught this frame
 #define PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT (1 << 23)
 // 
 #define PLAYER_STATE3_1000000    (1 << 24)
