@@ -8073,8 +8073,7 @@ s32 Player_ActionHandler_Talk(Player* this, PlayState* play) {
             //
             // This handles an edge case where a conversation is started on the same frame that a mask was taken on or
             // off. Because Player updates early before most actors, the text ID being offered comes from the previous
-            // frame. If a mask was taken on or off the same frame this function runs, the wrong text will be used. This
-            // is especially important to prevent unwanted behavior with regards to mask trading.
+            // frame. If a mask was taken on or off the same frame this function runs, the wrong text will be used.
             this->currentMask = sSavedCurrentMask;
             gSaveContext.save.equippedMask = this->currentMask;
 
