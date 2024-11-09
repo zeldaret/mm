@@ -2030,7 +2030,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         this->stateFlags |= ENAN_STATE_TALKING;
 
         if (this->prevTextId != textId) {

@@ -973,7 +973,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
             default:
                 tatlHoverActor = play->actorCtx.attention.tatlHoverActor;
-                if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
+                if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
                     Math_Vec3f_Copy(&nextPos, &play->actorCtx.attention.tatlHoverPos);
@@ -1153,7 +1153,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
                         if (this->unk_25C != 0) {
                             this->unk_25C--;
                             sp34 = 0;
-                        } else if (!(player->stateFlags1 & PLAYER_STATE1_40)) {
+                        } else if (!(player->stateFlags1 & PLAYER_STATE1_TALKING)) {
                             if (this->unk_269 == 0) {
                                 Actor_PlaySfx(&this->actor, NA_SE_EV_NAVY_VANISH);
                             }
@@ -1216,7 +1216,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
                     if (this->unk_269 == 0) {
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
                     }
-                } else if (player->stateFlags1 & PLAYER_STATE1_40) {
+                } else if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
                     player->stateFlags2 |= PLAYER_STATE2_100000;
                     sp34 = 0;
                     this->unk_25C = 0;

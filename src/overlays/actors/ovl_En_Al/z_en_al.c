@@ -892,7 +892,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     Actor* sp1C = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
     Actor* temp_v0 = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         this->unk_4C2 |= 0x400;
         if (this->unk_4C4 != sp22) {
             switch (sp22) {

@@ -8094,7 +8094,7 @@ s32 Camera_GetNegOne(void) {
     return sCameraNegOne;
 }
 
-s16 func_800E0238(Camera* camera) {
+s16 Camera_SetFinishedFlag(Camera* camera) {
     Camera_SetStateFlag(camera, CAM_STATE_3);
     if ((camera->camId == CAM_ID_MAIN) && (camera->play->activeCamId != CAM_ID_MAIN)) {
         Camera_SetStateFlag(GET_ACTIVE_CAM(camera->play), CAM_STATE_3);
