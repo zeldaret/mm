@@ -1143,7 +1143,7 @@
     0x800CBAD4:("Camera_GetFocalActorPos",),
     0x800CBB58:("Camera_IsUnderwaterAsZora",),
     0x800CBB88:("func_800CBB88",),
-    0x800CBC00:("Camera_IsUsingZoraFins",),
+    0x800CBC00:("func_800CBC00",),
     0x800CBC30:("func_800CBC30",),
     0x800CBC84:("func_800CBC84",),
     0x800CBFA4:("func_800CBFA4",),

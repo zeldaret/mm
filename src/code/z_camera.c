@@ -425,7 +425,6 @@ s32 func_800CB950(Camera* camera) {
 
             player = (Player*)camera->focalActor;
             if (!ret) {
-                // Using zora fins
                 ret = player->stateFlags1 & PLAYER_STATE1_200000;
                 ret = !!ret;
             }
@@ -527,7 +526,7 @@ s32 func_800CBB88(Camera* camera) {
     return 0;
 }
 
-s32 Camera_IsUsingZoraFins(Camera* camera) {
+s32 func_800CBC00(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
@@ -3898,7 +3897,7 @@ s32 Camera_Battle0(Camera* camera) {
 }
 
 /**
- * Used for following a secondary target such as zora fins or a z-target
+ * Used for following a secondary target such as zora boomerangs or a z-target
  */
 s32 Camera_KeepOn1(Camera* camera) {
     Vec3f* eye = &camera->eye;
@@ -7450,7 +7449,7 @@ Vec3s Camera_Update(Camera* camera) {
 
                 bgCamIndex = Camera_GetBgCamIndex(camera, &bgId, sp90);
                 if ((bgCamIndex != -1) && (camera->bgId == BGCHECK_SCENE)) {
-                    if (!Camera_IsUsingZoraFins(camera)) {
+                    if (!func_800CBC00(camera)) {
                         camera->nextCamSceneDataId = bgCamIndex | CAM_DATA_IS_BG;
                     }
                 }
