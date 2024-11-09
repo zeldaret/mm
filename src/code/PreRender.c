@@ -18,7 +18,7 @@
 #include "gfxalloc.h"
 #include "slowly.h"
 #include "stack.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "sys_ucode.h"
 
 /**

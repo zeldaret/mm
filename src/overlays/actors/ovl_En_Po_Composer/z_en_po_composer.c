@@ -176,7 +176,7 @@ static Color_RGBA8 sSharpClothingColor2 = { 90, 85, 50, 255 };
 static Color_RGBA8 sFlatClothingColor2 = { 100, 90, 100, 255 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 3200, ICHAIN_STOP),
 };
 
 static s32 sPlayerIsPlayingOcarina = false;
@@ -718,7 +718,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(&gfx[1], this->envColor.r, this->envColor.g, this->envColor.b, this->lightColor.a);
 
         Matrix_Put(&this->lanternMtxF);
-        gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[2], play->state.gfxCtx);
 
         gSPDisplayList(&gfx[3], gPoeComposerLanternBaseDL);
         gSPDisplayList(&gfx[4], gPoeComposerLanternGlassDL);

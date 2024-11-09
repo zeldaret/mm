@@ -8,8 +8,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS                                                                                      \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -143,7 +144,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 6000, ICHAIN_STOP),
 };
 
 // clang-format off
@@ -198,7 +199,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_SpawnMegClones(this, play);
             EnPoSisters_SetupSpawnPo(this);
         } else {
-            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
+            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW);
             this->collider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
             this->collider.elem.acDmgInfo.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
@@ -529,7 +530,7 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
 }
 
 void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_8000)) {
+    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW)) {
         if (this->actor.colChkInfo.health != 0) {
             if (this->type != POE_SISTERS_TYPE_MEG) {
                 EnPoSisters_SetupFlee(this);
@@ -1016,7 +1017,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
         }
 
         if (this->actionFunc == EnPoSisters_SpinAttack) {
-            this->actor.flags |= ACTOR_FLAG_1000000;
+            this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         }
 
@@ -1155,7 +1156,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
     if ((this->actionFunc == EnPoSisters_DeathStage1) && (this->deathTimer >= 8) &&
         (limbIndex == POE_SISTERS_LIMB_MAIN_BODY)) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, gPoeSistersBurnBodyDL);
     }
 
@@ -1225,7 +1226,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
     if (!(this->poSisterFlags & POE_SISTERS_FLAG_DRAW_TORCH)) {
         Matrix_Put(&this->mtxf);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gPoeSistersTorchDL);
     }
 
@@ -1259,7 +1260,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         }
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 

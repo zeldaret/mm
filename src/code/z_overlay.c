@@ -6,7 +6,7 @@
 
 #include "z64transition.h"
 
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 #include "z64lib.h"
 #include "zelda_arena.h"
 

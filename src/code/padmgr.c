@@ -34,6 +34,7 @@
 #include "padmgr.h"
 
 #include "libc64/sprintf.h"
+#include "libu64/padsetup.h"
 #include "PR/os_motor.h"
 
 #include "controller.h"

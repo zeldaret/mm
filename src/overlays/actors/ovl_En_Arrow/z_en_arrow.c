@@ -181,7 +181,7 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyQuad(play, &this->collider);
 
     if ((this->unk_264 != NULL) && (this->unk_264->update != NULL)) {
-        this->unk_264->flags &= ~ACTOR_FLAG_8000;
+        this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
     }
 
     if (ARROW_IS_MAGICAL(this->actor.params) && (this->actor.child == NULL)) {
@@ -439,11 +439,11 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 sp7C = this->collider.base.at;
 
                 if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
-                    (sp7C->flags & ACTOR_FLAG_4000)) {
+                    (sp7C->flags & ACTOR_FLAG_CAN_ATTACH_TO_ARROW)) {
                     this->unk_264 = sp7C;
                     func_8088A894(this, play);
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
-                    sp7C->flags |= ACTOR_FLAG_8000;
+                    sp7C->flags |= ACTOR_FLAG_ATTACHED_TO_ARROW;
                     this->collider.base.atFlags &= ~AT_HIT;
                     this->actor.speed *= 0.5f;
                     this->actor.velocity.y *= 0.5f;
@@ -542,14 +542,14 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
 
                 Math_Vec3f_Diff(&this->unk_264->world.pos, &this->actor.world.pos, &this->unk_268);
-                this->unk_264->flags &= ~ACTOR_FLAG_8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
                 this->unk_264 = NULL;
             } else {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &this->unk_264->world.pos);
             }
 
             if ((this->unk_262 != 0) && (this->unk_264 != NULL)) {
-                this->unk_264->flags &= ~ACTOR_FLAG_8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_ATTACHED_TO_ARROW;
                 this->unk_264 = NULL;
             }
         } else {
@@ -726,7 +726,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_ReplaceRotation(&gIdentityMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F9F0);
         } else {
@@ -736,7 +736,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,
                               COMBINED, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x7F, 230, 225, 150, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06FAE0);
         }
 
@@ -775,7 +775,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(phi_v0, MTXMODE_APPLY);
         Matrix_Scale(sp5C, sp5C, sp5C, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
 
         Matrix_Pop();
@@ -788,7 +788,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);
 
         CLOSE_DISPS(play->state.gfxCtx);

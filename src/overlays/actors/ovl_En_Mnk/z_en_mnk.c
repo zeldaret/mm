@@ -769,7 +769,7 @@ void func_80AB64B8(EnMnk* this, PlayState* play) {
     }
 
     if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
-        this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_80AB63CC;
         EnMnk_Monkey_ChangeAnim(this, 9, ANIMMODE_ONCE, -5.0f);
         this->picto.actor.velocity.y = 3.6f;
@@ -778,10 +778,10 @@ void func_80AB64B8(EnMnk* this, PlayState* play) {
         this->flags &= ~MONKEY_FLAGS_1;
         this->flags &= ~MONKEY_FLAGS_4;
     } else if (this->picto.actor.xzDistToPlayer < 100.0f) {
-        this->picto.actor.flags |= ACTOR_FLAG_10000;
+        this->picto.actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     } else {
-        this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 }
 
@@ -1518,7 +1518,7 @@ void EnMnk_MonkeyTiedUp_TalkAfterCutRope(EnMnk* this, PlayState* play) {
 
     if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TransitionAfterTalk;
-        this->picto.actor.flags &= ~ACTOR_FLAG_10000;
+        this->picto.actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else {
         Actor_OfferTalk(&this->picto.actor, play, 150.0f);
     }
@@ -1541,7 +1541,7 @@ void EnMnk_MonkeyTiedUp_WaitForCutRope(EnMnk* this, PlayState* play) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TalkAfterCutRope;
         this->picto.actor.textId = 0x8D2;
         EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_SHAKEHEAD);
-        this->picto.actor.flags |= ACTOR_FLAG_10000;
+        this->picto.actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
         if ((gSaveContext.save.playerForm != PLAYER_FORM_FIERCE_DEITY) &&
             (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
@@ -2146,8 +2146,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
 
                 Matrix_Push();
                 Matrix_RotateZS(this->cueId, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
                 Matrix_Pop();
 
@@ -2160,8 +2159,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(this->approachPlayerRadius + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
 
                 CLOSE_DISPS(play->state.gfxCtx);
@@ -2173,8 +2171,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(1.0f, 1.0f / (this->approachPlayerRadius + 1.0f), 1.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, *dList);
 
                 CLOSE_DISPS(play->state.gfxCtx);

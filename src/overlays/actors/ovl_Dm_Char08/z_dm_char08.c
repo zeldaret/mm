@@ -148,7 +148,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
 
     thisx->attentionRangeType = ATTENTION_RANGE_5;
     this->eyeMode = TURTLE_EYEMODE_CLOSED;
-    thisx->targetArrowOffset = 120.0f;
+    thisx->lockOnArrowOffset = 120.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTurtleSkel, NULL, NULL, NULL, 0);
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -1018,7 +1018,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     DmChar08* this = THIS;
 
     this->dyna.actor.focus.pos.x = this->focusPos.x;
-    this->dyna.actor.focus.pos.y = this->focusPos.y + this->dyna.actor.targetArrowOffset;
+    this->dyna.actor.focus.pos.y = this->focusPos.y + this->dyna.actor.lockOnArrowOffset;
     this->dyna.actor.focus.pos.z = this->focusPos.z;
     this->dyna.actor.focus.rot.x = this->dyna.actor.world.rot.x;
     this->dyna.actor.focus.rot.y = this->dyna.actor.world.rot.y;
@@ -1165,13 +1165,13 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     }
     if (this->unk_1FF == 0) {
         Scene_SetRenderModeXlu(play, 0, 1);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gTurtleAsleepDL);
     } else if (this->unk_1FF == 1) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
 

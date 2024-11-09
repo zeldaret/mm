@@ -1,4 +1,4 @@
-#include "gfxprint.h"
+#include "libu64/gfxprint.h"
 #include "attributes.h"
 
 #define GFXP_FLAG_HIRAGANA (1 << 0)

@@ -71,7 +71,7 @@ typedef enum PlayerIdleType {
  */
 
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into seperate values (see known usages above)
+    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into separate values (see known usages above)
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
@@ -882,8 +882,9 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_20         (1 << 5)
 // 
 #define PLAYER_STATE1_40         (1 << 6)
-// 
-#define PLAYER_STATE1_80         (1 << 7)
+// Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
+// This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
+#define PLAYER_STATE1_DEAD         (1 << 7)
 // 
 #define PLAYER_STATE1_100        (1 << 8)
 // 
@@ -898,12 +899,12 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_2000       (1 << 13)
 // 
 #define PLAYER_STATE1_4000       (1 << 14)
-// 
-#define PLAYER_STATE1_8000       (1 << 15)
+// Either lock-on or parallel is active. This flag is never checked for and is practically unused.
+#define PLAYER_STATE1_Z_TARGETING       (1 << 15)
 // Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
-// 
-#define PLAYER_STATE1_20000      (1 << 17)
+// "Parallel" mode, Z-Target without an actor lock-on
+#define PLAYER_STATE1_PARALLEL   (1 << 17)
 // 
 #define PLAYER_STATE1_40000      (1 << 18)
 // 
@@ -928,8 +929,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10000000   (1 << 28)
 // Time is stopped but Link & NPC animations continue
 #define PLAYER_STATE1_20000000   (1 << 29)
-// 
-#define PLAYER_STATE1_40000000   (1 << 30)
+// Lock-on was released automatically, for example by leaving the lock-on leash range
+#define PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE   (1 << 30)
 // Related to exit a grotto
 #define PLAYER_STATE1_80000000   (1 << 31)
 
@@ -1201,7 +1202,7 @@ typedef struct Player {
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
     /* 0x734 */ char unk_734[4];
-    /* 0x738 */ s32 unk_738;
+    /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
@@ -1240,7 +1241,7 @@ typedef struct Player {
     /* 0xAC8 */ f32 skelAnimeUpperBlendWeight;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
-    /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
+    /* 0xACF */ u8 putAwayCooldownTimer; // Frames to wait before showing "Put Away" on A
     /* 0xAD0 */ f32 speedXZ; // Controls horizontal speed, used for `actor.speed`. Current or target value depending on context.
     /* 0xAD4 */ s16 yaw; // General yaw value, used both for world and shape rotation. Current or target value depending on context.
     /* 0xAD6 */ s16 parallelYaw; // yaw in "parallel" mode, Z-Target without an actor lock-on
@@ -1280,7 +1281,7 @@ typedef struct Player {
     /* 0xB44 */ f32 unk_B44;
     /* 0xB48 */ f32 unk_B48;
     /* 0xB4C */ s16 unk_B4C;
-    /* 0xB4E */ s16 unk_B4E;
+    /* 0xB4E */ s16 turnRate; // Amount angle is changed every frame when turning in place
     /* 0xB50 */ f32 unk_B50;
     /* 0xB54 */ f32 yDistToLedge; // y distance to ground above an interact wall. LEDGE_DIST_MAX if no ground if found
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall
@@ -1389,7 +1390,7 @@ void func_80123140(struct PlayState* play, Player* player);
 bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
 bool Player_InCsMode(struct PlayState* play);
 bool Player_CheckHostileLockOn(Player* player);
-bool func_80123434(Player* player);
+bool Player_FriendlyLockOnOrParallel(Player* player);
 bool func_80123448(struct PlayState* play);
 bool Player_IsGoronOrDeku(Player* player);
 bool func_801234D4(struct PlayState* play);

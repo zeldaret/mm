@@ -7,7 +7,7 @@
 #include "z_en_horse_game_check.h"
 #include "z64horse.h"
 #include "assets/objects/object_horse_game_check/object_horse_game_check.h"
-#include "debug.h"
+#include "libu64/debug.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -99,7 +99,7 @@ s32 func_808F8C5C(EnHorseGameCheck* this, PlayState* play) {
 }
 
 s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play) {
-    if (Matrix_NewMtx(play->state.gfxCtx) == NULL) {
+    if (Matrix_Finalize(play->state.gfxCtx) == NULL) {
         return true;
     } else {
         Gfx_DrawDListXlu(play, object_horse_game_check_DL_003030);

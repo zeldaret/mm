@@ -4,7 +4,7 @@
 #include "PR/ultratypes.h"
 #include "stdbool.h"
 #include "color.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 #include "z64actor_dlftbls.h"
 #include "z64math.h"
 #include "z64animation.h"
@@ -109,7 +109,7 @@ typedef struct Actor {
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
-    /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
+    /* 0x054 */ f32 lockOnArrowOffset; // Height offset of the lock-on arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
     /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
@@ -166,8 +166,8 @@ typedef enum {
 #define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
 #define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
-#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
-#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
+#define DYNA_INTERACT_ACTOR_SWITCH_PRESSED (1 << 3) // An actor that is capable of pressing switches is on top of the dynapoly actor
+#define DYNA_INTERACT_ACTOR_HEAVY_SWITCH_PRESSED (1 << 4) // An actor that is capable of pressing heavy switches is on top of the dynapoly actor
 
 typedef struct DynaPolyActor {
     /* 0x000 */ Actor actor;
@@ -280,6 +280,21 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
+/**
+ * Attention System
+ *
+ * The Attention System's responsibility is to bring specific actors to the player's attention.
+ * This includes:
+ *     - Making Tatl fly over to certain actors of interest (can be lock-on actors, but may also not be)
+ *     - Displaying an arrow over an actor that can be locked onto
+ *     - Displaying a reticle over the current lock-on actor
+ *     - Playing enemy background music if a hostile actor is nearby
+ *     - Drift the camera towards an actor (unused)
+ *
+ * This system does not handle the actual lock-on implementation.
+ * That is the responsibility of Player via `player->focusActor` and the camera.
+ */
+
 // A set of 4 triangles which appear as a ring around an actor when locked-on
 typedef struct LockOnReticle {
     /* 0x00 */ Vec3f pos;
@@ -288,22 +303,22 @@ typedef struct LockOnReticle {
 } LockOnReticle; // size = 0x14
 
 typedef struct Attention {
-    /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
+    /* 0x00 */ Vec3f tatlHoverPos;  // Tatl's current hover position
     /* 0x0C */ Vec3f reticlePos; // Main reticle pos which each `LockOnReticle` instance can reference
-    /* 0x18 */ Color_RGBAf fairyInnerColor;
-    /* 0x28 */ Color_RGBAf fairyOuterColor;
-    /* 0x38 */ Actor* fairyActor;
+    /* 0x18 */ Color_RGBAf tatlInnerColor; // Tatl inner color, based on actor category
+    /* 0x28 */ Color_RGBAf tatlOuterColor; // Tatl outer color, based on actor category
+    /* 0x38 */ Actor* tatlHoverActor; // The actor that Tatl hovers over
     /* 0x3C */ Actor* reticleActor; // Actor to draw a reticle over
-    /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
+    /* 0x40 */ f32 tatlMoveProgressFactor; // Controls Tatl so she can smootly transition to an actor
     /* 0x44 */ f32 reticleRadius; // Main reticle radius value which each `LockOnReticle` instance can reference
     /* 0x48 */ s16 reticleFadeAlphaControl; // Set and fade the reticle alpha; Non-zero values control if it should draw
-    /* 0x4A */ u8 fairyActorCategory;
+    /* 0x4A */ u8 tatlHoverActorCategory; // Category of the actor Tatl is currently hovering over
     /* 0x4B */ u8 reticleSpinCounter; // Counts up when a reticle is active, used for the spinning animation
     /* 0x4C */ s8 curReticle; // Indexes lockOnReticles[]
     /* 0x50 */ LockOnReticle lockOnReticles[3]; // Multiple reticles are used for a motion-blur effect
-    /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
-    /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* arrowPointedActor;
+    /* 0x8C */ Actor* forcedLockOnActor; // Forces lock-on to this actor when set (never used in practice)
+    /* 0x90 */ Actor* bgmEnemy; // The nearest actor which can trigger enemy background music
+    /* 0x94 */ Actor* arrowHoverActor; // Actor to draw an arrow over
 } Attention; // size = 0x98
 
 // It is difficult to give each type a name because it is numerically based
@@ -325,8 +340,8 @@ typedef enum AttentionRangeType {
 } AttentionRangeType;
 
 typedef struct AttentionRangeParams {
-    /* 0x0 */ f32 rangeSq;
-    /* 0x4 */ f32 leashScale;
+    /* 0x0 */ f32 attentionRangeSq;
+    /* 0x4 */ f32 lockOnLeashScale;
 } AttentionRangeParams; // size = 0x8
 
 typedef struct {
@@ -448,9 +463,10 @@ typedef enum DoorLockType {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Actor is discoverable by the Attention System. This enables Navi to hover over the actor when it is in range.
+// Actor is discoverable by the Attention System. This enables Tatl to hover over the actor when it is in range.
 // The actor can also be locked onto (as long as `ACTOR_FLAG_LOCK_ON_DISABLED` is not set).
 #define ACTOR_FLAG_ATTENTION_ENABLED    (1 << 0)
+
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)
 
@@ -469,8 +485,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
+
 // hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
+
 // Signals that player has accepted an offer to talk to an actor
 // Player will retain this flag until the player is finished talking
 // Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
@@ -481,39 +499,58 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
+
 // Actor will not shake when a quake occurs
 #define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
-// 
-#define ACTOR_FLAG_4000          (1 << 14)
-//! Carried by arrow
-#define ACTOR_FLAG_8000          (1 << 15)
-// 
-#define ACTOR_FLAG_10000         (1 << 16)
-// actor can press and hold down heavy switches
-#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
-// 
-#define ACTOR_FLAG_40000         (1 << 18)
-// 
-#define ACTOR_FLAG_80000         (1 << 19)
+
+// When hit by an arrow, the actor will be able to attach to the arrow and fly with it in the air
+#define ACTOR_FLAG_CAN_ATTACH_TO_ARROW (1 << 14)
+
+// Actor is currently attached to an arrow and flying with it in the air
+#define ACTOR_FLAG_ATTACHED_TO_ARROW (1 << 15)
+
+// Player automatically accepts a Talk Offer without needing to press the A button.
+// Player still has to meet all conditions to be able to receive a talk offer (for example, being in range).
+#define ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED (1 << 16)
+
+// Actor can press and hold down heavy switches.
+// See usages of `DynaPolyActor_SetHeavySwitchPressed` and `DynaPolyActor_IsHeavySwitchPressed` for more context on how switches work.
+#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES  (1 << 17)
+
+// When locked onto an actor with this flag set, the C-Up button can be used to talk to this actor.
+// A C-Up button labeled "Tatl" will appear on the HUD when locked on which indicates the actor can be checked with Tatl.
+// With this flag Player talks directly to the actor with C-Up. It is expected that the resulting dialog should appear
+// to be coming from Tatl, even though she is not involved at all with this interaction.
+#define ACTOR_FLAG_TALK_WITH_C_UP (1 << 18)
+
+// Allows for the attention system to refind the focus actor in the search for the next attention actor.
+// Also allows for the next lock-on actor to be the focus actor again.
+// When chosen as the next lock-on actor, this flag is unset.
+#define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
 // 
 #define ACTOR_FLAG_100000        (1 << 20)
 // 
 #define ACTOR_FLAG_200000        (1 << 21)
 // 
 #define ACTOR_FLAG_400000        (1 << 22)
+
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
 // Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
 #define ACTOR_FLAG_THROW_ONLY    (1 << 23)
-// 
-#define ACTOR_FLAG_1000000       (1 << 24)
+
+// When colliding with Player's body AC collider, a "thump" sound will play indicating his body has been hit
+#define ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT       (1 << 24)
+
 // Actor can update even if Player is currently using the ocarina.
 // Typically an actor will halt while the ocarina is active (depending on category).
 // This flag allows a given actor to be an exception.
 #define ACTOR_FLAG_UPDATE_DURING_OCARINA       (1 << 25)
-// actor can press and hold down switches
-#define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
+
+// Actor can press and hold down switches.
+// See usages of `DynaPolyActor_SetSwitchPressed` and `DynaPolyActor_IsSwitchPressed` for more context on how switches work.
+#define ACTOR_FLAG_CAN_PRESS_SWITCHES (1 << 26)
 
 // Player is not able to lock onto the actor.
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
@@ -522,8 +559,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_10000000      (1 << 28)
 // 
 #define ACTOR_FLAG_20000000      (1 << 29)
-// 
-#define ACTOR_FLAG_40000000      (1 << 30)
+
+// Camera will slowly drift to the actor while approaching it.
+// Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
+#define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
 // 
 #define ACTOR_FLAG_80000000      (1 << 31)
 
@@ -688,7 +727,7 @@ extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
 
-extern Actor* D_801ED920;
+extern Actor* gCameraDriftActor;
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
 void ActorShadow_DrawCircle(Actor* actor, struct Lights* lights, struct PlayState* play);
@@ -777,7 +816,7 @@ PosRot Actor_GetFocus(Actor* actor);
 PosRot Actor_GetWorld(Actor* actor);
 PosRot Actor_GetWorldPosShapeRot(Actor* actor);
 
-s32 Attention_OutsideLeashRange(Actor* actor, struct Player* player, s32 ignoreLeash);
+s32 Attention_ShouldReleaseLockOn(Actor* actor, struct Player* player, s32 ignoreLeash);
 s32 Actor_TalkOfferAccepted(Actor* actor, struct GameState* gameState);
 s32 Actor_OfferTalk(Actor* actor, struct PlayState* play, f32 radius);
 s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
@@ -891,8 +930,8 @@ void DynaPolyActor_SetPlayerOnTop(DynaPolyActor* dynaActor);
 void DynaPoly_SetPlayerOnTop(struct CollisionContext* colCtx, s32 bgId);
 void DynaPolyActor_SetPlayerAbove(DynaPolyActor* dynaActor);
 void DynaPoly_SetPlayerAbove(struct CollisionContext* colCtx, s32 bgId);
-void DynaPolyActor_SetActorOnSwitch(DynaPolyActor* dynaActor);
-void DynaPolyActor_SetActorOnHeavySwitch(DynaPolyActor* dynaActor);
+void DynaPolyActor_SetSwitchPressed(DynaPolyActor* dynaActor);
+void DynaPolyActor_SetHeavySwitchPressed(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsActorOnTop(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsPlayerOnTop(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsPlayerAbove(DynaPolyActor* dynaActor);

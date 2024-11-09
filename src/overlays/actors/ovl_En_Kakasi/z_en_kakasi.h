@@ -44,6 +44,6 @@ typedef struct EnKakasi {
 
 #define KAKASI_GET_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 
 #define KAKASI_GET_ABOVE_GROUND(thisx) ((thisx)->params & 0x1) 
-#define KAKASI_GET_TARGETMODE(thisx) ((thisx)->world.rot.x - 1)
+#define KAKASI_GET_ATTENTION_RANGE_TYPE(thisx) ((thisx)->world.rot.x - 1)
 
 #endif // Z_EN_KAKASI_H

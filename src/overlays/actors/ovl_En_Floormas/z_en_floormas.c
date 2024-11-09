@@ -131,7 +131,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_FLOORMASTER, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 5500, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 5500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
@@ -1107,7 +1107,7 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
                                         UPDBGCHECKINFO_FLAG_10);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->actionFunc == func_808D1650) {
-                this->actor.flags |= ACTOR_FLAG_1000000;
+                this->actor.flags |= ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
             }
 
@@ -1202,7 +1202,7 @@ void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_RotateZF(M_PIf / 12, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
-        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD((*gfx)++, play->state.gfxCtx);
         gSPDisplayList((*gfx)++, gWallmasterLittleFingerDL);
 
         Matrix_Pop();

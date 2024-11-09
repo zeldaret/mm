@@ -4,10 +4,10 @@
 #include "PR/viint.h"
 
 #include "controller.h"
-#include "debug.h"
+#include "libu64/debug.h"
 #include "macros.h"
 #include "main.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 #include "regs.h"
 
 typedef struct {

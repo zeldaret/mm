@@ -571,12 +571,12 @@ void EnBaba_Idle(EnBaba* this, PlayState* play) {
         if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             EnBaba_HandleConversation(this, play);
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             }
             this->actionFunc = EnBaba_Talk;
         } else if (this->actor.xzDistToPlayer < 100.0f) {
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             }
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }

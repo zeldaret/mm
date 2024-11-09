@@ -6,7 +6,7 @@
 #include "fault.h"
 #include "attributes.h"
 #include "sys_cfb.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sActorFaultClient; // 2 funcs
@@ -14,21 +14,21 @@ FaultClient sActorFaultClient; // 2 funcs
 struct CollisionPoly* D_801ED8B0; // 1 func
 s32 D_801ED8B4;                   // 2 funcs
 
-struct Actor* sTargetableNearestActor;
-struct Actor* sTargetablePrioritizedActor;
-struct Actor* D_801ED8C0;
-struct Actor* D_801ED8C4;
+struct Actor* sNearestAttentionActor;
+struct Actor* sPrioritizedAttentionActor;
+struct Actor* sNearestCameraDriftActor;
+struct Actor* sPrioritizedCameraDriftActor;
 
-f32 sTargetableNearestActorDistSq;
+f32 sNearestAttentionActorDistSq;
 f32 sBgmEnemyDistSq;
-f32 D_801ED8D0;
-s32 sTargetablePrioritizedPriority;
-s32 D_801ED8D8;
-s16 sTargetPlayerRotY;
+f32 sNearestCameraDriftActorDistSq;
+s32 sHighestAttentionPriority;
+s32 sHighestCameraDriftPriority;
+s16 sAttentionPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
-struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
+struct Actor* gCameraDriftActor;
 
 #include "z64actor.h"
 
@@ -64,8 +64,8 @@ struct Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
-void Attention_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3,
-                              Player* player);
+void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
+                         Player* player);
 s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
@@ -134,7 +134,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, PlayState* play, Gfx* dList,
             shadowScale *= actor->shape.shadowScale;
             Matrix_Scale(actor->scale.x * shadowScale, 1.0f, actor->scale.z * shadowScale, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, dList);
 
             CLOSE_DISPS(play->state.gfxCtx);
@@ -188,7 +188,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
     Matrix_RotateYS(sp58, MTXMODE_APPLY);
     Matrix_Scale(shadowScaleX, 1.0f, shadowScaleX * shadowScaleZ, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gFootShadowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -428,21 +428,12 @@ void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos
     *invW = (*invW < 1.0f) ? 1.0f : (1.0f / *invW);
 }
 
-void Attention_SetReticlePos(Attention* attention, s32 reticleNum, f32 x, f32 y, f32 z) {
-    attention->lockOnReticles[reticleNum].pos.x = x;
-    attention->lockOnReticles[reticleNum].pos.y = y;
-    attention->lockOnReticles[reticleNum].pos.z = z;
+typedef struct AttentionColor {
+    /* 0x0 */ Color_RGBA8 primary;   // Used for Tatl's inner color, lock-on arrow, and lock-on reticle
+    /* 0x4 */ Color_RGBA8 secondary; // Used for Tatl's outer color
+} AttentionColor;                    // size = 0x8
 
-    attention->lockOnReticles[reticleNum].radius = attention->reticleRadius;
-}
-
-typedef struct {
-    /* 0x0 */ Color_RGBA8 inner;
-    /* 0x4 */ Color_RGBA8 outer;
-} TatlColor; // size = 0x8
-
-// For whatever reason it has an extra entry
-TatlColor sTatlColorList[] = {
+AttentionColor sAttentionColors[ACTORCAT_MAX + 1] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_SWITCH
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_BG
     { { 255, 255, 230, 255 }, { 220, 160, 80, 0 } },  // ACTORCAT_PLAYER
@@ -455,61 +446,72 @@ TatlColor sTatlColorList[] = {
     { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },     // ACTORCAT_BOSS
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_DOOR
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_CHEST
-    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_MAX
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // unused extra entry
 };
 
+void Attention_SetReticlePos(Attention* attention, s32 reticleNum, f32 x, f32 y, f32 z) {
+    attention->lockOnReticles[reticleNum].pos.x = x;
+    attention->lockOnReticles[reticleNum].pos.y = y;
+    attention->lockOnReticles[reticleNum].pos.z = z;
+
+    attention->lockOnReticles[reticleNum].radius = attention->reticleRadius;
+}
+
 void Attention_InitReticle(Attention* attention, ActorType actorCategory, PlayState* play) {
-    TatlColor* tatlColorEntry;
-    s32 i;
     LockOnReticle* reticle;
+    AttentionColor* attentionColor = &sAttentionColors[actorCategory];
+    s32 i;
 
     Math_Vec3f_Copy(&attention->reticlePos, &play->view.eye);
-    attention->reticleFadeAlphaControl = 256;
-    tatlColorEntry = &sTatlColorList[actorCategory];
-    attention->reticleRadius = 500.0f;
 
-    reticle = attention->lockOnReticles;
+    attention->reticleRadius = 500.0f; // radius starts wide to zoom in on the actor
+    attention->reticleFadeAlphaControl = 256;
+
+    reticle = &attention->lockOnReticles[0];
+
     for (i = 0; i < ARRAY_COUNT(attention->lockOnReticles); i++, reticle++) {
         Attention_SetReticlePos(attention, i, 0.0f, 0.0f, 0.0f);
 
-        reticle->color.r = tatlColorEntry->inner.r;
-        reticle->color.g = tatlColorEntry->inner.g;
-        reticle->color.b = tatlColorEntry->inner.b;
+        reticle->color.r = attentionColor->primary.r;
+        reticle->color.g = attentionColor->primary.g;
+        reticle->color.b = attentionColor->primary.b;
     }
 }
 
-void Attention_SetFairyState(Attention* attention, Actor* actor, ActorType type, PlayState* play) {
-    attention->fairyPos.x = actor->focus.pos.x;
-    attention->fairyPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
-    attention->fairyPos.z = actor->focus.pos.z;
+void Attention_SetTatlState(Attention* attention, Actor* actor, ActorType actorCategory, PlayState* play) {
+    AttentionColor* attentionColor = &sAttentionColors[actorCategory];
 
-    attention->fairyInnerColor.r = sTatlColorList[type].inner.r;
-    attention->fairyInnerColor.g = sTatlColorList[type].inner.g;
-    attention->fairyInnerColor.b = sTatlColorList[type].inner.b;
-    attention->fairyInnerColor.a = sTatlColorList[type].inner.a;
-    attention->fairyOuterColor.r = sTatlColorList[type].outer.r;
-    attention->fairyOuterColor.g = sTatlColorList[type].outer.g;
-    attention->fairyOuterColor.b = sTatlColorList[type].outer.b;
-    attention->fairyOuterColor.a = sTatlColorList[type].outer.a;
+    attention->tatlHoverPos.x = actor->focus.pos.x;
+    attention->tatlHoverPos.y = actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y);
+    attention->tatlHoverPos.z = actor->focus.pos.z;
+
+    attention->tatlInnerColor.r = attentionColor->primary.r;
+    attention->tatlInnerColor.g = attentionColor->primary.g;
+    attention->tatlInnerColor.b = attentionColor->primary.b;
+    attention->tatlInnerColor.a = attentionColor->primary.a;
+
+    attention->tatlOuterColor.r = attentionColor->secondary.r;
+    attention->tatlOuterColor.g = attentionColor->secondary.g;
+    attention->tatlOuterColor.b = attentionColor->secondary.b;
+    attention->tatlOuterColor.a = attentionColor->secondary.a;
 }
 
 void Attention_Init(Attention* attention, Actor* actor, PlayState* play) {
-    attention->bgmEnemy = NULL;
-    attention->forcedTargetActor = NULL;
-    attention->reticleActor = NULL;
-    attention->fairyActor = NULL;
+    attention->tatlHoverActor = attention->reticleActor = attention->forcedLockOnActor = attention->bgmEnemy = NULL;
+
     attention->reticleSpinCounter = 0;
     attention->curReticle = 0;
-    attention->fairyMoveProgressFactor = 0.0f;
-    Attention_SetFairyState(attention, actor, actor->category, play);
+    attention->tatlMoveProgressFactor = 0.0f;
+
+    Attention_SetTatlState(attention, actor, actor->category, play);
     Attention_InitReticle(attention, actor->category, play);
 }
 
 void Attention_Draw(Attention* attention, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Actor* actor;
+    Actor* actor; // used for both the reticle actor and arrow hover actor
 
-    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
+    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) {
         return;
     }
@@ -521,7 +523,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
     if (attention->reticleFadeAlphaControl != 0) {
         LockOnReticle* reticle;
         s16 alpha = 255;
-        f32 projectdPosScale = 1.0f;
+        f32 projectedPosScale = 1.0f;
         Vec3f projectedPos;
         s32 numReticles;
         f32 invW;
@@ -540,7 +542,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
         if (actor != NULL) {
             Math_Vec3f_Copy(&attention->reticlePos, &actor->focus.pos);
-            projectdPosScale = (500.0f - attention->reticleRadius) / 420.0f;
+            projectedPosScale = (500.0f - attention->reticleRadius) / 420.0f;
         } else {
             // Not locked on, start fading out
             attention->reticleFadeAlphaControl -= 120;
@@ -556,13 +558,13 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
         Actor_GetProjectedPos(play, &attention->reticlePos, &projectedPos, &invW);
 
-        projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * projectdPosScale;
+        projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * projectedPosScale;
         projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-        projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * projectdPosScale;
+        projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * projectedPosScale;
         projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-        projectedPos.z *= projectdPosScale;
+        projectedPos.z *= projectedPosScale;
 
         attention->curReticle--;
 
@@ -601,7 +603,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
                         Matrix_RotateZS(0x10000 / 4, MTXMODE_APPLY);
                         Matrix_Push();
                         Matrix_Translate(reticle->radius, reticle->radius, 0.0f, MTXMODE_APPLY);
-                        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+                        MATRIX_FINALIZE_AND_LOAD(OVERLAY_DISP++, play->state.gfxCtx);
                         gSPDisplayList(OVERLAY_DISP++, gLockOnReticleTriangleDL);
                         Matrix_Pop();
                     }
@@ -616,20 +618,21 @@ void Attention_Draw(Attention* attention, PlayState* play) {
         }
     }
 
-    actor = attention->arrowPointedActor;
+    actor = attention->arrowHoverActor;
 
     if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
-        TatlColor* color = &sTatlColorList[actor->category];
+        AttentionColor* attentionColor = &sAttentionColors[actor->category];
 
         POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
 
-        Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+        Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y) + 17.0f,
                          actor->focus.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(play->gameplayFrames * 0xBB8, MTXMODE_APPLY);
         Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
 
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, attentionColor->primary.r, attentionColor->primary.g,
+                        attentionColor->primary.b, 255);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLockOnArrowDL);
     }
 
@@ -638,24 +641,32 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
 void Attention_Update(Attention* attention, Player* player, Actor* playerFocusActor, PlayState* play) {
     s32 pad;
-    Actor* actor = NULL;
+    Actor* actor; // used for both the Tatl hover actor and reticle actor
     s32 category;
     Vec3f projectedPos;
     f32 invW;
 
-    // If currently not locked on to an actor and not pressing down on the analog stick then try to find a targetable
-    // actor
+    actor = NULL;
+
     if ((player->focusActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
-        attention->arrowPointedActor = NULL;
+        // Holding backward on the control stick prevents an arrow appearing over the next lock-on actor.
+        // This helps escape a lock-on loop when using Switch Targeting, but note that this still works for
+        // Hold Targeting as well.
+        attention->arrowHoverActor = NULL;
     } else {
-        Attention_GetTargetActor(play, &play->actorCtx, &actor, &D_801ED920, player);
-        attention->arrowPointedActor = actor;
+        // Find the next attention actor so Tatl and an arrow can hover over it (if applicable)
+        Attention_FindActor(play, &play->actorCtx, &actor, &gCameraDriftActor, player);
+        attention->arrowHoverActor = actor;
     }
 
-    if (attention->forcedTargetActor != NULL) {
-        actor = attention->forcedTargetActor;
-        attention->forcedTargetActor = NULL;
+    if (attention->forcedLockOnActor != NULL) {
+        // This lock-on actor takes precedence over anything else
+        // (this feature is never used in practice)
+        actor = attention->forcedLockOnActor;
+        attention->forcedLockOnActor = NULL;
     } else if (playerFocusActor != NULL) {
+        // Stay locked-on to the same actor, if there is one.
+        // This also makes Tatl fly over to the current focus actor, if there is one.
         actor = playerFocusActor;
     }
 
@@ -665,56 +676,70 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         category = player->actor.category;
     }
 
-    if ((actor != attention->fairyActor) || (category != attention->fairyActorCategory)) {
-        attention->fairyActor = actor;
-        attention->fairyActorCategory = category;
-        attention->fairyMoveProgressFactor = 1.0f;
+    if ((actor != attention->tatlHoverActor) || (category != attention->tatlHoverActorCategory)) {
+        // Set Tatl to hover over a new actor
+        attention->tatlHoverActor = actor;
+        attention->tatlHoverActorCategory = category;
+        attention->tatlMoveProgressFactor = 1.0f;
     }
 
     if (actor == NULL) {
+        // Setting the actor to Player will make Tatl return to him
         actor = &player->actor;
     }
 
-    if (!Math_StepToF(&attention->fairyMoveProgressFactor, 0.0f, 0.25f)) {
-        f32 fairyMoveScale = 0.25f / attention->fairyMoveProgressFactor;
-        f32 x = actor->focus.pos.x - attention->fairyPos.x;
-        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - attention->fairyPos.y;
-        f32 z = actor->focus.pos.z - attention->fairyPos.z;
+    if (!Math_StepToF(&attention->tatlMoveProgressFactor, 0.0f, 0.25f)) {
+        f32 moveScale = 0.25f / attention->tatlMoveProgressFactor;
+        f32 x = actor->focus.pos.x - attention->tatlHoverPos.x;
+        f32 y = (actor->focus.pos.y + (actor->lockOnArrowOffset * actor->scale.y)) - attention->tatlHoverPos.y;
+        f32 z = actor->focus.pos.z - attention->tatlHoverPos.z;
 
-        attention->fairyPos.x += x * fairyMoveScale;
-        attention->fairyPos.y += y * fairyMoveScale;
-        attention->fairyPos.z += z * fairyMoveScale;
+        attention->tatlHoverPos.x += x * moveScale;
+        attention->tatlHoverPos.y += y * moveScale;
+        attention->tatlHoverPos.z += z * moveScale;
     } else {
-        Attention_SetFairyState(attention, actor, category, play);
+        // Set Tatl pos and color after reaching destination
+        Attention_SetTatlState(attention, actor, category, play);
     }
 
     if ((playerFocusActor != NULL) && (attention->reticleSpinCounter == 0)) {
         Actor_GetProjectedPos(play, &playerFocusActor->focus.pos, &projectedPos, &invW);
+
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
+            // Release the reticle if the actor is off screen.
+            // It is possible to move far enough away from an actor that it goes off screen, despite being
+            // locked onto it. In this case the reticle will release, but the lock-on will remain
+            // because Player is still updating focusActor.
+            // It is unclear if this is intentional, or if it is a bug and the lock-on as a whole is supposed
+            // to release.
             playerFocusActor = NULL;
         }
     }
 
     if (playerFocusActor != NULL) {
         if (playerFocusActor != attention->reticleActor) {
-            s32 sfxId;
+            s32 lockOnSfxId;
 
-            // Lock On entries need to be re-initialized when changing the targeted actor
+            // Set up a new reticle
             Attention_InitReticle(attention, playerFocusActor->category, play);
-
             attention->reticleActor = playerFocusActor;
 
             if (playerFocusActor->id == ACTOR_EN_BOOM) {
-                // Avoid drawing the lock on triangles on a zora boomerang
+                // Don't draw the reticle when locked onto the zora fin boomerang.
+                // Note that it isn't possible to lock onto the boomerang, so this code doesn't do anything.
+                // This implies that the boomerang camera lock may have been implemented with Z-Targeting at one point,
+                // but was eventually implemented as its own camera mode instead.
                 attention->reticleFadeAlphaControl = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
-                        ? NA_SE_SY_LOCK_ON
-                        : NA_SE_SY_LOCK_ON_HUMAN;
-            Audio_PlaySfx(sfxId);
+            lockOnSfxId = CHECK_FLAG_ALL(playerFocusActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
+                              ? NA_SE_SY_LOCK_ON
+                              : NA_SE_SY_LOCK_ON_HUMAN;
+            Audio_PlaySfx(lockOnSfxId);
         }
+
+        // Update reticle
 
         attention->reticlePos.x = playerFocusActor->world.pos.x;
         attention->reticlePos.y =
@@ -722,20 +747,23 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
         attention->reticlePos.z = playerFocusActor->world.pos.z;
 
         if (attention->reticleSpinCounter == 0) {
-            f32 lockOnStep = (500.0f - attention->reticleRadius) * 3.0f;
+            f32 step = (500.0f - attention->reticleRadius) * 3.0f;
+            f32 reticleZoomStep = CLAMP(step, 30.0f, 100.0f);
 
-            lockOnStep = CLAMP(lockOnStep, 30.0f, 100.0f);
-
-            if (Math_StepToF(&attention->reticleRadius, 80.0f, lockOnStep)) {
+            if (Math_StepToF(&attention->reticleRadius, 80.0f, reticleZoomStep)) {
+                // Non-zero counter indicates the reticle is done zooming in
                 attention->reticleSpinCounter++;
             }
         } else {
-            // 0x80 is or'd to avoid getting this value be set to zero
+            // Finished zooming in, spin the reticle around the lock-on actor
+
+            // 0x80 is or'd to avoid a value of zero.
             // This rotation value gets multiplied by 0x200, which multiplied by 0x80 gives a full turn (0x10000)
             attention->reticleSpinCounter = (attention->reticleSpinCounter + 3) | 0x80;
             attention->reticleRadius = 120.0f;
         }
     } else {
+        // Expand the radius quickly as the reticle is released
         attention->reticleActor = NULL;
         Math_StepToF(&attention->reticleRadius, 500.0f, 80.0f);
     }
@@ -1411,7 +1439,7 @@ void Player_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 bool func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
+    return (player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE);
 }
 
@@ -1856,32 +1884,32 @@ PosRot Actor_GetWorldPosShapeRot(Actor* actor) {
 
 /**
  * Returns the squared xyz distance from the actor to Player.
- *
- * This distance will be adjusted smaller if Player is already targeting an actor. The more Player is facing the actor,
- * the smaller the distance is adjusted.
+ * This distance will be weighted if Player is already locked onto another actor.
  */
-f32 Attention_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
+f32 Attention_WeightedDistToPlayerSq(Actor* actor, Player* player, s16 playerShapeYaw) {
     f32 adjDistSq;
-    s16 yawDiff;
-
-    // The yaw, with player as the origin, from where player is facing to where the actor is positioned
-    yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), playerShapeYaw));
+    s16 yawDiffAbs = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), playerShapeYaw));
 
     if (player->focusActor != NULL) {
-        if ((yawDiff > 0x4000) || (actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
+        if ((yawDiffAbs > 0x4000) || (actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
             return FLT_MAX;
         }
 
-        // Linear scaling, yaw being 90 degree means it will return the original distance, 0 degree will adjust to 60%
-        // of the distance
+        // The distance returned is scaled down as the player faces more toward the actor.
+        // At 90 degrees, 100% of the original distance will be returned.
+        // This scales down linearly to 60% when facing 0 degrees away.
         adjDistSq =
-            actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yawDiff) * (1.0f / 0x8000)));
+            actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yawDiffAbs) * (1.0f / 0x8000)));
+
         return adjDistSq;
     }
 
-    if (yawDiff > (0x10000 / 6)) {
+    // Player has to be facing less than ~60 degrees away from the actor
+    if (yawDiffAbs > (0x10000 / 6)) {
         return FLT_MAX;
     }
+
+    // Unweighted distSq
     return actor->xyzDistToPlayerSq;
 }
 
@@ -1903,37 +1931,46 @@ AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX] = {
 };
 
 /**
- * Checks if an actor at distance `distSq` is inside the range specified by its attentionRangeType
+ * Checks if an actor at `distSq` is inside the range specified by its `attentionRangeType`.
+ *
+ * Note that this gets used for both the attention range check and for the lock-on leash range check.
+ * Despite how the data is presented in `gAttentionRanges`, the leash range is stored as a scale factor value.
+ * When checking the leash range, this scale factor is applied to the input distance and checked against
+ * the base `attentionRangeSq` value, which was used to initiate the lock-on in the first place.
  */
-s32 Attention_IsActorInRange(Actor* actor, f32 distSq) {
-    return distSq < gAttentionRanges[actor->attentionRangeType].rangeSq;
+s32 Attention_ActorIsInRange(Actor* actor, f32 distSq) {
+    return distSq < gAttentionRanges[actor->attentionRangeType].attentionRangeSq;
 }
 
 /**
- * Returns true if the actor is outside the leash distance to player.
+ * Returns true if an actor lock-on should be released.
+ * This function does not actually release the lock-on, as that is Player's responsibility.
  *
- * Passing true to ignoreLeash avoids the distance and yaw checks, and considers the actor inside the leash distance.
+ * If an actor's update function is NULL or `ACTOR_FLAG_ATTENTION_ENABLED` is unset, the lock-on should be released.
+ *
+ * There is also a check for Player exceeding the lock-on leash distance.
+ * Note that this check will be ignored if `ignoreLeash` is true.
+ *
  */
-s32 Attention_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
+s32 Attention_ShouldReleaseLockOn(Actor* actor, Player* player, s32 ignoreLeash) {
     if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) ||
         (actor->flags & ACTOR_FLAG_LOCK_ON_DISABLED)) {
         return true;
     }
 
     if (!ignoreLeash) {
-        s16 yawDiff;
+        s16 yawDiffAbs = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
         f32 distSq;
 
-        // The yaw, with player as the origin, from where player is facing to where the actor is positioned
-        yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
-
-        if ((player->focusActor == NULL) && (yawDiff > (0x10000 / 6))) {
+        if ((player->focusActor == NULL) && (yawDiffAbs > (0x10000 / 6))) {
+            // This function is only called (and is only relevant) when `player->focusActor != NULL`.
+            // This is unreachable.
             distSq = FLT_MAX;
         } else {
             distSq = actor->xyzDistToPlayerSq;
         }
 
-        return !Attention_IsActorInRange(actor, gAttentionRanges[actor->attentionRangeType].leashScale * distSq);
+        return !Attention_ActorIsInRange(actor, gAttentionRanges[actor->attentionRangeType].lockOnLeashScale * distSq);
     }
 
     return false;
@@ -2169,7 +2206,7 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_80 | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
            PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
@@ -2257,7 +2294,7 @@ s32 Actor_HasRider(PlayState* play, Actor* horse) {
 s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_1000 |
+    if (!(player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_1000 |
                                  PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 |
                                  PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
         player->rideActor = horse;
@@ -2557,7 +2594,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
             actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &params->player->actor);
-            actor->flags &= ~ACTOR_FLAG_1000000;
+            actor->flags &= ~ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
 
             if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
                 if (actor == params->player->focusActor) {
@@ -2589,33 +2626,33 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
 
 u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_PLAYER */
     PLAYER_STATE1_200,
     /* ACTORCAT_EXPLOSIVES */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_NPC */
-    PLAYER_STATE1_2 | PLAYER_STATE1_80 | PLAYER_STATE1_200,
+    PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200,
     /* ACTORCAT_ENEMY */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_PROP */
-    PLAYER_STATE1_2 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_ITEMACTION */
     PLAYER_STATE1_2,
     /* ACTORCAT_MISC */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_BOSS */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_DOOR */
     PLAYER_STATE1_2,
     /* ACTORCAT_CHEST */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
@@ -2701,7 +2738,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         Player_ReleaseLockOn(player);
     }
 
-    if ((actor == NULL) || (player->unk_738 < 5)) {
+    if ((actor == NULL) || (player->zTargetActiveTimer < 5)) {
         actor = NULL;
         if (actorCtx->attention.reticleSpinCounter != 0) {
             actorCtx->attention.reticleSpinCounter = 0;
@@ -3493,12 +3530,12 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
-    if (actor == actorCtx->attention.fairyActor) {
-        actorCtx->attention.fairyActor = NULL;
+    if (actor == actorCtx->attention.tatlHoverActor) {
+        actorCtx->attention.tatlHoverActor = NULL;
     }
 
-    if (actor == actorCtx->attention.forcedTargetActor) {
-        actorCtx->attention.forcedTargetActor = NULL;
+    if (actor == actorCtx->attention.forcedLockOnActor) {
+        actorCtx->attention.forcedLockOnActor = NULL;
     }
 
     if (actor == actorCtx->attention.bgmEnemy) {
@@ -3519,61 +3556,57 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     return newHead;
 }
 
-bool Attention_InTargetableScreenRegion(PlayState* play, Actor* actor) {
-    s16 screenPosX;
-    s16 screenPosY;
+/**
+ * Checks that an actor is on-screen enough to be considered an attention actor.
+ *
+ * Note that the screen bounds checks are larger than the actual screen region
+ * to give room for error.
+ */
+bool Attention_ActorOnScreen(PlayState* play, Actor* actor) {
+    s16 x;
+    s16 y;
 
-    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
+    Actor_GetScreenPos(play, actor, &x, &y);
 
-    return (screenPosX > -20) && (screenPosX < gScreenWidth + 20) && (screenPosY > -160) &&
-           (screenPosY < gScreenHeight + 160);
+#define X_LEEWAY 20
+#define Y_LEEWAY 160
+
+    return (x > (0 - X_LEEWAY)) && (x < (gScreenWidth + X_LEEWAY)) && (y > (0 - Y_LEEWAY)) &&
+           (y < (gScreenHeight + Y_LEEWAY));
 }
 
 /**
- * Search for targetable actors of the `actorCategory` category.
+ * Search for attention actors or camera drift actors within the specified category.
  *
- * Looks for the actor of said category with higher targetPriority and the one that is nearest to player. This actor
- * must be within the range (relative to player) speicified by its attentionRangeType.
+ * To be considered an attention actor the actor needs to:
+ * - Have a non-NULL update function (still active)
+ * - Not be player (this is technically a redundant check because the PLAYER category is never searched)
+ * - Have `ACTOR_FLAG_ATTENTION_ENABLED` or `ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE` set
+ * - Not be the current focus actor unless `ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE` is set
+ * - Be the closest attention actor found so far
+ * - Be within range, specified by attentionRangeType
+ * - Be roughly on-screen
+ * - Not be blocked by a surface
  *
- * The actor must be on-screen
- *
- * The highest priority actor is stored in `sTargetablePrioritizedActor`, while the nearest actor is stored in
- * `sTargetableNearestActor`. The higher priority / smaller distance of those actors are stored in
- * `sTargetablePrioritizedPriority` and `sTargetableNearestActorDistSq`.
- *
- * There is not much info to infer anything about ACTOR_FLAG_40000000, D_801ED8C4/D_801ED8C0, D_801ED8D8/D_801ED8D0.
- * All appear unused in any meaningful way.
- *
- * For an actor to be taken in consideration by this function it needs:
- * - Non-NULL update function (maybe obvious?)
- * - Not be Player itself.
- * - It must be targetable or ACTOR_FLAG_40000000
- * - Not be the already targeted actor, unless it has the ACTOR_FLAG_80000 flag
- * - Be withing the range specified by its attentionRangeType.
- * - It must be on-screen (within a margin)
- * - Must not be blocked by a surface (?)
- *
- * This function also checks for the nearest enemy actor, which allows determining if enemy background music should be
- * played. This actor is stored in `attention.bgmEnemy` and its distance is stored in `sBgmEnemyDistSq`
+ * If an actor has a priority value set and the value is the lowest found so far, it will be set as the prioritized
+ * attention actor. Otherwise, it is set as the nearest attention actor or camera drift actor.
  *
  * This function is expected to be called with almost every actor category in each cycle. On a new cycle its global
- * variables must be reset by the caller, otherwise the information of the previous cycle will be retained on this one.
+ * variables must be reset by the caller, otherwise the information of the previous cycle will be retained.
  */
-void Attention_FindTargetableActorForCategory(PlayState* play, ActorContext* actorCtx, Player* player,
-                                              ActorType actorCategory) {
+void Attention_FindActorInCategory(PlayState* play, ActorContext* actorCtx, Player* player, ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* playerFocusActor = player->focusActor;
-    s32 isNearestTargetableActor;
-    s32 phi_s2_2;
+    s32 isNearestAttentionActor;
+    s32 isNearestCameraDriftActor;
 
     for (; actor != NULL; actor = actor->next) {
         if ((actor->update == NULL) || ((Player*)actor == player)) {
             continue;
         }
 
-        // Actor must be at least either targetable or ACTOR_FLAG_40000000
-        if (!(actor->flags & (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_40000000))) {
+        if (!(actor->flags & (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_CAMERA_DRIFT_ENABLED))) {
             continue;
         }
 
@@ -3586,107 +3619,110 @@ void Attention_FindTargetableActorForCategory(PlayState* play, ActorContext* act
             }
         }
 
-        // If this actor is the currently targeted one, then ignore it unless it has the ACTOR_FLAG_80000 flag
-        if ((actor == playerFocusActor) && !(actor->flags & ACTOR_FLAG_80000)) {
+        // Ignore the current focus actor unless it is refindable
+        if ((actor == playerFocusActor) && !(actor->flags & ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE)) {
             continue;
         }
 
-        distSq = Attention_GetAdjustedDistSq(actor, player, sTargetPlayerRotY);
+        distSq = Attention_WeightedDistToPlayerSq(actor, player, sAttentionPlayerRotY);
 
-        isNearestTargetableActor =
-            (actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) && (distSq < sTargetableNearestActorDistSq);
-        phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
+        isNearestAttentionActor =
+            (actor->flags & ACTOR_FLAG_ATTENTION_ENABLED) && (distSq < sNearestAttentionActorDistSq);
 
-        if (!isNearestTargetableActor && !phi_s2_2) {
+        isNearestCameraDriftActor =
+            (actor->flags & ACTOR_FLAG_CAMERA_DRIFT_ENABLED) && (distSq < sNearestCameraDriftActorDistSq);
+
+        if (!isNearestAttentionActor && !isNearestCameraDriftActor) {
             continue;
         }
 
-        if (Attention_IsActorInRange(actor, distSq) && Attention_InTargetableScreenRegion(play, actor)) {
+        if (Attention_ActorIsInRange(actor, distSq) && Attention_ActorOnScreen(play, actor)) {
             CollisionPoly* poly;
             s32 bgId;
-            Vec3f posResult;
+            Vec3f lineTestResultPos;
 
-            if (BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos, &posResult, &poly,
-                                        true, true, true, true, &bgId)) {
+            if (BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos, &lineTestResultPos,
+                                        &poly, true, true, true, true, &bgId)) {
                 if (!SurfaceType_IsIgnoredByProjectiles(&play->colCtx, poly, bgId)) {
                     continue;
                 }
             }
 
             if (actor->targetPriority != 0) {
-                if (isNearestTargetableActor && (actor->targetPriority < sTargetablePrioritizedPriority)) {
-                    sTargetablePrioritizedActor = actor;
-                    sTargetablePrioritizedPriority = actor->targetPriority;
+                if (isNearestAttentionActor && (actor->targetPriority < sHighestAttentionPriority)) {
+                    sPrioritizedAttentionActor = actor;
+                    sHighestAttentionPriority = actor->targetPriority;
                 }
-                if (phi_s2_2 && (actor->targetPriority < D_801ED8D8)) {
-                    D_801ED8C4 = actor;
-                    D_801ED8D8 = actor->targetPriority;
+                if (isNearestCameraDriftActor && (actor->targetPriority < sHighestCameraDriftPriority)) {
+                    sPrioritizedCameraDriftActor = actor;
+                    sHighestCameraDriftPriority = actor->targetPriority;
                 }
             } else {
-                if (isNearestTargetableActor) {
-                    sTargetableNearestActor = actor;
-                    sTargetableNearestActorDistSq = distSq;
+                if (isNearestAttentionActor) {
+                    sNearestAttentionActor = actor;
+                    sNearestAttentionActorDistSq = distSq;
                 }
-                if (phi_s2_2) {
-                    D_801ED8C0 = actor;
-                    D_801ED8D0 = distSq;
+                if (isNearestCameraDriftActor) {
+                    sNearestCameraDriftActor = actor;
+                    sNearestCameraDriftActorDistSq = distSq;
                 }
             }
         }
     }
 }
 
-u8 sTargetableActorCategories[] = {
+u8 sAttentionCategorySearchOrder[] = {
     ACTORCAT_BOSS,  ACTORCAT_ENEMY,  ACTORCAT_BG,   ACTORCAT_EXPLOSIVES, ACTORCAT_NPC,  ACTORCAT_ITEMACTION,
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
 /**
- * Search for the nearest targetable actor.
+ * Search for the nearest attention actor and camera drift actor by iterating through most actor categories.
+ * See `Attention_FindActorInCategory` for more details on search criteria.
  *
- * The specific criteria is specified in Attention_FindTargetableActorForCategory.
- *
- * The actor found is stored in the targetableP parameter. It may be NULL if no actor that fulfills the criteria is
- * found.
+ * The attention actor found is stored in the `attentionActorP` parameter, while the camera drift actor is stored in
+ * `cameraDriftActorP` They may be NULL if no actor that fulfills the criteria is found.
  */
-void Attention_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3,
-                              Player* player) {
-    u8* actorCategories;
+void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
+                         Player* player) {
+    u8* category;
     s32 i;
 
-    sTargetableNearestActor = sTargetablePrioritizedActor = D_801ED8C0 = D_801ED8C4 = NULL;
-    sTargetableNearestActorDistSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
-    sTargetablePrioritizedPriority = D_801ED8D8 = INT32_MAX;
+    sNearestAttentionActor = sPrioritizedAttentionActor = sNearestCameraDriftActor = sPrioritizedCameraDriftActor =
+        NULL;
+    sNearestAttentionActorDistSq = sNearestCameraDriftActorDistSq = sBgmEnemyDistSq = FLT_MAX;
+    sHighestAttentionPriority = sHighestCameraDriftPriority = INT32_MAX;
 
     actorCtx->attention.bgmEnemy = NULL;
-    sTargetPlayerRotY = player->actor.shape.rot.y;
+    sAttentionPlayerRotY = player->actor.shape.rot.y;
 
-    actorCategories = sTargetableActorCategories;
+    category = sAttentionCategorySearchOrder;
 
-    // Try to search for a targetable actor that's a Boss, Enemy or Bg first
+    // Search the first 3 actor categories first for an attention actor
+    // These are Boss, Enemy, and Bg, in order.
     for (i = 0; i < 3; i++) {
-        Attention_FindTargetableActorForCategory(play, actorCtx, player, *actorCategories);
-        actorCategories++;
+        Attention_FindActorInCategory(play, actorCtx, player, *category);
+        category++;
     }
 
-    // If no actor in the above categories was found then try to search for one in every other category
-    if (sTargetableNearestActor == NULL) {
-        for (; i < ARRAY_COUNT(sTargetableActorCategories); i++) {
-            Attention_FindTargetableActorForCategory(play, actorCtx, player, *actorCategories);
-            actorCategories++;
+    // If no actor in the above categories was found, then try searching in the remaining categories
+    if (sNearestAttentionActor == NULL) {
+        for (; i < ARRAY_COUNT(sAttentionCategorySearchOrder); i++) {
+            Attention_FindActorInCategory(play, actorCtx, player, *category);
+            category++;
         }
     }
 
-    if (sTargetableNearestActor == NULL) {
-        *targetableP = sTargetablePrioritizedActor;
+    if (sNearestAttentionActor == NULL) {
+        *attentionActorP = sPrioritizedAttentionActor;
     } else {
-        *targetableP = sTargetableNearestActor;
+        *attentionActorP = sNearestAttentionActor;
     }
 
-    if (D_801ED8C0 == NULL) {
-        *arg3 = D_801ED8C4;
+    if (sNearestCameraDriftActor == NULL) {
+        *cameraDriftActorP = sPrioritizedCameraDriftActor;
     } else {
-        *arg3 = D_801ED8C0;
+        *cameraDriftActorP = sNearestCameraDriftActor;
     }
 }
 
@@ -3996,7 +4032,7 @@ void func_800BC620(Vec3f* pos, Vec3f* scale, u8 alpha, PlayState* play) {
 
     Matrix_Scale(scale->x, 1.0f, scale->z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4073,7 +4109,7 @@ void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type) {
             Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, entry->chainDL);
 
         if ((i % 2) != 0) {
@@ -4088,7 +4124,7 @@ void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type) {
     Matrix_Put(&baseMtxF);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, entry->lockDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4233,7 +4269,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
-        // srcPos is somewhere withing the bend of the path
+        // srcPos is somewhere within the bend of the path
         if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
             // srcPos is not inside a loop
             if (!Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
@@ -4923,8 +4959,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                         Matrix_RotateZF(M_PIf, MTXMODE_APPLY);
                     }
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment2ModelDL);
                 }
@@ -4955,8 +4990,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     Matrix_ReplaceRotation(&play->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
                 }
@@ -5003,8 +5037,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
@@ -5045,8 +5078,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = bodyPartsPos->y;
                     currentMatrix->mf[3][2] = bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
@@ -5085,8 +5117,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
@@ -5097,8 +5128,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                     currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->y;
                     currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + bodyPartsPos->z;
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
                 }

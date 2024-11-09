@@ -801,7 +801,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(effect->scaleXY, effect->scaleXY, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
 
         Matrix_Pop();
@@ -896,7 +896,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
         Matrix_Scale(effect->scaleXY, effect->scaleXY, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(alpha * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
@@ -1057,7 +1057,7 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
         Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
         Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, model);
 
         Matrix_Pop();
@@ -1365,19 +1365,19 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 objectSlot = this->actor.objectSlot;
-    s8 extraObjIndex = -1;
+    s8 extraObjectSlot = OBJECT_SLOT_NONE;
     s32 isAnimFinished = false;
 
     if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->hakuginDemoObjectSlot;
+        extraObjectSlot = this->hakuginDemoObjectSlot;
     } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->taisouObjectSlot;
+        extraObjectSlot = this->taisouObjectSlot;
     } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objectSlot;
+        extraObjectSlot = this->actor.objectSlot;
     }
 
-    if (extraObjIndex >= 0) {
-        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+    if (extraObjectSlot > OBJECT_SLOT_NONE) {
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjectSlot].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
@@ -1425,19 +1425,19 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  */
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     s8 objectSlot = this->actor.objectSlot;
-    s8 extraObjIndex = -1;
+    s8 extraObjectSlot = OBJECT_SLOT_NONE;
     s32 didAnimChange = false;
 
     if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->hakuginDemoObjectSlot;
+        extraObjectSlot = this->hakuginDemoObjectSlot;
     } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
-        extraObjIndex = this->taisouObjectSlot;
+        extraObjectSlot = this->taisouObjectSlot;
     } else if (animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objectSlot;
+        extraObjectSlot = this->actor.objectSlot;
     }
 
-    if (extraObjIndex >= 0) {
-        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+    if (extraObjectSlot > OBJECT_SLOT_NONE) {
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjectSlot].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
@@ -1793,7 +1793,7 @@ void EnGo_DrawIceBlockWhenFrozen(EnGo* this, PlayState* play, f32 scale, f32 alp
         Matrix_Scale(scale * 0.7f, scale * 0.8f, scale, MTXMODE_APPLY);
         func_800B8118(&this->actor, play, 0);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         y1 = play->gameplayFrames % 256;
         y2 = (play->gameplayFrames * 2) % 256;
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -2879,7 +2879,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, (this->actionFlags & ENGO_FLAG_SNOWBALLED) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

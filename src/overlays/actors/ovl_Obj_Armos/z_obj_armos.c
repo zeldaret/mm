@@ -7,7 +7,7 @@
 #include "z_obj_armos.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((ObjArmos*)thisx)
 
@@ -181,7 +181,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
     ObjArmos* this = THIS;
     s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
     s32 sp40 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
-    f32 sp3C = Animation_GetLastFrame(&gArmosPushedBackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
@@ -194,7 +194,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
                    this->morphTable, OBJECT_AM_LIMB_MAX);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, sp3C, sp3C, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
 
     if (sp40 == 0) {
         func_809A57D8(this);
@@ -377,7 +377,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
         Matrix_Put(&sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
