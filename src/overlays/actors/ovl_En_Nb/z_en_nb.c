@@ -293,7 +293,7 @@ s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
         if ((this->animIndex != EN_NB_ANIM_0) && (this->animIndex != EN_NB_ANIM_1)) {
             changeAnim = true;
         }
-    } else if (animIndex != this->animIndex) {
+    } else if (this->animIndex != animIndex) {
         changeAnim = true;
     }
 

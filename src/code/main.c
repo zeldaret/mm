@@ -35,10 +35,10 @@ struct PadMgr gPadMgr;
 #include "regs.h"
 #include "segment_symbols.h"
 #include "stack.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "scheduler.h"
 #include "sys_initial_check.h"
-#include "system_heap.h"
+#include "libu64/system_heap.h"
 #include "z64nmi_buff.h"
 #include "z64thread.h"
 

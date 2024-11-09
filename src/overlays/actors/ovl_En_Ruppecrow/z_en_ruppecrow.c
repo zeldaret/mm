@@ -7,7 +7,7 @@
 #include "z_en_ruppecrow.h"
 #include "assets/objects/object_crow/object_crow.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnRuppecrow*)thisx)
 
@@ -464,7 +464,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     }
 
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
-    if (this->actor.flags & ACTOR_FLAG_8000) {
+    if (this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW) {
         this->actor.speed = 0.0f;
     }
 
@@ -602,7 +602,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
     }
 
     this->actor.colorFilterTimer = 40;
-    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW)) {
         if (this->currentEffect != ENRUPPECROW_EFFECT_ICE) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;

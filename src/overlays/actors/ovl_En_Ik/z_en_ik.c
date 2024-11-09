@@ -772,10 +772,10 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
         return;
     }
     if (this->colliderTris.base.acFlags & AC_BOUNCED) {
-        f32 frame = Animation_GetLastFrame(&gIronKnuckleBlockAnim) - 2.0f;
+        f32 endFrame = Animation_GetLastFrame(&gIronKnuckleBlockAnim) - 2.0f;
 
-        if (this->skelAnime.curFrame < frame) {
-            this->skelAnime.curFrame = frame;
+        if (this->skelAnime.curFrame < endFrame) {
+            this->skelAnime.curFrame = endFrame;
         }
         this->colliderTris.base.acFlags &= ~AC_BOUNCED;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;

@@ -71,7 +71,7 @@ typedef enum PlayerIdleType {
  */
 
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into seperate values (see known usages above)
+    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into separate values (see known usages above)
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
@@ -899,12 +899,12 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_2000       (1 << 13)
 // 
 #define PLAYER_STATE1_4000       (1 << 14)
-// 
-#define PLAYER_STATE1_8000       (1 << 15)
+// Either lock-on or parallel is active. This flag is never checked for and is practically unused.
+#define PLAYER_STATE1_Z_TARGETING       (1 << 15)
 // Currently focusing on a friendly actor. Includes friendly lock-on, talking, and more. Usually does not include hostile actor lock-on, see `PLAYER_STATE3_HOSTILE_LOCK_ON`.
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
-// 
-#define PLAYER_STATE1_20000      (1 << 17)
+// "Parallel" mode, Z-Target without an actor lock-on
+#define PLAYER_STATE1_PARALLEL   (1 << 17)
 // 
 #define PLAYER_STATE1_40000      (1 << 18)
 // 
@@ -929,8 +929,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10000000   (1 << 28)
 // Time is stopped but Link & NPC animations continue
 #define PLAYER_STATE1_20000000   (1 << 29)
-// 
-#define PLAYER_STATE1_40000000   (1 << 30)
+// Lock-on was released automatically, for example by leaving the lock-on leash range
+#define PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE   (1 << 30)
 // Related to exit a grotto
 #define PLAYER_STATE1_80000000   (1 << 31)
 
@@ -1202,7 +1202,7 @@ typedef struct Player {
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
     /* 0x734 */ char unk_734[4];
-    /* 0x738 */ s32 unk_738;
+    /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
@@ -1390,7 +1390,7 @@ void func_80123140(struct PlayState* play, Player* player);
 bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
 bool Player_InCsMode(struct PlayState* play);
 bool Player_CheckHostileLockOn(Player* player);
-bool func_80123434(Player* player);
+bool Player_FriendlyLockOnOrParallel(Player* player);
 bool func_80123448(struct PlayState* play);
 bool Player_IsGoronOrDeku(Player* player);
 bool func_801234D4(struct PlayState* play);

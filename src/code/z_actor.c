@@ -6,7 +6,7 @@
 #include "fault.h"
 #include "attributes.h"
 #include "sys_cfb.h"
-#include "loadfragment.h"
+#include "libu64/loadfragment.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sActorFaultClient; // 2 funcs
@@ -2738,7 +2738,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         Player_ReleaseLockOn(player);
     }
 
-    if ((actor == NULL) || (player->unk_738 < 5)) {
+    if ((actor == NULL) || (player->zTargetActiveTimer < 5)) {
         actor = NULL;
         if (actorCtx->attention.reticleSpinCounter != 0) {
             actorCtx->attention.reticleSpinCounter = 0;
@@ -4269,7 +4269,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
-        // srcPos is somewhere withing the bend of the path
+        // srcPos is somewhere within the bend of the path
         if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
             // srcPos is not inside a loop
             if (!Math3D_PointDistSqToLine2DImpl(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,

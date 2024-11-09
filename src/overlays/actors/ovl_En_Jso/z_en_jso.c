@@ -992,8 +992,8 @@ void EnJso_SetupStunned(EnJso* this) {
     AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
     EnJso_ChangeAnim(this, EN_JSO_ANIM_DAMAGED);
 
-    //! @note: This assignment is immediately overriden below. This is probably a leftover from EnJso2's version of this
-    //! function, where the Garo Master is stunned for longer if it's frozen. Garos just use the longer stun
+    //! @note: This assignment is immediately overridden below. This is probably a leftover from EnJso2's version of
+    //! this function, where the Garo Master is stunned for longer if it's frozen. Garos just use the longer stun
     //! unconditionally, resulting in this useless assignment here.
     this->timer = 30;
     this->actor.speed = 0.0f;
