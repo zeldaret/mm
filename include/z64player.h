@@ -1047,8 +1047,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_200000     (1 << 21)
 // 
 #define PLAYER_STATE3_400000     (1 << 22)
-// 
-#define PLAYER_STATE3_800000     (1 << 23)
+// Signals that a zora boomerang has been caught on this frame
+#define PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT (1 << 23)
 // 
 #define PLAYER_STATE3_1000000    (1 << 24)
 // 
@@ -1215,7 +1215,7 @@ typedef struct Player {
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
     /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
-    /* 0xA7C */ Actor* zoraBoomerangActor;
+    /* 0xA7C */ Actor* zoraBoomerangActor; // Defaults to the left zora boomerang, but will switch to right if only the left boomerang is caught.
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;

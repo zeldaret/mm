@@ -159,7 +159,7 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
             }
         }
-        player->stateFlags3 |= PLAYER_STATE3_800000;
+        player->stateFlags3 |= PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
     }
 }
 

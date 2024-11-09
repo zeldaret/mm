@@ -11089,7 +11089,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
             ~(PLAYER_STATE3_8 | PLAYER_STATE3_40 | PLAYER_STATE3_80 | PLAYER_STATE3_100 | PLAYER_STATE3_200 |
               PLAYER_STATE3_800 | PLAYER_STATE3_1000 | PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 |
               PLAYER_STATE3_40000 | PLAYER_STATE3_80000 | PLAYER_STATE3_100000 | PLAYER_STATE3_200000 |
-              PLAYER_STATE3_800000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
+              PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
         this->unk_B08 = 0.0f;
         this->unk_B0C = 0.0f;
     }
@@ -14011,7 +14011,8 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
             }
 
             this->stateFlags1 |= PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
-            this->stateFlags3 &= ~PLAYER_STATE3_800000;
+            this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
+
             if (!Player_CheckHostileLockOn(this)) {
                 Player_SetParallel(this);
             }
@@ -14031,10 +14032,10 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
         return true;
     }
 
-    if (this->stateFlags3 & PLAYER_STATE3_800000) {
+    if (this->stateFlags3 & PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT) {
         Player_SetUpperAction(play, this, Player_UpperAction_16);
         PlayerAnimation_PlayOnce(play, &this->skelAnimeUpper, &gPlayerAnim_pz_cuttercatch);
-        this->stateFlags3 &= ~PLAYER_STATE3_800000;
+        this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
         Player_PlaySfx(this, NA_SE_PL_CATCH_BOOMERANG);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_SWORD_N);
         return true;
