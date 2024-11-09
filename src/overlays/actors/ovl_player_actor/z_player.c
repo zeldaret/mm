@@ -521,7 +521,7 @@ FloorProperty sPlayerPrevFloorProperty;
 s32 sPlayerShapeYawToTouchedWall;
 s32 sPlayerWorldYawToTouchedWall;
 s16 sPlayerFloorPitchShape;
-s32 sSavedCurrentMask; // sSavedCurrentMask = player->currentMask;
+s32 sSavedCurrentMask;
 Vec3f sPlayerInteractWallCheckResult;
 f32 D_80862B3C;
 FloorEffect sPlayerFloorEffect;
@@ -11364,9 +11364,11 @@ void func_808425B4(Player* this) {
 }
 
 /**
- * Sets the DoAction for the interface A/B buttons, depending on a significant number of things
+ * Updates the two main interface elements that player is responsible for:
+ *     - Do Action label on the A/B buttons
+ *     - Tatl C-up icon for hints
  */
-void Player_SetDoAction(PlayState* play, Player* this) {
+void Player_UpdateInterface(PlayState* play, Player* this) {
     DoAction doActionB;
     s32 sp38;
 
@@ -12646,7 +12648,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         if (!var_v1) {
-            Player_SetDoAction(play, this);
+            Player_UpdateInterface(play, this);
         }
 
         Player_UpdateCamAndSeqModes(play, this);

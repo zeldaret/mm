@@ -4605,7 +4605,7 @@
     0x80841AC4:("Player_Init",),
     0x80842510:("Player_ApproachZeroBinang",),
     0x808425B4:("func_808425B4",),
-    0x808426F0:("Player_SetDoAction",),
+    0x808426F0:("Player_UpdateInterface",),
     0x808430E0:("func_808430E0",),
     0x80843178:("Player_ProcessSceneCollision",),
     0x80843EC0:("Player_UpdateCamAndSeqModes",),
