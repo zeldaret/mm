@@ -314,10 +314,10 @@ typedef union {
 typedef enum RoomType {
     /* 0 */ ROOM_TYPE_NORMAL,
     /* 1 */ ROOM_TYPE_DUNGEON,
-    /* 2 */ ROOM_TYPE_INDOORS,
+    /* 2 */ ROOM_TYPE_INDOORS, // Reduces player run speed and blocks player from attacking or jumping.
     /* 3 */ ROOM_TYPE_3,
-    /* 4 */ ROOM_TYPE_4,
-    /* 5 */ ROOM_TYPE_BOSS
+    /* 4 */ ROOM_TYPE_4, // Prevents switching to CAM_SET_HORSE when mounting a horse.
+    /* 5 */ ROOM_TYPE_BOSS // Disables Environment_AdjustLights
 } RoomType;
 
 typedef enum RoomEnvironmentType {
@@ -801,13 +801,10 @@ typedef enum {
 #define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
     { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
-#define SCENE_CMD_ROOM_BEHAVIOR(type, environment, lensMode, msgCtxunk12044, enablePosLights,  \
-                                stormState)                                                         \
-    {                                                                                                       \
-        SCENE_CMD_ID_ROOM_BEHAVIOR, type,                                                           \
-            environment | _SHIFTL(lensMode, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
-                _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(stormState, 12, 1)                        \
-    }
+#define SCENE_CMD_ROOM_BEHAVIOR(type, environment, lensMode, msgCtxunk12044, enablePosLights, stormState)        \
+    { SCENE_CMD_ID_ROOM_BEHAVIOR, type,                                                                          \
+      environment | _SHIFTL(lensMode, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | _SHIFTL(enablePosLights, 11, 1) | \
+          _SHIFTL(stormState, 12, 1) }
 
 #define SCENE_CMD_UNK_09() \
     { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
