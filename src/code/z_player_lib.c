@@ -645,7 +645,7 @@ void func_80123140(PlayState* play, Player* player) {
 }
 
 bool Player_InBlockingCsMode(PlayState* play, Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
+    return (player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || play->actorCtx.isOverrideInputOn;
@@ -668,8 +668,25 @@ bool Player_CheckHostileLockOn(Player* player) {
     return player->stateFlags3 & PLAYER_STATE3_HOSTILE_LOCK_ON;
 }
 
-bool func_80123434(Player* player) {
-    return player->stateFlags1 & (PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+/**
+ * This function checks for friendly (non-hostile) Z-Target related states.
+ * For hostile related lock-on states, see `Player_UpdateHostileLockOn` and `Player_CheckHostileLockOn`.
+ *
+ * Note that `PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS` will include all `focusActor` use cases that relate to
+ * friendly actors. This function can return true when talking to an actor, for example.
+ * Despite that, this function is only relevant in the context of actor lock-on, which is a subset of actor focus.
+ * This is why the function name states `FriendlyLockOn` instead of `FriendlyActorFocus`.
+ *
+ * There is a special case that allows hostile actors to be treated as "friendly" if Player is carrying another actor
+ * See relevant code in `Player_UpdateZTargeting` for more details.
+ *
+ * Additionally, `PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE` will be set very briefly in some conditions when
+ * a lock-on is forced to release. In these niche cases, this function will apply to both friendly and hostile actors.
+ * Overall, it is safe to assume that this specific state flag is not very relevant for this function's use cases.
+ */
+bool Player_FriendlyLockOnOrParallel(Player* player) {
+    return player->stateFlags1 &
+           (PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_PARALLEL | PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE);
 }
 
 // Unused
@@ -677,7 +694,8 @@ bool func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           ((player->transformation != PLAYER_FORM_HUMAN) || (!func_80123434(player) && player->focusActor == NULL));
+           ((player->transformation != PLAYER_FORM_HUMAN) ||
+            (!Player_FriendlyLockOnOrParallel(player) && (player->focusActor == NULL)));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -1497,13 +1515,14 @@ void Player_ClearZTargeting(Player* player) {
         (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
         (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
-        player->stateFlags1 &= ~(PLAYER_STATE1_8000 | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 |
-                                 PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_40000000);
+        player->stateFlags1 &=
+            ~(PLAYER_STATE1_Z_TARGETING | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_PARALLEL |
+              PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE);
     } else if (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_200000))) {
         player->stateFlags1 |= PLAYER_STATE1_80000;
     } else if ((player->stateFlags1 & PLAYER_STATE1_40000) && (player->transformation == PLAYER_FORM_DEKU)) {
-        player->stateFlags1 &=
-            ~(PLAYER_STATE1_8000 | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+        player->stateFlags1 &= ~(PLAYER_STATE1_Z_TARGETING | PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS |
+                                 PLAYER_STATE1_PARALLEL | PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE);
     }
 
     Player_ReleaseLockOn(player);
@@ -1943,7 +1962,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
     f32 sp7C;
 
     if ((player->stateFlags3 & PLAYER_STATE3_1) || !(player->actor.scale.y >= 0.0f) ||
-        (player->stateFlags1 & PLAYER_STATE1_80) || play->unk_18844) {
+        (player->stateFlags1 & PLAYER_STATE1_DEAD) || play->unk_18844) {
         return;
     }
 

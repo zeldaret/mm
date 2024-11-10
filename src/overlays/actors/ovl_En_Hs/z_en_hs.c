@@ -83,7 +83,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_8095345C;
 
     if (play->curSpawn == 1) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 
     this->stateFlags = 0;
@@ -160,7 +160,7 @@ void func_80953098(EnHs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_8095345C;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->stateFlags |= 0x10;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
@@ -183,14 +183,14 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             case 0x33F7: // notice his chicks are grown up, happy, wants to give you bunny hood
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
             case 0x33F9: // laughing that they are all roosters (.)
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
@@ -263,7 +263,7 @@ void func_8095345C(EnHs* this, PlayState* play) {
     } else if (this->actor.home.rot.x >= 20) { // chicks turned adult >= 10
         this->actionFunc = func_80953354;
         this->stateTimer = 40;
-    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) {
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         this->stateFlags |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, play)) {

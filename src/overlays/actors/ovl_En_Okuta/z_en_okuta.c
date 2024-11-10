@@ -140,7 +140,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 6500, ICHAIN_STOP),
 };
 
 void EnOkuta_Init(Actor* thisx, PlayState* play2) {
@@ -946,7 +946,7 @@ void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
     Vec3f prevPos;
     s32 canRestorePrevPos = false;
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                  PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->actionFunc(this, play);
         Actor_MoveWithoutGravity(&this->actor);

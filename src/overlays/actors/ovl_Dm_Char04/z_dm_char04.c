@@ -72,7 +72,7 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
 
     this->primColors = sPrimColors[this->actor.params];
     this->envColors = sEnvColors[this->actor.params];
-    this->actor.targetArrowOffset = 3000.0f;
+    this->actor.lockOnArrowOffset = 3000.0f;
     this->cueId = 99;
     this->timer = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);

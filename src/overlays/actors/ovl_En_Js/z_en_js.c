@@ -892,7 +892,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         Animation_MorphToLoop(&this->skelAnime, &gMoonChildStandingAnim, 0.0f);
     }
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_8096A38C;
         Message_StartTextbox(play, 0x2208, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_84_20);
@@ -908,7 +908,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = func_8096A1E8;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {

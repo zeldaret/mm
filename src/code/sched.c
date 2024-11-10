@@ -6,7 +6,7 @@
 #include "idle.h"
 #include "macros.h"
 #include "regs.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "viconfig.h"
 #include "z64speed_meter.h"
 #include "z64thread.h"

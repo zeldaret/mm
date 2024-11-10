@@ -8,8 +8,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS                                                                                      \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -143,7 +144,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 6000, ICHAIN_STOP),
 };
 
 // clang-format off
@@ -198,7 +199,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_SpawnMegClones(this, play);
             EnPoSisters_SetupSpawnPo(this);
         } else {
-            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
+            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW);
             this->collider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
             this->collider.elem.acDmgInfo.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
@@ -529,7 +530,7 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
 }
 
 void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_8000)) {
+    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW)) {
         if (this->actor.colChkInfo.health != 0) {
             if (this->type != POE_SISTERS_TYPE_MEG) {
                 EnPoSisters_SetupFlee(this);

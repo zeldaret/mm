@@ -246,7 +246,7 @@ static DamageTable sDamageTableNoArmor = {
 static CollisionCheckInfoInit sColChkInfoInit = { 18, 25, 80, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2916, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2916, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 12, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
@@ -772,10 +772,10 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
         return;
     }
     if (this->colliderTris.base.acFlags & AC_BOUNCED) {
-        f32 frame = Animation_GetLastFrame(&gIronKnuckleBlockAnim) - 2.0f;
+        f32 endFrame = Animation_GetLastFrame(&gIronKnuckleBlockAnim) - 2.0f;
 
-        if (this->skelAnime.curFrame < frame) {
-            this->skelAnime.curFrame = frame;
+        if (this->skelAnime.curFrame < endFrame) {
+            this->skelAnime.curFrame = endFrame;
         }
         this->colliderTris.base.acFlags &= ~AC_BOUNCED;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;

@@ -103,7 +103,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.velocity.y = 0.0f;
 
     if (gSaveContext.save.entrance == ENTRANCE(GREAT_BAY_COAST, 13)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 
     this->unk_2F8 = 0;
@@ -161,8 +161,8 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if (this->actor.flags & ACTOR_FLAG_10000) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+        if (this->actor.flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED) {
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
@@ -191,7 +191,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
             this->unk_300 = 0x1096;
         }
         func_80C14030(this);
-    } else if (this->actor.flags & ACTOR_FLAG_10000) {
+    } else if (this->actor.flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED) {
         Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
         Actor_OfferTalk(&this->actor, play, 80.0f);
@@ -210,13 +210,13 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
 }
 
 void func_80C13E6C(EnJgameTsn* this) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = func_80C13E90;
 }
 
 void func_80C13E90(EnJgameTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (((CURRENT_TIME > CLOCK_TIME(4, 0)) && (CURRENT_TIME < CLOCK_TIME(7, 0))) ||
             ((CURRENT_TIME > CLOCK_TIME(16, 0)) && (CURRENT_TIME < CLOCK_TIME(19, 0)))) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_2);
