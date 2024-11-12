@@ -4298,7 +4298,7 @@
     0x8082EB18:("Player_AnimReplace_PlayLoopNormalAdjusted",),
     0x8082EB38:("Player_ProcessControlStick",),
     0x8082EC9C:("Player_Anim_PlayOnceWaterAdjustment",),
-    0x8082ECCC:("func_8082ECCC",),
+    0x8082ECCC:("Player_IsUsingZoraBoomerang",),
     0x8082ECE0:("func_8082ECE0",),
     0x8082ED20:("Player_GetIdleAnim",),
     0x8082ED94:("Player_CheckForIdleAnim",),

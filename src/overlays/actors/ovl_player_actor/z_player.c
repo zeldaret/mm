@@ -2064,7 +2064,7 @@ void Player_Anim_PlayOnceWaterAdjustment(PlayState* play, Player* this, PlayerAn
     PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, sWaterSpeedFactor);
 }
 
-s32 func_8082ECCC(Player* this) {
+s32 Player_IsUsingZoraBoomerang(Player* this) {
     return this->stateFlags1 & PLAYER_STATE1_USING_ZORA_BOOMERANG;
 }
 
@@ -2840,7 +2840,7 @@ PlayerAnimationHeader* func_8082EEE0(Player* this) {
 }
 
 bool func_8082EF20(Player* this) {
-    return func_8082ECCC(this) && (this->unk_ACC != 0);
+    return Player_IsUsingZoraBoomerang(this) && (this->unk_ACC != 0);
 }
 
 PlayerAnimationHeader* func_8082EF54(Player* this) {
@@ -15929,7 +15929,7 @@ void Player_Action_43(Player* this, PlayState* play) {
     }
 
     if (this->unk_AA5 == PLAYER_UNKAA5_3) {
-        if (func_800B7118(this) || func_8082ECCC(this)) {
+        if (func_800B7118(this) || Player_IsUsingZoraBoomerang(this)) {
             Player_UpdateUpperBody(this, play);
         }
     }
