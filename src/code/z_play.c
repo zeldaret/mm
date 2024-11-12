@@ -2316,8 +2316,8 @@ void Play_Init(GameState* thisx) {
     // Busyloop until the room loads
     while (!Room_ProcessRoomRequest(this, &this->roomCtx)) {}
 
-    if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) ||
-                               (this->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5))) {
+    if ((CURRENT_DAY != 0) &&
+        ((this->roomCtx.curRoom.type == ROOM_TYPE_DUNGEON) || (this->roomCtx.curRoom.type == ROOM_TYPE_BOSS))) {
         Actor_Spawn(&this->actorCtx, this, ACTOR_EN_TEST4, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
     }
 
