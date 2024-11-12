@@ -8188,9 +8188,8 @@ s32 func_80839A84(PlayState* play, Player* this) {
 }
 
 s32 Player_ActionHandler_10(Player* this, PlayState* play) {
-    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) &&
-        (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && (sPlayerFloorType != FLOOR_TYPE_7) &&
-        (sPlayerFloorEffect != FLOOR_EFFECT_1)) {
+    if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) &&
+        (sPlayerFloorType != FLOOR_TYPE_7) && (sPlayerFloorEffect != FLOOR_EFFECT_1)) {
         s32 temp_a2 = this->unk_AE3[this->unk_ADE];
 
         if (temp_a2 <= 0) {
@@ -9996,7 +9995,7 @@ void Player_ChooseNextIdleAnim(PlayState* play, Player* this) {
         } else {
             // Pick fidget type based on room behavior.
             // This may be changed below.
-            fidgetType = play->roomCtx.curRoom.behaviorType2;
+            fidgetType = play->roomCtx.curRoom.environmentType;
 
             if (healthIsCritical) {
                 if (this->idleType >= PLAYER_IDLE_DEFAULT) {
@@ -10014,7 +10013,7 @@ void Player_ChooseNextIdleAnim(PlayState* play, Player* this) {
 
                 // There is a 4/5 chance that a common fidget type will be considered.
                 // However it may get rejected by the conditions below.
-                // The type determined by `curRoom.behaviorType2` will be used if a common type is rejected.
+                // The type determined by `curRoom.environmentType` will be used if a common type is rejected.
                 if (commonType < 4) {
                     // `FIDGET_ADJUST_TUNIC` and `FIDGET_TAP_FEET` are accepted unconditionally.
                     // The sword and shield related common types have extra restrictions.
@@ -11493,10 +11492,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                     (Player_CheckHostileLockOn(this) ||
                      ((sPlayerFloorType != FLOOR_TYPE_7) &&
                       (Player_FriendlyLockOnOrParallel(this) ||
-                       ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
+                       ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) &&
                         !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
-                } else if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && sp24 && (sp28 > 0)) {
+                } else if ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) && sp24 && (sp28 > 0)) {
                     doActionA = DO_ACTION_JUMP;
                 } else if ((this->transformation == PLAYER_FORM_DEKU) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                            (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
@@ -11589,8 +11588,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             spAC) {
             updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-        } else if ((this->stateFlags1 & PLAYER_STATE1_1) &&
-                   (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) &&
+        } else if ((this->stateFlags1 & PLAYER_STATE1_1) && (play->roomCtx.curRoom.type != ROOM_TYPE_DUNGEON) &&
                    ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 100)) {
             updBgCheckInfoFlags =
                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
@@ -15047,7 +15045,7 @@ AnimSfxEntry D_8085D60C[] = {
 
 void Player_Action_24(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
-        if ((play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) || (sPlayerFloorType == FLOOR_TYPE_9) ||
+        if ((play->roomCtx.curRoom.environmentType == ROOM_ENV_HOT) || (sPlayerFloorType == FLOOR_TYPE_9) ||
             ((func_808340AC(sPlayerFloorType) >= 0) &&
              !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             func_808344C0(play, this);
@@ -20337,7 +20335,7 @@ void Player_CsAction_5(PlayState* play, Player* this, CsCmdActorCue* cue) {
         this->speedXZ = 2.5f;
     }
 
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.type == ROOM_TYPE_BOSS)) {
         R_PLAY_FILL_SCREEN_ON = 45;
         R_PLAY_FILL_SCREEN_R = 255;
         R_PLAY_FILL_SCREEN_G = 255;
@@ -20715,7 +20713,7 @@ void Player_CsAction_41(PlayState* play, Player* this, CsCmdActorCue* cue) {
 }
 
 void Player_CsAction_42(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.type == ROOM_TYPE_BOSS)) {
         R_PLAY_FILL_SCREEN_ON = 45;
         R_PLAY_FILL_SCREEN_R = 255;
         R_PLAY_FILL_SCREEN_G = 255;
