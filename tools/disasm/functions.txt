@@ -1137,7 +1137,7 @@
     0x800CB924:("func_800CB924",),
     0x800CB950:("func_800CB950",),
     0x800CBA08:("Camera_IsClimbingLedge",),
-    0x800CBA34:("Camera_IsChargingSwordOrDekuFlowerDive",),
+    0x800CBA34:("Camera_IsChargingSpinAttackOrDekuFlowerDive",),
     0x800CBA7C:("func_800CBA7C",),
     0x800CBAAC:("func_800CBAAC",),
     0x800CBAD4:("Camera_GetFocalActorPos",),

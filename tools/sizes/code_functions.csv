@@ -651,7 +651,7 @@ asm/non_matchings/code/z_camera/Camera_IsPlayerFormZora.s,Camera_IsPlayerFormZor
 asm/non_matchings/code/z_camera/func_800CB924.s,func_800CB924,0x800CB924,0xB
 asm/non_matchings/code/z_camera/func_800CB950.s,func_800CB950,0x800CB950,0x2E
 asm/non_matchings/code/z_camera/Camera_IsClimbingLedge.s,Camera_IsClimbingLedge,0x800CBA08,0xB
-asm/non_matchings/code/z_camera/Camera_IsChargingSwordOrDekuFlowerDive.s,Camera_IsChargingSwordOrDekuFlowerDive,0x800CBA34,0x12
+asm/non_matchings/code/z_camera/Camera_IsChargingSpinAttackOrDekuFlowerDive.s,Camera_IsChargingSpinAttackOrDekuFlowerDive,0x800CBA34,0x12
 asm/non_matchings/code/z_camera/func_800CBA7C.s,func_800CBA7C,0x800CBA7C,0xC
 asm/non_matchings/code/z_camera/func_800CBAAC.s,func_800CBAAC,0x800CBAAC,0xA
 asm/non_matchings/code/z_camera/Camera_GetFocalActorPos.s,Camera_GetFocalActorPos,0x800CBAD4,0x21

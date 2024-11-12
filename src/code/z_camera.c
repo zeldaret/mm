@@ -419,7 +419,7 @@ s32 Camera_IsClimbingLedge(Camera* camera) {
     }
 }
 
-s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
+s32 Camera_IsChargingSpinAttackOrDekuFlowerDive(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
@@ -3562,7 +3562,7 @@ s32 Camera_Battle1(Camera* camera) {
     swingPitchFinal = roData->swingPitchFinal;
     fov = roData->fov;
 
-    if (Camera_IsChargingSwordOrDekuFlowerDive(camera)) {
+    if (Camera_IsChargingSpinAttackOrDekuFlowerDive(camera)) {
         camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(18.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         camera->yOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->yOffsetUpdateRate, 0.5f, 0.0001f);
         camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->xzOffsetUpdateRate, 0.5f, 0.0001f);
@@ -3658,7 +3658,7 @@ s32 Camera_Battle1(Camera* camera) {
         sp104 = PREG(86) + 800.0f;
     }
 
-    if ((spA4.r > sp104) || Camera_IsChargingSwordOrDekuFlowerDive(camera)) {
+    if ((spA4.r > sp104) || Camera_IsChargingSpinAttackOrDekuFlowerDive(camera)) {
         distRatio = 1.0f;
         spF8 = 10.0f;
     } else {
