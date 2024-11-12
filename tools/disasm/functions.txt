@@ -4322,7 +4322,7 @@
     0x8082F5FC:("func_8082F5FC",),
     0x8082F62C:("Player_InitExplosiveIA",),
     0x8082F7F4:("Player_InitHookshotIA",),
-    0x8082F8A0:("Player_InitZoraFinsIA",),
+    0x8082F8A0:("Player_InitZoraBoomerangIA",),
     0x8082F8BC:("Player_InitItemAction",),
     0x8082F938:("Player_OverrideBlureColors",),
     0x8082FA5C:("func_8082FA5C",),

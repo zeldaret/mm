@@ -235,7 +235,7 @@ void Player_InitDekuStickIA(PlayState* play, Player* this);
 void Player_InitBowOrDekuNutIA(PlayState* play, Player* this);
 void Player_InitExplosiveIA(PlayState* play, Player* this);
 void Player_InitHookshotIA(PlayState* play, Player* this);
-void Player_InitZoraFinsIA(PlayState* play, Player* this);
+void Player_InitZoraBoomerangIA(PlayState* play, Player* this);
 
 s32 Player_ActionHandler_0(Player* this, PlayState* play);
 s32 Player_ActionHandler_1(Player* this, PlayState* play);
@@ -3211,89 +3211,89 @@ PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
 typedef void (*PlayerInitItemActionFunc)(PlayState*, Player*);
 
 PlayerInitItemActionFunc sPlayerItemActionInitFuncs[PLAYER_IA_MAX] = {
-    Player_InitDefaultIA,      // PLAYER_IA_NONE
-    Player_InitDefaultIA,      // PLAYER_IA_LAST_USED
-    Player_InitDefaultIA,      // PLAYER_IA_FISHING_ROD
-    Player_InitDefaultIA,      // PLAYER_IA_SWORD_KOKIRI
-    Player_InitDefaultIA,      // PLAYER_IA_SWORD_RAZOR
-    Player_InitDefaultIA,      // PLAYER_IA_SWORD_GILDED
-    Player_InitDefaultIA,      // PLAYER_IA_SWORD_TWO_HANDED
-    Player_InitDekuStickIA,    // PLAYER_IA_DEKU_STICK
-    Player_InitZoraFinsIA,     // PLAYER_IA_ZORA_FINS
-    Player_InitBowOrDekuNutIA, // PLAYER_IA_BOW
-    Player_InitBowOrDekuNutIA, // PLAYER_IA_BOW_FIRE
-    Player_InitBowOrDekuNutIA, // PLAYER_IA_BOW_ICE
-    Player_InitBowOrDekuNutIA, // PLAYER_IA_BOW_LIGHT
-    Player_InitHookshotIA,     // PLAYER_IA_HOOKSHOT
-    Player_InitExplosiveIA,    // PLAYER_IA_BOMB
-    Player_InitExplosiveIA,    // PLAYER_IA_POWDER_KEG
-    Player_InitExplosiveIA,    // PLAYER_IA_BOMBCHU
-    Player_InitZoraFinsIA,     // PLAYER_IA_11
-    Player_InitBowOrDekuNutIA, // PLAYER_IA_DEKU_NUT
-    Player_InitDefaultIA,      // PLAYER_IA_PICTOGRAPH_BOX
-    Player_InitDefaultIA,      // PLAYER_IA_OCARINA
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_EMPTY
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_FISH
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_SPRING_WATER
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_ZORA_EGG
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_GOLD_DUST
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_1C
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_SEA_HORSE
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_MUSHROOM
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_BUG
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_POE
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_BIG_POE
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_POTION_RED
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_POTION_BLUE
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_POTION_GREEN
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_MILK
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_MILK_HALF
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_CHATEAU
-    Player_InitDefaultIA,      // PLAYER_IA_BOTTLE_FAIRY
-    Player_InitDefaultIA,      // PLAYER_IA_MOONS_TEAR
-    Player_InitDefaultIA,      // PLAYER_IA_DEED_LAND
-    Player_InitDefaultIA,      // PLAYER_IA_ROOM_KEY
-    Player_InitDefaultIA,      // PLAYER_IA_LETTER_TO_KAFEI
-    Player_InitDefaultIA,      // PLAYER_IA_MAGIC_BEANS
-    Player_InitDefaultIA,      // PLAYER_IA_DEED_SWAMP
-    Player_InitDefaultIA,      // PLAYER_IA_DEED_MOUNTAIN
-    Player_InitDefaultIA,      // PLAYER_IA_DEED_OCEAN
-    Player_InitDefaultIA,      // PLAYER_IA_32
-    Player_InitDefaultIA,      // PLAYER_IA_LETTER_MAMA
-    Player_InitDefaultIA,      // PLAYER_IA_34
-    Player_InitDefaultIA,      // PLAYER_IA_35
-    Player_InitDefaultIA,      // PLAYER_IA_PENDANT_MEMORIES
-    Player_InitDefaultIA,      // PLAYER_IA_37
-    Player_InitDefaultIA,      // PLAYER_IA_38
-    Player_InitDefaultIA,      // PLAYER_IA_39
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_TRUTH
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_KAFEIS_MASK
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_ALL_NIGHT
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_BUNNY
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_KEATON
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_GARO
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_ROMANI
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_CIRCUS_LEADER
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_POSTMAN
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_COUPLE
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_GREAT_FAIRY
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_GIBDO
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_DON_GERO
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_KAMARO
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_CAPTAIN
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_STONE
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_BREMEN
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_BLAST
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_SCENTS
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_GIANT
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_FIERCE_DEITY
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_GORON
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_ZORA
-    Player_InitDefaultIA,      // PLAYER_IA_MASK_DEKU
-    Player_InitDefaultIA,      // PLAYER_IA_LENS_OF_TRUTH
+    Player_InitDefaultIA,       // PLAYER_IA_NONE
+    Player_InitDefaultIA,       // PLAYER_IA_LAST_USED
+    Player_InitDefaultIA,       // PLAYER_IA_FISHING_ROD
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_KOKIRI
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_RAZOR
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_GILDED
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_TWO_HANDED
+    Player_InitDekuStickIA,     // PLAYER_IA_DEKU_STICK
+    Player_InitZoraBoomerangIA, // PLAYER_IA_ZORA_FINS
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_FIRE
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_ICE
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_LIGHT
+    Player_InitHookshotIA,      // PLAYER_IA_HOOKSHOT
+    Player_InitExplosiveIA,     // PLAYER_IA_BOMB
+    Player_InitExplosiveIA,     // PLAYER_IA_POWDER_KEG
+    Player_InitExplosiveIA,     // PLAYER_IA_BOMBCHU
+    Player_InitZoraBoomerangIA, // PLAYER_IA_11
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_DEKU_NUT
+    Player_InitDefaultIA,       // PLAYER_IA_PICTOGRAPH_BOX
+    Player_InitDefaultIA,       // PLAYER_IA_OCARINA
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_EMPTY
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_FISH
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_SPRING_WATER
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_ZORA_EGG
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_GOLD_DUST
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_1C
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_SEA_HORSE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MUSHROOM
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_BUG
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_BIG_POE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_RED
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_BLUE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_GREEN
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MILK
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MILK_HALF
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_CHATEAU
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_FAIRY
+    Player_InitDefaultIA,       // PLAYER_IA_MOONS_TEAR
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_LAND
+    Player_InitDefaultIA,       // PLAYER_IA_ROOM_KEY
+    Player_InitDefaultIA,       // PLAYER_IA_LETTER_TO_KAFEI
+    Player_InitDefaultIA,       // PLAYER_IA_MAGIC_BEANS
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_SWAMP
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_MOUNTAIN
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_OCEAN
+    Player_InitDefaultIA,       // PLAYER_IA_32
+    Player_InitDefaultIA,       // PLAYER_IA_LETTER_MAMA
+    Player_InitDefaultIA,       // PLAYER_IA_34
+    Player_InitDefaultIA,       // PLAYER_IA_35
+    Player_InitDefaultIA,       // PLAYER_IA_PENDANT_MEMORIES
+    Player_InitDefaultIA,       // PLAYER_IA_37
+    Player_InitDefaultIA,       // PLAYER_IA_38
+    Player_InitDefaultIA,       // PLAYER_IA_39
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_TRUTH
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KAFEIS_MASK
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ALL_NIGHT
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BUNNY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KEATON
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GARO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ROMANI
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_CIRCUS_LEADER
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_POSTMAN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_COUPLE
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GREAT_FAIRY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GIBDO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_DON_GERO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KAMARO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_CAPTAIN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_STONE
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BREMEN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BLAST
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_SCENTS
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GIANT
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_FIERCE_DEITY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GORON
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ZORA
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_DEKU
+    Player_InitDefaultIA,       // PLAYER_IA_LENS_OF_TRUTH
 };
 
 void Player_InitDefaultIA(PlayState* play, Player* this) {
@@ -3480,7 +3480,7 @@ void Player_InitHookshotIA(PlayState* play, Player* this) {
     armsHook->unk_208 = this->transformation;
 }
 
-void Player_InitZoraFinsIA(PlayState* play, Player* this) {
+void Player_InitZoraBoomerangIA(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_1000000;
 }
 
