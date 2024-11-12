@@ -768,7 +768,7 @@ void EnTest7_SetupArriveCs(EnTest7* this, PlayState* play) {
     this->flags |= OWL_WARP_FLAGS_DRAW_WIND_CAPSULE;
     this->windCapsule.unk_04 = 30.0f;
 
-    if (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) {
+    if (play->roomCtx.curRoom.type != ROOM_TYPE_DUNGEON) {
         EnTest7_SetupAction(this, EnTest7_StartArriveCs);
     } else {
         EnTest7_SetupAction(this, EnTest7_StartArriveCsSkip);
