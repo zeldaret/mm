@@ -400,37 +400,10 @@ s32 func_800CB924(Camera* camera) {
 }
 
 s32 func_800CB950(Camera* camera) {
-    Player* player;
-    s32 phi_v0;
-    s32 ret;
-    f32 yDiff;
-
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        yDiff = Camera_fabsf(camera->focalActorPosRot.pos.y - camera->focalActorFloorHeight);
-
-        phi_v0 = false;
-        if (yDiff < 11.0f) {
-            phi_v0 = true;
-        }
-
-        ret = phi_v0;
-
-        if (!ret) {
-
-            ret = false;
-
-            if (camera->focalActor->gravity > -0.1f) {
-                ret = true;
-            }
-
-            player = (Player*)camera->focalActor;
-            if (!ret) {
-                // Using zora fins
-                ret = player->stateFlags1 & PLAYER_STATE1_200000;
-                ret = !!ret;
-            }
-        }
-        return ret;
+        return ((Camera_fabsf(camera->focalActorPosRot.pos.y - camera->focalActorFloorHeight)) < 11.0f) ||
+               (camera->focalActor->gravity > -0.1f) ||
+               (((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_200000);
     } else {
         return true;
     }
@@ -448,16 +421,10 @@ s32 Camera_IsClimbingLedge(Camera* camera) {
 
 s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
     Actor* focalActor = camera->focalActor;
-    s32 ret;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
-        // Charging Sword
-        ret = (((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) != 0;
-        if (!ret) {
-            // Deku Flower Dive
-            ret = (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100) != 0;
-        }
-        return ret;
+        return (((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) ||
+               (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100);
     } else {
         return false;
     }

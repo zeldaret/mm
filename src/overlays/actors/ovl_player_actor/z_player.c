@@ -8133,7 +8133,15 @@ s32 func_80839800(Player* this, PlayState* play) {
 
 void func_80839860(Player* this, PlayState* play, s32 controlStickDirection) {
     s32 pad;
-    f32 speed = (!(controlStickDirection & 1) ? 5.8f : 3.5f);
+    f32 speed;
+
+    if (!(controlStickDirection & 1)) {
+        // forwards, backwards, or none
+        speed = 5.8f;
+    } else {
+        // left or right
+        speed = 3.5f;
+    }
 
     if (this->currentBoots == PLAYER_BOOTS_GIANT) {
         speed /= 2.0f;
@@ -8148,7 +8156,14 @@ void func_80839860(Player* this, PlayState* play, s32 controlStickDirection) {
     this->av1.actionVar1 = controlStickDirection;
 
     this->yaw = this->actor.shape.rot.y + (controlStickDirection << 0xE);
-    this->speedXZ = !(controlStickDirection & 1) ? 6.0f : 8.5f;
+
+    if (!(controlStickDirection & 1)) {
+        // forwards, backwards, or none
+        this->speedXZ = 6.0f;
+    } else {
+        // left or right
+        this->speedXZ = 8.5f;
+    }
 
     this->stateFlags2 |= PLAYER_STATE2_80000;
     Player_PlaySfx(this, ((controlStickDirection << 0xE) == (PLAYER_STICK_DIR_BACKWARD << 0xE)) ? NA_SE_PL_ROLL
