@@ -177,7 +177,7 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
 Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActorFunc verifyActorFunc);
 
 s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyTalkExchangeActorFunc verifyActorFunc);
-s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
+s32 SubS_ArePlayerAndActorFacing (struct PlayState* play, Actor* actor, void* data);
 s32 SubS_OfferTalkExchangeFacing(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, s16 playerYawRange, s16 actorYawRange);
 
 s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);

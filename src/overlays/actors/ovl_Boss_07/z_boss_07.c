@@ -1137,7 +1137,7 @@ void Boss07_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* pos) {
  * Returns true if this actor's model is rotated such that it is looking at the player *and* if the player's model is
  * rotated such that they are looking at this actor.
  */
-s32 Boss07_ArePlayerAndThisFacing(Boss07* this, PlayState* play) {
+s32 Boss07_ArePlayerAndActorFacing(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3000) &&
@@ -1161,12 +1161,12 @@ void Boss07_RandVec3fXZ(Vec3f* dst, f32 length) {
     Matrix_MultVecZ(length, dst);
 }
 
-void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 spawnInterval, u8 spawnAtFocus) {
+void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 dustSpawnFrameMask, u8 spawnAtFocus) {
     static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
     static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
     u8 i;
 
-    if (!(this->frameCounter & spawnInterval) && ((spawnInterval == 0) || (this->actor.speed > 1.0f))) {
+    if (!(this->frameCounter & dustSpawnFrameMask) && ((dustSpawnFrameMask == 0) || (this->actor.speed > 1.0f))) {
         for (i = 0; i < MAJORAS_INCARNATION_FOOT_MAX; i++) {
             Vec3f pos;
             Vec3f velocity;
@@ -1203,7 +1203,7 @@ void Boss07_MovePlayer(PlayState* play) {
     }
 }
 
-void Boss07_SpawnDustAtPos(PlayState* play, Vec3f* spawnPos, u8 count) {
+void Boss07_Wrath_SpawnDustAtPos(PlayState* play, Vec3f* spawnPos, u8 count) {
     static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
     static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
     u8 i;
@@ -1216,11 +1216,14 @@ void Boss07_SpawnDustAtPos(PlayState* play, Vec3f* spawnPos, u8 count) {
         velocity.x = Rand_CenteredFloat(3.0f);
         velocity.y = Rand_ZeroFloat(2.0f) + 1.0f;
         velocity.z = Rand_CenteredFloat(3.0f);
+
         accel.x = accel.z = 0.0f;
         accel.y = -0.1f;
+
         pos.x = spawnPos->x + Rand_CenteredFloat(30.0f);
         pos.y = spawnPos->y + 15.0f + Rand_CenteredFloat(30.0f);
         pos.z = spawnPos->z + Rand_CenteredFloat(30.0f);
+
         func_800B0EB0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvColor, Rand_ZeroFloat(50.0f) + 100.0f,
                       10, Rand_ZeroFloat(5.0f) + 14.0f);
     }
@@ -2786,7 +2789,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
 
                     if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (KREG(38) + 60.0f)) {
                         ((ObjTsubo*)prop)->unk_19B = 1;
-                        Boss07_SpawnDustAtPos(play, &prop->world.pos, 10);
+                        Boss07_Wrath_SpawnDustAtPos(play, &prop->world.pos, 10);
                     }
                 }
             }
@@ -2834,7 +2837,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                         this->rightWhip.tension = 0.0f;
                         Audio_PlaySfx(NA_SE_EN_LAST3_GET_LINK_OLD);
                     }
-                } else if ((player->stateFlags1 & PLAYER_STATE1_400000) && Boss07_ArePlayerAndThisFacing(this, play)) {
+                } else if ((player->stateFlags1 & PLAYER_STATE1_400000) && Boss07_ArePlayerAndActorFacing(this, play)) {
                     player->pushedSpeed = 10.0f;
                     player->pushedYaw = this->actor.yawTowardsPlayer;
                     Audio_PlaySfx(NA_SE_IT_SHIELD_BOUND);
@@ -2851,7 +2854,7 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                 hitPos.z += Rand_CenteredFloat(30.0f);
 
                 EffectSsHitmark_SpawnFixedScale(play, 0, &hitPos);
-                Boss07_SpawnDustAtPos(play, &player->actor.world.pos, 7);
+                Boss07_Wrath_SpawnDustAtPos(play, &player->actor.world.pos, 7);
                 break;
             }
         }
@@ -2872,7 +2875,7 @@ void Boss07_Wrath_UpdateDamage(Boss07* this, PlayState* play) {
         this->kickCollider.elements[MAJORAS_WARTH_KICK_COLLIDER_RIGHT_FOOT].base.atElemFlags &= ~ATELEM_HIT;
         player->pushedYaw = this->actor.yawTowardsPlayer;
         player->pushedSpeed = 20.0f;
-        Boss07_SpawnDustAtPos(play, &player->actor.world.pos, 12);
+        Boss07_Wrath_SpawnDustAtPos(play, &player->actor.world.pos, 12);
         Audio_PlaySfx(NA_SE_IT_HOOKSHOT_STICK_OBJ);
     }
 
@@ -3147,7 +3150,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         (this->frameCounter >= 6)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->kickCollider.base);
     } else {
-        if (this->canEvade && Boss07_ArePlayerAndThisFacing(this, play)) {
+        if (this->canEvade && Boss07_ArePlayerAndActorFacing(this, play)) {
             if ((player->unk_D57 == 4) && (player->heldItemAction != PLAYER_IA_BOW_LIGHT)) {
                 if ((this->actor.xzDistToPlayer >= 400.0f) && (Rand_ZeroOne() < 0.5f)) {
                     Boss07_Wrath_SetupSidestep(this, play);
@@ -3721,7 +3724,7 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, PlayState* play, Vec3f* pos) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
+void Boss07_BattleHandler_DrawIntroPlayerLightOrb(Boss07* this, PlayState* play) {
     s32 pad;
     GraphicsContext* gfxCtx;
     f32 yPosOffset;
@@ -3744,6 +3747,7 @@ void Boss07_BattleHandler_DrawLight(Boss07* this, PlayState* play) {
         } else {
             yPosOffset = zPosOffset = 0.0f;
         }
+
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
             yPosOffset -= 43.0f;
         }
@@ -4319,6 +4323,7 @@ void Boss07_Incarnation_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u
 
     if (this->actor.colChkInfo.health != 0) {
         this->actor.colChkInfo.health -= damage;
+
         if ((s8)this->actor.colChkInfo.health <= 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_DEAD_OLD);
             this->shouldStartDeath = true;
@@ -4328,6 +4333,7 @@ void Boss07_Incarnation_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u
             return;
         }
     }
+
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_DAMAGE2_OLD);
 }
 
@@ -4335,9 +4341,11 @@ void Boss07_Incarnation_Damaged(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_BIRD2_OLD - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
     Boss07_SmoothStop(this, 2.0f);
+
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         Boss07_Incarnation_SetupRun(this, play);
     }
+
     Boss07_Incarnation_SpawnDust(this, play, 1, false);
 }
 
@@ -4370,6 +4378,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
     } else {
         dx = this->targetPos.x - this->actor.world.pos.x;
         dz = this->targetPos.z - this->actor.world.pos.z;
+
         if ((this->timers[1] == 0) || (SQ(dx) + SQ(dz) < 30000.0f)) { // dist ~ 173.2
             if (Rand_ZeroOne() < 0.3f) {
                 f32 rand = Rand_ZeroOne();
@@ -4922,6 +4931,7 @@ s32 Boss07_Incarnation_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
     if (limbIndex == MAJORAS_INCARNATION_LIMB_EYESTALK) {
         rot->y += this->cutsceneHeadRot.x;
     }
+
     return false;
 }
 
@@ -7025,7 +7035,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
 
     if (this->tryFireProjectile) {
         this->tryFireProjectile = false;
-        if (Boss07_ArePlayerAndThisFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_FireBeam)) {
+        if (Boss07_ArePlayerAndActorFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_FireBeam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_PROJECTILE_REMAINS);
         }
@@ -7654,7 +7664,7 @@ void Boss07_BattleHandler_Draw(Actor* thisx, PlayState* play2) {
     Boss07* this = THIS;
 
     Boss07_BattleHandler_DrawEffects(play);
-    Boss07_BattleHandler_DrawLight(this, play);
+    Boss07_BattleHandler_DrawIntroPlayerLightOrb(this, play);
 }
 
 void Boss07_BattleHandler_UpdateEffects(PlayState* play) {
@@ -7675,7 +7685,7 @@ void Boss07_BattleHandler_UpdateEffects(PlayState* play) {
 
             if (effect->type == MAJORA_EFFECT_FLAME) {
                 if (effect->isFadingAway) {
-                    effect->alpha -= (i % 8U) + 13;
+                    effect->alpha -= (i & 7) + 13;
                     if (effect->alpha <= 0) {
                         effect->alpha = 0;
                         effect->type = MAJORA_EFFECT_NONE;
@@ -7707,8 +7717,8 @@ void Boss07_BattleHandler_DrawEffects(PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (3 * effect->texScroll) % 128U,
-                                        (15 * -effect->texScroll) % 256U, 32, 64, 1, 0, 0, 32, 32));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (3 * effect->texScroll) & 0x7F,
+                                        (15 * -effect->texScroll) & 0xFF, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);

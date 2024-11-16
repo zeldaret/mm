@@ -2327,7 +2327,7 @@ void Boss01_Thaw(Boss01* this, PlayState* play) {
  * Returns true if Odolwa's model is rotated such that he is looking at the player *and* if the player's model is
  * rotated such that they are looking at Odolwa.
  */
-s32 Boss01_ArePlayerAndOdolwaFacing(Boss01* this, PlayState* play) {
+s32 Boss01_ArePlayerAndActorFacing(Boss01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3000) &&
@@ -2440,7 +2440,7 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
     // normally evades attacks, so long as the player is far enough to the side or behind him.
     if (this->canGuardOrEvade &&
         ((player->unk_D57 != 0) || ((player->unk_ADC != 0) && (this->actor.xzDistToPlayer <= 120.0f))) &&
-        Boss01_ArePlayerAndOdolwaFacing(this, play)) {
+        Boss01_ArePlayerAndActorFacing(this, play)) {
         if ((Rand_ZeroOne() < 0.25f) && (this->actionFunc != Boss01_Guard)) {
             Boss01_SetupJump(this, play, false);
             this->disableCollisionTimer = 10;
