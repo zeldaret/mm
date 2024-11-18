@@ -880,8 +880,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10         (1 << 4)
 // 
 #define PLAYER_STATE1_20         (1 << 5)
-// 
-#define PLAYER_STATE1_40         (1 << 6)
+// Currently talking to an actor. This includes item exchanges.
+#define PLAYER_STATE1_TALKING (1 << 6)
 // Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
 // This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
 #define PLAYER_STATE1_DEAD         (1 << 7)
@@ -937,8 +937,8 @@ typedef enum PlayerCueId {
 
 // 
 #define PLAYER_STATE2_1          (1 << 0)
-// 
-#define PLAYER_STATE2_2          (1 << 1)
+// Can accept a talk offer. "Speak" or "Check" is shown on the A button.
+#define PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER          (1 << 1)
 // 
 #define PLAYER_STATE2_4          (1 << 2)
 // 
@@ -1287,7 +1287,7 @@ typedef struct Player {
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall
     /* 0xB5C */ u8 ledgeClimbType; // see PlayerLedgeClimbType enum
     /* 0xB5D */ u8 ledgeClimbDelayTimer;
-    /* 0xB5E */ u8 unk_B5E;
+    /* 0xB5E */ u8 textboxBtnCooldownTimer; // Prevents usage of A/B/C-up when counting down
     /* 0xB5F */ u8 unk_B5F;
     /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;

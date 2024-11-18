@@ -1012,7 +1012,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_TALKING | PLAYER_STATE1_400)) {
         this->unk_356 |= 0x400;
         if (this->unk_358 != textId) {
             if ((this->animIndex == ENPM_ANIM_0) || (this->animIndex == ENPM_ANIM_1)) {

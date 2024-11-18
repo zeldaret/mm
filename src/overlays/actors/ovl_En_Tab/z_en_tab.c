@@ -569,7 +569,7 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
 
     switch (this->scheduleResult) {
         case 1:
-            if ((player->stateFlags1 & PLAYER_STATE1_40) && !(play->msgCtx.currentTextId <= 0x2B00) &&
+            if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && !(play->msgCtx.currentTextId <= 0x2B00) &&
                 (play->msgCtx.currentTextId < 0x2B08)) {
                 this->actor.child = &this->unk_1E4->actor;
                 this->unk_2FC |= 8;

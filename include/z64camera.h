@@ -1652,7 +1652,7 @@ s32 Camera_IsDbgCamEnabled(void);
 Vec3f Camera_GetQuakeOffset(Camera* camera);
 void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3);
 s32 Camera_GetNegOne(void);
-s16 func_800E0238(Camera* camera);
+s16 Camera_SetFinishedFlag(Camera* camera);
 void Camera_SetFocalActor(Camera* camera, struct Actor* actor);
 void Camera_SetTargetActor(Camera* camera, struct Actor* actor);
 f32 Camera_GetWaterYPos(Camera* camera);
