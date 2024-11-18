@@ -1486,7 +1486,7 @@ s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play)
         return false;
     }
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         if (this->lastTextId != textId) {
             switch (textId) {
                 case 0xE1A: // Awakening from frozen form, confused, turn to other Goron

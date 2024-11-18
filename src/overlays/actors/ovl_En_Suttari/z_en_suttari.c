@@ -1229,7 +1229,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (play->msgCtx.currentTextId != 0x2A31)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && (play->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
         this->actor.speed = 0.0f;
     } else {

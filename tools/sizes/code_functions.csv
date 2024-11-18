@@ -657,7 +657,7 @@ asm/non_matchings/code/z_camera/func_800CBAAC.s,func_800CBAAC,0x800CBAAC,0xA
 asm/non_matchings/code/z_camera/Camera_GetFocalActorPos.s,Camera_GetFocalActorPos,0x800CBAD4,0x21
 asm/non_matchings/code/z_camera/Camera_IsUnderwaterAsZora.s,Camera_IsUnderwaterAsZora,0x800CBB58,0xC
 asm/non_matchings/code/z_camera/func_800CBB88.s,func_800CBB88,0x800CBB88,0x1E
-asm/non_matchings/code/z_camera/Camera_IsUsingZoraFins.s,Camera_IsUsingZoraFins,0x800CBC00,0xC
+asm/non_matchings/code/z_camera/func_800CBC00.s,func_800CBC00,0x800CBC00,0xC
 asm/non_matchings/code/z_camera/func_800CBC30.s,func_800CBC30,0x800CBC30,0x15
 asm/non_matchings/code/z_camera/func_800CBC84.s,func_800CBC84,0x800CBC84,0xC8
 asm/non_matchings/code/z_camera/func_800CBFA4.s,func_800CBFA4,0x800CBFA4,0x17
@@ -807,7 +807,7 @@ asm/non_matchings/code/z_camera/Camera_IsDbgCamEnabled.s,Camera_IsDbgCamEnabled,
 asm/non_matchings/code/z_camera/Camera_GetQuakeOffset.s,Camera_GetQuakeOffset,0x800E01B8,0x9
 asm/non_matchings/code/z_camera/Camera_SetCameraData.s,Camera_SetCameraData,0x800E01DC,0x13
 asm/non_matchings/code/z_camera/Camera_GetNegOne.s,Camera_GetNegOne,0x800E0228,0x4
-asm/non_matchings/code/z_camera/func_800E0238.s,func_800E0238,0x800E0238,0x1D
+asm/non_matchings/code/z_camera/Camera_SetFinishedFlag.s,Camera_SetFinishedFlag,0x800E0238,0x1D
 asm/non_matchings/code/z_camera/Camera_SetFocalActor.s,Camera_SetFocalActor,0x800E02AC,0x17
 asm/non_matchings/code/z_camera/Camera_SetTargetActor.s,Camera_SetTargetActor,0x800E0308,0x5
 asm/non_matchings/code/z_camera/Camera_GetWaterYPos.s,Camera_GetWaterYPos,0x800E031C,0xB
