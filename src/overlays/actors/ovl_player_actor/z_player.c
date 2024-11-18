@@ -2064,8 +2064,8 @@ void Player_Anim_PlayOnceWaterAdjustment(PlayState* play, Player* this, PlayerAn
     PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, sWaterSpeedFactor);
 }
 
-s32 func_8082ECCC(Player* this) {
-    return this->stateFlags1 & PLAYER_STATE1_1000000;
+s32 Player_IsUsingZoraBoomerang(Player* this) {
+    return this->stateFlags1 & PLAYER_STATE1_USING_ZORA_BOOMERANG;
 }
 
 #define CHEST_ANIM_SHORT 0
@@ -2840,7 +2840,7 @@ PlayerAnimationHeader* func_8082EEE0(Player* this) {
 }
 
 bool func_8082EF20(Player* this) {
-    return func_8082ECCC(this) && (this->unk_ACC != 0);
+    return Player_IsUsingZoraBoomerang(this) && (this->unk_ACC != 0);
 }
 
 PlayerAnimationHeader* func_8082EF54(Player* this) {
@@ -3008,7 +3008,7 @@ void Player_InitItemActionWithAnim(PlayState* play, Player* this, PlayerItemActi
     PlayerAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 animGroup;
 
-    this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000000);
+    this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_USING_ZORA_BOOMERANG);
 
     for (animGroup = 0; animGroup < PLAYER_ANIMGROUP_MAX; animGroup++) {
         if (curAnim == **iter) {
@@ -3116,7 +3116,7 @@ PlayerItemAction Player_ItemToItemAction(Player* this, ItemId item) {
     } else if (item == ITEM_FISHING_ROD) {
         return PLAYER_IA_FISHING_ROD;
     } else if ((item == ITEM_SWORD_KOKIRI) && (this->transformation == PLAYER_FORM_ZORA)) {
-        return PLAYER_IA_ZORA_FINS;
+        return PLAYER_IA_ZORA_BOOMERANG;
     } else {
         return sItemItemActions[item];
     }
@@ -3131,7 +3131,7 @@ PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
     Player_UpperAction_1,          // PLAYER_IA_SWORD_GILDED
     Player_UpperAction_1,          // PLAYER_IA_SWORD_TWO_HANDED
     Player_UpperAction_0,          // PLAYER_IA_DEKU_STICK
-    Player_UpperAction_0,          // PLAYER_IA_ZORA_FINS
+    Player_UpperAction_0,          // PLAYER_IA_ZORA_BOOMERANG
     Player_UpperAction_6,          // PLAYER_IA_BOW
     Player_UpperAction_6,          // PLAYER_IA_BOW_FIRE
     Player_UpperAction_6,          // PLAYER_IA_BOW_ICE
@@ -3219,7 +3219,7 @@ PlayerInitItemActionFunc sPlayerItemActionInitFuncs[PLAYER_IA_MAX] = {
     Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_GILDED
     Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_TWO_HANDED
     Player_InitItemAction_DekuStick,      // PLAYER_IA_DEKU_STICK
-    Player_InitItemAction_5,              // PLAYER_IA_ZORA_FINS
+    Player_InitItemAction_5,              // PLAYER_IA_ZORA_BOOMERANG
     Player_InitItemAction_2,              // PLAYER_IA_BOW
     Player_InitItemAction_2,              // PLAYER_IA_BOW_FIRE
     Player_InitItemAction_2,              // PLAYER_IA_BOW_ICE
@@ -3481,14 +3481,14 @@ void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
 }
 
 void Player_InitItemAction_5(PlayState* play, Player* this) {
-    this->stateFlags1 |= PLAYER_STATE1_1000000;
+    this->stateFlags1 |= PLAYER_STATE1_USING_ZORA_BOOMERANG;
 }
 
 void Player_InitItemAction(PlayState* play, Player* this, PlayerItemAction itemAction) {
     this->itemAction = this->heldItemAction = itemAction;
     this->modelGroup = this->nextModelGroup;
 
-    this->stateFlags1 &= ~(PLAYER_STATE1_1000000 | PLAYER_STATE1_8);
+    this->stateFlags1 &= ~(PLAYER_STATE1_USING_ZORA_BOOMERANG | PLAYER_STATE1_8);
 
     this->unk_B08 = 0.0f;
     this->unk_B0C = 0.0f;
@@ -3918,7 +3918,7 @@ void Player_StartChangingHeldItem(Player* this, PlayState* play) {
     nextModelAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
     itemChangeType = sPlayerItemChangeTypes[gPlayerModelTypes[this->modelGroup].modelAnimType][nextModelAnimType];
 
-    if ((heldItemAction == PLAYER_IA_ZORA_FINS) || (this->heldItemAction == PLAYER_IA_ZORA_FINS)) {
+    if ((heldItemAction == PLAYER_IA_ZORA_BOOMERANG) || (this->heldItemAction == PLAYER_IA_ZORA_BOOMERANG)) {
         itemChangeType = (heldItemAction == PLAYER_IA_NONE) ? -PLAYER_ITEM_CHG_14 : PLAYER_ITEM_CHG_14;
     } else if ((heldItemAction == PLAYER_IA_BOTTLE_EMPTY) || (heldItemAction == PLAYER_IA_11) ||
                ((heldItemAction == PLAYER_IA_NONE) &&
@@ -4162,7 +4162,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
                     if ((this->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                         (!Player_IsGoronOrDeku(this) &&
                          ((((this->transformation == PLAYER_FORM_ZORA)) &&
-                           !(this->stateFlags1 & PLAYER_STATE1_2000000)) ||
+                           !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) ||
                           ((this->transformation == PLAYER_FORM_HUMAN) &&
                            (this->currentShield != PLAYER_SHIELD_NONE))) &&
                          Player_IsZTargeting(this))) {
@@ -4272,7 +4272,7 @@ bool func_80831010(Player* this, PlayState* play) {
 }
 
 bool func_80831094(Player* this, PlayState* play) {
-    if ((this->doorType == PLAYER_DOORTYPE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
+    if ((this->doorType == PLAYER_DOORTYPE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) {
         if (sPlayerUseHeldItem || func_80830F9C(play)) {
             if (func_80830E30(this, play)) {
                 return func_80831010(this, play);
@@ -4967,9 +4967,9 @@ void Player_UpdateZTargeting(Player* this, PlayState* play) {
     isTalking = Player_IsTalking(play);
 
     if (isTalking || (this->zTargetActiveTimer != 0) ||
-        (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
+        (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_ZORA_BOOMERANG_THROWN))) {
         if (!isTalking) {
-            if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
+            if (!(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) &&
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
 
@@ -5638,7 +5638,7 @@ MeleeWeaponDamageInfo D_8085D09C[PLAYER_MELEEWEAPON_MAX] = {
     { DMG_SWORD, 4, 8, 3, 6 },       // PLAYER_MELEEWEAPON_SWORD_GILDED
     { DMG_SWORD, 4, 8, 4, 8 },       // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
     { DMG_DEKU_STICK, 0, 0, 2, 4 },  // PLAYER_MELEEWEAPON_DEKU_STICK
-    { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_FINS
+    { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_BOOMERANG
 };
 
 // New function in NE0: split out of func_80833864 to be able to call it to patch Power Crouch Stab.
@@ -7711,7 +7711,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_SWORD_GILDED,        // PLAYER_IA_SWORD_GILDED
     GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_TWO_HANDED
     GI_DEKU_STICKS_1,       // PLAYER_IA_DEKU_STICK
-    GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_FINS
+    GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_BOOMERANG
     GI_QUIVER_30,           // PLAYER_IA_BOW
     GI_ARROW_FIRE,          // PLAYER_IA_BOW_FIRE
     GI_ARROW_ICE,           // PLAYER_IA_BOW_ICE
@@ -8128,7 +8128,7 @@ s32 func_808396B8(PlayState* play, Player* this) {
         (((this->actor.id != ACTOR_PLAYER) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) ||
          ((Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE) &&
           ((this->transformation != PLAYER_FORM_GORON) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) &&
-          ((this->transformation != PLAYER_FORM_ZORA) || !(this->stateFlags1 & PLAYER_STATE1_2000000)) &&
+          ((this->transformation != PLAYER_FORM_ZORA) || !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) &&
           sPlayerUseHeldItem))) {
         return true;
     }
@@ -8373,7 +8373,8 @@ s32 Player_ActionHandler_11(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_R) && (this->unk_AA5 == PLAYER_UNKAA5_0) &&
         (play->bButtonAmmoPlusOne == 0)) {
         if (Player_IsGoronOrDeku(this) ||
-            ((((this->transformation == PLAYER_FORM_ZORA) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) ||
+            ((((this->transformation == PLAYER_FORM_ZORA) &&
+               !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) ||
               ((this->transformation == PLAYER_FORM_HUMAN) && (this->currentShield != PLAYER_SHIELD_NONE))) &&
              !Player_FriendlyLockOnOrParallel(this) && (this->focusActor == NULL))) {
             func_8082DC38(this);
@@ -11111,13 +11112,14 @@ void Player_Init(Actor* thisx, PlayState* play) {
         this->unk_B92 = 0;
         this->unk_B94 = 0;
         this->unk_B96 = 0;
-        this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000 | PLAYER_STATE1_1000000 | PLAYER_STATE1_2000000);
+        this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000 | PLAYER_STATE1_USING_ZORA_BOOMERANG |
+                               PLAYER_STATE1_ZORA_BOOMERANG_THROWN);
         this->stateFlags2 &= ~(PLAYER_STATE2_20000 | PLAYER_STATE2_1000000 | PLAYER_STATE2_40000000);
         this->stateFlags3 &=
             ~(PLAYER_STATE3_8 | PLAYER_STATE3_40 | PLAYER_STATE3_80 | PLAYER_STATE3_100 | PLAYER_STATE3_200 |
               PLAYER_STATE3_800 | PLAYER_STATE3_1000 | PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 |
               PLAYER_STATE3_40000 | PLAYER_STATE3_80000 | PLAYER_STATE3_100000 | PLAYER_STATE3_200000 |
-              PLAYER_STATE3_800000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
+              PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
         this->unk_B08 = 0.0f;
         this->unk_B0C = 0.0f;
     }
@@ -11938,7 +11940,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK)) {
                     camMode = CAM_MODE_TALK;
                 } else if (this->stateFlags1 & PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS) {
-                    if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+                    if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
                         camMode = CAM_MODE_FOLLOWBOOMERANG;
                     } else {
                         camMode = CAM_MODE_FOLLOWTARGET;
@@ -11951,9 +11953,9 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 camMode = CAM_MODE_CHARGE;
             } else if (this->stateFlags3 & PLAYER_STATE3_100) {
                 camMode = CAM_MODE_DEKUHIDE;
-            } else if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+            } else if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
                 camMode = CAM_MODE_FOLLOWBOOMERANG;
-                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->boomerangActor);
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->zoraBoomerangActor);
             } else if (this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000)) {
                 if (Player_FriendlyLockOnOrParallel(this)) {
                     camMode = CAM_MODE_HANGZ;
@@ -13966,7 +13968,7 @@ s32 Player_UpperAction_11(Player* this, PlayState* play) {
         return true;
     }
 
-    if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+    if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
         Player_SetUpperAction(play, this, Player_UpperAction_15);
     } else if (func_80831094(this, play)) {
         return true;
@@ -14008,41 +14010,42 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
         pos.y = this->actor.world.pos.y + 50.0f;
 
         untargetedRotY = this->actor.shape.rot.y - 0x190;
-        this->boomerangActor = Actor_Spawn(
+        this->zoraBoomerangActor = Actor_Spawn(
             &play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
             (this->focusActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : untargetedRotY, 0, ZORA_BOOMERANG_LEFT);
 
-        if (this->boomerangActor != NULL) {
-            EnBoom* leftBoomerang = (EnBoom*)this->boomerangActor;
-            EnBoom* rightBoomerang;
+        if (this->zoraBoomerangActor != NULL) {
+            EnBoom* leftZoraBoomerang = (EnBoom*)this->zoraBoomerangActor;
+            EnBoom* rightZoraBoomerang;
 
-            leftBoomerang->moveTo = this->focusActor;
-            if (leftBoomerang->moveTo != NULL) {
-                leftBoomerang->unk_1CF = 0x10;
+            leftZoraBoomerang->moveTo = this->focusActor;
+            if (leftZoraBoomerang->moveTo != NULL) {
+                leftZoraBoomerang->unk_1CF = 0x10;
             }
-            leftBoomerang->unk_1CC = leftBoomerang->unk_1CF + 0x24;
+            leftZoraBoomerang->unk_1CC = leftZoraBoomerang->unk_1CF + 0x24;
 
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
             untargetedRotY = (this->actor.shape.rot.y + 0x190);
-            rightBoomerang =
+            rightZoraBoomerang =
                 (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
                                      (this->focusActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY, 0,
                                      ZORA_BOOMERANG_RIGHT);
 
-            if (rightBoomerang != NULL) {
-                rightBoomerang->moveTo = this->focusActor;
-                if (rightBoomerang->moveTo != NULL) {
-                    rightBoomerang->unk_1CF = 0x10;
+            if (rightZoraBoomerang != NULL) {
+                rightZoraBoomerang->moveTo = this->focusActor;
+                if (rightZoraBoomerang->moveTo != NULL) {
+                    rightZoraBoomerang->unk_1CF = 0x10;
                 }
 
-                rightBoomerang->unk_1CC = rightBoomerang->unk_1CF + 0x24;
-                leftBoomerang->actor.child = &rightBoomerang->actor;
-                rightBoomerang->actor.parent = &leftBoomerang->actor;
+                rightZoraBoomerang->unk_1CC = rightZoraBoomerang->unk_1CF + 0x24;
+                leftZoraBoomerang->actor.child = &rightZoraBoomerang->actor;
+                rightZoraBoomerang->actor.parent = &leftZoraBoomerang->actor;
             }
 
-            this->stateFlags1 |= PLAYER_STATE1_2000000;
-            this->stateFlags3 &= ~PLAYER_STATE3_800000;
+            this->stateFlags1 |= PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
+            this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
+
             if (!Player_CheckHostileLockOn(this)) {
                 Player_SetParallel(this);
             }
@@ -14062,10 +14065,10 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
         return true;
     }
 
-    if (this->stateFlags3 & PLAYER_STATE3_800000) {
+    if (this->stateFlags3 & PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT) {
         Player_SetUpperAction(play, this, Player_UpperAction_16);
         PlayerAnimation_PlayOnce(play, &this->skelAnimeUpper, &gPlayerAnim_pz_cuttercatch);
-        this->stateFlags3 &= ~PLAYER_STATE3_800000;
+        this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
         Player_PlaySfx(this, NA_SE_PL_CATCH_BOOMERANG);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_SWORD_N);
         return true;
@@ -14076,7 +14079,7 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
 
 s32 Player_UpperAction_16(Player* this, PlayState* play) {
     if (!Player_UpperAction_11(this, play) && PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
-        if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+        if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
             Player_SetUpperAction(play, this, Player_UpperAction_15);
             this->unk_ACC = 0;
         } else {
@@ -15961,7 +15964,7 @@ void Player_Action_43(Player* this, PlayState* play) {
     }
 
     if (this->unk_AA5 == PLAYER_UNKAA5_3) {
-        if (func_800B7118(this) || func_8082ECCC(this)) {
+        if (func_800B7118(this) || Player_IsUsingZoraBoomerang(this)) {
             Player_UpdateUpperBody(this, play);
         }
     }
@@ -18905,7 +18908,7 @@ void Player_Action_93(Player* this, PlayState* play) {
             this->actor.world.pos.y += temp_fv0_2 * this->actor.scale.y;
             func_80834DB8(this, &gPlayerAnim_pn_kakku, speed, play);
             Player_SetAction(play, this, Player_Action_94, 1);
-            this->boomerangActor = NULL;
+            this->zoraBoomerangActor = NULL;
 
             this->stateFlags3 |= PLAYER_STATE3_200;
             if (sp38 != 0) {
@@ -19001,8 +19004,8 @@ Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
 
 // Flying as Deku?
 void Player_Action_94(Player* this, PlayState* play) {
-    if ((this->boomerangActor != NULL) && (this->boomerangActor->update == NULL)) {
-        this->boomerangActor = NULL;
+    if ((this->zoraBoomerangActor != NULL) && (this->zoraBoomerangActor->update == NULL)) {
+        this->zoraBoomerangActor = NULL;
     }
 
     if (Player_ActionHandler_13(this, play)) {
@@ -19129,19 +19132,19 @@ void Player_Action_94(Player* this, PlayState* play) {
         }
 
         Audio_PlaySfx_AtPosWithTimer(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
-        if ((this->boomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
+        if ((this->zoraBoomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
             if (AMMO(ITEM_DEKU_NUT) == 0) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
-                this->boomerangActor =
+                this->zoraBoomerangActor =
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
                                 this->bodyPartsPos[PLAYER_BODYPART_WAIST].y,
                                 this->bodyPartsPos[PLAYER_BODYPART_WAIST].z, -1, 0, 0, ARROW_TYPE_DEKU_NUT);
-                if (this->boomerangActor != NULL) {
-                    this->boomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
-                    this->boomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
+                if (this->zoraBoomerangActor != NULL) {
+                    this->zoraBoomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
+                    this->zoraBoomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
                     Inventory_ChangeAmmo(ITEM_DEKU_NUT, -1);
-                    Actor_PlaySfx(this->boomerangActor, NA_SE_PL_DEKUNUTS_DROP_BOMB);
+                    Actor_PlaySfx(this->zoraBoomerangActor, NA_SE_PL_DEKUNUTS_DROP_BOMB);
                 }
             }
         }
@@ -20360,7 +20363,7 @@ void Player_CsAction_5(PlayState* play, Player* this, CsCmdActorCue* cue) {
     f32 linearVelocity;
     s16 yaw;
 
-    this->stateFlags1 &= ~PLAYER_STATE1_2000000;
+    this->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
 
     yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_3A0);
     linearVelocity = this->speedXZ;
