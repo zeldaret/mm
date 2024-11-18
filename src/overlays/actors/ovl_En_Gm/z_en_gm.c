@@ -1019,7 +1019,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
     Actor* al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     Actor* toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
-    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_TALKING | PLAYER_STATE1_400)) {
         this->unk_3A4 |= 0x400;
         if (this->unk_3A6 != sp32) {
             switch (sp32) {
@@ -1543,7 +1543,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
             toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
             if ((al != NULL) && (al->update != NULL) && (toto != NULL) && (toto->update != NULL) &&
-                !(player->stateFlags1 & PLAYER_STATE1_40)) {
+                !(player->stateFlags1 & PLAYER_STATE1_TALKING)) {
                 if (DECR(this->unk_3B8) == 0) {
                     if (al == this->unk_268) {
                         this->unk_268 = toto;

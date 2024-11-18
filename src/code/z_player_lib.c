@@ -845,7 +845,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
     PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_TWO_HANDED
     PLAYER_MODELGROUP_DEKU_STICK,     // PLAYER_IA_DEKU_STICK
-    PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
+    PLAYER_MODELGROUP_ZORA_BOOMERANG, // PLAYER_IA_ZORA_BOOMERANG
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_FIRE
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_ICE
@@ -1004,7 +1004,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
     /* PLAYER_MODELGROUP_13 */
     { PLAYER_ANIMTYPE_DEFAULT, PLAYER_MODELTYPE_LH_ONE_HAND_SWORD, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_15,
       PLAYER_MODELTYPE_WAIST },
-    /* PLAYER_MODELGROUP_ZORA_FINS */
+    /* PLAYER_MODELGROUP_ZORA_BOOMERANG */
     { PLAYER_ANIMTYPE_DEFAULT, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
 };
@@ -2401,7 +2401,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
             } else if ((sPlayerLeftHandType == PLAYER_MODELTYPE_LH_4) &&
-                       (player->stateFlags1 & PLAYER_STATE1_2000000)) {
+                       (player->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) {
                 leftHandDLists = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_OPEN;
             } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_OPEN) && (player->actor.speed > 2.0f) &&
@@ -2871,16 +2871,16 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        Actor* boomerangActor = player->boomerangActor;
+        Actor* zoraBoomerangActor = player->zoraBoomerangActor;
         Vec3f sp58;
         Vec3f sp4C;
 
-        if (player->stateFlags1 & PLAYER_STATE1_2000000) {
-            if (player->boomerangActor == NULL) {
+        if (player->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
+            if (player->zoraBoomerangActor == NULL) {
                 return;
             }
-            if ((player->boomerangActor->params == arg2) ||
-                (((boomerangActor->child != NULL)) && (boomerangActor->child->params == arg2))) {
+            if ((player->zoraBoomerangActor->params == arg2) ||
+                (((zoraBoomerangActor->child != NULL)) && (zoraBoomerangActor->child->params == arg2))) {
                 return;
             }
         }
@@ -2901,7 +2901,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
                 func_80124618(D_801C0820, player->skelAnime.curFrame, player->unk_AF0);
             } else if (player->skelAnime.animation == &gPlayerAnim_pz_jumpATend) {
                 func_80124618(D_801C0838, player->skelAnime.curFrame, player->unk_AF0);
-            } else if (player->heldItemAction == PLAYER_IA_ZORA_FINS) {
+            } else if (player->heldItemAction == PLAYER_IA_ZORA_BOOMERANG) {
                 player->unk_AF0[0].x = 1.0f;
                 player->unk_AF0[0].y = 1.0f;
                 player->unk_AF0[0].z = 1.0f;
@@ -3618,7 +3618,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
                     5500.0f, // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
                     -1.0f,   // PLAYER_MELEEWEAPON_DEKU_STICK
-                    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
+                    2500.0f, // PLAYER_MELEEWEAPON_ZORA_BOOMERANG
                 };
 
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||

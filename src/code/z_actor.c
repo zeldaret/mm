@@ -511,7 +511,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor; // used for both the reticle actor and arrow hover actor
 
-    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
+    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) {
         return;
     }
@@ -574,7 +574,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
         Attention_SetReticlePos(attention, attention->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
 
-        if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->focusActor)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_TALKING) || (actor != player->focusActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
             for (i = 0, curReticle = attention->curReticle; i < numReticles;
@@ -2628,33 +2628,33 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
 
 u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_PLAYER */
     PLAYER_STATE1_200,
     /* ACTORCAT_EXPLOSIVES */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_NPC */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200,
     /* ACTORCAT_ENEMY */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_PROP */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_ITEMACTION */
     PLAYER_STATE1_2,
     /* ACTORCAT_MISC */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_BOSS */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_DOOR */
     PLAYER_STATE1_2,
     /* ACTORCAT_CHEST */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
@@ -2690,7 +2690,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.freezeExceptionFlag = 0;
     }
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && ((player->actor.textId & 0xFF00) != 0x1900)) {
         params.talkActor = player->talkActor;
     } else {
         params.talkActor = NULL;
