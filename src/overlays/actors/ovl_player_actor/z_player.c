@@ -2994,7 +2994,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
     }
 }
 
-void Player_SetUpperAction(PlayState* play, Player* this, PlayerItemActionUpdateFunc upperActionFunc) {
+void Player_SetUpperAction(PlayState* play, Player* this, PlayerUpperActionFunc upperActionFunc) {
     this->upperActionFunc = upperActionFunc;
     this->unk_ACE = 0;
     this->skelAnimeUpperBlendWeight = 0.0f;
@@ -3122,7 +3122,7 @@ PlayerItemAction Player_ItemToItemAction(Player* this, ItemId item) {
     }
 }
 
-PlayerItemActionUpdateFunc sItemActionUpdateFuncs[PLAYER_IA_MAX] = {
+PlayerUpperActionFunc sItemActionUpdateFuncs[PLAYER_IA_MAX] = {
     Player_UpperAction_0,          // PLAYER_IA_NONE
     Player_UpperAction_0,          // PLAYER_IA_LAST_USED
     Player_UpperAction_0,          // PLAYER_IA_FISHING_ROD
