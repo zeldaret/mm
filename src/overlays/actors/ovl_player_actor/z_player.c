@@ -11004,11 +11004,11 @@ void func_80841A50(PlayState* play, Player* this) {
     }
 }
 
-typedef void (*PlayerInitModeFunc)(PlayState*, Player*);
+typedef void (*PlayerStartModeFunc)(PlayState*, Player*);
 
 // Initialisation functions for various gameplay modes depending on spawn params.
 // There may be at most 0x10 due to it using a single nybble.
-PlayerInitModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
+PlayerStartModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
     Player_StartMode_0,         // PLAYER_START_MODE_0
     Player_StartMode_1,         // PLAYER_START_MODE_1
     Player_StartMode_2,         // PLAYER_START_MODE_2
