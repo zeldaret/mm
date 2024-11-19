@@ -162,9 +162,9 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
-    if ((PLAYER_GET_INITMODE(play->linkActorEntry) == PLAYER_INITMODE_TELESCOPE) ||
-        ((gSaveContext.respawnFlag == 2) &&
-         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
+    if ((PLAYER_GET_START_MODE(play->linkActorEntry) == PLAYER_START_MODE_TELESCOPE) ||
+        ((gSaveContext.respawnFlag == 2) && (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams ==
+                                             PLAYER_PARAMS(0xFF, PLAYER_START_MODE_TELESCOPE)))) {
         // Skull Kid Object
         Object_SpawnPersistent(&play->objectCtx, OBJECT_STK);
         return;

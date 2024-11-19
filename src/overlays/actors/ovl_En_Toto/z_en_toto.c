@@ -571,7 +571,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
-                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_F) | 0xFFFFF000);
+                        PLAYER_PARAMS(0xFF, PLAYER_START_MODE_F) | 0xFFFFF000);
         }
     }
     func_80BA402C(this, play);
