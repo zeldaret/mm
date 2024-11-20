@@ -253,24 +253,6 @@ s32 Player_ActionHandler_12(Player* this, PlayState* play);
 s32 Player_ActionHandler_13(Player* this, PlayState* play);
 s32 Player_ActionHandler_14(Player* this, PlayState* play);
 
-/* Start Mode functions */
-void Player_StartMode_0(PlayState* play, Player* this);
-void Player_StartMode_1(PlayState* play, Player* this);
-void Player_StartMode_2(PlayState* play, Player* this);
-void Player_StartMode_3(PlayState* play, Player* this);
-void Player_StartMode_4(PlayState* play, Player* this);
-void Player_StartMode_5(PlayState* play, Player* this);
-void Player_StartMode_6(PlayState* play, Player* this);
-void Player_StartMode_7(PlayState* play, Player* this);
-void Player_StartMode_WarpTag(PlayState* play, Player* this);
-void Player_StartMode_WarpTag(PlayState* play, Player* this);
-void Player_StartMode_E(PlayState* play, Player* this);
-void Player_StartMode_B(PlayState* play, Player* this);
-void Player_StartMode_Telescope(PlayState* play, Player* this);
-void Player_StartMode_D(PlayState* play, Player* this);
-void Player_StartMode_E(PlayState* play, Player* this);
-void Player_StartMode_F(PlayState* play, Player* this);
-
 /* Cutscene functions */
 void Player_CsAction_0(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_1(PlayState* play, Player* this, CsCmdActorCue* cue);
