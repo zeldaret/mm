@@ -648,7 +648,8 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
 
     actor = NULL;
 
-    if ((player->focusActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->focusActor != NULL) &&
+        (player->controlStickDirections[player->controlStickDataIndex] == PLAYER_STICK_DIR_BACKWARD)) {
         // Holding backward on the control stick prevents an arrow appearing over the next lock-on actor.
         // This helps escape a lock-on loop when using Switch Targeting, but note that this still works for
         // Hold Targeting as well.
@@ -2206,8 +2207,8 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_DEAD | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
-           PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+           PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
@@ -2294,9 +2295,10 @@ s32 Actor_HasRider(PlayState* play, Actor* horse) {
 s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_1000 |
-                                 PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 |
-                                 PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 |
+           PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 |
+           PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
         CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
