@@ -253,24 +253,6 @@ s32 Player_ActionHandler_12(Player* this, PlayState* play);
 s32 Player_ActionHandler_13(Player* this, PlayState* play);
 s32 Player_ActionHandler_14(Player* this, PlayState* play);
 
-/* Init Mode functions */
-void Player_InitMode_0(PlayState* play, Player* this);
-void Player_InitMode_1(PlayState* play, Player* this);
-void Player_InitMode_2(PlayState* play, Player* this);
-void Player_InitMode_3(PlayState* play, Player* this);
-void Player_InitMode_4(PlayState* play, Player* this);
-void Player_InitMode_5(PlayState* play, Player* this);
-void Player_InitMode_6(PlayState* play, Player* this);
-void Player_InitMode_7(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void Player_InitMode_B(PlayState* play, Player* this);
-void Player_InitMode_Telescope(PlayState* play, Player* this);
-void Player_InitMode_D(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void Player_InitMode_F(PlayState* play, Player* this);
-
 /* Cutscene functions */
 void Player_CsAction_0(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_1(PlayState* play, Player* this, CsCmdActorCue* cue);
@@ -8648,7 +8630,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 }
 
 // Set up using a telescope
-void Player_InitMode_Telescope(PlayState* play, Player* this) {
+void Player_StartMode_Telescope(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
     this->actor.draw = NULL;
     if (play->sceneId == SCENE_00KEIKOKU) {
@@ -8667,18 +8649,17 @@ void Player_InitMode_Telescope(PlayState* play, Player* this) {
     play->actorCtx.flags |= ACTORCTX_FLAG_TELESCOPE_ON;
 }
 
-void Player_InitMode_B(PlayState* play, Player* this) {
+void Player_StartMode_B(PlayState* play, Player* this) {
     func_8085B384(this, play);
 }
 
-void Player_InitMode_D(PlayState* play, Player* this) {
+void Player_StartMode_D(PlayState* play, Player* this) {
     if (func_8083A878(play, this, 180.0f)) {
         this->av2.actionVar2 = -20;
     }
 }
 
-// InitModes 0xA and 0xE
-void func_8083ADF0(PlayState* play, Player* this) {
+void Player_StartMode_E(PlayState* play, Player* this) {
     this->speedXZ = 2.0f;
     gSaveContext.entranceSpeed = 2.0f;
 
@@ -8687,7 +8668,7 @@ void func_8083ADF0(PlayState* play, Player* this) {
     }
 }
 
-void Player_InitMode_F(PlayState* play, Player* this) {
+void Player_StartMode_F(PlayState* play, Player* this) {
     if (gSaveContext.entranceSpeed < 0.1f) {
         gSaveContext.entranceSpeed = 0.1f;
     }
@@ -10870,12 +10851,12 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
     return sp2C;
 }
 
-void Player_InitMode_0(PlayState* play, Player* this) {
+void Player_StartMode_0(PlayState* play, Player* this) {
     this->actor.update = func_801229EC;
     this->actor.draw = NULL;
 }
 
-void Player_InitMode_2(PlayState* play, Player* this) {
+void Player_StartMode_2(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_76, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     PlayerAnimation_Change(play, &this->skelAnime, &gPlayerAnim_link_okarina_warp_goal, PLAYER_ANIM_ADJUSTED_SPEED,
@@ -10909,7 +10890,7 @@ void func_80841358(PlayState* play, Player* this, s32 arg2) {
 
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 
-void Player_InitMode_1(PlayState* play, Player* this) {
+void Player_StartMode_1(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_66, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     Math_Vec3f_Copy(&this->actor.world.pos, &D_8085D2B4);
@@ -10924,30 +10905,30 @@ void Player_InitMode_1(PlayState* play, Player* this) {
     this->av2.actionVar2 = 20;
 }
 
-void Player_InitMode_3(PlayState* play, Player* this) {
+void Player_StartMode_3(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_78, 0);
     Player_AnimReplace_Setup(play, this,
                              ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
 }
 
-void Player_InitMode_4(PlayState* play, Player* this) {
+void Player_StartMode_4(PlayState* play, Player* this) {
     func_80834DB8(this, &gPlayerAnim_link_normal_jump, 12.0f, play);
     Player_SetAction(play, this, Player_Action_79, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     this->fallStartHeight = this->actor.world.pos.y;
 }
 
-void Player_InitMode_7(PlayState* play, Player* this) {
+void Player_StartMode_7(PlayState* play, Player* this) {
     func_80833B18(play, this, 1, 2.0f, 2.0f, this->actor.shape.rot.y + 0x8000, 0);
 }
 
-void Player_InitMode_5(PlayState* play, Player* this) {
+void Player_StartMode_5(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_75, 0);
     this->actor.draw = NULL;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
 }
 
-void Player_InitMode_6(PlayState* play, Player* this) {
+void Player_StartMode_6(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave) {
         Player_SetAction(play, this, Player_Action_0, 0);
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_nwait][this->modelAnimType]);
@@ -10964,10 +10945,9 @@ void Player_InitMode_6(PlayState* play, Player* this) {
     }
 }
 
-// InitModes 0x8 and 0x9
-void func_80841744(PlayState* play, Player* this) {
+void Player_StartMode_WarpTag(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_91, 0);
-    if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
+    if (PLAYER_GET_START_MODE(&this->actor) == PLAYER_START_MODE_8) {
         Player_Anim_PlayOnceAdjustedReverse(play, this, D_8085D17C[this->transformation]);
         this->itemAction = PLAYER_IA_OCARINA;
         Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
@@ -10990,9 +10970,9 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->yaw = this->actor.world.rot.y;
 
-    if ((PLAYER_GET_INITMODE(&this->actor) != PLAYER_INITMODE_TELESCOPE) &&
-        ((gSaveContext.respawnFlag != 2) ||
-         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
+    if ((PLAYER_GET_START_MODE(&this->actor) != PLAYER_START_MODE_TELESCOPE) &&
+        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams !=
+                                             PLAYER_PARAMS(0xFF, PLAYER_START_MODE_TELESCOPE)))) {
         func_808309CC(play, this);
         SkelAnime_InitPlayer(play, &this->skelAnime, skelHeader, D_8085BE84[PLAYER_ANIMGROUP_wait][this->modelAnimType],
                              1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
@@ -11027,27 +11007,27 @@ void func_80841A50(PlayState* play, Player* this) {
     }
 }
 
-typedef void (*PlayerInitModeFunc)(PlayState*, Player*);
+typedef void (*PlayerStartModeFunc)(PlayState*, Player*);
 
 // Initialisation functions for various gameplay modes depending on spawn params.
 // There may be at most 0x10 due to it using a single nybble.
-PlayerInitModeFunc sPlayerInitModeFuncs[PLAYER_INITMODE_MAX] = {
-    Player_InitMode_0,         // PLAYER_INITMODE_0
-    Player_InitMode_1,         // PLAYER_INITMODE_1
-    Player_InitMode_2,         // PLAYER_INITMODE_2
-    Player_InitMode_3,         // PLAYER_INITMODE_3
-    Player_InitMode_4,         // PLAYER_INITMODE_4
-    Player_InitMode_5,         // PLAYER_INITMODE_5
-    Player_InitMode_6,         // PLAYER_INITMODE_6
-    Player_InitMode_7,         // PLAYER_INITMODE_7
-    func_80841744,             // PLAYER_INITMODE_8
-    func_80841744,             // PLAYER_INITMODE_9
-    func_8083ADF0,             // PLAYER_INITMODE_A
-    Player_InitMode_B,         // PLAYER_INITMODE_B
-    Player_InitMode_Telescope, // PLAYER_INITMODE_TELESCOPE
-    Player_InitMode_D,         // PLAYER_INITMODE_D
-    func_8083ADF0,             // PLAYER_INITMODE_E
-    Player_InitMode_F,         // PLAYER_INITMODE_F
+PlayerStartModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
+    Player_StartMode_0,         // PLAYER_START_MODE_0
+    Player_StartMode_1,         // PLAYER_START_MODE_1
+    Player_StartMode_2,         // PLAYER_START_MODE_2
+    Player_StartMode_3,         // PLAYER_START_MODE_3
+    Player_StartMode_4,         // PLAYER_START_MODE_4
+    Player_StartMode_5,         // PLAYER_START_MODE_5
+    Player_StartMode_6,         // PLAYER_START_MODE_6
+    Player_StartMode_7,         // PLAYER_START_MODE_7
+    Player_StartMode_WarpTag,   // PLAYER_START_MODE_8
+    Player_StartMode_WarpTag,   // PLAYER_START_MODE_9
+    Player_StartMode_E,         // PLAYER_START_MODE_A
+    Player_StartMode_B,         // PLAYER_START_MODE_B
+    Player_StartMode_Telescope, // PLAYER_START_MODE_TELESCOPE
+    Player_StartMode_D,         // PLAYER_START_MODE_D
+    Player_StartMode_E,         // PLAYER_START_MODE_E
+    Player_StartMode_F,         // PLAYER_START_MODE_F
 };
 
 // sBlureInit
@@ -11074,7 +11054,6 @@ EffectTireMarkInit D_8085D330 = { 0, 63, { 0, 0, 15, 100 } };
 Color_RGBA8 D_8085D338 = { 0, 0, 15, 100 };
 // sTireMarkOtherColor ?
 Color_RGBA8 D_8085D33C = { 0, 0, 0, 150 };
-Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -11082,7 +11061,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     s8 objectSlot;
     s32 respawnFlag;
     s32 var_a1;
-    PlayerInitMode initMode;
+    PlayerStartMode startMode;
 
     play->playerInit = Player_InitCommon;
     play->playerUpdate = Player_UpdateCommon;
@@ -11281,7 +11260,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     var_a1 = ((respawnFlag == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0;
     if (func_801226E0(play, var_a1) == 0) {
-        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = PLAYER_PARAMS(thisx->params, PLAYER_INITMODE_D);
+        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = PLAYER_PARAMS(thisx->params, PLAYER_START_MODE_D);
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 1;
@@ -11289,21 +11268,24 @@ void Player_Init(Actor* thisx, PlayState* play) {
         gSaveContext.respawn[RESPAWN_MODE_TOP] = gSaveContext.respawn[RESPAWN_MODE_DOWN];
     }
     gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-        PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_D);
+        PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_D);
 
-    initMode = PLAYER_GET_INITMODE(&this->actor);
-    if (((initMode == PLAYER_INITMODE_5) || (initMode == PLAYER_INITMODE_6)) &&
+    startMode = PLAYER_GET_START_MODE(&this->actor);
+
+    if (((startMode == PLAYER_START_MODE_5) || (startMode == PLAYER_START_MODE_6)) &&
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        initMode = PLAYER_INITMODE_D;
+        startMode = PLAYER_START_MODE_D;
     }
 
-    sPlayerInitModeFuncs[initMode](play, this);
+    sStartModeFuncs[startMode](play, this);
 
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
         ((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         (play->sceneId != SCENE_SPOT00)) {
-        this->tatlActor =
-            Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
+        static Vec3f sTatlSpawnPosOffset = { 0.0f, 50.0f, 0.0f };
+
+        this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &sTatlSpawnPosOffset,
+                                            FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
 
         if (gSaveContext.dogParams != 0) {
             gSaveContext.dogParams |= 0x8000;
@@ -13721,7 +13703,7 @@ void func_80848640(PlayState* play, Player* this) {
 
     if (torch2 != NULL) {
         play->actorCtx.elegyShells[this->transformation] = torch2;
-        Play_SetupRespawnPoint(play, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+        Play_SetupRespawnPoint(play, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B));
     }
 
     effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -15851,7 +15833,7 @@ void Player_Action_36(Player* this, PlayState* play) {
                 }
 
                 Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
-                Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+                Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B));
             }
         }
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
@@ -18746,7 +18728,7 @@ void Player_Action_91(Player* this, PlayState* play) {
             if (BINANG_SUB(this->actor.shape.rot.y, this->actor.world.rot.y) >= 0) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Player_StopCutscene(this);
-                if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
+                if (PLAYER_GET_START_MODE(&this->actor) == PLAYER_START_MODE_8) {
                     anim = D_8085D17C[this->transformation];
                     func_80836A5C(this, play);
                     PlayerAnimation_Change(play, &this->skelAnime, anim, -PLAYER_ANIM_ADJUSTED_SPEED,

@@ -13,6 +13,31 @@
 struct Player;
 struct PlayState;
 
+#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
+#define PLAYER_GET_START_MODE(thisx) (((thisx)->params & 0xF00) >> 8)
+
+typedef enum PlayerStartMode {
+    /*  0x0 */ PLAYER_START_MODE_0,
+    /*  0x1 */ PLAYER_START_MODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
+    /*  0x2 */ PLAYER_START_MODE_2,
+    /*  0x3 */ PLAYER_START_MODE_3,
+    /*  0x4 */ PLAYER_START_MODE_4,
+    /*  0x5 */ PLAYER_START_MODE_5,
+    /*  0x6 */ PLAYER_START_MODE_6,
+    /*  0x7 */ PLAYER_START_MODE_7,
+    /*  0x8 */ PLAYER_START_MODE_8,
+    /*  0x9 */ PLAYER_START_MODE_9,
+    /*  0xA */ PLAYER_START_MODE_A,
+    /*  0xB */ PLAYER_START_MODE_B,
+    /*  0xC */ PLAYER_START_MODE_TELESCOPE,
+    /*  0xD */ PLAYER_START_MODE_D,
+    /*  0xE */ PLAYER_START_MODE_E,
+    /*  0xF */ PLAYER_START_MODE_F,
+    /* 0x10 */ PLAYER_START_MODE_MAX // Must not exceed 0x10 as `PLAYER_GET_START_MODE` is limited to a nibble in player params
+} PlayerStartMode;
+
+#define PLAYER_PARAMS(startBgCamIndex, startMode) ((startBgCamIndex & 0xFF) | ((startMode & 0xF) << 8))
+
 typedef enum PlayerShield {
     /* 0 */ PLAYER_SHIELD_NONE,
     /* 1 */ PLAYER_SHIELD_HEROS_SHIELD,
@@ -1073,32 +1098,6 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
 #define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
-
-
-#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
-#define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
-
-typedef enum PlayerInitMode {
-    /*  0x0 */ PLAYER_INITMODE_0,
-    /*  0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
-    /*  0x2 */ PLAYER_INITMODE_2,
-    /*  0x3 */ PLAYER_INITMODE_3,
-    /*  0x4 */ PLAYER_INITMODE_4,
-    /*  0x5 */ PLAYER_INITMODE_5,
-    /*  0x6 */ PLAYER_INITMODE_6,
-    /*  0x7 */ PLAYER_INITMODE_7,
-    /*  0x8 */ PLAYER_INITMODE_8,
-    /*  0x9 */ PLAYER_INITMODE_9,
-    /*  0xA */ PLAYER_INITMODE_A,
-    /*  0xB */ PLAYER_INITMODE_B,
-    /*  0xC */ PLAYER_INITMODE_TELESCOPE,
-    /*  0xD */ PLAYER_INITMODE_D,
-    /*  0xE */ PLAYER_INITMODE_E,
-    /*  0xF */ PLAYER_INITMODE_F,
-    /* 0x10 */ PLAYER_INITMODE_MAX // Must not exceed 0x10 as `PLAYER_GET_INITMODE` is limited to a nibble in player params
-} PlayerInitMode;
-
-#define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
 
 typedef enum PlayerUnkAA5 {
     /* 0 */ PLAYER_UNKAA5_0,
