@@ -363,7 +363,7 @@ void EnFg_Destroy(Actor* thisx, PlayState* play) {
 void EnFg_Update(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
 
-    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) == 0) &&
+    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) == 0) &&
         (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTACHED_TO_ARROW) == 0)) {
         this->actionFunc(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,

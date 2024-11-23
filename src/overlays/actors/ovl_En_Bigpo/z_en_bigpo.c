@@ -1159,7 +1159,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }
