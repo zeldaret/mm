@@ -321,7 +321,7 @@ typedef enum MajorasMaskEyeTexture {
     /* 1 */ MAJORAS_MASK_EYE_DULL
 } MajorasMaskEyeTexture;
 
-void Boss07_RandVec3fXZ(Vec3f* dst, f32 length);
+void Boss07_RandXZ(Vec3f* dst, f32 length);
 void Boss07_Incarnation_AvoidPlayer(Boss07* this);
 void Boss07_Mask_ClearBeam(Boss07* this);
 
@@ -358,12 +358,12 @@ void Boss07_Wrath_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u8 dmgE
 void Boss07_Wrath_Damaged(Boss07* this, PlayState* play);
 
 void Boss07_Wrath_ThrowPlayer(Boss07* this, PlayState* play);
-void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel);
+void Boss07_Wrath_ChooseJump(Boss07* this, PlayState* play, u8 canCancelCurrentJump);
 void Boss07_Wrath_SetupSidestep(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupGrab(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play);
-void Boss07_Wrath_SetupIdle(Boss07* this, PlayState* play, s16 delay);
+void Boss07_Wrath_SetupIdle(Boss07* this, PlayState* play, s16 idleTimer);
 void Boss07_Wrath_SetupJump(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupFlip(Boss07* this, PlayState* play);
 void Boss07_Wrath_Idle(Boss07* this, PlayState* play);
@@ -1148,6 +1148,10 @@ s32 Boss07_ArePlayerAndActorFacing(Boss07* this, PlayState* play) {
     return false;
 }
 
+/**
+ * Can be called repeatedly to gradually reduce the actor's speed to zero. If the actor is touching a wall or ceiling,
+ * though, it will immediately set the speed to zero.
+ */
 void Boss07_SmoothStop(Boss07* this, f32 maxStep) {
     Math_ApproachZeroF(&this->actor.speed, 1.0f, maxStep);
 
@@ -1156,7 +1160,7 @@ void Boss07_SmoothStop(Boss07* this, f32 maxStep) {
     }
 }
 
-void Boss07_RandVec3fXZ(Vec3f* dst, f32 length) {
+void Boss07_RandXZ(Vec3f* dst, f32 length) {
     Matrix_RotateYF(Rand_ZeroFloat(2 * M_PIf), MTXMODE_NEW);
     Matrix_MultVecZ(length, dst);
 }
@@ -1195,7 +1199,7 @@ void Boss07_Incarnation_SpawnDust(Boss07* this, PlayState* play, u8 dustSpawnFra
     }
 }
 
-void Boss07_MovePlayer(PlayState* play) {
+void Boss07_MovePlayerFromCenter(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (SQXZ(player->actor.world.pos) < SQ(80.0f)) {
@@ -1229,13 +1233,13 @@ void Boss07_Wrath_SpawnDustAtPos(PlayState* play, Vec3f* spawnPos, u8 count) {
     }
 }
 
-void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel) {
+void Boss07_Wrath_ChooseJump(Boss07* this, PlayState* play, u8 canCancelCurrentJump) {
     Player* player = GET_PLAYER(play);
 
     if ((this->damagedTimer == 0) &&
         (((this->actionFunc != Boss07_Wrath_Flip) && (this->actionFunc != Boss07_Wrath_StartJump) &&
           (this->actionFunc != Boss07_Wrath_Jump)) ||
-         canCancel)) {
+         canCancelCurrentJump)) {
         if (Rand_ZeroOne() < 0.5f) {
             Boss07_Wrath_SetupFlip(this, play);
         } else {
@@ -1253,7 +1257,7 @@ void Boss07_Wrath_Dodge(Boss07* this, PlayState* play, u8 canCancel) {
     }
 }
 
-void Boss07_Wrath_DodgeExplosives(Boss07* this, PlayState* play) {
+void Boss07_Wrath_JumpAwayFromExplosive(Boss07* this, PlayState* play) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
@@ -1262,7 +1266,7 @@ void Boss07_Wrath_DodgeExplosives(Boss07* this, PlayState* play) {
         f32 dz = explosive->world.pos.z - this->actor.world.pos.z;
 
         if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 200.0f) {
-            Boss07_Wrath_Dodge(this, play, false);
+            Boss07_Wrath_ChooseJump(this, play, false);
             break;
         }
 
@@ -1270,7 +1274,7 @@ void Boss07_Wrath_DodgeExplosives(Boss07* this, PlayState* play) {
     }
 }
 
-void Boss07_Wrath_BlastWhip(Vec3f* bombPos, Vec3f* pos, Vec3f* velocity) {
+void Boss07_Wrath_BombWhip(Vec3f* bombPos, Vec3f* pos, Vec3f* velocity) {
     s32 i;
     f32 push;
     f32 dx;
@@ -1297,13 +1301,13 @@ void Boss07_Wrath_BlastWhip(Vec3f* bombPos, Vec3f* pos, Vec3f* velocity) {
     }
 }
 
-void Boss07_Wrath_BombWhips(Boss07* this, PlayState* play) {
+void Boss07_Wrath_CheckBombWhips(Boss07* this, PlayState* play) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if (explosive->params == 1) {
-            Boss07_Wrath_BlastWhip(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.velocity);
-            Boss07_Wrath_BlastWhip(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.velocity);
+            Boss07_Wrath_BombWhip(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.velocity);
+            Boss07_Wrath_BombWhip(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.velocity);
         }
 
         explosive = explosive->next;
@@ -1704,12 +1708,14 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
     s32 i;
 
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
-    Boss07_MovePlayer(play);
+    Boss07_MovePlayerFromCenter(play);
     this->actionFunc = Boss07_Wrath_DeathCutscene;
+
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.drag = this->rightWhip.drag = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
+
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathDeathAnim, 0.0f);
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneState = MAJORAS_WRATH_DEATH_CS_STATE_STARTED;
@@ -1992,12 +1998,12 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     this->cutsceneTimer++;
 }
 
-void Boss07_Wrath_SetupIdle(Boss07* this, PlayState* play, s16 delay) {
+void Boss07_Wrath_SetupIdle(Boss07* this, PlayState* play, s16 idleTimer) {
     this->actionFunc = Boss07_Wrath_Idle;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasWrathIdleAnim, -10.0f);
 
-    if (delay != 0) {
-        this->timers[0] = delay;
+    if (idleTimer != 0) {
+        this->timers[0] = idleTimer;
     } else {
         this->timers[0] = Rand_ZeroFloat(30.0f);
     }
@@ -2020,6 +2026,7 @@ void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.3f) {
             this->actor.xzDistToPlayer = 250.0f;
         }
+
         Boss07_Wrath_SetupAttack(this, play);
     } else if (this->timers[0] == 0) {
         if (KREG(78) == 1) {
@@ -2078,31 +2085,29 @@ void Boss07_Wrath_Jump(Boss07* this, PlayState* play) {
 }
 
 void Boss07_Wrath_SetupFlip(Boss07* this, PlayState* play) {
-    f32 dx;
-    f32 dz;
-    s32 pad;
-    Vec3f sp30;
+    Vec3f direction;
+    Vec3f targetPos;
     s16 yawDiff;
 
     this->actionFunc = Boss07_Wrath_Flip;
     this->actor.velocity.y = 25.0f;
-    dx = 0.0f - this->actor.world.pos.x;
-    dz = 0.0f - this->actor.world.pos.z;
+    direction.x = 0.0f - this->actor.world.pos.x;
+    direction.z = 0.0f - this->actor.world.pos.z;
 
-    yawDiff = this->actor.yawTowardsPlayer - (s16)(Math_Atan2F_XY(dz, dx) * (0x8000 / M_PIf));
+    yawDiff = this->actor.yawTowardsPlayer - (s16)(Math_Atan2F_XY(direction.z, direction.x) * (0x8000 / M_PIf));
     if (yawDiff < 0) {
-        dx = 200.0f;
+        direction.x = 200.0f;
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathFlipLeftAnim, -5.0f);
     } else {
-        dx = -200.0f;
+        direction.x = -200.0f;
         Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathFlipRightAnim, -5.0f);
     }
 
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
-    Matrix_MultVecX(dx, &sp30);
-    dx = sp30.x - this->actor.world.pos.x;
-    dz = sp30.z - this->actor.world.pos.z;
-    this->actor.world.rot.y = Math_Atan2F_XY(dz, dx) * (0x8000 / M_PIf);
+    Matrix_MultVecX(direction.x, &targetPos);
+    direction.x = targetPos.x - this->actor.world.pos.x;
+    direction.z = targetPos.z - this->actor.world.pos.z;
+    this->actor.world.rot.y = Math_Atan2F_XY(direction.z, direction.x) * (0x8000 / M_PIf);
     this->frameCounter = 0;
     this->actor.speed = 17.0f;
 }
@@ -2121,38 +2126,38 @@ void Boss07_Wrath_Flip(Boss07* this, PlayState* play) {
 
     if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (Rand_ZeroOne() < 0.3f) {
-            Boss07_Wrath_Dodge(this, play, true);
+            Boss07_Wrath_ChooseJump(this, play, true);
         } else {
             Boss07_Wrath_SetupIdle(this, play, 1);
             this->actor.speed = 5.0f;
         }
+
         this->landSfxTimer = 5;
     }
+
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x4000);
 }
 
 void Boss07_Wrath_SetupSidestep(Boss07* this, PlayState* play) {
-    f32 dz;
-    f32 dx;
-    s32 pad;
+    Vec3f direction;
     s16 yawDiff;
 
     this->actionFunc = Boss07_Wrath_Sidestep;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasWrathSidestepAnim, -5.0f);
-    dx = -this->actor.world.pos.x;
-    dz = -this->actor.world.pos.z;
-    yawDiff = this->actor.yawTowardsPlayer - (s16)(Math_Atan2F_XY(dz, dx) * (0x8000 / M_PIf));
+    direction.x = -this->actor.world.pos.x;
+    direction.z = -this->actor.world.pos.z;
+    yawDiff = this->actor.yawTowardsPlayer - (s16)(Math_Atan2F_XY(direction.z, direction.x) * (0x8000 / M_PIf));
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
     if (yawDiff < 0) {
         this->skelAnime.playSpeed = 1.0f;
-        dx = 300.0f;
+        direction.x = 300.0f;
     } else {
         this->skelAnime.playSpeed = -1.0f;
-        dx = -300.0f;
+        direction.x = -300.0f;
     }
 
-    Matrix_MultVecX(dx, &this->targetPos);
+    Matrix_MultVecX(direction.x, &this->targetPos);
     this->targetPos.x += this->actor.world.pos.x;
     this->targetPos.z += this->actor.world.pos.z;
     this->timers[1] = 21;
@@ -2208,6 +2213,7 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
         }
     } else {
         this->subAction = Rand_ZeroFloat(MAJORAS_WRATH_ATTACK_SUB_ACTION_WHIP_ATTACK_MAX - 0.01f);
+
         if (((s8)this->actor.colChkInfo.health >= 28) &&
             ((this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_FLURRY) ||
              (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_DOUBLE_WHIP))) {
@@ -2239,7 +2245,7 @@ void Boss07_Wrath_SetupAttack(Boss07* this, PlayState* play) {
         case MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK:
             Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathSpinAttackAnim, -5.0f);
             this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathSpinAttackAnim);
-            Boss07_RandVec3fXZ(&this->targetPos, 650.0f);
+            Boss07_RandXZ(&this->targetPos, 650.0f);
             this->speedToTarget = 0.0f;
             break;
 
@@ -2307,6 +2313,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
 
             if ((this->frameCounter >= 8) && (this->frameCounter <= 55)) {
                 this->leftWhip.tension = this->rightWhip.tension = 300.0f;
+
                 if ((((this->frameCounter + 2) % 4) == 0) && (Rand_ZeroOne() < 0.5f)) {
                     Audio_PlaySfx(NA_SE_EN_LAST3_ROD_FLOOR_OLD);
                 }
@@ -2622,7 +2629,7 @@ void Boss07_Wrath_ShockStun(Boss07* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
-        Boss07_Wrath_Dodge(this, play, true);
+        Boss07_Wrath_ChooseJump(this, play, true);
     }
 }
 
@@ -2712,7 +2719,7 @@ void Boss07_Wrath_Stunned(Boss07* this, PlayState* play) {
     this->leftWhip.drag = this->rightWhip.drag = 2.0f;
 
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
-        Boss07_Wrath_Dodge(this, play, true);
+        Boss07_Wrath_ChooseJump(this, play, true);
     }
 }
 
@@ -2764,7 +2771,7 @@ void Boss07_Wrath_Damaged(Boss07* this, PlayState* play) {
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
-        Boss07_Wrath_Dodge(this, play, true);
+        Boss07_Wrath_ChooseJump(this, play, true);
     }
 }
 
@@ -2979,7 +2986,7 @@ void Boss07_Wrath_Thaw(Boss07* this, PlayState* play) {
     }
 }
 
-void Boss07_DamageEffects(Boss07* this, PlayState* play) {
+void Boss07_UpdateDamageEffects(Boss07* this, PlayState* play) {
     DECR(this->drawDmgEffTimer);
 
     switch (this->drawDmgEffState) {
@@ -3155,27 +3162,27 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
                 if ((this->actor.xzDistToPlayer >= 400.0f) && (Rand_ZeroOne() < 0.5f)) {
                     Boss07_Wrath_SetupSidestep(this, play);
                 } else {
-                    Boss07_Wrath_Dodge(this, play, false);
+                    Boss07_Wrath_ChooseJump(this, play, false);
                 }
             }
 
             if ((player->unk_ADC != 0) && (this->actor.xzDistToPlayer <= 150.0f)) {
-                Boss07_Wrath_Dodge(this, play, false);
+                Boss07_Wrath_ChooseJump(this, play, false);
             }
         }
 
         if ((this->actionFunc != Boss07_Wrath_Stunned) && (this->actionFunc != Boss07_Wrath_Damaged)) {
             if ((player->stateFlags3 & PLAYER_STATE3_1000) && !(player->stateFlags3 & PLAYER_STATE3_80000) &&
                 (this->actor.xzDistToPlayer <= 250.0f)) {
-                Boss07_Wrath_Dodge(this, play, false);
+                Boss07_Wrath_ChooseJump(this, play, false);
             }
         }
     }
     if (this->canEvade) {
-        Boss07_Wrath_DodgeExplosives(this, play);
+        Boss07_Wrath_JumpAwayFromExplosive(this, play);
     }
 
-    Boss07_Wrath_BombWhips(this, play);
+    Boss07_Wrath_CheckBombWhips(this, play);
 
     if (KREG(88) || this->shouldStartDeath) {
         KREG(88) = false;
@@ -3211,7 +3218,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Boss07_DamageEffects(this, play);
+    Boss07_UpdateDamageEffects(this, play);
 
     if ((this->landSfxTimer == 1) || (this->landSfxTimer == 4)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
@@ -4395,7 +4402,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
             } else if (Rand_ZeroOne() < 0.01f) {
                 Boss07_Incarnation_SetupStunned(this, play, 50);
             } else {
-                Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
+                Boss07_RandXZ(&this->targetPos, 500.0f);
                 this->timers[1] = Rand_ZeroFloat(50.0f) + 20.0f;
                 this->speedToTarget = 0.0f;
             }
@@ -4579,7 +4586,7 @@ void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play) {
 
 void Boss07_Incarnation_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Incarnation_DeathCutscene;
-    Boss07_MovePlayer(play);
+    Boss07_MovePlayerFromCenter(play);
     Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasIncarnationDamagedAnim, -2.0f);
     this->animEndFrame = Animation_GetLastFrame(&gMajorasIncarnationDamagedAnim);
     this->cutsceneState = MAJORAS_INCARNATION_DEATH_CS_STATE_STARTED;
@@ -4905,7 +4912,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
-    Boss07_DamageEffects(this, play);
+    Boss07_UpdateDamageEffects(this, play);
 }
 
 void Boss07_Afterimage_Draw(Actor* thisx, PlayState* play2) {
@@ -5151,9 +5158,9 @@ void Boss07_Mask_SetupIdle(Boss07* this, PlayState* play) {
 void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
     s16 targetRotX;
     s16 targetRotY;
-    f32 diffToTargetX;
-    f32 diffToTargetY;
-    f32 diffToTargetZ;
+    f32 dx;
+    f32 dy;
+    f32 dz;
     f32 distToTargetXZ;
     Player* player = GET_PLAYER(play);
 
@@ -5172,7 +5179,7 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
             this->flySpeedTarget = 2.0f;
             this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
         } else {
-            Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
+            Boss07_RandXZ(&this->targetPos, 500.0f);
             this->targetPos.y = Rand_ZeroFloat(350.0f) + 100.0f;
             this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
             this->speedToTarget = 0.0f;
@@ -5180,12 +5187,12 @@ void Boss07_Mask_Idle(Boss07* this, PlayState* play) {
         }
     }
 
-    diffToTargetX = this->targetPos.x - this->actor.world.pos.x;
-    diffToTargetY = this->targetPos.y - this->actor.world.pos.y;
-    diffToTargetZ = this->targetPos.z - this->actor.world.pos.z;
-    targetRotY = Math_Atan2S(diffToTargetX, diffToTargetZ);
-    distToTargetXZ = sqrtf(SQ(diffToTargetX) + SQ(diffToTargetZ));
-    targetRotX = Math_Atan2S(diffToTargetY, distToTargetXZ);
+    dx = this->targetPos.x - this->actor.world.pos.x;
+    dy = this->targetPos.y - this->actor.world.pos.y;
+    dz = this->targetPos.z - this->actor.world.pos.z;
+    targetRotY = Math_Atan2S(dx, dz);
+    distToTargetXZ = sqrtf(SQ(dx) + SQ(dz));
+    targetRotX = Math_Atan2S(dy, distToTargetXZ);
     targetRotX += (s16)(Math_SinS(this->frameCounter * 0x1388) * 0xFA0);
 
     Math_ApproachS(&this->actor.world.rot.y, targetRotY, 0xA, this->speedToTarget);
@@ -5228,9 +5235,9 @@ void Boss07_Mask_SetupSpinAttack(Boss07* this, PlayState* play) {
 void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
     s16 targetRotX;
     s16 targetRotY;
-    f32 diffToTargetX;
-    f32 diffToTargetY;
-    f32 diffToTargetZ;
+    f32 dx;
+    f32 dy;
+    f32 dz;
     f32 distToTargetXZ;
     Player* player = GET_PLAYER(play);
 
@@ -5265,12 +5272,12 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_ROLLING_OLD - SFX_FLAG);
             }
 
-            diffToTargetX = this->targetPos.x - this->actor.world.pos.x;
-            diffToTargetY = this->targetPos.y - this->actor.world.pos.y;
-            diffToTargetZ = this->targetPos.z - this->actor.world.pos.z;
-            targetRotY = Math_Atan2S(diffToTargetX, diffToTargetZ);
-            distToTargetXZ = sqrtf(SQ(diffToTargetX) + SQ(diffToTargetZ));
-            targetRotX = Math_Atan2S(diffToTargetY, distToTargetXZ);
+            dx = this->targetPos.x - this->actor.world.pos.x;
+            dy = this->targetPos.y - this->actor.world.pos.y;
+            dz = this->targetPos.z - this->actor.world.pos.z;
+            targetRotY = Math_Atan2S(dx, dz);
+            distToTargetXZ = sqrtf(SQ(dx) + SQ(dz));
+            targetRotX = Math_Atan2S(dy, distToTargetXZ);
             Math_ApproachS(&this->actor.world.rot.y, targetRotY, 0xA, this->speedToTarget);
             Math_ApproachS(&this->actor.world.rot.x, targetRotX, 0xA, this->speedToTarget);
             Math_ApproachF(&this->speedToTarget, 0xBB8, 1.0f, 0x64);
@@ -5286,7 +5293,7 @@ void Boss07_Mask_SpinAttack(Boss07* this, PlayState* play) {
                     this->subAction = MAJORAS_MASK_SPIN_ATTACK_SUB_ACTION_END;
                     this->timers[0] = 30;
                 } else {
-                    Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
+                    Boss07_RandXZ(&this->targetPos, 500.0f);
                     this->targetPos.y = Rand_ZeroFloat(100.0f) + 100.0f;
 
                     if (Rand_ZeroOne() < 0.3f) {
@@ -6942,7 +6949,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
                     this->flySpeedTarget = 1.0f;
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
                 } else {
-                    Boss07_RandVec3fXZ(&this->targetPos, 500.0f);
+                    Boss07_RandXZ(&this->targetPos, 500.0f);
                     this->targetPos.y = Rand_ZeroFloat(350.0f) + 100.0f;
                     this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
                     this->speedToTarget = 0.0f;
