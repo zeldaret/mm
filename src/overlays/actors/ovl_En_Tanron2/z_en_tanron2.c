@@ -130,7 +130,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     Actor_SetScale(&this->actor, 1.0f);
 
     this->actor.draw = NULL;

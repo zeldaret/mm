@@ -479,6 +479,7 @@ typedef enum DoorLockType {
 // Note that this flag doesn't have any effect on either the actor, or Player's behavior.
 // What actually matters is the presence or lack of `ACTOR_FLAG_HOSTILE`.
 #define ACTOR_FLAG_FRIENDLY (1 << 3)
+
 // 
 #define ACTOR_FLAG_10            (1 << 4)
 // 
@@ -493,18 +494,21 @@ typedef enum DoorLockType {
 // Player will retain this flag until the player is finished talking
 // Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
 #define ACTOR_FLAG_TALK (1 << 8)
-// 
-#define ACTOR_FLAG_200           (1 << 9)
-// 
-#define ACTOR_FLAG_400           (1 << 10)
-// 
-#define ACTOR_FLAG_800           (1 << 11)
+
+// When the hookshot attaches to this actor, the actor will be pulled back as the hookshot retracts.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR (1 << 9)
+
+// When the hookshot attaches to this actor, Player will be pulled by the hookshot and fly to the actor.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER (1 << 10)
+
+// Unused
+#define ACTOR_FLAG_800 (1 << 11)
 
 // Actor will not shake when a quake occurs
 #define ACTOR_FLAG_IGNORE_QUAKE (1 << 12)
 
 // The hookshot is currently attached to this actor.
-// The behavior that occurs after attachment is determined by `ACTOR_FLAG_200` and `ACTOR_FLAG_400`.
+// The behavior that occurs after attachment is determined by `ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR` and `ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER`.
 // If neither of those flags are set attachment cannot occur, and the hookshot will simply act as a damage source.
 //
 // This flag is also reused to indicate that an actor is attached to the Zora boomerang.
@@ -535,6 +539,7 @@ typedef enum DoorLockType {
 // Also allows for the next lock-on actor to be the focus actor again.
 // When chosen as the next lock-on actor, this flag is unset.
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
+
 // 
 #define ACTOR_FLAG_100000        (1 << 20)
 // 
@@ -561,6 +566,7 @@ typedef enum DoorLockType {
 // Player is not able to lock onto the actor.
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
 #define ACTOR_FLAG_LOCK_ON_DISABLED (1 << 27)
+
 // 
 #define ACTOR_FLAG_10000000      (1 << 28)
 // 
@@ -569,6 +575,7 @@ typedef enum DoorLockType {
 // Camera will slowly drift to the actor while approaching it.
 // Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
 #define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
+
 // 
 #define ACTOR_FLAG_80000000      (1 << 31)
 

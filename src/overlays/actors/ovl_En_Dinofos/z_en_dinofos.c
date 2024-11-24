@@ -7,7 +7,9 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS                                                                            \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -405,7 +407,7 @@ void EnDinofos_Freeze(EnDinofos* this) {
     this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->stunTimer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -415,7 +417,7 @@ void EnDinofos_ThawIfFrozen(EnDinofos* this, PlayState* play) {
         this->bodyAndFireCollider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 

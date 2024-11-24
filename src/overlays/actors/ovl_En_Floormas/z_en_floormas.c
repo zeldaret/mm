@@ -7,7 +7,7 @@
 #include "z_en_floormas.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnFloormas*)thisx)
 
@@ -228,7 +228,7 @@ void func_808D09CC(EnFloormas* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_18E = 80;
-    this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
+    this->actor.flags &= ~(ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -240,9 +240,9 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
                               this->actor.scale.x * (30000.0f * 0.001f), this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
-            this->actor.flags |= ACTOR_FLAG_400;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
         } else {
-            this->actor.flags |= ACTOR_FLAG_200;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
         }
     }
 }
@@ -562,8 +562,8 @@ void func_808D19D4(EnFloormas* this) {
                      ANIMMODE_ONCE, 0.0f);
     this->collider.dim.radius = sCylinderInit.dim.radius * 0.6f;
     this->collider.dim.height = sCylinderInit.dim.height * 0.6f;
-    this->actor.flags &= ~ACTOR_FLAG_400;
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     this->actor.colChkInfo.health = 1;
     this->actor.speed = 4.0f;
     this->actor.velocity.y = 7.0f;
@@ -871,8 +871,8 @@ void func_808D2764(EnFloormas* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10;
             func_808D0908(this);
             this->actor.params = ENFLOORMAS_GET_7FFF_0;
-            this->actor.flags &= ~ACTOR_FLAG_200;
-            this->actor.flags |= ACTOR_FLAG_400;
+            this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
             this->actor.colChkInfo.health = sColChkInfoInit.health;
             func_808D0C14(this);
         } else if (this->unk_18E == 0) {

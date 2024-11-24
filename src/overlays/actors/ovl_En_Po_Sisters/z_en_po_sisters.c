@@ -199,7 +199,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_SpawnMegClones(this, play);
             EnPoSisters_SetupSpawnPo(this);
         } else {
-            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW);
+            this->actor.flags &= ~(ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_CAN_ATTACH_TO_ARROW);
             this->collider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
             this->collider.elem.acDmgInfo.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
