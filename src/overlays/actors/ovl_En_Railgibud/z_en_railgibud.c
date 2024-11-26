@@ -939,7 +939,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
         if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE))) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
-                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
@@ -947,7 +947,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
                 }
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
             this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;

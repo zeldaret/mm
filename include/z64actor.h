@@ -501,7 +501,7 @@ typedef enum DoorLockType {
 // When the hookshot attaches to this actor, Player will be pulled by the hookshot and fly to the actor.
 #define ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER (1 << 10)
 
-// Unused
+// This is likely `ACTOR_FLAG_GRASS_DESTROYED` from OoT, however this flag is unused in this game.
 #define ACTOR_FLAG_800 (1 << 11)
 
 // Actor will not shake when a quake occurs
