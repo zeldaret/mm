@@ -1604,7 +1604,8 @@ void func_80B89280(EnKaizoku* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2B6 == 0) && (this->unk_2B8 == 0) && !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
+    if ((this->unk_2B6 == 0) && (this->unk_2B8 == 0) &&
+        !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) &&
         (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->unk_2D8 = 0;
         func_80B85A00(this, play, true);

@@ -244,8 +244,8 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
     }
 
     if ((player->stateFlags1 & (PLAYER_STATE1_100000 | PLAYER_STATE1_8000000)) ||
-        (player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B5E > 0) || (player->actor.freezeTimer > 0) ||
-        !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+        (player->stateFlags2 & PLAYER_STATE2_80) || (player->textboxBtnCooldownTimer > 0) ||
+        (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         AudioSfx_StopById(NA_SE_EN_FALL_AIM);
@@ -368,7 +368,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
     if (this->skelAnime.curFrame > 20.0f) {
         this->actor.world.pos.y += 30.0f;
         this->timer += 9;
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 20.0f)) {

@@ -511,7 +511,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor; // used for both the reticle actor and arrow hover actor
 
-    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
+    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) {
         return;
     }
@@ -574,7 +574,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
         Attention_SetReticlePos(attention, attention->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
 
-        if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->focusActor)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_TALKING) || (actor != player->focusActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
             for (i = 0, curReticle = attention->curReticle; i < numReticles;
@@ -648,7 +648,8 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
 
     actor = NULL;
 
-    if ((player->focusActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->focusActor != NULL) &&
+        (player->controlStickDirections[player->controlStickDataIndex] == PLAYER_STICK_DIR_BACKWARD)) {
         // Holding backward on the control stick prevents an arrow appearing over the next lock-on actor.
         // This helps escape a lock-on loop when using Switch Targeting, but note that this still works for
         // Hold Targeting as well.
@@ -1423,7 +1424,7 @@ bool func_800B715C(PlayState* play) {
 }
 
 void Player_SetCameraHorseSetting(PlayState* play, Player* player) {
-    if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_4) && (player->actor.id == ACTOR_PLAYER)) {
+    if ((play->roomCtx.curRoom.type != ROOM_TYPE_4) && (player->actor.id == ACTOR_PLAYER)) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
@@ -2206,8 +2207,8 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_DEAD | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
-           PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+           PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
@@ -2294,9 +2295,10 @@ s32 Actor_HasRider(PlayState* play, Actor* horse) {
 s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_1000 |
-                                 PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 |
-                                 PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 |
+           PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 |
+           PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
         CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
@@ -2626,33 +2628,33 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
 
 u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_PLAYER */
     PLAYER_STATE1_200,
     /* ACTORCAT_EXPLOSIVES */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_NPC */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200,
     /* ACTORCAT_ENEMY */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_PROP */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_ITEMACTION */
     PLAYER_STATE1_2,
     /* ACTORCAT_MISC */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_BOSS */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_DOOR */
     PLAYER_STATE1_2,
     /* ACTORCAT_CHEST */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
@@ -2688,7 +2690,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.freezeExceptionFlag = 0;
     }
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && ((player->actor.textId & 0xFF00) != 0x1900)) {
         params.talkActor = player->talkActor;
     } else {
         params.talkActor = NULL;

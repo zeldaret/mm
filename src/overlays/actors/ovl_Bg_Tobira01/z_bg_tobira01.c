@@ -65,8 +65,8 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
         this->timer = 180;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE) &&
-        (DECR(this->timer) == 0)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_TALKING) &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE) && (DECR(this->timer) == 0)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE);
     }
 }

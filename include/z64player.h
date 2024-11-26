@@ -13,6 +13,31 @@
 struct Player;
 struct PlayState;
 
+#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
+#define PLAYER_GET_START_MODE(thisx) (((thisx)->params & 0xF00) >> 8)
+
+typedef enum PlayerStartMode {
+    /*  0x0 */ PLAYER_START_MODE_0,
+    /*  0x1 */ PLAYER_START_MODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
+    /*  0x2 */ PLAYER_START_MODE_2,
+    /*  0x3 */ PLAYER_START_MODE_3,
+    /*  0x4 */ PLAYER_START_MODE_4,
+    /*  0x5 */ PLAYER_START_MODE_5,
+    /*  0x6 */ PLAYER_START_MODE_6,
+    /*  0x7 */ PLAYER_START_MODE_7,
+    /*  0x8 */ PLAYER_START_MODE_8,
+    /*  0x9 */ PLAYER_START_MODE_9,
+    /*  0xA */ PLAYER_START_MODE_A,
+    /*  0xB */ PLAYER_START_MODE_B,
+    /*  0xC */ PLAYER_START_MODE_TELESCOPE,
+    /*  0xD */ PLAYER_START_MODE_D,
+    /*  0xE */ PLAYER_START_MODE_E,
+    /*  0xF */ PLAYER_START_MODE_F,
+    /* 0x10 */ PLAYER_START_MODE_MAX // Must not exceed 0x10 as `PLAYER_GET_START_MODE` is limited to a nibble in player params
+} PlayerStartMode;
+
+#define PLAYER_PARAMS(startBgCamIndex, startMode) ((startBgCamIndex & 0xFF) | ((startMode & 0xF) << 8))
+
 typedef enum PlayerShield {
     /* 0 */ PLAYER_SHIELD_NONE,
     /* 1 */ PLAYER_SHIELD_HEROS_SHIELD,
@@ -81,7 +106,7 @@ typedef enum PlayerItemAction {
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
     /* 0x07 */ PLAYER_IA_DEKU_STICK,
-    /* 0x08 */ PLAYER_IA_ZORA_FINS,
+    /* 0x08 */ PLAYER_IA_ZORA_BOOMERANG,
     /* 0x09 */ PLAYER_IA_BOW,
     /* 0x0A */ PLAYER_IA_BOW_FIRE,
     /* 0x0B */ PLAYER_IA_BOW_ICE,
@@ -185,7 +210,7 @@ typedef enum PlayerMeleeWeapon {
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
     /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
     /* 5 */ PLAYER_MELEEWEAPON_DEKU_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_DEKU_STICK),
-    /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
+    /* 6 */ PLAYER_MELEEWEAPON_ZORA_BOOMERANG = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_BOOMERANG),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
 
@@ -444,7 +469,7 @@ typedef enum PlayerModelGroup {
     /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
-    /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
+    /* 14 */ PLAYER_MODELGROUP_ZORA_BOOMERANG,
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
@@ -559,6 +584,14 @@ typedef enum PlayerLedgeClimbType {
 } PlayerLedgeClimbType;
 
 #define LEDGE_DIST_MAX 399.96002f
+
+typedef enum PlayerStickDirection {
+    /* -1 */ PLAYER_STICK_DIR_NONE = -1,
+    /*  0 */ PLAYER_STICK_DIR_FORWARD,
+    /*  1 */ PLAYER_STICK_DIR_LEFT,
+    /*  2 */ PLAYER_STICK_DIR_BACKWARD,
+    /*  3 */ PLAYER_STICK_DIR_RIGHT
+} PlayerStickDirection;
 
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
@@ -880,8 +913,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10         (1 << 4)
 // 
 #define PLAYER_STATE1_20         (1 << 5)
-// 
-#define PLAYER_STATE1_40         (1 << 6)
+// Currently talking to an actor. This includes item exchanges.
+#define PLAYER_STATE1_TALKING (1 << 6)
 // Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
 // This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
 #define PLAYER_STATE1_DEAD         (1 << 7)
@@ -893,8 +926,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_400        (1 << 10)
 // Currently carrying an actor
 #define PLAYER_STATE1_CARRYING_ACTOR (1 << 11)
-// charging spin attack
-#define PLAYER_STATE1_1000       (1 << 12)
+// Currently charging a spin attack (by holding down the B button)
+#define PLAYER_STATE1_CHARGING_SPIN_ATTACK (1 << 12)
 // 
 #define PLAYER_STATE1_2000       (1 << 13)
 // 
@@ -917,10 +950,10 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_400000     (1 << 22)
 // 
 #define PLAYER_STATE1_800000     (1 << 23)
-// 
-#define PLAYER_STATE1_1000000    (1 << 24)
-// 
-#define PLAYER_STATE1_2000000    (1 << 25)
+// Currently using the zora boomerang. This includes all phases (aiming, throwing, and catching).
+#define PLAYER_STATE1_USING_ZORA_BOOMERANG (1 << 24)
+// Zora boomerang has been thrown and is flying in the air
+#define PLAYER_STATE1_ZORA_BOOMERANG_THROWN (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
 // Swimming?
@@ -937,8 +970,8 @@ typedef enum PlayerCueId {
 
 // 
 #define PLAYER_STATE2_1          (1 << 0)
-// 
-#define PLAYER_STATE2_2          (1 << 1)
+// Can accept a talk offer. "Speak" or "Check" is shown on the A button.
+#define PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER          (1 << 1)
 // 
 #define PLAYER_STATE2_4          (1 << 2)
 // 
@@ -1047,8 +1080,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_200000     (1 << 21)
 // 
 #define PLAYER_STATE3_400000     (1 << 22)
-// 
-#define PLAYER_STATE3_800000     (1 << 23)
+// A Zora boomerang has been caught this frame
+#define PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT (1 << 23)
 // 
 #define PLAYER_STATE3_1000000    (1 << 24)
 // 
@@ -1065,32 +1098,6 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
 #define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
-
-
-#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
-#define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
-
-typedef enum PlayerInitMode {
-    /*  0x0 */ PLAYER_INITMODE_0,
-    /*  0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
-    /*  0x2 */ PLAYER_INITMODE_2,
-    /*  0x3 */ PLAYER_INITMODE_3,
-    /*  0x4 */ PLAYER_INITMODE_4,
-    /*  0x5 */ PLAYER_INITMODE_5,
-    /*  0x6 */ PLAYER_INITMODE_6,
-    /*  0x7 */ PLAYER_INITMODE_7,
-    /*  0x8 */ PLAYER_INITMODE_8,
-    /*  0x9 */ PLAYER_INITMODE_9,
-    /*  0xA */ PLAYER_INITMODE_A,
-    /*  0xB */ PLAYER_INITMODE_B,
-    /*  0xC */ PLAYER_INITMODE_TELESCOPE,
-    /*  0xD */ PLAYER_INITMODE_D,
-    /*  0xE */ PLAYER_INITMODE_E,
-    /*  0xF */ PLAYER_INITMODE_F,
-    /* 0x10 */ PLAYER_INITMODE_MAX // Must not exceed 0x10 as `PLAYER_GET_INITMODE` is limited to a nibble in player params
-} PlayerInitMode;
-
-#define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
 
 typedef enum PlayerUnkAA5 {
     /* 0 */ PLAYER_UNKAA5_0,
@@ -1215,7 +1222,7 @@ typedef struct Player {
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
     /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
-    /* 0xA7C */ Actor* boomerangActor;
+    /* 0xA7C */ Actor* zoraBoomerangActor; // Defaults to the left zora boomerang, but will switch to right if only the left boomerang is caught.
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;
@@ -1250,9 +1257,9 @@ typedef struct Player {
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;
     /* 0xADD */ s8 unk_ADD; // Some sort of combo counter
-    /* 0xADE */ u8 unk_ADE;
-    /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
-    /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
+    /* 0xADE */ u8 controlStickDataIndex; // cycles between 0 - 3. Used to index `controlStickSpinAngles` and `controlStickDirections`
+    /* 0xADF */ s8 controlStickSpinAngles[4]; // Stores a modified version of the control stick angle for the last 4 frames. Used for checking spins.
+    /* 0xAE3 */ s8 controlStickDirections[4]; // Stores the control stick direction (relative to shape yaw) for the last 4 frames. See `PlayerStickDirection`.
     /* 0xAE7 */ union {
         s8 actionVar1;
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
@@ -1287,7 +1294,7 @@ typedef struct Player {
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall
     /* 0xB5C */ u8 ledgeClimbType; // see PlayerLedgeClimbType enum
     /* 0xB5D */ u8 ledgeClimbDelayTimer;
-    /* 0xB5E */ u8 unk_B5E;
+    /* 0xB5E */ u8 textboxBtnCooldownTimer; // Prevents usage of A/B/C-up when counting down
     /* 0xB5F */ u8 unk_B5F;
     /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;

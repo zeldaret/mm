@@ -2941,7 +2941,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
     s32 i;
     Player* player = GET_PLAYER(play);
 
-    if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5) {
+    if (play->roomCtx.curRoom.type == ROOM_TYPE_BOSS) {
         return 0;
     }
 

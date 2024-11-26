@@ -622,7 +622,7 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 currentTextId = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         this->stateFlags |= EN_NB_FLAG_80;
 
         if (this->textId != currentTextId) {

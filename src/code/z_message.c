@@ -4338,7 +4338,10 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     if ((msgCtx->ocarinaAction == OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF) ||
                         (msgCtx->ocarinaAction == OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF)) {
                         AudioOcarina_StartForSongCheck(
-                            (1 << (OCARINA_ACTION_PROMPT_SONATA + msgCtx->ocarinaAction)) | 0x80000000, 4);
+                            (1 << ((msgCtx->ocarinaAction - OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF) +
+                                   OCARINA_SONG_EVAN_PART1)) |
+                                0x80000000,
+                            4);
                         msgCtx->msgMode = MSGMODE_SONG_PROMPT;
                     } else {
                         if ((msgCtx->ocarinaAction >= OCARINA_ACTION_PROMPT_WIND_FISH_HUMAN) &&

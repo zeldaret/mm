@@ -455,7 +455,7 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
             play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams ==
-                PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)) {
+                PLAYER_PARAMS(0xFF, PLAYER_START_MODE_TELESCOPE)) {
                 gSaveContext.nextTransitionType = TRANS_TYPE_CIRCLE;
             } else {
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;

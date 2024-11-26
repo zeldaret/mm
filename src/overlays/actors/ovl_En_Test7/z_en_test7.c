@@ -662,7 +662,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_WARP_TO_ENTRANCE) {
         func_80169F78(play);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_6);
+            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_6);
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance =
@@ -768,7 +768,7 @@ void EnTest7_SetupArriveCs(EnTest7* this, PlayState* play) {
     this->flags |= OWL_WARP_FLAGS_DRAW_WIND_CAPSULE;
     this->windCapsule.unk_04 = 30.0f;
 
-    if (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) {
+    if (play->roomCtx.curRoom.type != ROOM_TYPE_DUNGEON) {
         EnTest7_SetupAction(this, EnTest7_StartArriveCs);
     } else {
         EnTest7_SetupAction(this, EnTest7_StartArriveCsSkip);

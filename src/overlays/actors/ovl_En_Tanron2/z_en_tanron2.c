@@ -559,8 +559,8 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) && (this->actor.xzDistToPlayer < 80.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) && (this->actor.xzDistToPlayer < 80.0f)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
         this->unk_15A = 25;
         this->unk_159 = 1;
     }

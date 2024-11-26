@@ -694,7 +694,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
     struct_80A41828 sp40;
     ScheduleOutput scheduleOutput;
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         return false;
     }
     cond = func_80A40230(this, play);
