@@ -221,7 +221,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                                                    (this->collider.base.at->id == ACTOR_EN_SI))) {
         this->unk_1C8 = this->collider.base.at;
         if (this->collider.base.at->id == ACTOR_EN_SI) {
-            this->collider.base.at->flags |= ACTOR_FLAG_2000;
+            this->collider.base.at->flags |= ACTOR_FLAG_HOOKSHOT_ATTACHED;
         }
     }
 
@@ -266,7 +266,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                     targetActor->gravity = -0.9f;
                     targetActor->bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH);
                 } else {
-                    targetActor->flags &= ~ACTOR_FLAG_2000;
+                    targetActor->flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
                 }
             }
             Actor_Kill(&this->actor);

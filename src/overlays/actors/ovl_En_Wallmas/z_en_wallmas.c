@@ -368,7 +368,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
     if (this->skelAnime.curFrame > 20.0f) {
         this->actor.world.pos.y += 30.0f;
         this->timer += 9;
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
