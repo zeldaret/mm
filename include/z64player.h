@@ -1207,7 +1207,7 @@ typedef struct Player {
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
-    /* 0x734 */ UNK_TYPE1 unk_734[4];
+    /* 0x734 */ UNK_TYPE1 unk_734[0x4];
     /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
@@ -1230,7 +1230,7 @@ typedef struct Player {
     /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* ocarinaInteractionActor;
     /* 0xA94 */ f32 ocarinaInteractionDistance;
-    /* 0xA98 */ UNK_TYPE1 unk_A98[4];
+    /* 0xA98 */ UNK_TYPE1 unk_A98[0x4];
     /* 0xA9C */ f32 secretRumbleCharge; // builds per frame until discharges with a rumble request
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 idleType;
