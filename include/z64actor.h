@@ -539,8 +539,9 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_100000        (1 << 20)
 // 
 #define ACTOR_FLAG_200000        (1 << 21)
-// 
-#define ACTOR_FLAG_LIGHTS_1        (1 << 22)
+
+// Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists
+#define ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS (1 << 22)
 
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
 // Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
@@ -561,8 +562,10 @@ typedef enum DoorLockType {
 // Player is not able to lock onto the actor.
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
 #define ACTOR_FLAG_LOCK_ON_DISABLED (1 << 27)
-// 
-#define ACTOR_FLAG_LIGHTS_2      (1 << 28)
+
+// Specifies whether subsequent geometry is compatible with ucode point lights
+#define ACTOR_FLAG_POINT_LIGHT_COMPATIBLE (1 << 28)
+
 // 
 #define ACTOR_FLAG_20000000      (1 << 29)
 

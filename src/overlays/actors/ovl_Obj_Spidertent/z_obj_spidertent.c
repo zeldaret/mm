@@ -7,7 +7,7 @@
 #include "z_obj_spidertent.h"
 #include "assets/objects/object_spidertent/object_spidertent.h"
 
-#define FLAGS (ACTOR_FLAG_LIGHTS_2)
+#define FLAGS (ACTOR_FLAG_POINT_LIGHT_COMPATIBLE)
 
 #define THIS ((ObjSpidertent*)thisx)
 

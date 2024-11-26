@@ -8,7 +8,7 @@
 #include "z64quake.h"
 #include "assets/objects/object_dhouse/object_dhouse.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LIGHTS_1)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS)
 
 #define THIS ((ObjDhouse*)thisx)
 

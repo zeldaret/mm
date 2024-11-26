@@ -204,7 +204,7 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.uncullZoneScale = 250.0f;
         this->dyna.actor.uncullZoneDownward = 300.0f;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->dyna.actor.flags |= ACTOR_FLAG_LIGHTS_2;
+        this->dyna.actor.flags |= ACTOR_FLAG_POINT_LIGHT_COMPATIBLE;
     }
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
