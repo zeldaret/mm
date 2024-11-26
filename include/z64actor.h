@@ -563,8 +563,9 @@ typedef enum DoorLockType {
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
 #define ACTOR_FLAG_LOCK_ON_DISABLED (1 << 27)
 
-// Specifies whether subsequent geometry is compatible with ucode point lights
-#define ACTOR_FLAG_POINT_LIGHT_COMPATIBLE (1 << 28)
+// Specifies whether subsequent geometry is compatible with ucode point lights.
+// The current room must also enable point lights for point lights to take effect.
+#define ACTOR_FLAG_POINT_LIGHT_ENABLED (1 << 28)
 
 // 
 #define ACTOR_FLAG_20000000      (1 << 29)

@@ -191,8 +191,8 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
     }
 }
 
-typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
+typedef void (*LightsBindFuncLegacy)(Lights* lights, LightParams* params, Vec3f* vec);
+typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 /**
  * For every light in a provided list, try to find a free slot in the provided Lights group and bind
@@ -203,26 +203,26 @@ typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct Pl
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
-    static LightsPosBindFunc sPosBindFuncs[] = {
+    static LightsBindFunc sBindFuncs[] = {
         Lights_BindPoint,
-        (LightsPosBindFunc)Lights_BindDirectional,
+        (LightsBindFunc)Lights_BindDirectional,
         Lights_BindPoint,
     };
-    static LightsBindFunc sDirBindFuncs[] = {
+    static LightsBindFuncLegacy sBindFuncsLegacy[] = {
         Lights_BindPointWithReference,
-        (LightsBindFunc)Lights_BindDirectional,
+        (LightsBindFuncLegacy)Lights_BindDirectional,
         Lights_BindPointWithReference,
     };
 
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                sPosBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
+                sBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
             do {
-                sDirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
+                sBindFuncsLegacy[listHead->info->type](lights, &listHead->info->params, refPos);
                 listHead = listHead->next;
             } while (listHead != NULL);
         }

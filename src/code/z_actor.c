@@ -2763,13 +2763,13 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     OPEN_DISPS(play->state.gfxCtx);
 
     light = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
-    if ((actor->flags & ACTOR_FLAG_POINT_LIGHT_COMPATIBLE) &&
+    if ((actor->flags & ACTOR_FLAG_POINT_LIGHT_ENABLED) &&
         (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
         light->enablePosLights = true;
     }
 
     Lights_BindAll(light, play->lightCtx.listHead,
-                   (actor->flags & (ACTOR_FLAG_POINT_LIGHT_COMPATIBLE | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS))
+                   (actor->flags & (ACTOR_FLAG_POINT_LIGHT_ENABLED | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS))
                        ? NULL
                        : &actor->world.pos,
                    play);

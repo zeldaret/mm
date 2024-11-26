@@ -7,7 +7,7 @@
 #include "z_bg_ikana_bombwall.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_POINT_LIGHT_COMPATIBLE)
+#define FLAGS (ACTOR_FLAG_POINT_LIGHT_ENABLED)
 
 #define THIS ((BgIkanaBombwall*)thisx)
 
