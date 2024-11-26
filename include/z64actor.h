@@ -569,8 +569,9 @@ typedef enum DoorLockType {
 // Camera will slowly drift to the actor while approaching it.
 // Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
 #define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
-// 
-#define ACTOR_FLAG_80000000      (1 << 31)
+
+// Actor will have an icon drawn on the minimap. All actors except player and EN_BOX will be drawn as a coloured square icon.
+#define ACTOR_FLAG_MINIMAP_ICON_ENABLED      (1 << 31)
 
 #define DROPFLAG_NONE   (0)
 #define DROPFLAG_1      (1 << 0)
