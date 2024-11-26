@@ -400,7 +400,7 @@ void Lights_GlowCheck(PlayState* play) {
             worldPos.z = params->z;
             Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
 
-            params->drawGlow = 0;
+            params->drawGlow = false;
 
             if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
                 s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
@@ -409,7 +409,7 @@ void Lights_GlowCheck(PlayState* play) {
                 s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
-                    params->drawGlow = 1;
+                    params->drawGlow = true;
                 }
             }
         }

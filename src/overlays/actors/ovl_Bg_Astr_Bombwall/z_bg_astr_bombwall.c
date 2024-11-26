@@ -109,7 +109,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
-    this->dyna.actor.flags |= ACTOR_FLAG_10000000;
+    this->dyna.actor.flags |= ACTOR_FLAG_LIGHTS_2;
     if (!Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements)) {
         Actor_Kill(&this->dyna.actor);
         return;

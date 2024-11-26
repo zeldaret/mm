@@ -84,7 +84,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.z = 0;
     this->dyna.actor.home.rot.x = 0;
     this->dyna.actor.home.rot.z = 0;
-    this->dyna.actor.flags |= ACTOR_FLAG_10000000;
+    this->dyna.actor.flags |= ACTOR_FLAG_LIGHTS_2;
 
     switch (BG_CRACE_MOVEBG_GET_TYPE(&this->dyna.actor)) {
         case BG_CRACE_MOVEBG_TYPE_CLOSING:

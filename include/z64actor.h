@@ -540,7 +540,7 @@ typedef enum DoorLockType {
 // 
 #define ACTOR_FLAG_200000        (1 << 21)
 // 
-#define ACTOR_FLAG_400000        (1 << 22)
+#define ACTOR_FLAG_LIGHTS_1        (1 << 22)
 
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
 // Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
@@ -562,7 +562,7 @@ typedef enum DoorLockType {
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
 #define ACTOR_FLAG_LOCK_ON_DISABLED (1 << 27)
 // 
-#define ACTOR_FLAG_10000000      (1 << 28)
+#define ACTOR_FLAG_LIGHTS_2      (1 << 28)
 // 
 #define ACTOR_FLAG_20000000      (1 << 29)
 
