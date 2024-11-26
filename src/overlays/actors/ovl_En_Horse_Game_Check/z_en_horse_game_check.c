@@ -57,7 +57,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     MtxF sp38;
 
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = this->unk_160 * 0.001f;
-    this->dyna.actor.flags |= ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS;
+    this->dyna.actor.flags |= ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS;
 
     DynaPolyActor_Init(&this->dyna, 0);
 

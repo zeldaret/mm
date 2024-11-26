@@ -8,7 +8,7 @@
 #include "assets/objects/object_mamenoki/object_mamenoki.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS)
+#define FLAGS (ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 #define THIS ((ObjBean*)thisx)
 

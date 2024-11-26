@@ -541,7 +541,7 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_200000        (1 << 21)
 
 // Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists
-#define ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS (1 << 22)
+#define ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS (1 << 22)
 
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
 // Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.

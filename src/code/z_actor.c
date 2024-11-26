@@ -2769,7 +2769,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     }
 
     Lights_BindAll(light, play->lightCtx.listHead,
-                   (actor->flags & (ACTOR_FLAG_POINT_LIGHT_COMPATIBLE | ACTOR_FLAG_INGORE_LEGACY_POINT_LIGHTS))
+                   (actor->flags & (ACTOR_FLAG_POINT_LIGHT_COMPATIBLE | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS))
                        ? NULL
                        : &actor->world.pos,
                    play);
