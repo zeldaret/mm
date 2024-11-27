@@ -9,7 +9,7 @@
 
 #define FLAGS                                                                                                        \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_IGNORE_QUAKE | \
-     ACTOR_FLAG_80000000)
+     ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnThiefbird*)thisx)
 

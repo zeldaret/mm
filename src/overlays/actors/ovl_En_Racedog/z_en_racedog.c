@@ -12,7 +12,7 @@
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnRacedog*)thisx)
 

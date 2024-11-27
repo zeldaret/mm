@@ -7,7 +7,7 @@
 #include "z_en_look_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
-#define FLAGS (ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnLookNuts*)thisx)
 
