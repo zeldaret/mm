@@ -161,7 +161,7 @@
         <Animation Name="gMajorasWrathIntroAnim" Offset="0x25018" /> <!-- Original name is "last_hen2" -->
         <Animation Name="gMajorasWrathBackflipAnim" Offset="0x25878" /> <!-- Original name is "last_jump" -->
         <Animation Name="gMajorasWrathKickAnim" Offset="0x26204" /> <!-- Original name is "last_kick" -->
-        <Animation Name="gMajorasWrathReleaseTopAnim" Offset="0x269EC" /> <!-- Original name is "last_koma" ("spinning top") -->
+        <Animation Name="gMajorasWrathThrowTopAnim" Offset="0x269EC" /> <!-- Original name is "last_koma" ("spinning top") -->
         <Animation Name="gMajorasWrathGrabAnim" Offset="0x26EA0" /> <!-- Original name is "last_link" -->
         <Animation Name="gMajorasWrathThrowAnim" Offset="0x27270" /> <!-- Original name is "last_link2" -->
 

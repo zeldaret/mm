@@ -335,7 +335,7 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2);
 void Boss07_Projectile_Update(Actor* thisx, PlayState* play2);
 void Boss07_Mask_Update(Actor* thisx, PlayState* play2);
 void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2);
-void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2);
+void Boss07_IncarnationAfterimage_Update(Actor* thisx, PlayState* play2);
 
 void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2);
 void Boss07_BattleHandler_Draw(Actor* thisx, PlayState* play2);
@@ -344,14 +344,14 @@ void Boss07_Top_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Projectile_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Mask_Draw(Actor* thisx, PlayState* play2);
 void Boss07_Incarnation_Draw(Actor* thisx, PlayState* play2);
-void Boss07_Afterimage_Draw(Actor* thisx, PlayState* play2);
+void Boss07_IncarnationAfterimage_Draw(Actor* thisx, PlayState* play2);
 
 void Boss07_Wrath_SetupIntroCutscene(Boss07* this, PlayState* play);
 void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play);
 void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play);
-void Boss07_Wrath_SetupReleaseTop(Boss07* this, PlayState* play);
-void Boss07_Wrath_ReleaseTop(Boss07* this, PlayState* play);
+void Boss07_Wrath_SetupThrowTop(Boss07* this, PlayState* play);
+void Boss07_Wrath_ThrowTop(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupStunned(Boss07* this, PlayState* play);
 void Boss07_Wrath_Stunned(Boss07* this, PlayState* play);
 void Boss07_Wrath_SetupDamaged(Boss07* this, PlayState* play, u8 damage, u8 dmgEffect);
@@ -374,7 +374,7 @@ void Boss07_Wrath_Sidestep(Boss07* this, PlayState* play);
 void Boss07_Wrath_Attack(Boss07* this, PlayState* play);
 void Boss07_Wrath_TryGrab(Boss07* this, PlayState* play);
 void Boss07_Wrath_GrabPlayer(Boss07* this, PlayState* play);
-void Boss07_Wrath_Shock(Boss07* this, PlayState* play);
+void Boss07_Wrath_ShockWhip(Boss07* this, PlayState* play);
 void Boss07_Wrath_ShockStunned(Boss07* this, PlayState* play);
 
 void Boss07_Wrath_GenShadowTex(u8* tex, Boss07* this, PlayState* play);
@@ -397,7 +397,7 @@ void Boss07_Mask_SetupDeathCutscene(Boss07* this, PlayState* play);
 void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play);
 
 void Boss07_Incarnation_SetupAttack(Boss07* this, PlayState* play);
-void Boss07_Incarnation_SetupHopak(Boss07* this, PlayState* play);
+void Boss07_Incarnation_SetupSquattingDance(Boss07* this, PlayState* play);
 void Boss07_Incarnation_SetupMoonwalk(Boss07* this, PlayState* play);
 void Boss07_Incarnation_SetupPirouette(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Taunt(Boss07* this, PlayState* play);
@@ -405,7 +405,7 @@ void Boss07_Incarnation_Stunned(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Damaged(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Run(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Attack(Boss07* this, PlayState* play);
-void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play);
+void Boss07_Incarnation_SquattingDance(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play);
 void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play);
 void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play);
@@ -1386,6 +1386,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         } else {
             Boss07_Remains_SetupIntroCutscene(this, play);
         }
+
         this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.colChkInfo.damageTable = &sRemainsDamageTable;
         return;
@@ -1466,11 +1467,12 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
         Actor_SetScale(&this->actor, 15.0f * 0.001f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gMajorasIncarnationSkel, &gMajorasIncarnationTauntDance1Anim,
                            this->jointTable, this->morphTable, MAJORAS_INCARNATION_LIMB_MAX);
+
         if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_INCARNATION_AFTERIMAGE) {
             this->timers[0] = this->actor.world.rot.z;
             this->actor.world.rot.z = 0;
-            this->actor.update = Boss07_Afterimage_Update;
-            this->actor.draw = Boss07_Afterimage_Draw;
+            this->actor.update = Boss07_IncarnationAfterimage_Update;
+            this->actor.draw = Boss07_IncarnationAfterimage_Draw;
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         } else {
             this->actor.colChkInfo.damageTable = &sMajorasIncarnationDamageTable;
@@ -1481,16 +1483,20 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
                                       this->bodyColliderElements);
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 80.0f);
             this->subCamId = this->actor.shape.rot.z;
+
             if (this->subCamId != SUB_CAM_ID_DONE) {
                 Boss07_Incarnation_SetupIntroCutscene(this, play);
             } else {
                 Boss07_Incarnation_SetupTaunt(this, play);
                 this->lightSettingsMode = 1;
+
                 for (i = 0; i < MAJORAS_INCARNATION_GROW_BODYPART_MAX; i++) {
                     this->incarnationIntroBodyPartsScale[i] = 1.0f;
                 }
+
                 play->envCtx.lightBlend = 0.0f;
             }
+
             this->incarnationArmScale = 1.0f;
             this->incarnationLegScale = 1.0f;
             this->incarnationMaskScaleY = 1.0f;
@@ -2030,11 +2036,11 @@ void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
         Boss07_Wrath_SetupAttack(this, play);
     } else if (this->timers[0] == 0) {
         if (KREG(78) == 1) {
-            Boss07_Wrath_SetupReleaseTop(this, play);
+            Boss07_Wrath_SetupThrowTop(this, play);
         } else if ((s8)this->actor.colChkInfo.health >= 28) {
             Boss07_Wrath_SetupAttack(this, play);
         } else if (((s8)this->actor.colChkInfo.health <= 12) && (Rand_ZeroOne() < 0.65f)) {
-            Boss07_Wrath_SetupReleaseTop(this, play);
+            Boss07_Wrath_SetupThrowTop(this, play);
         } else if (Rand_ZeroOne() < 0.3f) {
             Boss07_Wrath_SetupTryGrab(this, play);
         } else {
@@ -2554,7 +2560,7 @@ void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play) {
     s32 whipShockIndex;
     s32 whipShockIndexMax;
 
-    this->actionFunc = Boss07_Wrath_Shock;
+    this->actionFunc = Boss07_Wrath_ShockWhip;
 
     whipShockIndex = this->whipWrapEndOffset + 10;
     this->whipShockMaxIndex = this->whipShockMinIndex = whipShockIndex;
@@ -2568,7 +2574,7 @@ void Boss07_Wrath_SetupShock(Boss07* this, PlayState* play) {
     Audio_PlaySfx(NA_SE_EV_ELECTRIC_EXPLOSION);
 }
 
-void Boss07_Wrath_Shock(Boss07* this, PlayState* play) {
+void Boss07_Wrath_ShockWhip(Boss07* this, PlayState* play) {
     s32 i;
     Player* player = GET_PLAYER(play);
 
@@ -2647,14 +2653,14 @@ void Boss07_Wrath_SetupStunned(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE_OLD);
 }
 
-void Boss07_Wrath_SetupReleaseTop(Boss07* this, PlayState* play) {
-    this->actionFunc = Boss07_Wrath_ReleaseTop;
-    Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathReleaseTopAnim, -5.0f);
-    this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathReleaseTopAnim);
+void Boss07_Wrath_SetupThrowTop(Boss07* this, PlayState* play) {
+    this->actionFunc = Boss07_Wrath_ThrowTop;
+    Animation_MorphToPlayOnce(&this->skelAnime, &gMajorasWrathThrowTopAnim, -5.0f);
+    this->animEndFrame = Animation_GetLastFrame(&gMajorasWrathThrowTopAnim);
     this->frameCounter = 0;
 }
 
-void Boss07_Wrath_ReleaseTop(Boss07* this, PlayState* play) {
+void Boss07_Wrath_ThrowTop(Boss07* this, PlayState* play) {
     this->whipCollisionTimer = 20;
 
     if (this->frameCounter < (s16)(KREG(40) + 14)) {
@@ -3132,6 +3138,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
 
         if (this->whipCrackTimer != 0) {
             this->whipCrackTimer--;
+
             if ((this->actionFunc == Boss07_Wrath_Attack) && (this->whipCrackTimer == 0)) {
                 Audio_PlaySfx(NA_SE_EN_LAST3_ROD_FLOOR_OLD);
             }
@@ -3183,6 +3190,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
+
     if (this->canEvade) {
         Boss07_Wrath_JumpAwayFromExplosive(this, play);
     }
@@ -3384,7 +3392,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             this->whipGrabPos.x = pos->x + segVec.x;
             this->whipGrabPos.y = pos->y + segVec.y;
             this->whipGrabPos.z = pos->z + segVec.z;
-        } else if ((hand == MAJORAS_WRATH_RIGHT_HAND) && (this->actionFunc == Boss07_Wrath_ReleaseTop)) {
+        } else if ((hand == MAJORAS_WRATH_RIGHT_HAND) && (this->actionFunc == Boss07_Wrath_ThrowTop)) {
             // Updates the grab point when throwing a top
             if (i == (KREG(90) + sWhipLength - this->whipTopIndex + 1)) {
                 spAC.x = KREG(60);
@@ -4399,7 +4407,7 @@ void Boss07_Incarnation_Run(Boss07* this, PlayState* play) {
                 if (rand < 0.25f) {
                     Boss07_Incarnation_SetupAttack(this, play);
                 } else if (rand < 0.5f) {
-                    Boss07_Incarnation_SetupHopak(this, play);
+                    Boss07_Incarnation_SetupSquattingDance(this, play);
                 } else if (rand < 0.75f) {
                     Boss07_Incarnation_SetupMoonwalk(this, play);
                 } else if (rand < 1.0f) {
@@ -4464,15 +4472,15 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
     Boss07_Incarnation_SpawnDust(this, play, 1, false);
 }
 
-void Boss07_Incarnation_SetupHopak(Boss07* this, PlayState* play) {
-    this->actionFunc = Boss07_Incarnation_Hopak;
+void Boss07_Incarnation_SetupSquattingDance(Boss07* this, PlayState* play) {
+    this->actionFunc = Boss07_Incarnation_SquattingDance;
     Animation_MorphToLoop(&this->skelAnime, &gMajorasIncarnationSquattingDanceAnim, -5.0f);
     this->timers[0] = Rand_ZeroFloat(100.0f) + 100.0f;
     this->timers[1] = 0;
     this->cutsceneTimer = 0;
 }
 
-void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
+void Boss07_Incarnation_SquattingDance(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     // This uses `cutsceneTimer` to count how many loops of the dancing animation Majora's Incarnation completes.
@@ -4498,6 +4506,7 @@ void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
                 this->topPrecessionVelocity = this->actor.yawTowardsPlayer;
             }
         }
+
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->timers[1] = 20;
             this->topPrecessionVelocity = this->actor.yawTowardsPlayer;
@@ -4508,6 +4517,7 @@ void Boss07_Incarnation_Hopak(Boss07* this, PlayState* play) {
 
     if ((this->timers[0] == 0) || (this->actor.xzDistToPlayer <= 200.0f)) {
         Boss07_Incarnation_SetupRun(this, play);
+
         if (this->timers[0] != 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
         }
@@ -4526,7 +4536,7 @@ void Boss07_Incarnation_SetupMoonwalk(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Moonwalk(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_MOONWALK_OLD - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
-    Math_ApproachF(&this->actor.speed, KREG(69) + -10.0f, 1.0f, 3.0f);
+    Math_ApproachF(&this->actor.speed, -10.0f + KREG(69), 1.0f, 3.0f);
 
     if (this->timers[1] == 0) {
         if ((this->frameCounter == 0) && (Rand_ZeroOne() < 0.5f)) {
@@ -4562,16 +4572,17 @@ void Boss07_Incarnation_SetupPirouette(Boss07* this, PlayState* play) {
 void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_BALLET_OLD - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
-    Math_ApproachF(&this->actor.speed, KREG(69) + 10.0f, 1.0f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 10.0f + KREG(69), 1.0f, 1.0f);
 
     if (this->timers[1] == 0) {
-        if (((this->frameCounter % 0x40) == 0) && (Rand_ZeroOne() < 0.5f)) {
+        if (((this->frameCounter % 64) == 0) && (Rand_ZeroOne() < 0.5f)) {
             if (Rand_ZeroOne() < 0.75f) {
                 this->topPrecessionVelocity = Rand_CenteredFloat(0x10000);
             } else {
                 this->topPrecessionVelocity = this->actor.yawTowardsPlayer;
             }
         }
+
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->timers[1] = 20;
             this->topPrecessionVelocity = this->actor.yawTowardsPlayer;
@@ -4582,6 +4593,7 @@ void Boss07_Incarnation_Pirouette(Boss07* this, PlayState* play) {
 
     if ((this->timers[0] == 0) || (this->actor.xzDistToPlayer <= 200.0f)) {
         Boss07_Incarnation_SetupRun(this, play);
+
         if (this->timers[0] != 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
         }
@@ -4821,7 +4833,7 @@ void Boss07_Incarnation_UpdateDamage(Boss07* this, PlayState* play) {
     }
 }
 
-void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2) {
+void Boss07_IncarnationAfterimage_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
 
@@ -4831,25 +4843,26 @@ void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2) {
 }
 
 void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
-    static u8 sPrevLightSettings[] = { 1, 0, 3, 0, 4, 0, 5, 0 };
-    static u8 sLightSettings[] = { 0, 3, 0, 4, 0, 5, 0, 1 };
     PlayState* play = play2;
     Boss07* this = THIS;
     s32 i;
+    s32 pad;
 
     this->actor.hintId = TATL_HINT_ID_MAJORAS_INCARNATION;
     this->frameCounter++;
     Math_Vec3f_Copy(&sMajoraSfxPos, &this->actor.projectedPos);
 
     if (this->lightSettingsMode == 1) {
-        s32 pad;
+        static u8 sPrevLightSettings[] = { 1, 0, 3, 0, 4, 0, 5, 0 };
+        static u8 sLightSettings[] = { 0, 3, 0, 4, 0, 5, 0, 1 };
 
         Math_ApproachF(&play->envCtx.lightBlend, 1.0f, 1.0f, 0.1f);
 
         if (play->envCtx.lightBlend == 1.0f) {
             play->envCtx.lightBlend = 0.0f;
             this->lightSettingsIndex++;
-            if (this->lightSettingsIndex >= 8) {
+
+            if (this->lightSettingsIndex >= ARRAY_COUNT(sLightSettings)) {
                 this->lightSettingsIndex = 0;
             }
         }
@@ -4918,10 +4931,11 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
+
     Boss07_UpdateDamageEffects(this, play);
 }
 
-void Boss07_Afterimage_Draw(Actor* thisx, PlayState* play2) {
+void Boss07_IncarnationAfterimage_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss07* this = THIS;
     Boss07* parent = (Boss07*)this->actor.parent;
@@ -7197,7 +7211,7 @@ void Boss07_Top_SetupThrown(Boss07* this, PlayState* play) {
 }
 
 void Boss07_Top_Thrown(Boss07* this, PlayState* play) {
-    if (sMajorasWrath->actionFunc == Boss07_Wrath_ReleaseTop) {
+    if (sMajorasWrath->actionFunc == Boss07_Wrath_ThrowTop) {
         Math_Vec3f_Copy(&this->actor.world.pos, &sMajorasWrath->whipGrabPos);
         this->actor.world.pos.y -= 25.0f + sREG(78);
     }
