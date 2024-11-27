@@ -1250,9 +1250,9 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
 
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) {
         if ((yawDiff < (BREG(2) + 0x4A9C)) || (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED)) {
-            this->actor.flags |= ACTOR_FLAG_200;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_200;
+            this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
         }
     }
 

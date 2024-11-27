@@ -1048,8 +1048,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_20         (1 << 5)
 // 
 #define PLAYER_STATE3_40         (1 << 6)
-// 
-#define PLAYER_STATE3_80         (1 << 7)
+// Flying in the air with the hookshot as it pulls Player toward its destination
+#define PLAYER_STATE3_FLYING_WITH_HOOKSHOT (1 << 7)
 // Deku flower dive
 #define PLAYER_STATE3_100        (1 << 8)
 // 
@@ -1094,7 +1094,7 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_10000000   (1 << 28)
 // breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
-// 
+// Item change process has begun
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
 #define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
