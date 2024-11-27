@@ -304,7 +304,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->csId = this->picto.actor.csId;
     this->picto.actor.world.pos.y = player->actor.world.pos.y + 160.0f;
     this->picto.validationFunc = EnKaizoku_ValidatePictograph;
-    this->picto.actor.flags |= ACTOR_FLAG_400;
+    this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     func_80B85F48(this);
 }
 
@@ -1615,7 +1615,7 @@ void func_80B89280(EnKaizoku* this, PlayState* play) {
             Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
             this->unk_2B8 = 0;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-            this->picto.actor.flags |= ACTOR_FLAG_400;
+            this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
         }
     }
 }
@@ -1637,7 +1637,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
         Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->unk_2B8 = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->picto.actor.flags |= ACTOR_FLAG_400;
+        this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DAMAGE);
@@ -1689,7 +1689,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->picto.actor.flags &= ~ACTOR_FLAG_400;
+    this->picto.actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     this->unk_598 = 0;
     this->unk_59C = 0;
     this->action = KAIZOKU_ACTION_15;
@@ -1890,7 +1890,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
                     this->drawDmgEffFrozenSteamScale = 1.5f;
-                    this->picto.actor.flags &= ~ACTOR_FLAG_400;
+                    this->picto.actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
                     if (this->picto.actor.colChkInfo.health <= 0) {
                         func_80B8960C(this, play);
                     } else {

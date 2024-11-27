@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "assets/objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((ObjSyokudai*)thisx)
 

@@ -2086,7 +2086,7 @@ void EnInvadepoh_Romani_Init(EnInvadepoh* this, PlayState* play) {
         this->actor.update = EnInvadepoh_AbductedRomani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_SILENT) {
         this->actor.update = EnInvadepoh_SilentRomani_WaitForObject;
-        this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.flags = ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_NIGHT_1) {
         this->actor.update = EnInvadepoh_Night1Romani_WaitForObject;
     } else if (type == EN_INVADEPOH_TYPE_ROMANI_BARN) {
