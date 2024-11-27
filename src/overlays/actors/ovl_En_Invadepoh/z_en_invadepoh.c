@@ -2002,7 +2002,7 @@ void EnInvadepoh_Alien_Init(EnInvadepoh* this, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
-    this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
+    this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_MINIMAP_ICON_ENABLED;
 
     if (EN_INVADEPOH_GET_TYPE(&this->actor) == EN_INVADEPOH_TYPE_ALIEN_ABDUCTOR) {
         this->actor.update = EnInvadepoh_AlienAbductor_WaitForObject;
@@ -2525,7 +2525,7 @@ void EnInvadepoh_Alien_SetupWaitForInvasion(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    this->actor.flags &= ~ACTOR_FLAG_80000000;
+    this->actor.flags &= ~ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->alpha = 0;
     this->actor.draw = NULL;
     this->shouldDraw = false;
@@ -2555,7 +2555,7 @@ void EnInvadepoh_Alien_SetupWaitToRespawn(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    this->actor.flags &= ~ACTOR_FLAG_80000000;
+    this->actor.flags &= ~ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->alpha = 0;
     this->actor.draw = NULL;
     this->shouldDraw = false;
@@ -2590,7 +2590,7 @@ void EnInvadepoh_Alien_SetupWarpIn(EnInvadepoh* this) {
     this->shouldDraw = true;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 0;
-    this->actor.flags |= ACTOR_FLAG_80000000;
+    this->actor.flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->actionFunc = EnInvadepoh_Alien_WarpIn;
 }
 
@@ -2643,7 +2643,7 @@ void EnInvadepoh_Alien_SetupFloatForward(EnInvadepoh* this) {
     this->shouldDraw = true;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
-    this->actor.flags |= ACTOR_FLAG_80000000;
+    this->actor.flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->actionFunc = EnInvadepoh_Alien_FloatForward;
 }
 
@@ -2674,7 +2674,7 @@ void EnInvadepoh_Alien_SetupDamaged(EnInvadepoh* this) {
     this->eyeBeamAlpha = 0;
     this->timer = 8;
     this->frameCounter = 0;
-    this->actor.flags |= ACTOR_FLAG_80000000;
+    this->actor.flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->actionFunc = EnInvadepoh_Alien_Damaged;
 }
 
@@ -2702,7 +2702,7 @@ void EnInvadepoh_Alien_SetupDead(EnInvadepoh* this) {
     this->shouldDraw = true;
     this->shouldDrawDeathFlash = false;
     this->eyeBeamAlpha = 255;
-    this->actor.flags |= ACTOR_FLAG_80000000;
+    this->actor.flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->actionFunc = EnInvadepoh_Alien_Dead;
 }
 

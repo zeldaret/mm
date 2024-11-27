@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnAz*)thisx)
 
