@@ -7,6 +7,8 @@ import argparse, re, struct
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple, TypeVar
 
+from ..version import version_config
+
 T = TypeVar("T")
 
 item_ids = {
@@ -3054,9 +3056,8 @@ class MessageEntry:
 
         return out
 
-# TODO: Use version_config instead
 def collect_messages(message_tables : List[Optional[MessageTableDesc]], baserom_segments_dir : Path, 
-                     config : Dict[str,int], code_vram : int, code_bin : bytes):
+                     config : version_config.VersionConfig, code_vram : int, code_bin : bytes):
 
     messages : Dict[int,MessageEntry] = {}
 
@@ -3067,7 +3068,7 @@ def collect_messages(message_tables : List[Optional[MessageTableDesc]], baserom_
             continue
 
         baserom_seg = (baserom_segments_dir / desc.seg_name).read_bytes()
-        code_offset = config[desc.table_name] - code_vram
+        code_offset = config.variables[desc.table_name] - code_vram
 
         if desc.parent is None:
             # Complete table
@@ -3143,12 +3144,13 @@ def main():
     args = parser.parse_args()
 
     baserom_segments_dir : Path = args.baserom_segments_dir
+    version : str = args.version
     output_dir : Path = args.output_dir
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    # TODO: use version config instead to get code vram
-    code_vram = 0x800A5AC0
+    config = version_config.load_version_config(version)
+    code_vram = config.dmadata_segments["code"].vram
 
     code_bin = (baserom_segments_dir / "code").read_bytes()
 
@@ -3160,12 +3162,6 @@ def main():
 
     message_tables[0]  = MessageTableDesc("sMessageTableNES",   "message_data_static", nes_decoder, None)
     message_table_staff = MessageTableDesc("sMessageTableCredits", "staff_message_data_static", credits_decoder, None)
-
-    # TODO: use version config instead
-    config = {
-        "sMessageTableNES": 0x801C6B98,
-        "sMessageTableCredits": 0x801CFB08,
-    }
 
     messages = collect_messages(message_tables, baserom_segments_dir, config, code_vram, code_bin)
     staff_messages = collect_messages([message_table_staff], baserom_segments_dir, config, code_vram, code_bin)

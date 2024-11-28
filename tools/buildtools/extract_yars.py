@@ -21,6 +21,8 @@ import dataclasses
 from pathlib import Path
 import struct
 
+from ..version import version_config
+
 
 PRINT_XML = False
 
@@ -121,15 +123,13 @@ def main():
     global PRINT_XML
     PRINT_XML = args.xml
 
-    archivesCsvPath = Path(f"tools/filelists/{version}/archives.csv")
+    config = version_config.load_version_config(version)
 
-    with archivesCsvPath.open() as f:
-        for line in f:
-            archiveName = line.strip().split(",")[1]
-            archivePath = baseromSegmentsDir / archiveName
+    for archiveName in config.archives:
+        archivePath = baseromSegmentsDir / archiveName
 
-            extractedPath = Path(str(archivePath) + ".unarchive")
-            extractArchive(archivePath, extractedPath)
+        extractedPath = Path(str(archivePath) + ".unarchive")
+        extractArchive(archivePath, extractedPath)
 
 
 if __name__ == "__main__":

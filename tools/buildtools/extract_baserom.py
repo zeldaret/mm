@@ -9,7 +9,9 @@ import argparse
 from pathlib import Path
 import sys
 
-import dmadata
+from . import dmadata
+from ..version import version_config
+
 
 
 def main():
@@ -25,26 +27,28 @@ def main():
         help="Output directory for segments",
     )
     parser.add_argument(
-        "--dmadata-start",
-        type=lambda s: int(s, 16),
-        required=True,
-        help=(
-            "The dmadata location in the rom, as a hexadecimal offset (e.g. 0x12f70)"
-        ),
+        "-v",
+        "--version",
+        help="version to process",
+        default="n64-us",
     )
     parser.add_argument(
-        "--dmadata-names",
-        type=Path,
-        required=True,
-        help="Path to file containing segment names",
+        "--dmadata-start",
+        type=lambda s: int(s, 16),
+        help=(
+            "Override dmadata location for non-matching ROMs, as a hexadecimal offset (e.g. 0x12F70)"
+        ),
     )
 
     args = parser.parse_args()
 
     rom_data = memoryview(args.rom.read_bytes())
 
-    dma_names = args.dmadata_names.read_text().splitlines()
-    dma_entries = dmadata.read_dmadata(rom_data, args.dmadata_start)
+    config = version_config.load_version_config(args.version)
+    dmadata_start = args.dmadata_start or config.dmadata_start
+    dma_names = config.dmadata_segments.keys()
+
+    dma_entries = dmadata.read_dmadata(rom_data, dmadata_start)
     if len(dma_names) != len(dma_entries):
         print(
             f"Error: expected {len(dma_names)} DMA entries but found {len(dma_entries)} in ROM",
