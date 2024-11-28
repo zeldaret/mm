@@ -80,6 +80,8 @@ void func_80838A20(PlayState* play, Player* this);
 void func_80839978(PlayState* play, Player* this);
 void func_80839A10(PlayState* play, Player* this);
 
+void func_80859CE0(PlayState* play, Player* this, s32 arg2);
+
 typedef enum AnimSfxType {
     /*  1 */ ANIMSFX_TYPE_GENERAL = 1,
     /*  2 */ ANIMSFX_TYPE_FLOOR,
@@ -179,7 +181,7 @@ void Player_Action_62(Player* this, PlayState* play);
 void Player_Action_63(Player* this, PlayState* play);
 void Player_Action_64(Player* this, PlayState* play);
 void Player_Action_65(Player* this, PlayState* play);
-void Player_Action_66(Player* this, PlayState* play);
+void Player_Action_TimeTravelEnd(Player* this, PlayState* play);
 void Player_Action_67(Player* this, PlayState* play);
 void Player_Action_68(Player* this, PlayState* play);
 void Player_Action_69(Player* this, PlayState* play);
@@ -187,12 +189,12 @@ void Player_Action_70(Player* this, PlayState* play);
 void Player_Action_ExchangeItem(Player* this, PlayState* play);
 void Player_Action_72(Player* this, PlayState* play);
 void Player_Action_73(Player* this, PlayState* play);
-void Player_Action_74(Player* this, PlayState* play);
-void Player_Action_75(Player* this, PlayState* play);
-void Player_Action_76(Player* this, PlayState* play);
+void Player_Action_WaitForCutscene(Player* this, PlayState* play);
+void Player_Action_StartWarpSongArrive(Player* this, PlayState* play);
+void Player_Action_BlueWarpArrive(Player* this, PlayState* play);
 void Player_Action_77(Player* this, PlayState* play);
-void Player_Action_78(Player* this, PlayState* play);
-void Player_Action_79(Player* this, PlayState* play);
+void Player_Action_TryOpeningDoor(Player* this, PlayState* play);
+void Player_Action_ExitGrotto(Player* this, PlayState* play);
 void Player_Action_80(Player* this, PlayState* play);
 void Player_Action_81(Player* this, PlayState* play);
 void Player_Action_82(Player* this, PlayState* play);
@@ -801,9 +803,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         44.15145f,
         // openChestAnim
         &gPlayerAnim_link_demo_Tbox_open,
-        // unk_A4
+        // timeTravelStartAnim
         &gPlayerAnim_link_demo_back_to_past,
-        // unk_A8
+        // timeTravelEndAnim
         &gPlayerAnim_link_demo_return_to_past,
         // unk_AC
         &gPlayerAnim_link_normal_climb_startA,
@@ -897,9 +899,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         42.0f,
         // openChestAnim
         &gPlayerAnim_pg_Tbox_open,
-        // unk_A4
+        // timeTravelStartAnim
         &gPlayerAnim_link_demo_back_to_past,
-        // unk_A8
+        // timeTravelEndAnim
         &gPlayerAnim_link_demo_return_to_past,
         // unk_AC
         &gPlayerAnim_pg_climb_startA,
@@ -993,9 +995,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         36.0f,
         // openChestAnim
         &gPlayerAnim_pz_Tbox_open,
-        // unk_A4
+        // timeTravelStartAnim
         &gPlayerAnim_link_demo_back_to_past,
-        // unk_A8
+        // timeTravelEndAnim
         &gPlayerAnim_link_demo_return_to_past,
         // unk_AC
         &gPlayerAnim_pz_climb_startA,
@@ -1089,9 +1091,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         33.0f,
         // openChestAnim
         &gPlayerAnim_pn_Tbox_open,
-        // unk_A4
+        // timeTravelStartAnim
         &gPlayerAnim_link_demo_back_to_past,
-        // unk_A8
+        // timeTravelEndAnim
         &gPlayerAnim_link_demo_return_to_past,
         // unk_AC
         &gPlayerAnim_clink_normal_climb_startA,
@@ -1185,9 +1187,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         29.4343f,
         // openChestAnim
         &gPlayerAnim_clink_demo_Tbox_open,
-        // unk_A4
+        // timeTravelStartAnim
         &gPlayerAnim_clink_demo_goto_future,
-        // unk_A8
+        // timeTravelEndAnim
         &gPlayerAnim_clink_demo_return_to_future,
         // unk_AC
         &gPlayerAnim_clink_normal_climb_startA,
@@ -6797,8 +6799,9 @@ s32 Player_ActionHandler_1(Player* this, PlayState* play) {
             ((((this->doorType <= PLAYER_DOORTYPE_TALKING) && CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) ||
               ((this->doorType >= PLAYER_DOORTYPE_HANDLE) && CutsceneManager_IsNext(CS_ID_GLOBAL_DOOR))) &&
              (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) &&
-              (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) || (Player_Action_78 == this->actionFunc) ||
-               (this->doorType == PLAYER_DOORTYPE_STAIRCASE) || (this->doorType == PLAYER_DOORTYPE_PROXIMITY))))) {
+              (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) ||
+               (Player_Action_TryOpeningDoor == this->actionFunc) || (this->doorType == PLAYER_DOORTYPE_STAIRCASE) ||
+               (this->doorType == PLAYER_DOORTYPE_PROXIMITY))))) {
             Actor* doorActor = this->doorActor;
             Actor* var_v0_3;
 
@@ -10853,84 +10856,98 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
     return sp2C;
 }
 
-void Player_StartMode_0(PlayState* play, Player* this) {
-    this->actor.update = func_801229EC;
+void Player_StartMode_Nothing(PlayState* play, Player* this) {
+    this->actor.update = Player_DoNothing;
     this->actor.draw = NULL;
 }
 
-void Player_StartMode_2(PlayState* play, Player* this) {
-    Player_SetAction(play, this, Player_Action_76, 0);
+void Player_StartMode_BlueWarp(PlayState* play, Player* this) {
+    Player_SetAction(play, this, Player_Action_BlueWarpArrive, 0);
+
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     PlayerAnimation_Change(play, &this->skelAnime, &gPlayerAnim_link_okarina_warp_goal, PLAYER_ANIM_ADJUSTED_SPEED,
                            0.0f, 24.0f, ANIMMODE_ONCE, 0.0f);
+
+    // Start high up in the air
     this->actor.world.pos.y += 800.0f;
 }
 
-u8 D_8085D2B0[] = {
-    ITEM_SWORD_RAZOR,
-    ITEM_SWORD_KOKIRI,
-};
-
-// OoT leftover?
-void func_80841358(PlayState* play, Player* this, s32 arg2) {
-    ItemId item;
-    PlayerItemAction itemAction;
-
+/**
+ * Put the sword item in hand. If `playSfx` is true, the sword unsheathing sound will play.
+ * Sword will depend on transformation, but due to improper carryover from OoT,
+ * this will lead to OoB for goron, deku or human.
+ *
+ * Note: This will not play an animation, the sword instantly appears in hand.
+ *       It is expected that this function is called while an appropriate animation
+ *       is already playing, for example in a cutscene.
+ */
+void Player_PutSwordInHand(PlayState* play, Player* this, s32 playSfx) {
+    static u8 sSwordItemIds[] = { ITEM_SWORD_RAZOR, ITEM_SWORD_KOKIRI };
     //! @bug OoB read if player is goron, deku or human
-    item = D_8085D2B0[this->transformation];
-    itemAction = sItemItemActions[item];
+    ItemId swordItemId = sSwordItemIds[this->transformation];
+    PlayerItemAction swordItemAction = sItemItemActions[swordItemId];
+
     Player_DestroyHookshot(this);
     Player_DetachHeldActor(play, this);
-    this->heldItemId = item;
-    this->nextModelGroup = Player_ActionToModelGroup(this, itemAction);
-    Player_InitItemAction(play, this, itemAction);
+
+    this->heldItemId = swordItemId;
+    this->nextModelGroup = Player_ActionToModelGroup(this, swordItemAction);
+
+    Player_InitItemAction(play, this, swordItemAction);
     func_808309CC(play, this);
-    if (arg2) {
+
+    if (playSfx) {
         Player_PlaySfx(this, NA_SE_IT_SWORD_PICKOUT);
     }
 }
 
-Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
+void Player_StartMode_TimeTravel(PlayState* play, Player* this) {
+    static Vec3f sPedestalPos = { -1.0f, 69.0f, 20.0f };
 
-void Player_StartMode_1(PlayState* play, Player* this) {
-    Player_SetAction(play, this, Player_Action_66, 0);
+    Player_SetAction(play, this, Player_Action_TimeTravelEnd, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
-    Math_Vec3f_Copy(&this->actor.world.pos, &D_8085D2B4);
+
+    Math_Vec3f_Copy(&this->actor.world.pos, &sPedestalPos);
     this->yaw = this->actor.shape.rot.y = -0x8000;
-    PlayerAnimation_Change(play, &this->skelAnime, this->ageProperties->unk_A8, PLAYER_ANIM_ADJUSTED_SPEED, 0.0f, 0.0f,
-                           ANIMMODE_ONCE, 0.0f);
+
+    // The start frame and end frame are both set to 0 so that that the animation is frozen.
+    // `Player_Action_TimeTravelEnd` will play the animation after `animDelayTimer` completes.
+    PlayerAnimation_Change(play, &this->skelAnime, this->ageProperties->timeTravelEndAnim, PLAYER_ANIM_ADJUSTED_SPEED,
+                           0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
     Player_AnimReplace_Setup(
         play, this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_80 | ANIM_FLAG_200);
+
     if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
-        func_80841358(play, this, false);
+        Player_PutSwordInHand(play, this, false);
     }
-    this->av2.actionVar2 = 20;
+
+    this->av2.animDelayTimer = 20;
 }
 
-void Player_StartMode_3(PlayState* play, Player* this) {
-    Player_SetAction(play, this, Player_Action_78, 0);
+void Player_StartMode_Door(PlayState* play, Player* this) {
+    Player_SetAction(play, this, Player_Action_TryOpeningDoor, 0);
     Player_AnimReplace_Setup(play, this,
                              ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
 }
 
-void Player_StartMode_4(PlayState* play, Player* this) {
+void Player_StartMode_Grotto(PlayState* play, Player* this) {
     func_80834DB8(this, &gPlayerAnim_link_normal_jump, 12.0f, play);
-    Player_SetAction(play, this, Player_Action_79, 0);
+    Player_SetAction(play, this, Player_Action_ExitGrotto, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     this->fallStartHeight = this->actor.world.pos.y;
 }
 
-void Player_StartMode_7(PlayState* play, Player* this) {
+void Player_StartMode_KnockedOver(PlayState* play, Player* this) {
     func_80833B18(play, this, 1, 2.0f, 2.0f, this->actor.shape.rot.y + 0x8000, 0);
 }
 
-void Player_StartMode_5(PlayState* play, Player* this) {
-    Player_SetAction(play, this, Player_Action_75, 0);
-    this->actor.draw = NULL;
+void Player_StartMode_WarpSong(PlayState* play, Player* this) {
+    Player_SetAction(play, this, Player_Action_StartWarpSongArrive, 0);
+    this->actor.draw = NULL; // Start invisible
     this->stateFlags1 |= PLAYER_STATE1_20000000;
 }
 
-void Player_StartMode_6(PlayState* play, Player* this) {
+void Player_StartMode_OwlStatue(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave) {
         Player_SetAction(play, this, Player_Action_0, 0);
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_nwait][this->modelAnimType]);
@@ -11014,22 +11031,22 @@ typedef void (*PlayerStartModeFunc)(PlayState*, Player*);
 // Initialisation functions for various gameplay modes depending on spawn params.
 // There may be at most 0x10 due to it using a single nybble.
 PlayerStartModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
-    Player_StartMode_0,         // PLAYER_START_MODE_0
-    Player_StartMode_1,         // PLAYER_START_MODE_1
-    Player_StartMode_2,         // PLAYER_START_MODE_2
-    Player_StartMode_3,         // PLAYER_START_MODE_3
-    Player_StartMode_4,         // PLAYER_START_MODE_4
-    Player_StartMode_5,         // PLAYER_START_MODE_5
-    Player_StartMode_6,         // PLAYER_START_MODE_6
-    Player_StartMode_7,         // PLAYER_START_MODE_7
-    Player_StartMode_WarpTag,   // PLAYER_START_MODE_8
-    Player_StartMode_WarpTag,   // PLAYER_START_MODE_9
-    Player_StartMode_E,         // PLAYER_START_MODE_A
-    Player_StartMode_B,         // PLAYER_START_MODE_B
-    Player_StartMode_Telescope, // PLAYER_START_MODE_TELESCOPE
-    Player_StartMode_D,         // PLAYER_START_MODE_D
-    Player_StartMode_E,         // PLAYER_START_MODE_E
-    Player_StartMode_F,         // PLAYER_START_MODE_F
+    Player_StartMode_Nothing,     // PLAYER_START_MODE_NOTHING
+    Player_StartMode_TimeTravel,  // PLAYER_START_MODE_TIME_TRAVEL
+    Player_StartMode_BlueWarp,    // PLAYER_START_MODE_BLUE_WARP
+    Player_StartMode_Door,        // PLAYER_START_MODE_DOOR
+    Player_StartMode_Grotto,      // PLAYER_START_MODE_GROTTO
+    Player_StartMode_WarpSong,    // PLAYER_START_MODE_WARP_SONG
+    Player_StartMode_OwlStatue,   // PLAYER_START_MODE_OWL_STATUE
+    Player_StartMode_KnockedOver, // PLAYER_START_MODE_KNOCKED_OVER
+    Player_StartMode_WarpTag,     // PLAYER_START_MODE_8
+    Player_StartMode_WarpTag,     // PLAYER_START_MODE_9
+    Player_StartMode_E,           // PLAYER_START_MODE_A
+    Player_StartMode_B,           // PLAYER_START_MODE_B
+    Player_StartMode_Telescope,   // PLAYER_START_MODE_TELESCOPE
+    Player_StartMode_D,           // PLAYER_START_MODE_D
+    Player_StartMode_E,           // PLAYER_START_MODE_E
+    Player_StartMode_F,           // PLAYER_START_MODE_F
 };
 
 // sBlureInit
@@ -11274,7 +11291,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     startMode = PLAYER_GET_START_MODE(&this->actor);
 
-    if (((startMode == PLAYER_START_MODE_5) || (startMode == PLAYER_START_MODE_6)) &&
+    if (((startMode == PLAYER_START_MODE_WARP_SONG) || (startMode == PLAYER_START_MODE_OWL_STATUE)) &&
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
         startMode = PLAYER_START_MODE_D;
     }
@@ -17592,16 +17609,14 @@ void Player_Action_65(Player* this, PlayState* play) {
     }
 }
 
-AnimSfxEntry D_8085D75C[] = {
-    ANIMSFX(ANIMSFX_TYPE_VOICE, 5, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
-    ANIMSFX(ANIMSFX_TYPE_FLOOR_LAND, 15, NA_SE_NONE, STOP),
-};
-
-void Player_Action_66(Player* this, PlayState* play) {
+void Player_Action_TimeTravelEnd(Player* this, PlayState* play) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        if (this->av1.actionVar1 == 0) {
-            if (DECR(this->av2.actionVar2) == 0) {
-                this->av1.actionVar1 = 1;
+        if (!this->av1.startedAnim) {
+            if (DECR(this->av2.animDelayTimer) == 0) {
+                this->av1.startedAnim = true;
+
+                // endFrame was previously set to 0 to freeze the animation.
+                // Set it properly to allow the animation to play.
                 this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
             }
         } else {
@@ -17611,7 +17626,12 @@ void Player_Action_66(Player* this, PlayState* play) {
                PlayerAnimation_OnFrame(&this->skelAnime, 158.0f)) {
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_SWORD_N);
     } else if (this->transformation != PLAYER_FORM_FIERCE_DEITY) {
-        Player_PlayAnimSfx(this, D_8085D75C);
+        static AnimSfxEntry sJumpOffPedestalAnimSfxList[] = {
+            ANIMSFX(ANIMSFX_TYPE_VOICE, 5, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
+            ANIMSFX(ANIMSFX_TYPE_FLOOR_LAND, 15, NA_SE_NONE, STOP),
+        };
+
+        Player_PlayAnimSfx(this, sJumpOffPedestalAnimSfxList);
     } else {
         func_808484CC(this);
     }
@@ -18049,32 +18069,39 @@ void Player_Action_73(Player* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, var_v0, 0x7D0);
 }
 
-void func_80859CE0(PlayState* play, Player* this, s32 arg2);
-
-void Player_Action_74(Player* this, PlayState* play) {
-    if ((DECR(this->av2.actionVar2) == 0) && Player_StartCsAction(play, this)) {
+/**
+ * Waits to start processing a Cutscene Action.
+ * First, the timer `csDelayTimer` much reach 0.
+ * Then, there must be a CS action available to start processing.
+ *
+ * When starting the cutscene action, `draw` will be set to make
+ * Player appear, if he was invisible.
+ */
+void Player_Action_WaitForCutscene(Player* this, PlayState* play) {
+    if ((DECR(this->av2.csDelayTimer) == 0) && Player_StartCsAction(play, this)) {
         func_80859CE0(play, this, 0);
         Player_SetAction(play, this, Player_Action_CsAction, 0);
         Player_Action_CsAction(this, play);
     }
 }
 
-void Player_Action_75(Player* this, PlayState* play) {
-    Player_SetAction(play, this, Player_Action_74, 0);
-    this->av2.actionVar2 = 0x28;
+void Player_Action_StartWarpSongArrive(Player* this, PlayState* play) {
+    Player_SetAction(play, this, Player_Action_WaitForCutscene, 0);
+    this->av2.csDelayTimer = 40;
+
     Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
 }
 
 void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorCue* cue);
 
-void Player_Action_76(Player* this, PlayState* play) {
+void Player_Action_BlueWarpArrive(Player* this, PlayState* play) {
     if (sPlayerYDistToFloor < 150.0f) {
         if (PlayerAnimation_Update(play, &this->skelAnime)) {
-            if (this->av2.actionVar2 == 0) {
+            if (!this->av2.playedLandingSfx) {
                 if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                     this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
                     Player_AnimSfx_PlayFloorLand(this);
-                    this->av2.actionVar2 = 1;
+                    this->av2.playedLandingSfx = true;
                 }
             } else {
                 func_8085B384(this, play);
@@ -18087,10 +18114,10 @@ void Player_Action_76(Player* this, PlayState* play) {
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (play->csCtx.playerCue != NULL) {
             s32 pad;
-            f32 sp28 = this->actor.world.pos.y;
+            f32 savedYPos = this->actor.world.pos.y;
 
             Player_Cutscene_SetPosAndYawToStart(this, play->csCtx.playerCue);
-            this->actor.world.pos.y = sp28;
+            this->actor.world.pos.y = savedYPos;
         }
     }
 }
@@ -18131,12 +18158,17 @@ void Player_Action_77(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_78(Player* this, PlayState* play) {
+/**
+ * Automatically open a door (no need for the A button).
+ * Note: If no door is in useable range, a softlock will occur.
+ */
+void Player_Action_TryOpeningDoor(Player* this, PlayState* play) {
     Player_ActionHandler_1(this, play);
 }
 
-void Player_Action_79(Player* this, PlayState* play) {
+void Player_Action_ExitGrotto(Player* this, PlayState* play) {
     this->actor.gravity = -1.0f;
+
     PlayerAnimation_Update(play, &this->skelAnime);
 
     if (this->actor.velocity.y < 0.0f) {
@@ -20504,7 +20536,7 @@ void func_80859CE0(PlayState* play, Player* this, s32 arg2) {
 }
 
 void Player_CsAction_17(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80841358(play, this, false);
+    Player_PutSwordInHand(play, this, false);
     Player_Anim_PlayOnceAdjusted(play, this, &gPlayerAnim_link_demo_return_to_past);
 }
 
@@ -20555,7 +20587,7 @@ void Player_CsAction_20(PlayState* play, Player* this, CsCmdActorCue* cue) {
         Player_CsAction_End(play, this, cue);
     } else if (this->av2.actionVar2 == 0) {
         Item_Give(play, ITEM_SWORD_RAZOR);
-        func_80841358(play, this, false);
+        Player_PutSwordInHand(play, this, false);
     } else {
         func_808484CC(this);
     }
@@ -20566,7 +20598,7 @@ void Player_CsAction_21(PlayState* play, Player* this, CsCmdActorCue* cue) {
         func_8083FCF0(play, this, 0.0f, 99.0f, this->skelAnime.endFrame - 8.0f);
     }
     if (this->heldItemAction != PLAYER_IA_SWORD_GILDED) {
-        func_80841358(play, this, true);
+        Player_PutSwordInHand(play, this, true);
     }
 }
 

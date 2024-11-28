@@ -662,7 +662,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_WARP_TO_ENTRANCE) {
         func_80169F78(play);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_6);
+            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_OWL_STATUE);
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance =
