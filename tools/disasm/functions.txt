@@ -9534,7 +9534,7 @@
     0x80A00274:("Boss07_Mask_Stunned",),
     0x80A00484:("Boss07_Mask_SetupDamaged",),
     0x80A00554:("Boss07_Mask_Damaged",),
-    0x80A006D0:("Boss07_Mask_ClearBeam",),
+    0x80A006D0:("Boss07_Mask_StopBeam",),
     0x80A006F4:("Boss07_Mask_SetupFireBeam",),
     0x80A00720:("Boss07_Mask_FireBeam",),
     0x80A016E4:("Boss07_Mask_SetupIntroCutscene",),
