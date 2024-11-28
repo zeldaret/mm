@@ -2109,6 +2109,14 @@ PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     return player->exchangeItemAction;
 }
 
+/**
+ * When a given ocarina interaction offer is accepted, Player will set `ACTOR_FLAG_OCARINA_INTERACTION` for that actor.
+ * An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+ * This function serves to acknowledge that the offer was accepted by Player, and notifies the actor
+ * that it should proceed with its own internal processes for handling further interactions.
+ *
+ * @return  true if the ocarina interaction offer was accepted, false otherwise
+ */
 s32 Actor_OcarinaInteractionAccepted(Actor* actor, GameState* gameState) {
     if (actor->flags & ACTOR_FLAG_OCARINA_INTERACTION) {
         actor->flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;

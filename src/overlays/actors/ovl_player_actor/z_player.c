@@ -7922,6 +7922,9 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                         if (ocarinaInteractionActor != NULL) {
                             this->actor.flags |= ACTOR_FLAG_OCARINA_INTERACTION;
                             if (ocarinaInteractionActor->id == ACTOR_EN_ZOT) {
+                                // Delays setting `ACTOR_FLAG_OCARINA_INTERACTION` until a Zora guitar strum.
+                                // Uses a negative xzDist to signal this special case (normally unobtainable xzDist).
+                                // See `func_80852290`.
                                 this->ocarinaInteractionDistance = -1.0f;
                             } else {
                                 ocarinaInteractionActor->flags |= ACTOR_FLAG_OCARINA_INTERACTION;
@@ -17300,6 +17303,9 @@ void func_80852290(PlayState* play, Player* this) {
         if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
             (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
             if ((this->ocarinaInteractionActor != NULL) && (this->ocarinaInteractionDistance < 0.0f)) {
+                // Designed for tuning the guitar in zora hall for the zora: `ACTOR_EN_ZOT`
+                // This actor will delay setting the `ACTOR_FLAG_OCARINA_INTERACTION` until here.
+                // This is signaled by a negative `ocarinaInteractionDistance`.
                 this->ocarinaInteractionActor->flags |= ACTOR_FLAG_OCARINA_INTERACTION;
                 this->ocarinaInteractionDistance = 0.0f;
             }
