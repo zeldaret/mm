@@ -571,6 +571,7 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_10000000      (1 << 28)
 
 // Signals that player has accepted an offer to use the ocarina to interact with an actor
+// An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
 // Player will retain this flag until the player is finished playing the ocarina
 // Actor will retain this flag until `Actor_OcarinaInteractionAccepted` is called or manually turned off by the actor
 #define ACTOR_FLAG_OCARINA_INTERACTION (1 << 29)
