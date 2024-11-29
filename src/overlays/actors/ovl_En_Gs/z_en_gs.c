@@ -193,7 +193,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
     }
 
     if (this->actor.params != ENGS_2) {
-        func_800B874C(&this->actor, play, 100.0f, 100.0f);
+        Actor_OfferOcarinaInteraction(&this->actor, play, 100.0f, 100.0f);
     }
 }
 
@@ -1036,7 +1036,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, play);
-    } else if (func_800B8718(&this->actor, &play->state)) {
+    } else if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         this->unk_19A |= 0x200;
         this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.csId != CS_ID_NONE) {

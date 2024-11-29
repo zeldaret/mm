@@ -4363,9 +4363,9 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 
     play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
 
-    if (this->actor.flags & ACTOR_FLAG_20000000) {
+    if (this->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) {
         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
-        this->actor.flags &= ~ACTOR_FLAG_20000000;
+        this->actor.flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
     } else if ((Player_Action_96 == this->actionFunc) || (Player_Action_93 == this->actionFunc)) {
         this->actor.shape.shadowDraw = ActorShadow_DrawFeet;
         this->actor.shape.shadowScale = this->ageProperties->shadowScale;
@@ -7902,10 +7902,10 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                                                                   : &gPlayerAnim_link_bottle_drink_demo_start);
                         }
                     } else {
-                        Actor* actorUnkA90 = this->unk_A90;
+                        Actor* ocarinaInteractionActor = this->ocarinaInteractionActor;
 
-                        if ((actorUnkA90 == NULL) || (actorUnkA90->id == ACTOR_EN_ZOT) ||
-                            (actorUnkA90->csId == CS_ID_NONE)) {
+                        if ((ocarinaInteractionActor == NULL) || (ocarinaInteractionActor->id == ACTOR_EN_ZOT) ||
+                            (ocarinaInteractionActor->csId == CS_ID_NONE)) {
                             if (!func_808323C0(this, play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA])) {
                                 return false;
                             }
@@ -7919,12 +7919,15 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                             Player_Anim_PlayOnceAdjusted(play, this, D_8085D17C[this->transformation]);
                         }
                         this->stateFlags2 |= PLAYER_STATE2_USING_OCARINA;
-                        if (actorUnkA90 != NULL) {
-                            this->actor.flags |= ACTOR_FLAG_20000000;
-                            if (actorUnkA90->id == ACTOR_EN_ZOT) {
-                                this->unk_A94 = -1.0f;
+                        if (ocarinaInteractionActor != NULL) {
+                            this->actor.flags |= ACTOR_FLAG_OCARINA_INTERACTION;
+                            if (ocarinaInteractionActor->id == ACTOR_EN_ZOT) {
+                                // Delays setting `ACTOR_FLAG_OCARINA_INTERACTION` until a Zora guitar strum.
+                                // Uses a negative xzDist to signal this special case (normally unobtainable xzDist).
+                                // See `func_80852290`.
+                                this->ocarinaInteractionDistance = -1.0f;
                             } else {
-                                actorUnkA90->flags |= ACTOR_FLAG_20000000;
+                                ocarinaInteractionActor->flags |= ACTOR_FLAG_OCARINA_INTERACTION;
                             }
                         }
                     }
@@ -11435,7 +11438,7 @@ void Player_UpdateInterface(PlayState* play, Player* this) {
 
         if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
             doActionA = DO_ACTION_SNAP;
-        } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & ACTOR_FLAG_20000000) ||
+        } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) ||
                    (this->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) ||
                    (this->stateFlags3 & PLAYER_STATE3_80000) || (Player_Action_80 == this->actionFunc)) {
             doActionA = DO_ACTION_NONE;
@@ -12673,9 +12676,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->exchangeItemAction = PLAYER_IA_NONE;
             this->talkActorDistance = FLT_MAX;
         }
-        if (!(this->actor.flags & ACTOR_FLAG_20000000) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
-            this->unk_A90 = NULL;
-            this->unk_A94 = FLT_MAX;
+        if (!(this->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
+            this->ocarinaInteractionActor = NULL;
+            this->ocarinaInteractionDistance = FLT_MAX;
         }
         if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
             this->interactRangeActor = NULL;
@@ -17299,9 +17302,12 @@ void func_80852290(PlayState* play, Player* this) {
 
         if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
             (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
-            if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
-                this->unk_A90->flags |= ACTOR_FLAG_20000000;
-                this->unk_A94 = 0.0f;
+            if ((this->ocarinaInteractionActor != NULL) && (this->ocarinaInteractionDistance < 0.0f)) {
+                // Designed for tuning the guitar in zora hall for the zora: `ACTOR_EN_ZOT`
+                // This actor will delay setting the `ACTOR_FLAG_OCARINA_INTERACTION` until here.
+                // This is signaled by a negative `ocarinaInteractionDistance`.
+                this->ocarinaInteractionActor->flags |= ACTOR_FLAG_OCARINA_INTERACTION;
+                this->ocarinaInteractionDistance = 0.0f;
             }
 
             Player_Anim_PlayOnceAdjusted(play, this, D_8085D190[this->transformation]);
@@ -17379,16 +17385,18 @@ void Player_Action_63(Player* this, PlayState* play) {
           (this->skelAnime.animation == D_8085D17C[this->transformation])) ||
          ((this->skelAnime.mode == ANIMMODE_LOOP) && (this->av2.actionVar2 == 0)))) {
         func_808525C4(play, this);
-        if (!(this->actor.flags & ACTOR_FLAG_20000000) || (this->unk_A90->id == ACTOR_EN_ZOT)) {
+        if (!(this->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) ||
+            (this->ocarinaInteractionActor->id == ACTOR_EN_ZOT)) {
             Message_DisplayOcarinaStaff(play, OCARINA_ACTION_FREE_PLAY);
         }
     } else if (this->av2.actionVar2 != 0) {
         if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
             play->interfaceCtx.bButtonInterfaceDoActionActive = false;
             CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
-            this->actor.flags &= ~ACTOR_FLAG_20000000;
+            this->actor.flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
 
-            if ((this->talkActor != NULL) && (this->talkActor == this->unk_A90) && (this->unk_A94 >= 0.0f)) {
+            if ((this->talkActor != NULL) && (this->talkActor == this->ocarinaInteractionActor) &&
+                (this->ocarinaInteractionDistance >= 0.0f)) {
                 Player_StartTalking(play, this->talkActor);
             } else if (this->tatlTextId < 0) {
                 this->talkActor = this->tatlActor;
@@ -17423,7 +17431,7 @@ void Player_Action_63(Player* this, PlayState* play) {
 
                     play->interfaceCtx.bButtonInterfaceDoActionActive = false;
                     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
-                    this->actor.flags &= ~ACTOR_FLAG_20000000;
+                    this->actor.flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
 
                     actor = Actor_Spawn(&play->actorCtx, play, var_v1 ? ACTOR_EN_TEST7 : ACTOR_EN_TEST6,
                                         this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0,
@@ -17443,7 +17451,7 @@ void Player_Action_63(Player* this, PlayState* play) {
                 play->interfaceCtx.bButtonInterfaceDoActionActive = false;
                 CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
 
-                this->actor.flags &= ~ACTOR_FLAG_20000000;
+                this->actor.flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
                 Player_SetAction_PreserveItemAction(play, this, Player_Action_88, 0);
                 this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
             } else if (this->unk_AA5 == PLAYER_UNKAA5_4) {

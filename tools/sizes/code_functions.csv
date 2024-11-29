@@ -291,11 +291,11 @@ asm/non_matchings/code/z_actor/Actor_OfferTalkNearColChkInfoCylinder.s,Actor_Off
 asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
 asm/non_matchings/code/z_actor/Actor_ChangeFocus.s,Actor_ChangeFocus,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
-asm/non_matchings/code/z_actor/func_800B8718.s,func_800B8718,0x800B8718,0xD
-asm/non_matchings/code/z_actor/func_800B874C.s,func_800B874C,0x800B874C,0x2E
-asm/non_matchings/code/z_actor/func_800B8804.s,func_800B8804,0x800B8804,0xA
-asm/non_matchings/code/z_actor/func_800B882C.s,func_800B882C,0x800B882C,0x10
-asm/non_matchings/code/z_actor/func_800B886C.s,func_800B886C,0x800B886C,0xB
+asm/non_matchings/code/z_actor/Actor_OcarinaInteractionAccepted.s,Actor_OcarinaInteractionAccepted,0x800B8718,0xD
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteraction.s,Actor_OfferOcarinaInteraction,0x800B874C,0x2E
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteractionNearby.s,Actor_OfferOcarinaInteractionNearby,0x800B8804,0xA
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteractionColChkInfoCylinder.s,Actor_OfferOcarinaInteractionColChkInfoCylinder,0x800B882C,0x10
+asm/non_matchings/code/z_actor/Actor_NoOcarinaInteraction.s,Actor_NoOcarinaInteraction,0x800B886C,0xB
 asm/non_matchings/code/z_actor/Actor_GetScreenPos.s,Actor_GetScreenPos,0x800B8898,0x27
 asm/non_matchings/code/z_actor/Actor_OnScreen.s,Actor_OnScreen,0x800B8934,0x31
 asm/non_matchings/code/z_actor/Actor_HasParent.s,Actor_HasParent,0x800B89F8,0x9
