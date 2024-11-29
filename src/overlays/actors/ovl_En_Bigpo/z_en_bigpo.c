@@ -9,8 +9,9 @@
 #include "assets/objects/object_bigpo/object_bigpo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS                                                                                              \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | \
+     ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -1159,7 +1160,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }

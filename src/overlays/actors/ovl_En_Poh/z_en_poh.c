@@ -8,7 +8,8 @@
 #include "z_en_poh.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnPoh*)thisx)
 

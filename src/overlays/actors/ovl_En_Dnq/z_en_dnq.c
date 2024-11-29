@@ -324,7 +324,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && (player->talkActor == &this->picto.actor)) {
         switch (textId) {
             case 0x89B:
                 EnDnq_ChangeAnim(this, DEKU_KING_ANIM_FOOT_STAMP_LOOP);

@@ -140,26 +140,26 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
 void EnBoom_Destroy(Actor* thisx, PlayState* play) {
     EnBoom* this = THIS;
     Player* player = GET_PLAYER(play);
-    Actor* temp;
+    Actor* otherZoraBoomerangActor;
 
     if (player != NULL) {
         Effect_Destroy(play, this->effectIndex);
         Collider_DestroyQuad(play, &this->collider);
 
-        temp = this->actor.child;
-        if (temp != NULL) {
-            temp->parent = NULL;
-            player->boomerangActor = temp;
+        otherZoraBoomerangActor = this->actor.child;
+        if (otherZoraBoomerangActor != NULL) {
+            otherZoraBoomerangActor->parent = NULL;
+            player->zoraBoomerangActor = otherZoraBoomerangActor;
         } else {
-            temp = this->actor.parent;
-            if (temp != NULL) {
-                temp->child = NULL;
+            otherZoraBoomerangActor = this->actor.parent;
+            if (otherZoraBoomerangActor != NULL) {
+                otherZoraBoomerangActor->child = NULL;
             } else {
-                player->boomerangActor = NULL;
-                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
+                player->zoraBoomerangActor = NULL;
+                player->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
             }
         }
-        player->stateFlags3 |= PLAYER_STATE3_800000;
+        player->stateFlags3 |= PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
     }
 }
 
@@ -221,7 +221,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                                                    (this->collider.base.at->id == ACTOR_EN_SI))) {
         this->unk_1C8 = this->collider.base.at;
         if (this->collider.base.at->id == ACTOR_EN_SI) {
-            this->collider.base.at->flags |= ACTOR_FLAG_2000;
+            this->collider.base.at->flags |= ACTOR_FLAG_HOOKSHOT_ATTACHED;
         }
     }
 
@@ -266,7 +266,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                     targetActor->gravity = -0.9f;
                     targetActor->bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH);
                 } else {
-                    targetActor->flags &= ~ACTOR_FLAG_2000;
+                    targetActor->flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
                 }
             }
             Actor_Kill(&this->actor);

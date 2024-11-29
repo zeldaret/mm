@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_rr/object_rr.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnRr*)thisx)
 
@@ -197,7 +197,7 @@ void func_808FA11C(EnRr* this) {
     this->drawDmgEffScale = 0.85f;
     this->drawDmgEffFrozenSteamScale = 1275.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -210,7 +210,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,
                               this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 

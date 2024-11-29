@@ -6,7 +6,7 @@
 
 #include "z_en_si.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 #define THIS ((EnSi*)thisx)
 
@@ -114,7 +114,7 @@ void EnSi_GiveToken(EnSi* this, PlayState* play) {
 }
 
 void EnSi_Wait(EnSi* this, PlayState* play) {
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         this->actionFunc = EnSi_DraggedByHookshot;
     } else if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         EnSi_GiveToken(this, play);
@@ -125,7 +125,7 @@ void EnSi_Wait(EnSi* this, PlayState* play) {
 }
 
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play) {
-    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         EnSi_GiveToken(this, play);
         Actor_Kill(&this->actor);
     }

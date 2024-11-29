@@ -7,7 +7,7 @@
 #include "z_en_tite.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 #define THIS ((EnTite*)thisx)
 
@@ -272,7 +272,7 @@ void func_80893DD4(EnTite* this) {
     this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
 }
 
 void func_80893E54(EnTite* this, PlayState* play) {
@@ -281,7 +281,7 @@ void func_80893E54(EnTite* this, PlayState* play) {
         this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENTITE_BODYPART_MAX, 2, 0.2f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 

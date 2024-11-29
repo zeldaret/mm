@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnDodongo*)thisx)
 
@@ -432,7 +432,7 @@ void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -445,7 +445,7 @@ void func_80876D28(EnDodongo* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DODONGO_BODYPART_MAX, 2, this->unk_334 * 0.3f,
                               this->unk_334 * 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 

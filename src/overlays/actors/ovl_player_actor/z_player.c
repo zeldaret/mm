@@ -58,7 +58,7 @@ s32 Player_GrabPlayer(PlayState* play, Player* this);
 s32 Player_TryCsAction(PlayState* play, Player* this, PlayerCsAction csAction);
 void func_8085B384(Player* this, PlayState* play);
 s32 Player_InflictDamage(PlayState* play, s32 damage);
-void Player_TalkWithPlayer(PlayState* play, Actor* actor);
+void Player_StartTalking(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
 PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId);
@@ -161,7 +161,7 @@ void Player_Action_40(Player* this, PlayState* play);
 void Player_Action_41(Player* this, PlayState* play);
 void Player_Action_42(Player* this, PlayState* play);
 void Player_Action_43(Player* this, PlayState* play);
-void Player_Action_44(Player* this, PlayState* play);
+void Player_Action_Talk(Player* this, PlayState* play);
 void Player_Action_45(Player* this, PlayState* play);
 void Player_Action_46(Player* this, PlayState* play);
 void Player_Action_47(Player* this, PlayState* play);
@@ -188,7 +188,7 @@ void Player_Action_67(Player* this, PlayState* play);
 void Player_Action_68(Player* this, PlayState* play);
 void Player_Action_69(Player* this, PlayState* play);
 void Player_Action_70(Player* this, PlayState* play);
-void Player_Action_71(Player* this, PlayState* play);
+void Player_Action_ExchangeItem(Player* this, PlayState* play);
 void Player_Action_72(Player* this, PlayState* play);
 void Player_Action_SlideOnSlope(Player* this, PlayState* play);
 void Player_Action_74(Player* this, PlayState* play);
@@ -209,7 +209,7 @@ void Player_Action_88(Player* this, PlayState* play);
 void Player_Action_89(Player* this, PlayState* play);
 void Player_Action_90(Player* this, PlayState* play);
 void Player_Action_91(Player* this, PlayState* play);
-void Player_Action_92(Player* this, PlayState* play);
+void Player_Action_HookshotFly(Player* this, PlayState* play);
 void Player_Action_93(Player* this, PlayState* play);
 void Player_Action_94(Player* this, PlayState* play);
 void Player_Action_95(Player* this, PlayState* play);
@@ -234,18 +234,18 @@ s32 Player_UpperAction_14(Player* this, PlayState* play);
 s32 Player_UpperAction_15(Player* this, PlayState* play);
 s32 Player_UpperAction_16(Player* this, PlayState* play);
 
-void Player_InitItemAction_DoNothing(PlayState* play, Player* this);
-void Player_InitItemAction_DekuStick(PlayState* play, Player* this);
-void Player_InitItemAction_2(PlayState* play, Player* this);
-void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this);
-void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this);
-void Player_InitItemAction_5(PlayState* play, Player* this);
+void Player_InitDefaultIA(PlayState* play, Player* this);
+void Player_InitDekuStickIA(PlayState* play, Player* this);
+void Player_InitBowOrDekuNutIA(PlayState* play, Player* this);
+void Player_InitExplosiveIA(PlayState* play, Player* this);
+void Player_InitHookshotIA(PlayState* play, Player* this);
+void Player_InitZoraBoomerangIA(PlayState* play, Player* this);
 
 s32 Player_ActionHandler_0(Player* this, PlayState* play);
 s32 Player_ActionHandler_1(Player* this, PlayState* play);
 s32 Player_ActionHandler_2(Player* this, PlayState* play);
 s32 Player_ActionHandler_3(Player* this, PlayState* play);
-s32 Player_ActionHandler_4(Player* this, PlayState* play);
+s32 Player_ActionHandler_Talk(Player* this, PlayState* play);
 s32 Player_ActionHandler_5(Player* this, PlayState* play);
 s32 Player_ActionHandler_6(Player* this, PlayState* play);
 s32 Player_ActionHandler_7(Player* this, PlayState* play);
@@ -256,24 +256,6 @@ s32 Player_ActionHandler_11(Player* this, PlayState* play);
 s32 Player_ActionHandler_12(Player* this, PlayState* play);
 s32 Player_ActionHandler_13(Player* this, PlayState* play);
 s32 Player_ActionHandler_14(Player* this, PlayState* play);
-
-/* Init Mode functions */
-void Player_InitMode_0(PlayState* play, Player* this);
-void Player_InitMode_1(PlayState* play, Player* this);
-void Player_InitMode_2(PlayState* play, Player* this);
-void Player_InitMode_3(PlayState* play, Player* this);
-void Player_InitMode_4(PlayState* play, Player* this);
-void Player_InitMode_5(PlayState* play, Player* this);
-void Player_InitMode_6(PlayState* play, Player* this);
-void Player_InitMode_7(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_80841744(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void Player_InitMode_B(PlayState* play, Player* this);
-void Player_InitMode_Telescope(PlayState* play, Player* this);
-void Player_InitMode_D(PlayState* play, Player* this);
-void func_8083ADF0(PlayState* play, Player* this);
-void Player_InitMode_F(PlayState* play, Player* this);
 
 /* Cutscene functions */
 void Player_CsAction_0(PlayState* play, Player* this, CsCmdActorCue* cue);
@@ -511,9 +493,9 @@ typedef struct struct_8085D200 {
     /* 0x9 */ u8 unk_9;
 } struct_8085D200; // size = 0xC
 
-f32 sPlayerControlStickMagnitude;
-s16 sPlayerControlStickAngle;
-s16 D_80862B02;       // analog stick yaw + camera yaw
+f32 sControlStickMagnitude;
+s16 sControlStickAngle;
+s16 sControlStickWorldYaw;
 s32 sUpperBodyIsBusy; // see `Player_UpdateUpperBody`
 FloorType sPlayerFloorType;
 u32 sPlayerTouchedWallFlags;
@@ -525,7 +507,7 @@ FloorProperty sPlayerPrevFloorProperty;
 s32 sPlayerShapeYawToTouchedWall;
 s32 sPlayerWorldYawToTouchedWall;
 s16 sFloorPitchShape;
-s32 D_80862B2C; // D_80862B2C = player->currentMask;
+s32 sSavedCurrentMask;
 Vec3f sPlayerInteractWallCheckResult;
 f32 D_80862B3C;
 FloorEffect sPlayerFloorEffect;
@@ -549,7 +531,7 @@ void func_8082DAD4(Player* this) {
     this->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
-s32 func_8082DAFC(PlayState* play) {
+s32 Player_IsTalking(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_TALK);
@@ -628,7 +610,7 @@ void func_8082DD2C(PlayState* play, Player* this) {
     func_8082DC38(this);
     this->unk_AA5 = PLAYER_UNKAA5_0;
     func_8082DC64(play, this);
-    func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+    Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
     this->stateFlags1 &=
         ~(PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000);
     this->stateFlags2 &= ~(PLAYER_STATE2_10 | PLAYER_STATE2_80);
@@ -659,10 +641,10 @@ void func_8082DE50(PlayState* play, Player* this) {
 }
 
 s32 func_8082DE88(Player* this, s32 arg1, s32 arg2) {
-    s16 controlStickAngleDiff = this->prevControlStickAngle - sPlayerControlStickAngle;
+    s16 controlStickAngleDiff = this->prevControlStickAngle - sControlStickAngle;
 
     this->av2.actionVar2 +=
-        arg1 + TRUNCF_BINANG(ABS_ALT(controlStickAngleDiff) * fabsf(sPlayerControlStickMagnitude) * (1.0f / 0x600F0));
+        arg1 + TRUNCF_BINANG(ABS_ALT(controlStickAngleDiff) * fabsf(sControlStickMagnitude) * (1.0f / 0x600F0));
 
     if (CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_B | BTN_A)) {
         this->av2.actionVar2 += 5;
@@ -2036,40 +2018,40 @@ void Player_AnimReplace_PlayLoopNormalAdjusted(PlayState* play, Player* this, Pl
 }
 
 void Player_ProcessControlStick(PlayState* play, Player* this) {
-    s8 var_v0;
-    s8 var_v1;
+    s8 spinAngle;
+    s8 direction;
 
-    this->prevControlStickMagnitude = sPlayerControlStickMagnitude;
-    this->prevControlStickAngle = sPlayerControlStickAngle;
+    this->prevControlStickMagnitude = sControlStickMagnitude;
+    this->prevControlStickAngle = sControlStickAngle;
 
-    Lib_GetControlStickData(&sPlayerControlStickMagnitude, &sPlayerControlStickAngle, sPlayerControlInput);
+    Lib_GetControlStickData(&sControlStickMagnitude, &sControlStickAngle, sPlayerControlInput);
 
-    if (sPlayerControlStickMagnitude < 8.0f) {
-        sPlayerControlStickMagnitude = 0.0f;
+    if (sControlStickMagnitude < 8.0f) {
+        sControlStickMagnitude = 0.0f;
     }
 
-    D_80862B02 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) + sPlayerControlStickAngle;
+    sControlStickWorldYaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) + sControlStickAngle;
 
-    this->unk_ADE = (this->unk_ADE + 1) % ARRAY_COUNT(this->unk_ADF);
+    this->controlStickDataIndex = (this->controlStickDataIndex + 1) % ARRAY_COUNT(this->controlStickSpinAngles);
 
-    if (sPlayerControlStickMagnitude < 55.0f) {
-        var_v0 = -1;
-        var_v1 = -1;
+    if (sControlStickMagnitude < 55.0f) {
+        direction = PLAYER_STICK_DIR_NONE;
+        spinAngle = -1;
     } else {
-        var_v1 = ((u16)(sPlayerControlStickAngle + 0x2000)) >> 9;
-        var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
+        spinAngle = ((u16)(sControlStickAngle + 0x2000)) >> 9;
+        direction = ((u16)(BINANG_SUB(sControlStickWorldYaw, this->actor.shape.rot.y) + 0x2000)) >> 14;
     }
 
-    this->unk_ADF[this->unk_ADE] = var_v1;
-    this->unk_AE3[this->unk_ADE] = var_v0;
+    this->controlStickSpinAngles[this->controlStickDataIndex] = spinAngle;
+    this->controlStickDirections[this->controlStickDataIndex] = direction;
 }
 
 void Player_Anim_PlayOnceWaterAdjustment(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, sWaterSpeedFactor);
 }
 
-s32 func_8082ECCC(Player* this) {
-    return this->stateFlags1 & PLAYER_STATE1_1000000;
+s32 Player_IsUsingZoraBoomerang(Player* this) {
+    return this->stateFlags1 & PLAYER_STATE1_USING_ZORA_BOOMERANG;
 }
 
 #define CHEST_ANIM_SHORT 0
@@ -2844,7 +2826,7 @@ PlayerAnimationHeader* func_8082EEE0(Player* this) {
 }
 
 bool func_8082EF20(Player* this) {
-    return func_8082ECCC(this) && (this->unk_ACC != 0);
+    return Player_IsUsingZoraBoomerang(this) && (this->unk_ACC != 0);
 }
 
 PlayerAnimationHeader* func_8082EF54(Player* this) {
@@ -3012,7 +2994,7 @@ void Player_InitItemActionWithAnim(PlayState* play, Player* this, PlayerItemActi
     PlayerAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 animGroup;
 
-    this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000000);
+    this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_USING_ZORA_BOOMERANG);
 
     for (animGroup = 0; animGroup < PLAYER_ANIMGROUP_MAX; animGroup++) {
         if (curAnim == **iter) {
@@ -3120,13 +3102,13 @@ PlayerItemAction Player_ItemToItemAction(Player* this, ItemId item) {
     } else if (item == ITEM_FISHING_ROD) {
         return PLAYER_IA_FISHING_ROD;
     } else if ((item == ITEM_SWORD_KOKIRI) && (this->transformation == PLAYER_FORM_ZORA)) {
-        return PLAYER_IA_ZORA_FINS;
+        return PLAYER_IA_ZORA_BOOMERANG;
     } else {
         return sItemItemActions[item];
     }
 }
 
-PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
+PlayerUpperActionFunc sItemActionUpdateFuncs[PLAYER_IA_MAX] = {
     Player_UpperAction_0,          // PLAYER_IA_NONE
     Player_UpperAction_0,          // PLAYER_IA_LAST_USED
     Player_UpperAction_0,          // PLAYER_IA_FISHING_ROD
@@ -3135,7 +3117,7 @@ PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
     Player_UpperAction_1,          // PLAYER_IA_SWORD_GILDED
     Player_UpperAction_1,          // PLAYER_IA_SWORD_TWO_HANDED
     Player_UpperAction_0,          // PLAYER_IA_DEKU_STICK
-    Player_UpperAction_0,          // PLAYER_IA_ZORA_FINS
+    Player_UpperAction_0,          // PLAYER_IA_ZORA_BOOMERANG
     Player_UpperAction_6,          // PLAYER_IA_BOW
     Player_UpperAction_6,          // PLAYER_IA_BOW_FIRE
     Player_UpperAction_6,          // PLAYER_IA_BOW_ICE
@@ -3212,103 +3194,103 @@ PlayerUpperActionFunc sPlayerUpperActionUpdateFuncs[PLAYER_IA_MAX] = {
     Player_UpperAction_0,          // PLAYER_IA_LENS_OF_TRUTH
 };
 
-typedef void (*PlayerInitItemActionFunc)(PlayState*, Player*);
+typedef void (*PlayerItemActionInitFunc)(PlayState*, Player*);
 
-PlayerInitItemActionFunc sPlayerItemActionInitFuncs[PLAYER_IA_MAX] = {
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_NONE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_LAST_USED
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_FISHING_ROD
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_KOKIRI
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_RAZOR
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_GILDED
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_TWO_HANDED
-    Player_InitItemAction_DekuStick,      // PLAYER_IA_DEKU_STICK
-    Player_InitItemAction_5,              // PLAYER_IA_ZORA_FINS
-    Player_InitItemAction_2,              // PLAYER_IA_BOW
-    Player_InitItemAction_2,              // PLAYER_IA_BOW_FIRE
-    Player_InitItemAction_2,              // PLAYER_IA_BOW_ICE
-    Player_InitItemAction_2,              // PLAYER_IA_BOW_LIGHT
-    Player_InitItemAction_SpawnHookshot,  // PLAYER_IA_HOOKSHOT
-    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_BOMB
-    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_POWDER_KEG
-    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_BOMBCHU
-    Player_InitItemAction_5,              // PLAYER_IA_11
-    Player_InitItemAction_2,              // PLAYER_IA_DEKU_NUT
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_PICTOGRAPH_BOX
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_OCARINA
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_EMPTY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_FISH
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_SPRING_WATER
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_ZORA_EGG
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_GOLD_DUST
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_1C
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_SEA_HORSE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MUSHROOM
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_BUG
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_BIG_POE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_RED
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_BLUE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_GREEN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MILK
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MILK_HALF
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_CHATEAU
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_FAIRY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MOONS_TEAR
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_LAND
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_ROOM_KEY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_LETTER_TO_KAFEI
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MAGIC_BEANS
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_SWAMP
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_MOUNTAIN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_OCEAN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_32
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_LETTER_MAMA
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_34
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_35
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_PENDANT_MEMORIES
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_37
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_38
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_39
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_TRUTH
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KAFEIS_MASK
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ALL_NIGHT
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BUNNY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KEATON
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GARO
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ROMANI
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_CIRCUS_LEADER
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_POSTMAN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_COUPLE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GREAT_FAIRY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GIBDO
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_DON_GERO
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KAMARO
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_CAPTAIN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_STONE
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BREMEN
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BLAST
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_SCENTS
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GIANT
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_FIERCE_DEITY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GORON
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ZORA
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_DEKU
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_LENS_OF_TRUTH
+PlayerItemActionInitFunc sItemActionInitFuncs[PLAYER_IA_MAX] = {
+    Player_InitDefaultIA,       // PLAYER_IA_NONE
+    Player_InitDefaultIA,       // PLAYER_IA_LAST_USED
+    Player_InitDefaultIA,       // PLAYER_IA_FISHING_ROD
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_KOKIRI
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_RAZOR
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_GILDED
+    Player_InitDefaultIA,       // PLAYER_IA_SWORD_TWO_HANDED
+    Player_InitDekuStickIA,     // PLAYER_IA_DEKU_STICK
+    Player_InitZoraBoomerangIA, // PLAYER_IA_ZORA_BOOMERANG
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_FIRE
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_ICE
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_BOW_LIGHT
+    Player_InitHookshotIA,      // PLAYER_IA_HOOKSHOT
+    Player_InitExplosiveIA,     // PLAYER_IA_BOMB
+    Player_InitExplosiveIA,     // PLAYER_IA_POWDER_KEG
+    Player_InitExplosiveIA,     // PLAYER_IA_BOMBCHU
+    Player_InitZoraBoomerangIA, // PLAYER_IA_11
+    Player_InitBowOrDekuNutIA,  // PLAYER_IA_DEKU_NUT
+    Player_InitDefaultIA,       // PLAYER_IA_PICTOGRAPH_BOX
+    Player_InitDefaultIA,       // PLAYER_IA_OCARINA
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_EMPTY
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_FISH
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_SPRING_WATER
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_ZORA_EGG
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_GOLD_DUST
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_1C
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_SEA_HORSE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MUSHROOM
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_BUG
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_BIG_POE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_RED
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_BLUE
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_POTION_GREEN
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MILK
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_MILK_HALF
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_CHATEAU
+    Player_InitDefaultIA,       // PLAYER_IA_BOTTLE_FAIRY
+    Player_InitDefaultIA,       // PLAYER_IA_MOONS_TEAR
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_LAND
+    Player_InitDefaultIA,       // PLAYER_IA_ROOM_KEY
+    Player_InitDefaultIA,       // PLAYER_IA_LETTER_TO_KAFEI
+    Player_InitDefaultIA,       // PLAYER_IA_MAGIC_BEANS
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_SWAMP
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_MOUNTAIN
+    Player_InitDefaultIA,       // PLAYER_IA_DEED_OCEAN
+    Player_InitDefaultIA,       // PLAYER_IA_32
+    Player_InitDefaultIA,       // PLAYER_IA_LETTER_MAMA
+    Player_InitDefaultIA,       // PLAYER_IA_34
+    Player_InitDefaultIA,       // PLAYER_IA_35
+    Player_InitDefaultIA,       // PLAYER_IA_PENDANT_MEMORIES
+    Player_InitDefaultIA,       // PLAYER_IA_37
+    Player_InitDefaultIA,       // PLAYER_IA_38
+    Player_InitDefaultIA,       // PLAYER_IA_39
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_TRUTH
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KAFEIS_MASK
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ALL_NIGHT
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BUNNY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KEATON
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GARO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ROMANI
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_CIRCUS_LEADER
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_POSTMAN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_COUPLE
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GREAT_FAIRY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GIBDO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_DON_GERO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_KAMARO
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_CAPTAIN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_STONE
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BREMEN
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_BLAST
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_SCENTS
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GIANT
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_FIERCE_DEITY
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_GORON
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_ZORA
+    Player_InitDefaultIA,       // PLAYER_IA_MASK_DEKU
+    Player_InitDefaultIA,       // PLAYER_IA_LENS_OF_TRUTH
 };
 
-void Player_InitItemAction_DoNothing(PlayState* play, Player* this) {
+void Player_InitDefaultIA(PlayState* play, Player* this) {
 }
 
-void Player_InitItemAction_DekuStick(PlayState* play, Player* this) {
+void Player_InitDekuStickIA(PlayState* play, Player* this) {
     this->unk_B28 = 0;
     this->unk_B0C = 1.0f;
 }
 
-void Player_InitItemAction_2(PlayState* play, Player* this) {
+void Player_InitBowOrDekuNutIA(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_8;
 
     if (this->heldItemAction == PLAYER_IA_DEKU_NUT) {
@@ -3423,7 +3405,7 @@ ExplosiveInfo sPlayerExplosiveInfo[PLAYER_EXPLOSIVE_MAX] = {
     { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_EXPLOSIVE_BOMBCHU
 };
 
-void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this) {
+void Player_InitExplosiveIA(PlayState* play, Player* this) {
     PlayerExplosive explosiveType;
     ExplosiveInfo* explosiveInfo;
     Actor* explosiveActor;
@@ -3464,7 +3446,7 @@ void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this) {
     }
 }
 
-void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
+void Player_InitHookshotIA(PlayState* play, Player* this) {
     ArmsHook* armsHook;
 
     this->stateFlags1 |= PLAYER_STATE1_8;
@@ -3484,21 +3466,21 @@ void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
     armsHook->unk_208 = this->transformation;
 }
 
-void Player_InitItemAction_5(PlayState* play, Player* this) {
-    this->stateFlags1 |= PLAYER_STATE1_1000000;
+void Player_InitZoraBoomerangIA(PlayState* play, Player* this) {
+    this->stateFlags1 |= PLAYER_STATE1_USING_ZORA_BOOMERANG;
 }
 
 void Player_InitItemAction(PlayState* play, Player* this, PlayerItemAction itemAction) {
     this->itemAction = this->heldItemAction = itemAction;
     this->modelGroup = this->nextModelGroup;
 
-    this->stateFlags1 &= ~(PLAYER_STATE1_1000000 | PLAYER_STATE1_8);
+    this->stateFlags1 &= ~(PLAYER_STATE1_USING_ZORA_BOOMERANG | PLAYER_STATE1_8);
 
     this->unk_B08 = 0.0f;
     this->unk_B0C = 0.0f;
     this->unk_B28 = 0;
 
-    sPlayerItemActionInitFuncs[itemAction](play, this);
+    sItemActionInitFuncs[itemAction](play, this);
     Player_SetModelGroup(this, this->modelGroup);
 }
 
@@ -3922,7 +3904,7 @@ void Player_StartChangingHeldItem(Player* this, PlayState* play) {
     nextModelAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
     itemChangeType = sPlayerItemChangeTypes[gPlayerModelTypes[this->modelGroup].modelAnimType][nextModelAnimType];
 
-    if ((heldItemAction == PLAYER_IA_ZORA_FINS) || (this->heldItemAction == PLAYER_IA_ZORA_FINS)) {
+    if ((heldItemAction == PLAYER_IA_ZORA_BOOMERANG) || (this->heldItemAction == PLAYER_IA_ZORA_BOOMERANG)) {
         itemChangeType = (heldItemAction == PLAYER_IA_NONE) ? -PLAYER_ITEM_CHG_14 : PLAYER_ITEM_CHG_14;
     } else if ((heldItemAction == PLAYER_IA_BOTTLE_EMPTY) || (heldItemAction == PLAYER_IA_11) ||
                ((heldItemAction == PLAYER_IA_NONE) &&
@@ -4102,7 +4084,7 @@ void func_808309CC(PlayState* play, Player* this) {
         Player_FinishItemChange(play, this);
     }
 
-    Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
+    Player_SetUpperAction(play, this, sItemActionUpdateFuncs[this->heldItemAction]);
     this->unk_ACC = 0;
     this->idleType = PLAYER_IDLE_DEFAULT;
     Player_DetachHeldActor(play, this);
@@ -4166,7 +4148,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
                     if ((this->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                         (!Player_IsGoronOrDeku(this) &&
                          ((((this->transformation == PLAYER_FORM_ZORA)) &&
-                           !(this->stateFlags1 & PLAYER_STATE1_2000000)) ||
+                           !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) ||
                           ((this->transformation == PLAYER_FORM_HUMAN) &&
                            (this->currentShield != PLAYER_SHIELD_NONE))) &&
                          Player_IsZTargeting(this))) {
@@ -4276,7 +4258,7 @@ bool func_80831010(Player* this, PlayState* play) {
 }
 
 bool func_80831094(Player* this, PlayState* play) {
-    if ((this->doorType == PLAYER_DOORTYPE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
+    if ((this->doorType == PLAYER_DOORTYPE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) {
         if (sPlayerUseHeldItem || func_80830F9C(play)) {
             if (func_80830E30(this, play)) {
                 return func_80831010(this, play);
@@ -4424,14 +4406,14 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     func_80831454(this);
     Player_Anim_ResetMove(this);
 
-    this->stateFlags1 &= ~(PLAYER_STATE1_40 | PLAYER_STATE1_4000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000 |
-                           PLAYER_STATE1_80000000);
+    this->stateFlags1 &= ~(PLAYER_STATE1_TALKING | PLAYER_STATE1_4000000 | PLAYER_STATE1_10000000 |
+                           PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000);
     this->stateFlags2 &= ~(PLAYER_STATE2_80000 | PLAYER_STATE2_800000 | PLAYER_STATE2_2000000 |
                            PLAYER_STATE2_USING_OCARINA | PLAYER_STATE2_IDLE_FIDGET);
     this->stateFlags3 &=
-        ~(PLAYER_STATE3_2 | PLAYER_STATE3_8 | PLAYER_STATE3_80 | PLAYER_STATE3_200 | PLAYER_STATE3_2000 |
-          PLAYER_STATE3_8000 | PLAYER_STATE3_10000 | PLAYER_STATE3_20000 | PLAYER_STATE3_40000 | PLAYER_STATE3_80000 |
-          PLAYER_STATE3_200000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_20000000);
+        ~(PLAYER_STATE3_2 | PLAYER_STATE3_8 | PLAYER_STATE3_FLYING_WITH_HOOKSHOT | PLAYER_STATE3_200 |
+          PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 | PLAYER_STATE3_20000 | PLAYER_STATE3_40000 |
+          PLAYER_STATE3_80000 | PLAYER_STATE3_200000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_20000000);
 
     this->av1.actionVar1 = 0;
     this->av2.actionVar2 = 0;
@@ -4695,8 +4677,8 @@ bool func_8083213C(Player* this) {
 
 bool Player_UpdateUpperBody(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_800000) && (this->actor.parent != NULL) && Player_IsHoldingHookshot(this)) {
-        Player_SetAction(play, this, Player_Action_92, 1);
-        this->stateFlags3 |= PLAYER_STATE3_80;
+        Player_SetAction(play, this, Player_Action_HookshotFly, 1);
+        this->stateFlags3 |= PLAYER_STATE3_FLYING_WITH_HOOKSHOT;
         Player_Anim_PlayOnce(play, this, &gPlayerAnim_link_hook_fly_start);
         Player_AnimReplace_Setup(play, this,
                                  (ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80));
@@ -4936,7 +4918,8 @@ void Player_UpdateZTargeting(Player* this, PlayState* play) {
     }
 
     if ((play->csCtx.state != CS_STATE_IDLE) || (this->csAction != PLAYER_CSACTION_NONE) ||
-        (this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
+        (this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) ||
+        (this->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT)) {
         // Don't allow Z-Targeting in various states
         this->zTargetActiveTimer = 0;
     } else if (zButtonHeld || (this->stateFlags2 & PLAYER_STATE2_LOCK_ON_WITH_SWITCH) ||
@@ -4968,12 +4951,12 @@ void Player_UpdateZTargeting(Player* this, PlayState* play) {
         ignoreLeash = true;
     }
 
-    isTalking = func_8082DAFC(play);
+    isTalking = Player_IsTalking(play);
 
     if (isTalking || (this->zTargetActiveTimer != 0) ||
-        (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
+        (this->stateFlags1 & (PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_ZORA_BOOMERANG_THROWN))) {
         if (!isTalking) {
-            if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
+            if (!(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) &&
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
 
@@ -5015,7 +4998,7 @@ void Player_UpdateZTargeting(Player* this, PlayState* play) {
 
                         this->focusActor = nextLockOnActor;
                         this->zTargetActiveTimer = 15;
-                        this->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
+                        this->stateFlags2 &= ~(PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER | PLAYER_STATE2_200000);
                     } else if (!usingHoldTargeting) {
                         Player_ReleaseLockOn(this);
                     }
@@ -5104,8 +5087,8 @@ s32 Player_CalcSpeedAndYawFromControlStick(PlayState* play, Player* this, f32* o
         *outSpeedTarget = 0.0f;
         *outYawTarget = this->actor.shape.rot.y;
     } else {
-        *outSpeedTarget = sPlayerControlStickMagnitude;
-        *outYawTarget = sPlayerControlStickAngle;
+        *outSpeedTarget = sControlStickMagnitude;
+        *outYawTarget = sControlStickAngle;
 
         // The value of `speedMode` is never actually used. It only toggles this condition.
         // See the definition of `SPEED_MODE_LINEAR` and `SPEED_MODE_CURVED` for more information.
@@ -5131,7 +5114,7 @@ s32 Player_CalcSpeedAndYawFromControlStick(PlayState* play, Player* this, f32* o
             *outSpeedTarget *= 1.5f;
         }
 
-        if (sPlayerControlStickMagnitude != 0.0f) {
+        if (sControlStickMagnitude != 0.0f) {
             f32 floorPitchInfluence = Math_SinS(this->floorPitch);
             f32 speedCap = this->unk_B50;
             f32 var_fa1;
@@ -5204,7 +5187,7 @@ typedef enum ActionHandlerIndex {
     /* 0x1 */ PLAYER_ACTION_HANDLER_1,
     /* 0x2 */ PLAYER_ACTION_HANDLER_2,
     /* 0x3 */ PLAYER_ACTION_HANDLER_3,
-    /* 0x4 */ PLAYER_ACTION_HANDLER_4,
+    /* 0x4 */ PLAYER_ACTION_HANDLER_TALK,
     /* 0x5 */ PLAYER_ACTION_HANDLER_5,
     /* 0x6 */ PLAYER_ACTION_HANDLER_6,
     /* 0x7 */ PLAYER_ACTION_HANDLER_7,
@@ -5226,7 +5209,7 @@ typedef enum ActionHandlerIndex {
 s8 sActionHandlerList1[] = {
     /* 0 */ PLAYER_ACTION_HANDLER_13,
     /* 1 */ PLAYER_ACTION_HANDLER_2,
-    /* 2 */ PLAYER_ACTION_HANDLER_4,
+    /* 2 */ PLAYER_ACTION_HANDLER_TALK,
     /* 3 */ PLAYER_ACTION_HANDLER_9,
     /* 4 */ PLAYER_ACTION_HANDLER_10,
     /* 5 */ PLAYER_ACTION_HANDLER_11,
@@ -5240,7 +5223,7 @@ s8 sActionHandlerList2[] = {
     /*  2 */ PLAYER_ACTION_HANDLER_2,
     /*  3 */ PLAYER_ACTION_HANDLER_5,
     /*  4 */ PLAYER_ACTION_HANDLER_3,
-    /*  5 */ PLAYER_ACTION_HANDLER_4,
+    /*  5 */ PLAYER_ACTION_HANDLER_TALK,
     /*  6 */ PLAYER_ACTION_HANDLER_9,
     /*  7 */ PLAYER_ACTION_HANDLER_10,
     /*  8 */ PLAYER_ACTION_HANDLER_11,
@@ -5254,7 +5237,7 @@ s8 sActionHandlerList3[] = {
     /*  1 */ PLAYER_ACTION_HANDLER_1,
     /*  2 */ PLAYER_ACTION_HANDLER_2,
     /*  3 */ PLAYER_ACTION_HANDLER_3,
-    /*  4 */ PLAYER_ACTION_HANDLER_4,
+    /*  4 */ PLAYER_ACTION_HANDLER_TALK,
     /*  5 */ PLAYER_ACTION_HANDLER_9,
     /*  6 */ PLAYER_ACTION_HANDLER_10,
     /*  7 */ PLAYER_ACTION_HANDLER_11,
@@ -5266,7 +5249,7 @@ s8 sActionHandlerList3[] = {
 s8 sActionHandlerList4[] = {
     /* 0 */ PLAYER_ACTION_HANDLER_13,
     /* 1 */ PLAYER_ACTION_HANDLER_2,
-    /* 2 */ PLAYER_ACTION_HANDLER_4,
+    /* 2 */ PLAYER_ACTION_HANDLER_TALK,
     /* 3 */ PLAYER_ACTION_HANDLER_9,
     /* 4 */ PLAYER_ACTION_HANDLER_10,
     /* 5 */ PLAYER_ACTION_HANDLER_11,
@@ -5277,7 +5260,7 @@ s8 sActionHandlerList4[] = {
 s8 sActionHandlerList5[] = {
     /* 0 */ PLAYER_ACTION_HANDLER_13,
     /* 1 */ PLAYER_ACTION_HANDLER_2,
-    /* 2 */ PLAYER_ACTION_HANDLER_4,
+    /* 2 */ PLAYER_ACTION_HANDLER_TALK,
     /* 3 */ PLAYER_ACTION_HANDLER_9,
     /* 4 */ PLAYER_ACTION_HANDLER_10,
     /* 5 */ PLAYER_ACTION_HANDLER_11,
@@ -5297,7 +5280,7 @@ s8 sActionHandlerListIdle[] = {
     /*  3 */ PLAYER_ACTION_HANDLER_2,
     /*  4 */ PLAYER_ACTION_HANDLER_3,
     /*  5 */ PLAYER_ACTION_HANDLER_5,
-    /*  6 */ PLAYER_ACTION_HANDLER_4,
+    /*  6 */ PLAYER_ACTION_HANDLER_TALK,
     /*  7 */ PLAYER_ACTION_HANDLER_9,
     /*  8 */ PLAYER_ACTION_HANDLER_8,
     /*  9 */ PLAYER_ACTION_HANDLER_7,
@@ -5312,7 +5295,7 @@ s8 sActionHandlerList8[] = {
     /*  4 */ PLAYER_ACTION_HANDLER_3,
     /*  5 */ PLAYER_ACTION_HANDLER_12,
     /*  6 */ PLAYER_ACTION_HANDLER_5,
-    /*  7 */ PLAYER_ACTION_HANDLER_4,
+    /*  7 */ PLAYER_ACTION_HANDLER_TALK,
     /*  8 */ PLAYER_ACTION_HANDLER_9,
     /*  9 */ PLAYER_ACTION_HANDLER_8,
     /* 10 */ PLAYER_ACTION_HANDLER_7,
@@ -5326,7 +5309,7 @@ s8 sActionHandlerList9[] = {
     /*  3 */ PLAYER_ACTION_HANDLER_3,
     /*  4 */ PLAYER_ACTION_HANDLER_12,
     /*  5 */ PLAYER_ACTION_HANDLER_5,
-    /*  6 */ PLAYER_ACTION_HANDLER_4,
+    /*  6 */ PLAYER_ACTION_HANDLER_TALK,
     /*  7 */ PLAYER_ACTION_HANDLER_9,
     /*  8 */ PLAYER_ACTION_HANDLER_10,
     /*  9 */ PLAYER_ACTION_HANDLER_11,
@@ -5345,32 +5328,32 @@ s8 sActionHandlerList11[] = {
     /* 0 */ PLAYER_ACTION_HANDLER_0,
     /* 1 */ PLAYER_ACTION_HANDLER_12,
     /* 2 */ PLAYER_ACTION_HANDLER_5,
-    /* 3 */ PLAYER_ACTION_HANDLER_4,
+    /* 3 */ PLAYER_ACTION_HANDLER_TALK,
     /* 4 */ -PLAYER_ACTION_HANDLER_14,
 };
 
 s8 sActionHandlerList12[] = {
     /* 0 */ PLAYER_ACTION_HANDLER_13,
     /* 1 */ PLAYER_ACTION_HANDLER_2,
-    /* 2 */ -PLAYER_ACTION_HANDLER_4,
+    /* 2 */ -PLAYER_ACTION_HANDLER_TALK,
 };
 
 s32 (*sActionHandlerFuncs[PLAYER_ACTION_HANDLER_MAX])(Player* this, PlayState* play) = {
-    Player_ActionHandler_0,  // PLAYER_ACTION_HANDLER_0
-    Player_ActionHandler_1,  // PLAYER_ACTION_HANDLER_1
-    Player_ActionHandler_2,  // PLAYER_ACTION_HANDLER_2
-    Player_ActionHandler_3,  // PLAYER_ACTION_HANDLER_3
-    Player_ActionHandler_4,  // PLAYER_ACTION_HANDLER_4
-    Player_ActionHandler_5,  // PLAYER_ACTION_HANDLER_5
-    Player_ActionHandler_6,  // PLAYER_ACTION_HANDLER_6
-    Player_ActionHandler_7,  // PLAYER_ACTION_HANDLER_7
-    Player_ActionHandler_8,  // PLAYER_ACTION_HANDLER_8
-    Player_ActionHandler_9,  // PLAYER_ACTION_HANDLER_9
-    Player_ActionHandler_10, // PLAYER_ACTION_HANDLER_10
-    Player_ActionHandler_11, // PLAYER_ACTION_HANDLER_11
-    Player_ActionHandler_12, // PLAYER_ACTION_HANDLER_12
-    Player_ActionHandler_13, // PLAYER_ACTION_HANDLER_13
-    Player_ActionHandler_14, // PLAYER_ACTION_HANDLER_14
+    Player_ActionHandler_0,    // PLAYER_ACTION_HANDLER_0
+    Player_ActionHandler_1,    // PLAYER_ACTION_HANDLER_1
+    Player_ActionHandler_2,    // PLAYER_ACTION_HANDLER_2
+    Player_ActionHandler_3,    // PLAYER_ACTION_HANDLER_3
+    Player_ActionHandler_Talk, // PLAYER_ACTION_HANDLER_TALK
+    Player_ActionHandler_5,    // PLAYER_ACTION_HANDLER_5
+    Player_ActionHandler_6,    // PLAYER_ACTION_HANDLER_6
+    Player_ActionHandler_7,    // PLAYER_ACTION_HANDLER_7
+    Player_ActionHandler_8,    // PLAYER_ACTION_HANDLER_8
+    Player_ActionHandler_9,    // PLAYER_ACTION_HANDLER_9
+    Player_ActionHandler_10,   // PLAYER_ACTION_HANDLER_10
+    Player_ActionHandler_11,   // PLAYER_ACTION_HANDLER_11
+    Player_ActionHandler_12,   // PLAYER_ACTION_HANDLER_12
+    Player_ActionHandler_13,   // PLAYER_ACTION_HANDLER_13
+    Player_ActionHandler_14,   // PLAYER_ACTION_HANDLER_14
 };
 
 /**
@@ -5483,7 +5466,8 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam
         this->unk_B08 = 0.5f;
     }
 
-    this->stateFlags1 |= PLAYER_STATE1_1000;
+    this->stateFlags1 |= PLAYER_STATE1_CHARGING_SPIN_ATTACK;
+
     if ((this->actor.id == ACTOR_PLAYER) && (isSwordBeam || (this->transformation == PLAYER_FORM_HUMAN))) {
         s16 pitch = 0;
         Actor* thunder;
@@ -5508,9 +5492,8 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam
     }
 }
 
-// Check for inputs for quickspin
-s32 func_808333CC(Player* this) {
-    s8 sp3C[4];
+s32 Player_CanSpinAttack(Player* this) {
+    s8 sp3C[ARRAY_COUNT(this->controlStickSpinAngles)];
     s8* iter;
     s8* iter2;
     s8 temp1;
@@ -5521,9 +5504,10 @@ s32 func_808333CC(Player* this) {
         return false;
     }
 
-    iter = &this->unk_ADF[0];
+    iter = &this->controlStickSpinAngles[0];
     iter2 = &sp3C[0];
-    for (i = 0; i < 4; i++, iter++, iter2++) {
+
+    for (i = 0; i < ARRAY_COUNT(this->controlStickSpinAngles); i++, iter++, iter2++) {
         if ((*iter2 = *iter) < 0) {
             return false;
         }
@@ -5531,12 +5515,14 @@ s32 func_808333CC(Player* this) {
     }
 
     temp1 = sp3C[0] - sp3C[1];
+
     if (ABS_ALT(temp1) < 10) {
         return false;
     }
 
     iter2 = &sp3C[1];
-    for (i = 1; i < 3; i++, iter2++) {
+
+    for (i = 1; i < (ARRAY_COUNT(this->controlStickSpinAngles) - 1); i++, iter2++) {
         temp2 = *iter2 - *(iter2 + 1);
         if ((ABS_ALT(temp2) < 10) || (temp2 * temp1 < 0)) {
             return false;
@@ -5568,10 +5554,10 @@ void func_808335B0(PlayState* play, Player* this) {
 }
 
 s8 D_8085D090[] = {
-    PLAYER_MWA_STAB_1H,
-    PLAYER_MWA_RIGHT_SLASH_1H,
-    PLAYER_MWA_RIGHT_SLASH_1H,
-    PLAYER_MWA_LEFT_SLASH_1H,
+    PLAYER_MWA_STAB_1H,        // PLAYER_STICK_DIR_FORWARD
+    PLAYER_MWA_RIGHT_SLASH_1H, // PLAYER_STICK_DIR_LEFT, TODO: verify MWA as left/right does not match stick dir
+    PLAYER_MWA_RIGHT_SLASH_1H, // PLAYER_STICK_DIR_BACKWARD
+    PLAYER_MWA_LEFT_SLASH_1H,  // PLAYER_STICK_DIR_RIGHT
 };
 
 s8 D_8085D094[][3] = {
@@ -5580,10 +5566,10 @@ s8 D_8085D094[][3] = {
 };
 
 PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
-    s32 temp_a1;
+    s32 controlStickDirection;
     PlayerMeleeWeaponAnimation meleeWeaponAnim;
 
-    temp_a1 = this->unk_AE3[this->unk_ADE];
+    controlStickDirection = this->controlStickDirections[this->controlStickDataIndex];
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_GORON)) {
         s8* meleeWeaponAnims = (this->transformation == PLAYER_FORM_ZORA) ? D_8085D094[0] : D_8085D094[1];
         s32 unk_ADD = this->unk_ADD;
@@ -5597,13 +5583,13 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
             }
         }
     } else {
-        if (func_808333CC(this)) {
+        if (Player_CanSpinAttack(this)) {
             meleeWeaponAnim = PLAYER_MWA_SPIN_ATTACK_1H;
         } else {
-            if (temp_a1 < 0) {
+            if (controlStickDirection <= PLAYER_STICK_DIR_NONE) {
                 meleeWeaponAnim = Player_IsZTargeting(this) ? PLAYER_MWA_FORWARD_SLASH_1H : PLAYER_MWA_RIGHT_SLASH_1H;
             } else {
-                meleeWeaponAnim = D_8085D090[temp_a1];
+                meleeWeaponAnim = D_8085D090[controlStickDirection];
                 if (meleeWeaponAnim == PLAYER_MWA_STAB_1H) {
                     this->stateFlags2 |= PLAYER_STATE2_40000000;
                     if (!Player_IsZTargeting(this)) {
@@ -5642,7 +5628,7 @@ MeleeWeaponDamageInfo D_8085D09C[PLAYER_MELEEWEAPON_MAX] = {
     { DMG_SWORD, 4, 8, 3, 6 },       // PLAYER_MELEEWEAPON_SWORD_GILDED
     { DMG_SWORD, 4, 8, 4, 8 },       // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
     { DMG_DEKU_STICK, 0, 0, 2, 4 },  // PLAYER_MELEEWEAPON_DEKU_STICK
-    { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_FINS
+    { DMG_ZORA_PUNCH, 1, 2, 0, 0 },  // PLAYER_MELEEWEAPON_ZORA_BOOMERANG
 };
 
 // New function in NE0: split out of func_80833864 to be able to call it to patch Power Crouch Stab.
@@ -6821,7 +6807,7 @@ s32 Player_ActionHandler_1(Player* this, PlayState* play) {
             Actor* var_v0_3;
 
             if (this->doorType <= PLAYER_DOORTYPE_TALKING) {
-                Player_TalkWithPlayer(play, doorActor);
+                Player_StartTalking(play, doorActor);
                 if (doorActor->textId == 0x1821) {
                     doorActor->flags |= ACTOR_FLAG_TALK;
                 }
@@ -7079,7 +7065,8 @@ s32 func_80836F10(PlayState* play, Player* this) {
 }
 
 s32 func_808370D4(PlayState* play, Player* this) {
-    if ((this->fallDistance < 800) && (this->unk_AE3[this->unk_ADE] == 0) &&
+    if ((this->fallDistance < 800) &&
+        (this->controlStickDirections[this->controlStickDataIndex] == PLAYER_STICK_DIR_FORWARD) &&
         !(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
         func_80836B3C(play, this, 0.0f);
 
@@ -7315,11 +7302,11 @@ void func_808379C0(PlayState* play, Player* this) {
     }
 }
 
-void func_80837B60(PlayState* play, Player* this) {
-    Player_SetAction_PreserveMoveFlags(play, this, Player_Action_44, 0);
+void Player_SetupTalk(PlayState* play, Player* this) {
+    Player_SetAction_PreserveMoveFlags(play, this, Player_Action_Talk, 0);
 
     this->exchangeItemAction = PLAYER_IA_NONE;
-    this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
+    this->stateFlags1 |= (PLAYER_STATE1_TALKING | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
         Message_StartTextbox(play, this->actor.textId, this->talkActor);
     }
@@ -7715,7 +7702,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_SWORD_GILDED,        // PLAYER_IA_SWORD_GILDED
     GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_TWO_HANDED
     GI_DEKU_STICKS_1,       // PLAYER_IA_DEKU_STICK
-    GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_FINS
+    GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_BOOMERANG
     GI_QUIVER_30,           // PLAYER_IA_BOW
     GI_ARROW_FIRE,          // PLAYER_IA_BOW_FIRE
     GI_ARROW_ICE,           // PLAYER_IA_BOW_ICE
@@ -7854,7 +7841,7 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
 
                     Player_StopCutscene(this);
                     this->itemAction = PLAYER_IA_NONE;
-                    Player_SetAction_PreserveItemAction(play, this, Player_Action_71, 0);
+                    Player_SetAction_PreserveItemAction(play, this, Player_Action_ExchangeItem, 0);
                     talkActor = this->talkActor;
                     this->itemAction = heldItemTemp;
                     this->csId = CS_ID_NONE;
@@ -7863,7 +7850,7 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                                                  (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
                                                 ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->exchangeItemAction > PLAYER_IA_NONE)))) {
-                        this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_40);
+                        this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_TALKING);
                         if (this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             Player_SetAction_PreserveItemAction(play, this, Player_Action_17, 0);
@@ -7887,7 +7874,7 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                         this->actor.textId = 0;
                         this->focusActor = this->talkActor;
                     } else {
-                        this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_40);
+                        this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_TALKING);
                         this->csId = play->playerCsIds[PLAYER_CS_ID_ITEM_SHOW];
                         this->av1.actionVar1 = 1;
                         this->actor.textId = 0xFE;
@@ -7974,89 +7961,120 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
     return false;
 }
 
-s32 Player_ActionHandler_4(Player* this, PlayState* play) {
+s32 Player_ActionHandler_Talk(Player* this, PlayState* play) {
     if (gSaveContext.save.saveInfo.playerData.health != 0) {
-        Actor* talkActor = this->talkActor;
+        Actor* talkOfferActor = this->talkActor;
         Actor* lockOnActor = this->focusActor;
-        Actor* var_a1 = NULL;
-        s32 var_t1 = false;
-        s32 var_t2 = false;
+        Actor* cUpTalkActor = NULL;
+        s32 forceTalkToTatl = false;
+        s32 canTalkToLockOnWithCUp = false;
 
         if (this->tatlActor != NULL) {
-            var_t2 = (lockOnActor != NULL) &&
-                     (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP) ||
-                      (lockOnActor->hintId != TATL_HINT_ID_NONE));
+            canTalkToLockOnWithCUp =
+                (lockOnActor != NULL) &&
+                (CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP) ||
+                 (lockOnActor->hintId != TATL_HINT_ID_NONE));
 
-            if (var_t2 || (this->tatlTextId != 0)) {
+            if (canTalkToLockOnWithCUp || (this->tatlTextId != 0)) {
                 //! @bug The comparison `((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000)` always evaluates to `true`
-                var_t1 = (this->tatlTextId < 0) && ((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000);
+                // Likely changed 0x200 -> 0x10000 to disable this check from OoT
+                forceTalkToTatl = (this->tatlTextId < 0) && ((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000);
 
-                if (var_t1 || !var_t2) {
-                    var_a1 = this->tatlActor;
-                    if (var_t1) {
+                if (forceTalkToTatl || !canTalkToLockOnWithCUp) {
+                    // If `lockOnActor` can't be talked to with c-up, the only option left is Tatl
+                    cUpTalkActor = this->tatlActor;
+                    if (forceTalkToTatl) {
+                        // Clearing these pointers guarantees that `cUpTalkActor` will take priority
                         lockOnActor = NULL;
-                        talkActor = NULL;
+                        talkOfferActor = NULL;
                     }
                 } else {
-                    var_a1 = lockOnActor;
+                    // Tatl is not the talk actor, so the only option left for talking with c-up is `lockOnActor`
+                    // (though, `lockOnActor` may be NULL at this point).
+                    cUpTalkActor = lockOnActor;
                 }
             }
         }
 
-        if ((talkActor != NULL) || (var_a1 != NULL)) {
-            if ((lockOnActor == NULL) || (lockOnActor == talkActor) || (lockOnActor == var_a1)) {
-                if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) ||
-                    ((this->heldActor != NULL) &&
-                     (var_t1 || (talkActor == this->heldActor) || (var_a1 == this->heldActor) ||
-                      ((talkActor != NULL) && (talkActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED))))) {
-                    if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
-                         (this->stateFlags1 & PLAYER_STATE1_800000) || func_801242B4(this))) {
-                        if (talkActor != NULL) {
-                            if ((lockOnActor == NULL) || (lockOnActor == talkActor)) {
-                                this->stateFlags2 |= PLAYER_STATE2_2;
-                            }
+        if ((talkOfferActor != NULL) || (cUpTalkActor != NULL)) {
+            if ((lockOnActor != NULL) && (lockOnActor != talkOfferActor) && (lockOnActor != cUpTalkActor)) {
+                goto dont_talk;
+            }
 
-                            if (!CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
-                                return false;
-                            }
-
-                            if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) ||
-                                (talkActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) {
-                                var_a1 = NULL;
-                            } else if (var_a1 == NULL) {
-                                return false;
-                            }
-                        }
-
-                        if (var_a1 != NULL) {
-                            if (!var_t1) {
-                                this->stateFlags2 |= PLAYER_STATE2_200000;
-                                if (!CutsceneManager_IsNext(CS_ID_GLOBAL_TALK) ||
-                                    !CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP)) {
-                                    return false;
-                                }
-                            }
-
-                            talkActor = var_a1;
-                            this->talkActor = NULL;
-
-                            if (var_t1 || !var_t2) {
-                                var_a1->textId = ABS_ALT(this->tatlTextId);
-                            } else if (var_a1->hintId != 0xFF) {
-                                var_a1->textId = var_a1->hintId + 0x1900;
-                            }
-                        }
-
-                        this->currentMask = D_80862B2C;
-                        gSaveContext.save.equippedMask = this->currentMask;
-                        Player_TalkWithPlayer(play, talkActor);
-                        return true;
-                    }
+            if (this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) {
+                if ((this->heldActor == NULL) ||
+                    (!forceTalkToTatl && (talkOfferActor != this->heldActor) && (cUpTalkActor != this->heldActor) &&
+                     ((talkOfferActor == NULL) || !(talkOfferActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)))) {
+                    goto dont_talk;
                 }
             }
+
+            // FAKE: used to maintain matching using goto's. Goto's not required, but improves readability.
+            if (1) {}
+            if (1) {}
+
+            if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+                if (!(this->stateFlags1 & PLAYER_STATE1_800000) && !func_801242B4(this)) {
+                    goto dont_talk;
+                }
+            }
+
+            if (talkOfferActor != NULL) {
+                // At this point the talk offer can be accepted.
+                // "Speak" or "Check" will appear on the A button in the HUD.
+                if ((lockOnActor == NULL) || (lockOnActor == talkOfferActor)) {
+                    this->stateFlags2 |= PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER;
+                }
+
+                if (!CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+                    return false;
+                }
+
+                if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) ||
+                    (talkOfferActor->flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) {
+                    // Talk Offer has been accepted.
+                    // Clearing `cUpTalkActor` guarantees that `talkOfferActor` is the actor that will be spoken to
+                    cUpTalkActor = NULL;
+                } else if (cUpTalkActor == NULL) {
+                    return false;
+                }
+            }
+
+            if (cUpTalkActor != NULL) {
+                if (!forceTalkToTatl) {
+                    this->stateFlags2 |= PLAYER_STATE2_200000;
+                    if (!CutsceneManager_IsNext(CS_ID_GLOBAL_TALK) ||
+                        !CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP)) {
+                        return false;
+                    }
+                }
+
+                talkOfferActor = cUpTalkActor;
+                this->talkActor = NULL;
+
+                if (forceTalkToTatl || !canTalkToLockOnWithCUp) {
+                    cUpTalkActor->textId = ABS_ALT(this->tatlTextId);
+                } else if (cUpTalkActor->hintId != 0xFF) {
+                    cUpTalkActor->textId = cUpTalkActor->hintId + 0x1900;
+                }
+            }
+
+            // `sSavedCurrentMask` saves the current mask just before the current action runs on this frame.
+            // This saved mask value is then restored just before starting a conversation.
+            //
+            // This handles an edge case where a conversation is started on the same frame that a mask was taken on or
+            // off. Because Player updates early before most actors, the text ID being offered comes from the previous
+            // frame. If a mask was taken on or off the same frame this function runs, the wrong text will be used.
+            this->currentMask = sSavedCurrentMask;
+            gSaveContext.save.equippedMask = this->currentMask;
+
+            Player_StartTalking(play, talkOfferActor);
+
+            return true;
         }
     }
 
+dont_talk:
     return false;
 }
 
@@ -8101,7 +8119,7 @@ s32 func_808396B8(PlayState* play, Player* this) {
         (((this->actor.id != ACTOR_PLAYER) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) ||
          ((Player_GetMeleeWeaponHeld(this) != PLAYER_MELEEWEAPON_NONE) &&
           ((this->transformation != PLAYER_FORM_GORON) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) &&
-          ((this->transformation != PLAYER_FORM_ZORA) || !(this->stateFlags1 & PLAYER_STATE1_2000000)) &&
+          ((this->transformation != PLAYER_FORM_ZORA) || !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) &&
           sPlayerUseHeldItem))) {
         return true;
     }
@@ -8123,34 +8141,51 @@ s32 func_80839770(Player* this, PlayState* play) {
 }
 
 s32 func_80839800(Player* this, PlayState* play) {
-    if ((this->unk_AE3[this->unk_ADE] == 0) && (sPlayerFloorType != FLOOR_TYPE_7)) {
+    if ((this->controlStickDirections[this->controlStickDataIndex] == PLAYER_STICK_DIR_FORWARD) &&
+        (sPlayerFloorType != FLOOR_TYPE_7)) {
         func_80836B3C(play, this, 0.0f);
         return true;
     }
     return false;
 }
 
-void func_80839860(Player* this, PlayState* play, s32 arg2) {
+void func_80839860(Player* this, PlayState* play, s32 controlStickDirection) {
     s32 pad;
-    f32 speed = (!(arg2 & 1) ? 5.8f : 3.5f);
+    f32 speed;
+
+    if (!(controlStickDirection & 1)) {
+        // forwards, backwards, or none
+        speed = 5.8f;
+    } else {
+        // left or right
+        speed = 3.5f;
+    }
 
     if (this->currentBoots == PLAYER_BOOTS_GIANT) {
         speed /= 2.0f;
     }
 
     //! FAKE
-    if (arg2 == 2) {}
+    if (controlStickDirection == PLAYER_STICK_DIR_BACKWARD) {}
 
-    func_80834D50(play, this, D_8085C2A4[arg2].unk_0, speed, NA_SE_VO_LI_SWORD_N);
+    func_80834D50(play, this, D_8085C2A4[controlStickDirection].unk_0, speed, NA_SE_VO_LI_SWORD_N);
 
     this->av2.actionVar2 = 1;
-    this->av1.actionVar1 = arg2;
+    this->av1.actionVar1 = controlStickDirection;
 
-    this->yaw = this->actor.shape.rot.y + (arg2 << 0xE);
-    this->speedXZ = !(arg2 & 1) ? 6.0f : 8.5f;
+    this->yaw = this->actor.shape.rot.y + (controlStickDirection << 0xE);
+
+    if (!(controlStickDirection & 1)) {
+        // forwards, backwards, or none
+        this->speedXZ = 6.0f;
+    } else {
+        // left or right
+        this->speedXZ = 8.5f;
+    }
 
     this->stateFlags2 |= PLAYER_STATE2_80000;
-    Player_PlaySfx(this, ((arg2 << 0xE) == 0x8000) ? NA_SE_PL_ROLL : NA_SE_PL_SKIP);
+    Player_PlaySfx(this, ((controlStickDirection << 0xE) == (PLAYER_STICK_DIR_BACKWARD << 0xE)) ? NA_SE_PL_ROLL
+                                                                                                : NA_SE_PL_SKIP);
 }
 
 void func_80839978(PlayState* play, Player* this) {
@@ -8194,12 +8229,12 @@ s32 func_80839A84(PlayState* play, Player* this) {
 s32 Player_ActionHandler_10(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) && (play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) &&
         (sPlayerFloorType != FLOOR_TYPE_7) && (sPlayerFloorEffect != FLOOR_EFFECT_1)) {
-        s32 temp_a2 = this->unk_AE3[this->unk_ADE];
+        s32 controlStickDirection = this->controlStickDirections[this->controlStickDataIndex];
 
-        if (temp_a2 <= 0) {
+        if (controlStickDirection <= PLAYER_STICK_DIR_FORWARD) {
             if (Player_IsZTargeting(this)) {
                 if (this->actor.category != ACTORCAT_PLAYER) {
-                    if (temp_a2 < 0) {
+                    if (controlStickDirection <= PLAYER_STICK_DIR_NONE) {
                         func_80834DB8(this, &gPlayerAnim_link_normal_jump, REG(69) / 100.0f, play);
                     } else {
                         func_80836B3C(play, this, 0.0f);
@@ -8215,7 +8250,7 @@ s32 Player_ActionHandler_10(Player* this, PlayState* play) {
                 return true;
             }
         } else {
-            func_80839860(this, play, temp_a2);
+            func_80839860(this, play, controlStickDirection);
             return true;
         }
     }
@@ -8264,9 +8299,10 @@ void func_80839E74(Player* this, PlayState* play) {
 }
 
 void func_80839ED0(Player* this, PlayState* play) {
-    if (!(this->stateFlags3 & PLAYER_STATE3_80) && (Player_Action_64 != this->actionFunc) && !func_8083213C(this)) {
+    if (!(this->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT) && (Player_Action_64 != this->actionFunc) &&
+        !func_8083213C(this)) {
         func_80836D8C(this);
-        if (!(this->stateFlags1 & PLAYER_STATE1_40)) {
+        if (!(this->stateFlags1 & PLAYER_STATE1_TALKING)) {
             if (func_801242B4(this)) {
                 func_808353DC(play, this);
             } else {
@@ -8346,7 +8382,8 @@ s32 Player_ActionHandler_11(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_R) && (this->unk_AA5 == PLAYER_UNKAA5_0) &&
         (play->bButtonAmmoPlusOne == 0)) {
         if (Player_IsGoronOrDeku(this) ||
-            ((((this->transformation == PLAYER_FORM_ZORA) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) ||
+            ((((this->transformation == PLAYER_FORM_ZORA) &&
+               !(this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) ||
               ((this->transformation == PLAYER_FORM_HUMAN) && (this->currentShield != PLAYER_SHIELD_NONE))) &&
              !Player_FriendlyLockOnOrParallel(this) && (this->focusActor == NULL))) {
             func_8082DC38(this);
@@ -8599,7 +8636,7 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
 }
 
 // Set up using a telescope
-void Player_InitMode_Telescope(PlayState* play, Player* this) {
+void Player_StartMode_Telescope(PlayState* play, Player* this) {
     this->actor.update = func_8083A98C;
     this->actor.draw = NULL;
     if (play->sceneId == SCENE_00KEIKOKU) {
@@ -8618,18 +8655,17 @@ void Player_InitMode_Telescope(PlayState* play, Player* this) {
     play->actorCtx.flags |= ACTORCTX_FLAG_TELESCOPE_ON;
 }
 
-void Player_InitMode_B(PlayState* play, Player* this) {
+void Player_StartMode_B(PlayState* play, Player* this) {
     func_8085B384(this, play);
 }
 
-void Player_InitMode_D(PlayState* play, Player* this) {
+void Player_StartMode_D(PlayState* play, Player* this) {
     if (func_8083A878(play, this, 180.0f)) {
         this->av2.actionVar2 = -20;
     }
 }
 
-// InitModes 0xA and 0xE
-void func_8083ADF0(PlayState* play, Player* this) {
+void Player_StartMode_E(PlayState* play, Player* this) {
     this->speedXZ = 2.0f;
     gSaveContext.entranceSpeed = 2.0f;
 
@@ -8638,7 +8674,7 @@ void func_8083ADF0(PlayState* play, Player* this) {
     }
 }
 
-void Player_InitMode_F(PlayState* play, Player* this) {
+void Player_StartMode_F(PlayState* play, Player* this) {
     if (gSaveContext.entranceSpeed < 0.1f) {
         gSaveContext.entranceSpeed = 0.1f;
     }
@@ -9259,7 +9295,7 @@ s32 Player_ActionHandler_3(Player* this, PlayState* play) {
             if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
                 if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
                     rideActor->actor.textId = D_8085D254[this->transformation - 1];
-                    Player_TalkWithPlayer(play, &rideActor->actor);
+                    Player_StartTalking(play, &rideActor->actor);
                     return true;
                 }
             }
@@ -9269,7 +9305,7 @@ s32 Player_ActionHandler_3(Player* this, PlayState* play) {
             if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
                 if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
                     rideActor->actor.textId = D_8085D25C[this->transformation];
-                    Player_TalkWithPlayer(play, &rideActor->actor);
+                    Player_StartTalking(play, &rideActor->actor);
                     return true;
                 }
             }
@@ -10371,7 +10407,7 @@ s32 func_8083FD80(Player* this, PlayState* play) {
 }
 
 bool func_8083FE38(Player* this, PlayState* play) {
-    return Player_ActionHandler_13(this, play) || Player_ActionHandler_4(this, play) ||
+    return Player_ActionHandler_13(this, play) || Player_ActionHandler_Talk(this, play) ||
            Player_ActionHandler_2(this, play);
 }
 
@@ -10721,7 +10757,7 @@ s32 func_80840CD4(Player* this, PlayState* play) {
     } else if (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
         PlayerMeleeWeaponAnimation meleeWeaponAnim;
 
-        if ((this->unk_B08 >= 0.85f) || func_808333CC(this)) {
+        if ((this->unk_B08 >= 0.85f) || Player_CanSpinAttack(this)) {
             meleeWeaponAnim = D_8085CF84[Player_IsHoldingTwoHandedWeapon(this)];
         } else {
             meleeWeaponAnim = D_8085CF80[Player_IsHoldingTwoHandedWeapon(this)];
@@ -10729,7 +10765,7 @@ s32 func_80840CD4(Player* this, PlayState* play) {
         func_80833864(play, this, meleeWeaponAnim);
         func_808339B4(this, -8);
         this->stateFlags2 |= PLAYER_STATE2_20000;
-        if (this->unk_AE3[this->unk_ADE] == 0) {
+        if (this->controlStickDirections[this->controlStickDataIndex] == PLAYER_STICK_DIR_FORWARD) {
             this->stateFlags2 |= PLAYER_STATE2_40000000;
         }
     } else {
@@ -10825,12 +10861,12 @@ s32 func_808411D4(PlayState* play, Player* this, f32* arg2, s32 arg3) {
     return sp2C;
 }
 
-void Player_InitMode_0(PlayState* play, Player* this) {
+void Player_StartMode_0(PlayState* play, Player* this) {
     this->actor.update = func_801229EC;
     this->actor.draw = NULL;
 }
 
-void Player_InitMode_2(PlayState* play, Player* this) {
+void Player_StartMode_2(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_76, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     PlayerAnimation_Change(play, &this->skelAnime, &gPlayerAnim_link_okarina_warp_goal, PLAYER_ANIM_ADJUSTED_SPEED,
@@ -10864,7 +10900,7 @@ void func_80841358(PlayState* play, Player* this, s32 arg2) {
 
 Vec3f D_8085D2B4 = { -1.0f, 69.0f, 20.0f };
 
-void Player_InitMode_1(PlayState* play, Player* this) {
+void Player_StartMode_1(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_66, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     Math_Vec3f_Copy(&this->actor.world.pos, &D_8085D2B4);
@@ -10879,30 +10915,30 @@ void Player_InitMode_1(PlayState* play, Player* this) {
     this->av2.actionVar2 = 20;
 }
 
-void Player_InitMode_3(PlayState* play, Player* this) {
+void Player_StartMode_3(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_78, 0);
     Player_AnimReplace_Setup(play, this,
                              ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
 }
 
-void Player_InitMode_4(PlayState* play, Player* this) {
+void Player_StartMode_4(PlayState* play, Player* this) {
     func_80834DB8(this, &gPlayerAnim_link_normal_jump, 12.0f, play);
     Player_SetAction(play, this, Player_Action_79, 0);
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     this->fallStartHeight = this->actor.world.pos.y;
 }
 
-void Player_InitMode_7(PlayState* play, Player* this) {
+void Player_StartMode_7(PlayState* play, Player* this) {
     func_80833B18(play, this, 1, 2.0f, 2.0f, this->actor.shape.rot.y + 0x8000, 0);
 }
 
-void Player_InitMode_5(PlayState* play, Player* this) {
+void Player_StartMode_5(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_75, 0);
     this->actor.draw = NULL;
     this->stateFlags1 |= PLAYER_STATE1_20000000;
 }
 
-void Player_InitMode_6(PlayState* play, Player* this) {
+void Player_StartMode_6(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave) {
         Player_SetAction(play, this, Player_Action_0, 0);
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_nwait][this->modelAnimType]);
@@ -10919,10 +10955,9 @@ void Player_InitMode_6(PlayState* play, Player* this) {
     }
 }
 
-// InitModes 0x8 and 0x9
-void func_80841744(PlayState* play, Player* this) {
+void Player_StartMode_WarpTag(PlayState* play, Player* this) {
     Player_SetAction(play, this, Player_Action_91, 0);
-    if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
+    if (PLAYER_GET_START_MODE(&this->actor) == PLAYER_START_MODE_8) {
         Player_Anim_PlayOnceAdjustedReverse(play, this, D_8085D17C[this->transformation]);
         this->itemAction = PLAYER_IA_OCARINA;
         Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
@@ -10945,9 +10980,9 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->yaw = this->actor.world.rot.y;
 
-    if ((PLAYER_GET_INITMODE(&this->actor) != PLAYER_INITMODE_TELESCOPE) &&
-        ((gSaveContext.respawnFlag != 2) ||
-         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams != PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
+    if ((PLAYER_GET_START_MODE(&this->actor) != PLAYER_START_MODE_TELESCOPE) &&
+        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams !=
+                                             PLAYER_PARAMS(0xFF, PLAYER_START_MODE_TELESCOPE)))) {
         func_808309CC(play, this);
         SkelAnime_InitPlayer(play, &this->skelAnime, skelHeader, D_8085BE84[PLAYER_ANIMGROUP_wait][this->modelAnimType],
                              1 | 8, this->jointTableBuffer, this->morphTableBuffer, PLAYER_LIMB_MAX);
@@ -10982,27 +11017,27 @@ void func_80841A50(PlayState* play, Player* this) {
     }
 }
 
-typedef void (*PlayerInitModeFunc)(PlayState*, Player*);
+typedef void (*PlayerStartModeFunc)(PlayState*, Player*);
 
 // Initialisation functions for various gameplay modes depending on spawn params.
 // There may be at most 0x10 due to it using a single nybble.
-PlayerInitModeFunc sPlayerInitModeFuncs[PLAYER_INITMODE_MAX] = {
-    Player_InitMode_0,         // PLAYER_INITMODE_0
-    Player_InitMode_1,         // PLAYER_INITMODE_1
-    Player_InitMode_2,         // PLAYER_INITMODE_2
-    Player_InitMode_3,         // PLAYER_INITMODE_3
-    Player_InitMode_4,         // PLAYER_INITMODE_4
-    Player_InitMode_5,         // PLAYER_INITMODE_5
-    Player_InitMode_6,         // PLAYER_INITMODE_6
-    Player_InitMode_7,         // PLAYER_INITMODE_7
-    func_80841744,             // PLAYER_INITMODE_8
-    func_80841744,             // PLAYER_INITMODE_9
-    func_8083ADF0,             // PLAYER_INITMODE_A
-    Player_InitMode_B,         // PLAYER_INITMODE_B
-    Player_InitMode_Telescope, // PLAYER_INITMODE_TELESCOPE
-    Player_InitMode_D,         // PLAYER_INITMODE_D
-    func_8083ADF0,             // PLAYER_INITMODE_E
-    Player_InitMode_F,         // PLAYER_INITMODE_F
+PlayerStartModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
+    Player_StartMode_0,         // PLAYER_START_MODE_0
+    Player_StartMode_1,         // PLAYER_START_MODE_1
+    Player_StartMode_2,         // PLAYER_START_MODE_2
+    Player_StartMode_3,         // PLAYER_START_MODE_3
+    Player_StartMode_4,         // PLAYER_START_MODE_4
+    Player_StartMode_5,         // PLAYER_START_MODE_5
+    Player_StartMode_6,         // PLAYER_START_MODE_6
+    Player_StartMode_7,         // PLAYER_START_MODE_7
+    Player_StartMode_WarpTag,   // PLAYER_START_MODE_8
+    Player_StartMode_WarpTag,   // PLAYER_START_MODE_9
+    Player_StartMode_E,         // PLAYER_START_MODE_A
+    Player_StartMode_B,         // PLAYER_START_MODE_B
+    Player_StartMode_Telescope, // PLAYER_START_MODE_TELESCOPE
+    Player_StartMode_D,         // PLAYER_START_MODE_D
+    Player_StartMode_E,         // PLAYER_START_MODE_E
+    Player_StartMode_F,         // PLAYER_START_MODE_F
 };
 
 // sBlureInit
@@ -11029,7 +11064,6 @@ EffectTireMarkInit D_8085D330 = { 0, 63, { 0, 0, 15, 100 } };
 Color_RGBA8 D_8085D338 = { 0, 0, 15, 100 };
 // sTireMarkOtherColor ?
 Color_RGBA8 D_8085D33C = { 0, 0, 0, 150 };
-Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -11037,7 +11071,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     s8 objectSlot;
     s32 respawnFlag;
     s32 var_a1;
-    PlayerInitMode initMode;
+    PlayerStartMode startMode;
 
     play->playerInit = Player_InitCommon;
     play->playerUpdate = Player_UpdateCommon;
@@ -11047,7 +11081,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     play->tryPlayerCsAction = Player_TryCsAction;
     play->func_18780 = func_8085B384;
     play->damagePlayer = Player_InflictDamage;
-    play->talkWithPlayer = Player_TalkWithPlayer;
+    play->talkWithPlayer = Player_StartTalking;
     play->unk_1878C = func_8085B74C;
     play->unk_18790 = func_8085B820;
     play->unk_18794 = func_8085B854;
@@ -11088,13 +11122,14 @@ void Player_Init(Actor* thisx, PlayState* play) {
         this->unk_B92 = 0;
         this->unk_B94 = 0;
         this->unk_B96 = 0;
-        this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000 | PLAYER_STATE1_1000000 | PLAYER_STATE1_2000000);
+        this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_CHARGING_SPIN_ATTACK |
+                               PLAYER_STATE1_USING_ZORA_BOOMERANG | PLAYER_STATE1_ZORA_BOOMERANG_THROWN);
         this->stateFlags2 &= ~(PLAYER_STATE2_20000 | PLAYER_STATE2_1000000 | PLAYER_STATE2_40000000);
-        this->stateFlags3 &=
-            ~(PLAYER_STATE3_8 | PLAYER_STATE3_40 | PLAYER_STATE3_80 | PLAYER_STATE3_100 | PLAYER_STATE3_200 |
-              PLAYER_STATE3_800 | PLAYER_STATE3_1000 | PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 |
-              PLAYER_STATE3_40000 | PLAYER_STATE3_80000 | PLAYER_STATE3_100000 | PLAYER_STATE3_200000 |
-              PLAYER_STATE3_800000 | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
+        this->stateFlags3 &= ~(PLAYER_STATE3_8 | PLAYER_STATE3_40 | PLAYER_STATE3_FLYING_WITH_HOOKSHOT |
+                               PLAYER_STATE3_100 | PLAYER_STATE3_200 | PLAYER_STATE3_800 | PLAYER_STATE3_1000 |
+                               PLAYER_STATE3_2000 | PLAYER_STATE3_8000 | PLAYER_STATE3_10000 | PLAYER_STATE3_40000 |
+                               PLAYER_STATE3_80000 | PLAYER_STATE3_100000 | PLAYER_STATE3_200000 |
+                               PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT | PLAYER_STATE3_1000000 | PLAYER_STATE3_2000000);
         this->unk_B08 = 0.0f;
         this->unk_B0C = 0.0f;
     }
@@ -11235,7 +11270,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     var_a1 = ((respawnFlag == 4) || (gSaveContext.respawnFlag == -4)) ? 1 : 0;
     if (func_801226E0(play, var_a1) == 0) {
-        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = PLAYER_PARAMS(thisx->params, PLAYER_INITMODE_D);
+        gSaveContext.respawn[RESPAWN_MODE_DOWN].playerParams = PLAYER_PARAMS(thisx->params, PLAYER_START_MODE_D);
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 1;
@@ -11243,21 +11278,24 @@ void Player_Init(Actor* thisx, PlayState* play) {
         gSaveContext.respawn[RESPAWN_MODE_TOP] = gSaveContext.respawn[RESPAWN_MODE_DOWN];
     }
     gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-        PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_D);
+        PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_D);
 
-    initMode = PLAYER_GET_INITMODE(&this->actor);
-    if (((initMode == PLAYER_INITMODE_5) || (initMode == PLAYER_INITMODE_6)) &&
+    startMode = PLAYER_GET_START_MODE(&this->actor);
+
+    if (((startMode == PLAYER_START_MODE_5) || (startMode == PLAYER_START_MODE_6)) &&
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        initMode = PLAYER_INITMODE_D;
+        startMode = PLAYER_START_MODE_D;
     }
 
-    sPlayerInitModeFuncs[initMode](play, this);
+    sStartModeFuncs[startMode](play, this);
 
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
         ((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         (play->sceneId != SCENE_SPOT00)) {
-        this->tatlActor =
-            Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
+        static Vec3f sTatlSpawnPosOffset = { 0.0f, 50.0f, 0.0f };
+
+        this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &sTatlSpawnPosOffset,
+                                            FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
 
         if (gSaveContext.dogParams != 0) {
             gSaveContext.dogParams |= 0x8000;
@@ -11339,9 +11377,11 @@ void func_808425B4(Player* this) {
 }
 
 /**
- * Sets the DoAction for the interface A/B buttons, depending on a significant number of things
+ * Updates the two main interface elements that player is responsible for:
+ *     - Do Action label on the A/B buttons
+ *     - Tatl C-up icon for hints
  */
-void Player_SetDoAction(PlayState* play, Player* this) {
+void Player_UpdateInterface(PlayState* play, Player* this) {
     DoAction doActionB;
     s32 sp38;
 
@@ -11394,7 +11434,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         Actor* heldActor = this->heldActor;
         Actor* interactRangeActor = this->interactRangeActor;
         s32 pad;
-        s32 sp28 = this->unk_AE3[this->unk_ADE];
+        s32 controlStickDirection = this->controlStickDirections[this->controlStickDataIndex];
         s32 sp24;
         DoAction doActionA =
             ((this->transformation == PLAYER_FORM_GORON) && !(this->stateFlags1 & PLAYER_STATE1_400000))
@@ -11404,8 +11444,8 @@ void Player_SetDoAction(PlayState* play, Player* this) {
         if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
             doActionA = DO_ACTION_SNAP;
         } else if (Player_InBlockingCsMode(play, this) || (this->actor.flags & ACTOR_FLAG_20000000) ||
-                   (this->stateFlags1 & PLAYER_STATE1_1000) || (this->stateFlags3 & PLAYER_STATE3_80000) ||
-                   (Player_Action_80 == this->actionFunc)) {
+                   (this->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) ||
+                   (this->stateFlags3 & PLAYER_STATE3_80000) || (Player_Action_80 == this->actionFunc)) {
             doActionA = DO_ACTION_NONE;
         } else if (this->stateFlags1 & PLAYER_STATE1_100000) {
             doActionA = DO_ACTION_RETURN;
@@ -11433,7 +11473,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             doActionA = DO_ACTION_CLIMB;
         } else if ((this->stateFlags1 & PLAYER_STATE1_800000) &&
                    (!EN_HORSE_CHECK_4((EnHorse*)this->rideActor) && (Player_Action_53 != this->actionFunc))) {
-            if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->talkActor != NULL)) {
+            if ((this->stateFlags2 & PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER) && (this->talkActor != NULL)) {
                 if ((this->talkActor->category == ACTORCAT_NPC) || (this->talkActor->id == ACTOR_DM_CHAR08)) {
                     doActionA = DO_ACTION_SPEAK;
                 } else {
@@ -11444,7 +11484,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             } else {
                 doActionA = DO_ACTION_NONE;
             }
-        } else if ((this->stateFlags2 & PLAYER_STATE2_2) && (this->talkActor != NULL)) {
+        } else if ((this->stateFlags2 & PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER) && (this->talkActor != NULL)) {
             if ((this->talkActor->category == ACTORCAT_NPC) || (this->talkActor->category == ACTORCAT_ENEMY) ||
                 (this->talkActor->id == ACTOR_DM_CHAR08)) {
                 doActionA = DO_ACTION_SPEAK;
@@ -11496,14 +11536,16 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             if ((sp24 && (this->transformation != PLAYER_FORM_DEKU)) || !(this->stateFlags1 & PLAYER_STATE1_400000) ||
                 !Player_IsGoronOrDeku(this)) {
                 if ((this->transformation != PLAYER_FORM_GORON) &&
-                    !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
+                    !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) &&
+                    (controlStickDirection <= PLAYER_STICK_DIR_FORWARD) &&
                     (Player_CheckHostileLockOn(this) ||
-                     ((sPlayerFloorType != FLOOR_TYPE_7) &&
-                      (Player_FriendlyLockOnOrParallel(this) ||
-                       ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) &&
-                        !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
+                     ((sPlayerFloorType != FLOOR_TYPE_7) && (Player_FriendlyLockOnOrParallel(this) ||
+                                                             ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) &&
+                                                              !(this->stateFlags1 & PLAYER_STATE1_400000) &&
+                                                              (controlStickDirection == PLAYER_STICK_DIR_FORWARD)))))) {
                     doActionA = DO_ACTION_ATTACK;
-                } else if ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) && sp24 && (sp28 > 0)) {
+                } else if ((play->roomCtx.curRoom.type != ROOM_TYPE_INDOORS) && sp24 &&
+                           (controlStickDirection >= PLAYER_STICK_DIR_LEFT)) {
                     doActionA = DO_ACTION_JUMP;
                 } else if ((this->transformation == PLAYER_FORM_DEKU) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                            (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
@@ -11890,7 +11932,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
         } else {
             camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
                                                       : Play_GetCamera(play, ((EnTest3*)this)->subCamId);
-            if ((this->actor.parent != NULL) && (this->stateFlags3 & PLAYER_STATE3_80)) {
+            if ((this->actor.parent != NULL) && (this->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT)) {
                 camMode = CAM_MODE_HOOKSHOT;
                 Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->actor.parent);
             } else if (Player_Action_21 == this->actionFunc) {
@@ -11913,7 +11955,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK)) {
                     camMode = CAM_MODE_TALK;
                 } else if (this->stateFlags1 & PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS) {
-                    if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+                    if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
                         camMode = CAM_MODE_FOLLOWBOOMERANG;
                     } else {
                         camMode = CAM_MODE_FOLLOWTARGET;
@@ -11922,13 +11964,13 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                     camMode = CAM_MODE_BATTLE;
                 }
                 Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->focusActor);
-            } else if (this->stateFlags1 & PLAYER_STATE1_1000) {
+            } else if (this->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) {
                 camMode = CAM_MODE_CHARGE;
             } else if (this->stateFlags3 & PLAYER_STATE3_100) {
                 camMode = CAM_MODE_DEKUHIDE;
-            } else if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+            } else if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
                 camMode = CAM_MODE_FOLLOWBOOMERANG;
-                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->boomerangActor);
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->zoraBoomerangActor);
             } else if (this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000)) {
                 if (Player_FriendlyLockOnOrParallel(this)) {
                     camMode = CAM_MODE_HANGZ;
@@ -12350,8 +12392,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->unk_D57--;
     }
 
-    if (this->unk_B5E != 0) {
-        this->unk_B5E--;
+    if (this->textboxBtnCooldownTimer != 0) {
+        this->textboxBtnCooldownTimer--;
     }
 
     if (this->unk_D6B != 0) {
@@ -12516,7 +12558,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             Math_StepToF(&this->pushedSpeed, 0.0f, (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
         }
         if (!(this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_20000000)) &&
-            !(this->stateFlags3 & PLAYER_STATE3_80) && (Player_Action_80 != this->actionFunc)) {
+            !(this->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT) && (Player_Action_80 != this->actionFunc)) {
             func_8083BB4C(play, this);
             if (!Play_InCsMode(play)) {
                 if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags1 & PLAYER_STATE1_80000000) &&
@@ -12594,10 +12636,10 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         if (((this->focusActor == NULL) || (this->focusActor == this->talkActor) ||
              (this->focusActor->hintId == TATL_HINT_ID_NONE)) &&
             (this->tatlTextId == 0)) {
-            this->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
+            this->stateFlags2 &= ~(PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER | PLAYER_STATE2_200000);
         }
 
-        this->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_1000 | PLAYER_STATE1_400000);
+        this->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_400000);
         this->stateFlags2 &=
             ~(PLAYER_STATE2_1 | PLAYER_STATE2_4 | PLAYER_STATE2_8 | PLAYER_STATE2_20 | PLAYER_STATE2_40 |
               PLAYER_STATE2_100 | PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND | PLAYER_STATE2_1000 | PLAYER_STATE2_4000 |
@@ -12614,13 +12656,13 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         sPlayerUseHeldItem = sPlayerHeldItemButtonIsHeldDown = false;
 
         var_v1 = Play_InCsMode(play);
-        D_80862B2C = this->currentMask;
+        sSavedCurrentMask = this->currentMask;
         if (!(this->stateFlags3 & PLAYER_STATE3_4)) {
             this->actionFunc(this, play);
         }
 
         if (!var_v1) {
-            Player_SetDoAction(play, this);
+            Player_UpdateInterface(play, this);
         }
 
         Player_UpdateCamAndSeqModes(play, this);
@@ -12830,7 +12872,9 @@ void Player_Update(Actor* thisx, PlayState* play) {
         this->fallStartHeight = this->actor.world.pos.y;
     } else {
         input = *CONTROLLER1(&play->state);
-        if (this->unk_B5E != 0) {
+        if (this->textboxBtnCooldownTimer != 0) {
+            // Prevent the usage of A/B/C-up.
+            // Helps avoid accidental inputs when mashing to close the final textbox.
             input.cur.button &= ~(BTN_CUP | BTN_B | BTN_A);
             input.press.button &= ~(BTN_CUP | BTN_B | BTN_A);
         }
@@ -13546,7 +13590,7 @@ void func_80848250(PlayState* play, Player* this) {
     this->getItemDrawIdPlusOne = GID_NONE + 1;
     this->stateFlags1 &= ~(PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR);
     this->getItemId = GI_NONE;
-    func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+    Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
 }
 
 void func_80848294(PlayState* play, Player* this) {
@@ -13669,7 +13713,7 @@ void func_80848640(PlayState* play, Player* this) {
 
     if (torch2 != NULL) {
         play->actorCtx.elegyShells[this->transformation] = torch2;
-        Play_SetupRespawnPoint(play, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+        Play_SetupRespawnPoint(play, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B));
     }
 
     effChange = Actor_Spawn(&play->actorCtx, play, ACTOR_EFF_CHANGE, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -13702,7 +13746,7 @@ s32 Player_UpperAction_ChangeHeldItem(Player* this, PlayState* play) {
          (sPlayerUseHeldItem = (sPlayerUseHeldItem || ((this->modelAnimType != PLAYER_ANIMTYPE_3) &&
                                                        (this->heldItemAction != PLAYER_IA_DEKU_STICK) &&
                                                        (play->bButtonAmmoPlusOne == 0)))))) {
-        Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
+        Player_SetUpperAction(play, this, sItemActionUpdateFuncs[this->heldItemAction]);
         this->unk_ACC = 0;
         this->idleType = PLAYER_IDLE_DEFAULT;
         sPlayerHeldItemButtonIsHeldDown = sPlayerUseHeldItem;
@@ -13753,7 +13797,7 @@ s32 Player_UpperAction_4(Player* this, PlayState* play) {
 s32 Player_UpperAction_5(Player* this, PlayState* play) {
     sPlayerUseHeldItem = sPlayerHeldItemButtonIsHeldDown;
     if (sPlayerUseHeldItem || PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
-        Player_SetUpperAction(play, this, sPlayerUpperActionUpdateFuncs[this->heldItemAction]);
+        Player_SetUpperAction(play, this, sItemActionUpdateFuncs[this->heldItemAction]);
         PlayerAnimation_PlayLoop(play, &this->skelAnimeUpper, D_8085BE84[PLAYER_ANIMGROUP_wait][this->modelAnimType]);
         this->idleType = PLAYER_IDLE_DEFAULT;
         this->upperActionFunc(this, play);
@@ -13939,7 +13983,7 @@ s32 Player_UpperAction_11(Player* this, PlayState* play) {
         return true;
     }
 
-    if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+    if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
         Player_SetUpperAction(play, this, Player_UpperAction_15);
     } else if (func_80831094(this, play)) {
         return true;
@@ -13981,41 +14025,42 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
         pos.y = this->actor.world.pos.y + 50.0f;
 
         untargetedRotY = this->actor.shape.rot.y - 0x190;
-        this->boomerangActor = Actor_Spawn(
+        this->zoraBoomerangActor = Actor_Spawn(
             &play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
             (this->focusActor != NULL) ? this->actor.shape.rot.y + 0x36B0 : untargetedRotY, 0, ZORA_BOOMERANG_LEFT);
 
-        if (this->boomerangActor != NULL) {
-            EnBoom* leftBoomerang = (EnBoom*)this->boomerangActor;
-            EnBoom* rightBoomerang;
+        if (this->zoraBoomerangActor != NULL) {
+            EnBoom* leftZoraBoomerang = (EnBoom*)this->zoraBoomerangActor;
+            EnBoom* rightZoraBoomerang;
 
-            leftBoomerang->moveTo = this->focusActor;
-            if (leftBoomerang->moveTo != NULL) {
-                leftBoomerang->unk_1CF = 0x10;
+            leftZoraBoomerang->moveTo = this->focusActor;
+            if (leftZoraBoomerang->moveTo != NULL) {
+                leftZoraBoomerang->unk_1CF = 0x10;
             }
-            leftBoomerang->unk_1CC = leftBoomerang->unk_1CF + 0x24;
+            leftZoraBoomerang->unk_1CC = leftZoraBoomerang->unk_1CF + 0x24;
 
             func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
             untargetedRotY = (this->actor.shape.rot.y + 0x190);
-            rightBoomerang =
+            rightZoraBoomerang =
                 (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
                                      (this->focusActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY, 0,
                                      ZORA_BOOMERANG_RIGHT);
 
-            if (rightBoomerang != NULL) {
-                rightBoomerang->moveTo = this->focusActor;
-                if (rightBoomerang->moveTo != NULL) {
-                    rightBoomerang->unk_1CF = 0x10;
+            if (rightZoraBoomerang != NULL) {
+                rightZoraBoomerang->moveTo = this->focusActor;
+                if (rightZoraBoomerang->moveTo != NULL) {
+                    rightZoraBoomerang->unk_1CF = 0x10;
                 }
 
-                rightBoomerang->unk_1CC = rightBoomerang->unk_1CF + 0x24;
-                leftBoomerang->actor.child = &rightBoomerang->actor;
-                rightBoomerang->actor.parent = &leftBoomerang->actor;
+                rightZoraBoomerang->unk_1CC = rightZoraBoomerang->unk_1CF + 0x24;
+                leftZoraBoomerang->actor.child = &rightZoraBoomerang->actor;
+                rightZoraBoomerang->actor.parent = &leftZoraBoomerang->actor;
             }
 
-            this->stateFlags1 |= PLAYER_STATE1_2000000;
-            this->stateFlags3 &= ~PLAYER_STATE3_800000;
+            this->stateFlags1 |= PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
+            this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
+
             if (!Player_CheckHostileLockOn(this)) {
                 Player_SetParallel(this);
             }
@@ -14035,10 +14080,10 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
         return true;
     }
 
-    if (this->stateFlags3 & PLAYER_STATE3_800000) {
+    if (this->stateFlags3 & PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT) {
         Player_SetUpperAction(play, this, Player_UpperAction_16);
         PlayerAnimation_PlayOnce(play, &this->skelAnimeUpper, &gPlayerAnim_pz_cuttercatch);
-        this->stateFlags3 &= ~PLAYER_STATE3_800000;
+        this->stateFlags3 &= ~PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT;
         Player_PlaySfx(this, NA_SE_PL_CATCH_BOOMERANG);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_SWORD_N);
         return true;
@@ -14049,7 +14094,7 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
 
 s32 Player_UpperAction_16(Player* this, PlayState* play) {
     if (!Player_UpperAction_11(this, play) && PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
-        if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+        if (this->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN) {
             Player_SetUpperAction(play, this, Player_UpperAction_15);
             this->unk_ACC = 0;
         } else {
@@ -14794,7 +14839,7 @@ void Player_Action_17(Player* this, PlayState* play) {
             func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_check_end][this->modelAnimType], play);
         }
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+        Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
     }
 }
 
@@ -15152,7 +15197,8 @@ void Player_Action_25(Player* this, PlayState* play) {
                     (this->speedXZ > 0.0f)) {
                     if ((this->transformation != PLAYER_FORM_GORON) &&
                         ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0))) {
-                        if ((this->yDistToLedge >= 150.0f) && (this->unk_AE3[this->unk_ADE] == 0)) {
+                        if ((this->yDistToLedge >= 150.0f) &&
+                            (this->controlStickDirections[this->controlStickDataIndex] == PLAYER_STICK_DIR_FORWARD)) {
                             if (func_8083D860(this, play)) {
                                 func_8084C124(play, this);
                             }
@@ -15245,7 +15291,8 @@ void Player_Action_26(Player* this, PlayState* play) {
             Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
             speedTarget *= 1.5f;
 
-            if ((speedTarget < 3.0f) || (this->unk_AE3[this->unk_ADE] != 0)) {
+            if ((speedTarget < 3.0f) ||
+                (this->controlStickDirections[this->controlStickDataIndex] != PLAYER_STICK_DIR_FORWARD)) {
                 speedTarget = 3.0f;
             }
             func_8083CB58(this, speedTarget, this->actor.shape.rot.y);
@@ -15338,7 +15385,7 @@ void Player_Action_30(Player* this, PlayState* play) {
     s16 yawTarget;
     s32 temp_v0;
 
-    this->stateFlags1 |= PLAYER_STATE1_1000;
+    this->stateFlags1 |= PLAYER_STATE1_CHARGING_SPIN_ATTACK;
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         Player_Anim_ResetMove(this);
         Player_SetParallel(this);
@@ -15386,7 +15433,7 @@ void Player_Action_31(Player* this, PlayState* play) {
     var_v1 = ABS_ALT(temp_v0);
 
     temp_ft4 = fabsf(this->speedXZ);
-    this->stateFlags1 |= PLAYER_STATE1_1000;
+    this->stateFlags1 |= PLAYER_STATE1_CHARGING_SPIN_ATTACK;
 
     var_fa0 = temp_ft4 * 1.5f;
     var_fa0 = CLAMP_MIN(var_fa0, 1.5f);
@@ -15434,7 +15481,7 @@ void Player_Action_32(Player* this, PlayState* play) {
     f32 sp5C = fabsf(this->speedXZ);
     f32 var_fa0;
 
-    this->stateFlags1 |= PLAYER_STATE1_1000;
+    this->stateFlags1 |= PLAYER_STATE1_CHARGING_SPIN_ATTACK;
 
     if (sp5C == 0.0f) {
         sp5C = ABS_ALT(this->unk_B4C) * 0.0015f;
@@ -15739,7 +15786,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                 }
 
                 R_PLAY_FILL_SCREEN_ON = 0;
-                func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+                Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
                 Player_StopCutscene(this);
                 if (!(this->stateFlags3 & PLAYER_STATE3_20000)) {
                     func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
@@ -15751,7 +15798,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                     if (play->sceneId == SCENE_20SICHITAI) {
                         play->bButtonAmmoPlusOne = 0;
                     }
-                } else if (!Player_ActionHandler_4(this, play)) {
+                } else if (!Player_ActionHandler_Talk(this, play)) {
                     func_8083B2E4(this, play);
                 }
             }
@@ -15795,8 +15842,8 @@ void Player_Action_36(Player* this, PlayState* play) {
                     Room_FinishRoomChange(play, &play->roomCtx);
                 }
 
-                func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
-                Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
+                Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
+                Play_SetupRespawnPoint(play, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B));
             }
         }
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
@@ -15934,7 +15981,7 @@ void Player_Action_43(Player* this, PlayState* play) {
     }
 
     if (this->unk_AA5 == PLAYER_UNKAA5_3) {
-        if (func_800B7118(this) || func_8082ECCC(this)) {
+        if (func_800B7118(this) || Player_IsUsingZoraBoomerang(this)) {
             Player_UpdateUpperBody(this, play);
         }
     }
@@ -15952,7 +15999,7 @@ void Player_Action_43(Player* this, PlayState* play) {
            ((this->unk_AA5 == PLAYER_UNKAA5_1) &&
             CHECK_BTN_ANY(sPlayerControlInput->press.button,
                           BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_R | BTN_B | BTN_A))) ||
-          Player_ActionHandler_4(this, play)))) {
+          Player_ActionHandler_Talk(this, play)))) {
         func_80839ED0(this, play);
         Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
     } else if ((DECR(this->av2.actionVar2) == 0) || (this->unk_AA5 != PLAYER_UNKAA5_3)) {
@@ -15966,19 +16013,21 @@ void Player_Action_43(Player* this, PlayState* play) {
     this->yaw = this->actor.shape.rot.y;
 }
 
-void Player_Action_44(Player* this, PlayState* play) {
+void Player_Action_Talk(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     func_8083249C(this);
     Player_UpdateUpperBody(this, play);
+
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)) {
             this->stateFlags2 &= ~PLAYER_STATE2_LOCK_ON_WITH_SWITCH;
         }
 
-        func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+        Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+
         if (this->stateFlags1 & PLAYER_STATE1_800000) {
             s32 sp44 = this->av2.actionVar2;
 
@@ -15993,7 +16042,7 @@ void Player_Action_44(Player* this, PlayState* play) {
             }
         }
 
-        this->unk_B5E = 0xA;
+        this->textboxBtnCooldownTimer = 10;
         return;
     }
 
@@ -16206,7 +16255,7 @@ void Player_Action_48(Player* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->yaw, 0x800);
     if (this->av1.actionVar1 != 0) {
         Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
-        if (this->unk_ADF[this->unk_ADE] >= 0) {
+        if (this->controlStickSpinAngles[this->controlStickDataIndex] >= 0) {
             func_808381A0(this,
                           (this->av1.actionVar1 > 0) ? D_8085BE84[PLAYER_ANIMGROUP_fall_up][this->modelAnimType]
                                                      : D_8085BE84[PLAYER_ANIMGROUP_jump_climb_up][this->modelAnimType],
@@ -16563,7 +16612,7 @@ void Player_Action_52(Player* this, PlayState* play) {
         }
 
         if (this->av2.actionVar2 == 1) {
-            if (sUpperBodyIsBusy || func_8082DAFC(play)) {
+            if (sUpperBodyIsBusy || Player_IsTalking(play)) {
                 Player_Anim_PlayOnce(play, this, &gPlayerAnim_link_uma_wait_3);
             } else if (PlayerAnimation_Update(play, &this->skelAnime)) {
                 this->av2.actionVar2 = 0x63;
@@ -16643,7 +16692,8 @@ void Player_Action_52(Player* this, PlayState* play) {
                 func_8084FD7C(play, this, &rideActor->actor);
             }
         } else if ((this->csAction != PLAYER_CSACTION_NONE) ||
-                   (!func_8082DAFC(play) && ((rideActor->actor.speed != 0.0f) || !Player_ActionHandler_4(this, play)) &&
+                   (!Player_IsTalking(play) &&
+                    ((rideActor->actor.speed != 0.0f) || !Player_ActionHandler_Talk(this, play)) &&
                     !func_80847BF0(this, play) && !Player_ActionHandler_13(this, play))) {
             if (this->focusActor != NULL) {
                 if (func_800B7128(this)) {
@@ -16731,7 +16781,7 @@ s32 func_80850734(PlayState* play, Player* this) {
 
 s32 func_80850854(PlayState* play, Player* this) {
     if ((this->transformation == PLAYER_FORM_DEKU) && (this->remainingHopsCounter != 0) &&
-        (gSaveContext.save.saveInfo.playerData.health != 0) && (sPlayerControlStickMagnitude != 0.0f)) {
+        (gSaveContext.save.saveInfo.playerData.health != 0) && (sControlStickMagnitude != 0.0f)) {
         func_808373F8(play, this, 0);
         return true;
     }
@@ -16757,7 +16807,7 @@ void Player_Action_54(Player* this, PlayState* play) {
         this->av2.actionVar2 = 0;
     }
 
-    if (!func_8082DAFC(play) && !Player_TryActionHandlerList(play, this, sActionHandlerList11, true) &&
+    if (!Player_IsTalking(play) && !Player_TryActionHandlerList(play, this, sActionHandlerList11, true) &&
         !func_8083B3B4(play, this, sPlayerControlInput) &&
         ((this->av2.actionVar2 != 0) || !func_80850734(play, this))) {
         speedTarget = 0.0f;
@@ -17347,11 +17397,11 @@ void Player_Action_63(Player* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_20000000;
 
             if ((this->talkActor != NULL) && (this->talkActor == this->unk_A90) && (this->unk_A94 >= 0.0f)) {
-                Player_TalkWithPlayer(play, this->talkActor);
+                Player_StartTalking(play, this->talkActor);
             } else if (this->tatlTextId < 0) {
                 this->talkActor = this->tatlActor;
                 this->tatlActor->textId = -this->tatlTextId;
-                Player_TalkWithPlayer(play, this->talkActor);
+                Player_StartTalking(play, this->talkActor);
             } else if (!Player_ActionHandler_13(this, play)) {
                 func_80836A5C(this, play);
                 Player_Anim_PlayOnceAdjustedReverse(play, this, D_8085D17C[this->transformation]);
@@ -17486,7 +17536,7 @@ void Player_Action_65(Player* this, PlayState* play) {
                             func_80848250(play, this);
                             this->exchangeItemAction = PLAYER_IA_NONE;
                             if (!func_80847994(play, this)) {
-                                Player_TalkWithPlayer(play, this->talkActor);
+                                Player_StartTalking(play, this->talkActor);
                             }
                         } else {
                             func_80848294(play, this);
@@ -17722,11 +17772,11 @@ void Player_Action_68(Player* this, PlayState* play) {
 
                 this->av1.actionVar1 = 0;
                 Player_StopCutscene(this);
-                func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
+                Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
                 if ((talkActor != NULL) && (this->exchangeItemAction <= PLAYER_IA_MINUS1)) {
-                    Player_TalkWithPlayer(play, talkActor);
+                    Player_StartTalking(play, talkActor);
                 }
             }
         } else {
@@ -17873,7 +17923,7 @@ AnimSfxEntry D_8085D840[] = {
     ANIMSFX(ANIMSFX_TYPE_GENERAL, 30, NA_SE_PL_PUT_OUT_ITEM, STOP),
 };
 
-void Player_Action_71(Player* this, PlayState* play) {
+void Player_Action_ExchangeItem(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
     this->stateFlags3 |= PLAYER_STATE3_4000000;
 
@@ -17889,7 +17939,7 @@ void Player_Action_71(Player* this, PlayState* play) {
             if ((talkActor->textId != 0) && (talkActor->textId != 0xFFFF)) {
                 this->actor.flags |= ACTOR_FLAG_TALK;
             }
-            Player_TalkWithPlayer(play, talkActor);
+            Player_StartTalking(play, talkActor);
         } else {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemAction] - 1];
 
@@ -17908,7 +17958,7 @@ void Player_Action_71(Player* this, PlayState* play) {
                 this->getItemDrawIdPlusOne = GID_NONE + 1;
                 this->actor.flags &= ~ACTOR_FLAG_TALK;
                 func_80839E74(this, play);
-                this->unk_B5E = 0xA;
+                this->textboxBtnCooldownTimer = 10;
             }
         }
     } else if (this->av2.actionVar2 >= 0) {
@@ -18246,7 +18296,7 @@ void Player_Action_84(Player* this, PlayState* play) {
     if (PlayerAnimation_Update(play, &this->skelAnime) ||
         ((this->meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_FINISH) &&
          (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH) && (this->skelAnime.curFrame > 2.0f) &&
-         func_808333CC(this))) {
+         Player_CanSpinAttack(this))) {
         sPlayerUseHeldItem = this->av2.actionVar2;
 
         if (!Player_ActionHandler_7(this, play)) {
@@ -18692,7 +18742,7 @@ void Player_Action_91(Player* this, PlayState* play) {
             if (BINANG_SUB(this->actor.shape.rot.y, this->actor.world.rot.y) >= 0) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Player_StopCutscene(this);
-                if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
+                if (PLAYER_GET_START_MODE(&this->actor) == PLAYER_START_MODE_8) {
                     anim = D_8085D17C[this->transformation];
                     func_80836A5C(this, play);
                     PlayerAnimation_Change(play, &this->skelAnime, anim, -PLAYER_ANIM_ADJUSTED_SPEED,
@@ -18708,7 +18758,7 @@ void Player_Action_91(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_92(Player* this, PlayState* play) {
+void Player_Action_HookshotFly(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_20;
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
@@ -18716,6 +18766,7 @@ void Player_Action_92(Player* this, PlayState* play) {
     }
 
     Math_Vec3f_Sum(&this->actor.world.pos, &this->actor.velocity, &this->actor.world.pos);
+
     if (func_80831124(play, this)) {
         f32 var_fv0;
 
@@ -18879,7 +18930,7 @@ void Player_Action_93(Player* this, PlayState* play) {
             this->actor.world.pos.y += temp_fv0_2 * this->actor.scale.y;
             func_80834DB8(this, &gPlayerAnim_pn_kakku, speed, play);
             Player_SetAction(play, this, Player_Action_94, 1);
-            this->boomerangActor = NULL;
+            this->zoraBoomerangActor = NULL;
 
             this->stateFlags3 |= PLAYER_STATE3_200;
             if (sp38 != 0) {
@@ -18975,8 +19026,8 @@ Vec3f D_8085D96C = { 30.0f, 50.0f, 0.0f };
 
 // Flying as Deku?
 void Player_Action_94(Player* this, PlayState* play) {
-    if ((this->boomerangActor != NULL) && (this->boomerangActor->update == NULL)) {
-        this->boomerangActor = NULL;
+    if ((this->zoraBoomerangActor != NULL) && (this->zoraBoomerangActor->update == NULL)) {
+        this->zoraBoomerangActor = NULL;
     }
 
     if (Player_ActionHandler_13(this, play)) {
@@ -19103,19 +19154,19 @@ void Player_Action_94(Player* this, PlayState* play) {
         }
 
         Audio_PlaySfx_AtPosWithTimer(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
-        if ((this->boomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
+        if ((this->zoraBoomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
             if (AMMO(ITEM_DEKU_NUT) == 0) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
-                this->boomerangActor =
+                this->zoraBoomerangActor =
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
                                 this->bodyPartsPos[PLAYER_BODYPART_WAIST].y,
                                 this->bodyPartsPos[PLAYER_BODYPART_WAIST].z, -1, 0, 0, ARROW_TYPE_DEKU_NUT);
-                if (this->boomerangActor != NULL) {
-                    this->boomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
-                    this->boomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
+                if (this->zoraBoomerangActor != NULL) {
+                    this->zoraBoomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
+                    this->zoraBoomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
                     Inventory_ChangeAmmo(ITEM_DEKU_NUT, -1);
-                    Actor_PlaySfx(this->boomerangActor, NA_SE_PL_DEKUNUTS_DROP_BOMB);
+                    Actor_PlaySfx(this->zoraBoomerangActor, NA_SE_PL_DEKUNUTS_DROP_BOMB);
                 }
             }
         }
@@ -20334,7 +20385,7 @@ void Player_CsAction_5(PlayState* play, Player* this, CsCmdActorCue* cue) {
     f32 linearVelocity;
     s16 yaw;
 
-    this->stateFlags1 &= ~PLAYER_STATE1_2000000;
+    this->stateFlags1 &= ~PLAYER_STATE1_ZORA_BOOMERANG_THROWN;
 
     yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_3A0);
     linearVelocity = this->speedXZ;
@@ -20779,7 +20830,7 @@ void Player_CsAction_End(PlayState* play, Player* this, CsCmdActorCue* cue) {
         func_8082DC64(play, this);
     } else {
         func_80839ED0(this, play);
-        if (!Player_ActionHandler_4(this, play)) {
+        if (!Player_ActionHandler_Talk(this, play)) {
             Player_ActionHandler_2(this, play);
         }
     }
@@ -20943,7 +20994,7 @@ s32 Player_GrabPlayer(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && (this->invincibilityTimer >= 0) && !func_801240DC(this)) {
         if (!(this->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 |
                                    PLAYER_STATE1_200000 | PLAYER_STATE1_800000))) {
-            if (!(this->stateFlags2 & PLAYER_STATE2_80) && !(this->stateFlags3 & PLAYER_STATE3_80)) {
+            if (!(this->stateFlags2 & PLAYER_STATE2_80) && !(this->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT)) {
                 func_8085B170(play, this);
                 return true;
             }
@@ -21008,72 +21059,77 @@ s32 Player_InflictDamage(PlayState* play, s32 damage) {
     return false;
 }
 
-// Start talking with the given actor
-void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
+/**
+ * Start talking to the specified actor.
+ */
+void Player_StartTalking(PlayState* play, Actor* actor) {
     s32 pad;
-    Player* player = GET_PLAYER(play);
+    Player* this = GET_PLAYER(play);
 
-    func_808323C0(player, CS_ID_GLOBAL_TALK);
-    if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
+    func_808323C0(this, CS_ID_GLOBAL_TALK);
+
+    if ((this->talkActor != NULL) || (actor == this->tatlActor) ||
         CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_TALK_WITH_C_UP)) {
         actor->flags |= ACTOR_FLAG_TALK;
     }
 
-    player->talkActor = actor;
-    player->exchangeItemAction = PLAYER_IA_NONE;
-    player->focusActor = actor;
+    this->talkActor = actor;
+    this->exchangeItemAction = PLAYER_IA_NONE;
+    this->focusActor = actor;
 
     if (actor->textId == 0xFFFF) {
+        // Player will stand and look at the actor with no text appearing.
+        // This can be used to delay text from appearing, for example.
         Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_1);
         actor->flags |= ACTOR_FLAG_TALK;
-        Player_PutAwayHeldItem(play, player);
+        Player_PutAwayHeldItem(play, this);
     } else {
-        if (player->actor.flags & ACTOR_FLAG_TALK) {
-            player->actor.textId = 0;
+        if (this->actor.flags & ACTOR_FLAG_TALK) {
+            this->actor.textId = 0;
         } else {
-            player->actor.flags |= ACTOR_FLAG_TALK;
-            player->actor.textId = actor->textId;
+            this->actor.flags |= ACTOR_FLAG_TALK;
+            this->actor.textId = actor->textId;
         }
 
-        if (player->stateFlags1 & PLAYER_STATE1_800000) {
-            s32 sp24 = player->av2.actionVar2;
+        if (this->stateFlags1 & PLAYER_STATE1_800000) {
+            s32 sp24 = this->av2.actionVar2;
 
-            Player_PutAwayHeldItem(play, player);
-            func_80837B60(play, player);
-            player->av2.actionVar2 = sp24;
+            Player_PutAwayHeldItem(play, this);
+            Player_SetupTalk(play, this);
+            this->av2.actionVar2 = sp24;
         } else {
-            if (func_801242B4(player)) {
-                Player_SetupWaitForPutAway(play, player, func_80837B60);
-                Player_Anim_PlayLoopSlowMorph(play, player, &gPlayerAnim_link_swimer_swim_wait);
-            } else if ((actor->category != ACTORCAT_NPC) || (player->heldItemAction == PLAYER_IA_FISHING_ROD)) {
-                func_80837B60(play, player);
+            if (func_801242B4(this)) {
+                Player_SetupWaitForPutAway(play, this, Player_SetupTalk);
+                Player_Anim_PlayLoopSlowMorph(play, this, &gPlayerAnim_link_swimer_swim_wait);
+            } else if ((actor->category != ACTORCAT_NPC) || (this->heldItemAction == PLAYER_IA_FISHING_ROD)) {
+                Player_SetupTalk(play, this);
 
-                if (!Player_CheckHostileLockOn(player)) {
-                    if ((actor != player->tatlActor) && (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))) {
-                        Player_Anim_PlayOnceAdjusted(play, player, &gPlayerAnim_link_normal_backspace);
+                if (!Player_CheckHostileLockOn(this)) {
+                    if ((actor != this->tatlActor) && (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))) {
+                        Player_Anim_PlayOnceAdjusted(play, this, &gPlayerAnim_link_normal_backspace);
                     } else {
-                        Player_Anim_PlayLoop(play, player, Player_GetIdleAnim(player));
+                        Player_Anim_PlayLoop(play, this, Player_GetIdleAnim(this));
                     }
                 }
             } else {
-                Player_SetupWaitForPutAway(play, player, func_80837B60);
-                Player_Anim_PlayOnceAdjusted(play, player,
+                Player_SetupWaitForPutAway(play, this, Player_SetupTalk);
+                Player_Anim_PlayOnceAdjusted(play, this,
                                              (actor->xzDistToPlayer < (actor->colChkInfo.cylRadius + 40))
                                                  ? &gPlayerAnim_link_normal_backspace
                                                  : &gPlayerAnim_link_normal_talk_free);
             }
 
-            if (player->skelAnime.animation == &gPlayerAnim_link_normal_backspace) {
-                Player_AnimReplace_Setup(play, player, ANIM_FLAG_1 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE);
+            if (this->skelAnime.animation == &gPlayerAnim_link_normal_backspace) {
+                Player_AnimReplace_Setup(play, this, ANIM_FLAG_1 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE);
             }
-            func_8082DAD4(player);
+            func_8082DAD4(this);
         }
 
-        player->stateFlags1 |= PLAYER_STATE1_40 | PLAYER_STATE1_20000000;
+        this->stateFlags1 |= PLAYER_STATE1_TALKING | PLAYER_STATE1_20000000;
     }
 
-    if ((player->tatlActor == player->talkActor) && ((player->talkActor->textId & 0xFF00) != 0x200)) {
-        player->tatlActor->flags |= ACTOR_FLAG_TALK;
+    if ((this->tatlActor == this->talkActor) && ((this->talkActor->textId & 0xFF00) != 0x200)) {
+        this->tatlActor->flags |= ACTOR_FLAG_TALK;
     }
 }
 
@@ -21122,11 +21178,11 @@ PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
 
     this->itemAction = PLAYER_IA_NONE;
     this->actionFunc = NULL;
-    Player_SetAction_PreserveItemAction(play, this, Player_Action_71, 0);
+    Player_SetAction_PreserveItemAction(play, this, Player_Action_ExchangeItem, 0);
     this->csId = CS_ID_GLOBAL_TALK;
     this->itemAction = itemAction;
     Player_Anim_PlayOnce(play, this, &gPlayerAnim_link_normal_give_other);
-    this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
+    this->stateFlags1 |= (PLAYER_STATE1_TALKING | PLAYER_STATE1_20000000);
     this->getItemDrawIdPlusOne = GID_NONE + 1;
     this->exchangeItemAction = itemAction;
 

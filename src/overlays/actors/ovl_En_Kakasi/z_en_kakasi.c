@@ -181,7 +181,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
     this->aboveGroundStatus = KAKASI_GET_ABOVE_GROUND(&this->picto.actor);
     this->picto.actor.world.rot.x = 0;
-    this->picto.actor.flags |= ACTOR_FLAG_400;
+    this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
 
@@ -953,7 +953,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 player = GET_PLAYER(play);
 
                 Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(play);
 
                 if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {

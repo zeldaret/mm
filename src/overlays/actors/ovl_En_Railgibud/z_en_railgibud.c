@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnRailgibud*)thisx)
 
@@ -939,7 +939,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
         if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE))) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
-                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
@@ -947,7 +947,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
                 }
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
             this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;

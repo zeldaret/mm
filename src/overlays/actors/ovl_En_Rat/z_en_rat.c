@@ -8,7 +8,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 #define THIS ((EnRat*)thisx)
 
@@ -835,7 +835,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             if (this->damageReaction.hookedState == EN_RAT_HOOK_STARTED) {
                 // The player just hit the Real Bombchu with the Hookshot.
                 this->damageReaction.hookedState = EN_RAT_HOOKED;
-            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
                 // The player has hooked the Real Bombchu for more than one frame, but
                 // the actor flag indicating that the Hookshot is attached is *not* set.
                 EnRat_Explode(this, play);

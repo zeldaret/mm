@@ -7,7 +7,9 @@
 #include "z_en_fg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
+#define FLAGS                                                                               \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnFg*)thisx)
 
@@ -363,7 +365,7 @@ void EnFg_Destroy(Actor* thisx, PlayState* play) {
 void EnFg_Update(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
 
-    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) == 0) &&
+    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) == 0) &&
         (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTACHED_TO_ARROW) == 0)) {
         this->actionFunc(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,

@@ -1121,7 +1121,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
  * Moves the mask through the air and eventually makes it burst into flames.
  */
 void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
-    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) || (this->action == EN_PP_ACTION_MASK_DEAD)) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) || (this->action == EN_PP_ACTION_MASK_DEAD)) {
         switch (this->actionVar.maskDetachState) {
             case EN_PP_MASK_DETACH_STATE_START:
                 this->action = EN_PP_ACTION_MASK_DEAD;
@@ -1250,9 +1250,9 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
 
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) {
         if ((yawDiff < (BREG(2) + 0x4A9C)) || (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED)) {
-            this->actor.flags |= ACTOR_FLAG_200;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_200;
+            this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
         }
     }
 

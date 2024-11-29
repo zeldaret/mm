@@ -12,7 +12,9 @@
 #include "assets/objects/object_bigslime/object_bigslime.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS                                                                            \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 #define THIS ((EnBigslime*)thisx)
 
@@ -765,8 +767,8 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     EnBigslime_SetPlayerParams(this, play);
     EnBigslime_EndCutscene(this, play);
     this->actor.colChkInfo.mass = 50;
-    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_400);
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER);
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
@@ -914,7 +916,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->gekkoDrawDmgEffScale = 0.75f;
     this->gekkoDrawDmgEffFrozenSteamScale = 1.125f;
     this->gekkoDrawDmgEffAlpha = 1.0f;
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
 }
 
 void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
@@ -924,7 +926,7 @@ void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
         this->gekkoCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 
@@ -1031,7 +1033,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.acFlags |= AC_ON;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     this->actionFunc = EnBigslime_MoveOnCeiling;
 }
 
@@ -2179,8 +2181,8 @@ void EnBigslime_SetupDamageGekko(EnBigslime* this, s32 isNotFrozen) {
     }
 
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DAMAGE);
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     this->actionFunc = EnBigslime_DamageGekko;

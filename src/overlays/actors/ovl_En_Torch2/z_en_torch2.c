@@ -81,7 +81,7 @@ void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     Play_SetRespawnData(play, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
-                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &this->actor.world.pos, this->actor.shape.rot.y);
+                        PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B), &this->actor.world.pos, this->actor.shape.rot.y);
     play->actorCtx.elegyShells[this->actor.params] = NULL;
 }
 

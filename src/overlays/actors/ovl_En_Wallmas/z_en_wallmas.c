@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnWallmas*)thisx)
 
@@ -204,7 +204,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->timer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -214,7 +214,7 @@ void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
         this->collider.base.colMaterial = COL_MATERIAL_HIT0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 
@@ -244,8 +244,8 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
     }
 
     if ((player->stateFlags1 & (PLAYER_STATE1_100000 | PLAYER_STATE1_8000000)) ||
-        (player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B5E > 0) || (player->actor.freezeTimer > 0) ||
-        !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
+        (player->stateFlags2 & PLAYER_STATE2_80) || (player->textboxBtnCooldownTimer > 0) ||
+        (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         AudioSfx_StopById(NA_SE_EN_FALL_AIM);
@@ -368,7 +368,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
     if (this->skelAnime.curFrame > 20.0f) {
         this->actor.world.pos.y += 30.0f;
         this->timer += 9;
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 20.0f)) {

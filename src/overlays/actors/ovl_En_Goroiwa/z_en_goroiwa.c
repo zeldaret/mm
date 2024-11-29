@@ -9,7 +9,7 @@
 #include "assets/objects/object_goroiwa/object_goroiwa.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnGoroiwa*)thisx)
 
@@ -1438,7 +1438,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     CollisionPoly* tmp;
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
+          (PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }
