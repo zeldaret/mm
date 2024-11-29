@@ -673,4 +673,3 @@
     <Sample Name="VocalOhs" FileName="vocal_ohs" Offset="0x52A260" SampleRate="24000" BaseNote="C4"/>
     <Blob Name="UNACCOUNTED_530670_538CC0" Offset="0x530670" Size="0x8650"/>
 </SampleBank>
- 
