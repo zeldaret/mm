@@ -23,7 +23,7 @@ typedef enum PlayerStartMode {
     /*  0x3 */ PLAYER_START_MODE_DOOR, // Unused. Use a door immediately if one is nearby. If no door is in usable range, a softlock occurs.
     /*  0x4 */ PLAYER_START_MODE_GROTTO, // Arriving from a grotto, launched upward from the ground.
     /*  0x5 */ PLAYER_START_MODE_WARP_SONG, // OoT Leftover. Arriving from a warp song.
-    /*  0x6 */ PLAYER_START_MODE_OWL, // Arriving from either a song of soaring owl statue warp, from a song of soaring dungeon entrance warp, or from an owl statue save.
+    /*  0x6 */ PLAYER_START_MODE_OWL, // Arriving from an Owl Save or Song of Soaring (both overworld and dungeon warps).
     /*  0x7 */ PLAYER_START_MODE_KNOCKED_OVER, // Knocked over on the ground and flashing red.
     /*  0x8 */ PLAYER_START_MODE_8,
     /*  0x9 */ PLAYER_START_MODE_9,
