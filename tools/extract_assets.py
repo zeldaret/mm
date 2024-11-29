@@ -152,7 +152,8 @@ def main():
         for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
             for file in files:
                 fullPath = os.path.join(currentPath, file)
-                if file.endswith(".xml"):
+                # ZAPD can't handle audio, skip those XMLs.
+                if file.endswith(".xml") and (fullPath.find("audio") == -1):
                     xmlFiles.append(fullPath)
 
         try:
