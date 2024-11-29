@@ -115,7 +115,7 @@ typedef struct AnimSfxEntry {
 } AnimSfxEntry;          // size = 0x4
 
 /* action funcs */
-void Player_Action_0(Player* this, PlayState* play);
+void Player_Action_OwlSaveArrive(Player* this, PlayState* play);
 void Player_Action_1(Player* this, PlayState* play);
 void Player_Action_2(Player* this, PlayState* play);
 void Player_Action_3(Player* this, PlayState* play);
@@ -10947,12 +10947,12 @@ void Player_StartMode_WarpSong(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_20000000;
 }
 
-void Player_StartMode_OwlStatue(PlayState* play, Player* this) {
+void Player_StartMode_Owl(PlayState* play, Player* this) {
     if (gSaveContext.save.isOwlSave) {
-        Player_SetAction(play, this, Player_Action_0, 0);
+        Player_SetAction(play, this, Player_Action_OwlSaveArrive, 0);
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_nwait][this->modelAnimType]);
         this->stateFlags1 |= PLAYER_STATE1_20000000;
-        this->av2.actionVar2 = 0x28;
+        this->av2.actionVar2 = 40;
         gSaveContext.save.isOwlSave = false;
     } else {
         Player_SetAction(play, this, Player_Action_Idle, 0);
@@ -11037,7 +11037,7 @@ PlayerStartModeFunc sStartModeFuncs[PLAYER_START_MODE_MAX] = {
     Player_StartMode_Door,        // PLAYER_START_MODE_DOOR
     Player_StartMode_Grotto,      // PLAYER_START_MODE_GROTTO
     Player_StartMode_WarpSong,    // PLAYER_START_MODE_WARP_SONG
-    Player_StartMode_OwlStatue,   // PLAYER_START_MODE_OWL_STATUE
+    Player_StartMode_Owl,         // PLAYER_START_MODE_OWL
     Player_StartMode_KnockedOver, // PLAYER_START_MODE_KNOCKED_OVER
     Player_StartMode_WarpTag,     // PLAYER_START_MODE_8
     Player_StartMode_WarpTag,     // PLAYER_START_MODE_9
@@ -11291,7 +11291,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     startMode = PLAYER_GET_START_MODE(&this->actor);
 
-    if (((startMode == PLAYER_START_MODE_WARP_SONG) || (startMode == PLAYER_START_MODE_OWL_STATUE)) &&
+    if (((startMode == PLAYER_START_MODE_WARP_SONG) || (startMode == PLAYER_START_MODE_OWL)) &&
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
         startMode = PLAYER_START_MODE_D;
     }
@@ -14113,7 +14113,7 @@ s32 Player_UpperAction_16(Player* this, PlayState* play) {
     return true;
 }
 
-void Player_Action_0(Player* this, PlayState* play) {
+void Player_Action_OwlSaveArrive(Player* this, PlayState* play) {
     PlayerAnimation_Update(play, &this->skelAnime);
     func_808323C0(this, play->playerCsIds[PLAYER_CS_ID_ITEM_BOTTLE]);
 
