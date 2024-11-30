@@ -30,12 +30,6 @@ if __name__ == '__main__':
     seq_table_code_offset = config.variables["gSequenceTable"] - code_vram
     sample_bank_table_code_offset = config.variables["gSampleBankTable"] - code_vram
 
-    # soundfont_table_code_offset, seq_font_table_code_offset, seq_table_code_offset, sample_bank_table_code_offset = {
-    #     "n64-jp-1.0"     : (0xC97130-0xB5F000, 0xC973C0-0xB5F000, 0xC975D0-0xB5F000, 0xC97DE0-0xB5F000),
-    #     "n64-us"         : (0xC776C0-0xB3C000, 0xC77960-0xB3C000, 0xC77B70-0xB3C000, 0xC78380-0xB3C000),
-    #     "n64-eu-1.1-dbg" : (0xE0F7E0-0xC95000, 0xE0FA80-0xC95000, 0xE0FC90-0xC95000, 0xE104A0-0xC95000),
-    # }[version]
-
     # List any sequences that are "handwritten", we don't extract these by
     # default as we want these checked in for documentation.
     handwritten_sequences = (0, 1)
