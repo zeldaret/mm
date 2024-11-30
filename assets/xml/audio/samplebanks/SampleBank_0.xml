@@ -373,7 +373,7 @@
     <Sample Name="SAMPLE_0_370" FileName="Sample370" Offset="0x273AF0" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="SAMPLE_0_371" FileName="Sample371" Offset="0x275B90" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="SAMPLE_0_372" FileName="Sample372" Offset="0x277160" SampleRate="16000" BaseNote="C4"/>
-    <Sample Name="Ocarina_Looped" FileName="ocarina__looped" Offset="0x2786B0" SampleRate="32000" BaseNote="E3"/>
+    <Sample Name="OcarinaLooped" FileName="ocarina_looped" Offset="0x2786B0" SampleRate="32000" BaseNote="E3"/>
     <Sample Name="Accordion" FileName="accordion" Offset="0x27B930" SampleRate="32000" BaseNote="C4"/>
     <Sample Name="Harp1" FileName="harp1" Offset="0x280060" SampleRate="24000" BaseNote="C4"/>
     <Sample Name="Malon" FileName="malon" Offset="0x284590" SampleRate="22050" BaseNote="E3"/>
@@ -442,8 +442,8 @@
     <Sample Name="DekuBabaLunge" FileName="deku_baba_lunge" Offset="0x2F68B0" SampleRate="16000" BaseNote="C0"/>
     <Sample Name="Buzzing" FileName="buzzing" Offset="0x2F7490" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="ElectricBurst" FileName="electric_burst" Offset="0x2F87D0" SampleRate="16000" BaseNote="C4"/>
-    <Sample Name="PhantomGanoninAgon" FileName="phantom_ganonin_agon" Offset="0x2FC270" SampleRate="16000" BaseNote="C4"/>
-    <Sample Name="GoronandRedeadMoan" FileName="goronand_redead_moan" Offset="0x2FFF70" SampleRate="16000" BaseNote="C4"/>
+    <Sample Name="PhantomGanonInAgony" FileName="phantom_ganon_in_agony" Offset="0x2FC270" SampleRate="16000" BaseNote="C4"/>
+    <Sample Name="GoronAndRedeadMoan" FileName="goron_and_redead_moan" Offset="0x2FFF70" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="GoronInquiring" FileName="goron_inquiring" Offset="0x3030E0" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="GoronRecognizes" FileName="goron_recognizes" Offset="0x303670" SampleRate="16000" BaseNote="C0"/>
     <Sample Name="GoronYawn" FileName="goron_yawn" Offset="0x304E90" SampleRate="16000" BaseNote="C0"/>
@@ -641,7 +641,7 @@
     <Sample Name="SAMPLE_0_637" FileName="Sample637" Offset="0x4B4940" SampleRate="32000" BaseNote="C4"/>
     <Sample Name="Sitar" FileName="sitar" Offset="0x4B6610" SampleRate="32000" BaseNote="BF4"/>
     <Sample Name="Koto" FileName="koto" Offset="0x4B9CE0" SampleRate="32000" BaseNote="BF3"/>
-    <Sample Name="SomeMannerofDrum" FileName="some_mannerof_drum" Offset="0x4BE590" SampleRate="32000" BaseNote="C6"/>
+    <Sample Name="SomeMannerOfDrum" FileName="some_manner_of_drum" Offset="0x4BE590" SampleRate="32000" BaseNote="C6"/>
     <Sample Name="AnotherTypeofDrum" FileName="another_typeof_drum" Offset="0x4BF5B0" SampleRate="32000" BaseNote="G5"/>
     <Sample Name="QuickDrum" FileName="quick_drum" Offset="0x4C0DA0" SampleRate="24000" BaseNote="GF5"/>
     <Sample Name="Gong" FileName="gong" Offset="0x4C1CC0" SampleRate="32000" BaseNote="C4"/>
