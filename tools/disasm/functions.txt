@@ -9563,7 +9563,7 @@
     0x80A05B50:("Boss07_Top_Thrown",),
     0x80A05C88:("Boss07_Top_SetupMove",),
     0x80A05DDC:("Boss07_Top_Move",),
-    0x80A06500:("Boss07_Top_Collide",),
+    0x80A06500:("Boss07_Top_CheckTopCollision",),
     0x80A06990:("Boss07_Top_UpdateDamage",),
     0x80A06C64:("Boss07_Top_Update",),
     0x80A06E24:("Boss07_Top_Draw",),
