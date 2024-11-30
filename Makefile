@@ -488,9 +488,9 @@ venv:
 
 setup:
 	$(MAKE) -C tools
-	$(PYTHON) -m tools.buildtools.decompress_baserom -v $(VERSION)
-	$(PYTHON) -m tools.buildtools.extract_baserom $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
-	$(PYTHON) -m tools.buildtools.extract_yars $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/decompress_baserom.py -v $(VERSION)
+	$(PYTHON) tools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)

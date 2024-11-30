@@ -16,8 +16,8 @@ import crunch64
 import ipl3checksum
 import zlib
 
-from . import dmadata
-from ..version import version_config
+from buildtools import dmadata
+from version import version_config
 
 
 def decompress_zlib(data: bytes) -> bytes:

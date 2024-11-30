@@ -9,8 +9,8 @@ import argparse
 from pathlib import Path
 import sys
 
-from . import dmadata
-from ..version import version_config
+from buildtools import dmadata
+from version import version_config
 
 
 

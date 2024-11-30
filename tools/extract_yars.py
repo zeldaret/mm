@@ -21,8 +21,7 @@ import dataclasses
 from pathlib import Path
 import struct
 
-from ..version import version_config
-
+from version import version_config
 
 PRINT_XML = False
 
