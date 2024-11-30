@@ -1,3 +1,4 @@
+<!-- This file is only for extraction of vanilla data. For other purposes see assets/audio/samplebanks/ -->
 <SampleBank Name="SampleBank_0" Index="0">
     <Sample Name="SAMPLE_0_0" FileName="Sample000" Offset="0x000000" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="InsectChirrup" FileName="insect_chirrup" Offset="0x0006E0" SampleRate="16000" BaseNote="C4"/>
