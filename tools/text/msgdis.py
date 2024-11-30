@@ -3,11 +3,19 @@
 #   message_data_static disassembler/decompiler
 #
 
-import argparse, re, struct
+import struct
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple, TypeVar
 
-from ..version import version_config
+from dataclasses import dataclass
+
+@dataclass
+class GameVersionInfo:
+    # Vram location of the code segment
+    code_vram : int
+    # Variables dict from config
+    variables : Dict[str, int]
+
 
 T = TypeVar("T")
 
@@ -3057,7 +3065,7 @@ class MessageEntry:
         return out
 
 def collect_messages(message_tables : List[Optional[MessageTableDesc]], baserom_segments_dir : Path, 
-                     config : version_config.VersionConfig, code_vram : int, code_bin : bytes):
+                     version_info : GameVersionInfo, code_vram : int, code_bin : bytes):
 
     messages : Dict[int,MessageEntry] = {}
 
@@ -3068,7 +3076,7 @@ def collect_messages(message_tables : List[Optional[MessageTableDesc]], baserom_
             continue
 
         baserom_seg = (baserom_segments_dir / desc.seg_name).read_bytes()
-        code_offset = config.variables[desc.table_name] - code_vram
+        code_offset = version_info.variables[desc.table_name] - code_vram
 
         if desc.parent is None:
             # Complete table
@@ -3123,34 +3131,10 @@ def collect_messages(message_tables : List[Optional[MessageTableDesc]], baserom_
 
     return messages
 
-def main():
-    parser = argparse.ArgumentParser(description="Extract text from the baserom into .h files")
-    parser.add_argument(
-        "baserom_segments_dir",
-        type=Path,
-        help="Directory of uncompressed ROM segments",
-    )
-    parser.add_argument(
-        "output_dir",
-        type=Path,
-        help="Output directory to place files in",
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        help="version to process",
-        default="n64-us",
-    )
-    args = parser.parse_args()
+def extract(version_info: GameVersionInfo, baserom_segments_dir : Path, output_dir: Path):
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    baserom_segments_dir : Path = args.baserom_segments_dir
-    version : str = args.version
-    output_dir : Path = args.output_dir
-
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-
-    config = version_config.load_version_config(version)
-    code_vram = config.dmadata_segments["code"].vram
+    code_vram = version_info.code_vram
 
     code_bin = (baserom_segments_dir / "code").read_bytes()
 
@@ -3160,11 +3144,11 @@ def main():
     message_tables : MessageTableDesc = [None for _ in range(1)] # EN
     message_table_staff : MessageTableDesc = None
 
-    message_tables[0]  = MessageTableDesc("sMessageTableNES",   "message_data_static", nes_decoder, None)
+    message_tables[0]  = MessageTableDesc("sMessageTableNES", "message_data_static", nes_decoder, None)
     message_table_staff = MessageTableDesc("sMessageTableCredits", "staff_message_data_static", credits_decoder, None)
 
-    messages = collect_messages(message_tables, baserom_segments_dir, config, code_vram, code_bin)
-    staff_messages = collect_messages([message_table_staff], baserom_segments_dir, config, code_vram, code_bin)
+    messages = collect_messages(message_tables, baserom_segments_dir, version_info, code_vram, code_bin)
+    staff_messages = collect_messages([message_table_staff], baserom_segments_dir, version_info, code_vram, code_bin)
 
     message_data = []
 
@@ -3180,5 +3164,3 @@ def main():
     (output_dir / "message_data.h").write_text(message_data)
     (output_dir / "message_data_staff.h").write_text(message_data_staff)
 
-if __name__ == "__main__":
-    main()

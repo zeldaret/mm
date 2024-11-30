@@ -160,7 +160,6 @@ SCHC        := $(PYTHON) tools/buildtools/schc.py
 SCHC_FLAGS  :=
 
 # Audio tools
-AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 SAMPLECONV    := tools/audio/sampleconv/sampleconv
 SBC           := tools/audio/sbc
 SFC           := tools/audio/sfc
@@ -493,14 +492,10 @@ setup:
 	$(PYTHON) -m tools.buildtools.extract_baserom $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
 	$(PYTHON) -m tools.buildtools.extract_yars $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
-# TODO this is a temporary rule for testing audio, to be removed
-setup-audio:
-	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
-
 assets:
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
-	$(PYTHON) -m tools.text.msgdis $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
-	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
+	$(PYTHON) tools/extract_audio.py -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
 disasm:
