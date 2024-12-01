@@ -2,6 +2,19 @@
  * File: z_boss_07.c
  * Overlay: ovl_Boss_07
  * Description: Majora
+ *
+ * This actor is responsible for handling everything related to the final boss battle with Majora's Mask and its various
+ * forms. To be more specific, this actor handles the following things:
+ * - Majora's Mask, including the dynamically-moving tentacles
+ * - Majora's Incarnation
+ * - Majora's Wrath, including the dynamically-moving whips
+ * - The floating boss remains (Odolwa, Goht, Gyorg, and Twinmold) that fly around and attack the player
+ * - The projectiles that both the boss remains and Majora's Incarnation fire at the player
+ * - The spinning tops that Majora's Wrath can release
+ * - The afterimages that follow Majora's Incarnation around as it runs
+ * - An invisible "battle handler" that updates the flame effects, manages the lens flare, handles the cutscene where
+ *   the boss remains are activated, etc.
+ * - An invisible "battle initializer" that spawns Majora's Mask and the "battle handler", resets the effects, etc.
  */
 
 #include "prevent_bss_reordering.h"
