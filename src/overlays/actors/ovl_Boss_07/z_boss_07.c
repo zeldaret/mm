@@ -1676,7 +1676,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                 }
 
                 if (this->cutsceneTimer == 137) {
-                    TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                    TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                            Lib_SegmentedToVirtual(&gMajorasWrathTitleCardTex), 160, 180, 128, 40);
                 }
 
@@ -4224,7 +4224,7 @@ void Boss07_Incarnation_IntroCutscene(Boss07* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 45) {
-                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                        Lib_SegmentedToVirtual(&gMajorasIncarnationTitleCardTex), 160, 180, 128, 40);
             }
 
@@ -6085,7 +6085,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
                 Math_ApproachF(&this->actor.world.pos.y, 350.0f, 0.03f, 2.0f);
 
                 if (this->cutsceneTimer == 55) {
-                    TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                    TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                            Lib_SegmentedToVirtual(&gMajorasMaskTitleCardTex), 160, 180, 128, 40);
                 }
 
@@ -7035,7 +7035,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
             this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
             this->bgCheckTimer = 100;
             this->generalCollider.base.colMaterial = COL_MATERIAL_HIT3;
-            this->actor.flags |= (ACTOR_FLAG_200 | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags |= (ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_ATTENTION_ENABLED);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
 
