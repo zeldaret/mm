@@ -503,12 +503,12 @@ ConveyorSpeed sPlayerConveyorSpeedIndex;
 s16 sPlayerIsOnFloorConveyor;
 s16 sPlayerConveyorYaw;
 f32 sPlayerYDistToFloor;
-FloorProperty sPlayerPrevFloorProperty;
-s32 sPlayerShapeYawToTouchedWall;
-s32 sPlayerWorldYawToTouchedWall;
+FloorProperty sPrevFloorProperty;
+s32 sShapeYawToTouchedWall;
+s32 sWorldYawToTouchedWall;
 s16 sFloorPitchShape;
 s32 sSavedCurrentMask;
-Vec3f sPlayerInteractWallCheckResult;
+Vec3f sInteractWallCheckResult;
 f32 D_80862B3C;
 FloorEffect sPlayerFloorEffect;
 Input* sPlayerControlInput;
@@ -4325,7 +4325,7 @@ void Player_SetParallel(Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_PARALLEL;
 
     if (!(this->skelAnime.moveFlags & ANIM_FLAG_80) && (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-        (sPlayerShapeYawToTouchedWall < 0x2000)) {
+        (sShapeYawToTouchedWall < 0x2000)) {
         // snap to the wall
         this->yaw = this->actor.shape.rot.y = this->actor.wallYaw + 0x8000;
     }
@@ -7167,8 +7167,8 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
         s32 var_v1;
 
         if ((this->transformation != PLAYER_FORM_DEKU) &&
-            ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) || (sPlayerPrevFloorProperty == FLOOR_PROPERTY_2))) {
-            if (sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) {
+            ((sPrevFloorProperty == FLOOR_PROPERTY_1) || (sPrevFloorProperty == FLOOR_PROPERTY_2))) {
+            if (sPrevFloorProperty == FLOOR_PROPERTY_1) {
                 var_v1 = 4;
             } else {
                 var_v1 = 5;
@@ -7418,7 +7418,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                     temp_fv1_2 = this->actor.world.pos.y -
                                  BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp88, &this->actor, &sp70);
                     if ((temp_fv1_2 >= -11.0f) && (temp_fv1_2 <= 0.0f)) {
-                        var_v1_2 = (sPlayerPrevFloorProperty == FLOOR_PROPERTY_6);
+                        var_v1_2 = (sPrevFloorProperty == FLOOR_PROPERTY_6);
                         if (!var_v1_2) {
                             if (SurfaceType_GetWallFlags(&play->colCtx, entityPoly, entityBgId) & WALL_FLAG_3) {
                                 var_v1_2 = true;
@@ -7495,7 +7495,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if (sPlayerPrevFloorProperty == FLOOR_PROPERTY_8) {
+        if (sPrevFloorProperty == FLOOR_PROPERTY_8) {
             this->actor.world.pos.x = this->actor.prevPos.x;
             this->actor.world.pos.z = this->actor.prevPos.z;
             return;
@@ -7511,7 +7511,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+        if ((sPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
             ((this->skelAnime.moveFlags & ANIM_FLAG_8) && func_808381F8(play, this))) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
             if (this->speedXZ > 0.0f) {
@@ -7530,13 +7530,13 @@ void func_8083827C(Player* this, PlayState* play) {
             ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) &&
             (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
-                if ((sPlayerPrevFloorProperty != FLOOR_PROPERTY_6) && (sPlayerPrevFloorProperty != FLOOR_PROPERTY_9) &&
+                if ((sPrevFloorProperty != FLOOR_PROPERTY_6) && (sPrevFloorProperty != FLOOR_PROPERTY_9) &&
                     (sPlayerYDistToFloor > 20.0f) && (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->speedXZ > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
                                  CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) ||
-                                ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_11) &&
+                                ((sPrevFloorProperty == FLOOR_PROPERTY_11) &&
                                  (this->transformation != PLAYER_FORM_GORON) &&
                                  (this->transformation != PLAYER_FORM_DEKU))) {
 
@@ -7559,7 +7559,7 @@ void func_8083827C(Player* this, PlayState* play) {
         }
 
         // Checking if the ledge is tall enough for Player to hang from
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_9) || (sPlayerYDistToFloor <= this->ageProperties->unk_34) ||
+        if ((sPrevFloorProperty == FLOOR_PROPERTY_9) || (sPlayerYDistToFloor <= this->ageProperties->unk_34) ||
             !func_80837DEC(this, play)) {
             Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_normal_landing_wait);
         }
@@ -9773,7 +9773,7 @@ void func_8083DF38(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
 
 s32 Player_ActionHandler_5(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) &&
-        (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sPlayerShapeYawToTouchedWall < 0x3000)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sShapeYawToTouchedWall < 0x3000)) {
         if ((this->speedXZ > 0.0f) && func_8083D860(this, play)) {
             return true;
         }
@@ -10698,8 +10698,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
 
     if (arg3 <= *arg2) {
         // If interacting with a wall and close to facing it
-        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-             (sPlayerWorldYawToTouchedWall < 0x1C00)) ||
+        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sWorldYawToTouchedWall < 0x1C00)) ||
             // or, impacting something's cylinder
             (((this->cylinder.base.ocFlags1 & OC1_HIT) && (cylinderOc = this->cylinder.base.oc) != NULL) &&
              // and that something is a Beaver Race ring,
@@ -11645,7 +11644,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
     u32 updBgCheckInfoFlags;
     s32 spAC = (Player_Action_35 == this->actionFunc) && (this->unk_397 == 4);
 
-    sPlayerPrevFloorProperty = this->floorProperty;
+    sPrevFloorProperty = this->floorProperty;
 
     wallCheckRadius = this->ageProperties->wallCheckRadius;
     ceilingCheckHeight = this->ageProperties->ceilingCheckHeight;
@@ -11749,7 +11748,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
         sInteractWallCheckOffset.z = this->ageProperties->wallCheckRadius + 10.0f;
 
         if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &wallPoly, &wallBgId,
-                                     &sPlayerInteractWallCheckResult)) {
+                                     &sInteractWallCheckResult)) {
             this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_WALL_INTERACT;
 
             if (this->actor.wallPoly != wallPoly) {
@@ -11761,12 +11760,12 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
 
         yawDiff = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
         sPlayerTouchedWallFlags = SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
-        sPlayerShapeYawToTouchedWall = ABS_ALT(yawDiff);
+        sShapeYawToTouchedWall = ABS_ALT(yawDiff);
 
         yawDiff = BINANG_SUB(this->yaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
-        sPlayerWorldYawToTouchedWall = ABS_ALT(yawDiff);
+        sWorldYawToTouchedWall = ABS_ALT(yawDiff);
 
-        speedScale = sPlayerWorldYawToTouchedWall * 0.00008f;
+        speedScale = sWorldYawToTouchedWall * 0.00008f;
 
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (speedScale >= 1.0f)) {
             this->unk_B50 = R_RUN_SPEED_LIMIT / 100.0f;
@@ -11777,7 +11776,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             }
         }
 
-        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sPlayerShapeYawToTouchedWall < 0x3000)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sShapeYawToTouchedWall < 0x3000)) {
             CollisionPoly* wallPoly = this->actor.wallPoly;
 
             if (ABS_ALT(wallPoly->normal.y) < 600) {
@@ -11815,7 +11814,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
                     sInteractWallCheckOffset.y = (ledgePosY + 5.0f) - this->actor.world.pos.y;
 
                     if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &poly, &bgId,
-                                                 &sPlayerInteractWallCheckResult) &&
+                                                 &sInteractWallCheckResult) &&
                         (wallYawDiff = (s32)(this->actor.wallYaw - Math_Atan2S_XY(poly->normal.z, poly->normal.x)),
                          ABS_ALT(wallYawDiff) < 0x4000) &&
                         !SurfaceType_CheckWallFlag1(&play->colCtx, poly, bgId)) {
@@ -18044,10 +18043,8 @@ void Player_Action_SlideOnSlope(Player* this, PlayState* play) {
         return;
     }
 
-    if (this->transformation == PLAYER_FORM_GORON) {
-        if (Player_ActionHandler_6(this, play)) {
-            return;
-        }
+    if ((this->transformation == PLAYER_FORM_GORON) && Player_ActionHandler_6(this, play)) {
+        return;
     }
 
     floorPoly = this->actor.floorPoly;

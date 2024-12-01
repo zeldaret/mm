@@ -1260,9 +1260,9 @@ typedef struct Player {
     /* 0xADF */ s8 controlStickSpinAngles[4]; // Stores a modified version of the control stick angle for the last 4 frames. Used for checking spins.
     /* 0xAE3 */ s8 controlStickDirections[4]; // Stores the control stick direction (relative to shape yaw) for the last 4 frames. See `PlayerStickDirection`.
     /* 0xAE7 */ union {
-        s8 facingUpSlope; // Player_Action_SlideOnSlope: facing uphill when sliding on a slope
         s8 actionVar1;
         s8 startedAnim; // Player_Action_TimeTravelEnd: Started playing the animation that was previously frozen
+        s8 facingUpSlope; // Player_Action_SlideOnSlope: Facing uphill when sliding on a slope
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAE8 */ union {
         s16 actionVar2;
