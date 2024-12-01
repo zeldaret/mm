@@ -2707,7 +2707,7 @@
     0x8013E5CC:("SubS_LineSegVsPlane",),
     0x8013E640:("SubS_FindActorCustom",),
     0x8013E748:("SubS_OfferTalkExchangeCustom",),
-    0x8013E7C0:("SubS_ArePlayerAndActorFacing ",),
+    0x8013E7C0:("SubS_ArePlayerAndActorFacing",),
     0x8013E8F8:("SubS_OfferTalkExchangeFacing",),
     0x8013E950:("SubS_TrackPointStep",),
     0x8013EC10:("Rumble_Update",),
