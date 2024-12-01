@@ -2797,7 +2797,7 @@ void Boss07_Wrath_Damaged(Boss07* this, PlayState* play) {
     }
 }
 
-void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, PlayState* play) {
+void Boss07_Wrath_CheckWhipCollisions(Vec3f* whipPos, f32 tension, Boss07* this, PlayState* play) {
     s32 i;
     PlayerImpactType playerImpactType = -1;
     Player* player = GET_PLAYER(play);
@@ -2822,9 +2822,11 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                     }
                 }
             }
+
             prop = prop->next;
         }
     }
+
     if ((tension >= 50.0f) && (this->whipCollisionTimer == 0) &&
         (!(player->stateFlags3 & PLAYER_STATE3_100) ||
          (this->subAction == MAJORAS_WRATH_ATTACK_SUB_ACTION_SPIN_ATTACK))) {
@@ -2845,22 +2847,24 @@ void Boss07_Wrath_WhipCollisionCheck(Vec3f* whipPos, f32 tension, Boss07* this, 
                     !(player->stateFlags3 & PLAYER_STATE3_1000) && (this->actor.xzDistToPlayer >= 520.0f) &&
                     (this->actor.xzDistToPlayer <= 900.0f)) {
                     if (play->grabPlayer(play, player)) {
-                        f32 dx1;
-                        f32 dy1;
-                        f32 dz1;
-                        f32 dxz1;
+                        f32 dx;
+                        f32 dy;
+                        f32 dz;
+                        f32 distToPlayerXZ;
 
                         player->actor.parent = &this->actor;
                         AudioSfx_PlaySfx(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4,
                                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                         this->whipWrapStartIndex = 0;
                         this->whipWrapEndOffset = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
-                        dx1 = player->actor.world.pos.x - this->rightWhip.basePos.x;
-                        dy1 = player->actor.world.pos.y - this->rightWhip.basePos.y + 50.0f;
-                        dz1 = player->actor.world.pos.z - this->rightWhip.basePos.z;
-                        dxz1 = sqrtf(SQ(dx1) + SQ(dz1));
-                        this->whipWrapRotY = Math_Atan2F_XY(dz1, dx1);
-                        this->whipWrapRotX = -Math_Atan2F_XY(dxz1, dy1);
+
+                        dx = player->actor.world.pos.x - this->rightWhip.basePos.x;
+                        dy = player->actor.world.pos.y - this->rightWhip.basePos.y + 50.0f;
+                        dz = player->actor.world.pos.z - this->rightWhip.basePos.z;
+                        distToPlayerXZ = sqrtf(SQ(dx) + SQ(dz));
+
+                        this->whipWrapRotY = Math_Atan2F_XY(dz, dx);
+                        this->whipWrapRotX = -Math_Atan2F_XY(distToPlayerXZ, dy);
                         this->actionFunc = Boss07_Wrath_GrabPlayer;
                         this->frameCounter = 0;
                         this->rightWhip.tension = 0.0f;
@@ -3158,8 +3162,8 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
         sWhipLength = 45;
     }
 
-    Boss07_Wrath_WhipCollisionCheck(this->rightWhip.pos, this->rightWhip.tension, this, play);
-    Boss07_Wrath_WhipCollisionCheck(this->leftWhip.pos, this->leftWhip.tension, this, play);
+    Boss07_Wrath_CheckWhipCollisions(this->rightWhip.pos, this->rightWhip.tension, this, play);
+    Boss07_Wrath_CheckWhipCollisions(this->leftWhip.pos, this->leftWhip.tension, this, play);
 
     if (this->disableCollisionTimer != 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyColliderElements); i++) {

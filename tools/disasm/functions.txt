@@ -9480,7 +9480,7 @@
     0x809F91D4:("Boss07_Wrath_Stunned",),
     0x809F9280:("Boss07_Wrath_SetupDamaged",),
     0x809F93DC:("Boss07_Wrath_Damaged",),
-    0x809F94AC:("Boss07_Wrath_WhipCollisionCheck",),
+    0x809F94AC:("Boss07_Wrath_CheckWhipCollisions",),
     0x809F99C4:("Boss07_Wrath_UpdateDamage",),
     0x809F9CEC:("Boss07_Wrath_Thaw",),
     0x809F9E94:("Boss07_UpdateDamageEffects",),
