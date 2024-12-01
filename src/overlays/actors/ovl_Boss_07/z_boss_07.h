@@ -18,6 +18,7 @@ struct Boss07;
 #define MAJORAS_WRATH_SHADOW_TEX_SIZE ((s32)sizeof(u8[MAJORAS_WRATH_SHADOW_TEX_HEIGHT][MAJORAS_WRATH_SHADOW_TEX_WIDTH]))
 
 #define MAJORA_GET_TYPE(thisx) ((thisx)->params)
+#define MAJORA_PARAMS(type) (type)
 
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 

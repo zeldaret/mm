@@ -8,6 +8,7 @@ struct Boss01;
 
 #define ODOLWA_GET_TYPE(thisx) ((thisx)->params)
 #define ODOLWA_GET_AFTERIMAGE_DESPAWN_TIMER(thisx) ((thisx)->world.rot.z)
+#define ODOLWA_PARAMS(type) (type)
 
 #define ODOLWA_SHADOW_TEX_WIDTH 64
 #define ODOLWA_SHADOW_TEX_HEIGHT 64

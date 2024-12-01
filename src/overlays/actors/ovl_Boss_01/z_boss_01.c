@@ -1224,7 +1224,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
                     pos.z = Rand_CenteredFloat(200.0f) + (this->actor.world.pos.z + offset.z);
                     Audio_PlaySfx(NA_SE_PL_DEKUNUTS_DROP_BOMB);
                     Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_01, pos.x, 1200.0f, pos.z, 0, Rand_ZeroFloat(0x10000),
-                                0, ODOLWA_TYPE_BUG);
+                                0, ODOLWA_PARAMS(ODOLWA_TYPE_BUG));
                 }
             }
 
@@ -1424,7 +1424,7 @@ void Boss01_Wait(Boss01* this, PlayState* play) {
             case ODOLWA_WAIT_ARM_SWING_DANCE:
             case ODOLWA_WAIT_THRUST_ATTACK:
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_01, pos.x, pos.y, pos.z, 0, Rand_ZeroFloat(0x10000), 0,
-                            ODOLWA_TYPE_BUG);
+                            ODOLWA_PARAMS(ODOLWA_TYPE_BUG));
                 break;
 
             case ODOLWA_WAIT_SIDE_TO_SIDE_DANCE:
@@ -2458,10 +2458,10 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
     if (((this->frameCounter & (this->afterimageSpawnFrameMask - 1)) == 0) && (this->afterimageSpawnFrameMask != 0)) {
         s16 afterimageTimer = (this->actionFunc == Boss01_SpinAttack) ? 4 : 10;
         s32 pad;
-        Boss01* child =
-            (Boss01*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BOSS_01, this->actor.world.pos.x,
-                                        this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
-                                        this->actor.world.rot.y, afterimageTimer, ODOLWA_TYPE_AFTERIMAGE);
+        Boss01* child = (Boss01*)Actor_SpawnAsChild(
+            &play->actorCtx, &this->actor, play, ACTOR_BOSS_01, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, afterimageTimer,
+            ODOLWA_PARAMS(ODOLWA_TYPE_AFTERIMAGE));
 
         if (child != NULL) {
             for (i = 0; i < ODOLWA_LIMB_MAX; i++) {
@@ -2804,22 +2804,22 @@ static s8 sLimbToBodyParts[] = {
 void Boss01_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss01* this = THIS;
     PlayState* play = play2;
-    s8 index;
+    s8 bodyPartIndex;
     Vec3f pos;
 
     if (limbIndex == ODOLWA_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 
-    index = sLimbToBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
-        Matrix_MultZero(&this->bodyPartsPos[index]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
     }
 
-    index = sLimbToColliderBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
-        Matrix_MultVec3f(&sLimbColliderOffsets[index], &pos);
-        Boss01_SetColliderSphere(index, &this->bodyCollider, &pos);
+    bodyPartIndex = sLimbToColliderBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultVec3f(&sLimbColliderOffsets[bodyPartIndex], &pos);
+        Boss01_SetColliderSphere(bodyPartIndex, &this->bodyCollider, &pos);
     }
 
     if (limbIndex == ODOLWA_LIMB_PELVIS) {

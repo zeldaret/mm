@@ -1313,7 +1313,7 @@ void Boss07_Wrath_CheckBombWhips(Boss07* this, PlayState* play) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
-        if (explosive->params == 1) {
+        if (explosive->params == BOMB_TYPE_EXPLOSION) {
             Boss07_Wrath_BombWhip(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.velocity);
             Boss07_Wrath_BombWhip(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.velocity);
         }
@@ -1339,10 +1339,10 @@ static Vec3s sRemainsEndTarget[MAJORA_REMAINS_TYPE_MAX] = {
 
 void Boss07_Init(Actor* thisx, PlayState* play2) {
     static s16 sMajoraRemainsParams[MAJORA_REMAINS_TYPE_MAX] = {
-        MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_ODOLWA,
-        MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_GYORG,
-        MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_GOHT,
-        MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_TWINMOLD,
+        MAJORA_PARAMS(MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_ODOLWA),
+        MAJORA_PARAMS(MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_GYORG),
+        MAJORA_PARAMS(MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_GOHT),
+        MAJORA_PARAMS(MAJORA_TYPE_REMAINS + MAJORA_REMAINS_TYPE_TWINMOLD),
     };
     PlayState* play = play2;
     Boss07* this = THIS;
@@ -1362,7 +1362,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     if (MAJORA_GET_TYPE(&this->actor) == MAJORA_TYPE_BATTLE_INIT) {
         this->actor.params = MAJORA_TYPE_MASK;
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_BATTLE_HANDLER);
+                    this->actor.world.pos.z, 0, 0, 0, MAJORA_PARAMS(MAJORA_TYPE_BATTLE_HANDLER));
         play->specialEffects = (void*)sMajoraEffects;
 
         for (i = 0; i < MAJORA_EFFECT_COUNT; i++) {
@@ -2683,7 +2683,7 @@ void Boss07_Wrath_ThrowTop(Boss07* this, PlayState* play) {
 
     if (this->frameCounter == 8) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_TOP);
+                    this->actor.world.pos.z, 0, 0, 0, MAJORA_PARAMS(MAJORA_TYPE_TOP));
     }
 
     //! FAKE:
@@ -2816,7 +2816,7 @@ void Boss07_Wrath_CheckWhipCollisions(Vec3f* whipPos, f32 tension, Boss07* this,
                     dz = prop->world.pos.z - whipPos[i].z;
 
                     if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (KREG(38) + 60.0f)) {
-                        ((ObjTsubo*)prop)->unk_19B = 1;
+                        ((ObjTsubo*)prop)->unk_19B = true;
                         Boss07_Wrath_SpawnDustAtPos(play, &prop->world.pos, 10);
                     }
                 }
@@ -3308,7 +3308,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     Vec3f handForce;
     Vec3f shapeForce;
     Vec3f tensForce;
-    Vec3f* vel0 = velocity;
+    Vec3f* firstVelocity = velocity;
 
     // sets the fixed length of each whip segment
     baseSegVec.z = 22.0f * scale;
@@ -3346,7 +3346,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
 
     pos++;
     rot++;
-    velocity = vel0 + 1;
+    velocity = firstVelocity + 1;
     j = 0;
 
     for (i = 1; i < (s16)sWhipLength; i++, velocity++, pos++, rot++) {
@@ -3380,7 +3380,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
 
         // calculates the rotation angles from the previous point
         segYaw = Math_Atan2F_XY(tempPos.z, tempPos.x);
-        segPitch = -Math_Atan2F_XY(sqrtf(SQ(tempPos.x) + SQ(tempPos.z)), tempPos.y);
+        segPitch = -Math_Atan2F_XY(sqrtf(SQXZ(tempPos)), tempPos.y);
         (rot - 1)->y = segYaw;
         (rot - 1)->x = segPitch;
 
@@ -3590,24 +3590,24 @@ static s8 sWrathLimbToBodyParts[] = {
 void Boss07_Wrath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sWhipOffset = { 1000.0f, 100.0f, 0.0f };
     Boss07* this = THIS;
-    s8 index;
+    s8 bodyPartIndex;
     Vec3f colliderPos;
     MtxF curMtxF;
 
-    index = sWrathLimbToBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
-        Matrix_MultZero(&this->bodyPartsPos[index]);
+    bodyPartIndex = sWrathLimbToBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
     }
 
-    index = sWrathLimbToColliderBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
+    bodyPartIndex = sWrathLimbToColliderBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
         if (this->disableCollisionTimer != 0) {
             Matrix_MultVecZ(100000.0f, &colliderPos);
         } else {
-            Matrix_MultVec3f(&sWrathLimbColliderOffsets[index], &colliderPos);
+            Matrix_MultVec3f(&sWrathLimbColliderOffsets[bodyPartIndex], &colliderPos);
         }
 
-        Boss07_SetColliderSphere(index, &this->bodyCollider, &colliderPos);
+        Boss07_SetColliderSphere(bodyPartIndex, &this->bodyCollider, &colliderPos);
     }
 
     if (limbIndex == MAJORAS_WRATH_LIMB_HEAD) {
@@ -4471,13 +4471,13 @@ void Boss07_Incarnation_Attack(Boss07* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationLeftHandPos.x,
                     this->incarnationLeftHandPos.y, this->incarnationLeftHandPos.z, 0, 0, 0,
-                    MAJORA_TYPE_PROJECTILE_INCARNATION);
+                    MAJORA_PARAMS(MAJORA_TYPE_PROJECTILE_INCARNATION));
     }
 
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->incarnationRightHandPos.x,
                     this->incarnationRightHandPos.y, this->incarnationRightHandPos.z, 0, 0, 0,
-                    MAJORA_TYPE_PROJECTILE_INCARNATION);
+                    MAJORA_PARAMS(MAJORA_TYPE_PROJECTILE_INCARNATION));
     }
 
     if (this->timers[0] == 0) {
@@ -4756,7 +4756,7 @@ void Boss07_Incarnation_DeathCutscene(Boss07* this, PlayState* play) {
 
             if (this->cutsceneTimer == 40) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, this->subCamId, MAJORA_TYPE_WRATH);
+                            this->actor.world.pos.z, 0, 0, this->subCamId, MAJORA_PARAMS(MAJORA_TYPE_WRATH));
                 Actor_Kill(&this->actor);
             }
             break;
@@ -4949,7 +4949,7 @@ void Boss07_Incarnation_Update(Actor* thisx, PlayState* play2) {
         Boss07* afterimage =
             (Boss07*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BOSS_07, this->actor.world.pos.x,
                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
-                                        this->actor.world.rot.y, 7, MAJORA_TYPE_INCARNATION_AFTERIMAGE);
+                                        this->actor.world.rot.y, 7, MAJORA_PARAMS(MAJORA_TYPE_INCARNATION_AFTERIMAGE));
 
         if (afterimage != NULL) {
             for (i = 0; i < MAJORAS_INCARNATION_LIMB_MAX; i++) {
@@ -5104,26 +5104,26 @@ static s8 sIncarnationLimbToBodyParts[] = {
 void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
     Vec3f colliderPos;
-    s8 index;
+    s8 bodyPartIndex;
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_EYESTALK) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 
-    index = sIncarnationLimbToBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
-        Matrix_MultZero(&this->bodyPartsPos[index]);
+    bodyPartIndex = sIncarnationLimbToBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
     }
 
-    index = sIncarnationLimbToColliderBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
+    bodyPartIndex = sIncarnationLimbToColliderBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
         if (this->disableCollisionTimer != 0) {
             Matrix_MultVecZ(100000.0f, &colliderPos);
         } else {
-            Matrix_MultVec3f(&sIncarnationLimbColliderOffsets[index], &colliderPos);
+            Matrix_MultVec3f(&sIncarnationLimbColliderOffsets[bodyPartIndex], &colliderPos);
         }
 
-        Boss07_SetColliderSphere(index, &this->bodyCollider, &colliderPos);
+        Boss07_SetColliderSphere(bodyPartIndex, &this->bodyCollider, &colliderPos);
     }
 
     if (limbIndex == MAJORAS_INCARNATION_LIMB_RIGHT_FOOT) {
@@ -5142,10 +5142,11 @@ void Boss07_Incarnation_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
         Matrix_MultZero(&this->incarnationLeftHandPos);
     }
 
-    index = sIncarnationLimbToPumpBodyParts[limbIndex];
-    if (index > BODYPART_NONE) {
-        Matrix_Scale(this->incarnationIntroBodyPartsScale[index], this->incarnationIntroBodyPartsScale[index],
-                     this->incarnationIntroBodyPartsScale[index], MTXMODE_APPLY);
+    bodyPartIndex = sIncarnationLimbToPumpBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_Scale(this->incarnationIntroBodyPartsScale[bodyPartIndex],
+                     this->incarnationIntroBodyPartsScale[bodyPartIndex],
+                     this->incarnationIntroBodyPartsScale[bodyPartIndex], MTXMODE_APPLY);
     }
 }
 
@@ -5872,7 +5873,7 @@ void Boss07_Mask_IntroCutscene(Boss07* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->cutsceneTimer++;
-    SREG(90) = this->motionBlurAlpha;
+    R_MOTION_BLUR_ALPHA = this->motionBlurAlpha;
     this->maskEyeTexIndex = MAJORAS_MASK_EYE_DULL;
 
     switch (this->cutsceneState) {
@@ -6232,7 +6233,7 @@ void Boss07_Mask_DeathCutscene(Boss07* this, PlayState* play) {
             FALLTHROUGH;
         case MAJORAS_MASK_DEATH_CS_STATE_SPAWN_INCARNATION:
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
-                        this->subCamId, MAJORA_TYPE_INCARNATION);
+                        this->subCamId, MAJORA_PARAMS(MAJORA_TYPE_INCARNATION));
             Actor_Kill(&this->actor);
             break;
 
@@ -6472,7 +6473,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
     Vec3f baseSegVec = { 0.0f, 0.0f, 0.0f };
     Vec3f segVec;
     Vec3f shapeForce;
-    Vec3f* vel0 = velocity;
+    Vec3f* firstVelocity = velocity;
 
     if (this->tentacleState != MAJORAS_MASK_TENTACLE_STATE_DEFAULT) {
         for (i = 0; i < MAJORA_TENTACLE_LENGTH; i++) {
@@ -6505,7 +6506,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
 
     pos++;
     rot++;
-    velocity = vel0 + 1;
+    velocity = firstVelocity + 1;
     baseSegVec.x = baseSegVec.y = 0.0f;
     baseSegVec.z = lengthScale * 23.0f;
 
@@ -6539,7 +6540,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
 
         // calculates the rotation angles from the previous point
         segYaw = Math_Atan2F_XY(tempPos.z, tempPos.x);
-        temp = sqrtf(SQ(tempPos.x) + SQ(tempPos.z));
+        temp = sqrtf(SQXZ(tempPos));
         segPitch = -Math_Atan2F_XY(temp, tempPos.y);
         (rot - 1)->y = segYaw;
         (rot - 1)->x = segPitch;
@@ -7035,7 +7036,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
             this->subAction = REMAINS_MOVE_SUB_ACTION_FLY;
             this->bgCheckTimer = 100;
             this->generalCollider.base.colMaterial = COL_MATERIAL_HIT3;
-            this->actor.flags |= (ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR);
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             break;
 
@@ -7147,7 +7148,7 @@ void Boss07_Remains_Move(Boss07* this, PlayState* play) {
 
         if (Boss07_ArePlayerAndActorFacing(this, play) && (sMajorasMask->actionFunc != Boss07_Mask_FireBeam)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, MAJORA_TYPE_PROJECTILE_REMAINS);
+                        this->actor.world.pos.z, 0, 0, 0, MAJORA_PARAMS(MAJORA_TYPE_PROJECTILE_REMAINS));
         }
     }
 
