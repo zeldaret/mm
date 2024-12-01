@@ -1747,7 +1747,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
 
 void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
     s32 i;
-    s32 spC0 = 0;
+    s32 isCamCloseUp = false;
     Vec3f subCamEyeOffset;
     Vec3f subCamAtOffset = { 0.0f, 0.0f, 0.0f };
     // clang-format off
@@ -1858,8 +1858,9 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
             FALLTHROUGH;
         case MAJORAS_WRATH_DEATH_CS_STATE_FLOAT:
             if ((this->cutsceneTimer >= (u32)(sREG(90) + 260)) && (this->cutsceneTimer < (u32)(sREG(91) + 370))) {
-                spC0 = KREG(14) + 1;
+                isCamCloseUp = KREG(14) + 1;
                 this->subCamRotY = this->actor.shape.rot.y * M_PIf / 0x8000;
+
                 subCamEyeOffset.x = 0.0f;
                 subCamEyeOffset.y = this->subCamEyeModY + -190.0f;
                 subCamEyeOffset.z = sREG(17) + 390.0f - 380.0f;
@@ -1954,19 +1955,19 @@ void Boss07_Wrath_DeathCutscene(Boss07* this, PlayState* play) {
                 Vec3f hahenVelocity = { 0.0f, 10.0f, 0.0f };
                 Vec3f hahenAccel = { 0.0f, -0.5f, 0.0f };
                 Vec3f hahenPos;
-                f32 sp68;
+                f32 cameraShakeMagnitude;
 
                 Audio_PlaySfx(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
 
-                if (spC0 == 0) {
-                    sp68 = 2.0f;
+                if (!isCamCloseUp) {
+                    cameraShakeMagnitude = 2.0f;
                 } else {
-                    sp68 = (KREG(53) * 0.01f) + 0.2f;
+                    cameraShakeMagnitude = (KREG(53) * 0.01f) + 0.2f;
                 }
 
-                subCamAtOffset.x = Math_SinS(this->cutsceneTimer * 0x7000) * sp68;
-                subCamAtOffset.y = Math_SinS(this->cutsceneTimer * 0x5000) * sp68 * 2.5f;
-                subCamAtOffset.z = Math_CosS(this->cutsceneTimer * 0x8000) * sp68;
+                subCamAtOffset.x = Math_SinS(this->cutsceneTimer * 0x7000) * cameraShakeMagnitude;
+                subCamAtOffset.y = Math_SinS(this->cutsceneTimer * 0x5000) * cameraShakeMagnitude * 2.5f;
+                subCamAtOffset.z = Math_CosS(this->cutsceneTimer * 0x8000) * cameraShakeMagnitude;
 
                 for (i = 0; i < 2; i++) {
                     hahenPos.x = Rand_CenteredFloat(500.0f) + this->actor.world.pos.x;
@@ -5495,16 +5496,16 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
     f32 dx;
     f32 dz;
     f32 dy;
-    f32 sp180;
+    f32 distXYZ;
     f32 yOffset;
     s16 rotScale;
     s16 i;
-    Vec3f sp16C;
+    Vec3f diff;
     Vec3f sp160;
     Player* player = GET_PLAYER(play);
     CollisionPoly* poly;
     Vec3f beamTireMarkPos;
-    u8 sp14B = false;
+    u8 beamIsTouchingPoly = false;
     s32 bgId;
 
     this->damagedTimer = 20;
@@ -5568,8 +5569,8 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
             dx = player->actor.world.pos.x - this->beamStartPos.x;
             dy = player->actor.world.pos.y - this->beamStartPos.y + 20.0f;
             dz = player->actor.world.pos.z - this->beamStartPos.z;
-            sp180 = sqrtf(SQ(dx) + SQ(dy) + SQ(dz));
-            Math_ApproachF(&this->beamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
+            distXYZ = sqrtf(SQ(dx) + SQ(dy) + SQ(dz));
+            Math_ApproachF(&this->beamLengthScale, distXYZ * 0.2f, 1.0f, 7.0f);
 
             if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamStartPos, &this->beamEndPos, &beamTireMarkPos, &poly,
                                         true, true, true, true, &bgId) &&
@@ -5591,15 +5592,15 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                 flameAccel.z = flameVelocity.z * -0.05f;
 
                 Boss07_SpawnFlameEffect(play, &flamePos, &flameVelocity, &flameAccel, Rand_ZeroFloat(10.0f) + 25.0f);
-                sp14B = true;
+                beamIsTouchingPoly = true;
             }
 
-            sp16C.x = player->actor.world.pos.x - this->beamStartPos.x;
-            sp16C.y = player->actor.world.pos.y - this->beamStartPos.y + 10.0f;
-            sp16C.z = player->actor.world.pos.z - this->beamStartPos.z;
+            diff.x = player->actor.world.pos.x - this->beamStartPos.x;
+            diff.y = player->actor.world.pos.y - this->beamStartPos.y + 10.0f;
+            diff.z = player->actor.world.pos.z - this->beamStartPos.z;
             Matrix_RotateXS(-this->actor.shape.rot.x, MTXMODE_NEW);
             Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&sp16C, &sp160);
+            Matrix_MultVec3f(&diff, &sp160);
 
             if ((fabsf(sp160.x) < 20.0f) && (fabsf(sp160.y) < 50.0f) && (sp160.z > 40.0f) &&
                 (sp160.z <= (this->beamLengthScale * 20))) {
@@ -5607,33 +5608,39 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                     (player->stateFlags1 & PLAYER_STATE1_400000) &&
                     (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) < 0x2000) &&
                     (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) > -0x2000)) {
-                    Vec3s sp118;
+                    Vec3s reflectedBeamRot;
 
-                    this->beamLengthScale = sp180 * 0.05f;
-                    Math_ApproachF(&this->reflectedBeamLengthScale, sp180 * 0.2f, 1.0f, 7.0f);
-                    Matrix_MtxFToYXZRot(&player->shieldMf, &sp118, 0);
-                    sp118.y += 0x8000;
-                    sp118.x = -sp118.x;
+                    this->beamLengthScale = distXYZ * 0.05f;
+                    Math_ApproachF(&this->reflectedBeamLengthScale, distXYZ * 0.2f, 1.0f, 7.0f);
+                    Matrix_MtxFToYXZRot(&player->shieldMf, &reflectedBeamRot, 0);
+                    reflectedBeamRot.y += 0x8000;
+                    reflectedBeamRot.x = -reflectedBeamRot.x;
+
                     if (this->subAction == MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_ACTIVE) {
                         this->subAction = MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_BEAM_REFLECTED;
-                        this->reflectedBeamPitch = sp118.x;
-                        this->reflectedBeamYaw = sp118.y;
+                        this->reflectedBeamPitch = reflectedBeamRot.x;
+                        this->reflectedBeamYaw = reflectedBeamRot.y;
                     } else {
                         player->pushedYaw = this->actor.yawTowardsPlayer;
                         player->pushedSpeed = this->beamBaseScale * 0.5f;
+
                         sMajoraBattleHandler->lensFlareOn = true;
                         sMajoraBattleHandler->lensFlareScale = this->beamBaseScale * 30.0f;
                         sMajoraBattleHandler->lensFlarePos = this->beamEndPos;
-                        Math_ApproachS(&this->reflectedBeamPitch, sp118.x, 2, 0x2000);
-                        Math_ApproachS(&this->reflectedBeamYaw, sp118.y, 2, 0x2000);
-                        sp16C.x = this->actor.world.pos.x - this->beamEndPos.x;
-                        sp16C.y = this->actor.world.pos.y - this->beamEndPos.y;
-                        sp16C.z = this->actor.world.pos.z - this->beamEndPos.z;
-                        sp180 = sqrtf(SQXYZ(sp16C));
+
+                        Math_ApproachS(&this->reflectedBeamPitch, reflectedBeamRot.x, 2, 0x2000);
+                        Math_ApproachS(&this->reflectedBeamYaw, reflectedBeamRot.y, 2, 0x2000);
+
+                        diff.x = this->actor.world.pos.x - this->beamEndPos.x;
+                        diff.y = this->actor.world.pos.y - this->beamEndPos.y;
+                        diff.z = this->actor.world.pos.z - this->beamEndPos.z;
+                        distXYZ = sqrtf(SQXYZ(diff));
+
                         Matrix_RotateXS(-this->reflectedBeamPitch, MTXMODE_NEW);
                         Matrix_RotateYS(-this->reflectedBeamYaw, MTXMODE_APPLY);
                         Matrix_Push();
-                        Matrix_MultVec3f(&sp16C, &sp160);
+                        Matrix_MultVec3f(&diff, &sp160);
+
                         if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
                             (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                             (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
@@ -5643,7 +5650,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                             Vec3f flameAccel;
 
                             this->beamDamageTimer += 2;
-                            this->reflectedBeamLengthScale = sp180 * 0.062f;
+                            this->reflectedBeamLengthScale = distXYZ * 0.062f;
 
                             if (this->beamDamageTimer < 10) {
                                 flamePos.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
@@ -5701,11 +5708,11 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                 continue;
                             }
 
-                            sp16C.x = sMajoraRemains[i]->actor.world.pos.x - this->beamEndPos.x;
-                            sp16C.y = sMajoraRemains[i]->actor.world.pos.y - this->beamEndPos.y;
-                            sp16C.z = sMajoraRemains[i]->actor.world.pos.z - this->beamEndPos.z;
-                            sp180 = sqrtf(SQXYZ(sp16C));
-                            Matrix_MultVec3f(&sp16C, &sp160);
+                            diff.x = sMajoraRemains[i]->actor.world.pos.x - this->beamEndPos.x;
+                            diff.y = sMajoraRemains[i]->actor.world.pos.y - this->beamEndPos.y;
+                            diff.z = sMajoraRemains[i]->actor.world.pos.z - this->beamEndPos.z;
+                            distXYZ = sqrtf(SQXYZ(diff));
+                            Matrix_MultVec3f(&diff, &sp160);
 
                             if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
                                 (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
@@ -5716,7 +5723,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                 Vec3f flameAccel;
 
                                 this->beamDamageTimer += 2;
-                                this->reflectedBeamLengthScale = sp180 * 0.062f;
+                                this->reflectedBeamLengthScale = distXYZ * 0.062f;
 
                                 if (this->beamDamageTimer < 5) {
                                     flamePos.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(40.0f);
@@ -5738,6 +5745,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                     sMajoraRemains[i]->subAction = REMAINS_MOVE_SUB_ACTION_DIE;
                                     sMajoraRemains[i]->fireTimer = 60;
                                     Actor_PlaySfx(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
+
                                     for (j = 0; j < 20; j++) {
                                         flamePos.x = sMajoraRemains[i]->actor.world.pos.x + Rand_CenteredFloat(50.0f);
                                         flamePos.y = sMajoraRemains[i]->actor.world.pos.y + Rand_CenteredFloat(50.0f);
@@ -5757,6 +5765,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                 }
                             }
                         }
+
                         if (BgCheck_EntityLineTest1(&play->colCtx, &this->beamEndPos, &this->reflectedBeamEndPos,
                                                     &beamTireMarkPos, &poly, true, true, true, true, &bgId) &&
                             (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
@@ -5764,7 +5773,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                             Vec3f flameVelocity;
                             Vec3f flameAccel;
 
-                            sp14B = true;
+                            beamIsTouchingPoly = true;
 
                             flamePos.x = Rand_CenteredFloat(20.0f) + beamTireMarkPos.x;
                             flamePos.y = Rand_CenteredFloat(20.0f) + beamTireMarkPos.y;
@@ -5796,7 +5805,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                 }
             }
 
-            if (sp14B) {
+            if (beamIsTouchingPoly) {
                 if (beamTireMarkPos.y == 0.0f) {
                     dx = this->prevBeamTireMarkPos.x - beamTireMarkPos.x;
                     dz = this->prevBeamTireMarkPos.z - beamTireMarkPos.z;
@@ -5804,6 +5813,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                                   Math_Atan2S(dx, dz), poly, bgId);
                     this->beamTireMarkEnabled = true;
                 }
+
                 this->prevBeamTireMarkPos = beamTireMarkPos;
             }
 
@@ -5814,6 +5824,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                 }
             } else {
                 Math_ApproachZeroF(&this->beamBaseScale, 1.0f, 0.05f);
+
                 if (this->timers[0] == 0) {
                     Boss07_Mask_SetupIdle(this, play);
                     this->timers[2] = 100;
