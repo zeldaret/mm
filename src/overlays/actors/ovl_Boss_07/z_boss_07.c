@@ -10,7 +10,7 @@
  * - Majora's Wrath, including the dynamically-moving whips
  * - The floating boss remains (Odolwa, Goht, Gyorg, and Twinmold) that fly around and attack the player
  * - The projectiles that both the boss remains and Majora's Incarnation fire at the player
- * - The spinning tops that Majora's Wrath can release
+ * - The spinning tops that Majora's Wrath can throw
  * - The afterimages that follow Majora's Incarnation around as it runs
  * - An invisible "battle handler" that updates the flame effects, manages the lens flare, handles the cutscene where
  *   the boss remains are activated, etc.
