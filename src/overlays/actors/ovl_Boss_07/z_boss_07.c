@@ -5501,7 +5501,7 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
     s16 rotScale;
     s16 i;
     Vec3f diff;
-    Vec3f sp160;
+    Vec3f transformedDiff;
     Player* player = GET_PLAYER(play);
     CollisionPoly* poly;
     Vec3f beamTireMarkPos;
@@ -5600,10 +5600,10 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
             diff.z = player->actor.world.pos.z - this->beamStartPos.z;
             Matrix_RotateXS(-this->actor.shape.rot.x, MTXMODE_NEW);
             Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&diff, &sp160);
+            Matrix_MultVec3f(&diff, &transformedDiff);
 
-            if ((fabsf(sp160.x) < 20.0f) && (fabsf(sp160.y) < 50.0f) && (sp160.z > 40.0f) &&
-                (sp160.z <= (this->beamLengthScale * 20))) {
+            if ((fabsf(transformedDiff.x) < 20.0f) && (fabsf(transformedDiff.y) < 50.0f) &&
+                (transformedDiff.z > 40.0f) && (transformedDiff.z <= (this->beamLengthScale * 20))) {
                 if (Player_HasMirrorShieldEquipped(play) && (player->transformation == PLAYER_FORM_HUMAN) &&
                     (player->stateFlags1 & PLAYER_STATE1_400000) &&
                     (BINANG_ROT180(player->actor.shape.rot.y - this->actor.shape.rot.y) < 0x2000) &&
@@ -5639,10 +5639,11 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                         Matrix_RotateXS(-this->reflectedBeamPitch, MTXMODE_NEW);
                         Matrix_RotateYS(-this->reflectedBeamYaw, MTXMODE_APPLY);
                         Matrix_Push();
-                        Matrix_MultVec3f(&diff, &sp160);
+                        Matrix_MultVec3f(&diff, &transformedDiff);
 
-                        if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                            (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
+                        if ((fabsf(transformedDiff.x) < 60.0f) && (fabsf(transformedDiff.y) < 60.0f) &&
+                            (transformedDiff.z > 40.0f) &&
+                            (transformedDiff.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                             (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                             s32 j;
                             Vec3f flamePos;
@@ -5712,10 +5713,11 @@ void Boss07_Mask_FireBeam(Boss07* this, PlayState* play) {
                             diff.y = sMajoraRemains[i]->actor.world.pos.y - this->beamEndPos.y;
                             diff.z = sMajoraRemains[i]->actor.world.pos.z - this->beamEndPos.z;
                             distXYZ = sqrtf(SQXYZ(diff));
-                            Matrix_MultVec3f(&diff, &sp160);
+                            Matrix_MultVec3f(&diff, &transformedDiff);
 
-                            if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                                (sp160.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
+                            if ((fabsf(transformedDiff.x) < 60.0f) && (fabsf(transformedDiff.y) < 60.0f) &&
+                                (transformedDiff.z > 40.0f) &&
+                                (transformedDiff.z <= (this->reflectedBeamLengthScale * 16.666668f)) &&
                                 (this->subAction != MAJORAS_MASK_FIRE_BEAM_SUB_ACTION_END)) {
                                 s32 j;
                                 Vec3f flamePos;
