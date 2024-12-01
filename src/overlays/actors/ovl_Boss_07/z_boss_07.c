@@ -3304,7 +3304,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     s32 pad;
     Vec3f tempPos;
     Vec3f baseSegVec = { 0.0f, 0.0f, 0.0f };
-    Vec3f spAC;
+    Vec3f offsetVec;
     Vec3f segVec;
     Vec3f handForce;
     Vec3f shapeForce;
@@ -3324,7 +3324,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
         }
     }
 
-    spAC.z = 20.0f;
+    offsetVec.z = 20.0f;
 
     // calculates rotation away from Wrath's hand
     Matrix_RotateYS(baseRot->y, MTXMODE_NEW);
@@ -3332,18 +3332,18 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     Matrix_RotateZS(baseRot->z, MTXMODE_APPLY);
     Matrix_RotateYS(0x4000, MTXMODE_APPLY);
 
-    Matrix_MultVecZ(spAC.z, &handForce);
+    Matrix_MultVecZ(offsetVec.z, &handForce);
 
     if (grabIndex != 0) {
-        spAC.z = 200.0f;
+        offsetVec.z = 200.0f;
         // replaces the tension direction with the direction from Wrath's hand to Link
         Matrix_RotateYF(this->whipWrapRotY, MTXMODE_NEW);
         Matrix_RotateXFApply(this->whipWrapRotX);
     } else {
-        spAC.z = tension;
+        offsetVec.z = tension;
     }
 
-    Matrix_MultVecZ(spAC.z, &tensForce);
+    Matrix_MultVecZ(offsetVec.z, &tensForce);
 
     pos++;
     rot++;
@@ -3401,20 +3401,20 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
 
         if ((i != 0) && (i == grabIndex)) {
             // Updates the grab point for when Link is grabbed
-            spAC.x = 15.0f;
-            spAC.y = -30.0f;
-            spAC.z = -12.0f;
-            Matrix_MultVec3f(&spAC, &segVec);
+            offsetVec.x = 15.0f;
+            offsetVec.y = -30.0f;
+            offsetVec.z = -12.0f;
+            Matrix_MultVec3f(&offsetVec, &segVec);
             this->whipGrabPos.x = pos->x + segVec.x;
             this->whipGrabPos.y = pos->y + segVec.y;
             this->whipGrabPos.z = pos->z + segVec.z;
         } else if ((hand == MAJORAS_WRATH_HAND_RIGHT) && (this->actionFunc == Boss07_Wrath_ThrowTop)) {
             // Updates the grab point when throwing a top
             if (i == (KREG(90) + sWhipLength - this->whipTopIndex + 1)) {
-                spAC.x = KREG(60);
-                spAC.y = KREG(61);
-                spAC.z = KREG(62);
-                Matrix_MultVec3f(&spAC, &segVec);
+                offsetVec.x = KREG(60);
+                offsetVec.y = KREG(61);
+                offsetVec.z = KREG(62);
+                Matrix_MultVec3f(&offsetVec, &segVec);
                 this->whipGrabPos.x = pos->x + segVec.x;
                 this->whipGrabPos.y = pos->y + segVec.y;
                 this->whipGrabPos.z = pos->z + segVec.z;
@@ -6462,7 +6462,7 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
 }
 
 void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* velocity,
-                                 Vec3f* baseForce, f32 lengthScale, u8 arg8, f32 rotZ) {
+                                 Vec3f* baseForce, f32 lengthScale, u8 isMovingBackwards, f32 rotZ) {
     s32 i;
     f32 gravity;
     f32 segPitch;
@@ -6524,7 +6524,7 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
 
         if (this->tentacleState != MAJORAS_MASK_TENTACLE_STATE_DEFAULT) {
             gravity = 0.0f;
-        } else if (arg8 && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
+        } else if (isMovingBackwards && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
             gravity = -30.0f;
         } else {
             gravity = -3.0f - ((i & 7) * 0.05f);
@@ -6696,8 +6696,8 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     f32 rotZ;
     f32 lengthScale;
     s32 i;
-    s32 phi_s6;
-    Vec3f spA8;
+    s32 isMovingBackwards;
+    Vec3f offsetVec;
     Vec3f tentacleOffset;
     Vec3f baseForce;
 
@@ -6723,26 +6723,26 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     gSPDisplayList(POLY_OPA_DISP++, gMajorasMaskTentacleMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
 
-    phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
-              (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
-                 ? true
-                 : false;
+    isMovingBackwards = ((this->actionFunc == Boss07_Mask_Idle) &&
+                         (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
+                            ? true
+                            : false;
 
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_MultVecZ(-3.0f, &baseForce);
 
-    spA8.x = 0.0f;
-    spA8.y = 20.0f;
-    spA8.z = -2.0f;
+    offsetVec.x = 0.0f;
+    offsetVec.y = 20.0f;
+    offsetVec.z = -2.0f;
     rotZ = 0.0f;
 
     for (i = 0; i < MAJORA_TENTACLE_COUNT; i++) {
         Matrix_Push();
         Matrix_Push();
         Matrix_RotateZF(rotZ, MTXMODE_APPLY);
-        Matrix_MultVec3f(&spA8, &tentacleOffset);
+        Matrix_MultVec3f(&offsetVec, &tentacleOffset);
 
         this->tentacles[i].base.x = this->tentacleBasePos.x + tentacleOffset.x;
         this->tentacles[i].base.y = this->tentacleBasePos.y + tentacleOffset.y;
@@ -6754,12 +6754,12 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
         if (this->shouldUpdateTentaclesOrWhips) {
             Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
                                         this->tentacles[i].rot, this->tentacles[i].velocity, &baseForce, lengthScale,
-                                        phi_s6, rotZ);
+                                        isMovingBackwards, rotZ);
         }
 
         Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, lengthScale, i * 0.9f);
         rotZ += 0.5f;
-        spA8.y += 1.0f;
+        offsetVec.y += 1.0f;
 
         Matrix_Pop();
     }
