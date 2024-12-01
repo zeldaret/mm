@@ -3279,7 +3279,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  * than drag.
  * - Calculate the tension force. This points away from Wrath's hand (baserot) for whip movements and towards Link when
  * grabbed
- * - Calculate shaping forces. These are the force from Wrath's hand on the whip base and the force that wraps the whip
+ * - Calculate shaping forces. These are the forces from Wrath's hand on the whip base and the force that wraps the whip
  * around Link. Set tension to 0 for the latter segments.
  * - Calculate the provisional position of the point by applying the velocity, forces, and gravity. For the y-component,
  * set a minimum of 2 to not clip through the floor.
@@ -3298,17 +3298,18 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
                               f32 scale, s32 hand) {
     s32 i;
     s32 j;
-    Vec3f tempPos;
+    f32 segPitch;
     f32 segYaw;
     f32 tempY;
-    Vec3f* vel0 = velocity;
-    f32 segPitch;
+    s32 pad;
+    Vec3f tempPos;
     Vec3f baseSegVec = { 0.0f, 0.0f, 0.0f };
     Vec3f spAC;
     Vec3f segVec;
     Vec3f handForce;
     Vec3f shapeForce;
     Vec3f tensForce;
+    Vec3f* vel0 = velocity;
 
     // sets the fixed length of each whip segment
     baseSegVec.z = 22.0f * scale;
@@ -3341,6 +3342,7 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
     } else {
         spAC.z = tension;
     }
+
     Matrix_MultVecZ(spAC.z, &tensForce);
 
     pos++;
@@ -3374,7 +3376,6 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
             tempY = 2.0f;
         }
 
-        // tempY = CLAMP_MIN(tempY, 2.0f);
         tempPos.y = tempY - (pos - 1)->y;
         tempPos.z = pos->z + velocity->z - (pos - 1)->z + shapeForce.z + tensForce.z;
 
@@ -6461,32 +6462,33 @@ void Boss07_Mask_Update(Actor* thisx, PlayState* play2) {
 }
 
 void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* velocity,
-                                 Vec3f* arg6, f32 lengthScale, u8 arg8, f32 rotZ) {
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp_f24;
-    f32 phi_f0;
-    f32 phi_f2;
-    f32 temp_f26;
+                                 Vec3f* baseForce, f32 lengthScale, u8 arg8, f32 rotZ) {
     s32 i;
-    f32 temp1;
-    f32 temp2;
-    Vec3f sp98 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp8C;
-    Vec3f sp80;
-    Vec3f* sp7C = velocity;
+    f32 gravity;
+    f32 segPitch;
+    f32 segYaw;
+    f32 tempY;
+    f32 temp;
+    Vec3f tempPos;
+    Vec3f baseSegVec = { 0.0f, 0.0f, 0.0f };
+    Vec3f segVec;
+    Vec3f shapeForce;
+    Vec3f* vel0 = velocity;
 
     if (this->tentacleState != MAJORAS_MASK_TENTACLE_STATE_DEFAULT) {
         for (i = 0; i < MAJORA_TENTACLE_LENGTH; i++) {
             Matrix_Push();
+
             Matrix_RotateZF(rotZ, MTXMODE_APPLY);
-            sp98.x = Math_SinS((2 * i + this->frameCounter) * 0x1600) * 10;
-            sp98.y = 10.0f;
-            sp98.z = 0.0f;
-            Matrix_MultVec3f(&sp98, &sp8C);
-            pos[i].x += sp8C.x;
-            pos[i].y += sp8C.y;
-            pos[i].z += sp8C.z;
+            baseSegVec.x = Math_SinS((2 * i + this->frameCounter) * 0x1600) * 10;
+            baseSegVec.y = 10.0f;
+            baseSegVec.z = 0.0f;
+
+            Matrix_MultVec3f(&baseSegVec, &segVec);
+            pos[i].x += segVec.x;
+            pos[i].y += segVec.y;
+            pos[i].z += segVec.z;
+
             Matrix_Pop();
         }
     }
@@ -6504,53 +6506,63 @@ void Boss07_Mask_UpdateTentacles(Boss07* this, PlayState* play, Vec3f* base, Vec
 
     pos++;
     rot++;
-    velocity = sp7C + 1;
-    sp98.x = sp98.y = 0.0f;
-    sp98.z = lengthScale * 23.0f;
+    velocity = vel0 + 1;
+    baseSegVec.x = baseSegVec.y = 0.0f;
+    baseSegVec.z = lengthScale * 23.0f;
 
     for (i = 1; i < MAJORA_TENTACLE_LENGTH; i++, velocity++, pos++, rot++) {
         if (i < MAJORA_TENTACLE_LENGTH / 2) {
-            sp80.x = arg6->x * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
-            sp80.y = arg6->y * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
-            sp80.z = arg6->z * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
+            shapeForce.x = baseForce->x * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
+            shapeForce.y = baseForce->y * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
+            shapeForce.z = baseForce->z * (MAJORA_TENTACLE_LENGTH / 2 - i) * 0.2f;
         } else {
-            sp80 = gZeroVec3f;
+            shapeForce = gZeroVec3f;
         }
 
-        temp_f24 = pos->x + velocity->x - (pos - 1)->x + sp80.x;
+        // Advances the physics one frame to find the provisional position relative to the previous point
+        tempPos.x = pos->x + velocity->x - (pos - 1)->x + shapeForce.x;
 
         if (this->tentacleState != MAJORAS_MASK_TENTACLE_STATE_DEFAULT) {
-            phi_f0 = 0.0f;
+            gravity = 0.0f;
         } else if (arg8 && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
-            phi_f0 = -30.0f;
+            gravity = -30.0f;
         } else {
-            phi_f0 = -3.0f - ((s32)(i % 8U) * 0.05f);
+            gravity = -3.0f - ((i & 7) * 0.05f);
         }
 
-        phi_f2 = pos->y + velocity->y + phi_f0 + sp80.y;
-        if (phi_f2 < 2.0f) {
-            phi_f2 = 2.0f;
+        tempY = pos->y + velocity->y + gravity + shapeForce.y;
+        if (tempY < 2.0f) {
+            tempY = 2.0f;
         }
 
-        temp_f22 = phi_f2 - (pos - 1)->y;
-        temp_f20 = pos->z + velocity->z - (pos - 1)->z + sp80.x;
-        temp_f26 = Math_Atan2F_XY(temp_f20, temp_f24);
-        temp2 = sqrtf(SQ(temp_f24) + SQ(temp_f20));
-        temp1 = -Math_Atan2F_XY(temp2, temp_f22);
-        (rot - 1)->y = temp_f26;
-        (rot - 1)->x = temp1;
-        Matrix_RotateYF(temp_f26, MTXMODE_NEW);
-        Matrix_RotateXFApply(temp1);
-        Matrix_MultVecZ(sp98.z, &sp8C);
-        temp_f24 = pos->x;
-        temp_f22 = pos->y;
-        temp_f20 = pos->z;
-        pos->x = (pos - 1)->x + sp8C.x;
-        pos->y = (pos - 1)->y + sp8C.y;
-        pos->z = (pos - 1)->z + sp8C.z;
-        velocity->x = (pos->x - temp_f24) * 0.85f;
-        velocity->y = (pos->y - temp_f22) * 0.85f;
-        velocity->z = (pos->z - temp_f20) * 0.85f;
+        tempPos.y = tempY - (pos - 1)->y;
+        tempPos.z = pos->z + velocity->z - (pos - 1)->z + shapeForce.x;
+
+        // calculates the rotation angles from the previous point
+        segYaw = Math_Atan2F_XY(tempPos.z, tempPos.x);
+        temp = sqrtf(SQ(tempPos.x) + SQ(tempPos.z));
+        segPitch = -Math_Atan2F_XY(temp, tempPos.y);
+        (rot - 1)->y = segYaw;
+        (rot - 1)->x = segPitch;
+
+        // Sets the position to be in the same direction as the provisional position relative to the previous point, but
+        // a fixed distance away
+        Matrix_RotateYF(segYaw, MTXMODE_NEW);
+        Matrix_RotateXFApply(segPitch);
+        Matrix_MultVecZ(baseSegVec.z, &segVec);
+
+        tempPos.x = pos->x;
+        tempPos.y = pos->y;
+        tempPos.z = pos->z;
+
+        pos->x = (pos - 1)->x + segVec.x;
+        pos->y = (pos - 1)->y + segVec.y;
+        pos->z = (pos - 1)->z + segVec.z;
+
+        // calculates the velocity for the next frame
+        velocity->x = (pos->x - tempPos.x) * 0.85f;
+        velocity->y = (pos->y - tempPos.y) * 0.85f;
+        velocity->z = (pos->z - tempPos.z) * 0.85f;
     }
 }
 
@@ -6687,7 +6699,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     s32 phi_s6;
     Vec3f spA8;
     Vec3f tentacleOffset;
-    Vec3f sp90;
+    Vec3f baseForce;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -6719,7 +6731,7 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultVecZ(-3.0f, &sp90);
+    Matrix_MultVecZ(-3.0f, &baseForce);
 
     spA8.x = 0.0f;
     spA8.y = 20.0f;
@@ -6741,8 +6753,8 @@ void Boss07_Mask_Draw(Actor* thisx, PlayState* play2) {
 
         if (this->shouldUpdateTentaclesOrWhips) {
             Boss07_Mask_UpdateTentacles(this, play, &this->tentacles[i].base, this->tentacles[i].pos,
-                                        this->tentacles[i].rot, this->tentacles[i].velocity, &sp90, lengthScale, phi_s6,
-                                        rotZ);
+                                        this->tentacles[i].rot, this->tentacles[i].velocity, &baseForce, lengthScale,
+                                        phi_s6, rotZ);
         }
 
         Boss07_Mask_DrawTentacles(this, play, this->tentacles[i].pos, this->tentacles[i].rot, lengthScale, i * 0.9f);
