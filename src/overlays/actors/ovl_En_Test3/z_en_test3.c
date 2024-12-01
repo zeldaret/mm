@@ -161,9 +161,9 @@ static PlayerAgeProperties sAgeProperties = {
     29.4343f,
     // openChestAnim
     &gPlayerAnim_clink_demo_Tbox_open,
-    // unk_A4
+    // timeTravelStartAnim
     &gPlayerAnim_clink_demo_goto_future,
-    // unk_A8
+    // timeTravelEndAnim
     &gPlayerAnim_clink_demo_return_to_future,
     // unk_AC
     &gPlayerAnim_clink_normal_climb_startA,

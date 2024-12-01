@@ -88,7 +88,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     if (this->unk14A == -1) {
         var_v1 = 0;
     }
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_CHECK_HEALING + var_v1);
         this->actionFunc = func_8093E68C;
     } else {
@@ -106,7 +106,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
         if (yRange == 0.0f) {
             yRange = 50000.0f;
         }
-        func_800B874C(&this->actor, play, xzRange, yRange);
+        Actor_OfferOcarinaInteraction(&this->actor, play, xzRange, yRange);
     }
 }
 

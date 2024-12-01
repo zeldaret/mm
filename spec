@@ -790,9 +790,7 @@ endseg
 beginseg
     name "buffers"
     flags NOLOAD
-    include "$(BUILD_DIR)/src/buffers/gfxyield.o"
-    include "$(BUILD_DIR)/src/buffers/gfxstack.o"
-    include "$(BUILD_DIR)/src/buffers/gfxpools.o"
+    include "$(BUILD_DIR)/src/buffers/gfxbuffers.o"
     include "$(BUILD_DIR)/src/buffers/audio_heap.o"
 endseg
 

@@ -204,7 +204,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sEenoCylinderInit);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_LARGE) {
-            thisx->flags |= ACTOR_FLAG_400;
+            thisx->flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
             Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x, thisx->world.pos.y,
                                thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
             thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
@@ -837,7 +837,7 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     this->actor.world.pos.z = (Math_CosS(yRot) * 40.0f) + basePos->z;
     this->combineTimer = 600;
     this->actor.params = EN_SNOWMAN_TYPE_SPLIT;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     this->collider.base.ocFlags1 |= OC1_ON;
     this->collider.base.acFlags &= ~AC_ON;
     EnSnowman_SetupMoveSnowPile(this);
@@ -955,7 +955,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
         } else if (this->fwork.targetScaleDuringCombine > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
-            this->actor.flags |= ACTOR_FLAG_400;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
             this->collider.base.ocFlags1 |= OC1_ON;
             this->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
             this->eenoScale = 2.0f;

@@ -1464,7 +1464,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (func_800B8718(&this->picto.actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->picto.actor, &play->state)) {
         switch (gSaveContext.save.playerForm) {
             case PLAYER_FORM_HUMAN:
             case PLAYER_FORM_FIERCE_DEITY:
@@ -1508,7 +1508,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
         this->picto.actor.textId = 0x8D3;
         Actor_OfferTalk(&this->picto.actor, play, 100.0f);
-        func_800B874C(&this->picto.actor, play, 100.0f, 100.0f);
+        Actor_OfferOcarinaInteraction(&this->picto.actor, play, 100.0f, 100.0f);
     }
 }
 
@@ -1570,7 +1570,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
             SkelAnime_Update(&this->propSkelAnime);
         }
     }
-    if (func_800B8718(&this->picto.actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->picto.actor, &play->state)) {
         this->picto.actor.textId = 0x8D8;
         EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_KICKUPANDDOWN);
         this->actionFunc = EnMnk_MonkeyTiedUp_TeachSong;
@@ -1597,7 +1597,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
             } else {
                 this->picto.actor.textId = 0x8CA;
             }
-            func_800B874C(&this->picto.actor, play, 100.0f, 100.0f);
+            Actor_OfferOcarinaInteraction(&this->picto.actor, play, 100.0f, 100.0f);
         } else {
             this->picto.actor.textId = 0x8CC;
         }
