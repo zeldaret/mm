@@ -432,7 +432,7 @@ typedef struct ActorContext {
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ Attention attention;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
-    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1E4 */ TitleCardContext titleCtx;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
@@ -569,8 +569,12 @@ typedef enum DoorLockType {
 
 // 
 #define ACTOR_FLAG_10000000      (1 << 28)
-// 
-#define ACTOR_FLAG_20000000      (1 << 29)
+
+// Signals that player has accepted an offer to use the ocarina to interact with an actor
+// An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+// Player will retain this flag until the player is finished playing the ocarina
+// Actor will retain this flag until `Actor_OcarinaInteractionAccepted` is called or manually turned off by the actor
+#define ACTOR_FLAG_OCARINA_INTERACTION (1 << 29)
 
 // Camera will slowly drift to the actor while approaching it.
 // Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
@@ -839,10 +843,10 @@ s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, struct PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, struct PlayState* play, Actor* actor2);
 
-s32 func_800B8718(Actor* actor, struct GameState* gameState);
-s32 func_800B874C(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
-s32 func_800B8804(Actor* actor, struct PlayState* play, f32 xzRange);
-s32 func_800B886C(Actor* actor, struct PlayState* play);
+s32 Actor_OcarinaInteractionAccepted(Actor* actor, struct GameState* gameState);
+s32 Actor_OfferOcarinaInteraction(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
+s32 Actor_OfferOcarinaInteractionNearby(Actor* actor, struct PlayState* play, f32 xzRange);
+s32 Actor_NoOcarinaInteraction(Actor* actor, struct PlayState* play);
 void Actor_GetScreenPos(struct PlayState* play, Actor* actor, s16* posX, s16* posY);
 bool Actor_OnScreen(struct PlayState* play, Actor* actor);
 s32 Actor_HasParent(Actor* actor, struct PlayState* play);

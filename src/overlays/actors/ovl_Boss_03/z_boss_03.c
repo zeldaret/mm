@@ -1319,7 +1319,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
             if (this->csTimer == 30) {
-                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                        Lib_SegmentedToVirtual(gGyorgTitleCardTex), 160, 180, 128, 40);
             }
 

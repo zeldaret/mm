@@ -1838,10 +1838,11 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         // This handles the cutscene where the player takes out the Deku Pipes for the first time.
         switch (this->dekuPipesCutsceneState) {
             case SK_DEKU_PIPES_CS_STATE_READY:
-                if (func_800B8718(&this->actor, &play->state)) {
+                if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA;
                 } else {
-                    func_800B874C(&this->actor, play, this->actor.xzDistToPlayer, fabsf(this->actor.playerHeightRel));
+                    Actor_OfferOcarinaInteraction(&this->actor, play, this->actor.xzDistToPlayer,
+                                                  fabsf(this->actor.playerHeightRel));
                 }
                 break;
 

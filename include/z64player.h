@@ -17,14 +17,14 @@ struct PlayState;
 #define PLAYER_GET_START_MODE(thisx) (((thisx)->params & 0xF00) >> 8)
 
 typedef enum PlayerStartMode {
-    /*  0x0 */ PLAYER_START_MODE_0,
-    /*  0x1 */ PLAYER_START_MODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
-    /*  0x2 */ PLAYER_START_MODE_2,
-    /*  0x3 */ PLAYER_START_MODE_3,
-    /*  0x4 */ PLAYER_START_MODE_4,
-    /*  0x5 */ PLAYER_START_MODE_5,
-    /*  0x6 */ PLAYER_START_MODE_6,
-    /*  0x7 */ PLAYER_START_MODE_7,
+    /*  0x0 */ PLAYER_START_MODE_NOTHING, // Update is empty and draw function is NULL, nothing occurs. Useful in cutscenes, for example.
+    /*  0x1 */ PLAYER_START_MODE_TIME_TRAVEL, // OoT Leftover. Arriving from time travel. Automatically adjusts by age.
+    /*  0x2 */ PLAYER_START_MODE_BLUE_WARP, // Arriving from a blue warp.
+    /*  0x3 */ PLAYER_START_MODE_DOOR, // Unused. Use a door immediately if one is nearby. If no door is in usable range, a softlock occurs.
+    /*  0x4 */ PLAYER_START_MODE_GROTTO, // Arriving from a grotto, launched upward from the ground.
+    /*  0x5 */ PLAYER_START_MODE_WARP_SONG, // OoT Leftover. Arriving from a warp song.
+    /*  0x6 */ PLAYER_START_MODE_OWL, // Arriving from an Owl Save or Song of Soaring (both overworld and dungeon warps).
+    /*  0x7 */ PLAYER_START_MODE_KNOCKED_OVER, // Knocked over on the ground and flashing red.
     /*  0x8 */ PLAYER_START_MODE_8,
     /*  0x9 */ PLAYER_START_MODE_9,
     /*  0xA */ PLAYER_START_MODE_A,
@@ -33,7 +33,7 @@ typedef enum PlayerStartMode {
     /*  0xD */ PLAYER_START_MODE_D,
     /*  0xE */ PLAYER_START_MODE_E,
     /*  0xF */ PLAYER_START_MODE_F,
-    /* 0x10 */ PLAYER_START_MODE_MAX // Must not exceed 0x10 as `PLAYER_GET_START_MODE` is limited to a nibble in player params
+    /* 0x10 */ PLAYER_START_MODE_MAX // Note: By default, this param has 4 bits allocated. The max value is 16.
 } PlayerStartMode;
 
 #define PLAYER_PARAMS(startBgCamIndex, startMode) ((startBgCamIndex & 0xFF) | ((startMode & 0xF) << 8))
@@ -623,8 +623,8 @@ typedef struct PlayerAgeProperties {
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ PlayerAnimationHeader* openChestAnim;
-    /* 0xA4 */ PlayerAnimationHeader* unk_A4; // OoT leftovers to interact with the Master Sword
-    /* 0xA8 */ PlayerAnimationHeader* unk_A8; // OoT leftovers to interact with the Master Sword
+    /* 0xA4 */ PlayerAnimationHeader* timeTravelStartAnim; // OoT leftovers to interact with the Master Sword
+    /* 0xA8 */ PlayerAnimationHeader* timeTravelEndAnim; // OoT leftovers to interact with the Master Sword
     /* 0xAC */ PlayerAnimationHeader* unk_AC;
     /* 0xB0 */ PlayerAnimationHeader* unk_B0;
     /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
@@ -1148,7 +1148,7 @@ typedef struct Player {
     /* 0x164 */ Gfx** waistDLists;
     /* 0x168 */ UNK_TYPE1 unk_168[0x4C];
     /* 0x1B4 */ s16 unk_1B4;
-    /* 0x1B6 */ char unk_1B6[2];
+    /* 0x1B6 */ UNK_TYPE1 unk_1B6[0x2];
     /* 0x1B8 */ u8 giObjectLoading;
     /* 0x1BC */ DmaRequest giObjectDmaRequest;
     /* 0x1DC */ OSMesgQueue giObjectLoadQueue;
@@ -1194,7 +1194,6 @@ typedef struct Player {
                     s16 doorBgCamIndex; // `BgCamIndex` used during a sliding door and spiral staircase cutscenes
                 } cv; // "Cutscene Variable": context dependent variable that has different meanings depending on what function is called
     /* 0x3BC */ s16 subCamId;
-    /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s8 unk_3CE;
@@ -1208,7 +1207,7 @@ typedef struct Player {
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
-    /* 0x734 */ char unk_734[4];
+    /* 0x734 */ UNK_TYPE1 unk_734[0x4];
     /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
@@ -1229,9 +1228,9 @@ typedef struct Player {
     /* 0xA87 */ s8 exchangeItemAction; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
-    /* 0xA90 */ Actor* unk_A90;
-    /* 0xA94 */ f32 unk_A94;
-    /* 0xA98 */ Actor* unk_A98;
+    /* 0xA90 */ Actor* ocarinaInteractionActor;
+    /* 0xA94 */ f32 ocarinaInteractionDistance;
+    /* 0xA98 */ UNK_TYPE1 unk_A98[0x4];
     /* 0xA9C */ f32 secretRumbleCharge; // builds per frame until discharges with a rumble request
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 idleType;
@@ -1263,10 +1262,14 @@ typedef struct Player {
     /* 0xAE7 */ union {
         s8 facingUpSlope; // Player_Action_SlideOnSlope: facing uphill when sliding on a slope
         s8 actionVar1;
+        s8 startedAnim; // Player_Action_TimeTravelEnd: Started playing the animation that was previously frozen
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAE8 */ union {
         s16 actionVar2;
         s16 fallDamageStunTimer; // Player_Action_Idle: Prevents any movement and shakes model up and down quickly to indicate fall damage stun
+        s16 animDelayTimer; // Player_Action_TimeTravelEnd: Delays playing animation until finished counting down
+        s16 csDelayTimer; // Player_Action_WaitForCutscene: Number of frames to wait before responding to a cutscene
+        s16 playedLandingSfx; // Player_Action_BlueWarpArrive: Played sfx when landing on the ground
     } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
@@ -1382,7 +1385,7 @@ s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* i
 s32 Player_UpdateOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange);
 void func_80122868(struct PlayState* play, Player* player);
 void func_801229A0(struct PlayState* play, Player* player);
-void func_801229EC(Actor* thisx, struct PlayState* play);
+void Player_DoNothing(Actor* thisx, struct PlayState* play);
 void func_801229FC(Player* player);
 void func_80122BA4(struct PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
 void func_80122C20(struct PlayState* play, struct_80122D44_arg1* arg1);
