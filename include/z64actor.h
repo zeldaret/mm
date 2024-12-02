@@ -432,7 +432,7 @@ typedef struct ActorContext {
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ Attention attention;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
-    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1E4 */ TitleCardContext titleCtx;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
@@ -479,6 +479,7 @@ typedef enum DoorLockType {
 // Note that this flag doesn't have any effect on either the actor, or Player's behavior.
 // What actually matters is the presence or lack of `ACTOR_FLAG_HOSTILE`.
 #define ACTOR_FLAG_FRIENDLY (1 << 3)
+
 // 
 #define ACTOR_FLAG_10            (1 << 4)
 // 
@@ -493,18 +494,21 @@ typedef enum DoorLockType {
 // Player will retain this flag until the player is finished talking
 // Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
 #define ACTOR_FLAG_TALK (1 << 8)
-// 
-#define ACTOR_FLAG_200           (1 << 9)
-// 
-#define ACTOR_FLAG_400           (1 << 10)
-// 
-#define ACTOR_FLAG_800           (1 << 11)
+
+// When the hookshot attaches to this actor, the actor will be pulled back as the hookshot retracts.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR (1 << 9)
+
+// When the hookshot attaches to this actor, Player will be pulled by the hookshot and fly to the actor.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER (1 << 10)
+
+// This is likely `ACTOR_FLAG_GRASS_DESTROYED` from OoT, however this flag is unused in this game.
+#define ACTOR_FLAG_800 (1 << 11)
 
 // Actor will not shake when a quake occurs
 #define ACTOR_FLAG_IGNORE_QUAKE (1 << 12)
 
 // The hookshot is currently attached to this actor.
-// The behavior that occurs after attachment is determined by `ACTOR_FLAG_200` and `ACTOR_FLAG_400`.
+// The behavior that occurs after attachment is determined by `ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR` and `ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER`.
 // If neither of those flags are set attachment cannot occur, and the hookshot will simply act as a damage source.
 //
 // This flag is also reused to indicate that an actor is attached to the Zora boomerang.
@@ -535,6 +539,7 @@ typedef enum DoorLockType {
 // Also allows for the next lock-on actor to be the focus actor again.
 // When chosen as the next lock-on actor, this flag is unset.
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
+
 // 
 #define ACTOR_FLAG_100000        (1 << 20)
 // 
@@ -567,14 +572,21 @@ typedef enum DoorLockType {
 // The current room must also enable point lights for point lights to take effect.
 #define ACTOR_FLAG_POINT_LIGHT_ENABLED (1 << 28)
 
-// 
-#define ACTOR_FLAG_20000000      (1 << 29)
+// Signals that player has accepted an offer to use the ocarina to interact with an actor
+// An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+// Player will retain this flag until the player is finished playing the ocarina
+// Actor will retain this flag until `Actor_OcarinaInteractionAccepted` is called or manually turned off by the actor
+#define ACTOR_FLAG_OCARINA_INTERACTION (1 << 29)
 
 // Camera will slowly drift to the actor while approaching it.
 // Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
 #define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
-// 
-#define ACTOR_FLAG_80000000      (1 << 31)
+
+// The actor's location will be marked on the minimap.
+// If the actor is a player actor, a compass icon will be drawn.
+// If the actor is EN_BOX, the flag has no effect.
+// Otherwise a square icon is drawn, with the color determined by it's actor category.
+#define ACTOR_FLAG_MINIMAP_ICON_ENABLED (1 << 31)
 
 #define DROPFLAG_NONE   (0)
 #define DROPFLAG_1      (1 << 0)
@@ -833,10 +845,10 @@ s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, struct PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, struct PlayState* play, Actor* actor2);
 
-s32 func_800B8718(Actor* actor, struct GameState* gameState);
-s32 func_800B874C(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
-s32 func_800B8804(Actor* actor, struct PlayState* play, f32 xzRange);
-s32 func_800B886C(Actor* actor, struct PlayState* play);
+s32 Actor_OcarinaInteractionAccepted(Actor* actor, struct GameState* gameState);
+s32 Actor_OfferOcarinaInteraction(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
+s32 Actor_OfferOcarinaInteractionNearby(Actor* actor, struct PlayState* play, f32 xzRange);
+s32 Actor_NoOcarinaInteraction(Actor* actor, struct PlayState* play);
 void Actor_GetScreenPos(struct PlayState* play, Actor* actor, s16* posX, s16* posY);
 bool Actor_OnScreen(struct PlayState* play, Actor* actor);
 s32 Actor_HasParent(Actor* actor, struct PlayState* play);

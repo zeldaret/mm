@@ -2215,7 +2215,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
-                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                        Lib_SegmentedToVirtual(gTwinmoldTitleCardTex), 160, 180, 128, 40);
             }
 

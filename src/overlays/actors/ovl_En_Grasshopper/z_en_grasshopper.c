@@ -279,7 +279,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
         this->collider.elements[0].dim.modelSphere.center.z = this->collider.elements[1].dim.modelSphere.center.y =
             this->collider.elements[1].dim.modelSphere.center.z = 0;
 
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 1.0f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Math_Vec3f_Copy(&this->flyingHomePos, &this->actor.home.pos);

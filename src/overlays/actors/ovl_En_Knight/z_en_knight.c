@@ -561,7 +561,7 @@ void EnKnight_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.damageTable = &sDamageTableStanding;
     this->bodyAlpha = 255.0f;
     this->randTimer = Rand_ZeroFloat(1000.0f);
-    this->actor.flags |= ACTOR_FLAG_400;
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
 
     if (this->actor.params == EN_KNIGHT_PARAM_IGOS_HEAD) {
         // Flying head init

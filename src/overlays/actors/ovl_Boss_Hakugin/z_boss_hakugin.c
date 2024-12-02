@@ -1763,7 +1763,7 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 65.0f)) {
-            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&gGohtTitleCardTex),
+            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx, Lib_SegmentedToVirtual(&gGohtTitleCardTex),
                                    160, 180, 128, 40);
         }
 

@@ -791,10 +791,10 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->unk_1EC |= 0x10;
     } else if (thisx->params == ENHORSE_4) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        thisx->flags |= ACTOR_FLAG_80000000;
+        thisx->flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     } else if (thisx->params == ENHORSE_5) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        thisx->flags |= ACTOR_FLAG_80000000;
+        thisx->flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     } else if (thisx->params == ENHORSE_15) {
         this->stateFlags = ENHORSE_UNRIDEABLE | ENHORSE_FLAG_7;
     } else if (thisx->params == ENHORSE_17) {
@@ -802,7 +802,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->unk_1EC |= 8;
     } else if (thisx->params == ENHORSE_18) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        thisx->flags |= ACTOR_FLAG_80000000;
+        thisx->flags |= ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     } else if (thisx->params == ENHORSE_1) {
         this->stateFlags = ENHORSE_FLAG_7;
     } else if ((thisx->params == ENHORSE_19) || (thisx->params == ENHORSE_20)) {

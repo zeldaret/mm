@@ -7,7 +7,9 @@
 #include "z_en_fg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
+#define FLAGS                                                                               \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnFg*)thisx)
 

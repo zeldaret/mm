@@ -14,7 +14,7 @@
 
 #define FLAGS                                                                                                \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
-     ACTOR_FLAG_80000000)
+     ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnJso2*)thisx)
 

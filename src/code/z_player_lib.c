@@ -155,7 +155,7 @@ void func_801229A0(PlayState* play, Player* player) {
 }
 
 // Update function
-void func_801229EC(Actor* thisx, PlayState* play) {
+void Player_DoNothing(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
@@ -647,7 +647,7 @@ bool Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
-           (player->stateFlags3 & PLAYER_STATE3_80) || play->actorCtx.isOverrideInputOn;
+           (player->stateFlags3 & PLAYER_STATE3_FLYING_WITH_HOOKSHOT) || play->actorCtx.isOverrideInputOn;
 }
 
 bool Player_InCsMode(PlayState* play) {
