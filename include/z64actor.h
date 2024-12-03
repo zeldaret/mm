@@ -545,7 +545,9 @@ typedef enum DoorLockType {
 // 
 #define ACTOR_FLAG_200000        (1 << 21)
 
-// Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists
+// Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists.
+// In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.
+// Instead, fake point lights by using a directional light that constantly changes to face a reference position.
 #define ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS (1 << 22)
 
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
@@ -570,7 +572,7 @@ typedef enum DoorLockType {
 
 // Specifies whether subsequent geometry is compatible with ucode point lights.
 // The current room must also enable point lights for point lights to take effect.
-#define ACTOR_FLAG_POINT_LIGHT_ENABLED (1 << 28)
+#define ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED (1 << 28)
 
 // Signals that player has accepted an offer to use the ocarina to interact with an actor
 // An exception is made for EN_ZOT, see `Player_ActionHandler_13`.

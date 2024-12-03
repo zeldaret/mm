@@ -201,6 +201,10 @@ typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, struct PlayS
  *
  * Note: Lights in a given list can only be binded to however many free slots are
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
+ *
+ * Note: In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.
+ * Instead, fake point lights by using a directional light that constantly changes to face a reference position.
+ * `sBindFuncs` maps to the new microcode point lights, and `sBindFuncsLegacy` maps to the old fake point lights.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
     static LightsBindFunc sBindFuncs[] = {

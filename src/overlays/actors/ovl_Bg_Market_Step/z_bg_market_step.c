@@ -7,7 +7,7 @@
 #include "z_bg_market_step.h"
 #include "assets/objects/object_market_obj/object_market_obj.h"
 
-#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_POINT_LIGHT_ENABLED)
+#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 #define THIS ((BgMarketStep*)thisx)
 

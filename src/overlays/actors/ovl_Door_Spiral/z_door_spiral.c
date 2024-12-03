@@ -103,7 +103,7 @@ s32 func_809A2B70(DoorSpiral* this, PlayState* play) {
         if (this->unk148 == 2) {
             this->unk148 = 3;
         }
-        this->actor.flags |= ACTOR_FLAG_POINT_LIGHT_ENABLED;
+        this->actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
     }
     DoorSpiral_SetupAction(this, func_809A2FF8);
     return 0;

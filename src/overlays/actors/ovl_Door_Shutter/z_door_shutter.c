@@ -218,7 +218,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
 
         sp24 = shutterSceneInfo->index;
         if (sp24 == 6) {
-            this->slidingDoor.dyna.actor.flags |= ACTOR_FLAG_POINT_LIGHT_ENABLED;
+            this->slidingDoor.dyna.actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
         }
     } else if (sp24 == 0) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
