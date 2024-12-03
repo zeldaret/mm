@@ -4752,7 +4752,7 @@
     0x80853850:("Player_Action_70",),
     0x80853A5C:("Player_Action_ExchangeItem",),
     0x80853CC0:("Player_Action_72",),
-    0x80853D68:("Player_Action_73",),
+    0x80853D68:("Player_Action_SlideOnSlope",),
     0x80854010:("Player_Action_WaitForCutscene",),
     0x808540A0:("Player_Action_StartWarpSongArrive",),
     0x80854118:("Player_Action_BlueWarpArrive",),

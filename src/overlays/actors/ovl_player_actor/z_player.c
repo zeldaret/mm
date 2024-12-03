@@ -82,6 +82,8 @@ void func_80839A10(PlayState* play, Player* this);
 
 void func_80859CE0(PlayState* play, Player* this, s32 arg2);
 
+void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorCue* cue);
+
 typedef enum AnimSfxType {
     /*  1 */ ANIMSFX_TYPE_GENERAL = 1,
     /*  2 */ ANIMSFX_TYPE_FLOOR,
@@ -188,7 +190,7 @@ void Player_Action_69(Player* this, PlayState* play);
 void Player_Action_70(Player* this, PlayState* play);
 void Player_Action_ExchangeItem(Player* this, PlayState* play);
 void Player_Action_72(Player* this, PlayState* play);
-void Player_Action_73(Player* this, PlayState* play);
+void Player_Action_SlideOnSlope(Player* this, PlayState* play);
 void Player_Action_WaitForCutscene(Player* this, PlayState* play);
 void Player_Action_StartWarpSongArrive(Player* this, PlayState* play);
 void Player_Action_BlueWarpArrive(Player* this, PlayState* play);
@@ -501,12 +503,12 @@ ConveyorSpeed sPlayerConveyorSpeedIndex;
 s16 sPlayerIsOnFloorConveyor;
 s16 sPlayerConveyorYaw;
 f32 sPlayerYDistToFloor;
-FloorProperty sPlayerPrevFloorProperty;
-s32 sPlayerShapeYawToTouchedWall;
-s32 sPlayerWorldYawToTouchedWall;
-s16 sPlayerFloorPitchShape;
+FloorProperty sPrevFloorProperty;
+s32 sShapeYawToTouchedWall;
+s32 sWorldYawToTouchedWall;
+s16 sFloorPitchShape;
 s32 sSavedCurrentMask;
-Vec3f sPlayerInteractWallCheckResult;
+Vec3f sInteractWallCheckResult;
 f32 D_80862B3C;
 FloorEffect sPlayerFloorEffect;
 Input* sPlayerControlInput;
@@ -4323,7 +4325,7 @@ void Player_SetParallel(Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_PARALLEL;
 
     if (!(this->skelAnime.moveFlags & ANIM_FLAG_80) && (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-        (sPlayerShapeYawToTouchedWall < 0x2000)) {
+        (sShapeYawToTouchedWall < 0x2000)) {
         // snap to the wall
         this->yaw = this->actor.shape.rot.y = this->actor.wallYaw + 0x8000;
     }
@@ -7165,8 +7167,8 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
         s32 var_v1;
 
         if ((this->transformation != PLAYER_FORM_DEKU) &&
-            ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) || (sPlayerPrevFloorProperty == FLOOR_PROPERTY_2))) {
-            if (sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) {
+            ((sPrevFloorProperty == FLOOR_PROPERTY_1) || (sPrevFloorProperty == FLOOR_PROPERTY_2))) {
+            if (sPrevFloorProperty == FLOOR_PROPERTY_1) {
                 var_v1 = 4;
             } else {
                 var_v1 = 5;
@@ -7416,7 +7418,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                     temp_fv1_2 = this->actor.world.pos.y -
                                  BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp88, &this->actor, &sp70);
                     if ((temp_fv1_2 >= -11.0f) && (temp_fv1_2 <= 0.0f)) {
-                        var_v1_2 = (sPlayerPrevFloorProperty == FLOOR_PROPERTY_6);
+                        var_v1_2 = (sPrevFloorProperty == FLOOR_PROPERTY_6);
                         if (!var_v1_2) {
                             if (SurfaceType_GetWallFlags(&play->colCtx, entityPoly, entityBgId) & WALL_FLAG_3) {
                                 var_v1_2 = true;
@@ -7493,7 +7495,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if (sPlayerPrevFloorProperty == FLOOR_PROPERTY_8) {
+        if (sPrevFloorProperty == FLOOR_PROPERTY_8) {
             this->actor.world.pos.x = this->actor.prevPos.x;
             this->actor.world.pos.z = this->actor.prevPos.z;
             return;
@@ -7509,7 +7511,7 @@ void func_8083827C(Player* this, PlayState* play) {
             return;
         }
 
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
+        if ((sPrevFloorProperty == FLOOR_PROPERTY_7) || (this->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) ||
             ((this->skelAnime.moveFlags & ANIM_FLAG_8) && func_808381F8(play, this))) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
             if (this->speedXZ > 0.0f) {
@@ -7528,13 +7530,13 @@ void func_8083827C(Player* this, PlayState* play) {
             ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) &&
             (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
-                if ((sPlayerPrevFloorProperty != FLOOR_PROPERTY_6) && (sPlayerPrevFloorProperty != FLOOR_PROPERTY_9) &&
+                if ((sPrevFloorProperty != FLOOR_PROPERTY_6) && (sPrevFloorProperty != FLOOR_PROPERTY_9) &&
                     (sPlayerYDistToFloor > 20.0f) && (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->speedXZ > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
                                  CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) ||
-                                ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_11) &&
+                                ((sPrevFloorProperty == FLOOR_PROPERTY_11) &&
                                  (this->transformation != PLAYER_FORM_GORON) &&
                                  (this->transformation != PLAYER_FORM_DEKU))) {
 
@@ -7557,7 +7559,7 @@ void func_8083827C(Player* this, PlayState* play) {
         }
 
         // Checking if the ledge is tall enough for Player to hang from
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_9) || (sPlayerYDistToFloor <= this->ageProperties->unk_34) ||
+        if ((sPrevFloorProperty == FLOOR_PROPERTY_9) || (sPlayerYDistToFloor <= this->ageProperties->unk_34) ||
             !func_80837DEC(this, play)) {
             Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_normal_landing_wait);
         }
@@ -9363,50 +9365,54 @@ s32 Player_ActionHandler_3(Player* this, PlayState* play) {
     return false;
 }
 
-PlayerAnimationHeader* sPlayerSlopeSlipAnims[] = {
+PlayerAnimationHeader* sSlopeSlideAnims[] = {
     &gPlayerAnim_link_normal_down_slope_slip,
     &gPlayerAnim_link_normal_up_slope_slip,
 };
 
 s32 Player_HandleSlopes(PlayState* play, Player* this) {
-    if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & OC1_HIT)) {
-        if ((Player_Action_73 != this->actionFunc) && (Player_Action_96 != this->actionFunc) &&
-            (sPlayerFloorEffect == FLOOR_EFFECT_1)) {
-            s16 playerVelYaw = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
-            Vec3f slopeNormal;
-            s16 downwardSlopeYaw;
-            s16 velYawToDownwardSlope;
-            f32 slopeSlowdownSpeed;
-            f32 temp_fv1;
-            f32 var_fa1;
-            f32 slopeSlowdownSpeedStep;
+    if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & OC1_HIT) &&
+        (Player_Action_SlideOnSlope != this->actionFunc) && (Player_Action_96 != this->actionFunc) &&
+        (sPlayerFloorEffect == FLOOR_EFFECT_1)) {
+        s16 playerVelYaw = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
+        Vec3f slopeNormal;
+        s16 downwardSlopeYaw;
+        s16 velYawToDownwardSlope;
+        f32 slopeSlowdownSpeed;
+        f32 temp_fv1;
+        f32 var_fa1;
+        f32 slopeSlowdownSpeedStep;
 
-            Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
-            velYawToDownwardSlope = downwardSlopeYaw - playerVelYaw;
+        Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
+        velYawToDownwardSlope = downwardSlopeYaw - playerVelYaw;
 
-            if (ABS_ALT(velYawToDownwardSlope) > 0x3E80) { // 87.9 degrees
-                var_fa1 = (Player_Action_96 == this->actionFunc) ? Math_CosS(this->floorPitch) : slopeNormal.y;
-                slopeSlowdownSpeed = (1.0f - var_fa1) * 40.0f;
-                temp_fv1 = fabsf(this->actor.speed) + slopeSlowdownSpeed;
-                slopeSlowdownSpeedStep = SQ(temp_fv1) * 0.011f;
-                slopeSlowdownSpeedStep = CLAMP_MIN(slopeSlowdownSpeedStep, 2.2f);
+        if (ABS_ALT(velYawToDownwardSlope) > 0x3E80) { // 87.9 degrees
+            var_fa1 = (Player_Action_96 == this->actionFunc) ? Math_CosS(this->floorPitch) : slopeNormal.y;
+            slopeSlowdownSpeed = (1.0f - var_fa1) * 40.0f;
+            temp_fv1 = fabsf(this->actor.speed) + slopeSlowdownSpeed;
+            slopeSlowdownSpeedStep = SQ(temp_fv1) * 0.011f;
+            slopeSlowdownSpeedStep = CLAMP_MIN(slopeSlowdownSpeedStep, 2.2f);
 
-                // slows down speed as player is climbing a slope
-                this->pushedYaw = downwardSlopeYaw;
-                Math_StepToF(&this->pushedSpeed, slopeSlowdownSpeed, slopeSlowdownSpeedStep);
-            } else {
-                Player_SetAction(play, this, Player_Action_73, 0);
-                func_8082DE50(play, this);
-                Player_Anim_PlayLoopMorph(play, this, sPlayerSlopeSlipAnims[this->av1.actionVar1]);
-                this->speedXZ = sqrtf(SQXZ(this->actor.velocity));
-                this->yaw = downwardSlopeYaw;
-                if (sPlayerFloorPitchShape >= 0) {
-                    this->av1.actionVar1 = 1;
-                    Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_HANG);
-                }
+            // slows down speed as player is climbing a slope
+            this->pushedYaw = downwardSlopeYaw;
+            Math_StepToF(&this->pushedSpeed, slopeSlowdownSpeed, slopeSlowdownSpeedStep);
+        } else {
+            // moving downward on the slope, causing player to slip and then slide down
+            Player_SetAction(play, this, Player_Action_SlideOnSlope, 0);
+            func_8082DE50(play, this);
 
-                return true;
+            // facingUpSlope has not yet been updated based on slope, so it will always be 0 here.
+            Player_Anim_PlayLoopMorph(play, this, sSlopeSlideAnims[this->av1.facingUpSlope]);
+
+            this->speedXZ = sqrtf(SQXZ(this->actor.velocity));
+            this->yaw = downwardSlopeYaw;
+
+            if (sFloorPitchShape >= 0) {
+                this->av1.facingUpSlope = true;
+                Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_HANG);
             }
+
+            return true;
         }
     }
 
@@ -9767,7 +9773,7 @@ void func_8083DF38(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
 
 s32 Player_ActionHandler_5(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR) &&
-        (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sPlayerShapeYawToTouchedWall < 0x3000)) {
+        (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sShapeYawToTouchedWall < 0x3000)) {
         if ((this->speedXZ > 0.0f) && func_8083D860(this, play)) {
             return true;
         }
@@ -10199,10 +10205,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     f32 var_fv1;
     s16 var_a1;
 
-    if (ABS_ALT(sPlayerFloorPitchShape) < 0xE38) {
+    if (ABS_ALT(sFloorPitchShape) < 0xE38) {
         var_a1 = 0;
     } else {
-        var_a1 = CLAMP(sPlayerFloorPitchShape, -0x2AAA, 0x2AAA);
+        var_a1 = CLAMP(sFloorPitchShape, -0x2AAA, 0x2AAA);
     }
 
     Math_ScaledStepToS(&this->unk_B70, var_a1, 0x190);
@@ -10692,8 +10698,7 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
 
     if (arg3 <= *arg2) {
         // If interacting with a wall and close to facing it
-        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-             (sPlayerWorldYawToTouchedWall < 0x1C00)) ||
+        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sWorldYawToTouchedWall < 0x1C00)) ||
             // or, impacting something's cylinder
             (((this->cylinder.base.ocFlags1 & OC1_HIT) && (cylinderOc = this->cylinder.base.oc) != NULL) &&
              // and that something is a Beaver Race ring,
@@ -11614,7 +11619,7 @@ s32 func_808430E0(Player* this) {
     }
     this->floorPitch = 0;
     this->floorPitchAlt = 0;
-    sPlayerFloorPitchShape = 0;
+    sFloorPitchShape = 0;
     return true;
 }
 
@@ -11639,7 +11644,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
     u32 updBgCheckInfoFlags;
     s32 spAC = (Player_Action_35 == this->actionFunc) && (this->unk_397 == 4);
 
-    sPlayerPrevFloorProperty = this->floorProperty;
+    sPrevFloorProperty = this->floorProperty;
 
     wallCheckRadius = this->ageProperties->wallCheckRadius;
     ceilingCheckHeight = this->ageProperties->ceilingCheckHeight;
@@ -11743,7 +11748,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
         sInteractWallCheckOffset.z = this->ageProperties->wallCheckRadius + 10.0f;
 
         if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &wallPoly, &wallBgId,
-                                     &sPlayerInteractWallCheckResult)) {
+                                     &sInteractWallCheckResult)) {
             this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_WALL_INTERACT;
 
             if (this->actor.wallPoly != wallPoly) {
@@ -11755,12 +11760,12 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
 
         yawDiff = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
         sPlayerTouchedWallFlags = SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
-        sPlayerShapeYawToTouchedWall = ABS_ALT(yawDiff);
+        sShapeYawToTouchedWall = ABS_ALT(yawDiff);
 
         yawDiff = BINANG_SUB(this->yaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
-        sPlayerWorldYawToTouchedWall = ABS_ALT(yawDiff);
+        sWorldYawToTouchedWall = ABS_ALT(yawDiff);
 
-        speedScale = sPlayerWorldYawToTouchedWall * 0.00008f;
+        speedScale = sWorldYawToTouchedWall * 0.00008f;
 
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (speedScale >= 1.0f)) {
             this->unk_B50 = R_RUN_SPEED_LIMIT / 100.0f;
@@ -11771,7 +11776,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             }
         }
 
-        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sPlayerShapeYawToTouchedWall < 0x3000)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sShapeYawToTouchedWall < 0x3000)) {
             CollisionPoly* wallPoly = this->actor.wallPoly;
 
             if (ABS_ALT(wallPoly->normal.y) < 600) {
@@ -11809,7 +11814,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
                     sInteractWallCheckOffset.y = (ledgePosY + 5.0f) - this->actor.world.pos.y;
 
                     if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &poly, &bgId,
-                                                 &sPlayerInteractWallCheckResult) &&
+                                                 &sInteractWallCheckResult) &&
                         (wallYawDiff = (s32)(this->actor.wallYaw - Math_Atan2S_XY(poly->normal.z, poly->normal.x)),
                          ABS_ALT(wallYawDiff) < 0x4000) &&
                         !SurfaceType_CheckWallFlag1(&play->colCtx, poly, bgId)) {
@@ -11889,7 +11894,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             sin = Math_SinS(this->actor.shape.rot.y);
             cos = Math_CosS(this->actor.shape.rot.y);
 
-            sPlayerFloorPitchShape =
+            sFloorPitchShape =
                 Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sin) - (floorPolyNormalZ * cos)) * floorPolyNormalY);
 
             Player_HandleSlopes(play, this);
@@ -12787,7 +12792,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             if (!(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_DEAD | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
                                        PLAYER_STATE1_800000)) &&
                 !(this->stateFlags3 & PLAYER_STATE3_10000000)) {
-                if ((Player_Action_93 != this->actionFunc) && (Player_Action_73 != this->actionFunc) &&
+                if ((Player_Action_93 != this->actionFunc) && (Player_Action_SlideOnSlope != this->actionFunc) &&
                     (this->actor.draw != NULL)) {
                     if ((this->actor.id != ACTOR_PLAYER) && (this->csAction == PLAYER_CSACTION_110)) {
                         this->cylinder.dim.radius = 8;
@@ -18016,18 +18021,21 @@ void Player_Action_72(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_73(Player* this, PlayState* play) {
+void Player_Action_SlideOnSlope(Player* this, PlayState* play) {
     CollisionPoly* floorPoly;
-    f32 var_fv0;
-    f32 temp_fv1;
-    f32 var_fa0;
+    f32 speedXZTarget;
+    f32 speedXZIncrStep;
+    f32 speedXZDecrStep;
     s16 downwardSlopeYaw;
-    s16 var_v0;
+    s16 shapeYawTarget;
     Vec3f slopeNormal;
 
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
+
     PlayerAnimation_Update(play, &this->skelAnime);
+
     func_8083FBC4(play, this);
+
     Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(
         &this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), this->actor.speed);
 
@@ -18046,35 +18054,38 @@ void Player_Action_73(Player* this, PlayState* play) {
     }
 
     Actor_GetSlopeDirection(floorPoly, &slopeNormal, &downwardSlopeYaw);
-    var_v0 = downwardSlopeYaw;
-    if (this->av1.actionVar1 != 0) {
-        var_v0 = downwardSlopeYaw + 0x8000;
+
+    shapeYawTarget = downwardSlopeYaw;
+    if (this->av1.facingUpSlope) {
+        shapeYawTarget = downwardSlopeYaw + 0x8000;
     }
+
     if (this->speedXZ < 0.0f) {
         downwardSlopeYaw += 0x8000;
     }
 
-    var_fv0 = (1.0f - slopeNormal.y) * 40.0f;
-    var_fv0 = CLAMP(var_fv0, 0.0f, 10.0f);
+    speedXZTarget = (1.0f - slopeNormal.y) * 40.0f;
+    speedXZTarget = CLAMP(speedXZTarget, 0.0f, 10.0f);
 
-    temp_fv1 = var_fv0 * var_fv0 * 0.015f;
-    var_fa0 = slopeNormal.y * 0.01f;
+    speedXZIncrStep = SQ(speedXZTarget) * 0.015f;
+    speedXZDecrStep = slopeNormal.y * 0.01f;
+
     if (SurfaceType_GetFloorEffect(&play->colCtx, floorPoly, this->actor.floorBgId) != FLOOR_EFFECT_1) {
-        var_fv0 = 0.0f;
-        var_fa0 = slopeNormal.y * 10.0f;
+        speedXZTarget = 0.0f;
+        speedXZDecrStep = slopeNormal.y * 10.0f;
     }
-    temp_fv1 = CLAMP_MIN(temp_fv1, 1.0f);
 
-    if (Math_AsymStepToF(&this->speedXZ, var_fv0, temp_fv1, var_fa0) && (var_fv0 == 0.0f)) {
+    speedXZIncrStep = CLAMP_MIN(speedXZIncrStep, 1.0f);
+
+    if (Math_AsymStepToF(&this->speedXZ, speedXZTarget, speedXZIncrStep, speedXZDecrStep) && (speedXZTarget == 0.0f)) {
         func_80836A98(this,
-                      (this->av1.actionVar1 == 0)
-                          ? D_8085BE84[PLAYER_ANIMGROUP_down_slope_slip_end][this->modelAnimType]
-                          : D_8085BE84[PLAYER_ANIMGROUP_up_slope_slip_end][this->modelAnimType],
+                      (!this->av1.facingUpSlope) ? D_8085BE84[PLAYER_ANIMGROUP_down_slope_slip_end][this->modelAnimType]
+                                                 : D_8085BE84[PLAYER_ANIMGROUP_up_slope_slip_end][this->modelAnimType],
                       play);
     }
 
     Math_SmoothStepToS(&this->yaw, downwardSlopeYaw, 0xA, 0xFA0, 0x320);
-    Math_ScaledStepToS(&this->actor.shape.rot.y, var_v0, 0x7D0);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, shapeYawTarget, 0x7D0);
 }
 
 /**
@@ -18099,8 +18110,6 @@ void Player_Action_StartWarpSongArrive(Player* this, PlayState* play) {
 
     Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_KANKYO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x10);
 }
-
-void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorCue* cue);
 
 void Player_Action_BlueWarpArrive(Player* this, PlayState* play) {
     if (sPlayerYDistToFloor < 150.0f) {

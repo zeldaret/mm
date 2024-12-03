@@ -1262,6 +1262,7 @@ typedef struct Player {
     /* 0xAE7 */ union {
         s8 actionVar1;
         s8 startedAnim; // Player_Action_TimeTravelEnd: Started playing the animation that was previously frozen
+        s8 facingUpSlope; // Player_Action_SlideOnSlope: Facing uphill when sliding on a slope
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAE8 */ union {
         s16 actionVar2;
