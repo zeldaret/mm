@@ -45,7 +45,6 @@ typedef struct MajoraEffect {
     /* 0x2C */ s16 alpha;
     /* 0x2E */ UNK_TYPE1 unk2E[2];
     /* 0x30 */ s16 isFadingAway;
-    /* 0x32 */ UNK_TYPE1 unk32[2];
     /* 0x34 */ f32 scale;
     /* 0x38 */ UNK_TYPE1 unk38[0x10];
 } MajoraEffect; // size = 0x48
