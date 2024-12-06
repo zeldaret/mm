@@ -1,0 +1,18 @@
+dmadata_start: 0x1A500
+variables:
+  sMessageTableNES: 0x801C6B98
+  sMessageTableCredits: 0x801CFB08
+  gSoundFontTable: 0x801E1180
+  gSequenceFontTable: 0x801E1420
+  gSequenceTable:  0x801E1630
+  gSampleBankTable: 0x801E1E40
+archives:
+  - map_i_static
+  - map_grand_static
+  - item_name_static
+  - map_name_static
+  - icon_item_static_yar
+  - icon_item_24_static_yar
+  - schedule_dma_static_yar
+incbins:
+assets:
