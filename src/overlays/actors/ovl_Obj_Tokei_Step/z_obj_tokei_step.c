@@ -9,7 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_tokei_step/object_tokei_step.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 #define THIS ((ObjTokeiStep*)thisx)
 
