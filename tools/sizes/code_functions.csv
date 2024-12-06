@@ -2914,7 +2914,7 @@ asm/non_matchings/code/sys_ucode/SysUcode_GetUCodeData.s,SysUcode_GetUCodeData,0
 asm/non_matchings/code/sys_ucode/RumbleManager_Update.s,RumbleManager_Update,0x80182CE0,0xD0
 asm/non_matchings/code/sys_ucode/RumbleManager_Init.s,RumbleManager_Init,0x80183020,0xE
 asm/non_matchings/code/sys_ucode/RumbleManager_Destroy.s,RumbleManager_Destroy,0x80183058,0x6
-asm/non_matchings/code/code_80183070/func_80183070.s,func_80183070,0x80183070,0xC
+asm/non_matchings/code/sleep_forever/Sleep_Forever.s,Sleep_Forever,0x80183070,0xC
 asm/non_matchings/code/c_keyframe/FrameCtrl_Reset.s,FrameCtrl_Reset,0x801830A0,0xA
 asm/non_matchings/code/c_keyframe/FrameCtrl_Init.s,FrameCtrl_Init,0x801830C8,0x8
 asm/non_matchings/code/c_keyframe/FrameCtrl_SetProperties.s,FrameCtrl_SetProperties,0x801830E8,0x18

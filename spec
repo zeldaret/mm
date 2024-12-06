@@ -739,7 +739,7 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_matrix.o"
     include "$(BUILD_DIR)/src/code/sys_ucode.o"
     include "$(BUILD_DIR)/src/code/sys_rumble.o"
-    include "$(BUILD_DIR)/src/code/code_80183070.o"
+    include "$(BUILD_DIR)/src/code/sleep_forever.o"
     include "$(BUILD_DIR)/src/code/c_keyframe.o"
     include "$(BUILD_DIR)/src/code/sys_slowly.o"
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
