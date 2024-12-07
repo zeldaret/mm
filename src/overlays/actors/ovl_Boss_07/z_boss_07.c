@@ -6859,7 +6859,7 @@ void Boss07_Remains_UpdateDamage(Boss07* this, PlayState* play) {
         this->damagedTimer = 15;
         acHitElem = this->generalCollider.elem.acHitElem;
 
-        //! @note The hookshot has a damage effect of 0 (`REMAINS_DMGEFF_IMMUNE`) and a damage value of 0; due to
+        //! @bug The hookshot has a damage effect of 0 (`REMAINS_DMGEFF_IMMUNE`) and a damage value of 0; due to
         //! `CollisionCheck_SetATvsAC`, the hookshot passes through the remains. In other words, it's impossible for the
         //! following check to be true in the final game because the hookshot can't even register a hit.
         if (acHitElem->atDmgInfo.dmgFlags & DMG_HOOKSHOT) {
