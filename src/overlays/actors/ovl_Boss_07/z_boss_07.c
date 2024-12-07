@@ -6602,40 +6602,46 @@ void Boss07_Mask_DrawBeam(Boss07* this, PlayState* play) {
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_Push();
-        Matrix_Push();
-        Matrix_Push();
 
-        Matrix_Translate(250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
-        Matrix_RotateYS(-0xA00, MTXMODE_APPLY);
-        Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f, this->eyeBeamsLengthScale * 0.05f,
-                     MTXMODE_APPLY);
-        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
-        Matrix_Pop();
+        Matrix_Push();
+        {
+            Matrix_Push();
+            {
+                Matrix_Push();
+                {
+                    Matrix_Translate(250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
+                    Matrix_RotateYS(-0xA00, MTXMODE_APPLY);
+                    Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f,
+                                 this->eyeBeamsLengthScale * 0.05f, MTXMODE_APPLY);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
+                    gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
+                }
+                Matrix_Pop();
 
-        Matrix_Translate(-250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
-        Matrix_RotateYS(0xA00, MTXMODE_APPLY);
-        Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f, this->eyeBeamsLengthScale * 0.05f,
-                     MTXMODE_APPLY);
-        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
-        Matrix_Pop();
+                Matrix_Translate(-250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
+                Matrix_RotateYS(0xA00, MTXMODE_APPLY);
+                Matrix_Scale(this->beamBaseScale * 0.05f, this->beamBaseScale * 0.05f,
+                             this->eyeBeamsLengthScale * 0.05f, MTXMODE_APPLY);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
+                gSPDisplayList(POLY_XLU_DISP++, gMajorasMaskBeamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
+            }
+            Matrix_Pop();
 
-        Matrix_Translate(0.0f, 0.0f, 1200.0f, MTXMODE_APPLY);
-        Matrix_ReplaceRotation(&play->billboardMtxF);
-        Matrix_Scale(this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale,
-                     this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
-        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, sREG(89) + 80);
-        Matrix_Scale(6.0f, 6.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateZS(0x4000, MTXMODE_APPLY);
-        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
+            Matrix_Translate(0.0f, 0.0f, 1200.0f, MTXMODE_APPLY);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
+            Matrix_Scale(this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale,
+                         this->eyeBeamsFocusOrbScale * 40.0f * this->beamBaseScale, 0.0f, MTXMODE_APPLY);
+            Matrix_RotateZS(this->frameCounter * 0x100, MTXMODE_APPLY);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, sREG(89) + 80);
+            Matrix_Scale(6.0f, 6.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
+        }
         Matrix_Pop();
 
         Matrix_Translate(0.0f, 0.0f, 1150.0f, MTXMODE_APPLY);
