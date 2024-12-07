@@ -1533,7 +1533,7 @@ void Boss07_Init(Actor* thisx, PlayState* play2) {
     Collider_InitAndSetCylinder(play, &this->unusedCollider, &this->actor, &sWrathCylinderInit);
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
@@ -1655,7 +1655,7 @@ void Boss07_Wrath_IntroCutscene(Boss07* this, PlayState* play) {
                 if (this->cutsceneTimer >= 110) {
                     Math_ApproachF(&this->whipLengthScale, 1.0f, 1.0f, 0.05f);
                     this->leftWhip.mobility = this->rightWhip.mobility = 0.01f * 80;
-                    this->leftWhip.drag = this->rightWhip.drag = 1.0f;
+                    this->leftWhip.deceleration = this->rightWhip.deceleration = 1.0f;
                 }
 
                 if (this->cutsceneTimer == 127) {
@@ -1723,7 +1723,7 @@ void Boss07_Wrath_SetupDeathCutscene(Boss07* this, PlayState* play) {
     this->actionFunc = Boss07_Wrath_DeathCutscene;
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
 
@@ -2032,7 +2032,7 @@ void Boss07_Wrath_Idle(Boss07* this, PlayState* play) {
 
     this->rightWhip.mobility = this->leftWhip.mobility = 0.7f;
     this->rightWhip.gravity = this->leftWhip.gravity = -15.0f;
-    this->rightWhip.drag = this->leftWhip.drag = 2.0f;
+    this->rightWhip.deceleration = this->leftWhip.deceleration = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
     if ((this->actor.xzDistToPlayer <= 200.0f) && (player->actor.world.pos.y < 10.0f)) {
@@ -2068,7 +2068,7 @@ void Boss07_Wrath_SetupJump(Boss07* this, PlayState* play) {
 void Boss07_Wrath_StartJump(Boss07* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
@@ -2129,7 +2129,7 @@ void Boss07_Wrath_Flip(Boss07* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_MIBOSS_JUMP2 - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
@@ -2192,7 +2192,7 @@ void Boss07_Wrath_Sidestep(Boss07* this, PlayState* play) {
     }
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
@@ -2290,7 +2290,7 @@ void Boss07_Wrath_Attack(Boss07* this, PlayState* play) {
     this->leftWhip.mobility = this->rightWhip.mobility = 0.01f * 80;
     this->leftWhip.gravity = this->rightWhip.gravity = -5.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
-    this->leftWhip.drag = this->rightWhip.drag = 1.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 1.0f;
 
     if (this->frameCounter > 20) {
         this->canEvade = true;
@@ -2473,7 +2473,7 @@ void Boss07_Wrath_TryGrab(Boss07* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x800, 3, 0x2000);
     Boss07_SmoothStop(this, 2.0f);
     this->leftWhip.mobility = this->rightWhip.mobility = 0.01f * 80;
-    this->leftWhip.drag = this->rightWhip.drag = 1.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 1.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->rightWhip.gravity = -5.0f;
     this->leftWhip.gravity = -15.0f;
@@ -2711,7 +2711,7 @@ void Boss07_Wrath_ThrowTop(Boss07* this, PlayState* play) {
     Boss07_SmoothStop(this, 2.0f);
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.01f * 80;
-    this->leftWhip.drag = this->rightWhip.drag = 1.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 1.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->rightWhip.gravity = -5.0f;
     this->leftWhip.gravity = -15.0f;
@@ -2734,7 +2734,7 @@ void Boss07_Wrath_Stunned(Boss07* this, PlayState* play) {
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
 
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
         Boss07_Wrath_ChooseJump(this, play, true);
@@ -2785,7 +2785,7 @@ void Boss07_Wrath_Damaged(Boss07* this, PlayState* play) {
 
     this->leftWhip.mobility = this->rightWhip.mobility = 0.7f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
-    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    this->leftWhip.deceleration = this->rightWhip.deceleration = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
     if (Animation_OnFrame(&this->skelAnime, this->animEndFrame)) {
@@ -3260,7 +3260,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  * to find the next position. Then, starting from the base of the whip, each point is moved away from the previous point
  * until it is a fixed distance away. The new velocity of each point is found from the scaled difference between its
  * updated position and previous position. The forces applied are
- * - drag, which reduces the magnitude of each velocity component by a fixed amount (or to zero if smaller)
+ * - deceleration, which reduces the magnitude of each velocity component by a fixed amount (or to zero if smaller)
  * - gravity, which applies to the y-component of velocity
  * - tension, an outward force that makes the whip "crack"
  * - additional forces for special movements like wrapping around Link
@@ -3269,8 +3269,8 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  *
  * The algorithm used to implement this physics model is as follows:
  * - Set the position of the 0th point to the position of Wrath's hand (base)
- * - Move each component of each point's velocity towards 0 by drag. Set that component to zero if the magnitude is less
- * than drag.
+ * - Move each component of each point's velocity towards 0 by deceleration. Set that component to zero if the magnitude
+ * is less than deceleration.
  * - Calculate the tension force. This points away from Wrath's hand (baserot) for whip movements and towards Link when
  * grabbed
  * - Calculate shaping forces. These are the forces from Wrath's hand on the whip base and the force that wraps the whip
@@ -3288,7 +3288,7 @@ void Boss07_Wrath_Update(Actor* thisx, PlayState* play2) {
  */
 
 void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* velocity,
-                              f32 gravity, f32 mobility, f32 drag, f32 tension, Vec3s* baseRot, s16 grabIndex,
+                              f32 gravity, f32 mobility, f32 deceleration, f32 tension, Vec3s* baseRot, s16 grabIndex,
                               f32 scale, s32 hand) {
     s32 i;
     s32 j;
@@ -3312,9 +3312,9 @@ void Boss07_Wrath_UpdateWhips(Boss07* this, PlayState* play, Vec3f* base, Vec3f*
         if (i == 0) {
             pos[0] = *base;
         } else {
-            Math_ApproachF(&velocity->x, 0.0f, 1.0f, drag);
-            Math_ApproachF(&velocity->y, 0.0f, 1.0f, drag);
-            Math_ApproachF(&velocity->z, 0.0f, 1.0f, drag);
+            Math_ApproachF(&velocity->x, 0.0f, 1.0f, deceleration);
+            Math_ApproachF(&velocity->y, 0.0f, 1.0f, deceleration);
+            Math_ApproachF(&velocity->z, 0.0f, 1.0f, deceleration);
         }
     }
 
@@ -3821,11 +3821,11 @@ void Boss07_Wrath_Draw(Actor* thisx, PlayState* play2) {
     if (((KREG(63) == 0) || (KREG(63) == 2)) && this->shouldUpdateTentaclesOrWhips) {
         Boss07_Wrath_UpdateWhips(this, play, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
                                  this->rightWhip.velocity, this->rightWhip.gravity, this->rightWhip.mobility,
-                                 this->rightWhip.drag, this->rightWhip.tension, &this->rightWhip.baseRot,
+                                 this->rightWhip.deceleration, this->rightWhip.tension, &this->rightWhip.baseRot,
                                  this->whipWrapEndOffset, this->whipLengthScale, MAJORAS_WRATH_HAND_RIGHT);
         Boss07_Wrath_UpdateWhips(this, play, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
                                  this->leftWhip.velocity, this->leftWhip.gravity, this->leftWhip.mobility,
-                                 this->leftWhip.drag, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
+                                 this->leftWhip.deceleration, this->leftWhip.tension, &this->leftWhip.baseRot, 0,
                                  this->whipLengthScale, MAJORAS_WRATH_HAND_LEFT);
     }
 

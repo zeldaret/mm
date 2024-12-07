@@ -55,7 +55,7 @@ typedef struct MajoraWhip {
     /* 0x000 */ Vec3s baseRot;
     /* 0x008 */ f32 gravity;
     /* 0x00C */ f32 mobility;
-    /* 0x010 */ f32 drag;
+    /* 0x010 */ f32 deceleration;
     /* 0x014 */ f32 tension;
     /* 0x018 */ Vec3f basePos;
     /* 0x024 */ Vec3f pos[MAJORA_WHIP_LENGTH_MAX];
