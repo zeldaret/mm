@@ -146,10 +146,10 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
             temp_t1 = sp7C.y * 64.0f;
 
             if (D_80947AEC[i] == 2) {
-                for (j = 0, phi_a3 = -0x180; j < 12; j++, phi_a3 += 0x40) {
+                for (j = 0, phi_a3 = -384; j < 12; j++, phi_a3 += 64) {
                     for (phi_a0 = -D_80947A98[j]; phi_a0 < D_80947A98[j]; phi_a0++) {
                         temp_v1 = temp_t0 + phi_a0;
-                        if ((temp_v1 >= 0) && (temp_v1 < 0x40)) {
+                        if ((temp_v1 >= 0) && (temp_v1 < 64)) {
                             temp_v0 = temp_t1 + phi_a3;
                             if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                                 shadowTexture[temp_v1 + temp_v0] = 255;
@@ -158,10 +158,10 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                     }
                 }
             } else if (D_80947AEC[i] == 1) {
-                for (j = 0, phi_a3 = -0x100; j < 8; j++, phi_a3 += 0x40) {
+                for (j = 0, phi_a3 = -256; j < 8; j++, phi_a3 += 64) {
                     for (phi_a0 = -D_80947A88[j]; phi_a0 < D_80947A88[j]; phi_a0++) {
                         temp_v1 = temp_t0 + phi_a0;
-                        if ((temp_v1 >= 0) && (temp_v1 < 0x40)) {
+                        if ((temp_v1 >= 0) && (temp_v1 < 64)) {
                             temp_v0 = temp_t1 + phi_a3;
                             if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                                 shadowTexture[temp_v1 + temp_v0] = 255;
@@ -170,10 +170,10 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                     }
                 }
             } else if (D_80947AEC[i] == 0) {
-                for (j = 0, phi_a3 = -0xC0; j < 7; j++, phi_a3 += 0x40) {
+                for (j = 0, phi_a3 = -192; j < 7; j++, phi_a3 += 64) {
                     for (phi_a0 = -D_80947A78[j]; phi_a0 < D_80947A78[j] - 1; phi_a0++) {
                         temp_v1 = temp_t0 + phi_a0;
-                        if ((temp_v1 >= 0) && (temp_v1 < 0x40)) {
+                        if ((temp_v1 >= 0) && (temp_v1 < 64)) {
                             temp_v0 = temp_t1 + phi_a3;
                             if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                                 shadowTexture[temp_v1 + temp_v0] = 255;
@@ -182,10 +182,10 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                     }
                 }
             } else if (D_80947AEC[i] == 4) {
-                for (j = 0, phi_a3 = -0x1C0; j < 14; j++, phi_a3 += 0x40) {
+                for (j = 0, phi_a3 = -448; j < 14; j++, phi_a3 += 64) {
                     for (phi_a0 = -D_80947AB0[j]; phi_a0 < D_80947AB0[j]; phi_a0++) {
                         temp_v1 = temp_t0 + phi_a0;
-                        if ((temp_v1 >= 0) && (temp_v1 < 0x40)) {
+                        if ((temp_v1 >= 0) && (temp_v1 < 64)) {
                             temp_v0 = temp_t1 + phi_a3;
                             if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                                 shadowTexture[temp_v1 + temp_v0] = 255;
@@ -194,10 +194,10 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                     }
                 }
             } else {
-                for (j = 0, phi_a3 = -0x80; j < 6; j++, phi_a3 += 0x40) {
+                for (j = 0, phi_a3 = -128; j < 6; j++, phi_a3 += 64) {
                     for (phi_a0 = -D_80947A6C[j]; phi_a0 < D_80947A6C[j] - 1; phi_a0++) {
                         temp_v1 = temp_t0 + phi_a0;
-                        if ((temp_v1 >= 0) && (temp_v1 < 0x40)) {
+                        if ((temp_v1 >= 0) && (temp_v1 < 64)) {
                             temp_v0 = temp_t1 + phi_a3;
                             if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                                 shadowTexture[temp_v1 + temp_v0] = 255;

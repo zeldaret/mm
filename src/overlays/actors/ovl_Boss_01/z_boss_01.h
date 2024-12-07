@@ -8,6 +8,7 @@ struct Boss01;
 
 #define ODOLWA_GET_TYPE(thisx) ((thisx)->params)
 #define ODOLWA_GET_AFTERIMAGE_DESPAWN_TIMER(thisx) ((thisx)->world.rot.z)
+#define ODOLWA_PARAMS(type) (type)
 
 #define ODOLWA_SHADOW_TEX_WIDTH 64
 #define ODOLWA_SHADOW_TEX_HEIGHT 64
@@ -85,7 +86,7 @@ typedef struct Boss01 {
     /* 0x14E */ s16 timers[3];
     /* 0x154 */ f32 animMorphFrames1;
     /* 0x158 */ f32 animMorphFrames2;
-    /* 0x15C */ s16 damagedTimer;
+    /* 0x15C */ s16 damagedTimer; // TODO: Revisit this name when the equivalent Player variables are named
     /* 0x15E */ s16 damagedFlashTimer;
     /* 0x160 */ u8 isPerformingVerticalSlash; // set, but never checked
     /* 0x160 */ u8 landedFromJump;
@@ -133,8 +134,8 @@ typedef struct Boss01 {
     /* 0x9F0 */ Vec3f subCamAt;
     /* 0x9FC */ Vec3f subCamUp;
     /* 0xA08 */ Vec3f subCamEyeNext;
-    /* 0xA14 */ f32 deathCsInitialSubCamRot;
-    /* 0xA18 */ f32 deathCsSubCamRot;
+    /* 0xA14 */ f32 deathCsInitialSubCamRotY;
+    /* 0xA18 */ f32 deathCsSubCamRotY;
     /* 0xA1C */ f32 subCamVelocity;
     /* 0xA20 */ f32 deathShrinkSpeed;
     /* 0xA24 */ f32 screenShakeOffsetY;

@@ -473,10 +473,9 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         //! player->currentMask, but in this case is garbage in the collider
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
-    } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
+    } else if (this->unk_19B || (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
-        this->unk_19B = 0;
+        this->unk_19B = false;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, play);
         } else {
