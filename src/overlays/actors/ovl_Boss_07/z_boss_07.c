@@ -1265,9 +1265,10 @@ void Boss07_Wrath_ChooseJump(Boss07* this, PlayState* play, u8 canCancelCurrentJ
 }
 
 void Boss07_Wrath_JumpAwayFromExplosive(Boss07* this, PlayState* play) {
-    Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive;
 
-    while (explosive != NULL) {
+    for (explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first; explosive != NULL;
+         explosive = explosive->next) {
         f32 dx = explosive->world.pos.x - this->actor.world.pos.x;
         f32 dy = explosive->world.pos.y - this->actor.world.pos.y;
         f32 dz = explosive->world.pos.z - this->actor.world.pos.z;
@@ -1276,8 +1277,6 @@ void Boss07_Wrath_JumpAwayFromExplosive(Boss07* this, PlayState* play) {
             Boss07_Wrath_ChooseJump(this, play, false);
             break;
         }
-
-        explosive = explosive->next;
     }
 }
 
@@ -1309,15 +1308,14 @@ void Boss07_Wrath_BombWhip(Vec3f* bombPos, Vec3f* pos, Vec3f* velocity) {
 }
 
 void Boss07_Wrath_CheckBombWhips(Boss07* this, PlayState* play) {
-    Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive;
 
-    while (explosive != NULL) {
+    for (explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first; explosive != NULL;
+         explosive = explosive->next) {
         if (explosive->params == BOMB_TYPE_EXPLOSION) {
             Boss07_Wrath_BombWhip(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.velocity);
             Boss07_Wrath_BombWhip(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.velocity);
         }
-
-        explosive = explosive->next;
     }
 }
 
@@ -2805,9 +2803,9 @@ void Boss07_Wrath_CheckWhipCollisions(Vec3f* whipPos, f32 tension, Boss07* this,
     Vec3f hitPos;
 
     if ((tension >= 50.0f) && (this->whipCollisionTimer == 0)) {
-        Actor* prop = play->actorCtx.actorLists[ACTORCAT_PROP].first;
+        Actor* prop;
 
-        while (prop != NULL) {
+        for (prop = play->actorCtx.actorLists[ACTORCAT_PROP].first; prop != NULL; prop = prop->next) {
             if (prop->id == ACTOR_OBJ_TSUBO) {
                 for (i = 10; i < sWhipLength; i += 3) {
                     dx = prop->world.pos.x - whipPos[i].x;
@@ -2820,8 +2818,6 @@ void Boss07_Wrath_CheckWhipCollisions(Vec3f* whipPos, f32 tension, Boss07* this,
                     }
                 }
             }
-
-            prop = prop->next;
         }
     }
 
@@ -7428,9 +7424,8 @@ void Boss07_Top_CheckTopCollision(Boss07* this, PlayState* play) {
     f32 dz;
 
     if (this->disableCollisionTimer == 0) {
-        top = (Boss07*)play->actorCtx.actorLists[ACTORCAT_BOSS].first;
-
-        while (top != NULL) {
+        for (top = (Boss07*)play->actorCtx.actorLists[ACTORCAT_BOSS].first; top != NULL;
+             top = (Boss07*)top->actor.next) {
             if ((this != top) && (MAJORA_GET_TYPE(&top->actor) == MAJORA_TYPE_TOP) &&
                 (top->disableCollisionTimer == 0)) {
                 dx = top->actor.world.pos.x - this->actor.world.pos.x;
@@ -7481,8 +7476,6 @@ void Boss07_Top_CheckTopCollision(Boss07* this, PlayState* play) {
                     break;
                 }
             }
-
-            top = (Boss07*)top->actor.next;
         }
     }
 }

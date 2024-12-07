@@ -958,16 +958,15 @@ void Boss01_Destroy(Actor* thisx, PlayState* play) {
  * Checks every explosive actor to see if Odolwa is close enough to any of them. If he is, then he'll jump.
  */
 void Boss01_JumpAwayFromExplosive(Boss01* this, PlayState* play) {
-    Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive;
 
-    while (explosive != NULL) {
+    for (explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first; explosive != NULL;
+         explosive = explosive->next) {
         if (sqrtf(SQ(explosive->world.pos.x - this->actor.world.pos.x) +
                   SQ(explosive->world.pos.y - this->actor.world.pos.y) +
                   SQ(explosive->world.pos.z - this->actor.world.pos.z)) < 150.0f) {
             Boss01_SetupJump(this, play, false);
         }
-
-        explosive = explosive->next;
     }
 }
 
