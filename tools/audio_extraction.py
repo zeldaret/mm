@@ -200,7 +200,8 @@ if __name__ == '__main__':
             ),
     }
 
-    version_info = GameVersionInfo(MMLVersion.MM,
+    version_info = GameVersionInfo(version,
+                                   MMLVersion.MM,
                                    soundfont_table_code_offset,
                                    seq_font_table_code_offset,
                                    seq_table_code_offset,
