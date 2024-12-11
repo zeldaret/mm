@@ -1,38 +1,44 @@
 #ifndef PR_XSTDIO_H
 #define PR_XSTDIO_H
 
-#include "ultratypes.h"
 #include "stdarg.h"
 
+// IDO doesn't support long double types, improve portability for compilers supporting them
+#ifdef __sgi
+#define LONG_DOUBLE_TYPE double
+#else
+#define LONG_DOUBLE_TYPE long double
+#endif
+
 typedef struct {
-    /* 0x0 */ union {
-        /* 0x0 */ s64 ll;
-        /* 0x0 */ f64 ld;
+    /* 0x00 */ union {
+        long long ll;
+        LONG_DOUBLE_TYPE ld;
     } v;
-    /* 0x8 */ char* s;
-    /* 0xC */ s32 n0;
-    /* 0x10 */ s32 nz0;
-    /* 0x14 */ s32 n1;
-    /* 0x18 */ s32 nz1;
-    /* 0x1C */ s32 n2;
-    /* 0x20 */ s32 nz2;
-    /* 0x24 */ s32 prec;
-    /* 0x28 */ s32 width;
+    /* 0x08 */ char* s;
+    /* 0x0C */ int n0;
+    /* 0x10 */ int nz0;
+    /* 0x14 */ int n1;
+    /* 0x18 */ int nz1;
+    /* 0x1C */ int n2;
+    /* 0x20 */ int nz2;
+    /* 0x24 */ int prec;
+    /* 0x28 */ int width;
     /* 0x2C */ size_t nchar;
-    /* 0x30 */ u32 flags;
-    /* 0x34 */ u8 qual;
+    /* 0x30 */ unsigned int flags;
+    /* 0x34 */ char qual;
 } _Pft;
 
 typedef void* (*PrintCallback)(void*, const char*, size_t);
 
-#define FLAGS_SPACE 1
-#define FLAGS_PLUS 2
-#define FLAGS_MINUS 4
-#define FLAGS_HASH 8
-#define FLAGS_ZERO 16
+#define FLAGS_SPACE (1 << 0)
+#define FLAGS_PLUS  (1 << 1)
+#define FLAGS_MINUS (1 << 2)
+#define FLAGS_HASH  (1 << 3)
+#define FLAGS_ZERO  (1 << 4)
 
 int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
-void _Litob(_Pft* args, u8 type);
-void _Ldtob(_Pft* args, u8 type);
+void _Litob(_Pft* args, char code);
+void _Ldtob(_Pft* args, char code);
 
 #endif

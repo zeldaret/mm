@@ -1,4 +1,4 @@
-#include "ultra64.h"
+// IDO Compiler Intrinsics for 64-bit arithmetic
 
 long long __ull_rshift(unsigned long long left, unsigned long long right) {
     return left >> right;
