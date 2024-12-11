@@ -477,7 +477,7 @@
             0x80180160 : "sys_matrix",
             0x80182C90 : "sys_ucode",
             0x80182CE0 : "sys_rumble",
-            0x80183070 : "code_80183070",
+            0x80183070 : "sleep_forever",
             0x801830A0 : "c_keyframe",
             0x80185660 : "sys_slowly",
             0x801857C0 : "sys_flashrom",

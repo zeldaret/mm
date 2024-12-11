@@ -1,6 +1,6 @@
 #include "libc64/sleep.h"
 
-void func_80183070(void) {
+void Sleep_Forever(void) {
     for (;;) {
         msleep(1000);
     }
