@@ -36,6 +36,8 @@ Large code block, click to show
 
 #define FLAGS 0x00000009
 
+#define THIS ((EnRecepgirl*)thisx)
+
 void EnRecepgirl_Init(Actor* thisx, PlayState* play);
 void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
 void EnRecepgirl_Update(Actor* thisx, PlayState* play);
@@ -70,7 +72,7 @@ static s32 D_80C106C8 = 0;
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Init.s")
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
@@ -208,7 +210,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Update.s")
 void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
     Vec3s sp30;
 
     this->actionFunc(this, play);
@@ -218,7 +220,7 @@ void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s")
 s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
         rot->x += this->unk_2AE.y;
@@ -228,7 +230,7 @@ s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10590.s")
 void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
         Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
@@ -238,7 +240,7 @@ void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Draw.s")
 void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -423,7 +425,7 @@ We've got one struct variable left. To find out what it does, we can look at a f
 ```C
 s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
         rot->x += this->unk_2AE.y;
@@ -432,7 +434,7 @@ s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnRecepgirl_UnkLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnRecepgirl* this = (EnRecepgirl*)thisx;
+    EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
         Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);

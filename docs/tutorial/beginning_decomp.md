@@ -17,6 +17,8 @@ The actor file starts off looking like:
 
 #define FLAGS 0x00000009
 
+#define THIS ((EnRecepgirl*)thisx)
+
 // --------------- 3 ---------------
 void EnRecepgirl_Init(Actor* thisx, PlayState* play);
 void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
@@ -275,7 +277,23 @@ void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
 
 Typically for all but the simplest functions, there is a lot that needs fixing before we are anywhere near seeing how close we are to the original code. You will notice that mips2c creates a lot of temporary variables. Usually most of these will turn out to not be real, and we need to remove the right ones to get the code to match.
 
-While we are carrying out initial changes, you can find-and-replace any instances of `(Actor *) this` by `&this->actor`. The function now looks like this:
+To allow the function to find the variables, we need another correction. Half of this has already been done at the top of the file, where we have
+
+```C
+#define THIS ((EnRecepgirl*)thisx)
+```
+
+To do the other half, replace the recast at the beginning of the function, before any declarations:
+
+```C
+EnRecepgirl* this = THIS;
+```
+
+Now everything points to the right place, even though the argument of the function seems inconsistent with the contents.
+
+(Again: this step is only necessary for the "main four" functions, and sometimes functions that are used by these: it relates to how such functions are used outside the actor.)
+
+While we are carrying out initial changes, you can also find-and-replace any instances of `(Actor *) this` by `&this->actor`. The function now looks like this:
 
 ```C
 ? func_80C10148(EnRecepgirl *); // extern
@@ -285,7 +303,7 @@ static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = (EnRecepgirl *) thisx;
+    EnRecepgirl* this = THIS;
     void **temp_s0;
     void **phi_s0;
 
@@ -488,7 +506,7 @@ Removing some of the declarations for data that we have accounted for, the funct
 ? func_80C10148(EnRecepgirl *); // extern
 
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = (EnRecepgirl *) thisx;
+    EnRecepgirl* this = THIS;
     void **temp_s0;
     void **phi_s0;
 
@@ -637,7 +655,7 @@ void func_80C10148(EnRecepgirl* this);
 [...]
 
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = (EnRecepgirl *) thisx;
+    EnRecepgirl* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
