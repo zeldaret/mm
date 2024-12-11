@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnFuMato*)thisx)
-
 void EnFuMato_Init(Actor* thisx, PlayState* play);
 void EnFuMato_Destroy(Actor* thisx, PlayState* play);
 void EnFuMato_Update(Actor* thisx, PlayState* play);
@@ -70,7 +68,7 @@ Vec2f D_80ACF654[] = {
 
 void EnFuMato_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFuMato* this = THIS;
+    EnFuMato* this = (EnFuMato*)thisx;
     CollisionHeader* sp2C = NULL;
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
     EnFu* fu;
@@ -113,7 +111,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFuMato_Destroy(Actor* thisx, PlayState* play) {
-    EnFuMato* this = THIS;
+    EnFuMato* this = (EnFuMato*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroySphere(play, &this->collider);
@@ -384,7 +382,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
 }
 
 void EnFuMato_Update(Actor* thisx, PlayState* play) {
-    EnFuMato* this = THIS;
+    EnFuMato* this = (EnFuMato*)thisx;
 
     this->actionFunc(this, play);
 
@@ -463,7 +461,7 @@ void func_80ACF3F4(EnFuMato* this, PlayState* play) {
 
 void EnFuMato_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFuMato* this = THIS;
+    EnFuMato* this = (EnFuMato*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

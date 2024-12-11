@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
 
-#define THIS ((EnBombf*)thisx)
-
 void EnBombf_Init(Actor* thisx, PlayState* play2);
 void EnBombf_Destroy(Actor* thisx, PlayState* play);
 void EnBombf_Update(Actor* thisx, PlayState* play);
@@ -91,7 +89,7 @@ void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc) {
 void EnBombf_Init(Actor* thisx, PlayState* play2) {
     f32 yOffset = 0.0f;
     PlayState* play = play2;
-    EnBombf* this = THIS;
+    EnBombf* this = (EnBombf*)thisx;
 
     Actor_SetScale(thisx, 0.01f);
     this->unk_1F8 = 1;
@@ -132,7 +130,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnBombf_Destroy(Actor* thisx, PlayState* play) {
-    EnBombf* this = THIS;
+    EnBombf* this = (EnBombf*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroyJntSph(play, &this->colliderJntSph);
@@ -317,7 +315,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     Vec3f effPos;
     Vec3f sp5C = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 sp58 = { 255, 255, 255, 255 };
-    EnBombf* this = THIS;
+    EnBombf* this = (EnBombf*)thisx;
     s32 pad;
 
     if ((this->unk_1F8 != 0) && (this->timer != 0)) {
@@ -469,7 +467,7 @@ Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
 
 void EnBombf_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBombf* this = THIS;
+    EnBombf* this = (EnBombf*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

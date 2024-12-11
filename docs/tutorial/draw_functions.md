@@ -101,7 +101,7 @@ void func_80C10590(PlayState* play, s32 limbIndex, Actor *actor);
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Draw.s")
 void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -159,7 +159,7 @@ Only two things to do here: we need to use `EnRecepgirl` to get to `actor + 0x2B
 
 ```C
 s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     if (limbIndex == 5) {
         rot->x += this->unk_2AE.y;
@@ -187,7 +187,7 @@ There is only minor cleanup needed here:
 
 ```C
 void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     if (limbIndex == 5) {
         Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);

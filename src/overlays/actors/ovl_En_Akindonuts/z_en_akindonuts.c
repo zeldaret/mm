@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnAkindonuts*)thisx)
-
 void EnAkindonuts_Init(Actor* thisx, PlayState* play);
 void EnAkindonuts_Destroy(Actor* thisx, PlayState* play);
 void EnAkindonuts_Update(Actor* thisx, PlayState* play);
@@ -1688,7 +1686,7 @@ void func_80BEFD74(EnAkindonuts* this, PlayState* play) {
 
 void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubStandingAnim, this->jointTable,
@@ -1720,13 +1718,13 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAkindonuts_Destroy(Actor* thisx, PlayState* play) {
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnAkindonuts_Update(Actor* thisx, PlayState* play) {
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     Actor_SetFocus(&this->actor, 60.0f);
     SkelAnime_Update(&this->skelAnime);
@@ -1741,7 +1739,7 @@ void EnAkindonuts_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnAkindonuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     if (((this->animIndex == ENAKINDONUTS_ANIM_4) && (this->unk_33E == 0)) ||
         ((this->animIndex == ENAKINDONUTS_ANIM_8) && (this->unk_33E == 0)) ||
@@ -1797,7 +1795,7 @@ void EnAkindonuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnAkindonuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     if (((this->unk_33E == 1) || (this->unk_33E == 2)) &&
         ((limbIndex == BUSINESS_SCRUB_LIMB_SCALP) || (limbIndex == BUSINESS_SCRUB_LIMB_HAIR))) {
@@ -1816,7 +1814,7 @@ void EnAkindonuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx
 }
 
 void EnAkindonuts_Draw(Actor* thisx, PlayState* play) {
-    EnAkindonuts* this = THIS;
+    EnAkindonuts* this = (EnAkindonuts*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

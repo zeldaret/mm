@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
-#define THIS ((ObjBean*)thisx)
-
 void ObjBean_Init(Actor* thisx, PlayState* play);
 void ObjBean_Destroy(Actor* thisx, PlayState* play);
 void ObjBean_Update(Actor* thisx, PlayState* play);
@@ -359,7 +357,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjBean_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
     s32 sp2C = OBJBEAN_GET_C000(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -423,7 +421,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBean_Destroy(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -882,7 +880,7 @@ void func_80938AD8(ObjBean* this, PlayState* play) {
 }
 
 void func_80938C1C(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     if (this->unk_1B2 > 0) {
         this->unk_1B2--;
@@ -900,7 +898,7 @@ void func_80938C1C(Actor* thisx, PlayState* play) {
 
 void ObjBean_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     if (this->unk_1B2 > 0) {
         this->unk_1B2--;
@@ -937,7 +935,7 @@ void ObjBean_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80938E00(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -966,7 +964,7 @@ void func_80938E00(Actor* thisx, PlayState* play) {
 }
 
 void func_80938F50(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     Gfx_DrawDListXlu(play, object_mamenoki_DL_002208);
 }

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnKbt*)thisx)
-
 void EnKbt_Init(Actor* thisx, PlayState* play);
 void EnKbt_Destroy(Actor* thisx, PlayState* play);
 void EnKbt_Update(Actor* thisx, PlayState* play);
@@ -52,7 +50,7 @@ ActorProfile En_Kbt_Profile = {
 };
 
 void EnKbt_Init(Actor* thisx, PlayState* play) {
-    EnKbt* this = THIS;
+    EnKbt* this = (EnKbt*)thisx;
 
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_kbt_Skel_00DEE8, &object_kbt_Anim_004274, this->jointTable,
@@ -571,13 +569,13 @@ void func_80B34598(EnKbt* this, PlayState* play) {
 }
 
 void EnKbt_Update(Actor* thisx, PlayState* play) {
-    EnKbt* this = THIS;
+    EnKbt* this = (EnKbt*)thisx;
 
     this->actionFunc(this, play);
 }
 
 s32 EnKbt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKbt* this = THIS;
+    EnKbt* this = (EnKbt*)thisx;
 
     if (!(this->unk_27C & 1) && (limbIndex == OBJECT_KBT_LIMB_0E)) {
         *dList = NULL;
@@ -588,7 +586,7 @@ s32 EnKbt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 Vec3f D_80B34B84 = { 500.0f, 500.0f, 0.0f };
 
 void EnKbt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnKbt* this = THIS;
+    EnKbt* this = (EnKbt*)thisx;
 
     if (limbIndex == OBJECT_KBT_LIMB_09) {
         Matrix_MultVec3f(&D_80B34B84, &this->actor.focus.pos);
@@ -605,7 +603,7 @@ TexturePtr D_80B34B98[] = {
 };
 
 void EnKbt_Draw(Actor* thisx, PlayState* play) {
-    EnKbt* this = THIS;
+    EnKbt* this = (EnKbt*)thisx;
     Gfx* gfx;
     TexturePtr tex;
 

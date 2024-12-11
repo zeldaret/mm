@@ -12,8 +12,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
      ACTOR_FLAG_CAN_ATTACH_TO_ARROW | ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
 
-#define THIS ((EnSt*)thisx)
-
 void EnSt_Init(Actor* thisx, PlayState* play);
 void EnSt_Destroy(Actor* thisx, PlayState* play);
 void EnSt_Update(Actor* thisx, PlayState* play);
@@ -853,7 +851,7 @@ void func_808A701C(EnSt* this, PlayState* play) {
 }
 
 void EnSt_Init(Actor* thisx, PlayState* play) {
-    EnSt* this = THIS;
+    EnSt* this = (EnSt*)thisx;
 
     this->objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
     if (((ENST_GET_SWITCH_FLAG(&this->actor) != 0x3F) && Flags_GetSwitch(play, ENST_GET_SWITCH_FLAG(&this->actor))) ||
@@ -866,7 +864,7 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSt_Destroy(Actor* thisx, PlayState* play) {
-    EnSt* this = THIS;
+    EnSt* this = (EnSt*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -875,7 +873,7 @@ void EnSt_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnSt_Update(Actor* thisx, PlayState* play) {
-    EnSt* this = THIS;
+    EnSt* this = (EnSt*)thisx;
 
     if (this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW) {
         SkelAnime_Update(&this->skelAnime);
@@ -919,7 +917,7 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
 
 s32 EnSt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnSt* this = THIS;
+    EnSt* this = (EnSt*)thisx;
     Color_RGB8 sp20;
 
     if (limbIndex == OBJECT_ST_LIMB_04) {
@@ -932,7 +930,7 @@ s32 EnSt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void func_808A7478(Actor* thisx, PlayState* play) {
-    EnSt* this = THIS;
+    EnSt* this = (EnSt*)thisx;
     s32 bodyPartIndex;
     s32 count;
 

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnKgy*)thisx)
-
 void EnKgy_Init(Actor* thisx, PlayState* play);
 void EnKgy_Destroy(Actor* thisx, PlayState* play);
 void EnKgy_Update(Actor* thisx, PlayState* play);
@@ -59,7 +57,7 @@ ActorProfile En_Kgy_Profile = {
 };
 
 void EnKgy_Init(Actor* thisx, PlayState* play) {
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
     s16 csId;
     s32 i;
 
@@ -119,7 +117,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKgy_Destroy(Actor* thisx, PlayState* play) {
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
@@ -1132,7 +1130,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
 }
 
 void EnKgy_Update(Actor* thisx, PlayState* play) {
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
     s32 pad;
     Vec3s torsoRot;
 
@@ -1149,7 +1147,7 @@ void EnKgy_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnKgy_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
 
     if (!(this->unk_29C & 1)) {
         if (limbIndex == OBJECT_KGY_LIMB_11) {
@@ -1169,7 +1167,7 @@ s32 EnKgy_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnKgy_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B432D8 = { 1000.0f, 2000.0f, 0.0f };
     static Vec3f D_80B432E4 = { 3000.0f, 4000.0f, 300.0f };
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
 
     if (limbIndex == OBJECT_KGY_LIMB_0B) {
         Matrix_MultVec3f(&D_80B432D8, &this->unk_2A8);
@@ -1216,7 +1214,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
 }
 
 void EnKgy_Draw(Actor* thisx, PlayState* play) {
-    EnKgy* this = THIS;
+    EnKgy* this = (EnKgy*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_29C & 1) {

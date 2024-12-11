@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_20)
 
-#define THIS ((ObjDinner*)thisx)
-
 void ObjDinner_Init(Actor* thisx, PlayState* play);
 void ObjDinner_Destroy(Actor* thisx, PlayState* play);
 void ObjDinner_Update(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile Obj_Dinner_Profile = {
 };
 
 void ObjDinner_Init(Actor* thisx, PlayState* play) {
-    ObjDinner* this = THIS;
+    ObjDinner* this = (ObjDinner*)thisx;
 
     if ((gSaveContext.save.isNight != true) ||
         ((CURRENT_DAY == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS))) {

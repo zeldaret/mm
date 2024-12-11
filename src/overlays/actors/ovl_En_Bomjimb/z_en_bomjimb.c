@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnBomjimb*)thisx)
-
 void EnBomjimb_Init(Actor* thisx, PlayState* play);
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play);
 void EnBomjimb_Update(Actor* thisx, PlayState* play2);
@@ -149,7 +147,7 @@ static u8 sAnimationModes[ENBOMJIMB_ANIM_MAX] = {
 };
 
 void EnBomjimb_Init(Actor* thisx, PlayState* play) {
-    EnBomjimb* this = THIS;
+    EnBomjimb* this = (EnBomjimb*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -232,7 +230,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
-    EnBomjimb* this = THIS;
+    EnBomjimb* this = (EnBomjimb*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -884,7 +882,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play) {
 
 void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnBomjimb* this = THIS;
+    EnBomjimb* this = (EnBomjimb*)thisx;
 
     if (this->unk_2B0 != 0) {
         this->unk_2B0--;
@@ -940,7 +938,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBomjimb* this = THIS;
+    EnBomjimb* this = (EnBomjimb*)thisx;
 
     if (limbIndex == OBJECT_CS_LIMB_0F) {
         *dList = NULL;
@@ -977,7 +975,7 @@ void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80C03280[] = {
         object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
-    EnBomjimb* this = THIS;
+    EnBomjimb* this = (EnBomjimb*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

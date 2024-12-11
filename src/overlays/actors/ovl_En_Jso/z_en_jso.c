@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
-#define THIS ((EnJso*)thisx)
-
 void EnJso_Init(Actor* thisx, PlayState* play);
 void EnJso_Destroy(Actor* thisx, PlayState* play);
 void EnJso_Update(Actor* thisx, PlayState* play);
@@ -260,7 +258,7 @@ static u8 sAnimationModes[EN_JSO_ANIM_MAX] = {
 };
 
 void EnJso_Init(Actor* thisx, PlayState* play) {
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
     EffectBlureInit1 rightSwordBlureInit;
     EffectBlureInit1 leftSwordBlureInit;
 
@@ -310,7 +308,7 @@ void EnJso_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnJso_Destroy(Actor* thisx, PlayState* play) {
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
     EnEncount3* parent;
 
     Collider_DestroyCylinder(play, &this->bodyCollider);
@@ -1441,7 +1439,7 @@ void EnJso_UpdateDamage(EnJso* this, PlayState* play) {
 }
 
 void EnJso_Update(Actor* thisx, PlayState* play) {
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
     s32 pad;
 
     if ((this->action != EN_JSO_ACTION_CIRCLE_PLAYER) && !this->disableAnimations) {
@@ -1535,7 +1533,7 @@ void EnJso_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnJso_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
 
     if (limbIndex == GARO_LIMB_RIGHT_ARM) {
         rot->x += this->rightArmRot.x;
@@ -1569,7 +1567,7 @@ void EnJso_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     static Vec3f sSwordBaseOffset = { 0.0f, 0.0f, 0.0f };
     static Vec3f sSwordTipQuadOffset = { 1700.0f, 0.0f, 0.0f };
     static Vec3f sSwordBaseQuadOffset = { 0.0f, 0.0f, 0.0f };
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
     Vec3f swordTipPos;
     Vec3f swordBasePos;
 
@@ -1657,7 +1655,7 @@ void EnJso_Draw(Actor* thisx, PlayState* play) {
     static s16 sAfterimageAlpha[EN_JSO_AFTERIMAGE_COUNT] = {
         128, 0, 0, 0, 0, 128, 0, 0, 0, 0, 128, 0, 0, 0, 0, 128, 0, 0, 0, 0,
     };
-    EnJso* this = THIS;
+    EnJso* this = (EnJso*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

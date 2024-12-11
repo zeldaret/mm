@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnBombers2*)thisx)
-
 void EnBombers2_Init(Actor* thisx, PlayState* play);
 void EnBombers2_Destroy(Actor* thisx, PlayState* play);
 void EnBombers2_Update(Actor* thisx, PlayState* play);
@@ -130,7 +128,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBombers2_Destroy(Actor* thisx, PlayState* play) {
-    EnBombers2* this = THIS;
+    EnBombers2* this = (EnBombers2*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -442,7 +440,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBombers2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBombers2* this = THIS;
+    EnBombers2* this = (EnBombers2*)thisx;
 
     if (limbIndex == OBJECT_CS_LIMB_08) {
         rot->x += this->unk_296;
@@ -458,7 +456,7 @@ s32 EnBombers2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnBombers2_Draw(Actor* thisx, PlayState* play) {
-    EnBombers2* this = THIS;
+    EnBombers2* this = (EnBombers2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

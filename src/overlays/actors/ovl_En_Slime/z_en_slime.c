@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnSlime*)thisx)
-
 #define ICE_BLOCK_TIMER_MAX 254
 #define ICE_BLOCK_UNUSED (ICE_BLOCK_TIMER_MAX + 1)
 
@@ -156,7 +154,7 @@ static Vec3f sBubbleAccel = { 0.0f, -0.8f, 0.0f };
 AnimatedMaterial* sSlimeTexAnim;
 
 void EnSlime_Init(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     s32 reviveTimeSeconds;
     s32 i;
 
@@ -215,7 +213,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSlime_Destroy(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1082,7 +1080,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
 }
 
 void EnSlime_Update(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -1162,7 +1160,7 @@ static Vec3f sBodyPartPosOffsets[EN_SLIME_BODYPART_MAX] = {
 
 void EnSlime_Draw(Actor* thisx, PlayState* play) {
     s32 i;
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     Vec3f wobbleScale;
     Color_RGBA8* primColor;
     Color_RGBA8* envColor;

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
-#define THIS ((EnRuppecrow*)thisx)
-
 typedef enum EnRuppecrowEffect {
     /* 0x00 */ ENRUPPECROW_EFFECT_NONE = 0,
     /* 0x0A */ ENRUPPECROW_EFFECT_ICE = 10,
@@ -624,7 +622,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
 
 void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnRuppecrow* this = THIS;
+    EnRuppecrow* this = (EnRuppecrow*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
@@ -648,13 +646,13 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnRuppecrow_Destroy(Actor* thisx, PlayState* play) {
-    EnRuppecrow* this = THIS;
+    EnRuppecrow* this = (EnRuppecrow*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
 
 void EnRuppecrow_Update(Actor* thisx, PlayState* play) {
-    EnRuppecrow* this = THIS;
+    EnRuppecrow* this = (EnRuppecrow*)thisx;
 
     EnRuppecrow_UpdateDamage(this, play);
     this->actionFunc(this, play);
@@ -665,7 +663,7 @@ void EnRuppecrow_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnRuppecrow_Draw(Actor* thisx, PlayState* play) {
-    EnRuppecrow* this = THIS;
+    EnRuppecrow* this = (EnRuppecrow*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgIkanaDharma*)thisx)
-
 void BgIkanaDharma_Init(Actor* thisx, PlayState* play2);
 void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play);
@@ -95,7 +93,7 @@ void BgIkanaDharma_SpawnEffects(BgIkanaDharma* this, PlayState* play) {
 
 void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgIkanaDharma* this = THIS;
+    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.scale.x = 0.3f;
@@ -126,7 +124,7 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
 }
 
 void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaDharma* this = THIS;
+    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -215,7 +213,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
 }
 
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
-    BgIkanaDharma* this = THIS;
+    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
 
     this->actionFunc(this, play);
     if (this->actionFunc == BgIkanaDharma_WaitForHit) {
@@ -258,7 +256,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaDharma_Draw(Actor* thisx, PlayState* play) {
-    BgIkanaDharma* this = THIS;
+    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
 
     Gfx_DrawDListOpa(play, gStoneTowerTemplePunchablePillarDL);
 }

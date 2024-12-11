@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnWizFire*)thisx)
-
 void EnWizFire_Init(Actor* thisx, PlayState* play);
 void EnWizFire_Destroy(Actor* thisx, PlayState* play);
 void EnWizFire_Update(Actor* thisx, PlayState* play2);
@@ -71,7 +69,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnWizFire_Init(Actor* thisx, PlayState* play) {
-    EnWizFire* this = THIS;
+    EnWizFire* this = (EnWizFire*)thisx;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->type = EN_WIZ_FIRE_GET_TYPE(&this->actor);
@@ -117,7 +115,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWizFire_Destroy(Actor* thisx, PlayState* play) {
-    EnWizFire* this = THIS;
+    EnWizFire* this = (EnWizFire*)thisx;
 
     if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
         play->envCtx.adjLightSettings.fogColor[2] = 0;
@@ -496,7 +494,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
         { 0, 0, 0 },     { 200, 250, 250 }, { 100, 250, 250 }, { 225, 255, 235 }, // Ice
     };
     PlayState* play = play2;
-    EnWizFire* this = THIS;
+    EnWizFire* this = (EnWizFire*)thisx;
     Player* player = GET_PLAYER(play);
     s32 j;
     s16 randomScale;
@@ -760,7 +758,7 @@ void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
 
 void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnWizFire* this = THIS;
+    EnWizFire* this = (EnWizFire*)thisx;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -805,7 +803,7 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
 
 void EnWizFire_DrawSmallFlame(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWizFire* this = THIS;
+    EnWizFire* this = (EnWizFire*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnEgblock*)thisx)
-
 typedef enum {
     /* 0 */ EGBLOCK_EFFECT_DEBRIS_SOLID,
     /* 1 */ EGBLOCK_EFFECT_DEBRIS_FLAT
@@ -42,7 +40,7 @@ ActorProfile En_Egblock_Profile = {
 };
 
 void EnEgblock_Init(Actor* thisx, PlayState* play) {
-    EnEgblock* this = THIS;
+    EnEgblock* this = (EnEgblock*)thisx;
     CollisionHeader* colHeader = NULL;
     s32 pad;
 
@@ -64,7 +62,7 @@ void EnEgblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnEgblock_Destroy(Actor* thisx, PlayState* play) {
-    EnEgblock* this = THIS;
+    EnEgblock* this = (EnEgblock*)thisx;
 
     if (this->dyna.actor.colChkInfo.health == 1) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -97,7 +95,7 @@ void EnEgblock_DoNothing(EnEgblock* this, PlayState* play) {
 }
 
 void EnEgblock_Update(Actor* thisx, PlayState* play) {
-    EnEgblock* this = THIS;
+    EnEgblock* this = (EnEgblock*)thisx;
 
     this->actionFunc(this, play);
 
@@ -108,7 +106,7 @@ void EnEgblock_Update(Actor* thisx, PlayState* play) {
 
 void EnEgblock_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnEgblock* this = THIS;
+    EnEgblock* this = (EnEgblock*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 

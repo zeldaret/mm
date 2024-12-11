@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnTorch2*)thisx)
-
 void EnTorch2_Init(Actor* thisx, PlayState* play);
 void EnTorch2_Destroy(Actor* thisx, PlayState* play);
 void EnTorch2_Update(Actor* thisx, PlayState* play);
@@ -62,7 +60,7 @@ static Gfx* sShellDLists[] = {
 };
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -77,7 +75,7 @@ void EnTorch2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     Play_SetRespawnData(play, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
@@ -86,7 +84,7 @@ void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnTorch2_Update(Actor* thisx, PlayState* play) {
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
     u16 targetAlpha;
     u16 remainingFrames;
     s32 pad[2];
@@ -132,7 +130,7 @@ void EnTorch2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play) {
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
 
     if (this->state == TORCH2_STATE_DYING) {
         // Start death animation
@@ -142,7 +140,7 @@ void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play) {
 }
 
 void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
 
     // Fall down and become transparent, then delete once invisible
     if (Math_StepToS(&this->alpha, 0, 8)) {
@@ -156,7 +154,7 @@ void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
 
 void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTorch2* this = THIS;
+    EnTorch2* this = (EnTorch2*)thisx;
     Gfx* gfx = sShellDLists[this->actor.params];
 
     OPEN_DISPS(play->state.gfxCtx);

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgKin2Fence*)thisx)
-
 void BgKin2Fence_Init(Actor* thisx, PlayState* play);
 void BgKin2Fence_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Fence_Update(Actor* thisx, PlayState* play);
@@ -141,7 +139,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
     s32 i = 0;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -165,7 +163,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Fence_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
@@ -253,7 +251,7 @@ void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play) {
 }
 
 void BgKin2Fence_Update(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
 
     this->actionFunc(this, play);
 }

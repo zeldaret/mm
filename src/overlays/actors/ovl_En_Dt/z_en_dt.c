@@ -15,8 +15,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDt*)thisx)
-
 void EnDt_Init(Actor* thisx, PlayState* play);
 void EnDt_Destroy(Actor* thisx, PlayState* play);
 void EnDt_Update(Actor* thisx, PlayState* play);
@@ -234,7 +232,7 @@ static TexturePtr sEyebrowTextures[] = {
 };
 
 void EnDt_Init(Actor* thisx, PlayState* play) {
-    EnDt* this = THIS;
+    EnDt* this = (EnDt*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -260,7 +258,7 @@ void EnDt_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDt_Destroy(Actor* thisx, PlayState* play) {
-    EnDt* this = THIS;
+    EnDt* this = (EnDt*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -773,7 +771,7 @@ void EnDt_TriggerFinalNightTalkEvent(EnDt* this, PlayState* play) {
 
 void EnDt_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDt* this = THIS;
+    EnDt* this = (EnDt*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     Actor_SetScale(&this->actor, 0.01f);
@@ -817,7 +815,7 @@ void EnDt_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDt* this = THIS;
+    EnDt* this = (EnDt*)thisx;
 
     if (limbIndex == OBJECT_DT_LIMB_0C) {
         rot->y += -1 * this->headRotValue.y;
@@ -827,7 +825,7 @@ s32 EnDt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnDt_Draw(Actor* thisx, PlayState* play) {
-    EnDt* this = THIS;
+    EnDt* this = (EnDt*)thisx;
     s32 eyebrowIndex = 0;
 
     OPEN_DISPS(play->state.gfxCtx);

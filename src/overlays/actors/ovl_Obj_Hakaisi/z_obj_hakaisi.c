@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
-#define THIS ((ObjHakaisi*)thisx)
-
 void ObjHakaisi_Init(Actor* thisx, PlayState* play);
 void ObjHakaisi_Destroy(Actor* thisx, PlayState* play);
 void ObjHakaisi_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ Vec3f D_80B155BC[] = { { 0.0f, 65.0f, 8.0f }, { 0.0f, 35.0f, 8.0f }, { 0.0f, 15.
 
 void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjHakaisi* this = THIS;
+    ObjHakaisi* this = (ObjHakaisi*)thisx;
     CollisionHeader* sp7C = NULL;
     MtxF sp3C;
     s32 i;
@@ -140,7 +138,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjHakaisi_Destroy(Actor* thisx, PlayState* play) {
-    ObjHakaisi* this = THIS;
+    ObjHakaisi* this = (ObjHakaisi*)thisx;
 
     if (OBJHAKAISI_GET_FF(&this->dyna.actor) != 3) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -331,13 +329,13 @@ void func_80B14F4C(ObjHakaisi* this, PlayState* play, s32 arg2) {
 }
 
 void ObjHakaisi_Update(Actor* thisx, PlayState* play) {
-    ObjHakaisi* this = THIS;
+    ObjHakaisi* this = (ObjHakaisi*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjHakaisi_Draw(Actor* thisx, PlayState* play) {
-    ObjHakaisi* this = THIS;
+    ObjHakaisi* this = (ObjHakaisi*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -412,7 +410,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play) {
 }
 
 void func_80B1544C(Actor* thisx, PlayState* play) {
-    ObjHakaisi* this = THIS;
+    ObjHakaisi* this = (ObjHakaisi*)thisx;
 
     this->actionFunc(this, play);
 

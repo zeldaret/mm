@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnEncount3*)thisx)
-
 void EnEncount3_Init(Actor* thisx, PlayState* play);
 void EnEncount3_Destroy(Actor* thisx, PlayState* play);
 void EnEncount3_Update(Actor* thisx, PlayState* play2);
@@ -37,7 +35,7 @@ ActorProfile En_Encount3_Profile = {
 s32 D_809AD810 = false;
 
 void EnEncount3_Init(Actor* thisx, PlayState* play) {
-    EnEncount3* this = THIS;
+    EnEncount3* this = (EnEncount3*)thisx;
 
     this->unk14A = ENCOUNT3_GET_SPAWN_INDEX(thisx);
     this->childParams = ENCOUNT3_GET_PARAM_F80(thisx);
@@ -109,7 +107,7 @@ void func_809AD1EC(EnEncount3* this, PlayState* play) {
 }
 
 void EnEncount3_Update(Actor* thisx, PlayState* play2) {
-    EnEncount3* this = THIS;
+    EnEncount3* this = (EnEncount3*)thisx;
     f32 new_var;
     PlayState* play = play2;
     Player* player = GET_PLAYER(play);
@@ -177,7 +175,7 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnEncount3_Draw(Actor* thisx, PlayState* play) {
-    EnEncount3* this = THIS;
+    EnEncount3* this = (EnEncount3*)thisx;
     s32 pad;
 
     if (this->unk170 > 0.0f) {

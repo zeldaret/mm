@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((BgTobira01*)thisx)
-
 void BgTobira01_Init(Actor* thisx, PlayState* play);
 void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
@@ -72,7 +70,7 @@ void BgTobira01_Action(BgTobira01* this, PlayState* play) {
 }
 
 void BgTobira01_Init(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gGoronDoorCol);
@@ -84,13 +82,13 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgTobira01_Update(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     this->actionFunc(this, play);
 }

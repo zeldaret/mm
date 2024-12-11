@@ -52,7 +52,7 @@ In this case, we see that various branches are happening in the wrong place. Her
 
 ```C
 void EnJj_Init(Actor* thisx, PlayState* play) {
-    EnJj* this = THIS;
+    EnJj* this = (EnJj*)thisx;
 
     s32 sp4C;
     s16 temp_v0;
@@ -127,7 +127,7 @@ except we still have some stack issues. Now that `temp_v0` is only used once, it
 ```C
 void EnJj_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnJj* this = THIS;
+    EnJj* this = (EnJj*)thisx;
 	...
 ```
 

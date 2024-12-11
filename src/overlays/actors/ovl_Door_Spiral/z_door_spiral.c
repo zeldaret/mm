@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((DoorSpiral*)thisx)
-
 void DoorSpiral_Init(Actor* thisx, PlayState* play);
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play);
 void DoorSpiral_Update(Actor* thisx, PlayState* play);
@@ -129,7 +127,7 @@ u8 func_809A2BF8(PlayState* play) {
 }
 
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
     s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
     s8 objectSlot;
 
@@ -230,7 +228,7 @@ void func_809A3098(DoorSpiral* this, PlayState* play) {
 }
 
 void DoorSpiral_Update(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
@@ -242,7 +240,7 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
 
 void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
 
     if (this->actor.objectSlot == this->objectSlot) {
         SpiralInfo* spiralInfo = &sSpiralInfoTable[this->unk148];

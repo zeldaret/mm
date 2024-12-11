@@ -3,8 +3,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgLotus*)thisx)
-
 void BgLotus_Init(Actor* thisx, PlayState* play);
 void BgLotus_Destroy(Actor* thisx, PlayState* play);
 void BgLotus_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgLotus_Init(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
+    BgLotus* this = (BgLotus*)thisx;
     s32 pad;
     s32 bgId;
 
@@ -46,7 +44,7 @@ void BgLotus_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgLotus_Destroy(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
+    BgLotus* this = (BgLotus*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -146,7 +144,7 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
 }
 
 void BgLotus_Update(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
+    BgLotus* this = (BgLotus*)thisx;
     s32 pad;
     WaterBox* waterBox;
 
@@ -156,7 +154,7 @@ void BgLotus_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgLotus_Draw(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
+    BgLotus* this = (BgLotus*)thisx;
 
     Gfx_DrawDListOpa(play, gLilyPadDL);
 }

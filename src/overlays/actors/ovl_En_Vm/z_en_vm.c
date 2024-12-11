@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnVm*)thisx)
-
 void EnVm_Init(Actor* thisx, PlayState* play);
 void EnVm_Destroy(Actor* thisx, PlayState* play);
 void EnVm_Update(Actor* thisx, PlayState* play);
@@ -155,7 +153,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnVm_Init(Actor* thisx, PlayState* play) {
     static s32 sTexturesDesegmented = false;
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
     s32 i;
     s32 params;
 
@@ -186,7 +184,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnVm_Destroy(Actor* thisx, PlayState* play) {
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
 
     Collider_DestroyTris(play, &this->colliderTris);
     Collider_DestroyJntSph(play, &this->colliderJntSph);
@@ -429,7 +427,7 @@ void func_808CCDE4(EnVm* this, PlayState* play) {
 
 void EnVm_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
 
     func_808CCDE4(this, play);
 
@@ -456,7 +454,7 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnVm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
 
     if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         rot->x += this->unk_216;
@@ -469,7 +467,7 @@ s32 EnVm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
     Vec3f sp5C;
     Vec3f sp50;
     CollisionPoly* poly;
@@ -503,7 +501,7 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnVm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnVm* this = THIS;
+    EnVm* this = (EnVm*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

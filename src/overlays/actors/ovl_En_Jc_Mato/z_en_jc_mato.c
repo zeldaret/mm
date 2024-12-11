@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
-#define THIS ((EnJcMato*)thisx)
-
 void EnJcMato_Init(Actor* thisx, PlayState* play);
 void EnJcMato_Destroy(Actor* thisx, PlayState* play);
 void EnJcMato_Update(Actor* thisx, PlayState* play);
@@ -117,7 +115,7 @@ void EnJcMato_Idle(EnJcMato* this, PlayState* play) {
 }
 
 void EnJcMato_Init(Actor* thisx, PlayState* play) {
-    EnJcMato* this = THIS;
+    EnJcMato* this = (EnJcMato*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(play, &this->collider);
@@ -131,13 +129,13 @@ void EnJcMato_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnJcMato_Destroy(Actor* thisx, PlayState* play) {
-    EnJcMato* this = THIS;
+    EnJcMato* this = (EnJcMato*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnJcMato_Update(Actor* thisx, PlayState* play) {
-    EnJcMato* this = THIS;
+    EnJcMato* this = (EnJcMato*)thisx;
 
     this->actionFunc(this, play);
     if (!CHECK_EVENTINF(EVENTINF_40)) {
@@ -147,7 +145,7 @@ void EnJcMato_Update(Actor* thisx, PlayState* play) {
 
 void EnJcMato_Draw(Actor* thisx, PlayState* play) {
     static Vec3f sOffset = { 0.0f, -2500.0f, 0.0f };
-    EnJcMato* this = THIS;
+    EnJcMato* this = (EnJcMato*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

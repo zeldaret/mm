@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
-#define THIS ((EnPeehat*)thisx)
-
 void EnPeehat_Init(Actor* thisx, PlayState* play);
 void EnPeehat_Destroy(Actor* thisx, PlayState* play);
 void EnPeehat_Update(Actor* thisx, PlayState* play2);
@@ -175,7 +173,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnPeehat_Init(Actor* thisx, PlayState* play) {
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &object_ph_Skel_001C80, &object_ph_Anim_0009C4, this->jointTable,
@@ -213,7 +211,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPeehat_Destroy(Actor* thisx, PlayState* play) {
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
@@ -749,7 +747,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
 
 void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
 
     if (thisx->params == 0) {
         func_8089874C(this, play);
@@ -836,7 +834,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
     s32 pad;
 
     if (limbIndex == OBJECT_PH_LIMB_04) {
@@ -905,7 +903,7 @@ static s8 sLimbToBodyParts[OBJECT_PH_LIMB_MAX] = {
 
 void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     PlayState* play = play2;
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
     s32 i;
     s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     Gfx* gfx;
@@ -950,7 +948,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnPeehat_Draw(Actor* thisx, PlayState* play) {
-    EnPeehat* this = THIS;
+    EnPeehat* this = (EnPeehat*)thisx;
     Vec3f sp58;
     Vec3f sp4C;
     Vec3f sp40;

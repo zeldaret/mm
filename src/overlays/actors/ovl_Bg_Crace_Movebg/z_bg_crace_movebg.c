@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgCraceMovebg*)thisx)
-
 void BgCraceMovebg_Init(Actor* thisx, PlayState* play);
 void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgCraceMovebg_Update(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ static InitChainEntry sInitChain[] = {
 static Vec3f sUnitVecZ = { 0.0f, 0.0f, 1.0f };
 
 void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
-    BgCraceMovebg* this = THIS;
+    BgCraceMovebg* this = (BgCraceMovebg*)thisx;
     s32 i;
     s32 j;
 
@@ -187,7 +185,7 @@ void BgCraceMovebg_OpeningDoor_DoNothing(BgCraceMovebg* this, PlayState* play) {
 }
 
 void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play) {
-    BgCraceMovebg* this = THIS;
+    BgCraceMovebg* this = (BgCraceMovebg*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if (!(this->stateFlags & BG_CRACE_MOVEBG_FLAG_ALREADY_LOADED)) {
@@ -206,7 +204,7 @@ void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
-    BgCraceMovebg* this = THIS;
+    BgCraceMovebg* this = (BgCraceMovebg*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
     s16 yawDiff;

@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMine*)thisx)
-
 #define LINK_SIZE 12.0f
 #define ATTACH_OFFSET 10.0f
 #define PATH_RADIUS 32.0f
@@ -674,7 +672,7 @@ void ObjMine_Water_UpdateChain(ObjMine* this, PlayState* play) {
 
 void ObjMine_Init(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast. Must be gamestate recast.
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
     s32 pathIndex = OBJMINE_GET_PATH_INDEX(&this->actor);
     Path* path;
     s32 bgId; // not used
@@ -745,7 +743,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjMine_Destroy(Actor* thisx, PlayState* play) {
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -1065,7 +1063,7 @@ void ObjMine_Water_Stationary(ObjMine* this, PlayState* play) {
 
 void ObjMine_Path_Update(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast.
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
 
     if ((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.acFlags & AC_HIT)) {
         ObjMine_Path_SpawnBomb(this, play);
@@ -1086,14 +1084,14 @@ void ObjMine_Path_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjMine_AirWater_Update(Actor* thisx, PlayState* play) {
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjMine_Path_Draw(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1131,7 +1129,7 @@ void ObjMine_DrawExplosion(Actor* thisx, PlayState* play) {
 
 void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
     ObjMineAirChain* airChain = &this->chain.air;
     ObjMineAirLink* airLink;
@@ -1189,7 +1187,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
 
 void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast
-    ObjMine* this = THIS;
+    ObjMine* this = (ObjMine*)thisx;
     s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
     ObjMineWaterChain* waterChain = &this->chain.water;
     ObjMineWaterLink* waterLink;

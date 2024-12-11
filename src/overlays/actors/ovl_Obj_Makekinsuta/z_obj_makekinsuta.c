@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjMakekinsuta*)thisx)
-
 void ObjMakekinsuta_Init(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play);
@@ -46,7 +44,7 @@ bool func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
 }
 
 void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
-    ObjMakekinsuta* this = THIS;
+    ObjMakekinsuta* this = (ObjMakekinsuta*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (!func_8099FA40(this, play)) {
@@ -58,7 +56,7 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play) {
-    ObjMakekinsuta* this = THIS;
+    ObjMakekinsuta* this = (ObjMakekinsuta*)thisx;
 
     if (func_8099FA40(this, play)) {
         Flags_UnsetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx));
@@ -104,7 +102,7 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
 }
 
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
-    ObjMakekinsuta* this = THIS;
+    ObjMakekinsuta* this = (ObjMakekinsuta*)thisx;
 
     if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx))) {
         this->actor.update = func_8099FD7C;
