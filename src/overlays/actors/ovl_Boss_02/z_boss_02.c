@@ -4,6 +4,7 @@
  * Description: Twinmold
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
