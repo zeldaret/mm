@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((DmGm*)thisx)
-
 void DmGm_Init(Actor* thisx, PlayState* play);
 void DmGm_Destroy(Actor* thisx, PlayState* play);
 void DmGm_Update(Actor* thisx, PlayState* play);
@@ -311,7 +309,7 @@ void DmGm_DoNothing(DmGm* this, PlayState* play) {
 }
 
 void DmGm_Init(Actor* thisx, PlayState* play) {
-    DmGm* this = THIS;
+    DmGm* this = (DmGm*)thisx;
 
     this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
     this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
@@ -322,7 +320,7 @@ void DmGm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmGm_Update(Actor* thisx, PlayState* play) {
-    DmGm* this = THIS;
+    DmGm* this = (DmGm*)thisx;
 
     this->actionFunc(this, play);
 
@@ -337,7 +335,7 @@ void DmGm_Update(Actor* thisx, PlayState* play) {
 
 void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
-    DmGm* this = THIS;
+    DmGm* this = (DmGm*)thisx;
     s8 objectSlot = this->actor.objectSlot;
     s8 msmoObjectSlot = this->msmoObjectSlot;
 
@@ -369,7 +367,7 @@ void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    DmGm* this = THIS;
+    DmGm* this = (DmGm*)thisx;
     s16 stepRot;
     s16 overrideRot;
 
@@ -424,7 +422,7 @@ void DmGm_Draw(Actor* thisx, PlayState* play) {
         gAnju1EyeSadTex,            // DMGM_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMGM_EYES_RELIEVED_CLOSED
     };
-    DmGm* this = THIS;
+    DmGm* this = (DmGm*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

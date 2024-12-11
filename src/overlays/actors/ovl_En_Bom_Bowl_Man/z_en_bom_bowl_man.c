@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnBomBowlMan*)thisx)
-
 void EnBomBowlMan_Init(Actor* thisx, PlayState* play);
 void EnBomBowlMan_Destroy(Actor* thisx, PlayState* play);
 void EnBomBowlMan_Update(Actor* thisx, PlayState* play);
@@ -130,7 +128,7 @@ Vec3f D_809C61A0[] = {
 };
 
 void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
-    EnBomBowlMan* this = THIS;
+    EnBomBowlMan* this = (EnBomBowlMan*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -664,7 +662,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
 }
 
 void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
-    EnBomBowlMan* this = THIS;
+    EnBomBowlMan* this = (EnBomBowlMan*)thisx;
 
     if (this->unk_2BA != 0) {
         this->unk_2BA--;
@@ -698,7 +696,7 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBomBowlMan* this = THIS;
+    EnBomBowlMan* this = (EnBomBowlMan*)thisx;
 
     if (limbIndex == OBJECT_CS_LIMB_0F) {
         *dList = NULL;
@@ -736,7 +734,7 @@ TexturePtr D_809C6220[] = {
 };
 
 void EnBomBowlMan_Draw(Actor* thisx, PlayState* play) {
-    EnBomBowlMan* this = THIS;
+    EnBomBowlMan* this = (EnBomBowlMan*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnTanron2*)thisx)
-
 void EnTanron2_Init(Actor* thisx, PlayState* play);
 void EnTanron2_Destroy(Actor* thisx, PlayState* play);
 void EnTanron2_Update(Actor* thisx, PlayState* play);
@@ -119,7 +117,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 };
 
 void EnTanron2_Init(Actor* thisx, PlayState* play) {
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
 
     D_80BB8450 = (Boss04*)this->actor.parent;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
@@ -478,7 +476,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
 
 void EnTanron2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
     s32 pad2[2];
     Input* input;
 
@@ -576,7 +574,7 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80BB7B90(Actor* thisx, PlayState* play) {
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
 
     D_80BB8454 = (Math_SinS(play->gameplayFrames * 0x3000) * 0.1f) + 1.0f;
     if (D_80BB8450->unk_1F6 == 11) {

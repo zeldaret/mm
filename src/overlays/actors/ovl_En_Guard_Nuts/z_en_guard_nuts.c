@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnGuardNuts*)thisx)
-
 void EnGuardNuts_Init(Actor* thisx, PlayState* play);
 void EnGuardNuts_Destroy(Actor* thisx, PlayState* play);
 void EnGuardNuts_Update(Actor* thisx, PlayState* play);
@@ -102,7 +100,7 @@ typedef enum {
 } EnGuardNutsState;
 
 void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
-    EnGuardNuts* this = THIS;
+    EnGuardNuts* this = (EnGuardNuts*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
@@ -124,7 +122,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGuardNuts_Destroy(Actor* thisx, PlayState* play) {
-    EnGuardNuts* this = THIS;
+    EnGuardNuts* this = (EnGuardNuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -325,7 +323,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
 }
 
 void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
-    EnGuardNuts* this = THIS;
+    EnGuardNuts* this = (EnGuardNuts*)thisx;
     s32 pad;
 
     if (this->blinkTimer == 0) {
@@ -363,7 +361,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGuardNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnGuardNuts* this = THIS;
+    EnGuardNuts* this = (EnGuardNuts*)thisx;
 
     if (limbIndex == DEKU_PALACE_GUARD_LIMB_HEAD) {
         rot->x += this->headRot.x;
@@ -374,7 +372,7 @@ s32 EnGuardNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
-    EnGuardNuts* this = THIS;
+    EnGuardNuts* this = (EnGuardNuts*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

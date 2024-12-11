@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnBb*)thisx)
-
 void EnBb_Init(Actor* thisx, PlayState* play);
 void EnBb_Destroy(Actor* thisx, PlayState* play);
 void EnBb_Update(Actor* thisx, PlayState* play);
@@ -120,7 +118,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBb_Init(Actor* thisx, PlayState* play) {
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
@@ -143,7 +141,7 @@ void EnBb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBb_Destroy(Actor* thisx, PlayState* play) {
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
@@ -562,7 +560,7 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
 }
 
 void EnBb_Update(Actor* thisx, PlayState* play) {
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
 
     EnBb_UpdateDamage(this, play);
     this->actionFunc(this, play);
@@ -605,7 +603,7 @@ void EnBb_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_BROKEN) {
         this->limbDList = *dList;
@@ -645,7 +643,7 @@ static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
     MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
@@ -686,7 +684,7 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnBb_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBb* this = THIS;
+    EnBb* this = (EnBb*)thisx;
     MtxF* currentMatrixState;
     Gfx* gfx;
 

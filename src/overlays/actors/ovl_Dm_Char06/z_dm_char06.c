@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((DmChar06*)thisx)
-
 void DmChar06_Init(Actor* thisx, PlayState* play);
 void DmChar06_Destroy(Actor* thisx, PlayState* play);
 void DmChar06_Update(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
 }
 
 void DmChar06_Init(Actor* thisx, PlayState* play) {
-    DmChar06* this = THIS;
+    DmChar06* this = (DmChar06*)thisx;
 
     SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
     Actor_SetScale(&this->actor, 1.0f);
@@ -65,14 +63,14 @@ void DmChar06_HandleCutscene(DmChar06* this, PlayState* play) {
 }
 
 void DmChar06_Update(Actor* thisx, PlayState* play) {
-    DmChar06* this = THIS;
+    DmChar06* this = (DmChar06*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void DmChar06_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DmChar06* this = THIS;
+    DmChar06* this = (DmChar06*)thisx;
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_yukiyama_Matanimheader_006868));
 

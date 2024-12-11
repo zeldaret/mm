@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnSellnuts*)thisx)
-
 void EnSellnuts_Init(Actor* thisx, PlayState* play);
 void EnSellnuts_Destroy(Actor* thisx, PlayState* play);
 void EnSellnuts_Update(Actor* thisx, PlayState* play);
@@ -982,7 +980,7 @@ f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 }
 
 void EnSellnuts_Init(Actor* thisx, PlayState* play) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
     s32 pad2;
@@ -1064,13 +1062,13 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSellnuts_Destroy(Actor* thisx, PlayState* play) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnSellnuts_Update(Actor* thisx, PlayState* play) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
     Player* player = GET_PLAYER(play);
 
     this->unk_328++;
@@ -1096,7 +1094,7 @@ void EnSellnuts_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSellnuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
 
     if (((this->animIndex == ENSELLNUTS_ANIM_4) && (this->unk_350 == 0)) ||
         ((this->animIndex == ENSELLNUTS_ANIM_8) && (this->unk_350 == 0)) ||
@@ -1173,7 +1171,7 @@ void EnSellnuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 }
 
 void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
 
     if (((this->unk_350 == 1) || (this->unk_350 == 3)) &&
         ((limbIndex == BUSINESS_SCRUB_LIMB_SCALP) || (limbIndex == BUSINESS_SCRUB_LIMB_HAIR))) {
@@ -1193,7 +1191,7 @@ void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
 }
 
 void EnSellnuts_Draw(Actor* thisx, PlayState* play) {
-    EnSellnuts* this = THIS;
+    EnSellnuts* this = (EnSellnuts*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

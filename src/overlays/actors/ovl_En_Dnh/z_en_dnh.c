@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDnh*)thisx)
-
 void EnDnh_Init(Actor* thisx, PlayState* play);
 void EnDnh_Destroy(Actor* thisx, PlayState* play);
 void EnDnh_Update(Actor* thisx, PlayState* play);
@@ -308,7 +306,7 @@ void EnDnh_DoNothing(EnDnh* this, PlayState* play) {
 }
 
 void EnDnh_Init(Actor* thisx, PlayState* play) {
-    EnDnh* this = THIS;
+    EnDnh* this = (EnDnh*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkel, NULL, this->jointTable, this->morphTable,
@@ -337,7 +335,7 @@ void EnDnh_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnDnh_Update(Actor* thisx, PlayState* play) {
-    EnDnh* this = THIS;
+    EnDnh* this = (EnDnh*)thisx;
 
     func_80A50E40(this, play);
     this->actionFunc(this, play);
@@ -348,7 +346,7 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDnh* this = THIS;
+    EnDnh* this = (EnDnh*)thisx;
 
     if (limbIndex == KOUME_KIOSK_LIMB_HEAD) {
         Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
@@ -357,7 +355,7 @@ s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnDnh_Draw(Actor* thisx, PlayState* play) {
-    EnDnh* this = THIS;
+    EnDnh* this = (EnDnh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

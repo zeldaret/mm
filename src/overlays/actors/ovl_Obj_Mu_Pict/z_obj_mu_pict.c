@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((ObjMuPict*)thisx)
-
 void ObjMuPict_Init(Actor* thisx, PlayState* play);
 void ObjMuPict_Destroy(Actor* thisx, PlayState* play);
 void ObjMuPict_Update(Actor* thisx, PlayState* play);
@@ -38,7 +36,7 @@ ActorProfile Obj_Mu_Pict_Profile = {
 };
 
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
-    ObjMuPict* this = THIS;
+    ObjMuPict* this = (ObjMuPict*)thisx;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         Actor_Kill(&this->actor);
@@ -197,7 +195,7 @@ void func_80C06E88(ObjMuPict* this, PlayState* play) {
 }
 
 void ObjMuPict_Update(Actor* thisx, PlayState* play) {
-    ObjMuPict* this = THIS;
+    ObjMuPict* this = (ObjMuPict*)thisx;
     this->actionFunc(this, play);
 }
 

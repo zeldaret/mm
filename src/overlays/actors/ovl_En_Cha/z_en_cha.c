@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnCha*)thisx)
-
 void EnCha_Init(Actor* thisx, PlayState* play);
 void EnCha_Destroy(Actor* thisx, PlayState* play);
 void EnCha_Update(Actor* thisx, PlayState* play2);
@@ -51,7 +49,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnCha_Init(Actor* thisx, PlayState* play) {
-    EnCha* this = THIS;
+    EnCha* this = (EnCha*)thisx;
     s32 pad;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -65,7 +63,7 @@ void EnCha_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnCha_Destroy(Actor* thisx, PlayState* play) {
-    EnCha* this = THIS;
+    EnCha* this = (EnCha*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -103,7 +101,7 @@ void EnCha_Idle(EnCha* this, PlayState* play) {
 
 void EnCha_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnCha* this = THIS;
+    EnCha* this = (EnCha*)thisx;
 
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     this->actionFunc(this, play);
@@ -113,7 +111,7 @@ void EnCha_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnCha_Draw(Actor* thisx, PlayState* play) {
-    EnCha* this = THIS;
+    EnCha* this = (EnCha*)thisx;
 
     Gfx_DrawDListOpa(play, object_cha_DL_000710);
     Matrix_Translate(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);

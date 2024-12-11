@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgF40Switch*)thisx)
-
 void BgF40Switch_Init(Actor* thisx, PlayState* play);
 void BgF40Switch_Destroy(Actor* thisx, PlayState* play);
 void BgF40Switch_Update(Actor* thisx, PlayState* play);
@@ -106,7 +104,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgF40Switch_Init(Actor* thisx, PlayState* play) {
-    BgF40Switch* this = THIS;
+    BgF40Switch* this = (BgF40Switch*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.scale.y = 0.165f;
@@ -121,7 +119,7 @@ void BgF40Switch_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Switch_Destroy(Actor* thisx, PlayState* play) {
-    BgF40Switch* this = THIS;
+    BgF40Switch* this = (BgF40Switch*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -180,14 +178,14 @@ void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play) {
 }
 
 void BgF40Switch_Update(Actor* thisx, PlayState* play) {
-    BgF40Switch* this = THIS;
+    BgF40Switch* this = (BgF40Switch*)thisx;
 
     BgF40Switch_CheckAll(this, play);
     this->actionFunc(this, play);
 }
 
 void BgF40Switch_Draw(Actor* thisx, PlayState* play) {
-    BgF40Switch* this = THIS;
+    BgF40Switch* this = (BgF40Switch*)thisx;
 
     Gfx_DrawDListOpa(play, gStoneTowerFloorSwitchDL);
     Gfx_DrawDListOpa(play, gStoneTowerFloorSwitchOutlineDL);

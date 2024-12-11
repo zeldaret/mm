@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((ArmsHook*)thisx)
-
 void ArmsHook_Init(Actor* thisx, PlayState* play);
 void ArmsHook_Destroy(Actor* thisx, PlayState* play);
 void ArmsHook_Update(Actor* thisx, PlayState* play);
@@ -57,7 +55,7 @@ void ArmsHook_SetupAction(ArmsHook* this, ArmsHookActionFunc actionFunc) {
 }
 
 void ArmsHook_Init(Actor* thisx, PlayState* play) {
-    ArmsHook* this = THIS;
+    ArmsHook* this = (ArmsHook*)thisx;
 
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &D_808C1BC0);
@@ -66,7 +64,7 @@ void ArmsHook_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArmsHook_Destroy(Actor* thisx, PlayState* play) {
-    ArmsHook* this = THIS;
+    ArmsHook* this = (ArmsHook*)thisx;
 
     if (this->attachedActor != NULL) {
         this->attachedActor->flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
@@ -294,7 +292,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 }
 
 void ArmsHook_Update(Actor* thisx, PlayState* play) {
-    ArmsHook* this = THIS;
+    ArmsHook* this = (ArmsHook*)thisx;
 
     this->actionFunc(this, play);
     this->unk1EC = this->unk1E0;
@@ -308,7 +306,7 @@ Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
 Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 void ArmsHook_Draw(Actor* thisx, PlayState* play) {
-    ArmsHook* this = THIS;
+    ArmsHook* this = (ArmsHook*)thisx;
     f32 f0;
     Player* player = GET_PLAYER(play);
 

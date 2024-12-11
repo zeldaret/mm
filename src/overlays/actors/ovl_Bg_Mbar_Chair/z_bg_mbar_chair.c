@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgMbarChair*)thisx)
-
 void BgMbarChair_Init(Actor* thisx, PlayState* play);
 void BgMbarChair_Destroy(Actor* thisx, PlayState* play);
 void BgMbarChair_Update(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgMbarChair_Init(Actor* thisx, PlayState* play) {
-    BgMbarChair* this = THIS;
+    BgMbarChair* this = (BgMbarChair*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -44,7 +42,7 @@ void BgMbarChair_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgMbarChair_Destroy(Actor* thisx, PlayState* play) {
-    BgMbarChair* this = THIS;
+    BgMbarChair* this = (BgMbarChair*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }

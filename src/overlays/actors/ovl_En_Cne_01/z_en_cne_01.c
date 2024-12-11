@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnCne01*)thisx)
-
 void EnCne01_Init(Actor* thisx, PlayState* play);
 void EnCne01_Destroy(Actor* thisx, PlayState* play);
 void EnCne01_Update(Actor* thisx, PlayState* play);
@@ -204,7 +202,7 @@ void EnCne01_Talk(EnHy* this, PlayState* play) {
 
 void EnCne01_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
 
     this->enHy.animObjectSlot = SubS_GetObjectSlot(OBJECT_OS_ANIME, play);
     this->enHy.headObjectSlot = SubS_GetObjectSlot(OBJECT_CNE, play);
@@ -227,13 +225,13 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnCne01_Destroy(Actor* thisx, PlayState* play) {
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
 
     Collider_DestroyCylinder(play, &this->enHy.collider);
 }
 
 void EnCne01_Update(Actor* thisx, PlayState* play) {
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
 
     EnCne01_TestIsTalking(this, play);
     this->enHy.actionFunc(&this->enHy, play);
@@ -243,7 +241,7 @@ void EnCne01_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
     s8 bodyPartIndex;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -288,7 +286,7 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnCne01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -310,7 +308,7 @@ void EnCne01_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnCne01_Draw(Actor* thisx, PlayState* play) {
-    EnCne01* this = THIS;
+    EnCne01* this = (EnCne01*)thisx;
     s32 i;
     u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;

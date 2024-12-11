@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnRat*)thisx)
-
 void EnRat_Init(Actor* thisx, PlayState* play);
 void EnRat_Destroy(Actor* thisx, PlayState* play);
 void EnRat_Update(Actor* thisx, PlayState* play);
@@ -143,7 +141,7 @@ static s32 sTexturesDesegmented = false;
 
 void EnRat_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
     s32 attackRange;
     s32 i;
 
@@ -194,7 +192,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRat_Destroy(Actor* thisx, PlayState* play) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         Effect_Destroy(play, this->blure1Index);
@@ -781,7 +779,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play) {
 
 void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     this->shouldRotateOntoSurfaces = false;
     if (this->damageReaction.stunTimer == 0) {
@@ -893,7 +891,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     if (limbIndex == REAL_BOMBCHU_LIMB_BODY) {
         pos->y -= this->revivePosY;
@@ -908,7 +906,7 @@ s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     PlayState* play = play2;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
     MtxF* currentMatrixState;
     Vec3f* ptr;
     f32 redModifier;
@@ -969,7 +967,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnRat_Draw(Actor* thisx, PlayState* play) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);

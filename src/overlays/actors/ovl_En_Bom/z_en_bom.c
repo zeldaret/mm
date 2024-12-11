@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnBom*)thisx)
-
 void EnBom_Init(Actor* thisx, PlayState* play);
 void EnBom_Destroy(Actor* thisx, PlayState* play);
 void EnBom_Update(Actor* thisx, PlayState* play);
@@ -129,7 +127,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBom_Init(Actor* thisx, PlayState* play) {
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
     s32 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -185,7 +183,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBom_Destroy(Actor* thisx, PlayState* play) {
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
@@ -434,7 +432,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     Vec3f effPos;
     Vec3f dustAccel = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 dustColor = { 255, 255, 255, 255 };
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -615,7 +613,7 @@ static Vec3f D_80872F04 = { 0.0f, 0.0f, 0.0f };
 
 void EnBom_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

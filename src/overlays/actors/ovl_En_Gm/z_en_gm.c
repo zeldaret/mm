@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnGm*)thisx)
-
 void EnGm_Init(Actor* thisx, PlayState* play);
 void EnGm_Destroy(Actor* thisx, PlayState* play);
 void EnGm_Update(Actor* thisx, PlayState* play);
@@ -570,7 +568,7 @@ s16 func_8094E4D0(EnGm* this, s32 numCutscenes) {
 }
 
 s32 func_8094E52C(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s16 csId = func_8094E4D0(this, 0);
     s32 ret = false;
 
@@ -702,7 +700,7 @@ s32 func_8094E69C(Actor* thisx, PlayState* play) {
 }
 
 s32 func_8094EA34(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s32 pad;
     Actor* al;
     Actor* toto;
@@ -753,7 +751,7 @@ s32 func_8094EA34(Actor* thisx, PlayState* play) {
 }
 
 s32 func_8094EB1C(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s32 pad;
     s32 ret = false;
     s16 oldYaw;
@@ -1797,7 +1795,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
 }
 
 void EnGm_Init(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
 
     if (EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
         Actor_Kill(&this->actor);
@@ -1822,14 +1820,14 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGm_Destroy(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
 }
 
 void EnGm_Update(Actor* thisx, PlayState* play) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
 
     if (!func_8094E0F8(this, play)) {
         if (!func_8094EE84(this, play) && func_8094EFC4(this, play)) {
@@ -1859,7 +1857,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
 
 s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s32 fidgetIndex;
 
     if (limbIndex == OBJECT_IN2_LIMB_10) {
@@ -1894,7 +1892,7 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80951E24 = { 1400.0f, 0.0f, 0.0f };
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s32 pad[4];
     Vec3f sp30;
     s32 pad2;
@@ -1919,7 +1917,7 @@ void EnGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
     s32 overrideRot = true;
     s32 stepRot = false;
 
@@ -1964,7 +1962,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play) {
         object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
         object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68,
     };
-    EnGm* this = THIS;
+    EnGm* this = (EnGm*)thisx;
 
     if ((this->scheduleResult != 0) && (this->objectSlot > OBJECT_SLOT_NONE)) {
         OPEN_DISPS(play->state.gfxCtx);

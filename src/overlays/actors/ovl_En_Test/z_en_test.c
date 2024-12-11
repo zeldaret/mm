@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnTest*)thisx)
-
 void EnTest_Init(Actor* thisx, PlayState* play2);
 void EnTest_Destroy(Actor* thisx, PlayState* play);
 void EnTest_Update(Actor* thisx, PlayState* play);
@@ -159,7 +157,7 @@ void func_80863048(PlayState* play, EnTestStruct* arg1) {
 
 void EnTest_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest* this = THIS;
+    EnTest* this = (EnTest*)thisx;
     MtxF sp38;
     s32 bgId;
 
@@ -194,13 +192,13 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnTest_Destroy(Actor* thisx, PlayState* play) {
-    EnTest* this = THIS;
+    EnTest* this = (EnTest*)thisx;
 
     Keyframe_DestroyFlex(&this->kfSkelAnime);
 }
 
 void EnTest_Update(Actor* thisx, PlayState* play) {
-    EnTest* this = THIS;
+    EnTest* this = (EnTest*)thisx;
     s32 i;
 
     this->unk_208 = this->kfSkelAnime.frameCtrl.curTime;
@@ -226,7 +224,7 @@ void EnTest_Update(Actor* thisx, PlayState* play) {
 
 s32 EnTest_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
                             void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
-    EnTest* this = THIS;
+    EnTest* this = (EnTest*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -249,7 +247,7 @@ s32 EnTest_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 l
 }
 
 void EnTest_Draw(Actor* thisx, PlayState* play) {
-    EnTest* this = THIS;
+    EnTest* this = (EnTest*)thisx;
     Mtx* mtxStack;
     s32 sp2C = this->unk_208 - 1;
 

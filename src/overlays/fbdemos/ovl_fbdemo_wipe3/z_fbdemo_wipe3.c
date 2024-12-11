@@ -7,8 +7,6 @@
 #include "global.h"
 #include "z_fbdemo_wipe3.h"
 
-#define THIS ((TransitionWipe3*)thisx)
-
 void* TransitionWipe3_Init(void* thisx);
 void TransitionWipe3_Destroy(void* thisx);
 void TransitionWipe3_Update(void* thisx, s32 updateRate);
@@ -53,7 +51,7 @@ typedef enum {
 } TransitionWipe3Color;
 
 void TransitionWipe3_Start(void* thisx) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     this->isDone = false;
     this->curTexture = sTransWipe3Textures[this->texIndex % ARRAY_COUNTU(sTransWipe3Textures)];
@@ -82,7 +80,7 @@ void TransitionWipe3_Start(void* thisx) {
 }
 
 void* TransitionWipe3_Init(void* thisx) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     bzero(this, sizeof(TransitionWipe3));
     return this;
@@ -92,13 +90,13 @@ void TransitionWipe3_Destroy(void* thisx) {
 }
 
 void TransitionWipe3_UpdateScrollY(void* thisx, f32 scroll) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     this->scrollY = (s32)(500.0f * scroll);
 }
 
 void TransitionWipe3_Update(void* thisx, s32 updateRate) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     if (this->dir != TRANS_WIPE3_DIR_IN) {
         if ((this->scrollY == 0) && (this->texIndex == 2)) {
@@ -120,20 +118,21 @@ void TransitionWipe3_Update(void* thisx, s32 updateRate) {
 
 void TransitionWipe3_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    Mtx* modelView = &THIS->modelView[THIS->frame];
+    Mtx* modelView = &((TransitionWipe3*)thisx)->modelView[((TransitionWipe3*)thisx)->frame];
     f32 scale = 14.8f;
     Gfx* texScroll;
 
-    THIS->frame ^= 1;
+    ((TransitionWipe3*)thisx)->frame ^= 1;
     gDPPipeSync(gfx++);
-    texScroll = Gfx_BranchTexScroll(&gfx, THIS->scrollX, THIS->scrollY, 16, 64);
+    texScroll =
+        Gfx_BranchTexScroll(&gfx, ((TransitionWipe3*)thisx)->scrollX, ((TransitionWipe3*)thisx)->scrollY, 16, 64);
     gSPSegment(gfx++, 0x09, texScroll);
-    gSPSegment(gfx++, 0x08, THIS->curTexture);
-    gDPSetColor(gfx++, G_SETPRIMCOLOR, THIS->color.rgba);
-    gDPSetColor(gfx++, G_SETENVCOLOR, THIS->color.rgba);
-    gSPMatrix(gfx++, &THIS->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPPerspNormalize(gfx++, THIS->normal);
-    gSPMatrix(gfx++, &THIS->lookAt, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPSegment(gfx++, 0x08, ((TransitionWipe3*)thisx)->curTexture);
+    gDPSetColor(gfx++, G_SETPRIMCOLOR, ((TransitionWipe3*)thisx)->color.rgba);
+    gDPSetColor(gfx++, G_SETENVCOLOR, ((TransitionWipe3*)thisx)->color.rgba);
+    gSPMatrix(gfx++, &((TransitionWipe3*)thisx)->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPPerspNormalize(gfx++, ((TransitionWipe3*)thisx)->normal);
+    gSPMatrix(gfx++, &((TransitionWipe3*)thisx)->lookAt, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
     if (scale != 1.0f) {
         guScale(modelView, scale, scale, 1.0f);
@@ -145,13 +144,13 @@ void TransitionWipe3_Draw(void* thisx, Gfx** gfxP) {
 }
 
 s32 TransitionWipe3_IsDone(void* thisx) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     return this->isDone;
 }
 
 void TransitionWipe3_SetType(void* thisx, s32 type) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     if (type & TRANS_TYPE_SET_PARAMS) {
         this->speedType = TRANS3_GET_SPEED(type);
@@ -165,13 +164,13 @@ void TransitionWipe3_SetType(void* thisx, s32 type) {
 }
 
 void TransitionWipe3_SetColor(void* thisx, u32 color) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     this->color.rgba = color;
 }
 
 void TransitionWipe3_SetEnvColor(void* thisx, u32 color) {
-    TransitionWipe3* this = THIS;
+    TransitionWipe3* this = (TransitionWipe3*)thisx;
 
     this->envColor.rgba = color;
 }

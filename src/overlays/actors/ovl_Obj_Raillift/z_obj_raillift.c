@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjRaillift*)thisx)
-
 void ObjRaillift_Init(Actor* thisx, PlayState* play);
 void ObjRaillift_Destroy(Actor* thisx, PlayState* play);
 void ObjRaillift_Update(Actor* thisx, PlayState* play);
@@ -54,7 +52,7 @@ void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index) {
 }
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
     s32 pad;
     Path* path;
     s32 type = OBJRAILLIFT_GET_TYPE(thisx);
@@ -101,7 +99,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjRaillift_Destroy(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -214,7 +212,7 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);

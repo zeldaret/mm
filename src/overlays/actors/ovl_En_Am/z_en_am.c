@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnAm*)thisx)
-
 void EnAm_Init(Actor* thisx, PlayState* play);
 void EnAm_Destroy(Actor* thisx, PlayState* play);
 void EnAm_Update(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnAm_Init(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
@@ -150,7 +148,7 @@ void EnAm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAm_Destroy(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     Collider_DestroyCylinder(play, &this->enemyCollider);
     Collider_DestroyCylinder(play, &this->interactCollider);
@@ -469,7 +467,7 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
 }
 
 void EnAm_Update(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
     s32 pad;
 
     if (EnAm_UpdateDamage(this, play) == false) {
@@ -532,7 +530,7 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s32 phi_s3;
     Vec3f* phi_s1;
     Vec3f* phi_s2;
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     phi_s2 = 0;
     phi_s1 = 0;
@@ -559,7 +557,7 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnAm_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

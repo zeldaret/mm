@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnGs*)thisx)
-
 void EnGs_Init(Actor* thisx, PlayState* play);
 void EnGs_Destroy(Actor* thisx, PlayState* play);
 void EnGs_Update(Actor* thisx, PlayState* play);
@@ -138,7 +136,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnGs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_208 = -1;
@@ -171,7 +169,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGs_Destroy(Actor* thisx, PlayState* play) {
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     Play_DisableMotionBlur();
@@ -945,7 +943,7 @@ void func_80999B34(EnGs* this) {
 
 void func_80999BC8(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
     s32 pad;
 
     if (this->actor.isLockedOn && (AudioVoice_GetWord() == VOICE_WORD_ID_HOURS)) {
@@ -1029,7 +1027,7 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
 
 void EnGs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
@@ -1084,7 +1082,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
 
 void EnGs_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
     u32 frames;
 
     if (this->unk_19A & 8) {

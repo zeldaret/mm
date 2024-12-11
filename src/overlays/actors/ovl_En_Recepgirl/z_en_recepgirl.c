@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnRecepgirl*)thisx)
-
 void EnRecepgirl_Init(Actor* thisx, PlayState* play);
 void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
 void EnRecepgirl_Update(Actor* thisx, PlayState* play);
@@ -47,7 +45,7 @@ static InitChainEntry sInitChain[] = {
 static s32 sTexturesDesegmented = false;
 
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -177,7 +175,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
 
 void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
     Vec3s torsoRot;
 
     this->actionFunc(this, play);
@@ -186,7 +184,7 @@ void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     if (limbIndex == OBJECT_BG_2_LIMB_05) {
         rot->x += this->headRot.y;
@@ -195,7 +193,7 @@ s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnRecepgirl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     if (limbIndex == OBJECT_BG_2_LIMB_05) {
         Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
@@ -204,7 +202,7 @@ void EnRecepgirl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx)
 }
 
 void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
-    EnRecepgirl* this = THIS;
+    EnRecepgirl* this = (EnRecepgirl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

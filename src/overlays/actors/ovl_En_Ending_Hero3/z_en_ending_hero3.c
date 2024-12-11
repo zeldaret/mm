@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnEndingHero3*)thisx)
-
 void EnEndingHero3_Init(Actor* thisx, PlayState* play);
 void EnEndingHero3_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero3_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile En_Ending_Hero3_Profile = {
 };
 
 void EnEndingHero3_Init(Actor* thisx, PlayState* play) {
-    EnEndingHero3* this = THIS;
+    EnEndingHero3* this = (EnEndingHero3*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
@@ -56,7 +54,7 @@ void EnEndingHero3_Idle(EnEndingHero3* this, PlayState* play) {
 }
 
 void EnEndingHero3_Update(Actor* thisx, PlayState* play) {
-    EnEndingHero3* this = THIS;
+    EnEndingHero3* this = (EnEndingHero3*)thisx;
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
@@ -66,7 +64,7 @@ void EnEndingHero3_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnEndingHero3_Draw(Actor* thisx, PlayState* play) {
-    EnEndingHero3* this = THIS;
+    EnEndingHero3* this = (EnEndingHero3*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

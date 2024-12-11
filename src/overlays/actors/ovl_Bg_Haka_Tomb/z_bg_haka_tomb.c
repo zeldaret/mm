@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgHakaTomb*)thisx)
-
 void BgHakaTomb_Init(Actor* thisx, PlayState* play);
 void BgHakaTomb_Destroy(Actor* thisx, PlayState* play);
 void BgHakaTomb_Update(Actor* thisx, PlayState* play);
@@ -42,7 +40,7 @@ static InitChainEntry sInitChain[] = {
 static Vec3f D_80BD68A4 = { 30.0f, 90.0f, 0.0f };
 
 void BgHakaTomb_Init(Actor* thisx, PlayState* play) {
-    BgHakaTomb* this = THIS;
+    BgHakaTomb* this = (BgHakaTomb*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -52,7 +50,7 @@ void BgHakaTomb_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakaTomb_Destroy(Actor* thisx, PlayState* play) {
-    BgHakaTomb* this = THIS;
+    BgHakaTomb* this = (BgHakaTomb*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -114,7 +112,7 @@ void BgHakaTomb_DoNothing(BgHakaTomb* this, PlayState* play) {
 }
 
 void BgHakaTomb_Update(Actor* thisx, PlayState* play) {
-    BgHakaTomb* this = THIS;
+    BgHakaTomb* this = (BgHakaTomb*)thisx;
     s32 pad;
     Vec3f vec;
 

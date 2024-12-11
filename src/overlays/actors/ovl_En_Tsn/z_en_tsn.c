@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnTsn*)thisx)
-
 void EnTsn_Init(Actor* thisx, PlayState* play);
 void EnTsn_Destroy(Actor* thisx, PlayState* play);
 void EnTsn_Update(Actor* thisx, PlayState* play);
@@ -125,7 +123,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
 }
 
 void EnTsn_Init(Actor* thisx, PlayState* play) {
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
 
     if (ENTSN_GET_100(&this->actor)) {
         func_80ADFCEC(this, play);
@@ -152,7 +150,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTsn_Destroy(Actor* thisx, PlayState* play) {
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -568,7 +566,7 @@ void func_80AE0D78(EnTsn* this, PlayState* play) {
 
 void EnTsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
 
     this->actionFunc(this, play);
 
@@ -599,13 +597,13 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80AE0F84(Actor* thisx, PlayState* play) {
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
 
     this->actionFunc(this, play);
 }
 
 s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
     s16 shifted = this->headRot.x >> 1;
 
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
@@ -621,7 +619,7 @@ s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
@@ -632,7 +630,7 @@ void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 void EnTsn_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80AE11C8[] = { object_tsn_Tex_0073B8, object_tsn_Tex_0085B8 };
     s32 pad;
-    EnTsn* this = THIS;
+    EnTsn* this = (EnTsn*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((BgCtowerRot*)thisx)
-
 void BgCtowerRot_Init(Actor* thisx, PlayState* play);
 void BgCtowerRot_Destroy(Actor* thisx, PlayState* play);
 void BgCtowerRot_Update(Actor* thisx, PlayState* play);
@@ -41,7 +39,7 @@ static Gfx* sDLists[] = { gClockTowerCorridorDL, gClockTowerStoneDoorMainDL, gCl
 
 void BgCtowerRot_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgCtowerRot* this = THIS;
+    BgCtowerRot* this = (BgCtowerRot*)thisx;
     Player* player;
     Vec3f offset;
 
@@ -73,7 +71,7 @@ void BgCtowerRot_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerRot_Destroy(Actor* thisx, PlayState* play) {
-    BgCtowerRot* this = THIS;
+    BgCtowerRot* this = (BgCtowerRot*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -136,13 +134,13 @@ void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play) {
 }
 
 void BgCtowerRot_Update(Actor* thisx, PlayState* play) {
-    BgCtowerRot* this = THIS;
+    BgCtowerRot* this = (BgCtowerRot*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgCtowerRot_Draw(Actor* thisx, PlayState* play) {
-    BgCtowerRot* this = THIS;
+    BgCtowerRot* this = (BgCtowerRot*)thisx;
 
     Gfx_DrawDListOpa(play, sDLists[this->dyna.actor.params]);
     if (this->dyna.actor.params == BGCTOWERROT_CORRIDOR) {

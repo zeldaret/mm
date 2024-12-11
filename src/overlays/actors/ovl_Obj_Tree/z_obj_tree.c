@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((ObjTree*)thisx)
-
 void ObjTree_Init(Actor* thisx, PlayState* play);
 void ObjTree_Destroy(Actor* thisx, PlayState* play);
 void ObjTree_Update(Actor* thisx, PlayState* play);
@@ -91,7 +89,7 @@ static CollisionCheckInfoInit2 sColchkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 void ObjTree_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjTree* this = THIS;
+    ObjTree* this = (ObjTree*)thisx;
     CollisionHeader* colHeader = NULL;
 
     if (OBJTREE_ISLARGE(&this->dyna.actor)) {
@@ -119,7 +117,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTree_Destroy(Actor* thisx, PlayState* play) {
-    ObjTree* this = THIS;
+    ObjTree* this = (ObjTree*)thisx;
     s32 bgId;
 
     if (!OBJTREE_ISLARGE(&this->dyna.actor)) {
@@ -173,7 +171,7 @@ void ObjTree_UpdateCollision(ObjTree* this, PlayState* play) {
 }
 
 void ObjTree_Update(Actor* thisx, PlayState* play) {
-    ObjTree* this = THIS;
+    ObjTree* this = (ObjTree*)thisx;
 
     this->actionFunc(this, play);
     ObjTree_UpdateCollision(this, play);

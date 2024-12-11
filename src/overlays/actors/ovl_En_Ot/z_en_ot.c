@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnOt*)thisx)
-
 void EnOt_Init(Actor* thisx, PlayState* play);
 void EnOt_Destroy(Actor* thisx, PlayState* play);
 void EnOt_Update(Actor* thisx, PlayState* play);
@@ -136,7 +134,7 @@ void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 pathIndex, Vec3f* vec, s32* 
 
 void EnOt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
     s32 bgId;
     s32 pad2;
     Vec3f sp64;
@@ -296,7 +294,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnOt_Destroy(Actor* thisx, PlayState* play) {
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
@@ -967,7 +965,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
 
 void EnOt_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
 
     if ((this->animIndex == SEAHORSE_ANIM_1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
@@ -1009,7 +1007,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
 
 void func_80B5DAEC(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, 12.0f);
@@ -1022,7 +1020,7 @@ void func_80B5DAEC(Actor* thisx, PlayState* play) {
 
 void func_80B5DB6C(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && !(this->unk_32C & 8)) {
@@ -1062,7 +1060,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
 
 void EnOt_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
     Gfx* gfx;
 
     Matrix_Push();
@@ -1101,7 +1099,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
 void EnOt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B5E410 = { 400.0f, 600.0f, 0.0f };
-    EnOt* this = THIS;
+    EnOt* this = (EnOt*)thisx;
 
     if (limbIndex == OBJECT_OT_LIMB_04) {
         OPEN_DISPS(play->state.gfxCtx);

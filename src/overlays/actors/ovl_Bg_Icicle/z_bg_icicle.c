@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgIcicle*)thisx)
-
 void BgIcicle_Init(Actor* thisx, PlayState* play);
 void BgIcicle_Destroy(Actor* thisx, PlayState* play);
 void BgIcicle_Update(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ static InitChainEntry sInitChain[] = {
 
 void BgIcicle_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIcicle* this = THIS;
+    BgIcicle* this = (BgIcicle*)thisx;
     s32 paramsHigh;
     s32 paramsMid;
 
@@ -90,7 +88,7 @@ void BgIcicle_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIcicle_Destroy(Actor* thisx, PlayState* play) {
-    BgIcicle* this = THIS;
+    BgIcicle* this = (BgIcicle*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -230,7 +228,7 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, PlayState* play) {
 
 void BgIcicle_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIcicle* this = THIS;
+    BgIcicle* this = (BgIcicle*)thisx;
 
     BgIcicle_UpdateAttacked(this, play);
     this->actionFunc(this, play);

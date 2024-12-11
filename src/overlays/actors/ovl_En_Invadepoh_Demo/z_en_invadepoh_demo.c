@@ -21,8 +21,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnInvadepohDemo*)thisx)
-
 void EnInvadepohDemo_Init(Actor* thisx, PlayState* play);
 void EnInvadepohDemo_Destroy(Actor* thisx, PlayState* play);
 void EnInvadepohDemo_Update(Actor* thisx, PlayState* play);
@@ -769,7 +767,7 @@ void EnInvadepohDemo_CowTail_Draw(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     this->cueIdOffset = EN_INVADEPOH_DEMO_GET_CUEID_OFFSET(&this->actor);
     this->type = EN_INVADEPOH_DEMO_GET_TYPE(&this->actor);
@@ -799,21 +797,21 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
 
 void EnInvadepohDemo_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     sDestroyFuncs[this->type](this, play);
 }
 
 void EnInvadepohDemo_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnInvadepohDemo_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     if ((this->cueId != EN_INVADEPOH_DEMO_CUEID_NONE) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
         sDrawFuncs[this->type](this, play);

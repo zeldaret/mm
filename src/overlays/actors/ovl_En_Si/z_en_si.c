@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnSi*)thisx)
-
 void EnSi_Init(Actor* thisx, PlayState* play);
 void EnSi_Destroy(Actor* thisx, PlayState* play);
 void EnSi_Update(Actor* thisx, PlayState* play);
@@ -132,7 +130,7 @@ void EnSi_DraggedByHookshot(EnSi* this, PlayState* play) {
 }
 
 void EnSi_Init(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -142,13 +140,13 @@ void EnSi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSi_Destroy(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnSi_Update(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     this->actionFunc(this, play);
     EnSi_UpdateCollision(this, play);
@@ -156,7 +154,7 @@ void EnSi_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSi_Draw(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     func_800B8118(&this->actor, play, 0);
     func_800B8050(&this->actor, play, 0);

@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjDriftice*)thisx)
-
 void ObjDriftice_Init(Actor* thisx, PlayState* play);
 void ObjDriftice_Destroy(Actor* thisx, PlayState* play);
 void ObjDriftice_Update(Actor* thisx, PlayState* play);
@@ -265,7 +263,7 @@ void func_80A66E30(ObjDrifticeStruct* arg0, ObjDriftice* this) {
 
 void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjDriftice* this = THIS;
+    ObjDriftice* this = (ObjDriftice*)thisx;
     f32* sp2C = D_80A67620[OBJDRIFTICE_GET_3(&this->dyna.actor)];
     Path* path;
     s32 transformFlags;
@@ -320,7 +318,7 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjDriftice_Destroy(Actor* thisx, PlayState* play) {
-    ObjDriftice* this = THIS;
+    ObjDriftice* this = (ObjDriftice*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -426,7 +424,7 @@ void func_80A674C4(ObjDriftice* this, PlayState* play) {
 }
 
 void ObjDriftice_Update(Actor* thisx, PlayState* play) {
-    ObjDriftice* this = THIS;
+    ObjDriftice* this = (ObjDriftice*)thisx;
 
     if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_248 < 0) {
@@ -452,7 +450,7 @@ void ObjDriftice_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjDriftice_Draw(Actor* thisx, PlayState* play) {
-    ObjDriftice* this = THIS;
+    ObjDriftice* this = (ObjDriftice*)thisx;
 
     Gfx_DrawDListOpa(play, object_driftice_DL_0016A0);
 }

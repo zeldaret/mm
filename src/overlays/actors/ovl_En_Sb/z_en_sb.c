@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnSb*)thisx)
-
 void EnSb_Init(Actor* thisx, PlayState* play);
 void EnSb_Destroy(Actor* thisx, PlayState* play);
 void EnSb_Update(Actor* thisx, PlayState* play);
@@ -105,7 +103,7 @@ static Vec3f sFlamePosOffsets[] = {
 };
 
 void EnSb_Init(Actor* thisx, PlayState* play) {
-    EnSb* this = THIS;
+    EnSb* this = (EnSb*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -128,7 +126,7 @@ void EnSb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSb_Destroy(Actor* thisx, PlayState* play) {
-    EnSb* this = THIS;
+    EnSb* this = (EnSb*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -359,7 +357,7 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
 
 void EnSb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSb* this = THIS;
+    EnSb* this = (EnSb*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (this->isDead) {
@@ -390,7 +388,7 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
 
 void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s8 partParams;
-    EnSb* this = THIS;
+    EnSb* this = (EnSb*)thisx;
 
     if (this->isDrawn) {
         if (limbIndex <= OBJECT_SB_LIMB_06) {
@@ -405,7 +403,7 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnSb_Draw(Actor* thisx, PlayState* play) {
-    EnSb* this = THIS;
+    EnSb* this = (EnSb*)thisx;
     Vec3f flamePos;
     Vec3f* offset;
     s16 fireDecr;

@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgSpoutFire*)thisx)
-
 void BgSpoutFire_Init(Actor* thisx, PlayState* play);
 void BgSpoutFire_Destroy(Actor* thisx, PlayState* play);
 void BgSpoutFire_Update(Actor* thisx, PlayState* play);
@@ -65,7 +63,7 @@ static s32 sTexturesDesegmented = false;
 
 void BgSpoutFire_Init(Actor* thisx, PlayState* play) {
     s32 i;
-    BgSpoutFire* this = THIS;
+    BgSpoutFire* this = (BgSpoutFire*)thisx;
 
     this->actor.scale.z = 1350.0f * 0.0001f;
     this->actor.scale.x = 1350.0f * 0.0001f;
@@ -85,7 +83,7 @@ void BgSpoutFire_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgSpoutFire_Destroy(Actor* thisx, PlayState* play) {
-    BgSpoutFire* this = THIS;
+    BgSpoutFire* this = (BgSpoutFire*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -168,7 +166,7 @@ void func_80A60E08(BgSpoutFire* this, PlayState* play) {
 
 void BgSpoutFire_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgSpoutFire* this = THIS;
+    BgSpoutFire* this = (BgSpoutFire*)thisx;
 
     this->flameTexIndex = (this->flameTexIndex + 1) % 8;
     if ((this->collider.base.atFlags & AT_HIT)) {
@@ -185,7 +183,7 @@ void BgSpoutFire_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgSpoutFire_Draw(Actor* thisx, PlayState* play) {
-    BgSpoutFire* this = THIS;
+    BgSpoutFire* this = (BgSpoutFire*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

@@ -15,8 +15,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnKnight*)thisx)
-
 void EnKnight_Init(Actor* thisx, PlayState* play);
 void EnKnight_Destroy(Actor* thisx, PlayState* play);
 void EnKnight_Update(Actor* thisx, PlayState* play);
@@ -550,7 +548,7 @@ void EnKnight_SpawnDustAtFeet(EnKnight* this, PlayState* play, u8 timerMask) {
 }
 
 void EnKnight_Init(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
     s32 pad;
     s32 sfxIndex;
 
@@ -3521,7 +3519,7 @@ void EnKnight_FlyingHeadAttack(EnKnight* this, PlayState* play) {
 }
 
 void EnKnight_Update(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
     Input* input;
     PlayState* play2 = play;
     Player* player = GET_PLAYER(play);
@@ -3995,7 +3993,7 @@ void EnKnight_DrawEffectBlure(EnKnight* this, PlayState* play) {
 }
 
 s32 EnKnight_OverrideLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     if (limbIndex == IGOS_LIMB_NECK) {
         rot->x += (f32)this->neckYaw;
@@ -4015,7 +4013,7 @@ s32 EnKnight_OverrideLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, V
 
 s32 EnKnight_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                               Gfx** gfx) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     if (limbIndex == KNIGHT_LIMB_NECK) {
         rot->x += (f32)this->neckYaw;
@@ -4100,7 +4098,7 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     static Vec3f sBreathBaseModelOffset = { 300.0f, 500.0f, 0.0f };
     static Vec3f sBodyCollider0ModelOffset = { 1000.0f, 0.0f, 0.0f };
     static Vec3f sBodyCollider1ModelOffset = { 700.0f, -500.0f, 0.0f };
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
     Vec3f colliderPos;
 
     if ((this->actionFunc == EnKnight_Die) || (this->drawDmgEffAlpha > 0.0f)) {
@@ -4147,7 +4145,7 @@ void EnKnight_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnKnight_PostLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusPosModelOffset = { 300.0f, 500.0f, 0.0f };
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     if (limbIndex == KNIGHT_LIMB_NECK) {
         Matrix_MultVec3f(&sFocusPosModelOffset, &this->actor.focus.pos);
@@ -4156,7 +4154,7 @@ void EnKnight_PostLimbDrawHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnKnight_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** gfx) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     if (this == sIgosInstance) {
         if (limbIndex == IGOS_LIMB_SHIELD) {
@@ -4188,7 +4186,7 @@ Gfx* EnKnight_BuildXluMaterialDL(GraphicsContext* gfxCtx, u8 alpha) {
 }
 
 void EnKnight_Draw(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
     f32 scale;
     s32 drawXlu = false;
 
@@ -4277,7 +4275,7 @@ void EnKnight_Draw(Actor* thisx, PlayState* play) {
 }
 
 void EnKnight_UpdateAfterImage(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
     f32 maxStep;
 
     // Set alpha step
@@ -4298,7 +4296,7 @@ void EnKnight_UpdateAfterImage(Actor* thisx, PlayState* play) {
 
 s32 EnKnight_OverrideLimbDrawAfterImage(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                         Actor* thisx, Gfx** gfx) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     if ((this->actor.params == EN_KNIGHT_PARAM_IGOS_HEAD_AFTERIMAGE) && (limbIndex != IGOS_LIMB_JAW) &&
         (limbIndex != IGOS_LIMB_HEAD)) {
@@ -4308,7 +4306,7 @@ s32 EnKnight_OverrideLimbDrawAfterImage(PlayState* play, s32 limbIndex, Gfx** dL
 }
 
 void EnKnight_DrawAfterImage(Actor* thisx, PlayState* play) {
-    EnKnight* this = THIS;
+    EnKnight* this = (EnKnight*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

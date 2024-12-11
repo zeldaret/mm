@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((DmNb*)thisx)
-
 void DmNb_Init(Actor* thisx, PlayState* play);
 void DmNb_Destroy(Actor* thisx, PlayState* play);
 void DmNb_Update(Actor* thisx, PlayState* play);
@@ -77,7 +75,7 @@ void DmNb_HandleCutscene(DmNb* this, PlayState* play) {
 }
 
 void DmNb_Init(Actor* thisx, PlayState* play) {
-    DmNb* this = THIS;
+    DmNb* this = (DmNb*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
@@ -92,7 +90,7 @@ void DmNb_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmNb_Update(Actor* thisx, PlayState* play) {
-    DmNb* this = THIS;
+    DmNb* this = (DmNb*)thisx;
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
@@ -103,7 +101,7 @@ void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void DmNb_Draw(Actor* thisx, PlayState* play) {
-    DmNb* this = THIS;
+    DmNb* this = (DmNb*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnRz*)thisx)
-
 void EnRz_Init(Actor* thisx, PlayState* play);
 void EnRz_Destroy(Actor* thisx, PlayState* play);
 void EnRz_Update(Actor* thisx, PlayState* play);
@@ -86,7 +84,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnRz_Init(Actor* thisx, PlayState* play) {
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
     s16 csId = this->actor.csId;
     s32 i;
 
@@ -170,7 +168,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
  */
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
 
     if (this->animIndex == EN_RZ_ANIM_LINK_DANCE) {
         f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
@@ -363,7 +361,7 @@ void func_80BFBDFC(PlayState* play) {
 }
 
 void EnRz_Destroy(Actor* thisx, PlayState* play) {
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -663,7 +661,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
 
 void EnRz_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -684,7 +682,7 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 
 void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusOffsetPos = { 500.0f, -500.0f, 0.0f };
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
 
     if (limbIndex == OBJECT_RZ_LIMB_0B) {
         Matrix_MultVec3f(&sFocusOffsetPos, &thisx->focus.pos);
@@ -695,7 +693,7 @@ void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnRz_Draw(Actor* thisx, PlayState* play) {
-    EnRz* this = THIS;
+    EnRz* this = (EnRz*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

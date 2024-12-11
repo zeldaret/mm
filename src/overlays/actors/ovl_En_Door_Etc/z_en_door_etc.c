@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnDoorEtc*)thisx)
-
 void EnDoorEtc_Init(Actor* thisx, PlayState* play2);
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
 void EnDoorEtc_Update(Actor* thisx, PlayState* play);
@@ -90,7 +88,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     s32 objectSlot;
     EnDoorEtcInfo* objectInfo = sObjectInfo;
     s32 i;
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     Actor_ProcessInitChain(&this->knobDoor.dyna.actor, sInitChain);
     Actor_SetScale(&this->knobDoor.dyna.actor, 0.01f);
@@ -122,7 +120,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play) {
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -226,7 +224,7 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play) {
 
 void EnDoorEtc_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     this->actionFunc(this, play);
     if (this->unk_1F4 & 1) {
@@ -236,7 +234,7 @@ void EnDoorEtc_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play) {
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

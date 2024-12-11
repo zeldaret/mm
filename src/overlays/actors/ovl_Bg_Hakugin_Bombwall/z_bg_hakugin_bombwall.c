@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgHakuginBombwall*)thisx)
-
 void BgHakuginBombwall_Init(Actor* thisx, PlayState* play);
 void BgHakuginBombwall_Destroy(Actor* thisx, PlayState* play);
 void BgHakuginBombwall_Update(Actor* thisx, PlayState* play);
@@ -309,7 +307,7 @@ void func_80ABC7FC(BgHakuginBombwall* this, PlayState* play) {
 
 void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgHakuginBombwall* this = THIS;
+    BgHakuginBombwall* this = (BgHakuginBombwall*)thisx;
     BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -336,7 +334,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakuginBombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgHakuginBombwall* this = THIS;
+    BgHakuginBombwall* this = (BgHakuginBombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -421,7 +419,7 @@ void func_80ABCE60(BgHakuginBombwall* this, PlayState* play) {
 }
 
 void BgHakuginBombwall_Update(Actor* thisx, PlayState* play) {
-    BgHakuginBombwall* this = THIS;
+    BgHakuginBombwall* this = (BgHakuginBombwall*)thisx;
 
     this->actionFunc(this, play);
 }

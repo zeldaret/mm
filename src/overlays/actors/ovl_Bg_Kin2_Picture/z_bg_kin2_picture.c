@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgKin2Picture*)thisx)
-
 void BgKin2Picture_Init(Actor* thisx, PlayState* play);
 void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Picture_Update(Actor* thisx, PlayState* play);
@@ -152,7 +150,7 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
 
 void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgKin2Picture* this = THIS;
+    BgKin2Picture* this = (BgKin2Picture*)thisx;
     s32 skulltulaParams;
     Vec3f vertices[3];
     s32 i;
@@ -188,7 +186,7 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Picture_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Picture* this = THIS;
+    BgKin2Picture* this = (BgKin2Picture*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(play, &this->colliderTris);
@@ -333,13 +331,13 @@ void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play) {
 }
 
 void BgKin2Picture_Update(Actor* thisx, PlayState* play) {
-    BgKin2Picture* this = THIS;
+    BgKin2Picture* this = (BgKin2Picture*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgKin2Picture_Draw(Actor* thisx, PlayState* play) {
-    BgKin2Picture* this = THIS;
+    BgKin2Picture* this = (BgKin2Picture*)thisx;
 
     Gfx_DrawDListOpa(play, gOceanSpiderHouseSkullkidPaintingDL);
 }

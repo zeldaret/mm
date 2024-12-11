@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjDowsing*)thisx)
-
 void ObjDowsing_Init(Actor* thisx, PlayState* play);
 void ObjDowsing_Destroy(Actor* thisx, PlayState* play);
 void ObjDowsing_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play) {
 }
 
 void ObjDowsing_Init(Actor* thisx, PlayState* play) {
-    ObjDowsing* this = THIS;
+    ObjDowsing* this = (ObjDowsing*)thisx;
 
     ObjDowsing_CheckValidSpawn(this, play);
 }
@@ -62,7 +60,7 @@ void ObjDowsing_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjDowsing_Update(Actor* thisx, PlayState* play) {
-    ObjDowsing* this = THIS;
+    ObjDowsing* this = (ObjDowsing*)thisx;
 
     if (!ObjDowsing_CheckValidSpawn(this, play)) {
         Actor_SetClosestSecretDistance(thisx, play);

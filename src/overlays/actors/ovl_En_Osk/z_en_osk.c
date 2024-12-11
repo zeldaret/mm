@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnOsk*)thisx)
-
 void EnOsk_Init(Actor* thisx, PlayState* play);
 void EnOsk_Destroy(Actor* thisx, PlayState* play);
 void EnOsk_Update(Actor* thisx, PlayState* play);
@@ -115,7 +113,7 @@ AnimationHeader* sAnimationsType2[OSK_TYPE2_ANIM_MAX] = {
 };
 
 void EnOsk_Init(Actor* thisx, PlayState* play) {
-    EnOsk* this = THIS;
+    EnOsk* this = (EnOsk*)thisx;
 
     Actor_SetScale(&this->actor, 0.013f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
@@ -571,14 +569,14 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
 }
 
 void EnOsk_Update(Actor* thisx, PlayState* play) {
-    EnOsk* this = THIS;
+    EnOsk* this = (EnOsk*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnOsk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BF7024 = { 0.0f, 0.0f, 0.0f };
-    EnOsk* this = THIS;
+    EnOsk* this = (EnOsk*)thisx;
 
     if (limbIndex == 1) {
         // OBJECT_IKN_DEMO_1_LIMB_01
@@ -590,7 +588,7 @@ void EnOsk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnOsk_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOsk* this = THIS;
+    EnOsk* this = (EnOsk*)thisx;
     Gfx* gfx;
     Vec3f sp80;
     s32 pad2[4];

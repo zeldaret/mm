@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgUmajump*)thisx)
-
 void BgUmajump_Init(Actor* thisx, PlayState* play);
 void BgUmajump_Destroy(Actor* thisx, PlayState* play);
 void BgUmajump_Update(Actor* thisx, PlayState* play);
@@ -79,7 +77,7 @@ void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
 }
 
 void BgUmajump_Init(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     Actor_ProcessInitChain(thisx, sInitChain);
 
@@ -118,13 +116,13 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgUmajump_Destroy(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgUmajump_Update(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->dyna.actor.objectSlot = this->objectSlot;
@@ -175,7 +173,7 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8091A5A0(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this, play);
@@ -209,7 +207,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
 }
 
 void BgUmajump_Draw(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (this->dyna.bgId != BGACTOR_NEG_ONE) {
         Gfx_DrawDListOpa(play, gHorseJumpFenceDL);

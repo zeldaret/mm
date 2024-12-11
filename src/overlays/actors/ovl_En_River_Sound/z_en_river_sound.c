@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnRiverSound*)thisx)
-
 void EnRiverSound_Init(Actor* thisx, PlayState* play);
 void EnRiverSound_Update(Actor* thisx, PlayState* play);
 void EnRiverSound_Draw(Actor* thisx, PlayState* play);
@@ -28,7 +26,7 @@ ActorProfile En_River_Sound_Profile = {
 
 void EnRiverSound_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRiverSound* this = THIS;
+    EnRiverSound* this = (EnRiverSound*)thisx;
     Path* path;
     s32 pathIndex;
 
@@ -46,7 +44,7 @@ void EnRiverSound_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRiverSound_Update(Actor* thisx, PlayState* play) {
-    EnRiverSound* this = THIS;
+    EnRiverSound* this = (EnRiverSound*)thisx;
     Vec3f* worldPos = &this->actor.world.pos;
     Vec3f eye;
     s32 bgId;
@@ -82,7 +80,7 @@ void EnRiverSound_Draw(Actor* thisx, PlayState* play) {
         1.0f, // 1
         1.4f, // sqrt(2)
     };
-    EnRiverSound* this = THIS;
+    EnRiverSound* this = (EnRiverSound*)thisx;
     s16 params = this->actor.params;
 
     if (params < RS_RIVER_DEFAULT_LOW_FREQ) {

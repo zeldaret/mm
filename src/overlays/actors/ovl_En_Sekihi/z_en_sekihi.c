@@ -13,8 +13,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnSekihi*)thisx)
-
 void EnSekihi_Init(Actor* thisx, PlayState* play);
 void EnSekihi_Destroy(Actor* thisx, PlayState* play);
 void EnSekihi_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ static Gfx* sXluDLists[] = {
 static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
-    EnSekihi* this = THIS;
+    EnSekihi* this = (EnSekihi*)thisx;
     s32 type = ENSIKIHI_GET_TYPE(thisx);
     s32 objectSlot;
     s32 pad;
@@ -82,7 +80,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
-    EnSekihi* this = THIS;
+    EnSekihi* this = (EnSekihi*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -170,13 +168,13 @@ void EnSekihi_DoNothing(EnSekihi* this, PlayState* play) {
 }
 
 void EnSekihi_Update(Actor* thisx, PlayState* play) {
-    EnSekihi* this = THIS;
+    EnSekihi* this = (EnSekihi*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnSekihi_Draw(Actor* thisx, PlayState* play) {
-    EnSekihi* this = THIS;
+    EnSekihi* this = (EnSekihi*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

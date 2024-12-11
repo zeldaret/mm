@@ -15,8 +15,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnHorse*)thisx)
-
 void EnHorse_Init(Actor* thisx, PlayState* play2);
 void EnHorse_Destroy(Actor* thisx, PlayState* play);
 void EnHorse_Update(Actor* thisx, PlayState* play2);
@@ -717,7 +715,7 @@ void func_8087CA04(EnHorse* this, PlayState* play) {
 
 void EnHorse_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
     Skin* skin = &this->skin;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -947,7 +945,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
 
 // EnHorse_WaitForObject
 void func_8087D540(Actor* thisx, PlayState* play) {
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
@@ -969,7 +967,7 @@ void func_8087D540(Actor* thisx, PlayState* play) {
 }
 
 void EnHorse_Destroy(Actor* thisx, PlayState* play) {
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
 
     if (this->stateFlags & ENHORSE_DRAW) {
         AudioSfx_StopByPos(&this->unk_218);
@@ -4194,7 +4192,7 @@ static EnHorseActionFunc sActionFuncs[] = {
 };
 void EnHorse_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
     Vec3f dustAcc = { 0.0f, 0.0f, 0.0f };
     Vec3f dustVel = { 0.0f, 1.0f, 0.0f };
     Player* player = GET_PLAYER(play);
@@ -4468,7 +4466,7 @@ void EnHorse_RandomOffset(Vec3f* src, f32 dist, Vec3f* dst) {
 
 void EnHorse_PostDraw(Actor* thisx, PlayState* play, Skin* skin) {
     s32 pad;
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
     Vec3f sp7C = { 0.0f, 0.0f, 0.0f };
     Vec3f hoofOffset = { 5.0f, -4.0f, 5.0f };
     Vec3f sp64;
@@ -4668,7 +4666,7 @@ s32 EnHorse_OverrideLimbDraw(Actor* thisx, PlayState* play, s32 limbIndex, Skin*
         gEponaEyeClosedTex,
     };
     static u8 D_80889210[] = { 0, 1, 2, 1 };
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
     s32 drawOriginalLimb = true;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -4690,7 +4688,7 @@ s32 EnHorse_OverrideLimbDraw(Actor* thisx, PlayState* play, s32 limbIndex, Skin*
 
 s32 func_80888D18(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Vec3f sp1C = { -98.0f, -1454.0f, 0.0f };
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
 
     if (limbIndex == 3) {
         Matrix_MultVec3f(&sp1C, &this->riderPos);
@@ -4699,7 +4697,7 @@ s32 func_80888D18(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 }
 
 void EnHorse_Draw(Actor* thisx, PlayState* play) {
-    EnHorse* this = THIS;
+    EnHorse* this = (EnHorse*)thisx;
 
     if (!(this->stateFlags & ENHORSE_INACTIVE) && (this->actor.update != func_8087D540)) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

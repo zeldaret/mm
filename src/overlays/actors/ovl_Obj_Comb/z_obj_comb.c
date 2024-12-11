@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjComb*)thisx)
-
 void ObjComb_Init(Actor* thisx, PlayState* play);
 void ObjComb_Destroy(Actor* thisx, PlayState* play2);
 void ObjComb_Update(Actor* thisx, PlayState* play);
@@ -328,7 +326,7 @@ void func_8098DA74(ObjComb* this, PlayState* play) {
 
 void ObjComb_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
     s32 sp2C = OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -354,7 +352,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
 
 void ObjComb_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -501,7 +499,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 }
 
 void ObjComb_Update(Actor* thisx, PlayState* play) {
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     this->unk_1B3 = (this->collider.base.acFlags & AC_HIT) != 0;
     if (this->unk_1B3) {
@@ -552,7 +550,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjComb_Draw(Actor* thisx, PlayState* play) {
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((DmBal*)thisx)
-
 void DmBal_Init(Actor* thisx, PlayState* play);
 void DmBal_Destroy(Actor* thisx, PlayState* play);
 void DmBal_Update(Actor* thisx, PlayState* play);
@@ -68,7 +66,7 @@ static AnimationInfo sAnimationInfo[TINGLE_CS_ANIM_MAX] = {
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
-    DmBal* this = THIS;
+    DmBal* this = (DmBal*)thisx;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->actor.uncullZoneForward = 3000.0f;
@@ -174,7 +172,7 @@ void DmBal_SpawnPaper(DmBal* this, PlayState* play, Vec3f* pos, Vec3f* velocity,
 
 void DmBal_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    DmBal* this = THIS;
+    DmBal* this = (DmBal*)thisx;
 
     // Throw confetti
     if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleFloatThrowConfettiAnim)) {
@@ -197,7 +195,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    DmBal* this = THIS;
+    DmBal* this = (DmBal*)thisx;
     Vec3s rots;
 
     if (limbIndex == TINGLE_LIMB_BALLOON) {
@@ -217,7 +215,7 @@ void DmBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 static TexturePtr sEyeTextures[] = { gTingleEyeOpenTex, gTingleEyeClosedTex };
 
 void DmBal_Draw(Actor* thisx, PlayState* play) {
-    DmBal* this = THIS;
+    DmBal* this = (DmBal*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

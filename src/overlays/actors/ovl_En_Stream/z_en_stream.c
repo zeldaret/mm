@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnStream*)thisx)
-
 void EnStream_Init(Actor* thisx, PlayState* play);
 void EnStream_Destroy(Actor* thisx, PlayState* play);
 void EnStream_Update(Actor* thisx, PlayState* play);
@@ -39,7 +37,7 @@ void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc) {
 }
 
 void EnStream_Init(Actor* thisx, PlayState* play) {
-    EnStream* this = THIS;
+    EnStream* this = (EnStream*)thisx;
 
     this->size = EN_STREAM_SIZE(&this->actor);
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -124,7 +122,7 @@ void EnStream_WaitForPlayer(EnStream* this, PlayState* play) {
 }
 
 void EnStream_Update(Actor* thisx, PlayState* play) {
-    EnStream* this = THIS;
+    EnStream* this = (EnStream*)thisx;
 
     this->actionFunc(this, play);
     Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);

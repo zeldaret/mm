@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnTalk*)thisx)
-
 void EnTalk_Init(Actor* thisx, PlayState* play);
 void EnTalk_Destroy(Actor* thisx, PlayState* play);
 void EnTalk_Update(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile En_Talk_Profile = {
 };
 
 void EnTalk_Init(Actor* thisx, PlayState* play) {
-    EnTalk* this = THIS;
+    EnTalk* this = (EnTalk*)thisx;
     s8 attentionRangeType = ENTALK_GET_ATTENTION_RANGE_TYPE(&this->actor);
 
     if ((attentionRangeType >= ATTENTION_RANGE_0) && (attentionRangeType < ATTENTION_RANGE_7)) {
@@ -63,7 +61,7 @@ void func_80BDE090(EnTalk* this, PlayState* play) {
 }
 
 void EnTalk_Update(Actor* thisx, PlayState* play) {
-    EnTalk* this = THIS;
+    EnTalk* this = (EnTalk*)thisx;
 
     this->actionFunc(this, play);
 }

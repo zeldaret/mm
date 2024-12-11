@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
-#define THIS ((EnGg*)thisx)
-
 void EnGg_Init(Actor* thisx, PlayState* play);
 void EnGg_Destroy(Actor* thisx, PlayState* play);
 void EnGg_Update(Actor* thisx, PlayState* play);
@@ -669,7 +667,7 @@ void func_80B364D4(EnGgStruct* ptr, PlayState* play) {
 
 void EnGg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGg* this = THIS;
+    EnGg* this = (EnGg*)thisx;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
         Actor_Kill(&this->actor);
@@ -705,7 +703,7 @@ void EnGg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGg_Update(Actor* thisx, PlayState* play) {
-    EnGg* this = THIS;
+    EnGg* this = (EnGg*)thisx;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
@@ -762,7 +760,7 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
 
 s32 EnGg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnGg* this = THIS;
+    EnGg* this = (EnGg*)thisx;
 
     if (limbIndex == OBJECT_GG_LIMB_02) {
         Matrix_RotateZS(this->unk_2E8, MTXMODE_APPLY);
@@ -772,7 +770,7 @@ s32 EnGg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnGg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B36DF0 = { 1800.0f, 300.0f, 200.0f };
-    EnGg* this = THIS;
+    EnGg* this = (EnGg*)thisx;
     Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
 
@@ -809,7 +807,7 @@ TexturePtr D_80B36DFC[] = {
 
 void EnGg_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGg* this = THIS;
+    EnGg* this = (EnGg*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnGb2*)thisx)
-
 void EnGb2_Init(Actor* thisx, PlayState* play);
 void EnGb2_Destroy(Actor* thisx, PlayState* play);
 void EnGb2_Update(Actor* thisx, PlayState* play);
@@ -885,7 +883,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnGb2_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
 
     if (func_80B0F660(this, play)) {
         Actor_Kill(&this->actor);
@@ -977,13 +975,13 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGb2_Destroy(Actor* thisx, PlayState* play) {
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnGb2_Update(Actor* thisx, PlayState* play) {
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -997,7 +995,7 @@ void EnGb2_Update(Actor* thisx, PlayState* play) {
 
 s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
 
     if (limbIndex == OBJECT_PS_LIMB_07) {
         Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
@@ -1011,7 +1009,7 @@ s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnGb2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
     Vec3f sp18 = { 2400.0f, 0.0f, 0.0f };
 
     if (limbIndex == OBJECT_PS_LIMB_07) {
@@ -1020,7 +1018,7 @@ void EnGb2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnGb2_Draw(Actor* thisx, PlayState* play) {
-    EnGb2* this = THIS;
+    EnGb2* this = (EnGb2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnFall2*)thisx)
-
 void EnFall2_Init(Actor* thisx, PlayState* play);
 void EnFall2_Destroy(Actor* thisx, PlayState* play);
 void EnFall2_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile En_Fall2_Profile = {
 };
 
 void EnFall2_Init(Actor* thisx, PlayState* play) {
-    EnFall2* this = THIS;
+    EnFall2* this = (EnFall2*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnFall2_DoNothing;
@@ -46,7 +44,7 @@ void EnFall2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFall2_Destroy(Actor* thisx, PlayState* play) {
-    EnFall2* this = THIS;
+    EnFall2* this = (EnFall2*)thisx;
 
     Keyframe_DestroyFlex(&this->kfSkelAnime);
 }
@@ -144,14 +142,14 @@ void EnFall2_HandleCutscene(EnFall2* this, PlayState* play) {
 }
 
 void EnFall2_Update(Actor* thisx, PlayState* play) {
-    EnFall2* this = THIS;
+    EnFall2* this = (EnFall2*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnFall2_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFall2* this = THIS;
+    EnFall2* this = (EnFall2*)thisx;
     Mtx* mtxStack;
 
     if (!(this->alphaLevel <= 0.0f)) {

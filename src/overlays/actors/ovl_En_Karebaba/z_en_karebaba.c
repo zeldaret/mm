@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnKarebaba*)thisx)
-
 void EnKarebaba_Init(Actor* thisx, PlayState* play);
 void EnKarebaba_Destroy(Actor* thisx, PlayState* play);
 void EnKarebaba_Update(Actor* thisx, PlayState* play2);
@@ -142,7 +140,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
@@ -170,7 +168,7 @@ void EnKarebaba_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKarebaba_Destroy(Actor* thisx, PlayState* play) {
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
 
     Collider_DestroyCylinder(play, &this->hurtCollider);
     Collider_DestroyCylinder(play, &this->attackCollider);
@@ -581,7 +579,7 @@ void EnKarebaba_Dead(EnKarebaba* this, PlayState* play) {
 
 void EnKarebaba_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
     f32 max;
 
     this->actionFunc(this, play);
@@ -647,7 +645,7 @@ void EnKarebaba_DrawShadow(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     static Color_RGBA8 sFogColor = { 0, 0, 0, 0 };
     static Gfx* sStemDLists[] = { gDekuBabaStemTopDL, gDekuBabaStemMiddleDL, gDekuBabaStemBaseDL };
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
     s32 i;
     s32 stemSections;
     s16 bodyPartsCount;

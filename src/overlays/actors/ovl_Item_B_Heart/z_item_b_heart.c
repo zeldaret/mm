@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ItemBHeart*)thisx)
-
 void ItemBHeart_Init(Actor* thisx, PlayState* play);
 void ItemBHeart_Destroy(Actor* thisx, PlayState* play);
 void ItemBHeart_Update(Actor* thisx, PlayState* play);
@@ -38,7 +36,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ItemBHeart_Init(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* this = (ItemBHeart*)thisx;
 
     if (Flags_GetCollectible(play, 0x1F)) {
         Actor_Kill(&this->actor);
@@ -61,7 +59,7 @@ void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
  * Adjusts size and handles collection (if of proper baseScale)
  */
 void ItemBHeart_Update(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* this = (ItemBHeart*)thisx;
 
     ItemBHeart_UpdateModel(this, play);
 
@@ -88,7 +86,7 @@ void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play) {
  * Draw translucently when in front of a boss warp portal
  */
 void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
-    ItemBHeart* this = THIS;
+    ItemBHeart* this = (ItemBHeart*)thisx;
     Actor* actorIt;
     u8 drawTranslucent = false;
 

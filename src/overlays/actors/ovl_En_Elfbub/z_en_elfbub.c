@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
-#define THIS ((EnElfbub*)thisx)
-
 void EnElfbub_Init(Actor* thisx, PlayState* play);
 void EnElfbub_Destroy(Actor* thisx, PlayState* play);
 void EnElfbub_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnElfbub_Init(Actor* thisx, PlayState* play) {
-    EnElfbub* this = THIS;
+    EnElfbub* this = (EnElfbub*)thisx;
     Actor* childActor;
 
     if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCH_FLAG(&this->actor))) {
@@ -88,7 +86,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnElfbub_Destroy(Actor* thisx, PlayState* play) {
-    EnElfbub* this = THIS;
+    EnElfbub* this = (EnElfbub*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -141,7 +139,7 @@ void EnElfbub_Idle(EnElfbub* this, PlayState* play) {
 }
 
 void EnElfbub_Update(Actor* thisx, PlayState* play) {
-    EnElfbub* this = THIS;
+    EnElfbub* this = (EnElfbub*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actionFunc(this, play);
@@ -150,7 +148,7 @@ void EnElfbub_Update(Actor* thisx, PlayState* play) {
 
 void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnElfbub* this = THIS;
+    EnElfbub* this = (EnElfbub*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

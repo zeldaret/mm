@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnWf*)thisx)
-
 void EnWf_Init(Actor* thisx, PlayState* play);
 void EnWf_Destroy(Actor* thisx, PlayState* play);
 void EnWf_Update(Actor* thisx, PlayState* play);
@@ -261,7 +259,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnWf_Init(Actor* thisx, PlayState* play) {
     static s32 sTexturesDesegmented = false;
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
     s32 i;
     s32 temp_s0;
 
@@ -351,7 +349,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWf_Destroy(Actor* thisx, PlayState* play) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -1478,7 +1476,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
 
 void EnWf_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if (this->unk_2A2 == 0) {
         this->unk_2A2 = 96;
@@ -1542,7 +1540,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if ((limbIndex == WOLFOS_NORMAL_LIMB_HEAD) || (limbIndex == WOLFOS_NORMAL_LIMB_EYES)) {
         rot->y -= this->unk_29E;
@@ -1576,7 +1574,7 @@ static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
 };
 
 void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
     Vec3f sp20;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
@@ -1594,7 +1592,7 @@ void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnWf_Draw(Actor* thisx, PlayState* play) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);

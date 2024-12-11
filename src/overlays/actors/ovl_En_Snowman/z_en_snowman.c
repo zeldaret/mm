@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnSnowman*)thisx)
-
 void EnSnowman_Init(Actor* thisx, PlayState* play);
 void EnSnowman_Destroy(Actor* thisx, PlayState* play);
 void EnSnowman_Update(Actor* thisx, PlayState* play);
@@ -186,7 +184,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnSnowman_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     s32 attackRange;
 
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -284,7 +282,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_Destroy(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1021,7 +1019,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
 
 void EnSnowman_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     f32 wallCheckRadius;
 
     if (this->actionFunc != EnSnowman_SplitDoNothing) {
@@ -1077,7 +1075,7 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     s16 scale;
     s32 i;
 
@@ -1159,7 +1157,7 @@ static Vec3f sBodyBottomBodyPartOffsets[] = {
 
 void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     Gfx* gfx;
     s32 i;
 
@@ -1197,7 +1195,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnSnowman_Draw(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
@@ -1207,7 +1205,7 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_DrawSnowPile(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,

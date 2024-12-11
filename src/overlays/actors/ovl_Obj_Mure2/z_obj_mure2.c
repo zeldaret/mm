@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMure2*)thisx)
-
 #define OBJ_MURE2_CHILD_COUNT_BUSH_RING 9
 #define OBJ_MURE2_CHILD_COUNT_BUSH_SCATTERED 12
 #define OBJ_MURE2_CHILD_COUNT_ROCK_RING 8
@@ -189,7 +187,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjMure2_Init(Actor* thisx, PlayState* play) {
-    ObjMure2* this = THIS;
+    ObjMure2* this = (ObjMure2*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (play->csCtx.state != CS_STATE_IDLE) {
@@ -235,7 +233,7 @@ void ObjMure2_WaitForPlayerOutOfRange(ObjMure2* this, PlayState* play) {
 }
 
 void ObjMure2_Update(Actor* thisx, PlayState* play) {
-    ObjMure2* this = THIS;
+    ObjMure2* this = (ObjMure2*)thisx;
 
     if (play->csCtx.state == CS_STATE_IDLE) {
         this->rangeMultiplier = 1.0f;

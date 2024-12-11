@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgBotihasira*)thisx)
-
 void BgBotihasira_Init(Actor* thisx, PlayState* play);
 void BgBotihasira_Destroy(Actor* thisx, PlayState* play);
 void BgBotihasira_Update(Actor* thisx, PlayState* play2);
@@ -52,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void BgBotihasira_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgBotihasira* this = THIS;
+    BgBotihasira* this = (BgBotihasira*)thisx;
     CollisionHeader* colHeader = NULL;
 
     if (this->dyna.actor.params == 0) {
@@ -67,7 +65,7 @@ void BgBotihasira_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgBotihasira_Destroy(Actor* thisx, PlayState* play) {
-    BgBotihasira* this = THIS;
+    BgBotihasira* this = (BgBotihasira*)thisx;
 
     if (this->dyna.actor.params == 0) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -79,7 +77,7 @@ void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play) {
 
 void BgBotihasira_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgBotihasira* this = THIS;
+    BgBotihasira* this = (BgBotihasira*)thisx;
 
     this->actionFunc(this, play);
     if (this->dyna.actor.params != 0) {

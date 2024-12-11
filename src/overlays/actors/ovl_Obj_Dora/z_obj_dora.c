@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjDora*)thisx)
-
 void ObjDora_Init(Actor* thisx, PlayState* play);
 void ObjDora_Destroy(Actor* thisx, PlayState* play);
 void ObjDora_Update(Actor* thisx, PlayState* play);
@@ -167,7 +165,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 void ObjDora_Init(Actor* thisx, PlayState* play) {
-    ObjDora* this = THIS;
+    ObjDora* this = (ObjDora*)thisx;
     s32 i;
     s32 j;
     Vec3f vtx[3];
@@ -207,7 +205,7 @@ void ObjDora_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjDora_Destroy(Actor* thisx, PlayState* play) {
-    ObjDora* this = THIS;
+    ObjDora* this = (ObjDora*)thisx;
 
     Collider_DestroyTris(play, &this->colliderTris);
 }
@@ -309,7 +307,7 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
 }
 
 void ObjDora_Update(Actor* thisx, PlayState* play) {
-    ObjDora* this = THIS;
+    ObjDora* this = (ObjDora*)thisx;
 
     this->actionFunc(this, play);
     ObjDora_UpdateCollision(this, play);
@@ -317,7 +315,7 @@ void ObjDora_Update(Actor* thisx, PlayState* play) {
 
 void ObjDora_Draw(Actor* thisx, PlayState* play) {
     static Vec3f sPos = { 0.0f, -61.5f, 0.0f };
-    ObjDora* this = THIS;
+    ObjDora* this = (ObjDora*)thisx;
     f32 gongForceX;
 
     OPEN_DISPS(play->state.gfxCtx);

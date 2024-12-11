@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnSda*)thisx)
-
 void EnSda_Init(Actor* thisx, PlayState* play);
 void EnSda_Destroy(Actor* thisx, PlayState* play);
 void EnSda_Update(Actor* thisx, PlayState* play);
@@ -79,7 +77,7 @@ void EnSda_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnSda_Update(Actor* thisx, PlayState* play) {
-    EnSda* this = THIS;
+    EnSda* this = (EnSda*)thisx;
     Player* player;
 
     if (this->actor.params == ENSDA_1) {
@@ -91,7 +89,7 @@ void EnSda_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSda_Draw(Actor* thisx, PlayState* play) {
-    EnSda* this = THIS;
+    EnSda* this = (EnSda*)thisx;
     Player* player;
     u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 

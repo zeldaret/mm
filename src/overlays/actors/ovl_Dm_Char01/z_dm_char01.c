@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((DmChar01*)thisx)
-
 void DmChar01_Init(Actor* thisx, PlayState* play);
 void DmChar01_Destroy(Actor* thisx, PlayState* play);
 void DmChar01_Update(Actor* thisx, PlayState* play2);
@@ -54,7 +52,7 @@ static InitChainEntry sInitChain[] = {
 s16 D_80AAAAB4 = false;
 
 void DmChar01_Init(Actor* thisx, PlayState* play) {
-    DmChar01* this = THIS;
+    DmChar01* this = (DmChar01*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -149,7 +147,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 }
 
 void DmChar01_Destroy(Actor* thisx, PlayState* play) {
-    DmChar01* this = THIS;
+    DmChar01* this = (DmChar01*)thisx;
 
     if (this->unk_34D) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -365,7 +363,7 @@ void func_80AA90F4(DmChar01* this, PlayState* play) {
 
 void DmChar01_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DmChar01* this = THIS;
+    DmChar01* this = (DmChar01*)thisx;
 
     this->actionFunc(this, play);
 
@@ -397,7 +395,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
     static s16 D_80AAAAC4 = 0;
     static s16 D_80AAAAC8 = 0;
     static s16 D_80AAAACC = 0;
-    DmChar01* this = THIS;
+    DmChar01* this = (DmChar01*)thisx;
     f32 temp_f12;
     f32 spBC;
     s32 i;

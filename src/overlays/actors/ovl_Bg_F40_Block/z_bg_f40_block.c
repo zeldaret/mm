@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgF40Block*)thisx)
-
 void BgF40Block_Init(Actor* thisx, PlayState* play);
 void BgF40Block_Destroy(Actor* thisx, PlayState* play);
 void BgF40Block_Update(Actor* thisx, PlayState* play);
@@ -225,7 +223,7 @@ void func_80BC4038(BgF40Block* this) {
 }
 
 void BgF40Block_Init(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -254,7 +252,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Block_Destroy(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -365,7 +363,7 @@ void func_80BC457C(BgF40Block* this, PlayState* play) {
 }
 
 void BgF40Block_Update(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     this->actionFunc(this, play);
 

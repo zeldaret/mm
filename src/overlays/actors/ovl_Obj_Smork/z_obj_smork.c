@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((ObjSmork*)thisx)
-
 void ObjSmork_Init(Actor* thisx, PlayState* play);
 void ObjSmork_Destroy(Actor* thisx, PlayState* play);
 void ObjSmork_Update(Actor* thisx, PlayState* play);
@@ -128,7 +126,7 @@ void func_80A3D9C4(ObjSmork* this, PlayState* play) {
 }
 
 void ObjSmork_Init(Actor* thisx, PlayState* play) {
-    ObjSmork* this = THIS;
+    ObjSmork* this = (ObjSmork*)thisx;
 
     Lib_MemCpy(this->unk_148, ovl_Obj_Smork_Vtx_000C10, sizeof(Vtx) * ARRAY_COUNT(ovl_Obj_Smork_Vtx_000C10));
     this->unk_1C6 = Rand_S16Offset(0, 59);
@@ -139,13 +137,13 @@ void ObjSmork_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjSmork_Update(Actor* thisx, PlayState* play) {
-    ObjSmork* this = THIS;
+    ObjSmork* this = (ObjSmork*)thisx;
 
     func_80A3D940(this);
 }
 
 void ObjSmork_Draw(Actor* thisx, PlayState* play) {
-    ObjSmork* this = THIS;
+    ObjSmork* this = (ObjSmork*)thisx;
 
     func_80A3D9C4(this, play);
 }

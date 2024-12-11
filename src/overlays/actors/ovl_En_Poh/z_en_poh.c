@@ -11,8 +11,6 @@
 #define FLAGS \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_IGNORE_QUAKE)
 
-#define THIS ((EnPoh*)thisx)
-
 void EnPoh_Init(Actor* thisx, PlayState* play);
 void EnPoh_Destroy(Actor* thisx, PlayState* play);
 void EnPoh_Update(Actor* thisx, PlayState* play2);
@@ -150,7 +148,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnPoh_Init(Actor* thisx, PlayState* play) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -173,7 +171,7 @@ void EnPoh_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPoh_Destroy(Actor* thisx, PlayState* play) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
     Collider_DestroyJntSph(play, &this->colliderSph);
@@ -798,7 +796,7 @@ void func_80B2E8E0(EnPoh* this) {
 
 void EnPoh_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
     s32 pad;
 
     if (this->colliderSph.base.atFlags & AT_HIT) {
@@ -849,7 +847,7 @@ void EnPoh_Update(Actor* thisx, PlayState* play2) {
 
 s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
 
     if ((this->unk_197 == 0) || (limbIndex == POE_LIMB_LANTERN) ||
         ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2))) {
@@ -897,7 +895,7 @@ static Vec3f D_80B2F734[] = {
 void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     s32 bodyPartIndex;
     Vec3f sp60;
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
     s32 pad;
 
     Collider_UpdateSpheres(limbIndex, &this->colliderSph);
@@ -942,7 +940,7 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnPoh_Draw(Actor* thisx, PlayState* play) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -990,7 +988,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80B2F328(Actor* thisx, PlayState* play) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
 
     this->actionFunc(this, play);
     if (this->actionFunc != func_80B2DD2C) {
@@ -1001,7 +999,7 @@ void func_80B2F328(Actor* thisx, PlayState* play) {
 }
 
 void func_80B2F37C(Actor* thisx, PlayState* play) {
-    EnPoh* this = THIS;
+    EnPoh* this = (EnPoh*)thisx;
     s32 pad;
     Vec3f sp7C;
     Gfx* gfx;

@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgFireWall*)thisx)
-
 void BgFireWall_Init(Actor* thisx, PlayState* play);
 void BgFireWall_Destroy(Actor* thisx, PlayState* play);
 void BgFireWall_Update(Actor* thisx, PlayState* play2);
@@ -61,7 +59,7 @@ static TexturePtr sFlameTextures[] = {
 };
 
 void BgFireWall_Init(Actor* thisx, PlayState* play) {
-    BgFireWall* this = THIS;
+    BgFireWall* this = (BgFireWall*)thisx;
 
     this->unk_14C = this->actor.params;
     this->actor.scale.y = 0.005f;
@@ -80,13 +78,13 @@ void BgFireWall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgFireWall_Destroy(Actor* thisx, PlayState* play) {
-    BgFireWall* this = THIS;
+    BgFireWall* this = (BgFireWall*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
-    BgFireWall* this = THIS;
+    BgFireWall* this = (BgFireWall*)thisx;
     Player* player = GET_PLAYER(play);
     Vec3f sp1C;
 
@@ -172,7 +170,7 @@ void func_809AC970(BgFireWall* this, PlayState* play) {
 
 void BgFireWall_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgFireWall* this = THIS;
+    BgFireWall* this = (BgFireWall*)thisx;
 
     this->actionFunc(this, play);
     if ((this->unk_14C == 0) || ((this->unk_14C != 0) && (this->actor.xzDistToPlayer < 240.0f))) {
@@ -201,7 +199,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
 }
 
 void BgFireWall_Draw(Actor* thisx, PlayState* play) {
-    BgFireWall* this = THIS;
+    BgFireWall* this = (BgFireWall*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

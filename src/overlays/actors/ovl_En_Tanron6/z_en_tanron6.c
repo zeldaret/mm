@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnTanron6*)thisx)
-
 void EnTanron6_Init(Actor* thisx, PlayState* play);
 void EnTanron6_Destroy(Actor* thisx, PlayState* play);
 void EnTanron6_Update(Actor* thisx, PlayState* play);
@@ -66,7 +64,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnTanron6_Init(Actor* thisx, PlayState* play) {
-    EnTanron6* this = THIS;
+    EnTanron6* this = (EnTanron6*)thisx;
 
     this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 19.0f);
@@ -87,7 +85,7 @@ void func_80BE60D0(EnTanron6* this, PlayState* play) {
 }
 
 void EnTanron6_Update(Actor* thisx, PlayState* play) {
-    EnTanron6* this = THIS;
+    EnTanron6* this = (EnTanron6*)thisx;
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);

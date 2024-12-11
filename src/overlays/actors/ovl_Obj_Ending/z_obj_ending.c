@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((ObjEnding*)thisx)
-
 void ObjEnding_Init(Actor* thisx, PlayState* play);
 void ObjEnding_Update(Actor* thisx, PlayState* play);
 void ObjEnding_Draw(Actor* thisx, PlayState* play);
@@ -37,7 +35,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjEnding_Init(Actor* thisx, PlayState* play) {
-    ObjEnding* this = THIS;
+    ObjEnding* this = (ObjEnding*)thisx;
     AnimatedMaterial* animMat;
 
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -52,7 +50,7 @@ void ObjEnding_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjEnding_Draw(Actor* thisx, PlayState* play) {
-    ObjEnding* this = THIS;
+    ObjEnding* this = (ObjEnding*)thisx;
     Gfx* dl1;
     Gfx* dl2;
 

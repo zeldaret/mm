@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgIcefloe*)thisx)
-
 void BgIcefloe_Init(Actor* thisx, PlayState* play);
 void BgIcefloe_Destroy(Actor* thisx, PlayState* play);
 void BgIcefloe_Update(Actor* thisx, PlayState* play);
@@ -43,7 +41,7 @@ static InitChainEntry sInitChain[] = {
 static s32 numberSpawned;
 
 void BgIcefloe_Init(Actor* thisx, PlayState* play) {
-    BgIcefloe* this = THIS;
+    BgIcefloe* this = (BgIcefloe*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -68,7 +66,7 @@ void BgIcefloe_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIcefloe_Destroy(Actor* thisx, PlayState* play) {
-    BgIcefloe* this = THIS;
+    BgIcefloe* this = (BgIcefloe*)thisx;
     s32 i;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -163,7 +161,7 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
 }
 
 void BgIcefloe_Update(Actor* thisx, PlayState* play) {
-    BgIcefloe* this = THIS;
+    BgIcefloe* this = (BgIcefloe*)thisx;
 
     if (!Play_InCsMode(play)) {
         this->actionFunc(this, play);
@@ -171,7 +169,7 @@ void BgIcefloe_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgIcefloe_Draw(Actor* thisx, PlayState* play) {
-    BgIcefloe* this = THIS;
+    BgIcefloe* this = (BgIcefloe*)thisx;
 
     Gfx_DrawDListOpa(play, gIcefloeIcePlatformDL);
 }

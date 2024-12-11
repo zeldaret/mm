@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
-#define THIS ((ObjGhaka*)thisx)
-
 void ObjGhaka_Init(Actor* thisx, PlayState* play);
 void ObjGhaka_Destroy(Actor* thisx, PlayState* play);
 void ObjGhaka_Update(Actor* thisx, PlayState* play);
@@ -148,7 +146,7 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
 }
 
 void ObjGhaka_Init(Actor* thisx, PlayState* play) {
-    ObjGhaka* this = THIS;
+    ObjGhaka* this = (ObjGhaka*)thisx;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
@@ -168,13 +166,13 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjGhaka_Destroy(Actor* thisx, PlayState* play) {
-    ObjGhaka* this = THIS;
+    ObjGhaka* this = (ObjGhaka*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjGhaka_Update(Actor* thisx, PlayState* play) {
-    ObjGhaka* this = THIS;
+    ObjGhaka* this = (ObjGhaka*)thisx;
 
     this->actionFunc(this, play);
     thisx->focus.pos.x = thisx->world.pos.x;

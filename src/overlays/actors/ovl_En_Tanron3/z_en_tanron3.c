@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnTanron3*)thisx)
-
 #define WORK_TIMER_PICK_NEW_DEVIATION 0
 #define WORK_TIMER_DIE 0
 #define WORK_TIMER_OUT_OF_WATER 1
@@ -108,7 +106,7 @@ void EnTanron3_CreateEffect(PlayState* play, Vec3f* effectPos) {
 }
 
 void EnTanron3_Init(Actor* thisx, PlayState* play) {
-    EnTanron3* this = THIS;
+    EnTanron3* this = (EnTanron3*)thisx;
 
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(play, &this->atCollider, &this->actor, &sCylinderInit);
@@ -391,7 +389,7 @@ void EnTanron3_CheckCollisions(EnTanron3* this, PlayState* play) {
 
 void EnTanron3_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTanron3* this = THIS;
+    EnTanron3* this = (EnTanron3*)thisx;
     s16 i;
     Vec3f splashPos;
 
@@ -437,7 +435,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTanron3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTanron3* this = THIS;
+    EnTanron3* this = (EnTanron3*)thisx;
 
     if (limbIndex == GYORG_SMALL_FISH_LIMB_ROOT) {
         rot->y += this->bodyRotation;
@@ -455,7 +453,7 @@ s32 EnTanron3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnTanron3_Draw(Actor* thisx, PlayState* play) {
-    EnTanron3* this = THIS;
+    EnTanron3* this = (EnTanron3*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

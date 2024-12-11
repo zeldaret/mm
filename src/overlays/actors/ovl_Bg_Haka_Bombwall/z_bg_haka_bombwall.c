@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgHakaBombwall*)thisx)
-
 void BgHakaBombwall_Init(Actor* thisx, PlayState* play);
 void BgHakaBombwall_Destroy(Actor* thisx, PlayState* play);
 void BgHakaBombwall_Update(Actor* thisx, PlayState* play);
@@ -155,7 +153,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
 
 void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgHakaBombwall* this = THIS;
+    BgHakaBombwall* this = (BgHakaBombwall*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -172,7 +170,7 @@ void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakaBombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgHakaBombwall* this = THIS;
+    BgHakaBombwall* this = (BgHakaBombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -224,7 +222,7 @@ void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play) {
 }
 
 void BgHakaBombwall_Update(Actor* thisx, PlayState* play) {
-    BgHakaBombwall* this = THIS;
+    BgHakaBombwall* this = (BgHakaBombwall*)thisx;
 
     this->actionFunc(this, play);
 }

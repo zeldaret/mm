@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnNimotsu*)thisx)
-
 void EnNimotsu_Init(Actor* thisx, PlayState* play);
 void EnNimotsu_Destroy(Actor* thisx, PlayState* play);
 void EnNimotsu_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
 }
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play) {
-    EnNimotsu* this = THIS;
+    EnNimotsu* this = (EnNimotsu*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -67,14 +65,14 @@ void EnNimotsu_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNimotsu_Destroy(Actor* thisx, PlayState* play) {
-    EnNimotsu* this = THIS;
+    EnNimotsu* this = (EnNimotsu*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnNimotsu_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnNimotsu* this = THIS;
+    EnNimotsu* this = (EnNimotsu*)thisx;
     Vec3f dustPosition;
 
     Actor_MoveWithGravity(&this->actor);
@@ -97,7 +95,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 
 void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnNimotsu* this = THIS;
+    EnNimotsu* this = (EnNimotsu*)thisx;
     Vec3f position;
     Vec3f scale;
 

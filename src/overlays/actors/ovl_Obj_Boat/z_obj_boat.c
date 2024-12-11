@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjBoat*)thisx)
-
 void ObjBoat_Init(Actor* thisx, PlayState* play);
 void ObjBoat_Destroy(Actor* thisx, PlayState* play);
 void ObjBoat_Update(Actor* thisx, PlayState* play);
@@ -57,7 +55,7 @@ s16 ObjBoat_GetNextPoint(ObjBoat* this, Vec3f* nextPoint) {
 void ObjBoat_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     Path* path;
-    ObjBoat* this = THIS;
+    ObjBoat* this = (ObjBoat*)thisx;
     Vec3f sp24;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -79,7 +77,7 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBoat_Destroy(Actor* thisx, PlayState* play) {
-    ObjBoat* this = THIS;
+    ObjBoat* this = (ObjBoat*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -93,7 +91,7 @@ void ObjBoat_SetRotations(ObjBoat* this) {
 
 void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBoat* this = THIS;
+    ObjBoat* this = (ObjBoat*)thisx;
     Player* player = GET_PLAYER(play);
     s32 isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna);
     f32 speedTarget = 0.0f;
@@ -149,7 +147,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
 // Update used in cutscenes
 void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBoat* this = THIS;
+    ObjBoat* this = (ObjBoat*)thisx;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_511)) {
         CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_511)];
@@ -201,7 +199,7 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
 }
 
 void ObjBoat_Draw(Actor* thisx, PlayState* play) {
-    ObjBoat* this = THIS;
+    ObjBoat* this = (ObjBoat*)thisx;
 
     Gfx_DrawDListOpa(play, object_kaizoku_obj_DL_007630);
 }

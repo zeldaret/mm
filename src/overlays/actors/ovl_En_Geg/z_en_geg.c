@@ -13,8 +13,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnGeg*)thisx)
-
 void EnGeg_Init(Actor* thisx, PlayState* play);
 void EnGeg_Destroy(Actor* thisx, PlayState* play);
 void EnGeg_Update(Actor* thisx, PlayState* play);
@@ -903,7 +901,7 @@ void func_80BB347C(EnGeg* this, PlayState* play) {
 
 void EnGeg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
@@ -937,7 +935,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGeg_Destroy(Actor* thisx, PlayState* play) {
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
@@ -945,7 +943,7 @@ void EnGeg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGeg_Update(Actor* thisx, PlayState* play) {
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
 
     this->actionFunc(this, play);
     EnGeg_UpdateSkelAnime(this, play);
@@ -991,7 +989,7 @@ s32 EnGeg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnGeg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BB407C = { -1500.0f, 1500.0f, 0.0f };
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
     Vec3f sp38 = { 1.0f, 5.0f, -0.5f };
     Vec3f sp2C = { -1.0f, 5.0f, -0.5f };
 
@@ -1024,7 +1022,7 @@ void EnGeg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnGeg_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
     s32 phi_v0;
     s32 phi_v1;
 
@@ -1128,7 +1126,7 @@ void func_80BB3CB4(EnGeg* this, PlayState* play) {
 }
 
 void EnGeg_Draw(Actor* thisx, PlayState* play) {
-    EnGeg* this = THIS;
+    EnGeg* this = (EnGeg*)thisx;
 
     if (this->unk_230 & 1) {
         func_80BB3CB4(this, play);

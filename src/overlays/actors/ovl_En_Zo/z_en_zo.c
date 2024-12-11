@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnZo*)thisx)
-
 void EnZo_Init(Actor* thisx, PlayState* play);
 void EnZo_Destroy(Actor* thisx, PlayState* play);
 void EnZo_Update(Actor* thisx, PlayState* play);
@@ -321,7 +319,7 @@ void EnZo_DoNothing(EnZo* this, PlayState* play) {
 }
 
 void EnZo_Init(Actor* thisx, PlayState* play) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
@@ -340,13 +338,13 @@ void EnZo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZo_Destroy(Actor* thisx, PlayState* play) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnZo_Update(Actor* thisx, PlayState* play) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -357,7 +355,7 @@ void EnZo_Update(Actor* thisx, PlayState* play) {
 
 s32 EnZo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
 
     if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -380,7 +378,7 @@ s32 EnZo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnZo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -411,7 +409,7 @@ static Gfx sTransparencyDlist[] = {
 };
 
 void EnZo_Draw(Actor* thisx, PlayState* play) {
-    EnZo* this = THIS;
+    EnZo* this = (EnZo*)thisx;
     s32 i;
     u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;

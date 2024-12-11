@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnPart*)thisx)
-
 void EnPart_Init(Actor* thisx, PlayState* play);
 void EnPart_Destroy(Actor* thisx, PlayState* play);
 void EnPart_Update(Actor* thisx, PlayState* play);
@@ -119,7 +117,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
 EnPartActionFunc sActionFuncs[] = { func_80865390, func_808654C4 };
 
 void EnPart_Update(Actor* thisx, PlayState* play) {
-    EnPart* this = THIS;
+    EnPart* this = (EnPart*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
 
@@ -127,7 +125,7 @@ void EnPart_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnPart_Draw(Actor* thisx, PlayState* play) {
-    EnPart* this = THIS;
+    EnPart* this = (EnPart*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

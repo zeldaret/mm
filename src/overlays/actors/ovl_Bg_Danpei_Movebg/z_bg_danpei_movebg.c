@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgDanpeiMovebg*)thisx)
-
 #define DANPEI_MOVEBG_FLAG_4 (1 << 2)
 #define DANPEI_MOVEBG_FLAG_8 (1 << 3)
 #define DANPEI_MOVEBG_FLAG_10 (1 << 4)
@@ -68,7 +66,7 @@ s32 func_80AF6DE0(PlayState* this, ActorPathing* actorPathing) {
 }
 
 void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play) {
-    BgDanpeiMovebg* this = THIS;
+    BgDanpeiMovebg* this = (BgDanpeiMovebg*)thisx;
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
@@ -102,13 +100,13 @@ void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
 }
 
 void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play) {
-    BgDanpeiMovebg* this = THIS;
+    BgDanpeiMovebg* this = (BgDanpeiMovebg*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play) {
-    BgDanpeiMovebg* this = THIS;
+    BgDanpeiMovebg* this = (BgDanpeiMovebg*)thisx;
 
     this->actionFunc(this, play);
     this->prevFlags = this->flags;
@@ -222,7 +220,7 @@ void func_80AF746C(BgDanpeiMovebg* this, PlayState* play) {
 }
 
 void func_80AF74CC(Actor* thisx, PlayState* play) {
-    BgDanpeiMovebg* this = THIS;
+    BgDanpeiMovebg* this = (BgDanpeiMovebg*)thisx;
 
     if (this->dList != NULL) {
         Gfx_DrawDListOpa(play, this->dList);

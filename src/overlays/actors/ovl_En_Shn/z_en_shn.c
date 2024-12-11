@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnShn*)thisx)
-
 void EnShn_Init(Actor* thisx, PlayState* play);
 void EnShn_Destroy(Actor* thisx, PlayState* play);
 void EnShn_Update(Actor* thisx, PlayState* play);
@@ -584,7 +582,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
         PICTO_VALID_0,      PICTO_VALID_MONKEY,    PICTO_VALID_BIG_OCTO,
         PICTO_VALID_TINGLE, PICTO_VALID_DEKU_KING, PICTO_VALID_IN_SWAMP,
     };
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
     s32 ret = 0;
 
     switch (this->unk_2C6) {
@@ -700,7 +698,7 @@ void func_80AE6A64(EnShn* this, PlayState* play) {
 }
 
 void EnShn_Init(Actor* thisx, PlayState* play) {
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, NULL, this->jointTable, this->morphTable,
@@ -732,7 +730,7 @@ void EnShn_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnShn_Update(Actor* thisx, PlayState* play) {
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
 
     func_80AE68F0(this, play);
     this->actionFunc(this, play);
@@ -744,7 +742,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
 
     if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         func_80AE6488(this, play);
@@ -762,7 +760,7 @@ void EnShn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnShn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -792,7 +790,7 @@ void EnShn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnShn_Draw(Actor* thisx, PlayState* play) {
-    EnShn* this = THIS;
+    EnShn* this = (EnShn*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

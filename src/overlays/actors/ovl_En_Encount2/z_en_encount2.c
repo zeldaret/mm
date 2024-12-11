@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnEncount2*)thisx)
-
 void EnEncount2_Init(Actor* thisx, PlayState* play);
 void EnEncount2_Destroy(Actor* thisx, PlayState* play);
 void EnEncount2_Update(Actor* thisx, PlayState* play);
@@ -101,7 +99,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnEncount2_Init(Actor* thisx, PlayState* play) {
-    EnEncount2* this = THIS;
+    EnEncount2* this = (EnEncount2*)thisx;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
@@ -137,7 +135,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
-    EnEncount2* this = THIS;
+    EnEncount2* this = (EnEncount2*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
@@ -188,7 +186,7 @@ void EnEncount2_Die(EnEncount2* this, PlayState* play) {
 }
 
 void EnEncount2_Update(Actor* thisx, PlayState* play) {
-    EnEncount2* this = THIS;
+    EnEncount2* this = (EnEncount2*)thisx;
     s32 pad;
 
     DECR(this->deathTimer);
@@ -208,7 +206,7 @@ void EnEncount2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnEncount2_Draw(Actor* thisx, PlayState* play) {
-    EnEncount2* this = THIS;
+    EnEncount2* this = (EnEncount2*)thisx;
     if (this->isPopped != true) {
         Gfx_DrawDListOpa(play, gMajoraBalloonDL);
         Gfx_DrawDListOpa(play, gMajoraBalloonKnotDL);

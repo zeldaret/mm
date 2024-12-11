@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((ObjKzsaku*)thisx)
-
 void ObjKzsaku_Init(Actor* thisx, PlayState* play);
 void ObjKzsaku_Destroy(Actor* thisx, PlayState* play);
 void ObjKzsaku_Update(Actor* thisx, PlayState* play);
@@ -37,7 +35,7 @@ ActorProfile Obj_Kzsaku_Profile = {
 
 void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjKzsaku* this = THIS;
+    ObjKzsaku* this = (ObjKzsaku*)thisx;
     CollisionHeader* col = NULL;
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
@@ -57,7 +55,7 @@ void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjKzsaku_Destroy(Actor* thisx, PlayState* play) {
-    ObjKzsaku* this = THIS;
+    ObjKzsaku* this = (ObjKzsaku*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -114,7 +112,7 @@ void func_80C08CB0(ObjKzsaku* this, PlayState* play) {
 }
 
 void ObjKzsaku_Update(Actor* thisx, PlayState* play) {
-    ObjKzsaku* this = THIS;
+    ObjKzsaku* this = (ObjKzsaku*)thisx;
 
     this->actionFunc(this, play);
 }

@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgIkanaMirror*)thisx)
-
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2);
 void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaMirror_Update(Actor* thisx, PlayState* play);
@@ -228,7 +226,7 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
 
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgIkanaMirror* this = THIS;
+    BgIkanaMirror* this = (BgIkanaMirror*)thisx;
     ColliderTrisElementInit* element;
     Vec3f vertices[3];
     s32 i;
@@ -263,7 +261,7 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
 }
 
 void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaMirror* this = THIS;
+    BgIkanaMirror* this = (BgIkanaMirror*)thisx;
     s32 i;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -370,14 +368,14 @@ void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
 }
 
 void BgIkanaMirror_Update(Actor* thisx, PlayState* play) {
-    BgIkanaMirror* this = THIS;
+    BgIkanaMirror* this = (BgIkanaMirror*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgIkanaMirror_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaMirror* this = THIS;
+    BgIkanaMirror* this = (BgIkanaMirror*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

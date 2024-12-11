@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnToto*)thisx)
-
 #define ENTOTO_WEEK_EVENT_FLAGS (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
@@ -166,7 +164,7 @@ void func_80BA36C0(EnToto* this, PlayState* play, s32 index) {
 }
 
 void EnToto_Init(Actor* thisx, PlayState* play) {
-    EnToto* this = THIS;
+    EnToto* this = (EnToto*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -185,7 +183,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnToto_Destroy(Actor* thisx, PlayState* play) {
-    EnToto* this = THIS;
+    EnToto* this = (EnToto*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -687,7 +685,7 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
 }
 
 void EnToto_Update(Actor* thisx, PlayState* play) {
-    EnToto* this = THIS;
+    EnToto* this = (EnToto*)thisx;
     s32 pad;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_525)) {
@@ -705,7 +703,7 @@ void EnToto_Update(Actor* thisx, PlayState* play) {
 
 void EnToto_Draw(Actor* thisx, PlayState* play) {
     TexturePtr sp4C[] = { object_zm_Tex_008AE8, object_zm_Tex_00A068, object_zm_Tex_00A468 };
-    EnToto* this = THIS;
+    EnToto* this = (EnToto*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

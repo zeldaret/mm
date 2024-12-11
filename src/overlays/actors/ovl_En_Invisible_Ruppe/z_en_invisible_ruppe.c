@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnInvisibleRuppe*)thisx)
-
 void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play);
 void EnInvisibleRuppe_Destroy(Actor* thisx, PlayState* play);
 void EnInvisibleRuppe_Update(Actor* thisx, PlayState* play);
@@ -94,7 +92,7 @@ void func_80C259E8(EnInvisibleRuppe* this, PlayState* play) {
 
 void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvisibleRuppe* this = THIS;
+    EnInvisibleRuppe* this = (EnInvisibleRuppe*)thisx;
 
     this->switchFlag = INVISIBLERUPPE_GET_SWITCH_FLAG(&this->actor);
 
@@ -114,13 +112,13 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnInvisibleRuppe_Destroy(Actor* thisx, PlayState* play) {
-    EnInvisibleRuppe* this = THIS;
+    EnInvisibleRuppe* this = (EnInvisibleRuppe*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnInvisibleRuppe_Update(Actor* thisx, PlayState* play) {
-    EnInvisibleRuppe* this = THIS;
+    EnInvisibleRuppe* this = (EnInvisibleRuppe*)thisx;
 
     this->actionFunc(this, play);
     func_80C258A0(this, play);

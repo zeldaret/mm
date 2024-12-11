@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_REACT_TO_LENS)
 
-#define THIS ((EnTest2*)thisx)
-
 void EnTest2_Init(Actor* thisx, PlayState* play);
 void EnTest2_Update(Actor* thisx, PlayState* play);
 void EnTest2_UpdateForLens(Actor* thisx, PlayState* play);
@@ -79,7 +77,7 @@ static s16 sObjectIds[EN_TEST2_TYPE_MAX] = {
 };
 
 void EnTest2_Init(Actor* thisx, PlayState* play) {
-    EnTest2* this = THIS;
+    EnTest2* this = (EnTest2*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if ((ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_11) || (ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_12)) {
@@ -91,7 +89,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 objectSlot;
     EnTest2ModelInfo* modelInfo;
-    EnTest2* this = THIS;
+    EnTest2* this = (EnTest2*)thisx;
 
     objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[ENTEST2_GET_TYPE(&this->actor)]);
     if (objectSlot <= OBJECT_SLOT_NONE) {
@@ -118,7 +116,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
-    EnTest2* this = THIS;
+    EnTest2* this = (EnTest2*)thisx;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
@@ -129,7 +127,7 @@ void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
 
 void EnTest2_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTest2* this = THIS;
+    EnTest2* this = (EnTest2*)thisx;
     Gfx* dList = sModelInfo[ENTEST2_GET_TYPE(&this->actor)].dList2;
 
     if (this->animMat != NULL) {

@@ -16,8 +16,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnSyatekiMan*)thisx)
-
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play);
 void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiMan_Update(Actor* thisx, PlayState* play);
@@ -202,7 +200,7 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 }
 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* this = (EnSyatekiMan*)thisx;
     s32 pad;
     Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
@@ -1482,7 +1480,7 @@ void EnSyatekiMan_Blink(EnSyatekiMan* this) {
 }
 
 void EnSyatekiMan_Update(Actor* thisx, PlayState* play) {
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* this = (EnSyatekiMan*)thisx;
 
     this->actionFunc(this, play);
     EnSyatekiMan_Blink(this);
@@ -1495,7 +1493,7 @@ void EnSyatekiMan_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSyatekiMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* this = (EnSyatekiMan*)thisx;
 
     if ((play->sceneId == SCENE_SYATEKI_MIZU) && (limbIndex == BURLY_GUY_LIMB_HEAD)) {
         *dList = gTownShootingGalleryManHeadDL;
@@ -1514,7 +1512,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 }
 
 void EnSyatekiMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* this = (EnSyatekiMan*)thisx;
     Vec3f sFocusOffset = { 1600.0f, 0.0f, 0.0f };
 
     if (limbIndex == BURLY_GUY_LIMB_HEAD) {
@@ -1528,7 +1526,7 @@ void EnSyatekiMan_Draw(Actor* thisx, PlayState* play) {
         gSwampShootingGalleryManEyeHalfTex,
         gSwampShootingGalleryManEyeHalfTex,
     };
-    EnSyatekiMan* this = THIS;
+    EnSyatekiMan* this = (EnSyatekiMan*)thisx;
     s32 pad;
 
     if (play->sceneId == SCENE_SYATEKI_MIZU) {

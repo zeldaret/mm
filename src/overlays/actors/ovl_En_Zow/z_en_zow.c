@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnZow*)thisx)
-
 void EnZow_Init(Actor* thisx, PlayState* play);
 void EnZow_Destroy(Actor* thisx, PlayState* play);
 void EnZow_Update(Actor* thisx, PlayState* play);
@@ -321,7 +319,7 @@ static AnimationHeader* sAnimations[ENZOT_ANIM_MAX] = {
 
 void EnZow_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZow* this = THIS;
+    EnZow* this = (EnZow*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
@@ -342,7 +340,7 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZow_Destroy(Actor* thisx, PlayState* play) {
-    EnZow* this = THIS;
+    EnZow* this = (EnZow*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -556,7 +554,7 @@ void func_80BDD79C(EnZow* this, PlayState* play) {
 
 void EnZow_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZow* this = THIS;
+    EnZow* this = (EnZow*)thisx;
     Vec3f sp34;
 
     Actor_MoveWithGravity(&this->actor);
@@ -630,7 +628,7 @@ void EnZow_Draw(Actor* thisx, PlayState* play) {
         gZoraEyeHalfTex,
         gZoraEyeClosedTex,
     };
-    EnZow* this = THIS;
+    EnZow* this = (EnZow*)thisx;
 
     Matrix_Push();
 

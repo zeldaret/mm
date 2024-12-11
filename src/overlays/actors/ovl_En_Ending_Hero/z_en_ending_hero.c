@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnEndingHero*)thisx)
-
 void EnEndingHero_Init(Actor* thisx, PlayState* play);
 void EnEndingHero_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile En_Ending_Hero_Profile = {
 };
 
 void EnEndingHero_Init(Actor* thisx, PlayState* play) {
-    EnEndingHero* this = THIS;
+    EnEndingHero* this = (EnEndingHero*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
@@ -56,7 +54,7 @@ void EnEndingHero1_Idle(EnEndingHero* this, PlayState* play) {
 }
 
 void EnEndingHero_Update(Actor* thisx, PlayState* play) {
-    EnEndingHero* this = THIS;
+    EnEndingHero* this = (EnEndingHero*)thisx;
 
     if (this->unk240 == 0) {
         this->unk242++;
@@ -82,7 +80,7 @@ static TexturePtr sEyebrowTextures[] = {
 };
 
 void EnEndingHero_Draw(Actor* thisx, PlayState* play) {
-    EnEndingHero* this = THIS;
+    EnEndingHero* this = (EnEndingHero*)thisx;
     s32 index = 0;
 
     OPEN_DISPS(play->state.gfxCtx);

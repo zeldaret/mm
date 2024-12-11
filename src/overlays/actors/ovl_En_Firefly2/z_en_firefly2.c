@@ -10,8 +10,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | \
      ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
-#define THIS ((EnFirefly2*)thisx)
-
 void EnFirefly2_Init(Actor* thisx, PlayState* play);
 void EnFirefly2_Destroy(Actor* thisx, PlayState* play);
 void EnFirefly2_Update(Actor* thisx, PlayState* play);

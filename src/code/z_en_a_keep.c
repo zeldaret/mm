@@ -3,8 +3,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnAObj*)thisx)
-
 void EnAObj_Init(Actor* thisx, PlayState* play);
 void EnAObj_Destroy(Actor* thisx, PlayState* play);
 void EnAObj_Update(Actor* thisx, PlayState* play);
@@ -50,7 +48,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnAObj_Init(Actor* thisx, PlayState* play) {
-    EnAObj* this = THIS;
+    EnAObj* this = (EnAObj*)thisx;
 
     this->actor.textId = AOBJ_GET_TEXTID(&this->actor);
     this->actor.params = AOBJ_GET_TYPE(&this->actor);
@@ -63,7 +61,7 @@ void EnAObj_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAObj_Destroy(Actor* thisx, PlayState* play) {
-    EnAObj* this = THIS;
+    EnAObj* this = (EnAObj*)thisx;
 
     Collider_DestroyCylinder(play, &this->collision);
 }
@@ -89,7 +87,7 @@ void EnAObj_Talk(EnAObj* this, PlayState* play) {
 }
 
 void EnAObj_Update(Actor* thisx, PlayState* play) {
-    EnAObj* this = THIS;
+    EnAObj* this = (EnAObj*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, 45.0f);

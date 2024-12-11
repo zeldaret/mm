@@ -12,8 +12,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | \
      ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
-#define THIS ((EnPoSisters*)thisx)
-
 void EnPoSisters_Init(Actor* thisx, PlayState* play);
 void EnPoSisters_Destroy(Actor* thisx, PlayState* play);
 void EnPoSisters_Update(Actor* thisx, PlayState* play);
@@ -161,7 +159,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
@@ -214,7 +212,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPoSisters_Destroy(Actor* thisx, PlayState* play) {
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
     Collider_DestroyCylinder(play, &this->collider);
@@ -956,7 +954,7 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
 
 void EnPoSisters_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
     f32 alpha;
     Vec3f checkPos;
     s32 bgId;
@@ -1091,7 +1089,7 @@ s32 EnPoSisters_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
         { 0, 70, 50, 0 },
         { 70, 70, 0, 0 },
     };
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
 
     if ((limbIndex == POE_SISTERS_LIMB_ROOT) && (this->poSisterFlags & POE_SISTERS_FLAG_REAL_MEG_ROTATION)) {
         if (this->megSurroundTimer >= 284) {
@@ -1139,7 +1137,7 @@ static s8 sLimbToBodyParts[POE_SISTERS_LIMB_MAX] = {
 };
 
 void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
     s32 end;
     f32 brightness;
 
@@ -1194,7 +1192,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
-    EnPoSisters* this = THIS;
+    EnPoSisters* this = (EnPoSisters*)thisx;
     Color_RGBA8* sisterEnvColor = &sPoSisterEnvColors[this->type];
     Color_RGBA8* flameColor = &sPoSisterFlameColors[this->type];
     s32 pad;

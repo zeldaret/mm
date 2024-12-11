@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnGe2*)thisx)
-
 void EnGe2_Init(Actor* thisx, PlayState* play);
 void EnGe2_Destroy(Actor* thisx, PlayState* play);
 void EnGe2_Update(Actor* thisx, PlayState* play);
@@ -76,7 +74,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnGe2_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGe2* this = THIS;
+    EnGe2* this = (EnGe2*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoPurpleSkel, NULL, this->jointTable, this->morphTable,
@@ -699,7 +697,7 @@ void EnGe2_GuardStationary(EnGe2* this, PlayState* play) {
 
 void EnGe2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGe2* this = THIS;
+    EnGe2* this = (EnGe2*)thisx;
 
     if (!(this->stateFlags & GERUDO_PURPLE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
@@ -743,7 +741,7 @@ s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx) {
 }
 
 s32 EnGe2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnGe2* this = THIS;
+    EnGe2* this = (EnGe2*)thisx;
 
     if (limbIndex == GERUDO_PURPLE_NECK_LIMB) {
         rot->x += this->headRot.y;
@@ -767,7 +765,7 @@ void EnGe2_Draw(Actor* thisx, PlayState* play) {
         gGerudoPurpleEyeClosedTex,
     };
     s32 pad;
-    EnGe2* this = THIS;
+    EnGe2* this = (EnGe2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

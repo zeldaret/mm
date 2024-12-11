@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgLastBwall*)thisx)
-
 typedef struct {
     /* 0x0 */ Vec3s* posOffsets;
     /* 0x4 */ s16* indices;
@@ -145,7 +143,7 @@ void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, Co
 
 void BgLastBwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgLastBwall* this = THIS;
+    BgLastBwall* this = (BgLastBwall*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80C18AC8);
     this->type = BGLASTBWALL_GET_TYPE(&this->dyna.actor);
@@ -169,7 +167,7 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play) {
-    BgLastBwall* this = THIS;
+    BgLastBwall* this = (BgLastBwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -257,14 +255,14 @@ void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play) {
 }
 
 void BgLastBwall_Update(Actor* thisx, PlayState* play) {
-    BgLastBwall* this = THIS;
+    BgLastBwall* this = (BgLastBwall*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgLastBwall_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgLastBwall* this = THIS;
+    BgLastBwall* this = (BgLastBwall*)thisx;
 
     Gfx_DrawDListOpa(play, D_80C18A48[this->type].dList);
 }

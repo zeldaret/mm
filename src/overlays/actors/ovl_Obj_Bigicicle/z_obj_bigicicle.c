@@ -11,8 +11,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjBigicicle*)thisx)
-
 void ObjBigicicle_Init(Actor* thisx, PlayState* play);
 void ObjBigicicle_Destroy(Actor* thisx, PlayState* play);
 void ObjBigicicle_Update(Actor* thisx, PlayState* play);
@@ -99,7 +97,7 @@ Gfx* D_80AE98A8[] = {
 };
 
 void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
     f32 sp30;
     s32 sp28;
 
@@ -146,7 +144,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBigicicle_Destroy(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -290,7 +288,7 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
 
 void ObjBigicicle_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
     Vec3f sp44;
 
     this->actionFunc(this, play);
@@ -313,7 +311,7 @@ void ObjBigicicle_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjBigicicle_Draw(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
 
     Gfx_DrawDListXlu(play, D_80AE989C[this->unk_149]);
     Gfx_DrawDListXlu(play, D_80AE98A8[this->unk_149]);

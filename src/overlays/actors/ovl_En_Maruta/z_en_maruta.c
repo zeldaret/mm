@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
 
-#define THIS ((EnMaruta*)thisx)
-
 void EnMaruta_Init(Actor* thisx, PlayState* play);
 void EnMaruta_Destroy(Actor* thisx, PlayState* play);
 void EnMaruta_Update(Actor* thisx, PlayState* play);
@@ -209,7 +207,7 @@ Vec3f D_80B38B54 = { 0.0f, 0.0f, 0.0f };
 
 void EnMaruta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnMaruta* this = THIS;
+    EnMaruta* this = (EnMaruta*)thisx;
     s32 i;
 
     Actor_SetScale(&this->actor, 0.1f);
@@ -258,7 +256,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMaruta_Destroy(Actor* thisx, PlayState* play) {
-    EnMaruta* this = THIS;
+    EnMaruta* this = (EnMaruta*)thisx;
 
     if (this->unk_210 == 0) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -685,7 +683,7 @@ void func_80B382E4(PlayState* play, Vec3f arg1) {
 }
 
 void EnMaruta_Update(Actor* thisx, PlayState* play) {
-    EnMaruta* this = THIS;
+    EnMaruta* this = (EnMaruta*)thisx;
 
     this->actionFunc(this, play);
 
@@ -694,7 +692,7 @@ void EnMaruta_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMaruta_Draw(Actor* thisx, PlayState* play) {
-    EnMaruta* this = THIS;
+    EnMaruta* this = (EnMaruta*)thisx;
     Vec3f sp50;
     s32 i;
 

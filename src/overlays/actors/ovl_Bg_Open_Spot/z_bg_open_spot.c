@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgOpenSpot*)thisx)
-
 void BgOpenSpot_Init(Actor* thisx, PlayState* play);
 void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
 void BgOpenSpot_Update(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgOpenSpot_Init(Actor* thisx, PlayState* play) {
-    BgOpenSpot* this = THIS;
+    BgOpenSpot* this = (BgOpenSpot*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->texScrolls = Lib_SegmentedToVirtual(gSpotlightTexAnim);
@@ -46,7 +44,7 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenSpot_Update(Actor* thisx, PlayState* play) {
-    BgOpenSpot* this = THIS;
+    BgOpenSpot* this = (BgOpenSpot*)thisx;
     u32 cueId;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_125)) {

@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDaiku2*)thisx)
-
 void EnDaiku2_Init(Actor* thisx, PlayState* play);
 void EnDaiku2_Destroy(Actor* thisx, PlayState* play);
 void EnDaiku2_Update(Actor* thisx, PlayState* play);
@@ -77,7 +75,7 @@ void func_80BE61D0(EnDaiku2* this) {
 }
 
 void EnDaiku2_Init(Actor* thisx, PlayState* play) {
-    EnDaiku2* this = THIS;
+    EnDaiku2* this = (EnDaiku2*)thisx;
     s32 day = gSaveContext.save.day;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -115,7 +113,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDaiku2_Destroy(Actor* thisx, PlayState* play) {
-    EnDaiku2* this = THIS;
+    EnDaiku2* this = (EnDaiku2*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -486,7 +484,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play) {
 }
 
 void EnDaiku2_Update(Actor* thisx, PlayState* play) {
-    EnDaiku2* this = THIS;
+    EnDaiku2* this = (EnDaiku2*)thisx;
     s32 pad;
 
     SkelAnime_Update(&this->skelAnime);
@@ -504,7 +502,7 @@ void EnDaiku2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnDaiku2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDaiku2* this = THIS;
+    EnDaiku2* this = (EnDaiku2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -524,7 +522,7 @@ void EnDaiku2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 }
 
 void EnDaiku2_Draw(Actor* thisx, PlayState* play) {
-    EnDaiku2* this = THIS;
+    EnDaiku2* this = (EnDaiku2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

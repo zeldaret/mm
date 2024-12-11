@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((BgDyYoseizo*)thisx)
-
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play);
 void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play);
 void BgDyYoseizo_Update(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ static AnimationHeader* sAnimations[GREATFAIRY_ANIM_MAX] = {
 };
 
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
-    BgDyYoseizo* this = THIS;
+    BgDyYoseizo* this = (BgDyYoseizo*)thisx;
 
     this->unk2EC = this->actor.world.pos.y + 40.0f;
     this->actor.focus.pos = this->actor.world.pos;
@@ -539,7 +537,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
 }
 
 void BgDyYoseizo_Update(Actor* thisx, PlayState* play) {
-    BgDyYoseizo* this = THIS;
+    BgDyYoseizo* this = (BgDyYoseizo*)thisx;
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
@@ -550,7 +548,7 @@ void BgDyYoseizo_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 BgDyYoseizo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    BgDyYoseizo* this = THIS;
+    BgDyYoseizo* this = (BgDyYoseizo*)thisx;
 
     if (limbIndex == GREAT_FAIRY_LIMB_TORSO) {
         rot->x += this->torsoRot.y;
@@ -578,7 +576,7 @@ void BgDyYoseizo_Draw(Actor* thisx, PlayState* play) {
         gGreatFairyMouthClosedTex,
         gGreatFairyMouthOpenTex,
     };
-    BgDyYoseizo* this = THIS;
+    BgDyYoseizo* this = (BgDyYoseizo*)thisx;
     GreatFairyAppearance appearance = GREAT_FAIRY_APPEARANCE_MAGIC;
 
     // The differing eyes and hair colours

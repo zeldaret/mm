@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnTest5*)thisx)
-
 void EnTest5_Init(Actor* thisx, PlayState* play2);
 void EnTest5_Destroy(Actor* thisx, PlayState* play);
 void EnTest5_Update(Actor* thisx, PlayState* play2);
@@ -34,7 +32,7 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
 
 void EnTest5_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest5* this = THIS;
+    EnTest5* this = (EnTest5*)thisx;
     WaterBox* waterBox;
     f32 ySurface;
 
@@ -81,7 +79,7 @@ void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play) {
 
 void EnTest5_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest5* this = THIS;
+    EnTest5* this = (EnTest5*)thisx;
     Vec3f steamPos;
     CollisionPoly* poly;
     s32 pad;

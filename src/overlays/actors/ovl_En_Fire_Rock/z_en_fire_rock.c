@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnFireRock*)thisx)
-
 void EnFireRock_Init(Actor* thisx, PlayState* play);
 void EnFireRock_Destroy(Actor* thisx, PlayState* play);
 void EnFireRock_Update(Actor* thisx, PlayState* play);

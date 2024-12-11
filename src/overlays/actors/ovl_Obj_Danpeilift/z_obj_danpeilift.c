@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjDanpeilift*)thisx)
-
 void ObjDanpeilift_Init(Actor* thisx, PlayState* play);
 void ObjDanpeilift_Destroy(Actor* thisx, PlayState* play);
 void ObjDanpeilift_Update(Actor* thisx, PlayState* play);
@@ -47,7 +45,7 @@ void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 index) {
 void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
     Path* path;
     ObjDanpeiliftActionFunc tempActionFunc;
-    ObjDanpeilift* this = THIS;
+    ObjDanpeilift* this = (ObjDanpeilift*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
@@ -79,7 +77,7 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjDanpeilift_Destroy(Actor* thisx, PlayState* play) {
-    ObjDanpeilift* this = THIS;
+    ObjDanpeilift* this = (ObjDanpeilift*)thisx;
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -160,7 +158,7 @@ void ObjDanpeilift_Wait(ObjDanpeilift* this, PlayState* play) {
 
 void ObjDanpeilift_Update(Actor* thisx, PlayState* play) {
     f32 step;
-    ObjDanpeilift* this = THIS;
+    ObjDanpeilift* this = (ObjDanpeilift*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(&this->dyna.actor, 10.0f);

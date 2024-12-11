@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnBjt*)thisx)
-
 void EnBjt_Init(Actor* thisx, PlayState* play);
 void EnBjt_Destroy(Actor* thisx, PlayState* play);
 void EnBjt_Update(Actor* thisx, PlayState* play);
@@ -276,7 +274,7 @@ typedef enum {
 // msgevent callback/communication. Follow and choose parts of script to run
 s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    EnBjt* this = THIS;
+    EnBjt* this = (EnBjt*)thisx;
     PlayerItemAction itemAction;
     s32 scriptBranch = 0;
 
@@ -457,7 +455,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
 }
 
 void EnBjt_Init(Actor* thisx, PlayState* play) {
-    EnBjt* this = THIS;
+    EnBjt* this = (EnBjt*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
@@ -480,7 +478,7 @@ void EnBjt_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnBjt_Update(Actor* thisx, PlayState* play) {
-    EnBjt* this = THIS;
+    EnBjt* this = (EnBjt*)thisx;
 
     EnBjt_CheckTalk(this, play);
     this->actionFunc(this, play);
@@ -495,7 +493,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBjt_Draw(Actor* thisx, PlayState* play) {
-    EnBjt* this = THIS;
+    EnBjt* this = (EnBjt*)thisx;
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

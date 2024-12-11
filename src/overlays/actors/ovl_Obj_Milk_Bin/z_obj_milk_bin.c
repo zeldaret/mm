@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMilkBin*)thisx)
-
 void ObjMilkBin_Init(Actor* thisx, PlayState* play);
 void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
 void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
@@ -49,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
-    ObjMilkBin* this = THIS;
+    ObjMilkBin* this = (ObjMilkBin*)thisx;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -64,14 +62,14 @@ void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjMilkBin_Destroy(Actor* thisx, PlayState* play) {
-    ObjMilkBin* this = THIS;
+    ObjMilkBin* this = (ObjMilkBin*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjMilkBin* this = THIS;
+    ObjMilkBin* this = (ObjMilkBin*)thisx;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
@@ -95,7 +93,7 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play) {
-    ObjMilkBin* this = THIS;
+    ObjMilkBin* this = (ObjMilkBin*)thisx;
 
     if (!(this->disableDraw & 1)) {
         Gfx_DrawDListOpa(play, gMilkBinMilkJarDL);

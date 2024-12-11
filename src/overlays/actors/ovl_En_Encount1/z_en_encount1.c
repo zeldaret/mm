@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnEncount1*)thisx)
-
 void EnEncount1_Init(Actor* thisx, PlayState* play);
 void EnEncount1_Update(Actor* thisx, PlayState* play);
 
@@ -45,7 +43,7 @@ static s16 sActorParams[] = {
 };
 
 void EnEncount1_Init(Actor* thisx, PlayState* play) {
-    EnEncount1* this = THIS;
+    EnEncount1* this = (EnEncount1*)thisx;
 
     if (this->actor.params <= 0) {
         Actor_Kill(&this->actor);
@@ -163,7 +161,7 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
 }
 
 void EnEncount1_Update(Actor* thisx, PlayState* play) {
-    EnEncount1* this = THIS;
+    EnEncount1* this = (EnEncount1*)thisx;
 
     this->actionFunc(this, play);
 }

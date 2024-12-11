@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnNeoReeba*)thisx)
-
 void EnNeoReeba_Init(Actor* thisx, PlayState* play);
 void EnNeoReeba_Destroy(Actor* thisx, PlayState* play);
 void EnNeoReeba_Update(Actor* thisx, PlayState* play);
@@ -117,7 +115,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
-    EnNeoReeba* this = THIS;
+    EnNeoReeba* this = (EnNeoReeba*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable,
@@ -155,7 +153,7 @@ void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNeoReeba_Destroy(Actor* thisx, PlayState* play) {
-    EnNeoReeba* this = THIS;
+    EnNeoReeba* this = (EnNeoReeba*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -702,7 +700,7 @@ void EnNeoReeba_SinkIfStoneMask(EnNeoReeba* this, PlayState* play) {
 }
 
 void EnNeoReeba_Update(Actor* thisx, PlayState* play) {
-    EnNeoReeba* this = THIS;
+    EnNeoReeba* this = (EnNeoReeba*)thisx;
 
     if (EN_NEO_REEBA_IS_LARGE(&this->actor)) {
         this->collider.dim.radius = 27;
@@ -722,7 +720,7 @@ void EnNeoReeba_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnNeoReeba* this = THIS;
+    EnNeoReeba* this = (EnNeoReeba*)thisx;
 
     if ((limbIndex == OBJECT_RB_LIMB_03) && (this->rotationSpeed != 0.0f)) {
         rot->y += TRUNCF_BINANG(this->rotationSpeed * Math_SinS(this->rotationAngle));
@@ -733,7 +731,7 @@ s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnNeoReeba_Draw(Actor* thisx, PlayState* play) {
-    EnNeoReeba* this = THIS;
+    EnNeoReeba* this = (EnNeoReeba*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 

@@ -11,8 +11,6 @@
 #define FLAGS \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnMaYto*)thisx)
-
 void EnMaYto_Init(Actor* thisx, PlayState* play);
 void EnMaYto_Destroy(Actor* thisx, PlayState* play);
 void EnMaYto_Update(Actor* thisx, PlayState* play);
@@ -175,7 +173,7 @@ static TexturePtr sEyesTextures[] = {
 };
 
 void EnMaYto_Init(Actor* thisx, PlayState* play) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
     s32 pad;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_0;
@@ -393,7 +391,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_Destroy(Actor* thisx, PlayState* play) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1472,7 +1470,7 @@ void EnMaYto_SetTalkedFlag(void) {
 }
 
 void EnMaYto_Update(Actor* thisx, PlayState* play) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
 
     this->actionFunc(this, play);
     EnMaYto_UpdateCollision(this, play);
@@ -1480,7 +1478,7 @@ void EnMaYto_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
     Vec3s limbRot;
 
     if (limbIndex == CREMIA_LIMB_HEAD) {
@@ -1504,7 +1502,7 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
 
     if (limbIndex == CREMIA_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
@@ -1512,7 +1510,7 @@ void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnMaYto_Draw(Actor* thisx, PlayState* play) {
-    EnMaYto* this = THIS;
+    EnMaYto* this = (EnMaYto*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

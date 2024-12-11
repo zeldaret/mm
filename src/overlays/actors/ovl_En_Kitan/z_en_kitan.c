@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnKitan*)thisx)
-
 void EnKitan_Init(Actor* thisx, PlayState* play);
 void EnKitan_Destroy(Actor* thisx, PlayState* play);
 void EnKitan_Update(Actor* thisx, PlayState* play);
@@ -52,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnKitan_Init(Actor* thisx, PlayState* play) {
-    EnKitan* this = THIS;
+    EnKitan* this = (EnKitan*)thisx;
     s32 pad;
 
     Actor_SetScale(&this->actor, 0.0f);
@@ -82,7 +80,7 @@ void EnKitan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKitan_Destroy(Actor* thisx, PlayState* play) {
-    EnKitan* this = THIS;
+    EnKitan* this = (EnKitan*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -357,7 +355,7 @@ void EnKitan_WaitToAppear(EnKitan* this, PlayState* play) {
 }
 
 void EnKitan_Update(Actor* thisx, PlayState* play) {
-    EnKitan* this = THIS;
+    EnKitan* this = (EnKitan*)thisx;
 
     if (this->actor.draw != NULL) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -378,7 +376,7 @@ s32 EnKitan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
 void EnKitan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusOffset = { 0.0f, 0.0f, 0.0f };
-    EnKitan* this = THIS;
+    EnKitan* this = (EnKitan*)thisx;
 
     if (limbIndex == KEATON_LIMB_RIGHT_SHOULDER) {
         Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
@@ -386,7 +384,7 @@ void EnKitan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnKitan_Draw(Actor* thisx, PlayState* play) {
-    EnKitan* this = THIS;
+    EnKitan* this = (EnKitan*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnRailgibud*)thisx)
-
 void EnRailgibud_Init(Actor* thisx, PlayState* play);
 void EnRailgibud_Destroy(Actor* thisx, PlayState* play);
 void EnRailgibud_Update(Actor* thisx, PlayState* play);
@@ -243,7 +241,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnRailgibud_Init(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -281,7 +279,7 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRailgibud_Destroy(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1017,7 +1015,7 @@ void EnRailgibud_UpdateCollision(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_Update(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     EnRailgibud_UpdateWalkForwardState(this);
     EnRailgibud_CheckForGibdoMask(this, play);
@@ -1038,14 +1036,14 @@ void EnRailgibud_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnRailgibud_MainGibdo_DeadUpdate(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     EnRailgibud_UpdateWalkForwardState(this);
 }
 
 s32 EnRailgibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                                  Gfx** gfx) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     if (limbIndex == GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->torsoRot.y;
@@ -1057,7 +1055,7 @@ s32 EnRailgibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnRailgibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     if ((this->drawDmgEffTimer != 0) &&
         ((limbIndex == GIBDO_LIMB_LEFT_THIGH) || (limbIndex == GIBDO_LIMB_LEFT_SHIN) ||
@@ -1073,7 +1071,7 @@ void EnRailgibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnRailgibud_Draw(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1260,7 +1258,7 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
 }
 
 void EnRailgibud_Cutscene_Update(Actor* thisx, PlayState* play) {
-    EnRailgibud* this = THIS;
+    EnRailgibud* this = (EnRailgibud*)thisx;
 
     this->actionFunc(this, play);
     EnRailgibud_PerformCutsceneActions(this, play);

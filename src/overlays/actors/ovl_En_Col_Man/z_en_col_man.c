@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_100000)
 
-#define THIS ((EnColMan*)thisx)
-
 void EnColMan_Init(Actor* thisx, PlayState* play);
 void EnColMan_Destroy(Actor* thisx, PlayState* play);
 void EnColMan_Update(Actor* thisx, PlayState* play);
@@ -61,7 +59,7 @@ ActorProfile En_Col_Man_Profile = {
 };
 
 void EnColMan_Init(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.attentionRangeType = ATTENTION_RANGE_1;
@@ -88,7 +86,7 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnColMan_Destroy(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -220,7 +218,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
 
 void EnColMan_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Actor_SetScale(&this->actor, this->scale);
     this->actionFunc(this, play);
@@ -233,7 +231,7 @@ void EnColMan_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFE414(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -246,7 +244,7 @@ void func_80AFE414(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFE4AC(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

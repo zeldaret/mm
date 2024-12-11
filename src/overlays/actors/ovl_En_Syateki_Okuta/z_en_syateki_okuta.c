@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnSyatekiOkuta*)thisx)
-
 void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play);
 void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play);
@@ -88,7 +86,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSyatekiOkuta* this = THIS;
+    EnSyatekiOkuta* this = (EnSyatekiOkuta*)thisx;
     WaterBox* waterbox;
     f32 ySurface;
     s32 bgId;
@@ -116,7 +114,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
-    EnSyatekiOkuta* this = THIS;
+    EnSyatekiOkuta* this = (EnSyatekiOkuta*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -417,7 +415,7 @@ void EnSyatekiOkuta_CheckForSignal(EnSyatekiOkuta* this, PlayState* play) {
 
 void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSyatekiOkuta* this = THIS;
+    EnSyatekiOkuta* this = (EnSyatekiOkuta*)thisx;
     EnSyatekiMan* syatekiMan;
 
     this->actionFunc(this, play);
@@ -537,7 +535,7 @@ s32 EnSyatekiOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
     s32 pad;
     Vec3f scale;
     f32 curFrame;
-    EnSyatekiOkuta* this = THIS;
+    EnSyatekiOkuta* this = (EnSyatekiOkuta*)thisx;
 
     curFrame = this->skelAnime.curFrame;
     if (this->actionFunc == EnSyatekiOkuta_Die) {
@@ -555,7 +553,7 @@ s32 EnSyatekiOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
 }
 
 void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
-    EnSyatekiOkuta* this = THIS;
+    EnSyatekiOkuta* this = (EnSyatekiOkuta*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnMuto*)thisx)
-
 void EnMuto_Init(Actor* thisx, PlayState* play);
 void EnMuto_Destroy(Actor* thisx, PlayState* play);
 void EnMuto_Update(Actor* thisx, PlayState* play2);
@@ -55,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnMuto_Init(Actor* thisx, PlayState* play) {
-    EnMuto* this = THIS;
+    EnMuto* this = (EnMuto*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
@@ -91,7 +89,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMuto_Destroy(Actor* thisx, PlayState* play) {
-    EnMuto* this = THIS;
+    EnMuto* this = (EnMuto*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -256,7 +254,7 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
 
 void EnMuto_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnMuto* this = THIS;
+    EnMuto* this = (EnMuto*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -293,7 +291,7 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnMuto* this = THIS;
+    EnMuto* this = (EnMuto*)thisx;
 
     if (limbIndex == OBJECT_TORYO_LIMB_01) {
         rot->x += this->waistRot.y;
@@ -308,7 +306,7 @@ s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnMuto_Draw(Actor* thisx, PlayState* play) {
-    EnMuto* this = THIS;
+    EnMuto* this = (EnMuto*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

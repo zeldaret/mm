@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnMushi2*)thisx)
-
 void EnMushi2_Init(Actor* thisx, PlayState* play);
 void EnMushi2_Destroy(Actor* thisx, PlayState* play);
 void EnMushi2_Update(Actor* thisx, PlayState* play);
@@ -598,7 +596,7 @@ f32 func_80A69AA8(f32 x, f32 y, f32 z, Vec3f* pos) {
 }
 
 void func_80A69ADC(Actor* thisx) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
     ObjBean* bean = this->unk_34C;
     f32 sp44;
     f32 sp40;
@@ -632,7 +630,7 @@ void func_80A69ADC(Actor* thisx) {
 }
 
 void func_80A69CE0(Actor* thisx) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
 
     this->unk_360 = Rand_ZeroOne() * 1500.0f;
     this->unk_364 = 0;
@@ -691,7 +689,7 @@ s32 EnMushi2_IsUnderwater(EnMushi2* this, PlayState* play) {
 }
 
 void func_80A69F5C(Actor* thisx, PlayState* play) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
     s32 i;
 
     for (i = 0; i < 7; i++) {
@@ -738,7 +736,7 @@ void func_80A6A0D8(EnMushi2* this) {
 }
 
 void EnMushi2_Init(Actor* thisx, PlayState* play) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
     s32 pad;
     s32 sp3C;
 
@@ -780,7 +778,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMushi2_Destroy(Actor* thisx, PlayState* play) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
     func_80A68B6C(this);
@@ -834,7 +832,7 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
 }
 
 void func_80A6A508(Actor* thisx) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
 
     if (this->unk_36A > 100) {
         this->unk_35C = Rand_ZeroOne() + 1.0f;
@@ -1116,7 +1114,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
 }
 
 void EnMushi2_Update(Actor* thisx, PlayState* play) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
     s32 pad;
     f32 sp4C;
     f32 phi_f0;
@@ -1234,7 +1232,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMushi2_Draw(Actor* thisx, PlayState* play) {
-    EnMushi2* this = THIS;
+    EnMushi2* this = (EnMushi2*)thisx;
 
     func_80A687A0(this);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

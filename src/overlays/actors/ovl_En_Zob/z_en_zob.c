@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnZob*)thisx)
-
 void EnZob_Init(Actor* thisx, PlayState* play);
 void EnZob_Destroy(Actor* thisx, PlayState* play);
 void EnZob_Update(Actor* thisx, PlayState* play);
@@ -94,7 +92,7 @@ static AnimationHeader* sAnimations[ENZOB_ANIM_MAX] = {
 };
 
 void EnZob_Init(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
     s32 i;
     s16 csId;
 
@@ -160,7 +158,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZob_Destroy(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -724,7 +722,7 @@ void func_80BA0CF4(EnZob* this, PlayState* play) {
 
 void EnZob_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
 
@@ -756,7 +754,7 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     if (limbIndex == OBJECT_ZOB_LIMB_09) {
         rot->x += this->headRot.y;
@@ -767,7 +765,7 @@ s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BA1120 = { 300.0f, 900.0f, 0.0f };
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     if (limbIndex == OBJECT_ZOB_LIMB_09) {
         Matrix_MultVec3f(&D_80BA1120, &this->actor.focus.pos);
@@ -775,7 +773,7 @@ void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnZob_Draw(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

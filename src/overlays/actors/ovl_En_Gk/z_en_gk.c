@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnGk*)thisx)
-
 void EnGk_Init(Actor* thisx, PlayState* play);
 void EnGk_Destroy(Actor* thisx, PlayState* play);
 void EnGk_Update(Actor* thisx, PlayState* play);
@@ -1052,7 +1050,7 @@ void func_80B52654(EnGk* this, PlayState* play) {
 
 void EnGk_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_gk_Skel_0079C0, &object_gk_Anim_00787C, this->jointTable,
                        this->morphTable, OBJECT_GK_LIMB_MAX);
@@ -1116,13 +1114,13 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGk_Destroy(Actor* thisx, PlayState* play) {
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnGk_Update(Actor* thisx, PlayState* play) {
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
 
     this->actionFunc(this, play);
 
@@ -1147,7 +1145,7 @@ s32 EnGk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnGk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
     Vec3f sp58 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp4C = { 0.0f, 0.0f, 0.0f };
     Vec3f sp40 = { 0.0f, 0.0f, 0.0f };
@@ -1210,7 +1208,7 @@ void EnGk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnGk_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
     s32 phi_v0;
     s32 phi_v1;
 
@@ -1282,7 +1280,7 @@ TexturePtr D_80B533E4[] = {
 
 void EnGk_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGk* this = THIS;
+    EnGk* this = (EnGk*)thisx;
     Vec3f pos;
     Vec3f scale;
 

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((ObjHunsui*)thisx)
-
 void ObjHunsui_Init(Actor* thisx, PlayState* play);
 void ObjHunsui_Destroy(Actor* thisx, PlayState* play);
 void ObjHunsui_Update(Actor* thisx, PlayState* play);
@@ -203,7 +201,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
 }
 
 void ObjHunsui_Init(Actor* thisx, PlayState* play) {
-    ObjHunsui* this = THIS;
+    ObjHunsui* this = (ObjHunsui*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = OBJHUNSUI_GET_F000(thisx);
@@ -320,13 +318,13 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjHunsui_Destroy(Actor* thisx, PlayState* play) {
-    ObjHunsui* this = THIS;
+    ObjHunsui* this = (ObjHunsui*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHunsui_Update(Actor* thisx, PlayState* play) {
-    ObjHunsui* this = THIS;
+    ObjHunsui* this = (ObjHunsui*)thisx;
 
     this->actionFunc(this, play);
 
@@ -633,7 +631,7 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
 }
 
 void ObjHunsui_Draw(Actor* thisx, PlayState* play) {
-    ObjHunsui* this = THIS;
+    ObjHunsui* this = (ObjHunsui*)thisx;
 
     if (this->unk_172 & 0x10) {
         f32 temp_f8 = (this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) / 800.0f;
@@ -649,7 +647,7 @@ void ObjHunsui_Draw(Actor* thisx, PlayState* play) {
 
 void func_80B9DA60(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjHunsui* this = THIS;
+    ObjHunsui* this = (ObjHunsui*)thisx;
     f32 temp;
 
     if (this->unk_172 & 0x10) {

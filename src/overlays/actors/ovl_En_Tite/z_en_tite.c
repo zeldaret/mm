@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnTite*)thisx)
-
 void EnTite_Init(Actor* thisx, PlayState* play);
 void EnTite_Destroy(Actor* thisx, PlayState* play);
 void EnTite_Update(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnTite_Init(Actor* thisx, PlayState* play) {
     static s32 sTexturesDesegmented = false;
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     s32 i;
     s32 j;
 
@@ -183,7 +181,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTite_Destroy(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
@@ -1055,7 +1053,7 @@ void func_808963B4(EnTite* this, PlayState* play) {
 }
 
 void EnTite_Update(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     func_80895FF8(this, play);
 
@@ -1103,7 +1101,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTite_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     if (this->unk_2BA == -1) {
         this->unk_3A8 = *dList;
@@ -1169,7 +1167,7 @@ static s8 sLimbToBodyParts2[OBJECT_TITE_LIMB_MAX] = {
 };
 
 void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     MtxF* matrix;
     s8 bodyPart1Index;
 
@@ -1206,7 +1204,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnTite_Draw(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

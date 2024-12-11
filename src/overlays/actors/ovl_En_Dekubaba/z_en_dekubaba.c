@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnDekubaba*)thisx)
-
 void EnDekubaba_Init(Actor* thisx, PlayState* play);
 void EnDekubaba_Destroy(Actor* thisx, PlayState* play);
 void EnDekubaba_Update(Actor* thisx, PlayState* play);
@@ -201,7 +199,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDekubaba_Init(Actor* thisx, PlayState* play) {
-    EnDekubaba* this = THIS;
+    EnDekubaba* this = (EnDekubaba*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -239,7 +237,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDekubaba_Destroy(Actor* thisx, PlayState* play) {
-    EnDekubaba* this = THIS;
+    EnDekubaba* this = (EnDekubaba*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -1176,7 +1174,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
 void EnDekubaba_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDekubaba* this = THIS;
+    EnDekubaba* this = (EnDekubaba*)thisx;
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -1336,7 +1334,7 @@ void EnDekubaba_DrawShadow(EnDekubaba* this, PlayState* play) {
 }
 
 void EnDekubaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDekubaba* this = THIS;
+    EnDekubaba* this = (EnDekubaba*)thisx;
 
     if (limbIndex == DEKUBABA_LIMB_ROOT) {
         Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -1344,7 +1342,7 @@ void EnDekubaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 }
 
 void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
-    EnDekubaba* this = THIS;
+    EnDekubaba* this = (EnDekubaba*)thisx;
     f32 scale;
 
     OPEN_DISPS(play->state.gfxCtx);
