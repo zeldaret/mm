@@ -97,7 +97,7 @@ void _Ldtob(_Pft* args, char code) {
             if (gen > 0x13) {
                 gen = 0x13;
             }
-            
+
             for (*p++ = '0'; (gen > 0) && (0 < ldval); p += 8) {
                 int j;
                 long lo = ldval;
@@ -176,7 +176,7 @@ void _Genld(_Pft* px, char code, char* p, short nsig, short xexp) {
     }
 
     if ((code == 'f') || (((code == 'g') || (code == 'G')) && (-4 <= xexp) && (xexp < px->prec))) { /* 'f' format */
-        xexp++;            /* change to leading digit count */
+        xexp++; /* change to leading digit count */
 
         if (code != 'f') { /* fixup for 'g' */
             if (!(px->flags & FLAGS_HASH) && nsig < px->prec) {

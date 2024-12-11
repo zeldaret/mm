@@ -14,7 +14,7 @@ char zeroes[] = "00000000000000000000000000000000";
         if (i < 999)                             \
             i = *a + i * 10 - '0';
 
-#define PUT(fmt, _size)                 \
+#define PUT(fmt, _size)                    \
     if (_size > 0) {                       \
         arg = (void*)pfn(arg, fmt, _size); \
         if (arg != NULL)                   \
