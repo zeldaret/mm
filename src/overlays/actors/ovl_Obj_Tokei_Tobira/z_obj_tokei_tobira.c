@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjTokeiTobira*)thisx)
-
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Destroy(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ Gfx* D_80ABD780[] = {
 };
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
-    ObjTokeiTobira* this = THIS;
+    ObjTokeiTobira* this = (ObjTokeiTobira*)thisx;
     s32 pad;
     s32 type = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
     Vec3f posOffset;
@@ -85,7 +83,7 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeiTobira_Destroy(Actor* thisx, PlayState* play) {
-    ObjTokeiTobira* this = THIS;
+    ObjTokeiTobira* this = (ObjTokeiTobira*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -103,7 +101,7 @@ void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
 
 void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     s32 pad1;
-    ObjTokeiTobira* this = THIS;
+    ObjTokeiTobira* this = (ObjTokeiTobira*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad2;
     s32 type = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);

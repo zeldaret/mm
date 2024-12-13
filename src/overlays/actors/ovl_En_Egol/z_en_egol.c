@@ -19,8 +19,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
      ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnEgol*)thisx)
-
 typedef enum {
     /*  0 */ EYEGORE_ACTION_WAIT,
     /*  1 */ EYEGORE_ACTION_STAND,
@@ -438,7 +436,7 @@ void EnEgol_GetWaypoint(EnEgol* this) {
     element.dim.modelSphere.center.z = centerZ
 
 void EnEgol_Init(Actor* thisx, PlayState* play) {
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
 
     this->actor.gravity = -2.0f;
     Actor_SetScale(&this->actor, 0.015f);
@@ -498,7 +496,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnEgol_Destroy(Actor* thisx, PlayState* play) {
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
 
     Collider_DestroyJntSph(play, &this->bodyCollider);
     Collider_DestroyJntSph(play, &this->eyeCollider);
@@ -1213,7 +1211,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
 }
 
 void EnEgol_Update(Actor* thisx, PlayState* play) {
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1341,7 +1339,7 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnEgol_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
 
     if (limbIndex == EYEGORE_LIMB_HEAD) {
         rot->z += this->headRot;
@@ -1385,7 +1383,7 @@ s32 EnEgol_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnEgol_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
     Vec3f footOffset = { 1000.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -1477,7 +1475,7 @@ void EnEgol_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
 void EnEgol_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnEgol* this = THIS;
+    EnEgol* this = (EnEgol*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

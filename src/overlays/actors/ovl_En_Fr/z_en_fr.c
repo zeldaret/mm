@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_CAMERA_DRIFT_ENABLED)
 
-#define THIS ((EnFr*)thisx)
-
 void EnFr_Init(Actor* thisx, PlayState* play);
 void EnFr_Destroy(Actor* thisx, PlayState* play);
 void EnFr_Update(Actor* thisx, PlayState* play);
@@ -28,7 +26,7 @@ ActorProfile En_Fr_Profile = {
 };
 
 void EnFr_Init(Actor* thisx, PlayState* play) {
-    EnFr* this = THIS;
+    EnFr* this = (EnFr*)thisx;
 
     if (Flags_GetSwitch(play, ENFR_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
@@ -42,7 +40,7 @@ void EnFr_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnFr_Update(Actor* thisx, PlayState* play) {
-    EnFr* this = THIS;
+    EnFr* this = (EnFr*)thisx;
 
     if (Flags_GetSwitch(play, ENFR_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);

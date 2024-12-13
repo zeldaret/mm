@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnLookNuts*)thisx)
-
 void EnLookNuts_Init(Actor* thisx, PlayState* play);
 void EnLookNuts_Destroy(Actor* thisx, PlayState* play);
 void EnLookNuts_Update(Actor* thisx, PlayState* play);
@@ -101,7 +99,7 @@ typedef enum {
 } PalaceGuardState;
 
 void EnLookNuts_Init(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardDigAnim, this->jointTable,
@@ -133,7 +131,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnLookNuts_Destroy(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -315,7 +313,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     if (this->blinkTimer == 0) {
         this->eyeState++;
@@ -392,7 +390,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnLookNuts_Draw(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjWind*)thisx)
-
 void ObjWind_Init(Actor* thisx, PlayState* play);
 void ObjWind_Destroy(Actor* thisx, PlayState* play);
 void ObjWind_Update(Actor* thisx, PlayState* play);

@@ -30,8 +30,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnHakurock*)thisx)
-
 void EnHakurock_Init(Actor* thisx, PlayState* play);
 void EnHakurock_Destroy(Actor* thisx, PlayState* play);
 void EnHakurock_Update(Actor* thisx, PlayState* play);
@@ -93,7 +91,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
 void EnHakurock_Init(Actor* thisx, PlayState* play) {
-    EnHakurock* this = THIS;
+    EnHakurock* this = (EnHakurock*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 52.0f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -111,7 +109,7 @@ void EnHakurock_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
-    EnHakurock* this = THIS;
+    EnHakurock* this = (EnHakurock*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -379,7 +377,7 @@ void EnHakurock_LargeStalactite_Wait(EnHakurock* this, PlayState* play) {
 }
 
 void EnHakurock_Update(Actor* thisx, PlayState* play) {
-    EnHakurock* this = THIS;
+    EnHakurock* this = (EnHakurock*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);

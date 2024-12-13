@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjHsblock*)thisx)
-
 void ObjHsblock_Init(Actor* thisx, PlayState* play);
 void ObjHsblock_Destroy(Actor* thisx, PlayState* play);
 void ObjHsblock_Update(Actor* thisx, PlayState* play);
@@ -67,7 +65,7 @@ void func_8093DEAC(ObjHsblock* this, PlayState* play) {
 }
 
 void ObjHsblock_Init(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[OBJHSBLOCK_GET_3(thisx)]);
@@ -94,7 +92,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjHsblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -130,7 +128,7 @@ void func_8093E10C(ObjHsblock* this, PlayState* play) {
 }
 
 void ObjHsblock_Update(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this, play);

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnOsn*)thisx)
-
 void EnOsn_Init(Actor* thisx, PlayState* play);
 void EnOsn_Destroy(Actor* thisx, PlayState* play);
 void EnOsn_Update(Actor* thisx, PlayState* play);
@@ -902,7 +900,7 @@ void EnOsn_DoNothing(EnOsn* this, PlayState* play) {
 
 void EnOsn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOsn* this = THIS;
+    EnOsn* this = (EnOsn*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -959,7 +957,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnOsn_Destroy(Actor* thisx, PlayState* play) {
-    EnOsn* this = THIS;
+    EnOsn* this = (EnOsn*)thisx;
 
     SkelAnime_Free(&this->skelAnime, play);
     Collider_DestroyCylinder(play, &this->collider);
@@ -967,7 +965,7 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play) {
 
 void EnOsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOsn* this = THIS;
+    EnOsn* this = (EnOsn*)thisx;
     u32 isSwitchFlagSet = Flags_GetSwitch(play, 0);
 
     this->actionFunc(this, play);
@@ -1033,7 +1031,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sSmileTex = gHappyMaskSalesmanSmileTex;
     static TexturePtr sFrownTex = gHappyMaskSalesmanFrownTex;
     s32 pad;
-    EnOsn* this = THIS;
+    EnOsn* this = (EnOsn*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

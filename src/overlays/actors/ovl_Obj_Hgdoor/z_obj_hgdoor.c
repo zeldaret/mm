@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_100000)
 
-#define THIS ((ObjHgdoor*)thisx)
-
 void ObjHgdoor_Init(Actor* thisx, PlayState* play);
 void ObjHgdoor_Destroy(Actor* thisx, PlayState* play);
 void ObjHgdoor_Update(Actor* thisx, PlayState* play);
@@ -65,7 +63,7 @@ void ObjHgdoor_SetParent(ObjHgdoor* this, PlayState* play) {
 }
 
 void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
-    ObjHgdoor* this = THIS;
+    ObjHgdoor* this = (ObjHgdoor*)thisx;
     s32 pad;
     CollisionHeader* header = NULL;
 
@@ -84,7 +82,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjHgdoor_Destroy(Actor* thisx, PlayState* play) {
-    ObjHgdoor* this = THIS;
+    ObjHgdoor* this = (ObjHgdoor*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -191,7 +189,7 @@ void ObjHgdoor_Open(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_Update(Actor* thisx, PlayState* play) {
-    ObjHgdoor* this = THIS;
+    ObjHgdoor* this = (ObjHgdoor*)thisx;
 
     this->actionFunc(this, play);
     ObjHgdoor_Open(this);

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((ShotSun*)thisx)
-
 void ShotSun_Init(Actor* thisx, PlayState* play);
 void ShotSun_Destroy(Actor* thisx, PlayState* play);
 void ShotSun_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void ShotSun_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     if ((SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_SUNS) ||
         (SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_STORMS)) {
@@ -71,7 +69,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
 }
 
 void ShotSun_Destroy(Actor* thisx, PlayState* play) {
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     if ((SHOTSUN_GET_TYPE(thisx) != SHOTSUN_FAIRY_SPAWNER_SUNS) &&
         (SHOTSUN_GET_TYPE(thisx) != SHOTSUN_FAIRY_SPAWNER_STORMS)) {
@@ -195,7 +193,7 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
 }
 
 void ShotSun_Update(Actor* thisx, PlayState* play) {
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     this->actionFunc(this, play);
 }

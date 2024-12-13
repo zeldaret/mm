@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnBaba*)thisx)
-
 #define BOMB_SHOP_LADY_STATE_END_CONVERSATION (1 << 0)
 #define BOMB_SHOP_LADY_STATE_VISIBLE (1 << 1)
 #define BOMB_SHOP_LADY_STATE_KNOCKED_OVER (1 << 2) // Don't track player
@@ -725,7 +723,7 @@ void EnBaba_FaceForward(EnBaba* this, PlayState* play) {
 
 void EnBaba_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -741,13 +739,13 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBaba_Destroy(Actor* thisx, PlayState* play) {
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnBaba_Update(Actor* thisx, PlayState* play) {
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
 
     this->actionFunc(this, play);
 
@@ -756,7 +754,7 @@ void EnBaba_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
 
     if (limbIndex == BOMB_SHOP_LADY_LIMB_NECK) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -790,7 +788,7 @@ s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnBaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
     Vec3f sp18 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == BOMB_SHOP_LADY_LIMB_HEAD) {
@@ -806,7 +804,7 @@ void EnBaba_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void EnBaba_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBaba* this = THIS;
+    EnBaba* this = (EnBaba*)thisx;
     Vec3f pos;
     Vec3f scale;
 

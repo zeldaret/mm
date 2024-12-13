@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnHeishi*)thisx)
-
 void EnHeishi_Init(Actor* thisx, PlayState* play);
 void EnHeishi_Destroy(Actor* thisx, PlayState* play);
 void EnHeishi_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnHeishi_Init(Actor* thisx, PlayState* play) {
-    EnHeishi* this = THIS;
+    EnHeishi* this = (EnHeishi*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
@@ -86,7 +84,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHeishi_Destroy(Actor* thisx, PlayState* play) {
-    EnHeishi* this = THIS;
+    EnHeishi* this = (EnHeishi*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
@@ -152,7 +150,7 @@ void EnHeishi_Idle(EnHeishi* this, PlayState* play) {
 
 void EnHeishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHeishi* this = THIS;
+    EnHeishi* this = (EnHeishi*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     if (this->timer != 0) {
@@ -183,7 +181,7 @@ void EnHeishi_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnHeishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnHeishi* this = THIS;
+    EnHeishi* this = (EnHeishi*)thisx;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
@@ -195,7 +193,7 @@ s32 EnHeishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 void EnHeishi_Draw(Actor* thisx, PlayState* play) {
-    EnHeishi* this = THIS;
+    EnHeishi* this = (EnHeishi*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

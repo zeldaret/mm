@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnFuKago*)thisx)
-
 void EnFuKago_Init(Actor* thisx, PlayState* play);
 void EnFuKago_Destroy(Actor* thisx, PlayState* play);
 void EnFuKago_Update(Actor* thisx, PlayState* play);
@@ -82,7 +80,7 @@ Vec3f D_80AD06C4[] = {
 
 void EnFuKago_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFuKago* this = THIS;
+    EnFuKago* this = (EnFuKago*)thisx;
     CollisionHeader* sp34 = NULL;
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
@@ -114,7 +112,7 @@ void EnFuKago_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFuKago_Destroy(Actor* thisx, PlayState* play) {
-    EnFuKago* this = THIS;
+    EnFuKago* this = (EnFuKago*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -347,7 +345,7 @@ void func_80AD0288(EnFuKago* this, PlayState* play) {
 }
 
 void EnFuKago_Update(Actor* thisx, PlayState* play) {
-    EnFuKago* this = THIS;
+    EnFuKago* this = (EnFuKago*)thisx;
 
     this->actionFunc(this, play);
 
@@ -385,7 +383,7 @@ void func_80AD0340(EnFuKago* this, PlayState* play) {
 
 void EnFuKago_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFuKago* this = THIS;
+    EnFuKago* this = (EnFuKago*)thisx;
 
     if (this->unk_33A == 0) {
         OPEN_DISPS(play->state.gfxCtx);

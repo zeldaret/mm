@@ -17,8 +17,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjGrassUnit*)thisx)
-
 void ObjGrassUnit_Init(Actor* this, PlayState* play2);
 
 ActorProfile Obj_Grass_Unit_Profile = {

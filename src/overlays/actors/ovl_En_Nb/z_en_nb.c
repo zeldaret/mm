@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnNb*)thisx)
-
 void EnNb_Init(Actor* thisx, PlayState* play);
 void EnNb_Destroy(Actor* thisx, PlayState* play);
 void EnNb_Update(Actor* thisx, PlayState* play);
@@ -369,7 +367,7 @@ typedef enum EnNbBehaviour {
 } EnNbBehaviour;
 
 s32 func_80BC00AC(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
     s16 csId = func_80BC0050(this, 0);
     s32 ret = false;
 
@@ -414,7 +412,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BC01DC(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
     s32 pad;
     s32 ret = false;
 
@@ -786,7 +784,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
 }
 
 void EnNb_Init(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
@@ -811,14 +809,14 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNb_Destroy(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     play->interfaceCtx.storyState = STORY_STATE_DESTROY;
 }
 
 void EnNb_Update(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
 
     func_80BC04FC(this, play);
     this->actionFunc(this, play);
@@ -836,7 +834,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnNb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
 
     if (limbIndex == NB_LIMB_HEAD) {
         func_80BC05A8(this, play);
@@ -846,7 +844,7 @@ s32 EnNb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnNb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
     Vec3f focusTarget;
 
     if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == NB_LIMB_HEAD)) {
@@ -859,7 +857,7 @@ void EnNb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -890,7 +888,7 @@ void EnNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnNb_Draw(Actor* thisx, PlayState* play) {
-    EnNb* this = THIS;
+    EnNb* this = (EnNb*)thisx;
 
     if (this->scheduleResult != EN_NB_SCH_NONE) {
         Gfx_SetupDL37_Opa(play->state.gfxCtx);

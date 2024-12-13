@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnAttackNiw*)thisx)
-
 void EnAttackNiw_Init(Actor* thisx, PlayState* play);
 void EnAttackNiw_Destroy(Actor* thisx, PlayState* play);
 void EnAttackNiw_Update(Actor* thisx, PlayState* play);
@@ -39,7 +37,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
-    EnAttackNiw* this = THIS;
+    EnAttackNiw* this = (EnAttackNiw*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
@@ -65,7 +63,7 @@ void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAttackNiw_Destroy(Actor* thisx, PlayState* play) {
-    EnAttackNiw* this = THIS;
+    EnAttackNiw* this = (EnAttackNiw*)thisx;
     EnNiw* parent = (EnNiw*)this->actor.parent;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->update != NULL)) {
@@ -347,7 +345,7 @@ void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play) {
 }
 
 void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
-    EnAttackNiw* this = THIS;
+    EnAttackNiw* this = (EnAttackNiw*)thisx;
     s32 pad;
     EnNiw* parent;
     Player* player = GET_PLAYER(play);
@@ -422,7 +420,7 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnAttackNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnAttackNiw* this = THIS;
+    EnAttackNiw* this = (EnAttackNiw*)thisx;
 
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
         rot->y += TRUNCF_BINANG(this->upperBodyRotY);
@@ -447,7 +445,7 @@ s32 EnAttackNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnAttackNiw_Draw(Actor* thisx, PlayState* play) {
-    EnAttackNiw* this = THIS;
+    EnAttackNiw* this = (EnAttackNiw*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

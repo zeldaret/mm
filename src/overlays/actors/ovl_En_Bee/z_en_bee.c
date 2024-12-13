@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnBee*)thisx)
-
 void EnBee_Init(Actor* thisx, PlayState* play);
 void EnBee_Destroy(Actor* thisx, PlayState* play);
 void EnBee_Update(Actor* thisx, PlayState* play);
@@ -90,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnBee_Init(Actor* thisx, PlayState* play) {
-    EnBee* this = THIS;
+    EnBee* this = (EnBee*)thisx;
 
     this->actor.colChkInfo.mass = 10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -113,7 +111,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBee_Destroy(Actor* thisx, PlayState* play) {
-    EnBee* this = THIS;
+    EnBee* this = (EnBee*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -249,7 +247,7 @@ void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
 
 void EnBee_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBee* this = THIS;
+    EnBee* this = (EnBee*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -282,7 +280,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBee_Draw(Actor* thisx, PlayState* play) {
-    EnBee* this = THIS;
+    EnBee* this = (EnBee*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

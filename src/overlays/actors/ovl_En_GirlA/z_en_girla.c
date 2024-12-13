@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnGirlA*)thisx)
-
 void EnGirlA_Init(Actor* thisx, PlayState* play);
 void EnGirlA_Destroy(Actor* thisx, PlayState* play);
 void EnGirlA_Update(Actor* thisx, PlayState* play);
@@ -176,7 +174,7 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
 }
 
 void EnGirlA_Init(Actor* thisx, PlayState* play) {
-    EnGirlA* this = THIS;
+    EnGirlA* this = (EnGirlA*)thisx;
 
     EnGirlA_InitObjIndex(this, play);
 }
@@ -616,13 +614,13 @@ void EnGirlA_Update2(EnGirlA* this, PlayState* play) {
 }
 
 void EnGirlA_Update(Actor* thisx, PlayState* play) {
-    EnGirlA* this = THIS;
+    EnGirlA* this = (EnGirlA*)thisx;
 
     this->mainActionFunc(this, play);
 }
 
 void EnGirlA_Draw(Actor* thisx, PlayState* play) {
-    EnGirlA* this = THIS;
+    EnGirlA* this = (EnGirlA*)thisx;
 
     Matrix_RotateYS(this->rotY, MTXMODE_APPLY);
     if (this->drawFunc != NULL) {

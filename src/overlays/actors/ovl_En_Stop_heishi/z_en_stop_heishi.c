@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnStopheishi*)thisx)
-
 void EnStopheishi_Init(Actor* thisx, PlayState* play);
 void EnStopheishi_Destroy(Actor* thisx, PlayState* play);
 void EnStopheishi_Update(Actor* thisx, PlayState* play);
@@ -96,7 +94,7 @@ static AnimationHeader* sAnimations[SOLDIER_ANIM_MAX] = {
 };
 
 void EnStopheishi_Init(Actor* thisx, PlayState* play) {
-    EnStopheishi* this = THIS;
+    EnStopheishi* this = (EnStopheishi*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierStandHandOnHipAnim, this->jointTable,
@@ -123,7 +121,7 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnStopheishi_Destroy(Actor* thisx, PlayState* play) {
-    EnStopheishi* this = THIS;
+    EnStopheishi* this = (EnStopheishi*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -558,7 +556,7 @@ void EnStopheishi_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnStopheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnStopheishi* this = THIS;
+    EnStopheishi* this = (EnStopheishi*)thisx;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
@@ -568,7 +566,7 @@ s32 EnStopheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 }
 
 void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnStopheishi* this = THIS;
+    EnStopheishi* this = (EnStopheishi*)thisx;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
         Matrix_MultVec3f(&gZeroVec3f, &this->headWorldPos);
@@ -576,7 +574,7 @@ void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnStopheishi_Draw(Actor* thisx, PlayState* play) {
-    EnStopheishi* this = THIS;
+    EnStopheishi* this = (EnStopheishi*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

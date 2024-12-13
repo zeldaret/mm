@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnJs*)thisx)
-
 void EnJs_Init(Actor* thisx, PlayState* play);
 void EnJs_Destroy(Actor* thisx, PlayState* play);
 void EnJs_Update(Actor* thisx, PlayState* play);
@@ -78,7 +76,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s16 csId;
     s32 i;
-    EnJs* this = THIS;
+    EnJs* this = (EnJs*)thisx;
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -147,7 +145,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
 
 void EnJs_Destroy(Actor* thisx, PlayState* play) {
     u32 paramsF;
-    EnJs* this = THIS;
+    EnJs* this = (EnJs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 
@@ -1071,7 +1069,7 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
 
 void EnJs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnJs* this = THIS;
+    EnJs* this = (EnJs*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -1095,7 +1093,7 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
 
 void EnJs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnJs* this = THIS;
+    EnJs* this = (EnJs*)thisx;
 
     if (limbIndex == MOONCHILD_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8096AC30, &thisx->focus.pos);
@@ -1118,7 +1116,7 @@ void EnJs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnJs_Draw(Actor* thisx, PlayState* play) {
-    EnJs* this = THIS;
+    EnJs* this = (EnJs*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

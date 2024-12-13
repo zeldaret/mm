@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnOwl*)thisx)
-
 void EnOwl_Init(Actor* thisx, PlayState* play);
 void EnOwl_Destroy(Actor* thisx, PlayState* play);
 void EnOwl_Update(Actor* thisx, PlayState* play);
@@ -99,7 +97,7 @@ void func_8095A510(EnOwl* this, PlayState* play) {
 
 void EnOwl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     s32 i;
     s16 csId = this->actor.csId;
     s32 owlType;
@@ -209,7 +207,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnOwl_Destroy(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     if (ENOWL_GET_TYPE(&this->actor) != ENOWL_GET_TYPE_30) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -905,7 +903,7 @@ void func_8095C568(EnOwl* this) {
 
 void EnOwl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     s16 sp36;
 
     if (this->actor.draw != NULL) {
@@ -1100,7 +1098,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8095CCF4(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_10000000) {
@@ -1130,7 +1128,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
 }
 
 s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     switch (limbIndex) {
         case OWL_FLYING_LIMB_HEAD: // OWL_PERCHING_LIMB_HEAD
@@ -1163,7 +1161,7 @@ s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnOwl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     Vec3f sp18;
 
     sp18.z = 0.0f;
@@ -1187,7 +1185,7 @@ void EnOwl_Draw(Actor* thisx, PlayState* play) {
         gOwlEyeClosedTex,
     };
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1202,7 +1200,7 @@ void EnOwl_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_8095D074(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

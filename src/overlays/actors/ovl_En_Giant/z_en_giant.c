@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnGiant*)thisx)
-
 void EnGiant_Init(Actor* thisx, PlayState* play);
 void EnGiant_Destroy(Actor* thisx, PlayState* play);
 void EnGiant_Update(Actor* thisx, PlayState* play);
@@ -162,7 +160,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
 }
 
 void EnGiant_Init(Actor* thisx, PlayState* play) {
-    EnGiant* this = THIS;
+    EnGiant* this = (EnGiant*)thisx;
     s32 type = GIANT_TYPE(thisx);
 
     this->actor.uncullZoneForward = 4000.0f;
@@ -491,7 +489,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play) {
 }
 
 void EnGiant_Update(Actor* thisx, PlayState* play) {
-    EnGiant* this = THIS;
+    EnGiant* this = (EnGiant*)thisx;
     s32 blinkTimerTemp;
 
     this->actionFunc(this, play);
@@ -525,7 +523,7 @@ void EnGiant_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 }
 
 void EnGiant_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnGiant* this = THIS;
+    EnGiant* this = (EnGiant*)thisx;
 
     if (limbIndex == GIANT_LIMB_HEAD) {
         Matrix_Get(&this->headDrawMtxF);
@@ -534,7 +532,7 @@ void EnGiant_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
 void EnGiant_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGiant* this = THIS;
+    EnGiant* this = (EnGiant*)thisx;
     static TexturePtr sFaceTextures[] = { gGiantFaceEyeOpenTex, gGiantFaceEyeHalfTex, gGiantFaceEyeClosedTex };
 
     if (this->alpha > 0) {

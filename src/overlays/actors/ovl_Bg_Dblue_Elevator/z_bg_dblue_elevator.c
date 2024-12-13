@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgDblueElevator*)thisx)
-
 void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* play);
 void BgDblueElevator_CheckWaterBoxInfo(BgDblueElevator* this, PlayState* play2);
 s32 BgDblueElevator_GetWaterFlowFromCeiling(BgDblueElevator* this, PlayState* play);
@@ -160,7 +158,7 @@ s32 BgDblueElevator_GetWaterFlowFromPipes(BgDblueElevator* this, PlayState* play
 }
 
 void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
     PlayState* play = play2;
     s32 index = BG_DBLUE_ELEVATOR_GET_INDEX(&this->dyna.actor);
     BgDblueElevatorStruct1* ptr = &D_80B92960[index];
@@ -188,7 +186,7 @@ void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
 }
 
 void BgDblueElevator_Destroy(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -326,13 +324,13 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
 }
 
 void BgDblueElevator_Update(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgDblueElevator_Draw(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     Gfx_DrawDListOpa(play, gGreatBayTempleObjectElevatorDL);
 }

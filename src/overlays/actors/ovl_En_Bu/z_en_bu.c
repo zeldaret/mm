@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
-#define THIS ((EnBu*)thisx)
-
 void EnBu_Init(Actor* thisx, PlayState* play);
 void EnBu_Destroy(Actor* thisx, PlayState* play);
 void EnBu_Update(Actor* thisx, PlayState* play);
@@ -30,7 +28,7 @@ ActorProfile En_Bu_Profile = {
 };
 
 void EnBu_Init(Actor* thisx, PlayState* play) {
-    EnBu* this = THIS;
+    EnBu* this = (EnBu*)thisx;
 
     this->actionFunc = EnBu_DoNothing;
 }
@@ -42,14 +40,14 @@ void EnBu_DoNothing(EnBu* this, PlayState* play) {
 }
 
 void EnBu_Update(Actor* thisx, PlayState* play) {
-    EnBu* this = THIS;
+    EnBu* this = (EnBu*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
     this->actionFunc(this, play);
 }
 
 void EnBu_Draw(Actor* thisx, PlayState* play) {
-    EnBu* this = THIS;
+    EnBu* this = (EnBu*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

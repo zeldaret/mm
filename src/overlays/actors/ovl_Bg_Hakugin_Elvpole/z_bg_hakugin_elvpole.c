@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgHakuginElvpole*)thisx)
-
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play);
 void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play);
 void BgHakuginElvpole_Update(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ ActorProfile Bg_Hakugin_Elvpole_Profile = {
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
-    BgHakuginElvpole* this = THIS;
+    BgHakuginElvpole* this = (BgHakuginElvpole*)thisx;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->actionFunc = func_80ABD92C;
@@ -52,7 +50,7 @@ void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play) {
-    BgHakuginElvpole* this = THIS;
+    BgHakuginElvpole* this = (BgHakuginElvpole*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -121,7 +119,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
 }
 
 void BgHakuginElvpole_Update(Actor* thisx, PlayState* play) {
-    BgHakuginElvpole* this = THIS;
+    BgHakuginElvpole* this = (BgHakuginElvpole*)thisx;
 
     this->actionFunc(this, play);
 }
