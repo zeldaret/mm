@@ -6,7 +6,7 @@
 
 #include "z_obj_swprize.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjSwprize*)thisx)
 

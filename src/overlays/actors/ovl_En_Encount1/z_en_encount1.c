@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Wallmas/z_en_wallmas.h"
 #include "overlays/actors/ovl_En_Pr2/z_en_pr2.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnEncount1*)thisx)
 

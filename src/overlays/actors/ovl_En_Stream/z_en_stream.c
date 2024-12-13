@@ -7,7 +7,7 @@
 #include "z_en_stream.h"
 #include "assets/objects/object_stream/object_stream.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnStream*)thisx)
 

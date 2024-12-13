@@ -74,9 +74,9 @@ u16 D_8091BDB8[] = { 0, 5 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 700, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 20, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 30, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 20, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 30, ICHAIN_STOP),
 };
 
 Vec3f D_8091BDCC = { 0.0f, 0.0f, 0.0f };
@@ -151,7 +151,7 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
 
     if (this->unk_30C & 4) {
         this->unk_314 = Rand_S16Offset(200, 40);
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 
     rand = Rand_ZeroOne();

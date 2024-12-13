@@ -29,8 +29,8 @@ ActorProfile Obj_Kepn_Koya_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 void ObjKepnKoya_Init(Actor* thisx, PlayState* play) {

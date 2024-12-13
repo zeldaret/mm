@@ -7,7 +7,7 @@
 #include "z_en_ossan.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnOssan*)thisx)
 
@@ -1509,7 +1509,7 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
     ShopItem* shopItems;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         shopItems = sShops[this->actor.params];

@@ -98,7 +98,7 @@ static Gfx* D_80B04FC8[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_STOP),
 };
 
 void func_80B02CD0(ObjSnowball* this, PlayState* play) {
@@ -471,8 +471,8 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.world.pos.y += 20.0f * phi_f20;
-    this->actor.uncullZoneScale = 150.0f * phi_f20;
-    this->actor.uncullZoneDownward = 300.0f * phi_f20;
+    this->actor.cullingVolumeScale = 150.0f * phi_f20;
+    this->actor.cullingVolumeDownward = 300.0f * phi_f20;
     this->actor.shape.rot.y = Rand_Next() >> 0x10;
     this->unk_20C = phi_f20;
 
@@ -535,7 +535,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
     if (flag && (this->unk_211 == 0) &&
         (this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags &
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         if (this->actor.home.rot.y == 1) {
             this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
         }
@@ -757,11 +757,11 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     if (this->actor.home.rot.y == 1) {
         if (this->unk_211 != 0) {
             if (Actor_TextboxIsClosing(&this->actor, play)) {
-                this->actor.flags &= ~ACTOR_FLAG_10;
+                this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                 this->unk_211 = 0;
             }
         } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->unk_211 = 1;
         } else if (this->actor.isLockedOn) {
             sp24 = true;

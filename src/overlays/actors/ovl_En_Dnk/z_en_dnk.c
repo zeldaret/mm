@@ -240,7 +240,7 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-            this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+            this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
             this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {

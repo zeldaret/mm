@@ -7,7 +7,7 @@
 #include "z_en_nnh.h"
 #include "assets/objects/object_nnh/object_nnh.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnNnh*)thisx)
 

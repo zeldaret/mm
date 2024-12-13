@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjIcePoly*)thisx)
 
@@ -83,7 +83,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
 
     this->switchFlag = OBJICEPOLY_GET_SWITCH_FLAG(thisx);
     thisx->params = OBJICEPOLY_GET_SCALE(thisx);
-    thisx->uncullZoneForward = 5600.0f;
+    thisx->cullingVolumeDistance = 5600.0f;
 
     Actor_SetScale(thisx, thisx->params * 0.01f);
 

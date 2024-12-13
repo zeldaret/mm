@@ -96,7 +96,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
 
     if (OBJTREE_ISLARGE(&this->dyna.actor)) {
         Actor_SetScale(&this->dyna.actor, 0.15f);
-        this->dyna.actor.uncullZoneForward = 4000.0f;
+        this->dyna.actor.cullingVolumeDistance = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);

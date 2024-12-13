@@ -572,7 +572,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.world.pos.y = this->unk_3D8.yw;
     this->actor.world.pos.z = this->unk_3D8.zw;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.gravity = -1.0f;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.world.pos.y -= 15.0f;

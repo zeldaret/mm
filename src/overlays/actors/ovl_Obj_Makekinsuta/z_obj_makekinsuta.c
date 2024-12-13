@@ -6,7 +6,7 @@
 
 #include "z_obj_makekinsuta.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjMakekinsuta*)thisx)
 
@@ -30,9 +30,9 @@ ActorProfile Obj_Makekinsuta_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1, ICHAIN_STOP),
 };
 
 bool func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
@@ -133,7 +133,7 @@ void func_8099FD7C(Actor* thisx, PlayState* play) {
         }
         func_8099FB64(thisx, play);
         thisx->update = Actor_Noop;
-        thisx->flags &= ~ACTOR_FLAG_10;
+        thisx->flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     } else {
         CutsceneManager_Queue(thisx->csId);
     }

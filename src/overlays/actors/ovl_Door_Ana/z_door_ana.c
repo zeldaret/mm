@@ -72,7 +72,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
         if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
             Collider_InitAndSetCylinder(play, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= ACTOR_FLAG_10; // always update
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update
         }
 
         Actor_SetScale(&this->actor, 0);
@@ -102,7 +102,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
         if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && CutsceneFlags_Get(play, 5)) {
             grottoIsOpen = true;
-            this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update OFF
         }
 
     } else {

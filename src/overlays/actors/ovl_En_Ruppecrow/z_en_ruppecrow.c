@@ -7,7 +7,7 @@
 #include "z_en_ruppecrow.h"
 #include "assets/objects/object_crow/object_crow.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnRuppecrow*)thisx)
 
@@ -274,7 +274,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
-            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
+            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         } else {
             rupee =
                 (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
@@ -285,7 +285,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
-            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
+            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
     } else if (this->rupeeIndex == 19) {
         rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
@@ -296,7 +296,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
-        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
+        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     } else {
         rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
                                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ITEM00_RUPEE_GREEN);
@@ -306,7 +306,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
-        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
+        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 
     this->rupeeIndex++;
@@ -469,7 +469,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnRuppecrow_FallToDespawn;
 }
 

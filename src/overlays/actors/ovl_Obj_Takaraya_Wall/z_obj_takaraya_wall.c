@@ -27,7 +27,7 @@
 #include "z_obj_takaraya_wall.h"
 #include "assets/objects/object_takaraya_objects/object_takaraya_objects.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((ObjTakarayaWall*)thisx)
 
@@ -301,7 +301,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.z = 0;
 
     if (chest != NULL) {
-        chest->uncullZoneForward = 2000.0f;
+        chest->cullingVolumeDistance = 2000.0f;
     }
 
     sTakarayaWallHeights[0][column] = -10.0f;

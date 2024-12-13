@@ -58,7 +58,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
     if ((SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_SUNS) ||
         (SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_STORMS)) {
         this->fairySpawnerState = SPAWNER_OUT_OF_RANGE; // never read after here
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         this->actionFunc = ShotSun_UpdateForOcarina;
         this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;

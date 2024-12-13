@@ -87,7 +87,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
             }
             if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
                 this->unk166 = 40;
-                this->dyna.actor.flags |= ACTOR_FLAG_10;
+                this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                 this->actionFunc = func_80AD6A88;
                 return;
             }
@@ -137,7 +137,7 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
         } else {
             this->dyna.actor.world.pos.y = this->unk160;
         }
-        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->unk168 = 0x60;
         this->actionFunc = func_80AD68DC;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;

@@ -7,7 +7,7 @@
 #include "z_obj_fireshield.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjFireshield*)thisx)
 
@@ -71,8 +71,8 @@ s32 D_80A4D884[] = { 0, 0, 0, 0 };
 s32 D_80A4D894[] = { 0, 0, 0, 0 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -289,7 +289,7 @@ void ObjFireshield_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = 0.05f;
 
-    this->actor.uncullZoneScale = sp2C->unk_04;
+    this->actor.cullingVolumeScale = sp2C->unk_04;
     this->unk_1A4 = Rand_ZeroOne() * 128.0f;
 
     if ((this->actor.home.rot.z * 10) < 0) {

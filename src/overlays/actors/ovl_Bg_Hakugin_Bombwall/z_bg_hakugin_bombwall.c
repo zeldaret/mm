@@ -117,7 +117,7 @@ s32 D_80ABD020[] = { -73, -40, -8, 24, 57 };
 Vec3f D_80ABD034 = { 0.0f, 3.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -330,8 +330,8 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     Actor_SetFocus(&this->dyna.actor, ptr->unk_08);
-    this->dyna.actor.uncullZoneScale = ptr->unk_0C;
-    this->dyna.actor.uncullZoneDownward = ptr->unk_10;
+    this->dyna.actor.cullingVolumeScale = ptr->unk_0C;
+    this->dyna.actor.cullingVolumeDownward = ptr->unk_10;
     this->actionFunc = func_80ABCCE4;
 }
 
@@ -381,7 +381,7 @@ void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play) {
     BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
     if (ptr->unk_20(this, play)) {
-        this->dyna.actor.flags |= ACTOR_FLAG_10;
+        this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = func_80ABCD98;
     } else {

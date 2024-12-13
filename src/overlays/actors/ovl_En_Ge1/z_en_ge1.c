@@ -112,7 +112,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
             this->hairstyle = GERUDO_WHITE_HAIR_BOB;
             this->actionFunc = EnGe1_PerformCutsceneActions;
             this->picto.actor.draw = NULL;
-            this->picto.actor.flags |= ACTOR_FLAG_20 | ACTOR_FLAG_10;
+            this->picto.actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             break;
     }

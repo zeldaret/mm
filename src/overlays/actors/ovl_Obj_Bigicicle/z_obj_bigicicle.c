@@ -82,7 +82,7 @@ Vec3f D_80AE987C = { 0.0f, -1.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(gravity, -2, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 5600, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 5600, ICHAIN_STOP),
 };
 
 s32 D_80AE9890 = false;
@@ -202,7 +202,7 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
         if (this->unk_149 == 2) {
             f32 temp_f0 = this->actor.scale.y * 2100.0f;
 
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->actor.shape.yOffset = 2100.0f;
             this->actor.world.pos.y -= temp_f0;
             this->collider1.dim.yShift += TRUNCF_BINANG(temp_f0);

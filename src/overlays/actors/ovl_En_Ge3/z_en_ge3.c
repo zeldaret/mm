@@ -7,7 +7,9 @@
 #include "z_en_ge3.h"
 #include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnGe3*)thisx)
 

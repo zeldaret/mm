@@ -7,7 +7,7 @@
 #include "z_obj_ocarinalift.h"
 #include "assets/objects/object_raillift/object_raillift.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjOcarinalift*)thisx)
 
@@ -45,9 +45,9 @@ ActorProfile Obj_Ocarinalift_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -92,7 +92,7 @@ void ObjOcarinalift_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AC9680(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = func_80AC96A4;
 }
 

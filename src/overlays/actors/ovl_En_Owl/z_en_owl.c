@@ -6,7 +6,7 @@
 
 #include "z_en_owl.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnOwl*)thisx)
 
@@ -81,9 +81,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 2400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 2400, ICHAIN_STOP),
 };
 
 void func_8095A510(EnOwl* this, PlayState* play) {
@@ -449,7 +449,7 @@ void func_8095B254(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnimeFlying, &gOwlFlyAnim, 0.0f);
         this->unk_3EA = 6;
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     }
 
     func_8095B158(this);
@@ -762,7 +762,7 @@ void func_8095BF58(EnOwl* this, PlayState* play) {
 }
 
 void func_8095BF78(EnOwl* this, PlayState* play) {
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     if (this->actor.xzDistToPlayer > 6000.0f) {
         Actor_Kill(&this->actor);
     }

@@ -35,7 +35,7 @@ void BgLbfshot_Init(Actor* thisx, PlayState* play) {
     BgLbfshot* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->dyna.actor.uncullZoneForward = 4000.0f;
+    this->dyna.actor.cullingVolumeDistance = 4000.0f;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_lbfshot_Colheader_0014D8);
 }

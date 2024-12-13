@@ -12,7 +12,7 @@
 #include "assets/objects/object_meganeana_obj/object_meganeana_obj.h"
 #include "assets/objects/object_haka_obj/object_haka_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_REACT_TO_LENS)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnTest2*)thisx)
 
@@ -57,9 +57,9 @@ static EnTest2ModelInfo sModelInfo[EN_TEST2_TYPE_MAX] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 8000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 2500, ICHAIN_STOP),
 };
 
 static s16 sObjectIds[EN_TEST2_TYPE_MAX] = {
@@ -83,7 +83,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if ((ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_11) || (ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_12)) {
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     }
 }
 

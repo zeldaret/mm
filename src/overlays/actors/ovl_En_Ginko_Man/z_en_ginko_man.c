@@ -63,7 +63,7 @@ void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
     EnGinkoMan* this = THIS;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_1;
-    this->actor.uncullZoneForward = 400.0f;
+    this->actor.cullingVolumeDistance = 400.0f;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 100;
     this->curTextId = 0;

@@ -387,7 +387,7 @@ void EnKarebaba_SetupDying(EnKarebaba* this) {
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     this->actionFunc = EnKarebaba_Dying;
 }
 
@@ -451,7 +451,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
 
 void EnKarebaba_SetupShrinkDie(EnKarebaba* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->timer = 3;
@@ -487,7 +487,7 @@ void EnKarebaba_SetupDeadItemDrop(EnKarebaba* this, PlayState* play) {
     this->actor.shape.shadowScale = 3.0f;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->timer = 200;
-    this->actor.flags &= ~ACTOR_FLAG_20;
+    this->actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->drawDmgEffAlpha = 0.0f;
     this->actionFunc = EnKarebaba_DeadItemDrop;
 }
@@ -550,7 +550,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y + (14.0f * scale);
 
     if (this->timer == 20) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
         if (this->actor.params == ENKAREBABA_1) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);

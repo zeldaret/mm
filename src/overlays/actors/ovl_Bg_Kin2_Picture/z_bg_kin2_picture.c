@@ -80,9 +80,12 @@ static ColliderTrisInit sTrisInit = {
 static Vec3f sDustBasePos = { 0.0f, 23.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 bool BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {

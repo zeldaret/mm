@@ -7,7 +7,7 @@
 #include "z_bg_ctower_gear.h"
 #include "assets/objects/object_ctower_rot/object_ctower_rot.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((BgCtowerGear*)thisx)
 
@@ -45,28 +45,28 @@ static Vec3f sEnterSplashOffsets[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainCenterCog[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 2000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 2000, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainOrgan[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 420, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 570, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 420, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 570, ICHAIN_STOP),
 };
 
 static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gClockTowerWaterWheelDL };
 
 void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
     s32 i;
-    s32 flag40 = this->dyna.actor.flags & ACTOR_FLAG_40;
+    s32 flag40 = this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME;
     Vec3f splashSpawnPos;
     Vec3f splashOffset;
     s32 pad;

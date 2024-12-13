@@ -224,7 +224,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
 
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -1.0f;
-    this->actor.uncullZoneScale = 3000.0f;
+    this->actor.cullingVolumeScale = 3000.0f;
     this->actor.shape.yOffset = 1000.0f;
     this->unk_308 = 0;
     this->unk_30A = 0;

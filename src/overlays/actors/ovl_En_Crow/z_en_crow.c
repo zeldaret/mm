@@ -119,7 +119,7 @@ static DamageTable sDamageTable = {
 static s32 sDeadCount = 0;
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GUAY, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
@@ -333,7 +333,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
     this->actionFunc = EnCrow_Damaged;
 }
@@ -460,7 +460,7 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
         }
         if (Math_StepToF(&this->actor.scale.x, scaleTarget, scaleTarget * 0.1f)) {
             this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->actor.colChkInfo.health = 1;
             EnCrow_SetupFlyIdle(this);
         }

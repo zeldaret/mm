@@ -6,7 +6,7 @@
 
 #include "z_elf_msg5.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ElfMsg5*)thisx)
 
@@ -31,7 +31,7 @@ ActorProfile Elf_Msg5_Profile = {
 
 static InitChainEntry sInitChainsInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1000, ICHAIN_STOP),
 };
 
 s32 func_80AFD990(ElfMsg5* this, PlayState* play) {

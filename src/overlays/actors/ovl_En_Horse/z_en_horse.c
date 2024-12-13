@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 #include "assets/objects/object_horse_link_child/object_horse_link_child.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnHorse*)thisx)
 
@@ -249,8 +249,8 @@ static s32 sAnimSoundFrames[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 static u8 sResetNoInput[] = {
@@ -551,15 +551,16 @@ void func_8087C288(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
 bool func_8087C2B8(PlayState* play, EnHorse* this, Vec3f* arg2, f32 arg3) {
     f32 phi_f14;
 
-    if ((arg2->z > 0.0f) && (arg2->z < (this->actor.uncullZoneForward + this->actor.uncullZoneScale))) {
+    if ((arg2->z > 0.0f) && (arg2->z < (this->actor.cullingVolumeDistance + this->actor.cullingVolumeScale))) {
         if (arg3 < 1.0f) {
             phi_f14 = 1.0f;
         } else {
             phi_f14 = 1.0f / arg3;
         }
 
-        if (((fabsf(arg2->x) * phi_f14) < 1.0f) && (((arg2->y + this->actor.uncullZoneDownward) * phi_f14) > -1.0f) &&
-            (((arg2->y - this->actor.uncullZoneScale) * phi_f14) < 1.0f)) {
+        if (((fabsf(arg2->x) * phi_f14) < 1.0f) &&
+            (((arg2->y + this->actor.cullingVolumeDownward) * phi_f14) > -1.0f) &&
+            (((arg2->y - this->actor.cullingVolumeScale) * phi_f14) < 1.0f)) {
             return true;
         }
     }

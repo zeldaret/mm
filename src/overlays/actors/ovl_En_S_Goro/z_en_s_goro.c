@@ -36,7 +36,7 @@ Week Event Flags:
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
 #include "assets/objects/object_taisou/object_taisou.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 #define THIS ((EnSGoro*)thisx)
 
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
@@ -1027,7 +1027,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         this->scaleFactor = 0.01f;
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -1.0f;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         this->actor.attentionRangeType = ATTENTION_RANGE_1;
 

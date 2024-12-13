@@ -186,7 +186,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
         thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-        thisx->flags |= ACTOR_FLAG_10;
+        thisx->flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         this->timer = 22;
@@ -657,7 +657,7 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
 
     if (this->actor.child != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.child->csId = this->actor.csId;
         this->actionFunc = EnOkuta_FrozenInIceBlock;
     } else {
@@ -684,7 +684,7 @@ void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 10.0f)) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             EnOkuta_SetupFloat(this);
         }
     }

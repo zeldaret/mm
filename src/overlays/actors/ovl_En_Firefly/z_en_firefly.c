@@ -343,7 +343,7 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gFireKeeseFlyAnim, 0.0f, 6.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_DEAD);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
     if (this->isInvisible) {
         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 40);

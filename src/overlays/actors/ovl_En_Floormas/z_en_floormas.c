@@ -547,7 +547,7 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.colorFilterTimer = 0;
     this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         this->actor.draw = func_808D3754;
     } else {
@@ -868,7 +868,7 @@ void func_808D2764(EnFloormas* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.scale.x >= 0.01f) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             func_808D0908(this);
             this->actor.params = ENFLOORMAS_GET_7FFF_0;
             this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
@@ -899,7 +899,7 @@ void func_808D2A20(EnFloormas* this) {
         Actor_Kill(&this->actor);
     } else {
         this->actor.draw = NULL;
-        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+        this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED);
         this->actionFunc = func_808D2AA8;
     }
 }

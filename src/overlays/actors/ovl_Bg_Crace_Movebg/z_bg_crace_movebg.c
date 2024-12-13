@@ -7,7 +7,7 @@
 #include "z_bg_crace_movebg.h"
 #include "overlays/actors/ovl_En_Dno/z_en_dno.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((BgCraceMovebg*)thisx)
 

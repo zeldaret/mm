@@ -321,9 +321,9 @@ Vec3f D_80B31400 = { 1.0f, 0.0f, 0.0f };
 Vec3f D_80B3140C = { 0.0f, 1.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
@@ -671,7 +671,7 @@ void func_80B30808(ObjSpidertent* this, PlayState* play) {
 }
 
 void func_80B30A2C(ObjSpidertent* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = func_80B30A4C;
 }
 

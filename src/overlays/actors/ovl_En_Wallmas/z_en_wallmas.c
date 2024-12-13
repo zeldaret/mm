@@ -10,7 +10,9 @@
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 #define THIS ((EnWallmas*)thisx)
 
@@ -222,7 +224,7 @@ void EnWallmas_TimerInit(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->timer = 130;
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y = player->actor.world.pos.y;
@@ -273,7 +275,7 @@ void EnWallmas_SetupDrop(EnWallmas* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.floorHeight = player->actor.floorHeight;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags &= ~ACTOR_FLAG_20;
+    this->actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->actionFunc = EnWallmas_Drop;
 }
 

@@ -6,7 +6,7 @@
 #include "z_bg_kin2_bombwall.h"
 #include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 #define THIS ((BgKin2Bombwall*)thisx)
 
@@ -131,9 +131,9 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 

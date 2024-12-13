@@ -9,9 +9,9 @@
 #include "assets/objects/object_bigpo/object_bigpo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                              \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | \
-     ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -228,8 +228,8 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
         Actor_Kill(&this->actor);
     }
 
-    if (thisx->params == BIG_POE_TYPE_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~ACTOR_FLAG_10;          // always update OFF
+    if (thisx->params == BIG_POE_TYPE_REGULAR) {             // the well poe, starts immediately
+        thisx->flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update OFF
         this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == BIG_POE_TYPE_SUMMONED) { // dampe type

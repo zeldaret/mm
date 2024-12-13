@@ -394,7 +394,7 @@ void EnKame_SetupPrepareToAttack(EnKame* this) {
         this->timer = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnKame_PrepareToAttack;
 }
 
@@ -486,7 +486,7 @@ void EnKame_Attack(EnKame* this, PlayState* play) {
             this->spikesScale -= 0.1f;
             this->collider.base.atFlags &= ~AT_ON;
             if (this->spikesScale < 0.5f) {
-                this->actor.flags &= ~ACTOR_FLAG_10;
+                this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                 EnKame_SetupEmergeFromShell(this);
             }
         } else {
@@ -542,7 +542,7 @@ void EnKame_SetupFlip(EnKame* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-    this->actor.flags &= ~ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.shape.rot.z = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_REVERSE);
     this->actionFunc = EnKame_Flip;
@@ -689,7 +689,7 @@ void EnKame_SetupDead(EnKame* this, PlayState* play) {
 
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->timer = 0;
     this->actionFunc = EnKame_Dead;

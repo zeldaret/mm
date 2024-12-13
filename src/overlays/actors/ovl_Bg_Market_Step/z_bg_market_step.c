@@ -7,7 +7,7 @@
 #include "z_bg_market_step.h"
 #include "assets/objects/object_market_obj/object_market_obj.h"
 
-#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
+#define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 #define THIS ((BgMarketStep*)thisx)
 
@@ -27,9 +27,9 @@ ActorProfile Bg_Market_Step_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 

@@ -7,7 +7,7 @@
 #include "z_obj_moon_stone.h"
 #include "assets/objects/object_gi_reserve00/object_gi_reserve00.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_100000)
 
 #define THIS ((ObjMoonStone*)thisx)
 

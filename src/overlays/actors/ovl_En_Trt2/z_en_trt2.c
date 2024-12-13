@@ -242,7 +242,7 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->unk_3D9 = 0;
             this->unk_3B2 = 0;
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
     } else {
         Actor_Kill(&this->actor);
@@ -719,7 +719,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
 void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0f };
 
-    this->actor.flags &= ~ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
     this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);

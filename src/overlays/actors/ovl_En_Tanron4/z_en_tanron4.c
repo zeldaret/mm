@@ -6,7 +6,7 @@
 
 #include "z_en_tanron4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnTanron4*)thisx)
 
@@ -52,7 +52,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
 
     thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     thisx->speed = 3.0f + KREG(48);
-    thisx->uncullZoneForward = 10000.0f + KREG(70);
+    thisx->cullingVolumeDistance = 10000.0f + KREG(70);
     this->randRollTimer = Rand_ZeroFloat(10.0f);
 
     if (thisx->params == SEAGULL_FOLLOW_ACTOR) {

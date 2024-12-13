@@ -95,9 +95,9 @@ static ObjMineMtxF3 sStandardBasis = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 1300, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 1300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
@@ -714,8 +714,8 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
         s32 linkCount = OBJMINE_GET_LINK_COUNT(&this->actor);
 
         this->actor.update = ObjMine_AirWater_Update;
-        this->actor.uncullZoneScale = 150.0f + (linkCount * (LINK_SIZE * 1.75f));
-        this->actor.uncullZoneDownward = 150.0f + (linkCount * (LINK_SIZE * 1.75f));
+        this->actor.cullingVolumeScale = 150.0f + (linkCount * (LINK_SIZE * 1.75f));
+        this->actor.cullingVolumeDownward = 150.0f + (linkCount * (LINK_SIZE * 1.75f));
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
         this->actor.shape.shadowAlpha = 140;
 
@@ -758,7 +758,7 @@ void ObjMine_Path_Stationary(ObjMine* this, PlayState* play) {
 }
 
 void ObjMine_Path_SetupMove(ObjMine* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = ObjMine_Path_Move;
 }
 
@@ -801,7 +801,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         ObjMine_Path_MoveToWaypoint(this, this->waypointIndex);
     }
     thisx->floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId, thisx, &thisx->world.pos);
-    if (thisx->flags & ACTOR_FLAG_40) {
+    if (thisx->flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
         Vec3f rotAxis;
         Vec3f yhatCrossV;
         MtxF rotMtxF;
@@ -820,7 +820,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
 }
 
 void ObjMine_SetupExplode(ObjMine* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.draw = ObjMine_DrawExplosion;
     this->actor.shape.shadowDraw = NULL;
     this->actor.scale.x = 0.02f;
@@ -1078,7 +1078,7 @@ void ObjMine_Path_Update(Actor* thisx, PlayState* play) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
-        if ((this->actor.flags & ACTOR_FLAG_40) && (this->actionFunc != ObjMine_Explode)) {
+        if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (this->actionFunc != ObjMine_Explode)) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }

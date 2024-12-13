@@ -7,7 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_oceff_wipe3.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((OceffWipe3*)thisx)
 

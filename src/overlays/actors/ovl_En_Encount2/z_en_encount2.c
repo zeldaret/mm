@@ -9,7 +9,7 @@
 #include "assets/objects/object_fusen/object_fusen.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnEncount2*)thisx)
 

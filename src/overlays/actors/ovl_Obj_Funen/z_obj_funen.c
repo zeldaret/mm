@@ -7,7 +7,7 @@
 #include "z_obj_funen.h"
 #include "assets/objects/object_funen/object_funen.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((ObjFunen*)thisx)
 

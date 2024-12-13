@@ -15,9 +15,9 @@
 #include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS                                                                            \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
-     ACTOR_FLAG_MINIMAP_ICON_ENABLED)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 #define THIS ((EnEgol*)thisx)
 

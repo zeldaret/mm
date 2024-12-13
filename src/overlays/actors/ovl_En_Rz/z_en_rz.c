@@ -129,7 +129,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             break;
 
         case EN_RZ_TYPE_2:
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                 EnRz_ChangeAnim(play, this, EN_RZ_ANIM_LINK_DANCE, ANIMMODE_LOOP, 0.0f);
             } else {
@@ -137,7 +137,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             }
             this->actionFunc = func_80BFC3F8;
             this->sister = EnRz_FindSister(this, play);
-            this->actor.uncullZoneForward = 300.0f;
+            this->actor.cullingVolumeDistance = 300.0f;
             break;
 
         default: // EN_RZ_TYPE_0

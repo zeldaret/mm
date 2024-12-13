@@ -9,7 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((BgHakuginPost*)thisx)
 

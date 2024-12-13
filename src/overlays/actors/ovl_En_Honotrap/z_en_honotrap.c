@@ -8,7 +8,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define HONOTRAP_AT_ACTIVE (1 << 0)
 #define HONOTRAP_AC_ACTIVE (1 << 1)
@@ -146,9 +146,9 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 9, 23, 1 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_STOP),
 };
 
 void EnHonotrap_FlameCollisionCheck(EnHonotrap* this, PlayState* play) {
@@ -276,8 +276,8 @@ void EnHonotrap_Init(Actor* thisx, PlayState* play) {
         EnHonotrap_InitFlameGroup(this, play);
         this->actor.update = EnHonotrap_UpdateFlameGroup;
         this->actor.draw = EnHonotrap_DrawFlameGroup;
-        this->actor.uncullZoneScale = 500.0f;
-        this->actor.uncullZoneDownward = 500.0f;
+        this->actor.cullingVolumeScale = 500.0f;
+        this->actor.cullingVolumeDownward = 500.0f;
     } else { // HONOTRAP_TYPE_FLAME_MOVE, HONOTRAP_TYPE_FLAME_DROP
         EnHonotrap_InitFlame(this, play);
         this->actor.update = EnHonotrap_UpdateFlame;

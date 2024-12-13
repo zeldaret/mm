@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_bombf/object_bombf.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnBombf*)thisx)
 
@@ -127,8 +127,8 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
         func_808AEAB8(this, ENBOMBF_GET(thisx));
     }
 
-    thisx->uncullZoneScale += 31000.0f;
-    thisx->uncullZoneForward += 31000.0f;
+    thisx->cullingVolumeScale += 31000.0f;
+    thisx->cullingVolumeDistance += 31000.0f;
 }
 
 void EnBombf_Destroy(Actor* thisx, PlayState* play) {
@@ -262,7 +262,7 @@ void func_808AEF68(EnBombf* this, PlayState* play) {
 
 void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->colliderJntSph.elements[0].dim.modelSphere.radius == 0) {
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
@@ -423,7 +423,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
                 this->actor.params = ENBOMBF_1;
                 this->timer = 10;
-                this->actor.flags |= ACTOR_FLAG_20;
+                this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
 
                 EnBombf_SetupAction(this, func_808AEFD4);
             }

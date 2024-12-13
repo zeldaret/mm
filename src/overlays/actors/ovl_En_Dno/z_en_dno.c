@@ -13,7 +13,9 @@
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((EnDno*)thisx)
 
@@ -127,8 +129,8 @@ static ColliderCylinderInit sCylinderInit = {
 static Vec3f D_80A73B2C = { 0.0f, 0.0f, 1.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDownward, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_STOP),
 };
 
 void func_80A711D0(EnDno* this, PlayState* play, Vec3f* vec) {

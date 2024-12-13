@@ -85,9 +85,9 @@ s16 D_80BD52C8[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
@@ -318,7 +318,7 @@ void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play) {
 }
 
 void func_80BD4FF8(BgIkanaBombwall* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = func_80BD503C;
 }

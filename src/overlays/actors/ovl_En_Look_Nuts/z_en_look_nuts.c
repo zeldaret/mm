@@ -368,7 +368,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_FOUND);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = true;
-                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {

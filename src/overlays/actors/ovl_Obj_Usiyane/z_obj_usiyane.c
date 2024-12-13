@@ -7,7 +7,7 @@
 #include "z_obj_usiyane.h"
 #include "assets/objects/object_obj_usiyane/object_obj_usiyane.h"
 
-#define FLAGS (ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((ObjUsiyane*)thisx)
 
@@ -36,9 +36,9 @@ PosRot D_80C08660[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {

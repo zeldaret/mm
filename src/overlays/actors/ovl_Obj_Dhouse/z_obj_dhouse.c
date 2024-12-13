@@ -8,7 +8,7 @@
 #include "z64quake.h"
 #include "assets/objects/object_dhouse/object_dhouse.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 #define THIS ((ObjDhouse*)thisx)
 
@@ -116,9 +116,9 @@ ObjDhouseStruct3 D_80B13E90[] = {
 Vec3f D_80B13FA8 = { 0.0f, 0.3f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 8000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 800, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -136,7 +136,7 @@ void ObjDhouse_Init(Actor* thisx, PlayState* play) {
         func_80B13908(this);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_dhouse_Colheader_008040);
-        this->dyna.actor.flags |= ACTOR_FLAG_10;
+        this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         func_80B1392C(this);
     }
 }
@@ -443,7 +443,7 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
         func_80B12A88(&this->dyna.actor);
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B13C08;
-        this->dyna.actor.flags |= ACTOR_FLAG_20;
+        this->dyna.actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         func_80B139D8(this);
     }
 }
@@ -477,8 +477,8 @@ void func_80B139F4(ObjDhouse* this, PlayState* play) {
     this->unk_1370--;
     if (this->unk_1370 <= 0) {
         this->dyna.actor.draw = func_80B13E40;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_20;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         func_80B13908(this);
     } else {
         func_80B12B38(this, play);

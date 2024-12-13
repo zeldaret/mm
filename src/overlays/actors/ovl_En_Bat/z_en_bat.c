@@ -110,7 +110,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_BAD_BAT, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -348,7 +348,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnBat_Die;
 }
 

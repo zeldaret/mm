@@ -9,8 +9,9 @@
 #include "overlays/actors/ovl_Arrow_Light/z_arrow_light.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnDeath*)thisx)
 
@@ -1434,7 +1435,7 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
         if (this->actionFunc == EnDeath_BeginWithoutCutscene ||
-            CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
+            CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
             miniDeath = this->miniDeaths[i];
 
             Matrix_RotateZYX(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
@@ -1555,7 +1556,7 @@ void EnDeath_DrawFlames(EnDeath* this, PlayState* play2) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
-        if (CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
+        if (CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
             for (effect = this->miniDeaths[i]->effects, j = 0; j < MINIDEATH_NUM_EFFECTS; j++, effect++) {
                 cmf->mf[3][0] = effect->pos.x;
                 cmf->mf[3][1] = effect->pos.y - 12.0f;

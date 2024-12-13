@@ -312,7 +312,7 @@ void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
     this->alpha = 254;
     func_800BE568(&this->actor, &this->collider);
@@ -454,12 +454,12 @@ void func_80A4EE48(EnMkk* this, PlayState* play) {
     if (this->unk_14E > 0) {
         this->unk_14E--;
         if (this->unk_14E == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
     } else if ((this->actor.xzDistToPlayer < this->unk_178) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         this->actor.update = EnMkk_Update;
         this->actor.draw = EnMkk_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         func_80A4E0CC(this);
     }
 }

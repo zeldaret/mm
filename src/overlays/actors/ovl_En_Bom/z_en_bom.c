@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((EnBom*)thisx)
 
@@ -343,7 +343,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Color_RGBA8 sp80;
 
     if (this->collider2.elements[0].dim.modelSphere.radius == 0) {
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
@@ -557,7 +557,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;
-                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
+                thisx->flags |= (ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_100000);
                 this->actionFunc = EnBom_Explode;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;

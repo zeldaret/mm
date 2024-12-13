@@ -9,7 +9,7 @@
 #include "assets/objects/object_horse_game_check/object_horse_game_check.h"
 #include "libu64/debug.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnHorseGameCheck*)thisx)
 
@@ -395,8 +395,8 @@ s32 func_808F9868(EnHorseGameCheck* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 2400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 2400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 s32 func_808F987C(EnHorseGameCheck* this, PlayState* play) {

@@ -7,7 +7,7 @@
 #include "z_obj_skateblock.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((ObjSkateblock*)thisx)
 
@@ -72,9 +72,9 @@ Color_RGBA8 D_80A22AD8 = { 250, 250, 250, 255 };
 Color_RGBA8 D_80A22ADC = { 180, 180, 180, 255 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 150, ICHAIN_CONTINUE), ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 f32 D_80A22AF8[] = { 14.0f, -14.0f, 14.0f, -14.0f };
@@ -451,7 +451,7 @@ void func_80A21F74(ObjSkateblock* this, PlayState* play) {
 
     this->unk_17C++;
 
-    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
         if (this->unk_17C >= 46) {
             phi_f22 = 1.0f;
         } else {

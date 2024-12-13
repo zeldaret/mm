@@ -276,7 +276,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             thisx->gravity = -1.5f;
         }
 
-        thisx->flags |= ACTOR_FLAG_10;
+        thisx->flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         thisx->update = EnSnowman_UpdateSnowball;
         thisx->draw = EnSnowman_DrawSnowball;
         this->work.timer = 5;
@@ -607,7 +607,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speed = 0.0f;
     this->actionFunc = EnSnowman_Melt;
@@ -790,7 +790,7 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
@@ -863,7 +863,7 @@ void EnSnowman_SetupCombine(EnSnowman* this, PlayState* play, Vec3f* combinePos)
     if (this->actor.colChkInfo.health == 0) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     } else {
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         Math_Vec3f_Copy(&this->combinePos, combinePos);
         this->combineState = EN_SNOWMAN_COMBINE_STATE_ACTIVE;
 

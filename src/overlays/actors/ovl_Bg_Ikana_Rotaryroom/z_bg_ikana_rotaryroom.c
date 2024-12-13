@@ -11,7 +11,7 @@
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define THIS ((BgIkanaRotaryroom*)thisx)
 

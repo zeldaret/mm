@@ -260,7 +260,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDB788(EnHiddenNuts* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);

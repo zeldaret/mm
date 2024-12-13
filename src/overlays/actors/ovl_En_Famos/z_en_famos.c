@@ -673,7 +673,7 @@ void EnFamos_SetupDeathExplosion(EnFamos* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     this->stateTimer = 25;
     Math_Vec3f_Copy(&this->targetDest, &this->actor.world.pos);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnFamos_DeathExplosion;
 }
 

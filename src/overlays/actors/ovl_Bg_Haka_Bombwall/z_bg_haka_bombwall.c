@@ -59,9 +59,9 @@ static ColliderCylinderInit sCylinderInit = {
 static s16 sRockScales[4] = { 24, 15, 10, 5 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -191,7 +191,7 @@ void func_80BD6274(BgHakaBombwall* this, PlayState* play) {
 }
 
 void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgHakaBombwall_PlayCutscene;
 }

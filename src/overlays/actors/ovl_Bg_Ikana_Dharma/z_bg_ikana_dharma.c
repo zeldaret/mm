@@ -8,7 +8,7 @@
 #include "z64quake.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((BgIkanaDharma*)thisx)
 
@@ -57,9 +57,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 320, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 320, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 320, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 320, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1100, ICHAIN_STOP),
 };
 
@@ -160,8 +160,8 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         this->dyna.actor.speed = 20.0f;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_SetupStartCutscene(this);
-    } else if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (sFirstHitBgIkanaDharma == NULL) &&
-               (this->dyna.actor.xzDistToPlayer < 420.0f)) {
+    } else if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME) &&
+               (sFirstHitBgIkanaDharma == NULL) && (this->dyna.actor.xzDistToPlayer < 420.0f)) {
         tempAngle1 = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y);
         tempAngle1 = ABS_ALT(tempAngle1);
 

@@ -6,7 +6,7 @@
 
 #include "z_en_elforg.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define THIS ((EnElforg*)thisx)
 

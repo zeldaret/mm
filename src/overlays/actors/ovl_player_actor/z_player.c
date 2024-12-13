@@ -20954,7 +20954,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
     }
 
     if (!var_a0 && (playerCue == NULL)) {
-        this->actor.flags &= ~ACTOR_FLAG_40;
+        this->actor.flags &= ~ACTOR_FLAG_INSIDE_CULLING_VOLUME;
         return;
     }
 
