@@ -559,7 +559,7 @@ We like to make macros for reading an actor's `params` (indeed, this is required
 ```c
     if (this->dyna.actor.params & 0x8000) {
         Actor_SetScale(&this->dyna.actor, 0.15f);
-        this->dyna.actor.cullingVolumeDistance = 4000.0f;
+        this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
@@ -579,7 +579,7 @@ Notice that we use `thisx`: this makes the form of every one of these macros the
 ```c
     if (OBJTREE_ISLARGE(&this->dyna.actor)) {
         Actor_SetScale(&this->dyna.actor, 0.15f);
-        this->dyna.actor.cullingVolumeDistance = 4000.0f;
+        this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
