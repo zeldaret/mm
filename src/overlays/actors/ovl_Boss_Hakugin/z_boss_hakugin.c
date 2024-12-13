@@ -3603,7 +3603,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
             baseY = (u16)((s32)startVec.y * 64);
 
             if (sShadowSizes[i] == GOHT_SHADOW_SIZE_EXTRA_LARGE) {
-                for (y = 0, addY = -0x180; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 0x40) {
+                for (y = 0, addY = -384; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 64) {
                     for (x = -sShadowExtraLargeMap[y]; x < sShadowExtraLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3612,7 +3612,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_LARGE) {
-                for (y = 0, addY = -0x100; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 0x40) {
+                for (y = 0, addY = -256; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 64) {
                     for (x = -sShadowLargeMap[y]; x < sShadowLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3621,7 +3621,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_MEDIUM) {
-                for (y = 0, addY = -0xC0; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 0x40) {
+                for (y = 0, addY = -192; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 64) {
                     for (x = -sShadowMediumMap[y]; x < sShadowMediumMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3630,7 +3630,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else {
-                for (y = 0, addY = -0x80; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 0x40) {
+                for (y = 0, addY = -128; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 64) {
                     for (x = -sShadowSmallMap[y]; x < sShadowSmallMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
