@@ -3,7 +3,6 @@
  * Overlay: ovl_player_actor
  * Description: Player
  */
-#include "prevent_bss_reordering.h"
 #include "z64player.h"
 
 #include "global.h"
@@ -46,6 +45,8 @@
 #include "assets/objects/object_link_zora/object_link_zora.h"
 #include "assets/objects/object_link_nuts/object_link_nuts.h"
 #include "assets/objects/object_link_child/object_link_child.h"
+
+#pragma increment_block_number "n64-us:128"
 
 void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);

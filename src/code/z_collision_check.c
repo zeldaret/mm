@@ -18,66 +18,7 @@ typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Colli
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-#include "prevent_bss_reordering2.h"
-// clang-format off
-// Partial structs taken from "prevent_bss_reordering.h"
-struct Dummy200 { int x; };
-struct Dummy201 { int x; };
-struct Dummy202 { int x; };
-struct Dummy203 { int x; };
-struct Dummy204 { int x; };
-struct Dummy205 { int x; };
-struct Dummy206 { int x; };
-struct Dummy207 { int x; };
-struct Dummy208 { int x; };
-struct Dummy209 { int x; };
-struct Dummy210 { int x; };
-struct Dummy211 { int x; };
-struct Dummy212 { int x; };
-struct Dummy213 { int x; };
-struct Dummy214 { int x; };
-struct Dummy215 { int x; };
-struct Dummy216 { int x; };
-struct Dummy217 { int x; };
-struct Dummy218 { int x; };
-struct Dummy219 { int x; };
-struct Dummy220 { int x; };
-struct Dummy221 { int x; };
-struct Dummy222 { int x; };
-struct Dummy223 { int x; };
-struct Dummy224 { int x; };
-struct Dummy225 { int x; };
-struct Dummy226 { int x; };
-struct Dummy227 { int x; };
-struct Dummy228 { int x; };
-struct Dummy229 { int x; };
-struct Dummy230 { int x; };
-struct Dummy231 { int x; };
-struct Dummy232 { int x; };
-struct Dummy233 { int x; };
-struct Dummy234 { int x; };
-struct Dummy235 { int x; };
-struct Dummy236 { int x; };
-struct Dummy237 { int x; };
-struct Dummy238 { int x; };
-struct Dummy239 { int x; };
-struct Dummy240 { int x; };
-struct Dummy241 { int x; };
-struct Dummy242 { int x; };
-struct Dummy243 { int x; };
-struct Dummy244 { int x; };
-struct Dummy245 { int x; };
-struct Dummy246 { int x; };
-struct Dummy247 { int x; };
-struct Dummy248 { int x; };
-struct Dummy249 { int x; };
-struct Dummy250 { int x; };
-struct Dummy251 { int x; };
-struct Dummy252 { int x; };
-struct Dummy253 { int x; };
-struct Dummy254 { int x; };
-struct Dummy255 { int x; };
-// clang-format on
+#pragma increment_block_number "n64-us:192"
 
 Vec3f D_801EDE00;
 Vec3f D_801EDE10;
@@ -103,7 +44,7 @@ TriNorm D_801EE0E8[2];
 TriNorm D_801EE150;
 TriNorm D_801EE188;
 
-#include "prevent_bss_reordering.h"
+#pragma increment_block_number "n64-us:128"
 
 /**
  * Gets the damage and effect that should be applied for the collision between

@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "z64message.h"
 #include "global.h"
 

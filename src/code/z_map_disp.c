@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "gfx.h"
 #include "sys_cmpdma.h"

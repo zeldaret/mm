@@ -1,5 +1,3 @@
-#include "prevent_bss_reordering.h"
-
 #include "stdbool.h"
 
 #include "buffers.h"
