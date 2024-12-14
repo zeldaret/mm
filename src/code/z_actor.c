@@ -3053,8 +3053,8 @@ s32 Actor_CullingCheck(PlayState* play, Actor* actor) {
  * Every actor can set properties for their own culling volume, changing its dimensions to suit the needs of
  * it and its environment. These properties are in units of projected space (i.e. compared to the actor's position
  * after perspective projection is applied) are therefore not directly comparable to world units.
- * These depend on the current view parameters (fov, aspect, scale, znear, zfar).
- * The default parameters considered are (60 degrees, 4/3, 1.0, 10, 12800).
+ * These depend on the current view parameters (aspect, scale, znear, zfar).
+ * The default parameters considered are (4/3, 1.0, 10, 12800).
  *
  *    cullingVolumeDistance: Configures how far forward the far plane of the frustum should extend.
  *                           This along with cullingVolumeScale determines the maximum distance from
@@ -3071,11 +3071,11 @@ s32 Actor_CullingCheck(PlayState* play, Actor* actor) {
  *                           as above. For default view parameters, increasing this property by 1 increases
  *                           the forward and backward scales by ~0.995 world units.
  *                         - For the sideways directions, the relation to world units is
- *                                   (aspect / scale) * tan(0.5 * fov)
+ *                                   (aspect / scale) * sqrt(3)/3
  *                           For default view parameters, increasing this property by 1 increases the
  *                           sideways scales by ~0.77 world units.
  *                         - For the upward direction, the relation to world units is
- *                                   (1 / scale) * tan(0.5 * fov)
+ *                                   (1 / scale) * sqrt(3)/3
  *                           For default view parameters, increasing this property by 1 increases the
  *                           scale by ~0.58 world units.
  *
